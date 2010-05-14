@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Server UI
+Bundle-SymbolicName: com.liferay.ide.eclipse.server.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)",
+ org.eclipse.debug.ui,
+ org.eclipse.jdt.debug.ui,
+ com.liferay.ide.eclipse.server.core,
+ com.liferay.ide.eclipse.ui,
+ org.eclipse.jdt.launching,
+ org.eclipse.ui.navigator;bundle-version="[3.4.2,3.5.0)",
+ org.eclipse.core.expressions,
+ com.liferay.ide.eclipse.project.core,
+ com.liferay.ide.eclipse.core,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.ui.editors;bundle-version="3.5.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.eclipse.server.ui
