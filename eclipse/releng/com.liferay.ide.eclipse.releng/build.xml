@@ -1,0 +1,39 @@
+<!-- A sample build file for use with Hudson. Note that forceContextQualifier 
+	 is being set, which overrides tag/branch values found in *.map files 
+-->
+<project default="run">
+	<target name="run">
+		
+		<ant antfile="build-bootstrap.xml" target="init">
+			<property name="basebuilderTag" value="r35x_v20090811" />
+			<property name="commonrelengTag" value="2010.05.12.16.00.00" />
+			<property name="ANTCONTRIB_VERSION" value="1.0b2" />
+			<property name="ANT4ECLIPSE_VERSION" value="1.0.0.M3" />
+			<property name="build.properties" value="build.properties" />
+		</ant>
+		
+		
+		<!-- FIXME if required: Set a valid path to JAVA_HOME, if Eclipse's ${java.home}/../bin/javac cannot be found -->
+		<condition property="JAVA_HOME" value="${java.home}" else="${java.home}/..">
+			<available file="${java.home}/bin/javac" type="file" />
+		</condition>
+
+		<!-- FIXME if required: if not using this type of qualifier, comment next 4 lines -->
+		<tstamp>
+			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
+		</tstamp>
+		<property name="forceContextQualifier" value="v${buildTimestamp}" />
+
+		<!-- 1. To build from sources using information in the ./maps/*.map files, comment these next two properties
+			 2. Or, to build from sources in the workspace, use these properties. You can also use absolute paths if needed.
+		-->
+		<!-- <property name="localSourceCheckoutDir" value="${basedir}/.." />
+		<property name="relengBuilderDir" value="${basedir}" /> -->
+		
+		<property name="build.properties" value="build.properties" />
+		<property file="${build.properties}" />
+		<ant antfile="${relengCommonBuilderDir}/build.xml" />
+		
+		<ant antfile="build-promote.xml" target="run" />
+	</target>
+</project>

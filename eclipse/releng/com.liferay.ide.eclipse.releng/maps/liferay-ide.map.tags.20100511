@@ -1,0 +1,24 @@
+# Add your features/plugins here
+# Or you can generate this file from your workspace using these properties in build.properties
+
+#releng
+feature@com.liferay.ide.eclipse.tools=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/releng/features/com.liferay.ide.eclipse.tools,username=gregory.amerson,password=DirgBod
+
+plugin@com.liferay.ide.eclipse.tools.branding=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/releng/plugins/com.liferay.ide.eclipse.tools.branding,username=gregory.amerson,password=DirgBod
+
+#common
+plugin@com.liferay.ide.eclipse.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.core,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.project.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.project.core,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.project.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.project.ui,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.sdk=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.sdk,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.ui,username=gregory.amerson,password=DirgBod
+
+#portaltools
+plugin@com.liferay.ide.eclipse.portlet.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/portaltools/plugins/com.liferay.ide.eclipse.portlet.core,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.portlet.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/portaltools/plugins/com.liferay.ide.eclipse.portlet.ui,username=gregory.amerson,password=DirgBod
+
+#servertools
+plugin@com.liferay.ide.eclipse.server.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/servertools/plugins/com.liferay.ide.eclipse.server.core,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.server.tomcat.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/servertools/plugins/com.liferay.ide.eclipse.server.tomcat.core,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.server.tomcat.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/servertools/plugins/com.liferay.ide.eclipse.server.tomcat.ui,username=gregory.amerson,password=DirgBod
+plugin@com.liferay.ide.eclipse.server.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=tags/v20100511,path=ide/eclipse/servertools/plugins/com.liferay.ide.eclipse.server.ui,username=gregory.amerson,password=DirgBod
