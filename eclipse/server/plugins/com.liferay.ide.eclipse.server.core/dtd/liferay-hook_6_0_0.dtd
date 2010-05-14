@@ -1,0 +1,87 @@
+<!--
+This is the DTD for the Hook parameters for Liferay Portal.
+
+<!DOCTYPE hook PUBLIC
+	"-//Liferay//DTD Hook 6.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-hook_6_0_0.dtd">
+-->
+
+<!ELEMENT hook (portal-properties?, language-properties*, custom-jsp-dir?,
+service*)>
+
+<!--
+Not all portal properties can be overridden via a hook. The supported properties
+are:
+
+auth.forward.by.last.path
+auto.deploy.listeners
+application.startup.events
+auth.failure
+auth.max.failures
+auth.pipeline.post
+auth.pipeline.pre
+auto.login.hooks
+captcha.check.portal.create_account
+control.panel.entry.class.default
+default.landing.page.path
+dl.hook.impl
+dl.webdav.auto.unlock
+dl.webdav.save.to.single.version
+field.enable.com.liferay.portal.model.Contact.birthday
+field.enable.com.liferay.portal.model.Contact.male
+field.enable.com.liferay.portal.model.Organization.status
+hot.deploy.listeners
+image.hook.impl
+javascript.fast.load
+layout.static.portlets.all
+layout.template.cache.enabled
+layout.user.private.layouts.auto.create
+layout.user.private.layouts.enabled
+layout.user.private.layouts.modifiable
+layout.user.public.layouts.auto.create
+layout.user.public.layouts.enabled
+layout.user.public.layouts.modifiable
+ldap.attrs.transformer.impl
+login.create.account.allow.custom.password
+login.events.post
+login.events.pre
+logout.events.post
+logout.events.pre
+mail.hook.impl
+my.places.show.community.private.sites.with.no.layouts
+my.places.show.community.public.sites.with.no.layouts
+my.places.show.organization.private.sites.with.no.layouts
+my.places.show.organization.public.sites.with.no.layouts
+my.places.show.user.private.sites.with.no.layouts
+my.places.show.user.public.sites.with.no.layouts
+passwords.passwordpolicytoolkit.generator
+passwords.passwordpolicytoolkit.static
+servlet.session.create.events
+servlet.session.destroy.events
+servlet.service.events.post
+servlet.service.events.pre
+session.phishing.protected.attributes
+terms.of.use.required
+theme.css.fast.load
+theme.images.fast.load
+upgrade.processes
+users.email.address.generator
+users.email.address.required
+users.full.name.generator
+users.full.name.validator
+users.screen.name.always.autogenerate
+users.screen.name.generator
+users.screen.name.validator
+value.object.listener.*
+-->
+<!ELEMENT portal-properties (#PCDATA)>
+
+<!ELEMENT language-properties (#PCDATA)>
+
+<!ELEMENT custom-jsp-dir (#PCDATA)>
+
+<!ELEMENT service (service-type, service-impl)>
+
+<!ELEMENT service-type (#PCDATA)>
+
+<!ELEMENT service-impl (#PCDATA)>
