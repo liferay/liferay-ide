@@ -1,0 +1,9 @@
+<% 
+	Collection<String> imports = model.getImports();
+	for (String anImport : imports) { 
+%>
+import <%= anImport %>;
+<% 
+	}
+%>
+
