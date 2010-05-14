@@ -8,11 +8,18 @@
 		</or>
 	</condition>
 	<target name="local" unless="isInHudson">
+		<!--
 		<property name="WORKINGDIR" value="${basedir}/work" />
         <property name="WORKSPACE" value="${basedir}/work/workspace" />
 		<property name="DOWNLOADS" value="build/downloads"/>
         <property name="COMMON_TOOLS" value="${basedir}/${DOWNLOADS}" />
         <property name="writableBuildRoot" value="${WORKSPACE}/build" />
+		-->
+		<property name="WORKINGDIR" value="${basedir}/work" />
+        <property name="WORKSPACE" value="${basedir}/work/workspace" />
+		<property name="DOWNLOADS" value="work/downloads"/>
+        <property name="COMMON_TOOLS" value="${basedir}/${DOWNLOADS}" />
+        <property name="writableBuildRoot" value="${WORKSPACE}/work/build" />
 
 	</target>
 
