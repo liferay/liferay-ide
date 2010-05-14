@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+<template name="%Templates.servicebuilder.file.name" description="%Templates.servicebuilder.file.desc" 
+            id="com.liferay.ide.eclipse.templates.servicebuilder.file" context="servicebuilder_new" 
+            enabled="true">%Templates.servicebuilder.file.content</template>
+
+</templates>

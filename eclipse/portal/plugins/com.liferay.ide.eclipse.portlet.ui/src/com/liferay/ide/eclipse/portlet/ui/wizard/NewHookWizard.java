@@ -1,0 +1,214 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
+package com.liferay.ide.eclipse.portlet.ui.wizard;
+
+import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.eclipse.portlet.core.operation.NewHookDataModelProvider;
+import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.eclipse.portlet.ui.template.HookTemplateContextTypeIds;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
+import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
+
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("restriction")
+public class NewHookWizard extends DataModelWizard implements INewWizard, INewHookDataModelProperties {
+
+	public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
+
+	public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
+
+	public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage";
+
+	public static final String SERVICES_PAGE = "servicesPage";
+
+	public static final String TYPE_PAGE = "typePage";
+
+	protected NewCustomJSPsHookWizardPage customJSPsHookPage;
+
+	protected NewHookTypeWizardPage hookTypePage;
+
+	protected NewLanguagePropertiesHookWizardPage languagePropertiesPage;
+
+	protected NewPortalPropertiesHookWizardPage portalPropertiesPage;
+
+	protected NewServicesHookWizardPage servicesPage;
+
+	public NewHookWizard() {
+		this(null);
+	}
+
+	public NewHookWizard(IDataModel dataModel) {
+		super(dataModel);
+
+		setWindowTitle("New Hook Plug-in");
+
+		setDefaultPageImageDescriptor(getDefaultImageDescriptor());
+	}
+
+	@Override
+	public boolean canFinish() {
+		return getDataModel().isValid();
+	}
+
+	@Override
+	public String getNextPage(String currentPageName, String expectedNextPageName) {
+		if (TYPE_PAGE.equals(expectedNextPageName)) {
+			return TYPE_PAGE;
+		}
+
+		if (TYPE_PAGE.equals(currentPageName)) {
+			if (getDataModel().getBooleanProperty(CREATE_CUSTOM_JSPS)) {
+				return CUSTOM_JSPS_PAGE;
+			}
+			else if (getDataModel().getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
+				return PORTAL_PROPERTIES_PAGE;
+			}
+			else if (getDataModel().getBooleanProperty(CREATE_SERVICES)) {
+				return SERVICES_PAGE;
+			}
+			else if (getDataModel().getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
+				return LANGUAGE_PROPERTIES_PAGE;
+			}
+		}
+
+		return null;
+	}
+
+	@Override
+	public String getPreviousPage(String currentPageName, String expectedPreviousPageName) {
+		if (CUSTOM_JSPS_PAGE.equals(currentPageName) || PORTAL_PROPERTIES_PAGE.equals(currentPageName) ||
+			SERVICES_PAGE.equals(currentPageName) || LANGUAGE_PROPERTIES_PAGE.equals(currentPageName)) {
+
+			return TYPE_PAGE;
+		}
+
+		return super.getPreviousPage(currentPageName, expectedPreviousPageName);
+	}
+
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		getDataModel();
+	}
+
+	@Override
+	protected void doAddPages() {
+		hookTypePage = new NewHookTypeWizardPage(getDataModel(), TYPE_PAGE);
+
+		addPage(hookTypePage);
+
+		customJSPsHookPage = new NewCustomJSPsHookWizardPage(getDataModel(), CUSTOM_JSPS_PAGE);
+
+		addPage(customJSPsHookPage);
+
+		portalPropertiesPage = new NewPortalPropertiesHookWizardPage(getDataModel(), PORTAL_PROPERTIES_PAGE);
+
+		addPage(portalPropertiesPage);
+
+		servicesPage = new NewServicesHookWizardPage(getDataModel(), SERVICES_PAGE);
+
+		addPage(servicesPage);
+
+		languagePropertiesPage = new NewLanguagePropertiesHookWizardPage(getDataModel(), LANGUAGE_PROPERTIES_PAGE);
+
+		addPage(languagePropertiesPage);
+	}
+
+	protected ImageDescriptor getDefaultImageDescriptor() {
+		return PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png");
+	}
+
+	@Override
+	protected IDataModelProvider getDefaultProvider() {
+		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+
+		TemplateContextType contextType =
+			PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(HookTemplateContextTypeIds.NEW);
+
+		return new NewHookDataModelProvider(templateStore, contextType);
+	}
+
+	protected void openEditor(final IFile file) {
+		if (file != null) {
+			getShell().getDisplay().asyncExec(new Runnable() {
+
+				public void run() {
+					try {
+						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+						IDE.openEditor(page, file, true);
+					}
+					catch (PartInitException e) {
+						PortletUIPlugin.logError(e);
+					}
+				}
+			});
+		}
+	}
+
+	protected void openWebFile(IFile file) {
+		try {
+			openEditor(file);
+		}
+		catch (Exception cantOpen) {
+			PortletUIPlugin.logError(cantOpen);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void postPerformFinish()
+		throws InvocationTargetException {
+
+		super.postPerformFinish();
+
+		Set<IFile> jspFiles = (Set<IFile>) getDataModel().getProperty(CUSTOM_JSPS_FILES_CREATED);
+
+		if (jspFiles != null && jspFiles.size() > 0) {
+			openWebFile(jspFiles.iterator().next()); // just open the first one
+		}
+
+		Set<IFile> languagePropertiesFiles = (Set<IFile>) getDataModel().getProperty(LANGUAGE_PROPERTIES_FILES_CREATED);
+
+		if (languagePropertiesFiles != null && languagePropertiesFiles.size() > 0) {
+			openWebFile(languagePropertiesFiles.iterator().next()); // just
+																	// openthe
+																	// first one
+		}
+	}
+
+	@Override
+	protected boolean runForked() {
+		return false;
+	}
+
+}
