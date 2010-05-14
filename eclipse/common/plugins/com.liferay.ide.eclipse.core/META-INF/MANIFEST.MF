@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Core
+Bundle-SymbolicName: com.liferay.ide.eclipse.core;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.liferay.ide.eclipse.core.CorePlugin
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ant.core,
+ org.eclipse.core.resources;visibility:=reexport,
+ org.eclipse.core.runtime;visibility:=reexport,
+ org.eclipse.debug.core,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.debug,
+ org.eclipse.jdt.launching,
+ org.eclipse.wst.common.modulecore;bundle-version="[1.1.301,1.2.0)",
+ org.eclipse.wst.server.core;bundle-version="[1.1.102,1.2.0)",
+ org.eclipse.wst.sse.core;bundle-version="[1.1.402,1.2.0)",
+ org.eclipse.wst.xml.core;bundle-version="[1.1.402,1.2.0)"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.eclipse.core,
+ com.liferay.ide.eclipse.core.model,
+ com.liferay.ide.eclipse.core.util
