@@ -35,5 +35,10 @@
 		<ant antfile="${relengCommonBuilderDir}/build.xml" />
 		
 		<ant antfile="build-promote.xml" target="run" />
+		
+	</target>
+	
+	<target name="promote">
+		
 	</target>
 </project>
