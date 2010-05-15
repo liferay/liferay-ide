@@ -30,6 +30,10 @@
 		<!-- <property name="localSourceCheckoutDir" value="${basedir}/.." />
 		<property name="relengBuilderDir" value="${basedir}" /> -->
 		
+		
+		<!-- clean out all N* builds -->
+		<delete dir="${writableBuildRoot}/N**"></delete>
+		
 		<property name="build.properties" value="build.properties" />
 		<property file="${build.properties}" />
 		<ant antfile="${relengCommonBuilderDir}/build.xml" />
