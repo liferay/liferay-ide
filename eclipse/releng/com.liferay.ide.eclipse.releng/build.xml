@@ -31,11 +31,13 @@
 		<property name="relengBuilderDir" value="${basedir}" /> -->
 		
 		
-		<!-- clean out all N* builds -->
-		<delete dir="${writableBuildRoot}/N**"></delete>
 		
 		<property name="build.properties" value="build.properties" />
 		<property file="${build.properties}" />
+		
+		<!-- clean out all N* builds -->
+		<delete dir="${writableBuildRoot}/N**"></delete>
+		
 		<ant antfile="${relengCommonBuilderDir}/build.xml" />
 		
 		<ant antfile="build-promote.xml" target="run" />
