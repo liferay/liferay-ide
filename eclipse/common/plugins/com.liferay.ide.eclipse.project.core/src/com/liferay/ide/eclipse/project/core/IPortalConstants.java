@@ -15,16 +15,25 @@
 
 package com.liferay.ide.eclipse.project.core;
 
+import org.osgi.framework.Version;
+
 /**
  * @author Greg Amerson
  */
 public interface IPortalConstants {
 
 	String DEFAULT_RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
+
 	String LIFERAY_DISPLAY_XML_FILE = "liferay-display.xml";
+
 	String LIFERAY_HOOK_XML_FILE = "liferay-hook.xml";
+
 	String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml";
+
 	String PORTLET_XML_FILE = "portlet.xml";
+
 	String WEB_XML_FILE = "web.xml";
+
+	Version LEAST_SUPPORTED_VERSION = new Version(6, 0, 2);
 
 }

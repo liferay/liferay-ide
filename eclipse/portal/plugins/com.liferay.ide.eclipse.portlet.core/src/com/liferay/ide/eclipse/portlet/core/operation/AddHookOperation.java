@@ -154,7 +154,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
 		IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(getTargetProject());
 
-		IPath portalRoot = portalRuntime.getPortalRoot();
+		IPath portalRoot = portalRuntime.getRoot();
 
 		IPath portalJspPath = new Path(portalJsp);
 

@@ -123,7 +123,12 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
 		tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
 		
-		webXmlHelper.addTagLib(tagLibRefType);
+		try {
+			webXmlHelper.addTagLib(tagLibRefType);
+		}
+		catch (Exception e) {
+			ProjectCorePlugin.logError("Failed to add taglib reference", e);
+		}
 	}
 
 	// protected void extractZipToProject(File zipFile) {

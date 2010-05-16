@@ -16,8 +16,6 @@
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -27,7 +25,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
@@ -39,7 +36,7 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 
 	public static class PropertiesContentProvider implements ITreeContentProvider {
 
-		protected File propFile;
+		protected String[] properties;
 
 		public void dispose() {
 		}
@@ -49,22 +46,11 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 		}
 
 		public Object[] getElements(Object inputElement) {
-			if (inputElement instanceof File && propFile == null) {
-				propFile = (File) inputElement;
+			if (properties == null && inputElement instanceof String[]) {
+				properties = (String[]) inputElement;
 			}
 
-			Properties p = new Properties();
-
-			try {
-				p.load(new FileReader(propFile));
-
-				return p.keySet().toArray();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			return new Object[0];
+			return properties;
 		}
 
 		public Object getParent(Object element) {
@@ -76,24 +62,15 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 		}
 
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			this.propFile = null;
+			this.properties = null;
 		}
 
 	}
 
 	public static class PropertiesLabelProvider extends LabelProvider {
 
-		@Override
-		public Image getImage(Object element) {
-			return super.getImage(element);
-		}
-
-		@Override
-		public String getText(Object element) {
-			return super.getText(element);
-		}
-
 	}
+
 
 	public class PropertyFilter extends ViewerFilter {
 
@@ -136,8 +113,6 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 
 	public PropertiesFilteredDialog(Shell shell, String fixedPattern) {
 		super(shell, new PropertiesLabelProvider(), new PropertiesContentProvider());
-
-		setTitle("Title");
 
 		setAllowMultiple(false);
 

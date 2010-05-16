@@ -88,7 +88,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper {
 				webApp.setJspConfig(jspConfig);
 			}
 			
-			webArtifactEdit.saveIfNecessary(null);
+			webArtifactEdit.save(null);
 			webArtifactEdit.dispose();
 			
 			status = Status.OK_STATUS;

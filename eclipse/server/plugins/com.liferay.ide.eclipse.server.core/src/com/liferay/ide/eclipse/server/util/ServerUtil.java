@@ -95,7 +95,7 @@ public class ServerUtil {
 	public static IPath getPortalRoot(org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime) {
 		IPortalRuntime runtime = (IPortalRuntime) getRuntimeAdapter(facetRuntime, IPortalRuntime.class);
 		
-		return runtime != null ? runtime.getPortalRoot() : null;
+		return runtime != null ? runtime.getRoot() : null;
 	}
 
 	public static IPortalRuntime getPortalRuntime(IProject project)

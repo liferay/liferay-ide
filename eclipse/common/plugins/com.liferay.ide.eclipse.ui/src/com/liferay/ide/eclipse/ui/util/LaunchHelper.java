@@ -64,6 +64,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 
 	protected ILaunch runningLaunch;
 
+
 	public LaunchHelper(String launchConfigTypeId) {
 		this.launchConfigTypeId = launchConfigTypeId;
 	}
@@ -346,4 +347,5 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 	protected String getNewLaunchConfigurationName() {
 		return this.getClass().getName();
 	}
+
 }

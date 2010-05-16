@@ -17,15 +17,11 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
-import com.liferay.ide.eclipse.server.util.PortalClassHelper;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.wizard.StringArrayTableWizardSection;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -48,8 +44,6 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 	public class AddPropertyOverrideDialog extends AddStringArrayDialog {
 
 		protected String[] buttonLabels;
-
-		protected File hookOverridesFile;
 
 		public AddPropertyOverrideDialog(
 			Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels) {
@@ -122,20 +116,25 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 			// return;
 			// }
 
-			if (hookOverridesFile == null) {
-				try {
-					loadHookOverridesFile();
-				}
-				catch (CoreException e) {
-					PortletUIPlugin.logError(e);
-					return;
-				}
+			String[] hookProperties = new String[] {};
+
+			IPortalRuntime runtime;
+
+			try {
+				runtime = ServerUtil.getPortalRuntime(project);
+
+				hookProperties = runtime.getSupportedHookProperties();
 			}
+			catch (CoreException e) {
+				PortletUIPlugin.logError(e);
+			}
+
 
 			PropertiesFilteredDialog dialog = new PropertiesFilteredDialog(getParentShell());
 			dialog.setTitle("Property selection");
-			dialog.setMessage("Choose a property");
-			dialog.setInput(hookOverridesFile);
+			dialog.setMessage("Please select a property");
+			dialog.setInput(hookProperties);
+
 			if (dialog.open() == Window.OK) {
 				Object[] selected = dialog.getResult();
 
@@ -143,30 +142,32 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 			}
 		}
 
-		protected void loadHookOverridesFile()
-			throws CoreException {
-
-			hookOverridesFile =
-				PortletUIPlugin.getDefault().getStateLocation().append("hook.overrides.properties").toFile();
-
-			IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
-
-			IPath portalRoot = portalRuntime.getPortalRoot();
-
-			PortalClassHelper helper =
-				new PortalClassHelper(
-					portalRuntime.getRuntime().getLocation().append("lib/ext"), portalRoot,
-					"com.liferay.ide.eclipse.portlet.core.support.GetSupportedHookProperties", new String[] {
-						hookOverridesFile.getPath()
-					}, null);
-
-			try {
-				helper.launch(null);
-			}
-			catch (CoreException e) {
-				e.printStackTrace();
-			}
-		}
+		// protected void loadHookOverridesFile()
+		// throws CoreException {
+		//
+		// hookOverridesFile =
+		// PortletUIPlugin.getDefault().getStateLocation().append("hook.overrides.properties").toFile();
+		//
+		// IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
+		//
+		// IPath portalRoot = portalRuntime.getRoot();
+		//
+		// PortalSupportHelper helper =
+		// new PortalSupportHelper(
+		// portalRuntime.getRuntime().getLocation().append("lib/ext"),
+		// portalRoot,
+		// "com.liferay.ide.eclipse.portlet.core.support.GetSupportedHookProperties",
+		// new String[] {
+		// hookOverridesFile.getPath()
+		// }, null);
+		//
+		// try {
+		// helper.launch(null);
+		// }
+		// catch (CoreException e) {
+		// e.printStackTrace();
+		// }
+		// }
 
 	}
 

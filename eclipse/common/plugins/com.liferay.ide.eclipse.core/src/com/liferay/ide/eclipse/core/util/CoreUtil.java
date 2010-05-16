@@ -37,6 +37,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.osgi.framework.Version;
 
 /**
  * Core Utility methods
@@ -151,6 +152,21 @@ public class CoreUtil {
 		while (read >= 0);
 
 		return out.toString();
+	}
+
+	public static Version readVersionFile(File versionInfoFile) {
+		String versionContents = FileUtil.readContents(versionInfoFile);
+
+		Version version = null;;
+
+		try {
+			version = Version.parseVersion(versionContents.trim());
+		}
+		catch (NumberFormatException e) {
+			version = Version.emptyVersion;
+		}
+
+		return version;
 	}
 
 }

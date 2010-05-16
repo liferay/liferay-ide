@@ -29,10 +29,12 @@ public interface IPortalRuntime {
 
 	public Properties getCategories();
 
-	public IPath getPortalRoot();
+	public IPath getRoot();
 
-	public String getPortalVersion();
+	public String getVersion();
 
 	public IRuntime getRuntime();
+
+	public String[] getSupportedHookProperties();
 
 }

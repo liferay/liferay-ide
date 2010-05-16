@@ -35,7 +35,7 @@ public interface ISDKConstants {
 	public static final String LAYOUT_TEMPLATE_PLUGIN_ANT_BUILD =
 		_defaultPrefs.get("layouttpl.plugin.ant.build", null);
 
-	public static final Version LEAST_SUPPORTED_SDK_VERSION = new Version(6, 0, 0);
+	public static final Version LEAST_SUPPORTED_SDK_VERSION = new Version(6, 0, 1);
 
 	public static final String PORTLET_PLUGIN_ANT_BUILD = _defaultPrefs.get("portlet.plugin.ant.build", null);
 

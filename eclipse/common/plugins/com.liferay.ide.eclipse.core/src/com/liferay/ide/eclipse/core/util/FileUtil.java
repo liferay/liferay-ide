@@ -15,7 +15,13 @@
 
 package com.liferay.ide.eclipse.core.util;
 
+import com.liferay.ide.eclipse.core.CorePlugin;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Greg Amerson
@@ -38,6 +44,64 @@ public class FileUtil {
 		}
 
 		directory.delete();
+	}
+
+	public static String readContents(File file) {
+		if (file == null) {
+			return null;
+		}
+
+		if (!file.exists()) {
+			return null;
+		}
+
+		StringBuffer contents = new StringBuffer();
+
+		try {
+			FileReader fileReader = new FileReader(file);
+
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			String line;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				contents.append(line);
+			}
+		}
+		catch (Exception e) {
+			CorePlugin.logError("Could not read file: " + file.getPath());
+		}
+
+		return contents.toString();
+	}
+
+	public static String[] readLinesFromFile(File file) {
+		if (file == null) {
+			return null;
+		}
+
+		if (!file.exists()) {
+			return null;
+		}
+
+		List<String> lines = new ArrayList<String>();
+
+		try {
+			FileReader fileReader = new FileReader(file);
+
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+			String line;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				lines.add(line);
+			}
+		}
+		catch (Exception e) {
+			CorePlugin.logError("Could not read file: " + file.getPath());
+		}
+
+		return lines.toArray(new String[lines.size()]);
 	}
 
 }

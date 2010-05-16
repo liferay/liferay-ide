@@ -18,14 +18,9 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
-import com.liferay.ide.eclipse.server.util.PortalClassHelper;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.eclipse.ui.wizard.StringArrayTableWizardSection;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -203,20 +198,33 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 			// return;
 			// }
 
-			if (eventActionPropertiesFile == null) {
-				try {
-					loadEventActionsPropertiesFile();
-				}
-				catch (Exception e) {
-					PortletUIPlugin.logError(e);
-					return;
-				}
+			String[] hookProperties = new String[] {};
+
+			IPortalRuntime runtime;
+
+			try {
+				runtime = ServerUtil.getPortalRuntime(project);
+
+				hookProperties = runtime.getSupportedHookProperties();
+			}
+			catch (CoreException e) {
+				PortletUIPlugin.logError(e);
 			}
 
+			// if (eventActionPropertiesFile == null) {
+			// try {
+			// loadEventActionsPropertiesFile();
+			// }
+			// catch (Exception e) {
+			// PortletUIPlugin.logError(e);
+			// return;
+			// }
+			// }
+
 			PropertiesFilteredDialog dialog = new PropertiesFilteredDialog(getParentShell(), ".*events.*");
-			dialog.setTitle("title");
-			dialog.setMessage("messsage");
-			dialog.setInput(eventActionPropertiesFile);
+			dialog.setTitle("Property selection");
+			dialog.setMessage("Please select a property:");
+			dialog.setInput(hookProperties);
 
 			if (dialog.open() == Window.OK) {
 				Object[] selected = dialog.getResult();
@@ -231,7 +239,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
 	// protected File portalRoot;
 
-	protected File eventActionPropertiesFile;
+	// protected File eventActionPropertiesFile;
 
 	protected IProject project;
 
@@ -245,8 +253,6 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		this.buttonLabels = new String[] {
 			"Select...", "Select...,New..."
 		};
-
-		this.eventActionPropertiesFile = null;
 	}
 
 	public void setProject(IProject project) {
@@ -268,28 +274,30 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 	// this.portalRoot = root;
 	// }
 
-	protected void loadEventActionsPropertiesFile()
-		throws CoreException, FileNotFoundException, IOException {
-
-		eventActionPropertiesFile =
-			PortletUIPlugin.getDefault().getStateLocation().append("hook.overrides.properties").toFile();
-
-		IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
-
-		PortalClassHelper helper =
-			new PortalClassHelper(
-				portalRuntime.getRuntime().getLocation().append("lib/ext"), portalRuntime.getPortalRoot(),
-				"com.liferay.ide.eclipse.portlet.core.support.GetSupportedHookProperties", new String[] {
-					eventActionPropertiesFile.getPath()
-				}, null);
-
-		try {
-			helper.launch(null);
-		}
-		catch (CoreException e) {
-			e.printStackTrace();
-		}
-
-	}
+	// protected void loadEventActionsPropertiesFile()
+	// throws CoreException, FileNotFoundException, IOException {
+	//
+	// eventActionPropertiesFile =
+	// PortletUIPlugin.getDefault().getStateLocation().append("hook.overrides.properties").toFile();
+	//
+	// IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
+	//
+	// PortalSupportHelper helper =
+	// new PortalSupportHelper(
+	// portalRuntime.getRuntime().getLocation().append("lib/ext"),
+	// portalRuntime.getRoot(),
+	// "com.liferay.ide.eclipse.portlet.core.support.GetSupportedHookProperties",
+	// new String[] {
+	// eventActionPropertiesFile.getPath()
+	// }, null);
+	//
+	// try {
+	// helper.launch(null);
+	// }
+	// catch (CoreException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// }
 
 }

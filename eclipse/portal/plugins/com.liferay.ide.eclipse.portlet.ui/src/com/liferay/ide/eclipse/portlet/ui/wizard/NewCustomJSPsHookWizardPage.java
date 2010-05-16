@@ -120,7 +120,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 			try {
 				IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
 
-				IPath portalRoot = portalRuntime.getPortalRoot();
+				IPath portalRoot = portalRuntime.getRoot();
 
 				if (portalRoot != null && portalRoot.toFile().exists()) {
 					jspItemsSection.setPortalRoot(portalRoot.toFile());

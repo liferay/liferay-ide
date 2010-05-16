@@ -105,4 +105,8 @@ public class CorePlugin extends Plugin {
 		return createErrorStatus(PLUGIN_ID, msg);
 	}
 
+	public static void logError(String msg) {
+		getDefault().getLog().log(createErrorStatus(msg));
+	}
+
 }

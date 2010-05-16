@@ -75,4 +75,8 @@ public class ProjectCorePlugin extends CorePlugin {
 		super.stop(context);
 	}
 
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(createErrorStatus(msg, e));
+	}
+
 }
