@@ -36,7 +36,11 @@
 		<property file="${build.properties}" />
 		
 		<!-- clean out all N* builds -->
-		<delete dir="${writableBuildRoot}/N**"></delete>
+		<delete includeemptydirs="true" >
+			<fileset dir="${writableBuildRoot}" >
+				<include name="N**/**"/>
+			</fileset>			
+		</delete>
 		
 		<ant antfile="${relengCommonBuilderDir}/build.xml" />
 		
