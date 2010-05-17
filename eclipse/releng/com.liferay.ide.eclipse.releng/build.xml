@@ -36,7 +36,7 @@
 		<property file="${build.properties}" />
 		
 		<!-- clean out all N* builds -->
-		<delete includeemptydirs="true" >
+		<delete failonerror="false" includeemptydirs="true" >
 			<fileset dir="${writableBuildRoot}" >
 				<include name="N**/**"/>
 			</fileset>			
