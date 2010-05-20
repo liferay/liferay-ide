@@ -174,7 +174,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 				protected Control createButton(Composite composite) {
 					submitButton = new Button(composite, SWT.FLAT);
 
-					submitButton.setText("Build Services "); //$NON-NLS-1$
+					submitButton.setText("Build services "); //$NON-NLS-1$
 					submitButton.setImage(PortletUIPlugin.imageDescriptorFromPlugin(
 						PortletUIPlugin.PLUGIN_ID, "/icons/e16/service.png").createImage());
 					submitButton.setBackground(null);

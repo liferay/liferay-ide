@@ -51,7 +51,7 @@ public class BuildServiceJob extends SDKJob {
 	protected IFile serviceXmlFile;
 
 	public BuildServiceJob(IFile serviceXmlFile) {
-		super("Build Service");
+		super("Build services");
 
 		this.serviceXmlFile = serviceXmlFile;
 
@@ -130,8 +130,10 @@ public class BuildServiceJob extends SDKJob {
 						existingRawClasspath = Arrays.asList(javaProject.getRawClasspath());
 
 						updateClasspath(existingRawClasspath, javaProject);
+
+						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					}
-					catch (JavaModelException e) {
+					catch (Exception e) {
 						PortletCore.logError(e);
 					}
 
