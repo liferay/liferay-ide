@@ -10,6 +10,7 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  com.liferay.ide.eclipse.project.core,
  com.liferay.ide.eclipse.sdk,
  com.liferay.ide.eclipse.server.core,
+ com.liferay.ide.eclipse.project.ui,
  com.liferay.ide.eclipse.ui,
  org.eclipse.emf.ecore;bundle-version="2.5.0",
  org.eclipse.debug.ui,
@@ -35,7 +36,8 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  org.eclipse.ui.forms,
  org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)",
  org.eclipse.wst.xml.ui;bundle-version="[1.1.2,2.0.0)",
- org.eclipse.wst.sse.ui;bundle-version="[1.1.102,2.0.0)"
+ org.eclipse.wst.sse.ui;bundle-version="[1.1.102,2.0.0)",
+ org.eclipse.core.expressions;bundle-version="3.4.101"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.portlet.ui,

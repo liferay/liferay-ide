@@ -34,6 +34,8 @@ import org.xml.sax.SAXException;
  */
 public class ServiceBuilderContentDescriber extends XMLContentDescriber implements IExecutableExtension {
 
+	public static String ID = "com.liferay.ide.eclipse.portlet.core.servicebuildercontent";
+
 	public ServiceBuilderContentDescriber() {
 		super();
 	}

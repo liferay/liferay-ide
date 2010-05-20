@@ -13,29 +13,34 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.project.core;
+package com.liferay.ide.eclipse.project.ui;
 
-import org.osgi.framework.Version;
+import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.content.IContentType;
 
 /**
  * @author Greg Amerson
  */
-public interface IPortalConstants {
+public class ServiceFilePropertyTester extends PropertyTester {
 
-	String DEFAULT_RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
+	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
+		if (receiver instanceof IFile) {
+			IFile file = (IFile) receiver;
 
-	Version LEAST_SUPPORTED_VERSION = new Version(6, 0, 2);
+			try {
+				IContentType contentType = file.getContentDescription().getContentType();
 
-	String LIFERAY_DISPLAY_XML_FILE = "liferay-display.xml";
-
-	String LIFERAY_HOOK_XML_FILE = "liferay-hook.xml";
-
-	String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml";
-
-	String LIFERAY_SERVICE_BUILDER_XML_FILE = "service.xml";
-
-	String PORTLET_XML_FILE = "portlet.xml";
-
-	String WEB_XML_FILE = "web.xml";
+				if (contentType.getId().equals("com.liferay.ide.eclipse.portlet.core.servicebuildercontent")) {
+					return true;
+				}
+			}
+			catch (CoreException e) {
+			}
+		}
+		
+		return false;
+	}
 
 }

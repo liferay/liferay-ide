@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.IPortalConstants;
 
 import java.util.List;
 import java.util.Set;
@@ -72,7 +73,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 	@Override
 	public Object getDefaultProperty(String propertyName) {
 		if (SERVICE_FILE.equals(propertyName)) {
-			return "service.xml";
+			return IPortalConstants.LIFERAY_SERVICE_BUILDER_XML_FILE;
 		}
 		else if (AUTHOR.equals(propertyName)) {
 			return System.getProperty("user.name");

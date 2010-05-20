@@ -66,6 +66,13 @@
             properties="hasNature"
             type="org.eclipse.core.resources.IProject">
       </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.eclipse.project.ui.ServiceFilePropertyTester"
+            id="com.liferay.ide.eclipse.project.ui.isServiceFile"
+            namespace="com.liferay.ide.eclipse.project.ui"
+            properties="isServiceFile"
+            type="org.eclipse.core.resources.IFile">
+      </propertyTester>
    </extension>
    <extension
          point="org.eclipse.ui.keywords">
