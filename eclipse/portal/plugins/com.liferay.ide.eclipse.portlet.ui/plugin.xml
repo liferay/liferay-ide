@@ -128,7 +128,7 @@
                id="com.liferay.ide.eclipse.portlet.ui.service.popup.action"
                label="Build services..."
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Build services...">
+               tooltip="Build services">
          </action>
          <enablement>
          	<adapt type="org.eclipse.core.resources.IResource">
