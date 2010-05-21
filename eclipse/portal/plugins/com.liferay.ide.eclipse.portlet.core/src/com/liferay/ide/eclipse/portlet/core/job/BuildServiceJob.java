@@ -177,13 +177,24 @@ public class BuildServiceJob extends SDKJob {
 						if (entry2.getPath().lastSegment().equals(getProject().getName() + "-service.jar")) {
 							((ClasspathEntry) entry2).sourceAttachmentPath =
 								getProject().getFolder("docroot/WEB-INF/service").getFullPath();
+
+							break;
 						}
 					}
 				}
 				catch (JavaModelException e) {
 					return PortletCore.createErrorStatus(e);
 				}
+
+				break;
 			}
+		}
+
+		try {
+			javaProject.setRawClasspath(existingRawClasspath.toArray(new IClasspathEntry[0]), null);
+		}
+		catch (JavaModelException e) {
+			return PortletCore.createErrorStatus(e);
 		}
 
 		return Status.OK_STATUS;

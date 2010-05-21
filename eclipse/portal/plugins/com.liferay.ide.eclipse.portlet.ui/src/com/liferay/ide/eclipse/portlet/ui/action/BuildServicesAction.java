@@ -2,8 +2,12 @@ package com.liferay.ide.eclipse.portlet.ui.action;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -39,6 +43,18 @@ public class BuildServicesAction implements IObjectActionDelegate {
 			if (elem instanceof IFile) {
 				servicesFile = (IFile) elem;
 
+			}
+			else if (elem instanceof IProject) {
+				IProject project = (IProject) elem;
+
+				IFolder docroot = PortletUtil.getDocroot(project);
+
+				if (docroot != null && docroot.exists()) {
+					servicesFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
+				}
+			}
+
+			if (servicesFile != null && servicesFile.exists()) {
 				BuildServiceJob job = PortletCore.createServiceBuilderJob(servicesFile);
 
 				job.schedule();
