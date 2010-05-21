@@ -68,6 +68,10 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_HOOK_PARENT_DIR = "hook.parent.dir";
 
+	public static final String PROPERTY_LANG_DIR = "lang.dir";
+
+	public static final String PROPERTY_LANG_FILE = "lang.file";
+
 	public static final String PROPERTY_LAYOUTTPL_DISPLAY_NAME = "layouttpl.display.name";
 
 	public static final String PROPERTY_LAYOUTTPL_NAME = "layouttpl.name";
@@ -91,6 +95,8 @@ public interface ISDKConstants {
 	public static final String PROPERTY_THEME_NAME = "theme.name";
 
 	public static final String PROPERTY_THEME_PARENT_DIR = "theme.parent.dir";
+
+	public static final String TARGET_BUILD_LANG_CMD = "build-lang-cmd";
 
 	public static final String TARGET_BUILD_SERVICE = "build-service";
 

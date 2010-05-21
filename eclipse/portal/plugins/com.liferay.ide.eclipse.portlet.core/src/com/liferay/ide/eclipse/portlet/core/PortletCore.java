@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.core;
 
+import com.liferay.ide.eclipse.portlet.core.job.BuildLanguageJob;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
 
 import org.eclipse.core.resources.IFile;
@@ -36,18 +37,24 @@ public class PortletCore extends Plugin {
 	// The shared instance
 	private static PortletCore plugin;
 
+	public static BuildLanguageJob createBuildLanguageJob(IFile file) {
+		BuildLanguageJob job = new BuildLanguageJob(file);
+
+		return job;
+	}
+
+	public static BuildServiceJob createBuildServiceJob(IFile file) {
+		BuildServiceJob job = new BuildServiceJob(file);
+
+		return job;
+	}
+
 	public static IStatus createErrorStatus(Exception e) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
 	}
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
-	}
-
-	public static BuildServiceJob createServiceBuilderJob(IFile file) {
-		BuildServiceJob job = new BuildServiceJob(file);
-
-		return job;
 	}
 
 	/**

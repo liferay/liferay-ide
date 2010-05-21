@@ -59,6 +59,28 @@ public class SDK {
 		this.location = location;
 	}
 
+	public IStatus buildLanguage(IProject project, IFile langFile, Map<String, String> properties) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		String langDirLocation = langFile.getParent().getRawLocation().toOSString();
+
+		String langFileName = langFile.getFullPath().removeFileExtension().lastSegment();
+
+		properties.put(ISDKConstants.PROPERTY_LANG_DIR, langDirLocation);
+		properties.put(ISDKConstants.PROPERTY_LANG_FILE, langFileName);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_LANG_CMD,
+				properties);
+		}
+		catch (Exception e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
 	public IStatus buildService(IProject project, IFile serviceXmlFile, Map<String, String> properties) {
 		SDKHelper antHelper = new SDKHelper(this);
 

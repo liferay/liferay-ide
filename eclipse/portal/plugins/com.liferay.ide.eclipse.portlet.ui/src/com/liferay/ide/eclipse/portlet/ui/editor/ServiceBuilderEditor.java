@@ -572,7 +572,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 	protected void doGenerate() {
 		doSave(new NullProgressMonitor());
 
-		BuildServiceJob job = PortletCore.createServiceBuilderJob(getEditorInput().getFile());
+		BuildServiceJob job = PortletCore.createBuildServiceJob(getEditorInput().getFile());
 
 		job.schedule();
 
