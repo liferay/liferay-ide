@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IPath;
@@ -62,10 +63,12 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	
 	protected Text dirField;
 	
+	protected boolean ignoreModifyEvent;
+	
 	protected Button jreButton;
 	
 	protected Combo jreCombo;
-	
+
 	protected Label jreLabel;
 
 	protected Text nameField;
@@ -79,6 +82,12 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	}
 
 	public void modifyText(ModifyEvent e) {
+		if (ignoreModifyEvent) {
+			ignoreModifyEvent = false;
+
+			return;
+		}
+
 		if (e.getSource().equals(dirField)) {
 			getRuntime().setLocation(new Path(dirField.getText()));
 		}
@@ -90,6 +99,28 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		
 		IStatus status = getRuntime().validate(null);
 		
+		if (!status.isOK() && e.getSource().equals(dirField)) {
+			// check to see if we need to modify from a liferay folder down to
+			// embedded tomcat
+			IPath currentLocation = getRuntime().getLocation();
+
+			IPath modifiedLocation = modifyLocationForBundle(currentLocation);
+
+			if (modifiedLocation != null) {
+				getRuntime().setLocation(modifiedLocation);
+
+				status = getRuntime().validate(null);
+
+				if (status.isOK()) {
+					ignoreModifyEvent = true;
+
+					dirField.setText(modifiedLocation.toOSString());
+
+					validate();
+				}
+			}
+		}
+
 		if (status.isOK()) {
 			enableJREControls(true);
 		}
@@ -117,14 +148,6 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		}
 	}
 
-	private void enableJREControls(boolean enabled) {
-		jreLabel.setEnabled(enabled);	
-			
-		jreCombo.setEnabled(enabled);
-		
-		jreButton.setEnabled(enabled);
-	}
-
 	protected Button createButton(String text, int style) {
 		Button button = new Button(this, style);
 		
@@ -134,14 +157,6 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		
 		return button;
 	}
-
-	/*
-	 * protected void setRuntime(IRuntimeWorkingCopy newRuntime) { if
-	 * (newRuntime == null) { runtimeWC = null; runtime = null; } else {
-	 * runtimeWC = newRuntime; runtime = (ITomcatRuntimeWorkingCopy)
-	 * newRuntime.loadAdapter(ITomcatRuntimeWorkingCopy.class, null); } init();
-	 * validate(); }
-	 */
 
 	@Override
 	protected void createControl() {
@@ -223,6 +238,14 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		return label;
 	}
 
+	/*
+	 * protected void setRuntime(IRuntimeWorkingCopy newRuntime) { if
+	 * (newRuntime == null) { runtimeWC = null; runtime = null; } else {
+	 * runtimeWC = newRuntime; runtime = (ITomcatRuntimeWorkingCopy)
+	 * newRuntime.loadAdapter(ITomcatRuntimeWorkingCopy.class, null); } init();
+	 * validate(); }
+	 */
+
 	protected Layout createLayout() {
 		GridLayout layout = new GridLayout(2, false);
 		return layout;
@@ -239,6 +262,14 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		return text;
+	}
+
+	protected void enableJREControls(boolean enabled) {
+		jreLabel.setEnabled(enabled);	
+			
+		jreCombo.setEnabled(enabled);
+		
+		jreButton.setEnabled(enabled);
 	}
 
 	protected IRuntimeWorkingCopy getRuntime() {
@@ -258,6 +289,50 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		setFieldValue(nameField, getRuntime().getName());
 		
 		setFieldValue(dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : "");
+	}
+
+	protected IPath modifyLocationForBundle(IPath currentLocation) {
+		IPath modifiedLocation = null;
+
+		if (currentLocation == null || currentLocation.toOSString().isEmpty()) {
+			return null;
+		}
+
+		File location = currentLocation.toFile();
+
+		if (location.exists() && location.isDirectory()) {
+			// check to see if this location contains 3 dirs
+			// data, deploy, and tomcat-*
+			File[] files = location.listFiles();
+
+			boolean[] matches = new boolean[3];
+
+			String[] patterns = new String[] {
+				"data", "deploy", "^tomcat-.*"
+			};
+
+			File tomcatDir = null;
+
+			for (File file : files) {
+				for (int i = 0; i < patterns.length; i++) {
+					if (file.isDirectory() && file.getName().matches(patterns[i])) {
+						matches[i] = true;
+
+						if (i == 2) { // tomcat
+							tomcatDir = file;
+						}
+
+						break;
+					}
+				}
+			}
+
+			if (matches[0] && matches[1] && matches[2] && tomcatDir != null) {
+				modifiedLocation = new Path(tomcatDir.getPath());
+			}
+		}
+
+		return modifiedLocation;
 	}
 
 	@SuppressWarnings("unchecked")
