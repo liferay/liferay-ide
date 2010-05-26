@@ -23,15 +23,26 @@ import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.ui.internal.ide.StatusUtil;
+import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties.FacetDataModelMap;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
@@ -199,5 +210,138 @@ public class ProjectUtil {
 		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
 		prefs.flush();
 	}
+
+	public static boolean collectProjectsFromDirectory(
+		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
+		Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor) {
+	
+		if (monitor.isCanceled()) {
+			return false;
+		}
+	
+		monitor.subTask(NLS.bind(DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath()));
+	
+		File[] contents = directory.listFiles();
+	
+		if (contents == null) {
+			return false;
+		}
+	
+		// Initialize recursion guard for recursive symbolic links
+		if (directoriesVisited == null) {
+			directoriesVisited = new HashSet<String>();
+	
+			try {
+				directoriesVisited.add(directory.getCanonicalPath());
+			}
+			catch (IOException exception) {
+				StatusManager.getManager().handle(
+					StatusUtil.newStatus(IStatus.ERROR, exception.getLocalizedMessage(), exception));
+			}
+		}
+	
+		// first look for project description files
+		final String dotProject = IProjectDescription.DESCRIPTION_FILE_NAME;
+	
+		for (int i = 0; i < contents.length; i++) {
+			File file = contents[i];
+	
+			if (isLiferayProjectDir(file)) {
+				// recurse to see if it has project file
+				int currentSize = eclipseProjectFiles.size();
+	
+				collectProjectsFromDirectory(
+					eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor);
+	
+				int newSize = eclipseProjectFiles.size();
+	
+				if (newSize == currentSize) {
+					liferayProjectDirs.add(file);
+				}
+			}
+			else if (file.isFile() && file.getName().equals(dotProject)) {
+				if (!eclipseProjectFiles.contains(file) && isLiferayProjectDir(file.getParentFile())) {
+					eclipseProjectFiles.add(file);
+				}
+	
+				// don't search sub-directories since we can't have nested
+				// projects
+				return true;
+			}
+		}
+	
+		// no project description found, so recurse into sub-directories
+		for (int i = 0; i < contents.length; i++) {
+			if (contents[i].isDirectory()) {
+				if (!contents[i].getName().equals(METADATA_FOLDER)) {
+					try {
+						String canonicalPath = contents[i].getCanonicalPath();
+	
+						if (!directoriesVisited.add(canonicalPath)) {
+	
+							// already been here --> do not recurse
+							continue;
+						}
+					}
+					catch (IOException exception) {
+						StatusManager.getManager().handle(
+							StatusUtil.newStatus(IStatus.ERROR, exception.getLocalizedMessage(), exception));
+	
+					}
+	
+					// dont recurse directories that we have already determined
+					// are Liferay projects
+					if (!liferayProjectDirs.contains(contents[i]) && recurse) {
+						collectProjectsFromDirectory(
+							eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor);
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	public static boolean isValidLiferayProjectDir(File dir) {
+		String name = dir.getName();
+	
+		if (name.endsWith("-portlet") || name.endsWith("-ext") || name.endsWith("-hook")) {
+			return true;
+		}
+	
+		return false;
+	}
+
+	public static boolean isLiferayProjectDir(File file) {
+		if (file.isDirectory() && isValidLiferayProjectDir(file)) {
+			// check for build.xml and docroot
+			File[] contents = file.listFiles();
+	
+			boolean hasBuildXml = false;
+	
+			boolean hasDocroot = false;
+	
+			for (File content : contents) {
+				if (content.getName().equals("build.xml")) {
+					hasBuildXml = true;
+	
+					continue;
+				}
+	
+				if (content.getName().equals("docroot")) {
+					hasDocroot = true;
+	
+					continue;
+				}
+			}
+	
+			if (hasBuildXml && hasDocroot) {
+				return true;
+			}
+		}
+	
+		return false;
+	}
+
+	public static final String METADATA_FOLDER = ".metadata";
 
 }
