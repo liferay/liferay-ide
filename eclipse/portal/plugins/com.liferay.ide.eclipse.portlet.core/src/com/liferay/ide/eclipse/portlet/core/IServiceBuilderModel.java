@@ -20,10 +20,18 @@ package com.liferay.ide.eclipse.portlet.core;
  */
 public interface IServiceBuilderModel {
 
-	String PROPERTY_AUTHOR = "author";
+	public static final String ATTR_PACKAGE_PATH = "package-path";
 
-	String PROPERTY_NAMESPACE = "namespace";
+	public static final String ELEMENT_AUTHOR = "author";
 
-	String PROPERTY_PACKAGE_PATH = "package-path";
+	public static final String ELEMENT_ENTITY = "entity";
+
+	public static final String ELEMENT_NAMESPACE = "namespace";
+
+	public static final String PROPERTY_AUTHOR = "author";
+
+	public static final String PROPERTY_NAMESPACE = "namespace";
+
+	public static final String PROPERTY_PACKAGE_PATH = "package-path";
 
 }

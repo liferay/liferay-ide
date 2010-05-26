@@ -168,7 +168,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		// }
 
 		ToolBarButtonContribution submitButtonContribution =
-			new ToolBarButtonContribution("org.eclipse.mylyn.tasks.toolbars.submit") { //$NON-NLS-1$
+			new ToolBarButtonContribution("com.liferay.ide.eclipse.portlet.ui.toolbars.buildservices") { //$NON-NLS-1$
 
 				@Override
 				protected Control createButton(Composite composite) {

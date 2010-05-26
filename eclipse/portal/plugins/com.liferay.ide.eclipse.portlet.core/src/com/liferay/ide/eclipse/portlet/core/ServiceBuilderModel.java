@@ -76,7 +76,7 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public String getAuthor() {
-		NodeList elements = document.getDocumentElement().getElementsByTagName("author");
+		NodeList elements = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_AUTHOR);
 
 		if (elements.getLength() > 0) {
 			Node text = elements.item(0).getFirstChild();
@@ -90,7 +90,7 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public String getNamespace() {
-		NodeList elements = document.getDocumentElement().getElementsByTagName("namespace");
+		NodeList elements = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_NAMESPACE);
 
 		if (elements.getLength() > 0) {
 			Node text = elements.item(0).getFirstChild();
@@ -109,7 +109,7 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public String getPackagePath() {
-		return document.getDocumentElement().getAttribute("package-path");
+		return document.getDocumentElement().getAttribute(IServiceBuilderModel.ATTR_PACKAGE_PATH);
 	}
 
 	public boolean isAdapterForType(Object type) {
@@ -193,35 +193,35 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public void setAuthor(String namespace) {
-		if (namespaceTextNode != null) {
-			namespaceTextNode.setNodeValue(namespace);
+		if (authorTextNode != null) {
+			authorTextNode.setNodeValue(namespace);
 		}
 		else {
-			NodeList entities = document.getDocumentElement().getElementsByTagName("namespace");
+			NodeList namespaces = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_NAMESPACE);
 
 			Node refChild = null;
 
-			if (entities.getLength() > 0) {
-				refChild = entities.item(0);
+			if (namespaces.getLength() > 0) {
+				refChild = namespaces.item(0);
 			}
 
 			if (refChild == null) {
-				entities = document.getDocumentElement().getElementsByTagName("entity");
+				NodeList entities = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_ENTITY);
 
 				if (entities.getLength() > 0) {
 					refChild = entities.item(0);
 				}
 			}
 
-			Node namespaceNode = NodeUtil.getFirstNamedChildNode(document.getDocumentElement(), "namespace");
+			Node authorNode = NodeUtil.getFirstNamedChildNode(document.getDocumentElement(), IServiceBuilderModel.ELEMENT_AUTHOR);
 
-			if (namespaceNode == null) {
-				namespaceNode = document.createElement("namespace");
+			if (authorNode == null) {
+				authorNode = document.createElement(IServiceBuilderModel.ELEMENT_AUTHOR);
 
-				document.getDocumentElement().insertBefore(namespaceNode, refChild);
+				document.getDocumentElement().insertBefore(authorNode, refChild);
 			}
 
-			authorTextNode = NodeUtil.setTextContent(namespaceNode, namespace);
+			authorTextNode = NodeUtil.setTextContent(authorNode, namespace);
 
 			((TextImpl) authorTextNode).addAdapter(this);
 		}
@@ -232,7 +232,7 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 			namespaceTextNode.setNodeValue(namespace);
 		}
 		else {
-			NodeList entities = document.getDocumentElement().getElementsByTagName("entity");
+			NodeList entities = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_ENTITY);
 
 			Node refChild = null;
 
@@ -240,10 +240,10 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 				refChild = entities.item(0);
 			}
 
-			Node namespaceNode = NodeUtil.getFirstNamedChildNode(document.getDocumentElement(), "namespace");
+			Node namespaceNode = NodeUtil.getFirstNamedChildNode(document.getDocumentElement(), IServiceBuilderModel.ELEMENT_NAMESPACE);
 
 			if (namespaceNode == null) {
-				namespaceNode = document.createElement("namespace");
+				namespaceNode = document.createElement(IServiceBuilderModel.ELEMENT_NAMESPACE);
 
 				document.getDocumentElement().insertBefore(namespaceNode, refChild);
 			}
@@ -255,7 +255,7 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public void setPackagePath(String packagePath) {
-		document.getDocumentElement().setAttribute("package-path", packagePath);
+		document.getDocumentElement().setAttribute(IServiceBuilderModel.ATTR_PACKAGE_PATH, packagePath);
 	}
 
 	@Override
