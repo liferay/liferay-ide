@@ -79,6 +79,15 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation implements I
 			return status;
 		}
 
+		if (getDataModel().getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE)) {
+			try {
+				createEmptyFileInDefaultSourceFolder(getDataModel().getStringProperty(CREATE_RESOURCE_BUNDLE_FILE_PATH));
+			}
+			catch (CoreException e) {
+				status = PortletCore.createErrorStatus(e);
+			}
+		}
+
 		if (getDataModel().getBooleanProperty(CREATE_JSPS)) {
 			status = createModeJSPFiles();
 		}
@@ -116,6 +125,24 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation implements I
 		generateMetaData(getDataModel(), getQualifiedClassName());
 
 		return Status.OK_STATUS;
+	}
+
+	protected void createEmptyFileInDefaultSourceFolder(String filePath)
+		throws CoreException {
+
+		IFolder[] sourceFolders = ProjectUtil.getSourceFolders(getTargetProject());
+
+		if (sourceFolders != null && sourceFolders.length > 0) {
+			IFile projectFile = sourceFolders[0].getFile(filePath);
+
+			if (!projectFile.exists()) {
+				IFolder parent = (IFolder) projectFile.getParent();
+
+				CoreUtil.prepareFolder(parent);
+
+				projectFile.create(new ByteArrayInputStream(new byte[0]), IResource.FORCE, null);
+			}
+		}
 	}
 
 	protected void createEmptyFileInDocroot(String filePath)

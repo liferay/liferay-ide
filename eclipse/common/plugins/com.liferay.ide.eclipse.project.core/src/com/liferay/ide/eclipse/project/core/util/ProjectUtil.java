@@ -25,8 +25,10 @@ import com.liferay.ide.eclipse.sdk.SDKManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFolder;
@@ -37,6 +39,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -62,154 +66,7 @@ import org.osgi.service.prefs.Preferences;
 @SuppressWarnings("restriction")
 public class ProjectUtil {
 
-	public static IFacetedProject getFacetedProject(IProject project) {
-		try {
-			return ProjectFacetsManager.create(project);
-		}
-		catch (CoreException e) {
-			return null;
-		}
-	}
-
-	public static Set<IProjectFacetVersion> getFacetsForPreset(String presetId) {
-		IPreset preset = ProjectFacetsManager.getPreset(presetId);
-		return preset.getProjectFacets();
-	}
-
-	public static IProjectFacet getLiferayFacet(IFacetedProject facetedProject) {
-		for (IProjectFacetVersion projectFacet : facetedProject.getProjectFacets()) {
-			if (isLiferayFacet(projectFacet.getProjectFacet())) {
-				return projectFacet.getProjectFacet();
-			}
-		}
-		return null;
-	}
-
-	public static IProject getProject(IDataModel model) {
-		if (model != null) {
-			String projectName = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
-			return CoreUtil.getProject(projectName);
-		}
-		return null;
-	}
-
-	public static IProject getProject(String testProjectName) {
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(testProjectName);
-	}
-
-	public static SDK getSDK(IProject project, IProjectFacet facet)
-		throws BackingStoreException {
-		IFacetedProject factedProject = getFacetedProject(project);
-		Preferences prefs = factedProject.getPreferences(facet).node("liferay-plugin-project");
-		String name = prefs.get(ISDKConstants.PROPERTY_NAME, null);
-		return SDKManager.getSDKByName(name);
-	}
-
-	public static boolean hasFacet(IProject project, IProjectFacet checkProjectFacet) {
-		boolean retval = false;
-		if (project == null || checkProjectFacet == null) {
-			return retval;
-		}
-
-		try {
-			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
-			if (facetedProject != null && checkProjectFacet != null) {
-				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
-					IProjectFacet projectFacet = facet.getProjectFacet();
-					if (checkProjectFacet.equals(projectFacet)) {
-						retval = true;
-						break;
-					}
-				}
-			}
-		}
-		catch (CoreException e) {
-		}
-		return retval;
-	}
-
-	public static boolean isDynamicWebFacet(IProjectFacet facet) {
-		return facet != null && facet.getId().equals(IModuleConstants.JST_WEB_MODULE);
-	}
-
-	public static boolean isExtProject(IProject project) {
-		return hasFacet(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-	}
-
-	public static boolean isHookProject(IProject project) {
-		return hasFacet(project, HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
-	}
-
-	public static boolean isJavaFacet(IProjectFacet facet) {
-		return facet != null && facet.getId().equals(IModuleConstants.JST_JAVA);
-	}
-
-	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
-		return PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET.equals(projectFacet) ||
-			HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET.equals(projectFacet) ||
-			ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET.equals(projectFacet);
-	}
-
-	public static boolean isLiferayProject(IProject project) {
-		boolean retval = false;
-		if (project == null) {
-			return retval;
-		}
-
-		try {
-			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
-			if (facetedProject != null) {
-				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
-					IProjectFacet projectFacet = facet.getProjectFacet();
-					if (PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET.equals(projectFacet) ||
-						HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET.equals(projectFacet) ||
-						ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET.equals(projectFacet)) {
-						retval = true;
-						break;
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-		}
-		return retval;
-	}
-
-	public static boolean isParent(IFolder folder, IResource resource) {
-		if (folder == null || resource == null) {
-			return false;
-		}
-
-		if (resource.getParent() != null && resource.getParent().equals(folder)) {
-			return true;
-		}
-		else {
-			boolean retval = isParent(folder, resource.getParent());
-			if (retval == true) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public static boolean isPortletProject(IProject project) {
-		return hasFacet(project, PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
-	}
-
-	public static void setGenerateDD(IDataModel model, boolean generateDD) {
-		FacetDataModelMap map =
-			(FacetDataModelMap) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
-		IDataModel webFacet = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
-		webFacet.setBooleanProperty(IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD);
-	}
-
-	public static void setSDK(IProject project, IProjectFacet facet, SDK sdk)
-		throws BackingStoreException, CoreException {
-		Preferences prefs = ProjectFacetsManager.create(project).getPreferences(facet).node("liferay-plugin-project");
-		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
-		prefs.flush();
-	}
+	public static final String METADATA_FOLDER = ".metadata";
 
 	public static boolean collectProjectsFromDirectory(
 		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -301,14 +158,131 @@ public class ProjectUtil {
 		return true;
 	}
 
-	public static boolean isValidLiferayProjectDir(File dir) {
-		String name = dir.getName();
-	
-		if (name.endsWith("-portlet") || name.endsWith("-ext") || name.endsWith("-hook")) {
-			return true;
+	public static IFacetedProject getFacetedProject(IProject project) {
+		try {
+			return ProjectFacetsManager.create(project);
 		}
-	
-		return false;
+		catch (CoreException e) {
+			return null;
+		}
+	}
+
+	public static Set<IProjectFacetVersion> getFacetsForPreset(String presetId) {
+		IPreset preset = ProjectFacetsManager.getPreset(presetId);
+		return preset.getProjectFacets();
+	}
+
+	public static IProjectFacet getLiferayFacet(IFacetedProject facetedProject) {
+		for (IProjectFacetVersion projectFacet : facetedProject.getProjectFacets()) {
+			if (isLiferayFacet(projectFacet.getProjectFacet())) {
+				return projectFacet.getProjectFacet();
+			}
+		}
+		return null;
+	}
+
+	public static IProject getProject(IDataModel model) {
+		if (model != null) {
+			String projectName = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+			return CoreUtil.getProject(projectName);
+		}
+		return null;
+	}
+
+	public static IProject getProject(String testProjectName) {
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(testProjectName);
+	}
+
+	public static SDK getSDK(IProject project, IProjectFacet facet)
+		throws BackingStoreException {
+		IFacetedProject factedProject = getFacetedProject(project);
+		Preferences prefs = factedProject.getPreferences(facet).node("liferay-plugin-project");
+		String name = prefs.get(ISDKConstants.PROPERTY_NAME, null);
+		return SDKManager.getSDKByName(name);
+	}
+
+	public static IFolder[] getSourceFolders(IProject project) {
+		List<IFolder> sourceFolders = new ArrayList<IFolder>();
+
+		IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers(project);
+
+		for (IPackageFragmentRoot source : sources) {
+			if (source.getResource() instanceof IFolder) {
+				sourceFolders.add(((IFolder) source.getResource()));
+			}
+		}
+
+		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
+	}
+
+	public static boolean hasFacet(IProject project, IProjectFacet checkProjectFacet) {
+		boolean retval = false;
+		if (project == null || checkProjectFacet == null) {
+			return retval;
+		}
+
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
+			if (facetedProject != null && checkProjectFacet != null) {
+				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
+					if (checkProjectFacet.equals(projectFacet)) {
+						retval = true;
+						break;
+					}
+				}
+			}
+		}
+		catch (CoreException e) {
+		}
+		return retval;
+	}
+
+	public static boolean isDynamicWebFacet(IProjectFacet facet) {
+		return facet != null && facet.getId().equals(IModuleConstants.JST_WEB_MODULE);
+	}
+
+	public static boolean isExtProject(IProject project) {
+		return hasFacet(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+	}
+
+	public static boolean isHookProject(IProject project) {
+		return hasFacet(project, HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
+	}
+
+	public static boolean isJavaFacet(IProjectFacet facet) {
+		return facet != null && facet.getId().equals(IModuleConstants.JST_JAVA);
+	}
+
+	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
+		return PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET.equals(projectFacet) ||
+			HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET.equals(projectFacet) ||
+			ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET.equals(projectFacet);
+	}
+
+	public static boolean isLiferayProject(IProject project) {
+		boolean retval = false;
+		if (project == null) {
+			return retval;
+		}
+
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
+			if (facetedProject != null) {
+				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
+					if (PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET.equals(projectFacet) ||
+						HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET.equals(projectFacet) ||
+						ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET.equals(projectFacet)) {
+						retval = true;
+						break;
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+		}
+		return retval;
 	}
 
 	public static boolean isLiferayProjectDir(File file) {
@@ -342,6 +316,50 @@ public class ProjectUtil {
 		return false;
 	}
 
-	public static final String METADATA_FOLDER = ".metadata";
+	public static boolean isParent(IFolder folder, IResource resource) {
+		if (folder == null || resource == null) {
+			return false;
+		}
+
+		if (resource.getParent() != null && resource.getParent().equals(folder)) {
+			return true;
+		}
+		else {
+			boolean retval = isParent(folder, resource.getParent());
+			if (retval == true) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static boolean isPortletProject(IProject project) {
+		return hasFacet(project, PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
+	}
+
+	public static boolean isValidLiferayProjectDir(File dir) {
+		String name = dir.getName();
+	
+		if (name.endsWith("-portlet") || name.endsWith("-ext") || name.endsWith("-hook")) {
+			return true;
+		}
+	
+		return false;
+	}
+
+	public static void setGenerateDD(IDataModel model, boolean generateDD) {
+		FacetDataModelMap map =
+			(FacetDataModelMap) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
+		IDataModel webFacet = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
+		webFacet.setBooleanProperty(IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD);
+	}
+
+	public static void setSDK(IProject project, IProjectFacet facet, SDK sdk)
+		throws BackingStoreException, CoreException {
+		Preferences prefs = ProjectFacetsManager.create(project).getPreferences(facet).node("liferay-plugin-project");
+		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
+		prefs.flush();
+	}
 
 }

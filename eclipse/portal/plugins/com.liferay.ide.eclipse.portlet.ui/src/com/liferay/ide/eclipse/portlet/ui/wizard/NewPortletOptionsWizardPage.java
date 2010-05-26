@@ -16,8 +16,13 @@
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
+import com.liferay.ide.eclipse.ui.wizard.LiferayDataModelWizardPage;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,19 +34,23 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPage;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class NewPortletOptionsWizardPage extends DataModelWizardPage implements INewPortletClassDataModelProperties {
+public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
+	implements INewPortletClassDataModelProperties {
 
 	protected Button aboutButton;
+
+	protected Text bundleFile;
 
 	protected Button configButton;
 
 	protected Button createJspsButton;
+
+	protected Button createResourceBundleFileButton;
 
 	protected Text displayName;
 
@@ -61,14 +70,14 @@ public class NewPortletOptionsWizardPage extends DataModelWizardPage implements 
 
 	protected Button printButton;
 
+	protected Text resourceBundleFilePath;
+
 	protected Text title;
 
 	protected Button viewButton;
 
 	public NewPortletOptionsWizardPage(IDataModel dataModel, String pageName, String desc, String title) {
-		super(dataModel, pageName);
-
-		setTitle(title);
+		super(dataModel, pageName, title, null);
 
 		setDescription(desc);
 	}
@@ -157,31 +166,45 @@ public class NewPortletOptionsWizardPage extends DataModelWizardPage implements 
 
 	}
 
-	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite composite = SWTUtil.createTopComposite(parent, 3);
+	protected void createResourcesGroup(Composite composite) {
+		Group group = SWTUtil.createGroup(composite, "Resources", 2);
 
-		createPortletInfoGroup(composite);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
 
-		createPortletModesGroup(composite);
+		group.setLayoutData(gd);
 
-		createLiferayPortletModesGroup(composite);
+		createResourceBundleFileButton = new Button(group, SWT.CHECK);
+		createResourceBundleFileButton.setText("Create resource bundle file");
+		createResourceBundleFileButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
+		synchHelper.synchCheckbox(
+			createResourceBundleFileButton, INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE, null);
 
-		Composite composite2 = new Composite(composite, SWT.NONE);
+		final Label resourceBundleFileLabel = SWTUtil.createLabel(group, "Resource bundle file path:", 1);
 
-		GridLayout gl = new GridLayout(2, false);
-		gl.marginLeft = 3;
+		resourceBundleFilePath = SWTUtil.createText(group, 1);
+		((GridData) resourceBundleFilePath.getLayoutData()).widthHint = 150;
+		synchHelper.synchText(
+			resourceBundleFilePath, INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE_PATH, null);
 
-		composite2.setLayout(gl);
+		createResourceBundleFileButton.addSelectionListener(new SelectionAdapter() {
 
-		createJspsButton = new Button(composite2, SWT.CHECK);
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				resourceBundleFileLabel.setEnabled(createResourceBundleFileButton.getSelection());
+
+				resourceBundleFilePath.setEnabled(createResourceBundleFileButton.getSelection());
+			}
+		});
+
+		createJspsButton = new Button(group, SWT.CHECK);
 		createJspsButton.setText("Create JSP &files"); //$NON-NLS-1$
 		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
 		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
 
-		final Label jspLabel = SWTUtil.createLabel(composite2, "JSP folder:", 1);
+		final Label jspLabel = SWTUtil.createLabel(group, "JSP folder:", 1);
 
-		jspFolder = SWTUtil.createText(composite2, 1);
+		jspFolder = SWTUtil.createText(group, 1);
 		((GridData) jspFolder.getLayoutData()).widthHint = 150;
 		synchHelper.synchText(jspFolder, INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER, null);
 
@@ -194,16 +217,38 @@ public class NewPortletOptionsWizardPage extends DataModelWizardPage implements 
 				jspFolder.setEnabled(createJspsButton.getSelection());
 			}
 		});
+	}
+
+	@Override
+	protected Composite createTopLevelComposite(Composite parent) {
+		Composite composite = SWTUtil.createTopComposite(parent, 3);
+
+		createPortletInfoGroup(composite);
+
+		createPortletModesGroup(composite);
+
+		createLiferayPortletModesGroup(composite);
+
+		createResourcesGroup(composite);
 
 		return composite;
+	}
+
+	@Override
+	protected IFolder getDocroot() {
+		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	@Override
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
 			PORTLET_NAME, DISPLAY_NAME, VIEW_MODE, EDIT_MODE, HELP_MODE, ABOUT_MODE, CONFIG_MODE, EDITDEFAULTS_MODE,
-			EDITGUEST_MODE, PREVIEW_MODE, PRINT_MODE
+			EDITGUEST_MODE, PREVIEW_MODE, PRINT_MODE, CREATE_RESOURCE_BUNDLE_FILE_PATH
 		};
+	}
+
+	protected boolean isProjectValid(IProject project) {
+		return ProjectUtil.isPortletProject(project);
 	}
 
 	@Override
@@ -211,4 +256,6 @@ public class NewPortletOptionsWizardPage extends DataModelWizardPage implements 
 		return true;
 	}
 
+	protected void validateProjectRequirements(IProject selectedProject) {
+	}
 }

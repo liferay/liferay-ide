@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
@@ -26,6 +27,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -130,12 +132,8 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 		return topComposite;
 	}
 
-	protected void setShellImage() {
-		URL url = PortletUIPlugin.getDefault().getBundle().getEntry("/icons/e16/hook.png");
-
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
-
-		getShell().setImage(shellImage);
+	protected IFolder getDocroot() {
+		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	@Override
@@ -220,6 +218,14 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
 	protected boolean isProjectValid(IProject project) {
 		return ProjectUtil.isHookProject(project);
+	}
+
+	protected void setShellImage() {
+		URL url = PortletUIPlugin.getDefault().getBundle().getEntry("/icons/e16/hook.png");
+
+		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+
+		getShell().setImage(shellImage);
 	}
 
 	protected void validateProjectRequirements(IProject selectedProject) {

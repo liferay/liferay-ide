@@ -47,9 +47,9 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		DOMModelEditOperation domModelOperation =
 			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.PORTLET_XML_FILE)) {
 
-			protected IStatus doExecute(IDOMDocument document) {
-				return updatePortletXML(document, model);
-			}
+				protected IStatus doExecute(IDOMDocument document) {
+					return updatePortletXML(document, model);
+				}
 
 			};
 
@@ -64,6 +64,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			protected IStatus doExecute(IDOMDocument document) {
 				return updateLiferayPortletXML(document, model);
 			}
+
 		};
 
 		status = domModelOperation.execute();
@@ -77,6 +78,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			protected IStatus doExecute(IDOMDocument document) {
 				return updateLiferayDisplayXML(document, model);
 			}
+
 		};
 
 		status = domModelOperation.execute();
@@ -150,6 +152,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		appendChildElement(newPortletElement, "portlet-name", model.getStringProperty(PORTLET_NAME));
 
 		appendChildElement(newPortletElement, "icon", model.getStringProperty(ICON_FILE));
+
 		appendChildElement(
 			newPortletElement, "instanceable", Boolean.toString(model.getBooleanProperty(ALLOW_MULTIPLE)));
 
@@ -238,6 +241,11 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 					newSupportsElement, "portlet-mode",
 					model.getPropertyDescriptor(portletMode).getPropertyDescription());
 			}
+		}
+
+		if (model.getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE)) {
+			appendChildElement(
+				newPortletElement, "resource-bundle", model.getStringProperty(CREATE_RESOURCE_BUNDLE_FILE_PATH));
 		}
 
 		// add portlet-info

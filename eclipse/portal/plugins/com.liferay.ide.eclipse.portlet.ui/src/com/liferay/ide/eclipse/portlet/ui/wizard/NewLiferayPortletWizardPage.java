@@ -18,7 +18,9 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
+import com.liferay.ide.eclipse.ui.wizard.LiferayDataModelWizardPage;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -47,13 +49,13 @@ import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPage;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class NewLiferayPortletWizardPage extends DataModelWizardPage implements INewPortletClassDataModelProperties {
+public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
+	implements INewPortletClassDataModelProperties {
 
 	protected Button allowMultiInstanceButton;
 
@@ -70,9 +72,7 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 	protected Text name;
 
 	public NewLiferayPortletWizardPage(IDataModel dataModel, String pageName, String desc, String title) {
-		super(dataModel, pageName);
-
-		setTitle(title);
+		super(dataModel, pageName, title, null);
 
 		setDescription(desc);
 	}
@@ -113,6 +113,7 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 		this.synchHelper.synchText(iconFile, ICON_FILE, null);
 
 		Button iconFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+
 		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -120,6 +121,7 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 				handleFileBrowseButton(
 					NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: ");
 			}
+
 		});
 
 		SWTUtil.createLabel(group, "", 1);
@@ -133,12 +135,14 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 		this.synchHelper.synchText(cssFile, CSS_FILE, null);
 
 		Button cssFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+
 		cssFileBrowse.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleFileBrowseButton(NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: ");
 			}
+
 		});
 
 		SWTUtil.createLabel(group, SWT.RIGHT, "JavaScript:", 1);
@@ -147,6 +151,7 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 		this.synchHelper.synchText(javascriptFile, JAVASCRIPT_FILE, null);
 
 		Button javascriptFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+
 		javascriptFileBrowse.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -155,6 +160,7 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 					NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
 					"Choose a javascript file: ");
 			}
+
 		});
 	}
 
@@ -205,6 +211,10 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 		};
 	}
 
+	protected IFolder getDocroot() {
+		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+	}
+
 	@Override
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
@@ -249,6 +259,14 @@ public class NewLiferayPortletWizardPage extends DataModelWizardPage implements 
 			}
 
 		}
+	}
+
+	protected boolean isProjectValid(IProject project) {
+		return ProjectUtil.isPortletProject(project);
+	}
+
+	protected void validateProjectRequirements(IProject selectedProject) {
+
 	}
 
 }

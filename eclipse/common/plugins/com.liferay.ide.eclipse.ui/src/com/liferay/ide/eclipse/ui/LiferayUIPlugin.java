@@ -47,6 +47,10 @@ public class LiferayUIPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static LiferayUIPlugin plugin;
 
+	public static IStatus createErrorStatus(String string) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, string);
+	}
+
 	public static IWorkbenchPage getActivePage() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}

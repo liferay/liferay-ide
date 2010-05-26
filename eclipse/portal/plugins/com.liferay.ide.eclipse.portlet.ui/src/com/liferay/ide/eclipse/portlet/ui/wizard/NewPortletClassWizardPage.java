@@ -112,47 +112,6 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		this.projectName = null;
 	}
 
-	private void createPackageGroup(Composite parent) {
-		// package
-		packageLabel = new Label(parent, SWT.LEFT);
-		packageLabel.setText(J2EEUIMessages.JAVA_PACKAGE_LABEL);
-		packageLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-
-		packageText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		synchHelper.synchText(packageText, INewJavaClassDataModelProperties.JAVA_PACKAGE, null);
-
-		IPackageFragment packageFragment = getSelectedPackageFragment();
-
-		String targetProject = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
-
-		if (packageFragment != null && packageFragment.exists() &&
-			packageFragment.getJavaProject().getElementName().equals(targetProject)) {
-
-			IPackageFragmentRoot root = getPackageFragmentRoot(packageFragment);
-
-			if (root != null) {
-				folderText.setText(root.getPath().toString());
-			}
-
-			model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
-		}
-
-		packageButton = new Button(parent, SWT.PUSH);
-		packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-		packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-		packageButton.addSelectionListener(new SelectionListener() {
-
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Do nothing
-			}
-
-			public void widgetSelected(SelectionEvent e) {
-				handlePackageButtonPressed();
-			}
-		});
-	}
-
 	protected void createClassnameGroup(Composite parent) {
 		// class name
 		classLabel = new Label(parent, SWT.LEFT);
@@ -212,7 +171,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 				IFolder folder = getDefaultJavaSourceFolder(targetProject);
 
 				if (folder != null) {
-					folderText.setText(folder.getFullPath().toOSString());
+					folderText.setText(folder.getFullPath().toPortableString());
 				}
 			}
 			else {
@@ -231,6 +190,48 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 			public void widgetSelected(SelectionEvent e) {
 				handleFolderButtonPressed();
+			}
+
+		});
+	}
+
+	protected void createPackageGroup(Composite parent) {
+		// package
+		packageLabel = new Label(parent, SWT.LEFT);
+		packageLabel.setText(J2EEUIMessages.JAVA_PACKAGE_LABEL);
+		packageLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+
+		packageText = new Text(parent, SWT.SINGLE | SWT.BORDER);
+		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		synchHelper.synchText(packageText, INewJavaClassDataModelProperties.JAVA_PACKAGE, null);
+
+		IPackageFragment packageFragment = getSelectedPackageFragment();
+
+		String targetProject = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+
+		if (packageFragment != null && packageFragment.exists() &&
+			packageFragment.getJavaProject().getElementName().equals(targetProject)) {
+
+			IPackageFragmentRoot root = getPackageFragmentRoot(packageFragment);
+
+			if (root != null) {
+				folderText.setText(root.getPath().toString());
+			}
+
+			model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
+		}
+
+		packageButton = new Button(parent, SWT.PUSH);
+		packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
+		packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		packageButton.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// Do nothing
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				handlePackageButtonPressed();
 			}
 		});
 	}

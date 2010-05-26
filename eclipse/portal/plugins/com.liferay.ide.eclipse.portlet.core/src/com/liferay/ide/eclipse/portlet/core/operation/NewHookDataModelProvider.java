@@ -102,7 +102,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 			IFolder sourceFolder = getDefaultJavaSourceFolder();
 
 			if (sourceFolder != null && sourceFolder.exists()) {
-				return sourceFolder.getFullPath().toOSString();
+				return sourceFolder.getFullPath().toPortableString();
 			}
 		}
 		else if (propertyName.equals(JAVA_SOURCE_FOLDER)) {

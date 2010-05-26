@@ -25,9 +25,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.CommonFactory;
@@ -112,6 +116,12 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		}
 		else if (ICON_FILE.equals(propertyName)) {
 			return "/icon.png";
+		}
+		else if (CREATE_RESOURCE_BUNDLE_FILE.equals(propertyName)) {
+			return true;
+		}
+		else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
+			return "content/Language.properties";
 		}
 		else if (ALLOW_MULTIPLE.equals(propertyName)) {
 			return true;
@@ -211,6 +221,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(PREVIEW_MODE);
 		propertyNames.add(PRINT_MODE);
 
+		propertyNames.add(CREATE_RESOURCE_BUNDLE_FILE);
+		propertyNames.add(CREATE_RESOURCE_BUNDLE_FILE_PATH);
 		propertyNames.add(CREATE_JSPS);
 		propertyNames.add(CREATE_JSPS_FOLDER);
 
@@ -314,6 +326,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			getDataModel().notifyPropertyChange(PREVIEW_MODE, IDataModel.ENABLE_CHG);
 			getDataModel().notifyPropertyChange(PRINT_MODE, IDataModel.ENABLE_CHG);
 		}
+
+
 		return super.propertySet(propertyName, propertyValue);
 	}
 
@@ -325,6 +339,27 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 			if (portletName == null || portletName.length() == 0) {
 				return PortletCore.createErrorStatus("Portlet name is empty.");
+			}
+		}
+		else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
+			boolean validPath = false;
+
+			String val = getStringProperty(propertyName);
+
+			try {
+				IPath path = new Path(val);
+
+				validPath = path.isValidPath(val);
+			}
+			catch (Exception e) {
+				// eat errors
+			}
+
+			if (validPath) {
+				return super.validate(propertyName);
+			}
+			else {
+				return PortletCore.createErrorStatus("Resource bundle file path must be a valid path.");
 			}
 		}
 
@@ -402,9 +437,21 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		return initParams;
 	}
 
+	protected IFile getWorkspaceFile(IPath file) {
+		IFile retval = null;
+
+		try {
+			retval = ResourcesPlugin.getWorkspace().getRoot().getFile(file);
+		}
+		catch (Exception e) {
+			// best effort
+		}
+
+		return retval;
+	}
+
 	@Override
 	protected IStatus validateJavaClassName(String className) {
 		return super.validateJavaClassName(className);
 	}
-
 }

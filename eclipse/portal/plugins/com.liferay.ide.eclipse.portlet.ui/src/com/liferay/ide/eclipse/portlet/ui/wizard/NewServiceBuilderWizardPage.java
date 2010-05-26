@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.portlet.core.operation.INewServiceBuilderDataModelProperties;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
@@ -23,6 +24,7 @@ import com.liferay.ide.eclipse.ui.wizard.LiferayDataModelWizardPage;
 
 import java.net.URL;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -175,6 +177,11 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 		return topComposite;
 	}
 
+	@Override
+	protected IFolder getDocroot() {
+		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+	}
+
 	protected IPackageFragmentRoot getPackageFragmentRoot(IPackageFragment packageFragment) {
 		if (packageFragment == null) {
 			return null;
@@ -309,7 +316,6 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 	}
 
 	protected void validateProjectRequirements(IProject selectedProject) {
-
 	}
 
 }
