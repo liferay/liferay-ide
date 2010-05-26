@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.project.ui;
 
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -49,58 +51,118 @@ import org.osgi.service.prefs.Preferences;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayProjectPropertyPage extends PropertyPage implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties {
+public class LiferayProjectPropertyPage extends PropertyPage
+	implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties {
 
 	protected Combo sdkCombo;
-
 
 	public LiferayProjectPropertyPage() {
 		super();
 
-		setImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png"));
+		setImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
+			ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png"));
+	}
+
+	@Override
+	public boolean isValid() {
+		boolean valid = super.isValid();
+
+		if (!valid) {
+			return valid;
+		}
+
+		int index = sdkCombo.getSelectionIndex();
+
+		if (index < 0) {
+			valid = false;
+		}
+		else {
+			String sdkName = sdkCombo.getItem(sdkCombo.getSelectionIndex());
+
+			SDK sdk = SDKManager.getSDKByName(sdkName);
+
+			valid = sdk != null;
+		}
+
+		return valid;
+	}
+
+	@Override
+	public boolean performOk() {
+		if (!isValid()) {
+			setErrorMessage("Current values are invalid.");
+
+			return false;
+		}
+
+		boolean retval = false;
+
+		String sdkName = sdkCombo.getItem(sdkCombo.getSelectionIndex());
+
+		SDK sdk = SDKManager.getSDKByName(sdkName);
+
+		if (sdk != null) {
+			IFacetedProject facetedProject = getFacetedProject();
+
+			IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
+
+			try {
+				ProjectUtil.setSDK(facetedProject.getProject(), liferayFacet, sdk);
+
+				retval = true;
+			}
+			catch (Exception e) {
+				ProjectUIPlugin.logError(e);
+			}
+		}
+
+		return retval;
 	}
 
 	protected void configureSDKsLinkSelected(SelectionEvent e) {
-		boolean noSDKs = SDKManager.getAllSDKs().length == 0;
+		// boolean noSDKs = SDKManager.getAllSDKs().length == 0;
 
-		int retval = PreferencesUtil.createPreferenceDialogOn(
-				this.getShell(), SDKsPreferencePage.ID, new String[] {SDKsPreferencePage.ID}, null).open();
+		String[] id = new String[] {
+			SDKsPreferencePage.ID
+		};
+
+		PreferenceDialog dialog =
+			PreferencesUtil.createPreferenceDialogOn(this.getShell(), SDKsPreferencePage.ID, id, null);
+
+		int retval = dialog.open();
 
 		if (retval == Window.OK) {
-//			getModel().notifyPropertyChange(LIFERAY_SDK_NAME, IDataModel.VALID_VALUES_CHG);
-//			if (noSDKs && SDKManager.getDefaultSDK() != null && getModel().getBooleanProperty(LIFERAY_USE_SDK_LOCATION)) {
-				//toggling the location property will get the location field to update
-//				getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, false);
-//				getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, true);
-//			}
-//			validatePage(true);
+			setupSDKCombo();
 		}
-//			if (getModel().getProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME).equals(
-//					IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME_DEFAULT_VALUE)) {
-//				 no default sdk set, lets set one if it exists
-//				SDK sdk = LiferayCore.getDefaultSDK();
-//				if (sdk != null) {
-//					getModel().setProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdk.getName());
-//					sdkCombo.setItems(new String[0]);//refreish items
-//				}
-//			}
-//			modelHelper.synchAllUIWithModel();
+
+		// if
+		// (getModel().getProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME).equals(
+		// IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME_DEFAULT_VALUE))
+		// {
+		// no default sdk set, lets set one if it exists
+		// SDK sdk = LiferayCore.getDefaultSDK();
+		// if (sdk != null) {
+		// getModel().setProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME,
+		// sdk.getName());
+		// sdkCombo.setItems(new String[0]);//refreish items
+		// }
+		// }
+		// modelHelper.synchAllUIWithModel();
 		// }
 	}
-	
+
 	@Override
 	protected Control createContents(Composite parent) {
 		Composite top = SWTUtil.createTopComposite(parent, 1);
 
-//		createSDKGroup(top);
+		createSDKGroup(top);
 
 		return top;
 	}
-	
+
 	protected Group createDefaultGroup(Composite parent, String text, int columns) {
 		GridLayout gl = new GridLayout(columns, false);
-		
+
 		Group group = new Group(parent, SWT.NONE);
 		group.setText(text);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -112,74 +174,82 @@ public class LiferayProjectPropertyPage extends PropertyPage implements IWorkben
 	protected void createSDKGroup(Composite parent) {
 		Group group = createDefaultGroup(parent, "Liferay SDK", 2);
 
-		((GridData)group.getLayoutData()).grabExcessVerticalSpace = false;
+		((GridData) group.getLayoutData()).grabExcessVerticalSpace = false;
 
-//		Composite labelContainer = new Composite(group, SWT.NONE);
+		// Composite labelContainer = new Composite(group, SWT.NONE);
 
-		GridData gd = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		// GridData gd = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
 
-//		labelContainer.setLayoutData(gd);
+		// labelContainer.setLayoutData(gd);
 
 		GridLayout gl = new GridLayout(1, false);
-		
+
 		gl.marginHeight = 3;
 		gl.marginWidth = 0;
 
-//		labelContainer.setLayout(gl);
-//		Label label = SWTUtil.createLabel(labelContainer, "Use Liferay SDK: ", 1);
-//		label.setLayoutData(gd);
-		
-//		IDataModel nestedProjectModel = getModel().getNestedModel(NESTED_PROJECT_DM);
-//		nestedProjectModel.addListener(this);
-//		modelHelper = new DataModelSynchHelper(nestedProjectModel);
-//		Collection props = getModel().getAllProperties();
-//		for (Object prop : props) {
-//			System.out.println(prop);
-//		}
-//		getModel().addListener(this);
-		
-//		model = DataModelFactory.createDataModel(new PluginFacetProjectCreationDataModelProvider());
-//		DataModelSynchHelper modelHelper = new DataModelSynchHelper(model);
-		
 		sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
-		
+
 		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
-//		labelContainer = new Composite(group, SWT.NONE);
-//		labelContainer.setLayout(gl);
-//		labelContainer.setLayoutData(gd);
+
+		// labelContainer = new Composite(group, SWT.NONE);
+		// labelContainer.setLayout(gl);
+		// labelContainer.setLayoutData(gd);
 
 		Link configureSDKsLink = new Link(group, SWT.UNDERLINE_LINK);
-		
+
 		configureSDKsLink.setText("<a href=\"#\">Configure SDKs</a>");
 		configureSDKsLink.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 		configureSDKsLink.addSelectionListener(new SelectionAdapter() {
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				configureSDKsLinkSelected(e);
 			}
+
 		});
-		
+
 		setupSDKCombo();
-		
-//		modelHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] { configureSDKsLink });
-		
-//		Composite buttonContainer = new Composite(group, SWT.NONE);
-//		gl = new GridLayout(1, false);
-//		gl.marginWidth = 5;
-//		gl.marginHeight = 0;
-//		buttonContainer.setLayout(gl);
-//		buttonContainer.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 3, 1));
-//		Button advButton = SWTUtil.createCheckButton(buttonContainer, "Configure advanced project settings", null,
-//				false, 3);
-		
-//		modelHelper.synchCheckbox(advButton, LIFERAY_ADV_CONFIG, null);
+
+		// modelHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] {
+		// configureSDKsLink });
 	}
 
+	protected IFacetedProject getFacetedProject() {
+		IFacetedProject retval = null;
 
-//	private IDataModel getModel() {
-//		return model;
-//	}
+		IAdaptable adaptable = getElement();
+
+		IProject project = (IProject) adaptable.getAdapter(IProject.class);
+
+		if (project != null) {
+			retval = ProjectUtil.getFacetedProject(project);
+		}
+
+		return retval;
+	}
+
+	@Override
+	protected void performDefaults() {
+		SDK defaultSdk = SDKManager.getDefaultSDK();
+
+		if (defaultSdk != null) {
+			setupSDKCombo();
+
+			String[] items = sdkCombo.getItems();
+
+			for (int i = 0; i < items.length; i++) {
+				String sdkItemName = sdkCombo.getItem(i);
+
+				if (defaultSdk.getName().equals(sdkItemName)) {
+					sdkCombo.select(i);
+
+					break;
+				}
+			}
+		}
+
+		super.performDefaults();
+	}
 
 	protected void setupSDKCombo() {
 		List<String> sdkNames = new ArrayList<String>();
@@ -191,14 +261,10 @@ public class LiferayProjectPropertyPage extends PropertyPage implements IWorkben
 		}
 
 		sdkCombo.setItems(sdkNames.toArray(new String[0]));
-		
-		IAdaptable adaptable = getElement();
 
-		IProject project = (IProject)adaptable.getAdapter(IProject.class);
+		IFacetedProject facetedProject = getFacetedProject();
 
-		if (project != null) {
-			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
-
+		if (facetedProject != null) {
 			IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
 
 			try {
@@ -211,7 +277,8 @@ public class LiferayProjectPropertyPage extends PropertyPage implements IWorkben
 				if (!sdkName.isEmpty() && sdk != null) {
 					sdkCombo.select(sdkNames.indexOf(sdk.getName()));
 				}
-			} catch (BackingStoreException e) {
+			}
+			catch (BackingStoreException e) {
 				ProjectUIPlugin.logError(e);
 			}
 		}

@@ -31,7 +31,7 @@
       
       
    </extension>
-   <!--
+   
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
@@ -49,7 +49,7 @@
          </enabledWhen>
       </page>
    </extension>
-   -->
+   
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester

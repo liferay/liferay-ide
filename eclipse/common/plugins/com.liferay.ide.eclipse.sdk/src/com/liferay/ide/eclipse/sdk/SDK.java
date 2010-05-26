@@ -333,8 +333,14 @@ public class SDK {
 		this.version = version;
 	}
 
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+
 	public String toXmlString() {
 		StringBuilder builder = new StringBuilder();
+
 		builder.append("<sdk ");
 		builder.append(createXMLNameValuePair("name", getName()));
 		builder.append(createXMLNameValuePair("location", getLocation().toPortableString()));
@@ -342,6 +348,7 @@ public class SDK {
 		// ? getRuntime() : ""));
 		builder.append(createXMLNameValuePair("version", getVersion()));
 		builder.append("/>");
+
 		return builder.toString();
 	}
 
