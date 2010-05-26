@@ -78,6 +78,8 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 	public AddSDKDialog(Shell shell, SDK[] existingSDKs, SDK sdk) {
 		super(shell);
 
+		this.sdkToEdit = sdk;
+
 		configure(existingSDKs);
 	}
 

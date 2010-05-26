@@ -270,47 +270,6 @@ public class InstalledSDKsCompostite extends Composite {
 		this.page = prefPage;
 	}
 
-	protected void ensureDefaultSDK() {
-
-		// check if we only have one sdk it is new default
-		if (sdkList.size() == 1) {
-			setCheckedSDK(sdkList.get(0));
-		}
-	}
-
-	protected void fireSelectionChanged() {
-	}
-
-	protected boolean isContributed(SDK install) {
-		return install.isContributed();
-	}
-
-	protected void removeSDKs(SDK[] sdks) {
-		IStructuredSelection prev = (IStructuredSelection) getSelection();
-
-		for (int i = 0; i < sdks.length; i++) {
-			sdkList.remove(sdks[i]);
-		}
-
-		ensureDefaultSDK();
-
-		this.tableViewer.refresh();
-
-		IStructuredSelection curr = (IStructuredSelection) getSelection();
-
-		if (!curr.equals(prev)) {
-			SDK[] curSdks = getSDKs();
-
-			if (curr.size() == 0 && curSdks.length == 1) {
-				// pick a default SDK automatically
-				setSelection(new StructuredSelection(curSdks[0]));
-			}
-			else {
-				fireSelectionChanged();
-			}
-		}
-	}
-
 	protected void addSDK() {
 		AddSDKDialog dialog = new AddSDKDialog(this.getShell(), sdkList.toArray(new SDK[0]));
 		int retval = dialog.open();
@@ -434,6 +393,7 @@ public class InstalledSDKsCompostite extends Composite {
 
 	protected void editSDK(SDK sdk) {
 		AddSDKDialog dialog = new AddSDKDialog(this.getShell(), sdkList.toArray(new SDK[0]), sdk);
+
 		int retval = dialog.open();
 
 		if (retval == AddSDKDialog.OK) {
@@ -482,6 +442,17 @@ public class InstalledSDKsCompostite extends Composite {
 		}
 	}
 
+	protected void ensureDefaultSDK() {
+
+		// check if we only have one sdk it is new default
+		if (sdkList.size() == 1) {
+			setCheckedSDK(sdkList.get(0));
+		}
+	}
+
+	protected void fireSelectionChanged() {
+	}
+
 	protected SDK getFirstSelectedSDK() {
 		IStructuredSelection selection = (IStructuredSelection) getSelection();
 		Iterator<?> iterator = selection.iterator();
@@ -495,6 +466,36 @@ public class InstalledSDKsCompostite extends Composite {
 		}
 
 		return null;
+	}
+
+	protected boolean isContributed(SDK install) {
+		return install.isContributed();
+	}
+
+	protected void removeSDKs(SDK[] sdks) {
+		IStructuredSelection prev = (IStructuredSelection) getSelection();
+
+		for (int i = 0; i < sdks.length; i++) {
+			sdkList.remove(sdks[i]);
+		}
+
+		ensureDefaultSDK();
+
+		this.tableViewer.refresh();
+
+		IStructuredSelection curr = (IStructuredSelection) getSelection();
+
+		if (!curr.equals(prev)) {
+			SDK[] curSdks = getSDKs();
+
+			if (curr.size() == 0 && curSdks.length == 1) {
+				// pick a default SDK automatically
+				setSelection(new StructuredSelection(curSdks[0]));
+			}
+			else {
+				fireSelectionChanged();
+			}
+		}
 	}
 
 	protected void removeSelectedSDKs() {
