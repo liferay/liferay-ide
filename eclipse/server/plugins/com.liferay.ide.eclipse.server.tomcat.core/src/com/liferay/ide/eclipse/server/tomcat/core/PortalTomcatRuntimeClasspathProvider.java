@@ -101,9 +101,11 @@ public class PortalTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspath
 	}
 
 	private boolean shouldAttachSource(IClasspathEntry entry) {
-		if (entry != null && entry.getPath().lastSegment().matches("portal-.*\\.jar")) {
-			return true;
-		}
+		// TODO reenable this IDE-83
+		// if (entry != null &&
+		// entry.getPath().lastSegment().matches("portal-.*\\.jar")) {
+		// return true;
+		// }
 		
 		return false;
 	}
