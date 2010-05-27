@@ -45,7 +45,7 @@
                </requires>
                <requires
                      facet="jst.web"
-                     version="[2.3">
+                     version="[2.4">
                </requires>
             </and>
             <!--
@@ -121,7 +121,7 @@
                </requires>
                <requires
                      facet="jst.web"
-                     version="[2.3">
+                     version="[2.4">
                </requires>
             </and>
             <!--
@@ -202,7 +202,7 @@
                </requires>
                <requires
                      facet="jst.web"
-                     version="[2.3">
+                     version="[2.4">
                </requires>
             </and>
             <!--

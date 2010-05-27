@@ -27,7 +27,6 @@ public class GetReleaseInfo extends PortalSupport {
 		throws IOException {
 
 		writer.write(ReleaseInfo.getVersion());
-		// writer.write("1.2.3");
 	}
 
 }
