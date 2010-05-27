@@ -132,6 +132,9 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		else if (JAVASCRIPT_FILE.equals(propertyName)) {
 			return "/js/javascript.js";
 		}
+		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
+			return getProperty(CLASS_NAME).toString().toLowerCase() + "-portlet";
+		}
 		else if (ID.equals(propertyName)) {
 			return getProperty(TITLE);
 		}
@@ -231,6 +234,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(ALLOW_MULTIPLE);
 		propertyNames.add(CSS_FILE);
 		propertyNames.add(JAVASCRIPT_FILE);
+		propertyNames.add(CSS_CLASS_WRAPPER);
 		propertyNames.add(ID);
 		propertyNames.add(CATEGORY);
 
@@ -326,7 +330,6 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			getDataModel().notifyPropertyChange(PREVIEW_MODE, IDataModel.ENABLE_CHG);
 			getDataModel().notifyPropertyChange(PRINT_MODE, IDataModel.ENABLE_CHG);
 		}
-
 
 		return super.propertySet(propertyName, propertyValue);
 	}

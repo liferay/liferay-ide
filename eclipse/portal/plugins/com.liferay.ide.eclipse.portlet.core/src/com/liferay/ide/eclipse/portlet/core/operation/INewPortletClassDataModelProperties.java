@@ -68,6 +68,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String CREATE_RESOURCE_BUNDLE_FILE_PATH =
 		"INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE_PATH";
 
+	public static final String CSS_CLASS_WRAPPER = "INewPortletClassDataModelProperties.CSS_CLASS_WRAPPER";
+
 	public static final String CSS_FILE = "INewPortletClassDataModelProperties.CSS_FILE";
 
 	public static final String[] DEFAULT_SECURITY_ROLE_NAMES = {

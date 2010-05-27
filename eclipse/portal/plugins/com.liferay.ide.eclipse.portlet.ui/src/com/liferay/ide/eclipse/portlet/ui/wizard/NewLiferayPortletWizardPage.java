@@ -61,6 +61,8 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
 	protected Combo category;
 
+	protected Text cssClassWrapper;
+
 	protected Text cssFile;
 
 	protected Text iconFile;
@@ -162,6 +164,13 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 			}
 
 		});
+
+		SWTUtil.createLabel(group, SWT.RIGHT, "CSS classname:", 1);
+
+		this.cssClassWrapper = SWTUtil.createText(group, 1);
+		this.synchHelper.synchText(cssClassWrapper, CSS_CLASS_WRAPPER, null);
+
+		SWTUtil.createLabel(group, "", 1);
 	}
 
 	@Override
@@ -218,7 +227,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 	@Override
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
-			NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE, CATEGORY
+			NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE, CSS_CLASS_WRAPPER, CATEGORY
 		};
 	}
 

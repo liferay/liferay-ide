@@ -158,7 +158,9 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 		appendChildElement(newPortletElement, "header-portlet-css", model.getStringProperty(CSS_FILE));
 
-		appendChildElement(newPortletElement, "header-portlet-javascript", model.getStringProperty(JAVASCRIPT_FILE));
+		appendChildElement(newPortletElement, "footer-portlet-javascript", model.getStringProperty(JAVASCRIPT_FILE));
+
+		appendChildElement(newPortletElement, "css-class-wrapper", model.getStringProperty(CSS_CLASS_WRAPPER));
 
 		// TODO make sure role mapper elements are available and correct in the
 		// file.
