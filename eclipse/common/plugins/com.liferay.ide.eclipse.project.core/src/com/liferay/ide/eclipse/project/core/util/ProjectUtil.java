@@ -71,23 +71,23 @@ public class ProjectUtil {
 	public static boolean collectProjectsFromDirectory(
 		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
 		Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor) {
-	
+
 		if (monitor.isCanceled()) {
 			return false;
 		}
-	
+
 		monitor.subTask(NLS.bind(DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath()));
-	
+
 		File[] contents = directory.listFiles();
-	
+
 		if (contents == null) {
 			return false;
 		}
-	
+
 		// Initialize recursion guard for recursive symbolic links
 		if (directoriesVisited == null) {
 			directoriesVisited = new HashSet<String>();
-	
+
 			try {
 				directoriesVisited.add(directory.getCanonicalPath());
 			}
@@ -96,22 +96,22 @@ public class ProjectUtil {
 					StatusUtil.newStatus(IStatus.ERROR, exception.getLocalizedMessage(), exception));
 			}
 		}
-	
+
 		// first look for project description files
 		final String dotProject = IProjectDescription.DESCRIPTION_FILE_NAME;
-	
+
 		for (int i = 0; i < contents.length; i++) {
 			File file = contents[i];
-	
+
 			if (isLiferayProjectDir(file)) {
 				// recurse to see if it has project file
 				int currentSize = eclipseProjectFiles.size();
-	
+
 				collectProjectsFromDirectory(
 					eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor);
-	
+
 				int newSize = eclipseProjectFiles.size();
-	
+
 				if (newSize == currentSize) {
 					liferayProjectDirs.add(file);
 				}
@@ -120,22 +120,22 @@ public class ProjectUtil {
 				if (!eclipseProjectFiles.contains(file) && isLiferayProjectDir(file.getParentFile())) {
 					eclipseProjectFiles.add(file);
 				}
-	
+
 				// don't search sub-directories since we can't have nested
 				// projects
 				return true;
 			}
 		}
-	
+
 		// no project description found, so recurse into sub-directories
 		for (int i = 0; i < contents.length; i++) {
 			if (contents[i].isDirectory()) {
 				if (!contents[i].getName().equals(METADATA_FOLDER)) {
 					try {
 						String canonicalPath = contents[i].getCanonicalPath();
-	
+
 						if (!directoriesVisited.add(canonicalPath)) {
-	
+
 							// already been here --> do not recurse
 							continue;
 						}
@@ -143,9 +143,9 @@ public class ProjectUtil {
 					catch (IOException exception) {
 						StatusManager.getManager().handle(
 							StatusUtil.newStatus(IStatus.ERROR, exception.getLocalizedMessage(), exception));
-	
+
 					}
-	
+
 					// dont recurse directories that we have already determined
 					// are Liferay projects
 					if (!liferayProjectDirs.contains(contents[i]) && recurse) {
@@ -193,12 +193,21 @@ public class ProjectUtil {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(testProjectName);
 	}
 
-	public static SDK getSDK(IProject project, IProjectFacet facet)
+	public static SDK getSDK(IFacetedProject facetedProject, IProjectFacet facet)
 		throws BackingStoreException {
-		IFacetedProject factedProject = getFacetedProject(project);
-		Preferences prefs = factedProject.getPreferences(facet).node("liferay-plugin-project");
+
+		Preferences prefs = facetedProject.getPreferences(facet).node("liferay-plugin-project");
 		String name = prefs.get(ISDKConstants.PROPERTY_NAME, null);
+
 		return SDKManager.getSDKByName(name);
+	}
+
+	public static SDK getSDK(IProject proj, IProjectFacet projectFacet)
+		throws BackingStoreException {
+
+		IFacetedProject facetedProject = getFacetedProject(proj);
+
+		return getSDK(facetedProject, projectFacet);
 	}
 
 	public static IFolder[] getSourceFolders(IProject project) {
@@ -289,30 +298,30 @@ public class ProjectUtil {
 		if (file.isDirectory() && isValidLiferayProjectDir(file)) {
 			// check for build.xml and docroot
 			File[] contents = file.listFiles();
-	
+
 			boolean hasBuildXml = false;
-	
+
 			boolean hasDocroot = false;
-	
+
 			for (File content : contents) {
 				if (content.getName().equals("build.xml")) {
 					hasBuildXml = true;
-	
+
 					continue;
 				}
-	
+
 				if (content.getName().equals("docroot")) {
 					hasDocroot = true;
-	
+
 					continue;
 				}
 			}
-	
+
 			if (hasBuildXml && hasDocroot) {
 				return true;
 			}
 		}
-	
+
 		return false;
 	}
 
@@ -340,11 +349,11 @@ public class ProjectUtil {
 
 	public static boolean isValidLiferayProjectDir(File dir) {
 		String name = dir.getName();
-	
+
 		if (name.endsWith("-portlet") || name.endsWith("-ext") || name.endsWith("-hook")) {
 			return true;
 		}
-	
+
 		return false;
 	}
 

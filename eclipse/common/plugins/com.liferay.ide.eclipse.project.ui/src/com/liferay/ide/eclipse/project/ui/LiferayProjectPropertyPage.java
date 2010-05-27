@@ -133,6 +133,8 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 		if (retval == Window.OK) {
 			setupSDKCombo();
+
+			getContainer().updateButtons();
 		}
 
 		// if
@@ -190,6 +192,14 @@ public class LiferayProjectPropertyPage extends PropertyPage
 		sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
 
 		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		sdkCombo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getContainer().updateButtons();
+			}
+
+		});
 
 		// labelContainer = new Composite(group, SWT.NONE);
 		// labelContainer.setLayout(gl);

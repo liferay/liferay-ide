@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.sdk;
 
 import com.liferay.ide.eclipse.sdk.util.SDKHelper;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -350,6 +351,22 @@ public class SDK {
 		builder.append("/>");
 
 		return builder.toString();
+	}
+
+	public IStatus validate() {
+		boolean validLocation = SDKUtil.isValidSDKLocation(getLocation().toOSString());
+
+		boolean buildXmlExists = getLocation().append("build.xml").toFile().exists();
+
+		if (!validLocation) {
+			return SDKPlugin.createErrorStatus("SDK location is invalid.");
+		}
+
+		if (!buildXmlExists) {
+			return SDKPlugin.createErrorStatus("build.xml file does not exist.");
+		}
+
+		return Status.OK_STATUS;
 	}
 
 	// public String getRuntime() {

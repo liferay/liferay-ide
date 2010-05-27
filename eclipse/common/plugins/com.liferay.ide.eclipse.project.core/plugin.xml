@@ -450,5 +450,29 @@
             eventTypes="PRIMARY_RUNTIME_CHANGED">
       </listener>
    </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.validators">
+      <validator
+            class="com.liferay.ide.eclipse.project.core.facet.PortletPluginFacetValidator">
+         <facet
+               id="liferay.portlet"
+               version="6.0">
+         </facet>
+      </validator>
+      <validator
+            class="com.liferay.ide.eclipse.project.core.facet.HookPluginFacetValidator">
+         <facet
+               id="liferay.hook"
+               version="6.0">
+         </facet>
+      </validator>
+      <validator
+            class="com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetValidator">
+         <facet
+               id="liferay.ext"
+               version="6.0">
+         </facet>
+      </validator>
+   </extension>
  
 </plugin>
