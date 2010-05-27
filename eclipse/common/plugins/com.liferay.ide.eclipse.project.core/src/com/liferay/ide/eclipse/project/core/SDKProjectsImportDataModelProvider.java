@@ -37,7 +37,9 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings( {
+	"unchecked", "restriction"
+})
 public class SDKProjectsImportDataModelProvider extends FacetProjectCreationDataModelProvider
 	implements ISDKProjectsImportDataModelProperties {
 
@@ -57,51 +59,52 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		 * ProjectCorePlugin.getDefault
 		 * ().getPreferenceStore().getString(ProjectCorePlugin
 		 * .LAST_SDK_IMPORT_LOCATION_PREF); } else
-		 */if (SDK_VERSION.equals(propertyName)) {
+		 */
+		if (SDK_VERSION.equals(propertyName)) {
 			// see if we have a sdk location and extract the version
 			String sdkLoc = getStringProperty(SDK_LOCATION);
-			
+
 			try {
 				String sdkVersionValue = SDKUtil.readSDKVersion(sdkLoc);
-				
+
 				Version v = new Version(sdkVersionValue);
-				
+
 				return v.toString();
 			}
 			catch (Exception e) {
 			}
 		}
-		 
+
 		return super.getDefaultProperty(propertyName);
 	}
 
 	@Override
 	public Set getPropertyNames() {
 		Set propertyNames = super.getPropertyNames();
-		
+
 		propertyNames.add(SDK_LOCATION);
-		propertyNames.add(SDK_VERSION);		
+		propertyNames.add(SDK_VERSION);
 		propertyNames.add(SELECTED_PROJECTS);
-		
+
 		return propertyNames;
 	}
 
 	@Override
 	public void init() {
 		super.init();
-		
+
 		// set the project facets to get the runtime target dropdown to only
 		// show liferay runtimes
 		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
-		
+
 		Set<IProjectFacetVersion> facets = ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
-		
+
 		Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
-		
+
 		for (IProjectFacetVersion pfv : facets) {
 			fixedFacets.add(pfv.getProjectFacet());
 		}
-		
+
 		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
 	}
 
@@ -110,7 +113,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		if (SDK_VERSION.equals(propertyName)) {
 			return false;
 		}
-		
+
 		return super.isPropertyEnabled(propertyName);
 	}
 
@@ -123,7 +126,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 	public IStatus validate(String name) {
 		if (SDK_LOCATION.equals(name)) {
 			String sdkLocation = getStringProperty(SDK_LOCATION);
-			
+
 			if (SDKUtil.isValidSDKLocation(sdkLocation)) {
 				return Status.OK_STATUS;
 			}
@@ -133,7 +136,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		}
 		else if (SDK_VERSION.equals(name)) {
 			String sdkVersion = getStringProperty(SDK_VERSION);
-			
+
 			if (SDKUtil.isValidSDKVersion(sdkVersion, SDKManager.getLeastValidVersion())) {
 				return Status.OK_STATUS;
 			}
@@ -144,20 +147,20 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		}
 		else if (SELECTED_PROJECTS.equals(name)) {
 			Object val = getProperty(SELECTED_PROJECTS);
-			
+
 			if (val instanceof Object[]) {
 				Object[] selectedProjects = (Object[]) val;
-				
+
 				if (selectedProjects.length > 0) {
 					return Status.OK_STATUS;
 				}
 			}
-			
+
 			return ProjectCorePlugin.createErrorStatus("Must select at least one Liferay project to import.");
 		}
 		else if (FACET_RUNTIME.equals(name)) {
 			Object runtime = getProperty(FACET_RUNTIME);
-			
+
 			if (!(runtime instanceof BridgedRuntime)) {
 				return ProjectCorePlugin.createErrorStatus("A valid Liferay runtime must be selected.");
 			}
@@ -168,7 +171,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		else if (FACET_PROJECT_NAME.equals(name)) {// no need to check this one
 			return Status.OK_STATUS;
 		}
-		
+
 		return super.validate(name);
 	}
 

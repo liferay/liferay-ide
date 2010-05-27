@@ -540,6 +540,10 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 				sdkLocation.setText(lastLocation);
 
 				updateProjectsList(lastLocation);
+
+				synchHelper.synchAllUIWithModel();
+
+				validatePage();
 			}
 		}
 	}
@@ -578,6 +582,10 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 			sdkLocation.setText(dir);
 
 			updateProjectsList(dir);
+
+			synchHelper.synchAllUIWithModel();
+
+			validatePage();
 		}
 	}
 

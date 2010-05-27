@@ -19,6 +19,9 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelPropert
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.eclipse.project.core.util.PluginFacetUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,20 +59,31 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 
 	public SDKProjectsImportOperation(IDataModel model) {
 		super(model);
-		
+
 		createdProjects = new ArrayList<IProject>();
 	}
 
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 		throws ExecutionException {
-		
+
 		Object[] selectedProjects = (Object[]) getDataModel().getProperty(SELECTED_PROJECTS);
-		
+
+		if (selectedProjects != null && selectedProjects.length > 0) {
+			// need to add the SDK to workspace if not already available.
+			String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
+
+			if (SDKUtil.isValidSDKLocation(sdkLocation)) {
+				SDK newSDK = SDKManager.getInstance().createSDKFromLocation(new Path(sdkLocation));
+
+				SDKManager.getInstance().addSDK(newSDK);
+			}
+		}
+
 		for (int i = 0; i < selectedProjects.length; i++) {
 			if (selectedProjects[i] instanceof ProjectRecord) {
 				IStatus status = importProject((ProjectRecord) selectedProjects[i], monitor);
-				
+
 				if (!status.isOK()) {
 					return status;
 				}
@@ -81,17 +95,17 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 
 	private IProject createExistingProject(final ProjectRecord record, IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		String projectName = record.getProjectName();
-		
+
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		
+
 		IProject project = workspace.getRoot().getProject(projectName);
 
 		if (record.description == null) {
 			// error case
 			record.description = workspace.newProjectDescription(projectName);
-			
+
 			IPath locationPath = new Path(record.projectSystemFile.getAbsolutePath());
 
 			// If it is under the root use the default location
@@ -107,23 +121,23 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 		}
 
 		monitor.beginTask("Importing project", 100);
-		
+
 		project.create(record.description, new SubProgressMonitor(monitor, 30));
-		
+
 		project.open(IResource.FORCE, new SubProgressMonitor(monitor, 70));
 
 		// IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
 
 		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
-		
+
 		FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy(fProject);
-		
+
 		PluginFacetUtil.configureProjectAsPlugin(fpwc, this.model);
-		
+
 		fpwc.commitChanges(monitor);
-		
+
 		monitor.done();
-		
+
 		return project;
 	}
 
@@ -132,12 +146,12 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 
 		IDataModel newProjectDataModel =
 			DataModelFactory.createDataModel(new PluginFacetProjectCreationDataModelProvider());
-		
+
 		// we are importing so set flag to not create anything
 		newProjectDataModel.setBooleanProperty(IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false);
-		
+
 		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
-		
+
 		String sdkName = PluginFacetUtil.getSDKName(sdkLocation);
 		// if the get sdk from the location
 		newProjectDataModel.setProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName);
@@ -153,26 +167,26 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 		}
 
 		IPath webXmlPath = projectRecord.getProjectLocation().append("docroot/WEB-INF/web.xml");
-		
+
 		ProjectUtil.setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
 
 		IFacetedProjectWorkingCopy fpjwc =
 			(IFacetedProjectWorkingCopy) newProjectDataModel.getProperty(FACETED_PROJECT_WORKING_COPY);
 
 		fpjwc.setProjectName(projectRecord.getProjectName());
-		
+
 		fpjwc.setProjectLocation(projectRecord.getProjectLocation());
-		
+
 		PluginFacetUtil.configureProjectAsPlugin(fpjwc, this.model);
 
 		fpjwc.commitChanges(monitor);
-		
+
 		return fpjwc.getProject();
 	}
 
 	protected IStatus importProject(ProjectRecord projectRecord, IProgressMonitor monitor) {
 		IProject project = null;
-		
+
 		if (projectRecord.projectSystemFile != null) {
 			try {
 				project = createExistingProject(projectRecord, monitor);
@@ -189,11 +203,11 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 				return ProjectCorePlugin.createErrorStatus(e);
 			}
 		}
-		
+
 		if (project != null) {
 			createdProjects.add(project);
 		}
-		
+
 		return Status.OK_STATUS;
 	}
 

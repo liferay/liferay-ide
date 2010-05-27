@@ -48,7 +48,7 @@ public final class SDKManager {
 				return sdk;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -70,7 +70,7 @@ public final class SDKManager {
 				return sdk;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -92,22 +92,32 @@ public final class SDKManager {
 	}
 
 	public void addSDK(SDK sdk) {
+		if (!initialized) {
+			initialize();
+		}
+
 		sdkList.add(sdk);
+
+		if (sdkList.size() == 1) {
+			sdk.setDefault(true);
+		}
+
 		saveSDKs();
 	}
 
 	public SDK createSDKFromLocation(IPath path) {
 		try {
 			SDK sdk = new SDK(path);
+
 			sdk.setVersion(SDKUtil.readSDKVersion(path.toString()));
 			sdk.setName(path.lastSegment());
-			
+
 			return sdk;
 		}
 		catch (Exception e) {
 			CorePlugin.logError(e);
 		}
-		
+
 		return null;
 	}
 
@@ -115,13 +125,13 @@ public final class SDKManager {
 		if (sdkName == null) {
 			return null;
 		}
-		
+
 		for (SDK sdk : getSDKs()) {
 			if (sdkName.equals(sdk.getName())) {
 				return sdk;
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -129,17 +139,17 @@ public final class SDKManager {
 		if (!initialized) {
 			initialize();
 		}
-		
+
 		return sdkList.toArray(new SDK[sdkList.size()]);
 	}
 
 	public void setSDKs(SDK[] sdks) {
 		this.sdkList.clear();
-		
+
 		for (SDK sdk : sdks) {
 			sdkList.add(sdk);
 		}
-		
+
 		saveSDKs();
 	}
 
@@ -149,33 +159,35 @@ public final class SDKManager {
 
 	private void initialize() {
 		loadSDKs();
+
+		initialized = true;
 	}
 
 	private void loadSDKs() {
 		sdkList = new ArrayList<SDK>();
-		
+
 		IPreferenceStore prefs = getPrefStore();
-		
+
 		String sdksXmlString = prefs.getString("sdks");
-		
+
 		if (sdksXmlString != null && !sdksXmlString.isEmpty()) {
 			try {
 				XMLMemento root =
 					XMLMemento.createReadRoot(new InputStreamReader(new ByteArrayInputStream(
 						sdksXmlString.getBytes("UTF-8"))));
-				
+
 				String defaultSDKName = root.getString("default");
-				
+
 				IMemento[] children = root.getChildren("sdk");
-				
+
 				for (IMemento sdkElement : children) {
 					SDK sdk = new SDK();
 					sdk.loadFromMemento(sdkElement);
-					
+
 					boolean defaultSDK = sdk.getName() != null && sdk.getName().equals(defaultSDKName);
-					
+
 					sdk.setDefault(defaultSDK);
-					
+
 					sdkList.add(sdk);
 				}
 			}
@@ -190,18 +202,18 @@ public final class SDKManager {
 
 		for (SDK sdk : sdkList) {
 			IMemento child = root.createChild("sdk");
-			
+
 			sdk.saveToMemento(child);
-			
+
 			if (sdk.isDefault()) {
 				root.putString("default", sdk.getName());
 			}
 		}
-		
+
 		StringWriter writer = new StringWriter();
 		try {
 			root.save(writer);
-			
+
 			getPrefStore().setValue("sdks", writer.toString());
 			getPrefStore().save();
 		}
