@@ -46,9 +46,9 @@
 		
 		<ant antfile="build-promote.xml" target="run" />
 		
-		<echo file="${basedir}/dist/updatesite/installable.properties">
-com.liferay.ide.eclipse.server.tomcat.runtime.60=http://releases.liferay.com/portal/nightly/liferay-portal-tomcat-2010-05-27.zip	
-		</echo>
+<echo file="${basedir}/dist/updatesite/installable.properties">
+com.liferay.ide.eclipse.server.tomcat.runtime.60=http://releases.liferay.com/portal/nightly/liferay-portal-tomcat-2010-05-28.zip
+</echo>
 		
 	</target>
 	

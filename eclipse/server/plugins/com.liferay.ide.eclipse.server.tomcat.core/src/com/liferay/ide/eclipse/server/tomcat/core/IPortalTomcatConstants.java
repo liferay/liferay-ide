@@ -31,6 +31,8 @@ public interface IPortalTomcatConstants {
 
 	public static final IEclipsePreferences defaultPrefs = new DefaultScope().getNode(PortalTomcatPlugin.PLUGIN_ID);
 
+	public static final String INSTALLABLE_UPDATE_URL = defaultPrefs.get("installable.update.url", "");
+
 	public static final String[] LIB_EXCLUDES = defaultPrefs.get("tomcat.lib.excludes", "").split(",");
 
 	/**

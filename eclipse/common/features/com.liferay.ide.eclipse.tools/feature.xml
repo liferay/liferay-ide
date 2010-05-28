@@ -27,6 +27,10 @@
 */
    </copyright>
 
+   <url>
+      <update url="http://releases.liferay.com/tools/ide/eclipse/galileo/stable"/>
+   </url>
+
    <plugin
          id="com.liferay.ide.eclipse.core"
          download-size="0"

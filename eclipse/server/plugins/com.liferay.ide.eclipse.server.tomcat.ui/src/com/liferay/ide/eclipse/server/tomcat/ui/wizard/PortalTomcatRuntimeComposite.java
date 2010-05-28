@@ -15,23 +15,36 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
 
+import com.liferay.ide.eclipse.server.tomcat.core.PortalInstallableRuntime2;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
+import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
+import org.eclipse.jst.server.tomcat.ui.internal.Messages;
 import org.eclipse.jst.server.tomcat.ui.internal.TomcatRuntimeComposite;
+import org.eclipse.jst.server.tomcat.ui.internal.Trace;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -47,7 +60,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.TaskModel;
+import org.eclipse.wst.server.core.internal.InstallableRuntime2;
+import org.eclipse.wst.server.ui.internal.wizard.TaskWizard;
+import org.eclipse.wst.server.ui.internal.wizard.fragment.LicenseWizardFragment;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
+import org.eclipse.wst.server.ui.wizard.WizardFragment;
 
 /**
  * @author Greg Amerson
@@ -186,6 +204,63 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 			}
 		});
 
+		installLabel = new Label(this, SWT.RIGHT);
+
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		data.horizontalIndent = 10;
+
+		installLabel.setLayoutData(data);
+
+		install = SWTUtil.createButton(this, Messages.install);
+		install.setEnabled(false);
+		install.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent se) {
+				String license = null;
+
+				try {
+					license = ir.getLicense(new NullProgressMonitor());
+				}
+				catch (CoreException e) {
+					Trace.trace(Trace.SEVERE, "Error getting license", e);
+				}
+
+				TaskModel taskModel = new TaskModel();
+
+				taskModel.putObject(LicenseWizardFragment.LICENSE, license);
+
+				TaskWizard wizard2 = new TaskWizard(Messages.installDialogTitle, new WizardFragment() {
+
+					protected void createChildFragments(List list) {
+						list.add(new LicenseWizardFragment());
+					}
+
+				}, taskModel);
+
+				WizardDialog dialog2 = new WizardDialog(getShell(), wizard2);
+
+				if (dialog2.open() == Window.CANCEL) {
+					return;
+				}
+
+				DirectoryDialog dialog = new DirectoryDialog(PortalTomcatRuntimeComposite.this.getShell());
+
+				dialog.setMessage(Messages.selectInstallDir);
+				dialog.setFilterPath(dirField.getText());
+
+				String selectedDirectory = dialog.open();
+
+				if (selectedDirectory != null) {
+					IPath selectedPath =
+						new Path(selectedDirectory).append(((InstallableRuntime2) ir).getArchivePath());
+
+					ir.install(selectedPath);
+
+					dirField.setText(selectedPath.toOSString());
+				}
+			}
+		});
+
 		jreLabel = createLabel("Select runtime JRE");
 		
 		jreCombo = new Combo(this, SWT.DROP_DOWN | SWT.READ_ONLY);
@@ -237,14 +312,6 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		
 		return label;
 	}
-
-	/*
-	 * protected void setRuntime(IRuntimeWorkingCopy newRuntime) { if
-	 * (newRuntime == null) { runtimeWC = null; runtime = null; } else {
-	 * runtimeWC = newRuntime; runtime = (ITomcatRuntimeWorkingCopy)
-	 * newRuntime.loadAdapter(ITomcatRuntimeWorkingCopy.class, null); } init();
-	 * validate(); }
-	 */
 
 	protected Layout createLayout() {
 		GridLayout layout = new GridLayout(2, false);
@@ -333,6 +400,56 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		}
 
 		return modifiedLocation;
+	}
+
+	@Override
+	protected void setRuntime(IRuntimeWorkingCopy newRuntime) {
+		super.setRuntime(newRuntime);
+
+		if (ir != null) {
+			new Job("Installable Runtime Update") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						InstallableRuntime2 existingIR = (InstallableRuntime2) ir;
+
+						URL installableUrl = PortalTomcatUtil.checkForLatestInstallableRuntime(existingIR.getId());
+
+						if (installableUrl == null) {
+							installableUrl = new URL(((InstallableRuntime2) ir).getArchiveUrl());
+						}
+
+						InstallableRuntime2ConfigurationElement config =
+							new InstallableRuntime2ConfigurationElement(
+								(InstallableRuntime2) ir, installableUrl.toString());
+
+						ir = new PortalInstallableRuntime2(config);
+
+						IPath runtimePath = new Path(installableUrl.toString());
+
+						final String label = runtimePath.removeFileExtension().lastSegment();
+
+						if (!installLabel.isDisposed()) {
+							installLabel.getDisplay().asyncExec(new Runnable() {
+
+								public void run() {
+									installLabel.setText(label);
+								}
+
+							});
+						}
+					}
+					catch (Exception e) {
+						// best effort no error log
+					}
+
+					return Status.OK_STATUS;
+				}
+
+			}.schedule();
+
+		}
 	}
 
 	@SuppressWarnings("unchecked")
