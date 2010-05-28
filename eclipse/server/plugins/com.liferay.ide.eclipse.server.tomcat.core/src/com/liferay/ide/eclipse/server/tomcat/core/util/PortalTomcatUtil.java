@@ -11,14 +11,10 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.core.util;
 
-import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
 
 import org.eclipse.jst.server.tomcat.core.internal.xml.Factory;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Context;
@@ -64,28 +60,6 @@ public class PortalTomcatUtil {
 		String docBase = context.getDocBase();
 		
 		return false;
-	}
-
-	public static URL checkForLatestInstallableRuntime(String id) {
-
-		try {
-			URL url = new URL(IPortalTomcatConstants.INSTALLABLE_UPDATE_URL);
-
-			InputStream is = url.openStream();
-
-			Properties props = new Properties();
-
-			props.load(is);
-
-			String installableUrl = props.getProperty(id);
-
-			return new URL(installableUrl);
-		}
-		catch (Exception e) {
-			// best effort
-		}
-
-		return null;
 	}
 
 }

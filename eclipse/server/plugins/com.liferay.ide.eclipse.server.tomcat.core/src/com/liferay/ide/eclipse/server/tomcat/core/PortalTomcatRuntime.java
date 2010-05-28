@@ -14,7 +14,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.core.util.FileUtil;
-import com.liferay.ide.eclipse.project.core.IPortalConstants;
+import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.JavaUtil;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;

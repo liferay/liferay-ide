@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.dd;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-import com.liferay.ide.eclipse.project.core.IPortalConstants;
+import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.util.List;
 

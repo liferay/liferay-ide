@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.project.core.util;
 
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
-import com.liferay.ide.eclipse.project.core.IPortalConstants;
+import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

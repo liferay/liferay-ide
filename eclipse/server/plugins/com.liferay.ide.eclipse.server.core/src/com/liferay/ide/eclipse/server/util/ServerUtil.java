@@ -15,8 +15,13 @@
 
 package com.liferay.ide.eclipse.server.util;
 
+import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
+
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -42,9 +47,9 @@ import org.eclipse.wst.server.core.ServerCore;
 public class ServerUtil {
 
 	protected static final IStatus emptyInstallDirStatus = createErrorStatus("Install directory is empty.");
-	
+
 	protected static final IStatus installDirDoesNotExist = createErrorStatus("Install directory does not exist.");
-	
+
 	protected static final IStatus invalidInstallDirStatus = createErrorStatus("Invalid installation directory.");
 
 	/*
@@ -69,6 +74,28 @@ public class ServerUtil {
 	// runtime.loadAdapter(PortalRuntime.class, null) : null;
 	// }
 
+	public static URL checkForLatestInstallableRuntime(String id) {
+
+		try {
+			URL url = new URL(IPortalConstants.INSTALLABLE_UPDATE_URL);
+
+			InputStream is = url.openStream();
+
+			Properties props = new Properties();
+
+			props.load(is);
+
+			String installableUrl = props.getProperty(id);
+
+			return new URL(installableUrl);
+		}
+		catch (Exception e) {
+			// best effort
+		}
+
+		return null;
+	}
+
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, PortalServerCorePlugin.PLUGIN_ID, msg);
 	}
@@ -80,28 +107,28 @@ public class ServerUtil {
 	public static IPath getPortalRoot(IProject project) {
 		try {
 			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
-			
+
 			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = facetedProject.getPrimaryRuntime();
-			
-			return ServerUtil.getPortalRoot(runtime);			
+
+			return ServerUtil.getPortalRoot(runtime);
 		}
 		catch (CoreException e) {
 			PortalServerCorePlugin.logError(e);
 		}
-		
-		return null;		
+
+		return null;
 	}
 
 	public static IPath getPortalRoot(org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime) {
 		IPortalRuntime runtime = (IPortalRuntime) getRuntimeAdapter(facetRuntime, IPortalRuntime.class);
-		
+
 		return runtime != null ? runtime.getRoot() : null;
 	}
 
 	public static IPortalRuntime getPortalRuntime(IProject project)
 		throws CoreException {
-		
-		return (IPortalRuntime) getRuntimeAdapter(			
+
+		return (IPortalRuntime) getRuntimeAdapter(
 			ProjectFacetsManager.create(project).getPrimaryRuntime(), IPortalRuntime.class);
 	}
 
@@ -109,69 +136,69 @@ public class ServerUtil {
 		if (runtime != null) {
 			return (IPortalRuntime) runtime.createWorkingCopy().loadAdapter(IPortalRuntime.class, null);
 		}
-		
-		return null;		
+
+		return null;
 	}
 
 	public static IPortalRuntime getPortalRuntime(IServer server) {
 		if (server != null) {
 			return getPortalRuntime(server.getRuntime());
 		}
-		
-		return null;		
+
+		return null;
 	}
 
 	public static IRuntime getRuntime(IProject project)
 		throws CoreException {
-		
-		return (IRuntime) getRuntimeAdapter(ProjectFacetsManager.create(project).getPrimaryRuntime(), IRuntime.class);		
+
+		return (IRuntime) getRuntimeAdapter(ProjectFacetsManager.create(project).getPrimaryRuntime(), IRuntime.class);
 	}
 
 	public static IRuntimeWorkingCopy getRuntime(String runtimeTypeId, IPath location) {
 		IRuntimeType runtimeType = ServerCore.findRuntimeType(runtimeTypeId);
-		
+
 		try {
-			IRuntime runtime = runtimeType.createRuntime("runtime", null);	
-					
-			IRuntimeWorkingCopy runtimeWC = runtime.createWorkingCopy();			
-			runtimeWC.setName("Runtime");			
+			IRuntime runtime = runtimeType.createRuntime("runtime", null);
+
+			IRuntimeWorkingCopy runtimeWC = runtime.createWorkingCopy();
+			runtimeWC.setName("Runtime");
 			runtimeWC.setLocation(location);
-			
-			return runtimeWC;			
+
+			return runtimeWC;
 		}
 		catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
-		return null;		
+
+		return null;
 	}
 
 	public static Object getRuntimeAdapter(
 		org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime, Class<?> adapterClass) {
 
 		String runtimeId = facetRuntime.getProperty("id");
-		
+
 		for (org.eclipse.wst.server.core.IRuntime runtime : ServerCore.getRuntimes()) {
 			if (runtime.getId().equals(runtimeId)) {
-				
+
 				if (IRuntime.class.equals(adapterClass)) {
 					return runtime;
 				}
-				
+
 				IRuntimeWorkingCopy runtimeWC = null;
-				
+
 				if (!runtime.isWorkingCopy()) {
 					runtimeWC = runtime.createWorkingCopy();
 				}
 				else {
 					runtimeWC = (IRuntimeWorkingCopy) runtime;
 				}
-				
-				return (IPortalRuntime) runtimeWC.loadAdapter(adapterClass, null);				
+
+				return (IPortalRuntime) runtimeWC.loadAdapter(adapterClass, null);
 			}
 		}
-		
-		return null;		
+
+		return null;
 	}
 
 	public static IServerWorkingCopy getServerForRuntime(IRuntime runtime) {
@@ -184,14 +211,14 @@ public class ServerUtil {
 				}
 			}
 		}
-		
-		return null;		
+
+		return null;
 	}
 
 	public static boolean isPortalRuntime(BridgedRuntime bridgedRuntime) {
 		IRuntime runtime = ServerCore.findRuntime(bridgedRuntime.getProperty("id"));
-		
-		return isPortalRuntime(runtime);		
+
+		return isPortalRuntime(runtime);
 	}
 
 	public static boolean isPortalRuntime(IRuntime runtime) {

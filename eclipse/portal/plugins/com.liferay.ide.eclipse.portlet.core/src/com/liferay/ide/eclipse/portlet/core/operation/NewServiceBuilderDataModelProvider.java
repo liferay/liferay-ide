@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-import com.liferay.ide.eclipse.project.core.IPortalConstants;
+import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.util.List;
 import java.util.Set;

@@ -15,10 +15,11 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
 
-import com.liferay.ide.eclipse.server.tomcat.core.PortalInstallableRuntime2;
+import com.liferay.ide.eclipse.server.core.InstallableRuntime2ConfigurationElement;
+import com.liferay.ide.eclipse.server.core.PortalInstallableRuntime2;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
-import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
@@ -245,7 +246,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 
 				DirectoryDialog dialog = new DirectoryDialog(PortalTomcatRuntimeComposite.this.getShell());
 
-				dialog.setMessage(Messages.selectInstallDir);
+				dialog.setMessage("Select Liferay Tomcat runtime installation directory:");
 				dialog.setFilterPath(dirField.getText());
 
 				String selectedDirectory = dialog.open();
@@ -259,6 +260,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 					dirField.setText(selectedPath.toOSString());
 				}
 			}
+
 		});
 
 		jreLabel = createLabel("Select runtime JRE");
@@ -407,14 +409,14 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		super.setRuntime(newRuntime);
 
 		if (ir != null) {
-			new Job("Installable Runtime Update") {
+			new Job("Installable portal runtime update") {
 
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					try {
 						InstallableRuntime2 existingIR = (InstallableRuntime2) ir;
 
-						URL installableUrl = PortalTomcatUtil.checkForLatestInstallableRuntime(existingIR.getId());
+						URL installableUrl = ServerUtil.checkForLatestInstallableRuntime(existingIR.getId());
 
 						if (installableUrl == null) {
 							installableUrl = new URL(((InstallableRuntime2) ir).getArchiveUrl());

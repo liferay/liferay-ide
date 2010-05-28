@@ -3,7 +3,7 @@ package com.liferay.ide.eclipse.portlet.ui.action;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-import com.liferay.ide.eclipse.project.core.IPortalConstants;
+import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;

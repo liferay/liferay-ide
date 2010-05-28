@@ -13,8 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.project.core;
+package com.liferay.ide.eclipse.server.core;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.osgi.framework.Version;
 
 /**
@@ -22,7 +24,11 @@ import org.osgi.framework.Version;
  */
 public interface IPortalConstants {
 
+	public static final IEclipsePreferences defaultPrefs = new DefaultScope().getNode(PortalServerCorePlugin.PLUGIN_ID);
+
 	String DEFAULT_RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
+
+	String INSTALLABLE_UPDATE_URL = defaultPrefs.get("installable.update.url", "");
 
 	Version LEAST_SUPPORTED_VERSION = new Version(6, 0, 2);
 

@@ -48,6 +48,7 @@
 		
 <echo file="${basedir}/dist/updatesite/installable.properties">
 com.liferay.ide.eclipse.server.tomcat.runtime.60=http://releases.liferay.com/portal/nightly/liferay-portal-tomcat-2010-05-28.zip
+com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.1/liferay-plugins-sdk-6.0.1.zip
 </echo>
 		
 	</target>

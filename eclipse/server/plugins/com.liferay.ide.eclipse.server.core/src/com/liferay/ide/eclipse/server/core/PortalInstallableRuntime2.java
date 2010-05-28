@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - Initial API and implementation
  *******************************************************************************/
-package com.liferay.ide.eclipse.server.tomcat.core;
+package com.liferay.ide.eclipse.server.core;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -53,46 +53,57 @@ public class PortalInstallableRuntime2 extends InstallableRuntime2 {
 
 	@Override
 	public void install(final IPath path) {
-		try {
-			IRunnableContext context = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
-			context.run(true, true, new IRunnableWithProgress() {
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				IRunnableContext context = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 				
-				public void run(final IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
+				try {
+					context.run(true, true, new IRunnableWithProgress() {
 
-					monitor.beginTask("Downloading portal runtime...", IProgressMonitor.UNKNOWN);
+						public void run(final IProgressMonitor monitor)
+							throws InvocationTargetException, InterruptedException {
 
-					new Thread() {
+							monitor.beginTask("Downloading and installing...", IProgressMonitor.UNKNOWN);
 
-						@Override
-						public void run() {
-							try {
-								install(path, monitor);
-							}
-							catch (Exception ce) {
-								// ignore
-							}
+							new Thread() {
+
+								@Override
+								public void run() {
+									try {
+										install(path, monitor);
+									}
+									catch (Exception ce) {
+										// ignore
+									}
+
+									synchronized (mutex) {
+										mutex.notifyAll();
+									}
+								}
+
+							}.start();
 
 							synchronized (mutex) {
-								mutex.notifyAll();
+								mutex.wait();
 							}
+
+							monitor.done();
 						}
-
-					}.start();
-
-					synchronized (mutex) {
-						mutex.wait();
-					}
-
-					monitor.done();
+					});
 				}
-			});
-		}
-		catch (Exception e) {
-			// ignore
-		}
-		
+				catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
 	}
 
 	public void install(IPath path, IProgressMonitor monitor)

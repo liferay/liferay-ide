@@ -17,10 +17,10 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.project.core,
  org.eclipse.debug.ui,
  org.eclipse.jdt.debug.ui,
- com.liferay.ide.eclipse.sdk,
  org.eclipse.jdt.ui;bundle-version="3.5.2",
  org.eclipse.ui.editors;bundle-version="3.5.0",
- org.apache.commons.httpclient;bundle-version="3.1.0"
+ org.apache.commons.httpclient;bundle-version="3.1.0",
+ com.liferay.ide.eclipse.sdk
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.tomcat.core,

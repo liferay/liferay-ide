@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
+package com.liferay.ide.eclipse.server.core;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;

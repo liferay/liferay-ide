@@ -23,23 +23,21 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
  */
 public interface IPortalTomcatConstants {
 
-	public static final String DEFAULT_AUTO_DEPLOY_INTERVAL = "500";
-
-	public static final String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
-
-	public static final String DEFAULT_DEPLOYDIR = "webapps";
-
 	public static final IEclipsePreferences defaultPrefs = new DefaultScope().getNode(PortalTomcatPlugin.PLUGIN_ID);
 
-	public static final String INSTALLABLE_UPDATE_URL = defaultPrefs.get("installable.update.url", "");
+	final String DEFAULT_AUTO_DEPLOY_INTERVAL = "500";
 
-	public static final String[] LIB_EXCLUDES = defaultPrefs.get("tomcat.lib.excludes", "").split(",");
+	final String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
+
+	final String DEFAULT_DEPLOYDIR = "webapps";
+
+	final String[] LIB_EXCLUDES = defaultPrefs.get("tomcat.lib.excludes", "").split(",");
 
 	/**
 	 * Property which specifies the directory where liferay scans for
 	 * autodeployment
 	 */
-	public static final String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
+	final String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
 
-	public static final String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
+	final String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
 }
