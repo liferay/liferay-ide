@@ -16,6 +16,8 @@
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchableAdapterDelegate;
+import org.eclipse.wst.server.core.IModuleArtifact;
+import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Greg Amerson
@@ -24,6 +26,12 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchableAdapterDelega
 public class PortalTomcatLaunchableAdapter extends TomcatLaunchableAdapterDelegate {
 
 	public PortalTomcatLaunchableAdapter() {
+		System.out.println();
+	}
+
+	@Override
+	public Object getLaunchable(IServer server, IModuleArtifact moduleObject) {
+		return super.getLaunchable(server, moduleObject);
 	}
 
 }

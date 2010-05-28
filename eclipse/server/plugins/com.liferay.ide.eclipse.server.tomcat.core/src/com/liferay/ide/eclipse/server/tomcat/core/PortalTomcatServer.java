@@ -52,12 +52,16 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 		if (id.indexOf("60") > 0) {
 			configuration = new PortalTomcat60Configuration(folder);
 		}
-		try {
-			configuration.importFromPath(path, isTestEnvironment(), monitor);
-		} catch (CoreException ce) {
-			// ignore
-			configuration = null;
-			throw ce;
+
+		if (path.toFile().exists()) {
+			try {
+				configuration.importFromPath(path, isTestEnvironment(), monitor);
+			}
+			catch (CoreException ce) {
+				// ignore
+				configuration = null;
+				throw ce;
+			}
 		}
 	}
 

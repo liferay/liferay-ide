@@ -16,11 +16,14 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jst.server.tomcat.core.internal.Tomcat60Configuration;
+import org.eclipse.wst.server.core.IModule;
 
 /**
  * @author Greg Amerson
@@ -40,6 +43,17 @@ public class PortalTomcat60Configuration extends Tomcat60Configuration implement
 	@Override
 	public IStatus updateContextsToServeDirectly(IPath baseDir, String loader, IProgressMonitor monitor) {
 		return super.updateContextsToServeDirectly(baseDir, loader, monitor);
+	}
+
+
+	@Override
+	protected String getWebModuleURL(IModule webModule) {
+		if (webModule != null && ProjectUtil.isLiferayProject(webModule.getProject())) {
+			return ""; // just go to portal root, no need to view the webapp
+						// context url
+		}
+
+		return super.getWebModuleURL(webModule);
 	}
 
 }
