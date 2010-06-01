@@ -86,30 +86,29 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		}
 
 		if (shouldProcessResourceChangedEvent(event)) {
+			IResourceDelta delta = event.getDelta();
 
-		}
+			try {
+				delta.accept(new IResourceDeltaVisitor() {
 
-		IResourceDelta delta = event.getDelta();
+					public boolean visit(IResourceDelta delta)
+						throws CoreException {
 
-		try {
-			delta.accept(new IResourceDeltaVisitor() {
+						if (shouldProcessResourceDelta(delta)) {
+							processResourceChanged(delta);
 
-				public boolean visit(IResourceDelta delta)
-					throws CoreException {
-					
-					if (shouldProcessResourceDelta(delta)) {
-						processResourceChanged(delta);
+							return false;
+						}
 						
-						return false;						
+						return true;
 					}
-					
-					return true;					
-				}
-			});
+				});
+			}
+			catch (CoreException e) {
+
+			}
 		}
-		catch (CoreException e) {
-			
-		}
+
 
 		// if (delta == null) {
 		// return;
