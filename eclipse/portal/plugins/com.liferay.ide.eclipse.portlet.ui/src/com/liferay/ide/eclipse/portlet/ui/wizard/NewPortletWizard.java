@@ -74,13 +74,13 @@ public class NewPortletWizard extends NewWebArtifactWizard implements INewPortle
 	@Override
 	protected void doAddPages() {
 		addPage(new NewPortletClassWizardPage(
-			getDataModel(), "pageOne", "Create a Portlet class.", getDefaultPageTitle()));
+			getDataModel(), "pageOne", "Create a portlet class.", getDefaultPageTitle()));
 
 		addPage(new NewPortletOptionsWizardPage(
-			getDataModel(), "pageTwo", "Specify Portlet deployment descriptor details.", getDefaultPageTitle()));
+			getDataModel(), "pageTwo", "Specify portlet deployment descriptor details.", getDefaultPageTitle()));
 
 		addPage(new NewLiferayPortletWizardPage(
-			getDataModel(), "pageThree", "Specify Liferay Portlet deployment descriptor details.",
+			getDataModel(), "pageThree", "Specify Liferay portlet deployment descriptor details.",
 			getDefaultPageTitle()));
 
 		addPage(new NewPortletClassOptionsWizardPage(
