@@ -13,6 +13,9 @@ service*)>
 Not all portal properties can be overridden via a hook. The supported properties
 are:
 
+admin.default.group.names
+admin.default.role.names
+admin.default.user.group.names
 auth.forward.by.last.path
 auto.deploy.listeners
 application.startup.events
@@ -23,6 +26,7 @@ auth.pipeline.pre
 auto.login.hooks
 captcha.check.portal.create_account
 control.panel.entry.class.default
+convert.processes
 default.landing.page.path
 dl.hook.impl
 field.enable.com.liferay.portal.model.Contact.birthday
@@ -33,6 +37,7 @@ image.hook.impl
 javascript.fast.load
 layout.static.portlets.all
 layout.template.cache.enabled
+layout.types
 layout.user.private.layouts.auto.create
 layout.user.private.layouts.enabled
 layout.user.private.layouts.modifiable
@@ -54,6 +59,8 @@ my.places.show.user.private.sites.with.no.layouts
 my.places.show.user.public.sites.with.no.layouts
 passwords.passwordpolicytoolkit.generator
 passwords.passwordpolicytoolkit.static
+portlet.add.default.resource.check.enabled
+sanitizer.impl
 servlet.session.create.events
 servlet.session.destroy.events
 servlet.service.events.post
@@ -62,6 +69,10 @@ session.phishing.protected.attributes
 terms.of.use.required
 theme.css.fast.load
 theme.images.fast.load
+theme.loader.new.theme.id.on.import
+theme.portlet.decorate.default
+theme.portlet.sharing.default
+theme.shortcut.icon
 upgrade.processes
 users.email.address.generator
 users.email.address.required

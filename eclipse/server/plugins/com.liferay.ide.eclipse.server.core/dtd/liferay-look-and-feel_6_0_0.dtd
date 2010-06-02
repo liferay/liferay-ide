@@ -181,13 +181,13 @@ The default value is "${root-path}/images".
 <!--
 The javascript-path value sets the location of the JavaScript path for the
 theme. For example, the JavaScript path for the Classic theme is
-"/html/themes/classic/javascript". This means you can find JavaScript for the
-Classic theme in /docroot/html/themes/classic/javascript.
+"/html/themes/classic/js". This means you can find JavaScript for the
+Classic theme in /docroot/html/themes/classic/js.
 
 For convenience, the javascript-path attribute can be referenced in the rest of
 the theme element as ${javascript-path}.
 
-The default value is "${root-path}/javascript".
+The default value is "${root-path}/js".
 -->
 <!ELEMENT javascript-path (#PCDATA)>
 

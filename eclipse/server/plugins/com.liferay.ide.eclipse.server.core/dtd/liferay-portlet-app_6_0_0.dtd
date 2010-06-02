@@ -19,14 +19,14 @@ The portlet element contains the declarative data of a portlet.
 <!ELEMENT portlet (portlet-name, icon?, virtual-path?, struts-path?,
 configuration-path?, configuration-action-class?, indexer-class?,
 open-search-class?, scheduler-entry*, portlet-url-class?,
-friendly-url-mapper-class?, url-encoder-class?, portlet-data-handler-class?,
-portlet-layout-listener-class?, poller-processor-class?,
-pop-message-listener-class?, social-activity-interpreter-class?,
-social-request-interpreter-class?, webdav-storage-token?, webdav-storage-class?,
-xml-rpc-method-class?, control-panel-entry-category?,
-control-panel-entry-weight?, control-panel-entry-class?,
-asset-renderer-factory*, custom-attributes-display*, workflow-handler*,
-preferences-company-wide?, preferences-unique-per-layout?,
+friendly-url-mapper-class?, friendly-url-routes?, url-encoder-class?,
+portlet-data-handler-class?, portlet-layout-listener-class?,
+poller-processor-class?, pop-message-listener-class?,
+social-activity-interpreter-class?, social-request-interpreter-class?,
+webdav-storage-token?, webdav-storage-class?, xml-rpc-method-class?,
+control-panel-entry-category?, control-panel-entry-weight?,
+control-panel-entry-class?, asset-renderer-factory*, custom-attributes-display*,
+workflow-handler*, preferences-company-wide?, preferences-unique-per-layout?,
 preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
 show-portlet-inactive?, action-url-redirect?, restore-current-view?,
 maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
@@ -95,7 +95,7 @@ search index for the portlet.
 See:
 
 http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/messageboards/util/Indexer.html
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/search/Indexer.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/search/Indexer.html
 http://lucene.apache.org
 -->
 <!ELEMENT indexer-class (#PCDATA)>
@@ -108,7 +108,7 @@ in the OpenSearch 1.1 standard.
 See:
 
 http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/alfrescocontent/util/OpenSearch.html
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/search/OpenSearch.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/search/OpenSearch.html
 http://www.opensearch.org
 -->
 <!ELEMENT open-search-class (#PCDATA)>
@@ -144,7 +144,9 @@ The cron element specifies a cron style trigger for a scheduler.
 
 <!--
 The property-key value specifies a property key that will be queried from
-portal.properties to create a trigger.
+portal.properties or portlet.properties to create a trigger. The property key
+will be queried from portal.properties for portlets that are part of the portal
+and from portlet.propeties for portlets that are plugins.
 
 For a cron trigger, the queried value should be a cron text.
 
@@ -196,9 +198,41 @@ example of its uses.
 See:
 
 http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/messageboards/MBFriendlyURLMapper.html
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/portlet/FriendlyURLMapper.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/portlet/FriendlyURLMapper.html
 -->
 <!ELEMENT friendly-url-mapper-class (#PCDATA)>
+
+<!--
+The friendly-url-routes contains routes that can be used by a friendly
+URL mapper.
+-->
+<!ELEMENT friendly-url-routes (route*)>
+
+<!--
+The route element contains information on a single route.
+-->
+<!ELEMENT route (route-pattern, route-default*)>
+
+<!--
+The route-pattern specifies the pattern of the mapped friendly URL.
+-->
+<!ELEMENT route-pattern (#PCDATA)>
+
+<!--
+The route-default specifies a default parameter that is not preset in the route
+pattern.
+-->
+<!ELEMENT route-default (route-default-parameter, route-default-value)>
+
+<!--
+The route-default-parameter specifies the URL parameter of this default.
+-->
+<!ELEMENT route-default-parameter (#PCDATA)>
+
+<!--
+The route-default-parameter specifies the default value of this parameter.
+-->
+<!ELEMENT route-default-value (#PCDATA)>
 
 <!--
 The url-encoder-class value must be a class that implements
@@ -216,7 +250,7 @@ tasks are run.
 See:
 
 http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/journal/lar/PortletDataHandlerImpl.html
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/lar/PortletDataHandler.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/lar/PortletDataHandler.html
 -->
 <!ELEMENT portlet-data-handler-class (#PCDATA)>
 
@@ -228,7 +262,7 @@ is added, moved, or removed from a layout.
 See:
 
 http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/journalcontent/JournalContentPortletLayoutListener.html
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/portlet/PortletLayoutListener.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/portlet/PortletLayoutListener.html
 -->
 <!ELEMENT portlet-layout-listener-class (#PCDATA)>
 
@@ -240,7 +274,7 @@ notified of data changes. See the Chat portlet for a real world implementation.
 
 See:
 
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/poller/PollerProcessor.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/poller/PollerProcessor.html
 -->
 <!ELEMENT poller-processor-class (#PCDATA)>
 
@@ -252,7 +286,7 @@ emails.
 See:
 
 http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/messageboards/pop/MessageListenerImpl.html
-http://docs.liferay.com/portal/6.0/javadocs/portal-kernel/com/liferay/portal/kernel/pop/MessageListener.html
+http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/pop/MessageListener.html
 -->
 <!ELEMENT pop-message-listener-class (#PCDATA)>
 
@@ -293,8 +327,8 @@ http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/docu
 
 <!--
 The webdav-storage-class value must be a class that implements
-com.liferay.portal.webdav.WebDAVStorage and allows data to be exposed via the
-WebDAV protocol.
+com.liferay.portal.kernel.webdav.WebDAVStorage and allows data to be exposed via
+the WebDAV protocol.
 
 See:
 
