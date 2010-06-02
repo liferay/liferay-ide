@@ -174,6 +174,27 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
 		group.setLayoutData(gd);
 
+		createJspsButton = new Button(group, SWT.CHECK);
+		createJspsButton.setText("Create JSP &files"); //$NON-NLS-1$
+		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
+		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
+
+		final Label jspLabel = SWTUtil.createLabel(group, "JSP folder:", 1);
+
+		jspFolder = SWTUtil.createText(group, 1);
+		((GridData) jspFolder.getLayoutData()).widthHint = 150;
+		synchHelper.synchText(jspFolder, INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER, null);
+
+		createJspsButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				jspLabel.setEnabled(createJspsButton.getSelection());
+
+				jspFolder.setEnabled(createJspsButton.getSelection());
+			}
+		});
+
 		createResourceBundleFileButton = new Button(group, SWT.CHECK);
 		createResourceBundleFileButton.setText("Create resource bundle file");
 		createResourceBundleFileButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
@@ -194,27 +215,6 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 				resourceBundleFileLabel.setEnabled(createResourceBundleFileButton.getSelection());
 
 				resourceBundleFilePath.setEnabled(createResourceBundleFileButton.getSelection());
-			}
-		});
-
-		createJspsButton = new Button(group, SWT.CHECK);
-		createJspsButton.setText("Create JSP &files"); //$NON-NLS-1$
-		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
-		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
-
-		final Label jspLabel = SWTUtil.createLabel(group, "JSP folder:", 1);
-
-		jspFolder = SWTUtil.createText(group, 1);
-		((GridData) jspFolder.getLayoutData()).widthHint = 150;
-		synchHelper.synchText(jspFolder, INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER, null);
-
-		createJspsButton.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				jspLabel.setEnabled(createJspsButton.getSelection());
-
-				jspFolder.setEnabled(createJspsButton.getSelection());
 			}
 		});
 	}

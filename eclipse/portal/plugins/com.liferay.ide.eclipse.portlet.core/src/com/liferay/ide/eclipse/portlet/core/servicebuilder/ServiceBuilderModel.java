@@ -13,12 +13,14 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core;
+package com.liferay.ide.eclipse.portlet.core.servicebuilder;
 
 import com.liferay.ide.eclipse.core.model.AbstractModel;
 import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.ModelChangedEvent;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
+import com.liferay.ide.eclipse.portlet.core.IServiceBuilderModel;
+import com.liferay.ide.eclipse.portlet.core.PortletCore;
 
 import java.io.InputStream;
 

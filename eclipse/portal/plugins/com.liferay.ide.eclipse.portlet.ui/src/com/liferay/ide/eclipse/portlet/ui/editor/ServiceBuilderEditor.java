@@ -16,8 +16,8 @@
 package com.liferay.ide.eclipse.portlet.ui.editor;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.ServiceBuilderModel;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
+import com.liferay.ide.eclipse.portlet.core.servicebuilder.ServiceBuilderModel;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.ui.toolbar.ToolBarButtonContribution;
 

@@ -85,22 +85,24 @@ public class NodeUtil {
 		return retval;
 	}
 
-	public static String getTextContent(Element element) {
+	public static String getTextContent(Node node) {
+		NodeList children = node.getChildNodes();
 
-		String retval = null;
-
-		if (element != null) {
-			NodeList childNodes = element.getChildNodes();
-
-			for (int i = 0; i < childNodes.getLength(); i++) {
-				Node child = childNodes.item(i);
-
-				if (child instanceof Text) {
-					return child.getNodeValue();
-				}
-			}
+		if (children.getLength() == 1) {
+			return children.item(0).getNodeValue().trim();
 		}
-		return retval;
+
+		StringBuffer s = new StringBuffer();
+
+		Node child = node.getFirstChild();
+
+		while (child != null) {
+			s.append(child.getNodeValue().trim());
+
+			child = child.getNextSibling();
+		}
+
+		return s.toString().trim();
 	}
 
 }

@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core;
+package com.liferay.ide.eclipse.portlet.core.servicebuilder;
 
 import java.io.IOException;
 import java.io.StringReader;

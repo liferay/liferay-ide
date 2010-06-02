@@ -118,7 +118,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return "/icon.png";
 		}
 		else if (CREATE_RESOURCE_BUNDLE_FILE.equals(propertyName)) {
-			return true;
+			return false;
 		}
 		else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
 			return "content/Language.properties";

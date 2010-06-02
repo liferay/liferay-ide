@@ -266,6 +266,12 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 			return false;
 		}
 
+		IFile file = getWorkspaceFile(fullPath);
+
+		if (file == null || !file.exists() || !file.isAccessible()) {
+			return false;
+		}
+
 		return true;		
 	}
 

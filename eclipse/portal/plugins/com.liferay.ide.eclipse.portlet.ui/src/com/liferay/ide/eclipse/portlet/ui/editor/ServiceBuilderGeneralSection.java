@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.portlet.ui.editor;
 import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.IModelChangedListener;
 import com.liferay.ide.eclipse.portlet.core.IServiceBuilderModel;
-import com.liferay.ide.eclipse.portlet.core.ServiceBuilderModel;
+import com.liferay.ide.eclipse.portlet.core.servicebuilder.ServiceBuilderModel;
 import com.liferay.ide.eclipse.ui.form.FormEntry;
 import com.liferay.ide.eclipse.ui.form.FormEntryAdapter;
 import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
