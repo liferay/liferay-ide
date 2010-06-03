@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and others.
+ * Copyright (c) 2007, 2010 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,6 +8,7 @@
  * Contributors:
  *     IBM Corporation - Initial API and implementation
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.server.core;
 
 import java.io.BufferedInputStream;
@@ -38,7 +39,9 @@ import org.eclipse.wst.server.core.internal.Messages;
 import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.eclipse.wst.server.core.internal.Trace;
 
-
+/**
+ * @author Greg Amerson
+ */
 @SuppressWarnings("restriction")
 public class PortalInstallableRuntime2 extends InstallableRuntime2 {
 
@@ -58,7 +61,7 @@ public class PortalInstallableRuntime2 extends InstallableRuntime2 {
 
 			public void run() {
 				IRunnableContext context = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
-				
+
 				try {
 					context.run(true, true, new IRunnableWithProgress() {
 
@@ -93,13 +96,8 @@ public class PortalInstallableRuntime2 extends InstallableRuntime2 {
 						}
 					});
 				}
-				catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				catch (Exception e) {
+					PortalServerCorePlugin.logError(e);
 				}
 			}
 		});
@@ -172,18 +170,6 @@ public class PortalInstallableRuntime2 extends InstallableRuntime2 {
 		}
 	}
 
-	
-	protected void copy(InputStream in, OutputStream out, IProgressMonitor monitor)
-		throws IOException {
-		if (BUFFER == null)
-			BUFFER = new byte[8192];
-		int r = in.read(BUFFER);
-		while (r >= 0 && !monitor.isCanceled()) {
-			out.write(BUFFER, 0, r);
-			r = in.read(BUFFER);
-		}
-	}
-
 	private void unzip(InputStream in, IPath path, IProgressMonitor monitor)
 		throws IOException {
 		String archivePath = getArchivePath();
@@ -212,6 +198,17 @@ public class PortalInstallableRuntime2 extends InstallableRuntime2 {
 			entry = zin.getNextEntry();
 		}
 		zin.close();
+	}
+
+	protected void copy(InputStream in, OutputStream out, IProgressMonitor monitor)
+		throws IOException {
+		if (BUFFER == null)
+			BUFFER = new byte[8192];
+		int r = in.read(BUFFER);
+		while (r >= 0 && !monitor.isCanceled()) {
+			out.write(BUFFER, 0, r);
+			r = in.read(BUFFER);
+		}
 	}
 
 }

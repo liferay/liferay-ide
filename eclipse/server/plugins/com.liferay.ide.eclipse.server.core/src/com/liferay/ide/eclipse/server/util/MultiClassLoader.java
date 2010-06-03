@@ -1,4 +1,3 @@
-
 package com.liferay.ide.eclipse.server.util;
 
 import java.util.Hashtable;

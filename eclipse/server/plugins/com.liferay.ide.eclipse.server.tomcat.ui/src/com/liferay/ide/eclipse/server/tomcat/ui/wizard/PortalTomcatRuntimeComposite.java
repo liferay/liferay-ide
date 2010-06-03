@@ -79,13 +79,13 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 			field.setText(value != null ? value : "");
 		}
 	}
-	
+
 	protected Text dirField;
-	
+
 	protected boolean ignoreModifyEvent;
-	
+
 	protected Button jreButton;
-	
+
 	protected Combo jreCombo;
 
 	protected Label jreLabel;
@@ -94,7 +94,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 
 	public PortalTomcatRuntimeComposite(Composite parent, IWizardHandle wizard) {
 		super(parent, wizard);
-		
+
 		wizard.setTitle("Liferay Runtime (Tomcat)");
 		wizard.setDescription("Specify the installation directory of the Tomcat configured with Liferay.");
 		wizard.setImageDescriptor(PortalServerUIPlugin.getImageDescriptor(PortalServerUIPlugin.IMG_WIZ_RUNTIME));
@@ -113,11 +113,11 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		else if (e.getSource().equals(nameField)) {
 			getRuntime().setName(nameField.getText());
 		}
-		
+
 		validate();
-		
+
 		IStatus status = getRuntime().validate(null);
-		
+
 		if (!status.isOK() && e.getSource().equals(dirField)) {
 			// check to see if we need to modify from a liferay folder down to
 			// embedded tomcat
@@ -143,49 +143,49 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		if (status.isOK()) {
 			enableJREControls(true);
 		}
-		
+
 		if (getTomcatRuntime().getVMInstall() != null) {
 			// check to see if selected VM is in same path as new server
 			// location
 			IPath vmLoc = new Path(getTomcatRuntime().getVMInstall().getInstallLocation().getPath());
-			
+
 			IPath runtimeLoc = getRuntime().getLocation();
-			
+
 			if (!runtimeLoc.isPrefixOf(vmLoc)) {
 				// we have a jre that is outside the runtime location, need to
 				// look for new bundled JRE
 				PortalTomcatRuntime runtime = (PortalTomcatRuntime) getTomcatRuntime();
-				
+
 				IVMInstall newVM = runtime.findPortalBundledJRE(true);
-				
+
 				if (newVM != null) {
 					runtime.setVMInstall(newVM);
 				}
 			}
-			
+
 			updateJREs();
 		}
 	}
 
 	protected Button createButton(String text, int style) {
 		Button button = new Button(this, style);
-		
+
 		button.setText(text);
-		
+
 		GridDataFactory.generate(button, 2, 1);
-		
+
 		return button;
 	}
 
 	@Override
 	protected void createControl() {
 		setLayout(createLayout());
-		
+
 		setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		nameField = createTextField("Name");
 		nameField.addModifyListener(this);
-		
+
 		dirField = createTextField("Liferay Tomcat directory");
 		dirField.addModifyListener(this);
 
@@ -193,12 +193,12 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dd = new DirectoryDialog(PortalTomcatRuntimeComposite.this.getShell());
-				
+
 				dd.setMessage("Select Liferay Tomcat directory");
 				dd.setFilterPath(dirField.getText());
-				
+
 				String selectedDir = dd.open();
-				
+
 				if (selectedDir != null) {
 					dirField.setText(selectedDir);
 				}
@@ -264,22 +264,22 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		});
 
 		jreLabel = createLabel("Select runtime JRE");
-		
+
 		jreCombo = new Combo(this, SWT.DROP_DOWN | SWT.READ_ONLY);
 		jreCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		jreCombo.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				int sel = jreCombo.getSelectionIndex();
-				
+
 				IVMInstall vmInstall = null;
-				
+
 				if (sel > 0) {
 					vmInstall = (IVMInstall) installedJREs.get(sel - 1);
 				}
 
 				getTomcatRuntime().setVMInstall(vmInstall);
-				
+
 				validate();
 			}
 		});
@@ -295,12 +295,12 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 			}
 
 		});
-		
+
 		// initially disabled until user selects an installation directory
 		enableJREControls(false);
 
 		init();
-		
+
 		validate();
 
 		Dialog.applyDialogFont(this);
@@ -309,9 +309,9 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	protected Label createLabel(String text) {
 		Label label = new Label(this, SWT.NONE);
 		label.setText(text);
-		
+
 		GridDataFactory.generate(label, 2, 1);
-		
+
 		return label;
 	}
 
@@ -326,18 +326,18 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 
 	protected Text createTextField(String labelText) {
 		createLabel(labelText);
-		
+
 		Text text = new Text(this, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+
 		return text;
 	}
 
 	protected void enableJREControls(boolean enabled) {
-		jreLabel.setEnabled(enabled);	
-			
+		jreLabel.setEnabled(enabled);
+
 		jreCombo.setEnabled(enabled);
-		
+
 		jreButton.setEnabled(enabled);
 	}
 
@@ -356,7 +356,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		}
 
 		setFieldValue(nameField, getRuntime().getName());
-		
+
 		setFieldValue(dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : "");
 	}
 
@@ -457,21 +457,21 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	@SuppressWarnings("unchecked")
 	protected void updateJREs() {
 		IVMInstall currentVM = getTomcatRuntime().getVMInstall();
-		
+
 		int currentJREIndex = -1;
 
 		// get all installed JVMs
 		installedJREs = new ArrayList<IVMInstall>();
-		
+
 		IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
-		
+
 		int size = vmInstallTypes.length;
-		
+
 		for (int i = 0; i < size; i++) {
 			IVMInstall[] vmInstalls = vmInstallTypes[i].getVMInstalls();
-			
+
 			int size2 = vmInstalls.length;
-			
+
 			for (int j = 0; j < size2; j++) {
 				installedJREs.add(vmInstalls[j]);
 			}
@@ -479,15 +479,15 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 
 		// get names
 		size = installedJREs.size();
-		
+
 		jreNames = new String[size + 1];
 		jreNames[0] = "<Default Workbench JRE>";
-		
+
 		for (int i = 0; i < size; i++) {
 			IVMInstall vmInstall = (IVMInstall) installedJREs.get(i);
-			
+
 			jreNames[i + 1] = vmInstall.getName();
-			
+
 			if (vmInstall.equals(currentVM)) {
 				currentJREIndex = i + 1;
 			}
