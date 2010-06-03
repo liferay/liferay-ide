@@ -3,12 +3,12 @@ package com.liferay.ide.eclipse.portlet.core.descriptor;
 
 import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
+import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,25 +16,21 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
-import org.eclipse.wst.validation.AbstractValidator;
-import org.eclipse.wst.validation.ValidationEvent;
 import org.eclipse.wst.validation.ValidationResult;
 import org.eclipse.wst.validation.ValidationState;
 import org.eclipse.wst.validation.ValidatorMessage;
-import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -42,15 +38,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 @SuppressWarnings("restriction")
-public class PortletDescriptorValidator extends AbstractValidator {
+public class PortletDescriptorValidator extends BaseValidator {
+
+	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
 
 	public static final String PORTLET_CLASS_ELEMENT = "portlet-class";
 
 	public static final String RESOURCE_BUNDLE_ELEMENT = "resource-bundle";
 
 	public static final String MARKER_TYPE = "com.liferay.ide.eclipse.portlet.core.portletDescriptorValidationMarker";
-
-	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
 
 	public static final String VALIDATION_PORTLET_CLASS_NOT_FOUND = "validation-portlet-class-not-found";
 
@@ -61,8 +57,6 @@ public class PortletDescriptorValidator extends AbstractValidator {
 
 	public static final String MESSAGE_PORTLET_CLASS_NOT_FOUND =
 		"The portlet class {0} was not found on the Java Build Path";
-
-	protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
 
 	public PortletDescriptorValidator() {
 		super();
@@ -200,27 +194,6 @@ public class PortletDescriptorValidator extends AbstractValidator {
 		}
 	}
 
-	protected Integer getMessageSeverity(IScopeContext[] preferenceScopes, String key) {
-		int sev =
-			fPreferencesService.getInt(PREFERENCE_NODE_QUALIFIER, key, IMessage.NORMAL_SEVERITY, preferenceScopes);
-
-		switch (sev) {
-		case ValidationMessage.ERROR:
-			return new Integer(IMarker.SEVERITY_ERROR);
-
-		case ValidationMessage.WARNING:
-			return new Integer(IMarker.SEVERITY_WARNING);
-
-		case ValidationMessage.INFORMATION:
-			return new Integer(IMarker.SEVERITY_INFO);
-
-		case ValidationMessage.IGNORE:
-			return null;
-		}
-
-		return new Integer(IMarker.SEVERITY_WARNING);
-	}
-
 	protected Map<String, Object> checkClassResource(
 		IJavaProject javaProject, Node classResourceSpecifier, IScopeContext[] preferenceScopes, String preferenceKey,
 		String errorMessage) {
@@ -228,6 +201,35 @@ public class PortletDescriptorValidator extends AbstractValidator {
 		String classResource = NodeUtil.getTextContent(classResourceSpecifier);
 
 		if (classResource != null && classResource.length() > 2) {
+			try {
+				IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath(true);
+
+				IResource classResourceValue = null;
+				for (IClasspathEntry entry : classpathEntries) {
+					if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+						IPath entryPath = entry.getPath();
+						IPath classResourcePath = entryPath.append(classResource);
+						classResourceValue =
+							javaProject.getJavaModel().getWorkspace().getRoot().findMember(classResourcePath);
+						if (classResourceValue != null) {
+							break;
+						}
+					}
+				}
+
+				if (classResourceValue == null) {
+					String msg = MessageFormat.format(errorMessage, new Object[] {
+						classResource
+					});
+
+					return createMarkerValues(
+						PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier,
+						msg);
+				}
+			}
+			catch (JavaModelException e1) {
+
+			}
 
 		}
 
@@ -251,53 +253,17 @@ public class PortletDescriptorValidator extends AbstractValidator {
 			}
 
 			if (type == null || !type.exists()) {
-				Object severity = getMessageSeverity(preferenceScopes, preferenceKey);
-
-				if (severity == null) {
-					return null;
-				}
-
-				IDOMNode classElement = (IDOMNode) classSpecifier;
-
-				Map<String, Object> markerValues = new HashMap<String, Object>();
-
-				markerValues.put(IMarker.SEVERITY, severity);
-
-				int start = classElement.getStartOffset();
-
-				if (classElement.getStartStructuredDocumentRegion() != null &&
-					classElement.getEndStructuredDocumentRegion() != null) {
-
-					start = classElement.getStartStructuredDocumentRegion().getEndOffset();
-				}
-
-				int end = classElement.getEndOffset();
-
-				if (classElement.getStartStructuredDocumentRegion() != null &&
-					classElement.getEndStructuredDocumentRegion() != null) {
-
-					end = classElement.getEndStructuredDocumentRegion().getStartOffset();
-				}
-
-				int line = classElement.getStructuredDocument().getLineOfOffset(start);
-
-				markerValues.put(IMarker.CHAR_START, new Integer(start));
-				markerValues.put(IMarker.CHAR_END, new Integer(end));
-				markerValues.put(IMarker.LINE_NUMBER, new Integer(line + 1));
-				markerValues.put(IMarker.MESSAGE, MessageFormat.format(errorMessage, new Object[] {
+				String msg = MessageFormat.format(errorMessage, new Object[] {
 					className
-				}));
+				});
 
-				return markerValues;
+				return createMarkerValues(
+					PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg);
+
 			}
 		}
 
 		return null;
-	}
-
-	@Override
-	public boolean shouldClearMarkers(ValidationEvent event) {
-		return true;
 	}
 
 }
