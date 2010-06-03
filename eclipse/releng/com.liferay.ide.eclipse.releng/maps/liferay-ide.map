@@ -1,6 +1,5 @@
 #releng
 feature@com.liferay.ide.eclipse.tools=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/features/com.liferay.ide.eclipse.tools,username=guest,password=guest
-
 plugin@com.liferay.ide.eclipse.tools.branding=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.tools.branding,username=guest,password=guest
 
 #common
