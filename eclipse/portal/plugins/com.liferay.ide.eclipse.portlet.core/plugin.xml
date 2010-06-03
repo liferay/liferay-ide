@@ -29,6 +29,16 @@
             </parameter>
          </describer>
       </content-type>
+      <content-type
+            base-type="org.eclipse.wst.xml.core.xmlsource"
+            default-charset="UTF-8"
+            describer="com.liferay.ide.eclipse.portlet.core.descriptor.LiferayPortletContentDescriber"
+            file-extensions="xml"
+            file-names="liferay-portlet.xml"
+            id="liferayportletxml"
+            name="Liferay Portlet Descriptor"
+            priority="high">
+      </content-type>
    </extension>
    <extension
          id="portletdescriptorvalidator"
@@ -38,7 +48,7 @@
             build="true"
             class="com.liferay.ide.eclipse.portlet.core.descriptor.PortletDescriptorValidator"
             manual="true"
-            markerId="com.liferay.ide.eclipse.portlet.core.portletDescriptorValidationMarker"
+            markerId="com.liferay.ide.eclipse.portlet.core.portletDescriptorMarker"
             version="1">
          <include>
             <rules>
@@ -50,8 +60,38 @@
       </validator>
    </extension>
    <extension
-         id="portletDescriptorValidationMarker"
+         id="liferayportletdescriptorvalidator"
+         name="Liferay Portlet Descriptor Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="com.liferay.ide.eclipse.portlet.core.descriptor.LiferayPortletDescriptorValidator"
+            manual="true"
+            markerId="com.liferay.ide.eclipse.portlet.core.liferayPortletDescriptorMarker"
+            version="1">
+         <include>
+            <rules>
+               <contentType
+                     id="com.liferay.ide.eclipse.portlet.core.liferayportletxml">
+               </contentType>
+            </rules>
+         </include>
+      </validator>
+   </extension>
+   <extension
+         id="portletDescriptorMarker"
          name="Portlet Descriptor Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker">
+      </super>
+   </extension>
+   <extension
+         id="liferayPortletDescriptorMarker"
+         name="Liferay Portlet Descriptor Problem"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">

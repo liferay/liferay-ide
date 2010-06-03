@@ -13,22 +13,27 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core.servicebuilder;
+package com.liferay.ide.eclipse.portlet.core.descriptor;
 
-import com.liferay.ide.eclipse.portlet.core.AbstractContentDescriber;
 import com.liferay.ide.eclipse.portlet.core.AbstractDefaultHandler;
 
 /**
  * @author Greg Amerson
  */
-public class ServiceBuilderContentDescriber extends AbstractContentDescriber {
+public class LiferayPortletContentHandler extends AbstractDefaultHandler {
 
-	public ServiceBuilderContentDescriber() {
-		super();
-	}
+	public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Portlet Application ";
 
-	protected AbstractDefaultHandler createDefaultHandler() {
-		return new ServiceBuilderContentHandler();
+	public static final String PUBLIC_ID_SUFFIX = "//EN";
+
+	public static final String LIFERAY_PORTLET_APP = "liferay-portlet-app";
+
+	public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-portlet-app_";
+
+	public static final String SYSTEM_ID_SUFFIX = ".dtd";
+
+	public LiferayPortletContentHandler() {
+		super(PUBLIC_ID_PREFIX, PUBLIC_ID_SUFFIX, SYSTEM_ID_PREFIX, SYSTEM_ID_SUFFIX, LIFERAY_PORTLET_APP);
 	}
 
 }

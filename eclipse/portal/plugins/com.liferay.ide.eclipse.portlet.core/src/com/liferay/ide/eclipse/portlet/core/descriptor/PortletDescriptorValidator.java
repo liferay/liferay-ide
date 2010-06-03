@@ -57,7 +57,7 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 public class PortletDescriptorValidator extends BaseValidator {
 
-	public static final String MARKER_TYPE = "com.liferay.ide.eclipse.portlet.core.portletDescriptorValidationMarker";
+	public static final String MARKER_TYPE = "com.liferay.ide.eclipse.portlet.core.portletDescriptorMarker";
 
 	public static final String MESSAGE_PORTLET_CLASS_NOT_FOUND =
 		"The portlet class {0} was not found on the Java Build Path";
@@ -143,7 +143,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 		String className = NodeUtil.getTextContent(classSpecifier);
 
-		if (className != null && className.length() > 2) {
+		if (className != null && className.length() > 0) {
 			IType type = null;
 
 			try {
@@ -173,7 +173,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 		String classResource = NodeUtil.getTextContent(classResourceSpecifier);
 
-		if (classResource != null && classResource.length() > 2) {
+		if (classResource != null && classResource.length() > 0) {
 			try {
 				IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath(true);
 
