@@ -63,6 +63,11 @@
                webURL="http://www.liferay.com/dtd/liferay-display_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Friendly URL Routes 6.0.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-friendly-url-routes_6_0_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-friendly-url-routes_6_0_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Hook 5.1.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-hook_5_1_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-hook_5_1_0.dtd">

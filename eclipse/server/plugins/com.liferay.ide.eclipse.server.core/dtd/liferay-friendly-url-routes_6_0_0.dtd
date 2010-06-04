@@ -1,0 +1,36 @@
+<!--
+This is the DTD for the Friendly URL Routes parameters for Liferay Portal.
+
+<!DOCTYPE liferay-friendly-url-routes PUBLIC
+	"-//Liferay//DTD Friendly URL Routes 6.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-friendly-url-routes_6_0_0.dtd">
+-->
+
+<!--
+The routes element is the root of the deployment descriptor for a set of Liferay
+friendly URL mapper routes.
+-->
+<!ELEMENT routes (route*)>
+
+<!--
+The route element contains information on a single route.
+-->
+<!ELEMENT route (pattern, default*)>
+
+<!--
+The pattern element specifies the pattern of the mapped friendly URL.
+-->
+<!ELEMENT pattern (#PCDATA)>
+
+<!--
+The default element specifies a default parameter that is not preset in the
+route pattern.
+-->
+<!ELEMENT default (#PCDATA)>
+
+<!--
+The parameter attribute specifies the URL parameter of this default.
+-->
+<!ATTLIST default
+	parameter CDATA #REQUIRED
+>

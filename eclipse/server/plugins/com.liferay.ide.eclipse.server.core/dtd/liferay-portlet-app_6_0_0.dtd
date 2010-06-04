@@ -203,36 +203,10 @@ http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/ke
 <!ELEMENT friendly-url-mapper-class (#PCDATA)>
 
 <!--
-The friendly-url-routes contains routes that can be used by a friendly
-URL mapper.
+The friendly-url-routes points to the XML file that defines the friendly URL
+routes. This file is read by the class loader.
 -->
-<!ELEMENT friendly-url-routes (route*)>
-
-<!--
-The route element contains information on a single route.
--->
-<!ELEMENT route (route-pattern, route-default*)>
-
-<!--
-The route-pattern specifies the pattern of the mapped friendly URL.
--->
-<!ELEMENT route-pattern (#PCDATA)>
-
-<!--
-The route-default specifies a default parameter that is not preset in the route
-pattern.
--->
-<!ELEMENT route-default (route-default-parameter, route-default-value)>
-
-<!--
-The route-default-parameter specifies the URL parameter of this default.
--->
-<!ELEMENT route-default-parameter (#PCDATA)>
-
-<!--
-The route-default-parameter specifies the default value of this parameter.
--->
-<!ELEMENT route-default-value (#PCDATA)>
+<!ELEMENT friendly-url-routes (#PCDATA)>
 
 <!--
 The url-encoder-class value must be a class that implements
