@@ -15,7 +15,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.operation;
 
+import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
@@ -26,6 +28,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
@@ -363,6 +366,19 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			}
 			else {
 				return PortletCore.createErrorStatus("Resource bundle file path must be a valid path.");
+			}
+		}
+		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
+			String folderValue = getStringProperty(propertyName);
+
+			IFolder docroot = PortletUtil.getDocroot(getTargetProject());
+
+			if (folderValue != null && !folderValue.isEmpty()) {
+				String errorMsg = FileUtil.validateNewFolder(docroot, folderValue);
+
+				if (errorMsg != null) {
+					return PortletCore.createErrorStatus(errorMsg);
+				}
 			}
 		}
 

@@ -23,6 +23,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+
 /**
  * @author Greg Amerson
  */
@@ -102,6 +109,35 @@ public class FileUtil {
 		}
 
 		return lines.toArray(new String[lines.size()]);
+	}
+
+	public static String validateNewFolder(IFolder docroot, String folderValue) {
+		if (docroot == null || folderValue == null) {
+			return null;
+		}
+
+		if (folderValue.isEmpty()) {
+			return "Folder value cannot be empty.";
+		}
+
+		if (!Path.ROOT.isValidPath(folderValue)) {
+			return "Folder value is invalid.";
+		}
+
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IStatus result =
+			workspace.validatePath(docroot.getFolder(folderValue).getFullPath().toString(), IResource.FOLDER);
+
+		if (!result.isOK()) {
+			return result.getMessage();
+		}
+
+		if (docroot.getFolder(new Path(folderValue)).exists()) {
+			return "Folder already exists.";
+		}
+
+		return null;
 	}
 
 }

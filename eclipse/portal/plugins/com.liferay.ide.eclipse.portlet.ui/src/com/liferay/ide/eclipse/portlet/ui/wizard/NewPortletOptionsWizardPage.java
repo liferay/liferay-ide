@@ -235,6 +235,15 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 	}
 
 	@Override
+	protected void enter() {
+		super.enter();
+
+		if (resourceBundleFilePath != null && !resourceBundleFilePath.isDisposed()) {
+			resourceBundleFilePath.setEnabled(false);
+		}
+	}
+
+	@Override
 	protected IFolder getDocroot() {
 		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
@@ -243,7 +252,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
 			PORTLET_NAME, DISPLAY_NAME, VIEW_MODE, EDIT_MODE, HELP_MODE, ABOUT_MODE, CONFIG_MODE, EDITDEFAULTS_MODE,
-			EDITGUEST_MODE, PREVIEW_MODE, PRINT_MODE, CREATE_RESOURCE_BUNDLE_FILE_PATH
+			EDITGUEST_MODE, PREVIEW_MODE, PRINT_MODE, CREATE_RESOURCE_BUNDLE_FILE_PATH, CREATE_JSPS_FOLDER
 		};
 	}
 
