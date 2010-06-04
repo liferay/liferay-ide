@@ -398,8 +398,15 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		for (int i = 0; i < modes.length; i++) {
 			if (getBooleanProperty(modes[i])) {
 				ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
+
 				paramValue.setName(names[i]);
-				paramValue.setValue("/" + prependPath + values[i]);
+
+				if (prependPath.isEmpty()) {
+					paramValue.setValue(values[i]);
+				}
+				else {
+					paramValue.setValue("/" + prependPath + values[i]);
+				}
 
 				defaultParams.add(paramValue);
 			}
