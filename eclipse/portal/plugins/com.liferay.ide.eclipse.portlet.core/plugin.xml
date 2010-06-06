@@ -57,6 +57,9 @@
                </contentType>
             </rules>
          </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
       </validator>
    </extension>
    <extension
@@ -76,6 +79,9 @@
                </contentType>
             </rules>
          </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
       </validator>
    </extension>
    <extension
