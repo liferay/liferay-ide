@@ -185,8 +185,8 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 			new ExternalFileSelectionDialog(getShell(), new JSPFileViewerFilter(portalRoot, new String[] {
 				"html"
 			}), true, false);
-		dialog.setTitle("title");
-		dialog.setMessage("messsage");
+		dialog.setTitle("Liferay Custom JSP");
+		dialog.setMessage("Select a JSP to customize:");
 		dialog.setInput(portalRoot);
 
 		if (dialog.open() == Window.OK) {
