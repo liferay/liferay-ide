@@ -23,8 +23,10 @@ auth.failure
 auth.max.failures
 auth.pipeline.post
 auth.pipeline.pre
+auth.token.impl
 auto.login.hooks
 captcha.check.portal.create_account
+captcha.engine.impl
 control.panel.entry.class.default
 convert.processes
 default.landing.page.path
