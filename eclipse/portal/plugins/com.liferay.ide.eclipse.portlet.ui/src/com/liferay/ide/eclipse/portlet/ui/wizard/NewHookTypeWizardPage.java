@@ -76,19 +76,19 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected void createHookTypesGroup(Composite parent) {
-		Group group = SWTUtil.createGroup(parent, "Select a hook type to create", 1);
+		Group group = SWTUtil.createGroup(parent, "Select the type(s) of hook(s) to create", 1);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
-		customJSPButton = SWTUtil.createRadioButton(group, "Custom JSPs", null, false, 1);
+		customJSPButton = SWTUtil.createCheckButton(group, "Custom JSPs", null, false, 1);
 		this.synchHelper.synchCheckbox(customJSPButton, CREATE_CUSTOM_JSPS, null);
 
-		portalPropertiesButton = SWTUtil.createRadioButton(group, "Portal properties", null, false, 1);
+		portalPropertiesButton = SWTUtil.createCheckButton(group, "Portal properties", null, false, 1);
 		this.synchHelper.synchCheckbox(portalPropertiesButton, CREATE_PORTAL_PROPERTIES, null);
 
-		servicesButton = SWTUtil.createRadioButton(group, "Services", null, false, 1);
+		servicesButton = SWTUtil.createCheckButton(group, "Services", null, false, 1);
 		this.synchHelper.synchCheckbox(servicesButton, CREATE_SERVICES, null);
 
-		languagePropertiesButton = SWTUtil.createRadioButton(group, "Language properties", null, false, 1);
+		languagePropertiesButton = SWTUtil.createCheckButton(group, "Language properties", null, false, 1);
 		this.synchHelper.synchCheckbox(languagePropertiesButton, CREATE_LANGUAGE_PROPERTIES, null);
 	}
 
@@ -139,7 +139,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	@Override
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
-			PROJECT_NAME
+			PROJECT_NAME, CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES
 		};
 	}
 

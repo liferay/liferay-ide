@@ -48,11 +48,19 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 	public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
 
+	public static final String[] PAGE_PROPERTIES = new String[] {
+		CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES
+	};
+
 	public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage";
 
 	public static final String SERVICES_PAGE = "servicesPage";
 
 	public static final String TYPE_PAGE = "typePage";
+
+	public static final String[] WIZARD_PAGES = new String[] {
+		CUSTOM_JSPS_PAGE, PORTAL_PROPERTIES_PAGE, SERVICES_PAGE, LANGUAGE_PROPERTIES_PAGE
+	};
 
 	protected NewCustomJSPsHookWizardPage customJSPsHookPage;
 
@@ -78,7 +86,21 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 	@Override
 	public boolean canFinish() {
-		return getDataModel().isValid();
+		boolean valid = getDataModel().isValid();
+
+		if (!valid) {
+			return false;
+		}
+
+		for (String type : PAGE_PROPERTIES) {
+			boolean pageTypeChecked = getDataModel().getBooleanProperty(type);
+
+			if (pageTypeChecked) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
@@ -88,17 +110,24 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 		}
 
 		if (TYPE_PAGE.equals(currentPageName)) {
-			if (getDataModel().getBooleanProperty(CREATE_CUSTOM_JSPS)) {
-				return CUSTOM_JSPS_PAGE;
+			for (int i = 0; i < PAGE_PROPERTIES.length; i++) {
+				boolean nextPageType = getDataModel().getBooleanProperty(PAGE_PROPERTIES[i]);
+
+				if (nextPageType) {
+					return WIZARD_PAGES[i];
+				}
 			}
-			else if (getDataModel().getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
-				return PORTAL_PROPERTIES_PAGE;
-			}
-			else if (getDataModel().getBooleanProperty(CREATE_SERVICES)) {
-				return SERVICES_PAGE;
-			}
-			else if (getDataModel().getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
-				return LANGUAGE_PROPERTIES_PAGE;
+		}
+
+		for (int i = 0; i < WIZARD_PAGES.length; i++) {
+			if (WIZARD_PAGES[i].equals(currentPageName)) {
+				for (int j = i + 1; j < WIZARD_PAGES.length; j++) {
+					boolean nextPageType = getDataModel().getBooleanProperty(PAGE_PROPERTIES[j]);
+
+					if (nextPageType) {
+						return WIZARD_PAGES[j];
+					}
+				}
 			}
 		}
 
@@ -107,10 +136,20 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 	@Override
 	public String getPreviousPage(String currentPageName, String expectedPreviousPageName) {
-		if (CUSTOM_JSPS_PAGE.equals(currentPageName) || PORTAL_PROPERTIES_PAGE.equals(currentPageName) ||
-			SERVICES_PAGE.equals(currentPageName) || LANGUAGE_PROPERTIES_PAGE.equals(currentPageName)) {
-
+		if (TYPE_PAGE.equals(expectedPreviousPageName)) {
 			return TYPE_PAGE;
+		}
+
+		for (int i = 0; i < WIZARD_PAGES.length; i++) {
+			if (WIZARD_PAGES[i].equals(currentPageName)) {
+				for (int j = i - 1; j >= 0; j--) {
+					boolean previousPageType = getDataModel().getBooleanProperty(PAGE_PROPERTIES[j]);
+
+					if (previousPageType) {
+						return WIZARD_PAGES[j];
+					}
+				}
+			}
 		}
 
 		return super.getPreviousPage(currentPageName, expectedPreviousPageName);
@@ -201,8 +240,8 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 		if (languagePropertiesFiles != null && languagePropertiesFiles.size() > 0) {
 			openWebFile(languagePropertiesFiles.iterator().next()); // just
-																	// openthe
-																	// first one
+			// openthe
+			// first one
 		}
 	}
 

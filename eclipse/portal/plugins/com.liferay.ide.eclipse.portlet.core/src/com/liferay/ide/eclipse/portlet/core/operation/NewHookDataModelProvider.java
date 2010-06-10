@@ -72,10 +72,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
 	@Override
 	public Object getDefaultProperty(String propertyName) {
-		if (CREATE_CUSTOM_JSPS.equals(propertyName)) {
-			return true;
-		}
-		else if (CUSTOM_JSPS_FOLDER.equals(propertyName)) {
+		if (CUSTOM_JSPS_FOLDER.equals(propertyName)) {
 			// check to see if there is an existing hook descriptor and read
 			// custom_jsps out of that
 			HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper(getTargetProject());

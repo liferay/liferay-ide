@@ -98,13 +98,16 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		if (dm.getBooleanProperty(CREATE_CUSTOM_JSPS)) {
 			retval = createCustomJSPs(dm);
 		}
-		else if (dm.getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
+
+		if (dm.getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
 			retval = createPortalProperties(dm);
 		}
-		else if (dm.getBooleanProperty(CREATE_SERVICES)) {
+
+		if (dm.getBooleanProperty(CREATE_SERVICES)) {
 			retval = createServices(dm);
 		}
-		else if (dm.getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
+
+		if (dm.getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
 			retval = createLanguageProperties(dm);
 		}
 
