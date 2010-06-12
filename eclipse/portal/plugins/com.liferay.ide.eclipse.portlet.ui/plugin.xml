@@ -206,5 +206,31 @@
             type="org.eclipse.core.resources.IFile">
       </propertyTester>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.eclipse.ui.preferences.liferay"
+            class="com.liferay.ide.eclipse.portlet.ui.pref.PortletValidationSettingsPage"
+            id="com.liferay.ide.eclipse.portlet.ui.validation"
+            name="Plug-in Validation">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="com.liferay.ide.eclipse.project.ui.properties"
+            class="com.liferay.ide.eclipse.portlet.ui.pref.PortletValidationSettingsPage"
+            id="com.liferay.ide.eclipse.portlet.ui.propertyPage.project.validation"
+            name="Plug-in Validation">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="com.liferay.ide.eclipse.project.ui.isLiferayProject">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
 
 </plugin>

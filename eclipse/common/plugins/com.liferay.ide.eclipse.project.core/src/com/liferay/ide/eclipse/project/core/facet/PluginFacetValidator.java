@@ -16,27 +16,58 @@
 package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectValidator;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
+import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("restriction")
 public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 
 	public final static String MARKER_ID = "com.liferay.ide.eclipse.project.core.facet.validator";
+
+	public static final String PREFERENCE_NODE_QUALIFIER =
+		ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+
+	protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
 
 	public void validate(IFacetedProject fproj)
 		throws CoreException {
 
 		if (fproj == null) {
 			return;
+		}
+
+		IScopeContext[] scopes = new IScopeContext[] {
+			new InstanceScope(), new DefaultScope()
+		};
+
+		ProjectScope projectScope = new ProjectScope(fproj.getProject());
+
+		boolean useProjectSettings =
+			projectScope.getNode(PREFERENCE_NODE_QUALIFIER).getBoolean(ProjectCorePlugin.USE_PROJECT_SETTINGS, false);
+
+		if (useProjectSettings) {
+			scopes = new IScopeContext[] {
+				projectScope, new InstanceScope(), new DefaultScope()
+			};
 		}
 
 		// check for an SDK
@@ -50,7 +81,21 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 		}
 
 		if (projectSDK == null) {
-			fproj.createErrorMarker("No Liferay SDK configured on project " + fproj.getProject().getName());
+			Object severity =
+				getMessageSeverity(PREFERENCE_NODE_QUALIFIER, scopes, ValidationPreferences.SDK_NOT_VALID);
+
+			if (severity == null) {
+				return;
+			}
+
+			String msg = "No Liferay SDK configured on project " + fproj.getProject().getName();
+
+			if (severity.equals(IMarker.SEVERITY_ERROR)) {
+				fproj.createErrorMarker(msg);
+			}
+			else if (severity.equals(IMarker.SEVERITY_WARNING)) {
+				fproj.createWarningMarker(msg);
+			}
 
 			return;
 		}
@@ -64,6 +109,26 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 			}
 		}
 
+	}
+
+	protected Integer getMessageSeverity(String qualifier, IScopeContext[] preferenceScopes, String key) {
+		int sev = fPreferencesService.getInt(qualifier, key, IMessage.NORMAL_SEVERITY, preferenceScopes);
+
+		switch (sev) {
+		case ValidationMessage.ERROR:
+			return new Integer(IMarker.SEVERITY_ERROR);
+
+		case ValidationMessage.WARNING:
+			return new Integer(IMarker.SEVERITY_WARNING);
+
+		case ValidationMessage.INFORMATION:
+			return new Integer(IMarker.SEVERITY_INFO);
+
+		case ValidationMessage.IGNORE:
+			return null;
+		}
+
+		return new Integer(IMarker.SEVERITY_WARNING);
 	}
 
 	protected abstract IProjectFacet getProjectFacet();

@@ -29,6 +29,8 @@ public class ProjectCorePlugin extends CorePlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.project.core";
 
+	public static final String USE_PROJECT_SETTINGS = "use-project-settings";
+
 	// The shared instance
 	private static ProjectCorePlugin plugin;
 

@@ -17,7 +17,9 @@ package com.liferay.ide.eclipse.portlet.core.descriptor;
 
 import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
+import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -71,10 +74,6 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 	public static final String RESOURCE_BUNDLE_ELEMENT = "resource-bundle";
 
-	public static final String VALIDATION_PORTLET_CLASS_NOT_FOUND = "validation-portlet-class-not-found";
-
-	public static final String VALIDATION_RESOURCE_BUNDLE_NOT_FOUND = "validation-resource-bundle-not-found";
-
 	public PortletDescriptorValidator() {
 		super();
 	}
@@ -97,19 +96,17 @@ public class PortletDescriptorValidator extends BaseValidator {
 					new InstanceScope(), new DefaultScope()
 				};
 
-				// ProjectScope projectScope = new
-				// ProjectScope(portletXml.getProject());
+				ProjectScope projectScope = new ProjectScope(portletXml.getProject());
 
-				// boolean useProjectSettings =
-				// projectScope.getNode(PREFERENCE_NODE_QUALIFIER).getBoolean(
-				// JSPCorePreferenceNames.VALIDATION_USE_PROJECT_SETTINGS,
-				// false);
-				//				
-				// if (useProjectSettings) {
-				// scopes = new IScopeContext[] {
-				// projectScope, new InstanceScope(), new DefaultScope()
-				// };
-				// }
+				boolean useProjectSettings =
+					projectScope.getNode(PREFERENCE_NODE_QUALIFIER).getBoolean(
+						ProjectCorePlugin.USE_PROJECT_SETTINGS, false);
+
+				if (useProjectSettings) {
+					scopes = new IScopeContext[] {
+						projectScope, new InstanceScope(), new DefaultScope()
+					};
+				}
 
 				try {
 					Map<String, Object>[] problems = detectProblems(javaProject, portletXml, scopes);
@@ -121,12 +118,6 @@ public class PortletDescriptorValidator extends BaseValidator {
 						message.setAttributes(problems[i]);
 						result.add(message);
 					}
-
-					// if (problems.length > 0) {
-					// result.setDependsOn(new IResource[] {
-					// portletXml
-					// });
-					// }
 				}
 				catch (Exception e) {
 					PortletCore.logError(e);
@@ -220,7 +211,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 			Map<String, Object> problem =
 				checkClass(
-					javaProject, item, preferenceScopes, VALIDATION_PORTLET_CLASS_NOT_FOUND,
+					javaProject, item, preferenceScopes, ValidationPreferences.PORTLET_CLASS_NOT_FOUND,
 					MESSAGE_PORTLET_CLASS_NOT_FOUND);
 
 			if (problem != null) {
@@ -240,7 +231,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 			Map<String, Object> problem =
 				checkClassResource(
-					javaProject, item, preferenceScopes, VALIDATION_RESOURCE_BUNDLE_NOT_FOUND,
+					javaProject, item, preferenceScopes, ValidationPreferences.RESOURCE_BUNDLE_NOT_FOUND,
 					MESSAGE_RESOURCE_BUNDLE_NOT_FOUND);
 
 			if (problem != null) {

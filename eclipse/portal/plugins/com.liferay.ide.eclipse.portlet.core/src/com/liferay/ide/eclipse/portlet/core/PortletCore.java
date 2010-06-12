@@ -32,7 +32,7 @@ import org.osgi.framework.BundleContext;
 public class PortletCore extends Plugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.jst.portlet";
+	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.portlet.core";
 
 	// The shared instance
 	private static PortletCore plugin;
