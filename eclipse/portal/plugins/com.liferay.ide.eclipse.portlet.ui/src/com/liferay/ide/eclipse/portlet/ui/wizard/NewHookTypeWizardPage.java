@@ -76,7 +76,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected void createHookTypesGroup(Composite parent) {
-		Group group = SWTUtil.createGroup(parent, "Select the type(s) of hook(s) to create", 1);
+		Group group = SWTUtil.createGroup(parent, "Select hook type(s) to create", 1);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
 		customJSPButton = SWTUtil.createCheckButton(group, "Custom JSPs", null, false, 1);
