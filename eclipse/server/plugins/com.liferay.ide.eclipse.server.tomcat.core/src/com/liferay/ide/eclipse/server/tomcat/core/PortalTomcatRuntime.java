@@ -316,7 +316,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			for (String dir : jre) {
 				File javaw = new File(location.toFile(), dir + "/win/bin/javaw.exe");
 				if (javaw.exists()) {
-					return new Path(javaw.getPath());
+					return new Path(javaw.getPath()).removeLastSegments(2);
 				}
 			}
 		}
