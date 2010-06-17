@@ -15,6 +15,8 @@
 
 package com.liferay.ide.eclipse.ui.dialog;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
 import org.eclipse.jface.operation.IRunnableContext;
@@ -55,7 +57,7 @@ public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog
 						return;
 					}
 
-					if (text.getText() == null || text.getText().isEmpty()) {
+					if (CoreUtil.isNullOrEmpty(text.getText())) {
 						ignoreEvent = true;
 
 						text.setText("**");

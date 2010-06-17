@@ -95,13 +95,13 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation implements I
 		try {
 			String cssFilePath = getDataModel().getStringProperty(CSS_FILE);
 
-			if (cssFilePath != null && !cssFilePath.isEmpty()) {
+			if (!CoreUtil.isNullOrEmpty(cssFilePath)) {
 				createEmptyFileInDocroot(cssFilePath);
 			}
 
 			String javascriptFilePath = getDataModel().getStringProperty(JAVASCRIPT_FILE);
 
-			if (javascriptFilePath != null && !javascriptFilePath.isEmpty()) {
+			if (!CoreUtil.isNullOrEmpty(javascriptFilePath)) {
 				createEmptyFileInDocroot(javascriptFilePath);
 			}
 		}

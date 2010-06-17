@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.project.core.facet;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
@@ -92,7 +93,7 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 		if (LIFERAY_SDK_NAME.equals(name)) {
 			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
 			
-			if (sdkName == null || sdkName.isEmpty()) {
+			if (CoreUtil.isNullOrEmpty(sdkName)) {
 				return ProjectCorePlugin.createErrorStatus("No Liferay SDK configured.");
 			}
 			

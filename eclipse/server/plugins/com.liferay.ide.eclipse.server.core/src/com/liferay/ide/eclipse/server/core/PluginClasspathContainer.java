@@ -15,6 +15,8 @@
 
 package com.liferay.ide.eclipse.server.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -106,7 +108,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 					
 					String[] split = deps.split(",");
 					
-					if (split.length > 0 && !(split[0].isEmpty())) {
+					if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
 						jars = split;						
 					}
 				}				

@@ -76,7 +76,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			IVMInstallType installType = JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE);
 			VMStandin newVM = new VMStandin(installType, JavaUtil.createUniqueId(installType));
 			newVM.setInstallLocation(jrePath.toFile());
-			if (getRuntime().getName()!= null && !getRuntime().getName().isEmpty()) {
+			if (!CoreUtil.isNullOrEmpty(getRuntime().getName())) {
 				newVM.setName(getRuntime().getName() + " JRE");
 			} else {
 				newVM.setName("Liferay JRE");

@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.portlet.core.operation;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.core.util.StringBufferOutputStream;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.dd.HookDescriptorHelper;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
@@ -26,7 +27,6 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -350,7 +350,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 			}
 		}
 
-		StringWriter buffer = new StringWriter();
+		StringBufferOutputStream buffer = new StringBufferOutputStream();
 
 		try {
 			properties.store(buffer, "");

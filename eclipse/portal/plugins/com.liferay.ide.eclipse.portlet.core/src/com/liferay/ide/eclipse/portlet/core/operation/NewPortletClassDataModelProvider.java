@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.core.operation;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
@@ -373,7 +374,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 			IFolder docroot = PortletUtil.getDocroot(getTargetProject());
 
-			if (folderValue != null && !folderValue.isEmpty()) {
+			if (!CoreUtil.isNullOrEmpty(folderValue)) {
 				String errorMsg = FileUtil.validateNewFolder(docroot, folderValue);
 
 				if (errorMsg != null) {
@@ -401,7 +402,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 				paramValue.setName(names[i]);
 
-				if (prependPath.isEmpty()) {
+				if (CoreUtil.isNullOrEmpty(prependPath)) {
 					paramValue.setValue(values[i]);
 				}
 				else {

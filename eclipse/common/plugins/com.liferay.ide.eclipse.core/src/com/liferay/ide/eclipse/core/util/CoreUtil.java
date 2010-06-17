@@ -18,8 +18,8 @@ package com.liferay.ide.eclipse.core.util;
 import com.liferay.ide.eclipse.core.CorePlugin;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -104,7 +104,7 @@ public class CoreUtil {
 
 	public static boolean isNullOrEmpty(String val) {
 
-		return val == null || val.isEmpty();
+		return val == null || val.equals("") || val.trim().equals("");
 	}
 
 	public static void prepareFolder(IFolder folder)
@@ -125,7 +125,7 @@ public class CoreUtil {
 		throws FileNotFoundException, IOException {
 
 		Properties props = new Properties();
-		props.load(new FileReader(propertiesFile));
+		props.load(new FileInputStream(propertiesFile));
 		return props.getProperty(key);
 	}
 

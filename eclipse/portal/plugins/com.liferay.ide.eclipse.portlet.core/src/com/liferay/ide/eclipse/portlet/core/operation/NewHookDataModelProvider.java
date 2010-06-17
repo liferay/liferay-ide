@@ -152,7 +152,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 		if (CUSTOM_JSPS_FOLDER.equals(propertyName) && getBooleanProperty(CREATE_CUSTOM_JSPS)) {
 			String jspFolder = getStringProperty(CUSTOM_JSPS_FOLDER);
 
-			if (jspFolder == null || jspFolder.isEmpty()) {
+			if (CoreUtil.isNullOrEmpty(jspFolder)) {
 				return PortletCore.createErrorStatus("Custom JSPs folder not configured.");
 			}
 		}
@@ -203,7 +203,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 		else if (CONTENT_FOLDER.equals(propertyName) && getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
 			String contentFolder = getStringProperty(CONTENT_FOLDER);
 
-			if (contentFolder == null || contentFolder.isEmpty()) {
+			if (CoreUtil.isNullOrEmpty(contentFolder)) {
 				return PortletCore.createErrorStatus("Content folder not configured.");
 			}
 		}

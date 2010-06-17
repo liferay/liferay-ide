@@ -19,7 +19,7 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -163,7 +163,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 			}
 		}
 		
-		props.store(new FileWriter(idePropertiesPath.toFile()), null);
+		props.store(new FileOutputStream(idePropertiesPath.toFile()), null);
 	}
 
 }

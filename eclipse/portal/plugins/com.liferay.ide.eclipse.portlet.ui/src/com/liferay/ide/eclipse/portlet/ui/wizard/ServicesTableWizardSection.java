@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
@@ -126,7 +127,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 		}
 
 		protected void handleNewImplClassButton(Text text) {
-			if (texts[0].getText() == null || texts[0].getText().isEmpty()) {
+			if (CoreUtil.isNullOrEmpty(texts[0].getText())) {
 				MessageDialog.openWarning(getParentShell(), "Add Service", "Please specify a service type first.");
 
 				return;
@@ -151,7 +152,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 		}
 
 		protected void handleSelectImplClassButton(Text text) {
-			if (texts[0].getText() == null || texts[0].getText().isEmpty()) {
+			if (CoreUtil.isNullOrEmpty(texts[0].getText())) {
 				MessageDialog.openWarning(getParentShell(), "Add Service", "Please specify a service type first.");
 
 				return;

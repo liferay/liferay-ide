@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.project.ui;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -284,7 +285,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 				SDK sdk = SDKManager.getSDKByName(sdkName);
 
-				if (!sdkName.isEmpty() && sdk != null) {
+				if (!CoreUtil.isNullOrEmpty(sdkName) && sdk != null) {
 					sdkCombo.select(sdkNames.indexOf(sdk.getName()));
 				}
 			}

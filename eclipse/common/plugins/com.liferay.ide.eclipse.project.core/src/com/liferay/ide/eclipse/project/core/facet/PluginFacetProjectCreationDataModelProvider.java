@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.project.core.facet;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
@@ -265,7 +266,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			if (sdkVal instanceof String && IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals(sdkVal)) {
 				return ProjectCorePlugin.createErrorStatus("Liferay SDK must be configured.");
 			}
-			else if (!sdkVal.toString().isEmpty()) {
+			else if (!CoreUtil.isNullOrEmpty(sdkVal.toString())) {
 				SDK sdk = SDKManager.getSDKByName(sdkVal.toString());
 				return sdk != null ? Status.OK_STATUS : ProjectCorePlugin.createErrorStatus("Liferay SDK is invalid.");
 			}

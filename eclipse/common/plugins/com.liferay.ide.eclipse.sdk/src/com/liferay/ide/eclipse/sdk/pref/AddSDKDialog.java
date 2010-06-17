@@ -217,16 +217,16 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
 		dd.setText("Select Liferay SDK folder");
 
-		if (location.getText() != null && !location.getText().isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(location.getText())) {
 			dd.setFilterPath(location.getText());
 		}
 
 		String dir = dd.open();
 
-		if (dir != null && !dir.isEmpty()) {
+		if (!CoreUtil.isNullOrEmpty(dir)) {
 			location.setText(dir);
 
-			if (name.getText() == null || name.getText().isEmpty()) {
+			if (CoreUtil.isNullOrEmpty(name.getText())) {
 				IPath path = new Path(dir);
 
 				if (path.isValidPath(dir)) {
@@ -261,7 +261,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 	protected IStatus validate() {
 		lastName = name.getText();
 
-		if (lastName == null || lastName.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(lastName)) {
 			return CoreUtil.createErrorStatus("Name must have a value.");
 		}
 
@@ -276,7 +276,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 		lastLocation = location.getText();
 
-		if (lastLocation == null || lastLocation.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(lastLocation)) {
 			return CoreUtil.createErrorStatus("Location must have a value.");
 		}
 

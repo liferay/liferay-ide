@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.portlet.core;
 import com.liferay.ide.eclipse.core.model.AbstractEditingModel;
 import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.ModelChangedEvent;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -59,7 +60,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	}
 
 	public void addPortalDependencyJar(String jar) {
-		if (jar == null || jar.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(jar)) {
 			return;
 		}
 
@@ -75,7 +76,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
 		String newPortalJars = null;
 
-		if (existingPortalJars.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(existingPortalJars)) {
 			newPortalJars = jar;
 		}
 		else {
@@ -91,7 +92,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	}
 
 	public void addPortalDependencyTld(String tldFile) {
-		if (tldFile == null || tldFile.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(tldFile)) {
 			return;
 		}
 
@@ -107,7 +108,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
 		String newPortalTlds = null;
 
-		if (existingPortalTlds.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(existingPortalTlds)) {
 			newPortalTlds = tldFile;
 		}
 		else {

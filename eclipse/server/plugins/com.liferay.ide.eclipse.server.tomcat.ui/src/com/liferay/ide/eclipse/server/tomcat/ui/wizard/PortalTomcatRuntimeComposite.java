@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.InstallableRuntime2ConfigurationElement;
 import com.liferay.ide.eclipse.server.core.PortalInstallableRuntime2;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
@@ -363,7 +364,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	protected IPath modifyLocationForBundle(IPath currentLocation) {
 		IPath modifiedLocation = null;
 
-		if (currentLocation == null || currentLocation.toOSString().isEmpty()) {
+		if (currentLocation == null || CoreUtil.isNullOrEmpty(currentLocation.toOSString())) {
 			return null;
 		}
 

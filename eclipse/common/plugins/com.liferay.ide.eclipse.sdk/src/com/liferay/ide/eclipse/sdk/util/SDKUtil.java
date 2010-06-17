@@ -17,8 +17,8 @@ package com.liferay.ide.eclipse.sdk.util;
 
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -106,7 +106,7 @@ public class SDKUtil {
 		throws FileNotFoundException, IOException {
 
 		Properties properties = new Properties();
-		properties.load(new FileReader(new Path(path).append("build.properties").toFile()));
+		properties.load(new FileInputStream(new Path(path).append("build.properties").toFile()));
 
 		return properties.getProperty("lp.version");
 	}

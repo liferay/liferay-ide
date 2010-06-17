@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.sdk;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.io.ByteArrayInputStream;
@@ -170,7 +171,7 @@ public final class SDKManager {
 
 		String sdksXmlString = prefs.getString("sdks");
 
-		if (sdksXmlString != null && !sdksXmlString.isEmpty()) {
+		if (!CoreUtil.isNullOrEmpty(sdksXmlString)) {
 			try {
 				XMLMemento root =
 					XMLMemento.createReadRoot(new InputStreamReader(new ByteArrayInputStream(

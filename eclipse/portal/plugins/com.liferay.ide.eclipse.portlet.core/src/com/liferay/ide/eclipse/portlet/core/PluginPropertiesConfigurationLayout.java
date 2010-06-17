@@ -15,6 +15,8 @@
 
 package com.liferay.ide.eclipse.portlet.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
@@ -82,7 +84,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 					StringBuffer buf = new StringBuffer();
 
 					for (String val : values) {
-						if (buf.toString().isEmpty()) {
+						if (CoreUtil.isNullOrEmpty(buf.toString())) {
 							buf.append("\\\n");
 							buf.append("    " + escapeValue(val));
 						}

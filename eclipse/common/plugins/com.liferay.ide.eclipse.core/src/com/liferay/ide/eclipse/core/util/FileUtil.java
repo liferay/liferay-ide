@@ -116,7 +116,7 @@ public class FileUtil {
 			return null;
 		}
 
-		if (folderValue.isEmpty()) {
+		if (CoreUtil.isNullOrEmpty(folderValue)) {
 			return "Folder value cannot be empty.";
 		}
 

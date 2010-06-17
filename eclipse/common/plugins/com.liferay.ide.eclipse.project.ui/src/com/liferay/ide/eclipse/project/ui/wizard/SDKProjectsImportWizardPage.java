@@ -528,7 +528,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	protected void enter() {
 		super.enter();
 
-		if (sdkLocation.getText() != null && !(sdkLocation.getText().isEmpty())) {
+		if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
 			updateProjectsList(sdkLocation.getText());
 		}
 		else {
@@ -536,7 +536,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 				ProjectUIPlugin.getDefault().getPreferenceStore().getString(
 					ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF);
 
-			if (lastLocation != null && !lastLocation.isEmpty()) {
+			if (!CoreUtil.isNullOrEmpty(lastLocation)) {
 				sdkLocation.setText(lastLocation);
 
 				updateProjectsList(lastLocation);
@@ -572,13 +572,13 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 		dd.setText("Select Liferay SDK folder");
 
-		if (sdkLocation.getText() != null && !sdkLocation.getText().isEmpty()) {
+		if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
 			dd.setFilterPath(sdkLocation.getText());
 		}
 
 		String dir = dd.open();
 
-		if (dir != null && !dir.isEmpty()) {
+		if (!CoreUtil.isNullOrEmpty(dir)) {
 			sdkLocation.setText(dir);
 
 			updateProjectsList(dir);
