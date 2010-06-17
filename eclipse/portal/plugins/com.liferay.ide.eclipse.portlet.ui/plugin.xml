@@ -17,7 +17,7 @@
             <parameter name="menuIndex" value="10" />
          </class>
          <description>
-            Create a new Liferay Portlet Plug-in
+            Create a new Liferay Portlet
          </description>
       </wizard>
       <wizard
@@ -30,7 +30,7 @@
             <parameter name="menuIndex" value="20" />
          </class>
          <description>
-            Create a new Liferay Hook Plug-in
+            Create a new Liferay Hook
          </description>
       </wizard>
       <wizard
