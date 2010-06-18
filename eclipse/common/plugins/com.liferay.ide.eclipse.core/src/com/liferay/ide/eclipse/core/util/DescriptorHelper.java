@@ -178,6 +178,14 @@ public class DescriptorHelper {
 		return retval;
 	}
 
+	public static IFile getDescriptorFile(IProject project, String fileName) {
+		IVirtualFolder webRoot = ComponentCore.createComponent(project).getRootFolder();
+
+		IFolder webInfFolder = (IFolder) webRoot.getFolder("WEB-INF").getUnderlyingFolder();
+
+		return webInfFolder.getFile(fileName);
+	}
+
 	public static Element insertChildElement(
 		Element parentElement, Node refNode, String newElementName, String initialTextContent) {
 
@@ -250,12 +258,7 @@ public class DescriptorHelper {
 	}
 
 	protected IFile getDescriptorFile(String fileName) {
-
-		IVirtualFolder webRoot = ComponentCore.createComponent(project).getRootFolder();
-
-		IFolder webInfFolder = (IFolder) webRoot.getFolder("WEB-INF").getUnderlyingFolder();
-
-		return webInfFolder.getFile(fileName);
+		return getDescriptorFile(project, fileName);
 	}
 
 }

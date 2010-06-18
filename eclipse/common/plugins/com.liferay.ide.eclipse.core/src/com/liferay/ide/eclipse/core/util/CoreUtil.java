@@ -102,6 +102,10 @@ public class CoreUtil {
 		return method.invoke(object, args);
 	}
 
+	public static boolean isEqual(Object object1, Object object2) {
+		return object1 != null && object2 != null && object1.equals(object2);
+	}
+
 	public static boolean isNullOrEmpty(String val) {
 
 		return val == null || val.equals("") || val.trim().equals("");

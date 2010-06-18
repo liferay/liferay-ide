@@ -47,16 +47,17 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
 	public static final String VALIDATION_ID = "com.liferay.ide.eclipse.portlet.ui.validation";
 
-	private static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
-	private static final int[] ERROR_VALUES = new int[] {
+	protected static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
+
+	protected static final int[] ERROR_VALUES = new int[] {
 		1, 2, -1
 	};
 
-	private static final String[] ERRORS = new String[] {
+	protected static final String[] ERRORS = new String[] {
 		"Error", "Warning", "Ignore"
 	};
 
-	private static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities";
+	protected static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities";
 
 	static {
 		ERROR_MAP.put(IMarker.SEVERITY_ERROR, 0);
@@ -64,7 +65,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 		ERROR_MAP.put(IMarker.SEVERITY_INFO, 2);
 	}
 
-	private PixelConverter pixelConverter;
+	protected PixelConverter pixelConverter;
 
 	@Override
 	public void dispose() {
@@ -133,12 +134,45 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 		ExpandableComposite twistie;
 
 		int columns = 3;
+
 		twistie = createTwistie(body, "Portlet XML Descriptor", columns);
 		Composite inner = createInnerComposite(parent, twistie, columns);
 
+		createCombo(inner, "Portlet class not found", ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND);
+		createCombo(inner, "Resource bundle not found", ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND);
+
+		twistie = createTwistie(body, "Liferay Portlet XML Descriptor", columns);
 		inner = createInnerComposite(parent, twistie, columns);
-		createCombo(inner, "Portlet class not found", ValidationPreferences.PORTLET_CLASS_NOT_FOUND);
-		createCombo(inner, "Resource bundle not found", ValidationPreferences.RESOURCE_BUNDLE_NOT_FOUND);
+
+		createCombo(inner, "Icon not found", ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND);
+		createCombo(
+			inner, "Header portal css not found", ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND);
+		createCombo(
+			inner, "Header portlet css not found",
+			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_CSS_NOT_FOUND);
+		createCombo(
+			inner, "Header portal javascript not found",
+			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND);
+		createCombo(
+			inner, "Header portlet javascript not found",
+			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND);
+		createCombo(
+			inner, "Footer portal css not found", ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND);
+		createCombo(
+			inner, "Footer portlet css not found",
+			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_CSS_NOT_FOUND);
+		createCombo(
+			inner, "Footer portal javascript not found",
+			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND);
+		createCombo(
+			inner, "Footer portlet javascript not found",
+			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND);
+		createCombo(inner, "Portlet name not found", ValidationPreferences.LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND);
+
+		twistie = createTwistie(body, "Liferay Display XML Descriptor", columns);
+		inner = createInnerComposite(parent, twistie, columns);
+
+		createCombo(inner, "Portlet id not found", ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND);
 
 		return parent;
 	}

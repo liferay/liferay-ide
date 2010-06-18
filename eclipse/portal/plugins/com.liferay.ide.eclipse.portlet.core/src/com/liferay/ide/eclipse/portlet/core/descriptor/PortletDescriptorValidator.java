@@ -211,7 +211,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 			Map<String, Object> problem =
 				checkClass(
-					javaProject, item, preferenceScopes, ValidationPreferences.PORTLET_CLASS_NOT_FOUND,
+					javaProject, item, preferenceScopes, ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND,
 					MESSAGE_PORTLET_CLASS_NOT_FOUND);
 
 			if (problem != null) {
@@ -231,7 +231,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 			Map<String, Object> problem =
 				checkClassResource(
-					javaProject, item, preferenceScopes, ValidationPreferences.RESOURCE_BUNDLE_NOT_FOUND,
+					javaProject, item, preferenceScopes, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND,
 					MESSAGE_RESOURCE_BUNDLE_NOT_FOUND);
 
 			if (problem != null) {
@@ -247,25 +247,27 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 		List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
 
-		IStructuredModel m = null;
+		IStructuredModel model = null;
 
 		try {
-			m = StructuredModelManager.getModelManager().getModelForRead(portletXml);
+			model = StructuredModelManager.getModelManager().getModelForRead(portletXml);
 
-			if (m != null && m instanceof IDOMModel) {
-				IDOMDocument document = ((IDOMModel) m).getDocument();
+			if (model instanceof IDOMModel) {
+				IDOMDocument document = ((IDOMModel) model).getDocument();
 
 				checkPortletClassElements(document, javaProject, preferenceScopes, problems);
 
 				checkResourceBundleElements(document, javaProject, preferenceScopes, problems);
 			}
+
+
 		}
 		catch (IOException e) {
 
 		}
 		finally {
-			if (m != null) {
-				m.releaseFromRead();
+			if (model != null) {
+				model.releaseFromRead();
 			}
 		}
 

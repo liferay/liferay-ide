@@ -149,7 +149,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		// new <portlet> element
 		Element newPortletElement = document.createElement("portlet");
 
-		appendChildElement(newPortletElement, "portlet-name", model.getStringProperty(PORTLET_NAME));
+		appendChildElement(newPortletElement, "portlet-name", model.getStringProperty(LIFERAY_PORTLET_NAME));
 
 		appendChildElement(newPortletElement, "icon", model.getStringProperty(ICON_FILE));
 

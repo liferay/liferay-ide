@@ -101,8 +101,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		else if (CLASS_NAME.equals(propertyName)) {
 			return "NewPortlet";
 		}
-		else if (PORTLET_NAME.equals(propertyName) || DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName) ||
-			NAME.equals(propertyName)) {
+		else if (PORTLET_NAME.equals(propertyName) || LIFERAY_PORTLET_NAME.equals(propertyName)) {
+			return getProperty(CLASS_NAME).toString().toLowerCase();
+		}
+		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName)) {
 
 			return getProperty(CLASS_NAME);
 		}
@@ -140,7 +142,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return getProperty(CLASS_NAME).toString().toLowerCase() + "-portlet";
 		}
 		else if (ID.equals(propertyName)) {
-			return getProperty(TITLE);
+			return getProperty(PORTLET_NAME);
 		}
 		else if (CATEGORY.equals(propertyName)) {
 			return "category.sample";
@@ -233,7 +235,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(CREATE_JSPS);
 		propertyNames.add(CREATE_JSPS_FOLDER);
 
-		propertyNames.add(NAME);
+		propertyNames.add(LIFERAY_PORTLET_NAME);
 		propertyNames.add(ICON_FILE);
 		propertyNames.add(ALLOW_MULTIPLE);
 		propertyNames.add(CSS_FILE);
@@ -333,6 +335,16 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			getDataModel().notifyPropertyChange(EDITGUEST_MODE, IDataModel.ENABLE_CHG);
 			getDataModel().notifyPropertyChange(PREVIEW_MODE, IDataModel.ENABLE_CHG);
 			getDataModel().notifyPropertyChange(PRINT_MODE, IDataModel.ENABLE_CHG);
+		}
+		else if (PORTLET_NAME.equals(propertyName)) {
+			String portletName = getStringProperty(propertyName);
+
+			getDataModel().setStringProperty(LIFERAY_PORTLET_NAME, portletName);
+		}
+		else if (LIFERAY_PORTLET_NAME.equals(propertyName)) {
+			String liferayPortletName = getStringProperty(propertyName);
+
+			getDataModel().setStringProperty(PORTLET_NAME, liferayPortletName);
 		}
 
 		return super.propertySet(propertyName, propertyValue);

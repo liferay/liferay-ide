@@ -17,8 +17,41 @@ package com.liferay.ide.eclipse.portlet.core;
 
 public class ValidationPreferences {
 
-	public static final String PORTLET_CLASS_NOT_FOUND = "validation-portlet-class-not-found";
+	public static final String LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND =
+		"validation-liferay-display-xml-portlet-id-not-found";
 
-	public static final String RESOURCE_BUNDLE_NOT_FOUND = "validation-resource-bundle-not-found";
+	public static final String LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND =
+		"validation-liferay-portlet-xml-footer-portal-css-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND =
+		"validation-liferay-portlet-xml-footer-portal-javascript-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_FOOTER_PORTLET_CSS_NOT_FOUND =
+		"validation-liferay-portlet-xml-footer-portlet-css-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND =
+		"validation-liferay-portlet-xml-footer-portlet-javascript-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND =
+		"validation-liferay-portlet-xml-header-portal-css-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND =
+		"validation-liferay-portlet-xml-header-portal-javascript-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_HEADER_PORTLET_CSS_NOT_FOUND =
+		"validation-liferay-portlet-xml-header-portlet-css-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND =
+		"validation-liferay-portlet-xml-header-portlet-javascript-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_ICON_NOT_FOUND = "validation-liferay-portlet-xml-icon-not-found";
+
+	public static final String LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND =
+		"validation-liferay-portlet-xml-portlet-name-not-found";
+
+	public static final String PORTLET_XML_PORTLET_CLASS_NOT_FOUND = "validation-portlet-xml-portlet-class-not-found";
+
+	public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =
+		"validation-portlet-xml-resource-bundle-not-found";
 
 }

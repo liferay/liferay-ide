@@ -106,7 +106,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 		SWTUtil.createLabel(group, SWT.RIGHT, "Name:", 1);
 
 		this.name = SWTUtil.createText(group, 1);
-		this.synchHelper.synchText(name, NAME, null);
+		this.synchHelper.synchText(name, LIFERAY_PORTLET_NAME, null);
 		SWTUtil.createLabel(group, "", 1);
 
 		SWTUtil.createLabel(group, SWT.RIGHT, "Icon:", 1);
@@ -227,7 +227,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 	@Override
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
-			NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE, CSS_CLASS_WRAPPER, CATEGORY
+			LIFERAY_PORTLET_NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE, CSS_CLASS_WRAPPER, CATEGORY
 		};
 	}
 

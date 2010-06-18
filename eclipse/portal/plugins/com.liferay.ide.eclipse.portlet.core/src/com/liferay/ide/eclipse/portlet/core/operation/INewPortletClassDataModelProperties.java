@@ -124,7 +124,7 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String JAVASCRIPT_FILE = "INewPortletClassDataModelProperties.JAVASCRIPT_FILE";
 
-	public static final String NAME = "INewPortletClassDataModelProperties.NAME";
+	public static final String LIFERAY_PORTLET_NAME = "INewPortletClassDataModelProperties.LIFERAY_PORTLET_NAME";
 
 	public static final String PORTLET_NAME = "INewPortletClassDataModelProperties.PORTLET_NAME";
 
