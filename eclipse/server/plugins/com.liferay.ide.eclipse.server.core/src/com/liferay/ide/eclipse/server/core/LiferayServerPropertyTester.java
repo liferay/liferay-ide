@@ -29,8 +29,13 @@ public class LiferayServerPropertyTester extends PropertyTester {
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof IServer) {
 			IServer server = (IServer) receiver;
-			
-			return server.getRuntime().getRuntimeType().getId().startsWith("com.liferay.eclipse.server");			
+
+			try {
+				return server.getRuntime().getRuntimeType().getId().startsWith("com.liferay.eclipse.server");
+			}
+			catch (Throwable t) {
+				// ignore
+			}
 		}
 		
 		return false;		

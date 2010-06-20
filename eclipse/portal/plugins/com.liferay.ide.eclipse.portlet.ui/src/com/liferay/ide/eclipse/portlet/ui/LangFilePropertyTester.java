@@ -30,9 +30,7 @@ public class LangFilePropertyTester extends PropertyTester {
 			IFile file = (IFile) receiver;
 
 			if (file.exists() && file.getName().endsWith(".properties")) {
-				boolean isLiferayProject = ProjectUtil.isLiferayProject(file.getProject());
-
-				return isLiferayProject;
+				return ProjectUtil.isLiferayProject(file.getProject());
 			}
 		}
 

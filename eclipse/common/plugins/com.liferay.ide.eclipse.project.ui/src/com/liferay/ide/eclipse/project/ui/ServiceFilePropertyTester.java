@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.project.ui;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
 
 /**
@@ -30,13 +30,19 @@ public class ServiceFilePropertyTester extends PropertyTester {
 			IFile file = (IFile) receiver;
 
 			try {
-				IContentType contentType = file.getContentDescription().getContentType();
+				IContentDescription description = file.getContentDescription();
 
-				if (contentType.getId().equals("com.liferay.ide.eclipse.portlet.core.servicebuildercontent")) {
-					return true;
+				if (description != null) {
+					IContentType contentType = description.getContentType();
+
+					if (contentType.getId().equals("com.liferay.ide.eclipse.portlet.core.servicebuildercontent")) {
+						return true;
+					}
 				}
+
 			}
-			catch (CoreException e) {
+			catch (Throwable t) {
+				// ignore
 			}
 		}
 		

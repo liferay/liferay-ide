@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.project.ui;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Greg Amerson
@@ -32,13 +31,17 @@ public class ProjectNaturePropertyTester extends PropertyTester {
 			try {
 				IProjectDescription desc = project.getDescription();
 				
-				for (String natureId : desc.getNatureIds()) {
-					if (natureId.equals(expectedValue)) {
-						return true;
+				if (desc != null) {
+
+					for (String natureId : desc.getNatureIds()) {
+						if (natureId.equals(expectedValue)) {
+							return true;
+						}
 					}
 				}
 			}
-			catch (CoreException e) {
+			catch (Throwable t) {
+				// ignore
 			}
 
 		}

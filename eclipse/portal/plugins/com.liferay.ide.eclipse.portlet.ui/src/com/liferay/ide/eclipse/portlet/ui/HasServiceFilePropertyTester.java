@@ -36,14 +36,20 @@ public class HasServiceFilePropertyTester extends PropertyTester {
 			boolean isLiferayProject = ProjectUtil.isLiferayProject(project);
 
 			if (isLiferayProject) {
-				IFolder docroot = PortletUtil.getDocroot(project);
+				try {
+					IFolder docroot = PortletUtil.getDocroot(project);
 
-				if (docroot != null && docroot.exists()) {
-					IFile serviceFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
+					if (docroot != null && docroot.exists()) {
+						IFile serviceFile =
+							docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
 
-					if (serviceFile.exists()) {
-						return true;
+						if (serviceFile.exists()) {
+							return true;
+						}
 					}
+				}
+				catch (Throwable t) {
+					// ignore
 				}
 			}
 		}
