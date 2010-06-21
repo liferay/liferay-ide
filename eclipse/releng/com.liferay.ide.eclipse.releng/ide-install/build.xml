@@ -4,7 +4,7 @@
 			<arg value="-application"/>
 			<arg value="org.eclipse.equinox.p2.director"/>
 			<arg value="-repository"/>
-			<arg value="http://gregamerson.com/liferay-ide/updates/nightly"/>
+			<arg value="http://releases.liferay.com/tools/ide/eclipse/galileo/nightly/"/>
 			<arg value="-installIU"/>
 			<arg value="com.liferay.ide.eclipse.tools.feature.group"/>
 			<arg value="-destination"/>
