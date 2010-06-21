@@ -31,8 +31,6 @@ public interface IPluginProjectDataModelProperties
 
 	public static final String HOOK_NAME = "IPluginProjectDataModelProperties.HOOK_NAME";
 
-	public static final String LAYOUT_TEMPLATE_NAME = "IPluginProjectDataModelProperties.LAYOUT_TEMPLATE_NAME";
-
 	// public static final String LIFERAY_USE_WORKSPACE_LOCATION =
 	// "IPluginProjectDataModelProperties.LIFERAY_USE_WORKSPACE_LOCATION";
 
@@ -55,13 +53,15 @@ public interface IPluginProjectDataModelProperties
 
 	public static final String PLUGIN_TYPE_HOOK = "IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK";
 	
-	public static final String PLUGIN_TYPE_LAYOUT_TEMPLATE = "IPluginProjectDataModelProperties.PLUGIN_TYPE_TEMPLATE";
+	public static final String PLUGIN_TYPE_LAYOUTTPL = "IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL";
 	
 	public static final String PLUGIN_TYPE_PORTLET = "IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET";
 	
 	public static final String PLUGIN_TYPE_THEME = "IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME";
 	
 	public static final String PORTLET_NAME = "IPluginProjectDataModelProperties.PORTLET_NAME";
+
+	public static final String LAYOUTTPL_NAME = "IPluginProjectDataModelProperties.LAYOUTTPL_NAME";
 
 	public static final String THEME_NAME = "IPluginProjectDataModelProperties.THEME_NAME";
 }

@@ -163,7 +163,9 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 
 		//TODO try to uninstall ext files
 	}
-//	protected boolean shouldRunPortletDeployer(int kind, int deltaKind, IModule[] moduleTree) throws CoreException {
+
+	// protected boolean shouldRunPortletDeployer(int kind, int deltaKind,
+	// IModule[] moduleTree) throws CoreException {
 //		if (moduleTree == null || moduleTree[0] == null || moduleTree[0].getProject() == null) {
 //			return false;
 //		}
@@ -173,8 +175,6 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 //		}
 //		return false;			
 //	}
-	
-	
 	
 	@Override
 	protected void publishFinish(IProgressMonitor monitor) throws CoreException {
@@ -210,9 +210,6 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 		if (!status.isOK())
 			throw new CoreException(status);
 	}
-	
-	
-		
 
 	public PortalTomcatServer getPortalTomcatServer() {
 		return (PortalTomcatServer) getServer().loadAdapter(PortalTomcatServer.class, null);

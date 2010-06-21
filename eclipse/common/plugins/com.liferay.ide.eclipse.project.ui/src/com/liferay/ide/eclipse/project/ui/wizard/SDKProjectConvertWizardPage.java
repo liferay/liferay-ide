@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.project.ui.wizard;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
@@ -239,13 +240,14 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 		}
 	}
 
-	private IProject[] getProjectsInWorkspace() {
-		if (wsProjects == null) {
-			wsProjects = IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
-		}
-
-		return wsProjects;
-	}
+	// private IProject[] getProjectsInWorkspace() {
+	// if (wsProjects == null) {
+	// wsProjects =
+	// IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
+	// }
+	//
+	// return wsProjects;
+	// }
 
 	private boolean isLiferayProjectDir(File file) {
 		if (file.isDirectory() && isValidLiferayProjectDir(file)) {
@@ -257,7 +259,8 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 			boolean hasDocroot = false;
 
 			for (File content : contents) {
-				if (content.getName().equals("build.xml") || file.getName().endsWith("-hook")) {
+				if (content.getName().equals("build.xml") ||
+					file.getName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 					hasBuildXml = true;
 
 					continue;
@@ -277,21 +280,21 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 		return false;
 	}
 
-	private boolean isProjectInWorkspace(String projectName) {
-		if (projectName == null) {
-			return false;
-		}
-
-		IProject[] workspaceProjects = getProjectsInWorkspace();
-
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			if (projectName.equals(workspaceProjects[i].getName())) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+	// private boolean isProjectInWorkspace(String projectName) {
+	// if (projectName == null) {
+	// return false;
+	// }
+	//
+	// IProject[] workspaceProjects = getProjectsInWorkspace();
+	//
+	// for (int i = 0; i < workspaceProjects.length; i++) {
+	// if (projectName.equals(workspaceProjects[i].getName())) {
+	// return true;
+	// }
+	// }
+	//
+	// return false;
+	// }
 
 	// public ProjectRecord[] getProjectRecords() {
 	// List projectRecords = new ArrayList();
@@ -593,7 +596,9 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 	protected boolean isValidLiferayProjectDir(File dir) {
 		String name = dir.getName();
 
-		if (name.endsWith("-portlet") || name.endsWith("-ext") || name.endsWith("-hook")) {
+		if (name.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX) ||
+			name.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX) ||
+			name.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			return true;
 		}
 

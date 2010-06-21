@@ -193,6 +193,38 @@ public class SDK {
 		return null;
 	}
 
+	public IPath createNewLayoutTpl(String layoutTplName, String layoutTplDisplayName, String runtimeLocation) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		try {
+			Map<String, String> properties = new HashMap<String, String>();
+			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layoutTplName);
+			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_DISPLAY_NAME, layoutTplDisplayName);
+			properties.put(ISDKConstants.PROPERTY_APP_SERVER_TYPE, "tomcat");
+			properties.put(ISDKConstants.PROPERTY_APP_SERVER_DIR, runtimeLocation);
+			properties.put(ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtimeLocation + "/webapps");
+			properties.put(ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, runtimeLocation + "/lib/ext");
+			properties.put(ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, runtimeLocation + "/webapps/ROOT");
+
+			// create a space for new layouttpm template to get built
+			IPath newLayoutTplPath =
+				SDKPlugin.getDefault().getStateLocation().append(ISDKConstants.TARGET_CREATE).append(
+					String.valueOf(System.currentTimeMillis()));
+
+			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_PARENT_DIR, newLayoutTplPath.toOSString());
+
+			antHelper.runTarget(
+				getLocation().append(ISDKConstants.LAYOUTTPL_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties);
+
+			return newLayoutTplPath;
+		}
+		catch (CoreException e) {
+			SDKPlugin.logError(e);
+		}
+
+		return null;
+	}
+
 	public IPath createNewPortlet(String portletName, String portletDisplayName, String appServerDir) {
 		SDKHelper antHelper = new SDKHelper(this);
 

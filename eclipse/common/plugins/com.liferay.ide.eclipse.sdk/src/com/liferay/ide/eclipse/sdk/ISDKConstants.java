@@ -105,4 +105,16 @@ public interface ISDKConstants {
 	public static final String TARGET_DEPLOY = "deploy";
 
 	public static final String THEME_PLUGIN_ANT_BUILD = _defaultPrefs.get("theme.plugin.ant.build", null);
+
+	public static final String LAYOUTTPL_PLUGIN_ANT_BUILD = _defaultPrefs.get("layouttpl.plugin.ant.build", null);
+
+	public static final String PORTLET_PLUGIN_PROJECT_SUFFIX = "-portlet";
+
+	public static final String HOOK_PLUGIN_PROJECT_SUFFIX = "-hook";
+
+	public static final String EXT_PLUGIN_PROJECT_SUFFIX = "-ext";
+
+	public static final String THEME_PLUGIN_PROJECT_SUFFIX = "-theme";
+
+	public static final String LAYOUTTPL_PLUGIN_PROJECT_SUFFIX = "-layouttpl";
 }

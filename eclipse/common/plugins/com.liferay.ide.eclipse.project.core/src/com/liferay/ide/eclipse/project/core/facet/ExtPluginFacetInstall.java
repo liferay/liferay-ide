@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ import org.w3c.dom.Element;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("restriction")
 public class ExtPluginFacetInstall extends PluginFacetInstall {
 
 	public static final IProjectFacet LIFERAY_EXT_PLUGIN_FACET =
@@ -70,7 +72,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 			
 			IPath newExtPath = sdk.createNewExt(extName, extName, getRuntimeLocation());
 			
-			IPath tempInstallPath = newExtPath.append(extName + "-ext");
+			IPath tempInstallPath = newExtPath.append(extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX);
 			
 			processNewFiles(tempInstallPath, false);
 			// cleanup ext temp files
@@ -128,7 +130,6 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 		}
 	}
 
-	@SuppressWarnings("restriction")
 	protected void fixTilesDefExtFile() {
 		IFile tilesDefExtFile = this.project.getFile("docroot/WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml");
 		

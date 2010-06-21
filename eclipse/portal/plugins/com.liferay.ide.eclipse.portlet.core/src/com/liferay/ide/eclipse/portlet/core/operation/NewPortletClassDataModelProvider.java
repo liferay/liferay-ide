@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
@@ -139,7 +140,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return "/js/javascript.js";
 		}
 		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
-			return getProperty(CLASS_NAME).toString().toLowerCase() + "-portlet";
+			return getProperty(CLASS_NAME).toString().toLowerCase() + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (ID.equals(propertyName)) {
 			return getProperty(PORTLET_NAME);

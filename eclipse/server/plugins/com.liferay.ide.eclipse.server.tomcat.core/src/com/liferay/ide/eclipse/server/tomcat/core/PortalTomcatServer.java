@@ -132,7 +132,6 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 		return handler;
 	}
 
-	
 	public URL getPortalHomeUrl() {
 		try {
 			TomcatConfiguration config = getTomcatConfiguration();

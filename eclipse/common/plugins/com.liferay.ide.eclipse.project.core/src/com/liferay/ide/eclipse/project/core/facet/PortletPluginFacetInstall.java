@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.project.core.facet;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 
 import java.io.FileInputStream;
@@ -62,7 +63,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 			
 			IPath newPortletPath = sdk.createNewPortlet(portletName, portletName, getRuntimeLocation());
 			
-			processNewFiles(newPortletPath.append(portletName + "-portlet"), false);
+			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
 			
 			// cleanup portlet files
 			FileUtil.deleteDir(newPortletPath.toFile(), true);

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.facets">
+         
+          <project-facet
+            id="liferay.layouttpl">
+         <label>
+            Liferay Layout Template
+         </label>
+         <description>
+            Layout template plug-in for Liferay portal.  Version cooresponds to Portal version.
+         </description>
+         <member
+               category="liferay.plugins">
+         </member>
+         <default-version
+               version="6.0">
+         </default-version>
+      </project-facet>
+      <project-facet-version
+            facet="liferay.layouttpl"
+            version="6.0">
+         <constraint>
+            <and>
+               <requires
+                     facet="jst.java"
+                     version="[5.0">
+               </requires>
+               <requires
+                     facet="jst.web"
+                     version="[2.4">
+               </requires>
+            </and>
+            <!--
+            <conflicts facet="liferay.hook"/>
+            <conflicts facet="liferay.ext"/>
+            -->
+         </constraint>
+      </project-facet-version>
+      <action
+            facet="liferay.layouttpl"
+            id="liferay.layouttpl.install"
+            type="INSTALL"
+            version="[6.0">
+         <delegate
+               class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetInstall">
+         </delegate>
+         <config-factory
+               class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetInstallDataModelProvider">
+         </config-factory>
+      </action>
+      <action
+            facet="liferay.layouttpl"
+            id="liferay.layouttpl.uninstall"
+            type="UNINSTALL"
+            version="[6.0">
+         <delegate
+               class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetUninstall">
+         </delegate>
+      </action>
+      <template
+            id="liferay.layouttpl.template">
+         <label>
+            Liferay Layout Template Plug-in Project
+         </label>
+         <fixed
+               facet="jst.java">
+         </fixed>
+         <fixed
+               facet="jst.web">
+         </fixed>
+         <fixed 
+               facet="liferay.layouttpl">
+         </fixed>
+      </template>
+   </extension>
+   
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.presets">
+     
+      
+      <static-preset
+            id="liferay.layouttpl.preset">
+         <label>
+            Liferay layout template plug-in 6.0 preset
+         </label>
+         <description>
+            Preset for Liferay 6.0 layout template plug-in
+         </description>
+         <!--
+         <facet
+               id="jst.java"
+               version="5.0">
+         </facet>
+         -->
+         <facet
+               id="jst.web"
+               version="2.5">
+         </facet>
+         <facet
+               id="liferay.layouttpl"
+               version="6.0">
+         </facet>
+      </static-preset>
+      
+   </extension>
+   
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.validators">
+      <validator
+            class="com.liferay.ide.eclipse.project.core.facet.LayoutTplPluginFacetValidator">
+         <facet
+               id="liferay.layouttpl"
+               version="6.0">
+         </facet>
+      </validator>
+   </extension>
+   <extension
+         point="com.liferay.ide.eclipse.project.core.liferayProject">
+      <liferayProjectDefinition
+            class="com.liferay.ide.eclipse.layouttpl.core.LiferayLayoutTplDefinition"
+            displayName="Liferay Layout Template"
+            facetId="liferay.layouttpl"
+            facetedProjectTemplateId="liferay.layouttpl.template"
+            shortName="layouttpl">
+      </liferayProjectDefinition>
+   </extension>
+
+</plugin>

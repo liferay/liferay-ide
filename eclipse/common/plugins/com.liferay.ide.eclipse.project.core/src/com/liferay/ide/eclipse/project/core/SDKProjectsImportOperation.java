@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelPropert
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.eclipse.project.core.util.PluginFacetUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
@@ -156,14 +157,20 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 		// if the get sdk from the location
 		newProjectDataModel.setProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName);
 
-		if (projectRecord.getProjectName().endsWith("-portlet")) {
+		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
 		}
-		else if (projectRecord.getProjectName().endsWith("-hook")) {
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
 		}
-		else if (projectRecord.getProjectName().endsWith("-ext")) {
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
+		}
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true);
+		}
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true);
 		}
 
 		IPath webXmlPath = projectRecord.getProjectLocation().append("docroot/WEB-INF/web.xml");

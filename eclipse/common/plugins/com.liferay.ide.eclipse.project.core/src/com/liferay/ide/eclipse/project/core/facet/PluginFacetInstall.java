@@ -67,6 +67,7 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("restriction")
 public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties {
 
 	protected IDataModel masterModel = null;
@@ -93,7 +94,9 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 			this.monitor = monitor;
 		}
 
-		installPluginLibraryDelegate();
+		if (shouldInstallPluginLibraryDelegate()) {
+			installPluginLibraryDelegate();
+		}
 
 		// if (masterModel.getBooleanProperty(PLUGIN_TYPE_THEME)) {
 		// installThemeTemplate();
@@ -109,10 +112,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		catch (BackingStoreException e) {
 			ProjectCorePlugin.logError(e);
 		}
-	}
-
-	private boolean isProjectInSDK() {
-		return masterModel.getBooleanProperty(LIFERAY_USE_SDK_LOCATION);
 	}
 
 	protected void configWebXML() {
@@ -229,28 +228,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return (IFacetedProjectWorkingCopy) this.model.getProperty(IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY);
 	}
 
-	// protected void copyTLDsFromPortal() throws CoreException {
-	// IPath portalTLDFolder = getPortalRoot().append("WEB-INF/tld");
-	// IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
-	// if (!tldFolder.exists()) {
-	// tldFolder.create(true, true, null);
-	// }
-	// for (String tldFile : ISDKConstants.PORTLET_PLUGIN_TLD_FILES) {
-	// IPath portalTLDFilePath = portalTLDFolder.append(tldFile);
-	// if (portalTLDFilePath.toFile().exists()) {
-	// IFile projectTLDFile = tldFolder.getFile(tldFile);
-	// if (!projectTLDFile.exists()) {
-	// try {
-	// projectTLDFile.create(new FileInputStream(portalTLDFilePath.toFile()),
-	// true, null);
-	// } catch (FileNotFoundException e) {
-	// ProjectCorePlugin.logError(e);
-	// }
-	// }
-	// }
-	// }
-	// }
-
 	protected IPath getPortalRoot() {
 		IRuntime serverRuntime;
 		
@@ -274,6 +251,28 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		
 		return null;
 	}
+
+	// protected void copyTLDsFromPortal() throws CoreException {
+	// IPath portalTLDFolder = getPortalRoot().append("WEB-INF/tld");
+	// IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
+	// if (!tldFolder.exists()) {
+	// tldFolder.create(true, true, null);
+	// }
+	// for (String tldFile : ISDKConstants.PORTLET_PLUGIN_TLD_FILES) {
+	// IPath portalTLDFilePath = portalTLDFolder.append(tldFile);
+	// if (portalTLDFilePath.toFile().exists()) {
+	// IFile projectTLDFile = tldFolder.getFile(tldFile);
+	// if (!projectTLDFile.exists()) {
+	// try {
+	// projectTLDFile.create(new FileInputStream(portalTLDFilePath.toFile()),
+	// true, null);
+	// } catch (FileNotFoundException e) {
+	// ProjectCorePlugin.logError(e);
+	// }
+	// }
+	// }
+	// }
+	// }
 
 	protected SDK getSDK() {
 		String sdkName = null;
@@ -331,11 +330,11 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		// get the template zip for portlets and extract into the project
 		SDK sdk = getSDK();
 
-		String layouttplName = this.masterModel.getStringProperty(LAYOUT_TEMPLATE_NAME);
+		String layouttplName = this.masterModel.getStringProperty(LAYOUTTPL_NAME);
 		
 		IPath newThemePath = sdk.createNewLayoutTemplate(layouttplName, layouttplName, layouttplName);
 		
-		processNewFiles(newThemePath.append(layouttplName + "-layouttpl"), false);
+		processNewFiles(newThemePath.append(layouttplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX), false);
 		// cleanup portlet files
 		newThemePath.toFile().delete();
 
@@ -344,6 +343,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 	protected void installPluginLibraryDelegate()
 		throws CoreException {
+
 		LibraryInstallDelegate libraryDelegate =
 			(LibraryInstallDelegate) this.model.getProperty(IPluginProjectDataModelProperties.LIFERAY_PLUGIN_LIBRARY_DELEGATE);
 		
@@ -359,12 +359,16 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		
 		IPath newThemePath = sdk.createNewTheme(themeName, themeName);
 		
-		processNewFiles(newThemePath.append(themeName + "-theme"), false);
+		processNewFiles(newThemePath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX), false);
 		
 		// cleanup portlet files
 		newThemePath.toFile().delete();
 
 		this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+	}
+
+	protected boolean isProjectInSDK() {
+		return masterModel.getBooleanProperty(LIFERAY_USE_SDK_LOCATION);
 	}
 
 	protected void processNewFiles(IPath path, boolean prompt)
@@ -438,6 +442,10 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 			}
 		}
 		
+		return true;
+	}
+
+	protected boolean shouldInstallPluginLibraryDelegate() {
 		return true;
 	}
 

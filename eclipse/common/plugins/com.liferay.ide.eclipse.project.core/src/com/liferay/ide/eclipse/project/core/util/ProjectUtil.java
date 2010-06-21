@@ -16,6 +16,8 @@
 package com.liferay.ide.eclipse.project.core.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.IProjectDefinition;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.facet.HookPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.facet.PortletPluginFacetInstall;
@@ -39,18 +41,23 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.internal.ide.StatusUtil;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties.FacetDataModelMap;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IPreset;
@@ -213,7 +220,7 @@ public class ProjectUtil {
 	public static IFolder[] getSourceFolders(IProject project) {
 		List<IFolder> sourceFolders = new ArrayList<IFolder>();
 
-		IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers(project);
+		IPackageFragmentRoot[] sources = getSourceContainers(project);
 
 		for (IPackageFragmentRoot source : sources) {
 			if (source.getResource() instanceof IFolder) {
@@ -222,6 +229,38 @@ public class ProjectUtil {
 		}
 
 		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
+	}
+
+	public static IPackageFragmentRoot[] getSourceContainers(IProject project) {
+		IJavaProject jProject = JavaCore.create(project);
+		if (jProject == null)
+			return new IPackageFragmentRoot[0];
+		List<IPackageFragmentRoot> list = new ArrayList<IPackageFragmentRoot>();
+		IVirtualComponent vc = ComponentCore.createComponent(project);
+		IPackageFragmentRoot[] roots;
+		try {
+			roots = jProject.getPackageFragmentRoots();
+			for (int i = 0; i < roots.length; i++) {
+				if (roots[i].getKind() != IPackageFragmentRoot.K_SOURCE)
+					continue;
+				IResource resource = roots[i].getResource();
+				if (null != resource) {
+					IVirtualResource[] vResources = ComponentCore.createResources(resource);
+					boolean found = false;
+					for (int j = 0; !found && j < vResources.length; j++) {
+						if (vResources[j].getComponent().equals(vc)) {
+							if (!list.contains(roots[i]))
+								list.add(roots[i]);
+							found = true;
+						}
+					}
+				}
+			}
+		}
+		catch (JavaModelException e) {
+			ProjectCorePlugin.logError(e);
+		}
+		return (IPackageFragmentRoot[]) list.toArray(new IPackageFragmentRoot[list.size()]);
 	}
 
 	public static boolean hasFacet(IProject project, IProjectFacet checkProjectFacet) {
@@ -264,9 +303,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
-		return PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET.equals(projectFacet) ||
-			HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET.equals(projectFacet) ||
-			ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET.equals(projectFacet);
+		return ProjectCorePlugin.getProjectDefinition(projectFacet) != null;
 	}
 
 	public static boolean isLiferayProject(IProject project) {
@@ -280,9 +317,9 @@ public class ProjectUtil {
 			if (facetedProject != null) {
 				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
 					IProjectFacet projectFacet = facet.getProjectFacet();
-					if (PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET.equals(projectFacet) ||
-						HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET.equals(projectFacet) ||
-						ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET.equals(projectFacet)) {
+					IProjectDefinition projectDefinition = ProjectCorePlugin.getProjectDefinition(projectFacet);
+
+					if (projectDefinition != null) {
 						retval = true;
 						break;
 					}
@@ -350,7 +387,11 @@ public class ProjectUtil {
 	public static boolean isValidLiferayProjectDir(File dir) {
 		String name = dir.getName();
 
-		if (name.endsWith("-portlet") || name.endsWith("-ext") || name.endsWith("-hook")) {
+		if (name.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX) ||
+			name.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX) ||
+			name.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX) ||
+			name.endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX) ||
+			name.endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
 			return true;
 		}
 

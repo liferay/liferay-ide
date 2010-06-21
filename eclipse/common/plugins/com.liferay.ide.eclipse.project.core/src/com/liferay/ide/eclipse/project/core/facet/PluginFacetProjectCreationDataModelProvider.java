@@ -16,31 +16,30 @@
 package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.IProjectDefinition;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jst.common.project.facet.IJavaFacetInstallDataModelProperties;
-import org.eclipse.jst.common.project.facet.JavaFacetUtils;
 import org.eclipse.jst.j2ee.internal.web.archive.operations.WebFacetProjectCreationDataModelProvider;
-import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
-import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
 /**
@@ -52,8 +51,17 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 public class PluginFacetProjectCreationDataModelProvider extends WebFacetProjectCreationDataModelProvider
 	implements IPluginProjectDataModelProperties {
 
+	protected Map<String, IProjectDefinition> projectDefinitions = new HashMap<String, IProjectDefinition>();
+
 	public PluginFacetProjectCreationDataModelProvider() {
 		super();
+		IProjectDefinition[] definitions = ProjectCorePlugin.getProjectDefinitions();
+
+		for (IProjectDefinition definition : definitions) {
+			if (definition.getFacetId() != null) {
+				projectDefinitions.put(definition.getFacetId(), definition);
+			}
+		}
 	}
 
 	@Override
@@ -94,7 +102,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (THEME_NAME.equals(propertyName)) {
 			return getProperty(PROJECT_NAME);
 		}
-		else if (LAYOUT_TEMPLATE_NAME.equals(propertyName)) {
+		else if (LAYOUTTPL_NAME.equals(propertyName)) {
 			return getProperty(PROJECT_NAME);
 		}
 		else if (CREATE_PROJECT_OPERATION.equals(propertyName)) {
@@ -129,13 +137,13 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		propNames.add(PLUGIN_TYPE_HOOK);
 		propNames.add(PLUGIN_TYPE_EXT);
 		propNames.add(PLUGIN_TYPE_THEME);
-		propNames.add(PLUGIN_TYPE_LAYOUT_TEMPLATE);
+		propNames.add(PLUGIN_TYPE_LAYOUTTPL);
 		// propNames.add(SETUP_PROJECT_FLAG);
 		propNames.add(PORTLET_NAME);
 		propNames.add(HOOK_NAME);
 		propNames.add(EXT_NAME);
 		propNames.add(THEME_NAME);
-		propNames.add(LAYOUT_TEMPLATE_NAME);
+		propNames.add(LAYOUTTPL_NAME);
 		propNames.add(CREATE_PROJECT_OPERATION);
 		return propNames;
 	}
@@ -197,7 +205,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 	@Override
 	public boolean isPropertyEnabled(String propertyName) {
-		if (PLUGIN_TYPE_THEME.equals(propertyName) || PLUGIN_TYPE_LAYOUT_TEMPLATE.equals(propertyName)) {
+		if (PLUGIN_TYPE_THEME.equals(propertyName)) {
 			return false;
 		}
 		return super.isPropertyEnabled(propertyName);
@@ -235,19 +243,19 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			// } else if (SETUP_PROJECT_FLAG.equals(propertyName)) {
 		}
 		else if (PLUGIN_TYPE_PORTLET.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			setupPortletProject();
+			setupProject(IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_HOOK.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			setupHookProject();
+			setupProject(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_EXT.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			setupExtProject();
+			setupProject(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_THEME.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_THEME)) {
 			setupThemeProject();
 		}
-		else if (PLUGIN_TYPE_LAYOUT_TEMPLATE.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
-			setupLayoutTemplateProject();
+		else if (PLUGIN_TYPE_LAYOUTTPL.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
+			setupProject(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
 		}
 		return super.propertySet(propertyName, propertyValue);
 	}
@@ -292,7 +300,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		}
 		else if (PLUGIN_TYPE_PORTLET.equals(propertyName) || PLUGIN_TYPE_HOOK.equals(propertyName) ||
 			PLUGIN_TYPE_EXT.equals(propertyName) || PLUGIN_TYPE_THEME.equals(propertyName) ||
-			PLUGIN_TYPE_LAYOUT_TEMPLATE.equals(propertyName)) {
+			PLUGIN_TYPE_LAYOUTTPL.equals(propertyName)) {
 			return validate(FACET_PROJECT_NAME);
 		}
 		return super.validate(propertyName);
@@ -324,7 +332,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (getBooleanProperty(PLUGIN_TYPE_THEME)) {
 			return sdkLoc.append("themes").toOSString();
 		}
-		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
+		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
 			return sdkLoc.append("layouttpl").toOSString();
 		}
 		return null;
@@ -332,19 +340,19 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 	protected String getProjectSuffix() {
 		if (getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return "-portlet";
+			return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return "-hook";
+			return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return "-ext";
+			return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return "-theme";
+			return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
-			return "-layouttpl";
+		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
+			return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 		}
 		return null;
 	}
@@ -369,87 +377,89 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		facetedProject.setProjectFacets(newFacetSet);
 	}
 
-	protected void setupExtProject() {
-		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
-		removeFacet(facetedProject, PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
-		removeFacet(facetedProject, HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
-		IFacetedProjectTemplate template =
-			ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_TEMPLATE_ID);
-		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
+	protected void setupProject(String facetId) {
+		IProjectDefinition projectDefinition = projectDefinitions.get(facetId);
 
-		// Set<IProjectFacetVersion> facets =
-		// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_EXT_PRESET);
-		// facetedProject.setProjectFacets(Collections.unmodifiableSet(facets));
+		if (projectDefinition != null) {
+			IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
 
-		ProjectUtil.setGenerateDD(getDataModel(), true);
-		FacetDataModelMap map = (FacetDataModelMap) getProperty(FACET_DM_MAP);
-		// IDataModel javaFacetModel = map.getFacetDataModel(
-		// JavaFacetUtils.JAVA_FACET.getId() );
-		IDataModel webFacetModel = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+			for (IProjectDefinition def : projectDefinitions.values()) {
+				removeFacet(facetedProject, def.getFacet());
+			}
+
+			IFacetedProjectTemplate template = projectDefinition.getFacetedProjectTemplate();
+
+			if (template != null) {
+				facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
+			}
+
+			projectDefinition.setupNewProject(getDataModel(), facetedProject);
+		}
 	}
 
-	protected void setupHookProject() {
-		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
-		// facetedProject.setFixedProjectFacets(template.getFixedProjectFacets());
-		removeFacet(facetedProject, PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
-		removeFacet(facetedProject, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-		IFacetedProjectTemplate template =
-			ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_TEMPLATE_ID);
-		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
-		// Set<IProjectFacetVersion> facets =
-		// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_HOOK_PRESET);
-		// facetedProject.setProjectFacets(Collections.unmodifiableSet(facets));
+	// protected void setupExtProject() {
+	// IFacetedProjectWorkingCopy facetedProject =
+	// getFacetedProjectWorkingCopy();
+	// removeFacet(facetedProject,
+	// PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
+	// IFacetedProjectTemplate template =
+	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_TEMPLATE_ID);
+	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
+	// }
 
-		ProjectUtil.setGenerateDD(getDataModel(), false);
-		FacetDataModelMap map = (FacetDataModelMap) getProperty(FACET_DM_MAP);
-		IDataModel javaFacetModel = map.getFacetDataModel(JavaFacetUtils.JAVA_FACET.getId());
-		IDataModel webFacetModel = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
-		javaFacetModel.setStringProperty(
-			IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
-			IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
-		javaFacetModel.setStringProperty(
-			IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
-			IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
-	}
+	// protected void setupHookProject() {
+	// IFacetedProjectWorkingCopy facetedProject =
+	// getFacetedProjectWorkingCopy();
+	// //
+	// facetedProject.setFixedProjectFacets(template.getFixedProjectFacets());
+	// removeFacet(facetedProject,
+	// PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
+	// IFacetedProjectTemplate template =
+	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_TEMPLATE_ID);
+	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
+	// }
 
-	protected void setupLayoutTemplateProject() {
+	// protected void setupLayoutTemplateProject() {
+	// IFacetedProjectWorkingCopy facetedProject =
+	// getFacetedProjectWorkingCopy();
+	// //
+	// facetedProject.setFixedProjectFacets(template.getFixedProjectFacets());
+	// removeFacet(facetedProject,
+	// PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+	// IFacetedProjectTemplate template =
+	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_TEMPLATE_ID);
+	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
+	// Set<IProjectFacetVersion> facets =
+	// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_HOOK_PRESET);
+	// facetedProject.setProjectFacets(Collections.unmodifiableSet(facets));
+	// }
 
-	}
-
-	protected void setupPortletProject() {
-		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
-
-		removeFacet(facetedProject, HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
-		removeFacet(facetedProject, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-		IFacetedProjectTemplate template =
-			ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_TEMPLATE_ID);
-		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
-
-		// Set<IProjectFacetVersion> facets =
-		// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
-		// facetedProject.setProjectFacets(Collections.unmodifiableSet(facets));
-
-		ProjectUtil.setGenerateDD(getDataModel(), true);
-		FacetDataModelMap map = (FacetDataModelMap) getProperty(FACET_DM_MAP);
-		IDataModel webFacetModel = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
-		IDataModel javaFacetModel = map.getFacetDataModel(JavaFacetUtils.JAVA_FACET.getId());
-		javaFacetModel.setStringProperty(
-			IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
-			IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
-		javaFacetModel.setStringProperty(
-			IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
-			IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
-	}
+	// protected void setupPortletProject() {
+	// IFacetedProjectWorkingCopy facetedProject =
+	// getFacetedProjectWorkingCopy();
+	//
+	// removeFacet(facetedProject,
+	// HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+	// removeFacet(facetedProject,
+	// LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
+	// IFacetedProjectTemplate template =
+	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_TEMPLATE_ID);
+	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
+	// }
 
 	protected void setupThemeProject() {
 

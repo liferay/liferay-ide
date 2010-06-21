@@ -45,7 +45,6 @@ public class PortalTomcat60Configuration extends Tomcat60Configuration implement
 		return super.updateContextsToServeDirectly(baseDir, loader, monitor);
 	}
 
-
 	@Override
 	protected String getWebModuleURL(IModule webModule) {
 		if (webModule != null && ProjectUtil.isLiferayProject(webModule.getProject())) {

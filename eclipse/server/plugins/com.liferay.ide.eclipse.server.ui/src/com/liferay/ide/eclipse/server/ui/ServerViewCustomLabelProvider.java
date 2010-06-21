@@ -15,11 +15,16 @@
 
 package com.liferay.ide.eclipse.server.ui;
 
+import com.liferay.ide.eclipse.project.core.IProjectDefinition;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
-
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 /**
  * @author Greg Amerson
@@ -42,19 +47,13 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 		}
 		else if (element instanceof ModuleServer) {			
 			ModuleServer server = (ModuleServer) element;
-			
-			if (ProjectUtil.isPortletProject(server.getModule()[0].getProject())) {
-				return PortalServerUIPlugin.imageDescriptorFromPlugin(
-					PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png").createImage();
-			}
-			else if (ProjectUtil.isHookProject(server.getModule()[0].getProject())) {
-				return PortalServerUIPlugin.imageDescriptorFromPlugin(
-					PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/hook.png").createImage();
-			}
-			else if (ProjectUtil.isExtProject(server.getModule()[0].getProject())) {
-				return PortalServerUIPlugin.imageDescriptorFromPlugin(
-					PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/ext.png").createImage();
-			}
+			IProject project = server.getModule()[0].getProject();
+			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
+			IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
+
+			IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(liferayFacet);
+			return PortalServerUIPlugin.imageDescriptorFromPlugin(
+				PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png").createImage();
 		}
 		
 		return null;

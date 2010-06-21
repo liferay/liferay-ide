@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
 
@@ -64,20 +65,29 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	public void setProjectType(String projectType) {
 		this.projectType = projectType;
 		
-		if ("portlet".equals(projectType.toLowerCase())) {
+		if (IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, true);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
+			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 		}
-		else if ("hook".equals(projectType.toLowerCase())) {
+		else if (IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
+			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 		}
-		else if ("ext".equals(projectType.toLowerCase())) {
+		else if (IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
+			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
+		}
+		else if (IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, true);
+			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
+			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
+			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
 		}
 	}
 
@@ -127,19 +137,19 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 	protected String getProjectSuffix() {
 		if (getDataModel().getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return "-portlet";
+			return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return "-hook";
+			return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return "-ext";
+			return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
 		}
 		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return "-theme";
+			return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
 		}
-		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
-			return "-layouttpl";
+		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
+			return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 		}
 		
 		return null;
@@ -175,7 +185,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		
 		model.setProperty(PORTLET_NAME, projectName);
 		model.setProperty(THEME_NAME, projectName);
-		model.setProperty(LAYOUT_TEMPLATE_NAME, projectName);
+		model.setProperty(LAYOUTTPL_NAME, projectName);
 		
 		super.performFinish(monitor);
 

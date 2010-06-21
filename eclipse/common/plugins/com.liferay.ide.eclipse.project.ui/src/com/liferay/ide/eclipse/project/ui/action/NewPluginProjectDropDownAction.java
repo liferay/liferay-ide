@@ -13,9 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.ui.action;
+package com.liferay.ide.eclipse.project.ui.action;
 
-import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
+import com.liferay.ide.eclipse.project.core.IProjectDefinition;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
+import com.liferay.ide.eclipse.ui.action.NewWizardAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,9 +88,15 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 					for (String type : types) {
 						NewWizardAction wizardAction = new NewWizardAction(element);
 						wizardAction.setProjectType(type);
-						wizardAction.setImageDescriptor(ImageDescriptor.createFromURL(LiferayUIPlugin.getDefault().getBundle().getEntry(
-							"/icons/n16/" + type.toLowerCase() + "_new.png")));
-						wizardAction.setText(wizardAction.getText().replaceAll("Plug-in", type + " Plug-in"));
+
+						IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(type);
+
+						if (projectDef != null) {
+							wizardAction.setImageDescriptor(ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
+								"/icons/n16/" + projectDef.getShortName() + "_new.png")));
+							wizardAction.setText(wizardAction.getText().replaceAll(
+								"Liferay Plug-in", projectDef.getDisplayName() + " Plug-in"));
+						}
 
 						containers.add(wizardAction);
 					}

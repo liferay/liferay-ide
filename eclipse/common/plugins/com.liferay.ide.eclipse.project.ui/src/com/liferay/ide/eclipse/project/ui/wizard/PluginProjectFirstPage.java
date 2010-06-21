@@ -174,19 +174,19 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(extType, PLUGIN_TYPE_EXT, null);
 
+		layoutTemplateType =
+			SWTUtil.createRadioButton(
+				group, "Layout", getPluginImageDescriptor("/icons/e16/layout.png").createImage(), false, 1);
+		l = SWTUtil.createLabel(group, SWT.WRAP, "A plug-in for customizing Liferay's page layouts.", 1);
+		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		this.synchHelper.synchCheckbox(layoutTemplateType, PLUGIN_TYPE_LAYOUTTPL, null);
+
 		themeType =
 			SWTUtil.createRadioButton(
 				group, "Theme", getPluginImageDescriptor("/icons/e16/theme.png").createImage(), false, 1);
 		l = SWTUtil.createLabel(group, SWT.WRAP, "A plug-in for customizing Liferay's look and feel.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(themeType, PLUGIN_TYPE_THEME, null);
-
-		layoutTemplateType =
-			SWTUtil.createRadioButton(
-				group, "Layout", getPluginImageDescriptor("/icons/e16/layout.png").createImage(), false, 1);
-		l = SWTUtil.createLabel(group, SWT.WRAP, "A plug-in for customizing Liferay's page layouts.", 1);
-		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		this.synchHelper.synchCheckbox(layoutTemplateType, PLUGIN_TYPE_LAYOUT_TEMPLATE, null);
 	}
 
 	protected void createProjectGroup(Composite parent) {
@@ -203,7 +203,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 		// Composite labelContainer = new Composite(group, SWT.NONE);
 
-		GridData gd = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		// GridData gd = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
 
 		// labelContainer.setLayoutData(gd);
 		GridLayout gl = new GridLayout(1, false);
@@ -373,7 +373,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		arrayList.add(PLUGIN_TYPE_HOOK);
 		arrayList.add(PLUGIN_TYPE_EXT);
 		arrayList.add(PLUGIN_TYPE_THEME);
-		arrayList.add(PLUGIN_TYPE_LAYOUT_TEMPLATE);
+		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
 
 		return (String[]) arrayList.toArray(new String[0]);
 	}

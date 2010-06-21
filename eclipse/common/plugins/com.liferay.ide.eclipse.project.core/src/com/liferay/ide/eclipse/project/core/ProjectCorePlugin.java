@@ -17,6 +17,12 @@ package com.liferay.ide.eclipse.project.core;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -33,6 +39,8 @@ public class ProjectCorePlugin extends CorePlugin {
 
 	// The shared instance
 	private static ProjectCorePlugin plugin;
+
+	private static IProjectDefinition[] projectDefinitions = null;
 
 	/**
 	 * Returns the shared instance
@@ -79,6 +87,66 @@ public class ProjectCorePlugin extends CorePlugin {
 
 	public static void logError(String msg, Exception e) {
 		getDefault().getLog().log(createErrorStatus(msg, e));
+	}
+
+	public static IProjectDefinition getProjectDefinition(String type) {
+		IProjectDefinition[] defs = getProjectDefinitions();
+
+		if (defs != null && defs.length > 0) {
+			for (IProjectDefinition def : defs) {
+				if (def != null && def.getFacetId().equals(type)) {
+					return def;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public static IProjectDefinition[] getProjectDefinitions() {
+		if (projectDefinitions == null) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IProjectDefinition.ID);
+
+			try {
+				List<IProjectDefinition> definitions = new ArrayList<IProjectDefinition>();
+
+				for (IConfigurationElement element : elements) {
+					final Object o = element.createExecutableExtension("class");
+
+					if (o instanceof AbstractProjectDefinition) {
+						AbstractProjectDefinition projectDefinition = (AbstractProjectDefinition) o;
+						projectDefinition.setFacetId(element.getAttribute("facetId"));
+						projectDefinition.setShortName(element.getAttribute("shortName"));
+						projectDefinition.setDisplayName(element.getAttribute("displayName"));
+						projectDefinition.setFacetedProjectTemplateId(element.getAttribute("facetedProjectTemplateId"));
+
+						definitions.add(projectDefinition);
+					}
+				}
+
+				projectDefinitions = definitions.toArray(new IProjectDefinition[0]);
+			}
+			catch (Exception e) {
+				logError(e);
+			}
+		}
+
+		return projectDefinitions;
+	}
+
+	public static IProjectDefinition getProjectDefinition(IProjectFacet projectFacet) {
+		IProjectDefinition[] definitions = getProjectDefinitions();
+
+		if (definitions != null) {
+			for (IProjectDefinition def : definitions) {
+				if (def != null && def.getFacet() != null && def.getFacet().equals(projectFacet)) {
+					return def;
+				}
+			}
+		}
+
+		return null;
 	}
 
 }

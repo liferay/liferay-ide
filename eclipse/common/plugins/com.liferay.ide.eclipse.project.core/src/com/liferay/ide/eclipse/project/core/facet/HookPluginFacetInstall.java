@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 
 import org.eclipse.core.resources.IProject;
@@ -54,7 +55,7 @@ public class HookPluginFacetInstall extends PluginFacetInstall {
 			
 			IPath installPath = sdk.createNewHook(hookName, hookName, getRuntimeLocation());
 
-			IPath tempInstallPath = installPath.append(hookName + "-hook");
+			IPath tempInstallPath = installPath.append(hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX);
 
 			processNewFiles(tempInstallPath, false);
 			

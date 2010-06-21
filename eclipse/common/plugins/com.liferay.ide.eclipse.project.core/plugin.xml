@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="liferayProject" name="Liferay Project Definition" schema="schema/liferayProject.exsd"/>
 
 
 
@@ -250,9 +251,9 @@
          </fixed>
       </template>
      
-     
-     
+    
    </extension>
+   
    <extension
          point="org.eclipse.wst.common.project.facet.core.presets">
       <static-preset
@@ -321,8 +322,12 @@
                version="6.0">
          </facet>
       </static-preset>
+     
       
    </extension>
+   
+   
+   
    <extension
          point="org.eclipse.jst.common.project.facet.core.libraryProviders">
       <provider
@@ -473,6 +478,30 @@
                version="6.0">
          </facet>
       </validator>
+   </extension>
+   <extension
+         point="com.liferay.ide.eclipse.project.core.liferayProject">
+      <liferayProjectDefinition
+            class="com.liferay.ide.eclipse.project.core.LiferayPortletDefinition"
+            displayName="Liferay Portlet"
+            facetId="liferay.portlet"
+            facetedProjectTemplateId="liferay.portlet.template"
+            shortName="portlet">
+      </liferayProjectDefinition>
+      <liferayProjectDefinition
+            class="com.liferay.ide.eclipse.project.core.LiferayHookDefinition"
+            displayName="Liferay Hook"
+            facetId="liferay.hook"
+            facetedProjectTemplateId="liferay.hook.template"
+            shortName="hook">
+      </liferayProjectDefinition>
+      <liferayProjectDefinition
+            class="com.liferay.ide.eclipse.project.core.LiferayExtDefinition"
+            displayName="Liferay Ext"
+            facetId="liferay.ext"
+            facetedProjectTemplateId="liferay.ext.template"
+            shortName="ext">
+      </liferayProjectDefinition>
    </extension>
  
 </plugin>
