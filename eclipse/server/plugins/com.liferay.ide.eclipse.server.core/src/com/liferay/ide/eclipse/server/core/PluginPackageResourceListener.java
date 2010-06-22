@@ -238,7 +238,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			PortalServerCorePlugin.logError(e);
 		}
 
 	}

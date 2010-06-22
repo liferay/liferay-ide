@@ -110,7 +110,9 @@ public class ServerUtil {
 
 			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = facetedProject.getPrimaryRuntime();
 
-			return ServerUtil.getPortalRoot(runtime);
+			if (runtime != null) {
+				return ServerUtil.getPortalRoot(runtime);
+			}
 		}
 		catch (CoreException e) {
 			PortalServerCorePlugin.logError(e);
