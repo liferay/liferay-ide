@@ -75,7 +75,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
 		IExtensionPoint extensionPoint =
 			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
-		
+
 		if (extensionPoint != null) {
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
@@ -83,13 +83,11 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 				if (element.getName().equals(TAG_WIZARD) && isProjectWizard(element)) {
 					containers.add(new NewWizardAction(element));
 
-					String[] types = getTypes(element);
-					
-					for (String type : types) {
-						NewWizardAction wizardAction = new NewWizardAction(element);
-						wizardAction.setProjectType(type);
+					IProjectDefinition[] projectDefinitions = ProjectCorePlugin.getProjectDefinitions();
 
-						IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(type);
+					for (IProjectDefinition projectDef : projectDefinitions) {
+						NewWizardAction wizardAction = new NewWizardAction(element);
+						wizardAction.setProjectType(projectDef.getFacetId());
 
 						if (projectDef != null) {
 							wizardAction.setImageDescriptor(ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
@@ -105,7 +103,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 		}
 
 		NewWizardAction[] actions = (NewWizardAction[]) containers.toArray(new NewWizardAction[containers.size()]);
-		
+
 		Arrays.sort(actions);
 
 		return actions;
