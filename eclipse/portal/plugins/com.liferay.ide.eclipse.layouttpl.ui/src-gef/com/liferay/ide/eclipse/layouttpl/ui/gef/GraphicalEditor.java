@@ -194,7 +194,7 @@ public abstract class GraphicalEditor extends EditorPart implements CommandStack
 	 * 
 	 * @return the action registry
 	 */
-	protected ActionRegistry getActionRegistry() {
+	public ActionRegistry getActionRegistry() {
 		if (actionRegistry == null)
 			actionRegistry = new ActionRegistry();
 		return actionRegistry;
@@ -241,7 +241,7 @@ public abstract class GraphicalEditor extends EditorPart implements CommandStack
 	 * 
 	 * @return the edit domain
 	 */
-	protected DefaultEditDomain getEditDomain() {
+	public DefaultEditDomain getEditDomain() {
 		return editDomain;
 	}
 
@@ -286,7 +286,7 @@ public abstract class GraphicalEditor extends EditorPart implements CommandStack
 	 * 
 	 * @return the syncrhonizer
 	 */
-	protected SelectionSynchronizer getSelectionSynchronizer() {
+	public SelectionSynchronizer getSelectionSynchronizer() {
 		if (synchronizer == null)
 			synchronizer = new SelectionSynchronizer();
 		return synchronizer;
