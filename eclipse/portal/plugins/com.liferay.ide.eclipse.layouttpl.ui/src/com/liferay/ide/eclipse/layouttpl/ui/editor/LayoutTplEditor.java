@@ -9,6 +9,7 @@ import java.util.EventObject;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
@@ -44,6 +45,9 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		super.configureGraphicalViewer();
 		
 		GraphicalViewer viewer = getGraphicalViewer();
+		FigureCanvas control = (FigureCanvas) viewer.getControl();
+		control.setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
+		control.setVerticalScrollBarVisibility(FigureCanvas.NEVER);
 		viewer.setEditPartFactory(new LayoutTplEditPartFactory());
 		viewer.setRootEditPart(new ScalableRootEditPart());
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));

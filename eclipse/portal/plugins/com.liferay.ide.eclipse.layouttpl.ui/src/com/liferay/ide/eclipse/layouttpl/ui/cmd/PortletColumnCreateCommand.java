@@ -11,35 +11,33 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.cmd;
 
+import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutConstraint;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
+import com.liferay.ide.eclipse.layouttpl.ui.model.ModelElement;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
-import org.eclipse.draw2d.GridData;
 import org.eclipse.gef.commands.Command;
 
 public class PortletColumnCreateCommand extends Command {
 
 	protected PortletColumn newColumn;
 
-	private final LayoutTplDiagram parent;
+	protected LayoutTplDiagram diagram;
 	
-	private GridData gridData;
+	protected LayoutConstraint layoutConstraint;
 
-	public PortletColumnCreateCommand(PortletColumn newColumn, LayoutTplDiagram parent, GridData data) {
+	public PortletColumnCreateCommand(PortletColumn newColumn, LayoutTplDiagram diagram, LayoutConstraint constraint) {
 		this.newColumn = newColumn;
-		this.parent = parent;
-		this.gridData = data;
+		this.diagram = diagram;
+		this.layoutConstraint = constraint;
 		setLabel("Portlet column added");
 	}
 
 	public boolean canExecute() {
-		return newColumn != null && parent != null && gridData != null;
+		return newColumn != null && diagram != null && layoutConstraint != null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#execute()
-	 */
 	public void execute() {
 		// newColumn.setLocation(bounds.getLocation());
 
@@ -49,20 +47,24 @@ public class PortletColumnCreateCommand extends Command {
 		redo();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#redo()
-	 */
 	public void redo() {
-		parent.addChild(newColumn);
+		if (layoutConstraint.equals(LayoutConstraint.EMPTY)) {
+			PortletLayout portletLayout = new PortletLayout();
+			portletLayout.addColumn(newColumn);
+			diagram.addRow(portletLayout);
+		}
+		// parent.addColumn(newColumn);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.gef.commands.Command#undo()
-	 */
 	public void undo() {
-		parent.removeChild(newColumn);
+		if (layoutConstraint.equals(LayoutConstraint.EMPTY)) {
+			for (ModelElement row : diagram.getRows()) {
+				PortletLayout portletLayout = (PortletLayout) row;
+				if (portletLayout.getColumns().size() == 1 && portletLayout.getColumns().get(0).equals(newColumn)) {
+					diagram.removeRow(portletLayout);
+				}
+			}
+		}
 	}
 
 }

@@ -21,4 +21,5 @@ Export-Package: com.liferay.ide.eclipse.layouttpl.ui,
  com.liferay.ide.eclipse.layouttpl.ui.editor,
  com.liferay.ide.eclipse.layouttpl.ui.gef,
  com.liferay.ide.eclipse.layouttpl.ui.model,
- com.liferay.ide.eclipse.layouttpl.ui.parts
+ com.liferay.ide.eclipse.layouttpl.ui.parts,
+ com.liferay.ide.eclipse.layouttpl.ui.policies

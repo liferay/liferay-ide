@@ -2,6 +2,7 @@ package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -22,6 +23,10 @@ public class LayoutTplEditPartFactory implements EditPartFactory {
 	protected EditPart getPartForElement(Object modelElement) {
 		if (modelElement instanceof LayoutTplDiagram) {
 			return new LayoutTplDiagramEditPart();
+		}
+
+		if (modelElement instanceof PortletLayout) {
+			return new PortletLayoutEditPart();
 		}
 
 		if (modelElement instanceof PortletColumn) {

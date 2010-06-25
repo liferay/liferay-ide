@@ -1,7 +1,7 @@
 package com.liferay.ide.eclipse.layouttpl.ui.cmd;
 
-import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
 
@@ -9,11 +9,11 @@ public class PortletColumnDeleteCommand extends Command {
 
 	protected final PortletColumn child;
 
-	protected final LayoutTplDiagram parent;
+	protected final PortletLayout parent;
 
 	protected boolean wasRemoved;
 
-	public PortletColumnDeleteCommand(LayoutTplDiagram parent, PortletColumn child) {
+	public PortletColumnDeleteCommand(PortletLayout parent, PortletColumn child) {
 		if (parent == null || child == null) {
 			throw new IllegalArgumentException();
 		}
@@ -34,10 +34,10 @@ public class PortletColumnDeleteCommand extends Command {
 	}
 
 	public void redo() {
-		wasRemoved = parent.removeChild(child);
+		wasRemoved = parent.removeColumn(child);
 	}
 
 	public void undo() {
-		parent.addChild(child);
+		parent.addColumn(child);
 	}
 }

@@ -55,19 +55,19 @@ public class LayoutTplDiagramTreeEditPart extends AbstractTreeEditPart implement
 
 
 	protected List<ModelElement> getModelChildren() {
-		return getCastedModel().getChildren(); // a list of shapes
+		return getCastedModel().getRows();
 	}
 
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
-		if (LayoutTplDiagram.CHILD_ADDED_PROP.equals(prop)) {
+		if (LayoutTplDiagram.ROW_ADDED_PROP.equals(prop)) {
 			// add a child to this edit part
 			// causes an additional entry to appear in the tree of the outline
 			// view
 			addChild(createChild(evt.getNewValue()), -1);
 		}
-		else if (LayoutTplDiagram.CHILD_REMOVED_PROP.equals(prop)) {
+		else if (LayoutTplDiagram.ROW_REMOVED_PROP.equals(prop)) {
 			// remove a child from this edit part
 			// causes the corresponding edit part to disappear from the tree in
 			// the outline view

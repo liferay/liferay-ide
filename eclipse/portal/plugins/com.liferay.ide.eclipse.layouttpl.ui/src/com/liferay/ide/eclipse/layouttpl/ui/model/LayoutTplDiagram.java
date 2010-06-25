@@ -8,27 +8,35 @@ import org.eclipse.core.resources.IFile;
 
 public class LayoutTplDiagram extends ModelElement {
 
-	public static final String CHILD_ADDED_PROP = "LayoutTplDiagram.ChildAdded";
-	public static final String CHILD_REMOVED_PROP = "LayoutTplDiagram.ChildRemoved";
-	private List<ModelElement> elements = new ArrayList<ModelElement>();
+	public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
 
-	public boolean addChild(ModelElement s) {
-		if (s != null && elements.add(s)) {
-			firePropertyChange(CHILD_ADDED_PROP, null, s);
+	public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved";
+
+	public LayoutTplDiagram() {
+		super();
+	}
+
+	protected List<ModelElement> rows = new ArrayList<ModelElement>();
+
+	public boolean addRow(PortletLayout s) {
+		if (s != null && rows.add(s)) {
+			firePropertyChange(ROW_ADDED_PROP, null, s);
 			return true;
 		}
+
 		return false;
 	}
 
-	public List<ModelElement> getChildren() {
-		return elements;
+	public List<ModelElement> getRows() {
+		return rows;
 	}
 
-	public boolean removeChild(ModelElement s) {
-		if (s != null && elements.remove(s)) {
-			firePropertyChange(CHILD_REMOVED_PROP, null, s);
+	public boolean removeRow(PortletLayout s) {
+		if (s != null && rows.remove(s)) {
+			firePropertyChange(ROW_REMOVED_PROP, null, s);
 			return true;
 		}
+
 		return false;
 	}
 

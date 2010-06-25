@@ -3,6 +3,7 @@ package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
 import com.liferay.ide.eclipse.layouttpl.ui.model.ModelElement;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.policies.PortletColumnComponentEditPolicy;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
