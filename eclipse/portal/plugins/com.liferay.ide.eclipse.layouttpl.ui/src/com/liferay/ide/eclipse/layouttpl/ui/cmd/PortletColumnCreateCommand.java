@@ -1,13 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2004, 2005 Elias Volanakis and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    Elias Volanakis - initial API and implementation
- *******************************************************************************/
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.layouttpl.ui.cmd;
 
@@ -48,10 +52,20 @@ public class PortletColumnCreateCommand extends Command {
 	}
 
 	public void redo() {
-		if (layoutConstraint.equals(LayoutConstraint.EMPTY)) {
+		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.rowIndex > -1) {
 			PortletLayout portletLayout = new PortletLayout();
+			newColumn.setParent(portletLayout);
 			portletLayout.addColumn(newColumn);
-			diagram.addRow(portletLayout);
+			portletLayout.setParent(diagram);
+			diagram.addRow(portletLayout, layoutConstraint.rowIndex);
+		}
+		else if (layoutConstraint.columnIndex > -1) {
+			ModelElement portletLayout = diagram.getRows().get(layoutConstraint.columnIndex);
+			if (portletLayout instanceof PortletLayout) {
+				PortletLayout existingPortletLayout = (PortletLayout) portletLayout;
+				newColumn.setParent(existingPortletLayout);
+				existingPortletLayout.addColumn(newColumn, layoutConstraint.columnIndex);
+			}
 		}
 		// parent.addColumn(newColumn);
 	}

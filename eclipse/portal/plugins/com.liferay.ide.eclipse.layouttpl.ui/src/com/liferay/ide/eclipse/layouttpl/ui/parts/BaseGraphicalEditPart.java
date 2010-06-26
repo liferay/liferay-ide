@@ -12,19 +12,34 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.eclipse.layouttpl.core;
+package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
-import com.liferay.ide.eclipse.project.core.AbstractProjectDefinition;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.layouttpl.ui.model.ModelElement;
 
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
+import java.beans.PropertyChangeListener;
+
+import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.swt.widgets.Display;
 
 
-public class LiferayLayoutTplDefinition extends AbstractProjectDefinition {
+public abstract class BaseGraphicalEditPart extends AbstractGraphicalEditPart implements PropertyChangeListener {
 
-	public void setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		ProjectUtil.setGenerateDD(dataModel, false);
+	public void activate() {
+		if (!isActive()) {
+			super.activate();
+			((ModelElement) getModel()).addPropertyChangeListener(this);
+		}
+	}
+
+	public void deactivate() {
+		if (isActive()) {
+			super.deactivate();
+			((ModelElement) getModel()).removePropertyChangeListener(this);
+		}
+	}
+
+	protected Display getDisplay() {
+		return this.getViewer().getControl().getDisplay();
 	}
 
 }

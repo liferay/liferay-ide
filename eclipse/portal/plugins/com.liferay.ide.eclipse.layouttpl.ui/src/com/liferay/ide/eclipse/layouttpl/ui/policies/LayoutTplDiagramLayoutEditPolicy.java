@@ -1,20 +1,38 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.policies;
 
 import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletColumnCreateCommand;
+import com.liferay.ide.eclipse.layouttpl.ui.draw2d.FeedbackRoundedRectangle;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutConstraint;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.LayoutTplDiagramEditPart;
+import com.liferay.ide.eclipse.layouttpl.ui.parts.PortletLayoutEditPart;
 
 import java.util.List;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
@@ -23,7 +41,7 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
-	public static final int DEFAULT_FEEDBACK_HEIGHT = 50;
+	public static final int DEFAULT_FEEDBACK_HEIGHT = 20;
 
 	protected IFigure layoutFeedbackFigure;
 
@@ -42,17 +60,29 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 		if (request instanceof CreateRequest) {
 			LayoutConstraint constraint = (LayoutConstraint) getConstraintFor((CreateRequest) request);
 
-			RoundedRectangle rRect = new RoundedRectangle();
-			rRect.setBackgroundColor(ColorConstants.white);
-
-			if (constraint.equals(LayoutConstraint.EMPTY)) {
+			if (constraint != null) {
+				RoundedRectangle rRect = new FeedbackRoundedRectangle();
+				rRect.setBackgroundColor(ColorConstants.white);
 				rRect.setSize(getContainerWidth(), DEFAULT_FEEDBACK_HEIGHT);
-				rRect.setLocation(new Point(
-					LayoutTplDiagramEditPart.DIAGRAM_MARGIN, LayoutTplDiagramEditPart.DIAGRAM_MARGIN));
 				rRect.setAlpha(128);
-			}
 
-			return rRect;
+				if (constraint.rowIndex == 0) {
+					rRect.setLocation(new Point(
+						LayoutTplDiagramEditPart.DIAGRAM_MARGIN, LayoutTplDiagramEditPart.DIAGRAM_MARGIN));
+				}
+				else if (constraint.equals(LayoutConstraint.EMPTY)) {
+					List parts = getHost().getChildren();
+					Rectangle r = new Rectangle();
+					for (Object part : parts) {
+						GraphicalEditPart editPart = (GraphicalEditPart) part;
+						r.union(editPart.getFigure().getBounds());
+					}
+
+					rRect.setLocation(new Point(r.x, r.y + r.height));
+				}
+
+				return rRect;
+			}
 		}
 
 		return null;
@@ -71,10 +101,8 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 		super.eraseLayoutTargetFeedback(request);
 
 		if (layoutFeedbackFigure != null) {
-			System.out.println(getFeedbackLayer().getChildren().size());
 			removeFeedback(layoutFeedbackFigure);
 			getFeedbackLayer().repaint();
-			System.out.println(getFeedbackLayer().getChildren().size());
 			layoutFeedbackFigure = null;
 		}
 	}
@@ -82,14 +110,35 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object getConstraintFor(Point point) {
-		LayoutConstraint constraint = new LayoutConstraint();
-
+		LayoutConstraint constraint = null;
 		LayoutTplDiagramEditPart diagramPart = (LayoutTplDiagramEditPart) getHost();
-		List parts = diagramPart.getChildren();
-		int numParts = parts.size();
 
-		if (numParts > 0) {
+		if (diagramPart.getChildren().size() == 0) {
+			constraint = new LayoutConstraint();
+		}
+		else if (point.y < (LayoutTplDiagramEditPart.DIAGRAM_MARGIN + PortletLayoutEditPart.LAYOUT_MARGIN)) {
+			constraint = new LayoutConstraint();
+			List parts = diagramPart.getChildren();
+			int numParts = parts.size();
 
+			if (numParts > 0) {
+				constraint.rowIndex = 0;
+			}
+		}
+		else {
+			List parts = diagramPart.getChildren();
+			Rectangle r = new Rectangle();
+			Dimension d = new Dimension();
+			for (Object part : parts) {
+				GraphicalEditPart editPart = (GraphicalEditPart) part;
+				r.union(editPart.getFigure().getBounds());
+				d.union(editPart.getFigure().getBounds().getSize());
+			}
+
+			if (point.y > r.height) {
+				constraint = new LayoutConstraint();
+				constraint.rowIndex = -1;
+			}
 		}
 
 		return constraint;
@@ -97,7 +146,6 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 
 	@Override
 	protected Object getConstraintFor(Rectangle rect) {
-		System.out.println("ColumnLayoutEditPolicy.getConstraintFor " + rect);
 		return null;
 	}
 
@@ -116,20 +164,18 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 	@Override
 	protected void showLayoutTargetFeedback(Request request) {
 		// ColumnLayoutEditPolicy
-		System.out.println("ColumnLayoutEditPolicy.showLayoutTargetFeedback");
 		super.showLayoutTargetFeedback(request);
 
-		if (layoutFeedbackFigure == null) {
-			layoutFeedbackFigure = createLayoutFeedbackFigure(request);
-			if (layoutFeedbackFigure != null) {
-				addFeedback(layoutFeedbackFigure);
-			}
+		IFigure feedback = createLayoutFeedbackFigure(request);
+
+		if (feedback != null && !feedback.equals(layoutFeedbackFigure)) {
+			layoutFeedbackFigure = feedback;
+			addFeedback(layoutFeedbackFigure);
 		}
 	}
 
 	@Override
 	protected EditPolicy createChildEditPolicy(EditPart child) {
-		// return super.createChildEditPolicy(child);
 		return null;// don't create edit policy for child
 	}
 

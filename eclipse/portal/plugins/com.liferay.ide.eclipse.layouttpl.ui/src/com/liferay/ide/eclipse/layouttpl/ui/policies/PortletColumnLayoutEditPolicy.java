@@ -14,13 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.policies;
 
-import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletColumnCreateCommand;
-import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutConstraint;
-import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
-import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
-import com.liferay.ide.eclipse.layouttpl.ui.parts.PortletLayoutEditPart;
-
-import java.util.List;
+import com.liferay.ide.eclipse.layouttpl.ui.parts.PortletColumnEditPart;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -32,13 +26,13 @@ import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
 
-public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
+public class PortletColumnLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	public static final int DEFAULT_FEEDBACK_HEIGHT = 50;
 
 	protected IFigure layoutFeedbackFigure;
 
-	public PortletLayoutLayoutEditPolicy() {
+	public PortletColumnLayoutEditPolicy() {
 		super();
 	}
 
@@ -48,35 +42,35 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		return null;
 	}
 
-	// protected IFigure createLayoutFeedbackFigure(Request request) {
-	//
-	// if (request instanceof CreateRequest) {
-	// LayoutConstraint constraint = (LayoutConstraint)
-	// getConstraintFor((CreateRequest) request);
-	//
-	// RoundedRectangle rRect = new RoundedRectangle();
-	// rRect.setBackgroundColor(ColorConstants.white);
-	//
-	// if (constraint.equals(LayoutConstraint.EMPTY)) {
-	// rRect.setSize(getContainerWidth(), DEFAULT_FEEDBACK_HEIGHT);
-	// rRect.setLocation(new Point(
-	// LayoutTplDiagramEditPart.DIAGRAM_MARGIN,
-	// LayoutTplDiagramEditPart.DIAGRAM_MARGIN));
-	// rRect.setAlpha(128);
-	// }
-	//
-	// return rRect;
-	// }
-	//
-	// return null;
-	// }
+	protected IFigure createLayoutFeedbackFigure(Request request) {
+
+		// if (request instanceof CreateRequest) {
+		// LayoutConstraint constraint = (LayoutConstraint)
+		// getConstraintFor((CreateRequest) request);
+		//
+		// RoundedRectangle rRect = new RoundedRectangle();
+		// rRect.setBackgroundColor(ColorConstants.white);
+		//
+		// if (constraint.equals(LayoutConstraint.EMPTY)) {
+		// rRect.setSize(getContainerWidth(), DEFAULT_FEEDBACK_HEIGHT);
+		// rRect.setLocation(new Point(
+		// LayoutTplDiagramEditPart.DIAGRAM_MARGIN,
+		// LayoutTplDiagramEditPart.DIAGRAM_MARGIN));
+		// rRect.setAlpha(128);
+		// }
+		//
+		// return rRect;
+		// }
+
+		return null;
+	}
 
 	// protected int getContainerWidth() {
 	// return getDiagramPart().getContainerWidth();
 	// }
 
-	protected PortletLayoutEditPart getPart() {
-		return (PortletLayoutEditPart) getHost();
+	protected PortletColumnEditPart getDiagramPart() {
+		return (PortletColumnEditPart) getHost();
 	}
 
 	@Override
@@ -92,40 +86,28 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		// }
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Object getConstraintFor(Point point) {
-		LayoutConstraint constraint = new LayoutConstraint();
-
-		PortletLayoutEditPart layoutEditPart = (PortletLayoutEditPart) getHost();
-		List parts = layoutEditPart.getChildren();
-		int numParts = parts.size();
-
-		if (numParts == 0) {
-			constraint.columnIndex = 0;
-		}
-
-		return constraint;
+		System.out.println("PortletColumnLayoutEditPolicy.getConstraintFor " + point);
+		return null;
 	}
 
 	@Override
 	protected Object getConstraintFor(Rectangle rect) {
-		System.out.println("ColumnLayoutEditPolicy.getConstraintFor " + rect);
+		System.out.println("PortletColumnLayoutEditPolicy.getConstraintFor " + rect);
 		return null;
-	}
-
-	protected LayoutTplDiagram getDiagram() {
-		return (LayoutTplDiagram) getHost().getParent().getModel();
 	}
 
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
 		Object childClass = request.getNewObjectType();
 
-		if (childClass == PortletColumn.class) {
-			return new PortletColumnCreateCommand(
-				(PortletColumn) request.getNewObject(), getDiagram(), (LayoutConstraint) getConstraintFor(request));
-		}
+		// if (childClass == PortletColumn.class) {
+		// return new PortletColumnCreateCommand(
+		// (PortletColumn) request.getNewObject(), (LayoutTplDiagram)
+		// getHost().getModel(),
+		// (LayoutConstraint) getConstraintFor(request));
+		// }
 
 		return null;
 	}
@@ -134,7 +116,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	protected void showLayoutTargetFeedback(Request request) {
 		// ColumnLayoutEditPolicy
 		super.showLayoutTargetFeedback(request);
-
+		//
 		// if (layoutFeedbackFigure == null) {
 		// layoutFeedbackFigure = createLayoutFeedbackFigure(request);
 		// if (layoutFeedbackFigure != null) {

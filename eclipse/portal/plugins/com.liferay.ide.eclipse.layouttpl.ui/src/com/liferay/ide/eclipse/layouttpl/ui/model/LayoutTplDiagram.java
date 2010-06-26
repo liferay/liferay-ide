@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
@@ -18,9 +32,17 @@ public class LayoutTplDiagram extends ModelElement {
 
 	protected List<ModelElement> rows = new ArrayList<ModelElement>();
 
-	public boolean addRow(PortletLayout s) {
-		if (s != null && rows.add(s)) {
-			firePropertyChange(ROW_ADDED_PROP, null, s);
+	public boolean addRow(PortletLayout newRow, int index) {
+		if (newRow != null) {
+			if (index < 0) {
+				rows.add(newRow);
+			}
+			else {
+				rows.add(index, newRow);
+			}
+
+			firePropertyChange(ROW_ADDED_PROP, null, newRow);
+
 			return true;
 		}
 
@@ -31,9 +53,9 @@ public class LayoutTplDiagram extends ModelElement {
 		return rows;
 	}
 
-	public boolean removeRow(PortletLayout s) {
-		if (s != null && rows.remove(s)) {
-			firePropertyChange(ROW_REMOVED_PROP, null, s);
+	public boolean removeRow(PortletLayout existingRow) {
+		if (existingRow != null && rows.remove(existingRow)) {
+			firePropertyChange(ROW_REMOVED_PROP, null, existingRow);
 			return true;
 		}
 
@@ -44,5 +66,16 @@ public class LayoutTplDiagram extends ModelElement {
 		// TODO Implement loadFromFile method on class LayoutTplDiagram
 		System.out.println("LayoutTplDiagram.loadFromFile");
 
+	}
+
+	@Override
+	public void removeChild(ModelElement child) {
+		if (rows.contains(child)) {
+			removeRow((PortletLayout) child);
+		}
+	}
+
+	public void addRow(PortletLayout newRow) {
+		addRow(newRow, -1);
 	}
 }

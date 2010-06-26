@@ -12,19 +12,27 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.eclipse.layouttpl.core;
+package com.liferay.ide.eclipse.layouttpl.ui.draw2d;
 
-import com.liferay.ide.eclipse.project.core.AbstractProjectDefinition;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
+import org.eclipse.draw2d.RoundedRectangle;
 
 
-public class LiferayLayoutTplDefinition extends AbstractProjectDefinition {
+public class FeedbackRoundedRectangle extends RoundedRectangle {
 
-	public void setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		ProjectUtil.setGenerateDD(dataModel, false);
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+
+		if (!(obj instanceof RoundedRectangle)) {
+			return false;
+		}
+
+		RoundedRectangle rRect = (RoundedRectangle) obj;
+
+		return this.getSize().equals(rRect.getSize()) && this.getBackgroundColor().equals(rRect.getBackgroundColor()) &&
+			this.getLocation().equals(rRect.getLocation()) && this.getAlpha().equals(rRect.getAlpha());
 	}
 
 }

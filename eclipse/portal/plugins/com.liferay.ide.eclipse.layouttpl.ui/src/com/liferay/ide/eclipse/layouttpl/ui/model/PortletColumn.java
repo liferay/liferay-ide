@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
 import org.eclipse.draw2d.geometry.Dimension;
@@ -12,6 +26,10 @@ public class PortletColumn extends ModelElement {
 	protected Point location;
 
 	protected Dimension size;
+
+	public PortletColumn() {
+		super();
+	}
 
 	public Image getIcon() {
 		// TODO Implement getIcon method on class PortletColumn
@@ -40,6 +58,11 @@ public class PortletColumn extends ModelElement {
 
 	public Dimension getSize() {
 		return size.getCopy();
+	}
+
+
+	@Override
+	public void removeChild(ModelElement child) {
 	}
 
 }

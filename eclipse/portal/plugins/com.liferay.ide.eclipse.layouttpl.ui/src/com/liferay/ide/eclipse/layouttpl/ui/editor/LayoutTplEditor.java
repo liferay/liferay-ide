@@ -1,29 +1,44 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.editor;
 
 import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.eclipse.layouttpl.ui.gef.GraphicalEditorWithFlyoutPalette;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.LayoutTplEditPartFactory;
+import com.liferay.ide.eclipse.layouttpl.ui.parts.LayoutTplRootEditPart;
 
 import java.util.EventObject;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
-import org.eclipse.gef.editparts.ScalableRootEditPart;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
@@ -40,16 +55,31 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		setEditDomain(new DefaultEditDomain(this));
 	}
 	
+	protected void createGraphicalViewer(Composite parent) {
+		// GraphicalViewer viewer = new ScrollingGraphicalViewer();
+		GraphicalViewer viewer = new GraphicalViewerImpl();
+		viewer.createControl(parent);
+		setGraphicalViewer(viewer);
+		configureGraphicalViewer();
+		hookGraphicalViewer();
+		initializeGraphicalViewer();
+	}
+
 	@Override
 	protected void configureGraphicalViewer() {
 		super.configureGraphicalViewer();
 		
 		GraphicalViewer viewer = getGraphicalViewer();
-		FigureCanvas control = (FigureCanvas) viewer.getControl();
-		control.setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
-		control.setVerticalScrollBarVisibility(FigureCanvas.NEVER);
+		// FigureCanvas control = (FigureCanvas) viewer.getControl();
+		// control.getViewport().setContentsTracksHeight(true);
+		// control.getViewport().setContentsTracksWidth(true);
+		// control.setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
+		// control.setVerticalScrollBarVisibility(FigureCanvas.NEVER);
+
 		viewer.setEditPartFactory(new LayoutTplEditPartFactory());
-		viewer.setRootEditPart(new ScalableRootEditPart());
+
+		// viewer.setRootEditPart(new ScalableRootEditPart());
+		viewer.setRootEditPart(new LayoutTplRootEditPart());
 		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
 
 		// configure the context menu provider

@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Elias Volanakis - initial API and implementation
+ *    Gregory Amerson
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.layouttpl.ui.model;
@@ -31,6 +32,8 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * @author Elias Volanakis
  */
 public abstract class ModelElement implements IPropertySource {
+
+	protected ModelElement parent;
 
 	/** An empty property descriptor. */
 	private static final IPropertyDescriptor[] EMPTY_ARRAY = new IPropertyDescriptor[0];
@@ -141,4 +144,14 @@ public abstract class ModelElement implements IPropertySource {
 	public void setPropertyValue(Object id, Object value) {
 		// do nothing
 	}
+
+	public ModelElement getParent() {
+		return parent;
+	}
+
+	public void setParent(ModelElement parent) {
+		this.parent = parent;
+	}
+
+	public abstract void removeChild(ModelElement child);
 }

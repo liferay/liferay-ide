@@ -15,7 +15,7 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
-import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.eclipse.layouttpl.ui.policies.PortletColumnComponentEditPolicy;
 
 import java.beans.PropertyChangeEvent;
@@ -24,10 +24,10 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.swt.graphics.Image;
 
 
-public class PortletColumnTreeEditPart extends BaseTreeEditPart {
+public class PortletLayoutTreeEditPart extends BaseTreeEditPart {
 
 
-	public PortletColumnTreeEditPart(PortletColumn model) {
+	public PortletLayoutTreeEditPart(PortletLayout model) {
 		super(model);
 	}
 
@@ -38,8 +38,8 @@ public class PortletColumnTreeEditPart extends BaseTreeEditPart {
 	}
 
 
-	private PortletColumn getCastedModel() {
-		return (PortletColumn) getModel();
+	protected PortletLayout getCastedModel() {
+		return (PortletLayout) getModel();
 	}
 
 
@@ -54,6 +54,21 @@ public class PortletColumnTreeEditPart extends BaseTreeEditPart {
 
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		refreshVisuals();
+		String prop = evt.getPropertyName();
+		if (PortletLayout.COLUMN_ADDED_PROP.equals(prop)) {
+			// add a child to this edit part
+			// causes an additional entry to appear in the tree of the outline
+			// view
+			addChild(createChild(evt.getNewValue()), -1);
+		}
+		else if (PortletLayout.COLUMN_REMOVED_PROP.equals(prop)) {
+			// remove a child from this edit part
+			// causes the corresponding edit part to disappear from the tree in
+			// the outline view
+			removeChild(getEditPartForChild(evt.getNewValue()));
+		}
+		else {
+			refreshVisuals();
+		}
 	}
 }

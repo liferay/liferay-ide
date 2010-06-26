@@ -1,11 +1,24 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.layouttpl.ui.policies;
 
 import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletColumnDeleteCommand;
-import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
@@ -17,38 +30,12 @@ public class PortletColumnComponentEditPolicy extends ComponentEditPolicy {
 	protected Command createDeleteCommand(GroupRequest deleteRequest) {
 		Object parent = getHost().getParent().getModel();
 		Object child = getHost().getModel();
-		if (parent instanceof LayoutTplDiagram && child instanceof PortletColumn) {
-			return new PortletColumnDeleteCommand(null, (PortletColumn) child);
+
+		if (parent instanceof PortletLayout && child instanceof PortletColumn) {
+			return new PortletColumnDeleteCommand((PortletLayout) parent, (PortletColumn) child);
 		}
 
 		return super.createDeleteCommand(deleteRequest);
 	}
 
-	@Override
-	public void eraseSourceFeedback(Request request) {
-		// PortletColumnComponentEditPolicy
-		System.out.println("PortletColumnComponentEditPolicy.eraseSourceFeedback");
-		super.eraseSourceFeedback(request);
-	}
-
-	@Override
-	public void eraseTargetFeedback(Request request) {
-		// PortletColumnComponentEditPolicy
-		System.out.println("PortletColumnComponentEditPolicy.eraseTargetFeedback");
-		super.eraseTargetFeedback(request);
-	}
-
-	@Override
-	public void showSourceFeedback(Request request) {
-		// PortletColumnComponentEditPolicy
-		System.out.println("PortletColumnComponentEditPolicy.showSourceFeedback");
-		super.showSourceFeedback(request);
-	}
-
-	@Override
-	public void showTargetFeedback(Request request) {
-		// PortletColumnComponentEditPolicy
-		System.out.println("PortletColumnComponentEditPolicy.showTargetFeedback");
-		super.showTargetFeedback(request);
-	}
 }
