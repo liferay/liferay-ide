@@ -136,4 +136,13 @@ public class InstallableRuntime2ConfigurationElement implements IConfigurationEl
 		return false;
 	}
 
+	public String getAttribute(String attrName, String locale)
+			throws InvalidRegistryObjectException {
+		return null;
+	}
+
+	public String getValue(String locale) throws InvalidRegistryObjectException {
+		return null;
+	}
+
 }

@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.wst.common.project.facet.core;bundle-version="[1.4.1,1.5.0)",
  com.liferay.ide.eclipse.project.core,
- org.eclipse.jdt.core;bundle-version="[3.5.2,3.6.0)",
+ org.eclipse.jdt.core,
  org.eclipse.jst.j2ee;bundle-version="[1.1.301,1.2.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

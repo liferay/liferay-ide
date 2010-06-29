@@ -37,7 +37,7 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)",
  org.eclipse.wst.sse.ui;bundle-version="[1.1.102,2.0.0)",
  org.eclipse.core.expressions;bundle-version="3.4.101",
- org.eclipse.wst.xsl.ui;bundle-version="[1.0.100,1.1.0)"
+ org.eclipse.wst.xsl.ui;bundle-version="[1.0.100,1.2.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.portlet.ui,
