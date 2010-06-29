@@ -59,68 +59,43 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		}
 	}
 
-	public void addPortalDependencyJar(String jar) {
-		if (CoreUtil.isNullOrEmpty(jar)) {
+	public void addPortalDependency(String propertyName, String value) {
+		if (CoreUtil.isNullOrEmpty(value)) {
 			return;
 		}
 
-		String existingPortalJars = pluginPackageProperties.getString(PROPERTY_PORTAL_DEPENDENCY_JARS, "");
+		String existingDeps = pluginPackageProperties.getString(propertyName, "");
 
-		String[] existingJars = existingPortalJars.split(",");
+		String[] existingValues = existingDeps.split(",");
 
-		for (String existingJar : existingJars) {
-			if (jar.equals(existingJar.trim())) {
+		for (String existingValue : existingValues) {
+			if (value.equals(existingValue)) {
 				return;
 			}
 		}
 
-		String newPortalJars = null;
+		String newPortalDeps = null;
 
-		if (CoreUtil.isNullOrEmpty(existingPortalJars)) {
-			newPortalJars = jar;
+		if (CoreUtil.isNullOrEmpty(existingDeps)) {
+			newPortalDeps = value;
 		}
 		else {
-			newPortalJars = existingPortalJars + "," + jar;
+			newPortalDeps = existingDeps + "," + value;
 		}
 
-		pluginPackageProperties.setProperty(PROPERTY_PORTAL_DEPENDENCY_JARS, newPortalJars);
+		pluginPackageProperties.setProperty(propertyName, newPortalDeps);
 
 		flushProperties();
 
-		fireModelChanged(new ModelChangedEvent(
-			this, IModelChangedEvent.INSERT, newPortalJars.split(","), PROPERTY_PORTAL_DEPENDENCY_JARS));
+		fireModelChanged(new ModelChangedEvent(this, IModelChangedEvent.INSERT, newPortalDeps.split(","), propertyName));
+	}
+
+	public void addPortalDependencyJar(String jar) {
+		addPortalDependency(PROPERTY_PORTAL_DEPENDENCY_JARS, jar);
 	}
 
 	public void addPortalDependencyTld(String tldFile) {
-		if (CoreUtil.isNullOrEmpty(tldFile)) {
-			return;
-		}
-
-		String existingPortalTlds = pluginPackageProperties.getString(PROPERTY_PORTAL_DEPENDENCY_TLDS, "");
-
-		String[] existingTlds = existingPortalTlds.split(",");
-
-		for (String existingTld : existingTlds) {
-			if (tldFile.equals(existingTld.trim())) {
-				return;
-			}
-		}
-
-		String newPortalTlds = null;
-
-		if (CoreUtil.isNullOrEmpty(existingPortalTlds)) {
-			newPortalTlds = tldFile;
-		}
-		else {
-			newPortalTlds = existingPortalTlds + "," + tldFile;
-		}
-
-		pluginPackageProperties.setProperty(PROPERTY_PORTAL_DEPENDENCY_TLDS, newPortalTlds);
-
-		flushProperties();
-
-		fireModelChanged(new ModelChangedEvent(
-			this, IModelChangedEvent.INSERT, newPortalTlds.split(","), PROPERTY_PORTAL_DEPENDENCY_TLDS));
+		addPortalDependency(PROPERTY_PORTAL_DEPENDENCY_TLDS, tldFile);
 	}
 
 	@Override
@@ -237,58 +212,50 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		}
 	}
 
-	public void removePortalDependencyJars(String[] removedJars) {
-		String portalJars = pluginPackageProperties.getString(PROPERTY_PORTAL_DEPENDENCY_JARS, null);
-
-		List<String> updatedJars = new ArrayList<String>();
-
-		String[] jars = portalJars.split(",");
-
-		for (String jar : jars) {
-			for (String removedJar : removedJars) {
-				if (!(jar.trim().equals(removedJar.trim()))) {
-					updatedJars.add(jar);
+	public void removePortalDependency(String propertyName, String[] removedValues) {
+		String portalDependencies = pluginPackageProperties.getString(propertyName, null);
+		
+		List<String> updatedValues = new ArrayList<String>();
+		
+		String[] deps = portalDependencies.split(",");
+		
+		for (String dep : deps) {
+			boolean shouldKeep = true;
+			
+			for (String removedValue : removedValues) {
+				if (dep.trim().equals(removedValue.trim())) {
+					shouldKeep = false;
+					break;
 				}
 			}
+			
+			if (shouldKeep) {
+				updatedValues.add(dep);
+			}
 		}
-
-		pluginPackageProperties.setProperty(PROPERTY_PORTAL_DEPENDENCY_JARS, "");
-
-		for (String updatedJar : updatedJars) {
-			addPortalDependencyJar(updatedJar);
+		
+		if (updatedValues.size() > 0) {
+			pluginPackageProperties.setProperty(propertyName, "");
+			
+			for (String updatedValue : updatedValues) {
+				addPortalDependency(propertyName, updatedValue);
+			}
 		}
-
+		else {
+			pluginPackageProperties.clearProperty(propertyName);
+		}
+		
 		flushProperties();
+		
+		fireModelChanged(new ModelChangedEvent(this, IModelChangedEvent.REMOVE, updatedValues.toArray(), propertyName));
+	}
 
-		fireModelChanged(new ModelChangedEvent(
-			this, IModelChangedEvent.REMOVE, updatedJars.toArray(), PROPERTY_PORTAL_DEPENDENCY_JARS));
+	public void removePortalDependencyJars(String[] removedJars) {
+		removePortalDependency(PROPERTY_PORTAL_DEPENDENCY_JARS, removedJars);
 	}
 
 	public void removePortalDependencyTlds(String[] removedTlds) {
-		String portalTlds = pluginPackageProperties.getString(PROPERTY_PORTAL_DEPENDENCY_TLDS, null);
-
-		List<String> updatedTlds = new ArrayList<String>();
-
-		String[] tlds = portalTlds.split(",");
-
-		for (String tld : tlds) {
-			for (String removedTld : removedTlds) {
-				if (!(tld.trim().equals(removedTld.trim()))) {
-					updatedTlds.add(tld);
-				}
-			}
-		}
-
-		pluginPackageProperties.setProperty(PROPERTY_PORTAL_DEPENDENCY_TLDS, "");
-
-		for (String updatedTld : updatedTlds) {
-			addPortalDependencyTld(updatedTld);
-		}
-
-		flushProperties();
-
-		fireModelChanged(new ModelChangedEvent(
-			this, IModelChangedEvent.REMOVE, updatedTlds.toArray(), PROPERTY_PORTAL_DEPENDENCY_TLDS));
+		removePortalDependency(PROPERTY_PORTAL_DEPENDENCY_TLDS, removedTlds);
 	}
 
 	public void setAuthor(String author) {

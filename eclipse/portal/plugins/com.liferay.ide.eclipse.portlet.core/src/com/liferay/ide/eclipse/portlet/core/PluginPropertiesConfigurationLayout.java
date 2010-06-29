@@ -19,6 +19,9 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +36,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("unchecked")
 public class PluginPropertiesConfigurationLayout extends PropertiesConfigurationLayout {
 
 	public static class PluginPropertiesWriter extends PropertiesWriter {
@@ -167,13 +171,17 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 
 	}
 
+	public static final String[] sortedKeys =
+		new String[] {
+			"name", "module-group-id", "module-incremental-version", "tags", "short-description", "change-log",
+			"page-url", "author", "licenses", "portal-dependency-jars", "portal-dependency-tlds"
+		};
+
 	public PluginPropertiesConfigurationLayout(PropertiesConfiguration config) {
 		super(config);
 
 		this.setForceSingleLine(true);
-
 		this.setSingleLine(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, false);
-
 		this.setSingleLine(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS, false);
 	}
 
@@ -193,11 +201,40 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 
 			if (getHeaderComment() != null) {
 				writer.writeln(getCanonicalHeaderComment(true));
-
 				writer.writeln(null);
 			}
+			
+			List<Object> keyList = Arrays.asList(getKeys().toArray());
+			
+			Collections.sort(keyList, new Comparator<Object>() {
 
-			for (Iterator it = getKeys().iterator(); it.hasNext();) {
+				public int compare(Object o1, Object o2) {
+					int index1 = Integer.MAX_VALUE;
+					int index2 = Integer.MAX_VALUE;
+
+					for (int i = 0; i < sortedKeys.length; i++) {
+						if (sortedKeys[i].equals(o1)) {
+							index1 = i;
+						}
+
+						if (sortedKeys[i].equals(o2)) {
+							index2 = i;
+						}
+					}
+
+					if (index1 < index2) {
+						return -1;
+					}
+					else if (index1 > index2) {
+						return 1;
+					}
+					
+					return 0;
+				}
+				
+			});
+
+			for (Iterator it = keyList.iterator(); it.hasNext();) {
 				String key = (String) it.next();
 
 				if (getConfiguration().containsKey(key)) {
