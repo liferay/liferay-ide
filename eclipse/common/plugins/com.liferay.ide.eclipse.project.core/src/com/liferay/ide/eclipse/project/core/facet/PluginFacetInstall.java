@@ -324,23 +324,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return ResourcesPlugin.getWorkspace().getRoot().getFolder(webrootFullPath);
 	}
 
-	protected void installLayoutTplTemplate()
-		throws CoreException {
-		
-		// get the template zip for portlets and extract into the project
-		SDK sdk = getSDK();
-
-		String layouttplName = this.masterModel.getStringProperty(LAYOUTTPL_NAME);
-		
-		IPath newThemePath = sdk.createNewLayoutTemplate(layouttplName, layouttplName, layouttplName);
-		
-		processNewFiles(newThemePath.append(layouttplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX), false);
-		// cleanup portlet files
-		newThemePath.toFile().delete();
-
-		this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-	}
-
 	protected void installPluginLibraryDelegate()
 		throws CoreException {
 
@@ -357,7 +340,9 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 		String themeName = this.masterModel.getStringProperty(THEME_NAME);
 		
-		IPath newThemePath = sdk.createNewTheme(themeName, themeName);
+		String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
+
+		IPath newThemePath = sdk.createNewTheme(themeName, displayName);
 		
 		processNewFiles(newThemePath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX), false);
 		

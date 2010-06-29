@@ -164,35 +164,6 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewLayoutTemplate(String layouttplName, String layouttplDisplayName, String layouttplTemplateName) {
-		SDKHelper antHelper = new SDKHelper(this);
-
-		try {
-			Map<String, String> properties = new HashMap<String, String>();
-			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layouttplName);
-			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_DISPLAY_NAME, layouttplDisplayName);
-			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_TEMPLATE_NAME, layouttplTemplateName);
-
-			// create a space for new portlet template to get built
-			IPath tempPath =
-				SDKPlugin.getDefault().getStateLocation().append(ISDKConstants.TARGET_CREATE).append(
-					String.valueOf(System.currentTimeMillis()));
-
-			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_PARENT_DIR, tempPath.toOSString());
-
-			antHelper.runTarget(
-				getLocation().append(ISDKConstants.LAYOUT_TEMPLATE_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE,
-				properties);
-
-			return tempPath;
-		}
-		catch (CoreException e) {
-			SDKPlugin.logError(e);
-		}
-
-		return null;
-	}
-
 	public IPath createNewLayoutTpl(String layoutTplName, String layoutTplDisplayName, String runtimeLocation) {
 		SDKHelper antHelper = new SDKHelper(this);
 
@@ -332,6 +303,24 @@ public class SDK {
 		return defaultSDK;
 	}
 
+	public boolean isValid() {
+		IPath sdkLocation = getLocation();
+
+		if (sdkLocation == null) {
+			return false;
+		}
+
+		if (!SDKUtil.isSDKSupported(sdkLocation.toOSString())) {
+			return false;
+		}
+
+		if (!SDKUtil.isValidSDKLocation(sdkLocation.toOSString())) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public void loadFromMemento(IMemento sdkElement) {
 		setName(sdkElement.getString("name"));
 		setLocation(Path.fromPortableString(sdkElement.getString("location")));
@@ -399,25 +388,6 @@ public class SDK {
 		}
 
 		return Status.OK_STATUS;
-	}
-
-
-	public boolean isValid() {
-		IPath sdkLocation = getLocation();
-
-		if (sdkLocation == null) {
-			return false;
-		}
-
-		if (!SDKUtil.isSDKSupported(sdkLocation.toOSString())) {
-			return false;
-		}
-
-		if (!SDKUtil.isValidSDKLocation(sdkLocation.toOSString())) {
-			return false;
-		}
-
-		return true;
 	}
 
 	// public String getRuntime() {

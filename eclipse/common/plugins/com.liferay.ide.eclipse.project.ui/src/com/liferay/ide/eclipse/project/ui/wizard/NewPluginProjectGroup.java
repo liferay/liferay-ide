@@ -49,6 +49,8 @@ public class NewPluginProjectGroup extends NewProjectGroup implements IPluginPro
 	
 	protected Button customLocationButton;
 	
+	protected Text displayNameField;
+	
 	protected IDataModel model;
 	
 	protected IDataModel nestedModel;
@@ -58,7 +60,7 @@ public class NewPluginProjectGroup extends NewProjectGroup implements IPluginPro
 	protected Button sdkLocationButton;
 	
 	protected DataModelSynchHelper synchHelper;
-	
+
 	protected Button workspaceLocationButton;
 
 	public NewPluginProjectGroup(Composite parent, IDataModel model, IDataModel nestedModel) {
@@ -81,6 +83,8 @@ public class NewPluginProjectGroup extends NewProjectGroup implements IPluginPro
 
 	public void createControl(Composite parent) {
 		createProjectNameGroup(parent);
+
+		createDisplayNameGroup(parent);
 		// for 1.0 we are not going to show location
 		// createProjectLocationGroup(parent);
 	}
@@ -91,6 +95,49 @@ public class NewPluginProjectGroup extends NewProjectGroup implements IPluginPro
 		synchHelper.dispose();
 		
 		model = null;
+	}
+
+	protected void createDisplayNameGroup(Composite parent) {
+		Font font = parent.getFont(); // project specification group
+
+		Composite displayGroup = new Composite(parent, SWT.NONE);
+
+		GridLayout layout = new GridLayout();
+
+		layout.numColumns = 2;
+
+		displayGroup.setLayout(layout);
+		displayGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		// new project label
+		Label displayLabel = new Label(displayGroup, SWT.NONE);
+
+		displayLabel.setFont(font);
+		displayLabel.setText("Display name:");
+
+		// new project name entry field
+		displayNameField = new Text(displayGroup, SWT.BORDER);
+
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+
+		data.widthHint = SIZING_TEXT_FIELD_WIDTH;
+
+		displayNameField.setLayoutData(data);
+		displayNameField.setFont(font);
+
+		synchHelper.synchText(displayNameField, DISPLAY_NAME, new Control[] {
+			displayLabel
+		});
+
+		nestedSynchHelper.getDataModel().addListener(new IDataModelListener() {
+
+			public void propertyChanged(DataModelEvent event) {
+				if (PROJECT_NAME.equals(event.getPropertyName())) {
+					synchHelper.synchAllUIWithModel();
+				}
+			}
+
+		});
 	}
 
 	protected void createProjectLocationGroup(Composite parent) {

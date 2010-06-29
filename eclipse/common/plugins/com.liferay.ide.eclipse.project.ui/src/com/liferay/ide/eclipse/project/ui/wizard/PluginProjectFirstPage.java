@@ -368,6 +368,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		arrayList.add(LIFERAY_ADV_CONFIG);
 		arrayList.add(FACET_RUNTIME);
 		arrayList.add(PROJECT_NAME);
+		arrayList.add(DISPLAY_NAME);
 		arrayList.add(FACET_PROJECT_NAME);
 		arrayList.add(PLUGIN_TYPE_PORTLET);
 		arrayList.add(PLUGIN_TYPE_HOOK);

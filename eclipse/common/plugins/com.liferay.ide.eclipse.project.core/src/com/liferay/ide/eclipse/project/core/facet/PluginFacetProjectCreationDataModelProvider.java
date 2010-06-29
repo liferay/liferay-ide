@@ -30,9 +30,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.JavaConventions;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jst.j2ee.internal.web.archive.operations.WebFacetProjectCreationDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -93,6 +96,11 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (PORTLET_NAME.equals(propertyName)) {
 			return getProperty(PROJECT_NAME);
 		}
+		else if (DISPLAY_NAME.equals(propertyName)) {
+			String displayName = StringUtils.capitalize(getStringProperty(PROJECT_NAME));
+
+			return ProjectUtil.removePluginSuffix(displayName);
+		}
 		else if (HOOK_NAME.equals(propertyName)) {
 			return getProperty(PROJECT_NAME);
 		}
@@ -108,6 +116,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (CREATE_PROJECT_OPERATION.equals(propertyName)) {
 			return true;
 		}
+
 		return super.getDefaultProperty(propertyName);
 	}
 
@@ -139,6 +148,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		propNames.add(PLUGIN_TYPE_THEME);
 		propNames.add(PLUGIN_TYPE_LAYOUTTPL);
 		// propNames.add(SETUP_PROJECT_FLAG);
+		propNames.add(DISPLAY_NAME);
 		propNames.add(PORTLET_NAME);
 		propNames.add(HOOK_NAME);
 		propNames.add(EXT_NAME);
@@ -257,6 +267,12 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (PLUGIN_TYPE_LAYOUTTPL.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
 			setupProject(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
 		}
+		else if (DISPLAY_NAME.equals(propertyName)) {
+			String displayName = ProjectUtil.removePluginSuffix(propertyValue.toString());
+
+			return super.propertySet(DISPLAY_NAME, displayName);
+		}
+
 		return super.propertySet(propertyName, propertyValue);
 	}
 
@@ -265,12 +281,26 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		if (FACET_PROJECT_NAME.equals(propertyName)) {
 			String facetProjectName = getStringProperty(propertyName);
 			String testProjectName = facetProjectName + getProjectSuffix();
+
 			if (ProjectUtil.getProject(testProjectName).exists()) {
 				return ProjectCorePlugin.createErrorStatus("A project already exists with that name.");
+			}
+
+			// before we do a basic java validation we need to strip "-"
+
+			String nameValidation = facetProjectName.replaceAll("-", "");
+
+			IStatus status =
+				JavaConventions.validateIdentifier(
+					nameValidation, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5);
+
+			if (!status.isOK()) {
+				return ProjectCorePlugin.createErrorStatus("Project name is invalid.");
 			}
 		}
 		else if (LIFERAY_SDK_NAME.equals(propertyName)) {
 			Object sdkVal = getModel().getProperty(LIFERAY_SDK_NAME);
+
 			if (sdkVal instanceof String && IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals(sdkVal)) {
 				return ProjectCorePlugin.createErrorStatus("Liferay SDK must be configured.");
 			}

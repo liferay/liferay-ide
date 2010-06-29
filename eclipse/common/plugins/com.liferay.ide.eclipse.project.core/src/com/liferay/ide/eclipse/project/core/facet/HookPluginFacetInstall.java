@@ -53,7 +53,9 @@ public class HookPluginFacetInstall extends PluginFacetInstall {
 
 			String hookName = this.masterModel.getStringProperty(HOOK_NAME);
 			
-			IPath installPath = sdk.createNewHook(hookName, hookName, getRuntimeLocation());
+			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
+
+			IPath installPath = sdk.createNewHook(hookName, displayName, getRuntimeLocation());
 
 			IPath tempInstallPath = installPath.append(hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX);
 

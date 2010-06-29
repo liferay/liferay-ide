@@ -217,20 +217,6 @@ public class ProjectUtil {
 		return getSDK(facetedProject, projectFacet);
 	}
 
-	public static IFolder[] getSourceFolders(IProject project) {
-		List<IFolder> sourceFolders = new ArrayList<IFolder>();
-
-		IPackageFragmentRoot[] sources = getSourceContainers(project);
-
-		for (IPackageFragmentRoot source : sources) {
-			if (source.getResource() instanceof IFolder) {
-				sourceFolders.add(((IFolder) source.getResource()));
-			}
-		}
-
-		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
-	}
-
 	public static IPackageFragmentRoot[] getSourceContainers(IProject project) {
 		IJavaProject jProject = JavaCore.create(project);
 		if (jProject == null)
@@ -261,6 +247,20 @@ public class ProjectUtil {
 			ProjectCorePlugin.logError(e);
 		}
 		return (IPackageFragmentRoot[]) list.toArray(new IPackageFragmentRoot[list.size()]);
+	}
+
+	public static IFolder[] getSourceFolders(IProject project) {
+		List<IFolder> sourceFolders = new ArrayList<IFolder>();
+
+		IPackageFragmentRoot[] sources = getSourceContainers(project);
+
+		for (IPackageFragmentRoot source : sources) {
+			if (source.getResource() instanceof IFolder) {
+				sourceFolders.add(((IFolder) source.getResource()));
+			}
+		}
+
+		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
 	}
 
 	public static boolean hasFacet(IProject project, IProjectFacet checkProjectFacet) {
@@ -396,6 +396,35 @@ public class ProjectUtil {
 		}
 
 		return false;
+	}
+
+	public static String removePluginSuffix(String string) {
+		if (string == null) {
+			return null;
+		}
+
+		String regex = null;
+
+		if (string.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+			regex = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX + "$";
+		}
+		else if (string.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+			regex = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX + "$";
+		}
+		else if (string.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+			regex = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX + "$";
+		}
+		else if (string.endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+			regex = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "$";
+		}
+		else if (string.endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+			regex = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX + "$";
+		}
+		else {
+			return string;
+		}
+
+		return string.replaceFirst(regex, "");
 	}
 
 	public static void setGenerateDD(IDataModel model, boolean generateDD) {

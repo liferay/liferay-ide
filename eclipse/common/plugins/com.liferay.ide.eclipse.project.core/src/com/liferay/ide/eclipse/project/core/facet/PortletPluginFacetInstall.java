@@ -61,7 +61,9 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 			String portletName = this.masterModel.getStringProperty(PORTLET_NAME);
 			
-			IPath newPortletPath = sdk.createNewPortlet(portletName, portletName, getRuntimeLocation());
+			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
+
+			IPath newPortletPath = sdk.createNewPortlet(portletName, displayName, getRuntimeLocation());
 			
 			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
 			
