@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.sdk.util;
 
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -76,7 +77,13 @@ public class SDKUtil {
 
 			new Version(version);
 
-			retval = true;
+			File sdkDir = new File(loc);
+
+			File portletsBuildXml = new File(sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD);
+			File hooksBuildXml = new File(sdkDir, ISDKConstants.HOOK_PLUGIN_ANT_BUILD);
+			File extBuildXml = new File(sdkDir, ISDKConstants.EXT_PLUGIN_ANT_BUILD);
+
+			retval = portletsBuildXml.exists() && hooksBuildXml.exists() && extBuildXml.exists();
 		}
 		catch (Exception e) {
 			// best effort we didn't find a valid location

@@ -401,6 +401,25 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
+
+	public boolean isValid() {
+		IPath sdkLocation = getLocation();
+
+		if (sdkLocation == null) {
+			return false;
+		}
+
+		if (!SDKUtil.isSDKSupported(sdkLocation.toOSString())) {
+			return false;
+		}
+
+		if (!SDKUtil.isValidSDKLocation(sdkLocation.toOSString())) {
+			return false;
+		}
+
+		return true;
+	}
+
 	// public String getRuntime() {
 	// return runtime;
 	// }

@@ -276,7 +276,13 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			}
 			else if (!CoreUtil.isNullOrEmpty(sdkVal.toString())) {
 				SDK sdk = SDKManager.getSDKByName(sdkVal.toString());
-				return sdk != null ? Status.OK_STATUS : ProjectCorePlugin.createErrorStatus("Liferay SDK is invalid.");
+
+				if (sdk == null || !sdk.isValid()) {
+					return ProjectCorePlugin.createErrorStatus("Liferay SDK is invalid.");
+				}
+				else {
+					return Status.OK_STATUS;
+				}
 			}
 		}
 		else if (FACET_RUNTIME.equals(propertyName)) {
