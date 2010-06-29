@@ -19,8 +19,8 @@ The portlet element contains the declarative data of a portlet.
 <!ELEMENT portlet (portlet-name, icon?, virtual-path?, struts-path?,
 configuration-path?, configuration-action-class?, indexer-class?,
 open-search-class?, scheduler-entry*, portlet-url-class?,
-friendly-url-mapper-class?, friendly-url-routes?, url-encoder-class?,
-portlet-data-handler-class?, portlet-layout-listener-class?,
+friendly-url-mapper-class?, friendly-url-mapping?, friendly-url-routes?,
+url-encoder-class?, portlet-data-handler-class?, portlet-layout-listener-class?,
 poller-processor-class?, pop-message-listener-class?,
 social-activity-interpreter-class?, social-request-interpreter-class?,
 webdav-storage-token?, webdav-storage-class?, xml-rpc-method-class?,
@@ -30,7 +30,7 @@ workflow-handler*, preferences-company-wide?, preferences-unique-per-layout?,
 preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
 show-portlet-inactive?, action-url-redirect?, restore-current-view?,
 maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
-scopeable?, user-principal-strategy?, private-request-attributes?,
+remoteable?, scopeable?, user-principal-strategy?, private-request-attributes?,
 private-session-attributes?, render-weight?, ajaxable?, header-portal-css*,
 header-portlet-css*, header-portal-javascript*, header-portlet-javascript*,
 footer-portal-css*, footer-portlet-css*, footer-portal-javascript*,
@@ -201,6 +201,14 @@ http://docs.liferay.com/portal/6.0/javadocs/portal-impl/com/liferay/portlet/mess
 http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portal/kernel/portlet/FriendlyURLMapper.html
 -->
 <!ELEMENT friendly-url-mapper-class (#PCDATA)>
+
+<!--
+The friendly-url-mapping specifies the mapping used to map a friendly URL prefix
+to a specific portlet. For example, the Message Boards portlet has the mapping
+"message_boards" and will map all friendly URL's that contains
+"/-/message_boards" to itself.
+-->
+<!ELEMENT friendly-url-mapping (#PCDATA)>
 
 <!--
 The friendly-url-routes points to the XML file that defines the friendly URL
@@ -518,6 +526,13 @@ page. If set to false, the portlet can only appear once on a page. The default
 value is false.
 -->
 <!ELEMENT instanceable (#PCDATA)>
+
+<!--
+Set the remoteable value to true if the portlet can be used remotely like in
+WSRP. If set to false, the portlet will not be available remotely. The default
+value is false.
+-->
+<!ELEMENT remoteable (#PCDATA)>
 
 <!--
 If the scopeable is set to true, an administrator will be able to configure the

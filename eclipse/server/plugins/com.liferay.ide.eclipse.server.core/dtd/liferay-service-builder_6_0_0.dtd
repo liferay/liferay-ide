@@ -382,16 +382,22 @@ generate removeByCompanyId and countByCompanyId.
 See com.liferay.portal.service.persistence.LayoutPersistenceImpl for a good
 example.
 
+The attribute case-sensitive is a boolean value and is only used if the column
+is a String value.
+
 The attribute comparator takes in the values =, !=, <, <=, >, >=, or LIKE and is
 used to compare this column.
 
-The attribute case-sensitive is a boolean value and is only used if the column
-is a String value.
+The arrayable-operator comparator takes in the values AND or OR and will
+generate an additional finder where the column takes in an array instead of a
+single value. The values of the array will combined with either an AND or OR
+operator.
 -->
 <!ATTLIST finder-column
 	name CDATA #REQUIRED
 	case-sensitive CDATA #IMPLIED
 	comparator CDATA #IMPLIED
+	arrayable-operator CDATA #IMPLIED
 >
 
 <!--
