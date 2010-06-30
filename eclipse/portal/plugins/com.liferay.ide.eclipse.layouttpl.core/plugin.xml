@@ -124,6 +124,7 @@
             displayName="Liferay Layout Template"
             facetId="liferay.layouttpl"
             facetedProjectTemplateId="liferay.layouttpl.template"
+            menuIndex="40"
             shortName="layouttpl">
       </liferayProjectDefinition>
    </extension>

@@ -14,6 +14,8 @@ public abstract class AbstractProjectDefinition implements IProjectDefinition {
 
 	protected String facetId;
 
+	protected int menuIndex;
+
 	protected IProjectFacet projectFacet;
 
 	protected String shortName;
@@ -42,6 +44,10 @@ public abstract class AbstractProjectDefinition implements IProjectDefinition {
 		return facetId;
 	}
 
+	public int getMenuIndex() {
+		return menuIndex;
+	}
+
 	public String getShortName() {
 		return shortName;
 	}
@@ -58,6 +64,10 @@ public abstract class AbstractProjectDefinition implements IProjectDefinition {
 	public void setFacetId(String facetId) {
 		this.facetId = facetId;
 		this.projectFacet = ProjectFacetsManager.getProjectFacet(facetId);
+	}
+
+	public void setMenuIndex(int menuIndex) {
+		this.menuIndex = menuIndex;
 	}
 
 	public void setShortName(String shortName) {

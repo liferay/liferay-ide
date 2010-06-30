@@ -486,6 +486,7 @@
             displayName="Liferay Portlet"
             facetId="liferay.portlet"
             facetedProjectTemplateId="liferay.portlet.template"
+            menuIndex="10"
             shortName="portlet">
       </liferayProjectDefinition>
       <liferayProjectDefinition
@@ -493,6 +494,7 @@
             displayName="Liferay Hook"
             facetId="liferay.hook"
             facetedProjectTemplateId="liferay.hook.template"
+            menuIndex="20"
             shortName="hook">
       </liferayProjectDefinition>
       <liferayProjectDefinition
@@ -500,6 +502,7 @@
             displayName="Liferay Ext"
             facetId="liferay.ext"
             facetedProjectTemplateId="liferay.ext.template"
+            menuIndex="30"
             shortName="ext">
       </liferayProjectDefinition>
    </extension>

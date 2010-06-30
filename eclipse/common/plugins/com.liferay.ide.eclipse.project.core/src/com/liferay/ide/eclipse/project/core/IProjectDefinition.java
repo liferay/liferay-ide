@@ -17,6 +17,8 @@ public interface IProjectDefinition {
 
 	public String getFacetId();
 
+	public int getMenuIndex();
+
 	public String getShortName();
 
 	public void setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject);

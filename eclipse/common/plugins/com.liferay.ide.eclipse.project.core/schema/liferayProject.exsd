@@ -87,6 +87,13 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="menuIndex" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

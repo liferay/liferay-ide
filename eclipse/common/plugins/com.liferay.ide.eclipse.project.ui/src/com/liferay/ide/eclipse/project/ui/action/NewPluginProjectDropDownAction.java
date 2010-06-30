@@ -22,6 +22,9 @@ import com.liferay.ide.eclipse.ui.action.NewWizardAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -44,6 +47,16 @@ import org.eclipse.ui.PlatformUI;
  * @author Greg Amerson
  */
 public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2 {
+
+	private final class ProjectDefComparator implements Comparator<IProjectDefinition> {
+
+		public int compare(IProjectDefinition o1, IProjectDefinition o2) {
+			int index1 = o1.getMenuIndex();
+			int index2 = o2.getMenuIndex();
+
+			return index1 < index2 ? -1 : index1 > index2 ? 1 : 0;
+		}
+	}
 
 	protected final static String PL_NEW = "newWizards"; //$NON-NLS-1$
 
@@ -84,6 +97,10 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 					containers.add(new NewWizardAction(element));
 
 					IProjectDefinition[] projectDefinitions = ProjectCorePlugin.getProjectDefinitions();
+
+					List<IProjectDefinition> projectDefList = Arrays.asList(projectDefinitions);
+
+					Collections.sort(projectDefList, new ProjectDefComparator());
 
 					for (IProjectDefinition projectDef : projectDefinitions) {
 						NewWizardAction wizardAction = new NewWizardAction(element);
@@ -158,23 +175,24 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	private String[] getTypes(IConfigurationElement element) {
-		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
-
-		if (classElements.length > 0) {
-			for (IConfigurationElement classElement : classElements) {
-				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
-
-				for (IConfigurationElement paramElement : paramElements) {
-					if ("types".equals(paramElement.getAttribute(TAG_NAME))) {
-						return paramElement.getAttribute(TAG_VALUE).split(",");
-					}
-				}
-			}
-		}
-
-		return new String[0];
-	}
+	// private String[] getTypes(IConfigurationElement element) {
+	// IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
+	//
+	// if (classElements.length > 0) {
+	// for (IConfigurationElement classElement : classElements) {
+	// IConfigurationElement[] paramElements =
+	// classElement.getChildren(TAG_PARAMETER);
+	//
+	// for (IConfigurationElement paramElement : paramElements) {
+	// if ("types".equals(paramElement.getAttribute(TAG_NAME))) {
+	// return paramElement.getAttribute(TAG_VALUE).split(",");
+	// }
+	// }
+	// }
+	// }
+	//
+	// return new String[0];
+	// }
 
 	private boolean isProjectWizard(IConfigurationElement element) {
 		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);

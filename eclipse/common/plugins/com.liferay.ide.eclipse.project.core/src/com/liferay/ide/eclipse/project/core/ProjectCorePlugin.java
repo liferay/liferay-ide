@@ -121,6 +121,21 @@ public class ProjectCorePlugin extends CorePlugin {
 						projectDefinition.setDisplayName(element.getAttribute("displayName"));
 						projectDefinition.setFacetedProjectTemplateId(element.getAttribute("facetedProjectTemplateId"));
 
+						int menuIndex = Integer.MAX_VALUE;
+
+						try {
+							String intVal = element.getAttribute("menuIndex");
+
+							if (intVal != null) {
+								menuIndex = Integer.parseInt(intVal);
+							}
+						}
+						catch (Exception e) {
+							ProjectCorePlugin.logError("Error reading project definition.", e);
+						}
+
+						projectDefinition.setMenuIndex(menuIndex);
+
 						definitions.add(projectDefinition);
 					}
 				}
