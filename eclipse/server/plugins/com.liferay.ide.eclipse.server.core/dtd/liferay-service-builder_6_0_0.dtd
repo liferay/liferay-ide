@@ -253,6 +253,11 @@ the id-param value (stored in /sql/sequences.sql). This sequence is then
 accessed to generate a unique identifier whenever an insert occurs. This
 implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
 
+The filter-primary value specifies the column to use as the primary key column
+when using filter finders. Only one column should ever have this value set to
+true. If no column has this set to true, then the default primary column be
+used.
+
 The convert-null value specifies whether or not the column value is
 automatically converted to a non null value if it is null. This only applies if
 the type value is String. This is particularly useful if your entity is
@@ -267,6 +272,7 @@ different values for different locales. The default value is false.
 	db-name CDATA #IMPLIED
 	type CDATA #REQUIRED
 	primary CDATA #IMPLIED
+	filter-primary CDATA #IMPLIED
 	entity CDATA #IMPLIED
 	mapping-key CDATA #IMPLIED
 	mapping-table CDATA #IMPLIED
