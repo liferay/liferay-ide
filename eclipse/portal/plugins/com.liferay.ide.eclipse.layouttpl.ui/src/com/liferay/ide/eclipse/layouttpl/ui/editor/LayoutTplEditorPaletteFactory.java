@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.layouttpl.ui.editor;
 
 import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.MarqueeToolEntry;
@@ -54,12 +55,19 @@ public class LayoutTplEditorPaletteFactory {
 
 		PaletteGroup group = new PaletteGroup("");
 
+		ImageDescriptor desc =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png"));
+
 		CombinedTemplateCreationEntry component =
 			new CombinedTemplateCreationEntry(
 				"Portlet Column", "Create a portlet column", PortletColumn.class,
-				new SimpleFactory(PortletColumn.class),
-				ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png")),
-				ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png")));
+				new SimpleFactory(PortletColumn.class), desc, desc);
+
+		group.add(component);
+
+		component =
+			new CombinedTemplateCreationEntry("Portlet Row", "Create a row", PortletLayout.class, new SimpleFactory(
+				PortletLayout.class), desc, desc);
 
 		group.add(component);
 

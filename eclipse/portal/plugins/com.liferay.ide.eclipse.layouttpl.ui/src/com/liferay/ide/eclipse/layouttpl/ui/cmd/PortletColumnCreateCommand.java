@@ -23,6 +23,9 @@ import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
 
+/**
+ * @author Greg Amerson
+ */
 public class PortletColumnCreateCommand extends Command {
 
 	protected PortletColumn newColumn;
@@ -43,31 +46,33 @@ public class PortletColumnCreateCommand extends Command {
 	}
 
 	public void execute() {
-		// newColumn.setLocation(bounds.getLocation());
-
-		// Dimension size = bounds.getSize();
-		// if (size.width > 0 && size.height > 0)
-		// newColumn.setSize(size);
 		redo();
 	}
 
 	public void redo() {
-		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.rowIndex > -1) {
+		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.columnIndex == -1) {
 			PortletLayout portletLayout = new PortletLayout();
 			newColumn.setParent(portletLayout);
 			portletLayout.addColumn(newColumn);
 			portletLayout.setParent(diagram);
 			diagram.addRow(portletLayout, layoutConstraint.rowIndex);
 		}
-		else if (layoutConstraint.columnIndex > -1) {
-			ModelElement portletLayout = diagram.getRows().get(layoutConstraint.columnIndex);
-			if (portletLayout instanceof PortletLayout) {
-				PortletLayout existingPortletLayout = (PortletLayout) portletLayout;
-				newColumn.setParent(existingPortletLayout);
-				existingPortletLayout.addColumn(newColumn, layoutConstraint.columnIndex);
+		else if (layoutConstraint.rowIndex > -1 && layoutConstraint.columnIndex > -1) {
+			if (layoutConstraint.refColumn != null) {
+				layoutConstraint.refColumn.setWeight(layoutConstraint.weight);
+			}
+
+			newColumn.setWeight(layoutConstraint.weight);
+
+			// get the row that the column will be inserted into
+			ModelElement row = diagram.getRows().get(layoutConstraint.rowIndex);
+			PortletLayout portletLayout = (PortletLayout) row;
+
+			if (row != null) {
+				newColumn.setParent(portletLayout);
+				portletLayout.addColumn(newColumn, layoutConstraint.columnIndex);
 			}
 		}
-		// parent.addColumn(newColumn);
 	}
 
 	public void undo() {
@@ -78,6 +83,9 @@ public class PortletColumnCreateCommand extends Command {
 					diagram.removeRow(portletLayout);
 				}
 			}
+		}
+		else {
+			System.out.println("UNDO");
 		}
 	}
 

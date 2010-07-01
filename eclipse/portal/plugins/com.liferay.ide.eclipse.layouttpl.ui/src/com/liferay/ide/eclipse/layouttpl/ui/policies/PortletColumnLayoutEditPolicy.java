@@ -38,7 +38,7 @@ public class PortletColumnLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		System.out.println("ColumnLayoutEditPolicy.createChangeConstraintCommand");
+		System.out.println("PortletColumnLayoutEditPolicy.createChangeConstraintCommand");
 		return null;
 	}
 

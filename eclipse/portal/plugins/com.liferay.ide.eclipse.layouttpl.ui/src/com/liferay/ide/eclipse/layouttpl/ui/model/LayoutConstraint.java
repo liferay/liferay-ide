@@ -23,10 +23,19 @@ public class LayoutConstraint {
 
 	public int columnIndex = -1;
 
+	public int weight = PortletColumn.DEFAULT_WEIGHT;
+
+	public PortletColumn refColumn = null;
+
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof LayoutConstraint && this.rowIndex == ((LayoutConstraint) obj).rowIndex &&
-			this.columnIndex == ((LayoutConstraint) obj).columnIndex;
+		if (!(obj instanceof LayoutConstraint)) {
+			return false;
+		}
+
+		LayoutConstraint constraint = (LayoutConstraint) obj;
+		return this.rowIndex == constraint.rowIndex && this.columnIndex == constraint.columnIndex &&
+			this.weight == constraint.weight && this.refColumn == constraint.refColumn;
 	}
 
 

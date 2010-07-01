@@ -14,21 +14,27 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.swt.graphics.Image;
 
 public class PortletColumn extends ModelElement {
 
-	public static final String SIZE_PROP = "PortletColumn.size";
-	public static final String LOCATION_PROP = "PortletColumn.location";
+	public static final String WEIGHT_PROP = "PortletColumn.weight";
 
-	protected Point location;
+	public static final int DEFAULT_WEIGHT = -1;
 
-	protected Dimension size;
+	// public static final String SIZE_PROP = "PortletColumn.size";
+	// public static final String LOCATION_PROP = "PortletColumn.location";
+
+	protected int weight;
+
+	// protected Point location;
+
+	// protected Dimension size;
 
 	public PortletColumn() {
 		super();
+
+		this.weight = DEFAULT_WEIGHT;
 	}
 
 	public Image getIcon() {
@@ -37,32 +43,42 @@ public class PortletColumn extends ModelElement {
 		return null;
 	}
 
-	public void setLocation(Point newLocation) {
-		if (newLocation == null) {
-			throw new IllegalArgumentException();
-		}
-		location.setLocation(newLocation);
-		firePropertyChange(LOCATION_PROP, null, location);
-	}
+	// public void setLocation(Point newLocation) {
+	// if (newLocation == null) {
+	// throw new IllegalArgumentException();
+	// }
+	// location.setLocation(newLocation);
+	// firePropertyChange(LOCATION_PROP, null, location);
+	// }
 
-	public void setSize(Dimension newSize) {
-		if (newSize != null) {
-			size.setSize(newSize);
-			firePropertyChange(SIZE_PROP, null, size);
-		}
-	}
+	// public void setSize(Dimension newSize) {
+	// if (newSize != null) {
+	// size.setSize(newSize);
+	// firePropertyChange(SIZE_PROP, null, size);
+	// }
+	// }
 
-	public Point getLocation() {
-		return location.getCopy();
-	}
+	// public Point getLocation() {
+	// return location.getCopy();
+	// }
 
-	public Dimension getSize() {
-		return size.getCopy();
-	}
+	// public Dimension getSize() {
+	// return size.getCopy();
+	// }
 
 
 	@Override
 	public void removeChild(ModelElement child) {
+	}
+
+	public int getWeight() {
+		return weight;
+	}
+
+	public void setWeight(int weight) {
+		int oldValue = this.weight;
+		this.weight = weight;
+		firePropertyChange(WEIGHT_PROP, oldValue, this.weight);
 	}
 
 }

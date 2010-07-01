@@ -15,16 +15,18 @@
 package com.liferay.ide.eclipse.layouttpl.ui.policies;
 
 import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletColumnCreateCommand;
+import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletLayoutCreateCommand;
 import com.liferay.ide.eclipse.layouttpl.ui.draw2d.FeedbackRoundedRectangle;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutConstraint;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
+import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.LayoutTplDiagramEditPart;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.PortletLayoutEditPart;
+import com.liferay.ide.eclipse.layouttpl.ui.util.LayoutTplUtil;
 
 import java.util.List;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -57,33 +59,46 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 
 	protected IFigure createLayoutFeedbackFigure(Request request) {
 
-		if (request instanceof CreateRequest) {
+		if (LayoutTplUtil.isCreateRequest(PortletColumn.class, request) ||
+			LayoutTplUtil.isCreateRequest(PortletLayout.class, request)) {
 			LayoutConstraint constraint = (LayoutConstraint) getConstraintFor((CreateRequest) request);
 
 			if (constraint != null) {
 				RoundedRectangle rRect = new FeedbackRoundedRectangle();
-				rRect.setBackgroundColor(ColorConstants.white);
 				rRect.setSize(getContainerWidth(), DEFAULT_FEEDBACK_HEIGHT);
-				rRect.setAlpha(128);
 
+				List parts = getHost().getChildren();
 				if (constraint.rowIndex == 0) {
-					rRect.setLocation(new Point(
-						LayoutTplDiagramEditPart.DIAGRAM_MARGIN, LayoutTplDiagramEditPart.DIAGRAM_MARGIN));
+					int xOffset = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+					int yOffset = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+
+					if (parts.size() > 0) {
+						yOffset /= 2;
+					}
+
+					rRect.setLocation(new Point(xOffset, yOffset));
 				}
 				else if (constraint.equals(LayoutConstraint.EMPTY)) {
-					List parts = getHost().getChildren();
 					Rectangle r = new Rectangle();
 					for (Object part : parts) {
 						GraphicalEditPart editPart = (GraphicalEditPart) part;
 						r.union(editPart.getFigure().getBounds());
 					}
+					Point point = new Point(r.x, r.y + r.height);
+					if (point.x < LayoutTplDiagramEditPart.DIAGRAM_MARGIN) {
+						point.x = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+					}
+					if (point.y < LayoutTplDiagramEditPart.DIAGRAM_MARGIN) {
+						point.y = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+					}
 
-					rRect.setLocation(new Point(r.x, r.y + r.height));
+					rRect.setLocation(point);
 				}
 
 				return rRect;
 			}
 		}
+
 
 		return null;
 	}
@@ -101,6 +116,7 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 		super.eraseLayoutTargetFeedback(request);
 
 		if (layoutFeedbackFigure != null) {
+
 			removeFeedback(layoutFeedbackFigure);
 			getFeedbackLayer().repaint();
 			layoutFeedbackFigure = null;
@@ -158,6 +174,12 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 				(LayoutConstraint) getConstraintFor(request));
 		}
 
+		if (childClass == PortletLayout.class) {
+			return new PortletLayoutCreateCommand(
+				(PortletLayout) request.getNewObject(), (LayoutTplDiagram) getHost().getModel(),
+				(LayoutConstraint) getConstraintFor(request));
+		}
+
 		return null;
 	}
 
@@ -169,6 +191,10 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 		IFigure feedback = createLayoutFeedbackFigure(request);
 
 		if (feedback != null && !feedback.equals(layoutFeedbackFigure)) {
+			if (layoutFeedbackFigure != null) {
+				removeFeedback(layoutFeedbackFigure);
+			}
+
 			layoutFeedbackFigure = feedback;
 			addFeedback(layoutFeedbackFigure);
 		}

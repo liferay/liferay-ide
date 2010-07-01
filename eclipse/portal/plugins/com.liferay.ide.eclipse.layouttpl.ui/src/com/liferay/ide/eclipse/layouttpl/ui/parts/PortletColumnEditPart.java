@@ -31,9 +31,12 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
+/**
+ * @author Greg Amerson
+ */
 public class PortletColumnEditPart extends BaseGraphicalEditPart {
 
-	private static final int DEFAULT_COLUMN_HEIGHT = 100;
+	public static final int DEFAULT_COLUMN_HEIGHT = 100;
 
 	public PortletColumnEditPart() {
 		super();
@@ -41,7 +44,8 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart {
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
-		if (PortletColumn.SIZE_PROP.equals(prop) || PortletColumn.LOCATION_PROP.equals(prop)) {
+
+		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
 			refreshVisuals();
 		}
 	}
@@ -72,16 +76,28 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart {
 		}
 	}
 
-	protected PortletColumn getCastedModel() {
+	public PortletColumn getCastedModel() {
 		return (PortletColumn) getModel();
 	}
 
 	protected void refreshVisuals() {
-		// ColumnFigure columnFigure = (ColumnFigure) getFigure();
-		// columnFigure.setPreferredSize(150, 100);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd.heightHint = DEFAULT_COLUMN_HEIGHT;
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
+		Object constraint = ((GraphicalEditPart) getParent()).getFigure().getLayoutManager().getConstraint(getFigure());
+		if (constraint instanceof GridData) {
+			GridData gd = (GridData) constraint;
+
+			if (gd.heightHint == SWT.DEFAULT) {
+				gd.heightHint = DEFAULT_COLUMN_HEIGHT;
+			}
+
+			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
+		}
+		else {
+			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+			gd.heightHint = DEFAULT_COLUMN_HEIGHT;
+			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
+		}
+
 	}
+
 
 }

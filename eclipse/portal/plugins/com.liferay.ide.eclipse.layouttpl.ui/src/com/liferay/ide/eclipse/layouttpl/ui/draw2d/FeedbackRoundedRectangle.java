@@ -14,10 +14,17 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.draw2d;
 
+import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 
 
 public class FeedbackRoundedRectangle extends RoundedRectangle {
+
+	public FeedbackRoundedRectangle() {
+		super();
+		setBackgroundColor(ColorConstants.white);
+		setAlpha(128);
+	}
 
 	@Override
 	public boolean equals(Object obj) {

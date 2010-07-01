@@ -14,26 +14,44 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-public class PortletLayout extends ModelElement {
+public class PortletLayout extends ModelElement implements PropertyChangeListener {
 
 	public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded";
 
 	public static final String COLUMN_REMOVED_PROP = "PortletLayout.ColumnRemoved";
 
+	public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged";
+
+	protected List<ModelElement> columns = new ArrayList<ModelElement>();
+
 	public PortletLayout() {
 		super();
 	}
 
-	protected List<ModelElement> columns = new ArrayList<ModelElement>();
-
 	public boolean addColumn(PortletColumn newColumn) {
-		if (newColumn != null && columns.add(newColumn)) {
+		return addColumn(newColumn, -1);
+	}
+
+	public boolean addColumn(PortletColumn newColumn, int index) {
+		if (newColumn != null) {
+			if (index < 0) {
+				columns.add(newColumn);
+			}
+			else {
+				columns.add(index, newColumn);
+			}
+
+			newColumn.addPropertyChangeListener(this);
+
 			firePropertyChange(COLUMN_ADDED_PROP, null, newColumn);
+
 			return true;
 		}
 
@@ -42,15 +60,6 @@ public class PortletLayout extends ModelElement {
 
 	public List<ModelElement> getColumns() {
 		return columns;
-	}
-
-	public boolean removeColumn(PortletColumn existingColumn) {
-		if (existingColumn != null && columns.remove(existingColumn)) {
-			firePropertyChange(COLUMN_REMOVED_PROP, null, existingColumn);
-			return true;
-		}
-
-		return false;
 	}
 
 	public Image getIcon() {
@@ -66,9 +75,21 @@ public class PortletLayout extends ModelElement {
 		}
 	}
 
+	public boolean removeColumn(PortletColumn existingColumn) {
+		if (existingColumn != null && columns.remove(existingColumn)) {
+			firePropertyChange(COLUMN_REMOVED_PROP, null, existingColumn);
+			return true;
+		}
 
-	public void addColumn(PortletColumn newColumn, int index) {
-		columns.add(index, newColumn);
+		return false;
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		String prop = evt.getPropertyName();
+
+		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
+			firePropertyChange(CHILD_COLUMN_WEIGHT_CHANGED_PROP, null, evt.getSource());
+		}
 	}
 
 }
