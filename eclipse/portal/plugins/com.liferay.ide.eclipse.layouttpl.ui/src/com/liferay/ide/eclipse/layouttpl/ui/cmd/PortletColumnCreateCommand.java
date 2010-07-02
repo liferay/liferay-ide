@@ -50,14 +50,18 @@ public class PortletColumnCreateCommand extends Command {
 	}
 
 	public void redo() {
-		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.columnIndex == -1) {
+		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.newColumnIndex == -1) {
 			PortletLayout portletLayout = new PortletLayout();
 			newColumn.setParent(portletLayout);
 			portletLayout.addColumn(newColumn);
 			portletLayout.setParent(diagram);
-			diagram.addRow(portletLayout, layoutConstraint.rowIndex);
+			diagram.addRow(portletLayout, layoutConstraint.newRowIndex);
 		}
-		else if (layoutConstraint.rowIndex > -1 && layoutConstraint.columnIndex > -1) {
+		else if (layoutConstraint.rowIndex > -1 && /*
+													 * layoutConstraint.newRowIndex
+													 * > -1 &&
+													 */
+			layoutConstraint.newColumnIndex > -1) {
 			if (layoutConstraint.refColumn != null) {
 				layoutConstraint.refColumn.setWeight(layoutConstraint.weight);
 			}
@@ -70,7 +74,7 @@ public class PortletColumnCreateCommand extends Command {
 
 			if (row != null) {
 				newColumn.setParent(portletLayout);
-				portletLayout.addColumn(newColumn, layoutConstraint.columnIndex);
+				portletLayout.addColumn(newColumn, layoutConstraint.newColumnIndex);
 			}
 		}
 	}

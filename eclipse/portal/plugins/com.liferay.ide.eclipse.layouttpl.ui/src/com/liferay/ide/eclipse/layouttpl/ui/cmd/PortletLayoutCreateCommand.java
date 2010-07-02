@@ -48,17 +48,22 @@ public class PortletLayoutCreateCommand extends Command {
 	public void redo() {
 		if (layoutConstraint.equals(LayoutConstraint.EMPTY)) {
 			newLayout.setParent(diagram);
-			PortletColumn newColumn = new PortletColumn();
-			newLayout.addColumn(newColumn);
+			if (newLayout.getColumns().size() == 0) {
+				PortletColumn newColumn = new PortletColumn();
+				newLayout.addColumn(newColumn);
+			}
 			newLayout.setParent(diagram);
-			diagram.addRow(newLayout, layoutConstraint.rowIndex);
+			diagram.addRow(newLayout, layoutConstraint.newRowIndex);
 		}
-		else if (layoutConstraint.rowIndex > -1 && layoutConstraint.columnIndex > -1) {
+		else if (layoutConstraint.rowIndex > -1 && layoutConstraint.newRowIndex > -1) {
+
 			newLayout.setParent(diagram);
-			PortletColumn newColumn = new PortletColumn();
-			newLayout.addColumn(newColumn);
+			if (newLayout.getColumns().size() == 0) {
+				PortletColumn newColumn = new PortletColumn();
+				newLayout.addColumn(newColumn);
+			}
 			newLayout.setParent(diagram);
-			diagram.addRow(newLayout, layoutConstraint.rowIndex);
+			diagram.addRow(newLayout, layoutConstraint.newRowIndex);
 		}
 	}
 

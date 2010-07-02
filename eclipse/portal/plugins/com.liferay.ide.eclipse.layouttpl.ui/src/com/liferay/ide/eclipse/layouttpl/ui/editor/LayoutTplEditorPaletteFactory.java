@@ -22,7 +22,7 @@ import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.MarqueeToolEntry;
 import org.eclipse.gef.palette.PaletteContainer;
-import org.eclipse.gef.palette.PaletteGroup;
+import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.PaletteToolbar;
 import org.eclipse.gef.palette.PanningSelectionToolEntry;
@@ -53,7 +53,7 @@ public class LayoutTplEditorPaletteFactory {
 		PaletteRoot palette = new PaletteRoot();
 		palette.add(createToolsGroup(palette));
 
-		PaletteGroup group = new PaletteGroup("");
+		PaletteDrawer group = new PaletteDrawer("Layout");
 
 		ImageDescriptor desc =
 			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png"));
@@ -65,13 +65,31 @@ public class LayoutTplEditorPaletteFactory {
 
 		group.add(component);
 
-		component =
+		CombinedTemplateCreationEntry component2 =
 			new CombinedTemplateCreationEntry("Portlet Row", "Create a row", PortletLayout.class, new SimpleFactory(
 				PortletLayout.class), desc, desc);
 
-		group.add(component);
+		group.add(component2);
 
 		palette.add(group);
+
+		PaletteDrawer group2 = new PaletteDrawer("Templates");
+
+		CombinedTemplateCreationEntry component3 =
+			new CombinedTemplateCreationEntry(
+				"2 Column Row", "Create a 2 column row", PortletLayout.class, new PortletLayoutFactory(2),
+				desc, desc);
+
+		group2.add(component3);
+
+		CombinedTemplateCreationEntry component4 =
+			new CombinedTemplateCreationEntry(
+				"3 Column Row", "Create a 3 column row", PortletLayout.class, new PortletLayoutFactory(3),
+				desc, desc);
+
+		group2.add(component4);
+
+		palette.add(group2);
 
 		return palette;
 	}

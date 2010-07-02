@@ -56,7 +56,7 @@ public class PortletColumnChangeConstraintCommand extends Command {
 		if (currentParent.equals(newParent)) {
 			int currentColumnIndex = LayoutTplUtil.getColumnIndex(currentParent, column);
 
-			if (currentColumnIndex != layoutConstraint.columnIndex) {
+			if (currentColumnIndex != layoutConstraint.newColumnIndex) {
 
 			}
 

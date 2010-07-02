@@ -46,6 +46,22 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 
 		if (LayoutTplDiagram.ROW_ADDED_PROP.equals(prop) || LayoutTplDiagram.ROW_REMOVED_PROP.equals(prop)) {
 			refreshChildren();
+			List rows = getChildren();
+
+			if (rows.size() > 0) {
+				for (Object row : rows) {
+					AbstractEditPart rowPart = (AbstractEditPart) row;
+					List cols = rowPart.getChildren();
+
+					if (cols.size() > 0) {
+						for (Object col : cols) {
+							((AbstractEditPart) col).refresh();
+						}
+					}
+
+					((AbstractEditPart) row).refresh();
+				}
+			}
 			refreshVisuals();
 		}
 	}

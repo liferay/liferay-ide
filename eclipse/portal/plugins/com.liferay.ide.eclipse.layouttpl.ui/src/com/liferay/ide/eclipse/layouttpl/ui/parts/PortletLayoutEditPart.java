@@ -45,6 +45,8 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 	protected IFigure createFigure() {
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.horizontalSpacing = COLUMN_SPACING;
+		gridLayout.marginHeight = 0;
+		gridLayout.verticalSpacing = 0;
 
 		layoutPanel = new PortletLayoutPanel();
 		layoutPanel.setOpaque(true);
@@ -86,13 +88,17 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 		return (PortletLayoutPanel) getFigure();
 	}
 
+	public static GridData createGridData() {
+		return new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
 
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, layoutPanel, new GridData(
-			SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd = createGridData();
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, layoutPanel, gd);
 
 		List rows = getParent().getChildren();
 
@@ -130,10 +136,11 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 				// if (column.getWeight() == PortletColumn.DEFAULT_WEIGHT) {
 				// column.setWeight(100);
 				// }
-				GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+				GridData rowData = PortletColumnEditPart.createGridData();
+
 				double percent = column.getWeight() / 100d;
-				gd.widthHint = (int) (percent * rowWidth) - (COLUMN_SPACING * 2);
-				this.setLayoutConstraint(portletColumnPart, portletColumnPart.getFigure(), gd);
+				rowData.widthHint = (int) (percent * rowWidth) - (COLUMN_SPACING * 2);
+				this.setLayoutConstraint(portletColumnPart, portletColumnPart.getFigure(), rowData);
 			}
 		}
 

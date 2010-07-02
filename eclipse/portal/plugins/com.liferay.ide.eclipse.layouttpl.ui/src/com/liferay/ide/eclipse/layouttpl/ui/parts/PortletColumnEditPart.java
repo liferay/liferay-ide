@@ -92,12 +92,16 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart {
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
 		}
 		else {
-			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-			gd.heightHint = DEFAULT_COLUMN_HEIGHT;
+			GridData gd = createGridData();
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
 		}
 
 	}
 
+	public static GridData createGridData() {
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd.heightHint = DEFAULT_COLUMN_HEIGHT;
+		return gd;
+	}
 
 }

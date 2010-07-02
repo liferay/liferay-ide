@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.policies;
 
 import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletColumnCreateCommand;
@@ -40,7 +41,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
-
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("unchecked")
 public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	public static final int DEFAULT_FEEDBACK_HEIGHT = 20;
@@ -58,49 +62,66 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 	}
 
 	protected IFigure createLayoutFeedbackFigure(Request request) {
+		LayoutConstraint constraint = (LayoutConstraint) getConstraintFor((CreateRequest) request);
 
-		if (LayoutTplUtil.isCreateRequest(PortletColumn.class, request) ||
-			LayoutTplUtil.isCreateRequest(PortletLayout.class, request)) {
-			LayoutConstraint constraint = (LayoutConstraint) getConstraintFor((CreateRequest) request);
+		if (constraint == null) {
+			return null;
+		}
 
-			if (constraint != null) {
-				RoundedRectangle rRect = new FeedbackRoundedRectangle();
-				rRect.setSize(getContainerWidth(), DEFAULT_FEEDBACK_HEIGHT);
+		boolean isRowRequest = LayoutTplUtil.isCreateRequest(PortletLayout.class, request);
+		boolean isColumnRequest = LayoutTplUtil.isCreateRequest(PortletColumn.class, request);
+		RoundedRectangle feedback = new FeedbackRoundedRectangle();
 
-				List parts = getHost().getChildren();
-				if (constraint.rowIndex == 0) {
-					int xOffset = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
-					int yOffset = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+		if (isRowRequest || isColumnRequest) {
+			feedback.setSize(getContainerWidth(), DEFAULT_FEEDBACK_HEIGHT);
+			List parts = getHost().getChildren();
 
-					if (parts.size() > 0) {
-						yOffset /= 2;
-					}
+			if (constraint.equals(LayoutConstraint.EMPTY)) {
+				Rectangle r = new Rectangle();
 
-					rRect.setLocation(new Point(xOffset, yOffset));
-				}
-				else if (constraint.equals(LayoutConstraint.EMPTY)) {
-					Rectangle r = new Rectangle();
+				if (parts.size() > 0) {
 					for (Object part : parts) {
 						GraphicalEditPart editPart = (GraphicalEditPart) part;
 						r.union(editPart.getFigure().getBounds());
 					}
-					Point point = new Point(r.x, r.y + r.height);
-					if (point.x < LayoutTplDiagramEditPart.DIAGRAM_MARGIN) {
-						point.x = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
-					}
-					if (point.y < LayoutTplDiagramEditPart.DIAGRAM_MARGIN) {
-						point.y = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
-					}
-
-					rRect.setLocation(point);
 				}
 
-				return rRect;
+				Point point = new Point(r.x, r.y + r.height);
+
+				if (point.x < LayoutTplDiagramEditPart.DIAGRAM_MARGIN) {
+					point.x = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+				}
+
+				if (point.y < LayoutTplDiagramEditPart.DIAGRAM_MARGIN) {
+					point.y = LayoutTplDiagramEditPart.DIAGRAM_MARGIN;
+				}
+
+				if (parts.size() > 0) {
+					point.y -= (feedback.getSize().height / 2);
+				}
+
+				feedback.setLocation(point);
 			}
+			else if (constraint.newRowIndex == 0) {
+				Rectangle r = new Rectangle();
+
+				if (parts.size() > 0) {
+					GraphicalEditPart editPart = (GraphicalEditPart) parts.get(0);
+					r = editPart.getFigure().getBounds().getCopy();
+					r.y -= (feedback.getSize().height / 2);
+				}
+
+				Point point = new Point(r.x, r.y);
+
+				feedback.setLocation(point);
+			}
+
+		}
+		else {
+			feedback = null;
 		}
 
-
-		return null;
+		return feedback;
 	}
 
 	protected int getContainerWidth() {
@@ -116,14 +137,12 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 		super.eraseLayoutTargetFeedback(request);
 
 		if (layoutFeedbackFigure != null) {
-
 			removeFeedback(layoutFeedbackFigure);
 			getFeedbackLayer().repaint();
 			layoutFeedbackFigure = null;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Object getConstraintFor(Point point) {
 		LayoutConstraint constraint = null;
@@ -138,7 +157,7 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 			int numParts = parts.size();
 
 			if (numParts > 0) {
-				constraint.rowIndex = 0;
+				constraint.newRowIndex = 0;
 			}
 		}
 		else {
@@ -153,7 +172,7 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 
 			if (point.y > r.height) {
 				constraint = new LayoutConstraint();
-				constraint.rowIndex = -1;
+				constraint.newRowIndex = -1;
 			}
 		}
 
@@ -168,6 +187,7 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
 		Object childClass = request.getNewObjectType();
+
 		if (childClass == PortletColumn.class) {
 			return new PortletColumnCreateCommand(
 				(PortletColumn) request.getNewObject(), (LayoutTplDiagram) getHost().getModel(),
@@ -185,19 +205,20 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 
 	@Override
 	protected void showLayoutTargetFeedback(Request request) {
-		// ColumnLayoutEditPolicy
 		super.showLayoutTargetFeedback(request);
 
-		IFigure feedback = createLayoutFeedbackFigure(request);
+		// if (shouldCreateLayoutFeedbackFigure(request)) {
+			IFigure feedback = createLayoutFeedbackFigure(request);
 
-		if (feedback != null && !feedback.equals(layoutFeedbackFigure)) {
-			if (layoutFeedbackFigure != null) {
-				removeFeedback(layoutFeedbackFigure);
+			if (feedback != null && !feedback.equals(layoutFeedbackFigure)) {
+				if (layoutFeedbackFigure != null) {
+					removeFeedback(layoutFeedbackFigure);
+				}
+
+				layoutFeedbackFigure = feedback;
+				addFeedback(layoutFeedbackFigure);
 			}
-
-			layoutFeedbackFigure = feedback;
-			addFeedback(layoutFeedbackFigure);
-		}
+		// }
 	}
 
 	@Override
