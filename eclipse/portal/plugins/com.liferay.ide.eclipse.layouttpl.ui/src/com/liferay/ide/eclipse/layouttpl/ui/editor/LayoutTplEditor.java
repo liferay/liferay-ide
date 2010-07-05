@@ -148,7 +148,14 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// TODO LayoutTplEditor#doSave()
+		IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+		try {
+			diagram.saveToFile(file, monitor);
+			getCommandStack().markSaveLocation();
+		}
+		catch (Exception e) {
+			LayoutTplUI.logError(e);
+		}
 	}
 
 	public void doSaveAs() {

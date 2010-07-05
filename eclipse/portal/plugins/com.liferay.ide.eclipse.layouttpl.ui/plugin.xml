@@ -24,6 +24,17 @@
           name="Layout Template Editor">
     </editor>
  </extension>
+ <extension
+       point="com.liferay.ide.eclipse.templates.core.templateDefinition">
+    <template
+          id="layouttpl.tpl"
+          name="Default Layout Template"
+          resource="layouttpl.vm">
+    </template>
+    <templatesFolder
+          path="templates/">
+    </templatesFolder>
+ </extension>
    
    
 </plugin>

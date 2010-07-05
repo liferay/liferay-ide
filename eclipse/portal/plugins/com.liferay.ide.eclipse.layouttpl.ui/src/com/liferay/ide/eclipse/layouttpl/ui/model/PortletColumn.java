@@ -27,6 +27,11 @@ public class PortletColumn extends ModelElement {
 
 	protected int weight;
 
+	protected int numId = 0;
+
+	protected boolean first = false;
+	protected boolean last = false;
+
 	// protected Point location;
 
 	// protected Dimension size;
@@ -79,6 +84,30 @@ public class PortletColumn extends ModelElement {
 		int oldValue = this.weight;
 		this.weight = weight;
 		firePropertyChange(WEIGHT_PROP, oldValue, this.weight);
+	}
+
+	public int getNumId() {
+		return numId;
+	}
+
+	public void setNumId(int numId) {
+		this.numId = numId;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public void setFirst(boolean first) {
+		this.first = first;
+	}
+
+	public boolean isLast() {
+		return last;
+	}
+
+	public void setLast(boolean last) {
+		this.last = last;
 	}
 
 }

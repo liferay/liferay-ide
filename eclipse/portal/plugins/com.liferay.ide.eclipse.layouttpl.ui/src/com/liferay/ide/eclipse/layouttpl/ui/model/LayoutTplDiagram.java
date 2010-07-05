@@ -15,12 +15,19 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
+import com.liferay.ide.eclipse.templates.core.ITemplateOperation;
+import com.liferay.ide.eclipse.templates.core.TemplatesCore;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.velocity.VelocityContext;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
 
-public class LayoutTplDiagram extends ModelElement {
+public class LayoutTplDiagram extends ModelElement implements PropertyChangeListener {
 
 	public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
 
@@ -41,12 +48,33 @@ public class LayoutTplDiagram extends ModelElement {
 				rows.add(index, newRow);
 			}
 
+			newRow.addPropertyChangeListener(this);
+
+			updateColumns();
+
 			firePropertyChange(ROW_ADDED_PROP, null, newRow);
 
 			return true;
 		}
 
 		return false;
+	}
+
+	protected void updateColumns() {
+		int numIdCount = 1;
+		for (ModelElement row : rows) {
+			List<ModelElement> cols = ((PortletLayout) row).getColumns();
+			for (int i = 0; i < cols.size(); i++) {
+				PortletColumn col = ((PortletColumn) cols.get(i));
+				col.setNumId(numIdCount++);
+				if (i == 0 && cols.size() > 1) {
+					col.setFirst(true);
+				}
+				else if (cols.size() > 1 && i == (cols.size() - 1)) {
+					col.setLast(true);
+				}
+			}
+		}
 	}
 
 	public List<ModelElement> getRows() {
@@ -77,5 +105,27 @@ public class LayoutTplDiagram extends ModelElement {
 
 	public void addRow(PortletLayout newRow) {
 		addRow(newRow, -1);
+	}
+
+	public void saveToFile(IFile file, IProgressMonitor monitor) {
+		ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation("layouttpl.tpl");
+		templateOperation.setOutputFile(file);
+		try {
+			VelocityContext ctx = templateOperation.getContext();
+			ctx.put("root", this);
+			String name = file.getFullPath().removeFileExtension().lastSegment();
+			ctx.put("templateName", name);
+			templateOperation.execute(monitor);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		String prop = evt.getPropertyName();
+		if (PortletLayout.COLUMN_ADDED_PROP.equals(prop) || PortletLayout.COLUMN_REMOVED_PROP.equals(prop)) {
+			updateColumns();
+		}
 	}
 }

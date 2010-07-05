@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Layout Template UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.layouttpl.ui;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.common.project.facet.ui;bundle-version="[1.4.1,1.5.0)",
  org.eclipse.core.resources,
  com.liferay.ide.eclipse.layouttpl.core,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ com.liferay.ide.eclipse.templates.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.layouttpl.ui,
