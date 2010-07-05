@@ -45,7 +45,7 @@ public class TemplateOperation implements ITemplateOperation {
 
 		StringWriter writer = new StringWriter();
 		getTemplate().merge(getContext(), writer);
-		String result = writer.toString().replaceAll("_#_", "\\$");
+		String result = writer.toString();
 
 		if (this.outputFile.exists()) {
 			this.outputFile.setContents(new ByteArrayInputStream(result.getBytes()), true, true, monitor);

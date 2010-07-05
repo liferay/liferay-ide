@@ -1,10 +1,45 @@
+#set( $esc1 = '#' )
+#set( $esc2 = '$' )
+#if ( $root.getRows().size() > 0)
 <div class="$templateName" id="main-content" role="main">
+	${esc1}if ($browserSniffer.isIe($request) && $browserSniffer.getMajorVersion($request) < 8)
 #foreach( $row in $root.getRows() )		
 #if ( $row.getColumns().size() == 1)		
-		#set( $columnOnly = $row.getColumns().get(0) )
+#set( $columnOnly = $row.getColumns().get(0) )
+		<table class="portlet-layout">
+		<tr>
+			<td class="portlet-column portlet-column-only" id="column-$columnOnly.numId">
+				${esc2}processor.processColumn("column-$columnOnly.numId", "portlet-column-content portlet-column-content-only")
+			</td>
+		</tr>
+		</table>
+#elseif ( $row.getColumns().size() > 1) 
+		<table class="portlet-layout">
+		<tr>
+#foreach ( $col in $row.getColumns() )		
+#if ( $col.isFirst() )
+			<td class="aui-w$col.getWeight() portlet-column portlet-column-first" id="column-$col.numId">
+				${esc2}processor.processColumn("column-$col.numId", "portlet-column-content portlet-column-content-first")
+#elseif ( $col.isLast() )
+			<td class="aui-w$col.getWeight() portlet-column portlet-column-last" id="column-$col.numId">
+				${esc2}processor.processColumn("column-$col.numId", "portlet-column-content portlet-column-content-last")
+#else
+			<td class="aui-w$col.getWeight() portlet-column" id="column-$col.numId">
+				${esc2}processor.processColumn("column-$col.numId", "portlet-column-content")
+#end			
+			</td>
+#end			
+		</tr>
+		</table>
+#end
+#end
+	${esc1}else
+#foreach( $row in $root.getRows() )		
+#if ( $row.getColumns().size() == 1)		
+#set( $columnOnly = $row.getColumns().get(0) )
 		<div class="portlet-layout">
 			<div class="portlet-column portlet-column-only" id="column-$columnOnly.numId">
-				_#_processor.processColumn("column-$columnOnly.numId", "portlet-column-content portlet-column-content-only")
+				${esc2}processor.processColumn("column-$columnOnly.numId", "portlet-column-content portlet-column-content-only")
 			</div>
 		</div>
 #elseif ( $row.getColumns().size() > 1) 
@@ -12,17 +47,19 @@
 #foreach ( $col in $row.getColumns() )		
 #if ( $col.isFirst() )
 			<div class="aui-w$col.getWeight() portlet-column portlet-column-first" id="column-$col.numId">
-				_#_processor.processColumn("column-$col.numId", "portlet-column-content portlet-column-content-first")
+				${esc2}processor.processColumn("column-$col.numId", "portlet-column-content portlet-column-content-first")
 #elseif ( $col.isLast() )
 			<div class="aui-w$col.getWeight() portlet-column portlet-column-last" id="column-$col.numId">
-				_#_processor.processColumn("column-$col.numId", "portlet-column-content portlet-column-content-last")
+				${esc2}processor.processColumn("column-$col.numId", "portlet-column-content portlet-column-content-last")
 #else
 			<div class="aui-w$col.getWeight() portlet-column" id="column-$col.numId">
-				_#_processor.processColumn("column-$col.numId", "portlet-column-content")
+				${esc2}processor.processColumn("column-$col.numId", "portlet-column-content")
 #end			
 			</div>
 #end			
 		</div>
 #end
 #end
+	${esc1}end
 </div>
+#end
