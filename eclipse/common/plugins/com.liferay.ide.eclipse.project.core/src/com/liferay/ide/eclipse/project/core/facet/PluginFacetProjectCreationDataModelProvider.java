@@ -279,8 +279,13 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	@Override
 	public IStatus validate(String propertyName) {
 		if (FACET_PROJECT_NAME.equals(propertyName)) {
-			String facetProjectName = getStringProperty(propertyName);
-			String testProjectName = facetProjectName + getProjectSuffix();
+			String projectName = getNestedModel().getStringProperty(PROJECT_NAME);
+			
+			if (CoreUtil.isNullOrEmpty(projectName)) {
+				return super.validate(propertyName);
+			}
+			
+			String testProjectName = projectName + getProjectSuffix();
 
 			if (ProjectUtil.getProject(testProjectName).exists()) {
 				return ProjectCorePlugin.createErrorStatus("A project already exists with that name.");
@@ -288,7 +293,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			// before we do a basic java validation we need to strip "-"
 
-			String nameValidation = facetProjectName.replaceAll("-", "");
+			String nameValidation = testProjectName.replaceAll("-", "");
 
 			IStatus status =
 				JavaConventions.validateIdentifier(
