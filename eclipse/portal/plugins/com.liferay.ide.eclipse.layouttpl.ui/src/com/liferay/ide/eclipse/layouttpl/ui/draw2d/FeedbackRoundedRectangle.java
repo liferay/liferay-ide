@@ -16,6 +16,7 @@ package com.liferay.ide.eclipse.layouttpl.ui.draw2d;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.swt.SWT;
 
 
 public class FeedbackRoundedRectangle extends RoundedRectangle {
@@ -24,6 +25,7 @@ public class FeedbackRoundedRectangle extends RoundedRectangle {
 		super();
 		setBackgroundColor(ColorConstants.white);
 		setAlpha(128);
+		setAntialias(SWT.ON);
 	}
 
 	@Override

@@ -12,33 +12,35 @@
  * details.
  *
  *******************************************************************************/
-
 package com.liferay.ide.eclipse.layouttpl.ui.cmd;
 
-import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutConstraint;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
-import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
 
-public class PortletLayoutCreateCommand extends Command {
+public class PortletLayoutDeleteCommand extends Command {
 
-	protected PortletLayout newLayout;
+	protected final PortletLayout child;
 
-	protected LayoutTplDiagram diagram;
-	
-	protected LayoutConstraint layoutConstraint;
+	protected final LayoutTplDiagram parent;
 
-	public PortletLayoutCreateCommand(PortletLayout newLayout, LayoutTplDiagram diagram, LayoutConstraint constraint) {
-		this.newLayout = newLayout;
-		this.diagram = diagram;
-		this.layoutConstraint = constraint;
-		setLabel("Portlet row added");
+	protected boolean wasRemoved;
+
+	public PortletLayoutDeleteCommand(LayoutTplDiagram parent, PortletLayout child) {
+		if (parent == null || child == null) {
+			throw new IllegalArgumentException();
+		}
+
+		setLabel("Portlet Row deleted");
+
+		this.parent = parent;
+		this.child = child;
 	}
 
-	public boolean canExecute() {
-		return newLayout != null && diagram != null && layoutConstraint != null;
+
+	public boolean canUndo() {
+		return wasRemoved;
 	}
 
 	public void execute() {
@@ -46,18 +48,10 @@ public class PortletLayoutCreateCommand extends Command {
 	}
 
 	public void redo() {
-		newLayout.setParent(diagram);
-
-		if (newLayout.getColumns().size() == 0) {
-			PortletColumn newColumn = new PortletColumn();
-			newLayout.addColumn(newColumn);
-		}
-
-		diagram.addRow(newLayout, layoutConstraint.newRowIndex);
+		wasRemoved = parent.removeRow(child);
 	}
 
 	public void undo() {
-		System.out.println("UNDO");
+		parent.addRow(child);
 	}
-
 }

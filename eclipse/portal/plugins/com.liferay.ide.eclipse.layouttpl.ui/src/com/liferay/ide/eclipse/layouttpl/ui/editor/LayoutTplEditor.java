@@ -99,6 +99,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 
 			protected void configurePaletteViewer(PaletteViewer viewer) {
 				super.configurePaletteViewer(viewer);
+				viewer.setPaletteViewerPreferences(new LayoutTplPaletteViewerPreferences());
 				// create a drag source listener for this palette viewer
 				// together with an appropriate transfer drop target listener,
 				// this will enable
@@ -135,11 +136,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 			IFile file = ((IFileEditorInput) input).getFile();
 			setPartName(file.getName());
 
-			if (diagram == null) {
-				diagram = new LayoutTplDiagram();
-			}
-
-			diagram.loadFromFile(file);
+			diagram = LayoutTplDiagram.createFromFile(file);
 		}
 		catch (Exception e) {
 			LayoutTplUI.logError(e);
@@ -183,6 +180,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		super.initializeGraphicalViewer();
 		GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getDiagram()); // set the contents of this editor
+		viewer.getContents().refresh();// rebuild column heights if needed
 
 		// listen for dropped parts
 		viewer.addDropTargetListener(createTransferDropTargetListener());

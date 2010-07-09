@@ -18,6 +18,7 @@ import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.swt.SWT;
 
 
 public class PortletLayoutPanel extends Panel {
@@ -36,9 +37,14 @@ public class PortletLayoutPanel extends Panel {
 		this.bottom = bottom;
 	}
 
+	protected void setup() {
+
+	}
+
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		if (isOpaque()) {
+			graphics.setAntialias(SWT.ON);
 
 			if (!top && !bottom) {
 				graphics.fillRectangle(getBounds());

@@ -46,7 +46,7 @@ import org.eclipse.gef.requests.CreateRequest;
 @SuppressWarnings("unchecked")
 public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
-	public static final int DEFAULT_FEEDBACK_HEIGHT = 100;
+	// public static final int DEFAULT_FEEDBACK_HEIGHT = 100;
 
 	protected IFigure layoutFeedbackFigure;
 
@@ -93,7 +93,9 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 				feedback.setLocation(new Point(partBounds.x, partBounds.y));
 			}
 			else if (isColumnRequest) {
-				feedback.setSize((int) (PortletLayoutEditPart.COLUMN_SPACING * 1.2), DEFAULT_FEEDBACK_HEIGHT);
+				feedback.setSize(
+					(int) (PortletLayoutEditPart.COLUMN_SPACING * 1.2),
+					((PortletLayoutEditPart) getHost()).getDefaultColumnHeight());
 				Point rectLocation = null;
 
 				List children = getPart().getChildren();
@@ -116,10 +118,6 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 			}
 			else {
 				feedback = null;
-			}
-
-			if (feedback != null) {
-				System.out.println("setting feedback at " + feedback.getLocation());
 			}
 		}
 		else if (request instanceof ChangeBoundsRequest) {

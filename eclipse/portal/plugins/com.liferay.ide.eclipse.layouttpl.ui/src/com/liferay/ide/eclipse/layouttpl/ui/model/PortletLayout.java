@@ -14,13 +14,17 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.layouttpl.ui.util.LayoutTplUtil;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+@SuppressWarnings("restriction")
 public class PortletLayout extends ModelElement implements PropertyChangeListener {
 
 	public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded";
@@ -31,8 +35,11 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 
 	protected List<ModelElement> columns = new ArrayList<ModelElement>();
 
+	protected String className;
+
 	public PortletLayout() {
 		super();
+		this.className = "portlet-layout";
 	}
 
 	public boolean addColumn(PortletColumn newColumn) {
@@ -62,12 +69,6 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 		return columns;
 	}
 
-	public Image getIcon() {
-		// TODO Implement getIcon method on class PortletLayout
-		System.out.println("PortletLayout.getIcon");
-		return null;
-	}
-
 	@Override
 	public void removeChild(ModelElement child) {
 		if (columns.contains(child)) {
@@ -90,6 +91,41 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
 			firePropertyChange(CHILD_COLUMN_WEIGHT_CHANGED_PROP, null, evt.getSource());
 		}
+	}
+
+	public static PortletLayout createFromElement(IDOMElement portletLayoutElement) {
+		if (portletLayoutElement == null) {
+			return null;
+		}
+
+		PortletLayout newPortletLayout = new PortletLayout();
+		
+		String existingClassName = portletLayoutElement.getAttribute("class");
+		if ((!CoreUtil.isNullOrEmpty(existingClassName)) && existingClassName.contains("portlet-layout")) {
+			newPortletLayout.setClassName(existingClassName);
+		}
+		else {
+			newPortletLayout.setClassName("portlet-layout");
+		}
+
+		IDOMElement[] portletColumnElements =
+			LayoutTplUtil.findChildElementsByClassName(portletLayoutElement, "div", "portlet-column");
+
+		for (IDOMElement portletColumnElement : portletColumnElements) {
+			PortletColumn newPortletColumn = PortletColumn.createFromElement(portletColumnElement);
+			newPortletColumn.setParent(newPortletLayout);
+			newPortletLayout.addColumn(newPortletColumn);
+		}
+
+		return newPortletLayout;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
 	}
 
 }

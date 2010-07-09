@@ -14,8 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
-import org.eclipse.swt.graphics.Image;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.layouttpl.ui.util.LayoutTplUtil;
 
+import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
+import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+
+@SuppressWarnings("restriction")
 public class PortletColumn extends ModelElement {
 
 	public static final String WEIGHT_PROP = "PortletColumn.weight";
@@ -32,45 +40,65 @@ public class PortletColumn extends ModelElement {
 	protected boolean first = false;
 	protected boolean last = false;
 
-	// protected Point location;
+	protected String className;
 
-	// protected Dimension size;
+	protected static IPropertyDescriptor[] descriptors;
+
+	static {
+		descriptors = new IPropertyDescriptor[] {
+			new TextPropertyDescriptor(WEIGHT_PROP, "Weight"), // id and
+																// description
+																// pair
+		};
+
+		// use a custom cell editor validator for all four array entries
+		for (int i = 0; i < descriptors.length; i++) {
+			((PropertyDescriptor) descriptors[i]).setValidator(new ICellEditorValidator() {
+
+				public String isValid(Object value) {
+					int intValue = -1;
+					try {
+						intValue = Integer.parseInt((String) value);
+					}
+					catch (NumberFormatException exc) {
+						return "Not a number";
+					}
+					return (intValue >= 0) ? null : "Value must be >=  0";
+				}
+			});
+		}
+	}
 
 	public PortletColumn() {
 		super();
 
 		this.weight = DEFAULT_WEIGHT;
+		this.className = "portlet-column";
 	}
 
-	public Image getIcon() {
-		// TODO Implement getIcon method on class PortletColumn
-		System.out.println("PortletColumn.getIcon");
-		return null;
+	public Object getPropertyValue(Object propertyId) {
+		if (WEIGHT_PROP.equals(propertyId)) {
+			if (getWeight() == DEFAULT_WEIGHT) {
+				return "100%";
+			}
+			else {
+				return Integer.toString(getWeight()) + "%";
+			}
+		}
+
+		return super.getPropertyValue(propertyId);
 	}
 
-	// public void setLocation(Point newLocation) {
-	// if (newLocation == null) {
-	// throw new IllegalArgumentException();
-	// }
-	// location.setLocation(newLocation);
-	// firePropertyChange(LOCATION_PROP, null, location);
-	// }
-
-	// public void setSize(Dimension newSize) {
-	// if (newSize != null) {
-	// size.setSize(newSize);
-	// firePropertyChange(SIZE_PROP, null, size);
-	// }
-	// }
-
-	// public Point getLocation() {
-	// return location.getCopy();
-	// }
-
-	// public Dimension getSize() {
-	// return size.getCopy();
-	// }
-
+	public void setPropertyValue(Object propertyId, Object value) {
+		if (WEIGHT_PROP.equals(propertyId)) {
+			String val = value.toString().replaceAll("%", "");
+			int weight = Integer.parseInt(val);
+			setWeight(weight);
+		}
+		else {
+			super.setPropertyValue(propertyId, value);
+		}
+	}
 
 	@Override
 	public void removeChild(ModelElement child) {
@@ -108,6 +136,40 @@ public class PortletColumn extends ModelElement {
 
 	public void setLast(boolean last) {
 		this.last = last;
+	}
+
+
+	public static PortletColumn createFromElement(IDOMElement portletColumnElement) {
+		if (portletColumnElement == null) {
+			return null;
+		}
+
+		PortletColumn newPortletColumn = new PortletColumn();
+
+		String existingClassName = portletColumnElement.getAttribute("class");
+		if ((!CoreUtil.isNullOrEmpty(existingClassName)) && existingClassName.contains("portlet-column")) {
+			newPortletColumn.setClassName(existingClassName);
+		}
+		else {
+			newPortletColumn.setClassName("portlet-column");
+		}
+
+		newPortletColumn.setWeight(LayoutTplUtil.getWeightValue(portletColumnElement, -1));
+
+		return newPortletColumn;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	@Override
+	public IPropertyDescriptor[] getPropertyDescriptors() {
+		return descriptors;
 	}
 
 }

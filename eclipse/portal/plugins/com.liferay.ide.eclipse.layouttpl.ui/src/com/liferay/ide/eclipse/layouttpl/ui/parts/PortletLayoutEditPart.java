@@ -136,7 +136,7 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 				// if (column.getWeight() == PortletColumn.DEFAULT_WEIGHT) {
 				// column.setWeight(100);
 				// }
-				GridData rowData = PortletColumnEditPart.createGridData();
+				GridData rowData = portletColumnPart.createGridData();
 
 				double percent = column.getWeight() / 100d;
 				rowData.widthHint = (int) (percent * rowWidth) - (COLUMN_SPACING * 2);
@@ -148,6 +148,22 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 		gridLayout.invalidate();
 
 		this.getFigure().repaint();
+	}
+
+	public int getDefaultColumnHeight() {
+		return getCastedParent().getPreferredColumnHeight();
+	}
+
+	private LayoutTplDiagramEditPart getCastedParent() {
+		return (LayoutTplDiagramEditPart) getParent();
+	}
+
+	public Object getLayoutConstraint(PortletColumnEditPart columnPart, IFigure figure) {
+		if (getChildren().contains(columnPart)) {
+			return getFigure().getLayoutManager().getConstraint(figure);
+		}
+
+		return null;
 	}
 
 }

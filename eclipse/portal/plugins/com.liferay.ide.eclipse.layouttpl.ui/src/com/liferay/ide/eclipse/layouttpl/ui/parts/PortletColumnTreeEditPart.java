@@ -15,20 +15,29 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
+
+
+import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.eclipse.layouttpl.ui.policies.PortletColumnComponentEditPolicy;
 
 import java.beans.PropertyChangeEvent;
+import java.net.URL;
 
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
 
 public class PortletColumnTreeEditPart extends BaseTreeEditPart {
 
+	protected Image icon;
 
 	public PortletColumnTreeEditPart(PortletColumn model) {
 		super(model);
+
+		URL url = LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png");
+		icon = ImageDescriptor.createFromURL(url).createImage();
 	}
 
 
@@ -38,18 +47,27 @@ public class PortletColumnTreeEditPart extends BaseTreeEditPart {
 	}
 
 
-	private PortletColumn getCastedModel() {
+	protected PortletColumn getCastedModel() {
 		return (PortletColumn) getModel();
 	}
 
 
 	protected Image getImage() {
-		return getCastedModel().getIcon();
+		return icon;
 	}
 
 
 	protected String getText() {
-		return getCastedModel().toString();
+		String text = "Portlet Column";
+
+		if (getCastedModel().getWeight() == PortletColumn.DEFAULT_WEIGHT) {
+			text += " - 100%";
+		}
+		else {
+			text += " - " + getCastedModel().getWeight() + "%";
+		}
+
+		return text;
 	}
 
 

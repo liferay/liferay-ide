@@ -22,18 +22,25 @@ import com.liferay.ide.eclipse.layouttpl.ui.policies.LayoutTplDiagramLayoutEditP
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Panel;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.graphics.Color;
 
+@SuppressWarnings("unchecked")
 public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 
 	public static final int DIAGRAM_MARGIN = 10;
+
+	public static final int DEFAULT_COLUMN_HEIGHT = 100;
 
 	protected Panel diagramPanel;
 
@@ -91,6 +98,57 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 		panel.setLayoutManager(gridLayout);
 		panel.setBackgroundColor(new Color(null, 10, 10, 10));
 		panel.setBorder(new MarginBorder(DIAGRAM_MARGIN));
+
+		panel.addLayoutListener(new LayoutListener() {
+
+			public void invalidate(IFigure container) {
+				shouldUpdateConstraints = true;
+			}
+
+			public boolean layout(IFigure container) {
+				return false;
+			}
+
+			public void postLayout(IFigure container) {
+				if (shouldUpdateConstraints) {
+					updateColumnConstraints();
+				}
+			}
+
+			public void remove(IFigure child) {
+			}
+
+			public void setConstraint(IFigure child, Object constraint) {
+			}
+		});
+	}
+
+	protected boolean shouldUpdateConstraints = false;
+
+	protected void updateColumnConstraints() {
+		try {
+			for (Object row : getChildren()) {
+				PortletLayoutEditPart rowPart = (PortletLayoutEditPart) row;
+
+				for (Object col : ((EditPart) row).getChildren()) {
+					PortletColumnEditPart columnPart = (PortletColumnEditPart) col;
+					Object constraint = rowPart.getLayoutConstraint(columnPart, columnPart.getFigure());
+
+					if (constraint instanceof GridData) {
+						GridData gd = (GridData) constraint;
+						gd.heightHint = getPreferredColumnHeight();
+						System.out.println("Setting height to " + gd.heightHint);
+						rowPart.setLayoutConstraint(columnPart, columnPart.getFigure(), gd);
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			// best effort don't log errors
+		}
+		finally {
+			shouldUpdateConstraints = false;
+		}
 	}
 
 	protected LayoutTplDiagram getCastedModel() {
@@ -101,7 +159,6 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 		return getCastedModel().getRows(); // return a list of rows
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
@@ -113,5 +170,33 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 			}
 		}
 	}
+
+	public int getPreferredColumnHeight() {
+		int retval = DEFAULT_COLUMN_HEIGHT;
+
+		int numRows = getRowPartsCount();
+
+		if (numRows > 0) {
+			Rectangle partBounds = getFigure().getBounds();
+
+			if (partBounds.height > 0) {
+				int partHeight = partBounds.height;
+				int rowsHeight = partHeight - (DIAGRAM_MARGIN * 2);
+				int totalColumnsHeight = rowsHeight - (getRowPartsCount() * PortletLayoutEditPart.COLUMN_SPACING * 2);
+				int computedColumnHeight = totalColumnsHeight / numRows;
+
+				if (computedColumnHeight < DEFAULT_COLUMN_HEIGHT) {
+					retval = computedColumnHeight;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	protected int getRowPartsCount() {
+		return getChildren().size();
+	}
+
 
 }

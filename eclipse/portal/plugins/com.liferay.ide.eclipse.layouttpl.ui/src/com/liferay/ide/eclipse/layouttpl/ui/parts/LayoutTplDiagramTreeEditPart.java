@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.swt.graphics.Image;
 
 public class LayoutTplDiagramTreeEditPart extends BaseTreeEditPart {
 
@@ -68,5 +69,15 @@ public class LayoutTplDiagramTreeEditPart extends BaseTreeEditPart {
 		else {
 			refreshVisuals();
 		}
+	}
+
+	@Override
+	protected Image getImage() {
+		return super.getImage();
+	}
+
+	@Override
+	protected String getText() {
+		return super.getText();
 	}
 }

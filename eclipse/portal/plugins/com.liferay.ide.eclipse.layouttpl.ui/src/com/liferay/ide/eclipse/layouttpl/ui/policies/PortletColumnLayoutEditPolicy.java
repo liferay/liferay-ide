@@ -100,7 +100,7 @@ public class PortletColumnLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(CreateRequest request) {
-		Object childClass = request.getNewObjectType();
+		// Object childClass = request.getNewObjectType();
 
 		// if (childClass == PortletColumn.class) {
 		// return new PortletColumnCreateCommand(

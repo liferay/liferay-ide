@@ -128,5 +128,12 @@
             shortName="layouttpl">
       </liferayProjectDefinition>
    </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.wst.html.core.htmlsource"
+            file-extensions="tpl">
+      </file-association>
+   </extension>
 
 </plugin>

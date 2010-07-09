@@ -31,7 +31,7 @@ public class LayoutTplUI extends AbstractUIPlugin {
 	private static LayoutTplUI plugin;
 	
 	public static IStatus createErrorStatus(Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
+		return createErrorStatus(e.getMessage(), e);
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class LayoutTplUI extends AbstractUIPlugin {
 	}
 
 	public static void logError(Exception e) {
-		getDefault().getLog().log(createErrorStatus(e));
+		logError(e.getMessage(), e);
 	}
 
 	/**
@@ -70,6 +70,15 @@ public class LayoutTplUI extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+	}
+
+
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(createErrorStatus(msg, e));
+	}
+
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
 	}
 
 }

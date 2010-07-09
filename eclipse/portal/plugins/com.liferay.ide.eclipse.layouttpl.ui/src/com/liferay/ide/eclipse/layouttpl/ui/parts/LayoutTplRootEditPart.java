@@ -61,21 +61,7 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 	}
 
 	protected IFigure createFigure() {
-		layers = new LayeredPane()
-		// {
-		//
-		// @Override
-		// public Dimension getMinimumSize(int wHint, int hHint) {
-		// return super.getMinimumSize(-1, -1);
-		// }
-		//
-		// @Override
-		// public Dimension getPreferredSize(int wHint, int hHint) {
-		// return super.getPreferredSize(-1, -1);
-		// }
-		//
-		// }
-		;
+		layers = new LayeredPane();
 		createLayers(layers);
 
 		return layers;
@@ -85,23 +71,7 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
 		// layeredPane.add(getScaledLayers(), SCALABLE_LAYERS);
 		// layeredPane.add(getPrintableLayers(), PRINTABLE_LAYERS);
 		Layer layer = new Layer();
-		layer.setLayoutManager(new StackLayout()
-		// {
-		//
-		// @Override
-		// protected Dimension calculateMinimumSize(IFigure figure, int wHint,
-		// int hHint) {
-		// return super.calculateMinimumSize(figure, -1, -1);
-		// }
-		//
-		// @Override
-		// protected Dimension calculatePreferredSize(IFigure figure, int wHint,
-		// int hHint) {
-		// return super.calculatePreferredSize(figure, -1, -1);
-		// }
-		//
-		// }
-		);
+		layer.setLayoutManager(new StackLayout());
 		layeredPane.add(layer, PRIMARY_LAYER);
 
 		layeredPane.add(new Layer() {

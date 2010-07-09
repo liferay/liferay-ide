@@ -36,7 +36,7 @@ import org.eclipse.swt.graphics.Color;
  */
 public class PortletColumnEditPart extends BaseGraphicalEditPart {
 
-	public static final int DEFAULT_COLUMN_HEIGHT = 100;
+
 
 	public PortletColumnEditPart() {
 		super();
@@ -80,27 +80,43 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart {
 		return (PortletColumn) getModel();
 	}
 
-	protected void refreshVisuals() {
-		Object constraint = ((GraphicalEditPart) getParent()).getFigure().getLayoutManager().getConstraint(getFigure());
-		if (constraint instanceof GridData) {
-			GridData gd = (GridData) constraint;
-
-			if (gd.heightHint == SWT.DEFAULT) {
-				gd.heightHint = DEFAULT_COLUMN_HEIGHT;
-			}
-
-			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
-		}
-		else {
-			GridData gd = createGridData();
-			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
-		}
-
+	public PortletLayoutEditPart getCastedParent() {
+		return (PortletLayoutEditPart) getParent();
 	}
 
-	public static GridData createGridData() {
+	protected ColumnFigure getCastedFigure() {
+		return (ColumnFigure) getFigure();
+	}
+
+	protected void refreshVisuals() {
+		Object constraint = ((GraphicalEditPart) getParent()).getFigure().getLayoutManager().getConstraint(getFigure());
+		GridData gd = null;
+
+		if (constraint instanceof GridData) {
+			gd = (GridData) constraint;
+
+			if (gd.heightHint == SWT.DEFAULT) {
+				gd.heightHint = getCastedParent().getDefaultColumnHeight();
+			}
+
+		}
+		else {
+			gd = createGridData();
+		}
+		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
+
+		int columnWeight = getCastedModel().getWeight();
+
+		if (columnWeight == PortletColumn.DEFAULT_WEIGHT) {
+			columnWeight = 100;
+		}
+
+		getCastedFigure().setText(columnWeight + "%");
+	}
+
+	public GridData createGridData() {
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd.heightHint = DEFAULT_COLUMN_HEIGHT;
+		gd.heightHint = getCastedParent().getDefaultColumnHeight();
 		return gd;
 	}
 

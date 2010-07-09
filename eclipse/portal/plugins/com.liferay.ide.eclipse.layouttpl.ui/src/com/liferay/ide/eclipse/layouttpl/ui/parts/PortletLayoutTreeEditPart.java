@@ -15,26 +15,37 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
+
+
+import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
+import com.liferay.ide.eclipse.layouttpl.ui.model.ModelElement;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
-import com.liferay.ide.eclipse.layouttpl.ui.policies.PortletColumnComponentEditPolicy;
+import com.liferay.ide.eclipse.layouttpl.ui.policies.PortletLayoutComponentEditPolicy;
 
 import java.beans.PropertyChangeEvent;
+import java.net.URL;
+import java.util.List;
 
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 
 
 public class PortletLayoutTreeEditPart extends BaseTreeEditPart {
 
+	protected Image icon;
 
 	public PortletLayoutTreeEditPart(PortletLayout model) {
 		super(model);
+
+		URL url = LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png");
+		icon = ImageDescriptor.createFromURL(url).createImage();
 	}
 
 
 	protected void createEditPolicies() {
 		// allow removal of the associated model element
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new PortletColumnComponentEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new PortletLayoutComponentEditPolicy());
 	}
 
 
@@ -42,14 +53,28 @@ public class PortletLayoutTreeEditPart extends BaseTreeEditPart {
 		return (PortletLayout) getModel();
 	}
 
+	protected List<ModelElement> getModelChildren() {
+		return getCastedModel().getColumns();
+	}
 
 	protected Image getImage() {
-		return getCastedModel().getIcon();
+		return icon;
 	}
 
 
 	protected String getText() {
-		return getCastedModel().toString();
+		String text = "Portlet Row";
+
+		int numcols = getCastedModel().getColumns().size();
+
+		if (numcols == 1) {
+			text += " - 1 column";
+		}
+		else if (numcols > 1) {
+			text += " - " + numcols + " columns";
+		}
+
+		return text;
 	}
 
 
