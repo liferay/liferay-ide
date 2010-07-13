@@ -49,6 +49,7 @@ public class ColumnFigure extends RoundedRectangle {
 
 		if (graphics.getFont() != null) {
 			graphics.setTextAntialias(SWT.ON);
+			graphics.setFont(getFont());
 			Dimension extent = FigureUtilities.getTextExtents(getText(), graphics.getFont());
 
 			graphics.drawString(getText(), bounds.x + (bounds.width / 2) - (extent.width / 2), bounds.y +
