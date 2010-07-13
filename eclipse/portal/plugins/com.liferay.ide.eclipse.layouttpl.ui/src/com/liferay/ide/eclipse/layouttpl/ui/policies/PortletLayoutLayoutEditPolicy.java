@@ -48,7 +48,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	// public static final int DEFAULT_FEEDBACK_HEIGHT = 100;
 
-	protected IFigure layoutFeedbackFigure;
+	protected IFigure feedbackFigure;
 
 	public PortletLayoutLayoutEditPolicy() {
 		super();
@@ -76,26 +76,25 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 			LayoutConstraint constraint = (LayoutConstraint) getConstraintFor((CreateRequest) request);
 			feedback = new FeedbackRoundedRectangle();
 
-			if ((isRowRequest && constraint.newColumnIndex == -1) || (isColumnRequest && constraint.newRowIndex > -1)) {
+			Rectangle partBounds = getPart().getFigure().getBounds().getCopy();
 
+			if (isRowRequest) {
 				feedback.setSize(getContainerWidth(), LayoutTplDiagramLayoutEditPolicy.DEFAULT_FEEDBACK_HEIGHT);
-				Rectangle partBounds = getPart().getFigure().getBounds().getCopy();
 
 				PortletLayoutEditPart layoutEditPart = (PortletLayoutEditPart) getHost();
 				int currentRowIndex = LayoutTplUtil.getRowIndex(layoutEditPart);
 				if (constraint.newRowIndex == currentRowIndex) {
 					partBounds.y -= (feedback.getSize().height / 2);
 				}
-				else if (constraint.newRowIndex > currentRowIndex) {
+				else if (constraint.newRowIndex > currentRowIndex || constraint.newRowIndex == -1) {
 					partBounds.y = partBounds.y + partBounds.height - (feedback.getSize().height / 2);
 				}
 
 				feedback.setLocation(new Point(partBounds.x, partBounds.y));
 			}
 			else if (isColumnRequest) {
-				feedback.setSize(
-					(int) (PortletLayoutEditPart.COLUMN_SPACING * 1.2),
-					((PortletLayoutEditPart) getHost()).getDefaultColumnHeight());
+				feedback.setSize((int) (PortletLayoutEditPart.COLUMN_SPACING * 1.2), partBounds.height -
+					(PortletLayoutEditPart.LAYOUT_MARGIN * 2));
 				Point rectLocation = null;
 
 				List children = getPart().getChildren();
@@ -107,17 +106,20 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 					rectLocation = new Point(insertColumnRect.x + insertColumnRect.width, insertColumnRect.y);
 				}
 				else {
-					PortletColumnEditPart insertColumnPart =
-						(PortletColumnEditPart) getPart().getChildren().get(constraint.newColumnIndex);
+					int index = 0;
+					if (constraint.newColumnIndex > -1) {
+						index = constraint.newColumnIndex;
+					}
+					else {
+						index = getPart().getChildren().size() - 1;
+					}
+
+					PortletColumnEditPart insertColumnPart = (PortletColumnEditPart) getPart().getChildren().get(index);
 					Rectangle insertColumnRect = insertColumnPart.getFigure().getBounds();
 					rectLocation = new Point(insertColumnRect.x - feedback.getSize().width, insertColumnRect.y);
 				}
 
 				feedback.setLocation(rectLocation);
-
-			}
-			else {
-				feedback = null;
 			}
 		}
 		else if (request instanceof ChangeBoundsRequest) {
@@ -135,10 +137,10 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	protected void eraseLayoutTargetFeedback(Request request) {
 		super.eraseLayoutTargetFeedback(request);
 
-		if (layoutFeedbackFigure != null) {
-			removeFeedback(layoutFeedbackFigure);
+		if (feedbackFigure != null) {
+			removeFeedback(feedbackFigure);
 			getFeedbackLayer().repaint();
-			layoutFeedbackFigure = null;
+			feedbackFigure = null;
 		}
 	}
 
@@ -149,13 +151,13 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 		IFigure feedback = createLayoutFeedbackFigure(request);
 
-		if (feedback != null && !feedback.equals(layoutFeedbackFigure)) {
-			if (layoutFeedbackFigure != null) {
-				removeFeedback(layoutFeedbackFigure);
+		if (feedback != null && !feedback.equals(feedbackFigure)) {
+			if (feedbackFigure != null) {
+				removeFeedback(feedbackFigure);
 			}
 
-			layoutFeedbackFigure = feedback;
-			addFeedback(layoutFeedbackFigure);
+			feedbackFigure = feedback;
+			addFeedback(feedbackFigure);
 		}
 	}
 

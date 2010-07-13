@@ -166,7 +166,7 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
 			Dimension d = new Dimension();
 			for (Object part : parts) {
 				GraphicalEditPart editPart = (GraphicalEditPart) part;
-				r.union(editPart.getFigure().getBounds());
+				r.union(editPart.getFigure().getBounds().getSize());
 				d.union(editPart.getFigure().getBounds().getSize());
 			}
 

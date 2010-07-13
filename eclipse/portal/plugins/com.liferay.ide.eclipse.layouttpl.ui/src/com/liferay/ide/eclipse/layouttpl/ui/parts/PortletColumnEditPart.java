@@ -115,7 +115,7 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart {
 	}
 
 	public GridData createGridData() {
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd.heightHint = getCastedParent().getDefaultColumnHeight();
 		return gd;
 	}

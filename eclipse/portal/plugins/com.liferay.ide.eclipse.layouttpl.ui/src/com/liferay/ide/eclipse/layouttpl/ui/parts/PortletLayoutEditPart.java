@@ -89,7 +89,7 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 	}
 
 	public static GridData createGridData() {
-		return new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		return new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 	}
 
 	@SuppressWarnings("unchecked")

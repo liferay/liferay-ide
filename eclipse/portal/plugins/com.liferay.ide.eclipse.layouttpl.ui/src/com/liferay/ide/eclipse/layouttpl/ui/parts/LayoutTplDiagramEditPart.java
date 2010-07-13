@@ -33,6 +33,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editparts.AbstractEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
 @SuppressWarnings("unchecked")
@@ -40,7 +41,7 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 
 	public static final int DIAGRAM_MARGIN = 10;
 
-	public static final int DEFAULT_COLUMN_HEIGHT = 100;
+	public static final int DEFAULT_COLUMN_HEIGHT = -1;
 
 	protected Panel diagramPanel;
 
@@ -136,8 +137,16 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 
 					if (constraint instanceof GridData) {
 						GridData gd = (GridData) constraint;
-						gd.heightHint = getPreferredColumnHeight();
-						System.out.println("Setting height to " + gd.heightHint);
+						int columnHeight = getPreferredColumnHeight();
+
+						if (columnHeight > 0) {
+							gd.heightHint = columnHeight;
+						}
+						else {
+							gd.heightHint = SWT.DEFAULT;
+							gd.grabExcessVerticalSpace = true;
+						}
+
 						rowPart.setLayoutConstraint(columnPart, columnPart.getFigure(), gd);
 					}
 				}
@@ -176,7 +185,7 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 
 		int numRows = getRowPartsCount();
 
-		if (numRows > 0) {
+		if (numRows > 1) {
 			Rectangle partBounds = getFigure().getBounds();
 
 			if (partBounds.height > 0) {
@@ -185,9 +194,7 @@ public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
 				int totalColumnsHeight = rowsHeight - (getRowPartsCount() * PortletLayoutEditPart.COLUMN_SPACING * 2);
 				int computedColumnHeight = totalColumnsHeight / numRows;
 
-				if (computedColumnHeight < DEFAULT_COLUMN_HEIGHT) {
-					retval = computedColumnHeight;
-				}
+				retval = computedColumnHeight;
 			}
 		}
 
