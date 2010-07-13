@@ -44,12 +44,10 @@ public class DescriptorHelper {
 	public abstract class DOMModelEditOperation extends DOMModelOperation {
 
 		public DOMModelEditOperation(IFile descriptorFile) {
-
 			super(descriptorFile);
 		}
 
 		public IStatus execute() {
-
 			IStatus retval = null;
 
 			if (!this.file.exists()) {
@@ -86,7 +84,6 @@ public class DescriptorHelper {
 		protected IFile file;
 
 		public DOMModelOperation(IFile descriptorFile) {
-
 			this.file = descriptorFile;
 		}
 
@@ -99,12 +96,10 @@ public class DescriptorHelper {
 	protected abstract class DOMModelReadOperation extends DOMModelOperation {
 
 		public DOMModelReadOperation(IFile descriptorFile) {
-
 			super(descriptorFile);
 		}
 
 		public IStatus execute() {
-
 			IStatus retval = null;
 
 			if (!this.file.exists()) {
@@ -133,12 +128,10 @@ public class DescriptorHelper {
 	}
 
 	public static Element appendChildElement(Element parentElement, String newElementName) {
-
 		return appendChildElement(parentElement, newElementName, null);
 	}
 
 	public static Element appendChildElement(Element parentElement, String newElementName, String initialTextContent) {
-
 		Element newChildElement = null;
 
 		if (parentElement != null && newElementName != null) {
@@ -157,7 +150,6 @@ public class DescriptorHelper {
 	}
 
 	public static Element findChildElement(Element parentElement, String elementName) {
-
 		Element retval = null;
 
 		if (parentElement == null) {
@@ -207,7 +199,6 @@ public class DescriptorHelper {
 	}
 
 	public static void removeChildren(Node node) {
-
 		if (node == null || node.getChildNodes() == null || node.getChildNodes().getLength() <= 0) {
 			return;
 		}
@@ -224,12 +215,10 @@ public class DescriptorHelper {
 	protected IProject project;
 
 	public DescriptorHelper(IProject project) {
-
 		this.project = project;
 	}
 
 	public List<Element> getChildElements(Element parent) {
-
 		List<Element> retval = new ArrayList<Element>();
 
 		if (parent != null) {
@@ -248,12 +237,10 @@ public class DescriptorHelper {
 	}
 
 	public String getDescriptorPath() {
-
 		return this.descriptorPath;
 	}
 
 	public void setDescriptorPath(String path) {
-
 		this.descriptorPath = path;
 	}
 
@@ -261,4 +248,7 @@ public class DescriptorHelper {
 		return getDescriptorFile(project, fileName);
 	}
 
+	protected IProject getProject() {
+		return project;
+	}
 }

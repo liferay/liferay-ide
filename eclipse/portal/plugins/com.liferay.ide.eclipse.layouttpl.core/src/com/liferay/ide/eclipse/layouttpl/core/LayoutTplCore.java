@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.layouttpl.core;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -28,6 +30,31 @@ public class LayoutTplCore extends AbstractUIPlugin {
 	// The shared instance
 	private static LayoutTplCore plugin;
 	
+	public static IStatus createErrorStatus(Exception ex) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
+	}
+
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	}
+
+	public static IStatus createWarningStatus(String msg) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
+	}
+
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static LayoutTplCore getDefault() {
+		return plugin;
+	}
+
+	public static void logError(Exception ex) {
+		getDefault().getLog().log(createErrorStatus(ex));
+	}
+
 	/**
 	 * The constructor
 	 */
@@ -51,14 +78,4 @@ public class LayoutTplCore extends AbstractUIPlugin {
 		plugin = null;
 		super.stop(context);
 	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static LayoutTplCore getDefault() {
-		return plugin;
-	}
-
 }
