@@ -354,5 +354,6 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage {
 
 	protected abstract boolean isProjectValid(IProject project);
 
-	protected abstract void validateProjectRequirements(IProject project);
+	protected void validateProjectRequirements(IProject project) {
+	}
 }

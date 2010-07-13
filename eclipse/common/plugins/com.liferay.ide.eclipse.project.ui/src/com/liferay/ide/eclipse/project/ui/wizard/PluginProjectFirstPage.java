@@ -70,11 +70,9 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 	public PluginProjectFirstPage(NewPluginProjectWizard wizard, IDataModel model, String pageName) {
 		super(model, pageName);
 
-		setImageDescriptor(wizard.getDefaultPageImageDescriptor());
-
-		setTitle("Liferay Plug-in Project");
-
-		setDescription("Create a new plug-in project for Liferay Portal.");
+		this.setImageDescriptor(wizard.getDefaultPageImageDescriptor());
+		this.setTitle("Liferay Plug-in Project");
+		this.setDescription("Create a new plug-in project for Liferay Portal.");
 
 		primaryProjectFacet = PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET;
 

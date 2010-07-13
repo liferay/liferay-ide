@@ -36,6 +36,8 @@ public interface IPortalConstants {
 
 	String LIFERAY_HOOK_XML_FILE = "liferay-hook.xml";
 
+	String LIFERAY_LAYOUTTPL_XML_FILE = "liferay-layout-templates.xml";
+
 	String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml";
 
 	String LIFERAY_SERVICE_BUILDER_XML_FILE = "service.xml";

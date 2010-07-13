@@ -25,6 +25,7 @@ import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,14 +34,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -57,6 +62,7 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCr
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -196,8 +202,32 @@ public class ProjectUtil {
 		return null;
 	}
 
-	public static IProject getProject(String testProjectName) {
-		return ResourcesPlugin.getWorkspace().getRoot().getProject(testProjectName);
+	public static IProject getProject(String projectName) {
+		return ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+	}
+
+	public static IFolder getDocroot(IProject project) {
+		IContainer retval = null;
+
+		if (project != null) {
+			IVirtualComponent comp = ComponentCore.createComponent(project);
+
+			if (comp != null) {
+				IVirtualFolder rootFolder = comp.getRootFolder();
+
+				if (rootFolder != null) {
+					retval = rootFolder.getUnderlyingFolder();
+				}
+			}
+		}
+
+		return retval instanceof IFolder ? (IFolder) retval : null;
+	}
+
+	public static IFolder getDocroot(String projectName) {
+		IProject project = CoreUtil.getProject(projectName);
+
+		return getDocroot(project);
 	}
 
 	public static SDK getSDK(IFacetedProject facetedProject, IProjectFacet facet)
@@ -440,5 +470,33 @@ public class ProjectUtil {
 		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
 		prefs.flush();
 	}
+
+	public static IFile createEmptyProjectFile(String fileName, IFolder folder)
+		throws CoreException {
+	
+		IFile emptyFile = folder.getFile(fileName);
+	
+		if (emptyFile.exists()) {
+			return emptyFile;
+		}
+		else {
+			emptyFile.create(new ByteArrayInputStream("".getBytes()), true, null);
+		}
+	
+		return emptyFile;
+	}
+
+	public static String getRelativePathFromDocroot(IProject project, String path) {
+		IFolder docroot = getDocroot(project);
+	
+		IPath pathValue = new Path(path);
+	
+		IPath relativePath = pathValue.makeRelativeTo(docroot.getFullPath());
+	
+		String retval = relativePath.toPortableString();
+	
+		return retval.startsWith("/") ? retval : "/" + retval;
+	}
+
 
 }
