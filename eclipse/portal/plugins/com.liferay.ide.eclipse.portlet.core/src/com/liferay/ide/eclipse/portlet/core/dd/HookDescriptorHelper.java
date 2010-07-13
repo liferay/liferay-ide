@@ -17,16 +17,13 @@ package com.liferay.ide.eclipse.portlet.core.dd;
 
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -88,7 +85,8 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 		// <hook> element
 		Element docRoot = document.getDocumentElement();
 
-		String relativeJspFolderPath = getRelativePathFromDocroot(model.getStringProperty(CUSTOM_JSPS_FOLDER));
+		String relativeJspFolderPath =
+			ProjectUtil.getRelativePathFromDocroot(this.project, model.getStringProperty(CUSTOM_JSPS_FOLDER));
 
 		Element customJspElement = null;
 
@@ -302,18 +300,6 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 		processor.formatNode(portalPropertiesElement);
 
 		return Status.OK_STATUS;
-	}
-
-	protected String getRelativePathFromDocroot(String customJspFolder) {
-		IFolder docroot = PortletUtil.getDocroot(this.project);
-
-		IPath fullJspPath = new Path(customJspFolder);
-
-		IPath relativeJspPath = fullJspPath.makeRelativeTo(docroot.getFullPath());
-
-		String retval = relativeJspPath.toPortableString();
-
-		return retval.startsWith("/") ? retval : "/" + retval;
 	}
 
 }

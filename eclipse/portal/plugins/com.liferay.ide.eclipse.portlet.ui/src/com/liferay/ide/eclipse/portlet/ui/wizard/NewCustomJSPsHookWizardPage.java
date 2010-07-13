@@ -17,8 +17,8 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
@@ -216,7 +216,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 				if (element instanceof IFolder) {
 					IFolder folder = (IFolder) element;
 
-					if (folder.equals(PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME)))) {
+					if (folder.equals(ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME)))) {
 						folder = folder.getFolder("custom_jsps");
 					}
 

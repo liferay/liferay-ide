@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.util.List;
@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaConventions;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jem.workbench.utility.JemProjectUtilities;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
@@ -104,10 +105,10 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		// hookDescriptorHelper.getCustomJSPFolder(getDataModel());
 		// if (customJspFolder != null) {
 		// return
-		// PortletUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
+		// ProjectUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
 		// }
 		// return
-		// PortletUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
+		// ProjectUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
 		// } else if (PORTAL_PROPERTIES_FILE.equals(propertyName)) {
 		// return
 		// PortletUtil.getFirstSrcFolder(getTargetProject()).getFullPath().append("portal.properties").toPortableString();
@@ -284,7 +285,8 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 	private IStatus validateJavaPackage(String packName) {
 		if (packName != null && packName.trim().length() > 0) {
 			// Use standard java conventions to validate the package name
-			IStatus javaStatus = JavaConventions.validatePackageName(packName);
+			IStatus javaStatus =
+				JavaConventions.validatePackageName(packName, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5);
 
 			if (javaStatus.getSeverity() == IStatus.ERROR) {
 				String msg = J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage();
@@ -399,7 +401,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 			return null;
 		}
 
-		return PortletUtil.getDocroot(getTargetProject()).getFile("WEB-INF/" + serviceFileProperty);
+		return ProjectUtil.getDocroot(getTargetProject()).getFile("WEB-INF/" + serviceFileProperty);
 	}
 
 	// protected final IFolder getJavaSourceFolder() {

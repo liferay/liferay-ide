@@ -19,7 +19,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.StringBufferOutputStream;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.dd.HookDescriptorHelper;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -46,7 +46,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -77,7 +76,6 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		super(model);
 
 		this.templateStore = templateStore;
-
 		this.contextType = contextType;
 	}
 
@@ -117,11 +115,11 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 	public IProject getTargetProject() {
 		String projectName = model.getStringProperty(PROJECT_NAME);
 
-		return ProjectUtilities.getProject(projectName);
+		return ProjectUtil.getProject(projectName);
 	}
 
 	private IStatus checkDescriptorFile(IProject project) {
-		IFolder docroot = PortletUtil.getDocroot(project);
+		IFolder docroot = ProjectUtil.getDocroot(project);
 
 		IFile hookDescriptorFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_HOOK_XML_FILE);
 
@@ -135,21 +133,6 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	private IFile createEmptyProjectFile(String fileName, IFolder folder)
-		throws CoreException {
-
-		IFile emptyFile = folder.getFile(fileName);
-
-		if (emptyFile.exists()) {
-			return emptyFile;
-		}
-		else {
-			emptyFile.create(new ByteArrayInputStream("".getBytes()), true, null);
-		}
-
-		return emptyFile;
 	}
 
 	protected IFile copyPortalJSPToProject(String portalJsp, IFolder customFolder)
@@ -262,7 +245,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		if (languagePropertiesFiles != null) {
 			for (String[] languagePropertyFile : languagePropertiesFiles) {
 				try {
-					IFile createdFile = createEmptyProjectFile(languagePropertyFile[0], contentFolder);
+					IFile createdFile = ProjectUtil.createEmptyProjectFile(languagePropertyFile[0], contentFolder);
 
 					if (createdFile != null) {
 						Set<IFile> languageFilesCreated =

@@ -17,7 +17,6 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
@@ -133,7 +132,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected IFolder getDocroot() {
-		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+		return ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	@Override
@@ -226,10 +225,6 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
 
 		getShell().setImage(shellImage);
-	}
-
-	protected void validateProjectRequirements(IProject selectedProject) {
-
 	}
 
 }

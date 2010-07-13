@@ -17,7 +17,8 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.LiferayDataModelOperation;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -50,7 +51,7 @@ import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"restriction", "unchecked"
+	"restriction",
 })
 public class AddServiceBuilderOperation extends LiferayDataModelOperation
 	implements INewServiceBuilderDataModelProperties {
@@ -74,7 +75,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 	}
 
 	private IStatus createServiceBuilderFile(IProject project) {
-		IFolder docroot = PortletUtil.getDocroot(project);
+		IFolder docroot = ProjectUtil.getDocroot(project);
 
 		IFile serviceBuilderFile = docroot.getFile("WEB-INF/" + getDataModel().getStringProperty(SERVICE_FILE));
 

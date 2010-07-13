@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.portlet.ui.action;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFile;
@@ -35,7 +35,7 @@ import org.eclipse.ui.IWorkbenchPart;
  */
 public class BuildServicesAction implements IObjectActionDelegate {
 
-	private ISelection fSelection;
+	protected ISelection fSelection;
 
 	public BuildServicesAction() {
 	}
@@ -64,7 +64,7 @@ public class BuildServicesAction implements IObjectActionDelegate {
 			else if (elem instanceof IProject) {
 				IProject project = (IProject) elem;
 
-				IFolder docroot = PortletUtil.getDocroot(project);
+				IFolder docroot = ProjectUtil.getDocroot(project);
 
 				if (docroot != null && docroot.exists()) {
 					servicesFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);

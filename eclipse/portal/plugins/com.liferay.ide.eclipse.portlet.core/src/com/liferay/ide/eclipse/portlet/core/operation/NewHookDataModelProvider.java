@@ -24,6 +24,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.dd.HookDescriptorHelper;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +62,6 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 		super();
 
 		this.templateStore = templateStore;
-
 		this.contextType = contextType;
 	}
 
@@ -81,10 +81,10 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
 			if (customJspFolder != null) {
 				// folder should be relative to docroot
-				return PortletUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
+				return ProjectUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
 			}
 
-			return PortletUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
+			return ProjectUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
 		}
 		else if (PORTAL_PROPERTIES_FILE.equals(propertyName)) {
 			return PortletUtil.getFirstSrcFolder(getTargetProject()).getFullPath().append("portal.properties").toPortableString();
@@ -121,6 +121,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 	@Override
 	public Set getPropertyNames() {
 		Set propertyNames = super.getPropertyNames();
+
 		propertyNames.add(CREATE_CUSTOM_JSPS);
 		propertyNames.add(CREATE_PORTAL_PROPERTIES);
 		propertyNames.add(CREATE_SERVICES);

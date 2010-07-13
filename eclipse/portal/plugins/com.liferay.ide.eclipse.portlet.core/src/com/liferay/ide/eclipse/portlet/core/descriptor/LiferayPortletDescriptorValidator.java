@@ -20,7 +20,6 @@ import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
@@ -318,7 +317,7 @@ public class LiferayPortletDescriptorValidator extends BaseValidator {
 		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
 
 		if (docrootResource != null && docrootResource.length() > 0) {
-			IFolder docroot = PortletUtil.getDocroot(project);
+			IFolder docroot = ProjectUtil.getDocroot(project);
 
 			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
 

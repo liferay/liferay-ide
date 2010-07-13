@@ -27,19 +27,12 @@ public class HookTemplateContextType extends TemplateContextType {
 		super();
 
 		addResolver(new GlobalTemplateVariables.Cursor());
-
 		addResolver(new GlobalTemplateVariables.Date());
-
 		addResolver(new GlobalTemplateVariables.Dollar());
-
 		addResolver(new GlobalTemplateVariables.LineSelection());
-
 		addResolver(new GlobalTemplateVariables.Time());
-
 		addResolver(new GlobalTemplateVariables.User());
-
 		addResolver(new GlobalTemplateVariables.WordSelection());
-
 		addResolver(new GlobalTemplateVariables.Year());
 	}
 

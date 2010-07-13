@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -65,7 +65,6 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		super();
 
 		this.templateStore = templateStore;
-
 		this.contextType = contextType;
 	}
 
@@ -106,7 +105,6 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return getProperty(CLASS_NAME).toString().toLowerCase();
 		}
 		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName)) {
-
 			return getProperty(CLASS_NAME);
 		}
 		else if (INIT_PARAMS.equals(propertyName)) {
@@ -273,9 +271,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 	public void init() {
 		super.init();
 
-		setProperty(TEMPLATE_STORE, this.templateStore);
-
-		setProperty(CONTEXT_TYPE, this.contextType);
+		this.setProperty(TEMPLATE_STORE, this.templateStore);
+		this.setProperty(CONTEXT_TYPE, this.contextType);
 	}
 
 	@Override
@@ -385,7 +382,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
 			String folderValue = getStringProperty(propertyName);
 
-			IFolder docroot = PortletUtil.getDocroot(getTargetProject());
+			IFolder docroot = ProjectUtil.getDocroot(getTargetProject());
 
 			if (!CoreUtil.isNullOrEmpty(folderValue)) {
 				String errorMsg = FileUtil.validateNewFolder(docroot, folderValue);

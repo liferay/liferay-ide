@@ -16,7 +16,6 @@
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 import com.liferay.ide.eclipse.ui.wizard.LiferayDataModelWizardPage;
@@ -245,7 +244,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
 	@Override
 	protected IFolder getDocroot() {
-		return PortletUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+		return ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	@Override
@@ -265,6 +264,4 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 		return true;
 	}
 
-	protected void validateProjectRequirements(IProject selectedProject) {
-	}
 }
