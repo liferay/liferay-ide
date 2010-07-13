@@ -24,11 +24,11 @@ import org.eclipse.gef.commands.Command;
 
 public class PortletLayoutCreateCommand extends Command {
 
-	protected PortletLayout newLayout;
-
 	protected LayoutTplDiagram diagram;
-	
+
 	protected LayoutConstraint layoutConstraint;
+	
+	protected PortletLayout newLayout;
 
 	public PortletLayoutCreateCommand(PortletLayout newLayout, LayoutTplDiagram diagram, LayoutConstraint constraint) {
 		this.newLayout = newLayout;
@@ -46,8 +46,6 @@ public class PortletLayoutCreateCommand extends Command {
 	}
 
 	public void redo() {
-		newLayout.setParent(diagram);
-
 		if (newLayout.getColumns().size() == 0) {
 			PortletColumn newColumn = new PortletColumn();
 			newLayout.addColumn(newColumn);
@@ -57,7 +55,7 @@ public class PortletLayoutCreateCommand extends Command {
 	}
 
 	public void undo() {
-		System.out.println("UNDO");
+		System.out.println("UNDO not yet supported!");
 	}
 
 }

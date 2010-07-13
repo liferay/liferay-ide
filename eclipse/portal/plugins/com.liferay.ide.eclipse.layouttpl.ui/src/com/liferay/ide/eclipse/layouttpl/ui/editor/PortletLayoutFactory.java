@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.editor;
 
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
@@ -19,26 +20,35 @@ import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.requests.CreationFactory;
 
-
+/**
+ * @author Greg Amerson
+ */
 public class PortletLayoutFactory implements CreationFactory {
 
-	private int numColumns;
+	protected int numColumns;
 
-	public PortletLayoutFactory(int numCols) {
+	protected int[] weights;
+
+	public PortletLayoutFactory(int numCols, int... weights) {
 		if (numCols < 1) {
 			throw new IllegalArgumentException("Number of columns must be greater than 0");
 		}
 
+		if (numCols != weights.length) {
+			throw new IllegalArgumentException("Number of weight args must match number of columns.");
+		}
+
 		this.numColumns = numCols;
+		this.weights = weights;
 	}
 
 	public Object getNewObject() {
 		PortletLayout newRow = new PortletLayout();
-		int colWeight = (int) (100 / numColumns);
 
 		for (int i = 0; i < numColumns; i++) {
 			PortletColumn newColumn = new PortletColumn();
-			newColumn.setWeight(colWeight);
+			newColumn.setWeight(weights[i]);
+
 			newRow.addColumn(newColumn);
 		}
 

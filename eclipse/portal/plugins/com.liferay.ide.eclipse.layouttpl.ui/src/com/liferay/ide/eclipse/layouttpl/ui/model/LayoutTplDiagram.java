@@ -15,8 +15,6 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
-
-
 import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.eclipse.layouttpl.ui.util.LayoutTplUtil;
 import com.liferay.ide.eclipse.templates.core.ITemplateOperation;
@@ -35,56 +33,15 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
+/**
+ * @author Greg Amerson
+ */
 @SuppressWarnings("restriction")
 public class LayoutTplDiagram extends ModelElement implements PropertyChangeListener {
 
 	public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
 
 	public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved";
-
-	protected IDOMModel domModel;
-
-	protected List<ModelElement> rows = new ArrayList<ModelElement>();
-
-	protected String id;
-
-	protected String role;
-
-	public LayoutTplDiagram() {
-		super();
-
-		this.id = "main-content";
-		this.role = "main";
-	}
-
-	public void addRow(PortletLayout newRow) {
-		addRow(newRow, -1);
-	}
-
-	public boolean addRow(PortletLayout newRow, int index) {
-		if (newRow != null) {
-			if (index < 0) {
-				rows.add(newRow);
-			}
-			else {
-				rows.add(index, newRow);
-			}
-
-			newRow.addPropertyChangeListener(this);
-
-			updateColumns();
-
-			firePropertyChange(ROW_ADDED_PROP, null, newRow);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	public List<ModelElement> getRows() {
-		return rows;
-	}
 
 	public static LayoutTplDiagram createFromFile(IFile file) {
 		if (file == null || !(file.exists())) {
@@ -126,7 +83,6 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 
 			for (IDOMElement portletLayoutElement : portletLayoutElements) {
 				PortletLayout newPortletLayout = PortletLayout.createFromElement(portletLayoutElement);
-				newPortletLayout.setParent(newDiagram);
 				newDiagram.addRow(newPortletLayout);
 			}
 		}
@@ -137,8 +93,61 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 		return newDiagram;
 	}
 
+	protected IDOMModel domModel;
+
+	protected String id;
+
+	protected String role;
+
+	protected List<ModelElement> rows = new ArrayList<ModelElement>();
+
+	public LayoutTplDiagram() {
+		super();
+
+		this.id = "main-content";
+		this.role = "main";
+	}
+
+	public void addRow(PortletLayout newRow) {
+		addRow(newRow, -1);
+	}
+
+	public boolean addRow(PortletLayout newRow, int index) {
+		if (newRow != null) {
+			if (index < 0) {
+				rows.add(newRow);
+			}
+			else {
+				rows.add(index, newRow);
+			}
+
+			newRow.setParent(this);
+			newRow.addPropertyChangeListener(this);
+
+			this.updateColumns();
+			this.firePropertyChange(ROW_ADDED_PROP, null, newRow);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public List<ModelElement> getRows() {
+		return rows;
+	}
+
 	public void propertyChange(PropertyChangeEvent evt) {
 		String prop = evt.getPropertyName();
+
 		if (PortletLayout.COLUMN_ADDED_PROP.equals(prop) || PortletLayout.COLUMN_REMOVED_PROP.equals(prop)) {
 			updateColumns();
 		}
@@ -154,6 +163,7 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 	public boolean removeRow(PortletLayout existingRow) {
 		if (existingRow != null && rows.remove(existingRow)) {
 			firePropertyChange(ROW_REMOVED_PROP, null, existingRow);
+
 			return true;
 		}
 
@@ -163,6 +173,7 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 	public void saveToFile(IFile file, IProgressMonitor monitor) {
 		ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation("layouttpl.tpl");
 		templateOperation.setOutputFile(file);
+
 		try {
 			VelocityContext ctx = templateOperation.getContext();
 			ctx.put("root", this);
@@ -171,17 +182,28 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 			templateOperation.execute(monitor);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LayoutTplUI.logError(e);
 		}
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	protected void updateColumns() {
 		int numIdCount = 1;
+
 		for (ModelElement row : rows) {
 			List<ModelElement> cols = ((PortletLayout) row).getColumns();
+
 			for (int i = 0; i < cols.size(); i++) {
 				PortletColumn col = ((PortletColumn) cols.get(i));
 				col.setNumId(numIdCount++);
+
 				if (i == 0 && cols.size() > 1) {
 					col.setFirst(true);
 				}
@@ -190,21 +212,5 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 				}
 			}
 		}
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 }

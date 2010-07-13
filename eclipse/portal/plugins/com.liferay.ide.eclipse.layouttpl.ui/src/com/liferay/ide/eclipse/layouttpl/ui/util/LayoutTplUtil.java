@@ -12,86 +12,35 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetInstall;
 import com.liferay.ide.eclipse.layouttpl.ui.model.ModelElement;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.LayoutTplDiagramEditPart;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.PortletLayoutEditPart;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.NodeList;
 
+/**
+ * @author Greg Amerson
+ */
 @SuppressWarnings("restriction")
 public class LayoutTplUtil {
-
-	public static int getRowIndex(PortletLayoutEditPart layoutEditPart) {
-		if (layoutEditPart == null) {
-			return -1;
-		}
-
-		LayoutTplDiagramEditPart diagramPart = (LayoutTplDiagramEditPart) layoutEditPart.getParent();
-		Object[] rows = diagramPart.getChildren().toArray();
-
-		for (int i = 0; i < rows.length; i++) {
-			if (layoutEditPart.equals(rows[i])) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
-
-	public static int getColumnIndex(PortletLayout currentParent, PortletColumn column) {
-		if (currentParent == null || column == null) {
-			return -1;
-		}
-
-		List<ModelElement> cols = currentParent.getColumns();
-
-		for (int i = 0; i < cols.size(); i++) {
-			if (column.equals(cols.get(i))) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
-
-
-	public static boolean isCreateRequest(Class<?> class1, Request request) {
-		if (!(request instanceof CreateRequest)) {
-			return false;
-		}
-
-		if (!(((CreateRequest) request).getNewObject().getClass() == class1)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public static IDOMElement findMainContentElement(IDOMDocument rootDocument) {
-		if (rootDocument == null || !(rootDocument.hasChildNodes())) {
-			return null;
-		}
-
-		IDOMElement mainContentElement = null;
-
-		mainContentElement = (IDOMElement) rootDocument.getElementById("main-content");
-
-		return mainContentElement;
-	}
 
 	public static IDOMElement[] findChildElementsByClassName(
 		IDOMElement parentElement, String childElementTag, String className) {
@@ -114,18 +63,32 @@ public class LayoutTplUtil {
 		return childElements.toArray(new IDOMElement[0]);
 	}
 
-	public static boolean hasClassName(IDOMElement domElement, String className) {
-		boolean retval = false;
+	public static IDOMElement findMainContentElement(IDOMDocument rootDocument) {
+		if (rootDocument == null || !(rootDocument.hasChildNodes())) {
+			return null;
+		}
 
-		if (domElement != null) {
-			String classAttr = domElement.getAttribute("class");
+		IDOMElement mainContentElement = null;
 
-			if (!CoreUtil.isNullOrEmpty(classAttr)) {
-				retval = classAttr.contains(className);
+		mainContentElement = (IDOMElement) rootDocument.getElementById("main-content");
+
+		return mainContentElement;
+	}
+
+	public static int getColumnIndex(PortletLayout currentParent, PortletColumn column) {
+		if (currentParent == null || column == null) {
+			return -1;
+		}
+
+		List<ModelElement> cols = currentParent.getColumns();
+
+		for (int i = 0; i < cols.size(); i++) {
+			if (column.equals(cols.get(i))) {
+				return i;
 			}
 		}
 
-		return retval;
+		return -1;
 	}
 
 	public static String getRoleValue(IDOMElement mainContentElement, String defaultValue) {
@@ -139,6 +102,22 @@ public class LayoutTplUtil {
 		return retval;
 	}
 
+	public static int getRowIndex(PortletLayoutEditPart layoutEditPart) {
+		if (layoutEditPart == null) {
+			return -1;
+		}
+
+		LayoutTplDiagramEditPart diagramPart = (LayoutTplDiagramEditPart) layoutEditPart.getParent();
+		Object[] rows = diagramPart.getChildren().toArray();
+
+		for (int i = 0; i < rows.length; i++) {
+			if (layoutEditPart.equals(rows[i])) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
 
 	public static int getWeightValue(IDOMElement portletColumnElement, int defaultValue) {
 		int weightValue = defaultValue;
@@ -196,6 +175,36 @@ public class LayoutTplUtil {
 		}
 
 		return weightValue;
+	}
+
+	public static boolean hasClassName(IDOMElement domElement, String className) {
+		boolean retval = false;
+
+		if (domElement != null) {
+			String classAttr = domElement.getAttribute("class");
+
+			if (!CoreUtil.isNullOrEmpty(classAttr)) {
+				retval = classAttr.contains(className);
+			}
+		}
+
+		return retval;
+	}
+
+	public static boolean isCreateRequest(Class<?> class1, Request request) {
+		if (!(request instanceof CreateRequest)) {
+			return false;
+		}
+
+		if (!(((CreateRequest) request).getNewObject().getClass() == class1)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean isLayoutTplProject(IProject project) {
+		return ProjectUtil.hasFacet(project, LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
 	}
 
 }

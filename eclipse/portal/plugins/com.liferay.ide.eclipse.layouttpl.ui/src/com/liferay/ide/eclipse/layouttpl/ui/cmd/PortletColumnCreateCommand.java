@@ -28,11 +28,11 @@ import org.eclipse.gef.commands.Command;
  */
 public class PortletColumnCreateCommand extends Command {
 
-	protected PortletColumn newColumn;
-
 	protected LayoutTplDiagram diagram;
-	
+
 	protected LayoutConstraint layoutConstraint;
+	
+	protected PortletColumn newColumn;
 
 	public PortletColumnCreateCommand(PortletColumn newColumn, LayoutTplDiagram diagram, LayoutConstraint constraint) {
 		this.newColumn = newColumn;
@@ -52,16 +52,13 @@ public class PortletColumnCreateCommand extends Command {
 	public void redo() {
 		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.newColumnIndex == -1) {
 			PortletLayout portletLayout = new PortletLayout();
-			newColumn.setParent(portletLayout);
 			portletLayout.addColumn(newColumn);
-			portletLayout.setParent(diagram);
+
 			diagram.addRow(portletLayout, layoutConstraint.newRowIndex);
 		}
-		else if (layoutConstraint.rowIndex > -1 && /*
-													 * layoutConstraint.newRowIndex
-													 * > -1 &&
-													 */
-			layoutConstraint.newColumnIndex > -1) {
+		else if (layoutConstraint.rowIndex > -1 && layoutConstraint.newColumnIndex > -1) {
+			/* layoutConstraint.newRowIndex > -1 */
+
 			if (layoutConstraint.refColumn != null) {
 				layoutConstraint.refColumn.setWeight(layoutConstraint.weight);
 			}
@@ -73,7 +70,6 @@ public class PortletColumnCreateCommand extends Command {
 			PortletLayout portletLayout = (PortletLayout) row;
 
 			if (row != null) {
-				newColumn.setParent(portletLayout);
 				portletLayout.addColumn(newColumn, layoutConstraint.newColumnIndex);
 			}
 		}
@@ -83,13 +79,14 @@ public class PortletColumnCreateCommand extends Command {
 		if (layoutConstraint.equals(LayoutConstraint.EMPTY)) {
 			for (ModelElement row : diagram.getRows()) {
 				PortletLayout portletLayout = (PortletLayout) row;
+
 				if (portletLayout.getColumns().size() == 1 && portletLayout.getColumns().get(0).equals(newColumn)) {
 					diagram.removeRow(portletLayout);
 				}
 			}
 		}
 		else {
-			System.out.println("UNDO");
+			System.out.println("UNDO not supported!");
 		}
 	}
 

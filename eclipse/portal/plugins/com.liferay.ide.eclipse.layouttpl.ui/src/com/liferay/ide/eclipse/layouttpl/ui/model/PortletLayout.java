@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
@@ -24,18 +25,48 @@ import java.util.List;
 
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+/**
+ * @author Greg Amerson
+ */
 @SuppressWarnings("restriction")
 public class PortletLayout extends ModelElement implements PropertyChangeListener {
+
+	public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged";
 
 	public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded";
 
 	public static final String COLUMN_REMOVED_PROP = "PortletLayout.ColumnRemoved";
 
-	public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged";
+	public static PortletLayout createFromElement(IDOMElement portletLayoutElement) {
+		if (portletLayoutElement == null) {
+			return null;
+		}
 
-	protected List<ModelElement> columns = new ArrayList<ModelElement>();
+		PortletLayout newPortletLayout = new PortletLayout();
+
+		String existingClassName = portletLayoutElement.getAttribute("class");
+
+		if ((!CoreUtil.isNullOrEmpty(existingClassName)) && existingClassName.contains("portlet-layout")) {
+			newPortletLayout.setClassName(existingClassName);
+		}
+		else {
+			newPortletLayout.setClassName("portlet-layout");
+		}
+
+		IDOMElement[] portletColumnElements =
+			LayoutTplUtil.findChildElementsByClassName(portletLayoutElement, "div", "portlet-column");
+
+		for (IDOMElement portletColumnElement : portletColumnElements) {
+			PortletColumn newPortletColumn = PortletColumn.createFromElement(portletColumnElement);
+			newPortletLayout.addColumn(newPortletColumn);
+		}
+
+		return newPortletLayout;
+	}
 
 	protected String className;
+
+	protected List<ModelElement> columns = new ArrayList<ModelElement>();
 
 	public PortletLayout() {
 		super();
@@ -55,6 +86,7 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 				columns.add(index, newColumn);
 			}
 
+			newColumn.setParent(this);
 			newColumn.addPropertyChangeListener(this);
 
 			firePropertyChange(COLUMN_ADDED_PROP, null, newColumn);
@@ -65,8 +97,20 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 		return false;
 	}
 
+	public String getClassName() {
+		return className;
+	}
+
 	public List<ModelElement> getColumns() {
 		return columns;
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		String prop = evt.getPropertyName();
+
+		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
+			firePropertyChange(CHILD_COLUMN_WEIGHT_CHANGED_PROP, null, evt.getSource());
+		}
 	}
 
 	@Override
@@ -79,49 +123,11 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 	public boolean removeColumn(PortletColumn existingColumn) {
 		if (existingColumn != null && columns.remove(existingColumn)) {
 			firePropertyChange(COLUMN_REMOVED_PROP, null, existingColumn);
+
 			return true;
 		}
 
 		return false;
-	}
-
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
-
-		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
-			firePropertyChange(CHILD_COLUMN_WEIGHT_CHANGED_PROP, null, evt.getSource());
-		}
-	}
-
-	public static PortletLayout createFromElement(IDOMElement portletLayoutElement) {
-		if (portletLayoutElement == null) {
-			return null;
-		}
-
-		PortletLayout newPortletLayout = new PortletLayout();
-		
-		String existingClassName = portletLayoutElement.getAttribute("class");
-		if ((!CoreUtil.isNullOrEmpty(existingClassName)) && existingClassName.contains("portlet-layout")) {
-			newPortletLayout.setClassName(existingClassName);
-		}
-		else {
-			newPortletLayout.setClassName("portlet-layout");
-		}
-
-		IDOMElement[] portletColumnElements =
-			LayoutTplUtil.findChildElementsByClassName(portletLayoutElement, "div", "portlet-column");
-
-		for (IDOMElement portletColumnElement : portletColumnElements) {
-			PortletColumn newPortletColumn = PortletColumn.createFromElement(portletColumnElement);
-			newPortletColumn.setParent(newPortletLayout);
-			newPortletLayout.addColumn(newPortletColumn);
-		}
-
-		return newPortletLayout;
-	}
-
-	public String getClassName() {
-		return className;
 	}
 
 	public void setClassName(String className) {

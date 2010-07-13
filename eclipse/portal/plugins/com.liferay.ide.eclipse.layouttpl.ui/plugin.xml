@@ -35,6 +35,34 @@
           path="templates/">
     </templatesFolder>
  </extension>
-   
+ <extension
+       point="org.eclipse.ui.newWizards">
+       <wizard
+            category="com.liferay.ide.eclipse.newWizards"
+            icon="icons/n16/layout_new.png"
+            id="com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate"
+            name="Liferay Layout Template">
+         <class class="com.liferay.ide.eclipse.layouttpl.ui.wizard.NewLayoutTplWizard">
+         	<parameter name="liferay_artifact" value="true"/>
+            <parameter name="menuIndex" value="40" />
+         </class>
+         <description>
+            Create a new Liferay Layout Template
+         </description>
+      </wizard>
+ </extension>
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      
+      <contextType
+            class="com.liferay.ide.eclipse.layouttpl.ui.wizard.LayoutTplTemplateContextType"
+            id="layouttpl_new"
+            name="New Layout Template">
+      </contextType>
+      <include
+            file="templates/layouttpl-templates.xml"
+            translations="templates/layouttpl-templates.properties">
+      </include>
+   </extension>
    
 </plugin>
