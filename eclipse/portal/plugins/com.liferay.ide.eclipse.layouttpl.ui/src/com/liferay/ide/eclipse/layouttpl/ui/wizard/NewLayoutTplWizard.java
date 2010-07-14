@@ -80,7 +80,7 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
 	}
 
 	protected ImageDescriptor getDefaultImageDescriptor() {
-		return LayoutTplUI.imageDescriptorFromPlugin(LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_wiz.png");
+		return LayoutTplUI.imageDescriptorFromPlugin(LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png");
 	}
 
 	@Override

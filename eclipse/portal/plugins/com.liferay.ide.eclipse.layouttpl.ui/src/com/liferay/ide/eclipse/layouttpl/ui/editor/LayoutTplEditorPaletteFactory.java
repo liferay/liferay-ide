@@ -71,18 +71,27 @@ public class LayoutTplEditorPaletteFactory {
 		PaletteDrawer group = new PaletteDrawer("Layout");
 
 		ImageDescriptor desc =
-			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/e16/layout.png"));
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/column_16x16.png"));
+		ImageDescriptor large =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/column_32x32.png"));
 
 		CombinedTemplateCreationEntry component =
 			new CombinedTemplateCreationEntry(
-				"Column", "Create a single column", PortletColumn.class,
-				new SimpleFactory(PortletColumn.class), desc, desc);
+				"Column", "Create a single column", PortletColumn.class, new SimpleFactory(PortletColumn.class), desc,
+				large);
 
 		group.add(component);
 
+		desc =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/palette/row_16x16.png"));
+		large =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry("/icons/palette/row_32x32.png"));
+
 		CombinedTemplateCreationEntry component2 =
 			new CombinedTemplateCreationEntry("Row", "Create a single row", PortletLayout.class, new SimpleFactory(
-				PortletLayout.class), desc, desc);
+				PortletLayout.class), desc, large);
 
 		group.add(component2);
 
@@ -90,33 +99,59 @@ public class LayoutTplEditorPaletteFactory {
 
 		PaletteDrawer group2 = new PaletteDrawer("Templates");
 
+		desc =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/2column_50_50_16x16.png"));
+		large =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/2column_50_50_32x32.png"));
+
 		CombinedTemplateCreationEntry component3 =
 			new CombinedTemplateCreationEntry(
 				"2 Columns (50/50)", "Create a 2 column row both at 50% width.", PortletLayout.class,
-				new PortletLayoutFactory(2, 50, 50),
-				desc, desc);
+				new PortletLayoutFactory(2, 50, 50), desc, large);
 
 		group2.add(component3);
+
+		desc =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/2column_30_70_16x16.png"));
+		large =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/2column_30_70_32x32.png"));
 
 		CombinedTemplateCreationEntry component4 =
 			new CombinedTemplateCreationEntry(
 				"2 Columns (30/70)", "Create a 2 column row with 30% and 70% for column widths.", PortletLayout.class,
-				new PortletLayoutFactory(2, 30, 70),
-				desc, desc);
+				new PortletLayoutFactory(2, 30, 70), desc, large);
 
 		group2.add(component4);
+
+		desc =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/2column_70_30_16x16.png"));
+		large =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/2column_70_30_32x32.png"));
 
 		CombinedTemplateCreationEntry component5 =
 			new CombinedTemplateCreationEntry(
 				"2 Columns (70/30)", "Create a 2 column row with 70% and 30% for column widths.", PortletLayout.class,
-				new PortletLayoutFactory(2, 70, 30), desc, desc);
+				new PortletLayoutFactory(2, 70, 30), desc, large);
 
 		group2.add(component5);
+
+		desc =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/3column_16x16.png"));
+		large =
+			ImageDescriptor.createFromURL(LayoutTplUI.getDefault().getBundle().getEntry(
+				"/icons/palette/3column_32x32.png"));
 
 		CombinedTemplateCreationEntry component6 =
 			new CombinedTemplateCreationEntry(
 				"3 Columns", "Create a 3 column row with all widths at 33%.", PortletLayout.class,
-				new PortletLayoutFactory(3, 33, 33, 33), desc, desc);
+				new PortletLayoutFactory(3, 33, 33, 33), desc, large);
 
 		group2.add(component6);
 
