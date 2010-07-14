@@ -38,6 +38,8 @@ import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -70,11 +72,6 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		super.configureGraphicalViewer();
 		
 		GraphicalViewer viewer = getGraphicalViewer();
-		// FigureCanvas control = (FigureCanvas) viewer.getControl();
-		// control.getViewport().setContentsTracksHeight(true);
-		// control.getViewport().setContentsTracksWidth(true);
-		// control.setHorizontalScrollBarVisibility(FigureCanvas.NEVER);
-		// control.setVerticalScrollBarVisibility(FigureCanvas.NEVER);
 
 		viewer.setEditPartFactory(new LayoutTplEditPartFactory());
 
@@ -178,9 +175,16 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 	
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
-		GraphicalViewer viewer = getGraphicalViewer();
+		final GraphicalViewer viewer = getGraphicalViewer();
 		viewer.setContents(getDiagram()); // set the contents of this editor
-		viewer.getContents().refresh();// rebuild column heights if needed
+		viewer.getControl().addPaintListener(new PaintListener() {
+
+			public void paintControl(PaintEvent e) {
+				getGraphicalViewer().getContents().refresh();// rebuild column heights if needed
+				viewer.getControl().removePaintListener(this);
+			}
+
+		});
 
 		// listen for dropped parts
 		viewer.addDropTargetListener(createTransferDropTargetListener());

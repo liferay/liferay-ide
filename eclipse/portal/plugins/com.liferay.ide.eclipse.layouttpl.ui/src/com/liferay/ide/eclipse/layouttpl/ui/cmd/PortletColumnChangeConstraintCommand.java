@@ -65,8 +65,11 @@ public class PortletColumnChangeConstraintCommand extends Command {
 			int diffWeight = existingWeight - layoutConstraint.weight;
 
 			PortletColumn refColumn = layoutConstraint.refColumn;
-			refColumn.setWeight(refColumn.getWeight() + diffWeight);
+			int newWeight = refColumn.getWeight() + diffWeight;
 
+			newWeight = LayoutTplUtil.adjustWeight(newWeight);
+
+			refColumn.setWeight(newWeight);
 		}
 	}
 

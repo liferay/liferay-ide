@@ -15,8 +15,6 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.policies;
 
-
-
 import com.liferay.ide.eclipse.layouttpl.ui.cmd.PortletLayoutDeleteCommand;
 import com.liferay.ide.eclipse.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
@@ -25,9 +23,10 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ComponentEditPolicy;
 import org.eclipse.gef.requests.GroupRequest;
 
-
+/**
+ * @author Greg Amerson
+ */
 public class PortletLayoutComponentEditPolicy extends ComponentEditPolicy {
-
 
 	protected Command createDeleteCommand(GroupRequest deleteRequest) {
 		Object parent = getHost().getParent().getModel();

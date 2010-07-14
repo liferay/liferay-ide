@@ -34,6 +34,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
@@ -237,7 +238,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 				newWeight = 50; // 50%
 			}
 
-			constraint.weight = newWeight;
+			constraint.weight = LayoutTplUtil.adjustWeight(newWeight);
 			constraint.refColumn = refColumnPart.getCastedModel();
 		}
 
@@ -285,7 +286,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 		// get new weight based on resize
 		int rowWidth = getHostFigure().getSize().width - (PortletLayoutEditPart.LAYOUT_MARGIN * 2);
-		constraint.weight = (int) ((double) rect.width / (double) rowWidth * 100d);
+		constraint.weight = LayoutTplUtil.adjustWeight((int) ((double) rect.width / (double) rowWidth * 100d));
 
 		return constraint;
 	}
@@ -310,6 +311,17 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		}
 
 		return null;
+	}
+
+	@Override
+	protected Command getMoveChildrenCommand(Request request) {
+		return null;
+	}
+
+	@Override
+	protected EditPolicy createChildEditPolicy(EditPart child) {
+		// return new RoundedRectangleEditPolicy();
+		return super.createChildEditPolicy(child);
 	}
 
 }

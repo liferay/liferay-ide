@@ -38,12 +38,10 @@ public class PortletColumnLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
-		System.out.println("PortletColumnLayoutEditPolicy.createChangeConstraintCommand");
 		return null;
 	}
 
 	protected IFigure createLayoutFeedbackFigure(Request request) {
-
 		// if (request instanceof CreateRequest) {
 		// LayoutConstraint constraint = (LayoutConstraint)
 		// getConstraintFor((CreateRequest) request);
@@ -88,13 +86,11 @@ public class PortletColumnLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected Object getConstraintFor(Point point) {
-		System.out.println("PortletColumnLayoutEditPolicy.getConstraintFor " + point);
 		return null;
 	}
 
 	@Override
 	protected Object getConstraintFor(Rectangle rect) {
-		System.out.println("PortletColumnLayoutEditPolicy.getConstraintFor " + rect);
 		return null;
 	}
 
@@ -123,6 +119,17 @@ public class PortletColumnLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 		// addFeedback(layoutFeedbackFigure);
 		// }
 		// }
+	}
+
+
+	@Override
+	protected Command getMoveChildrenCommand(Request request) {
+		return null;
+	}
+
+	@Override
+	protected Command getAddCommand(Request generic) {
+		return null;
 	}
 
 }

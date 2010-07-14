@@ -207,4 +207,22 @@ public class LayoutTplUtil {
 		return ProjectUtil.hasFacet(project, LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
 	}
 
+
+	public static int adjustWeight(int newWeight) {
+		int retval = -1;
+
+		// make sure that new weight is valid
+		if (newWeight > 31 && newWeight < 34) {
+			retval = 33;
+		}
+		else if (newWeight > 65 && newWeight < 69) {
+			retval = 66;
+		}
+		else {
+			retval = (int) Math.round((double) newWeight / (double) 5) * 5;
+		}
+
+		return retval;
+	}
+
 }

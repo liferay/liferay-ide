@@ -103,6 +103,7 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart {
 		else {
 			gd = createGridData();
 		}
+
 		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
 
 		int columnWeight = getCastedModel().getWeight();

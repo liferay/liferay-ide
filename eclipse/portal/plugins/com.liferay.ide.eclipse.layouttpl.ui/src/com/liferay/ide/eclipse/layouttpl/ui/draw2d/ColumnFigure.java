@@ -27,6 +27,8 @@ public class ColumnFigure extends RoundedRectangle {
 
 	protected Font correctedFont = null;
 
+	protected boolean drawText = true;
+
 	protected String text = null;
 
 	public ColumnFigure() {
@@ -40,6 +42,10 @@ public class ColumnFigure extends RoundedRectangle {
 		super.paintFigure(graphics);
 
 		if (getText() == null) {
+			return;
+		}
+
+		if (!shouldDrawText()) {
 			return;
 		}
 
@@ -96,6 +102,14 @@ public class ColumnFigure extends RoundedRectangle {
 
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	public boolean shouldDrawText() {
+		return drawText;
+	}
+
+	public void setDrawText(boolean drawText) {
+		this.drawText = drawText;
 	}
 
 }
