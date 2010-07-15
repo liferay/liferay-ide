@@ -401,7 +401,13 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 			return null;
 		}
 
-		return ProjectUtil.getDocroot(getTargetProject()).getFile("WEB-INF/" + serviceFileProperty);
+		IFolder docroot = ProjectUtil.getDocroot(getTargetProject());
+
+		if (docroot == null) {
+			return null;
+		}
+
+		return docroot.getFile("WEB-INF/" + serviceFileProperty);
 	}
 
 	// protected final IFolder getJavaSourceFolder() {
