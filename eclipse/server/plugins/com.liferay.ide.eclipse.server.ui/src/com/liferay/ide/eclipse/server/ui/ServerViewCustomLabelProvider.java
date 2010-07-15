@@ -46,14 +46,18 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 				PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage();
 		}
 		else if (element instanceof ModuleServer) {			
-			ModuleServer server = (ModuleServer) element;
-			IProject project = server.getModule()[0].getProject();
-			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
-			IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
-
-			IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(liferayFacet);
-			return PortalServerUIPlugin.imageDescriptorFromPlugin(
-				PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png").createImage();
+			try {
+				ModuleServer server = (ModuleServer) element;
+				IProject project = server.getModule()[0].getProject();
+				IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
+				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
+				IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(liferayFacet);
+				return PortalServerUIPlugin.imageDescriptorFromPlugin(
+					PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png").createImage();
+			}
+			catch (Exception ex) {
+				// best effort no need to log error
+			}
 		}
 		
 		return null;
