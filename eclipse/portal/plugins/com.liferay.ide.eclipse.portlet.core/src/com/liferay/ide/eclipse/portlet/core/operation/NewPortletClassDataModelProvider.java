@@ -117,7 +117,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return true;
 		}
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
-			return getProperty(CLASS_NAME).toString().toLowerCase();
+			return "/html/" + getProperty(CLASS_NAME).toString().toLowerCase();
 		}
 		else if (ICON_FILE.equals(propertyName)) {
 			return "/icon.png";
@@ -389,6 +389,12 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 				if (errorMsg != null) {
 					return PortletCore.createErrorStatus(errorMsg);
+				}
+
+				// make sure path first segment isn't the same as the portlet name
+				String path = new Path(folderValue).segment(0);
+				if (!CoreUtil.isNullOrEmpty(path) && path.equals(getStringProperty(PORTLET_NAME))) {
+					return PortletCore.createErrorStatus("JSP folder cannot match portlet name");
 				}
 			}
 		}
