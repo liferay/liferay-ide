@@ -68,7 +68,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 	protected void createProjectNameGroup(Composite parent) {
 		projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Plug-in project:"); //$NON-NLS-1$
+		projectNameLabel.setText("Layout plug-in project:"); //$NON-NLS-1$
 		projectNameLabel.setLayoutData(new GridData());
 
 		// set up project name entry field
