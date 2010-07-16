@@ -15,3 +15,4 @@ plugin@org.eclipse.jst.common.frameworks=v201001252130,:pserver:anonymous@dev.ec
 plugin@org.eclipse.jst.j2ee.xdoclet.runtime=v200805140135,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,ejbtools/plugins/org.eclipse.jst.j2ee.xdoclet.runtime
 
 plugin@org.eclipse.jst.j2ee.ejb.annotations.xdoclet=v200805140020,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,ejbtools/plugins/org.eclipse.jst.j2ee.ejb.annotations.xdoclet
+plugin@org.eclipse.wst.common.snippets=v201001280015,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.snippets
