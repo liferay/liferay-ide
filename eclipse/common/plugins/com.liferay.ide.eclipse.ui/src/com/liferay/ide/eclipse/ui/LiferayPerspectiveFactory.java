@@ -28,6 +28,7 @@ import org.eclipse.ui.views.IViewDescriptor;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("deprecation")
 public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
@@ -42,6 +43,9 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	protected static String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
 	
+	protected static String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
+		"com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate";
+
 	protected static String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.eclipse.project.ui.newProjectWizard";
 
 	protected static String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
@@ -88,6 +92,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		layout.addNewWizardShortcut(ID_NEW_PORTLET_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_HOOK_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_SERVICE_BUILDER_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_LAYOUT_TEMPLATE_WIZARD);
 		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewPackageCreationWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewClassCreationWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard"); //$NON-NLS-1$
