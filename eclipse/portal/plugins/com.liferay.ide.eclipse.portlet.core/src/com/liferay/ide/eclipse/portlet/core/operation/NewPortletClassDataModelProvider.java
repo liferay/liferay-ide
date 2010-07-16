@@ -68,6 +68,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		this.contextType = contextType;
 	}
 
+	public NewPortletClassDataModelProvider() {
+		super();
+	}
+
 	@Override
 	public IDataModelOperation getDefaultOperation() {
 		return new AddPortletOperation(this.model);

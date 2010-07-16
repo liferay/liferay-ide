@@ -64,31 +64,10 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 	public void setProjectType(String projectType) {
 		this.projectType = projectType;
-		
-		if (IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
-			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, true);
-			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
-			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
-			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
-		}
-		else if (IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
-			getDataModel().setProperty(PLUGIN_TYPE_HOOK, true);
-			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
-			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
-			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
-		}
-		else if (IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
-			getDataModel().setProperty(PLUGIN_TYPE_EXT, true);
-			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
-			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
-			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
-		}
-		else if (IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
-			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, true);
-			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
-			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
-			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
-		}
+	}
+
+	public String getProjectType() {
+		return this.projectType;
 	}
 
 	@Override
@@ -96,7 +75,8 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		this.firstPage = createFirstPage();
 		
 		return new IWizardPage[] {
-			firstPage, new PluginProjectAdvPage(this, model)
+			firstPage
+		// , new PluginProjectAdvPage(this, model)
 		};
 	}
 
@@ -214,8 +194,31 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 	protected void setupWizard() {
 		setWindowTitle("New Plug-in Project");
-		
 		setShowFacetsSelectionPage(false);
+	}
+
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		// TODO Implement getNextPage method on class NewPluginProjectWizard
+		return super.getNextPage(page);
+	}
+
+	@Override
+	public IWizardPage getPage(String pageName) {
+		// TODO Implement getPage method on class NewPluginProjectWizard
+		return super.getPage(pageName);
+	}
+
+	@Override
+	public int getPageCount() {
+		// TODO Implement getPageCount method on class NewPluginProjectWizard
+		return super.getPageCount();
+	}
+
+	@Override
+	public IWizardPage getPreviousPage(IWizardPage page) {
+		// TODO Implement getPreviousPage method on class NewPluginProjectWizard
+		return super.getPreviousPage(page);
 	}
 
 }

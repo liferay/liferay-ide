@@ -479,32 +479,6 @@
          </facet>
       </validator>
    </extension>
-   <extension
-         point="com.liferay.ide.eclipse.project.core.liferayProject">
-      <liferayProjectDefinition
-            class="com.liferay.ide.eclipse.project.core.LiferayPortletDefinition"
-            displayName="Liferay Portlet"
-            facetId="liferay.portlet"
-            facetedProjectTemplateId="liferay.portlet.template"
-            menuIndex="10"
-            shortName="portlet">
-      </liferayProjectDefinition>
-      <liferayProjectDefinition
-            class="com.liferay.ide.eclipse.project.core.LiferayHookDefinition"
-            displayName="Liferay Hook"
-            facetId="liferay.hook"
-            facetedProjectTemplateId="liferay.hook.template"
-            menuIndex="20"
-            shortName="hook">
-      </liferayProjectDefinition>
-      <liferayProjectDefinition
-            class="com.liferay.ide.eclipse.project.core.LiferayExtDefinition"
-            displayName="Liferay Ext"
-            facetId="liferay.ext"
-            facetedProjectTemplateId="liferay.ext.template"
-            menuIndex="30"
-            shortName="ext">
-      </liferayProjectDefinition>
-   </extension>
+   
  
 </plugin>

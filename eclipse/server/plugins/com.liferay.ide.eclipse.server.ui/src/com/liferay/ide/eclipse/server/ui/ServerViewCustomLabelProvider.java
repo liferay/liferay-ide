@@ -38,10 +38,7 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if (element instanceof PluginsContent) {// || (element instanceof
-												// IServer &&
-												// ServerUtil.isPortalRuntime(((IServer)element))))
-												// {
+		if (element instanceof PluginsContent) {
 			return PortalServerUIPlugin.imageDescriptorFromPlugin(
 				PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage();
 		}

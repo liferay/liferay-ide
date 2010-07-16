@@ -78,9 +78,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				return IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE;
 			}
 		}
-		else if (LIFERAY_ADV_CONFIG.equals(propertyName)) {
-			return false;
-		}
+		// else if (LIFERAY_ADV_CONFIG.equals(propertyName)) {
+		// return false;
+		// }
 		else if (LIFERAY_USE_SDK_LOCATION.equals(propertyName)) {
 			return true;
 		}
@@ -116,6 +116,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (CREATE_PROJECT_OPERATION.equals(propertyName)) {
 			return true;
 		}
+		else if (PLUGIN_FRAGMENT_ENABLED.equals(propertyName)) {
+			return false;
+		}
 
 		return super.getDefaultProperty(propertyName);
 	}
@@ -138,8 +141,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	@Override
 	public Set getPropertyNames() {
 		Set propNames = super.getPropertyNames();
+
 		propNames.add(LIFERAY_SDK_NAME);
-		propNames.add(LIFERAY_ADV_CONFIG);
+		// propNames.add(LIFERAY_ADV_CONFIG);
 		propNames.add(LIFERAY_USE_SDK_LOCATION);
 		propNames.add(LIFERAY_USE_CUSTOM_LOCATION);
 		propNames.add(PLUGIN_TYPE_PORTLET);
@@ -155,6 +159,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		propNames.add(THEME_NAME);
 		propNames.add(LAYOUTTPL_NAME);
 		propNames.add(CREATE_PROJECT_OPERATION);
+		propNames.add(PLUGIN_FRAGMENT_DM);
+		propNames.add(PLUGIN_FRAGMENT_BUTTON_LABEL);
+		propNames.add(PLUGIN_FRAGMENT_ENABLED);
+
 		return propNames;
 	}
 
@@ -164,6 +172,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			SDK[] validSDKs = SDKManager.getAllSDKs();
 			String[] values = null;
 			String[] descriptions = null;
+
 			if (validSDKs.length == 0) {
 				values = new String[] {
 					IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE
@@ -175,13 +184,16 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			else {
 				values = new String[validSDKs.length];
 				descriptions = new String[validSDKs.length];
+
 				for (int i = 0; i < validSDKs.length; i++) {
 					values[i] = validSDKs[i].getName();
 					descriptions[i] = validSDKs[i].getName();
 				}
 			}
+
 			return DataModelPropertyDescriptor.createDescriptors(values, descriptions);
 		}
+
 		return super.getValidPropertyDescriptors(propertyName);
 	}
 
@@ -191,19 +203,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 		getDataModel().setProperty(LIFERAY_USE_SDK_LOCATION, true);
 
-		// Collection<IProjectFacet> existingRequiredFacets =
-		// (Collection<IProjectFacet>) getProperty(REQUIRED_FACETS_COLLECTION);
-		// Collection<IProjectFacet> requiredFacets = new
-		// ArrayList<IProjectFacet>();
-		// for (IProjectFacet f : existingRequiredFacets) {
-		// requiredFacets.add(f);
-		// }
-		// requiredFacets.add(IPluginFacetConstants.LIFERAY_PLUGIN_FACET);
-		// setProperty(REQUIRED_FACETS_COLLECTION, requiredFacets);
-
-		getDataModel().setProperty(PLUGIN_TYPE_PORTLET, true);
 
 		DataModelPropertyDescriptor[] validDescriptors = getDataModel().getValidPropertyDescriptors(FACET_RUNTIME);
+
 		for (DataModelPropertyDescriptor desc : validDescriptors) {
 			Object runtime = desc.getPropertyValue();
 			if (runtime instanceof BridgedRuntime && ServerUtil.isPortalRuntime((BridgedRuntime) runtime)) {
@@ -211,6 +213,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				break;
 			}
 		}
+
 	}
 
 	@Override
@@ -218,6 +221,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		if (PLUGIN_TYPE_THEME.equals(propertyName)) {
 			return false;
 		}
+
 		return super.isPropertyEnabled(propertyName);
 	}
 
@@ -262,7 +266,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			setupProject(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_THEME.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			setupThemeProject();
+			setupProject(IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_LAYOUTTPL.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
 			setupProject(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
@@ -326,7 +330,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			if (!status.isOK()) {
 				return status;
 			}
+
 			Object facetRuntime = getProperty(FACET_RUNTIME);
+
 			if (facetRuntime == null) {
 				return ProjectCorePlugin.createErrorStatus("Liferay Portal runtime must be configured and selected.");
 			}
@@ -342,8 +348,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (PLUGIN_TYPE_PORTLET.equals(propertyName) || PLUGIN_TYPE_HOOK.equals(propertyName) ||
 			PLUGIN_TYPE_EXT.equals(propertyName) || PLUGIN_TYPE_THEME.equals(propertyName) ||
 			PLUGIN_TYPE_LAYOUTTPL.equals(propertyName)) {
+
 			return validate(FACET_PROJECT_NAME);
 		}
+
 		return super.validate(propertyName);
 	}
 
@@ -361,6 +369,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 	protected String getProjectLocation() {
 		IPath sdkLoc = getSDKLocation();
+
 		if (getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
 			return sdkLoc.append("portlets").toOSString();
 		}
@@ -376,6 +385,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
 			return sdkLoc.append("layouttpl").toOSString();
 		}
+
 		return null;
 	}
 
@@ -434,75 +444,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
 			}
 
+			getModel().setStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL, "");
+
 			projectDefinition.setupNewProject(getDataModel(), facetedProject);
 		}
-	}
-
-	// protected void setupExtProject() {
-	// IFacetedProjectWorkingCopy facetedProject =
-	// getFacetedProjectWorkingCopy();
-	// removeFacet(facetedProject,
-	// PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
-	// IFacetedProjectTemplate template =
-	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_TEMPLATE_ID);
-	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
-	// }
-
-	// protected void setupHookProject() {
-	// IFacetedProjectWorkingCopy facetedProject =
-	// getFacetedProjectWorkingCopy();
-	// //
-	// facetedProject.setFixedProjectFacets(template.getFixedProjectFacets());
-	// removeFacet(facetedProject,
-	// PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
-	// IFacetedProjectTemplate template =
-	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_TEMPLATE_ID);
-	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
-	// }
-
-	// protected void setupLayoutTemplateProject() {
-	// IFacetedProjectWorkingCopy facetedProject =
-	// getFacetedProjectWorkingCopy();
-	// //
-	// facetedProject.setFixedProjectFacets(template.getFixedProjectFacets());
-	// removeFacet(facetedProject,
-	// PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-	// IFacetedProjectTemplate template =
-	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_TEMPLATE_ID);
-	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
-	// Set<IProjectFacetVersion> facets =
-	// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_HOOK_PRESET);
-	// facetedProject.setProjectFacets(Collections.unmodifiableSet(facets));
-	// }
-
-	// protected void setupPortletProject() {
-	// IFacetedProjectWorkingCopy facetedProject =
-	// getFacetedProjectWorkingCopy();
-	//
-	// removeFacet(facetedProject,
-	// HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-	// removeFacet(facetedProject,
-	// LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
-	// IFacetedProjectTemplate template =
-	// ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_TEMPLATE_ID);
-	// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
-	// }
-
-	protected void setupThemeProject() {
-
 	}
 }

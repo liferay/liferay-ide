@@ -1,5 +1,6 @@
-package com.liferay.ide.eclipse.project.core;
+package com.liferay.ide.eclipse.portlet.core;
 
+import com.liferay.ide.eclipse.project.core.AbstractProjectDefinition;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;

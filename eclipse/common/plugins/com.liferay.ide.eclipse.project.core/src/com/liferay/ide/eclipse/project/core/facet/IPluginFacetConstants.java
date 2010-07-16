@@ -69,6 +69,8 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION = "<None>";
 
+	public static final String LIFERAY_THEME_PLUGIN_FACET_ID = "liferay.theme";
+
 	public static final String LIFERAY_THEME_PLUGIN_FACET_TEMPLATE_ID = "liferay.theme.template";
 
 	public static final String PORTLET_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
