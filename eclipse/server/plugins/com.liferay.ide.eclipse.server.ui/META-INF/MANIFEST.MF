@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.core,
  org.eclipse.jdt.ui,
  org.eclipse.jdt.core,
- org.eclipse.ui.editors
+ org.eclipse.ui.editors,
+ org.eclipse.wst.ws.parser;bundle-version="[1.0.402,1.1.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.ui

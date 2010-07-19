@@ -21,7 +21,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.debug.ui,
  org.eclipse.wst.xml.core;bundle-version="[1.1.402,1.5.0)",
  org.eclipse.core.expressions;bundle-version="3.4.101",
- com.liferay.ide.eclipse.ui;bundle-version="1.0.0";visibility:=reexport
+ com.liferay.ide.eclipse.ui;bundle-version="1.0.0";visibility:=reexport,
+ org.eclipse.wst.ws.parser;bundle-version="[1.0.402,1.1.0)",
+ javax.wsdl;bundle-version="[1.5.1,1.7.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.core,

@@ -14,6 +14,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.server.core.IPortalServer;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.eclipse.core.resources.IFolder;
@@ -147,5 +148,16 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 		} catch (Exception ex) {
 			return null;
 		}
+	}
+
+	public URL getWebServicesListURL() {
+		try {
+			return new URL(getPortalHomeUrl(), "/tunnel-web/axis");
+		}
+		catch (MalformedURLException e) {
+			PortalTomcatPlugin.logError("Unable to get web services list URL", e);
+		}
+
+		return null;
 	}
 }

@@ -49,6 +49,10 @@ public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 		return plugin;
 	}
 
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(createErrorStatus(PLUGIN_ID, msg, e));
+	}
+
 	/**
 	 * The constructor
 	 */

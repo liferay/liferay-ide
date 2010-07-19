@@ -87,6 +87,14 @@
             </objectState>
          </visibility>
          <action
+               class="com.liferay.ide.eclipse.server.ui.action.TestWebServicesAction"
+               enablesFor="1"
+               icon="icons/e16/test_web_services_16x16.gif"
+               id="com.liferay.ide.eclipse.server.ui.action.testWebServices"
+               label="Test Web Services..."
+               menubarPath="com.liferay.ide.eclipse.server.ui.menu.portal/slot1">
+         </action>
+         <action
                class="com.liferay.ide.eclipse.server.ui.action.OpenPortalAction"
                enablesFor="1"
                icon="icons/e16/open_portal_16x16.gif"

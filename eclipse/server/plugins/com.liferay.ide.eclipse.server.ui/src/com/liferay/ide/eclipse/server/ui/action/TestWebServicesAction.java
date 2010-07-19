@@ -13,17 +13,38 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.core;
+package com.liferay.ide.eclipse.server.ui.action;
+
+import com.liferay.ide.eclipse.server.core.IPortalServer;
+import com.liferay.ide.eclipse.server.util.PortalServicesHelper;
 
 import java.net.URL;
+
+import org.eclipse.jface.action.IAction;
 
 /**
  * @author Greg Amerson
  */
-public interface IPortalServer {
+public class TestWebServicesAction extends AbstractServerRunningAction {
 
-	URL getPortalHomeUrl();
+	public TestWebServicesAction() {
+		super();
+	}
 
-	URL getWebServicesListURL();
+	public void run(IAction action) {
+		if (selectedServer == null) {
+			return; // can't do anything if server has not been selected
+		}
+
+		IPortalServer portalServer = (IPortalServer) selectedServer.getAdapter(IPortalServer.class);
+
+		URL webServicesListURL = portalServer.getWebServicesListURL();
+
+		PortalServicesHelper helper = new PortalServicesHelper(webServicesListURL);
+
+		String[] names = helper.getWebServiceNames();
+
+
+	}
 
 }

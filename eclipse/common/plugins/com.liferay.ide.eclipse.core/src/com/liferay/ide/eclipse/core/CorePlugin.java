@@ -32,6 +32,54 @@ public class CorePlugin extends Plugin {
 	// The shared instance
 	private static CorePlugin plugin;
 
+	public static IStatus createErrorStatus(Exception e) {
+
+		return createErrorStatus(PLUGIN_ID, e);
+	}
+
+	public static IStatus createErrorStatus(String msg) {
+
+		return createErrorStatus(PLUGIN_ID, msg);
+	}
+
+	public static IStatus createErrorStatus(String pluginId, String msg) {
+
+		return new Status(IStatus.ERROR, pluginId, msg);
+	}
+
+	public static IStatus createErrorStatus(String pluginId, String msg, Throwable e) {
+		return new Status(IStatus.ERROR, pluginId, msg, e);
+	}
+
+	public static IStatus createErrorStatus(String pluginId, Throwable t) {
+
+		return new Status(IStatus.ERROR, pluginId, t.getMessage(), t);
+	}
+
+	/**
+	 * Returns the shared instance
+	 * 
+	 * @return the shared instance
+	 */
+	public static CorePlugin getDefault() {
+
+		return plugin;
+	}
+
+	public static void logError(String msg) {
+		getDefault().getLog().log(createErrorStatus(msg));
+	}
+
+	public static void logError(Throwable t) {
+
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
+	}
+
+	public static void logWarning(Throwable t) {
+
+		getDefault().getLog().log(new Status(IStatus.WARNING, PLUGIN_ID, t.getMessage(), t));
+	}
+
 	/**
 	 * The constructor
 	 */
@@ -63,50 +111,6 @@ public class CorePlugin extends Plugin {
 
 		plugin = null;
 		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
-	public static CorePlugin getDefault() {
-
-		return plugin;
-	}
-
-	public static void logError(Throwable t) {
-
-		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, t.getMessage(), t));
-	}
-
-	public static void logWarning(Throwable t) {
-
-		getDefault().getLog().log(new Status(IStatus.WARNING, PLUGIN_ID, t.getMessage(), t));
-	}
-
-	public static IStatus createErrorStatus(String pluginId, String msg) {
-
-		return new Status(IStatus.ERROR, pluginId, msg);
-	}
-
-	public static IStatus createErrorStatus(String pluginId, Throwable t) {
-
-		return new Status(IStatus.ERROR, pluginId, t.getMessage(), t);
-	}
-
-	public static IStatus createErrorStatus(Exception e) {
-
-		return createErrorStatus(PLUGIN_ID, e);
-	}
-
-	public static IStatus createErrorStatus(String msg) {
-
-		return createErrorStatus(PLUGIN_ID, msg);
-	}
-
-	public static void logError(String msg) {
-		getDefault().getLog().log(createErrorStatus(msg));
 	}
 
 }
