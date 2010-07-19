@@ -1,3 +1,5 @@
+plugin@org.eclipse.wst.common.snippets=v201004290255,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.snippets
+plugin@org.eclipse.wst.ws.explorer=v201004220342,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,webservices/plugins/org.eclipse.wst.ws.explorer
 plugin@org.eclipse.wst.common.project.facet.core=v201005190114,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.project.facet.core
 plugin@org.eclipse.wst.common.project.facet.ui=v201005190114,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.project.facet.ui
 plugin@org.eclipse.jst.common.project.facet.core=v201004202202,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.jst.common.project.facet.core
