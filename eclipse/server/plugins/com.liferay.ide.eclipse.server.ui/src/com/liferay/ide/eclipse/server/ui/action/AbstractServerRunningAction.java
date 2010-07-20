@@ -18,9 +18,12 @@ package com.liferay.ide.eclipse.server.ui.action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.ui.IServerModule;
 
 /**
  * @author Greg Amerson
@@ -28,6 +31,8 @@ import org.eclipse.wst.server.core.IServer;
 public abstract class AbstractServerRunningAction implements IObjectActionDelegate {
 
 	protected IServer selectedServer;
+	protected IServerModule selectedModule;
+	protected IWorkbenchPart activePart;
 	
 	public AbstractServerRunningAction() {
 		super();
@@ -45,11 +50,29 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 					
 					action.setEnabled(selectedServer.getServerState() == IServer.STATE_STARTED);
 				}
+				else if (obj instanceof IServerModule) {
+					selectedModule = (IServerModule) obj;
+					action.setEnabled(selectedModule.getServer().getServerState() == IServer.STATE_STARTED);
+				}
 			}
 		}
 	}
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+		this.activePart = targetPart;
+	}
+	
+	protected IWorkbenchPart getActivePart() {
+		return this.activePart;
+	}
+	
+	protected Shell getActiveShell() {
+		if (getActivePart() != null) {
+			return getActivePart().getSite().getShell();
+		}
+		else {
+			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		}
 	}
 
 }

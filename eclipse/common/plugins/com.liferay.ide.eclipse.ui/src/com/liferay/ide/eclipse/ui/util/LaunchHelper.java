@@ -57,7 +57,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 	protected boolean launchIsPrivate = true;
 
 	protected boolean launchSync = true;
-
+	
 	protected String mainClass;
 
 	protected String mode = ILaunchManager.RUN_MODE;
@@ -137,7 +137,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 					synchronized (this) {
 						DebugPlugin.getDefault().removeDebugEventListener(this);
 
-						this.notifyAll();
+//						launchRunning = false;
 					}
 				}
 			}
@@ -157,7 +157,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 	}
 
 	public boolean isLaunchRunning() {
-		return this.runningLaunch != null && !this.runningLaunch.isTerminated();
+		return this.runningLaunch != null && !this.runningLaunch.isTerminated() && !this.runningLaunch.getProcesses()[0].isTerminated();
 	}
 
 	public boolean isLaunchSync() {
@@ -179,10 +179,10 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 
 		if (isLaunchSync()) {
 			runningLaunch = launch;
-
+						
 			try {
-				synchronized (this) {
-					this.wait();
+				while (isLaunchRunning()) {
+					Thread.sleep(100);
 				}
 			}
 			catch (InterruptedException e) {

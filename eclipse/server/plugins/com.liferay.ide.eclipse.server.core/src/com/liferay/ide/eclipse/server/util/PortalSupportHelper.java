@@ -84,6 +84,8 @@ public class PortalSupportHelper extends LaunchHelper {
 		this.portalRoot = portalRoot;
 
 		this.userLibs = userLibs;
+		
+//		this.launchTimeout = 2000;
 	}
 
 	@Override

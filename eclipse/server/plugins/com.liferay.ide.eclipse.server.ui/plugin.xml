@@ -78,7 +78,7 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="true"
-            id="com.liferay.ide.eclipse.server.ui.popup.openPortalAction"
+            id="com.liferay.ide.eclipse.server.ui.popup.server"
             objectClass="org.eclipse.wst.server.core.IServer">
          <visibility>
             <objectState
@@ -89,7 +89,7 @@
          <action
                class="com.liferay.ide.eclipse.server.ui.action.TestWebServicesAction"
                enablesFor="1"
-               icon="icons/e16/test_web_services_16x16.gif"
+               icon="icons/e16/test_web_services_16x16.png"
                id="com.liferay.ide.eclipse.server.ui.action.testWebServices"
                label="Test Web Services..."
                menubarPath="com.liferay.ide.eclipse.server.ui.menu.portal/slot1">
@@ -97,7 +97,7 @@
          <action
                class="com.liferay.ide.eclipse.server.ui.action.OpenPortalAction"
                enablesFor="1"
-               icon="icons/e16/open_portal_16x16.gif"
+               icon="icons/e16/open_portal_16x16.png"
                id="com.liferay.ide.eclipse.server.ui.action.openPortalAction"
                label="Open Portal Home"
                menubarPath="com.liferay.ide.eclipse.server.ui.menu.portal/slot1">
@@ -111,7 +111,33 @@
             </separator>
          </menu>
       </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.eclipse.server.ui.popup.module"
+            objectClass="org.eclipse.wst.server.ui.IServerModule">
+         
+         <action
+               class="com.liferay.ide.eclipse.server.ui.action.TestWebServicesAction"
+               enablesFor="1"
+               icon="icons/e16/test_web_services_16x16.png"
+               id="com.liferay.ide.eclipse.server.ui.action.testWebServices"
+               label="Test Web Services..."
+               menubarPath="com.liferay.ide.eclipse.server.ui.menu.portal/slot1">
+         </action>
+         
+         <menu
+               icon="icons/e16/server.png"
+               id="com.liferay.ide.eclipse.server.ui.menu.portal"
+               label="Liferay">
+            <separator
+                  name="slot1">
+            </separator>
+         </menu>
+      </objectContribution>
    </extension>
+   
+   
+   
    <!--
    <extension
          point="org.eclipse.jdt.ui.classpathContainerPage">

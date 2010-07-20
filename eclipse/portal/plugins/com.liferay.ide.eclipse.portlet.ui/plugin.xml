@@ -130,6 +130,15 @@
                menubarPath="liferayPopupMenuCategory/slot1"
                tooltip="Build services">
          </action>
+         <action
+               class="com.liferay.ide.eclipse.portlet.ui.action.BuildWSDDAction"
+               enablesFor="1"
+               icon="icons/e16/service.png"
+               id="com.liferay.ide.eclipse.portlet.ui.wsdd.popup.action"
+               label="Build web services descriptor"
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Build web services descriptor">
+         </action>
          <enablement>
          	<adapt type="org.eclipse.core.resources.IResource">
 	          <or>

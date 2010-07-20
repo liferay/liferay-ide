@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            base-type="org.eclipse.wst.xml.core.xmlsource"
+            base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.eclipse.portlet.core.servicebuilder.ServiceBuilderContentDescriber"
             file-extensions="xml"

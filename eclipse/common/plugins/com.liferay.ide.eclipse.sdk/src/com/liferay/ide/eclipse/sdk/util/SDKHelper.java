@@ -62,6 +62,7 @@ public class SDKHelper extends LaunchHelper {
 		setLaunchInBackground(true);
 		setLaunchCaptureInConsole(true);
 		setLaunchIsPrivate(true);
+//		this.launchTimeout = 10000;
 	}
 
 	public ILaunchConfiguration createLaunchConfiguration(

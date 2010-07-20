@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.portlet.ui.editor;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
+import com.liferay.ide.eclipse.portlet.core.job.BuildWSDDJob;
 import com.liferay.ide.eclipse.portlet.core.servicebuilder.ServiceBuilderModel;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.ui.toolbar.ToolBarButtonContribution;
@@ -181,7 +182,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 					submitButton.addListener(SWT.Selection, new Listener() {
 
 						public void handleEvent(Event e) {
-							doGenerate();
+							doGenerateServices();
 						}
 					});
 
@@ -192,6 +193,32 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		submitButtonContribution.marginLeft = 10;
 
 		toolBarManager.add(submitButtonContribution);
+		
+		ToolBarButtonContribution wsddButtonContribution =
+			new ToolBarButtonContribution("com.liferay.ide.eclipse.portlet.ui.toolbars.buildwsdd") { //$NON-NLS-1$
+
+				@Override
+				protected Control createButton(Composite composite) {
+					submitButton = new Button(composite, SWT.FLAT);
+
+					submitButton.setText("Build WSDD "); //$NON-NLS-1$
+					submitButton.setImage(PortletUIPlugin.imageDescriptorFromPlugin(
+						PortletUIPlugin.PLUGIN_ID, "/icons/e16/service.png").createImage());
+					submitButton.setBackground(null);
+					submitButton.addListener(SWT.Selection, new Listener() {
+
+						public void handleEvent(Event e) {
+							doGenerateWSDD();
+						}
+					});
+
+					return submitButton;
+				}
+			};
+
+			wsddButtonContribution.marginLeft = 10;
+
+		toolBarManager.add(wsddButtonContribution);
 		toolBarManager.update(true);
 
 		updateLeftHeaderToolBar();
@@ -569,10 +596,19 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		return composite;
 	}
 
-	protected void doGenerate() {
+	protected void doGenerateServices() {
 		doSave(new NullProgressMonitor());
 
 		BuildServiceJob job = PortletCore.createBuildServiceJob(getEditorInput().getFile());
+
+		job.schedule();
+
+	}
+	
+	protected void doGenerateWSDD() {
+		doSave(new NullProgressMonitor());
+
+		BuildWSDDJob job = PortletCore.createBuildWSDDJob(getEditorInput().getFile());
 
 		job.schedule();
 

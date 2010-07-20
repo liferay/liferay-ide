@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.portlet.core;
 
 import com.liferay.ide.eclipse.portlet.core.job.BuildLanguageJob;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
+import com.liferay.ide.eclipse.portlet.core.job.BuildWSDDJob;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
@@ -45,6 +46,12 @@ public class PortletCore extends Plugin {
 
 	public static BuildServiceJob createBuildServiceJob(IFile file) {
 		BuildServiceJob job = new BuildServiceJob(file);
+
+		return job;
+	}
+	
+	public static BuildWSDDJob createBuildWSDDJob(IFile file) {
+		BuildWSDDJob job = new BuildWSDDJob(file);
 
 		return job;
 	}

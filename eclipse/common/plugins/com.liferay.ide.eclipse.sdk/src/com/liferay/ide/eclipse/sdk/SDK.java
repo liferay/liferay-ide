@@ -390,6 +390,26 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
+	public IStatus buildWSDD(IProject project, IFile serviceXmlFile,
+			Map<String, String> properties) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		String serviceFile = serviceXmlFile.getRawLocation().toOSString();
+
+		properties.put(ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_WSDD,
+				properties);
+		}
+		catch (Exception e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
 	// public String getRuntime() {
 	// return runtime;
 	// }

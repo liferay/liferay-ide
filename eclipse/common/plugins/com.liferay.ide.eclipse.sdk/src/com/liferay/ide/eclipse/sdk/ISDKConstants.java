@@ -99,6 +99,8 @@ public interface ISDKConstants {
 	public static final String TARGET_BUILD_LANG_CMD = "build-lang-cmd";
 
 	public static final String TARGET_BUILD_SERVICE = "build-service";
+	
+	public static final String TARGET_BUILD_WSDD = "build-wsdd";
 
 	public static final String TARGET_CREATE = "create";
 
