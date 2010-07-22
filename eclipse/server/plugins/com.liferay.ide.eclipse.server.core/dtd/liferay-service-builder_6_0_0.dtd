@@ -17,9 +17,14 @@ development of services.
 
 <!--
 The package-path value specifies the package of the generated code.
+
+The auto-namespace-tables value specifies whether or not to automatically
+namespace tables. The default value is false for core services and true for
+plugin services.
 -->
 <!ATTLIST service-builder
 	package-path CDATA #REQUIRED
+	auto-namespace-tables CDATA #IMPLIED
 >
 
 <!--
@@ -51,6 +56,10 @@ based on the order and finder elements.
 
 <!--
 The name value specifies the name of the entity.
+
+The human-name value specifies the readable name to use when generating
+documentation for this entity. If none is specified, one will be generated from
+the name.
 
 The table value specifies the name of the table that this entity maps to in the
 database. If this value is not set, then the name of the table is the same as
@@ -96,6 +105,7 @@ programs. The default value is true.
 -->
 <!ATTLIST entity
 	name CDATA #REQUIRED
+	human-name CDATA #IMPLIED
 	table CDATA #IMPLIED
 	uuid CDATA #IMPLIED
 	local-service CDATA #IMPLIED
@@ -394,10 +404,12 @@ is a String value.
 The attribute comparator takes in the values =, !=, <, <=, >, >=, or LIKE and is
 used to compare this column.
 
-The arrayable-operator comparator takes in the values AND or OR and will
-generate an additional finder where the column takes in an array instead of a
-single value. The values of the array will combined with either an AND or OR
-operator.
+The attribute arrayable-operator takes in the values AND or OR and will
+generate an additional finder where this column's parameter takes an array
+instead of a single value. Every value in this array will be compared with the
+column using the comparator, and the conditions will be combined with either an
+AND or OR operator. For example, a finder column with the = comparator and an
+arrayable-operator of OR will act like an IN clause.
 -->
 <!ATTLIST finder-column
 	name CDATA #REQUIRED

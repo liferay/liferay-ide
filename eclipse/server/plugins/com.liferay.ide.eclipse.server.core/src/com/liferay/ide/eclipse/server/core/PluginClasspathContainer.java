@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.server.core;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 import java.util.ArrayList;
@@ -96,7 +97,8 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		if (comp != null) {			
 			IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
 			
-			IFile pluginPackageFile = webroot.getFile("WEB-INF/liferay-plugin-package.properties");
+			IFile pluginPackageFile =
+				webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
 			
 			if (pluginPackageFile.exists()) {
 				Properties props = new Properties();

@@ -5,12 +5,12 @@
          point="org.eclipse.wst.common.project.facet.core.facets">
          
           <project-facet
-            id="liferay.layouttpl">
+            id="liferay.theme">
          <label>
-            Liferay Layout Template
+            Liferay Theme
          </label>
          <description>
-            Layout template plug-in for Liferay portal.  Version cooresponds to Portal version.
+            Theme plug-in for Liferay portal.  Version cooresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -20,7 +20,7 @@
          </default-version>
       </project-facet>
       <project-facet-version
-            facet="liferay.layouttpl"
+            facet="liferay.theme"
             version="6.0">
          <constraint>
             <and>
@@ -36,39 +36,36 @@
          </constraint>
       </project-facet-version>
       <action
-            facet="liferay.layouttpl"
-            id="liferay.layouttpl.install"
+            facet="liferay.theme"
+            id="liferay.theme.install"
             type="INSTALL"
             version="[6.0">
          <delegate
-               class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetInstall">
+               class="com.liferay.ide.eclipse.theme.core.facet.ThemePluginFacetInstall">
          </delegate>
          <config-factory
-               class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetInstallDataModelProvider">
+               class="com.liferay.ide.eclipse.theme.core.facet.ThemePluginFacetInstallDataModelProvider">
          </config-factory>
       </action>
       <action
-            facet="liferay.layouttpl"
-            id="liferay.layouttpl.uninstall"
+            facet="liferay.theme"
+            id="liferay.theme.uninstall"
             type="UNINSTALL"
             version="[6.0">
          <delegate
-               class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetUninstall">
+               class="com.liferay.ide.eclipse.theme.core.facet.ThemePluginFacetUninstall">
          </delegate>
       </action>
       <template
-            id="liferay.layouttpl.template">
+            id="liferay.theme.template">
          <label>
-            Liferay Layout Template Plug-in Project
+            Liferay Theme Plug-in Project
          </label>
-         <fixed
-               facet="jst.java">
-         </fixed>
          <fixed
                facet="jst.web">
          </fixed>
          <fixed 
-               facet="liferay.layouttpl">
+               facet="liferay.theme">
          </fixed>
       </template>
    </extension>
@@ -78,17 +75,13 @@
      
       
       <static-preset
-            id="liferay.layouttpl.preset">
+            id="liferay.theme.preset">
          <label>
-            Liferay layout template plug-in 6.0 preset
+            Liferay theme plug-in 6.0 preset
          </label>
          <description>
-            Preset for Liferay 6.0 layout template plug-in
+            Preset for Liferay 6.0 theme plug-in
          </description>
-         <facet
-               id="jst.java"
-               version="5.0">
-         </facet>
          <!--
          <facet
                id="jst.java"
@@ -96,11 +89,15 @@
          </facet>
          -->
          <facet
+               id="jst.java"
+               version="5.0">
+         </facet>
+         <facet
                id="jst.web"
                version="2.5">
          </facet>
          <facet
-               id="liferay.layouttpl"
+               id="liferay.theme"
                version="6.0">
          </facet>
       </static-preset>
@@ -110,9 +107,9 @@
    <extension
          point="org.eclipse.wst.common.project.facet.core.validators">
       <validator
-            class="com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetValidator">
+            class="com.liferay.ide.eclipse.theme.core.facet.ThemePluginFacetValidator">
          <facet
-               id="liferay.layouttpl"
+               id="liferay.theme"
                version="6.0">
          </facet>
       </validator>
@@ -120,20 +117,20 @@
    <extension
          point="com.liferay.ide.eclipse.project.core.liferayProject">
       <liferayProjectDefinition
-            class="com.liferay.ide.eclipse.layouttpl.core.LiferayLayoutTplDefinition"
-            displayName="Liferay Layout Template"
-            facetId="liferay.layouttpl"
-            facetedProjectTemplateId="liferay.layouttpl.template"
-            menuIndex="40"
-            shortName="layouttpl">
+            class="com.liferay.ide.eclipse.theme.core.LiferayThemeDefinition"
+            displayName="Liferay Theme"
+            facetId="liferay.theme"
+            facetedProjectTemplateId="liferay.theme.template"
+            menuIndex="50"
+            shortName="theme">
       </liferayProjectDefinition>
    </extension>
    <extension
-         point="org.eclipse.core.contenttype.contentTypes">
-      <file-association
-            content-type="org.eclipse.wst.html.core.htmlsource"
-            file-extensions="tpl">
-      </file-association>
+         point="com.liferay.ide.eclipse.server.core.pluginDeployer">
+      <liferayPluginDeployer
+            class="com.liferay.ide.eclipse.theme.core.ThemePluginDeployer"
+            facetId="liferay.theme">
+      </liferayPluginDeployer>
    </extension>
 
 </plugin>

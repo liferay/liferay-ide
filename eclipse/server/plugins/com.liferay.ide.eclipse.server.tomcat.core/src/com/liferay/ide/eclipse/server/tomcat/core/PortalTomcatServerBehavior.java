@@ -11,20 +11,16 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.core;
 
-import com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.server.core.IPluginDeployer;
+import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,12 +39,15 @@ import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Host;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Server;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
-import org.osgi.service.prefs.BackingStoreException;
 import org.w3c.dom.Document;
 
+/**
+ * @author gregory.amerson@liferay.com
+ */
 @SuppressWarnings("restriction")
 public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 
@@ -64,10 +63,31 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 	@Override
 	protected void publishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor)
 			throws CoreException {
+		boolean shouldPublishModule = true;
 		
-		if (moduleTree != null && ProjectUtil.isExtProject(moduleTree[0].getProject())) {
-			publishExtModule(kind, deltaKind, moduleTree, monitor);
-		} else {
+		if (moduleTree != null && moduleTree.length > 0) {
+			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(moduleTree[0].getProject());
+
+			if (facetedProject != null) {
+				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
+
+				if (liferayFacet != null) {
+					String facetId = liferayFacet.getId();
+					IPluginDeployer pluginDeployer = PortalServerCorePlugin.getPluginDeployer(facetId);
+
+					if (pluginDeployer != null) {
+						try {
+							shouldPublishModule = pluginDeployer.prePublishModule(kind, deltaKind, moduleTree, monitor);
+						}
+						catch (Exception e) {
+							PortalTomcatPlugin.logError("Plugin deployer failed", e);
+						}
+					}
+				}
+			}
+		}
+
+		if (shouldPublishModule) {
 			try {
 				super.publishModule(kind, deltaKind, moduleTree, monitor);
 			} catch (CoreException ex) {
@@ -93,88 +113,8 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 			}
 		}
 		
-//		if (!shouldRunPortletDeployer(kind, deltaKind, moduleTree)) {
-//			return;
-//		}
-		
-//		if (getServer().getServerState() == IServer.STATE_STARTED) {
-//			// need to just copy a context file out into deploy directory of liferay.
-//			this.lastDeployDir = getModuleDeployDirectory(moduleTree[0]);
-//		} else {
-//			this.lastDeployDir = null;
-//			IPath deployDir = getModuleDeployDirectory(moduleTree[0]);
-//			new PortletDeployer(moduleTree[0]).deployPortlet(
-//					"com.liferay.portal.tools.deploy.TomcatExternalPortletDeployer",
-//					new String[] {
-//						ServerUtil.getRuntime(moduleTree[0].getProject()).getLocation().toOSString(),
-//						deployDir.toOSString(),
-//						deployDir.toOSString(),
-//					});
-//		}
-		
-	}
-
-	protected void publishExtModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor) throws CoreException {
-		if (kind != IServer.PUBLISH_FULL  ||moduleTree == null) {
-			return;
-		}
-		
-		if (deltaKind == ADDED) {
-			addExtModule(moduleTree[0]);
-		} else if (deltaKind == REMOVED){
-			removeExtModule(moduleTree[0]);
-		}
-		
-		
 		setModulePublishState(moduleTree, IServer.PUBLISH_STATE_NONE);
 	}
-	
-	protected void addExtModule(IModule module) throws CoreException {
-		SDK sdk = null;
-		IProject project = module.getProject();
-		
-		try {
-			sdk = ProjectUtil.getSDK(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-		} catch (BackingStoreException e) {
-			throw new CoreException(PortalTomcatPlugin.createErrorStatus(e));
-		}
-		
-		if (sdk == null) {
-			throw new CoreException(PortalTomcatPlugin.createErrorStatus("No SDK for project configured. Could not deploy ext module"));
-		}
-		
-		IRuntime runtime = ServerUtil.getRuntime(project);
-		
-		String appServerDir = runtime.getLocation().toOSString();
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("app.server.type", "tomcat");
-		properties.put("app.server.dir", appServerDir);
-		properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-		properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-		properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-		
-		IStatus status = sdk.deployExtPlugin(project, properties);
-		if (!status.isOK()) {
-			throw new CoreException(status);
-		}
-	}
-	
-	protected void removeExtModule(IModule module) {
-
-		//TODO try to uninstall ext files
-	}
-
-	// protected boolean shouldRunPortletDeployer(int kind, int deltaKind,
-	// IModule[] moduleTree) throws CoreException {
-//		if (moduleTree == null || moduleTree[0] == null || moduleTree[0].getProject() == null) {
-//			return false;
-//		}
-//		IFacetedProject project = ProjectFacetsManager.create(moduleTree[0].getProject());
-//		if (project != null && project.hasProjectFacet(IPluginFacetConstants.LIFERAY_PLUGIN_FACET)) {
-//			return kind != IServer.PUBLISH_CLEAN && deltaKind != REMOVED;
-//		}
-//		return false;			
-//	}
 	
 	@Override
 	protected void publishFinish(IProgressMonitor monitor) throws CoreException {

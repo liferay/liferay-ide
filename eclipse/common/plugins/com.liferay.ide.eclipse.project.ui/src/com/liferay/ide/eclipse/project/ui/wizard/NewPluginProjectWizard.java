@@ -26,10 +26,12 @@ import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
@@ -199,26 +201,29 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		// TODO Implement getNextPage method on class NewPluginProjectWizard
 		return super.getNextPage(page);
 	}
 
 	@Override
 	public IWizardPage getPage(String pageName) {
-		// TODO Implement getPage method on class NewPluginProjectWizard
 		return super.getPage(pageName);
 	}
 
 	@Override
 	public int getPageCount() {
-		// TODO Implement getPageCount method on class NewPluginProjectWizard
 		return super.getPageCount();
 	}
 
 	@Override
 	public IWizardPage getPreviousPage(IWizardPage page) {
-		// TODO Implement getPreviousPage method on class NewPluginProjectWizard
 		return super.getPreviousPage(page);
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+
+		getDataModel().setBooleanProperty(PLUGIN_TYPE_PORTLET, true);
 	}
 
 }

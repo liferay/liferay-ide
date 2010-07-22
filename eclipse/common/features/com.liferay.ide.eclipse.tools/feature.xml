@@ -28,7 +28,7 @@
    </copyright>
 
    <url>
-      <update url="http://releases.liferay.com/tools/ide/eclipse/galileo/stable"/>
+      <update url="http://releases.liferay.com/tools/ide/eclipse/helios/stable"/>
    </url>
 
    <plugin
@@ -108,6 +108,34 @@
 
    <plugin
          id="com.liferay.ide.eclipse.tools.branding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.eclipse.templates.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.eclipse.layouttpl.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.eclipse.layouttpl.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.eclipse.theme.core"
          download-size="0"
          install-size="0"
          version="0.0.0"

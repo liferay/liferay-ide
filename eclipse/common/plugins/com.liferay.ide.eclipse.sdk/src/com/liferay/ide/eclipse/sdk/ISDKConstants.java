@@ -104,6 +104,8 @@ public interface ISDKConstants {
 
 	public static final String TARGET_CREATE = "create";
 
+	public static final String TARGET_COMPILE = "compile";
+
 	public static final String TARGET_DEPLOY = "deploy";
 
 	public static final String THEME_PLUGIN_ANT_BUILD = _defaultPrefs.get("theme.plugin.ant.build", null);

@@ -38,6 +38,8 @@ public interface IPortalConstants {
 
 	String LIFERAY_LAYOUTTPL_XML_FILE = "liferay-layout-templates.xml";
 
+	String LIFERAY_LOOK_AND_FEEL_XML_FILE = "liferay-look-and-feel.xml";
+
 	String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml";
 
 	String LIFERAY_SERVICE_BUILDER_XML_FILE = "service.xml";

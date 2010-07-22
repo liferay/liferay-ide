@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.project.core.IProjectDefinition;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.facet.HookPluginFacetInstall;
+import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.PortletPluginFacetInstall;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
@@ -293,6 +294,10 @@ public class ProjectUtil {
 		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
 	}
 
+	public static boolean hasFacet(IProject project, String facetId) {
+		return hasFacet(project, ProjectFacetsManager.getProjectFacet(facetId));
+	}
+
 	public static boolean hasFacet(IProject project, IProjectFacet checkProjectFacet) {
 		boolean retval = false;
 		if (project == null || checkProjectFacet == null) {
@@ -322,6 +327,10 @@ public class ProjectUtil {
 
 	public static boolean isExtProject(IProject project) {
 		return hasFacet(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+	}
+
+	public static boolean isThemeProject(IProject project) {
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
 	}
 
 	public static boolean isHookProject(IProject project) {

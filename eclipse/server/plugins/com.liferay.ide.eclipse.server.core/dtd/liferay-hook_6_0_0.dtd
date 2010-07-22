@@ -13,6 +13,7 @@ service*)>
 Not all portal properties can be overridden via a hook. The supported properties
 are:
 
+<pre>
 admin.default.group.names
 admin.default.role.names
 admin.default.user.group.names
@@ -86,6 +87,7 @@ users.screen.name.always.autogenerate
 users.screen.name.generator
 users.screen.name.validator
 value.object.listener.*
+</pre>
 -->
 <!ELEMENT portal-properties (#PCDATA)>
 

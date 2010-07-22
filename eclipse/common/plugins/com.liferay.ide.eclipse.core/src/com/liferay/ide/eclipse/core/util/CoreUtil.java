@@ -173,4 +173,13 @@ public class CoreUtil {
 		return version;
 	}
 
+	public static void deleteResource(IResource resource)
+		throws CoreException {
+		if (resource == null || !resource.exists()) {
+			return;
+		}
+
+		resource.delete(true, null);
+	}
+
 }

@@ -156,39 +156,35 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		portletType =
 			SWTUtil.createRadioButton(
 				group, "Portlet", getPluginImageDescriptor("/icons/e16/portlet.png").createImage(), false, 1);
-		Label l =
-			SWTUtil.createLabel(group, SWT.WRAP, "A plug-in for implementing Liferay's portlet modes and actions", 1);
+		Label l = SWTUtil.createLabel(group, SWT.WRAP, "Create a web application using the portlet framework.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(portletType, PLUGIN_TYPE_PORTLET, null);
 
 		hookType =
 			SWTUtil.createRadioButton(
 				group, "Hook", getPluginImageDescriptor("/icons/e16/hook.png").createImage(), false, 1);
-		l =
-			SWTUtil.createLabel(
-				group, SWT.WRAP, "A hot-deployable plug-in for extending or customizing Liferay's functionality.", 1);
+		l = SWTUtil.createLabel(group, SWT.WRAP, "Override or extend Liferay's default behavior and functionality.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(hookType, PLUGIN_TYPE_HOOK, null);
 
 		extType =
 			SWTUtil.createRadioButton(
 				group, "Ext", getPluginImageDescriptor("/icons/e16/ext.png").createImage(), false, 1);
-		l =
-			SWTUtil.createLabel(group, SWT.WRAP, "A monolithic plug-in allowing for complete Liferay customization.", 1);
+		l = SWTUtil.createLabel(group, SWT.WRAP, "Light-weight extension environment for Liferay as a plug-in.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(extType, PLUGIN_TYPE_EXT, null);
 
 		layoutTemplateType =
 			SWTUtil.createRadioButton(
 				group, "Layout", getPluginImageDescriptor("/icons/e16/layout.png").createImage(), false, 1);
-		l = SWTUtil.createLabel(group, SWT.WRAP, "A plug-in for customizing Liferay's page layouts.", 1);
+		l = SWTUtil.createLabel(group, SWT.WRAP, "Create a new custom layout for Liferay pages.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(layoutTemplateType, PLUGIN_TYPE_LAYOUTTPL, null);
 
 		themeType =
 			SWTUtil.createRadioButton(
 				group, "Theme", getPluginImageDescriptor("/icons/e16/theme.png").createImage(), false, 1);
-		l = SWTUtil.createLabel(group, SWT.WRAP, "A plug-in for customizing Liferay's look and feel.", 1);
+		l = SWTUtil.createLabel(group, SWT.WRAP, "Build a custom look and feel for the portal.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(themeType, PLUGIN_TYPE_THEME, null);
 	}

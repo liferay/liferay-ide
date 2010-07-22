@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.server.core;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
@@ -262,7 +263,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
 		IPath fullPath = delta.getFullPath();
 		
-		if (fullPath == null || !("liferay-plugin-package.properties".equals(fullPath.lastSegment()))) {
+		if (fullPath == null ||
+			!(ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE.equals(fullPath.lastSegment()))) {
 			return false;
 		}
 

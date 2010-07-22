@@ -156,7 +156,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		// TODO LayoutTplEditor#doSaveAs()
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Object getAdapter(Class type) {
 		if (type == IContentOutlinePage.class) {
 			return new LayoutTplOutlinePage(this, new TreeViewer());

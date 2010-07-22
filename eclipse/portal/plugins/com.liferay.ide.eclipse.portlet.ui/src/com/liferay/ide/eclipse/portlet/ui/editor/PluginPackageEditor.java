@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.IModelChangedListener;
 import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
@@ -43,7 +44,9 @@ import org.eclipse.ui.part.FileEditorInput;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({
+	"restriction", "rawtypes"
+})
 public class PluginPackageEditor extends IDEFormEditor implements IModelChangedListener {
 
 	public static final String EDITOR_ID = "com.liferay.ide.eclipse.portlet.ui.editor.pluginpackage";
@@ -69,7 +72,6 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class adapterClass) {
 		Object adapter = super.getAdapter(adapterClass);
 
@@ -143,7 +145,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		try {
 			index = addPage(editor, getEditorInput());
 
-			setPageText(index, "liferay-plugin-package.properties");
+			setPageText(index, ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
 		}
 		catch (PartInitException e) {
 			PortletUIPlugin.logError(e);
@@ -154,7 +156,6 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 	protected void addDependenciesFormPage() {
 		try {
 			int index = addPage(new DependenciesFormPage(this));
-
 			setPageText(index, "Dependencies");
 		}
 		catch (PartInitException e) {
@@ -165,9 +166,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 	@Override
 	protected void addPages() {
 		addPluginPackageFormPage();
-
 		addDependenciesFormPage();
-
 		addPropertiesEditorPage();
 	}
 

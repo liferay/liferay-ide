@@ -269,6 +269,21 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
+	public IStatus compileThemePlugin(IProject project, Map<String, String> properties) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_COMPILE,
+				properties);
+		}
+		catch (CoreException e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
 	public IPath[] getAntLibraries() {
 		List<IPath> antLibs = new ArrayList<IPath>();
 
@@ -409,13 +424,5 @@ public class SDK {
 
 		return Status.OK_STATUS;
 	}
-
-	// public String getRuntime() {
-	// return runtime;
-	// }
-	//
-	// public void setRuntime(String runtime) {
-	// this.runtime = runtime;
-	// }
 
 }

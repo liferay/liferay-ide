@@ -49,7 +49,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"unchecked", "restriction"
+	"unchecked", "restriction", "rawtypes"
 })
 public class PluginFacetProjectCreationDataModelProvider extends WebFacetProjectCreationDataModelProvider
 	implements IPluginProjectDataModelProperties {
@@ -203,7 +203,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 		getDataModel().setProperty(LIFERAY_USE_SDK_LOCATION, true);
 
-
 		DataModelPropertyDescriptor[] validDescriptors = getDataModel().getValidPropertyDescriptors(FACET_RUNTIME);
 
 		for (DataModelPropertyDescriptor desc : validDescriptors) {
@@ -218,10 +217,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 	@Override
 	public boolean isPropertyEnabled(String propertyName) {
-		if (PLUGIN_TYPE_THEME.equals(propertyName)) {
-			return false;
-		}
-
 		return super.isPropertyEnabled(propertyName);
 	}
 

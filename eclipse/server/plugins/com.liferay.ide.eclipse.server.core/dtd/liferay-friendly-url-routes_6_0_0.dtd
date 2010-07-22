@@ -15,26 +15,13 @@ friendly URL mapper routes.
 <!--
 The route element contains information on a single route.
 -->
-<!ELEMENT route (pattern, default-parameter*, generated-parameter*,
-ignored-parameter*, overridden-parameter*)>
+<!ELEMENT route (pattern, generated-parameter*,
+ignored-parameter*, implicit-parameter*, overridden-parameter*)>
 
 <!--
 The pattern element specifies the pattern of the mapped friendly URL.
 -->
 <!ELEMENT pattern (#PCDATA)>
-
-<!--
-The default-parameter element specifies a default parameter that is not preset
-in the route pattern.
--->
-<!ELEMENT default-parameter (#PCDATA)>
-
-<!--
-The name attribute specifies the name of the default URL parameter.
--->
-<!ATTLIST default-parameter
-	name CDATA #REQUIRED
->
 
 <!--
 The generated-parameter element specifies the pattern of a parameter that will
@@ -66,9 +53,22 @@ The name attribute specifies the name of the parameter to be ignored.
 >
 
 <!--
+The implicit-parameter element specifies a parameter that is not present
+in the route pattern.
+-->
+<!ELEMENT implicit-parameter (#PCDATA)>
+
+<!--
+The name attribute specifies the name of the default URL parameter.
+-->
+<!ATTLIST implicit-parameter
+	name CDATA #REQUIRED
+>
+
+<!--
 The overridden-parameter element specifies a parameter that should be set to a
 certain value when a URL is recognized. This override value will be set
-regardless of any preexisting value, including one from a default-parameter or
+regardless of any preexisting value, including one from a implicit-parameter or
 one extracted from the URL.
 -->
 <!ELEMENT overridden-parameter (#PCDATA)>

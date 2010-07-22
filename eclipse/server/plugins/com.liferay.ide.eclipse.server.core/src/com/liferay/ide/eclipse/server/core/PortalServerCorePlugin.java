@@ -16,11 +16,17 @@
 package com.liferay.ide.eclipse.server.core;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
@@ -62,6 +68,10 @@ public class PortalServerCorePlugin extends CorePlugin {
 
 	public static void logError(Exception e) {
 		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+	}
+
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
 	}
 
 	/**
@@ -158,5 +168,55 @@ public class PortalServerCorePlugin extends CorePlugin {
 		if (pluginPackageResourceListener != null) {
 			ResourcesPlugin.getWorkspace().removeResourceChangeListener(pluginPackageResourceListener);
 		}
+	}
+
+	private static IPluginDeployer[] pluginDeployers = null;
+
+	public static IPluginDeployer getPluginDeployer(String facetId) {
+		if (CoreUtil.isNullOrEmpty(facetId)) {
+			return null;
+		}
+
+		IPluginDeployer retval = null;
+		IPluginDeployer[] deployers = getPluginDeployers();
+
+		if (deployers != null && deployers.length > 0) {
+			for (IPluginDeployer deployer : deployers) {
+				if (deployer != null && facetId.equals(deployer.getFacetId())) {
+					retval = deployer;
+					break;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	public static IPluginDeployer[] getPluginDeployers() {
+		if (pluginDeployers == null) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginDeployer.ID);
+
+			try {
+				List<IPluginDeployer> deployers = new ArrayList<IPluginDeployer>();
+
+				for (IConfigurationElement element : elements) {
+					final Object o = element.createExecutableExtension("class");
+
+					if (o instanceof AbstractPluginDeployer) {
+						AbstractPluginDeployer pluginDeployer = (AbstractPluginDeployer) o;
+						pluginDeployer.setFacetId(element.getAttribute("facetId"));
+						deployers.add(pluginDeployer);
+					}
+				}
+
+				pluginDeployers = deployers.toArray(new IPluginDeployer[0]);
+			}
+			catch (Exception e) {
+				logError("Unable to get plugin deployer extensions", e);
+			}
+		}
+
+		return pluginDeployers;
 	}
 }

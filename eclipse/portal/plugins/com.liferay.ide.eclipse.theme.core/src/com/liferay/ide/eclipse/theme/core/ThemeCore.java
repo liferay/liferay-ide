@@ -12,68 +12,46 @@
  * details.
  *
  *******************************************************************************/
+package com.liferay.ide.eclipse.theme.core;
 
-package com.liferay.ide.eclipse.portlet.core;
-
-import com.liferay.ide.eclipse.portlet.core.job.BuildLanguageJob;
-import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
-import com.liferay.ide.eclipse.portlet.core.job.BuildWSDDJob;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
- * 
- * @auther Greg Amerson
  */
-public class PortletCore extends Plugin {
+public class ThemeCore extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.portlet.core";
+	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.theme.core";
 
 	// The shared instance
-	private static PortletCore plugin;
-
-	public static BuildLanguageJob createBuildLanguageJob(IFile file) {
-		BuildLanguageJob job = new BuildLanguageJob(file);
-
-		return job;
-	}
-
-	public static BuildServiceJob createBuildServiceJob(IFile file) {
-		BuildServiceJob job = new BuildServiceJob(file);
-
-		return job;
-	}
+	private static ThemeCore plugin;
 	
-	public static BuildWSDDJob createBuildWSDDJob(IFile file) {
-		BuildWSDDJob job = new BuildWSDDJob(file);
-
-		return job;
-	}
-
-	public static IStatus createErrorStatus(Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
-	}
-
-	public static IStatus createErrorStatus(String msg, Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	public static IStatus createErrorStatus(Exception ex) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
 	}
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
 	}
 
+	public static IStatus createErrorStatus(String msg, Exception e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
+
+	public static IStatus createWarningStatus(String msg) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
+	}
+
 	/**
 	 * Returns the shared instance
-	 * 
+	 *
 	 * @return the shared instance
 	 */
-	public static PortletCore getDefault() {
+	public static ThemeCore getDefault() {
 		return plugin;
 	}
 
@@ -84,39 +62,28 @@ public class PortletCore extends Plugin {
 	/**
 	 * The constructor
 	 */
-	public PortletCore() {
+	public ThemeCore() {
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext context)
-		throws Exception {
-
+	public void start(BundleContext context) throws Exception {
 		super.start(context);
-
 		plugin = this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext context)
-		throws Exception {
-
+	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-
 		super.stop(context);
 	}
 
 	public static void logError(String msg, Exception e) {
 		getDefault().getLog().log(createErrorStatus(msg, e));
 	}
-
 }

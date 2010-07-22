@@ -41,18 +41,22 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 
 	private static ImageDescriptor HOOK;
 
-	private static ImageDescriptor LAYOUTTPL;
-
 	private static final String HOOK_FACET = "liferay.hook"; //$NON-NLS-1$ 
 
 	private static final String ICON_DIR = "icons/ovr"; //$NON-NLS-1$
+
+	private static ImageDescriptor LAYOUTTPL;
+
+	private static final String LAYOUTTPL_FACET = "liferay.layouttpl";
 
 	private static ImageDescriptor PORTLET;
 
 	/* The constants are duplicated here to avoid plugin loading. */
 	private static final String PORTLET_FACET = "liferay.portlet"; //$NON-NLS-1$ 
 
-	private static final String LAYOUTTPL_FACET = "liferay.layouttpl";
+	private static ImageDescriptor THEME;
+
+	private static final String THEME_FACET = "liferay.layouttpl";
 
 	private static ImageDescriptor getExt() {
 		if (EXT == null) {
@@ -68,14 +72,6 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 		}
 
 		return HOOK;
-	}
-
-	private static ImageDescriptor getLayoutTpl() {
-		if (LAYOUTTPL == null) {
-			LAYOUTTPL = getImageDescriptor("liferay_ovr"); //$NON-NLS-1$
-		}
-
-		return LAYOUTTPL;
 	}
 
 	/**
@@ -98,12 +94,28 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 		return imageDescriptor;
 	}
 
+	private static ImageDescriptor getLayoutTpl() {
+		if (LAYOUTTPL == null) {
+			LAYOUTTPL = getImageDescriptor("liferay_ovr"); //$NON-NLS-1$
+		}
+
+		return LAYOUTTPL;
+	}
+
 	private static ImageDescriptor getPortlet() {
 		if (PORTLET == null) {
 			PORTLET = getImageDescriptor("liferay_ovr"); //$NON-NLS-1$
 		}
 
 		return PORTLET;
+	}
+
+	private static ImageDescriptor getTheme() {
+		if (THEME == null) {
+			THEME = getImageDescriptor("liferay_ovr"); //$NON-NLS-1$
+		}
+
+		return THEME;
 	}
 
 	public void decorate(Object element, IDecoration decoration) {
@@ -127,6 +139,9 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 			}
 			else if (hasFacet(project, LAYOUTTPL_FACET)) {
 				overlay = getLayoutTpl();
+			}
+			else if (hasFacet(project, THEME_FACET)) {
+				overlay = getTheme();
 			}
 
 			if (overlay != null) {

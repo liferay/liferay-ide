@@ -30,7 +30,7 @@
          </describer>
       </content-type>
       <content-type
-            base-type="org.eclipse.wst.xml.core.xmlsource"
+            base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.eclipse.portlet.core.descriptor.LiferayPortletContentDescriber"
             file-extensions="xml"
@@ -40,7 +40,7 @@
             priority="high">
       </content-type>
       <content-type
-            base-type="org.eclipse.wst.xml.core.xmlsource"
+            base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.eclipse.portlet.core.descriptor.LiferayDisplayContentDescriber"
             file-extensions="xml"
@@ -176,6 +176,13 @@
             menuIndex="30"
             shortName="ext">
       </liferayProjectDefinition>
+   </extension>
+   <extension
+         point="com.liferay.ide.eclipse.server.core.pluginDeployer">
+      <liferayPluginDeployer
+            class="com.liferay.ide.eclipse.portlet.core.ExtPluginDeployer"
+            facetId="liferay.ext">
+      </liferayPluginDeployer>
    </extension>
 
 </plugin>
