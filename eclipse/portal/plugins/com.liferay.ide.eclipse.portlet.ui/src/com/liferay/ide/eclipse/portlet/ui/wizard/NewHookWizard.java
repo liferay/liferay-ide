@@ -79,7 +79,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 	public NewHookWizard(IDataModel dataModel) {
 		super(dataModel);
 
-		setWindowTitle("New Hook Plug-in");
+		setWindowTitle("New Liferay Hook");
 
 		setDefaultPageImageDescriptor(getDefaultImageDescriptor());
 	}

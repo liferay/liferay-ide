@@ -15,7 +15,13 @@
 
 package com.liferay.ide.eclipse.project.ui;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -46,6 +52,10 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 
 	public static void logError(Exception e) {
 		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+	}
+
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
 	}
 
 	/**
@@ -80,6 +90,45 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 		plugin = null;
 		
 		super.stop(context);
+	}
+
+
+	private static IConfigurationElement[] pluginWizardFragmentElements;
+
+	public static IPluginWizardFragment getPluginWizardFragment(String pluginFacetId) {
+		if (CoreUtil.isNullOrEmpty(pluginFacetId)) {
+			return null;
+		}
+
+		IConfigurationElement[] fragmentElements = getPluginWizardFragmentsElements();
+
+		for (IConfigurationElement fragmentElement : fragmentElements) {
+			if (pluginFacetId.equals(fragmentElement.getAttribute("facetId"))) {
+				try {
+					Object o = fragmentElement.createExecutableExtension("class");
+
+					if (o instanceof IPluginWizardFragment) {
+						IPluginWizardFragment fragment = (IPluginWizardFragment) o;
+						fragment.setFragment(true);
+						return fragment;
+					}
+				}
+				catch (CoreException e) {
+					ProjectUIPlugin.logError("Could not load plugin wizard fragment for " + pluginFacetId, e);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public static IConfigurationElement[] getPluginWizardFragmentsElements() {
+		if (pluginWizardFragmentElements == null) {
+			pluginWizardFragmentElements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginWizardFragment.ID);
+		}
+
+		return pluginWizardFragmentElements;
 	}
 
 }

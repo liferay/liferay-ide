@@ -19,12 +19,15 @@ import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelP
 import com.liferay.ide.eclipse.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.PortletTemplateContextTypeIds;
+import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
+import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
@@ -33,7 +36,11 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class NewPortletWizard extends NewWebArtifactWizard implements INewPortletClassDataModelProperties {
+public class NewPortletWizard extends NewWebArtifactWizard
+	implements IPluginWizardFragment, INewPortletClassDataModelProperties {
+
+	private boolean fragment;
+	private IWizardPage hostPage;
 
 	public NewPortletWizard() {
 		this(null);
@@ -41,8 +48,11 @@ public class NewPortletWizard extends NewWebArtifactWizard implements INewPortle
 
 	public NewPortletWizard(IDataModel model) {
 		super(model);
-
 		setDefaultPageImageDescriptor(getImage());
+	}
+
+	public String getFragmentPluginFacetId() {
+		return IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID;
 	}
 
 	@Override
@@ -113,10 +123,12 @@ public class NewPortletWizard extends NewWebArtifactWizard implements INewPortle
 		openJavaClass();
 	}
 
-	// private boolean shouldShowClassOptionsPage() {
-	// String superClass = getDataModel().getStringProperty(SUPERCLASS);
-	// return superClass != null &&
-	// (superClass.equals(QUALIFIED_LIFERAY_PORTLET) ||
-	// superClass.equals(QUALIFIED_GENERIC_PORTLET));
-	// }
+	public void setFragment(boolean fragment) {
+		this.fragment = fragment;
+	}
+
+	public void setHostPage(IWizardPage hostPage) {
+		this.hostPage = hostPage;
+	}
+
 }

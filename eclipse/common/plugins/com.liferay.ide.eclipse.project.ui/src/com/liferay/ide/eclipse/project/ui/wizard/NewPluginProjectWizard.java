@@ -195,12 +195,25 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	}
 
 	protected void setupWizard() {
-		setWindowTitle("New Plug-in Project");
+		setWindowTitle("New Liferay Plug-in Project");
 		setShowFacetsSelectionPage(false);
 	}
 
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
+		if (this.firstPage.equals(page)) {
+			if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED)) {
+				IPluginWizardFragment pluginFragment = ProjectUIPlugin.getPluginWizardFragment(getPluginFacetId());
+				pluginFragment.setDataModel(getDataModel().getNestedModel(PLUGIN_FRAGMENT_DM));
+				pluginFragment.addPages();
+				pluginFragment.setHostPage(this.firstPage);
+				return pluginFragment.getNextPage(page);
+			}
+			else {
+				return null;
+			}
+		}
+
 		return super.getNextPage(page);
 	}
 
@@ -224,6 +237,29 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		super.init(workbench, selection);
 
 		getDataModel().setBooleanProperty(PLUGIN_TYPE_PORTLET, true);
+	}
+
+	protected String getPluginFacetId() {
+		IDataModel dm = getDataModel();
+
+		if (dm.getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
+			return IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID;
+		}
+		else if (dm.getBooleanProperty(PLUGIN_TYPE_HOOK)) {
+			return IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID;
+		}
+		else if (dm.getBooleanProperty(PLUGIN_TYPE_EXT)) {
+			return IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID;
+		}
+		else if (dm.getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
+			return IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID;
+		}
+		else if (dm.getBooleanProperty(PLUGIN_TYPE_THEME)) {
+			return IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID;
+		}
+		else {
+			return null;
+		}
 	}
 
 }

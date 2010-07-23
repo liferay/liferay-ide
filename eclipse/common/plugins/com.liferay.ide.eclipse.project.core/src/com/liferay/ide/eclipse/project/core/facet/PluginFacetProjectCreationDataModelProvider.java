@@ -71,6 +71,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	public Object getDefaultProperty(String propertyName) {
 		if (LIFERAY_SDK_NAME.equals(propertyName)) {
 			SDK sdk = SDKManager.getDefaultSDK();
+
 			if (sdk != null) {
 				return sdk.getName();
 			}
@@ -78,9 +79,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				return IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE;
 			}
 		}
-		// else if (LIFERAY_ADV_CONFIG.equals(propertyName)) {
-		// return false;
-		// }
 		else if (LIFERAY_USE_SDK_LOCATION.equals(propertyName)) {
 			return true;
 		}
@@ -98,7 +96,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		}
 		else if (DISPLAY_NAME.equals(propertyName)) {
 			String displayName = StringUtils.capitalize(getStringProperty(PROJECT_NAME));
-
 			return ProjectUtil.removePluginSuffix(displayName);
 		}
 		else if (HOOK_NAME.equals(propertyName)) {
@@ -127,6 +124,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	public DataModelPropertyDescriptor getPropertyDescriptor(String propertyName) {
 		if (LIFERAY_SDK_NAME.equals(propertyName)) {
 			Object val = getProperty(propertyName);
+
 			if (IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals(val) || "".equals(val)) {
 				return new DataModelPropertyDescriptor(
 					getProperty(propertyName), IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION);
@@ -135,6 +133,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				return new DataModelPropertyDescriptor(val, val.toString());
 			}
 		}
+
 		return super.getPropertyDescriptor(propertyName);
 	}
 
@@ -151,7 +150,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		propNames.add(PLUGIN_TYPE_EXT);
 		propNames.add(PLUGIN_TYPE_THEME);
 		propNames.add(PLUGIN_TYPE_LAYOUTTPL);
-		// propNames.add(SETUP_PROJECT_FLAG);
 		propNames.add(DISPLAY_NAME);
 		propNames.add(PORTLET_NAME);
 		propNames.add(HOOK_NAME);
@@ -207,12 +205,12 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 		for (DataModelPropertyDescriptor desc : validDescriptors) {
 			Object runtime = desc.getPropertyValue();
+
 			if (runtime instanceof BridgedRuntime && ServerUtil.isPortalRuntime((BridgedRuntime) runtime)) {
 				getDataModel().setProperty(FACET_RUNTIME, runtime);
 				break;
 			}
 		}
-
 	}
 
 	@Override
@@ -322,6 +320,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (FACET_RUNTIME.equals(propertyName)) {
 			// validate the sdk first
 			IStatus status = validate(LIFERAY_SDK_NAME);
+
 			if (!status.isOK()) {
 				return status;
 			}
@@ -366,19 +365,19 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		IPath sdkLoc = getSDKLocation();
 
 		if (getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return sdkLoc.append("portlets").toOSString();
+			return sdkLoc.append(ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER).toOSString();
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return sdkLoc.append("hooks").toOSString();
+			return sdkLoc.append(ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER).toOSString();
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return sdkLoc.append("ext").toOSString();
+			return sdkLoc.append(ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER).toOSString();
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return sdkLoc.append("themes").toOSString();
+			return sdkLoc.append(ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER).toOSString();
 		}
 		else if (getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
-			return sdkLoc.append("layouttpl").toOSString();
+			return sdkLoc.append(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER).toOSString();
 		}
 
 		return null;
@@ -415,11 +414,13 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 		Set<IProjectFacetVersion> newFacetSet = new HashSet<IProjectFacetVersion>();
 		Set<IProjectFacetVersion> facets = facetedProject.getProjectFacets();
+
 		for (IProjectFacetVersion fv : facets) {
 			if (!(fv.getProjectFacet().equals(facet))) {
 				newFacetSet.add(fv);
 			}
 		}
+
 		facetedProject.setProjectFacets(newFacetSet);
 	}
 

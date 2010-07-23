@@ -467,7 +467,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		arrayList.addAll(list);
 
 		arrayList.add(LIFERAY_SDK_NAME);
-		// arrayList.add(LIFERAY_ADV_CONFIG);
 		arrayList.add(FACET_RUNTIME);
 		arrayList.add(PROJECT_NAME);
 		arrayList.add(DISPLAY_NAME);
@@ -477,6 +476,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		arrayList.add(PLUGIN_TYPE_EXT);
 		arrayList.add(PLUGIN_TYPE_THEME);
 		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
+		arrayList.add(PLUGIN_FRAGMENT_ENABLED);
 
 		return (String[]) arrayList.toArray(new String[0]);
 	}

@@ -17,6 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="fragment"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -46,10 +49,10 @@
 
    <element name="fragment">
       <complexType>
-         <attribute name="id" type="string" use="required">
+         <attribute name="facetId" type="string" use="required">
             <annotation>
                <documentation>
-                  specifies a unique identifier for this fragment
+                  
                </documentation>
             </annotation>
          </attribute>

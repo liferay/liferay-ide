@@ -241,5 +241,12 @@
          </enabledWhen>
       </page>
    </extension>
+   <extension
+         point="com.liferay.ide.eclipse.project.ui.pluginWizardFragment">
+      <fragment
+            class="com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard"
+            facetId="liferay.portlet">
+      </fragment>
+   </extension>
 
 </plugin>
