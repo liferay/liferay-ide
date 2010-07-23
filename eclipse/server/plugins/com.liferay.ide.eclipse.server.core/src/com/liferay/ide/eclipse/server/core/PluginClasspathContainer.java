@@ -25,7 +25,6 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathContainer;
@@ -58,19 +57,26 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 		
 		for (String pluginJar : getPluginJars()) {
-			entries.add(JavaCore.newLibraryEntry(				
-				this.portalRoot.append("/WEB-INF/lib/" + pluginJar),
-				
-				PortalServerCorePlugin.getDefault().getPortalSourcePath(new Path(pluginJar).removeFileExtension()),
-					null, new IAccessRule[] {}, new IClasspathAttribute[] {}, false));
+			// IPath sourcePath = PortalServerCorePlugin.getDefault().getPortalSourcePath(new
+			// Path(pluginJar).removeFileExtension());
+			IPath sourcePath = null;
+			entries.add(JavaCore.newLibraryEntry(
+				this.portalRoot.append("/WEB-INF/lib/" + pluginJar), sourcePath, null, new IAccessRule[] {},
+				new IClasspathAttribute[] {}, false));
 		}
 
 		for (String pluginPackageJar : getPluginPackageJars()) {
 			IPath entryPath = this.portalRoot.append("/WEB-INF/lib/" + pluginPackageJar);
 			
+
+			// IPath sourcePath =
+			// PortalServerCorePlugin.getDefault().getPortalSourcePath(
+			// new Path(pluginPackageJar).removeFileExtension());
+
+			IPath sourcePath = null;
+
 			entries.add(JavaCore.newLibraryEntry(
-				entryPath, PortalServerCorePlugin.getDefault().getPortalSourcePath(
-					new Path(pluginPackageJar).removeFileExtension()), null, new IAccessRule[] {},					
+				entryPath, sourcePath, null, new IAccessRule[] {},
 					new IClasspathAttribute[] {}, false));
 		}
 
