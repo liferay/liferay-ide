@@ -16,10 +16,50 @@
 package com.liferay.ide.eclipse.theme.core.facet;
 
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetUninstall;
+import com.liferay.ide.eclipse.theme.core.ThemeCSSBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * @author Greg Amerson
  */
 public class ThemePluginFacetUninstall extends PluginFacetUninstall {
+
+	@Override
+	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
+		throws CoreException {
+
+		super.execute(project, fv, config, monitor);
+
+		removeThemeCSSBuilder(project);
+	}
+
+	protected void removeThemeCSSBuilder(IProject project)
+		throws CoreException {
+
+		if (project == null) {
+			return;
+		}
+
+		IProjectDescription desc = project.getDescription();
+		ICommand[] commands = desc.getBuildSpec();
+		List<ICommand> newCommands = new ArrayList<ICommand>();
+
+		for (ICommand command : commands) {
+			if (!(ThemeCSSBuilder.ID.equals(command.getBuilderName()))) {
+				newCommands.add(command);
+			}
+		}
+
+		desc.setBuildSpec(newCommands.toArray(new ICommand[0]));
+	}
 
 }

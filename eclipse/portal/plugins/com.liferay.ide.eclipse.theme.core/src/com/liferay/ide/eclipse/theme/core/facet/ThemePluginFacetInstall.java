@@ -21,11 +21,14 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.theme.core.ThemeCSSBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -80,10 +83,41 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 			CoreUtil.deleteResource(project.findMember("docroot/WEB-INF/lib"));
 
 			this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+			installThemeBuilder(this.project);
 		}
 		else {
 			setupDefaultOutputLocation();
 		}
+	}
+
+	protected void installThemeBuilder(IProject project)
+		throws CoreException {
+
+		if (project == null) {
+			return;
+		}
+
+		IProjectDescription desc = project.getDescription();
+		ICommand[] commands = desc.getBuildSpec();
+
+		for (ICommand command : commands) {
+			if (ThemeCSSBuilder.ID.equals(command.getBuilderName())) {
+				return;
+			}
+		}
+
+		// add builder to project
+		ICommand command = desc.newCommand();
+		command.setBuilderName(ThemeCSSBuilder.ID);
+		ICommand[] nc = new ICommand[commands.length + 1];
+
+		// Add it before other builders.
+		System.arraycopy(commands, 0, nc, 1, commands.length);
+		nc[0] = command;
+		desc.setBuildSpec(nc);
+
+		project.setDescription(desc, null);
 	}
 
 	protected void removeUnneededClasspathEntries() {

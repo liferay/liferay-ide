@@ -125,6 +125,18 @@
             shortName="theme">
       </liferayProjectDefinition>
    </extension>
+   <extension
+         id="cssBuilder"
+         name="Theme CSS Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="false"
+            hasNature="false">
+         <run
+               class="com.liferay.ide.eclipse.theme.core.ThemeCSSBuilder">
+         </run>
+      </builder>
+   </extension>
    
    <!--
    <extension

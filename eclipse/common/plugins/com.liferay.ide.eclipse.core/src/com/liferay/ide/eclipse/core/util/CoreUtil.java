@@ -51,6 +51,15 @@ public class CoreUtil {
 		return new Status(IStatus.ERROR, CorePlugin.PLUGIN_ID, msg);
 	}
 
+	public static void deleteResource(IResource resource)
+		throws CoreException {
+		if (resource == null || !resource.exists()) {
+			return;
+		}
+
+		resource.delete(true, null);
+	}
+
 	public static IProject[] getAllProjects() {
 
 		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -104,6 +113,10 @@ public class CoreUtil {
 
 	public static boolean isEqual(Object object1, Object object2) {
 		return object1 != null && object2 != null && object1.equals(object2);
+	}
+
+	public static boolean isNullOrEmpty(Object[] array) {
+		return array == null || array.length == 0;
 	}
 
 	public static boolean isNullOrEmpty(String val) {
@@ -171,15 +184,6 @@ public class CoreUtil {
 		}
 
 		return version;
-	}
-
-	public static void deleteResource(IResource resource)
-		throws CoreException {
-		if (resource == null || !resource.exists()) {
-			return;
-		}
-
-		resource.delete(true, null);
 	}
 
 }
