@@ -92,7 +92,11 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		IPath containerPath, IJavaProject project, IClasspathContainer containerSuggestion)
 		throws CoreException {
 		
-		initialize(containerPath, project);
+		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
+			project
+		}, new IClasspathContainer[] {
+			containerSuggestion
+		}, null);
 	}
 
 }
