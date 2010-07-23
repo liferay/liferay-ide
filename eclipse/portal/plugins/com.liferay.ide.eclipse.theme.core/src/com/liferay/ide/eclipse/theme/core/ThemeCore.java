@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.theme.core;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -30,6 +32,8 @@ public class ThemeCore extends AbstractUIPlugin {
 	// The shared instance
 	private static ThemeCore plugin;
 	
+	private static ThemeDiffResourceListener themeDiffResourceListener;
+
 	public static IStatus createErrorStatus(Exception ex) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
 	}
@@ -63,6 +67,7 @@ public class ThemeCore extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public ThemeCore() {
+		//themeDiffResourceListener = new ThemeDiffResourceListener();
 	}
 
 	/*
@@ -72,6 +77,9 @@ public class ThemeCore extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		//ResourcesPlugin.getWorkspace().addResourceChangeListener(
+		//	themeDiffResourceListener, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/*
@@ -81,6 +89,10 @@ public class ThemeCore extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+
+		if (themeDiffResourceListener != null) {
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(themeDiffResourceListener);
+		}
 	}
 
 	public static void logError(String msg, Exception e) {

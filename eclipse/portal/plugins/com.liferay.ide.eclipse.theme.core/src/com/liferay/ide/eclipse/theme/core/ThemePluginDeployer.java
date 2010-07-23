@@ -42,7 +42,8 @@ public class ThemePluginDeployer extends AbstractPluginDeployer {
 	public boolean prePublishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor) {
 		boolean publish = true;
 
-		if ((kind != IServer.PUBLISH_FULL && kind != IServer.PUBLISH_INCREMENTAL) || moduleTree == null) {
+		if ((kind != IServer.PUBLISH_FULL && kind != IServer.PUBLISH_INCREMENTAL && kind != IServer.PUBLISH_AUTO) ||
+			moduleTree == null) {
 			return publish;
 		}
 

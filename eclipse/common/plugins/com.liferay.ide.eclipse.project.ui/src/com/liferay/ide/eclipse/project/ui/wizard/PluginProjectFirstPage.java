@@ -505,21 +505,32 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
+			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
 		else if (IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
+			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
 		else if (IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
+			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
 		else if (IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, true);
+			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
+			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
+			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
+			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
+		}
+		else if (IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+			getDataModel().setProperty(PLUGIN_TYPE_THEME, true);
+			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
