@@ -39,8 +39,9 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 public class NewPortletWizard extends NewWebArtifactWizard
 	implements IPluginWizardFragment, INewPortletClassDataModelProperties {
 
-	private boolean fragment;
-	private IWizardPage hostPage;
+	protected boolean fragment;
+
+	protected IWizardPage hostPage;
 
 	public NewPortletWizard() {
 		this(null);
@@ -49,6 +50,10 @@ public class NewPortletWizard extends NewWebArtifactWizard
 	public NewPortletWizard(IDataModel model) {
 		super(model);
 		setDefaultPageImageDescriptor(getImage());
+	}
+
+	public IDataModelProvider getDataModelProvider() {
+		return getDefaultProvider();
 	}
 
 	public String getFragmentPluginFacetId() {
@@ -81,21 +86,28 @@ public class NewPortletWizard extends NewWebArtifactWizard
 		return "New Liferay Portlet";
 	}
 
+	public void setFragment(boolean fragment) {
+		this.fragment = fragment;
+	}
+
+	public void setHostPage(IWizardPage hostPage) {
+		this.hostPage = hostPage;
+	}
+
 	@Override
 	protected void doAddPages() {
 		addPage(new NewPortletClassWizardPage(
-			getDataModel(), "pageOne", "Create a portlet class.", getDefaultPageTitle()));
-
+			getDataModel(), "pageOne", "Create a portlet class.", getDefaultPageTitle(), this.fragment));
 		addPage(new NewPortletOptionsWizardPage(
-			getDataModel(), "pageTwo", "Specify portlet deployment descriptor details.", getDefaultPageTitle()));
-
+			getDataModel(), "pageTwo", "Specify portlet deployment descriptor details.", getDefaultPageTitle(),
+			this.fragment));
 		addPage(new NewLiferayPortletWizardPage(
 			getDataModel(), "pageThree", "Specify Liferay portlet deployment descriptor details.",
-			getDefaultPageTitle()));
-
+			getDefaultPageTitle(), this.fragment));
 		addPage(new NewPortletClassOptionsWizardPage(
 			getDataModel(), "pageFour",
-			"Specify modifiers, interfaces, and method stubs to generate in Portlet class.", getDefaultPageTitle()));
+			"Specify modifiers, interfaces, and method stubs to generate in Portlet class.", getDefaultPageTitle(),
+			this.fragment));
 	}
 
 	protected String getDefaultPageTitle() {
@@ -109,7 +121,7 @@ public class NewPortletWizard extends NewWebArtifactWizard
 		TemplateContextType contextType =
 			PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(PortletTemplateContextTypeIds.NEW);
 
-		return new NewPortletClassDataModelProvider(templateStore, contextType);
+		return new NewPortletClassDataModelProvider(templateStore, contextType, this.fragment);
 	}
 
 	protected ImageDescriptor getImage() {
@@ -123,12 +135,15 @@ public class NewPortletWizard extends NewWebArtifactWizard
 		openJavaClass();
 	}
 
-	public void setFragment(boolean fragment) {
-		this.fragment = fragment;
-	}
-
-	public void setHostPage(IWizardPage hostPage) {
-		this.hostPage = hostPage;
+	@Override
+	protected boolean prePerformFinish() {
+		if (this.fragment) {
+			// if this is added to plugin wizard as fragment we don't want this to execute performFinish
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 }

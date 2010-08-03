@@ -64,6 +64,8 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
 	protected Text cssFile;
 
+	protected boolean fragment;
+
 	protected Text iconFile;
 
 	protected Text id;
@@ -72,9 +74,11 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
 	protected Text name;
 
-	public NewLiferayPortletWizardPage(IDataModel dataModel, String pageName, String desc, String title) {
-		super(dataModel, pageName, title, null);
+	public NewLiferayPortletWizardPage(
+		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
 
+		super(dataModel, pageName, title, null);
+		this.fragment = fragment;
 		setDescription(desc);
 	}
 
@@ -113,17 +117,21 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 		this.iconFile = SWTUtil.createText(group, 1);
 		this.synchHelper.synchText(iconFile, ICON_FILE, null);
 
-		Button iconFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+		if (this.fragment) {
+			SWTUtil.createLabel(group, "", 1);
+		}
+		else {
+			Button iconFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+			iconFileBrowse.addSelectionListener(new SelectionAdapter() {
 
-		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(
+						NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: ");
+				}
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(
-					NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: ");
-			}
-
-		});
+			});
+		}
 
 		SWTUtil.createLabel(group, "", 1);
 
@@ -135,34 +143,43 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 		this.cssFile = SWTUtil.createText(group, 1);
 		this.synchHelper.synchText(cssFile, CSS_FILE, null);
 
-		Button cssFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+		if (this.fragment) {
+			SWTUtil.createLabel(group, "", 1);
+		}
+		else {
+			Button cssFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+			cssFileBrowse.addSelectionListener(new SelectionAdapter() {
 
-		cssFileBrowse.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(
+						NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: ");
+				}
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: ");
-			}
-
-		});
+			});
+		}
 
 		SWTUtil.createLabel(group, SWT.RIGHT, "JavaScript:", 1);
 
 		this.javascriptFile = SWTUtil.createText(group, 1);
 		this.synchHelper.synchText(javascriptFile, JAVASCRIPT_FILE, null);
 
-		Button javascriptFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+		if (this.fragment) {
+			SWTUtil.createLabel(group, "", 1);
+		}
+		else {
+			Button javascriptFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
+			javascriptFileBrowse.addSelectionListener(new SelectionAdapter() {
 
-		javascriptFileBrowse.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					handleFileBrowseButton(
+						NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
+						"Choose a javascript file: ");
+				}
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(
-					NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
-					"Choose a javascript file: ");
-			}
-
-		});
+			});
+		}
 
 		SWTUtil.createLabel(group, SWT.RIGHT, "CSS classname:", 1);
 

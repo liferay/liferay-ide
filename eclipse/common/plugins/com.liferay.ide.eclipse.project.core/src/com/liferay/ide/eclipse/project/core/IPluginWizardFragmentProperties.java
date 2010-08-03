@@ -13,31 +13,15 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.project.ui.wizard;
-
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
+package com.liferay.ide.eclipse.project.core;
 
 /**
  * @author Greg Amerson
  */
-public interface IPluginWizardFragment {
+public interface IPluginWizardFragmentProperties {
 
-	public static final String ID = "com.liferay.ide.eclipse.project.ui.pluginWizardFragment";
+	public static final String FACET_RUNTIME = "IPluginWizardFragmentProperties.FACET_RUNTIME";
 
-	public void addPages();
-
-	public IDataModelProvider getDataModelProvider();
-
-	public String getFragmentPluginFacetId();
-
-	public IWizardPage getNextPage(IWizardPage page);
-
-	public void setDataModel(IDataModel model);
-
-	public void setFragment(boolean fragment);
-
-	public void setHostPage(IWizardPage firstPage);
+	public static final String REMOVE_EXISTING_ARTIFACTS = "IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS";
 
 }

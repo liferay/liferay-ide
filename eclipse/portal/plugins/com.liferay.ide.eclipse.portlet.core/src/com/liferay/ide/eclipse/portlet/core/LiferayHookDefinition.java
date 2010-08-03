@@ -12,6 +12,7 @@ import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelPropertie
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 
+@SuppressWarnings("deprecation")
 public class LiferayHookDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties {
 
 	public LiferayHookDefinition() {

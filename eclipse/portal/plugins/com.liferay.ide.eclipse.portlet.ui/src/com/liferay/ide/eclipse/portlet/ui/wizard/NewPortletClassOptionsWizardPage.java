@@ -53,12 +53,17 @@ public class NewPortletClassOptionsWizardPage extends NewWebClassOptionsWizardPa
 
 	protected Button doViewButton;
 
+	protected boolean fragment;
+
 	protected Button initButton;
 
 	protected Button processActionButton;
 
-	public NewPortletClassOptionsWizardPage(IDataModel model, String pageName, String pageDesc, String pageTitle) {
+	public NewPortletClassOptionsWizardPage(
+		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment) {
+
 		super(model, pageName, pageDesc, pageTitle);
+		this.fragment = fragment;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
+import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
@@ -37,6 +38,7 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.CommonFactory;
@@ -45,15 +47,16 @@ import org.eclipse.jst.j2ee.internal.web.operations.NewWebClassDataModelProvider
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
+import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"restriction", "unchecked"
+	"restriction", "unchecked", "rawtypes"
 })
 public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvider
-	implements INewPortletClassDataModelProperties {
+	implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties {
 
 	protected Properties categories;
 
@@ -61,11 +64,15 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 	protected TemplateStore templateStore;
 
-	public NewPortletClassDataModelProvider(TemplateStore templateStore, TemplateContextType contextType) {
+	protected boolean fragment;
+
+	public NewPortletClassDataModelProvider(
+		TemplateStore templateStore, TemplateContextType contextType, boolean fragment) {
 		super();
 
 		this.templateStore = templateStore;
 		this.contextType = contextType;
+		this.fragment = fragment;
 	}
 
 	public NewPortletClassDataModelProvider() {
@@ -247,6 +254,9 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(ID);
 		propertyNames.add(CATEGORY);
 
+		propertyNames.add(FACET_RUNTIME);
+		propertyNames.add(REMOVE_EXISTING_ARTIFACTS);
+
 		return propertyNames;
 	}
 
@@ -290,6 +300,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		else if (ABOUT_MODE.equals(propertyName) || CONFIG_MODE.equals(propertyName) ||
 			EDITDEFAULTS_MODE.equals(propertyName) || EDITGUEST_MODE.equals(propertyName) ||
 			PREVIEW_MODE.equals(propertyName) || PRINT_MODE.equals(propertyName)) {
+
+			if (this.fragment) {
+				return true;
+			}
 
 			return PortletSupertypesValidator.isLiferayPortletSuperclass(getDataModel(), true);
 		}
@@ -402,6 +416,9 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 				}
 			}
 		}
+		else if ((SUPERCLASS.equals(propertyName) || SOURCE_FOLDER.equals(propertyName)) && this.fragment) {
+			return Status.OK_STATUS;
+		}
 
 		return super.validate(propertyName);
 	}
@@ -442,11 +459,22 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 			if (project != null) {
 				try {
-					IPortalRuntime runtime =
-						(IPortalRuntime) ServerUtil.getRuntime(project).createWorkingCopy().loadAdapter(
+					IRuntime runtime = null;
+
+					if (this.fragment) {
+						org.eclipse.wst.common.project.facet.core.runtime.IRuntime bRuntime =
+							(org.eclipse.wst.common.project.facet.core.runtime.IRuntime) getDataModel().getProperty(
+								FACET_RUNTIME);
+						runtime = ServerUtil.getRuntime(bRuntime);
+					} 
+					else {
+						runtime = ServerUtil.getRuntime(project);
+					}
+
+					IPortalRuntime portalRuntime = (IPortalRuntime) runtime.createWorkingCopy().loadAdapter(
 							IPortalRuntime.class, null);
 
-					categories = runtime.getCategories();
+					categories = portalRuntime.getCategories();
 				}
 				catch (Exception e) {
 					e.printStackTrace();

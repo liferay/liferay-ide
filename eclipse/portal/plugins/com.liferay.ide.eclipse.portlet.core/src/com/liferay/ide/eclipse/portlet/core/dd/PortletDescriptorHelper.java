@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.portlet.core.dd;
 
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
+import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
@@ -30,6 +31,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Greg Amerson
@@ -77,6 +79,49 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 			protected IStatus doExecute(IDOMDocument document) {
 				return updateLiferayDisplayXML(document, model);
+			}
+
+		};
+
+		status = domModelOperation.execute();
+
+		return status;
+	}
+
+	public IStatus removeAllPortlets() {
+		DOMModelEditOperation domModelOperation =
+			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.PORTLET_XML_FILE)) {
+
+				protected IStatus doExecute(IDOMDocument document) {
+					return removeAllPortletElements(document);
+				}
+
+			};
+
+		IStatus status = domModelOperation.execute();
+
+		if (!status.isOK()) {
+			return status;
+		}
+
+		domModelOperation = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_PORTLET_XML_FILE)) {
+
+			protected IStatus doExecute(IDOMDocument document) {
+				return removeAllPortletElements(document);
+			}
+
+		};
+
+		status = domModelOperation.execute();
+
+		if (!status.isOK()) {
+			return status;
+		}
+
+		domModelOperation = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_DISPLAY_XML_FILE)) {
+
+			protected IStatus doExecute(IDOMDocument document) {
+				return removeAllPortletElements(document);
 			}
 
 		};
@@ -273,6 +318,28 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		FormatProcessorXML processor = new FormatProcessorXML();
 
 		processor.formatNode(newPortletElement);
+
+		return Status.OK_STATUS;
+	}
+
+	protected IStatus removeAllPortletElements(IDOMDocument document) {
+		if (document == null) {
+			return PortletCore.createErrorStatus("Could not remove portlet elements: null document");
+		}
+
+		NodeList portletElements = document.getElementsByTagName("portlet");
+
+		try {
+			if (portletElements != null && portletElements.getLength() > 0) {
+				for (int i = 0; i < portletElements.getLength(); i++) {
+					Node element = portletElements.item(i);
+					element.getParentNode().removeChild(element);
+				}
+			}
+		}
+		catch (Exception ex) {
+			return PortletCore.createErrorStatus("Could not remove portlet elements", ex);
+		}
 
 		return Status.OK_STATUS;
 	}

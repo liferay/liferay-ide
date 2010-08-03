@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.dd.PortletDescriptorHelper;
+import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
@@ -51,7 +52,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class AddPortletOperation extends AddJavaEEArtifactOperation implements INewPortletClassDataModelProperties {
+public class AddPortletOperation extends AddJavaEEArtifactOperation
+	implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties {
 
 	protected IVirtualFolder docroot;
 
@@ -63,9 +65,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation implements I
 		super(dataModel);
 
 		this.docroot = ComponentCore.createComponent(getTargetProject()).getRootFolder();
-
 		this.templateStore = (TemplateStore) getDataModel().getProperty(TEMPLATE_STORE);
-
 		this.portletContextType = (TemplateContextType) getDataModel().getProperty(CONTEXT_TYPE);
 	}
 
@@ -258,6 +258,10 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation implements I
 	protected void generateMetaData(IDataModel aModel, String qualifiedClassName) {
 		if (ProjectUtil.isPortletProject(getTargetProject())) {
 			PortletDescriptorHelper portletDescHelper = new PortletDescriptorHelper(getTargetProject());
+
+			if (aModel.getBooleanProperty(REMOVE_EXISTING_ARTIFACTS)) {
+				portletDescHelper.removeAllPortlets();
+			}
 
 			IStatus status = portletDescHelper.addNewPortlet(this.model);
 

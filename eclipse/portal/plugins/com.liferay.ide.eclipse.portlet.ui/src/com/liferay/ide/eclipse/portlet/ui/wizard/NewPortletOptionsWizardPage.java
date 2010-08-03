@@ -59,6 +59,8 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
 	protected Button editGuestButton;
 
+	protected boolean fragment;
+
 	protected Button helpButton;
 
 	protected Text jspFolder;
@@ -75,9 +77,10 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
 	protected Button viewButton;
 
-	public NewPortletOptionsWizardPage(IDataModel dataModel, String pageName, String desc, String title) {
+	public NewPortletOptionsWizardPage(
+		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
 		super(dataModel, pageName, title, null);
-
+		this.fragment = fragment;
 		setDescription(desc);
 	}
 

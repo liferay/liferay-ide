@@ -83,7 +83,9 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({
+	"restriction", "deprecation"
+})
 public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements INewPortletClassDataModelProperties {
 
 	protected Button customButton;
@@ -91,6 +93,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected Button folderButton;
 
 	protected Text folderText;
+
+	protected boolean fragment;
 
 	protected Button portletClassButton;
 
@@ -106,10 +110,12 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 	protected Combo superCombo;
 
-	public NewPortletClassWizardPage(IDataModel model, String pageName, String pageDesc, String pageTitle) {
+	public NewPortletClassWizardPage(
+		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment) {
 		super(model, pageName, pageDesc, pageTitle, IModuleConstants.JST_WEB_MODULE);
 
 		this.projectName = null;
+		this.fragment = fragment;
 	}
 
 	protected void createClassnameGroup(Composite parent) {
@@ -221,44 +227,26 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 			model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
 		}
 
-		packageButton = new Button(parent, SWT.PUSH);
-		packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-		packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-		packageButton.addSelectionListener(new SelectionListener() {
+		if (this.fragment) {
+			SWTUtil.createLabel(parent, "", 1);
+		}
+		else {
+			packageButton = new Button(parent, SWT.PUSH);
+			packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
+			packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+			packageButton.addSelectionListener(new SelectionListener() {
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Do nothing
-			}
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// Do nothing
+				}
 
-			public void widgetSelected(SelectionEvent e) {
-				handlePackageButtonPressed();
-			}
-		});
+				public void widgetSelected(SelectionEvent e) {
+					handlePackageButtonPressed();
+				}
+			});
+		}
 	}
 
-	// protected void createPortletClassGroup(Composite parent) {
-	// portletClassLabel = new label(parent, swt.left);
-	// portletclasslabel.settext("portlet class:");
-	// portletclasslabel.setlayoutdata(new
-	// griddata(griddata.horizontal_align_beginning));
-	// portletclasslabel.setenabled(true);
-	//		
-	// portletclasstext = new text(parent, swt.single | swt.border |
-	// swt.read_only);
-	// portletclasstext.setlayoutdata(new griddata(griddata.fill_horizontal));
-	// portletclasstext.setenabled(false);
-	// this.synchhelper.synchtext(portletclasstext, portlet_class, null);
-	//		
-	// portletclassbutton = new button(parent, swt.push);
-	// portletclassbutton.settext(iwebwizardconstants.browse_button_label);
-	// portletclassbutton.setlayoutdata(new
-	// griddata(griddata.horizontal_align_fill));
-	// portletclassbutton.addselectionlistener(new selectionadapter() {
-	// public void widgetselected(selectionevent e) {
-	// handleclassbuttonselected(portletclasstext);
-	// }
-	// });
-	// }
 
 	/**
 	 * Add project group
@@ -308,31 +296,36 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		superCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		synchHelper.synchCombo(superCombo, INewJavaClassDataModelProperties.SUPERCLASS, null);
 
-		superButton = new Button(parent, SWT.PUSH);
-		superButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-		superButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-		superButton.addSelectionListener(new SelectionListener() {
+		if (this.fragment) {
+			SWTUtil.createLabel(parent, "", 1);
+		}
+		else {
+			superButton = new Button(parent, SWT.PUSH);
+			superButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
+			superButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+			superButton.addSelectionListener(new SelectionListener() {
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Do nothing
-			}
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// Do nothing
+				}
 
-			public void widgetSelected(SelectionEvent e) {
-				// handleSuperButtonPressed();
-				handleClassButtonSelected(superCombo);
-			}
-		});
+				public void widgetSelected(SelectionEvent e) {
+					// handleSuperButtonPressed();
+					handleClassButtonSelected(superCombo);
+				}
+			});
+		}
 	}
 
 	@Override
 	protected Composite createTopLevelComposite(Composite parent) {
 		Composite composite = SWTUtil.createTopComposite(parent, 3);
 
-		createProjectNameGroup(composite);
-
-		createFolderGroup(composite);
-
-		addSeperator(composite, 3);
+		if (!this.fragment) {
+			createProjectNameGroup(composite);
+			createFolderGroup(composite);
+			addSeperator(composite, 3);
+		}
 
 		createCustomPortletClassGroup(composite);
 
@@ -506,7 +499,16 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected String[] getValidationPropertyNames() {
 		List<String> validationPropertyNames = new ArrayList<String>();
 
-		Collections.addAll(validationPropertyNames, super.getValidationPropertyNames());
+		if (this.fragment) {
+			return new String[] {
+				IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
+				INewJavaClassDataModelProperties.JAVA_PACKAGE, INewJavaClassDataModelProperties.CLASS_NAME,
+				INewJavaClassDataModelProperties.SUPERCLASS
+			};
+		}
+		else {
+			Collections.addAll(validationPropertyNames, super.getValidationPropertyNames());
+		}
 
 		return validationPropertyNames.toArray(new String[0]);
 	}

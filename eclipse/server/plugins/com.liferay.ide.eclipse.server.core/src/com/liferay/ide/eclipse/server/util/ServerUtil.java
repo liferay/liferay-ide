@@ -156,6 +156,10 @@ public class ServerUtil {
 		return (IRuntime) getRuntimeAdapter(ProjectFacetsManager.create(project).getPrimaryRuntime(), IRuntime.class);
 	}
 
+	public static IRuntime getRuntime(org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime) {
+		return ServerCore.findRuntime(runtime.getProperty("id"));
+	}
+
 	public static IRuntimeWorkingCopy getRuntime(String runtimeTypeId, IPath location) {
 		IRuntimeType runtimeType = ServerCore.findRuntimeType(runtimeTypeId);
 
