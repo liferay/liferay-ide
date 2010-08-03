@@ -172,6 +172,45 @@ public class ProjectUtil {
 		return true;
 	}
 
+	public static IFile createEmptyProjectFile(String fileName, IFolder folder)
+		throws CoreException {
+	
+		IFile emptyFile = folder.getFile(fileName);
+	
+		if (emptyFile.exists()) {
+			return emptyFile;
+		}
+		else {
+			emptyFile.create(new ByteArrayInputStream("".getBytes()), true, null);
+		}
+	
+		return emptyFile;
+	}
+
+	public static IFolder getDocroot(IProject project) {
+		IContainer retval = null;
+
+		if (project != null) {
+			IVirtualComponent comp = ComponentCore.createComponent(project);
+
+			if (comp != null) {
+				IVirtualFolder rootFolder = comp.getRootFolder();
+
+				if (rootFolder != null) {
+					retval = rootFolder.getUnderlyingFolder();
+				}
+			}
+		}
+
+		return retval instanceof IFolder ? (IFolder) retval : null;
+	}
+
+	public static IFolder getDocroot(String projectName) {
+		IProject project = CoreUtil.getProject(projectName);
+
+		return getDocroot(project);
+	}
+
 	public static IFacetedProject getFacetedProject(IProject project) {
 		try {
 			return ProjectFacetsManager.create(project);
@@ -207,28 +246,16 @@ public class ProjectUtil {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 	}
 
-	public static IFolder getDocroot(IProject project) {
-		IContainer retval = null;
-
-		if (project != null) {
-			IVirtualComponent comp = ComponentCore.createComponent(project);
-
-			if (comp != null) {
-				IVirtualFolder rootFolder = comp.getRootFolder();
-
-				if (rootFolder != null) {
-					retval = rootFolder.getUnderlyingFolder();
-				}
-			}
-		}
-
-		return retval instanceof IFolder ? (IFolder) retval : null;
-	}
-
-	public static IFolder getDocroot(String projectName) {
-		IProject project = CoreUtil.getProject(projectName);
-
-		return getDocroot(project);
+	public static String getRelativePathFromDocroot(IProject project, String path) {
+		IFolder docroot = getDocroot(project);
+	
+		IPath pathValue = new Path(path);
+	
+		IPath relativePath = pathValue.makeRelativeTo(docroot.getFullPath());
+	
+		String retval = relativePath.toPortableString();
+	
+		return retval.startsWith("/") ? retval : "/" + retval;
 	}
 
 	public static SDK getSDK(IFacetedProject facetedProject, IProjectFacet facet)
@@ -294,10 +321,6 @@ public class ProjectUtil {
 		return sourceFolders.toArray(new IFolder[sourceFolders.size()]);
 	}
 
-	public static boolean hasFacet(IProject project, String facetId) {
-		return hasFacet(project, ProjectFacetsManager.getProjectFacet(facetId));
-	}
-
 	public static boolean hasFacet(IProject project, IProjectFacet checkProjectFacet) {
 		boolean retval = false;
 		if (project == null || checkProjectFacet == null) {
@@ -321,16 +344,20 @@ public class ProjectUtil {
 		return retval;
 	}
 
+	public static boolean hasFacet(IProject project, String facetId) {
+		return hasFacet(project, ProjectFacetsManager.getProjectFacet(facetId));
+	}
+
 	public static boolean isDynamicWebFacet(IProjectFacet facet) {
 		return facet != null && facet.getId().equals(IModuleConstants.JST_WEB_MODULE);
 	}
 
-	public static boolean isExtProject(IProject project) {
-		return hasFacet(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+	public static boolean isDynamicWebFacet(IProjectFacetVersion facetVersion) {
+		return facetVersion != null && isDynamicWebFacet(facetVersion.getProjectFacet());
 	}
 
-	public static boolean isThemeProject(IProject project) {
-		return hasFacet(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
+	public static boolean isExtProject(IProject project) {
+		return hasFacet(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
 	}
 
 	public static boolean isHookProject(IProject project) {
@@ -341,8 +368,17 @@ public class ProjectUtil {
 		return facet != null && facet.getId().equals(IModuleConstants.JST_JAVA);
 	}
 
+	public static boolean isJavaFacet(IProjectFacetVersion facetVersion) {
+		return facetVersion != null && isJavaFacet(facetVersion.getProjectFacet());
+	}
+
 	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
 		return ProjectCorePlugin.getProjectDefinition(projectFacet) != null;
+	}
+
+	public static boolean isLiferayFacet(IProjectFacetVersion projectFacetVersion) {
+		return projectFacetVersion != null &&
+			ProjectCorePlugin.getProjectDefinition(projectFacetVersion.getProjectFacet()) != null;
 	}
 
 	public static boolean isLiferayProject(IProject project) {
@@ -423,6 +459,10 @@ public class ProjectUtil {
 		return hasFacet(project, PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
 	}
 
+	public static boolean isThemeProject(IProject project) {
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
+	}
+
 	public static boolean isValidLiferayProjectDir(File dir) {
 		String name = dir.getName();
 
@@ -478,33 +518,6 @@ public class ProjectUtil {
 		Preferences prefs = ProjectFacetsManager.create(project).getPreferences(facet).node("liferay-plugin-project");
 		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
 		prefs.flush();
-	}
-
-	public static IFile createEmptyProjectFile(String fileName, IFolder folder)
-		throws CoreException {
-	
-		IFile emptyFile = folder.getFile(fileName);
-	
-		if (emptyFile.exists()) {
-			return emptyFile;
-		}
-		else {
-			emptyFile.create(new ByteArrayInputStream("".getBytes()), true, null);
-		}
-	
-		return emptyFile;
-	}
-
-	public static String getRelativePathFromDocroot(IProject project, String path) {
-		IFolder docroot = getDocroot(project);
-	
-		IPath pathValue = new Path(path);
-	
-		IPath relativePath = pathValue.makeRelativeTo(docroot.getFullPath());
-	
-		String retval = relativePath.toPortableString();
-	
-		return retval.startsWith("/") ? retval : "/" + retval;
 	}
 
 

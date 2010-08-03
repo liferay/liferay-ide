@@ -16,7 +16,6 @@
 package com.liferay.ide.eclipse.project.core;
 
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
@@ -30,7 +29,7 @@ import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataMo
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 import org.osgi.framework.Version;
 
@@ -38,7 +37,7 @@ import org.osgi.framework.Version;
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"unchecked", "restriction"
+	"unchecked", "restriction", "rawtypes"
 })
 public class SDKProjectsImportDataModelProvider extends FacetProjectCreationDataModelProvider
 	implements ISDKProjectsImportDataModelProperties {
@@ -97,15 +96,20 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		// show liferay runtimes
 		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
 
-		Set<IProjectFacetVersion> facets = ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
-
+		facetedProject.setSelectedPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
 		Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
-
-		for (IProjectFacetVersion pfv : facets) {
-			fixedFacets.add(pfv.getProjectFacet());
-		}
-
+		fixedFacets.add(ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID));
 		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
+		// Set<IProjectFacetVersion> facets =
+		// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
+
+		// Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
+
+		// for (IProjectFacetVersion pfv : facets) {
+		// fixedFacets.add(pfv.getProjectFacet());
+		// }
+
+		// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
 	}
 
 	@Override

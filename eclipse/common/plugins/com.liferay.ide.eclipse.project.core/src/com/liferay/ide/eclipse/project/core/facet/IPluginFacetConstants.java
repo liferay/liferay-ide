@@ -59,6 +59,8 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_LAYOUTTPL_PLUGIN_FACET_TEMPLATE_ID = "liferay.layouttpl.template";
 
+	public static final String LIFERAY_LAYOUTTPL_PRESET = "liferay.layouttpl.preset";
+
 	public static final String LIFERAY_PORTLET_PLUGIN_FACET_ID = "liferay.portlet";
 
 	public static final String LIFERAY_PORTLET_PLUGIN_FACET_TEMPLATE_ID = "liferay.portlet.template";
@@ -72,6 +74,8 @@ public class IPluginFacetConstants {
 	public static final String LIFERAY_THEME_PLUGIN_FACET_ID = "liferay.theme";
 
 	public static final String LIFERAY_THEME_PLUGIN_FACET_TEMPLATE_ID = "liferay.theme.template";
+
+	public static final String LIFERAY_THEME_PRESET = "liferay.theme.preset";
 
 	public static final String PORTLET_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
 
