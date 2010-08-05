@@ -51,6 +51,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jst.common.project.facet.core.JavaFacet;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -365,7 +366,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isJavaFacet(IProjectFacet facet) {
-		return facet != null && facet.getId().equals(IModuleConstants.JST_JAVA);
+		return facet != null && (facet.getId().equals(JavaFacet.ID) || facet.getId().equals(IModuleConstants.JST_JAVA));
 	}
 
 	public static boolean isJavaFacet(IProjectFacetVersion facetVersion) {

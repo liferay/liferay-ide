@@ -160,6 +160,10 @@ public class PluginFacetUtil {
 				}
 			}
 
+			if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
+				configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+			}
+
 			if (!hasRequiredFacet) {
 				fpjwc.addProjectFacet(requiredFacetVersion);
 
@@ -168,9 +172,6 @@ public class PluginFacetUtil {
 				}
 				else if (ProjectUtil.isDynamicWebFacet(requiredFacetVersion)) {
 					configureWebFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
-				}
-				else if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
-					configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
 				}
 			}
 		}
