@@ -116,7 +116,7 @@ public final class SDKManager {
 			return sdk;
 		}
 		catch (Exception e) {
-			CorePlugin.logError(e);
+			// ignore errors
 		}
 
 		return null;
