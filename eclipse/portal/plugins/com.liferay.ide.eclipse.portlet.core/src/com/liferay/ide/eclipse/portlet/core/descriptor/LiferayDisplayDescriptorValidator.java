@@ -62,11 +62,11 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator {
 	public static final String MESSAGE_PORTLET_NAME_NOT_FOUND =
 		"The portlet id {0} did not match a portlet name found in portlet.xml.";
 
-	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
-
 	public static final String PORTLET_ELEMENT = "portlet";
 
 	public static final String PORTLET_NAME_ELEMENT = "portlet-name";
+
+	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
 
 	public LiferayDisplayDescriptorValidator() {
 		super();
@@ -131,25 +131,9 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator {
 		return result;
 	}
 
-	protected void checkPortletIds(
-		IDOMDocument liferayDisplayDocument, IDOMDocument portletXmlDocument,
-		IScopeContext[] preferenceScopes, List<Map<String, Object>> problems) {
-
-		NodeList elements = liferayDisplayDocument.getElementsByTagName(PORTLET_ELEMENT);
-
-		for (int i = 0; i < elements.getLength(); i++) {
-			Node portletElement = elements.item(i);
-
-			checkPortletId(
-				portletXmlDocument, portletElement, preferenceScopes,
-				ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND,
-				MESSAGE_PORTLET_NAME_NOT_FOUND, problems);
-		}
-	}
-
 	protected void checkPortletId(
-		IDOMDocument portletXmlDocument, Node portletIdNode, IScopeContext[] preferenceScopes,
-		String validationKey, String errorMessage, List<Map<String, Object>> problems) {
+		IDOMDocument portletXmlDocument, Node portletIdNode, IScopeContext[] preferenceScopes, String validationKey,
+		String errorMessage, List<Map<String, Object>> problems) {
 
 		NodeList elements = portletXmlDocument.getElementsByTagName(PORTLET_NAME_ELEMENT);
 
@@ -184,9 +168,23 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator {
 			}
 		}
 
-
 	}
 
+	protected void checkPortletIds(
+		IDOMDocument liferayDisplayDocument, IDOMDocument portletXmlDocument, IScopeContext[] preferenceScopes,
+		List<Map<String, Object>> problems) {
+
+		NodeList elements = liferayDisplayDocument.getElementsByTagName(PORTLET_ELEMENT);
+
+		for (int i = 0; i < elements.getLength(); i++) {
+			Node portletElement = elements.item(i);
+
+			checkPortletId(
+				portletXmlDocument, portletElement, preferenceScopes,
+				ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
+				problems);
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	protected Map<String, Object>[] detectProblems(

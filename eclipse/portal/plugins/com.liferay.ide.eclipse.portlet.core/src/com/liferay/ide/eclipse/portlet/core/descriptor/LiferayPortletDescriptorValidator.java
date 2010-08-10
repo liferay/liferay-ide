@@ -43,9 +43,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -169,36 +166,6 @@ public class LiferayPortletDescriptorValidator extends BaseValidator {
 		}
 
 		return result;
-	}
-
-	protected Map<String, Object> checkClass(
-		IJavaProject javaProject, Node classSpecifier, IScopeContext[] preferenceScopes, String preferenceKey,
-		String errorMessage) {
-
-		String className = NodeUtil.getTextContent(classSpecifier);
-
-		if (className != null && className.length() > 0) {
-			IType type = null;
-
-			try {
-				type = javaProject.findType(className);
-			}
-			catch (JavaModelException e) {
-				return null;
-			}
-
-			if (type == null || !type.exists()) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					className
-				});
-
-				return createMarkerValues(
-					PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg);
-
-			}
-		}
-
-		return null;
 	}
 
 	protected void checkDocrootElement(

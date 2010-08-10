@@ -15,7 +15,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.descriptor;
 
-import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
@@ -23,7 +22,6 @@ import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,16 +31,12 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -50,7 +44,6 @@ import org.eclipse.wst.validation.ValidationState;
 import org.eclipse.wst.validation.ValidatorMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -128,80 +121,9 @@ public class PortletDescriptorValidator extends BaseValidator {
 		return result;
 	}
 
-	protected Map<String, Object> checkClass(
-		IJavaProject javaProject, Node classSpecifier, IScopeContext[] preferenceScopes, String preferenceKey,
-		String errorMessage) {
-
-		String className = NodeUtil.getTextContent(classSpecifier);
-
-		if (className != null && className.length() > 0) {
-			IType type = null;
-
-			try {
-				type = javaProject.findType(className);
-			}
-			catch (JavaModelException e) {
-				return null;
-			}
-
-			if (type == null || !type.exists()) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					className
-				});
-
-				return createMarkerValues(
-					PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg);
-
-			}
-		}
-
-		return null;
-	}
-
-	protected Map<String, Object> checkClassResource(
-		IJavaProject javaProject, Node classResourceSpecifier, IScopeContext[] preferenceScopes, String preferenceKey,
-		String errorMessage) {
-
-		String classResource = NodeUtil.getTextContent(classResourceSpecifier);
-
-		if (classResource != null && classResource.length() > 0) {
-			try {
-				IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath(true);
-
-				IResource classResourceValue = null;
-				for (IClasspathEntry entry : classpathEntries) {
-					if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-						IPath entryPath = entry.getPath();
-						IPath classResourcePath = entryPath.append(classResource);
-						classResourceValue =
-							javaProject.getJavaModel().getWorkspace().getRoot().findMember(classResourcePath);
-						if (classResourceValue != null) {
-							break;
-						}
-					}
-				}
-
-				if (classResourceValue == null) {
-					String msg = MessageFormat.format(errorMessage, new Object[] {
-						classResource
-					});
-
-					return createMarkerValues(
-						PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier,
-						msg);
-				}
-			}
-			catch (JavaModelException e1) {
-
-			}
-
-		}
-
-		return null;
-	}
-
 	protected void checkPortletClassElements(
-		IDOMDocument document, IJavaProject javaProject, IScopeContext[] preferenceScopes,
+		IDOMDocument document, IJavaProject javaProject, String preferenceNodeQualifier,
+		IScopeContext[] preferenceScopes,
 		List<Map<String, Object>> problems) {
 
 		NodeList classes = document.getElementsByTagName(PORTLET_CLASS_ELEMENT);
@@ -211,8 +133,8 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 			Map<String, Object> problem =
 				checkClass(
-					javaProject, item, preferenceScopes, ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND,
-					MESSAGE_PORTLET_CLASS_NOT_FOUND);
+					javaProject, item, preferenceNodeQualifier, preferenceScopes,
+					ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND, MESSAGE_PORTLET_CLASS_NOT_FOUND);
 
 			if (problem != null) {
 				problems.add(problem);
@@ -231,7 +153,8 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 			Map<String, Object> problem =
 				checkClassResource(
-					javaProject, item, preferenceScopes, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND,
+					javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+					ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND,
 					MESSAGE_RESOURCE_BUNDLE_NOT_FOUND);
 
 			if (problem != null) {
@@ -255,7 +178,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 			if (model instanceof IDOMModel) {
 				IDOMDocument document = ((IDOMModel) model).getDocument();
 
-				checkPortletClassElements(document, javaProject, preferenceScopes, problems);
+				checkPortletClassElements(document, javaProject, PREFERENCE_NODE_QUALIFIER, preferenceScopes, problems);
 
 				checkResourceBundleElements(document, javaProject, preferenceScopes, problems);
 			}

@@ -174,6 +174,20 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
 		createCombo(inner, "Portlet id not found", ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND);
 
+		twistie = createTwistie(body, "Liferay Hook XML Descriptor", columns);
+		inner = createInnerComposite(parent, twistie, columns);
+
+		createCombo(
+			inner, "Portal properties resource not found",
+			ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND);
+		createCombo(
+			inner, "Language properties resource not found",
+			ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND);
+		createCombo(
+			inner, "Custom jsp directory not found", ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND);
+		createCombo(inner, "Service type not found", ValidationPreferences.LIFERAY_HOOK_XML_SERVICE_TYPE_NOT_FOUND);
+		createCombo(inner, "Service impl not found", ValidationPreferences.LIFERAY_HOOK_XML_SERVICE_IMPL_NOT_FOUND);
+
 		return parent;
 	}
 
