@@ -4,6 +4,8 @@ def outputFile = new File("../com.liferay.ide.eclipse.releng/maps/wtp-3.2.1-deps
 
 def deps = depsFile.readLines();
 
+outputFile.setText('')
+
 mapFile.eachLine {
 	def plugin = it.toString() =~ /^plugin@(.*)=.*/
 	if (plugin.matches()) {
