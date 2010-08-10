@@ -105,4 +105,22 @@ public class NodeUtil {
 		return s.toString().trim();
 	}
 
+	public static Node findFirstChild(Element element, String elementName) {
+		if (element != null && !(CoreUtil.isNullOrEmpty(elementName))) {
+			NodeList children = element.getChildNodes();
+	
+			if (children != null && children.getLength() > 0) {
+				for (int i = 0; i < children.getLength(); i++) {
+					Node child = children.item(i);
+	
+					if (elementName.equals(child.getNodeName())) {
+						return child;
+					}
+				}
+			}
+		}
+	
+		return null;
+	}
+
 }

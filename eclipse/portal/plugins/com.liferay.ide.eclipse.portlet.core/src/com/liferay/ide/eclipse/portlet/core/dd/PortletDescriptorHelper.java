@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.portlet.core.dd;
 
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
+import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
@@ -309,7 +310,26 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			appendChildElement(appendChildElement(newPortletElement, "security-role-ref"), "role-name", roleName);
 		}
 
-		docRoot.appendChild(newPortletElement);
+		// check for event-definition elements
+
+		Node refNode = null;
+
+		String[] refElementNames =
+			new String[] {
+				"custom-portlet-mode", "custom-window-state", "user-attribute", "security-constraint",
+				"resource-bundle", "filter", "filter-mapping", "default-namespace", "event-definition",
+				"public-render-parameter", "listener", "container-runtime-option"
+			};
+
+		for (int i = 0; i < refElementNames.length; i++) {
+			refNode = NodeUtil.findFirstChild(docRoot, refElementNames[i]);
+
+			if (refNode != null) {
+				break;
+			}
+		}
+
+		docRoot.insertBefore(newPortletElement, refNode);
 
 		// append a newline text node
 		docRoot.appendChild(document.createTextNode(System.getProperty("line.separator")));

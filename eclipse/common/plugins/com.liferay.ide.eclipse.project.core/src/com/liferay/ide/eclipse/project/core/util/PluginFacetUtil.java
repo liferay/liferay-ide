@@ -160,18 +160,24 @@ public class PluginFacetUtil {
 				}
 			}
 
-			if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
-				configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
-			}
+
 
 			if (!hasRequiredFacet) {
 				fpjwc.addProjectFacet(requiredFacetVersion);
 
-				if (ProjectUtil.isLiferayFacet(requiredFacetVersion)) {
+				if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
+					configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+				}
+				else if (ProjectUtil.isLiferayFacet(requiredFacetVersion)) {
 					configureLiferayFacet(fpjwc, requiredFacetVersion, model);
 				}
 				else if (ProjectUtil.isDynamicWebFacet(requiredFacetVersion)) {
 					configureWebFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+				}
+			}
+			else {
+				if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
+					configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
 				}
 			}
 		}
