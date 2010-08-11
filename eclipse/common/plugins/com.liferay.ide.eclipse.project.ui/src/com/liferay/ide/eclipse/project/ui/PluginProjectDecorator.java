@@ -56,7 +56,7 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 
 	private static ImageDescriptor THEME;
 
-	private static final String THEME_FACET = "liferay.layouttpl";
+	private static final String THEME_FACET = "liferay.theme";
 
 	private static ImageDescriptor getExt() {
 		if (EXT == null) {
