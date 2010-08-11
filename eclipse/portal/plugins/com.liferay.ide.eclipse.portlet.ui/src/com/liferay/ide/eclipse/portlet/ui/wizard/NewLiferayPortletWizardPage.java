@@ -32,6 +32,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,7 +48,9 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
  * @author Greg Amerson
@@ -187,6 +190,15 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 		this.synchHelper.synchText(cssClassWrapper, CSS_CLASS_WRAPPER, null);
 
 		SWTUtil.createLabel(group, "", 1);
+
+		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
+
+			public void propertyChanged(DataModelEvent event) {
+				if (INewJavaClassDataModelProperties.CLASS_NAME.equals(event.getPropertyName())) {
+					synchHelper.synchAllUIWithModel();
+				}
+			}
+		});
 	}
 
 	@Override
