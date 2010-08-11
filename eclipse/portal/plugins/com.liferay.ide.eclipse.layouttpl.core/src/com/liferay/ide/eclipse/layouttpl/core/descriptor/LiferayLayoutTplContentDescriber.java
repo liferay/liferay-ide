@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core.servicebuilder;
+package com.liferay.ide.eclipse.layouttpl.core.descriptor;
 
 import com.liferay.ide.eclipse.core.AbstractContentDescriber;
 import com.liferay.ide.eclipse.core.AbstractDefaultHandler;
@@ -21,14 +21,13 @@ import com.liferay.ide.eclipse.core.AbstractDefaultHandler;
 /**
  * @author Greg Amerson
  */
-public class ServiceBuilderContentDescriber extends AbstractContentDescriber {
+public class LiferayLayoutTplContentDescriber extends AbstractContentDescriber {
 
-	public ServiceBuilderContentDescriber() {
+	public LiferayLayoutTplContentDescriber() {
 		super();
 	}
 
 	protected AbstractDefaultHandler createDefaultHandler() {
-		return new ServiceBuilderContentHandler();
+		return new LiferayLayoutTplContentHandler();
 	}
-
 }

@@ -19,9 +19,9 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
@@ -66,7 +66,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator {
 
 	public static final String PORTLET_NAME_ELEMENT = "portlet-name";
 
-	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
+	public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
 	public LiferayDisplayDescriptorValidator() {
 		super();

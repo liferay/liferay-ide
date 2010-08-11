@@ -15,28 +15,24 @@
 
 package com.liferay.ide.eclipse.portlet.core.descriptor;
 
-import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -49,7 +45,6 @@ import org.eclipse.wst.validation.ValidationState;
 import org.eclipse.wst.validation.ValidatorMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -82,7 +77,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator {
 
 	public static final String PORTAL_PROPERTIES_ELEMENT = "portal-properties";
 
-	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
+	public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
 	public static final String SERVICE_IMPL_ELEMENT = "service-impl";
 
@@ -171,55 +166,12 @@ public class LiferayHookDescriptorValidator extends BaseValidator {
 			ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND, MESSAGE_LANGUAGE_PROPERTIES_NOT_FOUND);
 	}
 
-	protected void checkDocrootElement(
-		IDOMDocument document, String element, IProject project, IScopeContext[] preferenceScopes,
-		String validationKey, String messageKey, List<Map<String, Object>> problems) {
-
-		NodeList elements = document.getElementsByTagName(element);
-
-		for (int i = 0; i < elements.getLength(); i++) {
-			Node item = elements.item(i);
-
-			Map<String, Object> problem =
-				checkDocrootResource(item, project, preferenceScopes, validationKey, messageKey);
-
-			if (problem != null) {
-				problems.add(problem);
-			}
-		}
-	}
-
 	protected void checkDocrootElements(
 		IDOMDocument document, IProject project, IScopeContext[] preferenceScopes, List<Map<String, Object>> problems) {
 
 		checkDocrootElement(
-			document, CUSTOM_JSP_DIR_ELEMENT, project, preferenceScopes,
+			document, CUSTOM_JSP_DIR_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND, MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND, problems);
-	}
-
-	protected Map<String, Object> checkDocrootResource(
-		Node docrootResourceSpecifier, IProject project, IScopeContext[] preferenceScopes, String preferenceKey,
-		String errorMessage) {
-
-		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
-
-		if (docrootResource != null && docrootResource.length() > 0) {
-			IFolder docroot = ProjectUtil.getDocroot(project);
-
-			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
-
-			if (docrootResourceValue == null) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					docrootResource
-				});
-
-				return createMarkerValues(
-					PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier,
-					msg);
-			}
-		}
-
-		return null;
 	}
 
 	protected void checkJavaElements(

@@ -19,9 +19,9 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
@@ -32,14 +32,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -108,7 +106,7 @@ public class LiferayPortletDescriptorValidator extends BaseValidator {
 
 	public static final String MESSAGE_PORTLET_NAME_NOT_FOUND = "The portlet name {0} was not found in portlet.xml.";
 
-	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
+	public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
 	public static final String PORTLET_NAME_ELEMENT = "portlet-name";
 
@@ -168,24 +166,6 @@ public class LiferayPortletDescriptorValidator extends BaseValidator {
 		return result;
 	}
 
-	protected void checkDocrootElement(
-		IDOMDocument document, String element, IProject project, IScopeContext[] preferenceScopes,
-		String validationKey, String messageKey, List<Map<String, Object>> problems) {
-
-		NodeList elements = document.getElementsByTagName(element);
-
-		for (int i = 0; i < elements.getLength(); i++) {
-			Node item = elements.item(i);
-
-			Map<String, Object> problem =
-				checkDocrootResource(item, project, preferenceScopes, validationKey, messageKey);
-
-			if (problem != null) {
-				problems.add(problem);
-			}
-		}
-	}
-
 	protected void checkPortletNameElements(
 		IDOMDocument liferayPortletXmlDocument, IDOMDocument portletXmlDocument,
 		IScopeContext[] preferenceScopes, List<Map<String, Object>> problems) {
@@ -241,65 +221,43 @@ public class LiferayPortletDescriptorValidator extends BaseValidator {
 		List<Map<String, Object>> problems) {
 
 		checkDocrootElement(
-			document, ICON_ELEMENT, project, preferenceScopes, ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND, MESSAGE_ICON_NOT_FOUND,
+			document, ICON_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+			ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND, MESSAGE_ICON_NOT_FOUND, problems);
+
+		checkDocrootElement(
+			document, HEADER_PORTAL_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND, MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND,
 			problems);
 
 		checkDocrootElement(
-			document, HEADER_PORTAL_CSS_ELEMENT, project, preferenceScopes, ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND,
-			MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND, problems);
-
-		checkDocrootElement(
-			document, HEADER_PORTLET_CSS_ELEMENT, project, preferenceScopes,
+			document, HEADER_PORTLET_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_CSS_NOT_FOUND, MESSAGE_HEADER_PORTLET_CSS_NOT_FOUND, problems);
 
 		checkDocrootElement(
-			document, HEADER_PORTAL_JAVASCRIPT_ELEMENT, project, preferenceScopes,
+			document, HEADER_PORTAL_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND, MESSAGE_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND, problems);
 
 		checkDocrootElement(
-			document, HEADER_PORTLET_JAVASCRIPT_ELEMENT, project, preferenceScopes,
+			document, HEADER_PORTLET_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND, MESSAGE_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND, problems);
 
 		checkDocrootElement(
-			document, FOOTER_PORTAL_CSS_ELEMENT, project, preferenceScopes, ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND,
+			document, FOOTER_PORTAL_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND,
 			MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND, problems);
 
 		checkDocrootElement(
-			document, FOOTER_PORTLET_CSS_ELEMENT, project, preferenceScopes,
+			document, FOOTER_PORTLET_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_CSS_NOT_FOUND, MESSAGE_FOOTER_PORTLET_CSS_NOT_FOUND, problems);
 
 		checkDocrootElement(
-			document, FOOTER_PORTAL_JAVASCRIPT_ELEMENT, project, preferenceScopes,
+			document, FOOTER_PORTAL_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND,
 			MESSAGE_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND, problems);
 
 		checkDocrootElement(
-			document, FOOTER_PORTLET_JAVASCRIPT_ELEMENT, project, preferenceScopes,
+			document, FOOTER_PORTLET_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
 			ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND, MESSAGE_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND, problems);
-	}
-
-	protected Map<String, Object> checkDocrootResource(Node docrootResourceSpecifier, IProject project, IScopeContext[] preferenceScopes,
-		String preferenceKey, String errorMessage) {
-
-		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
-
-		if (docrootResource != null && docrootResource.length() > 0) {
-			IFolder docroot = ProjectUtil.getDocroot(project);
-
-			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
-
-			if (docrootResourceValue == null) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					docrootResource
-				});
-
-				return createMarkerValues(
-					PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier,
-					msg);
-			}
-		}
-
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")

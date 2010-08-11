@@ -373,6 +373,10 @@ public class ProjectUtil {
 		return facetVersion != null && isJavaFacet(facetVersion.getProjectFacet());
 	}
 
+	public static boolean isLayoutTplProject(IProject project) {
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
+	}
+
 	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
 		return ProjectCorePlugin.getProjectDefinition(projectFacet) != null;
 	}

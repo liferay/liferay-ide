@@ -16,14 +16,19 @@
 package com.liferay.ide.eclipse.project.core;
 
 import com.liferay.ide.eclipse.core.util.NodeUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -35,8 +40,10 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationEvent;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Greg Amerson
@@ -125,6 +132,50 @@ public abstract class BaseValidator extends AbstractValidator {
 
 		return null;
 	}
+
+	protected void checkDocrootElement(
+		IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
+		IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems) {
+		
+			NodeList elements = document.getElementsByTagName(element);
+		
+			for (int i = 0; i < elements.getLength(); i++) {
+				Node item = elements.item(i);
+		
+				Map<String, Object> problem =
+					checkDocrootResource(
+						item, project, preferenceNodeQualifier, preferenceScopes, validationKey, messageKey);
+		
+				if (problem != null) {
+					problems.add(problem);
+				}
+			}
+		}
+
+	protected Map<String, Object> checkDocrootResource(
+		Node docrootResourceSpecifier, IProject project, String preferenceNodeQualifier,
+		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage) {
+
+		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
+	
+		if (docrootResource != null && docrootResource.length() > 0) {
+			IFolder docroot = ProjectUtil.getDocroot(project);
+	
+			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
+	
+			if (docrootResourceValue == null) {
+				String msg = MessageFormat.format(errorMessage, new Object[] {
+					docrootResource
+				});
+	
+				return createMarkerValues(
+					preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier, msg);
+			}
+		}
+	
+		return null;
+	}
+
 
 	protected Map<String, Object> createMarkerValues(
 		String qualifier, IScopeContext[] preferenceScopes, String preferenceKey, IDOMNode domNode, String message) {

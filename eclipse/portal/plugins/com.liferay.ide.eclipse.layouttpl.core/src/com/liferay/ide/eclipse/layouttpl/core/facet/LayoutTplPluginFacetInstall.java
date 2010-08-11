@@ -69,7 +69,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 			
 			processNewFiles(newLayoutTplPath.append(layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX), false);
 			
-			// cleanup portlet files
+			// cleanup files
 			FileUtil.deleteDir(newLayoutTplPath.toFile(), true);
 
 			removeUnneededClasspathEntries();

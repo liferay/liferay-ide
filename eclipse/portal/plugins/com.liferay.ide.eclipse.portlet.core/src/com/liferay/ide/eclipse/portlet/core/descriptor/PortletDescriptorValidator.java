@@ -16,9 +16,9 @@
 package com.liferay.ide.eclipse.portlet.core.descriptor;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class PortletDescriptorValidator extends BaseValidator {
 
 	public static final String PORTLET_CLASS_ELEMENT = "portlet-class";
 
-	public static final String PREFERENCE_NODE_QUALIFIER = PortletCore.getDefault().getBundle().getSymbolicName();
+	public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
 	public static final String RESOURCE_BUNDLE_ELEMENT = "resource-bundle";
 

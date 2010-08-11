@@ -15,7 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.core.servicebuilder;
 
-import com.liferay.ide.eclipse.portlet.core.AbstractDefaultHandler;
+import com.liferay.ide.eclipse.core.AbstractDefaultHandler;
 
 /**
  * @author Greg Amerson

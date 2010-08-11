@@ -17,5 +17,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.layouttpl.core,
+ com.liferay.ide.eclipse.layouttpl.core.descriptor,
  com.liferay.ide.eclipse.layouttpl.core.facet,
  com.liferay.ide.eclipse.layouttpl.core.operation

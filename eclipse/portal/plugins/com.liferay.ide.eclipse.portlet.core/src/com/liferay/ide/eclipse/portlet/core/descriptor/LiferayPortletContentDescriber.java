@@ -15,8 +15,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.descriptor;
 
-import com.liferay.ide.eclipse.portlet.core.AbstractContentDescriber;
-import com.liferay.ide.eclipse.portlet.core.AbstractDefaultHandler;
+import com.liferay.ide.eclipse.core.AbstractContentDescriber;
+import com.liferay.ide.eclipse.core.AbstractDefaultHandler;
 
 /**
  * @author Greg Amerson

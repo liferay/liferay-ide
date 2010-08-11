@@ -16,9 +16,9 @@
 package com.liferay.ide.eclipse.portlet.ui.pref;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.ValidationPreferences;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.ui.pref.AbstractValidationSettingsPage;
 
 import java.util.HashMap;
@@ -188,6 +188,19 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 		createCombo(inner, "Service type not found", ValidationPreferences.LIFERAY_HOOK_XML_SERVICE_TYPE_NOT_FOUND);
 		createCombo(inner, "Service impl not found", ValidationPreferences.LIFERAY_HOOK_XML_SERVICE_IMPL_NOT_FOUND);
 
+		twistie = createTwistie(body, "Liferay Layout Templates Descriptor", columns);
+		inner = createInnerComposite(parent, twistie, columns);
+
+		createCombo(
+			inner, "Template path resource not found",
+			ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND);
+		createCombo(
+			inner, "WAP Template path resource not found",
+			ValidationPreferences.LIFERAY_LAYOUTTPL_XML_WAP_TEMPLATE_PATH_NOT_FOUND);
+		createCombo(
+			inner, "Thumbnail path resource not found",
+			ValidationPreferences.LIFERAY_LAYOUTTPL_XML_THUMBNAIL_PATH_NOT_FOUND);
+
 		return parent;
 	}
 
@@ -200,7 +213,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
 	@Override
 	protected String getPreferenceNodeQualifier() {
-		return PortletCore.getDefault().getBundle().getSymbolicName();
+		return ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 	}
 
 	@Override
