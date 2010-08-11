@@ -221,6 +221,11 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 					}
 
 					host.removeElement("Context", i);
+
+					if (Boolean.parseBoolean(host.getAttributeValue("deployXML"))) {
+						host.setAttributeValue("deployXML", "false");
+					}
+
 					modified = true;
 				}
 			}
