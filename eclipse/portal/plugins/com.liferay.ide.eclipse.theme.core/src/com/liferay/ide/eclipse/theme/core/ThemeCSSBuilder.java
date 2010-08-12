@@ -141,7 +141,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 		return false;
 	}
 
-	protected IStatus cssBuild(IProject project)
+	public static IStatus cssBuild(IProject project)
 		throws CoreException {
 
 		SDK sdk = null;
