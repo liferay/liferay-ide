@@ -425,4 +425,11 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof SDK && getName() != null && getName().equals(((SDK) obj).getName()) &&
+			getLocation() != null && getLocation().equals(((SDK) obj).getLocation());
+	}
+
 }

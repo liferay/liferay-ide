@@ -35,21 +35,21 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 @SuppressWarnings("restriction")
 public class ProjectRecord {
 
-	IProjectDescription description;
+	public IProjectDescription description;
+
+	public File liferayProjectDir;
+
+	public File projectSystemFile;
 
 	boolean hasConflicts;
 
 	int level;
-
-	File liferayProjectDir;
 
 	Object parent;
 
 	IProject project;
 
 	String projectName;
-
-	File projectSystemFile;
 
 	/**
 	 * Create a record for a project based on the info in the file.
@@ -63,13 +63,13 @@ public class ProjectRecord {
 		else {
 			projectSystemFile = file;
 		}
-		
+
 		setProjectName();
 	}
 
 	public ProjectRecord(IProject preSelectedProject) {
 		this.project = preSelectedProject;
-		
+
 		setProjectName();
 	}
 
@@ -83,9 +83,9 @@ public class ProjectRecord {
 	 */
 	ProjectRecord(Object file, Object parent, int level) {
 		this.parent = parent;
-		
+
 		this.level = level;
-		
+
 		setProjectName();
 	}
 
@@ -96,7 +96,7 @@ public class ProjectRecord {
 				return this.project.equals(((ProjectRecord) obj).project);
 			}
 		}
-		
+
 		return super.equals(obj);
 	}
 
@@ -127,7 +127,7 @@ public class ProjectRecord {
 		else if (this.project != null) {
 			return this.project.getRawLocation();
 		}
-		
+
 		return null;
 	}
 
@@ -152,8 +152,7 @@ public class ProjectRecord {
 	}
 
 	/**
-	 * Returns whether the given project description file path is in the default
-	 * location for a project
+	 * Returns whether the given project description file path is in the default location for a project
 	 * 
 	 * @param path
 	 *            The path to examine
@@ -165,7 +164,7 @@ public class ProjectRecord {
 		if (path.segmentCount() < 2) {
 			return false;
 		}
-		
+
 		return path.removeLastSegments(2).toFile().equals(Platform.getLocation().toFile());
 	}
 
@@ -178,30 +177,30 @@ public class ProjectRecord {
 			if (projectName == null) {
 				if (projectSystemFile != null) {
 					IPath path = new Path(projectSystemFile.getPath());
-					
+
 					// if the file is in the default location, use the directory
 					// name as the project name
 					if (isDefaultLocation(path)) {
 						projectName = path.segment(path.segmentCount() - 2);
-						
+
 						description = IDEWorkbenchPlugin.getPluginWorkspace().newProjectDescription(projectName);
 					}
 					else {
 						description = IDEWorkbenchPlugin.getPluginWorkspace().loadProjectDescription(path);
-						
+
 						projectName = description.getName();
 					}
 				}
 				else if (liferayProjectDir != null) {
 					IPath path = new Path(liferayProjectDir.getPath());
-					
+
 					projectName = path.lastSegment();
-					
+
 					description = IDEWorkbenchPlugin.getPluginWorkspace().newProjectDescription(projectName);
 				}
 				else if (project != null) {
 					projectName = project.getName();
-					
+
 					description = project.getDescription();
 				}
 

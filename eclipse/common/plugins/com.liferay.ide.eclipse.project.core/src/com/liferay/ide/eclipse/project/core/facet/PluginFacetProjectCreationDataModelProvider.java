@@ -70,7 +70,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	@Override
 	public Object getDefaultProperty(String propertyName) {
 		if (LIFERAY_SDK_NAME.equals(propertyName)) {
-			SDK sdk = SDKManager.getDefaultSDK();
+			SDK sdk = SDKManager.getInstance().getDefaultSDK();
 
 			if (sdk != null) {
 				return sdk.getName();
@@ -167,7 +167,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	@Override
 	public DataModelPropertyDescriptor[] getValidPropertyDescriptors(String propertyName) {
 		if (LIFERAY_SDK_NAME.equals(propertyName)) {
-			SDK[] validSDKs = SDKManager.getAllSDKs();
+			SDK[] validSDKs = SDKManager.getInstance().getSDKs();
 			String[] values = null;
 			String[] descriptions = null;
 
@@ -307,7 +307,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				return ProjectCorePlugin.createErrorStatus("Liferay SDK must be configured.");
 			}
 			else if (!CoreUtil.isNullOrEmpty(sdkVal.toString())) {
-				SDK sdk = SDKManager.getSDKByName(sdkVal.toString());
+				SDK sdk = SDKManager.getInstance().getSDK(sdkVal.toString());
 
 				if (sdk == null || !sdk.isValid()) {
 					return ProjectCorePlugin.createErrorStatus("Liferay SDK is invalid.");
@@ -403,7 +403,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	}
 
 	protected IPath getSDKLocation() {
-		SDK sdk = SDKManager.getSDKByName((String) getProperty(LIFERAY_SDK_NAME));
+		SDK sdk = SDKManager.getInstance().getSDK((String) getProperty(LIFERAY_SDK_NAME));
 		return sdk != null ? sdk.getLocation() : null;
 	}
 

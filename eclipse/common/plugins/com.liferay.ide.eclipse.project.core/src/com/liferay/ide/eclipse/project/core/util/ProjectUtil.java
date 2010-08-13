@@ -18,13 +18,17 @@ package com.liferay.ide.eclipse.project.core.util;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.IProjectDefinition;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.facet.HookPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
+import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
+import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.eclipse.project.core.facet.PortletPluginFacetInstall;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.server.core.PluginClasspathContainerInitializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -41,12 +45,17 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -66,12 +75,16 @@ import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IPreset;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
+import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -175,17 +188,131 @@ public class ProjectUtil {
 
 	public static IFile createEmptyProjectFile(String fileName, IFolder folder)
 		throws CoreException {
-	
+
 		IFile emptyFile = folder.getFile(fileName);
-	
+
 		if (emptyFile.exists()) {
 			return emptyFile;
 		}
 		else {
 			emptyFile.create(new ByteArrayInputStream("".getBytes()), true, null);
 		}
-	
+
 		return emptyFile;
+	}
+
+	public static IProject createExistingProject(
+		final ProjectRecord record, IRuntime runtime, String sdkLocation, IProgressMonitor monitor)
+		throws CoreException {
+
+		String projectName = record.getProjectName();
+
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+		IProject project = workspace.getRoot().getProject(projectName);
+
+		if (record.description == null) {
+			// error case
+			record.description = workspace.newProjectDescription(projectName);
+
+			IPath locationPath = new Path(record.projectSystemFile.getAbsolutePath());
+
+			// If it is under the root use the default location
+			if (Platform.getLocation().isPrefixOf(locationPath)) {
+				record.description.setLocation(null);
+			}
+			else {
+				record.description.setLocation(locationPath);
+			}
+		}
+		else {
+			record.description.setName(projectName);
+		}
+
+		monitor.beginTask("Importing project", 100);
+
+		project.create(record.description, new SubProgressMonitor(monitor, 30));
+
+		project.open(IResource.FORCE, new SubProgressMonitor(monitor, 70));
+
+		// IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
+
+		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
+
+		FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy(fProject);
+
+		PluginFacetUtil.configureProjectAsPlugin(fpwc, runtime, sdkLocation);
+
+		fpwc.commitChanges(monitor);
+
+		final IJavaProject javaProject = JavaCore.create(fProject.getProject());
+
+		ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
+
+			public void run(IProgressMonitor monitor)
+				throws CoreException {
+				for (IClasspathEntry entry : javaProject.getRawClasspath()) {
+					if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
+						entry.getPath().segment(0).equals(PluginClasspathContainerInitializer.ID)) {
+						JavaCore.getClasspathContainerInitializer(PluginClasspathContainerInitializer.ID).initialize(
+							entry.getPath(), javaProject);
+						break;
+					}
+				}
+
+				monitor.done();
+			}
+		}, monitor);
+
+		return project;
+	}
+
+	public static IProject createNewProject(
+		ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor)
+		throws CoreException {
+
+		IDataModel newProjectDataModel =
+			DataModelFactory.createDataModel(new PluginFacetProjectCreationDataModelProvider());
+
+		// we are importing so set flag to not create anything
+		newProjectDataModel.setBooleanProperty(IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false);
+
+		String sdkName = PluginFacetUtil.getSDKName(sdkLocation);
+		// if the get sdk from the location
+		newProjectDataModel.setProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName);
+
+		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
+		}
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
+		}
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
+		}
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true);
+		}
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true);
+		}
+
+		IPath webXmlPath = projectRecord.getProjectLocation().append("docroot/WEB-INF/web.xml");
+
+		setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
+
+		IFacetedProjectWorkingCopy fpjwc =
+			(IFacetedProjectWorkingCopy) newProjectDataModel.getProperty(IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY);
+
+		fpjwc.setProjectName(projectRecord.getProjectName());
+
+		fpjwc.setProjectLocation(projectRecord.getProjectLocation());
+
+		PluginFacetUtil.configureProjectAsPlugin(fpjwc, runtime, sdkLocation);
+
+		fpjwc.commitChanges(monitor);
+
+		return fpjwc.getProject();
 	}
 
 	public static IFolder getDocroot(IProject project) {
@@ -235,6 +362,31 @@ public class ProjectUtil {
 		return null;
 	}
 
+	public static String getLiferayPluginType(String projectLocation) {
+		if (isLiferayProjectDir(new File(projectLocation))) {
+			String suffix = "";
+			if (projectLocation.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+				suffix = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+			}
+			else if (projectLocation.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+				suffix = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+			}
+			else if (projectLocation.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+				suffix = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+			}
+			else if (projectLocation.endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+				suffix = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+			}
+			else if (projectLocation.endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+				suffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+			}
+
+			return suffix.replace("-", "");
+		}
+
+		return null;
+	}
+
 	public static IProject getProject(IDataModel model) {
 		if (model != null) {
 			String projectName = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
@@ -247,15 +399,38 @@ public class ProjectUtil {
 		return ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 	}
 
+	public static ProjectRecord getProjectRecordForDir(String dir) {
+		ProjectRecord projectRecord = null;
+		File projectDir = new File(dir);
+
+		if (isLiferayProjectDir(projectDir)) {
+			// determine if this is a previous eclipse project or vanilla
+
+			String[] files = projectDir.list();
+
+			for (String file : files) {
+				if (IProjectDescription.DESCRIPTION_FILE_NAME.equals(file)) {
+					projectRecord = new ProjectRecord(new File(projectDir, file));
+				}
+			}
+
+			if (projectRecord == null) {
+				projectRecord = new ProjectRecord(projectDir);
+			}
+		}
+
+		return projectRecord;
+	}
+
 	public static String getRelativePathFromDocroot(IProject project, String path) {
 		IFolder docroot = getDocroot(project);
-	
+
 		IPath pathValue = new Path(path);
-	
+
 		IPath relativePath = pathValue.makeRelativeTo(docroot.getFullPath());
-	
+
 		String retval = relativePath.toPortableString();
-	
+
 		return retval.startsWith("/") ? retval : "/" + retval;
 	}
 
@@ -265,7 +440,7 @@ public class ProjectUtil {
 		Preferences prefs = facetedProject.getPreferences(facet).node("liferay-plugin-project");
 		String name = prefs.get(ISDKConstants.PROPERTY_NAME, null);
 
-		return SDKManager.getSDKByName(name);
+		return SDKManager.getInstance().getSDK(name);
 	}
 
 	public static SDK getSDK(IProject proj, IProjectFacet projectFacet)
@@ -349,6 +524,32 @@ public class ProjectUtil {
 		return hasFacet(project, ProjectFacetsManager.getProjectFacet(facetId));
 	}
 
+	public static IProject importProject(
+		ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor)
+		throws CoreException {
+
+		IProject project = null;
+
+		if (projectRecord.projectSystemFile != null) {
+			try {
+				project = createExistingProject(projectRecord, runtime, sdkLocation, monitor);
+			}
+			catch (CoreException e) {
+				throw new CoreException(ProjectCorePlugin.createErrorStatus(e));
+			}
+		}
+		else if (projectRecord.liferayProjectDir != null) {
+			try {
+				project = createNewProject(projectRecord, runtime, sdkLocation, monitor);
+			}
+			catch (CoreException e) {
+				throw new CoreException(ProjectCorePlugin.createErrorStatus(e));
+			}
+		}
+
+		return project;
+	}
+
 	public static boolean isDynamicWebFacet(IProjectFacet facet) {
 		return facet != null && facet.getId().equals(IModuleConstants.JST_WEB_MODULE);
 	}
@@ -384,6 +585,14 @@ public class ProjectUtil {
 	public static boolean isLiferayFacet(IProjectFacetVersion projectFacetVersion) {
 		return projectFacetVersion != null &&
 			ProjectCorePlugin.getProjectDefinition(projectFacetVersion.getProjectFacet()) != null;
+	}
+
+	public static boolean isLiferayPluginType(String type) {
+		return type != null &&
+			(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX.endsWith(type) ||
+				ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX.endsWith(type) ||
+				ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX.endsWith(type) ||
+				ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith(type) || ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith(type));
 	}
 
 	public static boolean isLiferayProject(IProject project) {
@@ -524,6 +733,5 @@ public class ProjectUtil {
 		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
 		prefs.flush();
 	}
-
 
 }

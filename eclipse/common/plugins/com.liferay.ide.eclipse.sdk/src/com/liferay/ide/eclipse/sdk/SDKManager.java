@@ -17,7 +17,6 @@ package com.liferay.ide.eclipse.sdk;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -39,12 +38,8 @@ public final class SDKManager {
 
 	private static SDKManager instance;
 
-	public static SDK[] getAllSDKs() {
-		return getInstance().getSDKs();
-	}
-
-	public static SDK getDefaultSDK() {
-		for (SDK sdk : getInstance().getSDKs()) {
+	public SDK getDefaultSDK() {
+		for (SDK sdk : getSDKs()) {
 			if (sdk.isDefault()) {
 				return sdk;
 			}
@@ -65,8 +60,8 @@ public final class SDKManager {
 		return ISDKConstants.LEAST_SUPPORTED_SDK_VERSION;
 	}
 
-	public static SDK getSDKByLocation(IPath sdkLocation) {
-		for (SDK sdk : getAllSDKs()) {
+	public SDK getSDK(IPath sdkLocation) {
+		for (SDK sdk : getSDKs()) {
 			if (sdk.getLocation().equals(sdkLocation)) {
 				return sdk;
 			}
@@ -75,12 +70,8 @@ public final class SDKManager {
 		return null;
 	}
 
-	public static SDK getSDKByName(String sdkName) {
-		return getInstance().getSDK(sdkName);
-	}
-
-	public static void saveSDKs(SDK[] sdks) {
-		getInstance().setSDKs(sdks);
+	public void saveSDKs(SDK[] sdks) {
+		setSDKs(sdks);
 	}
 
 	private boolean initialized = false;
@@ -104,22 +95,6 @@ public final class SDKManager {
 		}
 
 		saveSDKs();
-	}
-
-	public SDK createSDKFromLocation(IPath path) {
-		try {
-			SDK sdk = new SDK(path);
-
-			sdk.setVersion(SDKUtil.readSDKVersion(path.toString()));
-			sdk.setName(path.lastSegment());
-
-			return sdk;
-		}
-		catch (Exception e) {
-			// ignore errors
-		}
-
-		return null;
 	}
 
 	public SDK getSDK(String sdkName) {
@@ -221,6 +196,18 @@ public final class SDKManager {
 		catch (IOException e) {
 			CorePlugin.logError(e);
 		}
+	}
+
+	public boolean containsSDK(SDK theSDK) {
+		if (theSDK != null && getSDKs().length > 0) {
+			for (SDK sdk : getSDKs()) {
+				if (theSDK.equals(sdk)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }

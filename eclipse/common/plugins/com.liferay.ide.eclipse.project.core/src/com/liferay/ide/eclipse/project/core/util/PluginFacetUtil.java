@@ -15,12 +15,12 @@
 
 package com.liferay.ide.eclipse.project.core.util;
 
-import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.util.Collections;
 import java.util.Set;
@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jst.common.project.facet.IJavaFacetInstallDataModelProperties;
 import org.eclipse.jst.common.project.facet.core.JavaFacetInstallConfig;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
-import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
@@ -48,13 +47,14 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public class PluginFacetUtil {
 
 	public static void configureJavaFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset) {
-
 		Action action = fpjwc.getProjectFacetAction(requiredFacet);
 
+		if (action == null) {
+			return;
+		}
+
 		Object config = action.getConfig();
-
 		JavaFacetInstallConfig javaConfig = (JavaFacetInstallConfig) config;
-
 		IDataModel dm = (IDataModel) Platform.getAdapterManager().getAdapter(config, IDataModel.class);
 
 		if (preset.getId().contains("portlet")) {
@@ -88,28 +88,22 @@ public class PluginFacetUtil {
 	}
 
 	public static void configureLiferayFacet(
-		IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IDataModel model) {
-
+		IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, String sdkLocation) {
 		Action action = fpjwc.getProjectFacetAction(requiredFacet);
-
 		Object config = action.getConfig();
-
 		IDataModel dm = (IDataModel) config;
-
-		String sdkLocation = model.getStringProperty(ISDKProjectsImportDataModelProperties.SDK_LOCATION);
-
 		dm.setProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, getSDKName(sdkLocation));
 	}
 
 	public static void configureLiferayFacet(
-		IFacetedProjectWorkingCopy fpjwc, IProjectFacetVersion requiredFacetVersion, IDataModel model) {
-		configureLiferayFacet(fpjwc, requiredFacetVersion.getProjectFacet(), model);
+		IFacetedProjectWorkingCopy fpjwc, IProjectFacetVersion requiredFacetVersion, String sdkLocation) {
+		configureLiferayFacet(fpjwc, requiredFacetVersion.getProjectFacet(), sdkLocation);
 	}
 
-	public static void configureProjectAsPlugin(IFacetedProjectWorkingCopy fpjwc, IDataModel model) {
-
+	public static void configureProjectAsPlugin(IFacetedProjectWorkingCopy fpjwc, IRuntime runtime, String sdkLocation) {
 		// final IPreset preset = template.getInitialPreset();
-		final IRuntime runtime = (IRuntime) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
+		// final IRuntime runtime = (IRuntime)
+		// model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
 
 		fpjwc.setTargetedRuntimes(Collections.<IRuntime> emptySet());
 
@@ -160,8 +154,6 @@ public class PluginFacetUtil {
 				}
 			}
 
-
-
 			if (!hasRequiredFacet) {
 				fpjwc.addProjectFacet(requiredFacetVersion);
 
@@ -169,7 +161,7 @@ public class PluginFacetUtil {
 					configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
 				}
 				else if (ProjectUtil.isLiferayFacet(requiredFacetVersion)) {
-					configureLiferayFacet(fpjwc, requiredFacetVersion, model);
+					configureLiferayFacet(fpjwc, requiredFacetVersion, sdkLocation);
 				}
 				else if (ProjectUtil.isDynamicWebFacet(requiredFacetVersion)) {
 					configureWebFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
@@ -185,25 +177,21 @@ public class PluginFacetUtil {
 	}
 
 	public static void configureWebFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset) {
-
 		Action action = fpjwc.getProjectFacetAction(requiredFacet);
-
 		Object config = action.getConfig();
-
 		IDataModel dm = (IDataModel) config;
 
 		if (preset.getId().contains("portlet")) {
-			dm.setStringProperty(IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
-
-			IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
-			dm.setStringProperty(IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
-
-			IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
+			dm.setStringProperty(
+				IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+				IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
+			dm.setStringProperty(
+				IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
+				IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
 		}
 		else if (preset.getId().contains("hook")) {
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
-
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
 		}
@@ -235,7 +223,6 @@ public class PluginFacetUtil {
 
 	public static IFacetedProjectTemplate getLiferayTemplateForProject(IFacetedProjectWorkingCopy fpjwc) {
 		IFacetedProjectTemplate template = null;
-
 		String projName = fpjwc.getProjectName();
 
 		if (projName.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
@@ -261,7 +248,7 @@ public class PluginFacetUtil {
 	public static String getSDKName(String sdkLocation) {
 		IPath sdkLocationPath = new Path(sdkLocation);
 
-		SDK sdk = SDKManager.getSDKByLocation(sdkLocationPath);
+		SDK sdk = SDKManager.getInstance().getSDK(sdkLocationPath);
 
 		String sdkName = null;
 
@@ -269,10 +256,8 @@ public class PluginFacetUtil {
 			sdkName = sdk.getName();
 		}
 		else {
-			sdk = SDKManager.getInstance().createSDKFromLocation(sdkLocationPath);
-
+			sdk = SDKUtil.createSDKFromLocation(sdkLocationPath);
 			SDKManager.getInstance().addSDK(sdk);
-
 			sdkName = sdk.getName();
 		}
 

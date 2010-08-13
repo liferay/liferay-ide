@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.sdk.util;
 
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
+import com.liferay.ide.eclipse.sdk.SDK;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Version;
 
@@ -116,5 +118,32 @@ public class SDKUtil {
 		properties.load(new FileInputStream(new Path(path).append("build.properties").toFile()));
 
 		return properties.getProperty("lp.version");
+	}
+
+
+	public static SDK getSDKFromProjectDir(File projectDir) {
+		File sdkDir = projectDir.getParentFile().getParentFile();
+		
+		if (sdkDir.exists() && SDKUtil.isValidSDKLocation(sdkDir.getPath())) {
+			return createSDKFromLocation(new Path(sdkDir.getPath()));
+		}
+			
+		return null;
+	}
+
+	public static SDK createSDKFromLocation(IPath path) {
+		try {
+			SDK sdk = new SDK(path);
+	
+			sdk.setVersion(readSDKVersion(path.toString()));
+			sdk.setName(path.lastSegment());
+	
+			return sdk;
+		}
+		catch (Exception e) {
+			// ignore errors
+		}
+	
+		return null;
 	}
 }

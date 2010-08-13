@@ -60,7 +60,7 @@ public abstract class SDKJob extends Job {
 						preferences.node(PREF_NODE_LIFERAY_PLUGIN_PROJECT).get(
 							ISDKConstants.PROPERTY_NAME, "");
 					
-					return SDKManager.getSDKByName(name);
+					return SDKManager.getInstance().getSDK(name);
 				}
 			}
 		}

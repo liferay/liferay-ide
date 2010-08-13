@@ -20,16 +20,13 @@ import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
@@ -39,51 +36,40 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 /**
  * @author Greg Amerson
  */
-public class SDKProjectsImportOperation extends AbstractDataModelOperation
-	implements ISDKProjectsImportDataModelProperties {
+public class LiferayProjectImportOperation extends AbstractDataModelOperation
+	implements ILiferayProjectImportDataModelProperties {
 
-	List<IProject> createdProjects;
-
-	public SDKProjectsImportOperation(IDataModel model) {
+	public LiferayProjectImportOperation(IDataModel model) {
 		super(model);
-
-		createdProjects = new ArrayList<IProject>();
 	}
 
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 		throws ExecutionException {
 
-		Object[] selectedProjects = (Object[]) getDataModel().getProperty(SELECTED_PROJECTS);
+		ProjectRecord projectRecord = (ProjectRecord) getDataModel().getProperty(PROJECT_RECORD);
 
-		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
+		if (projectRecord == null) {
+			return ProjectCorePlugin.createErrorStatus("Project record to import is null.");
+		}
 
-		if (selectedProjects != null && selectedProjects.length > 0) {
-			// need to add the SDK to workspace if not already available.
-			if (SDKUtil.isValidSDKLocation(sdkLocation)) {
-				SDK newSDK = SDKUtil.createSDKFromLocation(new Path(sdkLocation));
+		File projectDir = projectRecord.getProjectLocation().toFile();
 
-				SDKManager.getInstance().addSDK(newSDK);
+		SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
+
+		if (sdk != null) {
+			if (!(SDKManager.getInstance().containsSDK(sdk))) {
+				SDKManager.getInstance().addSDK(sdk);
 			}
 		}
 
 		IRuntime runtime = (IRuntime) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
 
-		for (int i = 0; i < selectedProjects.length; i++) {
-			if (selectedProjects[i] instanceof ProjectRecord) {
-
-				try {
-					IProject project =
-						ProjectUtil.importProject((ProjectRecord) selectedProjects[i], runtime, sdkLocation, monitor);
-
-					if (project != null) {
-						createdProjects.add(project);
-					}
-				}
-				catch (CoreException e) {
-					return ProjectCorePlugin.createErrorStatus(e);
-				}
-			}
+		try {
+			ProjectUtil.importProject(projectRecord, runtime, sdk.getLocation().toOSString(), monitor);
+		}
+		catch (CoreException e) {
+			return ProjectCorePlugin.createErrorStatus(e);
 		}
 
 		return Status.OK_STATUS;

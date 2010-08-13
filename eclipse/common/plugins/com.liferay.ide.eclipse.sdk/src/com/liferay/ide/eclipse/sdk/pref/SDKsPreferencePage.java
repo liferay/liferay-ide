@@ -58,7 +58,7 @@ public class SDKsPreferencePage extends LiferayUIPreferencePage implements IWork
 			SDK[] sdks = installedSDKsComposite.getSDKs();
 
 			if (sdks != null) {
-				SDKManager.saveSDKs(sdks);
+				SDKManager.getInstance().saveSDKs(sdks);
 			}
 
 			return true;
@@ -94,7 +94,7 @@ public class SDKsPreferencePage extends LiferayUIPreferencePage implements IWork
 		data.horizontalSpan = 1;
 
 		installedSDKsComposite.setLayoutData(data);
-		installedSDKsComposite.setSDKs(SDKManager.getAllSDKs());
+		installedSDKsComposite.setSDKs(SDKManager.getInstance().getSDKs());
 
 		return parent;
 	}
@@ -102,7 +102,7 @@ public class SDKsPreferencePage extends LiferayUIPreferencePage implements IWork
 	@Override
 	protected void performDefaults() {
 		if (installedSDKsComposite != null && !installedSDKsComposite.isDisposed()) {
-			installedSDKsComposite.setSDKs(SDKManager.getAllSDKs());
+			installedSDKsComposite.setSDKs(SDKManager.getInstance().getSDKs());
 		}
 	}
 }

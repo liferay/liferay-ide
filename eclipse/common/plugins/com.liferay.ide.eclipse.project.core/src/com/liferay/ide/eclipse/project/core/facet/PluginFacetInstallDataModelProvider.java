@@ -33,7 +33,9 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked", "rawtypes"
+})
 public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDataModelProvider
 	implements IPluginProjectDataModelProperties {
 
@@ -97,7 +99,7 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 				return ProjectCorePlugin.createErrorStatus("No Liferay SDK configured.");
 			}
 			
-			SDK sdk = SDKManager.getSDKByName(sdkName);
+			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
 			
 			if (sdk == null) {
 				return ProjectCorePlugin.createErrorStatus("Liferay SDK (" + sdkName + ") is not defined.");

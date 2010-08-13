@@ -80,7 +80,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 		else {
 			String sdkName = sdkCombo.getItem(sdkCombo.getSelectionIndex());
 
-			SDK sdk = SDKManager.getSDKByName(sdkName);
+			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
 
 			valid = sdk != null;
 		}
@@ -100,7 +100,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 		String sdkName = sdkCombo.getItem(sdkCombo.getSelectionIndex());
 
-		SDK sdk = SDKManager.getSDKByName(sdkName);
+		SDK sdk = SDKManager.getInstance().getSDK(sdkName);
 
 		if (sdk != null) {
 			IFacetedProject facetedProject = getFacetedProject();
@@ -241,7 +241,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 	@Override
 	protected void performDefaults() {
-		SDK defaultSdk = SDKManager.getDefaultSDK();
+		SDK defaultSdk = SDKManager.getInstance().getDefaultSDK();
 
 		if (defaultSdk != null) {
 			setupSDKCombo();
@@ -265,7 +265,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 	protected void setupSDKCombo() {
 		List<String> sdkNames = new ArrayList<String>();
 
-		SDK[] allSDKs = SDKManager.getAllSDKs();
+		SDK[] allSDKs = SDKManager.getInstance().getSDKs();
 
 		for (SDK sdk : allSDKs) {
 			sdkNames.add(sdk.getName());
@@ -283,7 +283,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 				String sdkName = prefs.get(ISDKConstants.PROPERTY_NAME, "");
 
-				SDK sdk = SDKManager.getSDKByName(sdkName);
+				SDK sdk = SDKManager.getInstance().getSDK(sdkName);
 
 				if (!CoreUtil.isNullOrEmpty(sdkName) && sdk != null) {
 					sdkCombo.select(sdkNames.indexOf(sdk.getName()));

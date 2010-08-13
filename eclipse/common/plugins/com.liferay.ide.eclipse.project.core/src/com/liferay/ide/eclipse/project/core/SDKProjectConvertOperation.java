@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.project.core;
 import com.liferay.ide.eclipse.project.core.util.PluginFacetUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
@@ -33,11 +34,13 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
+import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
 /**
  * @author Greg Amerson
@@ -55,13 +58,13 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 		throws ExecutionException {
-		
+
 		Object[] selectedProjects = (Object[]) getDataModel().getProperty(SELECTED_PROJECTS);
-		
+
 		for (int i = 0; i < selectedProjects.length; i++) {
 			if (selectedProjects[i] instanceof ProjectRecord) {
 				IStatus status = convertProject((ProjectRecord) selectedProjects[i], monitor);
-				
+
 				if (!status.isOK()) {
 					return status;
 				}
@@ -71,19 +74,19 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 		return Status.OK_STATUS;
 	}
 
-	private IProject convertExistingProject(final ProjectRecord record, IProgressMonitor monitor)
+	protected IProject convertExistingProject(final ProjectRecord record, IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		String projectName = record.getProjectName();
-		
+
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		
+
 		IProject project = workspace.getRoot().getProject(projectName);
 
 		if (record.description == null) {
 			// error case
 			record.description = workspace.newProjectDescription(projectName);
-			
+
 			IPath locationPath = new Path(record.projectSystemFile.getAbsolutePath());
 
 			// If it is under the root use the default location
@@ -99,50 +102,31 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 		}
 
 		monitor.beginTask("Importing project", 100);
-		
+
 		project.open(IResource.FORCE, new SubProgressMonitor(monitor, 70));
 
 		// IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
 
 		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
-		
+
 		FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy(fProject);
-		
-		PluginFacetUtil.configureProjectAsPlugin(fpwc, model);
-		
+
+		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
+
+		final IRuntime runtime = (IRuntime) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
+
+		PluginFacetUtil.configureProjectAsPlugin(fpwc, runtime, sdkLocation);
+
 		fpwc.commitChanges(monitor);
-		
+
 		monitor.done();
 
 		return project;
 	}
 
-	private String getSDKName() {
-		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
-		
-		IPath sdkLocationPath = new Path(sdkLocation);
-		
-		SDK sdk = SDKManager.getSDKByLocation(sdkLocationPath);
-		
-		String sdkName = null;
-		
-		if (sdk != null) {
-			sdkName = sdk.getName();
-		}
-		else {
-			sdk = SDKManager.getInstance().createSDKFromLocation(sdkLocationPath);
-			
-			SDKManager.getInstance().addSDK(sdk);
-			
-			sdkName = sdk.getName();
-		}
-
-		return sdkName;
-	}
-
 	protected IStatus convertProject(ProjectRecord projectRecord, IProgressMonitor monitor) {
 		IProject project = null;
-		
+
 		if (projectRecord.project != null) {
 			try {
 				project = convertExistingProject(projectRecord, monitor);
@@ -152,7 +136,30 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 			}
 		}
 		convertedProject = project;
-		
+
 		return Status.OK_STATUS;
+	}
+
+	protected String getSDKName() {
+		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
+
+		IPath sdkLocationPath = new Path(sdkLocation);
+
+		SDK sdk = SDKManager.getInstance().getSDK(sdkLocationPath);
+
+		String sdkName = null;
+
+		if (sdk != null) {
+			sdkName = sdk.getName();
+		}
+		else {
+			sdk = SDKUtil.createSDKFromLocation(sdkLocationPath);
+
+			SDKManager.getInstance().addSDK(sdk);
+
+			sdkName = sdk.getName();
+		}
+
+		return sdkName;
 	}
 }

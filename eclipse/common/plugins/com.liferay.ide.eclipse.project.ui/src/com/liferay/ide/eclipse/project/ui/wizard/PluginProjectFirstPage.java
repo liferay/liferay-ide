@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jst.servlet.ui.project.facet.WebProjectFirstPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -66,13 +67,13 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 	// private DataModelSynchHelper modelHelper;
 
+	protected Button pluginFragmentButton;
+
 	protected Button portletType;
 
 	protected boolean shouldValidatePage = true;
 
 	protected Button themeType;
-
-	protected Button pluginFragmentButton;
 
 	public PluginProjectFirstPage(NewPluginProjectWizard wizard, IDataModel model, String pageName) {
 		super(model, pageName);
@@ -102,7 +103,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 	}
 
 	protected void configureSDKsLinkSelected(SelectionEvent e) {
-		boolean noSDKs = SDKManager.getAllSDKs().length == 0;
+		boolean noSDKs = SDKManager.getInstance().getSDKs().length == 0;
 
 		int retval = PreferencesUtil.createPreferenceDialogOn(this.getShell(), SDKsPreferencePage.ID, new String[] {
 			SDKsPreferencePage.ID
@@ -111,7 +112,8 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		if (retval == Window.OK) {
 			getModel().notifyPropertyChange(LIFERAY_SDK_NAME, IDataModel.VALID_VALUES_CHG);
 
-			if (noSDKs && SDKManager.getDefaultSDK() != null && getModel().getBooleanProperty(LIFERAY_USE_SDK_LOCATION)) {
+			if (noSDKs && SDKManager.getInstance().getDefaultSDK() != null &&
+				getModel().getBooleanProperty(LIFERAY_USE_SDK_LOCATION)) {
 				// toggling the location property will get the location field to
 				// update
 				getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, false);
@@ -147,6 +149,147 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		group.setLayout(gl);
 
 		return group;
+	}
+
+	protected void createImportProjectLink(Composite parent) {
+		GridData gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		gd.horizontalAlignment = SWT.END;
+		gd.horizontalIndent = 8;
+		gd.verticalIndent = 8;
+
+		Link link = new Link(parent, SWT.UNDERLINE_LINK);
+		link.setText("<a href=\"#\">Import existing Liferay project...</a>");
+		link.setLayoutData(gd);
+		link.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getWizard().getContainer().getShell().close();
+
+				WizardDialog dialog = new WizardDialog(getShell(), new LiferayProjectImportWizard());
+				dialog.open();
+			}
+
+		});
+	}
+
+	protected void createLiferayRuntimeGroup(Composite parent) {
+		Group group = new Group(parent, SWT.NONE);
+		group.setText("Configuration");
+		group.setLayoutData(gdhfill());
+		group.setLayout(new GridLayout(3, false));
+
+		getModel().addListener(this);
+
+		SWTUtil.createLabel(group, "Liferay Plug-ins SDK", 1);
+
+		Combo sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
+		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		Link configureSDKsLink = new Link(group, SWT.UNDERLINE_LINK);
+		// Button configureSDKsLink = new Button(group, SWT.PUSH);
+		configureSDKsLink.setText("<a href=\"#\">Configure</a>");
+		// configureSDKsLink.setText("Configure ...");
+		configureSDKsLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+		configureSDKsLink.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				configureSDKsLinkSelected(e);
+			}
+		});
+		this.synchHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] {
+			configureSDKsLink
+		});
+
+		SWTUtil.createLabel(group, "Liferay Portal Runtime", 1);
+		serverTargetCombo = new Combo(group, SWT.BORDER | SWT.READ_ONLY);
+		serverTargetCombo.setLayoutData(gdhfill());
+
+		Button newServerTargetButton = new Button(group, SWT.PUSH);
+		newServerTargetButton.setText("New ...");
+		newServerTargetButton.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				final DataModelPropertyDescriptor[] preAdditionDescriptors =
+					model.getValidPropertyDescriptors(FACET_RUNTIME);
+
+				boolean isOK =
+					ServerUIUtil.showNewRuntimeWizard(
+						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
+
+				if (isOK) {
+					DataModelPropertyDescriptor[] postAdditionDescriptors =
+						model.getValidPropertyDescriptors(FACET_RUNTIME);
+
+					Object[] preAddition = new Object[preAdditionDescriptors.length];
+
+					for (int i = 0; i < preAddition.length; i++) {
+						preAddition[i] = preAdditionDescriptors[i].getPropertyValue();
+					}
+
+					Object[] postAddition = new Object[postAdditionDescriptors.length];
+
+					for (int i = 0; i < postAddition.length; i++) {
+						postAddition[i] = postAdditionDescriptors[i].getPropertyValue();
+					}
+
+					Object newAddition = CoreUtil.getNewObject(preAddition, postAddition);
+
+					if (newAddition != null) // can this ever be null?
+						model.setProperty(FACET_RUNTIME, newAddition);
+				}
+			}
+		});
+
+		Control[] deps = new Control[] {
+			newServerTargetButton
+		};
+		synchHelper.synchCombo(serverTargetCombo, FACET_RUNTIME, deps);
+		if (serverTargetCombo.getSelectionIndex() == -1 && serverTargetCombo.getVisibleItemCount() != 0) {
+			serverTargetCombo.select(0);
+		}
+
+		SWTUtil.createLabel(group, "", 1);
+
+		Link facetsLink = new Link(group, SWT.UNDERLINE_LINK);
+		GridData gd = new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false, 1, 1);
+		facetsLink.setLayoutData(gd);
+		facetsLink.setText("<a href=\"#\">Advanced project configuration...</a>");
+		facetsLink.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FacetsSelectionDialog.openDialog(
+					getShell(), (IFacetedProjectWorkingCopy) getModel().getProperty(FACETED_PROJECT_WORKING_COPY));
+			}
+		});
+		SWTUtil.createLabel(group, "", 1);
+	}
+
+	protected void createPluginFragmentButton(Composite parent) {
+		pluginFragmentButton = SWTUtil.createCheckButton(parent, "", null, false, 1);
+		((GridData) pluginFragmentButton.getLayoutData()).horizontalIndent = 8;
+		((GridData) pluginFragmentButton.getLayoutData()).verticalIndent = 8;
+		this.synchHelper.synchCheckbox(pluginFragmentButton, PLUGIN_FRAGMENT_ENABLED, null);
+		if (!CoreUtil.isNullOrEmpty(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL))) {
+			pluginFragmentButton.setText(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL));
+		}
+		else {
+			pluginFragmentButton.setVisible(false);
+		}
+
+		getModel().addListener(new IDataModelListener() {
+
+			public void propertyChanged(DataModelEvent event) {
+				if (PLUGIN_FRAGMENT_BUTTON_LABEL.equals(event.getPropertyName())) {
+					String buttonText = getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL);
+					pluginFragmentButton.setText(buttonText);
+					pluginFragmentButton.setVisible(!CoreUtil.isNullOrEmpty(buttonText));
+				}
+			}
+		});
 	}
 
 	protected void createPluginTypeGroup(Composite parent) {
@@ -246,7 +389,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 	}
 
-
 	protected void createServerTargetComposite(Composite parent) {
 		Group group = new Group(parent, SWT.NONE);
 		((GridData) group.getLayoutData()).grabExcessVerticalSpace = false;
@@ -302,100 +444,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		}
 	}
 
-	protected void createLiferayRuntimeGroup(Composite parent) {
-		Group group = new Group(parent, SWT.NONE);
-		group.setText("Configuration");
-		group.setLayoutData(gdhfill());
-		group.setLayout(new GridLayout(3, false));
-
-		getModel().addListener(this);
-
-		SWTUtil.createLabel(group, "Liferay Plug-ins SDK", 1);
-
-		Combo sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
-		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-		Link configureSDKsLink = new Link(group, SWT.UNDERLINE_LINK);
-		// Button configureSDKsLink = new Button(group, SWT.PUSH);
-		configureSDKsLink.setText("<a href=\"#\">Configure</a>");
-		// configureSDKsLink.setText("Configure ...");
-		configureSDKsLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-		configureSDKsLink.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				configureSDKsLinkSelected(e);
-			}
-		});
-		this.synchHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] {
-			configureSDKsLink
-		});
-
-		SWTUtil.createLabel(group, "Liferay Portal Runtime", 1);
-		serverTargetCombo = new Combo(group, SWT.BORDER | SWT.READ_ONLY);
-		serverTargetCombo.setLayoutData(gdhfill());
-
-		Button newServerTargetButton = new Button(group, SWT.PUSH);
-		newServerTargetButton.setText("New ...");
-		newServerTargetButton.addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent e) {
-				final DataModelPropertyDescriptor[] preAdditionDescriptors =
-					model.getValidPropertyDescriptors(FACET_RUNTIME);
-
-				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
-
-				if (isOK) {
-					DataModelPropertyDescriptor[] postAdditionDescriptors =
-						model.getValidPropertyDescriptors(FACET_RUNTIME);
-
-					Object[] preAddition = new Object[preAdditionDescriptors.length];
-
-					for (int i = 0; i < preAddition.length; i++) {
-						preAddition[i] = preAdditionDescriptors[i].getPropertyValue();
-					}
-
-					Object[] postAddition = new Object[postAdditionDescriptors.length];
-
-					for (int i = 0; i < postAddition.length; i++) {
-						postAddition[i] = postAdditionDescriptors[i].getPropertyValue();
-					}
-
-					Object newAddition = CoreUtil.getNewObject(preAddition, postAddition);
-
-					if (newAddition != null) // can this ever be null?
-						model.setProperty(FACET_RUNTIME, newAddition);
-				}
-			}
-		});
-
-		Control[] deps = new Control[] {
-			newServerTargetButton
-		};
-		synchHelper.synchCombo(serverTargetCombo, FACET_RUNTIME, deps);
-		if (serverTargetCombo.getSelectionIndex() == -1 && serverTargetCombo.getVisibleItemCount() != 0) {
-			serverTargetCombo.select(0);
-		}
-
-		SWTUtil.createLabel(group, "", 1);
-
-		Link facetsLink = new Link(group, SWT.UNDERLINE_LINK);
-		GridData gd = new GridData(SWT.DEFAULT, SWT.DEFAULT, false, false, 1, 1);
-		facetsLink.setLayoutData(gd);
-		facetsLink.setText("<a href=\"#\">Advanced project configuration</a>");
-		facetsLink.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				FacetsSelectionDialog.openDialog(getShell(), (IFacetedProjectWorkingCopy) getModel().getProperty(
-					FACETED_PROJECT_WORKING_COPY));
-			}
-		});
-		SWTUtil.createLabel(group, "", 1);
-	}
-
 	@Override
 	protected Composite createTopLevelComposite(Composite parent) {
 		Composite top = new Composite(parent, SWT.NONE);
@@ -403,7 +451,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		top.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createProjectGroup(top);
-
 		createLiferayRuntimeGroup(top);
 
 		// createSDKGroup(top);
@@ -413,8 +460,8 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		// createPresetPanel(top);
 
 		createPluginTypeGroup(top);
-
 		createPluginFragmentButton(top);
+		createImportProjectLink(top);
 
 		updateControls();
 
@@ -423,71 +470,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 		return top;
 	}
-
-	protected void createPluginFragmentButton(Composite parent) {
-		pluginFragmentButton = SWTUtil.createCheckButton(parent, "", null, false, 1);
-		((GridData) pluginFragmentButton.getLayoutData()).horizontalIndent = 8;
-		((GridData) pluginFragmentButton.getLayoutData()).verticalIndent = 8;
-		this.synchHelper.synchCheckbox(pluginFragmentButton, PLUGIN_FRAGMENT_ENABLED, null);
-		if (!CoreUtil.isNullOrEmpty(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL))) {
-			pluginFragmentButton.setText(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL));
-		}
-		else {
-			pluginFragmentButton.setVisible(false);
-		}
-
-		getModel().addListener(new IDataModelListener() {
-
-			public void propertyChanged(DataModelEvent event) {
-				if (PLUGIN_FRAGMENT_BUTTON_LABEL.equals(event.getPropertyName())) {
-					String buttonText = getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL);
-					pluginFragmentButton.setText(buttonText);
-					pluginFragmentButton.setVisible(!CoreUtil.isNullOrEmpty(buttonText));
-				}
-			}
-		});
-	}
-
-	protected IDataModel getModel() {
-		return model;
-	}
-
-	protected ImageDescriptor getPluginImageDescriptor(String path) {
-		return ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(path));
-	}
-
-	@Override
-	protected String[] getValidationPropertyNames() {
-		String[] superProperties = super.getValidationPropertyNames();
-
-		List<String> list = Arrays.asList(superProperties);
-
-		ArrayList<String> arrayList = new ArrayList<String>();
-
-		arrayList.addAll(list);
-
-		arrayList.add(LIFERAY_SDK_NAME);
-		arrayList.add(FACET_RUNTIME);
-		arrayList.add(PROJECT_NAME);
-		arrayList.add(DISPLAY_NAME);
-		arrayList.add(FACET_PROJECT_NAME);
-		arrayList.add(PLUGIN_TYPE_PORTLET);
-		arrayList.add(PLUGIN_TYPE_HOOK);
-		arrayList.add(PLUGIN_TYPE_EXT);
-		arrayList.add(PLUGIN_TYPE_THEME);
-		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
-		arrayList.add(PLUGIN_FRAGMENT_ENABLED);
-
-		return (String[]) arrayList.toArray(new String[0]);
-	}
-
-	@Override
-	protected void validatePage(boolean showMessage) {
-		if (shouldValidatePage) {
-			super.validatePage(showMessage);
-		}
-	}
-
 
 	@Override
 	protected void enter() {
@@ -537,6 +519,46 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		}
 		setShouldValidatePage(true);
 		// getDataModel().setProperty(PLUGIN_TYPE_PORTLET, true);
+	}
+
+	protected IDataModel getModel() {
+		return model;
+	}
+
+	protected ImageDescriptor getPluginImageDescriptor(String path) {
+		return ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(path));
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		String[] superProperties = super.getValidationPropertyNames();
+
+		List<String> list = Arrays.asList(superProperties);
+
+		ArrayList<String> arrayList = new ArrayList<String>();
+
+		arrayList.addAll(list);
+
+		arrayList.add(LIFERAY_SDK_NAME);
+		arrayList.add(FACET_RUNTIME);
+		arrayList.add(PROJECT_NAME);
+		arrayList.add(DISPLAY_NAME);
+		arrayList.add(FACET_PROJECT_NAME);
+		arrayList.add(PLUGIN_TYPE_PORTLET);
+		arrayList.add(PLUGIN_TYPE_HOOK);
+		arrayList.add(PLUGIN_TYPE_EXT);
+		arrayList.add(PLUGIN_TYPE_THEME);
+		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
+		arrayList.add(PLUGIN_FRAGMENT_ENABLED);
+
+		return (String[]) arrayList.toArray(new String[0]);
+	}
+
+	@Override
+	protected void validatePage(boolean showMessage) {
+		if (shouldValidatePage) {
+			super.validatePage(showMessage);
+		}
 	}
 
 	// protected void createSimpleProjectGroup(Composite parent) {

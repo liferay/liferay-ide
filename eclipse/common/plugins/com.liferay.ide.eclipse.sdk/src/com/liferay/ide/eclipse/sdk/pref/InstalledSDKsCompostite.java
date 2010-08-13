@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.sdk.pref;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.SDKPlugin;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.InstallableRuntime2ConfigurationElement;
 import com.liferay.ide.eclipse.server.core.PortalInstallableRuntime2;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -292,7 +293,7 @@ public class InstalledSDKsCompostite extends Composite {
 		if (retval == AddSDKDialog.OK) {
 			String name = dialog.getName();
 
-			SDK newSDK = SDKManager.getInstance().createSDKFromLocation(new Path(dialog.getLocation()));
+			SDK newSDK = SDKUtil.createSDKFromLocation(new Path(dialog.getLocation()));
 			newSDK.setName(name);
 
 			sdkList.add(newSDK);
@@ -439,9 +440,9 @@ public class InstalledSDKsCompostite extends Composite {
 
 							pir.install(selectedPath);
 
-							final SDK newSDK = SDKManager.getInstance().createSDKFromLocation(selectedPath);
+							final SDK newSDK = SDKUtil.createSDKFromLocation(selectedPath);
 
-							SDK existingSDK = SDKManager.getSDKByName(newSDK.getName());
+							SDK existingSDK = SDKManager.getInstance().getSDK(newSDK.getName());
 
 							int count = 1;
 
@@ -450,7 +451,7 @@ public class InstalledSDKsCompostite extends Composite {
 							while (existingSDK != null) {
 								newSDK.setName(originalName + "(" + (count++) + ")");
 
-								existingSDK = SDKManager.getSDKByName(newSDK.getName());
+								existingSDK = SDKManager.getInstance().getSDK(newSDK.getName());
 							}
 
 							SDKManager.getInstance().addSDK(newSDK);
@@ -476,7 +477,7 @@ public class InstalledSDKsCompostite extends Composite {
 			}
 		});
 
-		setSDKs(SDKManager.getAllSDKs());
+		setSDKs(SDKManager.getInstance().getSDKs());
 
 		enableButtons();
 

@@ -58,9 +58,9 @@ import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.osgi.service.prefs.BackingStoreException;
 
@@ -71,26 +71,23 @@ import org.osgi.service.prefs.BackingStoreException;
 public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties {
 
 	protected IDataModel masterModel = null;
-	
+
 	protected IDataModel model = null;
-	
+
 	protected IProgressMonitor monitor;
-	
+
 	protected IProject project;
 
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		if (!(config instanceof IDataModel)) {
 			return;
 		}
 		else {
 			this.model = (IDataModel) config;
-			
 			this.masterModel = (IDataModel) this.model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
-			
 			this.project = project;
-			
 			this.monitor = monitor;
 		}
 
@@ -116,12 +113,12 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 	protected void configWebXML() {
 		WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper(this.project);
-		
+
 		TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-		
+
 		tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
 		tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
-		
+
 		try {
 			webXmlHelper.addTagLib(tagLibRefType);
 		}
@@ -130,38 +127,24 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		}
 	}
 
-	// protected void extractZipToProject(File zipFile) {
-	// try {
-	// ZipFile zip = ZipUtil.open(zipFile);
-	// Enumeration<? extends ZipEntry> entries = zip.entries();
-	// while (entries.hasMoreElements()) {
-	// copyToProject(zip, entries.nextElement());
-	// }
-	// } catch (Exception e) {
-	// ProjectCorePlugin.logError(e);
-	// }
-	// }
-	//
 	protected void copyToProject(IPath parent, File newFile, boolean prompt)
 		throws CoreException, IOException {
-		
+
 		if (newFile == null || !shouldCopyToProject(newFile)) {
 			return;
 		}
 
 		IResource projectEntry = null;
-		
 		IPath newFilePath = new Path(newFile.getPath());
-		
 		IPath newFileRelativePath = newFilePath.makeRelativeTo(parent);
-		
+
 		if (newFile.isDirectory()) {
 			projectEntry = this.project.getFolder(newFileRelativePath);
 		}
 		else {
 			projectEntry = this.project.getFile(newFileRelativePath);
 		}
-		
+
 		if (projectEntry.exists()) {
 			if (projectEntry instanceof IFolder) {
 				// folder already exists, we can return
@@ -171,56 +154,43 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 				if (prompt && !promptForOverwrite(projectEntry)) {
 					return;
 				}
-				
+
 				((IFile) projectEntry).setContents(new FileInputStream(newFile), IResource.FORCE, null);
 			}
 		}
 		else if (projectEntry instanceof IFolder) {
 			IFolder newProjectFolder = (IFolder) projectEntry;
-			
+
 			newProjectFolder.create(true, true, null);
 		}
 		else if (projectEntry instanceof IFile) {
 			((IFile) projectEntry).create(new FileInputStream(newFile), IResource.FORCE, null);
 		}
-		
-		// if (projectEntry instanceof IFile) {
-		// String contents =
-		// CoreUtil.readStreamToString(((IFile)projectEntry).getContents(true));
-		// for (String token : ISDKConstants.PORTLET_PLUGIN_ZIP_REPLACE_TOKENS)
-		// {
-		// contents = contents.replaceAll(token, this.project.getName());
-		// }
-		// ((IFile)projectEntry).setContents(new
-		// ByteArrayInputStream(contents.getBytes("UTF-8")),
-		// IResource.FORCE,
-		// null);
-		// }
 	}
 
 	protected boolean deletePath(IPath path) {
 		if (path != null && path.toFile().exists()) {
 			return path.toFile().delete();
 		}
-		
+
 		return false;
 	}
 
 	protected IDataModel getFacetDataModel(String facetId) {
 		IFacetedProjectWorkingCopy fp = getFacetedProject();
-		
+
 		for (IProjectFacetVersion pfv : fp.getProjectFacets()) {
 			if (pfv.getProjectFacet().getId().equals(facetId)) {
 				Action action = fp.getProjectFacetAction(pfv.getProjectFacet());
-				
+
 				if (action != null) {
 					Object config = action.getConfig();
-					
+
 					return (IDataModel) Platform.getAdapterManager().getAdapter(config, IDataModel.class);
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -230,14 +200,14 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 	protected IPath getPortalRoot() {
 		IRuntime serverRuntime;
-		
+
 		if (masterModel != null) {
 			serverRuntime = (IRuntime) masterModel.getProperty(PluginFacetInstallDataModelProvider.FACET_RUNTIME);
 		}
 		else {
 			serverRuntime = getFacetedProject().getPrimaryRuntime();
 		}
-		
+
 		return ServerUtil.getPortalRoot(serverRuntime);
 	}
 
@@ -248,7 +218,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		catch (CoreException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -276,13 +246,13 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 	protected SDK getSDK() {
 		String sdkName = null;
-		
+
 		try {
 			sdkName = masterModel.getStringProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME);
 		}
 		catch (Exception ex) {
 		}
-		
+
 		if (sdkName == null) {
 			try {
 				sdkName = model.getStringProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME);
@@ -290,17 +260,17 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 			catch (Exception ex) {
 			}
 		}
-		
-		return SDKManager.getSDKByName(sdkName);
+
+		return SDKManager.getInstance().getSDK(sdkName);
 	}
 
 	protected IFolder getWebRootFolder() {
 		IDataModel webFacetDataModel = null;
-		
+
 		if (masterModel != null) {
 			FacetDataModelMap map =
 				(FacetDataModelMap) masterModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
-			
+
 			webFacetDataModel = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
 		}
 		else {
@@ -308,7 +278,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		}
 
 		IPath webrootFullPath = null;
-		
+
 		if (webFacetDataModel != null) {
 			webrootFullPath =
 				this.project.getFullPath().append(
@@ -320,7 +290,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 				webrootFullPath = component.getRootFolder().getUnderlyingFolder().getFullPath();
 			}
 		}
-		
+
 		return ResourcesPlugin.getWorkspace().getRoot().getFolder(webrootFullPath);
 	}
 
@@ -329,23 +299,21 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 		LibraryInstallDelegate libraryDelegate =
 			(LibraryInstallDelegate) this.model.getProperty(IPluginProjectDataModelProperties.LIFERAY_PLUGIN_LIBRARY_DELEGATE);
-		
+
 		libraryDelegate.execute(monitor);
 	}
 
 	protected void installThemeTemplate()
 		throws CoreException {
+
 		// get the template zip for portlets and extract into the project
 		SDK sdk = getSDK();
-
 		String themeName = this.masterModel.getStringProperty(THEME_NAME);
-		
 		String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
-
 		IPath newThemePath = sdk.createNewTheme(themeName, displayName);
-		
+
 		processNewFiles(newThemePath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX), false);
-		
+
 		// cleanup portlet files
 		newThemePath.toFile().delete();
 
@@ -358,10 +326,10 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 	protected void processNewFiles(IPath path, boolean prompt)
 		throws CoreException {
-		
+
 		try {
 			List<File> newFiles = FileListing.getFileListing(path.toFile());
-			
+
 			for (File file : newFiles) {
 				try {
 					copyToProject(path, file, prompt);
@@ -377,9 +345,8 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 	}
 
 	protected boolean promptForOverwrite(final IResource projectEntryPath) {
-		
 		final boolean[] retval = new boolean[1];
-		
+
 		PlatformUI.getWorkbench().getDisplay().syncExec(new Runnable() {
 
 			public void run() {
@@ -388,28 +355,25 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 						PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Overwrite project file?",
 						"Overwrite project file: " + projectEntryPath.getLocation());
 			}
-			
+
 		});
-		
+
 		return retval[0];
 	}
 
 	protected void setupDefaultOutputLocation()
 		throws CoreException {
-		
+
 		IJavaProject jProject = JavaCore.create(this.project);
-		
 		IFolder folder = this.project.getFolder(IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
-		
+
 		if (folder.getParent().exists()) {
 			CoreUtil.prepareFolder(folder);
-			
+
 			IPath oldOutputLocation = jProject.getOutputLocation();
-			
 			IFolder oldOutputFolder = CoreUtil.getWorkspaceRoot().getFolder(oldOutputLocation);
-			
 			jProject.setOutputLocation(folder.getFullPath(), null);
-			
+
 			if (oldOutputFolder.exists()) {
 				oldOutputFolder.delete(true, null);
 			}
@@ -426,7 +390,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 

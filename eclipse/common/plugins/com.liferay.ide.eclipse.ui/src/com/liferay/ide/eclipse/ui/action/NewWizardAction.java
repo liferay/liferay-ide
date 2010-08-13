@@ -40,25 +40,25 @@ import org.eclipse.ui.PlatformUI;
  */
 public class NewWizardAction extends Action implements Comparable {
 
-	protected final static String ATT_CLASS = "class";//$NON-NLS-1$
+	public final static String ATT_CLASS = "class";//$NON-NLS-1$
 
-	protected final static String ATT_ICON = "icon";//$NON-NLS-1$
+	public final static String ATT_ICON = "icon";//$NON-NLS-1$
 
-	protected final static String ATT_MENUINDEX = "menuIndex";//$NON-NLS-1$
+	public final static String ATT_MENUINDEX = "menuIndex";//$NON-NLS-1$
 
-	protected final static String ATT_NAME = "name";//$NON-NLS-1$
+	public final static String ATT_NAME = "name";//$NON-NLS-1$
+
+	public final static String TAG_CLASS = "class"; //$NON-NLS-1$
+
+	public final static String TAG_DESCRIPTION = "description"; //$NON-NLS-1$
+
+	public final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
+
+	public final static String TAG_VALUE = "value";//$NON-NLS-1$
 
 	protected final static String ATT_PROJECTTYPE = "project_type";
 
-	protected final static String TAG_CLASS = "class"; //$NON-NLS-1$
-
-	protected final static String TAG_DESCRIPTION = "description"; //$NON-NLS-1$
-
 	protected final static String TAG_NAME = "name";//$NON-NLS-1$
-
-	protected final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
-
-	protected final static String TAG_VALUE = "value";//$NON-NLS-1$
 
 	protected IConfigurationElement fConfigurationElement;
 
@@ -73,16 +73,12 @@ public class NewWizardAction extends Action implements Comparable {
 	public NewWizardAction(IConfigurationElement element) {
 		fConfigurationElement = element;
 
-		setText(element.getAttribute(ATT_NAME));
-
 		String description = getDescriptionFromConfig(fConfigurationElement);
 
+		setText("New " + element.getAttribute(ATT_NAME));
 		setDescription(description);
-
 		setToolTipText(description);
-
 		setImageDescriptor(getIconFromConfig(fConfigurationElement));
-
 		setMenuIndex(getMenuIndexFromConfig(fConfigurationElement));
 	}
 
