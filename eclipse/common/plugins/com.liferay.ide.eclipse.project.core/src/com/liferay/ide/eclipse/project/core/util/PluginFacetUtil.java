@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.project.core.util;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -23,6 +24,7 @@ import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
@@ -56,8 +58,9 @@ public class PluginFacetUtil {
 		Object config = action.getConfig();
 		JavaFacetInstallConfig javaConfig = (JavaFacetInstallConfig) config;
 		IDataModel dm = (IDataModel) Platform.getAdapterManager().getAdapter(config, IDataModel.class);
+		String presetId = preset.getId();
 
-		if (preset.getId().contains("portlet")) {
+		if (presetId.contains("portlet")) {
 			javaConfig.setSourceFolder(new Path(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER));
 			javaConfig.setDefaultOutputFolder(new Path(IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER));
 
@@ -71,7 +74,7 @@ public class PluginFacetUtil {
 				IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
 				IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
 		}
-		else if (preset.getId().contains("hook")) {
+		else if (presetId.contains("hook")) {
 			// javaConfig.setSourceFolder(new
 			// Path(IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER));
 			// javaConfig.setDefaultOutputFolder(new
@@ -84,6 +87,20 @@ public class PluginFacetUtil {
 			dm.setStringProperty(
 				IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
 				IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
+		}
+		else if (presetId.contains("layouttpl") || presetId.contains("theme")) {
+			dm.setStringProperty(IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME, null);
+			dm.setStringProperty(
+				IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
+				IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
+
+			List<IPath> srcFolders = javaConfig.getSourceFolders();
+
+			if (!CoreUtil.isNullOrEmpty(srcFolders)) {
+				for (IPath srcFolder : srcFolders) {
+					javaConfig.removeSourceFolder(srcFolder);
+				}
+			}
 		}
 	}
 
@@ -173,7 +190,6 @@ public class PluginFacetUtil {
 				}
 			}
 		}
-
 	}
 
 	public static void configureWebFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset) {
@@ -194,6 +210,17 @@ public class PluginFacetUtil {
 				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
+		}
+		else if (preset.getId().contains("layouttpl")) {
+			dm.setStringProperty(
+				IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+				IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER);
+			ProjectUtil.setGenerateDD(dm, false);
+		}
+		else if (preset.getId().contains("theme")) {
+			dm.setStringProperty(
+				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER);
+			ProjectUtil.setGenerateDD(dm, false);
 		}
 	}
 

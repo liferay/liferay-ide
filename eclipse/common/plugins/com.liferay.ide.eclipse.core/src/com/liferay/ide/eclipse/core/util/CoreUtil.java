@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IContainer;
@@ -115,12 +116,15 @@ public class CoreUtil {
 		return object1 != null && object2 != null && object1.equals(object2);
 	}
 
+	public static boolean isNullOrEmpty(List<?> list) {
+		return list != null && list.size() == 0;
+	}
+
 	public static boolean isNullOrEmpty(Object[] array) {
 		return array == null || array.length == 0;
 	}
 
 	public static boolean isNullOrEmpty(String val) {
-
 		return val == null || val.equals("") || val.trim().equals("");
 	}
 
@@ -170,6 +174,7 @@ public class CoreUtil {
 
 		return out.toString();
 	}
+
 
 	public static Version readVersionFile(File versionInfoFile) {
 		String versionContents = FileUtil.readContents(versionInfoFile);

@@ -41,6 +41,8 @@ public class IPluginFacetConstants {
 
 	public static final String HOOK_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src";
 
+	public static final String LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
+
 	public static final String LIFERAY_DEFAULT_FACET_TEMPLATE = "liferay.portlet.template";
 
 	public static final String LIFERAY_EXT_PLUGIN_FACET_ID = "liferay.ext";
@@ -82,4 +84,6 @@ public class IPluginFacetConstants {
 	public static final String PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes";
 
 	public static final String PORTLET_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src";
+
+	public static final String THEME_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
 }

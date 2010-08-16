@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -54,41 +55,50 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		super.execute(project, fv, config, monitor);
 
 		IDataModel model = (IDataModel) config;
-		
+
 		IDataModel masterModel = (IDataModel) model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
-		
+
 		if (masterModel != null && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
 			// get the template zip for theme and extract into the project
 			SDK sdk = getSDK();
 
 			String themeName = this.masterModel.getStringProperty(THEME_NAME);
-			
+
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
 			IPath newThemePath = sdk.createNewTheme(themeName, displayName);
-			
+
 			processNewFiles(newThemePath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX), false);
-			
+
 			// cleanup files
 			FileUtil.deleteDir(newThemePath.toFile(), true);
 
-			removeUnneededClasspathEntries();
-
 			// delete WEB-INF/lib and META-INF
 			CoreUtil.deleteResource(project.findMember("docroot/META-INF"));
-			CoreUtil.deleteResource(project.findMember("docroot/WEB-INF/lib"));
-
-			this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-
-			installThemeBuilder(this.project);
 		}
 		else {
 			setupDefaultOutputLocation();
 		}
+
+		removeUnneededClasspathEntries();
+
+		IResource libRes = project.findMember("docroot/WEB-INF/lib");
+
+		if (libRes.exists()) {
+			IFolder libFolder = (IFolder) libRes;
+			IResource[] libFiles = libFolder.members(true);
+			if (CoreUtil.isNullOrEmpty(libFiles)) {
+				libRes.delete(true, monitor);
+			}
+		}
+
+		installThemeBuilder(this.project);
+
+		this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 	}
 
 	protected void installThemeBuilder(IProject project)

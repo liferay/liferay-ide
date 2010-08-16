@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.layouttpl.core.facet;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetInstall;
@@ -24,6 +25,7 @@ import com.liferay.ide.eclipse.sdk.SDK;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -54,7 +56,6 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 		super.execute(project, fv, config, monitor);
 
 		IDataModel model = (IDataModel) config;
-		
 		IDataModel masterModel = (IDataModel) model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
 		
 		if (masterModel != null && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
@@ -62,7 +63,6 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 			SDK sdk = getSDK();
 
 			String layoutTplName = this.masterModel.getStringProperty(LAYOUTTPL_NAME);
-			
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
 			IPath newLayoutTplPath = sdk.createNewLayoutTpl(layoutTplName, displayName, getRuntimeLocation());
@@ -71,14 +71,24 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 			
 			// cleanup files
 			FileUtil.deleteDir(newLayoutTplPath.toFile(), true);
-
-			removeUnneededClasspathEntries();
-
-			this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 		else {
 			setupDefaultOutputLocation();
 		}
+
+		removeUnneededClasspathEntries();
+
+		IResource libRes = project.findMember("docroot/WEB-INF/lib");
+
+		if (libRes.exists()) {
+			IFolder libFolder = (IFolder) libRes;
+			IResource[] libFiles = libFolder.members(true);
+			if (CoreUtil.isNullOrEmpty(libFiles)) {
+				libRes.delete(true, monitor);
+			}
+		}
+
+		this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 	}
 
 	protected void removeUnneededClasspathEntries() {
@@ -95,6 +105,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 				}
 				else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
 					String path = entry.getPath().toPortableString();
+
 					if (path.contains("org.eclipse.jdt.launching.JRE_CONTAINER") ||
 						path.contains("org.eclipse.jst.j2ee.internal.web.container") ||
 						path.contains("org.eclipse.jst.j2ee.internal.module.container")) {

@@ -281,31 +281,32 @@ public class ProjectUtil {
 		// if the get sdk from the location
 		newProjectDataModel.setProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName);
 
+		IPath webXmlPath = projectRecord.getProjectLocation().append("docroot/WEB-INF/web.xml");
+
 		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
+			setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
+			setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
-		}
-		else if (projectRecord.getProjectName().endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
-			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true);
+			setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true);
+			setGenerateDD(newProjectDataModel, false);
 		}
-
-		IPath webXmlPath = projectRecord.getProjectLocation().append("docroot/WEB-INF/web.xml");
-
-		setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
+		else if (projectRecord.getProjectName().endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
+			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true);
+			setGenerateDD(newProjectDataModel, false);
+		}
 
 		IFacetedProjectWorkingCopy fpjwc =
 			(IFacetedProjectWorkingCopy) newProjectDataModel.getProperty(IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY);
-
 		fpjwc.setProjectName(projectRecord.getProjectName());
-
 		fpjwc.setProjectLocation(projectRecord.getProjectLocation());
 
 		PluginFacetUtil.configureProjectAsPlugin(fpjwc, runtime, sdkLocation);
@@ -524,6 +525,23 @@ public class ProjectUtil {
 		return hasFacet(project, ProjectFacetsManager.getProjectFacet(facetId));
 	}
 
+	public static boolean hasProperty(IDataModel model, String propertyName) {
+		boolean retval = false;
+
+		if (model == null || CoreUtil.isNullOrEmpty(propertyName)) {
+			return retval;
+		}
+
+		for (Object property : model.getAllProperties()) {
+			if (propertyName.equals(property)) {
+				retval = true;
+				break;
+			}
+		}
+
+		return retval;
+	}
+
 	public static IProject importProject(
 		ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor)
 		throws CoreException {
@@ -721,10 +739,20 @@ public class ProjectUtil {
 	}
 
 	public static void setGenerateDD(IDataModel model, boolean generateDD) {
-		FacetDataModelMap map =
-			(FacetDataModelMap) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
-		IDataModel webFacet = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
-		webFacet.setBooleanProperty(IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD);
+		IDataModel ddModel = null;
+
+		if (hasProperty(model, IJ2EEFacetInstallDataModelProperties.GENERATE_DD)) {
+			ddModel = model;
+		}
+		else if (hasProperty(model, IFacetProjectCreationDataModelProperties.FACET_DM_MAP)) {
+			FacetDataModelMap map =
+				(FacetDataModelMap) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_DM_MAP);
+			ddModel = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
+		}
+
+		if (ddModel != null) {
+			ddModel.setBooleanProperty(IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD);
+		}
 	}
 
 	public static void setSDK(IProject project, IProjectFacet facet, SDK sdk)
