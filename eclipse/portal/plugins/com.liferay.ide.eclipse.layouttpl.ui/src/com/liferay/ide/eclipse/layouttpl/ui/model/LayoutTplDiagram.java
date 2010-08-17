@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.velocity.VelocityContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
@@ -42,6 +43,10 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 	public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
 
 	public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved";
+
+	public static LayoutTplDiagram createDefaultDiagram() {
+		return new LayoutTplDiagram();
+	}
 
 	public static LayoutTplDiagram createFromFile(IFile file) {
 		if (file == null || !(file.exists())) {
@@ -92,8 +97,6 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 
 		return newDiagram;
 	}
-
-	protected IDOMModel domModel;
 
 	protected String id;
 
@@ -212,5 +215,22 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 				}
 			}
 		}
+	}
+
+	public String getTemplateSource(String templateName) {
+		ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation("layouttpl.tpl");
+		StringBuffer buffer = new StringBuffer();
+		templateOperation.setOutputBuffer(buffer);
+		templateOperation.getContext().put("root", this);
+		templateOperation.getContext().put("templateName", templateName);
+
+		try {
+			templateOperation.execute(new NullProgressMonitor());
+		}
+		catch (Exception ex) {
+			LayoutTplUI.logError("Error getting template source.", ex);
+		}
+
+		return buffer.toString();
 	}
 }

@@ -1,5 +1,7 @@
 package com.liferay.ide.eclipse.templates.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
 import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 
@@ -11,9 +13,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class TemplateOperation implements ITemplateOperation {
 
-	protected TemplateModel model;
-	protected IFile outputFile;
 	protected VelocityContext context;
+	protected TemplateModel model;
+	protected StringBuffer outputBuffer;
+	protected IFile outputFile;
 	protected Template template;
 
 	public TemplateOperation(TemplateModel model) {
@@ -21,20 +24,29 @@ public class TemplateOperation implements ITemplateOperation {
 		this.model = model;
 	}
 
-	public void setOutputFile(IFile file) {
-		this.outputFile = file;
-	}
+	public boolean canExecute() {
+		try {
+			if ((this.outputFile == null && this.outputBuffer == null) || this.model == null || getTemplate() == null) {
+				return false;
+			}
 
-	public VelocityContext getContext() {
-		if (context == null) {
-			context = createContext();
+			String[] names = model.getRequiredVarNames();
+
+			if (!CoreUtil.isNullOrEmpty(names)) {
+				for (String name : names) {
+					if (!(getContext().containsKey(name))) {
+						TemplatesCore.logError("Could not execute template operation: context var " + name +
+							" not found.");
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
-
-		return context;
-	}
-
-	protected VelocityContext createContext() {
-		return new VelocityContext();
+		catch (Exception e) {
+			return false;
+		}
 	}
 
 	public void execute(IProgressMonitor monitor)
@@ -47,12 +59,38 @@ public class TemplateOperation implements ITemplateOperation {
 		getTemplate().merge(getContext(), writer);
 		String result = writer.toString();
 
-		if (this.outputFile.exists()) {
-			this.outputFile.setContents(new ByteArrayInputStream(result.getBytes()), true, true, monitor);
+		if (this.outputFile != null) {
+			if (this.outputFile.exists()) {
+				this.outputFile.setContents(new ByteArrayInputStream(result.getBytes()), true, true, monitor);
+			}
+			else {
+				this.outputFile.create(new ByteArrayInputStream(result.getBytes()), true, monitor);
+			}
 		}
-		else {
-			this.outputFile.create(new ByteArrayInputStream(result.getBytes()), true, monitor);
+		else if (this.outputBuffer != null) {
+			this.outputBuffer.delete(0, this.outputBuffer.length());
+			this.outputBuffer.append(result);
 		}
+	}
+
+	public VelocityContext getContext() {
+		if (context == null) {
+			context = createContext();
+		}
+
+		return context;
+	}
+
+	public void setOutputBuffer(StringBuffer buffer) {
+		this.outputBuffer = buffer;
+	}
+
+	public void setOutputFile(IFile file) {
+		this.outputFile = file;
+	}
+
+	protected VelocityContext createContext() {
+		return new VelocityContext();
 	}
 
 	protected Template getTemplate()
@@ -68,15 +106,4 @@ public class TemplateOperation implements ITemplateOperation {
 
 		return template;
 	}
-
-	public boolean canExecute() {
-		try {
-			return this.outputFile != null && this.model != null && getTemplate() != null;
-		}
-		catch (Exception e) {
-			return false;
-		}
-	}
-
-
 }

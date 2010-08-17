@@ -1,5 +1,10 @@
 package com.liferay.ide.eclipse.templates.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.velocity.app.VelocityEngine;
 
 public class TemplateModel {
@@ -10,9 +15,12 @@ public class TemplateModel {
 	protected String resource;
 	protected String templateFolder;
 	protected VelocityEngine engine;
+	private TemplateVariable[] vars;
 
 	public TemplateModel(
-		String bundleId, String id, String name, String resource, String templateFolder, VelocityEngine velocityEngine) {
+		String bundleId, String id, String name, String resource, String templateFolder, VelocityEngine velocityEngine,
+		TemplateVariable[] vars) {
+
 		super();
 		this.bundleId = bundleId;
 		this.id = id;
@@ -20,6 +28,7 @@ public class TemplateModel {
 		this.resource = resource;
 		this.templateFolder = templateFolder;
 		this.engine = velocityEngine;
+		this.vars = vars;
 	}
 
 	public VelocityEngine getEngine() {
@@ -44,6 +53,20 @@ public class TemplateModel {
 
 	public String getBundleId() {
 		return bundleId;
+	}
+
+	public String[] getRequiredVarNames() {
+		List<String> reqVarNames = new ArrayList<String>();
+
+		if (!CoreUtil.isNullOrEmpty(vars)) {
+			for (TemplateVariable var : vars) {
+				if (var.isRequired()) {
+					reqVarNames.add(var.getName());
+				}
+			}
+		}
+
+		return reqVarNames.toArray(new String[0]);
 	}
 
 }

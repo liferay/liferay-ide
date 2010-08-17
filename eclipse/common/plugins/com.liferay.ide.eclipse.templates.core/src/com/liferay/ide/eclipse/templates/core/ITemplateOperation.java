@@ -6,13 +6,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface ITemplateOperation {
 
-	public void setOutputFile(IFile file);
+	public boolean canExecute();
 
 	public void execute(IProgressMonitor monitor)
 		throws Exception;
 
-	public boolean canExecute();
-
 	public VelocityContext getContext();
+
+	public void setOutputBuffer(StringBuffer buffer);
+
+	public void setOutputFile(IFile file);
 
 }
