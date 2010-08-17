@@ -56,7 +56,13 @@ public class PluginFacetUtil {
 		}
 
 		Object config = action.getConfig();
+
+		if (!(config instanceof JavaFacetInstallConfig)) {
+			return;
+		}
+
 		JavaFacetInstallConfig javaConfig = (JavaFacetInstallConfig) config;
+
 		IDataModel dm = (IDataModel) Platform.getAdapterManager().getAdapter(config, IDataModel.class);
 		String presetId = preset.getId();
 
@@ -75,10 +81,8 @@ public class PluginFacetUtil {
 				IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
 		}
 		else if (presetId.contains("hook")) {
-			// javaConfig.setSourceFolder(new
-			// Path(IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER));
-			// javaConfig.setDefaultOutputFolder(new
-			// Path(IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER));
+			javaConfig.setSourceFolder(new Path(IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER));
+			javaConfig.setDefaultOutputFolder(new Path(IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER));
 
 			dm.setStringProperty(
 				IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
