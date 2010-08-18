@@ -25,7 +25,7 @@
     </editor>
     <editor
           class="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplMultiPageEditor"
-          contributorClass="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplEditorActionBarContributor"
+          contributorClass="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplMultiPageEditorActionBarContributor"
           extensions="tpl"
           icon="icons/e16/layout.png"
           id="com.liferay.ide.eclipse.layouttpl.ui.template.multiEditor"

@@ -60,4 +60,5 @@ public class LayoutTplEditorActionBarContributor extends ActionBarContributor {
 		// currently none
 	}
 
+
 }
