@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.model;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.eclipse.layouttpl.ui.util.LayoutTplUtil;
 import com.liferay.ide.eclipse.templates.core.ITemplateOperation;
@@ -86,9 +87,11 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 			IDOMElement[] portletLayoutElements =
 				LayoutTplUtil.findChildElementsByClassName(mainContentElement, "div", "portlet-layout");
 
-			for (IDOMElement portletLayoutElement : portletLayoutElements) {
-				PortletLayout newPortletLayout = PortletLayout.createFromElement(portletLayoutElement);
-				newDiagram.addRow(newPortletLayout);
+			if (!CoreUtil.isNullOrEmpty(portletLayoutElements)) {
+				for (IDOMElement portletLayoutElement : portletLayoutElements) {
+					PortletLayout newPortletLayout = PortletLayout.createFromElement(portletLayoutElement);
+					newDiagram.addRow(newPortletLayout);
+				}
 			}
 		}
 		else {
