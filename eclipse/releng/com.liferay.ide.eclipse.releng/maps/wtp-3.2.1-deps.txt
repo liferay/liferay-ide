@@ -42,6 +42,7 @@ org.eclipse.wst.sse.core
 org.eclipse.wst.xml.core
 org.eclipse.wst.xsd.core
 org.eclipse.wst.dtd.ui
+org.eclipse.wst.html.ui
 org.eclipse.wst.sse.ui
 org.eclipse.wst.command.env.ui
 org.eclipse.wst.wsi.ui

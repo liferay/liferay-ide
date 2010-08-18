@@ -35,6 +35,7 @@ plugin@org.eclipse.wst.server.ui=v20100712b,:pserver:anonymous@dev.eclipse.org:/
 plugin@org.eclipse.wst.server.discovery=v20100707,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.wst.server.discovery
 plugin@org.eclipse.jst.jsp.core=v201007070628,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,sourceediting/plugins/org.eclipse.jst.jsp.core
 plugin@org.eclipse.jst.jsp.ui=v201006030742,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,sourceediting/plugins/org.eclipse.jst.jsp.ui
+plugin@org.eclipse.wst.html.ui=v201006251806,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,sourceediting/plugins/org.eclipse.wst.html.ui
 plugin@org.eclipse.wst.web.ui=v201004141630,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,jeetools/plugins/org.eclipse.wst.web.ui
 plugin@org.eclipse.wst.dtd.core=v201004290328,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,sourceediting/plugins/org.eclipse.wst.dtd.core
 plugin@org.eclipse.wst.sse.core=v201007131444,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,sourceediting/plugins/org.eclipse.wst.sse.core
