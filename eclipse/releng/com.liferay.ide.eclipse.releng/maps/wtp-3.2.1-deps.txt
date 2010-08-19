@@ -53,4 +53,4 @@ org.eclipse.wst.wsdl.ui
 org.eclipse.wst.xml.ui
 org.eclipse.wst.xsd.ui
 org.eclipse.wst.xsl.core
-org.eclipse.wst.xsl.ui
+org.eclipse.wst.xsl.uiorg.eclipse.wst.common.snippets
