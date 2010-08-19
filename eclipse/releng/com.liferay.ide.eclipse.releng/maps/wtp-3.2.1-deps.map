@@ -6,6 +6,7 @@ plugin@org.eclipse.jst.common.frameworks=v201007150400,:pserver:anonymous@dev.ec
 plugin@org.eclipse.wst.common.frameworks=v201003040800,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.frameworks
 plugin@org.eclipse.wst.common.modulecore=v201007220100,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.modulecore
 plugin@org.eclipse.wst.common.frameworks.ui=v201004080500,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.frameworks.ui
+plugin@org.eclipse.wst.common.snippets=v201004290255,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.snippets
 plugin@org.eclipse.wst.common.ui=v200911190730,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.ui
 plugin@org.eclipse.wst.validation.ui=v201004150700,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.validation.ui
 plugin@org.eclipse.wst.common.core=v200908252030,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.core
