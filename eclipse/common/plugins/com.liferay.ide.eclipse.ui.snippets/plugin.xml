@@ -1,0 +1,1358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+<extension point="org.eclipse.wst.common.snippets.SnippetContributions">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Portlet Taglib Description" id="com.liferay.ide.eclipse.ui.snippets.category.portlet" label="Portlet Taglib" smallicon="icons/snippets/portlet_tld.png">
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="actionURL" id="com.liferay.ide.eclipse.ui.snippets.item.actionURL" label="actionURL" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:actionURL ${copyCurrentRenderParameters}${escapeXml}${name}${portletMode}${secure}${var}${windowState}&gt;&lt;/portlet:actionURL&gt;
+      </content>
+      <variable description="copyCurrentRenderParameters" id="copyCurrentRenderParameters" name="copyCurrentRenderParameters"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="portletMode" id="portletMode" name="portletMode"/>
+      <variable description="secure" id="secure" name="secure"/>
+      <variable description="var" id="var" name="var"/>
+      <variable description="windowState" id="windowState" name="windowState"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="defineObjects" id="com.liferay.ide.eclipse.ui.snippets.item.defineObjects" label="defineObjects" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:defineObjects &gt;&lt;/portlet:defineObjects&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="namespace" id="com.liferay.ide.eclipse.ui.snippets.item.namespace" label="namespace" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:namespace &gt;&lt;/portlet:namespace&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="param" id="com.liferay.ide.eclipse.ui.snippets.item.param" label="param" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:param ${name}${value}&gt;&lt;/portlet:param&gt;
+      </content>
+      <variable description="name" id="name" name="name"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="property" id="com.liferay.ide.eclipse.ui.snippets.item.property" label="property" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:property ${name}${value}&gt;&lt;/portlet:property&gt;
+      </content>
+      <variable description="name" id="name" name="name"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="renderURL" id="com.liferay.ide.eclipse.ui.snippets.item.renderURL" label="renderURL" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:renderURL ${copyCurrentRenderParameters}${escapeXml}${portletMode}${secure}${var}${windowState}&gt;&lt;/portlet:renderURL&gt;
+      </content>
+      <variable description="copyCurrentRenderParameters" id="copyCurrentRenderParameters" name="copyCurrentRenderParameters"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="portletMode" id="portletMode" name="portletMode"/>
+      <variable description="secure" id="secure" name="secure"/>
+      <variable description="var" id="var" name="var"/>
+      <variable description="windowState" id="windowState" name="windowState"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="resourceURL" id="com.liferay.ide.eclipse.ui.snippets.item.resourceURL" label="resourceURL" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;portlet:resourceURL ${cacheability}${escapeXml}${id}${secure}${var}&gt;&lt;/portlet:resourceURL&gt;
+      </content>
+      <variable description="cacheability" id="cacheability" name="cacheability"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="secure" id="secure" name="secure"/>
+      <variable description="var" id="var" name="var"/>
+    </item>
+  </category>
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay Portlet Ext Taglib Description" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-portlet" label="Liferay Portlet Ext Taglib" smallicon="icons/snippets/portlet_tld.png">
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="actionURL" id="com.liferay.ide.eclipse.ui.snippets.item.actionURL" label="actionURL" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:actionURL ${anchor}${copyCurrentRenderParameters}${doAsUserId}${encrypt}${escapeXml}${name}${plid}${portletConfiguration}${portletMode}${portletName}${secure}${var}${varImpl}${windowState}&gt;&lt;/liferay-portlet:actionURL&gt;
+      </content>
+      <variable description="anchor" id="anchor" name="anchor"/>
+      <variable description="copyCurrentRenderParameters" id="copyCurrentRenderParameters" name="copyCurrentRenderParameters"/>
+      <variable description="doAsUserId" id="doAsUserId" name="doAsUserId"/>
+      <variable description="encrypt" id="encrypt" name="encrypt"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="plid" id="plid" name="plid"/>
+      <variable description="portletConfiguration" id="portletConfiguration" name="portletConfiguration"/>
+      <variable description="portletMode" id="portletMode" name="portletMode"/>
+      <variable description="portletName" id="portletName" name="portletName"/>
+      <variable description="secure" id="secure" name="secure"/>
+      <variable description="var" id="var" name="var"/>
+      <variable description="varImpl" id="varImpl" name="varImpl"/>
+      <variable description="windowState" id="windowState" name="windowState"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-back" id="com.liferay.ide.eclipse.ui.snippets.item.icon-back" label="icon-back" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-back &gt;&lt;/liferay-portlet:icon-back&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-close" id="com.liferay.ide.eclipse.ui.snippets.item.icon-close" label="icon-close" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-close &gt;&lt;/liferay-portlet:icon-close&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-configuration" id="com.liferay.ide.eclipse.ui.snippets.item.icon-configuration" label="icon-configuration" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-configuration &gt;&lt;/liferay-portlet:icon-configuration&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-edit" id="com.liferay.ide.eclipse.ui.snippets.item.icon-edit" label="icon-edit" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-edit &gt;&lt;/liferay-portlet:icon-edit&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-edit-defaults" id="com.liferay.ide.eclipse.ui.snippets.item.icon-edit-defaults" label="icon-edit-defaults" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-edit-defaults &gt;&lt;/liferay-portlet:icon-edit-defaults&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-edit-guest" id="com.liferay.ide.eclipse.ui.snippets.item.icon-edit-guest" label="icon-edit-guest" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-edit-guest &gt;&lt;/liferay-portlet:icon-edit-guest&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-export-import" id="com.liferay.ide.eclipse.ui.snippets.item.icon-export-import" label="icon-export-import" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-export-import &gt;&lt;/liferay-portlet:icon-export-import&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-help" id="com.liferay.ide.eclipse.ui.snippets.item.icon-help" label="icon-help" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-help &gt;&lt;/liferay-portlet:icon-help&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-maximize" id="com.liferay.ide.eclipse.ui.snippets.item.icon-maximize" label="icon-maximize" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-maximize &gt;&lt;/liferay-portlet:icon-maximize&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-minimize" id="com.liferay.ide.eclipse.ui.snippets.item.icon-minimize" label="icon-minimize" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-minimize &gt;&lt;/liferay-portlet:icon-minimize&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-options" id="com.liferay.ide.eclipse.ui.snippets.item.icon-options" label="icon-options" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-options &gt;&lt;/liferay-portlet:icon-options&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-portlet" id="com.liferay.ide.eclipse.ui.snippets.item.icon-portlet" label="icon-portlet" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-portlet ${portlet}&gt;&lt;/liferay-portlet:icon-portlet&gt;
+      </content>
+      <variable description="portlet" id="portlet" name="portlet"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-portlet-css" id="com.liferay.ide.eclipse.ui.snippets.item.icon-portlet-css" label="icon-portlet-css" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-portlet-css &gt;&lt;/liferay-portlet:icon-portlet-css&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-print" id="com.liferay.ide.eclipse.ui.snippets.item.icon-print" label="icon-print" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-print &gt;&lt;/liferay-portlet:icon-print&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-refresh" id="com.liferay.ide.eclipse.ui.snippets.item.icon-refresh" label="icon-refresh" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:icon-refresh &gt;&lt;/liferay-portlet:icon-refresh&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="param" id="com.liferay.ide.eclipse.ui.snippets.item.param" label="param" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:param ${name}${value}&gt;&lt;/liferay-portlet:param&gt;
+      </content>
+      <variable description="name" id="name" name="name"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="preview" id="com.liferay.ide.eclipse.ui.snippets.item.preview" label="preview" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:preview ${portletName}${queryString}${width}&gt;&lt;/liferay-portlet:preview&gt;
+      </content>
+      <variable description="portletName" id="portletName" name="portletName"/>
+      <variable description="queryString" id="queryString" name="queryString"/>
+      <variable description="width" id="width" name="width"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="renderURL" id="com.liferay.ide.eclipse.ui.snippets.item.renderURL" label="renderURL" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:renderURL ${anchor}${copyCurrentRenderParameters}${doAsUserId}${encrypt}${escapeXml}${plid}${portletConfiguration}${portletMode}${portletName}${secure}${var}${varImpl}${windowState}&gt;&lt;/liferay-portlet:renderURL&gt;
+      </content>
+      <variable description="anchor" id="anchor" name="anchor"/>
+      <variable description="copyCurrentRenderParameters" id="copyCurrentRenderParameters" name="copyCurrentRenderParameters"/>
+      <variable description="doAsUserId" id="doAsUserId" name="doAsUserId"/>
+      <variable description="encrypt" id="encrypt" name="encrypt"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="plid" id="plid" name="plid"/>
+      <variable description="portletConfiguration" id="portletConfiguration" name="portletConfiguration"/>
+      <variable description="portletMode" id="portletMode" name="portletMode"/>
+      <variable description="portletName" id="portletName" name="portletName"/>
+      <variable description="secure" id="secure" name="secure"/>
+      <variable description="var" id="var" name="var"/>
+      <variable description="varImpl" id="varImpl" name="varImpl"/>
+      <variable description="windowState" id="windowState" name="windowState"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="renderURLParams" id="com.liferay.ide.eclipse.ui.snippets.item.renderURLParams" label="renderURLParams" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:renderURLParams ${varImpl}&gt;&lt;/liferay-portlet:renderURLParams&gt;
+      </content>
+      <variable description="varImpl" id="varImpl" name="varImpl"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="resourceURL" id="com.liferay.ide.eclipse.ui.snippets.item.resourceURL" label="resourceURL" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:resourceURL ${anchor}${copyCurrentRenderParameters}${doAsUserId}${encrypt}${escapeXml}${id}${plid}${portletConfiguration}${portletMode}${portletName}${secure}${var}${varImpl}${windowState}&gt;&lt;/liferay-portlet:resourceURL&gt;
+      </content>
+      <variable description="anchor" id="anchor" name="anchor"/>
+      <variable description="copyCurrentRenderParameters" id="copyCurrentRenderParameters" name="copyCurrentRenderParameters"/>
+      <variable description="doAsUserId" id="doAsUserId" name="doAsUserId"/>
+      <variable description="encrypt" id="encrypt" name="encrypt"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="plid" id="plid" name="plid"/>
+      <variable description="portletConfiguration" id="portletConfiguration" name="portletConfiguration"/>
+      <variable description="portletMode" id="portletMode" name="portletMode"/>
+      <variable description="portletName" id="portletName" name="portletName"/>
+      <variable description="secure" id="secure" name="secure"/>
+      <variable description="var" id="var" name="var"/>
+      <variable description="varImpl" id="varImpl" name="varImpl"/>
+      <variable description="windowState" id="windowState" name="windowState"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="runtime" id="com.liferay.ide.eclipse.ui.snippets.item.runtime" label="runtime" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-portlet:runtime ${defaultPreferences}${portletName}${queryString}&gt;&lt;/liferay-portlet:runtime&gt;
+      </content>
+      <variable description="defaultPreferences" id="defaultPreferences" name="defaultPreferences"/>
+      <variable description="portletName" id="portletName" name="portletName"/>
+      <variable description="queryString" id="queryString" name="queryString"/>
+    </item>
+  </category>
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Taglib Description" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-ui" label="Lifeary UI Taglib" smallicon="icons/snippets/portlet_tld.png">
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-categories-navigation" id="com.liferay.ide.eclipse.ui.snippets.item.asset-categories-navigation" label="asset-categories-navigation" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-categories-navigation ${hidePortletWhenEmpty}${vocabularyIds}&gt;&lt;/liferay-ui:asset-categories-navigation&gt;
+      </content>
+      <variable description="hidePortletWhenEmpty" id="hidePortletWhenEmpty" name="hidePortletWhenEmpty"/>
+      <variable description="vocabularyIds" id="vocabularyIds" name="vocabularyIds"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-categories-selector" id="com.liferay.ide.eclipse.ui.snippets.item.asset-categories-selector" label="asset-categories-selector" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-categories-selector ${className}${classPK}${contentCallback}${curCategoryIds}${focus}${hiddenInput}&gt;&lt;/liferay-ui:asset-categories-selector&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="contentCallback" id="contentCallback" name="contentCallback"/>
+      <variable description="curCategoryIds" id="curCategoryIds" name="curCategoryIds"/>
+      <variable description="focus" id="focus" name="focus"/>
+      <variable description="hiddenInput" id="hiddenInput" name="hiddenInput"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-categories-summary" id="com.liferay.ide.eclipse.ui.snippets.item.asset-categories-summary" label="asset-categories-summary" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-categories-summary ${className}${classPK}${message}${portletURL}&gt;&lt;/liferay-ui:asset-categories-summary&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="portletURL" id="portletURL" name="portletURL"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-tags-error" id="com.liferay.ide.eclipse.ui.snippets.item.asset-tags-error" label="asset-tags-error" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-tags-error &gt;&lt;/liferay-ui:asset-tags-error&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-tags-navigation" id="com.liferay.ide.eclipse.ui.snippets.item.asset-tags-navigation" label="asset-tags-navigation" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-tags-navigation ${classNameId}${displayStyle}${hidePortletWhenEmpty}${showAssetCount}${showZeroAssetCount}&gt;&lt;/liferay-ui:asset-tags-navigation&gt;
+      </content>
+      <variable description="classNameId" id="classNameId" name="classNameId"/>
+      <variable description="displayStyle" id="displayStyle" name="displayStyle"/>
+      <variable description="hidePortletWhenEmpty" id="hidePortletWhenEmpty" name="hidePortletWhenEmpty"/>
+      <variable description="showAssetCount" id="showAssetCount" name="showAssetCount"/>
+      <variable description="showZeroAssetCount" id="showZeroAssetCount" name="showZeroAssetCount"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-tags-selector" id="com.liferay.ide.eclipse.ui.snippets.item.asset-tags-selector" label="asset-tags-selector" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-tags-selector ${className}${classPK}${contentCallback}${curTags}${focus}${hiddenInput}&gt;&lt;/liferay-ui:asset-tags-selector&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="contentCallback" id="contentCallback" name="contentCallback"/>
+      <variable description="curTags" id="curTags" name="curTags"/>
+      <variable description="focus" id="focus" name="focus"/>
+      <variable description="hiddenInput" id="hiddenInput" name="hiddenInput"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-tags-summary" id="com.liferay.ide.eclipse.ui.snippets.item.asset-tags-summary" label="asset-tags-summary" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:asset-tags-summary ${assetTagNames}${className}${classPK}${message}${portletURL}&gt;&lt;/liferay-ui:asset-tags-summary&gt;
+      </content>
+      <variable description="assetTagNames" id="assetTagNames" name="assetTagNames"/>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="portletURL" id="portletURL" name="portletURL"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="breadcrumb" id="com.liferay.ide.eclipse.ui.snippets.item.breadcrumb" label="breadcrumb" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:breadcrumb ${displayStyle}${portletURL}${selLayout}${selLayoutParam}${showGuestGroup}${showLayout}${showParentGroups}${showPortletBreadcrumb}&gt;&lt;/liferay-ui:breadcrumb&gt;
+      </content>
+      <variable description="displayStyle" id="displayStyle" name="displayStyle"/>
+      <variable description="portletURL" id="portletURL" name="portletURL"/>
+      <variable description="selLayout" id="selLayout" name="selLayout"/>
+      <variable description="selLayoutParam" id="selLayoutParam" name="selLayoutParam"/>
+      <variable description="showGuestGroup" id="showGuestGroup" name="showGuestGroup"/>
+      <variable description="showLayout" id="showLayout" name="showLayout"/>
+      <variable description="showParentGroups" id="showParentGroups" name="showParentGroups"/>
+      <variable description="showPortletBreadcrumb" id="showPortletBreadcrumb" name="showPortletBreadcrumb"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="calendar" id="com.liferay.ide.eclipse.ui.snippets.item.calendar" label="calendar" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:calendar ${data}${day}${headerFormat}${headerPattern}${month}${showAllPotentialWeeks}${year}&gt;&lt;/liferay-ui:calendar&gt;
+      </content>
+      <variable description="data" id="data" name="data"/>
+      <variable description="day" id="day" name="day"/>
+      <variable description="headerFormat" id="headerFormat" name="headerFormat"/>
+      <variable description="headerPattern" id="headerPattern" name="headerPattern"/>
+      <variable description="month" id="month" name="month"/>
+      <variable description="showAllPotentialWeeks" id="showAllPotentialWeeks" name="showAllPotentialWeeks"/>
+      <variable description="year" id="year" name="year"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="captcha" id="com.liferay.ide.eclipse.ui.snippets.item.captcha" label="captcha" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:captcha ${url}&gt;&lt;/liferay-ui:captcha&gt;
+      </content>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="custom-attribute" id="com.liferay.ide.eclipse.ui.snippets.item.custom-attribute" label="custom-attribute" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:custom-attribute ${className}${classPK}${editable}${label}${name}&gt;&lt;/liferay-ui:custom-attribute&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="editable" id="editable" name="editable"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="name" id="name" name="name"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="custom-attribute-list" id="com.liferay.ide.eclipse.ui.snippets.item.custom-attribute-list" label="custom-attribute-list" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:custom-attribute-list ${className}${classPK}${editable}${label}&gt;&lt;/liferay-ui:custom-attribute-list&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="editable" id="editable" name="editable"/>
+      <variable description="label" id="label" name="label"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="custom-attributes-available" id="com.liferay.ide.eclipse.ui.snippets.item.custom-attributes-available" label="custom-attributes-available" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:custom-attributes-available ${className}${companyId}&gt;&lt;/liferay-ui:custom-attributes-available&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="companyId" id="companyId" name="companyId"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="diff" id="com.liferay.ide.eclipse.ui.snippets.item.diff" label="diff" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:diff ${diffResults}${sourceName}${targetName}&gt;&lt;/liferay-ui:diff&gt;
+      </content>
+      <variable description="diffResults" id="diffResults" name="diffResults"/>
+      <variable description="sourceName" id="sourceName" name="sourceName"/>
+      <variable description="targetName" id="targetName" name="targetName"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="diff-html" id="com.liferay.ide.eclipse.ui.snippets.item.diff-html" label="diff-html" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:diff-html ${diffHtmlResults}&gt;&lt;/liferay-ui:diff-html&gt;
+      </content>
+      <variable description="diffHtmlResults" id="diffHtmlResults" name="diffHtmlResults"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="discussion" id="com.liferay.ide.eclipse.ui.snippets.item.discussion" label="discussion" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:discussion ${className}${classPK}${formAction}${formName}${permissionClassName}${permissionClassPK}${ratingsEnabled}${redirect}${subject}${userId}&gt;&lt;/liferay-ui:discussion&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="formAction" id="formAction" name="formAction"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="permissionClassName" id="permissionClassName" name="permissionClassName"/>
+      <variable description="permissionClassPK" id="permissionClassPK" name="permissionClassPK"/>
+      <variable description="ratingsEnabled" id="ratingsEnabled" name="ratingsEnabled"/>
+      <variable description="redirect" id="redirect" name="redirect"/>
+      <variable description="subject" id="subject" name="subject"/>
+      <variable description="userId" id="userId" name="userId"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="error" id="com.liferay.ide.eclipse.ui.snippets.item.error" label="error" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:error ${exception}${key}${message}${rowBreak}${translateMessage}&gt;&lt;/liferay-ui:error&gt;
+      </content>
+      <variable description="exception" id="exception" name="exception"/>
+      <variable description="key" id="key" name="key"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="rowBreak" id="rowBreak" name="rowBreak"/>
+      <variable description="translateMessage" id="translateMessage" name="translateMessage"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="error-marker" id="com.liferay.ide.eclipse.ui.snippets.item.error-marker" label="error-marker" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:error-marker ${key}${value}&gt;&lt;/liferay-ui:error-marker&gt;
+      </content>
+      <variable description="key" id="key" name="key"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="flags" id="com.liferay.ide.eclipse.ui.snippets.item.flags" label="flags" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:flags ${className}${classPK}${contentTitle}${label}${message}${reportedUserId}&gt;&lt;/liferay-ui:flags&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="contentTitle" id="contentTitle" name="contentTitle"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="reportedUserId" id="reportedUserId" name="reportedUserId"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="flash" id="com.liferay.ide.eclipse.ui.snippets.item.flash" label="flash" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:flash ${align}${allowFullScreen}${allowScriptAccess}${base}${bgcolor}${devicefont}${flashvars}${height}${id}${loop}${menu}${movie}${play}${quality}${salign}${scale}${swliveconnect}${version}${width}${wmode}&gt;&lt;/liferay-ui:flash&gt;
+      </content>
+      <variable description="align" id="align" name="align"/>
+      <variable description="allowFullScreen" id="allowFullScreen" name="allowFullScreen"/>
+      <variable description="allowScriptAccess" id="allowScriptAccess" name="allowScriptAccess"/>
+      <variable description="base" id="base" name="base"/>
+      <variable description="bgcolor" id="bgcolor" name="bgcolor"/>
+      <variable description="devicefont" id="devicefont" name="devicefont"/>
+      <variable description="flashvars" id="flashvars" name="flashvars"/>
+      <variable description="height" id="height" name="height"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="loop" id="loop" name="loop"/>
+      <variable description="menu" id="menu" name="menu"/>
+      <variable description="movie" id="movie" name="movie"/>
+      <variable description="play" id="play" name="play"/>
+      <variable description="quality" id="quality" name="quality"/>
+      <variable description="salign" id="salign" name="salign"/>
+      <variable description="scale" id="scale" name="scale"/>
+      <variable description="swliveconnect" id="swliveconnect" name="swliveconnect"/>
+      <variable description="version" id="version" name="version"/>
+      <variable description="width" id="width" name="width"/>
+      <variable description="wmode" id="wmode" name="wmode"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="group-search" id="com.liferay.ide.eclipse.ui.snippets.item.group-search" label="group-search" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:group-search ${groupParams}${portletURL}${rowChecker}&gt;&lt;/liferay-ui:group-search&gt;
+      </content>
+      <variable description="groupParams" id="groupParams" name="groupParams"/>
+      <variable description="portletURL" id="portletURL" name="portletURL"/>
+      <variable description="rowChecker" id="rowChecker" name="rowChecker"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="header" id="com.liferay.ide.eclipse.ui.snippets.item.header" label="header" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:header ${backLabel}${backURL}${cssClass}${escapeXml}${title}&gt;&lt;/liferay-ui:header&gt;
+      </content>
+      <variable description="backLabel" id="backLabel" name="backLabel"/>
+      <variable description="backURL" id="backURL" name="backURL"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="title" id="title" name="title"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon" id="com.liferay.ide.eclipse.ui.snippets.item.icon" label="icon" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:icon ${cssClass}${id}${image}${imageHover}${label}${lang}${message}${method}${src}${srcHover}${target}${toolTip}${url}&gt;&lt;/liferay-ui:icon&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="image" id="image" name="image"/>
+      <variable description="imageHover" id="imageHover" name="imageHover"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="lang" id="lang" name="lang"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="method" id="method" name="method"/>
+      <variable description="src" id="src" name="src"/>
+      <variable description="srcHover" id="srcHover" name="srcHover"/>
+      <variable description="target" id="target" name="target"/>
+      <variable description="toolTip" id="toolTip" name="toolTip"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-deactivate" id="com.liferay.ide.eclipse.ui.snippets.item.icon-deactivate" label="icon-deactivate" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:icon-deactivate ${label}${url}&gt;&lt;/liferay-ui:icon-deactivate&gt;
+      </content>
+      <variable description="label" id="label" name="label"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-delete" id="com.liferay.ide.eclipse.ui.snippets.item.icon-delete" label="icon-delete" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:icon-delete ${label}${url}&gt;&lt;/liferay-ui:icon-delete&gt;
+      </content>
+      <variable description="label" id="label" name="label"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-help" id="com.liferay.ide.eclipse.ui.snippets.item.icon-help" label="icon-help" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:icon-help ${message}&gt;&lt;/liferay-ui:icon-help&gt;
+      </content>
+      <variable description="message" id="message" name="message"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-list" id="com.liferay.ide.eclipse.ui.snippets.item.icon-list" label="icon-list" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:icon-list ${showWhenSingleIcon}&gt;&lt;/liferay-ui:icon-list&gt;
+      </content>
+      <variable description="showWhenSingleIcon" id="showWhenSingleIcon" name="showWhenSingleIcon"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-menu" id="com.liferay.ide.eclipse.ui.snippets.item.icon-menu" label="icon-menu" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:icon-menu ${align}${cssClass}${icon}${id}${message}${showExpanded}${showArrow}${showWhenSingleIcon}&gt;&lt;/liferay-ui:icon-menu&gt;
+      </content>
+      <variable description="align" id="align" name="align"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="icon" id="icon" name="icon"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="showExpanded" id="showExpanded" name="showExpanded"/>
+      <variable description="showArrow" id="showArrow" name="showArrow"/>
+      <variable description="showWhenSingleIcon" id="showWhenSingleIcon" name="showWhenSingleIcon"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-checkbox" id="com.liferay.ide.eclipse.ui.snippets.item.input-checkbox" label="input-checkbox" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-checkbox ${cssClass}${defaultValue}${disabled}${formName}${id}${onClick}${param}&gt;&lt;/liferay-ui:input-checkbox&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="defaultValue" id="defaultValue" name="defaultValue"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="onClick" id="onClick" name="onClick"/>
+      <variable description="param" id="param" name="param"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-date" id="com.liferay.ide.eclipse.ui.snippets.item.input-date" label="input-date" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-date ${cssClass}${dayNullable}${dayParam}${dayValue}${disableNamespace}${disabled}${firstDayOfWeek}${formName}${imageInputId}${monthAndYearNullable}${monthAndYearParam}${monthNullable}${monthParam}${monthValue}${yearNullable}${yearParam}${yearRangeEnd}${yearRangeStart}${yearValue}&gt;&lt;/liferay-ui:input-date&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="dayNullable" id="dayNullable" name="dayNullable"/>
+      <variable description="dayParam" id="dayParam" name="dayParam"/>
+      <variable description="dayValue" id="dayValue" name="dayValue"/>
+      <variable description="disableNamespace" id="disableNamespace" name="disableNamespace"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="firstDayOfWeek" id="firstDayOfWeek" name="firstDayOfWeek"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="imageInputId" id="imageInputId" name="imageInputId"/>
+      <variable description="monthAndYearNullable" id="monthAndYearNullable" name="monthAndYearNullable"/>
+      <variable description="monthAndYearParam" id="monthAndYearParam" name="monthAndYearParam"/>
+      <variable description="monthNullable" id="monthNullable" name="monthNullable"/>
+      <variable description="monthParam" id="monthParam" name="monthParam"/>
+      <variable description="monthValue" id="monthValue" name="monthValue"/>
+      <variable description="yearNullable" id="yearNullable" name="yearNullable"/>
+      <variable description="yearParam" id="yearParam" name="yearParam"/>
+      <variable description="yearRangeEnd" id="yearRangeEnd" name="yearRangeEnd"/>
+      <variable description="yearRangeStart" id="yearRangeStart" name="yearRangeStart"/>
+      <variable description="yearValue" id="yearValue" name="yearValue"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-editor" id="com.liferay.ide.eclipse.ui.snippets.item.input-editor" label="input-editor" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-editor ${cssClass}${editorImpl}${height}${initMethod}${name}${onChangeMethod}${toolbarSet}${width}&gt;&lt;/liferay-ui:input-editor&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="editorImpl" id="editorImpl" name="editorImpl"/>
+      <variable description="height" id="height" name="height"/>
+      <variable description="initMethod" id="initMethod" name="initMethod"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="onChangeMethod" id="onChangeMethod" name="onChangeMethod"/>
+      <variable description="toolbarSet" id="toolbarSet" name="toolbarSet"/>
+      <variable description="width" id="width" name="width"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-field" id="com.liferay.ide.eclipse.ui.snippets.item.input-field" label="input-field" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-field ${bean}${cssClass}${defaultValue}${disabled}${field}${fieldParam}${formName}${format}${model}&gt;&lt;/liferay-ui:input-field&gt;
+      </content>
+      <variable description="bean" id="bean" name="bean"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="defaultValue" id="defaultValue" name="defaultValue"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="field" id="field" name="field"/>
+      <variable description="fieldParam" id="fieldParam" name="fieldParam"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="format" id="format" name="format"/>
+      <variable description="model" id="model" name="model"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-localized" id="com.liferay.ide.eclipse.ui.snippets.item.input-localized" label="input-localized" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-localized ${cssClass}${disabled}${name}${type}${xml}&gt;&lt;/liferay-ui:input-localized&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="type" id="type" name="type"/>
+      <variable description="xml" id="xml" name="xml"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-move-boxes" id="com.liferay.ide.eclipse.ui.snippets.item.input-move-boxes" label="input-move-boxes" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-move-boxes ${cssClass}${leftBoxName}${leftList}${leftOnChange}${leftReorder}${leftTitle}${rightBoxName}${rightList}${rightOnChange}${rightReorder}${rightTitle}&gt;&lt;/liferay-ui:input-move-boxes&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="leftBoxName" id="leftBoxName" name="leftBoxName"/>
+      <variable description="leftList" id="leftList" name="leftList"/>
+      <variable description="leftOnChange" id="leftOnChange" name="leftOnChange"/>
+      <variable description="leftReorder" id="leftReorder" name="leftReorder"/>
+      <variable description="leftTitle" id="leftTitle" name="leftTitle"/>
+      <variable description="rightBoxName" id="rightBoxName" name="rightBoxName"/>
+      <variable description="rightList" id="rightList" name="rightList"/>
+      <variable description="rightOnChange" id="rightOnChange" name="rightOnChange"/>
+      <variable description="rightReorder" id="rightReorder" name="rightReorder"/>
+      <variable description="rightTitle" id="rightTitle" name="rightTitle"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-permissions" id="com.liferay.ide.eclipse.ui.snippets.item.input-permissions" label="input-permissions" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-permissions ${formName}${modelName}&gt;&lt;/liferay-ui:input-permissions&gt;
+      </content>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="modelName" id="modelName" name="modelName"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-permissions-params" id="com.liferay.ide.eclipse.ui.snippets.item.input-permissions-params" label="input-permissions-params" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-permissions-params ${modelName}&gt;&lt;/liferay-ui:input-permissions-params&gt;
+      </content>
+      <variable description="modelName" id="modelName" name="modelName"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-repeat" id="com.liferay.ide.eclipse.ui.snippets.item.input-repeat" label="input-repeat" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-repeat ${cssClass}${event}&gt;&lt;/liferay-ui:input-repeat&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="event" id="event" name="event"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-resource" id="com.liferay.ide.eclipse.ui.snippets.item.input-resource" label="input-resource" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-resource ${cssClass}${url}&gt;&lt;/liferay-ui:input-resource&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-scheduler" id="com.liferay.ide.eclipse.ui.snippets.item.input-scheduler" label="input-scheduler" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-scheduler &gt;&lt;/liferay-ui:input-scheduler&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-select" id="com.liferay.ide.eclipse.ui.snippets.item.input-select" label="input-select" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-select ${cssClass}${defaultValue}${disabled}${formName}${param}&gt;&lt;/liferay-ui:input-select&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="defaultValue" id="defaultValue" name="defaultValue"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="param" id="param" name="param"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-textarea" id="com.liferay.ide.eclipse.ui.snippets.item.input-textarea" label="input-textarea" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-textarea ${cssClass}${defaultValue}${disabled}${param}&gt;&lt;/liferay-ui:input-textarea&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="defaultValue" id="defaultValue" name="defaultValue"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="param" id="param" name="param"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-time" id="com.liferay.ide.eclipse.ui.snippets.item.input-time" label="input-time" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-time ${amPmNullable}${amPmParam}${amPmValue}${cssClass}${disabled}${hourNullable}${hourParam}${hourValue}${minuteInterval}${minuteNullable}${minuteParam}${minuteValue}&gt;&lt;/liferay-ui:input-time&gt;
+      </content>
+      <variable description="amPmNullable" id="amPmNullable" name="amPmNullable"/>
+      <variable description="amPmParam" id="amPmParam" name="amPmParam"/>
+      <variable description="amPmValue" id="amPmValue" name="amPmValue"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="hourNullable" id="hourNullable" name="hourNullable"/>
+      <variable description="hourParam" id="hourParam" name="hourParam"/>
+      <variable description="hourValue" id="hourValue" name="hourValue"/>
+      <variable description="minuteInterval" id="minuteInterval" name="minuteInterval"/>
+      <variable description="minuteNullable" id="minuteNullable" name="minuteNullable"/>
+      <variable description="minuteParam" id="minuteParam" name="minuteParam"/>
+      <variable description="minuteValue" id="minuteValue" name="minuteValue"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-time-zone" id="com.liferay.ide.eclipse.ui.snippets.item.input-time-zone" label="input-time-zone" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:input-time-zone ${cssClass}${daylight}${disabled}${displayStyle}${name}${nullable}${value}&gt;&lt;/liferay-ui:input-time-zone&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="daylight" id="daylight" name="daylight"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="displayStyle" id="displayStyle" name="displayStyle"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="nullable" id="nullable" name="nullable"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="journal-article" id="com.liferay.ide.eclipse.ui.snippets.item.journal-article" label="journal-article" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:journal-article ${articleId}${articlePage}${articleResourcePrimKey}${groupId}${languageId}${showAvailableLocales}${showTitle}${templateId}${xmlRequest}&gt;&lt;/liferay-ui:journal-article&gt;
+      </content>
+      <variable description="articleId" id="articleId" name="articleId"/>
+      <variable description="articlePage" id="articlePage" name="articlePage"/>
+      <variable description="articleResourcePrimKey" id="articleResourcePrimKey" name="articleResourcePrimKey"/>
+      <variable description="groupId" id="groupId" name="groupId"/>
+      <variable description="languageId" id="languageId" name="languageId"/>
+      <variable description="showAvailableLocales" id="showAvailableLocales" name="showAvailableLocales"/>
+      <variable description="showTitle" id="showTitle" name="showTitle"/>
+      <variable description="templateId" id="templateId" name="templateId"/>
+      <variable description="xmlRequest" id="xmlRequest" name="xmlRequest"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="journal-content-search" id="com.liferay.ide.eclipse.ui.snippets.item.journal-content-search" label="journal-content-search" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:journal-content-search &gt;&lt;/liferay-ui:journal-content-search&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="language" id="com.liferay.ide.eclipse.ui.snippets.item.language" label="language" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:language ${displayStyle}${formAction}${formName}${languageIds}${name}&gt;&lt;/liferay-ui:language&gt;
+      </content>
+      <variable description="displayStyle" id="displayStyle" name="displayStyle"/>
+      <variable description="formAction" id="formAction" name="formAction"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="languageIds" id="languageIds" name="languageIds"/>
+      <variable description="name" id="name" name="name"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="message" id="com.liferay.ide.eclipse.ui.snippets.item.message" label="message" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:message ${arguments}${key}${translateArguments}&gt;&lt;/liferay-ui:message&gt;
+      </content>
+      <variable description="arguments" id="arguments" name="arguments"/>
+      <variable description="key" id="key" name="key"/>
+      <variable description="translateArguments" id="translateArguments" name="translateArguments"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="my-places" id="com.liferay.ide.eclipse.ui.snippets.item.my-places" label="my-places" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:my-places ${max}&gt;&lt;/liferay-ui:my-places&gt;
+      </content>
+      <variable description="max" id="max" name="max"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="navigation" id="com.liferay.ide.eclipse.ui.snippets.item.navigation" label="navigation" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:navigation ${bulletStyle}${displayStyle}${headerType}${includedLayouts}${nestedChildren}${rootLayoutLevel}${rootLayoutType}&gt;&lt;/liferay-ui:navigation&gt;
+      </content>
+      <variable description="bulletStyle" id="bulletStyle" name="bulletStyle"/>
+      <variable description="displayStyle" id="displayStyle" name="displayStyle"/>
+      <variable description="headerType" id="headerType" name="headerType"/>
+      <variable description="includedLayouts" id="includedLayouts" name="includedLayouts"/>
+      <variable description="nestedChildren" id="nestedChildren" name="nestedChildren"/>
+      <variable description="rootLayoutLevel" id="rootLayoutLevel" name="rootLayoutLevel"/>
+      <variable description="rootLayoutType" id="rootLayoutType" name="rootLayoutType"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="page-iterator" id="com.liferay.ide.eclipse.ui.snippets.item.page-iterator" label="page-iterator" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:page-iterator ${cur}${curParam}${delta}${deltaConfigurable}${deltaParam}${formName}${jsCall}${maxPages}${target}${total}${type}${url}&gt;&lt;/liferay-ui:page-iterator&gt;
+      </content>
+      <variable description="cur" id="cur" name="cur"/>
+      <variable description="curParam" id="curParam" name="curParam"/>
+      <variable description="delta" id="delta" name="delta"/>
+      <variable description="deltaConfigurable" id="deltaConfigurable" name="deltaConfigurable"/>
+      <variable description="deltaParam" id="deltaParam" name="deltaParam"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="jsCall" id="jsCall" name="jsCall"/>
+      <variable description="maxPages" id="maxPages" name="maxPages"/>
+      <variable description="target" id="target" name="target"/>
+      <variable description="total" id="total" name="total"/>
+      <variable description="type" id="type" name="type"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="panel" id="com.liferay.ide.eclipse.ui.snippets.item.panel" label="panel" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:panel ${collapsible}${cssClass}${defaultState}${extended}${id}${persistState}${title}&gt;&lt;/liferay-ui:panel&gt;
+      </content>
+      <variable description="collapsible" id="collapsible" name="collapsible"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="defaultState" id="defaultState" name="defaultState"/>
+      <variable description="extended" id="extended" name="extended"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="persistState" id="persistState" name="persistState"/>
+      <variable description="title" id="title" name="title"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="panel-container" id="com.liferay.ide.eclipse.ui.snippets.item.panel-container" label="panel-container" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:panel-container ${accordion}${cssClass}${extended}${id}${persistState}&gt;&lt;/liferay-ui:panel-container&gt;
+      </content>
+      <variable description="accordion" id="accordion" name="accordion"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="extended" id="extended" name="extended"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="persistState" id="persistState" name="persistState"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="panel-floating-container" id="com.liferay.ide.eclipse.ui.snippets.item.panel-floating-container" label="panel-floating-container" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:panel-floating-container ${accordion}${cssClass}${extended}${id}${paging}${pagingElements}${persistState}${resultsPerPage}${trigger}${width}&gt;&lt;/liferay-ui:panel-floating-container&gt;
+      </content>
+      <variable description="accordion" id="accordion" name="accordion"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="extended" id="extended" name="extended"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="paging" id="paging" name="paging"/>
+      <variable description="pagingElements" id="pagingElements" name="pagingElements"/>
+      <variable description="persistState" id="persistState" name="persistState"/>
+      <variable description="resultsPerPage" id="resultsPerPage" name="resultsPerPage"/>
+      <variable description="trigger" id="trigger" name="trigger"/>
+      <variable description="width" id="width" name="width"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="param" id="com.liferay.ide.eclipse.ui.snippets.item.param" label="param" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:param ${name}${value}&gt;&lt;/liferay-ui:param&gt;
+      </content>
+      <variable description="name" id="name" name="name"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="png-image" id="com.liferay.ide.eclipse.ui.snippets.item.png-image" label="png-image" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:png-image ${height}${image}${width}&gt;&lt;/liferay-ui:png-image&gt;
+      </content>
+      <variable description="height" id="height" name="height"/>
+      <variable description="image" id="image" name="image"/>
+      <variable description="width" id="width" name="width"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="ratings" id="com.liferay.ide.eclipse.ui.snippets.item.ratings" label="ratings" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:ratings ${className}${classPK}${numberOfStars}${ratingsEntry}${ratingsStats}${type}${url}&gt;&lt;/liferay-ui:ratings&gt;
+      </content>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="numberOfStars" id="numberOfStars" name="numberOfStars"/>
+      <variable description="ratingsEntry" id="ratingsEntry" name="ratingsEntry"/>
+      <variable description="ratingsStats" id="ratingsStats" name="ratingsStats"/>
+      <variable description="type" id="type" name="type"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="ratings-score" id="com.liferay.ide.eclipse.ui.snippets.item.ratings-score" label="ratings-score" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:ratings-score ${score}&gt;&lt;/liferay-ui:ratings-score&gt;
+      </content>
+      <variable description="score" id="score" name="score"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search" id="com.liferay.ide.eclipse.ui.snippets.item.search" label="search" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search &gt;&lt;/liferay-ui:search&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container" id="com.liferay.ide.eclipse.ui.snippets.item.search-container" label="search-container" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container ${curParam}${delta}${deltaConfigurable}${deltaParam}${displayTerms}${emptyResultsMessage}${headerNames}${hover}${id}${iteratorURL}${orderByCol}${orderByColParam}${orderByComparator}${orderByType}${orderByTypeParam}${rowChecker}${searchContainer}${searchTerms}${var}&gt;&lt;/liferay-ui:search-container&gt;
+      </content>
+      <variable description="curParam" id="curParam" name="curParam"/>
+      <variable description="delta" id="delta" name="delta"/>
+      <variable description="deltaConfigurable" id="deltaConfigurable" name="deltaConfigurable"/>
+      <variable description="deltaParam" id="deltaParam" name="deltaParam"/>
+      <variable description="displayTerms" id="displayTerms" name="displayTerms"/>
+      <variable description="emptyResultsMessage" id="emptyResultsMessage" name="emptyResultsMessage"/>
+      <variable description="headerNames" id="headerNames" name="headerNames"/>
+      <variable description="hover" id="hover" name="hover"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="iteratorURL" id="iteratorURL" name="iteratorURL"/>
+      <variable description="orderByCol" id="orderByCol" name="orderByCol"/>
+      <variable description="orderByColParam" id="orderByColParam" name="orderByColParam"/>
+      <variable description="orderByComparator" id="orderByComparator" name="orderByComparator"/>
+      <variable description="orderByType" id="orderByType" name="orderByType"/>
+      <variable description="orderByTypeParam" id="orderByTypeParam" name="orderByTypeParam"/>
+      <variable description="rowChecker" id="rowChecker" name="rowChecker"/>
+      <variable description="searchContainer" id="searchContainer" name="searchContainer"/>
+      <variable description="searchTerms" id="searchTerms" name="searchTerms"/>
+      <variable description="var" id="var" name="var"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-button" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-button" label="search-container-column-button" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-column-button ${align}${colspan}${href}${index}${name}${valign}&gt;&lt;/liferay-ui:search-container-column-button&gt;
+      </content>
+      <variable description="align" id="align" name="align"/>
+      <variable description="colspan" id="colspan" name="colspan"/>
+      <variable description="href" id="href" name="href"/>
+      <variable description="index" id="index" name="index"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="valign" id="valign" name="valign"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-jsp" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-jsp" label="search-container-column-jsp" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-column-jsp ${align}${colspan}${index}${name}${path}${valign}&gt;&lt;/liferay-ui:search-container-column-jsp&gt;
+      </content>
+      <variable description="align" id="align" name="align"/>
+      <variable description="colspan" id="colspan" name="colspan"/>
+      <variable description="index" id="index" name="index"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="path" id="path" name="path"/>
+      <variable description="valign" id="valign" name="valign"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-score" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-score" label="search-container-column-score" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-column-score ${index}${name}${score}&gt;&lt;/liferay-ui:search-container-column-score&gt;
+      </content>
+      <variable description="index" id="index" name="index"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="score" id="score" name="score"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-text" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-text" label="search-container-column-text" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-column-text ${align}${buffer}${colspan}${href}${index}${name}${orderable}${orderableProperty}${property}${target}${title}${translate}${valign}${value}&gt;&lt;/liferay-ui:search-container-column-text&gt;
+      </content>
+      <variable description="align" id="align" name="align"/>
+      <variable description="buffer" id="buffer" name="buffer"/>
+      <variable description="colspan" id="colspan" name="colspan"/>
+      <variable description="href" id="href" name="href"/>
+      <variable description="index" id="index" name="index"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="orderable" id="orderable" name="orderable"/>
+      <variable description="orderableProperty" id="orderableProperty" name="orderableProperty"/>
+      <variable description="property" id="property" name="property"/>
+      <variable description="target" id="target" name="target"/>
+      <variable description="title" id="title" name="title"/>
+      <variable description="translate" id="translate" name="translate"/>
+      <variable description="valign" id="valign" name="valign"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-results" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-results" label="search-container-results" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-results ${results}${resultsVar}${total}${totalVar}&gt;&lt;/liferay-ui:search-container-results&gt;
+      </content>
+      <variable description="results" id="results" name="results"/>
+      <variable description="resultsVar" id="resultsVar" name="resultsVar"/>
+      <variable description="total" id="total" name="total"/>
+      <variable description="totalVar" id="totalVar" name="totalVar"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-row" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-row" label="search-container-row" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-row ${bold}${className}${escapedModel}${indexVar}${keyProperty}${modelVar}${rowVar}${servletContext}${stringKey}&gt;&lt;/liferay-ui:search-container-row&gt;
+      </content>
+      <variable description="bold" id="bold" name="bold"/>
+      <variable description="className" id="className" name="className"/>
+      <variable description="escapedModel" id="escapedModel" name="escapedModel"/>
+      <variable description="indexVar" id="indexVar" name="indexVar"/>
+      <variable description="keyProperty" id="keyProperty" name="keyProperty"/>
+      <variable description="modelVar" id="modelVar" name="modelVar"/>
+      <variable description="rowVar" id="rowVar" name="rowVar"/>
+      <variable description="servletContext" id="servletContext" name="servletContext"/>
+      <variable description="stringKey" id="stringKey" name="stringKey"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-row-parameter" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-row-parameter" label="search-container-row-parameter" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-container-row-parameter ${name}${value}&gt;&lt;/liferay-ui:search-container-row-parameter&gt;
+      </content>
+      <variable description="name" id="name" name="name"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-form" id="com.liferay.ide.eclipse.ui.snippets.item.search-form" label="search-form" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-form ${page}${searchContainer}${servletContext}${showAddButton}&gt;&lt;/liferay-ui:search-form&gt;
+      </content>
+      <variable description="page" id="page" name="page"/>
+      <variable description="searchContainer" id="searchContainer" name="searchContainer"/>
+      <variable description="servletContext" id="servletContext" name="servletContext"/>
+      <variable description="showAddButton" id="showAddButton" name="showAddButton"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-iterator" id="com.liferay.ide.eclipse.ui.snippets.item.search-iterator" label="search-iterator" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-iterator ${paginate}${searchContainer}${type}&gt;&lt;/liferay-ui:search-iterator&gt;
+      </content>
+      <variable description="paginate" id="paginate" name="paginate"/>
+      <variable description="searchContainer" id="searchContainer" name="searchContainer"/>
+      <variable description="type" id="type" name="type"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-paginator" id="com.liferay.ide.eclipse.ui.snippets.item.search-paginator" label="search-paginator" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-paginator ${searchContainer}${type}&gt;&lt;/liferay-ui:search-paginator&gt;
+      </content>
+      <variable description="searchContainer" id="searchContainer" name="searchContainer"/>
+      <variable description="type" id="type" name="type"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-speed" id="com.liferay.ide.eclipse.ui.snippets.item.search-speed" label="search-speed" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-speed ${hits}${searchContainer}&gt;&lt;/liferay-ui:search-speed&gt;
+      </content>
+      <variable description="hits" id="hits" name="hits"/>
+      <variable description="searchContainer" id="searchContainer" name="searchContainer"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-toggle" id="com.liferay.ide.eclipse.ui.snippets.item.search-toggle" label="search-toggle" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:search-toggle ${buttonLabel}${displayTerms}${id}&gt;&lt;/liferay-ui:search-toggle&gt;
+      </content>
+      <variable description="buttonLabel" id="buttonLabel" name="buttonLabel"/>
+      <variable description="displayTerms" id="displayTerms" name="displayTerms"/>
+      <variable description="id" id="id" name="id"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="section" id="com.liferay.ide.eclipse.ui.snippets.item.section" label="section" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:section &gt;&lt;/liferay-ui:section&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="social-activities" id="com.liferay.ide.eclipse.ui.snippets.item.social-activities" label="social-activities" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:social-activities ${activities}${className}${classPK}${feedEnabled}${feedLink}${feedLinkMessage}${feedTitle}&gt;&lt;/liferay-ui:social-activities&gt;
+      </content>
+      <variable description="activities" id="activities" name="activities"/>
+      <variable description="className" id="className" name="className"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="feedEnabled" id="feedEnabled" name="feedEnabled"/>
+      <variable description="feedLink" id="feedLink" name="feedLink"/>
+      <variable description="feedLinkMessage" id="feedLinkMessage" name="feedLinkMessage"/>
+      <variable description="feedTitle" id="feedTitle" name="feedTitle"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="social-bookmark" id="com.liferay.ide.eclipse.ui.snippets.item.social-bookmark" label="social-bookmark" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:social-bookmark ${target}${title}${type}${url}&gt;&lt;/liferay-ui:social-bookmark&gt;
+      </content>
+      <variable description="target" id="target" name="target"/>
+      <variable description="title" id="title" name="title"/>
+      <variable description="type" id="type" name="type"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="social-bookmarks" id="com.liferay.ide.eclipse.ui.snippets.item.social-bookmarks" label="social-bookmarks" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:social-bookmarks ${target}${title}${types}${url}&gt;&lt;/liferay-ui:social-bookmarks&gt;
+      </content>
+      <variable description="target" id="target" name="target"/>
+      <variable description="title" id="title" name="title"/>
+      <variable description="types" id="types" name="types"/>
+      <variable description="url" id="url" name="url"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="staging" id="com.liferay.ide.eclipse.ui.snippets.item.staging" label="staging" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:staging &gt;&lt;/liferay-ui:staging&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="success" id="com.liferay.ide.eclipse.ui.snippets.item.success" label="success" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:success ${key}${message}${translateMessage}&gt;&lt;/liferay-ui:success&gt;
+      </content>
+      <variable description="key" id="key" name="key"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="translateMessage" id="translateMessage" name="translateMessage"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="table-iterator" id="com.liferay.ide.eclipse.ui.snippets.item.table-iterator" label="table-iterator" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:table-iterator ${bodyPage}${list}${listType}${rowBreak}${rowLength}${rowPadding}${rowValign}${width}&gt;&lt;/liferay-ui:table-iterator&gt;
+      </content>
+      <variable description="bodyPage" id="bodyPage" name="bodyPage"/>
+      <variable description="list" id="list" name="list"/>
+      <variable description="listType" id="listType" name="listType"/>
+      <variable description="rowBreak" id="rowBreak" name="rowBreak"/>
+      <variable description="rowLength" id="rowLength" name="rowLength"/>
+      <variable description="rowPadding" id="rowPadding" name="rowPadding"/>
+      <variable description="rowValign" id="rowValign" name="rowValign"/>
+      <variable description="width" id="width" name="width"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="tabs" id="com.liferay.ide.eclipse.ui.snippets.item.tabs" label="tabs" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:tabs ${backLabel}${backURL}${formName}${names}${onClick}${param}${portletURL}${refresh}${tabsValues}${url}${url0}${url1}${url2}${url3}${url4}${url5}${url6}${url7}${url8}${url9}${value}&gt;&lt;/liferay-ui:tabs&gt;
+      </content>
+      <variable description="backLabel" id="backLabel" name="backLabel"/>
+      <variable description="backURL" id="backURL" name="backURL"/>
+      <variable description="formName" id="formName" name="formName"/>
+      <variable description="names" id="names" name="names"/>
+      <variable description="onClick" id="onClick" name="onClick"/>
+      <variable description="param" id="param" name="param"/>
+      <variable description="portletURL" id="portletURL" name="portletURL"/>
+      <variable description="refresh" id="refresh" name="refresh"/>
+      <variable description="tabsValues" id="tabsValues" name="tabsValues"/>
+      <variable description="url" id="url" name="url"/>
+      <variable description="url0" id="url0" name="url0"/>
+      <variable description="url1" id="url1" name="url1"/>
+      <variable description="url2" id="url2" name="url2"/>
+      <variable description="url3" id="url3" name="url3"/>
+      <variable description="url4" id="url4" name="url4"/>
+      <variable description="url5" id="url5" name="url5"/>
+      <variable description="url6" id="url6" name="url6"/>
+      <variable description="url7" id="url7" name="url7"/>
+      <variable description="url8" id="url8" name="url8"/>
+      <variable description="url9" id="url9" name="url9"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="toggle" id="com.liferay.ide.eclipse.ui.snippets.item.toggle" label="toggle" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:toggle ${defaultShowContent}${hideImage}${hideMessage}${id}${showImage}${showMessage}${stateVar}&gt;&lt;/liferay-ui:toggle&gt;
+      </content>
+      <variable description="defaultShowContent" id="defaultShowContent" name="defaultShowContent"/>
+      <variable description="hideImage" id="hideImage" name="hideImage"/>
+      <variable description="hideMessage" id="hideMessage" name="hideMessage"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="showImage" id="showImage" name="showImage"/>
+      <variable description="showMessage" id="showMessage" name="showMessage"/>
+      <variable description="stateVar" id="stateVar" name="stateVar"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="toggle-area" id="com.liferay.ide.eclipse.ui.snippets.item.toggle-area" label="toggle-area" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:toggle-area ${align}${defaultShowContent}${hideImage}${hideMessage}${id}${showImage}${showMessage}${stateVar}&gt;&lt;/liferay-ui:toggle-area&gt;
+      </content>
+      <variable description="align" id="align" name="align"/>
+      <variable description="defaultShowContent" id="defaultShowContent" name="defaultShowContent"/>
+      <variable description="hideImage" id="hideImage" name="hideImage"/>
+      <variable description="hideMessage" id="hideMessage" name="hideMessage"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="showImage" id="showImage" name="showImage"/>
+      <variable description="showMessage" id="showMessage" name="showMessage"/>
+      <variable description="stateVar" id="stateVar" name="stateVar"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="toggle-value" id="com.liferay.ide.eclipse.ui.snippets.item.toggle-value" label="toggle-value" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:toggle-value ${id}&gt;&lt;/liferay-ui:toggle-value&gt;
+      </content>
+      <variable description="id" id="id" name="id"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="upload-progress" id="com.liferay.ide.eclipse.ui.snippets.item.upload-progress" label="upload-progress" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:upload-progress ${id}${iframeSrc}${message}${redirect}&gt;&lt;/liferay-ui:upload-progress&gt;
+      </content>
+      <variable description="id" id="id" name="id"/>
+      <variable description="iframeSrc" id="iframeSrc" name="iframeSrc"/>
+      <variable description="message" id="message" name="message"/>
+      <variable description="redirect" id="redirect" name="redirect"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="user-display" id="com.liferay.ide.eclipse.ui.snippets.item.user-display" label="user-display" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:user-display ${displayStyle}${url}${userId}${userName}&gt;&lt;/liferay-ui:user-display&gt;
+      </content>
+      <variable description="displayStyle" id="displayStyle" name="displayStyle"/>
+      <variable description="url" id="url" name="url"/>
+      <variable description="userId" id="userId" name="userId"/>
+      <variable description="userName" id="userName" name="userName"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="user-search" id="com.liferay.ide.eclipse.ui.snippets.item.user-search" label="user-search" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:user-search ${portletURL}${rowChecker}${userParams}&gt;&lt;/liferay-ui:user-search&gt;
+      </content>
+      <variable description="portletURL" id="portletURL" name="portletURL"/>
+      <variable description="rowChecker" id="rowChecker" name="rowChecker"/>
+      <variable description="userParams" id="userParams" name="userParams"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="webdav" id="com.liferay.ide.eclipse.ui.snippets.item.webdav" label="webdav" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:webdav ${path}&gt;&lt;/liferay-ui:webdav&gt;
+      </content>
+      <variable description="path" id="path" name="path"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="write" id="com.liferay.ide.eclipse.ui.snippets.item.write" label="write" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;liferay-ui:write ${bean}${property}&gt;&lt;/liferay-ui:write&gt;
+      </content>
+      <variable description="bean" id="bean" name="bean"/>
+      <variable description="property" id="property" name="property"/>
+    </item>
+  </category>
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay AUI Taglib Description" id="com.liferay.ide.eclipse.ui.snippets.category.aui" label="Liferay AUI Taglib" smallicon="icons/snippets/portlet_tld.png">
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="a" id="com.liferay.ide.eclipse.ui.snippets.item.a" label="a" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:a ${cssClass}${href}${id}${label}${lang}${target}&gt;&lt;/aui:a&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="href" id="href" name="href"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="lang" id="lang" name="lang"/>
+      <variable description="target" id="target" name="target"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="button" id="com.liferay.ide.eclipse.ui.snippets.item.button" label="button" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:button ${cssClass}${data}${disabled}${inputCssClass}${name}${onClick}${type}${value}&gt;&lt;/aui:button&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="data" id="data" name="data"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="inputCssClass" id="inputCssClass" name="inputCssClass"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="onClick" id="onClick" name="onClick"/>
+      <variable description="type" id="type" name="type"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="button-row" id="com.liferay.ide.eclipse.ui.snippets.item.button-row" label="button-row" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:button-row ${cssClass}&gt;&lt;/aui:button-row&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="column" id="com.liferay.ide.eclipse.ui.snippets.item.column" label="column" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:column ${cssClass}${columnWidth}${first}${last}&gt;&lt;/aui:column&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="columnWidth" id="columnWidth" name="columnWidth"/>
+      <variable description="first" id="first" name="first"/>
+      <variable description="last" id="last" name="last"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="field-wrapper" id="com.liferay.ide.eclipse.ui.snippets.item.field-wrapper" label="field-wrapper" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:field-wrapper ${cssClass}${first}${helpMessage}${inlineField}${inlineLabel}${label}${last}${name}&gt;&lt;/aui:field-wrapper&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="first" id="first" name="first"/>
+      <variable description="helpMessage" id="helpMessage" name="helpMessage"/>
+      <variable description="inlineField" id="inlineField" name="inlineField"/>
+      <variable description="inlineLabel" id="inlineLabel" name="inlineLabel"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="last" id="last" name="last"/>
+      <variable description="name" id="name" name="name"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="fieldset" id="com.liferay.ide.eclipse.ui.snippets.item.fieldset" label="fieldset" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:fieldset ${column}${cssClass}${label}&gt;&lt;/aui:fieldset&gt;
+      </content>
+      <variable description="column" id="column" name="column"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="label" id="label" name="label"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="form" id="com.liferay.ide.eclipse.ui.snippets.item.form" label="form" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:form ${action}${cssClass}${escapeXml}${inlineLabels}${name}${onSubmit}${useNamespace}&gt;&lt;/aui:form&gt;
+      </content>
+      <variable description="action" id="action" name="action"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="escapeXml" id="escapeXml" name="escapeXml"/>
+      <variable description="inlineLabels" id="inlineLabels" name="inlineLabels"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="onSubmit" id="onSubmit" name="onSubmit"/>
+      <variable description="useNamespace" id="useNamespace" name="useNamespace"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input" id="com.liferay.ide.eclipse.ui.snippets.item.input" label="input" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:input ${bean}${changesContext}${checked}${classPK}${cssClass}${data}${disabled}${field}${fieldParam}${first}${helpMessage}${id}${inlineField}${inlineLabel}${inputCssClass}${label}${last}${model}${name}${onChange}${onClick}${prefix}${suffix}${title}${type}${value}&gt;&lt;/aui:input&gt;
+      </content>
+      <variable description="bean" id="bean" name="bean"/>
+      <variable description="changesContext" id="changesContext" name="changesContext"/>
+      <variable description="checked" id="checked" name="checked"/>
+      <variable description="classPK" id="classPK" name="classPK"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="data" id="data" name="data"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="field" id="field" name="field"/>
+      <variable description="fieldParam" id="fieldParam" name="fieldParam"/>
+      <variable description="first" id="first" name="first"/>
+      <variable description="helpMessage" id="helpMessage" name="helpMessage"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="inlineField" id="inlineField" name="inlineField"/>
+      <variable description="inlineLabel" id="inlineLabel" name="inlineLabel"/>
+      <variable description="inputCssClass" id="inputCssClass" name="inputCssClass"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="last" id="last" name="last"/>
+      <variable description="model" id="model" name="model"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="onChange" id="onChange" name="onChange"/>
+      <variable description="onClick" id="onClick" name="onClick"/>
+      <variable description="prefix" id="prefix" name="prefix"/>
+      <variable description="suffix" id="suffix" name="suffix"/>
+      <variable description="title" id="title" name="title"/>
+      <variable description="type" id="type" name="type"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="layout" id="com.liferay.ide.eclipse.ui.snippets.item.layout" label="layout" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:layout ${cssClass}&gt;&lt;/aui:layout&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="legend" id="com.liferay.ide.eclipse.ui.snippets.item.legend" label="legend" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:legend ${cssClass}${label}&gt;&lt;/aui:legend&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="label" id="label" name="label"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="model-context" id="com.liferay.ide.eclipse.ui.snippets.item.model-context" label="model-context" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:model-context ${bean}${model}&gt;&lt;/aui:model-context&gt;
+      </content>
+      <variable description="bean" id="bean" name="bean"/>
+      <variable description="model" id="model" name="model"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="option" id="com.liferay.ide.eclipse.ui.snippets.item.option" label="option" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:option ${cssClass}${label}${selected}${style}${value}&gt;&lt;/aui:option&gt;
+      </content>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="selected" id="selected" name="selected"/>
+      <variable description="style" id="style" name="style"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="panel" id="com.liferay.ide.eclipse.ui.snippets.item.panel" label="panel" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:panel ${collapsible}${id}${label}&gt;&lt;/aui:panel&gt;
+      </content>
+      <variable description="collapsible" id="collapsible" name="collapsible"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="label" id="label" name="label"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="script" id="com.liferay.ide.eclipse.ui.snippets.item.script" label="script" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:script ${position}${use}&gt;&lt;/aui:script&gt;
+      </content>
+      <variable description="position" id="position" name="position"/>
+      <variable description="use" id="use" name="use"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="select" id="com.liferay.ide.eclipse.ui.snippets.item.select" label="select" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:select ${bean}${changesContext}${cssClass}${data}${disabled}${first}${helpMessage}${id}${inlineField}${inlineLabel}${inputCssClass}${label}${last}${listType}${listTypeFieldName}${multiple}${name}${onChange}${onClick}${prefix}${showEmptyOption}${suffix}${title}&gt;&lt;/aui:select&gt;
+      </content>
+      <variable description="bean" id="bean" name="bean"/>
+      <variable description="changesContext" id="changesContext" name="changesContext"/>
+      <variable description="cssClass" id="cssClass" name="cssClass"/>
+      <variable description="data" id="data" name="data"/>
+      <variable description="disabled" id="disabled" name="disabled"/>
+      <variable description="first" id="first" name="first"/>
+      <variable description="helpMessage" id="helpMessage" name="helpMessage"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="inlineField" id="inlineField" name="inlineField"/>
+      <variable description="inlineLabel" id="inlineLabel" name="inlineLabel"/>
+      <variable description="inputCssClass" id="inputCssClass" name="inputCssClass"/>
+      <variable description="label" id="label" name="label"/>
+      <variable description="last" id="last" name="last"/>
+      <variable description="listType" id="listType" name="listType"/>
+      <variable description="listTypeFieldName" id="listTypeFieldName" name="listTypeFieldName"/>
+      <variable description="multiple" id="multiple" name="multiple"/>
+      <variable description="name" id="name" name="name"/>
+      <variable description="onChange" id="onChange" name="onChange"/>
+      <variable description="onClick" id="onClick" name="onClick"/>
+      <variable description="prefix" id="prefix" name="prefix"/>
+      <variable description="showEmptyOption" id="showEmptyOption" name="showEmptyOption"/>
+      <variable description="suffix" id="suffix" name="suffix"/>
+      <variable description="title" id="title" name="title"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="tool" id="com.liferay.ide.eclipse.ui.snippets.item.tool" label="tool" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:tool ${handler}${icon}${id}&gt;&lt;/aui:tool&gt;
+      </content>
+      <variable description="handler" id="handler" name="handler"/>
+      <variable description="icon" id="icon" name="icon"/>
+      <variable description="id" id="id" name="id"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="workflow-status" id="com.liferay.ide.eclipse.ui.snippets.item.workflow-status" label="workflow-status" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;aui:workflow-status ${bean}${id}${model}${status}${version}&gt;&lt;/aui:workflow-status&gt;
+      </content>
+      <variable description="bean" id="bean" name="bean"/>
+      <variable description="id" id="id" name="id"/>
+      <variable description="model" id="model" name="model"/>
+      <variable description="status" id="status" name="status"/>
+      <variable description="version" id="version" name="version"/>
+    </item>
+  </category>
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay Theme Taglib Description" id="com.liferay.ide.eclipse.ui.snippets.category.theme" label="Liferay Theme Taglib" smallicon="icons/snippets/portlet_tld.png">
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="defineObjects" id="com.liferay.ide.eclipse.ui.snippets.item.defineObjects" label="defineObjects" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;theme:defineObjects &gt;&lt;/theme:defineObjects&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="include" id="com.liferay.ide.eclipse.ui.snippets.item.include" label="include" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;theme:include ${page}&gt;&lt;/theme:include&gt;
+      </content>
+      <variable description="page" id="page" name="page"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="layout-icon" id="com.liferay.ide.eclipse.ui.snippets.item.layout-icon" label="layout-icon" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;theme:layout-icon ${layout}&gt;&lt;/theme:layout-icon&gt;
+      </content>
+      <variable description="layout" id="layout" name="layout"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="meta-tags" id="com.liferay.ide.eclipse.ui.snippets.item.meta-tags" label="meta-tags" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;theme:meta-tags &gt;&lt;/theme:meta-tags&gt;
+      </content>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="param" id="com.liferay.ide.eclipse.ui.snippets.item.param" label="param" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;theme:param ${name}${value}&gt;&lt;/theme:param&gt;
+      </content>
+      <variable description="name" id="name" name="name"/>
+      <variable description="value" id="value" name="value"/>
+    </item>
+    <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="wrap-portlet" id="com.liferay.ide.eclipse.ui.snippets.item.wrap-portlet" label="wrap-portlet" smallicon="icons/snippets/tag-generic.gif">
+      <content>
+        &lt;theme:wrap-portlet ${page}&gt;&lt;/theme:wrap-portlet&gt;
+      </content>
+      <variable description="page" id="page" name="page"/>
+    </item>
+  </category>
+</extension>
+
+
+</plugin>
