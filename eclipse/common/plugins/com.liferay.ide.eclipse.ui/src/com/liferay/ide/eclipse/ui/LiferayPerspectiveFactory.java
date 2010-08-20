@@ -76,12 +76,13 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		}
 	}
 
-	private void addTLViewIfPresent(IPageLayout layout, String topLeft) {
+	private void addTLViewIfPresent(IFolderLayout layout, String ref) {
 		IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
 
 		if (tlView != null) {
-			IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7f, topLeft);
-			bottomTopLeft.addView(ID_TASKLIST_VIEW);
+			layout.addView(ID_TASKLIST_VIEW);
+			// IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7f, ref);
+			// bottomTopLeft.addView(ID_TASKLIST_VIEW);
 		}
 	}
 
@@ -139,20 +140,25 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		topLeft.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
 		topLeft.addPlaceholder(JavaUI.ID_PACKAGES_VIEW);
 
-		addTLViewIfPresent(layout, "topLeft");
-
 		// Top right.
-		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.7f, editorArea);//$NON-NLS-1$
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.75f, editorArea);//$NON-NLS-1$
 		topRight.addView(IPageLayout.ID_OUTLINE);
+		topRight.addView(ID_WST_SNIPPETS_VIEW);
+
 		topRight.addPlaceholder(IPageLayout.ID_BOOKMARKS);
 
 		IFolderLayout topRightBottom = layout.createFolder("topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight");
+		IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
+		if (tlView != null) {
+			topRightBottom.addView(ID_TASKLIST_VIEW);
+		}
 		topRightBottom.addView(IPageLayout.ID_PROP_SHEET);
-		// Bottom top right
 
-		// Left Top right.
-		//		IFolderLayout leftTopRight = layout.createFolder("leftTopRight", IPageLayout.LEFT, 0.5f, "topRight");//$NON-NLS-1$
-		// leftTopRight.addView(ID_WST_SNIPPETS_VIEW);
+		IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft");
+
+		bottomTopLeft.addView(ID_SERVERS_VIEW);
+
+		bottomTopLeft.addView(ID_WST_SNIPPETS_VIEW);
 
 		// Bottom
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7f, editorArea);//$NON-NLS-1$
@@ -160,7 +166,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		
 		addDBViewIfPresent(layout, bottom);
 		
-		bottom.addView(ID_SERVERS_VIEW);
+
 
 		bottom.addPlaceholder(IPageLayout.ID_PROBLEM_VIEW);
 		bottom.addPlaceholder(ID_CONSOLE_VIEW);
