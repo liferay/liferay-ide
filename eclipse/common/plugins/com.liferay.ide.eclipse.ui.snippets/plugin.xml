@@ -3,7 +3,7 @@
 <plugin>
 
 <extension point="org.eclipse.wst.common.snippets.SnippetContributions">
-  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Portlet Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.portlet" label="Portlet Taglib" smallicon="icons/snippets/portlet_tld.png">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Portlet Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.portlet" label="Portlet Taglib" smallicon="icons/snippets/portlet_tld_16x16.png" largeicon="icons/snippets/portlet_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="actionURL" id="com.liferay.ide.eclipse.ui.snippets.item.actionURL" label="actionURL" smallicon="icons/snippets/tag-generic.gif">
       <content>
         &lt;portlet:actionURL${copyCurrentRenderParameters}${escapeXml}${name}${portletMode}${secure}${var}${windowState}&gt;&lt;/portlet:actionURL&gt;
@@ -62,7 +62,7 @@
       <variable description="var" id="var" name="var"/>
     </item>
   </category>
-  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay Portlet Ext Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-portlet" label="Liferay Portlet Ext Taglib" smallicon="icons/snippets/portlet_tld.png">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay Portlet Ext Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-portlet" label="Liferay Portlet Ext Taglib" smallicon="icons/snippets/portlet_ext_tld_16x16.png" largeicon="icons/snippets/portlet_ext_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="actionURL" id="com.liferay.ide.eclipse.ui.snippets.item.actionURL" label="actionURL" smallicon="icons/snippets/tag-generic.gif">
       <content>
         &lt;liferay-portlet:actionURL${anchor}${copyCurrentRenderParameters}${doAsUserId}${encrypt}${escapeXml}${name}${plid}${portletConfiguration}${portletMode}${portletName}${secure}${var}${varImpl}${windowState}&gt;&lt;/liferay-portlet:actionURL&gt;
@@ -225,7 +225,7 @@
       <variable description="queryString" id="queryString" name="queryString"/>
     </item>
   </category>
-  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-ui" label="Lifeary UI Taglib" smallicon="icons/snippets/portlet_tld.png">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-ui" label="Lifeary UI Taglib" smallicon="icons/snippets/liferay_ui_tld_16x16.png" largeicon="icons/snippets/liferay_ui_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-categories-navigation" id="com.liferay.ide.eclipse.ui.snippets.item.asset-categories-navigation" label="asset-categories-navigation" smallicon="icons/snippets/tag-generic.gif">
       <content>
         &lt;liferay-ui:asset-categories-navigation${hidePortletWhenEmpty}${vocabularyIds}&gt;&lt;/liferay-ui:asset-categories-navigation&gt;
@@ -1119,7 +1119,7 @@
       <variable description="property" id="property" name="property"/>
     </item>
   </category>
-  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay AUI Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.aui" label="Liferay AUI Taglib" smallicon="icons/snippets/portlet_tld.png">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay AUI Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.aui" label="Liferay AUI Taglib" smallicon="icons/snippets/liferay_aui_tld_16x16.png" largeicon="icons/snippets/liferay_aui_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="a" id="com.liferay.ide.eclipse.ui.snippets.item.a" label="a" smallicon="icons/snippets/tag-generic.gif">
       <content>
         &lt;aui:a${cssClass}${href}${id}${label}${lang}${target}&gt;&lt;/aui:a&gt;
@@ -1315,7 +1315,7 @@
       <variable description="version" id="version" name="version"/>
     </item>
   </category>
-  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay Theme Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.theme" label="Liferay Theme Taglib" smallicon="icons/snippets/portlet_tld.png">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay Theme Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.theme" label="Liferay Theme Taglib" smallicon="icons/snippets/liferay_theme_tld_16x16.png" largeicon="icons/snippets/liferay_theme_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="defineObjects" id="com.liferay.ide.eclipse.ui.snippets.item.defineObjects" label="defineObjects" smallicon="icons/snippets/tag-generic.gif">
       <content>
         &lt;theme:defineObjects&gt;&lt;/theme:defineObjects&gt;
@@ -1352,7 +1352,7 @@
       <variable description="page" id="page" name="page"/>
     </item>
   </category>
-  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Alloy UI Component Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.alloy" label="Alloy UI Component Taglib" smallicon="icons/snippets/portlet_tld.png">
+  <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Alloy UI Component Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.alloy" label="Alloy UI Component Taglib" smallicon="icons/snippets/alloy_tld_16x16.png" largeicon="icons/snippets/alloy_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="createConfig" id="com.liferay.ide.eclipse.ui.snippets.item.createConfig" label="createConfig" smallicon="icons/snippets/tag-generic.gif">
       <content>
         &lt;alloy:createConfig${var}${excludeAttributes}${javaScriptAttributes}${tagDynamicAttributes}${tagScopedAttributes}${tagPageContext}&gt;&lt;/alloy:createConfig&gt;

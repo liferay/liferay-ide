@@ -43,32 +43,38 @@ def mappings = [
 			aui : [
 				desc : "Liferay AUI Taglib",
 				label : "Liferay AUI Taglib",
-				icon : "portlet_tld.png",
+				icon16 : "liferay_aui_tld_16x16.png",
+				icon32 : "liferay_aui_tld_32x32.png",
 			],
 			"liferay-portlet" : [
 				desc : "Liferay Portlet Ext Taglib",
 				label : "Liferay Portlet Ext Taglib",
-				icon : "portlet_tld.png",
+				icon16 : "portlet_ext_tld_16x16.png",
+				icon32 : "portlet_ext_tld_32x32.png",
 			],
 			portlet : [
 				desc : "Portlet Taglib",
 				label : "Portlet Taglib",
-				icon : "portlet_tld.png",
+				icon16 : "portlet_tld_16x16.png",
+				icon32 : "portlet_tld_32x32.png",
 			],
 			theme : [
 				desc : "Liferay Theme Taglib",
 				label : "Liferay Theme Taglib",
-				icon : "portlet_tld.png",
+				icon16 : "liferay_theme_tld_16x16.png",
+				icon32 : "liferay_theme_tld_32x32.png",
 			],
 			"liferay-ui" : [
 				desc : "Liferay UI Taglib",
 				label : "Lifeary UI Taglib",
-				icon : "portlet_tld.png",
+				icon16 : "liferay_ui_tld_16x16.png",
+				icon32 : "liferay_ui_tld_32x32.png",
 			],
 			alloy : [
 				desc : "Alloy UI Component Taglib",
 				label : "Alloy UI Component Taglib",
-				icon : "portlet_tld.png",
+				icon16 : "alloy_tld_16x16.png",
+				icon32 : "alloy_tld_32x32.png",
 			]
 		]
 
@@ -106,7 +112,8 @@ tldFiles.each {
 				description : mappings[name]["desc"],
 				id : "${categoryIdPrefix}.${name}",
 				label : mappings[name]["label"],
-				smallicon : "${iconPrefix}/${mappings[name]['icon']}",
+				smallicon : "${iconPrefix}/${mappings[name]['icon16']}",
+				largeicon : "${iconPrefix}/${mappings[name]['icon32']}",
 			]
 	
 	def categoryNode = extensionNode.appendNode("category", categoryAttrs)
