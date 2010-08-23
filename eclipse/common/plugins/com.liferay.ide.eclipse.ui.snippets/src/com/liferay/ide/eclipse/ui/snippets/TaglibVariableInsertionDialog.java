@@ -21,6 +21,22 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 	}
 
 	@Override
+	protected Control createDialogArea(Composite parent) {
+		Control control = super.createDialogArea(parent);
+
+		if (control instanceof Composite) {
+			Composite composite = (Composite) control;
+			replaceUIText(composite, "variable", "attribute");
+			replaceUIText(composite, "Variable", "Attribute");
+		}
+
+		fTableViewer.getTable().getColumns()[0].setText("Attribute Name");
+		fTableViewer.getTable().redraw();
+
+		return control;
+	}
+
+	@Override
 	protected void prepareText() {
 		// this could be horribly inefficient
 		String text = fItem.getContentString();
@@ -29,7 +45,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 			String value = (String) fTableViewer.getColumnData()[1].get(((SnippetVariable) variables[i]).getId());
 
 			if (!CoreUtil.isNullOrEmpty(value)) {
-				value = variables[i].getName() + "=\"" + value + "\" ";
+				value = " " + variables[i].getName() + "=\"" + value + "\"";
 			}
 
 			text = StringUtils.replace(text, "${" + variables[i].getName() + "}", value); //$NON-NLS-1$ //$NON-NLS-2$
@@ -47,22 +63,6 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 		}
 
 		setPreparedText(text);
-	}
-
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		Control control = super.createDialogArea(parent);
-
-		if (control instanceof Composite) {
-			Composite composite = (Composite) control;
-			replaceUIText(composite, "variable", "attribute");
-			replaceUIText(composite, "Variable", "Attribute");
-		}
-
-		fTableViewer.getTable().getColumns()[0].setText("Attribute Name");
-		fTableViewer.getTable().redraw();
-
-		return control;
 	}
 
 	protected void replaceUIText(Composite parent, String search, String replace) {

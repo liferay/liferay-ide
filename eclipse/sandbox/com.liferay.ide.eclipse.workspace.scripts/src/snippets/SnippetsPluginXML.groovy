@@ -135,7 +135,7 @@ tldFiles.each {
 			writer << '${' + attr + '}' 
 		}
 		
-		def contentBody = "<${name}:${itemName} ${ writer -> tagAttrs.each { appendAttr(writer, it) }}></${name}:${itemName}>"
+		def contentBody = "<${name}:${itemName}${ writer -> tagAttrs.each { appendAttr(writer, it) }}></${name}:${itemName}>"
 		
 		itemNode.appendNode("content", contentBody)
 		

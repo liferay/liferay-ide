@@ -33,34 +33,35 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
 
-	protected static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
+	public static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
 	
-	protected static final String ID_DATA_VIEW = "org.eclipse.datatools.connectivity.DataSourceExplorerNavigator"; //$NON-NLS-1$
+	public static final String ID_DATA_VIEW = "org.eclipse.datatools.connectivity.DataSourceExplorerNavigator"; //$NON-NLS-1$
 
-	protected static String ID_J2EE_HIERARCHY_VIEW = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
+	public static final String ID_J2EE_HIERARCHY_VIEW = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
 
-	protected static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView";
+	public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView";
 
-	protected static String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
+	public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
 	
-	protected static String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
+	public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
 		"com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate";
 
-	protected static String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.eclipse.project.ui.newProjectWizard";
+	public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.eclipse.project.ui.newProjectWizard";
 
-	protected static String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
+	public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
 
-	protected static String ID_NEW_SERVICE_BUILDER_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder";
+	public static final String ID_NEW_SERVICE_BUILDER_WIZARD =
+		"com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder";
 
-	protected static String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
+	public static final String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
 
-	protected static final String ID_SEARCH_VIEW = "org.eclipse.search.ui.views.SearchView"; //$NON-NLS-1$
+	public static final String ID_SEARCH_VIEW = "org.eclipse.search.ui.views.SearchView"; //$NON-NLS-1$
 
-	protected static String ID_SERVERS_VIEW = "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
+	public static final String ID_SERVERS_VIEW = "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
 
-	protected static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks";
+	public static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks";
 	
-	protected static String ID_WST_SNIPPETS_VIEW = "org.eclipse.wst.common.snippets.internal.ui.SnippetsView"; //$NON-NLS-1$	
+	public static final String ID_WST_SNIPPETS_VIEW = "org.eclipse.wst.common.snippets.internal.ui.SnippetsView"; //$NON-NLS-1$	
 
 	public void createInitialLayout(IPageLayout layout) {
 		createLayout(layout);
