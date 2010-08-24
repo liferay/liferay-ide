@@ -44,6 +44,7 @@ public class SDKsPreferencePage extends LiferayUIPreferencePage implements IWork
 
 	@Override
 	public void init(IWorkbench workbench) {
+		noDefaultAndApplyButton();
 	}
 
 	@Override
