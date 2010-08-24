@@ -134,12 +134,12 @@ tldFiles.each {
 		def tagAttrs = []		
 	
 		it.attribute.findAll {
-			tagAttrs << it.name.text()
+			tagAttrs << [name : it.name.text(), desc : it.description?.text()]
 		}
 		
 		def appendAttr = {
 			writer, attr ->
-			writer << '${' + attr + '}' 
+			writer << '${' + attr.name + '}' 
 		}
 		
 		def contentBody = "<${name}:${itemName}${ writer -> tagAttrs.each { appendAttr(writer, it) }}></${name}:${itemName}>"
@@ -148,9 +148,9 @@ tldFiles.each {
 		
 		tagAttrs.each {
 			itemNode.appendNode "variable", [
-				description : it,
-				id : it,
-				name: it,
+				description : it.desc,
+				id : it.name,
+				name: it.name,
 			]
 		}
 		
