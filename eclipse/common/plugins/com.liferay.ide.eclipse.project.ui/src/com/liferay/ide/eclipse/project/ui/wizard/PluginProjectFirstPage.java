@@ -103,7 +103,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 	}
 
 	protected void configureSDKsLinkSelected(SelectionEvent e) {
-		boolean noSDKs = SDKManager.getInstance().getSDKs().length == 0;
+		// boolean noSDKs = SDKManager.getInstance().getSDKs().length == 0;
 
 		int retval = PreferencesUtil.createPreferenceDialogOn(this.getShell(), SDKsPreferencePage.ID, new String[] {
 			SDKsPreferencePage.ID
@@ -111,32 +111,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 		if (retval == Window.OK) {
 			getModel().notifyPropertyChange(LIFERAY_SDK_NAME, IDataModel.VALID_VALUES_CHG);
-
-			if (noSDKs && SDKManager.getInstance().getDefaultSDK() != null &&
-				getModel().getBooleanProperty(LIFERAY_USE_SDK_LOCATION)) {
-				// toggling the location property will get the location field to
-				// update
-				getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, false);
-				getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, true);
-			}
-
-			validatePage(true);
 		}
-
-		// if
-		// (getModel().getProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME).equals(
-		// IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME_DEFAULT_VALUE))
-		// {
-		// no default sdk set, lets set one if it exists
-		// SDK sdk = LiferayCore.getDefaultSDK();
-		// if (sdk != null) {
-		// getModel().setProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME,
-		// sdk.getName());
-		// sdkCombo.setItems(new String[0]);//refreish items
-		// }
-		// }
-		// modelHelper.synchAllUIWithModel();
-		// }
 	}
 
 	protected Group createDefaultGroup(Composite parent, String text, int columns) {
@@ -182,26 +157,37 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 		getModel().addListener(this);
 
-		SWTUtil.createLabel(group, "Liferay Plug-ins SDK", 1);
-
-		Combo sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
-		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-		Link configureSDKsLink = new Link(group, SWT.UNDERLINE_LINK);
-		// Button configureSDKsLink = new Button(group, SWT.PUSH);
-		configureSDKsLink.setText("<a href=\"#\">Configure</a>");
-		// configureSDKsLink.setText("Configure ...");
-		configureSDKsLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-		configureSDKsLink.addSelectionListener(new SelectionAdapter() {
+		SelectionAdapter selectionAdapter = new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				configureSDKsLinkSelected(e);
+
+				if (SDKManager.getInstance().getDefaultSDK() != null &&
+					getModel().getBooleanProperty(LIFERAY_USE_SDK_LOCATION)) {
+					// toggling the location property will get the location field to
+					// update
+					getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, false);
+					getModel().setBooleanProperty(LIFERAY_USE_SDK_LOCATION, true);
+				}
+
+				validatePage(true);
 			}
-		});
-		this.synchHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] {
-			configureSDKsLink
-		});
+		};
+
+		new LiferaySDKField(group, getModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper);
+
+		// SWTUtil.createLabel(group, "Liferay Plug-ins SDK", 1);
+		//
+		// Combo sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
+		// sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		//
+		// Link configureSDKsLink = new Link(group, SWT.UNDERLINE_LINK);
+		// configureSDKsLink.setText("<a href=\"#\">Configure</a>");
+		// configureSDKsLink.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+		// configureSDKsLink.addSelectionListener(selectionAdapter);
+		// this.synchHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] {
+		// configureSDKsLink
+		// });
 
 		SWTUtil.createLabel(group, "Liferay Portal Runtime", 1);
 		serverTargetCombo = new Combo(group, SWT.BORDER | SWT.READ_ONLY);
@@ -454,9 +440,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		createLiferayRuntimeGroup(top);
 
 		// createSDKGroup(top);
-
 		// createServerTargetComposite(top);
-
 		// createPresetPanel(top);
 
 		createPluginTypeGroup(top);
@@ -464,9 +448,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		createImportProjectLink(top);
 
 		updateControls();
-
-		getShell().setImage(
-			ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry("/icons/e16/plugin.png")).createImage());
 
 		return top;
 	}

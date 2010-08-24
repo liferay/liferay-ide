@@ -65,7 +65,7 @@ import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"restriction", "unchecked"
+	"restriction", "unchecked", "rawtypes"
 })
 public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPage
 	implements ISDKProjectsImportDataModelProperties {
@@ -250,12 +250,12 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		if (selectedProjects.length == 0) {
 			setMessage(DataTransferMessages.WizardProjectsImportPage_noProjectsToImport, WARNING);
 		}
-		else {
-			if (!sdkLocation.isDisposed()) {
-				ProjectUIPlugin.getDefault().getPreferenceStore().setValue(
-					ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF, sdkLocation.getText());
-			}
-		}
+		// else {
+		// if (!sdkLocation.isDisposed()) {
+		// ProjectUIPlugin.getDefault().getPreferenceStore().setValue(
+		// ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF, sdkLocation.getText());
+		// }
+		// }
 
 		Object[] checkedProjects = projectsList.getCheckedElements();
 
@@ -267,6 +267,21 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 			}
 			getDataModel().setProperty(SELECTED_PROJECTS, selectedProjects);
 		}
+	}
+
+	protected void createPluginsSDKField(Composite parent) {
+		SelectionAdapter selectionAdapter = new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				SDKProjectsImportWizardPage.this.synchHelper.synchAllUIWithModel();
+				updateProjectsList(getDataModel().getStringProperty(SDK_LOCATION));
+				validatePage(true);
+			}
+
+		};
+
+		new LiferaySDKField(parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper);
 	}
 
 	protected void createProjectsList(Composite workArea) {
@@ -356,16 +371,18 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		sdkLocation = SWTUtil.createText(topComposite, 1);
 		this.synchHelper.synchText(sdkLocation, SDK_LOCATION, null);
 
-		Button iconFileBrowse = SWTUtil.createPushButton(topComposite, "Browse...", null);
-		iconFileBrowse.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "", 1);
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(SDKProjectsImportWizardPage.this.sdkLocation);
-			}
-
-		});
+		// Button iconFileBrowse = SWTUtil.createPushButton(topComposite, "Browse...", null);
+		// iconFileBrowse.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		// iconFileBrowse.addSelectionListener(new SelectionAdapter() {
+		//
+		// @Override
+		// public void widgetSelected(SelectionEvent e) {
+		// handleFileBrowseButton(SDKProjectsImportWizardPage.this.sdkLocation);
+		// }
+		//
+		// });
 	}
 
 	protected void createSDKVersionField(Composite topComposite) {
@@ -511,47 +528,44 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		topComposite.setLayout(gl);
 		topComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 
-		createSDKLocationField(topComposite);
+		createPluginsSDKField(topComposite);
 
+		SWTUtil.createSeparator(topComposite, 3);
+
+		createSDKLocationField(topComposite);
 		createSDKVersionField(topComposite);
 
 		SWTUtil.createVerticalSpacer(topComposite, 1, 3);
 
 		createProjectsList(topComposite);
-
 		createTargetRuntimeGroup(topComposite);
 
 		return topComposite;
 	}
 
-	@Override
-	protected void enter() {
-		super.enter();
-
-		if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
-			updateProjectsList(sdkLocation.getText());
-		}
-		else {
-			String lastLocation =
-				ProjectUIPlugin.getDefault().getPreferenceStore().getString(
-					ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF);
-
-			if (!CoreUtil.isNullOrEmpty(lastLocation)) {
-				sdkLocation.setText(lastLocation);
-
-				updateProjectsList(lastLocation);
-
-				synchHelper.synchAllUIWithModel();
-
-				validatePage();
-			}
-		}
-	}
-
-	@Override
-	protected void exit() {
-
-	}
+	// @Override
+	// protected void enter() {
+	// super.enter();
+	//
+	// if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
+	// updateProjectsList(sdkLocation.getText());
+	// }
+	// else {
+	// String lastLocation =
+	// ProjectUIPlugin.getDefault().getPreferenceStore().getString(
+	// ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF);
+	//
+	// if (!CoreUtil.isNullOrEmpty(lastLocation)) {
+	// sdkLocation.setText(lastLocation);
+	//
+	// updateProjectsList(lastLocation);
+	//
+	// synchHelper.synchAllUIWithModel();
+	//
+	// validatePage();
+	// }
+	// }
+	// }
 
 	protected IProject[] getProjectsInWorkspace() {
 		if (wsProjects == null) {

@@ -22,6 +22,8 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCr
  */
 public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties {
 
+	public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME";
+
 	public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION";
 
 	public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION";

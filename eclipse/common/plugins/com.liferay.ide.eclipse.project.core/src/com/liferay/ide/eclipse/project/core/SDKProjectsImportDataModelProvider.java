@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.project.core;
 
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
+import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
@@ -26,6 +27,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -59,15 +61,21 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		 * ().getPreferenceStore().getString(ProjectCorePlugin
 		 * .LAST_SDK_IMPORT_LOCATION_PREF); } else
 		 */
-		if (SDK_VERSION.equals(propertyName)) {
+		if (SDK_LOCATION.equals(propertyName)) {
+			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
+			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
+
+			if (sdk != null) {
+				return sdk.getLocation().toOSString();
+			}
+		}
+		else if (SDK_VERSION.equals(propertyName)) {
 			// see if we have a sdk location and extract the version
 			String sdkLoc = getStringProperty(SDK_LOCATION);
 
 			try {
 				String sdkVersionValue = SDKUtil.readSDKVersion(sdkLoc);
-
 				Version v = new Version(sdkVersionValue);
-
 				return v.toString();
 			}
 			catch (Exception e) {
@@ -81,11 +89,43 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 	public Set getPropertyNames() {
 		Set propertyNames = super.getPropertyNames();
 
+		propertyNames.add(LIFERAY_SDK_NAME);
 		propertyNames.add(SDK_LOCATION);
 		propertyNames.add(SDK_VERSION);
 		propertyNames.add(SELECTED_PROJECTS);
 
 		return propertyNames;
+	}
+
+	@Override
+	public DataModelPropertyDescriptor[] getValidPropertyDescriptors(String propertyName) {
+		if (LIFERAY_SDK_NAME.equals(propertyName)) {
+			SDK[] validSDKs = SDKManager.getInstance().getSDKs();
+			String[] values = null;
+			String[] descriptions = null;
+
+			if (validSDKs.length == 0) {
+				values = new String[] {
+					IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE
+				};
+				descriptions = new String[] {
+					IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION
+				};
+			}
+			else {
+				values = new String[validSDKs.length];
+				descriptions = new String[validSDKs.length];
+
+				for (int i = 0; i < validSDKs.length; i++) {
+					values[i] = validSDKs[i].getName();
+					descriptions[i] = validSDKs[i].getName();
+				}
+			}
+
+			return DataModelPropertyDescriptor.createDescriptors(values, descriptions);
+		}
+
+		return super.getValidPropertyDescriptors(propertyName);
 	}
 
 	@Override
@@ -117,13 +157,11 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 		if (SDK_VERSION.equals(propertyName)) {
 			return false;
 		}
+		else if (SDK_LOCATION.equals(propertyName)) {
+			return false;
+		}
 
 		return super.isPropertyEnabled(propertyName);
-	}
-
-	@Override
-	public boolean propertySet(String propertyName, Object propertyValue) {
-		return super.propertySet(propertyName, propertyValue);
 	}
 
 	@Override
