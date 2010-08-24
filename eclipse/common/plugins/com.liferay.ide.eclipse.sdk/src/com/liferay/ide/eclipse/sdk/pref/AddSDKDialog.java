@@ -71,15 +71,12 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 	public AddSDKDialog(Shell parent, SDK[] existingSDKs) {
 		super(parent);
-
 		configure(existingSDKs);
 	}
 
 	public AddSDKDialog(Shell shell, SDK[] existingSDKs, SDK sdk) {
 		super(shell);
-
 		this.sdkToEdit = sdk;
-
 		configure(existingSDKs);
 	}
 
@@ -99,31 +96,23 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 			case IStatus.WARNING:
 				setMessage(status.getMessage(), IMessageProvider.WARNING);
-
 				break;
 
 			case IStatus.ERROR:
-
 				setMessage(status.getMessage(), IMessageProvider.ERROR);
-
 				this.getButton(IDialogConstants.OK_ID).setEnabled(false);
-
 				break;
-
 			}
 		}
 		else {
 			this.getButton(IDialogConstants.OK_ID).setEnabled(true);
-
 			setMessage(getDefaultMessage(), IMessageProvider.NONE);
 		}
 	}
 
 	protected void configure(SDK[] existingSdks) {
-		setShellStyle(getShellStyle() | SWT.RESIZE);
-
 		this.existingSDKs = existingSdks;
-
+		setShellStyle(getShellStyle() | SWT.RESIZE);
 		setTitleImage(ImageDescriptor.createFromURL(
 			SDKPlugin.getDefault().getBundle().getEntry("/icons/wizban/sdk_wiz.png")).createImage());
 	}
@@ -226,7 +215,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		if (!CoreUtil.isNullOrEmpty(dir)) {
 			location.setText(dir);
 
-			if (CoreUtil.isNullOrEmpty(name.getText())) {
+			if (SDKUtil.isValidSDKLocation(dir) && CoreUtil.isNullOrEmpty(name.getText())) {
 				IPath path = new Path(dir);
 
 				if (path.isValidPath(dir)) {
