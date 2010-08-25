@@ -34,6 +34,10 @@ import org.eclipse.wst.xml.core.internal.document.NodeImpl;
 import org.eclipse.wst.xml.core.internal.document.TextImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.DocumentType;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -42,6 +46,10 @@ import org.w3c.dom.NodeList;
  */
 @SuppressWarnings("restriction")
 public class ServiceBuilderModel extends AbstractModel implements IServiceBuilderModel, INodeAdapter {
+
+	public static final String LIFERAY_DTD_SERVICE_BUILDER_PUBLIC_ID = "-//Liferay//DTD Service Builder 6.0.0//EN";
+
+	public static final String LIFERAY_DTD_SERVICE_BUILDER_SYSTEM_ID = "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd";
 
 	protected static final long serialVersionUID = 1L;
 
@@ -78,13 +86,17 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public String getAuthor() {
-		NodeList elements = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_AUTHOR);
+		Element rootElement = getDocumentElement();
 
-		if (elements.getLength() > 0) {
-			Node text = elements.item(0).getFirstChild();
+		if (rootElement != null) {
+			NodeList elements = rootElement.getElementsByTagName(IServiceBuilderModel.ELEMENT_AUTHOR);
 
-			if (text != null) {
-				return text.getNodeValue();
+			if (elements.getLength() > 0) {
+				Node text = elements.item(0).getFirstChild();
+
+				if (text != null) {
+					return text.getNodeValue();
+				}
 			}
 		}
 
@@ -92,18 +104,22 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public String getNamespace() {
-		NodeList elements = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_NAMESPACE);
+		Element rootElement = getDocumentElement();
 
-		if (elements.getLength() > 0) {
-			Node text = elements.item(0).getFirstChild();
+		if (rootElement != null) {
+			NodeList elements = rootElement.getElementsByTagName(IServiceBuilderModel.ELEMENT_NAMESPACE);
 
-			if (text instanceof NodeImpl) {
-				((NodeImpl) text).addAdapter(this);
-				namespaceTextNode = text;
-			}
+			if (elements.getLength() > 0) {
+				Node text = elements.item(0).getFirstChild();
 
-			if (text != null) {
-				return text.getNodeValue();
+				if (text instanceof NodeImpl) {
+					((NodeImpl) text).addAdapter(this);
+					namespaceTextNode = text;
+				}
+
+				if (text != null) {
+					return text.getNodeValue();
+				}
 			}
 		}
 
@@ -111,7 +127,14 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public String getPackagePath() {
-		return document.getDocumentElement().getAttribute(IServiceBuilderModel.ATTR_PACKAGE_PATH);
+		Element rootElement = getDocumentElement();
+
+		if (rootElement != null) {
+			return rootElement.getAttribute(IServiceBuilderModel.ATTR_PACKAGE_PATH);
+		}
+		else {
+			return "";
+		}
 	}
 
 	public boolean isAdapterForType(Object type) {
@@ -199,7 +222,8 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 			authorTextNode.setNodeValue(namespace);
 		}
 		else {
-			NodeList namespaces = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_NAMESPACE);
+			Element docElement = getDocumentElement(true);
+			NodeList namespaces = docElement.getElementsByTagName(IServiceBuilderModel.ELEMENT_NAMESPACE);
 
 			Node refChild = null;
 
@@ -208,19 +232,19 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 			}
 
 			if (refChild == null) {
-				NodeList entities = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_ENTITY);
+				NodeList entities = docElement.getElementsByTagName(IServiceBuilderModel.ELEMENT_ENTITY);
 
 				if (entities.getLength() > 0) {
 					refChild = entities.item(0);
 				}
 			}
 
-			Node authorNode = NodeUtil.getFirstNamedChildNode(document.getDocumentElement(), IServiceBuilderModel.ELEMENT_AUTHOR);
+			Node authorNode = NodeUtil.getFirstNamedChildNode(docElement, IServiceBuilderModel.ELEMENT_AUTHOR);
 
 			if (authorNode == null) {
 				authorNode = document.createElement(IServiceBuilderModel.ELEMENT_AUTHOR);
 
-				document.getDocumentElement().insertBefore(authorNode, refChild);
+				docElement.insertBefore(authorNode, refChild);
 			}
 
 			authorTextNode = NodeUtil.setTextContent(authorNode, namespace);
@@ -234,7 +258,7 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 			namespaceTextNode.setNodeValue(namespace);
 		}
 		else {
-			NodeList entities = document.getDocumentElement().getElementsByTagName(IServiceBuilderModel.ELEMENT_ENTITY);
+			NodeList entities = getDocumentElement(true).getElementsByTagName(IServiceBuilderModel.ELEMENT_ENTITY);
 
 			Node refChild = null;
 
@@ -242,12 +266,13 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 				refChild = entities.item(0);
 			}
 
-			Node namespaceNode = NodeUtil.getFirstNamedChildNode(document.getDocumentElement(), IServiceBuilderModel.ELEMENT_NAMESPACE);
+			Node namespaceNode =
+				NodeUtil.getFirstNamedChildNode(getDocumentElement(), IServiceBuilderModel.ELEMENT_NAMESPACE);
 
 			if (namespaceNode == null) {
 				namespaceNode = document.createElement(IServiceBuilderModel.ELEMENT_NAMESPACE);
 
-				document.getDocumentElement().insertBefore(namespaceNode, refChild);
+				getDocumentElement().insertBefore(namespaceNode, refChild);
 			}
 
 			namespaceTextNode = NodeUtil.setTextContent(namespaceNode, namespace);
@@ -257,7 +282,30 @@ public class ServiceBuilderModel extends AbstractModel implements IServiceBuilde
 	}
 
 	public void setPackagePath(String packagePath) {
-		document.getDocumentElement().setAttribute(IServiceBuilderModel.ATTR_PACKAGE_PATH, packagePath);
+		getDocumentElement(true).setAttribute(IServiceBuilderModel.ATTR_PACKAGE_PATH, packagePath);
+	}
+
+	protected Element getDocumentElement() {
+		return getDocumentElement(false);
+	}
+
+	protected Element getDocumentElement(boolean createIfDoesntExist) {
+		Element element = document.getDocumentElement();
+
+		if (element == null && createIfDoesntExist) {
+			DOMImplementation domImpl = document.getImplementation();
+			DocumentType docType =
+				domImpl.createDocumentType(
+					ServiceBuilderContentHandler.SERVICE_BUILDER, LIFERAY_DTD_SERVICE_BUILDER_PUBLIC_ID,
+					LIFERAY_DTD_SERVICE_BUILDER_SYSTEM_ID);
+			document.appendChild(docType);
+
+			element = (Element) document.appendChild(document.createElement("service-builder"));
+			FormatProcessorXML format = new FormatProcessorXML();
+			format.formatNode(element);
+		}
+
+		return element;
 	}
 
 	@Override
