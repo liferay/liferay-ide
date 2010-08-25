@@ -35,6 +35,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -69,6 +71,11 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 @SuppressWarnings("restriction")
 public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties {
+
+	/**
+	 * copied from ProjectFacetPreferencesGroup
+	 */
+	private static final String PATH_IN_PROJECT = ".settings/org.eclipse.wst.common.project.facet.core.prefs.xml";
 
 	protected IDataModel masterModel = null;
 
@@ -211,17 +218,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return ServerUtil.getPortalRoot(serverRuntime);
 	}
 
-	protected String getRuntimeLocation() {
-		try {
-			return ServerUtil.getRuntime(this.project).getLocation().toOSString();
-		}
-		catch (CoreException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
 	// protected void copyTLDsFromPortal() throws CoreException {
 	// IPath portalTLDFolder = getPortalRoot().append("WEB-INF/tld");
 	// IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
@@ -243,6 +239,17 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 	// }
 	// }
 	// }
+
+	protected String getRuntimeLocation() {
+		try {
+			return ServerUtil.getRuntime(this.project).getLocation().toOSString();
+		}
+		catch (CoreException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	protected SDK getSDK() {
 		String sdkName = null;
@@ -299,6 +306,28 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 		LibraryInstallDelegate libraryDelegate =
 			(LibraryInstallDelegate) this.model.getProperty(IPluginProjectDataModelProperties.LIFERAY_PLUGIN_LIBRARY_DELEGATE);
+
+		// IDE-195
+		// If the user has the plug-ins sdk in the workspace, trying to write to the P/foo-portlet/.settings/ will find
+		// the file first in the the plugins-sdk that is in the workspace and will fail to find the file.
+		// lets do a research
+
+		try {
+			final IFile f = this.project.getProject().getFile(PATH_IN_PROJECT);
+			final File file = f.getLocation().toFile();
+			final IWorkspace ws = ResourcesPlugin.getWorkspace();
+			final IWorkspaceRoot wsroot = ws.getRoot();
+			final IPath path = new Path(file.getAbsolutePath());
+			final IFile[] wsFiles = wsroot.findFilesForLocation(path);
+			if (!CoreUtil.isNullOrEmpty(wsFiles)) {
+				for (IFile wsFile : wsFiles) {
+					wsFile.getParent().getParent().refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			}
+		}
+		catch (Exception ex) {
+			// best effort to make sure directories are current
+		}
 
 		libraryDelegate.execute(monitor);
 	}
