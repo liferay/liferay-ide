@@ -111,7 +111,6 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		super(model, pageName);
 
 		setTitle("Import Liferay Projects");
-
 		setDescription("Select a Liferay SDK and import existing projects.");
 	}
 

@@ -48,17 +48,17 @@ public class NewWizardAction extends Action implements Comparable {
 
 	public final static String ATT_NAME = "name";//$NON-NLS-1$
 
+	public final static String ATT_PROJECTTYPE = "project_type";
+
 	public final static String TAG_CLASS = "class"; //$NON-NLS-1$
 
 	public final static String TAG_DESCRIPTION = "description"; //$NON-NLS-1$
 
+	public final static String TAG_NAME = "name";//$NON-NLS-1$
+
 	public final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
 
 	public final static String TAG_VALUE = "value";//$NON-NLS-1$
-
-	protected final static String ATT_PROJECTTYPE = "project_type";
-
-	protected final static String TAG_NAME = "name";//$NON-NLS-1$
 
 	protected IConfigurationElement fConfigurationElement;
 
