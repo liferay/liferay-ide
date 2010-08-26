@@ -14,6 +14,7 @@
    </extension>
  <extension
        point="org.eclipse.ui.editors">
+       <!--
     <editor
           class="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplEditor"
           contributorClass="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplEditorActionBarContributor"
@@ -23,13 +24,15 @@
           id="com.liferay.ide.eclipse.layouttpl.ui.template.editor"
           name="Layout Template Editor">
     </editor>
+    -->
     <editor
           class="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplMultiPageEditor"
           contributorClass="com.liferay.ide.eclipse.layouttpl.ui.editor.LayoutTplMultiPageEditorActionBarContributor"
+          default="true"
           extensions="tpl"
           icon="icons/e16/layout.png"
           id="com.liferay.ide.eclipse.layouttpl.ui.template.multiEditor"
-          name="Layout Template Multipage Editor">
+          name="Layout Template Editor">
     </editor>
  </extension>
  <extension

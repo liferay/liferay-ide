@@ -99,7 +99,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 		throws PartInitException {
 		IEditorPart editor = createVisualEditor();
 		int index = addPage(editor, getEditorInput());
-		setPageText(index, "Visual");
+		setPageText(index, "Visual (Experimental)");
 	}
 
 	protected LayoutTplEditor createVisualEditor() {
