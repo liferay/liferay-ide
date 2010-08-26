@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.ui.snippets.util;
 import com.liferay.ide.eclipse.ui.LiferayPerspectiveFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
@@ -59,8 +58,8 @@ public class SnippetsUtil {
 			return;
 		}
 
-		FileInputStream stream = new FileInputStream(snippetFile);
-		SnippetDefinitions definitions = ModelFactoryForUser.getInstance().load(stream);
+		// FileInputStream stream = new FileInputStream(snippetFile);
+		SnippetDefinitions definitions = ModelFactoryForUser.getInstance().load(snippetFile.getAbsolutePath());
 
 		final List importCategories = definitions.getCategories();
 		final List currentCategories = SnippetManager.getInstance().getDefinitions().getCategories();
