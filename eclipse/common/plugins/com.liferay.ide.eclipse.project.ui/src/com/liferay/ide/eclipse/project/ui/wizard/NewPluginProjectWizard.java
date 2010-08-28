@@ -77,6 +77,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 			if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED)) {
 				IPluginWizardFragment pluginFragment = ProjectUIPlugin.getPluginWizardFragment(getPluginFacetId());
 				IDataModel dm = DataModelFactory.createDataModel(pluginFragment.getDataModelProvider());
+				dm.setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
 				getDataModel().addNestedModel(PLUGIN_FRAGMENT_DM, dm);
 				dm.setProperty(IPluginWizardFragmentProperties.FACET_RUNTIME, getDataModel().getProperty(FACET_RUNTIME));
 				dm.setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, getProjectName());
@@ -274,7 +275,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		// if we have a wizard fragment execute its operation after project is created
 		if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED)) {
 			final IDataModel fragmentModel = getDataModel().getNestedModel(PLUGIN_FRAGMENT_DM);
-			fragmentModel.setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
 			fragmentModel.setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, getProjectName());
 
 			try {
@@ -304,6 +304,16 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	protected void setupWizard() {
 		setWindowTitle("New Liferay Plug-in Project");
 		setShowFacetsSelectionPage(false);
+	}
+
+	@Override
+	public boolean canFinish() {
+		if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED) &&
+			getContainer().getCurrentPage().equals(firstPage)) {
+			return false;
+		}
+
+		return super.canFinish();
 	}
 
 }
