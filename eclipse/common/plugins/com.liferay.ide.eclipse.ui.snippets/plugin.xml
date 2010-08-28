@@ -5365,8 +5365,8 @@ has been through the init lifecycle phase." id="initialized" name="initialized"/
             smallicon="icons/snippets/search.png">
          <item
                class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion"
-               id="com.liferay.ide.eclipse.ui.snippets.item.basic_model_search_container"
-               label="Basic Model Search Container"
+               id="com.liferay.ide.eclipse.ui.snippets.item.portal_model_search_container"
+               label="Portal Model Search Container"
                smallicon="icons/snippets/tag-generic.gif">
             <content>
                &lt;liferay-ui:search-container&gt;
@@ -5380,8 +5380,7 @@ has been through the init lifecycle phase." id="initialized" name="initialized"/
 		modelVar=&quot;${varName}&quot;
 	&gt;
 	
-
-
+		${columns}
 	&lt;/liferay-ui:search-container-row&gt;
 
 	&lt;liferay-ui:search-iterator /&gt;

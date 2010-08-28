@@ -1,4 +1,7 @@
+
 package com.liferay.ide.eclipse.ui.snippets;
+
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -10,28 +13,12 @@ import org.eclipse.wst.common.snippets.internal.ui.EntrySerializer;
 import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 import org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion;
 
-
 @SuppressWarnings("restriction")
 public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 
 	protected IEditorPart fEditorPart;
 
 	protected ISnippetItem fItem;
-
-	protected abstract String getResolvedString(Shell host);
-
-	/**
-	 * Copied from DefaultSnippetInsertion.getInsertString() version 1.7 (WTP 3.2.1)
-	 */
-	@Override
-	protected String getInsertString(Shell host) {
-		if (fItem == null)
-			return ""; //$NON-NLS-1$
-
-		String insertString = getResolvedString(host);
-
-		return insertString;
-	}
 
 	/**
 	 * Copied from DefaultSnippetInsertion.dragSetData() version 1.7 (WTP 3.2.1)
@@ -52,6 +39,10 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			}
 
 			String content = getResolvedString(shell);
+
+			if (CoreUtil.isNullOrEmpty(content)) {
+				event.dataType = null;
+			}
 
 			// Update EOLs (bug 80231)
 			String systemEOL = System.getProperty("line.separator"); //$NON-NLS-1$
@@ -82,5 +73,20 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 		super.setItem(item);
 		this.fItem = item;
 	}
+
+	/**
+	 * Copied from DefaultSnippetInsertion.getInsertString() version 1.7 (WTP 3.2.1)
+	 */
+	@Override
+	protected String getInsertString(Shell host) {
+		if (fItem == null)
+			return ""; //$NON-NLS-1$
+
+		String insertString = getResolvedString(host);
+
+		return insertString;
+	}
+
+	protected abstract String getResolvedString(Shell host);
 
 }
