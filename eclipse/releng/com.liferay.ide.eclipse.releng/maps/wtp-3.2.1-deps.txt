@@ -54,3 +54,16 @@ org.eclipse.wst.xml.ui
 org.eclipse.wst.xsd.ui
 org.eclipse.wst.xsl.core
 org.eclipse.wst.xsl.uiorg.eclipse.wst.common.snippets
+
+org.eclipse.jst.jsf.core
+org.eclipse.jst.jsf.ui
+org.eclipse.jst.jsf.facelet.core
+org.eclipse.jst.jsf.facelet.ui
+
+org.eclipse.jst.jsf.facesconfig
+org.eclipse.jst.jsf.facesconfig.ui
+org.eclipse.jst.jsf.common
+org.eclipse.jst.jsf.common.ui
+org.eclipse.jst.jsf.common.runtime
+
+
