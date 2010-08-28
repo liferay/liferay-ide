@@ -2,7 +2,9 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-<extension point="org.eclipse.wst.common.snippets.SnippetContributions">
+<extension
+      id="taglib"
+      point="org.eclipse.wst.common.snippets.SnippetContributions">
   <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Portlet Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.portlet" label="Portlet Taglib" smallicon="icons/snippets/portlet_tld_16x16.png" largeicon="icons/snippets/portlet_tld_32x32.png">
     <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="actionURL" id="com.liferay.ide.eclipse.ui.snippets.item.actionURL" label="actionURL" smallicon="icons/snippets/tag-generic.gif">
       <content>
@@ -5350,6 +5352,62 @@ has been through the init lifecycle phase." id="initialized" name="initialized"/
     </item>
   </category>
 </extension>
+   <extension
+         id="jsp"
+         name="JSP"
+         point="org.eclipse.wst.common.snippets.SnippetContributions">
+      <category
+            contenttypes="org.eclipse.jst.jsp.core.jspsource"
+            description="Liferay UI Search Container"
+            id="com.liferay.ide.eclipse.ui.snippets.search_container"
+            label="Liferay UI Search Container"
+            largeicon="icons/snippets/search.png"
+            smallicon="icons/snippets/search.png">
+         <item
+               class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion"
+               id="com.liferay.ide.eclipse.ui.snippets.item.basic_model_search_container"
+               label="Basic Model Search Container"
+               smallicon="icons/snippets/tag-generic.gif">
+            <content>
+               &lt;liferay-ui:search-container&gt;
+	&lt;liferay-ui:search-container-results
+		results=&quot;&lt;%= ${model}LocalServiceUtil.get${model}s(searchContainer.getStart(), searchContainer.getEnd()) %&gt;&quot;
+		total=&quot;&lt;%= ${model}LocalServiceUtil.get${model}sCount() %&gt;&quot;
+	/&gt;
+
+	&lt;liferay-ui:search-container-row
+		className=&quot;${modelClass}&quot;
+		modelVar=&quot;${varName}&quot;
+	&gt;
+	
+
+
+	&lt;/liferay-ui:search-container-row&gt;
+
+	&lt;liferay-ui:search-iterator /&gt;
+&lt;/liferay-ui:search-container&gt;
+               
+            </content>
+         </item>
+         <item
+               class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
+               id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text"
+               label="Search Container Column Text"
+               smallicon="icons/snippets/tag-generic.gif">
+            <content>
+               &lt;liferay-ui:search-container-column-text property=&quot;${property}&quot; name=&quot;${name}&quot; /&gt;
+            </content>
+            <variable
+                  id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.property"
+                  name="property">
+            </variable>
+            <variable
+                  id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.name"
+                  name="name">
+            </variable>
+         </item>
+      </category>
+   </extension>
 
 
 </plugin>

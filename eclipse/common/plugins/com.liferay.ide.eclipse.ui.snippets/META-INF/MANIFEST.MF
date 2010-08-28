@@ -12,7 +12,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor,
  com.liferay.ide.eclipse.core,
  org.eclipse.gef,
- com.liferay.ide.eclipse.ui
+ com.liferay.ide.eclipse.ui,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.ui.snippets,
