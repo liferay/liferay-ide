@@ -261,6 +261,16 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 	}
 
 	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
+		if (delta == null) {
+			return false;
+		}
+		
+		int deltaKind = delta.getKind();
+
+		if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
+			return false;
+		}
+
 		IPath fullPath = delta.getFullPath();
 		
 		if (fullPath == null ||
