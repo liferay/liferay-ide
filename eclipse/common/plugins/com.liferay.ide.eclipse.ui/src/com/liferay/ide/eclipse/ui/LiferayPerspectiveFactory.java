@@ -142,7 +142,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		topLeft.addPlaceholder(JavaUI.ID_PACKAGES_VIEW);
 
 		// Top right.
-		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.75f, editorArea);//$NON-NLS-1$
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.70f, editorArea);//$NON-NLS-1$
 		topRight.addView(IPageLayout.ID_OUTLINE);
 		topRight.addView(ID_WST_SNIPPETS_VIEW);
 
