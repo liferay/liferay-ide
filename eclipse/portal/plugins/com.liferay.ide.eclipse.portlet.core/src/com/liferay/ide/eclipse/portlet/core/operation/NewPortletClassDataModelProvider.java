@@ -443,7 +443,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 					paramValue.setValue(values[i]);
 				}
 				else {
-					paramValue.setValue("/" + prependPath + values[i]);
+					if (CoreUtil.isNullOrEmpty(prependPath) || (!prependPath.startsWith("/"))) {
+						prependPath = "/" + prependPath;
+					}
+					paramValue.setValue(prependPath + values[i]);
 				}
 
 				defaultParams.add(paramValue);
