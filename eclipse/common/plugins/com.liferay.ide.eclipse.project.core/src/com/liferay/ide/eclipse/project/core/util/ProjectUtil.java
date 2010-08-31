@@ -281,27 +281,33 @@ public class ProjectUtil {
 		// if the get sdk from the location
 		newProjectDataModel.setProperty(IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName);
 
+		setGenerateDD(newProjectDataModel, false);
+
 		IPath webXmlPath = projectRecord.getProjectLocation().append("docroot/WEB-INF/web.xml");
 
 		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
-			setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
+			if (!(webXmlPath.toFile().exists())) {
+				createDefaultWebXml(webXmlPath.toFile());
+			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
-			setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
+			if (!(webXmlPath.toFile().exists())) {
+				createDefaultWebXml(webXmlPath.toFile());
+			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
-			setGenerateDD(newProjectDataModel, !(webXmlPath.toFile().exists()));
+			if (!(webXmlPath.toFile().exists())) {
+				createDefaultWebXml(webXmlPath.toFile());
+			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true);
-			setGenerateDD(newProjectDataModel, false);
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true);
-			setGenerateDD(newProjectDataModel, false);
 		}
 
 		IFacetedProjectWorkingCopy fpjwc =
@@ -314,6 +320,17 @@ public class ProjectUtil {
 		fpjwc.commitChanges(monitor);
 
 		return fpjwc.getProject();
+	}
+
+	public static void createDefaultWebXml(File webxmlFile) {
+		final String webXmlContents =
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.4\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd\">\n</web-app>"; //$NON-NLS-1$
+		try {
+			org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile(webxmlFile, webXmlContents);
+		}
+		catch (Exception e) {
+			ProjectCorePlugin.logError("Unable to create default web xml", e);
+		}
 	}
 
 	public static IFolder getDocroot(IProject project) {

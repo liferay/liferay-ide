@@ -193,10 +193,8 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 			if (val instanceof Object[]) {
 				Object[] selectedProjects = (Object[]) val;
 
-				if (selectedProjects.length > 1) {
-					return ProjectCorePlugin.createErrorStatus("Only one project can be imported at a time.");
-				}
-				else if (selectedProjects.length == 1) {
+				if (selectedProjects.length >= 1) {
+					// return ProjectCorePlugin.createErrorStatus("Only one project can be imported at a time.");
 					return Status.OK_STATUS;
 				}
 			}
