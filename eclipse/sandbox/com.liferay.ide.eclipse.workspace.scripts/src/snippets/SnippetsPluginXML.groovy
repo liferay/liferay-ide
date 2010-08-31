@@ -1,4 +1,10 @@
 package snippets;
+
+import groovy.util.XmlNodePrinter 
+import groovy.util.XmlParser 
+import java.io.PrintWriter 
+import java.io.StringWriter 
+
 File workspaceDir = new File("..")
 File outputXml = new File(workspaceDir, "com.liferay.ide.eclipse.ui.snippets/plugin.xml")
 String contenttypesVal = "org.eclipse.jst.jsp.core.jspsource"
@@ -45,41 +51,46 @@ def mappings = [
 				label : "Liferay AUI Taglib",
 				icon16 : "liferay_aui_tld_16x16.png",
 				icon32 : "liferay_aui_tld_32x32.png",
+				url : "http://liferay.com/tld/aui",
 			],
 			"liferay-portlet" : [
 				desc : "Liferay Portlet Ext Taglib",
 				label : "Liferay Portlet Ext Taglib",
 				icon16 : "portlet_ext_tld_16x16.png",
 				icon32 : "portlet_ext_tld_32x32.png",
+				url : "http://liferay.com/tld/portlet",
 			],
 			portlet : [
 				desc : "Portlet Taglib",
 				label : "Portlet Taglib",
 				icon16 : "portlet_tld_16x16.png",
 				icon32 : "portlet_tld_32x32.png",
+				url : "http://java.sun.com/portlet",
 			],
 			theme : [
 				desc : "Liferay Theme Taglib",
 				label : "Liferay Theme Taglib",
 				icon16 : "liferay_theme_tld_16x16.png",
 				icon32 : "liferay_theme_tld_32x32.png",
+				url : "http://liferay.com/tld/theme",
 			],
 			"liferay-ui" : [
 				desc : "Liferay UI Taglib",
-				label : "Lifeary UI Taglib",
+				label : "Liferay UI Taglib",
 				icon16 : "liferay_ui_tld_16x16.png",
 				icon32 : "liferay_ui_tld_32x32.png",
+				url : "http://liferay.com/tld/ui",
 			],
 			alloy : [
 				desc : "Alloy UI Component Taglib",
 				label : "Alloy UI Component Taglib",
 				icon16 : "alloy_tld_16x16.png",
 				icon32 : "alloy_tld_32x32.png",
+				url : "http://alloy.liferay.com/tld/alloy",
 			]
 		]
 
 
-XmlParser pluginXmlParser = new XmlParser()
 
 File snippetsDir = new File("bin/snippets")
 def tldFiles = []
@@ -96,8 +107,57 @@ tldFilenames.each {
 	tldFiles << new File(snippetsDir, it)
 }
 
+XmlParser pluginXmlParser = new XmlParser()
+def pluginXmlNode = pluginXmlParser.parse(outputXml)
+
 //find the <plugin> parent in plugin.xml
-def extensionNode = pluginXmlParser.createNode(null, "extension", [point:"org.eclipse.wst.common.snippets.SnippetContributions"])
+def existingTaglibExt = pluginXmlNode.extension.findAll { it.'@id'.equals("taglib") }
+
+if (existingTaglibExt?.size() == 1) {
+	pluginXmlNode.remove(existingTaglibExt[0])
+}
+
+def taglibExtensionNode = pluginXmlParser.createNode(null, "extension", [id:"taglib",point:"org.eclipse.wst.common.snippets.SnippetContributions"])
+
+def importCategoryAttrs = [
+	contenttypes : contenttypesVal,
+	description : "Taglib imports",
+	id : "${categoryIdPrefix}.taglib_imports",
+	label :"Taglib imports",
+	smallicon : "${iconPrefix}/jsptaglib.gif",
+]
+
+def importCategoryNode = taglibExtensionNode.appendNode("category", importCategoryAttrs)
+
+def taglibImportSnippets = []
+
+mappings.each {
+	def mapping = it.getValue()
+	def taglibImportSnippet = [
+		label : "${mapping['label']} Import",
+		desc : mapping["desc"],
+		url : mapping["url"],
+		prefix : it.getKey()
+	]
+	
+	taglibImportSnippets << taglibImportSnippet			
+}
+
+taglibImportSnippets.each { 
+	def importItemAttrs = [
+		class : "org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion",
+		description : it["desc"],
+		id : "${itemIdPrefix}.taglib-import." + it["prefix"],
+		label : it["label"],
+		smallicon : "${iconPrefix}/tag-generic.gif",
+	]
+	
+	def importItemNode = importCategoryNode.appendNode("item", importItemAttrs)
+	
+	def importContentBody = "<%@ taglib uri=\"${it['url']}\" prefix=\"${it['prefix']}\" %>"
+	
+	importItemNode.appendNode("content", importContentBody)
+}
 
 tldFiles.each {
 	println it
@@ -116,7 +176,7 @@ tldFiles.each {
 				largeicon : "${iconPrefix}/${mappings[name]['icon32']}",
 			]
 	
-	def categoryNode = extensionNode.appendNode("category", categoryAttrs)
+	def categoryNode = taglibExtensionNode.appendNode("category", categoryAttrs)
 	
 	rootNode.tag.findAll {
 		def itemName = it.name.text()
@@ -152,22 +212,15 @@ tldFiles.each {
 				id : it.name,
 				name: it.name,
 			]
-		}
-		
-		def writer = new StringWriter()
-		new XmlNodePrinter(new PrintWriter(writer)).print(extensionNode)
-		def extensionText = writer.toString()
-		
-		def outputTemplate = """\
-<?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
-<plugin>
-
-${extensionText}
-
-</plugin>
-"""
-		outputXml.setText outputTemplate
-		
+		}	
 	}
 }
+
+pluginXmlNode.append(taglibExtensionNode)
+
+def writer = new StringWriter()
+new XmlNodePrinter(new PrintWriter(writer)).print(pluginXmlNode)
+def pluginText = writer.toString()
+
+
+outputXml.setText pluginText
