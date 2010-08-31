@@ -39,17 +39,15 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
  */
 public abstract class PluginClasspathContainer implements IClasspathContainer {
 
-	private IPath path;	
+	protected IPath path;
 	
-	private IPath portalRoot;
+	protected IPath portalRoot;
 	
-	private IJavaProject project;
+	protected IJavaProject project;
 
 	public PluginClasspathContainer(IPath containerPath, IJavaProject project, IPath portalRoot) {
 		this.path = containerPath;
-		
 		this.project = project;
-		
 		this.portalRoot = portalRoot;
 	}
 
@@ -126,6 +124,10 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		}
 		
 		return jars;		
+	}
+
+	public IPath getPortalRoot() {
+		return portalRoot;
 	}
 
 }

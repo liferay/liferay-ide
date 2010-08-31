@@ -95,12 +95,18 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 					public boolean visit(IResourceDelta delta)
 						throws CoreException {
 
+						int deltaKind = delta.getKind();
+
+						if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
+							return false;
+						}
+						
 						if (shouldProcessResourceDelta(delta)) {
 							processResourceChanged(delta);
 
 							return false;
 						}
-						
+
 						return true;
 					}
 				});

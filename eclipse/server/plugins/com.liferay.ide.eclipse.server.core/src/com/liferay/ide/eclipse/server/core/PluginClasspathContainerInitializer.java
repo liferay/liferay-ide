@@ -65,6 +65,22 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			return;
 		}
 
+		classpathContainer = getCorrectContainer(containerPath, finalSegment, project, portalRoot);
+
+		JavaCore.setClasspathContainer(containerPath, 
+			new IJavaProject[] {
+				project
+			}, new IClasspathContainer[] {
+				classpathContainer
+			}, null);
+	}
+
+	protected IClasspathContainer getCorrectContainer(
+		IPath containerPath, String finalSegment, IJavaProject project, IPath portalRoot)
+		throws CoreException {
+
+		IClasspathContainer classpathContainer = null;
+
 		if (PortletClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
 			classpathContainer = new PortletClasspathContainer(containerPath, project, portalRoot);
 		}
@@ -79,12 +95,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 				finalSegment));
 		}
 
-		JavaCore.setClasspathContainer(containerPath, 
-			new IJavaProject[] {
-				project
-			}, new IClasspathContainer[] {
-				classpathContainer
-			}, null);
+		return classpathContainer;
 	}
 
 	@Override
@@ -92,11 +103,18 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		IPath containerPath, IJavaProject project, IClasspathContainer containerSuggestion)
 		throws CoreException {
 		
-		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
-			project
-		}, new IClasspathContainer[] {
-			containerSuggestion
-		}, null);
+		if (containerSuggestion instanceof PluginClasspathContainer) {
+			PluginClasspathContainer pluginContainer = (PluginClasspathContainer) containerSuggestion;
+			
+			IClasspathContainer newContainer =
+				getCorrectContainer(containerPath, containerPath.segment(1), project, pluginContainer.getPortalRoot());
+
+			JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
+				project
+			}, new IClasspathContainer[] {
+				newContainer
+			}, null);
+		}
 	}
 
 }
