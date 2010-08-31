@@ -232,9 +232,9 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 				projectsList.setGrayed(projects[i], true);
 			}
-			else {
-				projectsList.setChecked(projects[i], true);
-			}
+			// else {
+			// projectsList.setChecked(projects[i], true);
+			// }
 		}
 
 		if (displayWarning) {
