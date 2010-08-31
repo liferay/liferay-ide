@@ -5366,7 +5366,7 @@ has been through the init lifecycle phase." id="initialized" name="initialized"/
          <item
                class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion"
                id="com.liferay.ide.eclipse.ui.snippets.item.portal_model_search_container"
-               label="Portal Model Search Container"
+               label="Model Search Container"
                smallicon="icons/snippets/tag-generic.gif">
             <content>
                &lt;liferay-ui:search-container&gt;
