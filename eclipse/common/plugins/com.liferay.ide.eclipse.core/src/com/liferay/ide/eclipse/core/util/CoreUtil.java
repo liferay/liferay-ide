@@ -179,6 +179,10 @@ public class CoreUtil {
 	public static Version readVersionFile(File versionInfoFile) {
 		String versionContents = FileUtil.readContents(versionInfoFile);
 
+		if (CoreUtil.isNullOrEmpty(versionContents)) {
+			return Version.emptyVersion;
+		}
+
 		Version version = null;;
 
 		try {

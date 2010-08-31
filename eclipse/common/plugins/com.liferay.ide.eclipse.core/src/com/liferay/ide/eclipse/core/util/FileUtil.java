@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.CorePlugin;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,20 @@ import org.eclipse.core.runtime.Path;
  * @author Greg Amerson
  */
 public class FileUtil {
+
+	public static void clearContents(File versionFile) {
+		if (versionFile != null && versionFile.exists()) {
+			try {
+				RandomAccessFile file = new RandomAccessFile(versionFile, "rw");
+				file.setLength(0);
+				file.close();
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
+
+		}
+	}
 
 	public static void deleteDir(File directory, boolean removeAll) {
 

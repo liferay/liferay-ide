@@ -21,7 +21,9 @@ import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
 import com.liferay.ide.eclipse.server.util.ReleaseHelper;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -195,17 +197,36 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		// check for existing release info
 		IPath location = getRuntime().getLocation();
 
-		IPath versionInfoPath =
-			PortalTomcatPlugin.getDefault().getStateLocation().append("versions").append(
-				location.toPortableString().replaceAll("\\/", "_") + "_version.txt");
+		IPath versionsInfoPath = PortalTomcatPlugin.getDefault().getStateLocation().append("version.properties");
 
-		File versionInfoFile = versionInfoPath.toFile();
+		String locationKey = location.toPortableString().replaceAll("\\/", "_");
 
-		if (!versionInfoFile.exists()) {
-			loadVersionInfoFile(location, versionInfoFile);
+		File versionInfoFile = versionsInfoPath.toFile();
+
+		Properties properties = new Properties();
+
+		if (versionInfoFile.exists()) {
+			try {
+				properties.load(new FileInputStream(versionInfoFile));
+				String version = (String) properties.get(locationKey);
+
+				if (!CoreUtil.isNullOrEmpty(version)) {
+					return version;
+				}
+			}
+			catch (Exception e) {
+			}
 		}
 
-		Version version = CoreUtil.readVersionFile(versionInfoFile);
+		File versionFile = PortalTomcatPlugin.getDefault().getStateLocation().append("version.txt").toFile();
+
+		if (versionFile.exists()) {
+			FileUtil.clearContents(versionFile);
+		}
+
+		loadVersionInfoFile(location, versionFile);
+
+		Version version = CoreUtil.readVersionFile(versionFile);
 
 		if (version.equals(Version.emptyVersion)) {
 			loadVersionInfoFile(location, versionInfoFile);
@@ -213,21 +234,16 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			version = CoreUtil.readVersionFile(versionInfoFile);
 		}
 
+		if (!version.equals(Version.emptyVersion)) {
+			properties.put(locationKey, version.toString());
+			try {
+				properties.store(new FileOutputStream(versionInfoFile), "");
+			}
+			catch (Exception e) {
+			}
+		}
+
 		return version.toString();
-	
-		// IPath location = getRuntime().getLocation();
-		//		
-		// if (location != null) {
-		// try {
-		// ReleaseHelper helper =
-		// getReleaseHelper(location.append("lib/ext").append("portal-service.jar"));
-		//
-		// retval = helper.getVersion();
-		// }
-		// catch (Exception e) {
-		// PortalTomcatPlugin.logError(e);
-		// }
-		// }
 	}
 
 	protected void loadVersionInfoFile(IPath location, File versionInfoFile) {
