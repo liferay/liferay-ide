@@ -84,6 +84,12 @@
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.liferay.ide.eclipse.ui.LiferayUIPlugin">
+      </startup>
+   </extension>
    
 
 </plugin>

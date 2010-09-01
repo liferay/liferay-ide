@@ -15,29 +15,48 @@
 
 package com.liferay.ide.eclipse.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
+import org.eclipse.jdt.internal.ui.preferences.PreferencesAccess;
+import org.eclipse.jdt.internal.ui.preferences.formatter.FormatterProfileStore;
+import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileManager.CustomProfile;
+import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileManager.Profile;
+import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileVersioner;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * The activator class controls the plug-in life cycle
  * 
  * @author Greg Amerson
  */
-public class LiferayUIPlugin extends AbstractUIPlugin {
+@SuppressWarnings("restriction")
+public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
+
+	public static final String FIRST_STARTUP_COMPLETE = "FIRST_STARTUP_COMPLETE";
 
 	public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL";
 
@@ -64,6 +83,13 @@ public class LiferayUIPlugin extends AbstractUIPlugin {
 		return plugin;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public static Map getLiferaySettings() {
+		final Map options = new DefaultCodeFormatterOptions(LiferayDefaultCodeFormatterSettings.settings).getMap();
+		ProfileVersioner.setLatestCompliance(options);
+		return options;
+	}
+
 	public static IWorkspace getWorkspace() {
 		return ResourcesPlugin.getWorkspace();
 	}
@@ -80,6 +106,14 @@ public class LiferayUIPlugin extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public LiferayUIPlugin() {
+	}
+
+	public void earlyStartup() {
+		if (isFirstStartup()) {
+			installLiferayFormatterProfile();
+
+			firstStartupComplete();
+		}
 	}
 
 	public Image getImage(String key) {
@@ -126,6 +160,61 @@ public class LiferayUIPlugin extends AbstractUIPlugin {
 		plugin = null;
 
 		super.stop(context);
+	}
+
+	private void firstStartupComplete() {
+		getPreferences().putBoolean(FIRST_STARTUP_COMPLETE, true);
+	}
+
+	private IEclipsePreferences getPreferences() {
+		return new InstanceScope().getNode(PLUGIN_ID);
+	}
+
+	@SuppressWarnings({
+		"rawtypes", "unchecked"
+	})
+	private void installLiferayFormatterProfile() {
+		PreferencesAccess access = PreferencesAccess.getOriginalPreferences();
+		ProfileVersioner profileVersioner = new ProfileVersioner();
+		IScopeContext instanceScope = access.getInstanceScope();
+		try {
+			FormatterProfileStore store = new FormatterProfileStore(profileVersioner);
+			List profiles = store.readProfiles(instanceScope);
+			if (profiles == null) {
+				profiles = new ArrayList();
+			}
+
+			// add liferay profile
+			final Profile eclipseProfile =
+				new CustomProfile(
+					"Liferay [plug-in]", getLiferaySettings(), profileVersioner.getCurrentVersion(),
+					profileVersioner.getProfileKind());
+			profiles.add(eclipseProfile);
+
+			store.writeProfiles(profiles, instanceScope);
+			// ProfileManager manager = new FormatterProfileManager(profiles, instanceScope, access, profileVersioner);
+			// manager.setSelected(eclipseProfile);
+			// manager.commitChanges(instanceScope);
+			instanceScope.getNode(JavaUI.ID_PLUGIN).flush();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			try {
+				instanceScope.getNode(JavaCore.PLUGIN_ID).flush();
+			}
+			catch (BackingStoreException e) {
+			}
+		}
+	}
+
+	private boolean isFirstStartup() {
+		IScopeContext[] scopes = new IScopeContext[] {
+			new InstanceScope()
+		};
+
+		return !(Platform.getPreferencesService().getBoolean(PLUGIN_ID, FIRST_STARTUP_COMPLETE, false, scopes));
 	}
 
 	@Override
