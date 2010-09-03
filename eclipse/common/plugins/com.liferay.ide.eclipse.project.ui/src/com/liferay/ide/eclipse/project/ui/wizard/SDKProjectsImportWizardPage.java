@@ -368,6 +368,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay SDK Location:", 1);
 
 		sdkLocation = SWTUtil.createText(topComposite, 1);
+		((GridData) sdkLocation.getLayoutData()).widthHint = 300;
 		this.synchHelper.synchText(sdkLocation, SDK_LOCATION, null);
 
 		SWTUtil.createLabel(topComposite, SWT.LEAD, "", 1);
