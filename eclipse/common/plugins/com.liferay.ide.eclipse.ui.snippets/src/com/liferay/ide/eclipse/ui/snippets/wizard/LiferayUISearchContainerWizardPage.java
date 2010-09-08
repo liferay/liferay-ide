@@ -15,9 +15,12 @@
 
 package com.liferay.ide.eclipse.ui.snippets.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -90,6 +93,16 @@ public class LiferayUISearchContainerWizardPage extends NewTypeWizardPage {
 	protected static final int IDX_DESELECT = 1;
 
 	protected static final int IDX_SELECT = 0;
+
+	public static Object[] getTypeProperties(IType type) {
+		if (type == null) {
+			return null;
+		}
+
+		JDTBeanIntrospector beanIntrospector = new JDTBeanIntrospector(type);
+		Map<String, JDTBeanProperty> properties = beanIntrospector.getProperties();
+		return properties.keySet().toArray();
+	}
 
 	protected IEditorPart editorPart;
 
@@ -195,16 +208,16 @@ public class LiferayUISearchContainerWizardPage extends NewTypeWizardPage {
 		return modelClassDialogField.getText();
 	}
 
-	public String[] getPropertyColumns() {
-		return (String[]) propertyListField.getCheckedElements().toArray(new String[0]);
-	}
-
 	// protected StubTypeContext getClassStubTypeContext() {
 	// if (fClassStubTypeContext == null) {
 	// fClassStubTypeContext = TypeContextChecker.createSuperClassStubTypeContext(getTypeName(), null, null);
 	// }
 	// return fClassStubTypeContext;
 	// }
+
+	public String[] getPropertyColumns() {
+		return (String[]) propertyListField.getCheckedElements().toArray(new String[0]);
+	}
 
 	public String getTypeName() {
 		return modelClassDialogField.getText();
@@ -252,11 +265,44 @@ public class LiferayUISearchContainerWizardPage extends NewTypeWizardPage {
 	}
 
 	protected void updatePropertyList(IType type) {
-		JDTBeanIntrospector beanIntrospector = new JDTBeanIntrospector(type);
-		Map<String, JDTBeanProperty> properties = beanIntrospector.getProperties();
+		List<Object> propNames = new ArrayList<Object>();
 
-		Object[] props = properties.keySet().toArray();
-		propertyListField.setElements(Arrays.asList(props));
+		Object[] props = getTypeProperties(type);
+
+		if (!CoreUtil.isNullOrEmpty(props)) {
+			propNames.addAll(Arrays.asList(props));
+		}
+
+		try {
+			if (type.isInterface()) {
+				String[] superInterfaces = type.getSuperInterfaceNames();
+
+				if (!CoreUtil.isNullOrEmpty(superInterfaces)) {
+					for (String superInterface : superInterfaces) {
+						IType superInterfaceType = type.getJavaProject().findType(superInterface);
+						Object[] superInterfaceProps = getTypeProperties(superInterfaceType);
+
+						if (!CoreUtil.isNullOrEmpty(superInterfaceProps)) {
+							propNames.addAll(Arrays.asList(superInterfaceProps));
+						}
+					}
+				}
+			}
+			else {
+				IType superType = type.getJavaProject().findType(type.getSuperclassName());
+				Object[] superTypeProps = getTypeProperties(superType);
+
+				if (!CoreUtil.isNullOrEmpty(superTypeProps)) {
+					propNames.addAll(Arrays.asList(superTypeProps));
+				}
+			}
+
+		}
+		catch (Exception e) {
+			// no error this is best effort
+		}
+
+		propertyListField.setElements(propNames);
 
 		varNameText.setText("a" + getModel());
 	}
