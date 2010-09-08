@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.parts;
 
 import com.liferay.ide.eclipse.layouttpl.ui.draw2d.PortletLayoutPanel;
@@ -27,19 +28,86 @@ import java.util.List;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
-
+/**
+ * @author Greg Amerson
+ */
 public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 
-	public static final int LAYOUT_MARGIN = 10;
+	protected class PortletLayoutLayoutListener implements LayoutListener {
+
+		public void invalidate(IFigure container) {
+		}
+
+		public boolean layout(IFigure container) {
+			return false;
+		}
+
+		public void postLayout(IFigure container) {
+			if (needsRefreshPostLayout) {
+				needsRefreshPostLayout = false;
+				refreshVisuals();
+			}
+
+		}
+
+		public void remove(IFigure child) {
+		}
+
+		public void setConstraint(IFigure child, Object constraint) {
+		}
+
+	}
 	public static final int COLUMN_SPACING = 10;
 
+	public static final int LAYOUT_MARGIN = 10;
+
+	public static GridData createGridData() {
+		return new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+	}
+
+	protected LayoutListener layoutListener = new PortletLayoutLayoutListener();
+
 	protected PortletLayoutPanel layoutPanel;
+
+	protected boolean needsRefreshPostLayout;
+
+	public int getDefaultColumnHeight() {
+		return getCastedParent().getPreferredColumnHeight();
+	}
+
+	public Object getLayoutConstraint(PortletColumnEditPart columnPart, IFigure figure) {
+		if (getChildren().contains(columnPart)) {
+			return getFigure().getLayoutManager().getConstraint(figure);
+		}
+
+		return null;
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		String prop = evt.getPropertyName();
+
+		if (PortletLayout.COLUMN_ADDED_PROP.equals(prop) || PortletLayout.COLUMN_REMOVED_PROP.equals(prop) ||
+			PortletLayout.CHILD_COLUMN_WEIGHT_CHANGED_PROP.equals(prop)) {
+			refreshChildren();
+			refreshVisuals();
+		}
+	}
+
+	private LayoutTplDiagramEditPart getCastedParent() {
+		return (LayoutTplDiagramEditPart) getParent();
+	}
+
+	@Override
+	protected void createEditPolicies() {
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PortletLayoutLayoutEditPolicy());
+	}
 
 	@Override
 	protected IFigure createFigure() {
@@ -54,26 +122,13 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 		layoutPanel.setBackgroundColor(new Color(null, 171, 171, 171));
 		layoutPanel.setLayoutManager(gridLayout);
 
+		layoutPanel.addLayoutListener(layoutListener);
+
 		return layoutPanel;
 	}
 
-	@Override
-	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PortletLayoutLayoutEditPolicy());
-	}
-
-	protected LayoutTplDiagram getParentModel() {
-		return (LayoutTplDiagram) getParent().getModel();
-	}
-
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
-
-		if (PortletLayout.COLUMN_ADDED_PROP.equals(prop) || PortletLayout.COLUMN_REMOVED_PROP.equals(prop) ||
-			PortletLayout.CHILD_COLUMN_WEIGHT_CHANGED_PROP.equals(prop)) {
-			refreshChildren();
-			refreshVisuals();
-		}
+	protected PortletLayoutPanel getCastedFigure() {
+		return (PortletLayoutPanel) getFigure();
 	}
 
 	protected PortletLayout getCastedModel() {
@@ -84,15 +139,11 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 		return getCastedModel().getColumns(); // return a list of columns
 	}
 
-	protected PortletLayoutPanel getCastedFigure() {
-		return (PortletLayoutPanel) getFigure();
+	protected LayoutTplDiagram getParentModel() {
+		return (LayoutTplDiagram) getParent().getModel();
 	}
 
-	public static GridData createGridData() {
-		return new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-	}
-
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
@@ -118,7 +169,7 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 			layoutPanel.setTop(false);
 			layoutPanel.setBottom(false);
 		}
-		
+
 		PortletLayoutPanel panel = getCastedFigure();
 		GridLayout gridLayout = (GridLayout) panel.getLayoutManager();
 		List columns = getChildren();
@@ -130,17 +181,22 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 			// get width of our own part to calculate new width
 			int rowWidth = this.getFigure().getSize().width - (PortletLayoutEditPart.LAYOUT_MARGIN * 2);
 
-			for (Object col : columns) {
-				PortletColumnEditPart portletColumnPart = (PortletColumnEditPart) col;
-				PortletColumn column = (PortletColumn) portletColumnPart.getModel();
-				// if (column.getWeight() == PortletColumn.DEFAULT_WEIGHT) {
-				// column.setWeight(100);
-				// }
-				GridData rowData = portletColumnPart.createGridData();
+			if (rowWidth > 0) {
+				for (Object col : columns) {
+					PortletColumnEditPart portletColumnPart = (PortletColumnEditPart) col;
+					PortletColumn column = (PortletColumn) portletColumnPart.getModel();
+					// if (column.getWeight() == PortletColumn.DEFAULT_WEIGHT) {
+					// column.setWeight(100);
+					// }
+					GridData rowData = portletColumnPart.createGridData();
 
-				double percent = column.getWeight() / 100d;
-				rowData.widthHint = (int) (percent * rowWidth) - (COLUMN_SPACING * 2);
-				this.setLayoutConstraint(portletColumnPart, portletColumnPart.getFigure(), rowData);
+					double percent = column.getWeight() / 100d;
+					rowData.widthHint = (int) (percent * rowWidth) - (COLUMN_SPACING * 2);
+					this.setLayoutConstraint(portletColumnPart, portletColumnPart.getFigure(), rowData);
+				}
+			}
+			else {
+				this.needsRefreshPostLayout = true;
 			}
 		}
 
@@ -148,22 +204,6 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart {
 		gridLayout.invalidate();
 
 		this.getFigure().repaint();
-	}
-
-	public int getDefaultColumnHeight() {
-		return getCastedParent().getPreferredColumnHeight();
-	}
-
-	private LayoutTplDiagramEditPart getCastedParent() {
-		return (LayoutTplDiagramEditPart) getParent();
-	}
-
-	public Object getLayoutConstraint(PortletColumnEditPart columnPart, IFigure figure) {
-		if (getChildren().contains(columnPart)) {
-			return getFigure().getLayoutManager().getConstraint(figure);
-		}
-
-		return null;
 	}
 
 }
