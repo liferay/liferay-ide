@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.editor;
 
 import com.liferay.ide.eclipse.layouttpl.core.LayoutTplCore;
@@ -26,86 +41,19 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wst.html.core.internal.provisional.contenttype.ContentTypeIdForHTML;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
-
+/**
+ * @author Greg Amerson
+ */
 @SuppressWarnings({
 	"restriction", "rawtypes"
 })
 public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 
-	protected static final int VISUAL_PAGE_INDEX = 0;
+	class PropertyListener implements IPropertyListener {
 
-	protected static final int SOURCE_PAGE_INDEX = 1;
-
-	protected LayoutTplEditor visualEditor;
-
-	protected StructuredTextEditor sourceEditor;
-
-	protected PropertyListener propertyListener;
-
-	protected int lastPageIndex = -1;
-
-	public LayoutTplMultiPageEditor() {
-		super();
-	}
-
-	protected LayoutTplMultiOutlinePage multiOutlinePage;
-
-	@Override
-	protected void createPages() {
-		try {
-			createSourcePage(); // must create source page first
-			createAndAddVisualPage();
-			addSourcePage();
-			connectVisualPage();
-
-			IEditorActionBarContributor contributor = getEditorSite().getActionBarContributor();
-
-			if (contributor instanceof MultiPageEditorActionBarContributor) {
-				((MultiPageEditorActionBarContributor) contributor).setActiveEditor(this);
-			}
-
-			int activePageIndex = getPreferenceStore().getInt(ILayoutTplUIPreferenceNames.LAST_ACTIVE_PAGE);
-			if ((activePageIndex >= 0) && (activePageIndex < getPageCount())) {
-				setActivePage(activePageIndex);
-			}
-			else {
-				setActivePage(0);
-			}
+		public void propertyChanged(Object source, int propId) {
 		}
-		catch (PartInitException ex) {
-			LayoutTplCore.logError(ex);
-			throw new RuntimeException(ex);
-		}
-	}
 
-	protected void connectVisualPage() {
-		this.visualEditor.setInput(getEditorInput());
-	}
-
-	protected void addSourcePage()
-		throws PartInitException {
-		int index = addPage(sourceEditor, getEditorInput());
-		setPageText(index, "Source");
-
-		firePropertyChange(PROP_TITLE);
-
-		// Changes to the Text Viewer's document instance should also
-		// force an
-		// input refresh
-		sourceEditor.getTextViewer().addTextInputListener(new TextInputListener());
-	}
-
-	protected void createAndAddVisualPage()
-		throws PartInitException {
-		IEditorPart editor = createVisualEditor();
-		int index = addPage(editor, getEditorInput());
-		setPageText(index, "Visual (Experimental)");
-	}
-
-	protected LayoutTplEditor createVisualEditor() {
-		this.visualEditor = new LayoutTplEditor(this.sourceEditor);
-
-		return this.visualEditor;
 	}
 
 	class TextInputListener implements ITextInputListener {
@@ -118,28 +66,25 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 			// if ((fDesignViewer != null) && (newInput != null)) {
 			// fDesignViewer.setDocument(newInput);
 			// }
-			System.out.println("ITextInputListener.inputDocumentChanged " + oldInput + " " + newInput);
 		}
 	}
 
-	class PropertyListener implements IPropertyListener {
+	protected static final int SOURCE_PAGE_INDEX = 1;
 
-		public void propertyChanged(Object source, int propId) {
-			System.out.println("IPropertyListener.propertyChanged " + source + " " + propId);
-		}
+	protected static final int VISUAL_PAGE_INDEX = 0;
 
-	}
+	protected int lastPageIndex = -1;
 
-	protected void createSourcePage()
-		throws PartInitException {
-		sourceEditor = new StructuredTextEditor();
-		sourceEditor.setEditorPart(this);
+	protected LayoutTplMultiOutlinePage multiOutlinePage;
 
-		if (this.propertyListener == null) {
-			this.propertyListener = new PropertyListener();
-		}
+	protected PropertyListener propertyListener;
 
-		sourceEditor.addPropertyListener(this.propertyListener);
+	protected StructuredTextEditor sourceEditor;
+
+	protected LayoutTplEditor visualEditor;
+
+	public LayoutTplMultiPageEditor() {
+		super();
 	}
 
 	@Override
@@ -153,56 +98,9 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 		sourceEditor.doSave(monitor);
 	}
 
-	protected IPreferenceStore getPreferenceStore() {
-		return LayoutTplUI.getDefault().getPreferenceStore();
-	}
-
 	@Override
 	public void doSaveAs() {
 		sourceEditor.doSaveAs();
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return (sourceEditor != null) && sourceEditor.isSaveAsAllowed();
-	}
-
-	@Override
-	public boolean isSaveOnCloseNeeded() {
-		// overriding super class since it does a lowly isDirty!
-		if (sourceEditor != null) {
-			return sourceEditor.isSaveOnCloseNeeded();
-		}
-
-		return isDirty();
-	}
-
-	@Override
-	protected void setInput(IEditorInput input) {
-		super.setInput(input);
-
-		IFile file = ((IFileEditorInput) input).getFile();
-		setPartName(file.getName());
-	}
-
-	@Override
-	protected void pageChange(int newPageIndex) {
-		if (lastPageIndex == VISUAL_PAGE_INDEX && newPageIndex == SOURCE_PAGE_INDEX) {
-			if (this.visualEditor.isDirty()) {
-				this.visualEditor.refreshSourceModel();
-			}
-		}
-		else if (lastPageIndex == SOURCE_PAGE_INDEX && newPageIndex == VISUAL_PAGE_INDEX) {
-			this.visualEditor.refreshVisualModel();
-		}
-
-		super.pageChange(newPageIndex);
-
-		if (multiOutlinePage != null) {
-			multiOutlinePage.refreshOutline();
-		}
-
-		lastPageIndex = newPageIndex;
 	}
 
 	@Override
@@ -228,7 +126,6 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 					new LayoutTplMultiOutlinePage(this, sourceOutlinePage, visualOutlinePage);
 				this.multiOutlinePage = outlinePage;
 			}
-
 
 			return multiOutlinePage;
 		}
@@ -263,9 +160,75 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 		return result;
 	}
 
-	void gotoMarker(IMarker marker) {
-		setActivePage(1);
-		IDE.gotoMarker(sourceEditor, marker);
+	@Override
+	public boolean isSaveAsAllowed() {
+		return (sourceEditor != null) && sourceEditor.isSaveAsAllowed();
+	}
+
+	@Override
+	public boolean isSaveOnCloseNeeded() {
+		if (isDirty()) {
+			return true;
+		}
+
+		// overriding super class since it does a lowly isDirty!
+		if (sourceEditor != null) {
+			return sourceEditor.isSaveOnCloseNeeded();
+		}
+
+		return isDirty();
+	}
+
+	protected void addSourcePage()
+		throws PartInitException {
+		int index = addPage(sourceEditor, getEditorInput());
+		setPageText(index, "Source");
+
+		firePropertyChange(PROP_TITLE);
+
+		// Changes to the Text Viewer's document instance should also
+		// force an
+		// input refresh
+		sourceEditor.getTextViewer().addTextInputListener(new TextInputListener());
+	}
+
+	protected void connectVisualPage() {
+		this.visualEditor.setInput(getEditorInput());
+	}
+
+	protected void createAndAddVisualPage()
+		throws PartInitException {
+		IEditorPart editor = createVisualEditor();
+		int index = addPage(editor, getEditorInput());
+		setPageText(index, "Visual (Experimental)");
+	}
+
+	@Override
+	protected void createPages() {
+		try {
+			createSourcePage(); // must create source page first
+			createAndAddVisualPage();
+			addSourcePage();
+			connectVisualPage();
+
+			IEditorActionBarContributor contributor = getEditorSite().getActionBarContributor();
+
+			if (contributor instanceof MultiPageEditorActionBarContributor) {
+				((MultiPageEditorActionBarContributor) contributor).setActiveEditor(this);
+			}
+
+			int activePageIndex = getPreferenceStore().getInt(ILayoutTplUIPreferenceNames.LAST_ACTIVE_PAGE);
+			if ((activePageIndex >= 0) && (activePageIndex < getPageCount())) {
+				setActivePage(activePageIndex);
+			}
+			else {
+				setActivePage(0);
+			}
+		}
+		catch (PartInitException ex) {
+			LayoutTplCore.logError(ex);
+			throw new RuntimeException(ex);
+		}
 	}
 
 	protected IEditorSite createSite(IEditorPart editor) {
@@ -298,5 +261,60 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 			site = super.createSite(editor);
 		}
 		return site;
+	}
+
+	protected void createSourcePage()
+		throws PartInitException {
+		sourceEditor = new StructuredTextEditor();
+		sourceEditor.setEditorPart(this);
+
+		if (this.propertyListener == null) {
+			this.propertyListener = new PropertyListener();
+		}
+
+		sourceEditor.addPropertyListener(this.propertyListener);
+	}
+
+	protected LayoutTplEditor createVisualEditor() {
+		this.visualEditor = new LayoutTplEditor(this.sourceEditor);
+
+		return this.visualEditor;
+	}
+
+	protected IPreferenceStore getPreferenceStore() {
+		return LayoutTplUI.getDefault().getPreferenceStore();
+	}
+
+	@Override
+	protected void pageChange(int newPageIndex) {
+		if (lastPageIndex == VISUAL_PAGE_INDEX && newPageIndex == SOURCE_PAGE_INDEX) {
+			if (this.visualEditor.isDirty()) {
+				this.visualEditor.refreshSourceModel();
+			}
+		}
+		else if (lastPageIndex == SOURCE_PAGE_INDEX && newPageIndex == VISUAL_PAGE_INDEX) {
+			this.visualEditor.refreshVisualModel();
+		}
+
+		super.pageChange(newPageIndex);
+
+		if (multiOutlinePage != null) {
+			multiOutlinePage.refreshOutline();
+		}
+
+		lastPageIndex = newPageIndex;
+	}
+
+	@Override
+	protected void setInput(IEditorInput input) {
+		super.setInput(input);
+
+		IFile file = ((IFileEditorInput) input).getFile();
+		setPartName(file.getName());
+	}
+
+	void gotoMarker(IMarker marker) {
+		setActivePage(1);
+		IDE.gotoMarker(sourceEditor, marker);
 	}
 }
