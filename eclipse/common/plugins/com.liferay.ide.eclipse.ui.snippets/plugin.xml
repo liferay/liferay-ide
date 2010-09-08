@@ -5415,7 +5415,12 @@ has been through the init lifecycle phase." id="initialized" name="initialized"/
   </extension>
   <extension id="jsp" name="JSP" point="org.eclipse.wst.common.snippets.SnippetContributions">
     <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Search Container" id="com.liferay.ide.eclipse.ui.snippets.search_container" label="Liferay UI Search Container" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
-      <item class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.portal_model_search_container" label="Model Search Container" smallicon="icons/snippets/tag-generic.gif">
+      <item
+            class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion"
+            id="com.liferay.ide.eclipse.ui.snippets.item.portal_model_search_container"
+            label="Model Search Container"
+            largeicon="icons/snippets/tag-generic.gif"
+            smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:search-container&gt;
 	&lt;liferay-ui:search-container-results
@@ -5435,13 +5440,139 @@ has been through the init lifecycle phase." id="initialized" name="initialized"/
 &lt;/liferay-ui:search-container&gt;
         </content>
       </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text" label="Search Container Column Text" smallicon="icons/snippets/tag-generic.gif">
+      <item
+            class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
+            id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text"
+            label="Search Container Column Text"
+            largeicon="icons/snippets/tag-generic.gif"
+            smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:search-container-column-text property=&quot;${property}&quot; name=&quot;${name}&quot; /&gt;
         </content>
         <variable id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.property" name="property"/>
         <variable id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.name" name="name"/>
       </item>
+    </category>
+    <category
+          contenttypes="org.eclipse.wst.xml.core.xmlsource"
+          description="Service Builder"
+          id="com.liferay.ide.eclipse.ui.snippets.service_builder"
+          label="Service Builder"
+          largeicon="icons/snippets/search.png"
+          smallicon="icons/snippets/search.png">
+       <item
+             class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
+             id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_entity"
+             label="Sample Entity"
+             largeicon="icons/snippets/tag-generic.gif"
+             smallicon="icons/snippets/tag-generic.gif">
+          <content>
+             &lt;entity name=&quot;Foo&quot; local-service=&quot;true&quot; remote-service=&quot;true&quot;&gt;
+
+		&lt;!-- PK fields --&gt;
+
+		&lt;column name=&quot;fooId&quot; type=&quot;long&quot; primary=&quot;true&quot; /&gt;
+
+		&lt;!-- Audit fields --&gt;
+
+		&lt;column name=&quot;companyId&quot; type=&quot;long&quot; /&gt;
+		&lt;column name=&quot;userId&quot; type=&quot;long&quot; /&gt;
+		&lt;column name=&quot;userName&quot; type=&quot;String&quot; /&gt;
+		&lt;column name=&quot;createDate&quot; type=&quot;Date&quot; /&gt;
+		&lt;column name=&quot;modifiedDate&quot; type=&quot;Date&quot; /&gt;
+
+		&lt;!-- Other fields --&gt;
+
+		&lt;column name=&quot;field1&quot; type=&quot;String&quot; /&gt;
+		&lt;column name=&quot;field2&quot; type=&quot;boolean&quot; /&gt;
+		&lt;column name=&quot;field3&quot; type=&quot;int&quot; /&gt;
+		&lt;column name=&quot;field4&quot; type=&quot;Date&quot; /&gt;
+		&lt;column name=&quot;field5&quot; type=&quot;String&quot; /&gt;
+
+		&lt;!-- Order --&gt;
+
+		&lt;order by=&quot;asc&quot;&gt;
+			&lt;order-column name=&quot;field1&quot; /&gt;
+		&lt;/order&gt;
+
+		&lt;!-- Finder methods --&gt;
+
+		&lt;finder name=&quot;Field2&quot; return-type=&quot;Collection&quot;&gt;
+			&lt;finder-column name=&quot;field2&quot; /&gt;
+		&lt;/finder&gt;
+	&lt;/entity&gt;
+             <entity name="Foo" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="fooId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="userId" type="long" />
+		<column name="userName" type="String" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="field1" type="String" />
+		<column name="field2" type="boolean" />
+		<column name="field3" type="int" />
+		<column name="field4" type="Date" />
+		<column name="field5" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="field1" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="Field2" return-type="Collection">
+			<finder-column name="field2" />
+		</finder>
+	</entity>
+          </content>
+       </item>
+       <item
+             class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
+             id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column"
+             label="Primary Key Column"
+             largeicon="icons/snippets/tag-generic.gif"
+             smallicon="icons/snippets/tag-generic.gif">
+          <content>
+             <column name="${name}Id" type="long" primary="true" />
+          </content>
+          <variable
+                description="Name to use for prefix of primary key (will end with &quot;Id&quot;)"
+                id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column.id_name_var"
+                name="name">
+          </variable>
+       </item>
+       <item
+             class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
+             id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column"
+             label="Column"
+             largeicon="icons/snippets/tag-generic.gif"
+             smallicon="icons/snippets/tag-generic.gif">
+          <content>
+             <column name="${name}" type="${type}" />
+          </content>
+          <variable
+                description="Column name"
+                id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.var_name"
+                name="name">
+          </variable>
+          <variable
+                default="String"
+                description="Type to use for column"
+                id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.type_var"
+                name="type">
+          </variable>
+       </item>
     </category>
   </extension>
 </plugin>
