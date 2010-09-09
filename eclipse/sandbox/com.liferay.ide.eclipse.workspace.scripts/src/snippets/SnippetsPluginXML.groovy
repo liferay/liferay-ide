@@ -82,8 +82,8 @@ def mappings = [
 				url : "http://liferay.com/tld/ui",
 			],
 			alloy : [
-				desc : "Alloy UI Component Taglib",
-				label : "Alloy UI Component Taglib",
+				desc : "AlloyUI Component Taglib",
+				label : "AlloyUI Component Taglib",
 				icon16 : "alloy_tld_16x16.png",
 				icon32 : "alloy_tld_32x32.png",
 				url : "http://alloy.liferay.com/tld/alloy",
