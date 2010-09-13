@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.editor;
 
 import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
@@ -52,6 +53,9 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
+/**
+ * @author Greg Amerson
+ */
 @SuppressWarnings("restriction")
 public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 
@@ -65,38 +69,10 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		super();
 		setEditDomain(new DefaultEditDomain(this));
 	}
-	
+
 	public LayoutTplEditor(StructuredTextEditor sourceEditor) {
 		this();
 		this.sourceEditor = sourceEditor;
-	}
-
-	protected void createGraphicalViewer(Composite parent) {
-		// GraphicalViewer viewer = new ScrollingGraphicalViewer();
-		GraphicalViewer viewer = new GraphicalViewerImpl();
-		viewer.createControl(parent);
-		setGraphicalViewer(viewer);
-		configureGraphicalViewer();
-		hookGraphicalViewer();
-		initializeGraphicalViewer();
-	}
-
-	@Override
-	protected void configureGraphicalViewer() {
-		super.configureGraphicalViewer();
-		
-		GraphicalViewer viewer = getGraphicalViewer();
-
-		viewer.setEditPartFactory(new LayoutTplEditPartFactory());
-
-		// viewer.setRootEditPart(new ScalableRootEditPart());
-		viewer.setRootEditPart(new LayoutTplRootEditPart());
-		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
-
-		// configure the context menu provider
-		ContextMenuProvider cmProvider = new LayoutTplContextMenuProvider(viewer, getActionRegistry());
-		viewer.setContextMenu(cmProvider);
-		getSite().registerContextMenu(cmProvider, viewer);
 	}
 
 	public void commandStackChanged(EventObject event) {
@@ -105,129 +81,9 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		super.commandStackChanged(event);
 	}
 
-	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new PaletteViewerProvider(getEditDomain()) {
-
-			protected void configurePaletteViewer(PaletteViewer viewer) {
-				super.configurePaletteViewer(viewer);
-				viewer.setPaletteViewerPreferences(new LayoutTplPaletteViewerPreferences());
-				// FlyoutPreferences preferences = getPalettePreferences();
-				// preferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
-				// create a drag source listener for this palette viewer
-				// together with an appropriate transfer drop target listener,
-				// this will enable
-				// model element creation by dragging a
-				// CombinatedTemplateCreationEntries
-				// from the palette into the editor
-				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
-			}
-
-		};
-	}
-
-	/**
-	 * Create a transfer drop target listener. When using a
-	 * CombinedTemplateCreationEntry tool in the palette, this will enable model
-	 * element creation by dragging from the palette.
-	 * 
-	 * @see #createPaletteViewerProvider()
-	 */
-	protected TransferDropTargetListener createTransferDropTargetListener() {
-		return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
-
-			protected CreationFactory getFactory(Object template) {
-				return new SimpleFactory((Class<?>) template);
-			}
-
-		};
-	}
-
-	protected IDOMModel getSourceModel(boolean readOnly) {
-		IDOMModel domModel = null;
-
-		if (this.sourceEditor != null && this.sourceEditor.getDocumentProvider() != null) {
-			IDocumentProvider documentProvider = this.sourceEditor.getDocumentProvider();
-			IDocument doc = documentProvider.getDocument(getEditorInput());
-			IStructuredModel model;
-
-			if (readOnly) {
-				model = StructuredModelManager.getModelManager().getExistingModelForRead(doc);
-			}
-			else {
-				model = StructuredModelManager.getModelManager().getExistingModelForEdit(doc);
-			}
-
-			if (model instanceof IDOMModel) {
-				domModel = (IDOMModel) model;
-			}
-		}
-
-		return domModel;
-	}
-
-	protected void setInput(IEditorInput input) {
-		super.setInput(input);
-
-		refreshVisualModel();
-		
-		IFile file = ((IFileEditorInput) input).getFile();
-		setPartName(file.getName());
-		
-		// try {
-		// IFile file = ((IFileEditorInput) input).getFile();
-		// setPartName(file.getName());
-		// diagram = LayoutTplDiagram.createFromFile(file);
-		// }
-		// catch (Exception e) {
-		// LayoutTplUI.logError(e);
-		// }
-	}
-
-	protected IFile getSourceFile() {
-		return ((IFileEditorInput) getEditorInput()).getFile();
-	}
-
-	public void refreshSourceModel() {
-		IDOMModel domModel = getSourceModel();
-		domModel.aboutToChangeModel();
-		String name = getSourceFile().getFullPath().removeFileExtension().lastSegment();
-		String templateSource = diagram.getTemplateSource(name);
-		domModel.getStructuredDocument().setText(this, templateSource);
-		domModel.changedModel();
-		domModel.releaseFromEdit();
-	}
-
-	public void refreshVisualModel() {
-		IDOMModel domModel = getSourceModel(true);
-
-		if (domModel != null) {
-			diagram = LayoutTplDiagram.createFromModel(domModel);
-			domModel.releaseFromRead();
-		}
-		else {
-			diagram = LayoutTplDiagram.createDefaultDiagram();
-		}
-
-		final GraphicalViewer viewer = getGraphicalViewer();
-		if (viewer != null) {
-			viewer.setContents(diagram);
-			refreshViewer(viewer);
-		}
-	}
-
-	private void refreshViewer(final GraphicalViewer viewer) {
-		viewer.getControl().addPaintListener(new PaintListener() {
-
-			public void paintControl(PaintEvent e) {
-				getGraphicalViewer().getContents().refresh();// rebuild column heights if needed
-				viewer.getControl().removePaintListener(this);
-			}
-
-		});
-	}
-
-	protected IDOMModel getSourceModel() {
-		return getSourceModel(false);
+	@Override
+	public void dispose() {
+		super.dispose();
 	}
 
 	@Override
@@ -262,6 +118,121 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		return super.getAdapter(type);
 	}
 
+	public LayoutTplDiagram getDiagram() {
+		return diagram;
+	}
+
+	public boolean isSaveAsAllowed() {
+		return false;
+	}
+
+	public void refreshSourceModel() {
+		IDOMModel domModel = getSourceModel();
+		domModel.aboutToChangeModel();
+		String name = getSourceFile().getFullPath().removeFileExtension().lastSegment();
+		String templateSource = diagram.getTemplateSource(name);
+		domModel.getStructuredDocument().setText(this, templateSource);
+		domModel.changedModel();
+		domModel.releaseFromEdit();
+	}
+
+	public void refreshVisualModel() {
+		IDOMModel domModel = getSourceModel(true);
+
+		if (domModel != null) {
+			diagram = LayoutTplDiagram.createFromModel(domModel);
+			domModel.releaseFromRead();
+		}
+		else {
+			diagram = LayoutTplDiagram.createDefaultDiagram();
+		}
+
+		final GraphicalViewer viewer = getGraphicalViewer();
+		if (viewer != null) {
+			viewer.setContents(diagram);
+			refreshViewer(viewer);
+		}
+	}
+
+	public void updateActions() {
+		updateActions(this.getSelectionActions());
+	}
+
+	private void refreshViewer(final GraphicalViewer viewer) {
+		viewer.getControl().addPaintListener(new PaintListener() {
+
+			public void paintControl(PaintEvent e) {
+				getGraphicalViewer().getContents().refresh();// rebuild column heights if needed
+				viewer.getControl().removePaintListener(this);
+			}
+
+		});
+	}
+
+	@Override
+	protected void configureGraphicalViewer() {
+		super.configureGraphicalViewer();
+
+		GraphicalViewer viewer = getGraphicalViewer();
+
+		viewer.setEditPartFactory(new LayoutTplEditPartFactory());
+
+		// viewer.setRootEditPart(new ScalableRootEditPart());
+		viewer.setRootEditPart(new LayoutTplRootEditPart());
+		viewer.setKeyHandler(new GraphicalViewerKeyHandler(viewer));
+
+		// configure the context menu provider
+		ContextMenuProvider cmProvider = new LayoutTplContextMenuProvider(viewer, getActionRegistry());
+		viewer.setContextMenu(cmProvider);
+		getSite().registerContextMenu(cmProvider, viewer);
+	}
+
+	protected void createGraphicalViewer(Composite parent) {
+		// GraphicalViewer viewer = new ScrollingGraphicalViewer();
+		GraphicalViewer viewer = new GraphicalViewerImpl();
+		viewer.createControl(parent);
+		setGraphicalViewer(viewer);
+		configureGraphicalViewer();
+		hookGraphicalViewer();
+		initializeGraphicalViewer();
+	}
+
+	protected PaletteViewerProvider createPaletteViewerProvider() {
+		return new PaletteViewerProvider(getEditDomain()) {
+
+			protected void configurePaletteViewer(PaletteViewer viewer) {
+				super.configurePaletteViewer(viewer);
+				viewer.setPaletteViewerPreferences(new LayoutTplPaletteViewerPreferences());
+				// FlyoutPreferences preferences = getPalettePreferences();
+				// preferences.setPaletteState(FlyoutPaletteComposite.STATE_PINNED_OPEN);
+				// create a drag source listener for this palette viewer
+				// together with an appropriate transfer drop target listener,
+				// this will enable
+				// model element creation by dragging a
+				// CombinatedTemplateCreationEntries
+				// from the palette into the editor
+				viewer.addDragSourceListener(new TemplateTransferDragSourceListener(viewer));
+			}
+
+		};
+	}
+
+	/**
+	 * Create a transfer drop target listener. When using a CombinedTemplateCreationEntry tool in the palette, this will
+	 * enable model element creation by dragging from the palette.
+	 * 
+	 * @see #createPaletteViewerProvider()
+	 */
+	protected TransferDropTargetListener createTransferDropTargetListener() {
+		return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
+
+			protected CreationFactory getFactory(Object template) {
+				return new SimpleFactory((Class<?>) template);
+			}
+
+		};
+	}
+
 	protected PaletteRoot getPaletteRoot() {
 		if (PALETTE_MODEL == null) {
 			PALETTE_MODEL = LayoutTplEditorPaletteFactory.createPalette();
@@ -269,7 +240,38 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 
 		return PALETTE_MODEL;
 	}
-	
+
+	protected IFile getSourceFile() {
+		return ((IFileEditorInput) getEditorInput()).getFile();
+	}
+
+	protected IDOMModel getSourceModel() {
+		return getSourceModel(false);
+	}
+
+	protected IDOMModel getSourceModel(boolean readOnly) {
+		IDOMModel domModel = null;
+
+		if (this.sourceEditor != null && this.sourceEditor.getDocumentProvider() != null) {
+			IDocumentProvider documentProvider = this.sourceEditor.getDocumentProvider();
+			IDocument doc = documentProvider.getDocument(getEditorInput());
+			IStructuredModel model;
+
+			if (readOnly) {
+				model = StructuredModelManager.getModelManager().getExistingModelForRead(doc);
+			}
+			else {
+				model = StructuredModelManager.getModelManager().getExistingModelForEdit(doc);
+			}
+
+			if (model instanceof IDOMModel) {
+				domModel = (IDOMModel) model;
+			}
+		}
+
+		return domModel;
+	}
+
 	protected void initializeGraphicalViewer() {
 		super.initializeGraphicalViewer();
 		final GraphicalViewer viewer = getGraphicalViewer();
@@ -280,16 +282,22 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		viewer.addDropTargetListener(createTransferDropTargetListener());
 	}
 
-	public LayoutTplDiagram getDiagram() {
-		return diagram;
+	protected void setInput(IEditorInput input) {
+		super.setInput(input);
+
+		refreshVisualModel();
+
+		IFile file = ((IFileEditorInput) input).getFile();
+		setPartName(file.getName());
+
+		// try {
+		// IFile file = ((IFileEditorInput) input).getFile();
+		// setPartName(file.getName());
+		// diagram = LayoutTplDiagram.createFromFile(file);
+		// }
+		// catch (Exception e) {
+		// LayoutTplUI.logError(e);
+		// }
 	}
 
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
 }

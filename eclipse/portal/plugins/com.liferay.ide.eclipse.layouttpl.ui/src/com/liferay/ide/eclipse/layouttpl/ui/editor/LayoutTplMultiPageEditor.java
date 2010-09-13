@@ -25,12 +25,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextInputListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.ide.IGotoMarker;
@@ -47,7 +50,7 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 @SuppressWarnings({
 	"restriction", "rawtypes"
 })
-public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
+public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISelectionListener {
 
 	class PropertyListener implements IPropertyListener {
 
@@ -85,6 +88,13 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 
 	public LayoutTplMultiPageEditor() {
 		super();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 	}
 
 	@Override
@@ -161,6 +171,14 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 	}
 
 	@Override
+	public void init(IEditorSite site, IEditorInput input)
+		throws PartInitException {
+		super.init(site, input);
+
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+	}
+
+	@Override
 	public boolean isSaveAsAllowed() {
 		return (sourceEditor != null) && sourceEditor.isSaveAsAllowed();
 	}
@@ -177,6 +195,12 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart {
 		}
 
 		return isDirty();
+	}
+
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (this.equals(getSite().getPage().getActiveEditor())) {
+			visualEditor.updateActions();
+		}
 	}
 
 	protected void addSourcePage()
