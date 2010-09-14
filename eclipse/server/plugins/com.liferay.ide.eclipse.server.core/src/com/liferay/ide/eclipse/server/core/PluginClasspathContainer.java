@@ -24,6 +24,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -31,18 +32,39 @@ import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorations;
+import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("restriction")
 public abstract class PluginClasspathContainer implements IClasspathContainer {
 
+	protected static ClasspathDecorationsManager cpDecorations;
+
+	protected static final String SEPARATOR = "!";
+
+	static {
+		cpDecorations = new ClasspathDecorationsManager(PortalServerCorePlugin.PLUGIN_ID);
+	}
+
+	public static String getDecorationManagerKey(IProject project, String container) {
+		return project.getName() + SEPARATOR + container;
+	}
+
+	static ClasspathDecorationsManager getDecorationsManager() {
+		return cpDecorations;
+	}
+
+	protected IClasspathEntry[] classpathEntries;
+
 	protected IPath path;
-	
+
 	protected IPath portalRoot;
-	
+
 	protected IJavaProject project;
 
 	public PluginClasspathContainer(IPath containerPath, IJavaProject project, IPath portalRoot) {
@@ -52,33 +74,25 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	public IClasspathEntry[] getClasspathEntries() {
-		List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-		
-		for (String pluginJar : getPluginJars()) {
-			// IPath sourcePath = PortalServerCorePlugin.getDefault().getPortalSourcePath(new
-			// Path(pluginJar).removeFileExtension());
-			IPath sourcePath = null;
-			entries.add(JavaCore.newLibraryEntry(
-				this.portalRoot.append("/WEB-INF/lib/" + pluginJar), sourcePath, null, new IAccessRule[] {},
-				new IClasspathAttribute[] {}, false));
+		if (this.classpathEntries == null) {
+			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+
+			if (this.portalRoot == null) {
+				return entries.toArray(new IClasspathEntry[0]);
+			}
+
+			for (String pluginJar : getPluginJars()) {
+				entries.add(createClasspathEntry(pluginJar));
+			}
+
+			for (String pluginPackageJar : getPluginPackageJars()) {
+				entries.add(createClasspathEntry(pluginPackageJar));
+			}
+
+			this.classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
 		}
 
-		for (String pluginPackageJar : getPluginPackageJars()) {
-			IPath entryPath = this.portalRoot.append("/WEB-INF/lib/" + pluginPackageJar);
-			
-
-			// IPath sourcePath =
-			// PortalServerCorePlugin.getDefault().getPortalSourcePath(
-			// new Path(pluginPackageJar).removeFileExtension());
-
-			IPath sourcePath = null;
-
-			entries.add(JavaCore.newLibraryEntry(
-				entryPath, sourcePath, null, new IAccessRule[] {},
-					new IClasspathAttribute[] {}, false));
-		}
-
-		return entries.toArray(new IClasspathEntry[entries.size()]);		
+		return this.classpathEntries;
 	}
 
 	public abstract String getDescription();
@@ -91,43 +105,86 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		return this.path;
 	}
 
+	public IPath getPortalRoot() {
+		return portalRoot;
+	}
+
+	protected IClasspathEntry createClasspathEntry(String pluginJar) {
+		IPath sourcePath = null;
+		IPath sourceRootPath = null;
+		IAccessRule[] rules = new IAccessRule[] {};
+		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
+		IPath entryPath = this.portalRoot.append("/WEB-INF/lib/" + pluginJar);
+
+		final ClasspathDecorations dec =
+			cpDecorations.getDecorations(
+				getDecorationManagerKey(project.getProject(), getPath().toString()), entryPath.toString());
+
+		if (dec != null) {
+			sourcePath = dec.getSourceAttachmentPath();
+			sourceRootPath = dec.getSourceAttachmentRootPath();
+			attrs = dec.getExtraAttributes();
+		}
+
+		IClasspathEntry newEntry = null;
+
+		newEntry = JavaCore.newLibraryEntry(entryPath, sourcePath, sourceRootPath, rules, attrs, false);
+
+		return newEntry;
+	}
+
+	protected IClasspathEntry findSuggestedEntry(IPath jarPath, IClasspathEntry[] suggestedEntries) {
+		// compare jarPath to an existing entry
+		if (jarPath != null && (!CoreUtil.isNullOrEmpty(jarPath.toString())) &&
+			(!CoreUtil.isNullOrEmpty(suggestedEntries))) {
+			int matchLength = jarPath.segmentCount();
+
+			for (IClasspathEntry suggestedEntry : suggestedEntries) {
+				IPath suggestedPath = suggestedEntry.getPath();
+				IPath pathToMatch =
+					suggestedPath.removeFirstSegments(suggestedPath.segmentCount() - matchLength).setDevice(null).makeAbsolute();
+				if (jarPath.equals(pathToMatch)) {
+					return suggestedEntry;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	protected abstract String[] getPluginJars();
 
 	protected String[] getPluginPackageJars() {
 		String[] jars = new String[0];
-		
+
 		IVirtualComponent comp = ComponentCore.createComponent(this.project.getProject());
-		
-		if (comp != null) {			
+
+		if (comp != null) {
 			IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
-			
+
 			IFile pluginPackageFile =
 				webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
-			
+
 			if (pluginPackageFile.exists()) {
 				Properties props = new Properties();
-				
+
 				try {
 					props.load(pluginPackageFile.getContents());
-					
+
 					String deps = props.getProperty("portal-dependency-jars", "");
-					
+
 					String[] split = deps.split(",");
-					
+
 					if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
-						jars = split;						
+						jars = split;
 					}
-				}				
+				}
 				catch (Exception e) {
 				}
 			}
 		}
-		
-		return jars;		
-	}
 
-	public IPath getPortalRoot() {
-		return portalRoot;
+		return jars;
 	}
 
 }

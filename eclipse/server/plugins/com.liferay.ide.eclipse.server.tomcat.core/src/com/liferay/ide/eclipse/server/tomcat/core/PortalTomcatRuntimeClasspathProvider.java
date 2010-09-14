@@ -15,20 +15,13 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
-import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntimeClasspathProvider;
 import org.eclipse.wst.server.core.IRuntime;
 
@@ -69,46 +62,45 @@ public class PortalTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspath
 			}
 		}
 
-		List<IClasspathEntry> sourceList = new ArrayList<IClasspathEntry>();
+		// List<IClasspathEntry> sourceList = new ArrayList<IClasspathEntry>();
+		//
+		// for (IClasspathEntry entry : optimizedList) {
+		// if (shouldAttachSource(entry)) {
+		// IClasspathEntry newEntry =
+		// JavaCore.newLibraryEntry(entry.getPath(), PortalServerCorePlugin.getDefault().getPortalSourcePath(
+		// new Path(entry.getPath().removeFileExtension().lastSegment())), null);
+		//
+		// sourceList.add(newEntry);
+		// }
+		// else {
+		// sourceList.add(entry);
+		// }
+		// }
+		//
+		// try {
+		// project.getWorkspace().run(new IWorkspaceRunnable() {
+		//
+		// public void run(IProgressMonitor monitor)
+		// throws CoreException {
+		//
+		// requestClasspathContainerUpdate(runtime, new IClasspathEntry[] {});
+		// }
+		// }, null);
+		// }
+		// catch (CoreException e) {
+		// }
 
-		for (IClasspathEntry entry : optimizedList) {
-			if (shouldAttachSource(entry)) {
-				IClasspathEntry newEntry =
-					JavaCore.newLibraryEntry(entry.getPath(), PortalServerCorePlugin.getDefault().getPortalSourcePath(
-						new Path(entry.getPath().removeFileExtension().lastSegment())), null);
-				
-				sourceList.add(newEntry);
-			}
-			else {
-				sourceList.add(entry);
-			}
-		}
-
-		try {
-			project.getWorkspace().run(new IWorkspaceRunnable() {
-
-				public void run(IProgressMonitor monitor)				
-					throws CoreException {
-					
-					requestClasspathContainerUpdate(runtime, new IClasspathEntry[] {});
-				}
-			}, null);
-		}
-		catch (CoreException e) {
-		}
-
-		return (IClasspathEntry[]) sourceList.toArray(new IClasspathEntry[sourceList.size()]);
+		return (IClasspathEntry[]) optimizedList.toArray(new IClasspathEntry[optimizedList.size()]);
 	}
 
-	private boolean shouldAttachSource(IClasspathEntry entry) {
-		// TODO reenable this IDE-83
+	// TODO reenable this IDE-83
+	// private boolean shouldAttachSource(IClasspathEntry entry) {
 		// if (entry != null &&
 		// entry.getPath().lastSegment().matches("portal-.*\\.jar")) {
 		// return true;
 		// }
-		
-		return false;
-	}
+	// return false;
+	// }
 
 	protected void updateClasspath(IProject project, IRuntime runtime) {
 		// IJavaProject javaProject = JavaCore.create(project);

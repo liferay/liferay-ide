@@ -20,16 +20,23 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathContainer;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorations;
+import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager;
 
 /**
- * @author Greg Amersont
+ * @author Greg Amerson
  */
+@SuppressWarnings("restriction")
 public class PluginClasspathContainerInitializer extends ClasspathContainerInitializer {
 
 	public static final String ID = "com.liferay.ide.eclipse.server.plugin.container";
+
+	protected static final ClasspathDecorationsManager cpDecorations = PluginClasspathContainer.getDecorationsManager();
 
 	@Override
 	public boolean canUpdateClasspathContainer(IPath containerPath, IJavaProject project) {
@@ -39,18 +46,18 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 	@Override
 	public void initialize(IPath containerPath, IJavaProject project)
 		throws CoreException {
-		
+
 		IClasspathContainer classpathContainer = null;
 
 		int count = containerPath.segmentCount();
-		
+
 		if (count != 2) {
 			throw new CoreException(
 				PortalServerCorePlugin.createErrorStatus("Invalid plugin classpath container should expecting 2 segments."));
 		}
 
-		String root = containerPath.segment(0);		
-		
+		String root = containerPath.segment(0);
+
 		if (!ID.equals(root)) {
 			throw new CoreException(
 				PortalServerCorePlugin.createErrorStatus("Invalid plugin classpath container, expecting container root " +
@@ -67,12 +74,63 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 		classpathContainer = getCorrectContainer(containerPath, finalSegment, project, portalRoot);
 
-		JavaCore.setClasspathContainer(containerPath, 
-			new IJavaProject[] {
-				project
-			}, new IClasspathContainer[] {
-				classpathContainer
-			}, null);
+		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
+			project
+		}, new IClasspathContainer[] {
+			classpathContainer
+		}, null);
+	}
+
+	@Override
+	public void requestClasspathContainerUpdate(
+		IPath containerPath, IJavaProject project, IClasspathContainer containerSuggestion)
+		throws CoreException {
+
+		final String key =
+			PluginClasspathContainer.getDecorationManagerKey(project.getProject(), containerPath.toString());
+
+		final IClasspathEntry[] entries = containerSuggestion.getClasspathEntries();
+
+		cpDecorations.clearAllDecorations(key);
+
+		for (int i = 0; i < entries.length; i++) {
+			final IClasspathEntry entry = entries[i];
+
+			final IPath srcpath = entry.getSourceAttachmentPath();
+			final IPath srcrootpath = entry.getSourceAttachmentRootPath();
+			final IClasspathAttribute[] attrs = entry.getExtraAttributes();
+
+			if (srcpath != null || attrs.length > 0) {
+				final String eid = entry.getPath().toString();
+				final ClasspathDecorations dec = new ClasspathDecorations();
+
+				dec.setSourceAttachmentPath(srcpath);
+				dec.setSourceAttachmentRootPath(srcrootpath);
+				dec.setExtraAttributes(attrs);
+
+				cpDecorations.setDecorations(key, eid, dec);
+			}
+		}
+
+		cpDecorations.save();
+
+		IPath portalRoot = null;
+
+		if (containerSuggestion instanceof PluginClasspathContainer) {
+			portalRoot = ((PluginClasspathContainer) containerSuggestion).getPortalRoot();
+		}
+		else {
+			portalRoot = ServerUtil.getPortalRoot(project);
+		}
+
+		IClasspathContainer newContainer =
+			getCorrectContainer(containerPath, containerPath.segment(1), project, portalRoot);
+
+		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
+			project
+		}, new IClasspathContainer[] {
+			newContainer
+		}, null);
 	}
 
 	protected IClasspathContainer getCorrectContainer(
@@ -96,25 +154,6 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		}
 
 		return classpathContainer;
-	}
-
-	@Override
-	public void requestClasspathContainerUpdate(
-		IPath containerPath, IJavaProject project, IClasspathContainer containerSuggestion)
-		throws CoreException {
-		
-		if (containerSuggestion instanceof PluginClasspathContainer) {
-			PluginClasspathContainer pluginContainer = (PluginClasspathContainer) containerSuggestion;
-			
-			IClasspathContainer newContainer =
-				getCorrectContainer(containerPath, containerPath.segment(1), project, pluginContainer.getPortalRoot());
-
-			JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
-				project
-			}, new IClasspathContainer[] {
-				newContainer
-			}, null);
-		}
 	}
 
 }
