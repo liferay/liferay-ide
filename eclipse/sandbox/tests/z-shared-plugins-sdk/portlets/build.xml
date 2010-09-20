@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<project name="portlets" basedir="." default="deploy" xmlns:antelope="antlib:ise.antelope.tasks">
+	<property name="project.dir" value=".." />
+
+	<import file="../build-common-plugins.xml" />
+
+	<target name="create">
+		<if>
+			<not>
+				<isset property="portlet.name" />
+			</not>
+			<then>
+				<echo message="This task must be called by create.bat." />
+			</then>
+			<else>
+				<if>
+					<not>
+						<isset property="portlet.parent.dir" />
+					</not>
+					<then>
+						<property name="portlet.parent.dir" value="${basedir}" />
+					</then>
+				</if>
+				<if>
+					<available file="${portlet.parent.dir}/${portlet.name}-portlet" />
+					<then>
+						<echo message="${portlet.name}-portlet already exists." />
+					</then>
+					<else>
+						<unzip src="portlet.zip" dest="${portlet.parent.dir}/${portlet.name}-portlet" />
+
+						<replace dir="${portlet.parent.dir}/${portlet.name}-portlet">
+							<replacefilter token="@portlet.name@" value="${portlet.name}" />
+							<replacefilter token="@portlet.display.name@" value="${portlet.display.name}" />
+						</replace>
+
+						<mkdir dir="${portlet.parent.dir}/${portlet.name}-portlet/docroot/WEB-INF/tld" />
+
+						<copy todir="${portlet.parent.dir}/${portlet.name}-portlet/docroot/WEB-INF/tld">
+						    <fileset dir="${app.server.portal.dir}/WEB-INF/tld">
+								<include name="liferay-portlet.tld" />
+								<include name="liferay-portlet-ext.tld" />
+								<include name="liferay-security.tld" />
+								<include name="liferay-theme.tld" />
+								<include name="liferay-ui.tld" />
+								<include name="liferay-util.tld" />
+						    </fileset>
+						</copy>
+					</else>
+				</if>
+			</else>
+		</if>
+	</target>
+</project>
