@@ -18,4 +18,3 @@
 
 <portlet:defineObjects />
 
-This is the <b>Test</b> portlet.
