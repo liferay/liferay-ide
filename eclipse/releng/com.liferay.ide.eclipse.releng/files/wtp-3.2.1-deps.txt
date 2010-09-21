@@ -31,6 +31,7 @@ org.eclipse.jst.server.generic.jonas
 org.eclipse.jst.server.generic.ui
 org.eclipse.jst.server.tomcat.core
 org.eclipse.jst.server.tomcat.ui
+org.eclipse.jst.server.websphere.core
 org.eclipse.jst.server.ui
 org.eclipse.wst.server.core
 org.eclipse.wst.server.discovery

@@ -36,6 +36,7 @@ plugin@org.eclipse.jst.server.generic.core=v20100512,:pserver:anonymous@dev.ecli
 plugin@org.eclipse.jst.server.generic.ui=v20100428,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.generic.ui
 plugin@org.eclipse.jst.server.tomcat.core=v20100707,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.tomcat.core
 plugin@org.eclipse.jst.server.tomcat.ui=v20100418,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.tomcat.ui
+plugin@org.eclipse.jst.server.websphere.core=v20080620,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.websphere.core
 plugin@org.eclipse.jst.server.generic.jboss=v200904151730,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.generic.jboss
 plugin@org.eclipse.jst.server.generic.jonas=v200805140145,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.generic.jonas
 plugin@org.eclipse.wst.server.core=v20100714,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.wst.server.core
