@@ -60,12 +60,16 @@ public class PortletCore extends Plugin {
 		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
 	}
 
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	}
+
 	public static IStatus createErrorStatus(String msg, Exception e) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
 	}
 
-	public static IStatus createErrorStatus(String msg) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
+	public static IStatus createWarningStatus(String msg) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
 	}
 
 	/**
@@ -79,6 +83,10 @@ public class PortletCore extends Plugin {
 
 	public static void logError(Exception ex) {
 		getDefault().getLog().log(createErrorStatus(ex));
+	}
+
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(createErrorStatus(msg, e));
 	}
 
 	/**
@@ -113,10 +121,6 @@ public class PortletCore extends Plugin {
 		plugin = null;
 
 		super.stop(context);
-	}
-
-	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(createErrorStatus(msg, e));
 	}
 
 }

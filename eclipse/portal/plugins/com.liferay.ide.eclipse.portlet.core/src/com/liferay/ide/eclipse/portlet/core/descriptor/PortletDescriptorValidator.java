@@ -154,8 +154,8 @@ public class PortletDescriptorValidator extends BaseValidator {
 			Map<String, Object> problem =
 				checkClassResource(
 					javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-					ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND,
-					MESSAGE_RESOURCE_BUNDLE_NOT_FOUND);
+					ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND, MESSAGE_RESOURCE_BUNDLE_NOT_FOUND,
+					true);
 
 			if (problem != null) {
 				problems.add(problem);

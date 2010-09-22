@@ -292,8 +292,10 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		}
 
 		if (model.getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE)) {
-			appendChildElement(
-				newPortletElement, "resource-bundle", model.getStringProperty(CREATE_RESOURCE_BUNDLE_FILE_PATH));
+			// need to remove .properties off the end of the bundle_file_path
+			String bundlePath = model.getStringProperty(CREATE_RESOURCE_BUNDLE_FILE_PATH);
+			String bundleValue = bundlePath.replaceAll("\\.properties$", "");
+			appendChildElement(newPortletElement, "resource-bundle", bundleValue);
 		}
 
 		// add portlet-info

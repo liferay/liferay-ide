@@ -96,9 +96,27 @@ public abstract class BaseValidator extends AbstractValidator {
 		IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
 		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage) {
 
+		return checkClassResource(
+			javaProject, classResourceSpecifier, preferenceNodeQualifier, preferenceScopes, preferenceKey,
+			errorMessage, false);
+	}
+
+	protected Map<String, Object> checkClassResource(
+		IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
+		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, boolean warnPropertiesSuffix) {
+
 		String classResource = NodeUtil.getTextContent(classResourceSpecifier);
 
 		if (classResource != null && classResource.length() > 0) {
+			if (classResource.endsWith(".properties") && warnPropertiesSuffix) {
+				String msg =
+					MessageFormat.format("The class resource {0} should not end with .properties", new Object[] {
+						classResource
+					});
+				return createMarkerValues(
+					preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg);
+			}
+
 			try {
 				IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath(true);
 
@@ -109,6 +127,18 @@ public abstract class BaseValidator extends AbstractValidator {
 						IPath classResourcePath = entryPath.append(classResource);
 						classResourceValue =
 							javaProject.getJavaModel().getWorkspace().getRoot().findMember(classResourcePath);
+
+						if (classResourceValue == null && classResourcePath.segmentCount() > 0) {
+							// check for a .properties of the same resource path in case of a resource bundle element
+							// that doesn't append the .properties
+							String resourceName = classResourcePath.lastSegment();
+							IPath propertiesClassResourcePath =
+								classResourcePath.removeLastSegments(1).append(resourceName + ".properties");
+							classResourceValue =
+								javaProject.getJavaModel().getWorkspace().getRoot().findMember(
+									propertiesClassResourcePath);
+						}
+
 						if (classResourceValue != null) {
 							break;
 						}
@@ -136,46 +166,45 @@ public abstract class BaseValidator extends AbstractValidator {
 	protected void checkDocrootElement(
 		IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
 		IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems) {
-		
-			NodeList elements = document.getElementsByTagName(element);
-		
-			for (int i = 0; i < elements.getLength(); i++) {
-				Node item = elements.item(i);
-		
-				Map<String, Object> problem =
-					checkDocrootResource(
-						item, project, preferenceNodeQualifier, preferenceScopes, validationKey, messageKey);
-		
-				if (problem != null) {
-					problems.add(problem);
-				}
+
+		NodeList elements = document.getElementsByTagName(element);
+
+		for (int i = 0; i < elements.getLength(); i++) {
+			Node item = elements.item(i);
+
+			Map<String, Object> problem =
+				checkDocrootResource(
+					item, project, preferenceNodeQualifier, preferenceScopes, validationKey, messageKey);
+
+			if (problem != null) {
+				problems.add(problem);
 			}
 		}
+	}
 
 	protected Map<String, Object> checkDocrootResource(
 		Node docrootResourceSpecifier, IProject project, String preferenceNodeQualifier,
 		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage) {
 
 		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
-	
+
 		if (docrootResource != null && docrootResource.length() > 0) {
 			IFolder docroot = ProjectUtil.getDocroot(project);
-	
+
 			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
-	
+
 			if (docrootResourceValue == null) {
 				String msg = MessageFormat.format(errorMessage, new Object[] {
 					docrootResource
 				});
-	
+
 				return createMarkerValues(
 					preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier, msg);
 			}
 		}
-	
+
 		return null;
 	}
-
 
 	protected Map<String, Object> createMarkerValues(
 		String qualifier, IScopeContext[] preferenceScopes, String preferenceKey, IDOMNode domNode, String message) {

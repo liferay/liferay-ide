@@ -378,23 +378,35 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		}
 		else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
 			boolean validPath = false;
+			boolean validFileName = false;
 
 			String val = getStringProperty(propertyName);
 
+			if (getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE) && CoreUtil.isNullOrEmpty(val)) {
+				return PortletCore.createErrorStatus("Resource bundle file path must be a valid path.");
+			}
+
 			try {
 				IPath path = new Path(val);
-
 				validPath = path.isValidPath(val);
+
+				if ("properties".equals(path.getFileExtension())) {
+					validFileName = true;
+				}
 			}
 			catch (Exception e) {
 				// eat errors
 			}
 
-			if (validPath) {
+			if (!validPath) {
+				return PortletCore.createErrorStatus("Resource bundle file path must be a valid path.");
+			}
+
+			if (validFileName) {
 				return super.validate(propertyName);
 			}
 			else {
-				return PortletCore.createErrorStatus("Resource bundle file path must be a valid path.");
+				return PortletCore.createWarningStatus("Resource bundle file path should end with .properties");
 			}
 		}
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
