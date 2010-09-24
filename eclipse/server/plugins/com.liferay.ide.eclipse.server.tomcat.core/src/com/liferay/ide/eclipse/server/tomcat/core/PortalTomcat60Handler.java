@@ -48,7 +48,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 	public IStatus canAddModule(IModule module) {
 		// check to make sure that the user isn't trying to add multiple
 		// ext-plugins to server
-		if (module != null && currentServer != null) {
+		if (IPortalTomcatConstants.PREVENT_MULTI_EXT_PLUGINS_DEPLOY && module != null && currentServer != null) {
 			if (ProjectUtil.isExtProject(module.getProject())) {
 				for (IModule currentModule : currentServer.getModules()) {
 					if (ProjectUtil.isExtProject(currentModule.getProject())) {
