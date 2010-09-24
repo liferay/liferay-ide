@@ -152,6 +152,26 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		return null;
 	}
 
+	protected String[] getJarsfromPackagePropertiesFile(IFile pluginPackageFile) {
+		Properties props = new Properties();
+
+		try {
+			props.load(pluginPackageFile.getContents());
+
+			String deps = props.getProperty("portal-dependency-jars", "");
+
+			String[] split = deps.split(",");
+
+			if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
+				return split;
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return null;
+	}
+
 	protected abstract String[] getPluginJars();
 
 	protected String[] getPluginPackageJars() {
@@ -165,22 +185,28 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			IFile pluginPackageFile =
 				webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
 
-			if (pluginPackageFile.exists()) {
-				Properties props = new Properties();
-
+			if (!pluginPackageFile.exists()) {
+				// IDE-226 the file may be missing because we are in an ext plugin which has a different layout
+				// check for ext-web in the path to the docroot
 				try {
-					props.load(pluginPackageFile.getContents());
-
-					String deps = props.getProperty("portal-dependency-jars", "");
-
-					String[] split = deps.split(",");
-
-					if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
-						jars = split;
+					if (webroot.getFullPath().toPortableString().endsWith("WEB-INF/ext-web/docroot")) {
+						// look for packages file in first docroot
+						IPath parentDocroot = webroot.getFullPath().removeFirstSegments(1).removeLastSegments(3);
+						IFolder parentWebroot = this.project.getProject().getFolder(parentDocroot);
+						if (parentWebroot.exists()) {
+							pluginPackageFile =
+								parentWebroot.getFile("WEB-INF/" +
+									ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+						}
 					}
 				}
-				catch (Exception e) {
+				catch (Exception ex) {
+					PortalServerCorePlugin.logError(ex);
 				}
+			}
+
+			if (pluginPackageFile.exists()) {
+				jars = getJarsfromPackagePropertiesFile(pluginPackageFile);
 			}
 		}
 
