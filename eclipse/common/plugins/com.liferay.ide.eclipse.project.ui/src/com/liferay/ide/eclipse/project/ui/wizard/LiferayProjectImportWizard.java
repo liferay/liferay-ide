@@ -42,9 +42,9 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 		super(dataModel);
 		
 		setWindowTitle("Import Project");
-		
 		setDefaultPageImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
 			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
+		setNeedsProgressMonitor(true);
 	}
 
 	@Override
@@ -76,5 +76,6 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 	public void setProjectType(String projectType) {
 
 	}
+
 
 }
