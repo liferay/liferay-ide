@@ -33,6 +33,8 @@ public interface IPortalTomcatConstants {
 
 	final String[] LIB_EXCLUDES = defaultPrefs.get("tomcat.lib.excludes", "").split(",");
 
+	final boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = defaultPrefs.getBoolean("prevent.multi.ext.plugins.deploy", false);
+
 	/**
 	 * Property which specifies the directory where liferay scans for
 	 * autodeployment
