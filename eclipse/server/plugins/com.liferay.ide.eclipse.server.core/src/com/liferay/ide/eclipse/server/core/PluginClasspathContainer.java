@@ -169,7 +169,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		catch (Exception e) {
 		}
 
-		return null;
+		return new String[0];
 	}
 
 	protected abstract String[] getPluginJars();
