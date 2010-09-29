@@ -38,7 +38,7 @@ public class PortalTomcatLaunchConfigTabGroup extends TomcatLaunchConfigurationT
 		ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[6];
 		
 		tabs[0] = new ServerLaunchConfigurationTab(new String[] {
-			"com.liferay.ide.eclipse.server.tomcat"
+			getServerTypeId()
 		});
 		tabs[0].setLaunchConfigurationDialog(dialog);
 		
@@ -58,5 +58,9 @@ public class PortalTomcatLaunchConfigTabGroup extends TomcatLaunchConfigurationT
 		tabs[5].setLaunchConfigurationDialog(dialog);
 		
 		setTabs(tabs);
+	}
+
+	protected String getServerTypeId() {
+		return "com.liferay.ide.eclipse.server.tomcat";
 	}
 }

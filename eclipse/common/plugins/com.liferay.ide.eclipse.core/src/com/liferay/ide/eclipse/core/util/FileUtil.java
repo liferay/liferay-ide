@@ -17,9 +17,16 @@ package com.liferay.ide.eclipse.core.util;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,6 +160,77 @@ public class FileUtil {
 		}
 
 		return null;
+	}
+
+
+	public static int writeFileFromStream(File tempFile, InputStream in)
+		throws IOException {
+		byte[] buffer = new byte[1024];
+
+		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
+		BufferedInputStream bin = new BufferedInputStream(in);
+
+		int bytesRead = 0;
+		int bytesTotal = 0;
+
+		// Keep reading from the file while there is any content
+		// when the end of the stream has been reached, -1 is returned
+		while ((bytesRead = bin.read(buffer)) != -1) {
+			out.write(buffer);
+			bytesTotal += bytesRead;
+		}
+
+		if (bin != null) {
+			bin.close();
+		}
+
+		if (out != null) {
+			out.flush();
+			out.close();
+		}
+
+		return bytesTotal;
+	}
+
+	public static void copyFileToDir(File file, File dir) {
+		if (file == null || (!file.exists()) || dir == null || (!dir.exists()) || (!dir.isDirectory())) {
+			return;
+		}
+
+		byte[] buf = new byte[4096];
+
+		OutputStream out = null;
+		FileInputStream in = null;
+
+		try {
+			out = new FileOutputStream(new File(dir, file.getName()));
+			in = new FileInputStream(file);
+
+			int avail = in.read(buf);
+			while (avail > 0) {
+				out.write(buf, 0, avail);
+				avail = in.read(buf);
+			}
+		}
+		catch (Exception e) {
+			CorePlugin.logError("Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath());
+		}
+		finally {
+			try {
+				if (in != null)
+					in.close();
+			}
+			catch (Exception ex) {
+				// ignore
+			}
+			try {
+				if (out != null)
+					out.close();
+			}
+			catch (Exception ex) {
+				// ignore
+			}
+		}
 	}
 
 }

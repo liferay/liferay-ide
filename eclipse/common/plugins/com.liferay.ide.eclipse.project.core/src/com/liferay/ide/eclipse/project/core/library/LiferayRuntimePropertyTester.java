@@ -35,7 +35,7 @@ public class LiferayRuntimePropertyTester extends PropertyTester {
 			IFacetedProjectBase projectBase = ctx.getFacetedProject();
 			IRuntime serverRuntime = FacetUtil.getRuntime(projectBase.getPrimaryRuntime());
 			
-			if (serverRuntime.getRuntimeType().getId().startsWith("com.liferay.ide.eclipse.server.tomcat.runtime")) {
+			if (serverRuntime.getRuntimeType().getId().startsWith("com.liferay.")) {
 				retval = true;
 			}
 		}

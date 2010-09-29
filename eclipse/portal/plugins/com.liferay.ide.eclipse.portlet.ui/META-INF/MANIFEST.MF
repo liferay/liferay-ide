@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Portlet UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.ui;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.eclipse.core,

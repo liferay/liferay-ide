@@ -23,7 +23,4 @@ import org.eclipse.jst.server.tomcat.core.internal.PublishTask;
 @SuppressWarnings("restriction")
 public class PortalTomcatPublishTask extends PublishTask {
 
-	public PortalTomcatPublishTask() {
-	}
-
 }

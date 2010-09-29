@@ -29,6 +29,7 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 public class PortalTomcatRuntimeFragment extends TomcatRuntimeWizardFragment {
 
 	public PortalTomcatRuntimeFragment() {
+		super();
 	}
 
 	public Composite createComposite(Composite parent, IWizardHandle wizard) {

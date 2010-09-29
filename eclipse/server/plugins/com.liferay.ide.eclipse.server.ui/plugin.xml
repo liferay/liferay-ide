@@ -81,10 +81,12 @@
             id="com.liferay.ide.eclipse.server.ui.popup.server"
             objectClass="org.eclipse.wst.server.core.IServer">
          <visibility>
-            <objectState
-                  name="serverType"
-                  value="com.liferay.ide.eclipse.server.*">
-            </objectState>
+         	<or>
+	            <objectState
+	                  name="serverType"
+	                  value="com.liferay.*">
+	            </objectState>
+            </or>
          </visibility>
          <action
                class="com.liferay.ide.eclipse.server.ui.action.TestWebServicesAction"

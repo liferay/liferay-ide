@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="pluginDeployer" name="Liferay Plug-in Deployer" schema="schema/pluginDeployer.exsd"/>
+   <extension-point id="pluginDeployers" name="Liferay Plug-in Deployers" schema="schema/pluginDeployers.exsd"/>
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer

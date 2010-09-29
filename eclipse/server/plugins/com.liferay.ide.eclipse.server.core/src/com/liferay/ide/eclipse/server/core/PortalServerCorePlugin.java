@@ -40,9 +40,6 @@ public class PortalServerCorePlugin extends CorePlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.server.core";
 
-	// Server IDs
-	public static final String PORTAL_60 = "com.liferay.ide.eclipse.server.portal.60";
-
 	// The shared instance
 	private static PortalServerCorePlugin plugin;
 

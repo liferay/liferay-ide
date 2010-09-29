@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.eclipse.tools"
       label="Liferay IDE"
-      version="1.1.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.eclipse.tools.branding">
 

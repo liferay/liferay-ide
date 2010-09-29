@@ -181,24 +181,6 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 			validate();
 		}
 
-		// SWTUtil.createLabel(container, "Runtime", 1);
-		// serverTargetCombo = new Combo(container, SWT.BORDER | SWT.READ_ONLY);
-		// serverTargetCombo.setLayoutData(new
-		// GridData(GridData.FILL_HORIZONTAL));
-		// updateRuntimeItems();
-		// Button newServerTargetButton = new Button(container, SWT.NONE);
-		// newServerTargetButton.setText("New...");
-		// newServerTargetButton.addSelectionListener(new SelectionAdapter() {
-		// public void widgetSelected(SelectionEvent e) {
-		// boolean isOK = ServerUIUtil.showNewRuntimeWizard(getShell(),
-		// IModuleConstants.JST_WEB_MODULE, null,
-		// "com.liferay.ide.eclipse.server.tomcat.runtime.60");
-		// if (isOK) {
-		// updateRuntimeItems();
-		// }
-		// }
-		// });
-
 		return container;
 	}
 

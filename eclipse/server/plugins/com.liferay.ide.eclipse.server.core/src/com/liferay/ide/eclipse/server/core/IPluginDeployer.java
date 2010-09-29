@@ -6,7 +6,7 @@ import org.eclipse.wst.server.core.IModule;
 
 public interface IPluginDeployer {
 
-	public static final String ID = "com.liferay.ide.eclipse.server.core.pluginDeployer";
+	public static final String ID = "com.liferay.ide.eclipse.server.core.pluginDeployers";
 
 	public String getFacetId();
 

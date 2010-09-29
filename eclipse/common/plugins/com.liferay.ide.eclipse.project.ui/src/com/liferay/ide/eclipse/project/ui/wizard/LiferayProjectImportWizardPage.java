@@ -120,8 +120,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 					model.getValidPropertyDescriptors(FACET_RUNTIME);
 
 				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
+					ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =

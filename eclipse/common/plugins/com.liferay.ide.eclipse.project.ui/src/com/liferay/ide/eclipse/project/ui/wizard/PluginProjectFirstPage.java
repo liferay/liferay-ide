@@ -202,8 +202,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 					model.getValidPropertyDescriptors(FACET_RUNTIME);
 
 				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
+					ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =
@@ -395,7 +394,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 				boolean isOK =
 					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
+getShell(), getModuleTypeID(), null, "com.liferay.");
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =

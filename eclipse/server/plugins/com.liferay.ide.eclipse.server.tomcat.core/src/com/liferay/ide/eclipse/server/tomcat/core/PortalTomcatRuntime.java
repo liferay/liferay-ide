@@ -246,8 +246,73 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		return version.toString();
 	}
 
+	public String getServerInfo() {
+		// check for existing server info
+		IPath location = getRuntime().getLocation();
+
+		IPath serverInfosPath = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfos.properties");
+
+		String locationKey = location.toPortableString().replaceAll("\\/", "_");
+
+		File serverInfosFile = serverInfosPath.toFile();
+
+		Properties properties = new Properties();
+
+		if (serverInfosFile.exists()) {
+			try {
+				properties.load(new FileInputStream(serverInfosFile));
+				String serverInfo = (String) properties.get(locationKey);
+
+				if (!CoreUtil.isNullOrEmpty(serverInfo)) {
+					return serverInfo;
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		File serverInfoFile = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfo.txt").toFile();
+
+		if (serverInfoFile.exists()) {
+			FileUtil.clearContents(serverInfoFile);
+		}
+
+		loadServerInfoFile(location, serverInfoFile);
+
+		String serverInfoString = FileUtil.readContents(serverInfoFile);
+
+		if (!CoreUtil.isNullOrEmpty(serverInfoString)) {
+			properties.put(locationKey, serverInfoString);
+			try {
+				properties.store(new FileOutputStream(serverInfosFile), "");
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return serverInfoString;
+	}
+
+	protected void loadServerInfoFile(IPath location, File versionInfoFile) {
+		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
+
+		IPath libRoot = location.append("lib/ext");
+
+		IPath portalRoot = getRoot();
+
+		PortalSupportHelper helper =
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
+
+		try {
+			helper.launch(null);
+		}
+		catch (CoreException e) {
+			PortalTomcatPlugin.logError(e);
+		}
+	}
+
 	protected void loadVersionInfoFile(IPath location, File versionInfoFile) {
-		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetReleaseInfo";
+		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
 
 		IPath libRoot = location.append("lib/ext");
 
@@ -317,7 +382,19 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 				IPortalConstants.LEAST_SUPPORTED_VERSION);
 		}
 
+		String serverInfo = getServerInfo();
+
+		if (CoreUtil.isNullOrEmpty(serverInfo) || serverInfo.indexOf(getExpectedServerInfo()) < 0) {
+			status =
+				PortalTomcatPlugin.createErrorStatus("Portal server not supported.  Expecting " +
+					getExpectedServerInfo());
+		}
+
 		return status;
+	}
+
+	protected String getExpectedServerInfo() {
+		return "Liferay Portal Community Edition";
 	}
 
 	private IPath findBundledJREPath(IPath location) {

@@ -2,26 +2,26 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Portal Tomcat UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.tomcat.ui;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.server.tomcat.ui.PortalTomcatUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)",
- org.eclipse.debug.ui,
- org.eclipse.jdt.debug.ui,
- org.eclipse.jdt.launching,
- org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)",
- com.liferay.ide.eclipse.server.tomcat.core,
- org.eclipse.jst.server.tomcat.ui;bundle-version="[1.1.102,1.2.0)",
- org.eclipse.jst.server.tomcat.core;bundle-version="[1.1.106,1.2.0)",
- org.eclipse.core.expressions,
- com.liferay.ide.eclipse.server.ui,
+ org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)";visibility:=reexport,
+ org.eclipse.debug.ui;visibility:=reexport,
+ org.eclipse.jdt.debug.ui;visibility:=reexport,
+ org.eclipse.jdt.launching;visibility:=reexport,
+ org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";visibility:=reexport,
+ com.liferay.ide.eclipse.server.tomcat.core;visibility:=reexport,
+ org.eclipse.jst.server.tomcat.ui;bundle-version="[1.1.102,1.2.0)";visibility:=reexport,
+ org.eclipse.jst.server.tomcat.core;bundle-version="[1.1.106,1.2.0)";visibility:=reexport,
+ org.eclipse.core.expressions;visibility:=reexport,
+ com.liferay.ide.eclipse.server.ui;visibility:=reexport,
  com.liferay.ide.eclipse.ui,
- org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)",
- com.liferay.ide.eclipse.server.core,
- com.liferay.ide.eclipse.project.core,
- com.liferay.ide.eclipse.project.ui,
+ org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)";visibility:=reexport,
+ com.liferay.ide.eclipse.server.core;visibility:=reexport,
+ com.liferay.ide.eclipse.project.core;visibility:=reexport,
+ com.liferay.ide.eclipse.project.ui;visibility:=reexport,
  org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy

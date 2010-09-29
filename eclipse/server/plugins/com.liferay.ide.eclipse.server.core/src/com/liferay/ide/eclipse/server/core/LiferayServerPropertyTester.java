@@ -31,7 +31,7 @@ public class LiferayServerPropertyTester extends PropertyTester {
 			IServer server = (IServer) receiver;
 
 			try {
-				return server.getRuntime().getRuntimeType().getId().startsWith("com.liferay.eclipse.server");
+				return server.getRuntime().getRuntimeType().getId().startsWith("com.liferay.");
 			}
 			catch (Throwable t) {
 				// ignore

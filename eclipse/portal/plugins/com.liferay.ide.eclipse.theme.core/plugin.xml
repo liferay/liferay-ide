@@ -139,7 +139,7 @@
    </extension>
    
    <extension
-         point="com.liferay.ide.eclipse.server.core.pluginDeployer">
+         point="com.liferay.ide.eclipse.server.core.pluginDeployers">
       <liferayPluginDeployer
             class="com.liferay.ide.eclipse.theme.core.ThemePluginDeployer"
             facetId="liferay.theme">

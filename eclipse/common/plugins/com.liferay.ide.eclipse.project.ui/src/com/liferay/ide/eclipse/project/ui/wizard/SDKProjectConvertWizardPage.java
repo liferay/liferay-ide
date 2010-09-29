@@ -69,9 +69,7 @@ import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( {
-	"restriction", "unchecked"
-})
+@SuppressWarnings("restriction")
 public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPage
 	implements ISDKProjectsImportDataModelProperties {
 
@@ -327,7 +325,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
 		// Initialize recursion guard for recursive symbolic links
 		if (directoriesVisited == null) {
-			directoriesVisited = new HashSet();
+			directoriesVisited = new HashSet<String>();
 
 			try {
 				directoriesVisited.add(directory.getCanonicalPath());
@@ -517,8 +515,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 					model.getValidPropertyDescriptors(FACET_RUNTIME);
 
 				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
+					ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =

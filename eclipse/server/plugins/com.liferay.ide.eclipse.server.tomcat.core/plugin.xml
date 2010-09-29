@@ -5,7 +5,7 @@
          point="org.eclipse.wst.server.core.runtimeTypes">
       <runtimeType
             class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime"
-            description="Supports Liferay plug-in development including Portlet 1.0 (JSR-168) and 2.0 (JSR-286)"
+            description="Liferay Portal Community Edition v6.0 bundled with Tomcat 6"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             name="Liferay v6.0 (Tomcat 6)"
             vendor="Liferay, Inc."
@@ -43,7 +43,7 @@
       <serverType
             behaviourClass="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerBehavior"
             class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer"
-            description="Supports Liferay plug-in development including Portlet 1.0 (JSR-168) and 2.0 (JSR-286)"
+            description="Liferay Portal Community Edition Server bundled with Tomcat 6"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.60"
             initialState="stopped"

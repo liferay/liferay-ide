@@ -35,7 +35,7 @@ import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOpera
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"restriction", "unchecked"
+	"restriction", "unchecked", "rawtypes"
 })
 public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataModelProvider
 	implements INewLayoutTplDataModelProperties {

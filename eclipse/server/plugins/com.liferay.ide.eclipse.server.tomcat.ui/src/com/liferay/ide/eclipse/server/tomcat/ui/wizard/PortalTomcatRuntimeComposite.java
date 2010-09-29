@@ -15,15 +15,14 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
 
-import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.InstallableRuntime2ConfigurationElement;
 import com.liferay.ide.eclipse.server.core.PortalInstallableRuntime2;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
+import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,9 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({
+	"restriction", "unchecked", "rawtypes"
+})
 public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite implements ModifyListener {
 
 	public static void setFieldValue(Text field, String value) {
@@ -124,7 +125,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 			// embedded tomcat
 			IPath currentLocation = getRuntime().getLocation();
 
-			IPath modifiedLocation = modifyLocationForBundle(currentLocation);
+			IPath modifiedLocation = PortalTomcatUtil.modifyLocationForBundle(currentLocation);
 
 			if (modifiedLocation != null) {
 				getRuntime().setLocation(modifiedLocation);
@@ -361,50 +362,6 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		setFieldValue(dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : "");
 	}
 
-	protected IPath modifyLocationForBundle(IPath currentLocation) {
-		IPath modifiedLocation = null;
-
-		if (currentLocation == null || CoreUtil.isNullOrEmpty(currentLocation.toOSString())) {
-			return null;
-		}
-
-		File location = currentLocation.toFile();
-
-		if (location.exists() && location.isDirectory()) {
-			// check to see if this location contains 3 dirs
-			// data, deploy, and tomcat-*
-			File[] files = location.listFiles();
-
-			boolean[] matches = new boolean[3];
-
-			String[] patterns = new String[] {
-				"data", "deploy", "^tomcat-.*"
-			};
-
-			File tomcatDir = null;
-
-			for (File file : files) {
-				for (int i = 0; i < patterns.length; i++) {
-					if (file.isDirectory() && file.getName().matches(patterns[i])) {
-						matches[i] = true;
-
-						if (i == 2) { // tomcat
-							tomcatDir = file;
-						}
-
-						break;
-					}
-				}
-			}
-
-			if (matches[0] && matches[1] && matches[2] && tomcatDir != null) {
-				modifiedLocation = new Path(tomcatDir.getPath());
-			}
-		}
-
-		return modifiedLocation;
-	}
-
 	@Override
 	protected void setRuntime(IRuntimeWorkingCopy newRuntime) {
 		super.setRuntime(newRuntime);
@@ -455,7 +412,6 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void updateJREs() {
 		IVMInstall currentVM = getTomcatRuntime().getVMInstall();
 
