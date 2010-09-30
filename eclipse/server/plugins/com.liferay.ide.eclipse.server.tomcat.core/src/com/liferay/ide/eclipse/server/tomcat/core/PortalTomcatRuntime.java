@@ -151,6 +151,53 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		return getRuntime().getLocation().append("webapps/ROOT");
 	}
 
+	public String getServerInfo() {
+		// check for existing server info
+		IPath location = getRuntime().getLocation();
+
+		IPath serverInfosPath = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfos.properties");
+
+		String locationKey = location.toPortableString().replaceAll("\\/", "_");
+
+		File serverInfosFile = serverInfosPath.toFile();
+
+		Properties properties = new Properties();
+
+		if (serverInfosFile.exists()) {
+			try {
+				properties.load(new FileInputStream(serverInfosFile));
+				String serverInfo = (String) properties.get(locationKey);
+
+				if (!CoreUtil.isNullOrEmpty(serverInfo)) {
+					return serverInfo;
+				}
+			}
+			catch (Exception e) {
+			}
+		}
+
+		File serverInfoFile = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfo.txt").toFile();
+
+		if (serverInfoFile.exists()) {
+			FileUtil.clearContents(serverInfoFile);
+		}
+
+		loadServerInfoFile(location, serverInfoFile);
+
+		String serverInfoString = FileUtil.readContents(serverInfoFile);
+
+		if (!CoreUtil.isNullOrEmpty(serverInfoString)) {
+			properties.put(locationKey, serverInfoString);
+			try {
+				properties.store(new FileOutputStream(serverInfosFile), "");
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return serverInfoString;
+	}
+
 	public String[] getSupportedHookProperties() {
 		IPath location = getRuntime().getLocation();
 
@@ -173,24 +220,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		}
 
 		return hookProperties;
-	}
-
-	protected void loadHookPropertiesFile(IPath location, File hookPropertiesFile) {
-		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetSupportedHookProperties";
-
-		IPath libRoot = location.append("lib/ext");
-
-		IPath portalRoot = getRoot();
-
-		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, hookPropertiesFile, null);
-
-		try {
-			helper.launch(null);
-		}
-		catch (CoreException e) {
-			PortalTomcatPlugin.logError(e);
-		}
 	}
 
 	public String getVersion() {
@@ -246,89 +275,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		return version.toString();
 	}
 
-	public String getServerInfo() {
-		// check for existing server info
-		IPath location = getRuntime().getLocation();
-
-		IPath serverInfosPath = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfos.properties");
-
-		String locationKey = location.toPortableString().replaceAll("\\/", "_");
-
-		File serverInfosFile = serverInfosPath.toFile();
-
-		Properties properties = new Properties();
-
-		if (serverInfosFile.exists()) {
-			try {
-				properties.load(new FileInputStream(serverInfosFile));
-				String serverInfo = (String) properties.get(locationKey);
-
-				if (!CoreUtil.isNullOrEmpty(serverInfo)) {
-					return serverInfo;
-				}
-			}
-			catch (Exception e) {
-			}
-		}
-
-		File serverInfoFile = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfo.txt").toFile();
-
-		if (serverInfoFile.exists()) {
-			FileUtil.clearContents(serverInfoFile);
-		}
-
-		loadServerInfoFile(location, serverInfoFile);
-
-		String serverInfoString = FileUtil.readContents(serverInfoFile);
-
-		if (!CoreUtil.isNullOrEmpty(serverInfoString)) {
-			properties.put(locationKey, serverInfoString);
-			try {
-				properties.store(new FileOutputStream(serverInfosFile), "");
-			}
-			catch (Exception e) {
-			}
-		}
-
-		return serverInfoString;
-	}
-
-	protected void loadServerInfoFile(IPath location, File versionInfoFile) {
-		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
-
-		IPath libRoot = location.append("lib/ext");
-
-		IPath portalRoot = getRoot();
-
-		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
-
-		try {
-			helper.launch(null);
-		}
-		catch (CoreException e) {
-			PortalTomcatPlugin.logError(e);
-		}
-	}
-
-	protected void loadVersionInfoFile(IPath location, File versionInfoFile) {
-		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
-
-		IPath libRoot = location.append("lib/ext");
-
-		IPath portalRoot = getRoot();
-
-		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
-
-		try {
-			helper.launch(null);
-		}
-		catch (CoreException e) {
-			PortalTomcatPlugin.logError(e);
-		}
-	}
-
 	@Override
 	public ITomcatVersionHandler getVersionHandler() {
 		String id = getRuntime().getRuntimeType().getId();
@@ -376,7 +322,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 		Version portalVersion = Version.parseVersion(version);
 
-		if (portalVersion != null && (portalVersion.compareTo(IPortalConstants.LEAST_SUPPORTED_VERSION) < 0)) {
+		if (portalVersion != null && (portalVersion.compareTo(getLeastSupportedVersion()) < 0)) {
 			status =
 				PortalTomcatPlugin.createErrorStatus("Portal version not supported.  Need at least " +
 				IPortalConstants.LEAST_SUPPORTED_VERSION);
@@ -391,10 +337,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		}
 
 		return status;
-	}
-
-	protected String getExpectedServerInfo() {
-		return "Liferay Portal Community Edition";
 	}
 
 	private IPath findBundledJREPath(IPath location) {
@@ -425,6 +367,14 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		return false;
 	}
 
+	protected String getExpectedServerInfo() {
+		return "Liferay Portal Community Edition";
+	}
+
+	protected Version getLeastSupportedVersion() {
+		return IPortalConstants.LEAST_SUPPORTED_VERSION;
+	}
+
 	protected ReleaseHelper getReleaseHelper(IPath serviceJar) {
 		if (releaseHelpers == null) {
 			releaseHelpers = new HashMap<IPath, ReleaseHelper>();
@@ -441,6 +391,60 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		releaseHelpers.put(serviceJar, newHelper);
 
 		return newHelper;
+	}
+
+	protected void loadHookPropertiesFile(IPath location, File hookPropertiesFile) {
+		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetSupportedHookProperties";
+
+		IPath libRoot = location.append("lib/ext");
+
+		IPath portalRoot = getRoot();
+
+		PortalSupportHelper helper =
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, hookPropertiesFile, null);
+
+		try {
+			helper.launch(null);
+		}
+		catch (CoreException e) {
+			PortalTomcatPlugin.logError(e);
+		}
+	}
+
+	protected void loadServerInfoFile(IPath location, File versionInfoFile) {
+		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
+
+		IPath libRoot = location.append("lib/ext");
+
+		IPath portalRoot = getRoot();
+
+		PortalSupportHelper helper =
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
+
+		try {
+			helper.launch(null);
+		}
+		catch (CoreException e) {
+			PortalTomcatPlugin.logError(e);
+		}
+	}
+
+	protected void loadVersionInfoFile(IPath location, File versionInfoFile) {
+		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
+
+		IPath libRoot = location.append("lib/ext");
+
+		IPath portalRoot = getRoot();
+
+		PortalSupportHelper helper =
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
+
+		try {
+			helper.launch(null);
+		}
+		catch (CoreException e) {
+			PortalTomcatPlugin.logError(e);
+		}
 	}
 
 }
