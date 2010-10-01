@@ -16,6 +16,7 @@ import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.util.JavaUtil;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
 import com.liferay.ide.eclipse.server.util.ReleaseHelper;
@@ -49,6 +50,11 @@ import org.osgi.framework.Version;
 
 @SuppressWarnings("restriction")
 public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime {
+
+	@Override
+	protected void initialize() {
+		super.initialize();
+	}
 
 	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
 
@@ -312,7 +318,14 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 	@Override
 	public IStatus validate() {
-		IStatus status = super.validate();
+		// first validate that this runtime is
+		IStatus status = PortalServerCorePlugin.validateRuntimeDelegate(this);
+
+		if (!status.isOK()) {
+			return status;
+		}
+
+		status = super.validate();
 
 		if (!status.isOK()) {
 			return status;

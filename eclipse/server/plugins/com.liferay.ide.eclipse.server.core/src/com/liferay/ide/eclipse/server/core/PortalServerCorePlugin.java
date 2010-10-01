@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.server.core.model.RuntimeDelegate;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -169,6 +170,8 @@ public class PortalServerCorePlugin extends CorePlugin {
 
 	private static IPluginDeployer[] pluginDeployers = null;
 
+	private static IRuntimeDelegateValidator[] runtimeDelegateValidators;
+
 	public static IPluginDeployer getPluginDeployer(String facetId) {
 		if (CoreUtil.isNullOrEmpty(facetId)) {
 			return null;
@@ -215,5 +218,54 @@ public class PortalServerCorePlugin extends CorePlugin {
 		}
 
 		return pluginDeployers;
+	}
+
+	public static IStatus validateRuntimeDelegate(RuntimeDelegate runtimeDelegate) {
+		String runtimeTypeId = runtimeDelegate.getRuntime().getRuntimeType().getId();
+
+		IRuntimeDelegateValidator[] validators = getRuntimeDelegateValidators();
+
+		if (!CoreUtil.isNullOrEmpty(validators)) {
+			for (IRuntimeDelegateValidator validator : validators) {
+				if (runtimeTypeId.equals(validator.getRuntimeTypeId())) {
+					IStatus status = validator.validateRuntimeDelegate(runtimeDelegate);
+
+					if (!status.isOK()) {
+						return status;
+					}
+				}
+			}
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	public static IRuntimeDelegateValidator[] getRuntimeDelegateValidators() {
+		if (runtimeDelegateValidators == null) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IRuntimeDelegateValidator.ID);
+
+			try {
+				List<IRuntimeDelegateValidator> validators = new ArrayList<IRuntimeDelegateValidator>();
+
+				for (IConfigurationElement element : elements) {
+					final Object o = element.createExecutableExtension("class");
+					final String runtimeTypeId = element.getAttribute("runtimeTypeId");
+
+					if (o instanceof AbstractRuntimeDelegateValidator) {
+						AbstractRuntimeDelegateValidator validator = (AbstractRuntimeDelegateValidator) o;
+						validator.setRuntimeTypeId(runtimeTypeId);
+						validators.add(validator);
+					}
+				}
+
+				runtimeDelegateValidators = validators.toArray(new IRuntimeDelegateValidator[0]);
+			}
+			catch (Exception e) {
+				logError("Unable to get IRuntimeDelegateValidator extensions", e);
+			}
+		}
+
+		return runtimeDelegateValidators;
 	}
 }
