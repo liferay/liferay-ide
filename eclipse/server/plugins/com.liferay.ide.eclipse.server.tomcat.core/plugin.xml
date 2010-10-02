@@ -7,7 +7,7 @@
             class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime"
             description="Liferay Portal Community Edition v6.0 bundled with Tomcat 6"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.60"
-            name="Liferay v6.0 (Tomcat 6)"
+            name="Liferay v6.0 CE (Tomcat 6)"
             vendor="Liferay, Inc."
             version="6.0">
          <moduleType
@@ -48,7 +48,7 @@
             id="com.liferay.ide.eclipse.server.tomcat.60"
             initialState="stopped"
             launchConfigId="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
-            name="Liferay v6.0 Server (Tomcat 6)"
+            name="Liferay v6.0 CE Server (Tomcat 6)"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             startTimeout="300000"
@@ -62,7 +62,7 @@
             delegate="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatLaunchConfigDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             modes="run, debug, profile"
-            name="Liferay v6.0 (Tomcat 6)"
+            name="Liferay v6.0 CE (Tomcat 6)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
             sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
       </launchConfigurationType>

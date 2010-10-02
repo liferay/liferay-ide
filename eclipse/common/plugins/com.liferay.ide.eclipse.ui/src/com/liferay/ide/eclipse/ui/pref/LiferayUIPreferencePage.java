@@ -35,6 +35,10 @@ import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
+/**
+ * @author Greg Amerson
+ */
+@SuppressWarnings("restriction")
 public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public LiferayUIPreferencePage() {
@@ -91,8 +95,7 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 
 			public void linkActivated(HyperlinkEvent e) {
 				ServerUIUtil.showNewRuntimeWizard(
-					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5",
-					"com.liferay.ide.eclipse.server.tomcat.runtime.60");
+					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay.");
 			}
 
 		});
@@ -105,8 +108,7 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 
 			public void linkActivated(HyperlinkEvent e) {
 				ServerUIUtil.showNewServerWizard(
-					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5",
-					"com.liferay.ide.eclipse.server.tomcat.60");
+					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay.");
 			}
 
 		});
