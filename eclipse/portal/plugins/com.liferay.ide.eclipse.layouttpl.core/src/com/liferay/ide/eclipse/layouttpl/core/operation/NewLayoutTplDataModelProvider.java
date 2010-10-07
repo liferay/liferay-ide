@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaConventions;
@@ -167,27 +168,39 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 			}
 		}
 		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
-			IFile templateFile =
-				ProjectUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_TEMPLATE_FILE));
+			IProject targetProject = getTargetProject();
 
-			if (templateFile.exists()) {
-				return LayoutTplCore.createWarningStatus("Template file already exists and will be overwritten.");
+			if (targetProject != null) {
+				IFile templateFile =
+					ProjectUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_TEMPLATE_FILE));
+
+				if (templateFile.exists()) {
+					return LayoutTplCore.createWarningStatus("Template file already exists and will be overwritten.");
+				}
 			}
 		}
 		else if (LAYOUT_WAP_TEMPLATE_FILE.equals(propertyName)) {
-			IFile wapTemplateFile =
-				ProjectUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
+			IProject targetProject = getTargetProject();
 
-			if (wapTemplateFile.exists()) {
-				return LayoutTplCore.createWarningStatus("WAP template file already exists and will be overwritten.");
+			if (targetProject != null) {
+				IFile wapTemplateFile =
+					ProjectUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
+
+				if (wapTemplateFile.exists()) {
+					return LayoutTplCore.createWarningStatus("WAP template file already exists and will be overwritten.");
+				}
 			}
 		}
 		else if (LAYOUT_THUMBNAIL_FILE.equals(propertyName)) {
-			IFile thumbnailFile =
-				ProjectUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_THUMBNAIL_FILE));
+			IProject targetProject = getTargetProject();
 
-			if (thumbnailFile.exists()) {
-				return LayoutTplCore.createWarningStatus("Thumbnail file already exists and will be overwritten.");
+			if (targetProject != null) {
+				IFile thumbnailFile =
+					ProjectUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_THUMBNAIL_FILE));
+
+				if (thumbnailFile.exists()) {
+					return LayoutTplCore.createWarningStatus("Thumbnail file already exists and will be overwritten.");
+				}
 			}
 		}
 

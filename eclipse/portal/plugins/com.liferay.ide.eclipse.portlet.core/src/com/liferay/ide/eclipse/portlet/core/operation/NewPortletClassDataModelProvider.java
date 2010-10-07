@@ -412,9 +412,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
 			String folderValue = getStringProperty(propertyName);
 
-			IFolder docroot = ProjectUtil.getDocroot(getTargetProject());
+			IProject targetProject = getTargetProject();
 
-			if (!CoreUtil.isNullOrEmpty(folderValue)) {
+			if ((!CoreUtil.isNullOrEmpty(folderValue)) && targetProject != null) {
+				IFolder docroot = ProjectUtil.getDocroot(targetProject);
 				String errorMsg = FileUtil.validateNewFolder(docroot, folderValue);
 
 				if (errorMsg != null) {

@@ -49,7 +49,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"restriction", "unchecked"
+	"restriction", "unchecked", "rawtypes"
 })
 public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProvider
 	implements INewHookDataModelProperties {
@@ -75,22 +75,33 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 		if (CUSTOM_JSPS_FOLDER.equals(propertyName)) {
 			// check to see if there is an existing hook descriptor and read
 			// custom_jsps out of that
-			HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper(getTargetProject());
+			IProject targetProject = getTargetProject();
 
-			String customJspFolder = hookDescriptorHelper.getCustomJSPFolder(getDataModel());
+			if (targetProject != null) {
+				HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper(targetProject);
+				String customJspFolder = hookDescriptorHelper.getCustomJSPFolder(getDataModel());
 
-			if (customJspFolder != null) {
-				// folder should be relative to docroot
-				return ProjectUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
+				if (customJspFolder != null) {
+					// folder should be relative to docroot
+					return ProjectUtil.getDocroot(targetProject).getFolder(customJspFolder).getFullPath().toPortableString();
+				}
+
+				return ProjectUtil.getDocroot(targetProject).getFullPath().append("custom_jsps").toPortableString();
 			}
-
-			return ProjectUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
 		}
 		else if (PORTAL_PROPERTIES_FILE.equals(propertyName)) {
-			return PortletUtil.getFirstSrcFolder(getTargetProject()).getFullPath().append("portal.properties").toPortableString();
+			IProject targetProject = getTargetProject();
+
+			if (targetProject != null) {
+				return PortletUtil.getFirstSrcFolder(targetProject).getFullPath().append("portal.properties").toPortableString();
+			}
 		}
 		else if (CONTENT_FOLDER.equals(propertyName)) {
-			return PortletUtil.getFirstSrcFolder(getTargetProject()).getFullPath().append("content").toPortableString();
+			IProject targetProject = getTargetProject();
+
+			if (targetProject != null) {
+				return PortletUtil.getFirstSrcFolder(targetProject).getFullPath().append("content").toPortableString();
+			}
 		}
 		else if (propertyName.equals(PROJECT)) {
 			return getTargetProject();

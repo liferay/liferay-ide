@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaConventions;
@@ -146,7 +147,13 @@ public class NewThemeDataModelProvider extends ArtifactEditOperationDataModelPro
 	public IStatus validate(String propertyName) {
 		if (LAYOUT_TEMPLATE_ID.equals(propertyName)) {
 			// first check to see if an existing property exists.
-			ThemeDescriptorHelper helper = new ThemeDescriptorHelper(getTargetProject());
+			IProject targetProject = getTargetProject();
+
+			if (targetProject == null) {
+				return ThemeCore.createErrorStatus("Target project is null.");
+			}
+
+			ThemeDescriptorHelper helper = new ThemeDescriptorHelper(targetProject);
 
 			if (helper.hasTemplateId(getStringProperty(propertyName))) {
 				return ThemeCore.createErrorStatus("Template id already exists in project.");
