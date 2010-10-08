@@ -23,6 +23,7 @@ import org.eclipse.wst.common.project.facet.ui.IDecorationsProvider;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings("rawtypes")
 public class PortalTomcatRuntimeDecorationsProvider implements IAdapterFactory {
 
 	public class PortalDecorationsProvider implements IDecorationsProvider {
@@ -44,7 +45,6 @@ public class PortalTomcatRuntimeDecorationsProvider implements IAdapterFactory {
 		IDecorationsProvider.class
 	};
 
-	@SuppressWarnings("unchecked")
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (IDecorationsProvider.class.equals(adapterType)) {
 			return new PortalDecorationsProvider((IRuntime) adaptableObject);
