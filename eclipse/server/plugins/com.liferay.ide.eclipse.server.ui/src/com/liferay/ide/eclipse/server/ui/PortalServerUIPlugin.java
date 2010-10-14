@@ -137,7 +137,7 @@ public class PortalServerUIPlugin extends AbstractUIPlugin {
 	protected ImageRegistry createImageRegistry() {
 		ImageRegistry registry = new ImageRegistry();
 
-		registerImage(registry, IMG_WIZ_RUNTIME, "liferay_wiz.png");
+		registerImage(registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png");
 
 		return registry;
 	}

@@ -31,12 +31,17 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
 
 /**
  * @author Greg Amerson
@@ -54,6 +59,47 @@ public class FileUtil {
 				ex.printStackTrace();
 			}
 
+		}
+	}
+
+	public static void copyFileToDir(File file, File dir) {
+		if (file == null || (!file.exists()) || dir == null || (!dir.exists()) || (!dir.isDirectory())) {
+			return;
+		}
+
+		byte[] buf = new byte[4096];
+
+		OutputStream out = null;
+		FileInputStream in = null;
+
+		try {
+			out = new FileOutputStream(new File(dir, file.getName()));
+			in = new FileInputStream(file);
+
+			int avail = in.read(buf);
+			while (avail > 0) {
+				out.write(buf, 0, avail);
+				avail = in.read(buf);
+			}
+		}
+		catch (Exception e) {
+			CorePlugin.logError("Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath());
+		}
+		finally {
+			try {
+				if (in != null)
+					in.close();
+			}
+			catch (Exception ex) {
+				// ignore
+			}
+			try {
+				if (out != null)
+					out.close();
+			}
+			catch (Exception ex) {
+				// ignore
+			}
 		}
 	}
 
@@ -133,6 +179,28 @@ public class FileUtil {
 		return lines.toArray(new String[lines.size()]);
 	}
 
+	public static Document readXMLFile(File file) {
+		return readXMLFile(file, null);
+	}
+
+	public static Document readXMLFile(File file, EntityResolver resolver) {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+
+		try {
+			db = dbf.newDocumentBuilder();
+
+			if (resolver != null) {
+				db.setEntityResolver(resolver);
+			}
+
+			return db.parse(file);
+		}
+		catch (Throwable t) {
+			return null;
+		}
+	}
+
 	public static String validateNewFolder(IFolder docroot, String folderValue) {
 		if (docroot == null || folderValue == null) {
 			return null;
@@ -162,7 +230,6 @@ public class FileUtil {
 		return null;
 	}
 
-
 	public static int writeFileFromStream(File tempFile, InputStream in)
 		throws IOException {
 		byte[] buffer = new byte[1024];
@@ -190,47 +257,6 @@ public class FileUtil {
 		}
 
 		return bytesTotal;
-	}
-
-	public static void copyFileToDir(File file, File dir) {
-		if (file == null || (!file.exists()) || dir == null || (!dir.exists()) || (!dir.isDirectory())) {
-			return;
-		}
-
-		byte[] buf = new byte[4096];
-
-		OutputStream out = null;
-		FileInputStream in = null;
-
-		try {
-			out = new FileOutputStream(new File(dir, file.getName()));
-			in = new FileInputStream(file);
-
-			int avail = in.read(buf);
-			while (avail > 0) {
-				out.write(buf, 0, avail);
-				avail = in.read(buf);
-			}
-		}
-		catch (Exception e) {
-			CorePlugin.logError("Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath());
-		}
-		finally {
-			try {
-				if (in != null)
-					in.close();
-			}
-			catch (Exception ex) {
-				// ignore
-			}
-			try {
-				if (out != null)
-					out.close();
-			}
-			catch (Exception ex) {
-				// ignore
-			}
-		}
 	}
 
 }

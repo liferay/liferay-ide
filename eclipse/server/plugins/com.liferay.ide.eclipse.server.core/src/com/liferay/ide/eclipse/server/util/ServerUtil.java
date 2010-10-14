@@ -29,6 +29,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.internal.launching.StandardVMType;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
@@ -219,6 +222,15 @@ public class ServerUtil {
 		}
 
 		return null;
+	}
+
+	public static boolean isExistingVMName(String name) {
+		for (IVMInstall vm : JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE).getVMInstalls()) {
+			if (vm.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static boolean isPortalRuntime(BridgedRuntime bridgedRuntime) {

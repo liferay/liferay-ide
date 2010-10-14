@@ -9,6 +9,7 @@
  *     IBM Corporation - Initial API and implementation
  *     Greg Amerson <gregory.amerson@liferay.com>
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
@@ -20,6 +21,7 @@ import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.util.JavaUtil;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
 import com.liferay.ide.eclipse.server.util.ReleaseHelper;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,17 +53,14 @@ import org.osgi.framework.Version;
 @SuppressWarnings("restriction")
 public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime {
 
-	@Override
-	protected void initialize() {
-		super.initialize();
-	}
+	public static final String RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
 
 	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
 
 	public PortalTomcatRuntime() {
 		releaseHelpers = new HashMap<IPath, ReleaseHelper>();
 	}
-	
+
 	@Override
 	public void dispose() {
 		super.dispose();
@@ -91,12 +90,12 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			}
 			
 			//make sure the new VM name isn't the same as existing name 
-			boolean existingVMWithSameName = existingVMName(newVM.getName());
+			boolean existingVMWithSameName = ServerUtil.isExistingVMName(newVM.getName());
 			
 			int num = 1;
 			while (existingVMWithSameName) {
 				newVM.setName(getRuntime().getName() + " JRE (" + (num++) + ")");
-				existingVMWithSameName = existingVMName(newVM.getName());
+				existingVMWithSameName = ServerUtil.isExistingVMName(newVM.getName());
 			}
 			
 			return newVM.convertToRealVM();
@@ -128,7 +127,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		
 		return libs.toArray(new IPath[0]);
 	}
-
+	
 	public Properties getCategories() {
 		Properties retval = null;
 		File implJar = getRoot().append("WEB-INF/lib/portal-impl.jar").toFile();
@@ -371,15 +370,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		return null;
 	}
 
-	protected boolean existingVMName(String name) {
-		for (IVMInstall vm : JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE).getVMInstalls()) {
-			if (vm.getName().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	protected String getExpectedServerInfo() {
 		return "Liferay Portal Community Edition";
 	}
@@ -404,6 +394,11 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		releaseHelpers.put(serviceJar, newHelper);
 
 		return newHelper;
+	}
+
+	@Override
+	protected void initialize() {
+		super.initialize();
 	}
 
 	protected void loadHookPropertiesFile(IPath location, File hookPropertiesFile) {
