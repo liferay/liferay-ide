@@ -121,6 +121,22 @@ public class FileUtil {
 		directory.delete();
 	}
 
+	public static void deleteDirContents(final File directory) {
+		if (directory == null || !directory.isDirectory()) {
+			return;
+		}
+
+		for (File file : directory.listFiles()) {
+			if (file.isDirectory()) {
+				deleteDir(file, true);
+			}
+			else {
+				file.delete();
+			}
+		}
+
+	}
+
 	public static String readContents(File file) {
 		if (file == null) {
 			return null;
