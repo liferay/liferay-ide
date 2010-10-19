@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
@@ -176,6 +177,16 @@ public class SWTUtil {
 		return l;
 	}
 	
+	public static Link createLink(Composite parent, int style, String text, int hspan) {
+		Link l = new Link(parent, style);
+		l.setFont(parent.getFont());
+		l.setText(text);
+		GridData gd = new GridData();
+		gd.horizontalSpan = hspan;
+		l.setLayoutData(gd);
+		return l;
+	}
+
 	/**
 	 * Creates a Composite widget
 	 * @param parent the parent composite to add this composite to
