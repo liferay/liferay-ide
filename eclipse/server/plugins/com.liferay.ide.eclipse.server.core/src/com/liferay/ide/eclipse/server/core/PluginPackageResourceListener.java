@@ -86,10 +86,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 			return;			
 		}
 
-		if (shouldProcessResourceChangedEvent(event)) {
-			IResourceDelta delta = event.getDelta();
-
-			try {
+		try {
+			if (shouldProcessResourceChangedEvent(event)) {
+				IResourceDelta delta = event.getDelta();
 				delta.accept(new IResourceDeltaVisitor() {
 
 					public boolean visit(IResourceDelta delta)
@@ -111,9 +110,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 					}
 				});
 			}
-			catch (CoreException e) {
-
-			}
+		}
+		catch (CoreException e) {
 		}
 
 
@@ -134,11 +132,13 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		// }
 	}
 
+
 	private IFile getWorkspaceFile(IPath path) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		
 		return root.getFile(path);		
 	}
+
 
 	protected boolean isLiferayPluginProject(IPath deltaPath) {
 		IFile pluginPackagePropertiesFile = getWorkspaceFile(deltaPath);
@@ -150,8 +150,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		return false;		
 	}
 
+
 	protected void processResourceChanged(IResourceDelta delta)
 		throws CoreException {
+
 		IPath deltaPath = delta.getFullPath();
 		
 		IFile pluginPackagePropertiesFile = getWorkspaceFile(deltaPath);
@@ -250,6 +252,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 
 	}
 
+
 	protected boolean shouldProcessResourceChangedEvent(IResourceChangeEvent event) {
 		if (event == null) {
 			return false;
@@ -265,6 +268,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 
 		return true;
 	}
+
 
 	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
 		if (delta == null) {
