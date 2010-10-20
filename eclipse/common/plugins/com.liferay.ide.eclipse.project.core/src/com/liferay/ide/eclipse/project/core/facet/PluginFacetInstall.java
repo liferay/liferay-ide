@@ -339,7 +339,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		SDK sdk = getSDK();
 		String themeName = this.masterModel.getStringProperty(THEME_NAME);
 		String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
-		IPath newThemePath = sdk.createNewTheme(themeName, displayName);
+		IPath newThemePath = sdk.createNewThemeProject(themeName, displayName);
 
 		processNewFiles(newThemePath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX), false);
 

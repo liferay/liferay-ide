@@ -70,7 +70,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
-			IPath newThemePath = sdk.createNewTheme(themeName, displayName);
+			IPath newThemePath = sdk.createNewThemeProject(themeName, displayName);
 
 			processNewFiles(newThemePath.append(themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX), false);
 

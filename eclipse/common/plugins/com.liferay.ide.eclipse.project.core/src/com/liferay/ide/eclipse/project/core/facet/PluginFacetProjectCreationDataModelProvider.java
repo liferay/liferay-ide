@@ -113,8 +113,8 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (CREATE_PROJECT_OPERATION.equals(propertyName)) {
 			return true;
 		}
-		else if (PLUGIN_FRAGMENT_ENABLED.equals(propertyName)) {
-			return false;
+		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
+			return ProjectCorePlugin.getPortletFrameworks()[0];
 		}
 
 		return super.getDefaultProperty(propertyName);
@@ -142,7 +142,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		Set propNames = super.getPropertyNames();
 
 		propNames.add(LIFERAY_SDK_NAME);
-		// propNames.add(LIFERAY_ADV_CONFIG);
 		propNames.add(LIFERAY_USE_SDK_LOCATION);
 		propNames.add(LIFERAY_USE_CUSTOM_LOCATION);
 		propNames.add(PLUGIN_TYPE_PORTLET);
@@ -157,9 +156,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		propNames.add(THEME_NAME);
 		propNames.add(LAYOUTTPL_NAME);
 		propNames.add(CREATE_PROJECT_OPERATION);
-		propNames.add(PLUGIN_FRAGMENT_DM);
-		propNames.add(PLUGIN_FRAGMENT_BUTTON_LABEL);
 		propNames.add(PLUGIN_FRAGMENT_ENABLED);
+		propNames.add(PLUGIN_FRAGMENT_DM);
+		propNames.add(PORTLET_FRAMEWORK);
 
 		return propNames;
 	}
@@ -211,11 +210,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				break;
 			}
 		}
-	}
-
-	@Override
-	public boolean isPropertyEnabled(String propertyName) {
-		return super.isPropertyEnabled(propertyName);
 	}
 
 	@Override
@@ -439,8 +433,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			if (template != null) {
 				facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(template.getFixedProjectFacets()));
 			}
-
-			getModel().setStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL, "");
 
 			projectDefinition.setupNewProject(getDataModel(), facetedProject);
 		}

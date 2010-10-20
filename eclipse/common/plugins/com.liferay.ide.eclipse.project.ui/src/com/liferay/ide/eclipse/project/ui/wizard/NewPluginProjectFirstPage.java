@@ -45,10 +45,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.dialogs.PreferencesUtil;
-import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.ui.internal.FacetsSelectionDialog;
 import org.eclipse.wst.server.ui.ServerUIUtil;
@@ -57,7 +55,7 @@ import org.eclipse.wst.server.ui.ServerUIUtil;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class PluginProjectFirstPage extends WebProjectFirstPage implements IPluginProjectDataModelProperties {
+public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IPluginProjectDataModelProperties {
 
 	protected Button extType;
 
@@ -67,15 +65,13 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 	// private DataModelSynchHelper modelHelper;
 
-	protected Button pluginFragmentButton;
-
 	protected Button portletType;
 
 	protected boolean shouldValidatePage = true;
 
 	protected Button themeType;
 
-	public PluginProjectFirstPage(NewPluginProjectWizard wizard, IDataModel model, String pageName) {
+	public NewPluginProjectFirstPage(NewPluginProjectWizard wizard, IDataModel model, String pageName) {
 		super(model, pageName);
 
 		this.setImageDescriptor(wizard.getDefaultPageImageDescriptor());
@@ -91,8 +87,8 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		boolean canFlip = super.canFlipToNextPage();
 
 		if (canFlip) {
-			// check to only allow the flip is the user has pressed the "advanced" button
-			return getModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED);
+			// Only the portlet mode needs a 2ne page
+			return getModel().getBooleanProperty(PLUGIN_TYPE_PORTLET);
 		}
 
 		return canFlip;
@@ -134,7 +130,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 		gd.verticalIndent = 8;
 
 		Link link = new Link(parent, SWT.UNDERLINE_LINK);
-		link.setText("<a href=\"#\">Import existing Liferay project...</a>");
+		link.setText("<a href=\"#\">Create a new plug-in project from existing sources...</a>");
 		link.setLayoutData(gd);
 		link.addSelectionListener(new SelectionAdapter() {
 
@@ -201,8 +197,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 				final DataModelPropertyDescriptor[] preAdditionDescriptors =
 					model.getValidPropertyDescriptors(FACET_RUNTIME);
 
-				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
+				boolean isOK = ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =
@@ -251,30 +246,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 			}
 		});
 		SWTUtil.createLabel(group, "", 1);
-	}
-
-	protected void createPluginFragmentButton(Composite parent) {
-		pluginFragmentButton = SWTUtil.createCheckButton(parent, "", null, false, 1);
-		((GridData) pluginFragmentButton.getLayoutData()).horizontalIndent = 8;
-		((GridData) pluginFragmentButton.getLayoutData()).verticalIndent = 8;
-		this.synchHelper.synchCheckbox(pluginFragmentButton, PLUGIN_FRAGMENT_ENABLED, null);
-		if (!CoreUtil.isNullOrEmpty(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL))) {
-			pluginFragmentButton.setText(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL));
-		}
-		else {
-			pluginFragmentButton.setVisible(false);
-		}
-
-		getModel().addListener(new IDataModelListener() {
-
-			public void propertyChanged(DataModelEvent event) {
-				if (PLUGIN_FRAGMENT_BUTTON_LABEL.equals(event.getPropertyName())) {
-					String buttonText = getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL);
-					pluginFragmentButton.setText(buttonText);
-					pluginFragmentButton.setVisible(!CoreUtil.isNullOrEmpty(buttonText));
-				}
-			}
-		});
 	}
 
 	protected void createPluginTypeGroup(Composite parent) {
@@ -354,7 +325,6 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 
 		getModel().addListener(this);
 
-
 		Combo sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
 		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
@@ -392,9 +362,7 @@ public class PluginProjectFirstPage extends WebProjectFirstPage implements IPlug
 				final DataModelPropertyDescriptor[] preAdditionDescriptors =
 					model.getValidPropertyDescriptors(FACET_RUNTIME);
 
-				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-getShell(), getModuleTypeID(), null, "com.liferay.");
+				boolean isOK = ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =
@@ -436,6 +404,7 @@ getShell(), getModuleTypeID(), null, "com.liferay.");
 		top.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		createProjectGroup(top);
+		createImportProjectLink(top);
 		createLiferayRuntimeGroup(top);
 
 		// createSDKGroup(top);
@@ -443,8 +412,10 @@ getShell(), getModuleTypeID(), null, "com.liferay.");
 		// createPresetPanel(top);
 
 		createPluginTypeGroup(top);
-		createPluginFragmentButton(top);
-		createImportProjectLink(top);
+
+		createWorkingSetGroupPanel(top, new String[] {
+			RESOURCE_WORKING_SET, JAVA_WORKING_SET
+		});
 
 		updateControls();
 
@@ -529,7 +500,6 @@ getShell(), getModuleTypeID(), null, "com.liferay.");
 		arrayList.add(PLUGIN_TYPE_EXT);
 		arrayList.add(PLUGIN_TYPE_THEME);
 		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
-		arrayList.add(PLUGIN_FRAGMENT_ENABLED);
 
 		return (String[]) arrayList.toArray(new String[0]);
 	}

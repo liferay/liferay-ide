@@ -17,22 +17,29 @@ package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.core.util.ZipUtil;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
+import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -50,25 +57,39 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		super.execute(project, fv, config, monitor);
 
 		IDataModel model = (IDataModel) config;
-		
+
 		IDataModel masterModel = (IDataModel) model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
-		
+
 		if (masterModel != null && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
-			// get the template zip for portlets and extract into the project
 			SDK sdk = getSDK();
 
 			String portletName = this.masterModel.getStringProperty(PORTLET_NAME);
-			
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
-			IPath newPortletPath = sdk.createNewPortlet(portletName, displayName, getRuntimeLocation());
-			
+			// get the template delegate
+			IPortletFramework portletFramework = (IPortletFramework) this.masterModel.getProperty(PORTLET_FRAMEWORK);
+
+			IPath newPortletPath = sdk.createNewPortletProject(portletName, displayName, getRuntimeLocation());
+
+			String templateZipPath = portletFramework.getTemplateZipPath();
+
+			if (!CoreUtil.isNullOrEmpty(templateZipPath)) {
+				File templateZipFile = sdk.getLocation().append("portlets").append(templateZipPath).toFile();
+
+				if (!templateZipFile.exists()) { // we need to unzip the template from the eclipse plugin
+					overwriteProjectFromTemplate(
+						newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX),
+						portletFramework);
+				}
+
+			}
+
 			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
-			
+
 			// cleanup portlet files
 			FileUtil.deleteDir(newPortletPath.toFile(), true);
 
@@ -76,6 +97,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 			if (masterModel.getBooleanProperty(PLUGIN_FRAGMENT_ENABLED)) {
 				final IDataModel fragmentModel = masterModel.getNestedModel(PLUGIN_FRAGMENT_DM);
+
 				if (fragmentModel != null) {
 					// IDE-205 remove view.jsp
 					try {
@@ -92,7 +114,6 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 					}
 				}
 			}
-
 		}
 		else {
 			setupDefaultOutputLocation();
@@ -100,24 +121,24 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 		// modify the web.xml and add <jsp-config><taglib> for liferay tlds
 		copyPortletTLD();
-		
+
 		configWebXML();
 	}
 
 	protected void copyPortletTLD()
 		throws CoreException {
-		
+
 		IPath portalRoot = getPortalRoot();
-		
+
 		IPath portletTld = portalRoot.append("WEB-INF/tld/liferay-portlet.tld");
-		
+
 		if (portletTld.toFile().exists()) {
 			IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
-			
+
 			CoreUtil.prepareFolder(tldFolder);
-			
+
 			IFile tldFile = tldFolder.getFile("liferay-portlet.tld");
-			
+
 			if (!tldFile.exists()) {
 				try {
 					tldFile.create(new FileInputStream(portletTld.toFile()), true, null);
@@ -126,6 +147,26 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 					throw new CoreException(ProjectCorePlugin.createErrorStatus(e));
 				}
 			}
+		}
+	}
+
+	protected void overwriteProjectFromTemplate(IPath newProjectPath, IPortletFramework portletTemplate) {
+		String bundleId = portletTemplate.getBundleId();
+
+		try {
+			URL url =
+				FileLocator.toFileURL(Platform.getBundle(bundleId).getEntry(portletTemplate.getTemplateZipPath()));
+			File templateZip = new File(url.getFile());
+
+			if (templateZip.exists() && newProjectPath.toFile().isDirectory()) {
+				File newProjectDir = newProjectPath.toFile();
+				FileUtil.deleteDirContents(newProjectDir);
+
+				ZipUtil.unzip(templateZip, newProjectPath.toFile());
+			}
+		}
+		catch (IOException e) {
+			ProjectCorePlugin.logError("Could not unzip project template from bundle.", e);
 		}
 	}
 

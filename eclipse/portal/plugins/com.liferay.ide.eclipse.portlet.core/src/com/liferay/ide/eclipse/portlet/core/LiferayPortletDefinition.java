@@ -41,12 +41,5 @@ public class LiferayPortletDefinition extends AbstractProjectDefinition implemen
 		if (dataModel.isNestedModel(PLUGIN_FRAGMENT_DM)) {
 			dataModel.removeNestedModel(PLUGIN_FRAGMENT_DM);
 		}
-
-		// if (nestedModel == null) {
-		// nestedModel = DataModelFactory.createDataModel(new NewPortletClassDataModelProvider());
-		// }
-
-		// dataModel.addNestedModel(PLUGIN_FRAGMENT_DM, nestedModel);
-		dataModel.setStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL, "Create custom portlet class");
 	}
 }

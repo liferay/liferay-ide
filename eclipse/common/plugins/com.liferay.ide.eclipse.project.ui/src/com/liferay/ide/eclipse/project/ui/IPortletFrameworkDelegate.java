@@ -13,32 +13,34 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.project.ui.wizard;
+package com.liferay.ide.eclipse.project.ui;
 
-import org.eclipse.jface.wizard.IWizardPage;
+import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
+
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
 /**
  * @author Greg Amerson
  */
-public interface IPluginWizardFragment {
+public interface IPortletFrameworkDelegate {
 
-	public static final String ID = "com.liferay.ide.eclipse.project.ui.pluginWizardFragment";
+	String EXTENSION_ID = "com.liferay.ide.eclipse.project.ui.portletFrameworkDelegates";
 
-	public void addPages();
+	String FRAMEWORK_ID = "frameworkId";
 
-	public IDataModelProvider getDataModelProvider();
+	String ICON = "icon";
 
-	public String getFragmentPluginFacetId();
+	Composite createNewProjectOptionsComposite(Composite parent, IDataModel iDataModel);
 
-	public IWizardPage getNextPage(IWizardPage page);
+	String getBundleId();
 
-	public void initFragmentDataModel(IDataModel parentDataModel, String projectName);
+	String getFrameworkId();
 
-	public void setDataModel(IDataModel model);
+	String getIconUrl();
 
-	public void setFragment(boolean fragment);
+	IPluginWizardFragment getWizardFragment();
 
-	public void setHostPage(IWizardPage firstPage);
+	boolean isFragmentEnabled();
+
 }

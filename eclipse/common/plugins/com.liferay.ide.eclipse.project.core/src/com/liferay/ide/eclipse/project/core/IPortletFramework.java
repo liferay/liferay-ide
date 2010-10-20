@@ -13,32 +13,45 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.project.ui.wizard;
+package com.liferay.ide.eclipse.project.core;
 
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
+import java.net.URL;
 
 /**
  * @author Greg Amerson
  */
-public interface IPluginWizardFragment {
+public interface IPortletFramework {
 
-	public static final String ID = "com.liferay.ide.eclipse.project.ui.pluginWizardFragment";
+	String DEFAULT = "default";
 
-	public void addPages();
+	String DESCRIPTION = "description";
 
-	public IDataModelProvider getDataModelProvider();
+	String DISPLAY_NAME = "displayName";
 
-	public String getFragmentPluginFacetId();
+	String EXTENSION_ID = "com.liferay.ide.eclipse.project.core.portletFrameworks";
 
-	public IWizardPage getNextPage(IWizardPage page);
+	String HELP_URL = "helpUrl";
 
-	public void initFragmentDataModel(IDataModel parentDataModel, String projectName);
+	String IDX = "id";
 
-	public void setDataModel(IDataModel model);
+	String SHORT_NAME = "shortName";
 
-	public void setFragment(boolean fragment);
+	String TEMPLATE_ZIP_PATH = "templateZipPath";
 
-	public void setHostPage(IWizardPage firstPage);
+	String getBundleId();
+
+	String getDescription();
+
+	String getDisplayName();
+
+	URL getHelpUrl();
+
+	String getId();
+
+	String getShortName();
+
+	String getTemplateZipPath();
+
+	boolean isDefault();
+
 }

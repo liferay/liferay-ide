@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelP
 import com.liferay.ide.eclipse.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.PortletTemplateContextTypeIds;
+import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
 
@@ -29,6 +30,8 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
+import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
+import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
@@ -84,6 +87,14 @@ public class NewPortletWizard extends NewWebArtifactWizard
 
 	public String getTitle() {
 		return "New Liferay Portlet";
+	}
+
+	public void initFragmentDataModel(IDataModel parentDataModel, String projectName) {
+		getDataModel().setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
+		getDataModel().setProperty(
+			IPluginWizardFragmentProperties.FACET_RUNTIME,
+			parentDataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME));
+		getDataModel().setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName);
 	}
 
 	public void setFragment(boolean fragment) {

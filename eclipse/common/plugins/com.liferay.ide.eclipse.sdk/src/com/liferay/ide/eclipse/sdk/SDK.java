@@ -101,7 +101,41 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IPath createNewExt(String extName, String extDisplayName, String appServerDir) {
+	public IStatus buildWSDD(IProject project, IFile serviceXmlFile, Map<String, String> properties) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		String serviceFile = serviceXmlFile.getRawLocation().toOSString();
+
+		properties.put(ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_WSDD,
+				properties);
+		}
+		catch (Exception e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	public IStatus compileThemePlugin(IProject project, Map<String, String> properties) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_COMPILE,
+				properties);
+		}
+		catch (CoreException e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	public IPath createNewExtProject(String extName, String extDisplayName, String appServerDir) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
@@ -137,7 +171,7 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewHook(String hookName, String hookDisplayName, String appServerDir) {
+	public IPath createNewHookProject(String hookName, String hookDisplayName, String appServerDir) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
@@ -164,7 +198,7 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewLayoutTpl(String layoutTplName, String layoutTplDisplayName, String runtimeLocation) {
+	public IPath createNewLayoutTplProject(String layoutTplName, String layoutTplDisplayName, String runtimeLocation) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
@@ -196,11 +230,21 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewPortlet(String portletName, String portletDisplayName, String appServerDir) {
+	public IPath createNewPortletProject(String portletName, String portletDisplayName, String appServerDir) {
+		return createNewPortletProject(portletName, portletDisplayName, appServerDir, null);
+	}
+
+	public IPath createNewPortletProject(
+		String portletName, String portletDisplayName, String appServerDir, Map<String, String> props) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
+
+			if (props != null && props.size() > 0) {
+				properties.putAll(props);
+			}
+
 			properties.put(ISDKConstants.PROPERTY_PORTLET_NAME, portletName);
 			properties.put(ISDKConstants.PROPERTY_PORTLET_DISPLAY_NAME, portletDisplayName);
 			properties.put(ISDKConstants.PROPERTY_APP_SERVER_TYPE, "tomcat");
@@ -228,7 +272,7 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewTheme(String themeName, String themeDisplayName) {
+	public IPath createNewThemeProject(String themeName, String themeDisplayName) {
 		SDKHelper antHelper = new SDKHelper(this);
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
@@ -269,19 +313,10 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IStatus compileThemePlugin(IProject project, Map<String, String> properties) {
-		SDKHelper antHelper = new SDKHelper(this);
-
-		try {
-			antHelper.runTarget(
-				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_COMPILE,
-				properties);
-		}
-		catch (CoreException e) {
-			return SDKPlugin.createErrorStatus(e);
-		}
-
-		return Status.OK_STATUS;
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof SDK && getName() != null && getName().equals(((SDK) obj).getName()) &&
+			getLocation() != null && getLocation().equals(((SDK) obj).getLocation());
 	}
 
 	public IPath[] getAntLibraries() {
@@ -403,33 +438,6 @@ public class SDK {
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	public IStatus buildWSDD(IProject project, IFile serviceXmlFile,
-			Map<String, String> properties) {
-		SDKHelper antHelper = new SDKHelper(this);
-
-		String serviceFile = serviceXmlFile.getRawLocation().toOSString();
-
-		properties.put(ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile);
-
-		try {
-			antHelper.runTarget(
-				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_WSDD,
-				properties);
-		}
-		catch (Exception e) {
-			return SDKPlugin.createErrorStatus(e);
-		}
-
-		return Status.OK_STATUS;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof SDK && getName() != null && getName().equals(((SDK) obj).getName()) &&
-			getLocation() != null && getLocation().equals(((SDK) obj).getLocation());
 	}
 
 }

@@ -15,10 +15,11 @@
 
 package com.liferay.ide.eclipse.project.ui.wizard;
 
-import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
+import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
+import com.liferay.ide.eclipse.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.ui.LiferayPerspectiveFactory;
@@ -53,37 +54,51 @@ import org.eclipse.wst.web.ui.internal.wizards.NewProjectDataModelFacetWizard;
 public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	implements INewProjectWizard, IPluginProjectDataModelProperties {
 
-	private PluginProjectFirstPage firstPage;
-	
+	protected NewPluginProjectFirstPage firstPage;
+
 	protected ImageDescriptor liferayWizardImageDescriptor;
-	
+
+	protected NewPortletPluginProjectPage portletPluginPage;
+
 	protected String projectType;
 
 	public NewPluginProjectWizard() {
 		super();
-		
+
 		setupWizard();
 	}
 
 	public NewPluginProjectWizard(IDataModel model) {
 		super(model);
-		
+
 		setupWizard();
 	}
 
 	@Override
+	public boolean canFinish() {
+		if (getContainer().getCurrentPage().equals(portletPluginPage) && isPluginWizardFragmentEnabled()) {
+			return false;
+		}
+
+		return super.canFinish();
+	}
+
+	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
-		if (this.firstPage.equals(page)) {
-			if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED)) {
-				IPluginWizardFragment pluginFragment = ProjectUIPlugin.getPluginWizardFragment(getPluginFacetId());
+		if (this.portletPluginPage.equals(page)) {
+			if (isPluginWizardFragmentEnabled()) {
+				IPortletFramework selectedFramework = this.portletPluginPage.getSelectedPortletFramework();
+				IPortletFrameworkDelegate delegate =
+					ProjectUIPlugin.getPortletFrameworkDelegate(selectedFramework.getId());
+
+				IPluginWizardFragment pluginFragment = delegate.getWizardFragment();
 				IDataModel dm = DataModelFactory.createDataModel(pluginFragment.getDataModelProvider());
-				dm.setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
+
 				getDataModel().addNestedModel(PLUGIN_FRAGMENT_DM, dm);
-				dm.setProperty(IPluginWizardFragmentProperties.FACET_RUNTIME, getDataModel().getProperty(FACET_RUNTIME));
-				dm.setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, getProjectName());
 				pluginFragment.setDataModel(dm);
+				pluginFragment.initFragmentDataModel(getDataModel(), getProjectName());
 				pluginFragment.addPages();
-				pluginFragment.setHostPage(this.firstPage);
+				pluginFragment.setHostPage(this.portletPluginPage);
 				return pluginFragment.getNextPage(page);
 			}
 			else {
@@ -92,21 +107,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		}
 
 		return super.getNextPage(page);
-	}
-
-	@Override
-	public IWizardPage getPage(String pageName) {
-		return super.getPage(pageName);
-	}
-
-	@Override
-	public int getPageCount() {
-		return super.getPageCount();
-	}
-
-	@Override
-	public IWizardPage getPreviousPage(IWizardPage page) {
-		return super.getPreviousPage(page);
 	}
 
 	public String getProjectType() {
@@ -127,10 +127,10 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	@Override
 	protected IWizardPage[] createBeginingPages() {
 		this.firstPage = createFirstPage();
-		
+		this.portletPluginPage = new NewPortletPluginProjectPage(this, model);
+
 		return new IWizardPage[] {
-			firstPage
-		// , new PluginProjectAdvPage(this, model)
+			firstPage, portletPluginPage
 		};
 	}
 
@@ -140,14 +140,14 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		}
 		catch (Exception e) {
 			ProjectUIPlugin.logError(e);
-			
+
 			return null;
 		}
 	}
 
 	@Override
-	protected PluginProjectFirstPage createFirstPage() {
-		return new PluginProjectFirstPage(this, model, "first.page"); //$NON-NLS-1$
+	protected NewPluginProjectFirstPage createFirstPage() {
+		return new NewPluginProjectFirstPage(this, model, "first.page"); //$NON-NLS-1$
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 				ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
 					"/icons/wizban/plugin_project.png"));
 		}
-		
+
 		return liferayWizardImageDescriptor;
 	}
 
@@ -208,7 +208,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
 			return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 		}
-		
+
 		return null;
 	}
 
@@ -217,10 +217,25 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		return ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_DEFAULT_FACET_TEMPLATE); //$NON-NLS-1$
 	}
 
+	protected boolean isPluginWizardFragmentEnabled() {
+		IPortletFramework portletFramework = this.portletPluginPage.getSelectedPortletFramework();
+
+		if (portletFramework != null) {
+			IPortletFrameworkDelegate delegate = ProjectUIPlugin.getPortletFrameworkDelegate(portletFramework.getId());
+
+			if (delegate != null && delegate.getWizardFragment() != null && delegate.isFragmentEnabled()) {
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	protected void performFinish(IProgressMonitor monitor)
 		throws CoreException {
-		
+
 		// String projectName = getFacetedProjectWorkingCopy().getProjectName();
 		// getFacetedProjectWorkingCopy().setProjectName(projectName +
 		// getProjectSuffix());
@@ -228,27 +243,28 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		// getDataModel().getStringProperty(FACET_PROJECT_NAME);
 		// getDataModel().setStringProperty(FACET_PROJECT_NAME, projectName +
 		// getProjectSuffix());
-		
+
 		firstPage.setShouldValidatePage(false);
 
 		// model.setProperty(SETUP_PROJECT_FLAG, "");
 
 		String projectName = getNestedModel().getStringProperty(PROJECT_NAME);
-		
+
 		if (!projectName.endsWith(getProjectSuffix())) {
 			getNestedModel().setStringProperty(PROJECT_NAME, projectName + getProjectSuffix());
 		}
-		
+
 		model.setProperty(PORTLET_NAME, projectName);
 		model.setProperty(THEME_NAME, projectName);
 		model.setProperty(LAYOUTTPL_NAME, projectName);
-		
+
 		super.performFinish(monitor);
 
 		Display.getDefault().asyncExec(new Runnable() {
+
 			public void run() {
 				IViewPart view = null;
-				
+
 				try {
 					view =
 						PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
@@ -262,7 +278,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 				}
 
 				CommonViewer viewer = (CommonViewer) view.getAdapter(CommonViewer.class);
-				
+
 				viewer.refresh(true);
 			}
 		});;
@@ -273,7 +289,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		throws InvocationTargetException {
 
 		// if we have a wizard fragment execute its operation after project is created
-		if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED)) {
+		if (isPluginWizardFragmentEnabled()) {
 			final IDataModel fragmentModel = getDataModel().getNestedModel(PLUGIN_FRAGMENT_DM);
 			fragmentModel.setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, getProjectName());
 
@@ -304,16 +320,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	protected void setupWizard() {
 		setWindowTitle("New Liferay Plug-in Project");
 		setShowFacetsSelectionPage(false);
-	}
-
-	@Override
-	public boolean canFinish() {
-		if (getDataModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED) &&
-			getContainer().getCurrentPage().equals(firstPage)) {
-			return false;
-		}
-
-		return super.canFinish();
 	}
 
 }

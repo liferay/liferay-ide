@@ -16,10 +16,15 @@
 package com.liferay.ide.eclipse.project.core;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -40,6 +45,8 @@ public class ProjectCorePlugin extends CorePlugin {
 	// The shared instance
 	private static ProjectCorePlugin plugin;
 
+	private static IPortletFramework[] portletFrameworks;
+
 	private static IProjectDefinition[] projectDefinitions = null;
 
 	/**
@@ -51,42 +58,84 @@ public class ProjectCorePlugin extends CorePlugin {
 		return plugin;
 	}
 
-	/**
-	 * The constructor
-	 */
-	public ProjectCorePlugin() {
+	public static IPortletFramework[] getPortletFrameworks() {
+		if (portletFrameworks == null) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IPortletFramework.EXTENSION_ID);
+
+			if (!CoreUtil.isNullOrEmpty(elements)) {
+				List<IPortletFramework> frameworks = new ArrayList<IPortletFramework>();
+
+				for (IConfigurationElement element : elements) {
+					String id = element.getAttribute(IPortletFramework.IDX);
+					String shortName = element.getAttribute(IPortletFramework.SHORT_NAME);
+					String displayName = element.getAttribute(IPortletFramework.DISPLAY_NAME);
+					String description = element.getAttribute(IPortletFramework.DESCRIPTION);
+					String templateZipPath = element.getAttribute(IPortletFramework.TEMPLATE_ZIP_PATH);
+					boolean isDefault = Boolean.parseBoolean(element.getAttribute(IPortletFramework.DEFAULT));
+
+					URL helpUrl = null;
+					try {
+						helpUrl = new URL(element.getAttribute(IPortletFramework.HELP_URL));
+					}
+					catch (Exception e1) {
+					}
+
+					try {
+						AbstractPortletFramework framework =
+							(AbstractPortletFramework) element.createExecutableExtension("class");
+						framework.setId(id);
+						framework.setShortName(shortName);
+						framework.setDisplayName(displayName);
+						framework.setDescription(description);
+						framework.setTemplateZipPath(templateZipPath);
+						framework.setHelpUrl(helpUrl);
+						framework.setDefault(isDefault);
+						framework.setBundleId(element.getContributor().getName());
+
+						frameworks.add(framework);
+					}
+					catch (CoreException e) {
+						ProjectCorePlugin.logError("Could not load portlet framework.", e);
+					}
+
+				}
+
+				portletFrameworks = frameworks.toArray(new IPortletFramework[0]);
+
+				// sort the array so that the default template is first
+				Arrays.sort(portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFramework>() {
+
+						public int compare(IPortletFramework o1, IPortletFramework o2) {
+							if (o1.isDefault() && (!o2.isDefault())) {
+								return -1;
+							}
+							else if ((!o1.isDefault()) && o2.isDefault()) {
+								return 1;
+							}
+
+							return 0;
+						}
+
+					});
+			}
+		}
+
+		return portletFrameworks;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
-	public void start(BundleContext context)
-		throws Exception {
-		
-		super.start(context);
-		
-		plugin = this;
-	}
+	public static IProjectDefinition getProjectDefinition(IProjectFacet projectFacet) {
+		IProjectDefinition[] definitions = getProjectDefinitions();
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
-	 */
-	public void stop(BundleContext context)
-		throws Exception {
-		
-		plugin = null;
-		
-		super.stop(context);
-	}
+		if (definitions != null) {
+			for (IProjectDefinition def : definitions) {
+				if (def != null && def.getFacet() != null && def.getFacet().equals(projectFacet)) {
+					return def;
+				}
+			}
+		}
 
-	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(createErrorStatus(msg, e));
+		return null;
 	}
 
 	public static IProjectDefinition getProjectDefinition(String type) {
@@ -150,18 +199,43 @@ public class ProjectCorePlugin extends CorePlugin {
 		return projectDefinitions;
 	}
 
-	public static IProjectDefinition getProjectDefinition(IProjectFacet projectFacet) {
-		IProjectDefinition[] definitions = getProjectDefinitions();
-
-		if (definitions != null) {
-			for (IProjectDefinition def : definitions) {
-				if (def != null && def.getFacet() != null && def.getFacet().equals(projectFacet)) {
-					return def;
-				}
-			}
-		}
-
-		return null;
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(createErrorStatus(msg, e));
 	}
+
+	/**
+	 * The constructor
+	 */
+	public ProjectCorePlugin() {
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
+	 * )
+	 */
+	public void start(BundleContext context)
+		throws Exception {
+		
+		super.start(context);
+		
+		plugin = this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
+	 * )
+	 */
+	public void stop(BundleContext context)
+		throws Exception {
+		
+		plugin = null;
+		
+		super.stop(context);
+	}
+
 
 }

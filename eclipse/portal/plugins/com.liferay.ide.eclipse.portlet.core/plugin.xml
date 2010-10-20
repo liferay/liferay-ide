@@ -227,5 +227,18 @@
             facetId="liferay.ext">
       </liferayPluginDeployer>
    </extension>
+   
+   <extension
+       point="com.liferay.ide.eclipse.project.core.portletFrameworks">
+    <portletFramework
+          class="com.liferay.ide.eclipse.portlet.core.JSPPortletFramework"
+          default="true"
+          description="Simple and lightweight MVC framework using JSPs that is built-in to Liferay 6 Portal."
+          displayName="JSP"
+          helpUrl="http://www.liferay.com"
+          id="com.liferay.ide.eclipse.project.core.template.jsp"
+          shortName="jsp">
+    </portletFramework>
+    </extension>
 
 </plugin>

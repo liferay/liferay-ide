@@ -13,32 +13,17 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.project.ui.wizard;
+package com.liferay.ide.eclipse.portlet.core;
 
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
+import com.liferay.ide.eclipse.project.core.AbstractPortletFramework;
 
 /**
  * @author Greg Amerson
  */
-public interface IPluginWizardFragment {
+public class JSPPortletFramework extends AbstractPortletFramework {
 
-	public static final String ID = "com.liferay.ide.eclipse.project.ui.pluginWizardFragment";
+	public JSPPortletFramework() {
+		super();
+	}
 
-	public void addPages();
-
-	public IDataModelProvider getDataModelProvider();
-
-	public String getFragmentPluginFacetId();
-
-	public IWizardPage getNextPage(IWizardPage page);
-
-	public void initFragmentDataModel(IDataModel parentDataModel, String projectName);
-
-	public void setDataModel(IDataModel model);
-
-	public void setFragment(boolean fragment);
-
-	public void setHostPage(IWizardPage firstPage);
 }

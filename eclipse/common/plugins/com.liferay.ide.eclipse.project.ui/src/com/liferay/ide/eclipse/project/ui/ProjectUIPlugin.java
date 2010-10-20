@@ -16,7 +16,9 @@
 package com.liferay.ide.eclipse.project.ui;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -41,6 +43,8 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static ProjectUIPlugin plugin;
 
+	private static IPortletFrameworkDelegate[] portletFrameworkDelegates;
+
 	/**
 	 * Returns the shared instance
 	 * 
@@ -48,6 +52,56 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 	 */
 	public static ProjectUIPlugin getDefault() {
 		return plugin;
+	}
+
+	public static IPortletFrameworkDelegate getPortletFrameworkDelegate(String frameworkId) {
+		IPortletFrameworkDelegate[] delegates = getPortletFrameworkDelegates();
+
+		if (CoreUtil.isNullOrEmpty(frameworkId) || CoreUtil.isNullOrEmpty(delegates)) {
+			return null;
+		}
+
+		for (IPortletFrameworkDelegate delegate : delegates) {
+			if (frameworkId.equals(delegate.getFrameworkId())) {
+				return delegate;
+			}
+		}
+
+		return null;
+	}
+
+	public static IPortletFrameworkDelegate[] getPortletFrameworkDelegates() {
+		if (portletFrameworkDelegates == null) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IPortletFrameworkDelegate.EXTENSION_ID);
+
+			if (!CoreUtil.isNullOrEmpty(elements)) {
+				List<IPortletFrameworkDelegate> delegates = new ArrayList<IPortletFrameworkDelegate>();
+
+				for (IConfigurationElement element : elements) {
+					String frameworkId = element.getAttribute(IPortletFrameworkDelegate.FRAMEWORK_ID);
+					String iconUrl = element.getAttribute(IPortletFrameworkDelegate.ICON);
+
+					try {
+						AbstractPortletFrameworkDelegate delegate =
+							(AbstractPortletFrameworkDelegate) element.createExecutableExtension("class");
+						delegate.setFrameworkId(frameworkId);
+						delegate.setIconUrl(iconUrl);
+						delegate.setBundleId(element.getContributor().getName());
+
+						delegates.add(delegate);
+					}
+					catch (CoreException e) {
+						ProjectUIPlugin.logError("Could not create portlet plugin template delegate.", e);
+					}
+
+				}
+
+				portletFrameworkDelegates = delegates.toArray(new IPortletFrameworkDelegate[0]);
+			}
+		}
+
+		return portletFrameworkDelegates;
 	}
 
 	public static void logError(Exception e) {
@@ -64,6 +118,45 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 	public ProjectUIPlugin() {
 	}
 
+
+	// private static IConfigurationElement[] pluginWizardFragmentElements;
+
+	// public static IPluginWizardFragment getPluginWizardFragment(String pluginFacetId) {
+	// if (CoreUtil.isNullOrEmpty(pluginFacetId)) {
+	// return null;
+	// }
+	//
+	// IConfigurationElement[] fragmentElements = getPluginWizardFragmentsElements();
+	//
+	// for (IConfigurationElement fragmentElement : fragmentElements) {
+	// if (pluginFacetId.equals(fragmentElement.getAttribute("facetId"))) {
+	// try {
+	// Object o = fragmentElement.createExecutableExtension("class");
+	//
+	// if (o instanceof IPluginWizardFragment) {
+	// IPluginWizardFragment fragment = (IPluginWizardFragment) o;
+	// fragment.setFragment(true);
+	// return fragment;
+	// }
+	// }
+	// catch (CoreException e) {
+	// ProjectUIPlugin.logError("Could not load plugin wizard fragment for " + pluginFacetId, e);
+	// }
+	// }
+	// }
+	//
+	// return null;
+	// }
+
+	// public static IConfigurationElement[] getPluginWizardFragmentsElements() {
+	// if (pluginWizardFragmentElements == null) {
+	// pluginWizardFragmentElements =
+	// Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginWizardFragment.ID);
+	// }
+	//
+	// return pluginWizardFragmentElements;
+	// }
+
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -78,6 +171,7 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 		plugin = this;
 	}
 
+
 	/*
 	 * (non-Javadoc)
 	 * @see
@@ -91,44 +185,4 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 		
 		super.stop(context);
 	}
-
-
-	private static IConfigurationElement[] pluginWizardFragmentElements;
-
-	public static IPluginWizardFragment getPluginWizardFragment(String pluginFacetId) {
-		if (CoreUtil.isNullOrEmpty(pluginFacetId)) {
-			return null;
-		}
-
-		IConfigurationElement[] fragmentElements = getPluginWizardFragmentsElements();
-
-		for (IConfigurationElement fragmentElement : fragmentElements) {
-			if (pluginFacetId.equals(fragmentElement.getAttribute("facetId"))) {
-				try {
-					Object o = fragmentElement.createExecutableExtension("class");
-
-					if (o instanceof IPluginWizardFragment) {
-						IPluginWizardFragment fragment = (IPluginWizardFragment) o;
-						fragment.setFragment(true);
-						return fragment;
-					}
-				}
-				catch (CoreException e) {
-					ProjectUIPlugin.logError("Could not load plugin wizard fragment for " + pluginFacetId, e);
-				}
-			}
-		}
-
-		return null;
-	}
-
-	public static IConfigurationElement[] getPluginWizardFragmentsElements() {
-		if (pluginWizardFragmentElements == null) {
-			pluginWizardFragmentElements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginWizardFragment.ID);
-		}
-
-		return pluginWizardFragmentElements;
-	}
-
 }
