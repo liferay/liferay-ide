@@ -198,7 +198,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 			IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(runtime);
 			if (portalRuntime != null) {
-				ThemeDescriptorHelper.createDefaultFile(lookAndFeelFile, portalRuntime.getVersion() + "+", id, name);
+				ThemeDescriptorHelper.createDefaultFile(lookAndFeelFile, portalRuntime.getPortalVersion() + "+", id, name);
 			}
 		}
 

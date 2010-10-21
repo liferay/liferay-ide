@@ -34,16 +34,8 @@ public class PortalTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspath
 	public PortalTomcatRuntimeClasspathProvider() {
 	}
 
-	@Override
-	public IClasspathEntry[] resolveClasspathContainer(final IProject project, final IRuntime runtime) {
-		IPath installPath = runtime.getLocation();
-
-		if (installPath == null)
-			return new IClasspathEntry[0];
-
+	protected IClasspathEntry[] resolveClasspathContainerForPath(IPath installPath, String runtimeId) {
 		List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
-		
-		String runtimeId = runtime.getRuntimeType().getId();
 		
 		if (runtimeId.indexOf("60") > 0) {
 			IPath path = installPath.append("lib");
@@ -91,6 +83,19 @@ public class PortalTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspath
 		// }
 
 		return (IClasspathEntry[]) optimizedList.toArray(new IClasspathEntry[optimizedList.size()]);
+	}
+
+	@Override
+	public IClasspathEntry[] resolveClasspathContainer(final IProject project, final IRuntime runtime) {
+		IPath installPath = runtime.getLocation();
+
+		if (installPath == null)
+			return new IClasspathEntry[0];
+
+		String runtimeId = runtime.getRuntimeType().getId();
+
+		return resolveClasspathContainerForPath(installPath, runtimeId);
+
 	}
 
 	// TODO reenable this IDE-83

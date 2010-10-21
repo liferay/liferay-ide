@@ -132,13 +132,11 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		// }
 	}
 
-
 	private IFile getWorkspaceFile(IPath path) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		
 		return root.getFile(path);		
 	}
-
 
 	protected boolean isLiferayPluginProject(IPath deltaPath) {
 		IFile pluginPackagePropertiesFile = getWorkspaceFile(deltaPath);
@@ -255,6 +253,12 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 
 	protected boolean shouldProcessResourceChangedEvent(IResourceChangeEvent event) {
 		if (event == null) {
+			return false;
+		}
+
+		int eventType = event.getType();
+
+		if (eventType != IResourceChangeEvent.POST_CHANGE) {
 			return false;
 		}
 

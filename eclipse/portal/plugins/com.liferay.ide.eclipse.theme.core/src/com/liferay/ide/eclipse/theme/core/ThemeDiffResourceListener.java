@@ -170,7 +170,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 					IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(runtime);
 					if (portalRuntime != null) {
 						ThemeDescriptorHelper.createDefaultFile(
-							lookAndFeelFile, portalRuntime.getVersion() + "+", id, name);
+							lookAndFeelFile, portalRuntime.getPortalVersion() + "+", id, name);
 					}
 				}
 

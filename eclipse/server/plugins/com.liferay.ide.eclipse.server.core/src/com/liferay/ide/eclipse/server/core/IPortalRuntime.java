@@ -31,7 +31,7 @@ public interface IPortalRuntime {
 
 	public IPath getRoot();
 
-	public String getVersion();
+	public String getPortalVersion();
 
 	public IRuntime getRuntime();
 
