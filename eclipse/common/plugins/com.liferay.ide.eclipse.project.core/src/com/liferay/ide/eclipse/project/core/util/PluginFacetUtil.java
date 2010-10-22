@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.project.core.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -121,7 +123,8 @@ public class PluginFacetUtil {
 		configureLiferayFacet(fpjwc, requiredFacetVersion.getProjectFacet(), sdkLocation);
 	}
 
-	public static void configureProjectAsPlugin(IFacetedProjectWorkingCopy fpjwc, IRuntime runtime, String sdkLocation) {
+	public static void configureProjectAsPlugin(IFacetedProjectWorkingCopy fpjwc, IRuntime runtime, String sdkLocation)
+		throws CoreException {
 		// final IPreset preset = template.getInitialPreset();
 		// final IRuntime runtime = (IRuntime)
 		// model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
@@ -153,6 +156,11 @@ public class PluginFacetUtil {
 
 		// IFacetedProjectTemplate template = getLiferayTemplateForProject(fpjwc);
 		IPreset preset = getLiferayPresetForProject(fpjwc);
+
+		if (preset == null) {
+			throw new CoreException(
+				ProjectCorePlugin.createErrorStatus("No facet preset found, make sure your project is a valid liferay plugins sdk project with an expected prefix, e.g. -portlet, -hook, etc."));
+		}
 
 		Set<IProjectFacetVersion> currentProjectFacets = fpjwc.getProjectFacets();
 
