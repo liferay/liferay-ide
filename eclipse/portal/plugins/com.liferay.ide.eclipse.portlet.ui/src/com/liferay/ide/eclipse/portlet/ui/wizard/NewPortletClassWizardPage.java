@@ -132,24 +132,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	}
 
 	protected void createCustomPortletClassGroup(Composite parent) {
-		// SWTUtil.createHorizontalSpacer(parent, 1);
-		// customButton = new Button(parent, SWT.CHECK);
-		// customButton.setText("Create custom portlet class");
-		// GridData data = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		// data.horizontalSpan = 2;
-		// customButton.setLayoutData(data);
-		// this.synchHelper.synchCheckbox(customButton,
-		// CREATE_CUSTOM_PORTLET_CLASS, null);
-		// customButton.addSelectionListener(new SelectionAdapter() {
-		// public void widgetSelected(SelectionEvent e) {
-		// handleCustomButtonSelected();
-		// }
-		// });
-
 		createClassnameGroup(parent);
-
 		createPackageGroup(parent);
-
 		createSuperclassGroup(parent);
 	}
 

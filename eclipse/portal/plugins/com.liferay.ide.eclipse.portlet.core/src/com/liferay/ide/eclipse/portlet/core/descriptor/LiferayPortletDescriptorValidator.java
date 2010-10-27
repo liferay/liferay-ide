@@ -126,7 +126,9 @@ public class LiferayPortletDescriptorValidator extends BaseValidator {
 		
 		IFile portletXml = DescriptorHelper.getDescriptorFile(liferayPortletXml.getProject(), IPortalConstants.PORTLET_XML_FILE);
 
-		if (liferayPortletXml.isAccessible() && portletXml.isAccessible() && ProjectUtil.isPortletProject(resource.getProject())) {
+		if (liferayPortletXml.isAccessible() && portletXml != null && portletXml.isAccessible() &&
+			ProjectUtil.isPortletProject(resource.getProject())) {
+
 			IScopeContext[] scopes = new IScopeContext[] {
 				new InstanceScope(), new DefaultScope()
 			};

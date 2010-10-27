@@ -85,7 +85,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator {
 		IFile portletXml =
 			DescriptorHelper.getDescriptorFile(liferayDisplayXml.getProject(), IPortalConstants.PORTLET_XML_FILE);
 
-		if (liferayDisplayXml.isAccessible() && portletXml.isAccessible() &&
+		if (liferayDisplayXml.isAccessible() && portletXml != null && portletXml.isAccessible() &&
 			ProjectUtil.isPortletProject(resource.getProject())) {
 
 			IScopeContext[] scopes = new IScopeContext[] {

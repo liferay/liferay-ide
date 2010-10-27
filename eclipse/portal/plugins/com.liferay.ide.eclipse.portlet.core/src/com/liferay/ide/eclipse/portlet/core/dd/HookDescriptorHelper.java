@@ -169,9 +169,10 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 		DOMModelOperation operation =
 			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
 
-			protected IStatus doExecute(IDOMDocument document) {
-				return doSetCustomJSPDir(document, model);
-			}
+				protected IStatus doExecute(IDOMDocument document) {
+					return doSetCustomJSPDir(document, model);
+				}
+
 			};
 
 		IStatus status = operation.execute();
@@ -187,9 +188,10 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 		DOMModelOperation operation =
 			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
 
-			protected IStatus doExecute(IDOMDocument document) {
-				return doSetPortalProperties(document, model, propertiesFile);
-			}
+				protected IStatus doExecute(IDOMDocument document) {
+					return doSetPortalProperties(document, model, propertiesFile);
+				}
+
 			};
 
 		IStatus status = operation.execute();

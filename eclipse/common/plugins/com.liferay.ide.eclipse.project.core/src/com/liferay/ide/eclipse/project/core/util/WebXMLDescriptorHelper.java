@@ -52,7 +52,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper {
 		
 		IStatus status = null;
 		
-		if (file.exists()) {
+		if (file != null && file.exists()) {
 			status = new DOMModelEditOperation(file) {
 
 				protected IStatus doExecute(IDOMDocument document) {

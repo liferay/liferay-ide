@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -171,7 +172,13 @@ public class DescriptorHelper {
 	}
 
 	public static IFile getDescriptorFile(IProject project, String fileName) {
-		IVirtualFolder webRoot = ComponentCore.createComponent(project).getRootFolder();
+		IVirtualComponent comp = ComponentCore.createComponent(project);
+
+		if (comp == null) {
+			return null;
+		}
+
+		IVirtualFolder webRoot = comp.getRootFolder();
 
 		IFolder webInfFolder = (IFolder) webRoot.getFolder("WEB-INF").getUnderlyingFolder();
 

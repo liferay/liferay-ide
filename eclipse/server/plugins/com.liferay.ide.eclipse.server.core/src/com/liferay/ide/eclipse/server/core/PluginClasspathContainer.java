@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -180,34 +181,38 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		IVirtualComponent comp = ComponentCore.createComponent(this.project.getProject());
 
 		if (comp != null) {
-			IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
+			IContainer resource = comp.getRootFolder().getUnderlyingFolder();
 
-			IFile pluginPackageFile =
-				webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+			if (resource instanceof IFolder) {
+				IFolder webroot = (IFolder) resource;
 
-			if (!pluginPackageFile.exists()) {
-				// IDE-226 the file may be missing because we are in an ext plugin which has a different layout
-				// check for ext-web in the path to the docroot
-				try {
-					if (webroot.getFullPath().toPortableString().endsWith("WEB-INF/ext-web/docroot")) {
-						// look for packages file in first docroot
-						IPath parentDocroot = webroot.getFullPath().removeFirstSegments(1).removeLastSegments(3);
-						IFolder parentWebroot = this.project.getProject().getFolder(parentDocroot);
-						if (parentWebroot.exists()) {
-							pluginPackageFile =
-								parentWebroot.getFile("WEB-INF/" +
-									ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+				IFile pluginPackageFile =
+					webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+
+				if (!pluginPackageFile.exists()) {
+					// IDE-226 the file may be missing because we are in an ext plugin which has a different layout
+					// check for ext-web in the path to the docroot
+					try {
+						if (webroot.getFullPath().toPortableString().endsWith("WEB-INF/ext-web/docroot")) {
+							// look for packages file in first docroot
+							IPath parentDocroot = webroot.getFullPath().removeFirstSegments(1).removeLastSegments(3);
+							IFolder parentWebroot = this.project.getProject().getFolder(parentDocroot);
+							if (parentWebroot.exists()) {
+								pluginPackageFile =
+									parentWebroot.getFile("WEB-INF/" +
+										ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+							}
 						}
 					}
+					catch (Exception ex) {
+						PortalServerCorePlugin.logError(ex);
+					}
 				}
-				catch (Exception ex) {
-					PortalServerCorePlugin.logError(ex);
-				}
-			}
 
-			if (pluginPackageFile.exists()) {
-				jars = getJarsfromPackagePropertiesFile(pluginPackageFile);
-			}
+				if (pluginPackageFile.exists()) {
+					jars = getJarsfromPackagePropertiesFile(pluginPackageFile);
+				}			}
+	
 		}
 
 		return jars;
