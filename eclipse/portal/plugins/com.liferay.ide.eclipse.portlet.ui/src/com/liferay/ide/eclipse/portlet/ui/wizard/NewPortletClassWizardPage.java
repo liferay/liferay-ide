@@ -131,12 +131,6 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		new Label(parent, SWT.LEFT);
 	}
 
-	protected void createCustomPortletClassGroup(Composite parent) {
-		createClassnameGroup(parent);
-		createPackageGroup(parent);
-		createSuperclassGroup(parent);
-	}
-
 	/**
 	 * Add folder group to composite
 	 */
@@ -231,6 +225,11 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		}
 	}
 
+	protected void createPortletClassGroup(Composite parent) {
+		createClassnameGroup(parent);
+		createPackageGroup(parent);
+		createSuperclassGroup(parent);
+	}
 
 	/**
 	 * Add project group
@@ -295,7 +294,9 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 				public void widgetSelected(SelectionEvent e) {
 					// handleSuperButtonPressed();
-					handleClassButtonSelected(superCombo);
+					handleClassButtonSelected(
+						superCombo, "javax.portlet.GenericPortlet", J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE,
+						J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC);
 				}
 			});
 		}
@@ -311,11 +312,9 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 			addSeperator(composite, 3);
 		}
 
-		createCustomPortletClassGroup(composite);
+		createPortletClassGroup(composite);
 
-		// handleCustomButtonSelected();
-
-		classText.setFocus();
+		setFocusOnClassText();
 
 		setShellImage();
 
@@ -497,7 +496,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		return validationPropertyNames.toArray(new String[0]);
 	}
 
-	protected void handleClassButtonSelected(Control control) {
+	protected void handleClassButtonSelected(Control control, String baseClass, String title, String message) {
 		getControl().setCursor(new Cursor(getShell().getDisplay(), SWT.CURSOR_WAIT));
 
 		IPackageFragmentRoot packRoot =
@@ -515,12 +514,17 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		IJavaSearchScope scope = null;
 
 		try {
-			scope =
-				BasicSearchEngine.createHierarchyScope(packRoot.getJavaProject().findType(
-					"javax.portlet.GenericPortlet"));
+			IType type = packRoot.getJavaProject().findType(baseClass);
+
+			if (type == null) {
+				return;
+			}
+
+			scope = BasicSearchEngine.createHierarchyScope(type);
 		}
 		catch (JavaModelException e) {
 			PortletUIPlugin.logError(e);
+			return;
 		}
 
 		// This includes all entries on the classpath. This behavior is
@@ -531,8 +535,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		FilteredTypesSelectionDialog dialog =
 			new FilteredTypesSelectionDialogEx(
 				getShell(), false, getWizard().getContainer(), scope, IJavaSearchConstants.CLASS);
-		dialog.setTitle(J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE);
-		dialog.setMessage(J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC);
+		dialog.setTitle(title);
+		dialog.setMessage(message);
 
 		if (dialog.open() == Window.OK) {
 			IType type = (IType) dialog.getFirstResult();
@@ -700,6 +704,10 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 	protected boolean isProjectValid(IProject project) {
 		return super.isProjectValid(project) && ProjectUtil.isPortletProject(project);
+	}
+
+	protected void setFocusOnClassText() {
+		classText.setFocus();
 	}
 
 	protected void setShellImage() {

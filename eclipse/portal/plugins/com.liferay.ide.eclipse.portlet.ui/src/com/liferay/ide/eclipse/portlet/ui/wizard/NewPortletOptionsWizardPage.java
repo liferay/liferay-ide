@@ -87,6 +87,29 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 		setDescription(desc);
 	}
 
+	protected void createJSPsField(Composite parent) {
+		createJspsButton = new Button(parent, SWT.CHECK);
+		createJspsButton.setText("Create JSP &files"); //$NON-NLS-1$
+		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
+		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
+
+		final Label jspLabel = SWTUtil.createLabel(parent, "JSP folder:", 1);
+
+		jspFolder = SWTUtil.createText(parent, 1);
+		((GridData) jspFolder.getLayoutData()).widthHint = 150;
+		synchHelper.synchText(jspFolder, INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER, null);
+
+		createJspsButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				jspLabel.setEnabled(createJspsButton.getSelection());
+
+				jspFolder.setEnabled(createJspsButton.getSelection());
+			}
+		});
+	}
+
 	protected void createLiferayPortletModesGroup(Composite composite) {
 		Group group = SWTUtil.createGroup(composite, "Liferay Portlet Modes", 6);
 
@@ -180,44 +203,16 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
 	}
 
-	protected void createResourcesGroup(Composite composite) {
-		Group group = SWTUtil.createGroup(composite, "Resources", 2);
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-
-		group.setLayoutData(gd);
-
-		createJspsButton = new Button(group, SWT.CHECK);
-		createJspsButton.setText("Create JSP &files"); //$NON-NLS-1$
-		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
-		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
-
-		final Label jspLabel = SWTUtil.createLabel(group, "JSP folder:", 1);
-
-		jspFolder = SWTUtil.createText(group, 1);
-		((GridData) jspFolder.getLayoutData()).widthHint = 150;
-		synchHelper.synchText(jspFolder, INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER, null);
-
-		createJspsButton.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				jspLabel.setEnabled(createJspsButton.getSelection());
-
-				jspFolder.setEnabled(createJspsButton.getSelection());
-			}
-		});
-
-		createResourceBundleFileButton = new Button(group, SWT.CHECK);
+	protected void createResourceBundleField(Composite parent) {
+		createResourceBundleFileButton = new Button(parent, SWT.CHECK);
 		createResourceBundleFileButton.setText("Create resource bundle file");
 		createResourceBundleFileButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
 		synchHelper.synchCheckbox(
 			createResourceBundleFileButton, INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE, null);
 
-		final Label resourceBundleFileLabel = SWTUtil.createLabel(group, "Resource bundle file path:", 1);
+		final Label resourceBundleFileLabel = SWTUtil.createLabel(parent, "Resource bundle file path:", 1);
 
-		resourceBundleFilePath = SWTUtil.createText(group, 1);
+		resourceBundleFilePath = SWTUtil.createText(parent, 1);
 		((GridData) resourceBundleFilePath.getLayoutData()).widthHint = 150;
 		synchHelper.synchText(
 			resourceBundleFilePath, INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE_PATH, null);
@@ -231,6 +226,18 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 				resourceBundleFilePath.setEnabled(createResourceBundleFileButton.getSelection());
 			}
 		});
+	}
+
+	protected void createResourcesGroup(Composite composite) {
+		Group group = SWTUtil.createGroup(composite, "Resources", 2);
+
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 3;
+
+		group.setLayoutData(gd);
+
+		createJSPsField(group);
+		createResourceBundleField(group);
 	}
 
 	@Override

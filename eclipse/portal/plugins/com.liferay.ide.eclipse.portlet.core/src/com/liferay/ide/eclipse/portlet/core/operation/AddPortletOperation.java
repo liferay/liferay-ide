@@ -122,7 +122,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 			return status;
 		}
 
-		generateMetaData(getDataModel(), getQualifiedClassName());
+		generateMetaData(getDataModel());
 
 		return Status.OK_STATUS;
 	}
@@ -255,7 +255,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 		return Status.OK_STATUS;
 	}
 
-	protected void generateMetaData(IDataModel aModel, String qualifiedClassName) {
+	protected IStatus generateMetaData(IDataModel aModel) {
 		if (ProjectUtil.isPortletProject(getTargetProject())) {
 			PortletDescriptorHelper portletDescHelper = new PortletDescriptorHelper(getTargetProject());
 
@@ -267,8 +267,11 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
 			if (!status.isOK()) {
 				PortletCore.getDefault().getLog().log(status);
+				return status;
 			}
 		}
+
+		return Status.OK_STATUS;
 	}
 
 	@Override

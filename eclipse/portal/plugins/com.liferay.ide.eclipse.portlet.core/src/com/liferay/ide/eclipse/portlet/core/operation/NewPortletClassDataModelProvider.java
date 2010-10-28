@@ -115,8 +115,11 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		else if (PORTLET_NAME.equals(propertyName) || LIFERAY_PORTLET_NAME.equals(propertyName)) {
 			return getProperty(CLASS_NAME).toString().toLowerCase();
 		}
-		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName)) {
+		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName) || SHORT_TITLE.equals(propertyName)) {
 			return getProperty(CLASS_NAME);
+		}
+		else if (KEYWORDS.equals(propertyName)) {
+			return "";
 		}
 		else if (INIT_PARAMS.equals(propertyName)) {
 			return getInitParams();
@@ -227,6 +230,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(PORTLET_NAME);
 		propertyNames.add(DISPLAY_NAME);
 		propertyNames.add(TITLE);
+		propertyNames.add(SHORT_TITLE);
+		propertyNames.add(KEYWORDS);
 		propertyNames.add(INIT_PARAMS);
 
 		propertyNames.add(VIEW_MODE);

@@ -104,16 +104,6 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="class" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn="com.liferay.ide.eclipse.project.core.AbstractPortletFramework:"/>
-               </appinfo>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 

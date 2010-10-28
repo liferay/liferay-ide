@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.vaadin.core.operation;
 
@@ -31,10 +45,6 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 		super(templateStore, contextType, fragment);
 	}
 
-	public NewVaadinPortletClassDataModelProvider() {
-		super();
-	}
-
 	@Override
 	public IDataModelOperation getDefaultOperation() {
 		return new AddVaadinApplicationOperation(this.model);
@@ -48,7 +58,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 		else if (PORTLET_NAME.equals(propertyName) || LIFERAY_PORTLET_NAME.equals(propertyName)) {
 			return getPortletName().toLowerCase();
 		}
-		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName)) {
+		else if (DISPLAY_NAME.equals(propertyName) || TITLE.equals(propertyName) || SHORT_TITLE.equals(propertyName)) {
 			return getPortletName();
 		}
 		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
@@ -57,7 +67,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 		else if (SUPERCLASS.equals(propertyName)) {
 			return QUALIFIED_VAADIN_APPLICATION;
 		}
-		else if (PORTLET_CLASS.equals(propertyName)) {
+		else if (VAADIN_PORTLET_CLASS.equals(propertyName)) {
 			return QUALIFIED_VAADIN_PORTLET;
 		}
 		else if (CREATE_JSPS.equals(propertyName)) {
@@ -66,6 +76,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 		else if (CONSTRUCTOR.equals(propertyName)) {
 			return false;
 		}
+
 		return super.getDefaultProperty(propertyName);
 	}
 
@@ -76,7 +87,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 	@Override
 	public Set getPropertyNames() {
 		Set propertyNames = super.getPropertyNames();
-		propertyNames.add(PORTLET_CLASS);
+		propertyNames.add(VAADIN_PORTLET_CLASS);
 		return propertyNames;
 	}
 
@@ -86,12 +97,14 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 			String[] vals = new String[] {
 				QUALIFIED_VAADIN_APPLICATION
 			};
+
 			return DataModelPropertyDescriptor.createDescriptors(vals, vals);
 		}
-		else if (PORTLET_CLASS.equals(propertyName)) {
+		else if (VAADIN_PORTLET_CLASS.equals(propertyName)) {
 			String[] vals = new String[] {
 				QUALIFIED_VAADIN_PORTLET
 			};
+
 			return DataModelPropertyDescriptor.createDescriptors(vals, vals);
 		}
 
@@ -106,6 +119,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 		else if (EDIT_MODE.equals(propertyName) || HELP_MODE.equals(propertyName)) {
 			return false;
 		}
+
 		return super.isPropertyEnabled(propertyName);
 	}
 
@@ -123,7 +137,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 	protected Object getInitParams() {
 		List<ParamValue> initParams = new ArrayList<ParamValue>();
 
-		if (getStringProperty(PORTLET_CLASS).equals(QUALIFIED_VAADIN_PORTLET)) {
+		if (getStringProperty(VAADIN_PORTLET_CLASS).equals(QUALIFIED_VAADIN_PORTLET)) {
 			ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
 			paramValue.setName("application");
 

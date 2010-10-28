@@ -20,7 +20,7 @@ import java.net.URL;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractPortletFramework implements IPortletFramework {
+public class PortletFramework implements IPortletFramework {
 
 	protected String bundleId;
 

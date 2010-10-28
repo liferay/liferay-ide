@@ -30,8 +30,6 @@ public interface IPluginWizardFragment {
 
 	public IDataModelProvider getDataModelProvider();
 
-	public String getFragmentPluginFacetId();
-
 	public IWizardPage getNextPage(IWizardPage page);
 
 	public void initFragmentDataModel(IDataModel parentDataModel, String projectName);

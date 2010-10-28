@@ -1,9 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.vaadin.core.dd;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.IPluginPackageModel;
 import com.liferay.ide.eclipse.portlet.core.PluginPropertiesConfiguration;
 import com.liferay.ide.eclipse.portlet.core.dd.PortletDescriptorHelper;
@@ -12,7 +25,6 @@ import com.liferay.ide.eclipse.portlet.vaadin.core.operation.INewVaadinPortletCl
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -21,14 +33,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * Helper for editing various portlet configuration XML files, to add Vaadin portlet configuration to them. Also
@@ -36,9 +43,6 @@ import org.w3c.dom.Node;
  * 
  * @author Henri Sara - borrows/modifies some code from superclass by Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "unchecked"
-})
 public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
 	implements INewVaadinPortletClassDataModelProperties {
 
@@ -132,100 +136,9 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
 		return Status.OK_STATUS;
 	}
 
-	// some superclass behavior modifications: portlet class as a separate
-	// property
-	public IStatus updatePortletXML(IDOMDocument document, IDataModel model) {
-		// <portlet-app> element
-		Element docRoot = document.getDocumentElement();
-
-		// new <portlet> element
-		Element newPortletElement = document.createElement("portlet");
-
-		appendChildElement(newPortletElement, "portlet-name", model.getStringProperty(PORTLET_NAME));
-
-		appendChildElement(newPortletElement, "display-name", model.getStringProperty(DISPLAY_NAME));
-
-		appendChildElement(newPortletElement, "portlet-class", model.getStringProperty(PORTLET_CLASS));
-
-		// add <init-param> elements as needed
-		List<ParamValue> initParams = (List<ParamValue>) model.getProperty(INIT_PARAMS);
-
-		for (ParamValue initParam : initParams) {
-			Element newInitParamElement = appendChildElement(newPortletElement, "init-param");
-
-			appendChildElement(newInitParamElement, "name", initParam.getName());
-
-			appendChildElement(newInitParamElement, "value", initParam.getValue());
-		}
-
-		// expiration cache
-		appendChildElement(newPortletElement, "expiration-cache", "0");
-
-		// supports node
-		Element newSupportsElement = appendChildElement(newPortletElement, "supports");
-
-		appendChildElement(newSupportsElement, "mime-type", "text/html");
-
-		// for all support modes need to add into
-		for (String portletMode : ALL_PORTLET_MODES) {
-			if (model.getBooleanProperty(portletMode)) {
-				appendChildElement(
-					newSupportsElement, "portlet-mode",
-					model.getPropertyDescriptor(portletMode).getPropertyDescription());
-			}
-		}
-
-		if (model.getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE)) {
-			// need to remove .properties off the end of the bundle_file_path
-			String bundlePath = model.getStringProperty(CREATE_RESOURCE_BUNDLE_FILE_PATH);
-			String bundleValue = bundlePath.replaceAll("\\.properties$", "");
-			appendChildElement(newPortletElement, "resource-bundle", bundleValue);
-		}
-
-		// add portlet-info
-		Element newPortletInfoElement = appendChildElement(newPortletElement, "portlet-info");
-
-		appendChildElement(newPortletInfoElement, "title", model.getStringProperty(TITLE));
-
-		appendChildElement(newPortletInfoElement, "short-title", model.getStringProperty(TITLE));
-
-		appendChildElement(newPortletInfoElement, "keywords", "");
-
-		// security role refs
-		for (String roleName : DEFAULT_SECURITY_ROLE_NAMES) {
-			appendChildElement(appendChildElement(newPortletElement, "security-role-ref"), "role-name", roleName);
-		}
-
-		// check for event-definition elements
-
-		Node refNode = null;
-
-		String[] refElementNames =
-			new String[] {
-				"custom-portlet-mode", "custom-window-state", "user-attribute", "security-constraint",
-				"resource-bundle", "filter", "filter-mapping", "default-namespace", "event-definition",
-				"public-render-parameter", "listener", "container-runtime-option"
-			};
-
-		for (int i = 0; i < refElementNames.length; i++) {
-			refNode = NodeUtil.findFirstChild(docRoot, refElementNames[i]);
-
-			if (refNode != null) {
-				break;
-			}
-		}
-
-		docRoot.insertBefore(newPortletElement, refNode);
-
-		// append a newline text node
-		docRoot.appendChild(document.createTextNode(System.getProperty("line.separator")));
-
-		// format the new node added to the model;
-		FormatProcessorXML processor = new FormatProcessorXML();
-
-		processor.formatNode(newPortletElement);
-
-		return Status.OK_STATUS;
+	@Override
+	protected String getPortletClassText(IDataModel model) {
+		return model.getStringProperty(VAADIN_PORTLET_CLASS);
 	}
 
 }

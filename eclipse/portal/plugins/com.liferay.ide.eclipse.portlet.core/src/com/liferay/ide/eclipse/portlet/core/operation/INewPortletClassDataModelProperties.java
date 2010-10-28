@@ -124,6 +124,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String JAVASCRIPT_FILE = "INewPortletClassDataModelProperties.JAVASCRIPT_FILE";
 
+	public static final String KEYWORDS = "INewPortletClassDataModelProperties.KEYWORDS";
+
 	public static final String LIFERAY_PORTLET_NAME = "INewPortletClassDataModelProperties.LIFERAY_PORTLET_NAME";
 
 	public static final String PORTLET_NAME = "INewPortletClassDataModelProperties.PORTLET_NAME";
@@ -143,6 +145,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String QUALIFIED_LIFERAY_PORTLET = "com.liferay.portal.kernel.portlet.LiferayPortlet";
 
 	public static final String QUALIFIED_MVC_PORTLET = "com.liferay.util.bridges.mvc.MVCPortlet";
+
+	public static final String SHORT_TITLE = "INewPortletClassDataModelProperties.SHORT_TITLE";
 
 	public static final String TEMPLATE_STORE = "INewPortletClassDataModelProperties.TEMPLATE_STORE";
 

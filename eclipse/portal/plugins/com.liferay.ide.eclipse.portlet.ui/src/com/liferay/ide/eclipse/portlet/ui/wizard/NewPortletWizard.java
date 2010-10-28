@@ -20,7 +20,6 @@ import com.liferay.ide.eclipse.portlet.core.operation.NewPortletClassDataModelPr
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.PortletTemplateContextTypeIds;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
 
 import java.lang.reflect.InvocationTargetException;
@@ -57,32 +56,6 @@ public class NewPortletWizard extends NewWebArtifactWizard
 
 	public IDataModelProvider getDataModelProvider() {
 		return getDefaultProvider();
-	}
-
-	public String getFragmentPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID;
-	}
-
-	@Override
-	public String getNextPage(String currentPageName, String expectedNextPageName) {
-		// if ("pageOne".equals(currentPageName) &&
-		// "pageTwo".equals(expectedNextPageName) &&
-		// !shouldShowClassOptionsPage()) {
-		// return "pageThree";
-		// }
-
-		return super.getNextPage(currentPageName, expectedNextPageName);
-	}
-
-	@Override
-	public String getPreviousPage(String currentPageName, String expectedPreviousPageName) {
-		// if ("pageThree".equals(currentPageName) &&
-		// "pageTwo".equals(expectedPreviousPageName) &&
-		// !shouldShowClassOptionsPage()) {
-		// return "pageOne";
-		// }
-
-		return super.getPreviousPage(currentPageName, expectedPreviousPageName);
 	}
 
 	public String getTitle() {

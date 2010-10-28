@@ -261,7 +261,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 		appendChildElement(newPortletElement, "display-name", model.getStringProperty(DISPLAY_NAME));
 
-		appendChildElement(newPortletElement, "portlet-class", model.getStringProperty(QUALIFIED_CLASS_NAME));
+		appendChildElement(newPortletElement, "portlet-class", getPortletClassText(model));
 
 		// add <init-param> elements as needed
 		List<ParamValue> initParams = (List<ParamValue>) model.getProperty(INIT_PARAMS);
@@ -303,9 +303,9 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 		appendChildElement(newPortletInfoElement, "title", model.getStringProperty(TITLE));
 
-		appendChildElement(newPortletInfoElement, "short-title", model.getStringProperty(TITLE));
+		appendChildElement(newPortletInfoElement, "short-title", model.getStringProperty(SHORT_TITLE));
 
-		appendChildElement(newPortletInfoElement, "keywords", "");
+		appendChildElement(newPortletInfoElement, "keywords", model.getStringProperty(KEYWORDS));
 
 		// security role refs
 		for (String roleName : DEFAULT_SECURITY_ROLE_NAMES) {
@@ -342,6 +342,10 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		processor.formatNode(newPortletElement);
 
 		return Status.OK_STATUS;
+	}
+
+	protected String getPortletClassText(IDataModel model) {
+		return model.getStringProperty(QUALIFIED_CLASS_NAME);
 	}
 
 	protected IStatus removeAllPortletElements(IDOMDocument document) {
