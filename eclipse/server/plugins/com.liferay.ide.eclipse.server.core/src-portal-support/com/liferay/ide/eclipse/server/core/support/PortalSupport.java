@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.server.core.support;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @author Greg Amerson
@@ -26,6 +27,10 @@ public abstract class PortalSupport {
 
 	public static void main(String[] args) {
 		String supportClassName = args[0];
+
+		File outputFile = new File(args[1]);
+
+		File errorFile = new File(args[2]);
 
 		try {
 			Class<?> portalSupportClass;
@@ -37,8 +42,6 @@ public abstract class PortalSupport {
 			if (newClass instanceof PortalSupport) {
 				PortalSupport portalSupport = (PortalSupport) newClass;
 
-				File outputFile = new File(args[1]);
-
 				outputFile.getParentFile().mkdirs();
 
 				FileWriter writer = null;
@@ -47,9 +50,11 @@ public abstract class PortalSupport {
 					writer = new FileWriter(outputFile);
 
 					portalSupport.writeOutput(writer);
+
+					writer.flush();
 				}
 				catch (Exception e) {
-					e.printStackTrace();
+					appendError(e, errorFile);
 				}
 				finally {
 					if (writer != null) {
@@ -63,16 +68,25 @@ public abstract class PortalSupport {
 				}
 			}
 		}
-		catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		catch (InstantiationException e) {
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e) {
-			e.printStackTrace();
+		catch (Exception e) {
+			try {
+				appendError(e, errorFile);
+			}
+			catch (Exception e1) {
+				// best effort no error here
+			}
 		}
 
+	}
+
+	static void appendError(Exception e, File errorFile)
+		throws IOException {
+
+		FileWriter writer = new FileWriter(errorFile);
+		writer.append(e.getMessage());
+		e.printStackTrace(new PrintWriter(writer));
+		writer.flush();
+		writer.close();
 	}
 
 	abstract void writeOutput(FileWriter writer)

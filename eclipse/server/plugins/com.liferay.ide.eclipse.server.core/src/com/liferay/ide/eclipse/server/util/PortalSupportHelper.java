@@ -57,7 +57,7 @@ public class PortalSupportHelper extends LaunchHelper {
 	protected File outputFile;
 
 	public PortalSupportHelper(
-		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, String[] userLibs) {
+		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile, String[] userLibs) {
 		
 		super(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
 
@@ -74,7 +74,7 @@ public class PortalSupportHelper extends LaunchHelper {
 		setOutputFile(outputFile);
 
 		setLaunchArgs(new String[] {
-			portalSupportClass, outputFile.getAbsolutePath()
+			portalSupportClass, outputFile.getAbsolutePath(), errorFile.getAbsolutePath()
 		});
 
 		setMode(ILaunchManager.RUN_MODE);

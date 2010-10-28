@@ -118,16 +118,20 @@ public class PortalTomcatUtil {
 			PortalTomcatPlugin.getDefault().getStateLocation().append("hook_properties").append(
 				runtimeLocation.toPortableString().replaceAll("\\/", "_") + "_hook_properties.txt");
 
+		IPath errorPath = PortalTomcatPlugin.getDefault().getStateLocation().append("hookError.log");
+
 		File hookPropertiesFile = hookPropertiesPath.toFile();
 
+		File errorFile = errorPath.toFile();
+
 		if (!hookPropertiesFile.exists()) {
-			loadHookPropertiesFile(runtimeLocation, hookPropertiesFile);
+			loadHookPropertiesFile(runtimeLocation, hookPropertiesFile, errorFile);
 		}
 
 		String[] hookProperties = FileUtil.readLinesFromFile(hookPropertiesFile);
 
 		if (hookProperties.length == 0) {
-			loadHookPropertiesFile(runtimeLocation, hookPropertiesFile);
+			loadHookPropertiesFile(runtimeLocation, hookPropertiesFile, errorFile);
 
 			hookProperties = FileUtil.readLinesFromFile(hookPropertiesFile);
 		}
@@ -137,6 +141,7 @@ public class PortalTomcatUtil {
 
 	public static String getVersion(IPath location) {
 		IPath versionsInfoPath = PortalTomcatPlugin.getDefault().getStateLocation().append("version.properties");
+
 
 		String locationKey = location.toPortableString().replaceAll("\\/", "_");
 
@@ -163,12 +168,16 @@ public class PortalTomcatUtil {
 			FileUtil.clearContents(versionFile);
 		}
 
-		loadVersionInfoFile(location, versionFile);
+		IPath errorPath = PortalTomcatPlugin.getDefault().getStateLocation().append("versionError.log");
+
+		File errorFile = errorPath.toFile();
+
+		loadVersionInfoFile(location, versionFile, errorFile);
 
 		Version version = CoreUtil.readVersionFile(versionFile);
 
 		if (version.equals(Version.emptyVersion)) {
-			loadVersionInfoFile(location, versionInfoFile);
+			loadVersionInfoFile(location, versionInfoFile, errorFile);
 
 			version = CoreUtil.readVersionFile(versionInfoFile);
 		}
@@ -226,7 +235,7 @@ public class PortalTomcatUtil {
 		return context;
 	}
 
-	public static void loadHookPropertiesFile(IPath runtimeLocation, File hookPropertiesFile) {
+	public static void loadHookPropertiesFile(IPath runtimeLocation, File hookPropertiesFile, File errorFile) {
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetSupportedHookProperties";
 
 		IPath libRoot = runtimeLocation.append("lib/ext");
@@ -234,7 +243,7 @@ public class PortalTomcatUtil {
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
 		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, hookPropertiesFile, null);
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, hookPropertiesFile, errorFile, null);
 
 		try {
 			helper.launch(null);
@@ -244,7 +253,7 @@ public class PortalTomcatUtil {
 		}
 	}
 
-	public static void loadVersionInfoFile(IPath runtimeLocation, File versionInfoFile) {
+	public static void loadVersionInfoFile(IPath runtimeLocation, File versionInfoFile, File errorFile) {
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
 
 		IPath libRoot = runtimeLocation.append("lib/ext");
@@ -252,7 +261,7 @@ public class PortalTomcatUtil {
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
 		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, null);
 
 		try {
 			helper.launch(null);

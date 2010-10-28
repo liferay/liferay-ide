@@ -146,7 +146,11 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			FileUtil.clearContents(serverInfoFile);
 		}
 
-		loadServerInfoFile(location, serverInfoFile);
+		IPath errorPath = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfoError.log");
+
+		File errorFile = errorPath.toFile();
+
+		loadServerInfoFile(location, serverInfoFile, errorFile);
 
 		String serverInfoString = FileUtil.readContents(serverInfoFile);
 
@@ -296,7 +300,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		super.initialize();
 	}
 
-	protected void loadServerInfoFile(IPath location, File versionInfoFile) {
+	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile) {
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
 
 		IPath libRoot = location.append("lib/ext");
@@ -304,7 +308,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		IPath portalRoot = getRoot();
 
 		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, null);
+			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, null);
 
 		try {
 			helper.launch(null);
