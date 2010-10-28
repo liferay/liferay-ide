@@ -77,7 +77,7 @@ public class NewVaadinPortletWizard extends NewPortletWizard {
 
 	@Override
 	protected ImageDescriptor getImage() {
-		return ImageDescriptor.createFromURL(VaadinUI.getDefault().getBundle().getEntry("/icons/vaadin-icon-32.png"));
+		return ImageDescriptor.createFromURL(VaadinUI.getDefault().getBundle().getEntry("/icons/wizban/vaadin_wiz.png"));
 	}
 
 }
