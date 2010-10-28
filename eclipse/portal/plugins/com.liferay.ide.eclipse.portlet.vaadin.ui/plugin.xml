@@ -23,7 +23,7 @@
             id="com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"
             name="Liferay Vaadin Portlet">
          <class class="com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.NewVaadinPortletWizard">
-         	<parameter name="liferay_artifact" value="true"/>
+         	<parameter name="liferay_extra_artifact" value="true"/>
             <parameter name="menuIndex" value="10" />
          </class>
          <description>

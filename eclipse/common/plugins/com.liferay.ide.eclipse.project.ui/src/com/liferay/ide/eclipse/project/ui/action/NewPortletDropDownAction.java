@@ -27,6 +27,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
@@ -58,7 +59,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 	public void dispose() {
 	}
 
-	public NewWizardAction[] getActionFromDescriptors() {
+	public NewWizardAction[] getActionFromDescriptors(String typeAttribute) {
 		ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
 
 		IExtensionPoint extensionPoint =
@@ -68,7 +69,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
 			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(TAG_WIZARD) && isProjectWizard(element)) {
+				if (element.getName().equals(TAG_WIZARD) && isLiferayArtifactWizard(element, typeAttribute)) {
 					containers.add(new NewWizardAction(element));
 				}
 			}
@@ -82,7 +83,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 	}
 
 	public Action getDefaultAction() {
-		Action[] actions = getActionFromDescriptors();
+		Action[] actions = getActionFromDescriptors(getTypeAttribute());
 
 		if (actions.length > 0) {
 			return actions[0];
@@ -95,9 +96,20 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 		if (fMenu == null) {
 			fMenu = new Menu(parent);
 
-			NewWizardAction[] actions = getActionFromDescriptors();
+			NewWizardAction[] actions = getActionFromDescriptors(getTypeAttribute());
 
 			for (NewWizardAction action : actions) {
+				action.setShell(fWizardShell);
+
+				ActionContributionItem item = new ActionContributionItem(action);
+				item.fill(fMenu, -1);
+			}
+
+			new Separator().fill(fMenu, -1);
+
+			NewWizardAction[] extraActions = getActionFromDescriptors(getExtraTypeAttribute());
+
+			for (NewWizardAction action : extraActions) {
 				action.setShell(fWizardShell);
 
 				ActionContributionItem item = new ActionContributionItem(action);
@@ -123,7 +135,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
-	private boolean isProjectWizard(IConfigurationElement element) {
+	private boolean isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
 		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
 
 		if (classElements.length > 0) {
@@ -131,7 +143,8 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
 
 				for (IConfigurationElement paramElement : paramElements) {
-					if (getTypeAttribute().equals(paramElement.getAttribute(TAG_NAME))) {
+					String tagName = paramElement.getAttribute(TAG_NAME);
+					if (tagName != null && tagName.equals(typeAttribute)) {
 						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
 					}
 				}
@@ -144,6 +157,10 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 		}
 
 		return false;
+	}
+
+	protected String getExtraTypeAttribute() {
+		return "liferay_extra_artifact";
 	}
 
 	protected String getTypeAttribute() {
