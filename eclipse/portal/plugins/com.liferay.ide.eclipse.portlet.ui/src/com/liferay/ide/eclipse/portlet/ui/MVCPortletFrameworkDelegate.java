@@ -32,13 +32,13 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public class JSPPortletFrameworkDelegate extends AbstractPortletFrameworkDelegate {
+public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegate {
 
 	protected IDataModel createProjectDataModel;
 
 	protected IPluginWizardFragment wizardFragment;
 
-	public JSPPortletFrameworkDelegate() {
+	public MVCPortletFrameworkDelegate() {
 		super();
 	}
 
@@ -54,7 +54,7 @@ public class JSPPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setFragmentEnabled(createCustomClassButton.getSelection());
-				JSPPortletFrameworkDelegate.this.createProjectDataModel.setBooleanProperty(
+				MVCPortletFrameworkDelegate.this.createProjectDataModel.setBooleanProperty(
 					IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, createCustomClassButton.getSelection());
 			}
 

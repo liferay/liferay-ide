@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.IProjectDefinition;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
@@ -44,6 +45,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -338,6 +340,29 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			PLUGIN_TYPE_LAYOUTTPL.equals(propertyName)) {
 
 			return validate(FACET_PROJECT_NAME);
+		}
+		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
+			// check to make sure that the current SDK has the propery version
+			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
+			SDK selectedSDK = SDKManager.getInstance().getSDK(sdkName);
+
+			if (selectedSDK == null) {
+				return ProjectCorePlugin.createErrorStatus("Unable to determine SDK version for " + sdkName);
+			}
+
+			Version sdkVersion = new Version(selectedSDK.getVersion());
+
+			IPortletFramework framework = (IPortletFramework) getProperty(PORTLET_FRAMEWORK);
+
+			Version requiredSDKVersion = new Version(framework.getRequiredSDKVersion());
+
+			if (sdkVersion.compareTo(requiredSDKVersion) < 0) {
+				return ProjectCorePlugin.createErrorStatus("At least SDK version " + requiredSDKVersion +
+					" is required to use the selected portlet framework.");
+			}
+			else {
+				return Status.OK_STATUS;
+			}
 		}
 
 		return super.validate(propertyName);

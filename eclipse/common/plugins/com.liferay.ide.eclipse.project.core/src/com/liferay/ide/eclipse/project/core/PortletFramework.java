@@ -34,9 +34,9 @@ public class PortletFramework implements IPortletFramework {
 
 	protected boolean isDefault;
 
-	protected String shortName;
+	protected String requiredSDKVersion;
 
-	protected String templateZipPath;
+	protected String shortName;
 
 	public String getBundleId() {
 		return bundleId;
@@ -58,12 +58,12 @@ public class PortletFramework implements IPortletFramework {
 		return id;
 	}
 
-	public String getShortName() {
-		return shortName;
+	public String getRequiredSDKVersion() {
+		return requiredSDKVersion;
 	}
 
-	public String getTemplateZipPath() {
-		return templateZipPath;
+	public String getShortName() {
+		return shortName;
 	}
 
 	public boolean isDefault() {
@@ -86,23 +86,20 @@ public class PortletFramework implements IPortletFramework {
 		this.displayName = displayName;
 	}
 
-
 	public void setHelpUrl(URL helpUrl) {
 		this.helpUrl = helpUrl;
 	}
-
-
 
 	public void setId(String id) {
 		this.id = id;
 	}
 
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
+	public void setRequiredSDKVersion(String version) {
+		this.requiredSDKVersion = version;
 	}
 
-	public void setTemplateZipPath(String templateZipPath) {
-		this.templateZipPath = templateZipPath;
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 }

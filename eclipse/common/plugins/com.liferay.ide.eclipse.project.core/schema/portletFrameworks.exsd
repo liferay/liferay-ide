@@ -59,7 +59,7 @@
          <attribute name="shortName" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  This field should be identical to the flag that is passed into the plug-ins SDK for the value of the portlet.framework.
                </documentation>
             </annotation>
          </attribute>
@@ -83,13 +83,6 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="templateZipPath" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="helpUrl" type="string">
             <annotation>
                <documentation>
@@ -98,6 +91,13 @@
             </annotation>
          </attribute>
          <attribute name="default" type="boolean">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="requiredSDKVersion" type="string" use="required">
             <annotation>
                <documentation>
                   

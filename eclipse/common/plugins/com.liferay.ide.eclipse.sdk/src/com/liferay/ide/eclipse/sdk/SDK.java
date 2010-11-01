@@ -235,18 +235,15 @@ public class SDK {
 	}
 
 	public IPath createNewPortletProject(
-		String portletName, String portletDisplayName, String appServerDir, Map<String, String> props) {
+		String portletName, String portletDisplayName, String portletFramework, String appServerDir) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
 			Map<String, String> properties = new HashMap<String, String>();
 
-			if (props != null && props.size() > 0) {
-				properties.putAll(props);
-			}
-
 			properties.put(ISDKConstants.PROPERTY_PORTLET_NAME, portletName);
 			properties.put(ISDKConstants.PROPERTY_PORTLET_DISPLAY_NAME, portletDisplayName);
+			properties.put(ISDKConstants.PROPERTY_PORTLET_FRAMEWORK, portletFramework);
 			properties.put(ISDKConstants.PROPERTY_APP_SERVER_TYPE, "tomcat");
 			properties.put(ISDKConstants.PROPERTY_APP_SERVER_DIR, appServerDir);
 			properties.put(ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServerDir + "/webapps");

@@ -30,14 +30,32 @@ public interface ISDKConstants {
 
 	public static final String EXT_PLUGIN_ANT_BUILD = _defaultPrefs.get("ext.plugin.ant.build", null);
 
+	public static final String EXT_PLUGIN_PROJECT_FOLDER = "ext";
+
+	public static final String EXT_PLUGIN_PROJECT_SUFFIX = "-ext";
+
 	public static final String HOOK_PLUGIN_ANT_BUILD = _defaultPrefs.get("hook.plugin.ant.build", null);
+
+	public static final String HOOK_PLUGIN_PROJECT_FOLDER = "hooks";
+
+	public static final String HOOK_PLUGIN_PROJECT_SUFFIX = "-hook";
 
 	public static final String LAYOUT_TEMPLATE_PLUGIN_ANT_BUILD =
 		_defaultPrefs.get("layouttpl.plugin.ant.build", null);
 
+	public static final String LAYOUTTPL_PLUGIN_ANT_BUILD = _defaultPrefs.get("layouttpl.plugin.ant.build", null);
+
+	public static final String LAYOUTTPL_PLUGIN_PROJECT_FOLDER = "layouttpl";
+
+	public static final String LAYOUTTPL_PLUGIN_PROJECT_SUFFIX = "-layouttpl";
+
 	public static final Version LEAST_SUPPORTED_SDK_VERSION = new Version(6, 0, 1);
 
 	public static final String PORTLET_PLUGIN_ANT_BUILD = _defaultPrefs.get("portlet.plugin.ant.build", null);
+
+	public static final String PORTLET_PLUGIN_PROJECT_FOLDER = "portlets";
+
+	public static final String PORTLET_PLUGIN_PROJECT_SUFFIX = "-portlet";
 
 	public static final String[] PORTLET_PLUGIN_ZIP_IGNORE_FILES =
 		_defaultPrefs.get("portlet.plugin.zip.ignore.files", "").split(",");
@@ -84,6 +102,8 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_PORTLET_DISPLAY_NAME = "portlet.display.name";
 
+	public static final String PROPERTY_PORTLET_FRAMEWORK = "portlet.framework";
+
 	public static final String PROPERTY_PORTLET_NAME = "portlet.name";
 
 	public static final String PROPERTY_PORTLET_PARENT_DIR = "portlet.parent.dir";
@@ -99,36 +119,18 @@ public interface ISDKConstants {
 	public static final String TARGET_BUILD_LANG_CMD = "build-lang-cmd";
 
 	public static final String TARGET_BUILD_SERVICE = "build-service";
-	
+
 	public static final String TARGET_BUILD_WSDD = "build-wsdd";
 
-	public static final String TARGET_CREATE = "create";
-
 	public static final String TARGET_COMPILE = "compile";
+
+	public static final String TARGET_CREATE = "create";
 
 	public static final String TARGET_DEPLOY = "deploy";
 
 	public static final String THEME_PLUGIN_ANT_BUILD = _defaultPrefs.get("theme.plugin.ant.build", null);
 
-	public static final String LAYOUTTPL_PLUGIN_ANT_BUILD = _defaultPrefs.get("layouttpl.plugin.ant.build", null);
-
-	public static final String PORTLET_PLUGIN_PROJECT_FOLDER = "portlets";
-
-	public static final String PORTLET_PLUGIN_PROJECT_SUFFIX = "-portlet";
-
-	public static final String HOOK_PLUGIN_PROJECT_FOLDER = "hooks";
-
-	public static final String HOOK_PLUGIN_PROJECT_SUFFIX = "-hook";
-
-	public static final String EXT_PLUGIN_PROJECT_FOLDER = "ext";
-
-	public static final String EXT_PLUGIN_PROJECT_SUFFIX = "-ext";
-
 	public static final String THEME_PLUGIN_PROJECT_FOLDER = "themes";
 
 	public static final String THEME_PLUGIN_PROJECT_SUFFIX = "-theme";
-
-	public static final String LAYOUTTPL_PLUGIN_PROJECT_FOLDER = "layouttpl";
-
-	public static final String LAYOUTTPL_PLUGIN_PROJECT_SUFFIX = "-layouttpl";
 }

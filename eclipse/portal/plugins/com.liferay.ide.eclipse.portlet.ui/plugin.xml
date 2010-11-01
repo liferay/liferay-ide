@@ -244,9 +244,9 @@
    <extension
        point="com.liferay.ide.eclipse.project.ui.portletFrameworkDelegates">
      <portletFrameworkDelegate
-          class="com.liferay.ide.eclipse.portlet.ui.JSPPortletFrameworkDelegate"
+          class="com.liferay.ide.eclipse.portlet.ui.MVCPortletFrameworkDelegate"
           icon="icons/e16/portlet.png"
-          frameworkId="com.liferay.ide.eclipse.project.core.template.jsp">
+          frameworkId="com.liferay.ide.eclipse.project.core.framework.mvc">
      </portletFrameworkDelegate>
    </extension>
 </plugin>

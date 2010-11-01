@@ -500,6 +500,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		arrayList.add(PLUGIN_TYPE_EXT);
 		arrayList.add(PLUGIN_TYPE_THEME);
 		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
+		arrayList.add(PORTLET_FRAMEWORK);
 
 		return (String[]) arrayList.toArray(new String[0]);
 	}

@@ -66,14 +66,15 @@ public class ProjectCorePlugin extends CorePlugin {
 				List<IPortletFramework> frameworks = new ArrayList<IPortletFramework>();
 
 				for (IConfigurationElement element : elements) {
-					String id = element.getAttribute(IPortletFramework.IDX);
+					String id = element.getAttribute(IPortletFramework.ID);
 					String shortName = element.getAttribute(IPortletFramework.SHORT_NAME);
 					String displayName = element.getAttribute(IPortletFramework.DISPLAY_NAME);
 					String description = element.getAttribute(IPortletFramework.DESCRIPTION);
-					String templateZipPath = element.getAttribute(IPortletFramework.TEMPLATE_ZIP_PATH);
+					String requiredSDKVersion = element.getAttribute(IPortletFramework.REQUIRED_SDK_VERSION);
 					boolean isDefault = Boolean.parseBoolean(element.getAttribute(IPortletFramework.DEFAULT));
 
 					URL helpUrl = null;
+
 					try {
 						helpUrl = new URL(element.getAttribute(IPortletFramework.HELP_URL));
 					}
@@ -85,7 +86,7 @@ public class ProjectCorePlugin extends CorePlugin {
 					framework.setShortName(shortName);
 					framework.setDisplayName(displayName);
 					framework.setDescription(description);
-					framework.setTemplateZipPath(templateZipPath);
+					framework.setRequiredSDKVersion(requiredSDKVersion);
 					framework.setHelpUrl(helpUrl);
 					framework.setDefault(isDefault);
 					framework.setBundleId(element.getContributor().getName());

@@ -32,11 +32,11 @@ public interface IPortletFramework {
 
 	String HELP_URL = "helpUrl";
 
-	String IDX = "id";
+	String ID = "id";
+
+	String REQUIRED_SDK_VERSION = "requiredSDKVersion";
 
 	String SHORT_NAME = "shortName";
-
-	String TEMPLATE_ZIP_PATH = "templateZipPath";
 
 	String getBundleId();
 
@@ -48,9 +48,9 @@ public interface IPortletFramework {
 
 	String getId();
 
-	String getShortName();
+	String getRequiredSDKVersion();
 
-	String getTemplateZipPath();
+	String getShortName();
 
 	boolean isDefault();
 

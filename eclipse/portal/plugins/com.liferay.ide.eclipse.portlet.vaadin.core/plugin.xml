@@ -9,8 +9,8 @@
             displayName="Vaadin"
             helpUrl="http://vaadin.com"
             id="com.liferay.ide.eclipse.project.core.framework.vaadin"
-            shortName="vaadin"
-            templateZipPath="portlet-vaadin.zip">
+            requiredSDKVersion="6.1.0"
+            shortName="vaadin">
       </portletFramework>
    </extension>
 

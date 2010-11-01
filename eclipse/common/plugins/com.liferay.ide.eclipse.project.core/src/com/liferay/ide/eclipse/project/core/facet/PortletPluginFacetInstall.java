@@ -17,7 +17,6 @@ package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
-import com.liferay.ide.eclipse.core.util.ZipUtil;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
@@ -25,21 +24,16 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -73,21 +67,10 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 			// get the template delegate
 			IPortletFramework portletFramework = (IPortletFramework) this.masterModel.getProperty(PORTLET_FRAMEWORK);
 
-			IPath newPortletPath = sdk.createNewPortletProject(portletName, displayName, getRuntimeLocation());
+			String frameworkName = portletFramework.getShortName();
 
-			String templateZipPath = portletFramework.getTemplateZipPath();
-
-			if (!CoreUtil.isNullOrEmpty(templateZipPath)) {
-				File templateZipFile = sdk.getLocation().append("portlets").append(templateZipPath).toFile();
-
-				if (!templateZipFile.exists()) { // we need to unzip the template from the eclipse plugin
-					overwriteProjectFromTemplate(
-						newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX),
-						portletFramework);
-				}
-
-			}
-
+			IPath newPortletPath = sdk.createNewPortletProject(portletName, displayName, frameworkName, getRuntimeLocation());
+			
 			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
 
 			// cleanup portlet files
@@ -150,25 +133,25 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 		}
 	}
 
-	protected void overwriteProjectFromTemplate(IPath newProjectPath, IPortletFramework portletTemplate) {
-		String bundleId = portletTemplate.getBundleId();
-
-		try {
-			URL url =
-				FileLocator.toFileURL(Platform.getBundle(bundleId).getEntry(portletTemplate.getTemplateZipPath()));
-			File templateZip = new File(url.getFile());
-
-			if (templateZip.exists() && newProjectPath.toFile().isDirectory()) {
-				File newProjectDir = newProjectPath.toFile();
-				FileUtil.deleteDirContents(newProjectDir);
-
-				ZipUtil.unzip(templateZip, newProjectPath.toFile());
-			}
-		}
-		catch (IOException e) {
-			ProjectCorePlugin.logError("Could not unzip project template from bundle.", e);
-		}
-	}
+	// protected void overwriteProjectFromTemplate(IPath newProjectPath, IPortletFramework portletTemplate) {
+	// String bundleId = portletTemplate.getBundleId();
+	//
+	// try {
+	// URL url =
+	// FileLocator.toFileURL(Platform.getBundle(bundleId).getEntry(portletTemplate.getRequiredSDKVersion()));
+	// File templateZip = new File(url.getFile());
+	//
+	// if (templateZip.exists() && newProjectPath.toFile().isDirectory()) {
+	// File newProjectDir = newProjectPath.toFile();
+	// FileUtil.deleteDirContents(newProjectDir);
+	//
+	// ZipUtil.unzip(templateZip, newProjectPath.toFile());
+	// }
+	// }
+	// catch (IOException e) {
+	// ProjectCorePlugin.logError("Could not unzip project template from bundle.", e);
+	// }
+	// }
 
 	// @SuppressWarnings("unchecked")
 	// protected void configWebXML() {
