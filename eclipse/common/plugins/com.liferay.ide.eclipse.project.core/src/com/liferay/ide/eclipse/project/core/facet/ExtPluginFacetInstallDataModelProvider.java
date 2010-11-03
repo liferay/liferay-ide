@@ -22,7 +22,7 @@ public class ExtPluginFacetInstallDataModelProvider extends PluginFacetInstallDa
 
 	@Override
 	protected String getPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID;
+		return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
 	}
 
 }

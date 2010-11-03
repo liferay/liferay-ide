@@ -37,9 +37,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -51,9 +49,6 @@ import org.w3c.dom.Element;
  */
 @SuppressWarnings("restriction")
 public class ExtPluginFacetInstall extends PluginFacetInstall {
-
-	public static final IProjectFacet LIFERAY_EXT_PLUGIN_FACET =
-		ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID);
 
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)

@@ -265,20 +265,20 @@ public class PluginFacetUtil {
 		String projName = fpjwc.getProjectName();
 
 		if (projName.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
-			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_TEMPLATE_ID);
+			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_FACET_TEMPLATE_ID);
 		}
 		else if (projName.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
-			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_TEMPLATE_ID);
+			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_FACET_TEMPLATE_ID);
 		}
 		else if (projName.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
-			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_TEMPLATE_ID);
+			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_FACET_TEMPLATE_ID);
 		}
 		else if (projName.endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
-			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_TEMPLATE_ID);
+			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_THEME_FACET_TEMPLATE_ID);
 		}
 		else if (projName.endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
 			template =
-				ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_TEMPLATE_ID);
+				ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_TEMPLATE_ID);
 		}
 
 		return template;

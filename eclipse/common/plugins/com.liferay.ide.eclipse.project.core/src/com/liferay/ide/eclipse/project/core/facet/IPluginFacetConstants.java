@@ -15,6 +15,9 @@
 
 package com.liferay.ide.eclipse.project.core.facet;
 
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+
 /**
  * @author Greg Amerson
  */
@@ -45,27 +48,27 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_DEFAULT_FACET_TEMPLATE = "liferay.portlet.template";
 
-	public static final String LIFERAY_EXT_PLUGIN_FACET_ID = "liferay.ext";
+	public static final String LIFERAY_EXT_FACET_ID = "liferay.ext";
 
-	public static final String LIFERAY_EXT_PLUGIN_FACET_TEMPLATE_ID = "liferay.ext.template";
+	public static final String LIFERAY_EXT_FACET_TEMPLATE_ID = "liferay.ext.template";
 
 	public static final String LIFERAY_EXT_PRESET = "liferay.ext.preset";
 
-	public static final String LIFERAY_HOOK_PLUGIN_FACET_ID = "liferay.hook";
+	public static final String LIFERAY_HOOK_FACET_ID = "liferay.hook";
 
-	public static final String LIFERAY_HOOK_PLUGIN_FACET_TEMPLATE_ID = "liferay.hook.template";
+	public static final String LIFERAY_HOOK_FACET_TEMPLATE_ID = "liferay.hook.template";
 
 	public static final String LIFERAY_HOOK_PRESET = "liferay.hook.preset";
 
-	public static final String LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID = "liferay.layouttpl";
+	public static final String LIFERAY_LAYOUTTPL_FACET_ID = "liferay.layouttpl";
 
-	public static final String LIFERAY_LAYOUTTPL_PLUGIN_FACET_TEMPLATE_ID = "liferay.layouttpl.template";
+	public static final String LIFERAY_LAYOUTTPL_FACET_TEMPLATE_ID = "liferay.layouttpl.template";
 
 	public static final String LIFERAY_LAYOUTTPL_PRESET = "liferay.layouttpl.preset";
 
-	public static final String LIFERAY_PORTLET_PLUGIN_FACET_ID = "liferay.portlet";
+	public static final String LIFERAY_PORTLET_FACET_ID = "liferay.portlet";
 
-	public static final String LIFERAY_PORTLET_PLUGIN_FACET_TEMPLATE_ID = "liferay.portlet.template";
+	public static final String LIFERAY_PORTLET_FACET_TEMPLATE_ID = "liferay.portlet.template";
 
 	public static final String LIFERAY_PORTLET_PRESET = "liferay.portlet.preset";
 
@@ -73,9 +76,9 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION = "<None>";
 
-	public static final String LIFERAY_THEME_PLUGIN_FACET_ID = "liferay.theme";
+	public static final String LIFERAY_THEME_FACET_ID = "liferay.theme";
 
-	public static final String LIFERAY_THEME_PLUGIN_FACET_TEMPLATE_ID = "liferay.theme.template";
+	public static final String LIFERAY_THEME_FACET_TEMPLATE_ID = "liferay.theme.template";
 
 	public static final String LIFERAY_THEME_PRESET = "liferay.theme.preset";
 
@@ -86,4 +89,19 @@ public class IPluginFacetConstants {
 	public static final String PORTLET_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src";
 
 	public static final String THEME_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
+
+	public static final IProjectFacet LIFERAY_PORTLET_FACET =
+		ProjectFacetsManager.getProjectFacet(LIFERAY_PORTLET_FACET_ID);
+
+	public static final IProjectFacet LIFERAY_THEME_PLUGIN_FACET =
+	ProjectFacetsManager.getProjectFacet(LIFERAY_THEME_FACET_ID);
+
+	public static final IProjectFacet LIFERAY_EXT_FACET =
+	ProjectFacetsManager.getProjectFacet(LIFERAY_EXT_FACET_ID);
+
+	public static final IProjectFacet LIFERAY_HOOK_FACET =
+	ProjectFacetsManager.getProjectFacet(LIFERAY_HOOK_FACET_ID);
+
+	public static final IProjectFacet LIFERAY_LAYOUTTPL_FACET =
+	ProjectFacetsManager.getProjectFacet(LIFERAY_LAYOUTTPL_FACET_ID);
 }

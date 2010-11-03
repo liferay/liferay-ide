@@ -15,8 +15,6 @@
 
 package com.liferay.ide.eclipse.project.core.facet;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
@@ -26,15 +24,8 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 public class HookPluginFacetValidator extends PluginFacetValidator {
 
 	@Override
-	public void validate(IFacetedProject fproj)
-		throws CoreException {
-
-		super.validate(fproj);
-	}
-
-	@Override
 	protected IProjectFacet getProjectFacet() {
-		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID);
+		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_HOOK_FACET_ID);
 	}
 
 }

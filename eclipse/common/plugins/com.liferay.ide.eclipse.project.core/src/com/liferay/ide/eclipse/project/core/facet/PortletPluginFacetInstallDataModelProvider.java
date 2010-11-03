@@ -22,7 +22,7 @@ public class PortletPluginFacetInstallDataModelProvider extends PluginFacetInsta
 
 	@Override
 	protected String getPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID;
+		return IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
 	}
 
 }

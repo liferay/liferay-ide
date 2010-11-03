@@ -18,8 +18,6 @@ package com.liferay.ide.eclipse.theme.core.facet;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetValidator;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
@@ -29,15 +27,8 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 public class ThemePluginFacetValidator extends PluginFacetValidator {
 
 	@Override
-	public void validate(IFacetedProject fproj)
-		throws CoreException {
-
-		super.validate(fproj);
-	}
-
-	@Override
 	protected IProjectFacet getProjectFacet() {
-		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
+		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_THEME_FACET_ID);
 	}
 
 }

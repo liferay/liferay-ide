@@ -17,13 +17,13 @@ package com.liferay.ide.eclipse.theme.core;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
-import com.liferay.ide.eclipse.theme.core.facet.ThemePluginFacetInstall;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
@@ -48,7 +48,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IRuntime;
-import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Greg Amerson
@@ -113,15 +112,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 				throws CoreException {
 
-				SDK sdk = null;
 				IProject project = delta.getResource().getProject();
 
-				try {
-					sdk = ProjectUtil.getSDK(project, ThemePluginFacetInstall.LIFERAY_THEME_PLUGIN_FACET);
-				}
-				catch (BackingStoreException e) {
-					throw new CoreException(ThemeCore.createErrorStatus(e));
-				}
+				SDK sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET);
 
 				if (sdk == null) {
 					throw new CoreException(

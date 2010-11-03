@@ -1,6 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.eclipse.portlet.core;
 
-import com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetInstall;
+import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.AbstractPluginDeployer;
@@ -17,8 +32,10 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
-import org.osgi.service.prefs.BackingStoreException;
 
+/**
+ * @author Greg Amerson
+ */
 public class ExtPluginDeployer extends AbstractPluginDeployer {
 
 	public ExtPluginDeployer() {
@@ -57,12 +74,7 @@ public class ExtPluginDeployer extends AbstractPluginDeployer {
 		SDK sdk = null;
 		IProject project = module.getProject();
 
-		try {
-			sdk = ProjectUtil.getSDK(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
-		}
-		catch (BackingStoreException e) {
-			throw new CoreException(PortletCore.createErrorStatus(e));
-		}
+		sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_EXT_FACET);
 
 		if (sdk == null) {
 			throw new CoreException(

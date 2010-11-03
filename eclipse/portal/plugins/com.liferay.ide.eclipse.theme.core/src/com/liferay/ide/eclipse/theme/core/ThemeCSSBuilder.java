@@ -1,15 +1,29 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.theme.core;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
-import com.liferay.ide.eclipse.theme.core.facet.ThemePluginFacetInstall;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
@@ -29,7 +43,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.server.core.IRuntime;
-import org.osgi.service.prefs.BackingStoreException;
 
 @SuppressWarnings("rawtypes")
 public class ThemeCSSBuilder extends IncrementalProjectBuilder {
@@ -144,14 +157,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 	public static IStatus cssBuild(IProject project)
 		throws CoreException {
 
-		SDK sdk = null;
-
-		try {
-			sdk = ProjectUtil.getSDK(project, ThemePluginFacetInstall.LIFERAY_THEME_PLUGIN_FACET);
-		}
-		catch (BackingStoreException e) {
-			throw new CoreException(ThemeCore.createErrorStatus(e));
-		}
+		SDK sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET);
 
 		if (sdk == null) {
 			throw new CoreException(

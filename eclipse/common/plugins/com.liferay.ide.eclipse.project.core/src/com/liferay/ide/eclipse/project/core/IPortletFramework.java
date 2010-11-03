@@ -17,6 +17,11 @@ package com.liferay.ide.eclipse.project.core;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
+
 /**
  * @author Greg Amerson
  */
@@ -53,5 +58,9 @@ public interface IPortletFramework {
 	String getShortName();
 
 	boolean isDefault();
+
+	IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject);
+
+	IStatus setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject);
 
 }

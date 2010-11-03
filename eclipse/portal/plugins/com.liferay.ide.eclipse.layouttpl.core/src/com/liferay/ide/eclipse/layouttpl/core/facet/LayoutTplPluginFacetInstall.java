@@ -37,17 +37,12 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
 /**
  * @author Greg Amerson
  */
 public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
-
-	public static final IProjectFacet LIFERAY_LAYOUTTPL_PLUGIN_FACET =
-		ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
 
 	@Override
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)

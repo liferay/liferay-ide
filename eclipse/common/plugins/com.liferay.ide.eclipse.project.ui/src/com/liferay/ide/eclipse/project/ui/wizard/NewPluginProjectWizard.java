@@ -173,19 +173,19 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		IDataModel dm = getDataModel();
 
 		if (dm.getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID;
+			return IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
 		}
 		else if (dm.getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID;
+			return IPluginFacetConstants.LIFERAY_HOOK_FACET_ID;
 		}
 		else if (dm.getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID;
+			return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
 		}
 		else if (dm.getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
-			return IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID;
+			return IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID;
 		}
 		else if (dm.getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID;
+			return IPluginFacetConstants.LIFERAY_THEME_FACET_ID;
 		}
 		else {
 			return null;
@@ -259,34 +259,17 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		model.setProperty(LAYOUTTPL_NAME, projectName);
 
 		super.performFinish(monitor);
-
-		Display.getDefault().asyncExec(new Runnable() {
-
-			public void run() {
-				IViewPart view = null;
-
-				try {
-					view =
-						PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-							IPageLayout.ID_PROJECT_EXPLORER);
-				}
-				catch (Exception e) {
-					// Just bail and return if there is no view
-				}
-				if (view == null) {
-					return;
-				}
-
-				CommonViewer viewer = (CommonViewer) view.getAdapter(CommonViewer.class);
-
-				viewer.refresh(true);
-			}
-		});;
 	}
 
 	@Override
 	protected void postPerformFinish()
 		throws InvocationTargetException {
+
+		if (getDataModel().getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
+			IPortletFramework portletFramework = (IPortletFramework) getDataModel().getProperty(PORTLET_FRAMEWORK);
+
+			portletFramework.postProjectCreated(getDataModel(), getFacetedProject());
+		}
 
 		// if we have a wizard fragment execute its operation after project is created
 		if (isPluginWizardFragmentEnabled()) {
@@ -313,6 +296,29 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 				ProjectUIPlugin.logError("Error executing wizard fragment", e);
 			}
 		}
+
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				IViewPart view = null;
+
+				try {
+					view =
+						PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+							IPageLayout.ID_PROJECT_EXPLORER);
+				}
+				catch (Exception e) {
+					// Just bail and return if there is no view
+				}
+				if (view == null) {
+					return;
+				}
+
+				CommonViewer viewer = (CommonViewer) view.getAdapter(CommonViewer.class);
+
+				viewer.refresh(true);
+			}
+		});;
 
 		super.postPerformFinish();
 	}

@@ -25,7 +25,7 @@ public class LayoutTplPluginFacetInstallDataModelProvider extends PluginFacetIns
 
 	@Override
 	protected String getPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID;
+		return IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID;
 	}
 
 }

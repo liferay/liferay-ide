@@ -104,7 +104,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 
 		facetedProject.setSelectedPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
 		Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
-		fixedFacets.add(ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID));
+		fixedFacets.add(ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_FACET_ID));
 		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
 		// Set<IProjectFacetVersion> facets =
 		// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);

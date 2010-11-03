@@ -41,7 +41,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
  * @author Greg Amerson
@@ -61,38 +63,14 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 		setWizard(wizard);
 		setImageDescriptor(wizard.getDefaultPageImageDescriptor());
-		setTitle("Liferay Plug-in Project");
-		setDescription("Choose from various template types depending on which technology is most appropriate.");
+		setTitle("Liferay Portlet Plug-in Project");
+		setDescription("Choose from available portlet frameworks depending on which technology is most appropriate for this project.");
 	}
 
 	@Override
 	public boolean canFlipToNextPage() {
 		return getModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED);
 	}
-
-	// protected void createPluginFragmentButton(Composite parent) {
-	// pluginFragmentButton = SWTUtil.createCheckButton(parent, "", null, false, 1);
-	// ((GridData) pluginFragmentButton.getLayoutData()).horizontalIndent = 8;
-	// ((GridData) pluginFragmentButton.getLayoutData()).verticalIndent = 8;
-	// this.synchHelper.synchCheckbox(pluginFragmentButton, PLUGIN_FRAGMENT_ENABLED, null);
-	// if (!CoreUtil.isNullOrEmpty(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL))) {
-	// pluginFragmentButton.setText(getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL));
-	// }
-	// else {
-	// pluginFragmentButton.setVisible(false);
-	// }
-	//
-	// getModel().addListener(new IDataModelListener() {
-	//
-	// public void propertyChanged(DataModelEvent event) {
-	// if (PLUGIN_FRAGMENT_BUTTON_LABEL.equals(event.getPropertyName())) {
-	// String buttonText = getModel().getStringProperty(PLUGIN_FRAGMENT_BUTTON_LABEL);
-	// pluginFragmentButton.setText(buttonText);
-	// pluginFragmentButton.setVisible(!CoreUtil.isNullOrEmpty(buttonText));
-	// }
-	// }
-	// });
-	// }
 
 	public IPortletFramework getSelectedPortletFramework() {
 		IPortletFramework retval = null;
@@ -110,8 +88,8 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 	protected void createFrameworkGroup(Composite parent) {
 		Group group = SWTUtil.createGroup(parent, "Select portlet framework", 2);
-		GridData layoutData = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
-		layoutData.widthHint = 200;// make sure the width doesn't grow the dialog
+		GridData layoutData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
+		layoutData.widthHint = 500;// make sure the width doesn't grow the dialog
 		group.setLayoutData(layoutData);
 		((GridLayout) group.getLayout()).verticalSpacing = 10;
 
@@ -219,6 +197,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 			if (optionsComposite[0] == null) {
 				optionsComposite[0] = SWTUtil.createComposite(stackComposite, 1, 1, SWT.FILL);
+				((GridData) optionsComposite[0].getLayoutData()).verticalAlignment = SWT.TOP;
 			}
 
 			composites.add(optionsComposite[0]);
@@ -232,14 +211,22 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 	@Override
 	protected Composite createTopLevelComposite(Composite parent) {
-		Composite top = new Composite(parent, SWT.NONE);
-
-		top.setLayout(new GridLayout());
-		top.setLayoutData(new GridData(GridData.FILL_BOTH));
+		Composite top = SWTUtil.createTopComposite(parent, 1);
 
 		createFrameworkGroup(top);
 		// createPluginFragmentButton(top);
 		createTemplateOptionsGroup(top);
+
+		getModel().addListener(new IDataModelListener() {
+
+			public void propertyChanged(DataModelEvent event) {
+				// if the user has switched back to first page and changed either to or from a portlet type need to
+				// validate again in case we need to clear out any errors from selecting a portlet framework
+				if (PLUGIN_TYPE_PORTLET.equals(event.getPropertyName())) {
+					validatePage(false);
+				}
+			}
+		});
 
 		return top;
 	}
@@ -259,5 +246,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 			PLUGIN_FRAGMENT_ENABLED, PORTLET_FRAMEWORK
 		};
 	}
+
+
 
 }

@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.ui.util;
 
+import com.liferay.ide.eclipse.ui.DebugGroup;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceNode;
@@ -330,6 +332,19 @@ public class SWTUtil {
 		}
 		setButtonDimensionHint(button);
 		return button;
+	}
+
+	public static Group createDebugGroup(Composite parent, String text, int numColumns) {
+		Group group = new DebugGroup(parent, SWT.NULL);
+		group.setText(text);
+		GridLayout layout = new GridLayout(numColumns, false);
+		group.setLayout(layout);
+		GridData data = new GridData();
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalAlignment = GridData.FILL;
+		data.widthHint = 300;
+		group.setLayoutData(data);
+		return group;
 	}
 
 	public static Group createGroup(Composite parent, String text, int numColumns) {

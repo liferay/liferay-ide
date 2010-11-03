@@ -246,24 +246,29 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			// } else if (SETUP_PROJECT_FLAG.equals(propertyName)) {
 		}
 		else if (PLUGIN_TYPE_PORTLET.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			setupProject(IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID);
+			setupProject(IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_HOOK.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			setupProject(IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID);
+			setupProject(IPluginFacetConstants.LIFERAY_HOOK_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_EXT.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			setupProject(IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID);
+			setupProject(IPluginFacetConstants.LIFERAY_EXT_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_THEME.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			setupProject(IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
+			setupProject(IPluginFacetConstants.LIFERAY_THEME_FACET_ID);
 		}
 		else if (PLUGIN_TYPE_LAYOUTTPL.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
-			setupProject(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
+			setupProject(IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID);
 		}
 		else if (DISPLAY_NAME.equals(propertyName)) {
 			String displayName = ProjectUtil.removePluginSuffix(propertyValue.toString());
 
 			return super.propertySet(DISPLAY_NAME, displayName);
+		}
+		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
+			IPortletFramework portletFramework = (IPortletFramework) getProperty(PORTLET_FRAMEWORK);
+
+			portletFramework.setupNewProject(getDataModel(), getFacetedProjectWorkingCopy());
 		}
 
 		return super.propertySet(propertyName, propertyValue);
@@ -341,7 +346,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			return validate(FACET_PROJECT_NAME);
 		}
-		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
+		else if (PORTLET_FRAMEWORK.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
 			// check to make sure that the current SDK has the propery version
 			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
 			SDK selectedSDK = SDKManager.getInstance().getSDK(sdkName);

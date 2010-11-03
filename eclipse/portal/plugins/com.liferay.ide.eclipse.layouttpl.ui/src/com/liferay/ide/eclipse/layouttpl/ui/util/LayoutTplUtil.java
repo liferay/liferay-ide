@@ -16,12 +16,12 @@
 package com.liferay.ide.eclipse.layouttpl.ui.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.layouttpl.core.facet.LayoutTplPluginFacetInstall;
 import com.liferay.ide.eclipse.layouttpl.ui.model.ModelElement;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.LayoutTplDiagramEditPart;
 import com.liferay.ide.eclipse.layouttpl.ui.parts.PortletLayoutEditPart;
+import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
@@ -204,7 +204,7 @@ public class LayoutTplUtil {
 	}
 
 	public static boolean isLayoutTplProject(IProject project) {
-		return ProjectUtil.hasFacet(project, LayoutTplPluginFacetInstall.LIFERAY_LAYOUTTPL_PLUGIN_FACET);
+		return ProjectUtil.hasFacet(project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET);
 	}
 
 

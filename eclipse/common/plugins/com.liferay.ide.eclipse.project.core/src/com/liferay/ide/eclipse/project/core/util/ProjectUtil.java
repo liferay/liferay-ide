@@ -19,12 +19,9 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.IProjectDefinition;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
-import com.liferay.ide.eclipse.project.core.facet.ExtPluginFacetInstall;
-import com.liferay.ide.eclipse.project.core.facet.HookPluginFacetInstall;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
-import com.liferay.ide.eclipse.project.core.facet.PortletPluginFacetInstall;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
@@ -461,12 +458,18 @@ public class ProjectUtil {
 		return SDKManager.getInstance().getSDK(name);
 	}
 
-	public static SDK getSDK(IProject proj, IProjectFacet projectFacet)
-		throws BackingStoreException {
-
+	public static SDK getSDK(IProject proj, IProjectFacet projectFacet) {
 		IFacetedProject facetedProject = getFacetedProject(proj);
+		SDK sdk = null;
 
-		return getSDK(facetedProject, projectFacet);
+		try {
+			sdk = getSDK(facetedProject, projectFacet);
+		}
+		catch (BackingStoreException e) {
+			ProjectCorePlugin.logError("Could not get SDK.", e);
+		}
+
+		return sdk;
 	}
 
 	public static IPackageFragmentRoot[] getSourceContainers(IProject project) {
@@ -594,11 +597,11 @@ public class ProjectUtil {
 	}
 
 	public static boolean isExtProject(IProject project) {
-		return hasFacet(project, ExtPluginFacetInstall.LIFERAY_EXT_PLUGIN_FACET);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_EXT_FACET);
 	}
 
 	public static boolean isHookProject(IProject project) {
-		return hasFacet(project, HookPluginFacetInstall.LIFERAY_HOOK_PLUGIN_FACET);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_HOOK_FACET);
 	}
 
 	public static boolean isJavaFacet(IProjectFacet facet) {
@@ -610,7 +613,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isLayoutTplProject(IProject project) {
-		return hasFacet(project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID);
 	}
 
 	public static boolean isLiferayFacet(IProjectFacet projectFacet) {
@@ -705,11 +708,11 @@ public class ProjectUtil {
 	}
 
 	public static boolean isPortletProject(IProject project) {
-		return hasFacet(project, PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_PORTLET_FACET);
 	}
 
 	public static boolean isThemeProject(IProject project) {
-		return hasFacet(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_THEME_FACET_ID);
 	}
 
 	public static boolean isValidLiferayProjectDir(File dir) {

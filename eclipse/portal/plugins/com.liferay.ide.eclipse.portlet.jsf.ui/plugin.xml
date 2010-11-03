@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="com.liferay.ide.eclipse.project.ui.portletFrameworkDelegates">
+      <portletFrameworkDelegate
+            class="com.liferay.ide.eclipse.portlet.jsf.ui.JSFPortletFrameworkDelegate"
+            icon="icons/e16/jsf.png"
+            frameworkId="com.liferay.ide.eclipse.project.core.template.jsf">
+      </portletFrameworkDelegate>
+   </extension>
+
+</plugin>

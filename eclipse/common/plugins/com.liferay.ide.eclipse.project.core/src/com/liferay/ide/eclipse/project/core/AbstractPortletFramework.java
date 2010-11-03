@@ -17,10 +17,15 @@ package com.liferay.ide.eclipse.project.core;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+
 /**
  * @author Greg Amerson
  */
-public class PortletFramework implements IPortletFramework {
+public abstract class AbstractPortletFramework implements IPortletFramework {
 
 	protected String bundleId;
 
@@ -68,6 +73,11 @@ public class PortletFramework implements IPortletFramework {
 
 	public boolean isDefault() {
 		return isDefault;
+	}
+
+	public IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject) {
+		// do nothing;
+		return Status.OK_STATUS;
 	}
 
 	public void setBundleId(String bundleId) {

@@ -18,8 +18,6 @@ package com.liferay.ide.eclipse.layouttpl.core.facet;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetValidator;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
@@ -29,15 +27,8 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 public class LayoutTplPluginFacetValidator extends PluginFacetValidator {
 
 	@Override
-	public void validate(IFacetedProject fproj)
-		throws CoreException {
-
-		super.validate(fproj);
-	}
-
-	@Override
 	protected IProjectFacet getProjectFacet() {
-		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID);
+		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID);
 	}
 
 }

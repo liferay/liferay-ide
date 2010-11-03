@@ -22,7 +22,7 @@ public class HookPluginFacetInstallDataModelProvider extends PluginFacetInstallD
 
 	@Override
 	protected String getPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID;
+		return IPluginFacetConstants.LIFERAY_HOOK_FACET_ID;
 	}
 
 }

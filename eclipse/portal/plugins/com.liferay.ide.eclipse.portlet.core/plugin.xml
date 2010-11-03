@@ -231,6 +231,7 @@
    <extension
        point="com.liferay.ide.eclipse.project.core.portletFrameworks">
     <portletFramework
+          class="com.liferay.ide.eclipse.portlet.core.MVCPortletFramework"
           default="true"
           description="Simple and lightweight MVC framework using JSPs that is built-in to Liferay 6 Portal."
           displayName="Liferay MVC"

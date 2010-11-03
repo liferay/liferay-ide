@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.project.ui.wizard;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
-import com.liferay.ide.eclipse.project.core.facet.PortletPluginFacetInstall;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.pref.SDKsPreferencePage;
@@ -78,7 +77,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		this.setTitle("Liferay Plug-in Project");
 		this.setDescription("Create a new plug-in project for Liferay Portal.");
 
-		primaryProjectFacet = PortletPluginFacetInstall.LIFERAY_PORTLET_PLUGIN_FACET;
+		primaryProjectFacet = IPluginFacetConstants.LIFERAY_PORTLET_FACET;
 
 	}
 
@@ -429,39 +428,39 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		String projectType = ((NewPluginProjectWizard) getWizard()).getProjectType();
 
 		if (CoreUtil.isNullOrEmpty(projectType)) {
-			projectType = IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID;
+			projectType = IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
 		}
 
 		setShouldValidatePage(false);
-		if (IPluginFacetConstants.LIFERAY_PORTLET_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+		if (IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, true);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
-		else if (IPluginFacetConstants.LIFERAY_HOOK_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+		else if (IPluginFacetConstants.LIFERAY_HOOK_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
-		else if (IPluginFacetConstants.LIFERAY_EXT_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+		else if (IPluginFacetConstants.LIFERAY_EXT_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
-		else if (IPluginFacetConstants.LIFERAY_LAYOUTTPL_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+		else if (IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, true);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
 			getDataModel().setProperty(PLUGIN_TYPE_HOOK, false);
 			getDataModel().setProperty(PLUGIN_TYPE_EXT, false);
 			getDataModel().setProperty(PLUGIN_TYPE_THEME, false);
 		}
-		else if (IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID.equals(projectType.toLowerCase())) {
+		else if (IPluginFacetConstants.LIFERAY_THEME_FACET_ID.equals(projectType.toLowerCase())) {
 			getDataModel().setProperty(PLUGIN_TYPE_THEME, true);
 			getDataModel().setProperty(PLUGIN_TYPE_LAYOUTTPL, false);
 			getDataModel().setProperty(PLUGIN_TYPE_PORTLET, false);
@@ -500,7 +499,6 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		arrayList.add(PLUGIN_TYPE_EXT);
 		arrayList.add(PLUGIN_TYPE_THEME);
 		arrayList.add(PLUGIN_TYPE_LAYOUTTPL);
-		arrayList.add(PORTLET_FRAMEWORK);
 
 		return (String[]) arrayList.toArray(new String[0]);
 	}

@@ -81,17 +81,23 @@ public class ProjectCorePlugin extends CorePlugin {
 					catch (Exception e1) {
 					}
 
-					PortletFramework framework = new PortletFramework();
-					framework.setId(id);
-					framework.setShortName(shortName);
-					framework.setDisplayName(displayName);
-					framework.setDescription(description);
-					framework.setRequiredSDKVersion(requiredSDKVersion);
-					framework.setHelpUrl(helpUrl);
-					framework.setDefault(isDefault);
-					framework.setBundleId(element.getContributor().getName());
+					try {
+						AbstractPortletFramework framework =
+							(AbstractPortletFramework) element.createExecutableExtension("class");
+						framework.setId(id);
+						framework.setShortName(shortName);
+						framework.setDisplayName(displayName);
+						framework.setDescription(description);
+						framework.setRequiredSDKVersion(requiredSDKVersion);
+						framework.setHelpUrl(helpUrl);
+						framework.setDefault(isDefault);
+						framework.setBundleId(element.getContributor().getName());
 
-					frameworks.add(framework);
+						frameworks.add(framework);
+					}
+					catch (Exception e) {
+						logError("Could not create portlet framework.", e);
+					}
 				}
 
 				portletFrameworks = frameworks.toArray(new IPortletFramework[0]);

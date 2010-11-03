@@ -25,7 +25,7 @@ public class ThemePluginFacetInstallDataModelProvider extends PluginFacetInstall
 
 	@Override
 	protected String getPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET_ID;
+		return IPluginFacetConstants.LIFERAY_THEME_FACET_ID;
 	}
 
 }
