@@ -16,6 +16,8 @@ plugin@com.liferay.ide.eclipse.layouttpl.core=SVN,url=http://svn.liferay.com/rep
 plugin@com.liferay.ide.eclipse.layouttpl.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.layouttpl.ui,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.portlet.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.portlet.core,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.portlet.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.portlet.ui,username=guest,password=guest
+plugin@com.liferay.ide.eclipse.portlet.jsf.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.portlet.jsf.core,username=guest,password=guest
+plugin@com.liferay.ide.eclipse.portlet.jsf.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.portlet.jsf.ui,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.portlet.vaadin.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.core,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.portlet.vaadin.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.ui,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.theme.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/portal/plugins/com.liferay.ide.eclipse.theme.core,username=guest,password=guest
