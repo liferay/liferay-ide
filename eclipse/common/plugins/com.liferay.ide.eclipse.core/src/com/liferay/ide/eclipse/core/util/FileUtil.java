@@ -166,6 +166,35 @@ public class FileUtil {
 		return contents.toString();
 	}
 
+	public static String readContents(InputStream contents)
+		throws IOException {
+		byte[] buffer = new byte[4096];
+
+		BufferedInputStream bin = new BufferedInputStream(contents);
+		StringBufferOutputStream out = new StringBufferOutputStream();
+
+		int bytesRead = 0;
+		int bytesTotal = 0;
+
+		// Keep reading from the file while there is any content
+		// when the end of the stream has been reached, -1 is returned
+		while ((bytesRead = bin.read(buffer)) != -1) {
+			out.write(buffer, 0, bytesRead);
+			bytesTotal += bytesRead;
+		}
+
+		if (bin != null) {
+			bin.close();
+		}
+
+		if (out != null) {
+			out.flush();
+			out.close();
+		}
+
+		return out.toString();
+	}
+
 	public static String[] readLinesFromFile(File file) {
 		if (file == null) {
 			return null;
@@ -246,6 +275,7 @@ public class FileUtil {
 		return null;
 	}
 
+
 	public static int writeFileFromStream(File tempFile, InputStream in)
 		throws IOException {
 		byte[] buffer = new byte[1024];
@@ -259,7 +289,7 @@ public class FileUtil {
 		// Keep reading from the file while there is any content
 		// when the end of the stream has been reached, -1 is returned
 		while ((bytesRead = bin.read(buffer)) != -1) {
-			out.write(buffer);
+			out.write(buffer, 0, bytesRead);
 			bytesTotal += bytesRead;
 		}
 

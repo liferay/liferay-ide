@@ -707,7 +707,9 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	}
 
 	protected void setFocusOnClassText() {
-		classText.setFocus();
+		if (classText != null) {
+			classText.setFocus();
+		}
 	}
 
 	protected void setShellImage() {

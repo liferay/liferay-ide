@@ -34,14 +34,12 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.aboutjsp";
 
-	public static final String[] ALL_PORTLET_MODES =
-		{
-			"INewPortletClassDataModelProperties.VIEW_MODE", "INewPortletClassDataModelProperties.EDIT_MODE",
-			"INewPortletClassDataModelProperties.HELP_MODE", ABOUT_MODE,
-			"INewPortletClassDataModelProperties.CONFIG_MODE", "INewPortletClassDataModelProperties.EDITDEFAULTS_MODE",
-			"INewPortletClassDataModelProperties.EDITGUEST_MODE", "INewPortletClassDataModelProperties.PREVIEW_MODE",
-			"INewPortletClassDataModelProperties.PRINT_MODE"
-		};
+	public static final String[] ALL_PORTLET_MODES = {
+		"INewPortletClassDataModelProperties.VIEW_MODE", "INewPortletClassDataModelProperties.EDIT_MODE",
+		"INewPortletClassDataModelProperties.HELP_MODE", ABOUT_MODE, "INewPortletClassDataModelProperties.CONFIG_MODE",
+		"INewPortletClassDataModelProperties.EDITDEFAULTS_MODE", "INewPortletClassDataModelProperties.EDITGUEST_MODE",
+		"INewPortletClassDataModelProperties.PREVIEW_MODE", "INewPortletClassDataModelProperties.PRINT_MODE"
+	};
 
 	public static final String ALLOW_MULTIPLE = "INewPortletClassDataModelProperties.ALLOW_MULTIPLE";
 

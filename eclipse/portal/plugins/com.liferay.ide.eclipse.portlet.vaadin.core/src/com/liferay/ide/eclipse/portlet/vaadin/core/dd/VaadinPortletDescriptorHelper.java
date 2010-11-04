@@ -41,7 +41,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * Helper for editing various portlet configuration XML files, to add Vaadin portlet configuration to them. Also
  * supports adding a dependency to Vaadin in liferay-plugin-package.properties (if necessary).
  * 
- * @author Henri Sara - borrows/modifies some code from superclass by Greg Amerson
+ * @author Henri Sara
  */
 public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
 	implements INewVaadinPortletClassDataModelProperties {
@@ -50,9 +50,9 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
 		super(project);
 	}
 
-	public IStatus addNewVaadinPortlet(IDataModel model) {
-		IStatus status = addNewPortlet(model);
-
+	@Override
+	public IStatus addNewPortlet(IDataModel model) {
+		IStatus status = super.addNewPortlet(model);
 		if (!status.isOK()) {
 			return status;
 		}

@@ -38,7 +38,6 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
 /**
  * @author Greg Amerson
@@ -83,7 +82,7 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 
 	public IStatus setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
 		IProjectFacetVersion jsfFacetVersion = getJSFProjectFacet(facetedProject);
-		IProjectFacet jsfFacet = ProjectFacetsManager.getProjectFacet(IJSFCoreConstants.JSF_CORE_FACET_ID);
+		IProjectFacet jsfFacet = JSFCorePlugin.JSF_FACET;
 
 		if (jsfFacetVersion == null) {
 

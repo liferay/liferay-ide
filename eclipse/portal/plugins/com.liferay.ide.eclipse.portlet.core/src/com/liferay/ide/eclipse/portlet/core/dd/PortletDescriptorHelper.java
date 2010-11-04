@@ -21,6 +21,7 @@ import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -87,6 +88,29 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 		status = domModelOperation.execute();
 
 		return status;
+	}
+
+	public String[] getAllPortletNames() {
+		final List<String> allPortletNames = new ArrayList<String>();
+
+		DOMModelEditOperation op = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.PORTLET_XML_FILE)) {
+
+			protected IStatus doExecute(IDOMDocument document) {
+				NodeList nodeList = document.getElementsByTagName("portlet-name");
+
+				for (int i = 0; i < nodeList.getLength(); i++) {
+					Element portletName = (Element) nodeList.item(i);
+					allPortletNames.add(NodeUtil.getTextContent(portletName));
+				}
+
+				return Status.OK_STATUS;
+			}
+
+		};
+
+		op.execute();
+
+		return allPortletNames.toArray(new String[0]);
 	}
 
 	public IStatus removeAllPortlets() {

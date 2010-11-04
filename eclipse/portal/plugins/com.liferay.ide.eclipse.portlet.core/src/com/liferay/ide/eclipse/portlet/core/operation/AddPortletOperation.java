@@ -27,6 +27,7 @@ import java.util.List;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -34,7 +35,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.templates.DocumentTemplateContext;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateBuffer;
@@ -160,14 +160,59 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
 	}
 
-	@SuppressWarnings("unchecked")
-	protected void createJSPForMode(String mode, String initParamName, String templateId) {
-		Template template = templateStore.findTemplateById(templateId);
+	protected IStatus createModeJSPFiles() {
+		IDataModel dm = getDataModel();
 
-		IDocument document = new Document();
-
-		TemplateContext context = new DocumentTemplateContext(portletContextType, document, 0, 0);
+		TemplateContext context = new DocumentTemplateContext(portletContextType, new Document(), 0, 0);
 		context.setVariable("portlet_display_name", getDataModel().getStringProperty(DISPLAY_NAME));
+
+
+		if (dm.getBooleanProperty(ABOUT_MODE)) {
+			createResourceForMode("about-jsp", ABOUT_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(CONFIG_MODE)) {
+			createResourceForMode("config-jsp", CONFIG_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(EDIT_MODE)) {
+			createResourceForMode("edit-jsp", EDIT_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(EDITDEFAULTS_MODE)) {
+			createResourceForMode("edit-defaults-jsp", EDITDEFAULTS_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(EDITGUEST_MODE)) {
+			createResourceForMode("edit-guest-jsp", EDITGUEST_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(HELP_MODE)) {
+			createResourceForMode("help-jsp", HELP_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(PREVIEW_MODE)) {
+			createResourceForMode("preview-jsp", PREVIEW_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(PRINT_MODE)) {
+			createResourceForMode("print-jsp", PRINT_MODE_TEMPLATE, context);
+		}
+
+		if (dm.getBooleanProperty(VIEW_MODE)) {
+			createResourceForMode("view-jsp", VIEW_MODE_TEMPLATE, context);
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	protected PortletDescriptorHelper createPortletDescriptorHelper(IProject targetProject) {
+		return new PortletDescriptorHelper(targetProject);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected void createResourceForMode(String initParamName, String templateId, TemplateContext context) {
+		Template template = templateStore.findTemplateById(templateId);
 
 		String templateString = null;
 		try {
@@ -213,51 +258,9 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 		}
 	}
 
-	protected IStatus createModeJSPFiles() {
-		IDataModel dm = getDataModel();
-
-		if (dm.getBooleanProperty(ABOUT_MODE)) {
-			createJSPForMode(ABOUT_MODE, "about-jsp", ABOUT_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(CONFIG_MODE)) {
-			createJSPForMode(CONFIG_MODE, "config-jsp", CONFIG_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(EDIT_MODE)) {
-			createJSPForMode(EDIT_MODE, "edit-jsp", EDIT_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(EDITDEFAULTS_MODE)) {
-			createJSPForMode(EDITDEFAULTS_MODE, "edit-defaults-jsp", EDITDEFAULTS_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(EDITGUEST_MODE)) {
-			createJSPForMode(EDITGUEST_MODE, "edit-guest-jsp", EDITGUEST_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(HELP_MODE)) {
-			createJSPForMode(HELP_MODE, "help-jsp", HELP_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(PREVIEW_MODE)) {
-			createJSPForMode(PREVIEW_MODE, "preview-jsp", PREVIEW_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(PRINT_MODE)) {
-			createJSPForMode(PRINT_MODE, "print-jsp", PRINT_MODE_TEMPLATE);
-		}
-
-		if (dm.getBooleanProperty(VIEW_MODE)) {
-			createJSPForMode(VIEW_MODE, "view-jsp", VIEW_MODE_TEMPLATE);
-		}
-
-		return Status.OK_STATUS;
-	}
-
 	protected IStatus generateMetaData(IDataModel aModel) {
-		if (ProjectUtil.isPortletProject(getTargetProject())) {
-			PortletDescriptorHelper portletDescHelper = new PortletDescriptorHelper(getTargetProject());
+		if (shouldGenerateMetaData(aModel)) {
+			PortletDescriptorHelper portletDescHelper = createPortletDescriptorHelper(getTargetProject());
 
 			if (aModel.getBooleanProperty(REMOVE_EXISTING_ARTIFACTS)) {
 				portletDescHelper.removeAllPortlets();
@@ -281,6 +284,10 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
 	protected IFile getProjectFile(String filePath) {
 		return this.docroot.getFile(filePath).getUnderlyingFile();
+	}
+
+	protected boolean shouldGenerateMetaData(IDataModel aModel) {
+		return ProjectUtil.isPortletProject(getTargetProject());
 	}
 
 }

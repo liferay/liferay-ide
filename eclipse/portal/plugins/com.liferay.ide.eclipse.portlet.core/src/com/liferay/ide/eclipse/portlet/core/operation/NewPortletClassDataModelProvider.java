@@ -86,14 +86,6 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 	@Override
 	public Object getDefaultProperty(String propertyName) {
-		// if (PORTLET_CLASS.equals(propertyName)) {
-		// return DEFAULT_PORTLET_CLASS;
-		// } else if (SUPERCLASS.equals(propertyName)) {
-		// return DEFAULT_SUPERCLASS;
-		// } else if (CREATE_CUSTOM_PORTLET_CLASS.equals(propertyName)) {
-		// return DEFAULT_CREATE_CUSTOM_PORTLET_CLASS;
-		// }
-
 		if (SUPERCLASS.equals(propertyName)) {
 			return QUALIFIED_MVC_PORTLET;
 		}

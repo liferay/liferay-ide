@@ -68,6 +68,8 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
 	protected Text jspFolder;
 
+	protected Label jspLabel;
+
 	protected Text portletName;
 
 	protected Button previewButton;
@@ -93,7 +95,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 		createJspsButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, 1));
 		synchHelper.synchCheckbox(createJspsButton, INewPortletClassDataModelProperties.CREATE_JSPS, null);
 
-		final Label jspLabel = SWTUtil.createLabel(parent, "JSP folder:", 1);
+		jspLabel = SWTUtil.createLabel(parent, "JSP folder:", 1);
 
 		jspFolder = SWTUtil.createText(parent, 1);
 		((GridData) jspFolder.getLayoutData()).widthHint = 150;

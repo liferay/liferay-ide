@@ -13,36 +13,26 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.vaadin.core.operation;
+package com.liferay.ide.eclipse.portlet.jsf.core.operation;
 
 import com.liferay.ide.eclipse.portlet.core.dd.PortletDescriptorHelper;
-import com.liferay.ide.eclipse.portlet.core.operation.AddPortletOperation;
-import com.liferay.ide.eclipse.portlet.vaadin.core.dd.VaadinPortletDescriptorHelper;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jst.j2ee.internal.common.operations.NewJavaEEArtifactClassOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Henri Sara
+ * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class AddVaadinApplicationOperation extends AddPortletOperation
-	implements INewVaadinPortletClassDataModelProperties {
+public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
+	implements INewJSFPortletClassDataModelProperties {
 
-	public AddVaadinApplicationOperation(IDataModel dataModel) {
-		super(dataModel);
-	}
-
-	protected NewJavaEEArtifactClassOperation getNewClassOperation() {
-		return new NewVaadinApplicationClassOperation(getDataModel());
+	public JSFPortletDescriptorHelper(IProject project) {
+		super(project);
 	}
 
 	@Override
-	protected PortletDescriptorHelper createPortletDescriptorHelper(IProject targetProject) {
-		// also adds a dependency to vaadin.jar in
-		// liferay-plugin-package.properties
-		return new VaadinPortletDescriptorHelper(targetProject);
+	protected String getPortletClassText(IDataModel model) {
+		return model.getStringProperty(JSF_PORTLET_CLASS);
 	}
 
 }

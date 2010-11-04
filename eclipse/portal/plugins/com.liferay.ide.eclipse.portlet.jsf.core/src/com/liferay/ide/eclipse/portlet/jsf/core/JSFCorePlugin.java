@@ -17,6 +17,9 @@ package com.liferay.ide.eclipse.portlet.jsf.core;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jst.jsf.core.IJSFCoreConstants;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -25,6 +28,9 @@ import org.osgi.framework.BundleContext;
  * @author Greg Amerson
  */
 public class JSFCorePlugin extends Plugin {
+
+	public static final IProjectFacet JSF_FACET =
+		ProjectFacetsManager.getProjectFacet(IJSFCoreConstants.JSF_CORE_FACET_ID);
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.portlet.jsf.core"; //$NON-NLS-1$
@@ -49,6 +55,10 @@ public class JSFCorePlugin extends Plugin {
 		return plugin;
 	}
 
+	public static void logError(String msg, Exception e) {
+		getDefault().getLog().log(createErrorStatus(msg, e));
+	}
+
 	/**
 	 * The constructor
 	 */
@@ -63,6 +73,7 @@ public class JSFCorePlugin extends Plugin {
 		super.start(context);
 		plugin = this;
 	}
+
 
 	/*
 	 * (non-Javadoc)

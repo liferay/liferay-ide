@@ -75,7 +75,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
 	protected Text javascriptFile;
 
-	protected Text name;
+	// protected Text name;
 
 	public NewLiferayPortletWizardPage(
 		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
@@ -109,11 +109,12 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
 		group.setLayoutData(gd);
 
-		SWTUtil.createLabel(group, SWT.RIGHT, "Name:", 1);
-
-		this.name = SWTUtil.createText(group, 1);
-		this.synchHelper.synchText(name, LIFERAY_PORTLET_NAME, null);
-		SWTUtil.createLabel(group, "", 1);
+		// we don't need to create the name as it can never be anything different than the portlet name on 2nd page
+		// SWTUtil.createLabel(group, SWT.RIGHT, "Name:", 1);
+		//
+		// this.name = SWTUtil.createText(group, 1);
+		// this.synchHelper.synchText(name, LIFERAY_PORTLET_NAME, null);
+		// SWTUtil.createLabel(group, "", 1);
 
 		SWTUtil.createLabel(group, SWT.RIGHT, "Icon:", 1);
 
