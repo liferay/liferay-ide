@@ -105,18 +105,18 @@ public class ProjectCorePlugin extends CorePlugin {
 				// sort the array so that the default template is first
 				Arrays.sort(portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFramework>() {
 
-						public int compare(IPortletFramework o1, IPortletFramework o2) {
-							if (o1.isDefault() && (!o2.isDefault())) {
-								return -1;
-							}
-							else if ((!o1.isDefault()) && o2.isDefault()) {
-								return 1;
-							}
-
-							return 0;
+					public int compare(IPortletFramework o1, IPortletFramework o2) {
+						if (o1.isDefault() && (!o2.isDefault())) {
+							return -1;
+						}
+						else if ((!o1.isDefault()) && o2.isDefault()) {
+							return 1;
 						}
 
-					});
+						return o1.getShortName().compareTo(o2.getShortName());
+					}
+
+				});
 			}
 		}
 

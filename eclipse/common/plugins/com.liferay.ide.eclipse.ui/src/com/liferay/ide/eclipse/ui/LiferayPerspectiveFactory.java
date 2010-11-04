@@ -43,6 +43,8 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
 	
+	public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet";
+
 	public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
 		"com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate";
 
@@ -52,6 +54,9 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String ID_NEW_SERVICE_BUILDER_WIZARD =
 		"com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder";
+
+	public static final String ID_NEW_VAADIN_PORTLET_WIZARD =
+		"com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet";
 
 	public static final String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
 
@@ -77,19 +82,11 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		}
 	}
 
-	private void addTLViewIfPresent(IFolderLayout layout, String ref) {
-		IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
-
-		if (tlView != null) {
-			layout.addView(ID_TASKLIST_VIEW);
-			// IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7f, ref);
-			// bottomTopLeft.addView(ID_TASKLIST_VIEW);
-		}
-	}
-
 	protected void addShortcuts(IPageLayout layout) {
 		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_PORTLET_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_JSF_PORTLET_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_VAADIN_PORTLET_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_HOOK_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_SERVICE_BUILDER_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_LAYOUT_TEMPLATE_WIZARD);

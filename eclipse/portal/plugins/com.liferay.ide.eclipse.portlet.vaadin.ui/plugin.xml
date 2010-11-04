@@ -24,7 +24,7 @@
             name="Liferay Vaadin Portlet">
          <class class="com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.NewVaadinPortletWizard">
          	<parameter name="liferay_extra_artifact" value="true"/>
-            <parameter name="menuIndex" value="10" />
+            <parameter name="menuIndex" value="20" />
          </class>
          <description>
             Create a new Liferay Vaadin Portlet
