@@ -11,6 +11,8 @@
 	<path id="lib.classpath">
 		<fileset dir="${basedir}/../lib" includes="*.jar" />
 	</path>
+	
+	<taskdef classpathref="lib.classpath" resource="net/sf/antcontrib/antlib.xml" />
 
 	<property environment="env" />
 
