@@ -138,6 +138,10 @@ public class FileUtil {
 	}
 
 	public static String readContents(File file) {
+		return readContents(file, false);
+	}
+
+	public static String readContents(File file, boolean includeNewlines) {
 		if (file == null) {
 			return null;
 		}
@@ -157,6 +161,10 @@ public class FileUtil {
 
 			while ((line = bufferedReader.readLine()) != null) {
 				contents.append(line);
+
+				if (includeNewlines) {
+					contents.append("\n");
+				}
 			}
 		}
 		catch (Exception e) {
