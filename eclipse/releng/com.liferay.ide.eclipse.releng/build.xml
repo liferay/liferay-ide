@@ -2,6 +2,12 @@
 	 is being set, which overrides tag/branch values found in *.map files 
 -->
 <project default="run">
+	
+	<target name="all">
+		<antcall target="run" />
+		<antcall target="bundle" />
+	</target>
+	
 	<target name="run">
 		
 		<ant antfile="build-bootstrap.xml" target="init">
@@ -55,6 +61,10 @@ com.liferay.ide.eclipse.server.tomcat.runtime.60=http://downloads.sourceforge.ne
 com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.5/liferay-plugins-sdk-6.0.5.zip
 </echo>
 		
+	</target>
+	
+	<target name="bundle">
+		<ant antfile="build.xml" dir="bundle"/>
 	</target>
 	
 	<target name="promote">
