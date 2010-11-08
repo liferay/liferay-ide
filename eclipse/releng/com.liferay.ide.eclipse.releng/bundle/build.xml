@@ -12,9 +12,6 @@
 		<fileset dir="${basedir}/../lib" includes="*.jar" />
 	</path>
 
-	<taskdef classpathref="lib.classpath" resource="net/sf/antcontrib/antlib.xml" />
-	<typedef classpathref="lib.classpath" resource="org/tigris/subversion/svnant/svnantlib.xml" />
-	
 	<property environment="env" />
 
 	<property file="bundle.${user.name}.properties" />

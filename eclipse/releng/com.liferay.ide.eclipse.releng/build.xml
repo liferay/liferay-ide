@@ -64,7 +64,9 @@ com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/
 	</target>
 	
 	<target name="bundle">
-		<ant antfile="build.xml" dir="bundle"/>
+		<ant antfile="build.xml" dir="bundle">
+			<property name="ideVersion" value="${forceContextQualifier}"></property>
+		</ant>
 	</target>
 	
 	<target name="promote">
