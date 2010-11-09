@@ -63,10 +63,10 @@ com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/
 	</target>
 	
 	<target name="bundle">
+		<tstamp>
+			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
+		</tstamp>
 		<ant antfile="build.xml" dir="bundle">
-			<tstamp>
-				<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
-			</tstamp>
 			<property name="ideVersion" value="v${buildTimestamp}" />
 		</ant>
 	</target>
