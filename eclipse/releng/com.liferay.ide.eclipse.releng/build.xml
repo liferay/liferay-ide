@@ -24,7 +24,6 @@
 			<available file="${java.home}/bin/javac" type="file" />
 		</condition>
 
-		<!-- FIXME if required: if not using this type of qualifier, comment next 4 lines -->
 		<tstamp>
 			<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
 		</tstamp>
@@ -65,7 +64,10 @@ com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/
 	
 	<target name="bundle">
 		<ant antfile="build.xml" dir="bundle">
-			<property name="ideVersion" value="${forceContextQualifier}"></property>
+			<tstamp>
+				<format property="buildTimestamp" pattern="yyyyMMddHHmm" />
+			</tstamp>
+			<property name="ideVersion" value="v${buildTimestamp}" />
 		</ant>
 	</target>
 	
