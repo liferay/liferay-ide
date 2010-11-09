@@ -1,7 +1,7 @@
 <!-- A sample build file for use with Hudson. Note that forceContextQualifier 
 	 is being set, which overrides tag/branch values found in *.map files 
 -->
-<project default="run">
+<project default="all">
 	
 	<target name="all">
 		<antcall target="run" />
