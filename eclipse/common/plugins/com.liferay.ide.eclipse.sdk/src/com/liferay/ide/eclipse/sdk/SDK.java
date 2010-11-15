@@ -310,6 +310,22 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
+	public IStatus directDeploy(IProject project, Map<String, String> properties) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_DIRECT_DEPLOY,
+				properties);
+		}
+		catch (CoreException e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof SDK && getName() != null && getName().equals(((SDK) obj).getName()) &&

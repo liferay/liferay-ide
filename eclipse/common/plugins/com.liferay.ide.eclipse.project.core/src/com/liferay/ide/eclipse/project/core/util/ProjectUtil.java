@@ -183,6 +183,17 @@ public class ProjectUtil {
 		return true;
 	}
 
+	public static void createDefaultWebXml(File webxmlFile) {
+		final String webXmlContents =
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.4\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd\">\n</web-app>"; //$NON-NLS-1$
+		try {
+			org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile(webxmlFile, webXmlContents);
+		}
+		catch (Exception e) {
+			ProjectCorePlugin.logError("Unable to create default web xml", e);
+		}
+	}
+
 	public static IFile createEmptyProjectFile(String fileName, IFolder folder)
 		throws CoreException {
 
@@ -319,17 +330,6 @@ public class ProjectUtil {
 		return fpjwc.getProject();
 	}
 
-	public static void createDefaultWebXml(File webxmlFile) {
-		final String webXmlContents =
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.4\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd\">\n</web-app>"; //$NON-NLS-1$
-		try {
-			org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile(webxmlFile, webXmlContents);
-		}
-		catch (Exception e) {
-			ProjectCorePlugin.logError("Unable to create default web xml", e);
-		}
-	}
-
 	public static IFolder getDocroot(IProject project) {
 		IContainer retval = null;
 
@@ -456,6 +456,28 @@ public class ProjectUtil {
 		String name = prefs.get(ISDKConstants.PROPERTY_NAME, null);
 
 		return SDKManager.getInstance().getSDK(name);
+	}
+
+	public static SDK getSDK(IProject project) {
+		SDK retval = null;
+
+		if (isLiferayProject(project)) {
+			IFacetedProject facetedProject = getFacetedProject(project);
+
+			if (facetedProject != null) {
+				IProjectFacet liferayFacet = getLiferayFacet(facetedProject);
+
+				if (liferayFacet != null) {
+					try {
+						retval = getSDK(facetedProject, liferayFacet);
+					}
+					catch (BackingStoreException e) {
+					}
+				}
+			}
+		}
+
+		return retval;
 	}
 
 	public static SDK getSDK(IProject proj, IProjectFacet projectFacet) {

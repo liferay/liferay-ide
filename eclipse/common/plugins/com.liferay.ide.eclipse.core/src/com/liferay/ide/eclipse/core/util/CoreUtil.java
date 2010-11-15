@@ -117,7 +117,7 @@ public class CoreUtil {
 	}
 
 	public static boolean isNullOrEmpty(List<?> list) {
-		return list != null && list.size() == 0;
+		return list == null || list.size() == 0;
 	}
 
 	public static boolean isNullOrEmpty(Object[] array) {

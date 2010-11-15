@@ -128,6 +128,8 @@ public interface ISDKConstants {
 
 	public static final String TARGET_DEPLOY = "deploy";
 
+	public static final String TARGET_DIRECT_DEPLOY = "direct-deploy";
+
 	public static final String THEME_PLUGIN_ANT_BUILD = _defaultPrefs.get("theme.plugin.ant.build", null);
 
 	public static final String THEME_PLUGIN_PROJECT_FOLDER = "themes";
