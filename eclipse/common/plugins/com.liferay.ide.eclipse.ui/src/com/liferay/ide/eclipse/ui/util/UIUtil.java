@@ -15,16 +15,33 @@
 
 package com.liferay.ide.eclipse.ui.util;
 
+import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
+
 import java.net.URL;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 
 /**
  * @author Greg Amerson
  */
 public class UIUtil {
+
+	public static void async(Runnable runnable) {
+		if (runnable != null) {
+			try {
+				Display.getDefault().asyncExec(runnable);
+			}
+			catch (Throwable t) {
+				// ignore
+			}
+		}
+	}
 
 	public static ImageDescriptor getPluginImageDescriptor(String symbolicName, String imagePath) {
 		Bundle bundle = Platform.getBundle(symbolicName);
@@ -35,6 +52,18 @@ public class UIUtil {
 			if (entry != null) {
 				return ImageDescriptor.createFromURL(entry);
 			}
+		}
+
+		return null;
+	}
+
+	public static IViewPart showView(String viewId) {
+		try {
+			IViewPart view = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().showView(viewId);
+			return view;
+		}
+		catch (PartInitException e) {
+			LiferayUIPlugin.logError(e);
 		}
 
 		return null;
