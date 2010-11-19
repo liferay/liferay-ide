@@ -657,6 +657,7 @@ public class ProjectUtil {
 
 	public static boolean isLiferayProject(IProject project) {
 		boolean retval = false;
+
 		if (project == null) {
 			return retval;
 		}
