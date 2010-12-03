@@ -103,6 +103,12 @@ public class ServerUtil {
 		return new Status(IStatus.ERROR, PortalServerCorePlugin.PLUGIN_ID, msg);
 	}
 
+	public static IPath getAppServerDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime) {
+		IPortalRuntime runtime = (IPortalRuntime) getRuntimeAdapter(serverRuntime, IPortalRuntime.class);
+
+		return runtime != null ? runtime.getAppServerDir() : null;
+	}
+
 	public static IPath getPortalRoot(IJavaProject project) {
 		return getPortalRoot(project.getProject());
 	}

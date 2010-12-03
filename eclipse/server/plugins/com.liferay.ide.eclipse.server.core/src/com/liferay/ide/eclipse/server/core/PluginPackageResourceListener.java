@@ -28,6 +28,7 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -94,19 +95,24 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 					public boolean visit(IResourceDelta delta)
 						throws CoreException {
 
-						int deltaKind = delta.getKind();
+						try {
+							int deltaKind = delta.getKind();
 
-						if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
-							return false;
+							if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
+								return false;
+							}
+
+							if (shouldProcessResourceDelta(delta)) {
+								processResourceChanged(delta);
+
+								return false;
+							}
 						}
-						
-						if (shouldProcessResourceDelta(delta)) {
-							processResourceChanged(delta);
-
-							return false;
+						catch (Exception e) {
+							// do nothing
 						}
 
-						return true;
+						return delta.getResource() != null && delta.getResource().getType() != IResource.FILE;
 					}
 				});
 			}

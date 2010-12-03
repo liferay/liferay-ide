@@ -63,9 +63,10 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 			IPortletFramework portletFramework = (IPortletFramework) this.masterModel.getProperty(PORTLET_FRAMEWORK);
 
 			String frameworkName = portletFramework.getShortName();
-
-			IPath newPortletPath = sdk.createNewPortletProject(portletName, displayName, frameworkName, getRuntimeLocation());
 			
+			IPath newPortletPath =
+				sdk.createNewPortletProject(portletName, displayName, frameworkName, getAppServerDir().toOSString());
+
 			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
 
 			// cleanup portlet files

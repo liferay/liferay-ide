@@ -205,6 +205,19 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return false;
 	}
 
+	protected IPath getAppServerDir() {
+		IRuntime serverRuntime;
+
+		if (masterModel != null) {
+			serverRuntime = (IRuntime) masterModel.getProperty(PluginFacetInstallDataModelProvider.FACET_RUNTIME);
+		}
+		else {
+			serverRuntime = getFacetedProject().getPrimaryRuntime();
+		}
+
+		return ServerUtil.getAppServerDir(serverRuntime);
+	}
+
 	protected IDataModel getFacetDataModel(String facetId) {
 		IFacetedProjectWorkingCopy fp = getFacetedProject();
 

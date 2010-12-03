@@ -74,6 +74,8 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_APP_SERVER_TYPE = "app.server.type";
 
+	public static final String PROPERTY_AUTO_DEPLOY_UNPACK_WAR = "auto.deploy.unpack.war";
+
 	public static final String PROPERTY_EXT_DISPLAY_NAME = "ext.display.name";
 
 	public static final String PROPERTY_EXT_NAME = "ext.name";
@@ -99,6 +101,8 @@ public interface ISDKConstants {
 	public static final String PROPERTY_LAYOUTTPL_TEMPLATE_NAME = "layouttpl.template.name";
 
 	public static final String PROPERTY_NAME = "sdk-name";
+
+	public static final String PROPERTY_PLUGIN_FILE = "plugin.file";
 
 	public static final String PROPERTY_PORTLET_DISPLAY_NAME = "portlet.display.name";
 

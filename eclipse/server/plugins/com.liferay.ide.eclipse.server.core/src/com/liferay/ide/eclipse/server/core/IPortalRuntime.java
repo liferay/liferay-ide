@@ -18,20 +18,23 @@ package com.liferay.ide.eclipse.server.core;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jst.server.core.IJavaRuntime;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Greg Amerson
  */
-public interface IPortalRuntime {
+public interface IPortalRuntime extends IJavaRuntime {
 
 	public IPath[] getAllUserClasspathLibraries();
 
+	public IPath getAppServerDir();
+
 	public Properties getCategories();
 
-	public IPath getRoot();
-
 	public String getPortalVersion();
+
+	public IPath getRoot();
 
 	public IRuntime getRuntime();
 

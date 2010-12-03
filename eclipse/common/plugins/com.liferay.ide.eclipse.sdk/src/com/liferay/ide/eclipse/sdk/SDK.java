@@ -231,7 +231,7 @@ public class SDK {
 	}
 
 	public IPath createNewPortletProject(String portletName, String portletDisplayName, String appServerDir) {
-		return createNewPortletProject(portletName, portletDisplayName, appServerDir, null);
+		return createNewPortletProject(portletName, portletDisplayName, null, appServerDir);
 	}
 
 	public IPath createNewPortletProject(

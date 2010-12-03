@@ -105,10 +105,21 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 	}
 	
+	public IPath getAppServerDir() {
+		return getRuntime().getLocation();
+	}
+
 	public Properties getCategories() {
 		IPath runtimeLocation = getRuntime().getLocation();
 
 		return PortalTomcatUtil.getCategories(runtimeLocation);
+	}
+
+	public String getPortalVersion() {
+		// check for existing release info
+		IPath location = getRuntime().getLocation();
+
+		return PortalTomcatUtil.getVersion(location);
 	}
 
 	public IPath getRoot() {
@@ -170,13 +181,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		IPath location = getRuntime().getLocation();
 
 		return PortalTomcatUtil.getSupportedHookProperties(location);
-	}
-
-	public String getPortalVersion() {
-		// check for existing release info
-		IPath location = getRuntime().getLocation();
-
-		return PortalTomcatUtil.getVersion(location);
 	}
 
 	@Override
@@ -317,7 +321,5 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			PortalTomcatPlugin.logError(e);
 		}
 	}
-
-
 
 }
