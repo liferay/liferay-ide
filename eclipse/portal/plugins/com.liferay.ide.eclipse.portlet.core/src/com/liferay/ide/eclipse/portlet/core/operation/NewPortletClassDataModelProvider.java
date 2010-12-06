@@ -135,7 +135,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return "content/Language.properties";
 		}
 		else if (ALLOW_MULTIPLE.equals(propertyName)) {
-			return true;
+			return false;
 		}
 		else if (CSS_FILE.equals(propertyName)) {
 			return "/css/portlet.css";
