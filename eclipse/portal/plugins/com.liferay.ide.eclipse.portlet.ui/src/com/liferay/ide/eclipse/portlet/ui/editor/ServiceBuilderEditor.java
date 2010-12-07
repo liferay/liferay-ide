@@ -535,9 +535,9 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 
 	@Override
 	protected void addPages() {
-		addServiceBuilderFormPage();
-
 		addXMLEditorPage();
+
+		addServiceBuilderFormPage();
 
 		updateHeaderToolBar();
 
