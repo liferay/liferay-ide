@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="liferayProject" name="Liferay Project Definition" schema="schema/liferayProject.exsd"/>
+   <extension-point id="liferayProjects" name="Liferay Project Definitions" schema="schema/liferayProjects.exsd"/>
    <extension-point id="portletFrameworks" name="Portlet Plug-in Frameworks" schema="schema/portletFrameworks.exsd"/>
    
    <extension

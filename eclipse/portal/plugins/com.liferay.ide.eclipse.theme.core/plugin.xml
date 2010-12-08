@@ -115,7 +115,7 @@
       </validator>
    </extension>
    <extension
-         point="com.liferay.ide.eclipse.project.core.liferayProject">
+         point="com.liferay.ide.eclipse.project.core.liferayProjects">
       <liferayProjectDefinition
             class="com.liferay.ide.eclipse.theme.core.LiferayThemeDefinition"
             displayName="Liferay Theme"

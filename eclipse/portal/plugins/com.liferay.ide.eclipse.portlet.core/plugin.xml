@@ -194,7 +194,7 @@
    </extension>
    
    <extension
-         point="com.liferay.ide.eclipse.project.core.liferayProject">
+         point="com.liferay.ide.eclipse.project.core.liferayProjects">
       <liferayProjectDefinition
             class="com.liferay.ide.eclipse.portlet.core.LiferayPortletDefinition"
             displayName="Liferay Portlet"
