@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.server.tomcat.core.util;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatPlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
@@ -27,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -242,8 +244,13 @@ public class PortalTomcatUtil {
 
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
+		URL[] urls = new URL[] {
+			PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar")
+		};
+
 		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, hookPropertiesFile, errorFile, null);
+			new PortalSupportHelper(
+				libRoot, portalRoot, portalSupportClass, hookPropertiesFile, errorFile, urls, new String[] {});
 
 		try {
 			helper.launch(null);
@@ -260,8 +267,13 @@ public class PortalTomcatUtil {
 
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
+		URL[] urls = new URL[] {
+			PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar")
+		};
+
 		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, null);
+			new PortalSupportHelper(
+				libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, urls, new String[] {});
 
 		try {
 			helper.launch(null);

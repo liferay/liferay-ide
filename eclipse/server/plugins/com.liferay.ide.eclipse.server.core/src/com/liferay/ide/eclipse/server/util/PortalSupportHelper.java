@@ -15,15 +15,12 @@
 
 package com.liferay.ide.eclipse.server.util;
 
-import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.ui.util.LaunchHelper;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -54,10 +51,20 @@ public class PortalSupportHelper extends LaunchHelper {
 	
 	protected String[] userLibs;
 
+	protected URL[] supportLibs;
+
 	protected File outputFile;
 
 	public PortalSupportHelper(
-		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile, String[] userLibs) {
+		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile, URL[] supportLibs,
+		String[] userLibs) {
+
+		this(libRoot, portalRoot, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null);
+	}
+
+	public PortalSupportHelper(
+		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile, URL[] supportLibs,
+		String[] userLibs, String extraArg) {
 		
 		super(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
 
@@ -74,7 +81,7 @@ public class PortalSupportHelper extends LaunchHelper {
 		setOutputFile(outputFile);
 
 		setLaunchArgs(new String[] {
-			portalSupportClass, outputFile.getAbsolutePath(), errorFile.getAbsolutePath()
+			portalSupportClass, outputFile.getAbsolutePath(), errorFile.getAbsolutePath(), extraArg
 		});
 
 		setMode(ILaunchManager.RUN_MODE);
@@ -85,6 +92,8 @@ public class PortalSupportHelper extends LaunchHelper {
 
 		this.userLibs = userLibs;
 		
+		this.supportLibs = supportLibs;
+
 //		this.launchTimeout = 2000;
 	}
 
@@ -110,19 +119,13 @@ public class PortalSupportHelper extends LaunchHelper {
 	protected void addUserEntries(ClasspathModel model)
 		throws CoreException {
 		
-		URL url = PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar");
+		if (supportLibs != null && supportLibs.length > 0) {
+			for (URL supportLib : supportLibs) {
+				model.addEntry(
+					ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(supportLib.getPath())));
+			}
+		}
 		
-		try {
-			URL fileUrl = FileLocator.toFileURL(url);
-			
-			IPath portalSupportPath = new Path(fileUrl.getPath());
-			
-			model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(portalSupportPath));			
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		for (String rootLib : rootLibs) {
 			model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(libRoot.append(rootLib)));
 		}
@@ -136,6 +139,15 @@ public class PortalSupportHelper extends LaunchHelper {
 			for (String userLib : userLibs) {
 				model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(portalRoot.append(
 					"WEB-INF/lib").append(userLib)));
+			}
+		}
+		else {
+			for (String jarFile : this.portalRoot.append("WEB-INF/lib").toFile().list()) {
+				if (jarFile.endsWith(".jar")) {
+					model.addEntry(
+						ClasspathModel.USER,
+						JavaRuntime.newArchiveRuntimeClasspathEntry(portalRoot.append("WEB-INF/lib").append(jarFile)));
+				}
 			}
 		}
 	}

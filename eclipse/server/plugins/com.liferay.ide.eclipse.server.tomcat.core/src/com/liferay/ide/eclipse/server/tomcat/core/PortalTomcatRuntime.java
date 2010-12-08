@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -50,6 +51,8 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 	public static final String RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
 
 	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
+
+	private IStatus runtimeDelegateStatus;
 
 	public PortalTomcatRuntime() {
 		releaseHelpers = new HashMap<IPath, ReleaseHelper>();
@@ -221,13 +224,15 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 	@Override
 	public IStatus validate() {
 		// first validate that this runtime is
-		IStatus status = PortalServerCorePlugin.validateRuntimeDelegate(this);
-
-		if (!status.isOK()) {
-			return status;
+		if (runtimeDelegateStatus == null) {
+			runtimeDelegateStatus = PortalServerCorePlugin.validateRuntimeDelegate(this);
 		}
 
-		status = super.validate();
+		if (!runtimeDelegateStatus.isOK()) {
+			return runtimeDelegateStatus;
+		}
+
+		IStatus status = super.validate();
 
 		if (!status.isOK()) {
 			return status;
@@ -311,8 +316,13 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 		IPath portalRoot = getRoot();
 
+		URL[] supportUrls = new URL[] {
+			PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar")
+		};
+
 		PortalSupportHelper helper =
-			new PortalSupportHelper(libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, null);
+			new PortalSupportHelper(
+				libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
 
 		try {
 			helper.launch(null);
