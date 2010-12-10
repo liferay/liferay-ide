@@ -65,7 +65,7 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 			throws CoreException {
 		boolean shouldPublishModule = true;
 		
-		if (moduleTree != null && moduleTree.length > 0) {
+		if (moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null) {
 			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(moduleTree[0].getProject());
 
 			if (facetedProject != null) {
