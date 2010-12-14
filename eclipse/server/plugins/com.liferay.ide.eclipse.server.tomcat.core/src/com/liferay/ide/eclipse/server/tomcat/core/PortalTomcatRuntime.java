@@ -27,11 +27,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -122,14 +124,21 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		// check for existing release info
 		IPath location = getRuntime().getLocation();
 
-		return PortalTomcatUtil.getVersion(location);
+		try {
+			return PortalTomcatUtil.getVersion(location);
+		}
+		catch (IOException e) {
+			return "";
+		}
 	}
 
 	public IPath getRoot() {
 		return PortalTomcatUtil.getPortalRoot(getRuntime().getLocation());
 	}
 
-	public String getServerInfo() {
+	public String getServerInfo()
+		throws IOException {
+
 		// check for existing server info
 		IPath location = getRuntime().getLocation();
 
@@ -183,7 +192,12 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 	public String[] getSupportedHookProperties() {
 		IPath location = getRuntime().getLocation();
 
-		return PortalTomcatUtil.getSupportedHookProperties(location);
+		try {
+			return PortalTomcatUtil.getSupportedHookProperties(location);
+		}
+		catch (IOException e) {
+			return new String[0];
+		}
 	}
 
 	@Override
@@ -245,10 +259,16 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		if (portalVersion != null && (portalVersion.compareTo(getLeastSupportedVersion()) < 0)) {
 			status =
 				PortalTomcatPlugin.createErrorStatus("Portal version not supported.  Need at least " +
-				IPortalConstants.LEAST_SUPPORTED_VERSION);
+					getLeastSupportedVersion());
 		}
 
-		String serverInfo = getServerInfo();
+		String serverInfo = null;
+
+		try {
+			serverInfo = getServerInfo();
+		}
+		catch (IOException e) {
+		}
 
 		if (CoreUtil.isNullOrEmpty(serverInfo) || serverInfo.indexOf(getExpectedServerInfo()) < 0) {
 			status =
@@ -309,7 +329,9 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		super.initialize();
 	}
 
-	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile) {
+	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile)
+		throws IOException {
+
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
 
 		IPath libRoot = location.append("lib/ext");
@@ -317,7 +339,8 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		IPath portalRoot = getRoot();
 
 		URL[] supportUrls = new URL[] {
-			PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar")
+				FileLocator.toFileURL(PortalServerCorePlugin.getDefault().getBundle().getEntry(
+					"portal-support/portal-support.jar"))
 		};
 
 		PortalSupportHelper helper =

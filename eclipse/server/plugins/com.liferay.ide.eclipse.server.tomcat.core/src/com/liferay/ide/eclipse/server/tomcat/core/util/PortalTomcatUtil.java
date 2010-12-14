@@ -36,6 +36,7 @@ import java.util.Properties;
 import java.util.jar.JarFile;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -115,7 +116,9 @@ public class PortalTomcatUtil {
 	}
 
 
-	public static String[] getSupportedHookProperties(IPath runtimeLocation) {
+	public static String[] getSupportedHookProperties(IPath runtimeLocation)
+		throws IOException {
+		
 		IPath hookPropertiesPath =
 			PortalTomcatPlugin.getDefault().getStateLocation().append("hook_properties").append(
 				runtimeLocation.toPortableString().replaceAll("\\/", "_") + "_hook_properties.txt");
@@ -141,9 +144,10 @@ public class PortalTomcatUtil {
 		return hookProperties;
 	}
 
-	public static String getVersion(IPath location) {
+	public static String getVersion(IPath location)
+		throws IOException {
+		
 		IPath versionsInfoPath = PortalTomcatPlugin.getDefault().getStateLocation().append("version.properties");
-
 
 		String locationKey = location.toPortableString().replaceAll("\\/", "_");
 
@@ -237,7 +241,9 @@ public class PortalTomcatUtil {
 		return context;
 	}
 
-	public static void loadHookPropertiesFile(IPath runtimeLocation, File hookPropertiesFile, File errorFile) {
+	public static void loadHookPropertiesFile(IPath runtimeLocation, File hookPropertiesFile, File errorFile)
+		throws IOException {
+		
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetSupportedHookProperties";
 
 		IPath libRoot = runtimeLocation.append("lib/ext");
@@ -245,7 +251,8 @@ public class PortalTomcatUtil {
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
 		URL[] urls = new URL[] {
-			PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar")
+				FileLocator.toFileURL(PortalServerCorePlugin.getDefault().getBundle().getEntry(
+					"portal-support/portal-support.jar"))
 		};
 
 		PortalSupportHelper helper =
@@ -260,7 +267,9 @@ public class PortalTomcatUtil {
 		}
 	}
 
-	public static void loadVersionInfoFile(IPath runtimeLocation, File versionInfoFile, File errorFile) {
+	public static void loadVersionInfoFile(IPath runtimeLocation, File versionInfoFile, File errorFile)
+		throws IOException {
+		
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
 
 		IPath libRoot = runtimeLocation.append("lib/ext");
@@ -268,7 +277,8 @@ public class PortalTomcatUtil {
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
 		URL[] urls = new URL[] {
-			PortalServerCorePlugin.getDefault().getBundle().getEntry("portal-support/portal-support.jar")
+				FileLocator.toFileURL(PortalServerCorePlugin.getDefault().getBundle().getEntry(
+					"portal-support/portal-support.jar"))
 		};
 
 		PortalSupportHelper helper =

@@ -17,6 +17,8 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
 
+import java.io.File;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.IStartup;
 import org.osgi.framework.BundleContext;
@@ -65,15 +67,13 @@ public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
 	 */
-	public void start(BundleContext context)	
+	public void start(BundleContext context)
 		throws Exception {
-		
+
 		super.start(context);
-		
+
 		plugin = this;
 
 		// portalSourcePartListener = new PortalSourcePartListener();
@@ -107,19 +107,39 @@ public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 		// portalSourcePartListener);
 		// }
 		// });
+
+		cleanupVersionFiles();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
 	 */
-	public void stop(BundleContext context)	
+	public void stop(BundleContext context)
 		throws Exception {
-		
+
+		cleanupVersionFiles();
+
 		plugin = null;
-		
+
 		super.stop(context);
+	}
+
+	private void cleanupVersionFiles() {
+		File versionProps = PortalTomcatPlugin.getDefault().getStateLocation().append("version.properties").toFile();
+
+		if (versionProps.exists()) {
+			if (!versionProps.delete()) {
+				versionProps.deleteOnExit();
+			}
+		}
+
+		File serverInfos = PortalTomcatPlugin.getDefault().getStateLocation().append("serverInfos.properties").toFile();
+
+		if (serverInfos.exists()) {
+			if (!serverInfos.delete()) {
+				serverInfos.deleteOnExit();
+			}
+		}
 	}
 }
