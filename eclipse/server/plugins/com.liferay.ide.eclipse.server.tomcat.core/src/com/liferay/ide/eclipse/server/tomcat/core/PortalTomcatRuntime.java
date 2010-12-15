@@ -262,18 +262,21 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 					getLeastSupportedVersion());
 		}
 
-		String serverInfo = null;
+		if (!getRuntime().isStub()) {
 
-		try {
-			serverInfo = getServerInfo();
-		}
-		catch (IOException e) {
-		}
+			String serverInfo = null;
 
-		if (CoreUtil.isNullOrEmpty(serverInfo) || serverInfo.indexOf(getExpectedServerInfo()) < 0) {
-			status =
-				PortalTomcatPlugin.createErrorStatus("Portal server not supported.  Expecting " +
-					getExpectedServerInfo());
+			try {
+				serverInfo = getServerInfo();
+			}
+			catch (IOException e) {
+			}
+
+			if (CoreUtil.isNullOrEmpty(serverInfo) || serverInfo.indexOf(getExpectedServerInfo()) < 0) {
+				status =
+					PortalTomcatPlugin.createErrorStatus("Portal server not supported.  Expecting " +
+						getExpectedServerInfo());
+			}
 		}
 
 		return status;
