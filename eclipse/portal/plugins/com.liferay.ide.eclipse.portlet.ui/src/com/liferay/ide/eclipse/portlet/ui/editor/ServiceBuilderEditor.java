@@ -93,7 +93,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		getEditor(getPageCount() - 1).doSave(monitor);
+		getEditor(0).doSave(monitor);
 	}
 
 	/**
