@@ -22,6 +22,7 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -61,10 +62,17 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 
 	protected IProject[] wsProjects;
 
-	public LiferayProjectImportWizardPage(IDataModel model, String pageName) {
+	public LiferayProjectImportWizardPage(IDataModel model, String pageName, IWizard parentWizard) {
 		super(model, pageName);
-		setTitle("Import Liferay Project");
-		setDescription("Select an existing Liferay project to import.");
+
+		if (parentWizard instanceof NewProjectFromSourceWizard) {
+			setTitle("New Liferay Project from Existing Source");
+			setDescription("Browse to an existing Liferay project to import.");
+		}
+		else {
+			setTitle("Import Liferay Project");
+			setDescription("Select an existing Liferay project to import.");
+		}
 	}
 
 	protected void createProjectLocationField(Composite topComposite) {

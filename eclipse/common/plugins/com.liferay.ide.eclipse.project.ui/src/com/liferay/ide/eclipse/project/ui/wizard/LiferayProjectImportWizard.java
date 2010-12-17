@@ -57,7 +57,8 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 
 	@Override
 	protected void doAddPages() {
-		liferayProjectImportWizardPage = new LiferayProjectImportWizardPage(getDataModel(), "pageOne");
+		liferayProjectImportWizardPage = new LiferayProjectImportWizardPage(getDataModel(), "pageOne", this);
+		liferayProjectImportWizardPage.setWizard(this);
 		
 		addPage(liferayProjectImportWizardPage);
 	}

@@ -164,27 +164,32 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 		if (fMenu == null) {
 			fMenu = new Menu(parent);
 
-			Separator separator = null;
-
 			NewWizardAction[] actions = getNewProjectActions();
 
-			for (NewWizardAction action : actions) {
-				action.setShell(fWizardShell);
+			// Separator separator = null;
+			//
+			// for (NewWizardAction action : actions) {
+			// action.setShell(fWizardShell);
+			//
+			// ActionContributionItem item = new ActionContributionItem(action);
+			// item.fill(fMenu, -1);
+			//
+			// if (separator == null) {
+			// separator = new Separator();
+			// separator.fill(fMenu, -1);
+			// }
+			// }
 
-				ActionContributionItem item = new ActionContributionItem(action);
-				item.fill(fMenu, -1);
-
-				if (separator == null) {
-					separator = new Separator();
-					separator.fill(fMenu, -1);
-				}
-			}
+			// only do the first project action (not the 5 separate ones)
+			actions[0].setShell(fWizardShell);
+			ActionContributionItem item = new ActionContributionItem(actions[0]);
+			item.fill(fMenu, -1);
 
 			new Separator().fill(fMenu, -1);
 
 			NewWizardAction importAction = new ImportLiferayProjectWizardAction();
 			importAction.setShell(fWizardShell);
-			ActionContributionItem item = new ActionContributionItem(importAction);
+			item = new ActionContributionItem(importAction);
 			item.fill(fMenu, -1);
 
 			NewWizardAction[] extraActions = getExtraProjectActions();

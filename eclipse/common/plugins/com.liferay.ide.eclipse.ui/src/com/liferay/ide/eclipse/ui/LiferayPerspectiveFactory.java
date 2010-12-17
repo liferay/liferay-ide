@@ -50,6 +50,9 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.eclipse.project.ui.newProjectWizard";
 
+	public static final String ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE =
+		"com.liferay.ide.eclipse.project.ui.newProjectWizardExistingSource";
+
 	public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
 
 	public static final String ID_NEW_SERVICE_BUILDER_WIZARD =
@@ -84,6 +87,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	protected void addShortcuts(IPageLayout layout) {
 		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD);
+		layout.addNewWizardShortcut(ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE);
 		layout.addNewWizardShortcut(ID_NEW_PORTLET_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_JSF_PORTLET_WIZARD);
 		layout.addNewWizardShortcut(ID_NEW_VAADIN_PORTLET_WIZARD);

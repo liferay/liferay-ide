@@ -324,7 +324,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	}
 
 	protected void setupWizard() {
-		setWindowTitle("New Liferay Plug-in Project");
+		setWindowTitle("New Liferay Project");
 		setShowFacetsSelectionPage(false);
 	}
 

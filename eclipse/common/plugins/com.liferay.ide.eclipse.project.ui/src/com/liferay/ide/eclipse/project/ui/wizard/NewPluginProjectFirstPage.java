@@ -129,7 +129,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		gd.verticalIndent = 8;
 
 		Link link = new Link(parent, SWT.UNDERLINE_LINK);
-		link.setText("<a href=\"#\">Create a new plug-in project from existing sources...</a>");
+		link.setText("<a href=\"#\">Create a new project from existing sources...</a>");
 		link.setLayoutData(gd);
 		link.addSelectionListener(new SelectionAdapter() {
 
@@ -137,7 +137,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 			public void widgetSelected(SelectionEvent e) {
 				getWizard().getContainer().getShell().close();
 
-				WizardDialog dialog = new WizardDialog(getShell(), new LiferayProjectImportWizard());
+				WizardDialog dialog = new WizardDialog(getShell(), new NewProjectFromSourceWizard());
 				dialog.open();
 			}
 

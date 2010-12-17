@@ -1,7 +1,7 @@
 package com.liferay.ide.eclipse.project.ui.action;
 
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
-import com.liferay.ide.eclipse.project.ui.wizard.LiferayProjectImportWizard;
+import com.liferay.ide.eclipse.project.ui.wizard.NewProjectFromSourceWizard;
 import com.liferay.ide.eclipse.ui.action.AbstractNewProjectWizardProjectElement;
 import com.liferay.ide.eclipse.ui.action.NewWizardAction;
 
@@ -20,7 +20,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction {
 				return "";
 			}
 			else if (NewWizardAction.ATT_ICON.equals(attr)) {
-				return "/icons/e16/import.png";
+				return "/icons/n16/plugin_new.png";
 			}
 
 			return null;
@@ -28,7 +28,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction {
 
 		@Override
 		protected Object createNewWizard() {
-			return new LiferayProjectImportWizard();
+			return new NewProjectFromSourceWizard();
 		}
 
 		@Override
@@ -47,7 +47,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction {
 
 	public ImportLiferayProjectWizardAction() {
 		super(new ImportLiferayProjectElement());
-		setText("Import Existing Liferay Plug-in Project");
+		setText("New Liferay Project from Existing Source");
 	}
 
 }
