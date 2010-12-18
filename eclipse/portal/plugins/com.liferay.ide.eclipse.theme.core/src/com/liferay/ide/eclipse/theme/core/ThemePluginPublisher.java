@@ -15,14 +15,16 @@
 package com.liferay.ide.eclipse.theme.core;
 
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.AbstractPluginDeployer;
+import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
@@ -30,13 +32,19 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 /**
  * @author Greg Amerson
  */
-public class ThemePluginDeployer extends AbstractPluginDeployer {
+public class ThemePluginPublisher extends AbstractPluginPublisher {
 
-	public ThemePluginDeployer() {
+	public ThemePluginPublisher() {
+		super();
 	}
 
-	@Override
-	public boolean prePublishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor) {
+	public IStatus canPublishModule(IServer server, IModule module) {
+		return Status.OK_STATUS;
+	}
+
+	public boolean prePublishModule(
+		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor) {
+
 		boolean publish = true;
 
 		if ((kind != IServer.PUBLISH_FULL && kind != IServer.PUBLISH_INCREMENTAL && kind != IServer.PUBLISH_AUTO) ||

@@ -12,7 +12,10 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalServer;
+import com.liferay.ide.eclipse.ui.util.UIUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,8 +33,11 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatConfiguration;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatServer;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerUtil;
+import org.eclipse.wst.server.core.internal.Server;
 
 @SuppressWarnings("restriction")
 public class PortalTomcatServer extends TomcatServer implements IPortalTomcatConstants, IPortalServer {
@@ -160,4 +166,66 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 
 		return null;
 	}
+
+	@Override
+	public void modifyModules(IModule[] add, IModule[] remove, IProgressMonitor monitor)
+		throws CoreException {
+
+		// check if we are adding ext plugin then we need to turn off auto publishing if we are removing ext plugin
+		// then we can re-enable publishing if it was previously set
+
+		boolean addingExt = false;
+		boolean removingExt = false;
+
+		if (!CoreUtil.isNullOrEmpty(add)) {
+			for (IModule m : add) {
+				if (m.getProject() != null && ProjectUtil.isExtProject(m.getProject())) {
+					addingExt = true;
+					break;
+				}
+			}
+		}
+		else if (!CoreUtil.isNullOrEmpty(remove)) {
+			for (IModule m : remove) {
+				if (m.getProject() != null && ProjectUtil.isExtProject(m.getProject())) {
+					removingExt = true;
+					break;
+				}
+			}
+		}
+
+		if (addingExt && !removingExt) {
+			int existingSetting =
+				getServer().getAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
+
+			if (existingSetting != Server.AUTO_PUBLISH_DISABLE) {
+				UIUtil.postInfo(
+					"Liferay Tomcat Server",
+					"Automatic publishing will be disabled now that an EXT plug-in is being added.  Any changes to the server module resources will have to be published manually using the Publish action.");
+			}
+
+			IServerWorkingCopy wc = getServer().createWorkingCopy();
+			wc.setAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE);
+			wc.setAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, existingSetting);
+			wc.save(true, monitor);
+		}
+		else if (!addingExt && removingExt) {
+			int lastSetting =
+				getServer().getAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
+
+			if (lastSetting != Server.AUTO_PUBLISH_DISABLE) {
+				UIUtil.postInfo(
+					"Liferay Tomcat Server",
+					"Removing the EXT Plug-in from the server only changes eclipse metadata.  The undeploy process does not reverse changes made to the portal files made by the initial deployment.  Also, automatic publishing will be re-enabled now that the EXT plug-in is being removed.  Any changes to server module resources will not be published automatically according to server settings.");
+			}
+
+			IServerWorkingCopy wc = getServer().createWorkingCopy();
+			wc.setAttribute(Server.PROP_AUTO_PUBLISH_SETTING, lastSetting);
+			wc.save(true, monitor);
+		}
+
+		super.modifyModules(add, remove, monitor);
+
+	}
+
 }

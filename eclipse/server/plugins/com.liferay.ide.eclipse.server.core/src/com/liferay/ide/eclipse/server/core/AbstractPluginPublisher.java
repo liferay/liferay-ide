@@ -15,21 +15,21 @@
 
 package com.liferay.ide.eclipse.server.core;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.wst.server.core.IModule;
 
 /**
  * @author gregory.amerson@liferay.com
  */
-public abstract class AbstractPluginDeployer implements IPluginDeployer {
+public abstract class AbstractPluginPublisher implements IPluginPublisher {
 
 	protected String facetId;
 
-	public AbstractPluginDeployer() {
+	protected String runtimeTypeId;
+
+	public AbstractPluginPublisher() {
 		this(null);
 	}
 
-	public AbstractPluginDeployer(String facetId) {
+	public AbstractPluginPublisher(String facetId) {
 		super();
 		this.facetId = facetId;
 	}
@@ -38,12 +38,16 @@ public abstract class AbstractPluginDeployer implements IPluginDeployer {
 		return facetId;
 	}
 
-	public boolean prePublishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor) {
-		return true;
+	public String getRuntimeTypeId() {
+		return runtimeTypeId;
 	}
 
 	public void setFacetId(String facetId) {
 		this.facetId = facetId;
+	}
+
+	public void setRuntimeTypeId(String runtimeTypeId) {
+		this.runtimeTypeId = runtimeTypeId;
 	}
 
 }

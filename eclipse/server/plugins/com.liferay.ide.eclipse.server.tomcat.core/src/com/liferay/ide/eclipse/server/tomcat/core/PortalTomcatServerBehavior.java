@@ -12,15 +12,17 @@
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPluginDeployer;
+import com.liferay.ide.eclipse.server.core.IPluginPublisher;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,6 +44,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.w3c.dom.Document;
 
@@ -56,31 +59,42 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 	}
 	
 	@Override
-	protected void publishServer(int kind, IProgressMonitor monitor) throws CoreException {
-		super.publishServer(kind, monitor);
-	}
-
-	@Override
 	protected void publishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor)
 			throws CoreException {
 		boolean shouldPublishModule = true;
 		
 		if (moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null) {
-			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(moduleTree[0].getProject());
+			IProject project = moduleTree[0].getProject();
+
+			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
 
 			if (facetedProject != null) {
 				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
 
 				if (liferayFacet != null) {
 					String facetId = liferayFacet.getId();
-					IPluginDeployer pluginDeployer = PortalServerCorePlugin.getPluginDeployer(facetId);
 
-					if (pluginDeployer != null) {
-						try {
-							shouldPublishModule = pluginDeployer.prePublishModule(kind, deltaKind, moduleTree, monitor);
-						}
-						catch (Exception e) {
-							PortalTomcatPlugin.logError("Plugin deployer failed", e);
+					IRuntime runtime = null;
+
+					try {
+						runtime = ServerUtil.getRuntime(project);
+					}
+					catch (CoreException ce) {
+						// do nothing
+					}
+
+					if (runtime != null) {
+						IPluginPublisher pluginPublisher =
+							PortalServerCorePlugin.getPluginPublisher(facetId, runtime.getRuntimeType().getId());
+
+						if (pluginPublisher != null) {
+							try {
+								shouldPublishModule =
+									pluginPublisher.prePublishModule(this, kind, deltaKind, moduleTree, monitor);
+							}
+							catch (Exception e) {
+								PortalTomcatPlugin.logError("Plugin deployer failed", e);
+							}
 						}
 					}
 				}

@@ -126,6 +126,8 @@ public interface ISDKConstants {
 
 	public static final String TARGET_BUILD_WSDD = "build-wsdd";
 
+	public static final String TARGET_CLEAN_APP_SERVER = "clean-app-server";
+
 	public static final String TARGET_COMPILE = "compile";
 
 	public static final String TARGET_CREATE = "create";

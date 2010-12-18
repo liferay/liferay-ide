@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
 import java.net.URL;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
@@ -55,6 +56,16 @@ public class UIUtil {
 		}
 
 		return null;
+	}
+
+	public static void postInfo(final String title, final String msg) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				MessageDialog.openInformation(Display.getDefault().getActiveShell(), title, msg);
+			}
+
+		});
 	}
 
 	public static IViewPart showView(String viewId) {

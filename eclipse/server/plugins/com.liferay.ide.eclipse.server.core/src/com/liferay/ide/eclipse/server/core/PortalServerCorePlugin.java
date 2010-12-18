@@ -44,14 +44,14 @@ public class PortalServerCorePlugin extends CorePlugin {
 	// The shared instance
 	private static PortalServerCorePlugin plugin;
 
-	private static IPluginDeployer[] pluginDeployers = null;
+	private static PluginPackageResourceListener pluginPackageResourceListener;
 
 	// private static HashMap<String, ServerInstallSpec> serverInstallSpecs =
 	// null;
 
 	// private PortalBundle[] portalBundles;
 
-	private static PluginPackageResourceListener pluginPackageResourceListener;
+	private static IPluginPublisher[] pluginPublishers = null;
 
 	private static IRuntimeDelegateValidator[] runtimeDelegateValidators;
 
@@ -68,18 +68,19 @@ public class PortalServerCorePlugin extends CorePlugin {
 		return plugin;
 	}
 
-	public static IPluginDeployer getPluginDeployer(String facetId) {
-		if (CoreUtil.isNullOrEmpty(facetId)) {
+	public static IPluginPublisher getPluginPublisher(String facetId, String runtimeTypeId) {
+		if (CoreUtil.isNullOrEmpty(facetId) || CoreUtil.isNullOrEmpty(runtimeTypeId)) {
 			return null;
 		}
 
-		IPluginDeployer retval = null;
-		IPluginDeployer[] deployers = getPluginDeployers();
+		IPluginPublisher retval = null;
+		IPluginPublisher[] publishers = getPluginPublishers();
 
-		if (deployers != null && deployers.length > 0) {
-			for (IPluginDeployer deployer : deployers) {
-				if (deployer != null && facetId.equals(deployer.getFacetId())) {
-					retval = deployer;
+		if (publishers != null && publishers.length > 0) {
+			for (IPluginPublisher publisher : publishers) {
+				if (publisher != null && facetId.equals(publisher.getFacetId()) &&
+					runtimeTypeId.equals(publisher.getRuntimeTypeId())) {
+					retval = publisher;
 					break;
 				}
 			}
@@ -118,32 +119,33 @@ public class PortalServerCorePlugin extends CorePlugin {
 	 * (portalBundle.getRuntimeTypeId().equals(id)) { return portalBundle; } } return null; }
 	 */
 
-	public static IPluginDeployer[] getPluginDeployers() {
-		if (pluginDeployers == null) {
+	public static IPluginPublisher[] getPluginPublishers() {
+		if (pluginPublishers == null) {
 			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginDeployer.ID);
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginPublisher.ID);
 
 			try {
-				List<IPluginDeployer> deployers = new ArrayList<IPluginDeployer>();
+				List<IPluginPublisher> deployers = new ArrayList<IPluginPublisher>();
 
 				for (IConfigurationElement element : elements) {
 					final Object o = element.createExecutableExtension("class");
 
-					if (o instanceof AbstractPluginDeployer) {
-						AbstractPluginDeployer pluginDeployer = (AbstractPluginDeployer) o;
+					if (o instanceof AbstractPluginPublisher) {
+						AbstractPluginPublisher pluginDeployer = (AbstractPluginPublisher) o;
 						pluginDeployer.setFacetId(element.getAttribute("facetId"));
+						pluginDeployer.setRuntimeTypeId(element.getAttribute("runtimeTypeId"));
 						deployers.add(pluginDeployer);
 					}
 				}
 
-				pluginDeployers = deployers.toArray(new IPluginDeployer[0]);
+				pluginPublishers = deployers.toArray(new IPluginPublisher[0]);
 			}
 			catch (Exception e) {
 				logError("Unable to get plugin deployer extensions", e);
 			}
 		}
 
-		return pluginDeployers;
+		return pluginPublishers;
 	}
 
 	public static IRuntimeDelegateValidator[] getRuntimeDelegateValidators() {

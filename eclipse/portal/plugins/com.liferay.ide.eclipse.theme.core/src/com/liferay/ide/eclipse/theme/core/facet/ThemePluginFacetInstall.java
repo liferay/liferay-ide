@@ -83,7 +83,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 
 		IResource libRes = project.findMember("docroot/WEB-INF/lib");
 
-		if (libRes.exists()) {
+		if (libRes != null && libRes.exists()) {
 			IFolder libFolder = (IFolder) libRes;
 			IResource[] libFiles = libFolder.members(true);
 			if (CoreUtil.isNullOrEmpty(libFiles)) {

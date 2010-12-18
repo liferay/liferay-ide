@@ -3,7 +3,7 @@
 <schema targetNamespace="com.liferay.ide.eclipse.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.eclipse.server.core" id="pluginDeployer" name="Liferay Plug-in Deployer"/>
+         <meta.schema plugin="com.liferay.ide.eclipse.server.core" id="pluginPublisher" name="Liferay Plug-in Publisher"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="liferayPluginDeployer"/>
+            <element ref="liferayPluginPublisher"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="liferayPluginDeployer">
+   <element name="liferayPluginPublisher">
       <complexType>
          <attribute name="facetId" type="string" use="required">
             <annotation>
@@ -62,8 +62,15 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="com.liferay.ide.eclipse.server.core.AbstractPluginDeployer:"/>
+                  <meta.attribute kind="java" basedOn="com.liferay.ide.eclipse.server.core.AbstractPluginPublisher:"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="runtimeTypeId" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

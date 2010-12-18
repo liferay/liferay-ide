@@ -177,4 +177,12 @@
       </runtime>
    </extension>
 
+	<extension
+         point="com.liferay.ide.eclipse.server.core.pluginPublishers">
+      <liferayPluginPublisher
+            class="com.liferay.ide.eclipse.server.tomcat.core.TomcatExtPluginPublisher"
+            facetId="liferay.ext"
+            runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+      </liferayPluginPublisher>
+   </extension>
 </plugin>

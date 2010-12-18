@@ -16,6 +16,9 @@
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.server.core.IPluginPublisher;
+import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,13 +29,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jst.server.tomcat.core.internal.Tomcat60Handler;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.xml.sax.SAXException;
 
@@ -46,18 +54,41 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 
 	@Override
 	public IStatus canAddModule(IModule module) {
-		// check to make sure that the user isn't trying to add multiple
-		// ext-plugins to server
-		if (IPortalTomcatConstants.PREVENT_MULTI_EXT_PLUGINS_DEPLOY && module != null && currentServer != null) {
-			if (ProjectUtil.isExtProject(module.getProject())) {
-				for (IModule currentModule : currentServer.getModules()) {
-					if (ProjectUtil.isExtProject(currentModule.getProject())) {
-						return PortalTomcatPlugin.createErrorStatus("Portal can only have on Ext-plugin deployed at a time.");
+		IProject project = module.getProject();
+
+		if (project != null) {
+			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
+
+			if (facetedProject != null) {
+				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
+
+				if (liferayFacet != null) {
+					String facetId = liferayFacet.getId();
+
+					IRuntime runtime = null;
+
+					try {
+						runtime = ServerUtil.getRuntime(project);
+					}
+					catch (CoreException e) {
+					}
+
+					if (runtime != null) {
+						IPluginPublisher pluginPublisher =
+							PortalServerCorePlugin.getPluginPublisher(facetId, runtime.getRuntimeType().getId());
+
+						if (pluginPublisher != null) {
+							IStatus status = pluginPublisher.canPublishModule(currentServer, module);
+
+							if (!status.isOK()) {
+								return status;
+							}
+						}
 					}
 				}
 			}
 		}
-		
+
 		return super.canAddModule(module);
 	}
 
@@ -65,7 +96,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 	public String[] getRuntimeVMArguments(IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv) {
 		List<String> runtimeVMArgs = new ArrayList<String>();
 
-		runtimeVMArgs.add("-Xmx1024m");		
+		runtimeVMArgs.add("-Xmx1024m");
 		runtimeVMArgs.add("-XX:MaxPermSize=256m");
 		runtimeVMArgs.add("-Dfile.encoding=UTF8");
 		runtimeVMArgs.add("-Duser.timezone=GMT");
@@ -78,7 +109,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 
 		try {
 			ensurePortalIDEPropertiesExists(installPath, configPath);
-			
+
 			runtimeVMArgs.add("-Dexternal-properties=portal-ide.properties");
 		}
 		catch (Exception e) {
@@ -86,7 +117,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 		}
 
 		Collections.addAll(runtimeVMArgs, super.getRuntimeVMArguments(installPath, configPath, deployPath, isTestEnv));
-		
+
 		return runtimeVMArgs.toArray(new String[runtimeVMArgs.size()]);
 	}
 
@@ -96,15 +127,15 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 
 	protected void ensurePortalIDEPropertiesExists(IPath installPath, IPath configPath)
 		throws FileNotFoundException, IOException {
-		
+
 		IPath idePropertiesPath = installPath.append("../portal-ide.properties");
-		
+
 		String hostName = "localhost";
-		
+
 		try {
 			ServerInstance server =
 				TomcatVersionHelper.getCatalinaServerInstance(configPath.append("conf/server.xml"), null, null);
-			
+
 			hostName = server.getHost().getName();
 		}
 		catch (SAXException e) {
@@ -128,31 +159,31 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 		// return;
 		// }
 		// }
-		
+
 		Properties props = new Properties();
-		
+
 		props.put("include-and-override", "portal-developer.properties");
-		
+
 		props.put("auto.deploy.tomcat.conf.dir", configPath.append("conf/Catalina/" + hostName).toOSString());
 
 		if (this.currentServer != null) {
 			PortalTomcatServer server =
 				(PortalTomcatServer) this.currentServer.loadAdapter(PortalTomcatServer.class, null);
-			
+
 			if (server != null) {
 				IPath runtimLocation = server.getTomcatRuntime().getRuntime().getLocation();
-				
+
 				String autoDeployDir = server.getAutoDeployDirectory();
-				
+
 				if (!IPortalTomcatConstants.DEFAULT_AUTO_DEPLOYDIR.equals(autoDeployDir)) {
 					IPath autoDeployDirPath = new Path(autoDeployDir);
-					
+
 					if (autoDeployDirPath.isAbsolute() && autoDeployDirPath.toFile().exists()) {
 						props.put("auto.deploy.deploy.dir", server.getAutoDeployDirectory());
 					}
 					else {
 						File autoDeployDirFile = new File(runtimLocation.toFile(), autoDeployDir);
-						
+
 						if (autoDeployDirFile.exists()) {
 							props.put("auto.deploy.deploy.dir", autoDeployDirFile.getPath());
 						}
@@ -162,7 +193,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 				props.put("auto.deploy.interval", server.getAutoDeployInterval());
 			}
 		}
-		
+
 		props.store(new FileOutputStream(idePropertiesPath.toFile()), null);
 	}
 

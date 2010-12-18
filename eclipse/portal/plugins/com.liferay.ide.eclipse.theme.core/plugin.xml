@@ -139,11 +139,12 @@
    </extension>
    
    <extension
-         point="com.liferay.ide.eclipse.server.core.pluginDeployers">
-      <liferayPluginDeployer
-            class="com.liferay.ide.eclipse.theme.core.ThemePluginDeployer"
+         point="com.liferay.ide.eclipse.server.core.pluginPublishers">
+      <liferayPluginPublisher
+            class="com.liferay.ide.eclipse.theme.core.ThemePluginPublisher"
+            runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             facetId="liferay.theme">
-      </liferayPluginDeployer>
+      </liferayPluginPublisher>
    </extension>
 	
 </plugin>
