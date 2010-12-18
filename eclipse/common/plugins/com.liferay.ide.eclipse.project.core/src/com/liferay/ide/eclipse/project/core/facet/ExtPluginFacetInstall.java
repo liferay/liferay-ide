@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 
@@ -115,6 +116,8 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 
 		javaProject.setRawClasspath(newRawClasspath.toArray(new IClasspathEntry[0]), this.project.getFolder(
 			IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[0]).getFullPath(), null);
+
+		ProjectUtil.fixExtProjectSrcFolderLinks(this.project);
 
 		// fixTilesDefExtFile();
 	}

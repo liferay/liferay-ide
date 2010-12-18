@@ -343,6 +343,50 @@ public class ProjectUtil {
 		return fpjwc.getProject();
 	}
 
+	/** IDE-270 */
+	public static void fixExtProjectSrcFolderLinks(IProject extProject)
+		throws JavaModelException {
+
+		if (extProject != null) {
+			IJavaProject javaProject = JavaCore.create(extProject);
+
+			if (javaProject != null) {
+				final IVirtualComponent c = ComponentCore.createComponent(extProject, false);
+
+				if (c != null) {
+					final IVirtualFolder jsrc = c.getRootFolder().getFolder("/WEB-INF/classes");
+
+					if (jsrc != null) {
+						final IClasspathEntry[] cp = javaProject.getRawClasspath();
+
+						for (int i = 0; i < cp.length; i++) {
+							final IClasspathEntry cpe = cp[i];
+
+							if (cpe.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+								if (cpe.getPath().removeFirstSegments(1).segmentCount() > 0) {
+									try {
+										IFolder srcFolder =
+											ResourcesPlugin.getWorkspace().getRoot().getFolder(cpe.getPath());
+
+										IVirtualResource[] virtualResource = ComponentCore.createResources(srcFolder);
+
+										// create link for source folder only when it is not mapped
+										if (virtualResource.length == 0) {
+											jsrc.createLink(cpe.getPath().removeFirstSegments(1), 0, null);
+										}
+									}
+									catch (Exception e) {
+										ProjectCorePlugin.logError(e);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	public static IFolder getDocroot(IProject project) {
 		IContainer retval = null;
 
@@ -853,9 +897,9 @@ public class ProjectUtil {
 						}
 
 						newEntry =
-							JavaCore.newContainerEntry(
-								entry.getPath(), entry.getAccessRules(), newAttrs.toArray(new IClasspathAttribute[0]),
-								entry.isExported());
+							JavaCore.newSourceEntry(
+								entry.getPath(), entry.getInclusionPatterns(), entry.getExclusionPatterns(),
+								entry.getOutputLocation(), newAttrs.toArray(new IClasspathAttribute[0]));
 					}
 				}
 
@@ -867,8 +911,14 @@ public class ProjectUtil {
 			}
 
 			if (fixedAttr) {
-				javaProject.setRawClasspath(newEntries.toArray(new IClasspathEntry[0]), new NullProgressMonitor());
+				IProgressMonitor monitor = new NullProgressMonitor();
+
+				javaProject.setRawClasspath(newEntries.toArray(new IClasspathEntry[0]), monitor);
+
+				javaProject.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 			}
+
+			fixExtProjectSrcFolderLinks(project);
 		}
 		catch (Exception ex) {
 			ProjectCorePlugin.logError("Exception trying to fix EXT project classpath entries.", ex);
