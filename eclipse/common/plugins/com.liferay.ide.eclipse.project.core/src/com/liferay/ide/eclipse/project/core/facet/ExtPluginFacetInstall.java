@@ -97,7 +97,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 				this.project.getFolder(IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i]).getFullPath();
 			
 			IClasspathAttribute[] attributes = new IClasspathAttribute[] {
-				JavaCore.newClasspathAttribute("owner.project.facets", "liferay.plugin")
+				JavaCore.newClasspathAttribute("owner.project.facets", "liferay.ext")
 			};
 			
 			IClasspathEntry sourceEntry =

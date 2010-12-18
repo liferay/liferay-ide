@@ -223,6 +223,10 @@ public class PluginFacetUtil {
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
 		}
+		else if (preset.getId().contains("ext")) {
+			dm.setStringProperty(
+				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+		}
 		else if (preset.getId().contains("layouttpl")) {
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.CONFIG_FOLDER,

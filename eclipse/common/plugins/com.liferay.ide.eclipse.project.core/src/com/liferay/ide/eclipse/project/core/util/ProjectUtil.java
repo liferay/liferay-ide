@@ -49,9 +49,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -243,6 +245,11 @@ public class ProjectUtil {
 
 		project.open(IResource.FORCE, new SubProgressMonitor(monitor, 70));
 
+		// need to check to see if we an ext project with source folders with incorrect parent attributes
+		if (project.getName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+			fixExtProjectClasspathEntries(project);
+		}
+
 		// IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
 
 		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
@@ -295,18 +302,24 @@ public class ProjectUtil {
 
 		if (projectRecord.getProjectName().endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true);
+
 			if (!(webXmlPath.toFile().exists())) {
 				createDefaultWebXml(webXmlPath.toFile());
 			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true);
+
 			if (!(webXmlPath.toFile().exists())) {
 				createDefaultWebXml(webXmlPath.toFile());
 			}
 		}
 		else if (projectRecord.getProjectName().endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+			webXmlPath =
+				webXmlPath.removeLastSegments(3).append(new Path("docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml"));
+
 			newProjectDataModel.setProperty(IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true);
+
 			if (!(webXmlPath.toFile().exists())) {
 				createDefaultWebXml(webXmlPath.toFile());
 			}
@@ -803,6 +816,63 @@ public class ProjectUtil {
 		Preferences prefs = ProjectFacetsManager.create(project).getPreferences(facet).node("liferay-plugin-project");
 		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
 		prefs.flush();
+	}
+
+	private static void fixExtProjectClasspathEntries(IProject project) {
+		try {
+			boolean fixedAttr = false;
+
+			IJavaProject javaProject = JavaCore.create(project);
+
+			List<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>();
+
+			IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+			for (IClasspathEntry entry : entries) {
+				IClasspathEntry newEntry = null;
+
+				if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+					List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
+
+					IClasspathAttribute[] attrs = entry.getExtraAttributes();
+
+					if (!CoreUtil.isNullOrEmpty(attrs)) {
+						for (IClasspathAttribute attr : attrs) {
+							IClasspathAttribute newAttr = null;
+
+							if ("owner.project.facets".equals(attr.getName()) &&
+								"liferay.plugin".equals(attr.getValue())) {
+								newAttr = JavaCore.newClasspathAttribute(attr.getName(), "liferay.ext");
+								fixedAttr = true;
+							}
+							else {
+								newAttr = attr;
+							}
+
+							newAttrs.add(newAttr);
+						}
+
+						newEntry =
+							JavaCore.newContainerEntry(
+								entry.getPath(), entry.getAccessRules(), newAttrs.toArray(new IClasspathAttribute[0]),
+								entry.isExported());
+					}
+				}
+
+				if (newEntry == null) {
+					newEntry = entry;
+				}
+
+				newEntries.add(newEntry);
+			}
+
+			if (fixedAttr) {
+				javaProject.setRawClasspath(newEntries.toArray(new IClasspathEntry[0]), new NullProgressMonitor());
+			}
+		}
+		catch (Exception ex) {
+			ProjectCorePlugin.logError("Exception trying to fix EXT project classpath entries.", ex);
+		}
 	}
 
 }
