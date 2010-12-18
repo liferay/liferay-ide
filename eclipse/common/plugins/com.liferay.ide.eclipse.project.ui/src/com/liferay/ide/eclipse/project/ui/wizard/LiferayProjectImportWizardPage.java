@@ -36,8 +36,10 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
 
@@ -80,6 +82,16 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 
 		projectLocation = SWTUtil.createText(topComposite, 1);
 		this.synchHelper.synchText(projectLocation, PROJECT_LOCATION, null);
+		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
+
+			public void propertyChanged(DataModelEvent event) {
+				if (PROJECT_LOCATION.equals(event.getPropertyName())) {
+					updateProjectRecord(event.getDataModel().getStringProperty(PROJECT_LOCATION));
+					synchHelper.synchAllUIWithModel();
+					validatePage();
+				}
+			}
+		});
 
 		Button iconFileBrowse = SWTUtil.createPushButton(topComposite, "Browse...", null);
 		iconFileBrowse.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
@@ -202,9 +214,6 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 
 		if (!CoreUtil.isNullOrEmpty(dir)) {
 			projectLocation.setText(dir);
-			updateProjectRecord(dir);
-			synchHelper.synchAllUIWithModel();
-			validatePage();
 		}
 	}
 
