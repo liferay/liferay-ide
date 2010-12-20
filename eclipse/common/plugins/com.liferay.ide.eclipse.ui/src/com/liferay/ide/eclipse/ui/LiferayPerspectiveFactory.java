@@ -31,6 +31,8 @@ import org.eclipse.ui.views.IViewDescriptor;
 @SuppressWarnings("deprecation")
 public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
+	private static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView";
+
 	public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
 
 	public static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
@@ -103,6 +105,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		layout.addPerspectiveShortcut("org.eclipse.jst.j2ee.J2EEPerspective");
 		layout.addPerspectiveShortcut("org.eclipse.jdt.ui.JavaPerspective");
 		layout.addPerspectiveShortcut("org.eclipse.debug.ui.DebugPerspective");
+		layout.addShowViewShortcut(ANT_VIEW_ID);
 
 		IPerspectiveDescriptor desc =
 			PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(
@@ -143,35 +146,34 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		topLeft.addPlaceholder(JavaUI.ID_PACKAGES_VIEW);
 
 		// Top right.
-		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.70f, editorArea);//$NON-NLS-1$
+		IFolderLayout topRight = layout.createFolder("topRight", IPageLayout.RIGHT, 0.68f, editorArea);//$NON-NLS-1$
 		topRight.addView(IPageLayout.ID_OUTLINE);
 		topRight.addView(ID_WST_SNIPPETS_VIEW);
+		
+		IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
+		
+		if (tlView != null) {
+			topRight.addView(ID_TASKLIST_VIEW);
+		}
 
 		topRight.addPlaceholder(IPageLayout.ID_BOOKMARKS);
 
 		IFolderLayout topRightBottom = layout.createFolder("topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight");
-		IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
-		if (tlView != null) {
-			topRightBottom.addView(ID_TASKLIST_VIEW);
-		}
+		topRightBottom.addView(ANT_VIEW_ID);
 		topRightBottom.addView(IPageLayout.ID_PROP_SHEET);
 
 		IFolderLayout bottomTopLeft = layout.createFolder("bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft");
 
 		bottomTopLeft.addView(ID_SERVERS_VIEW);
 
-		bottomTopLeft.addView(ID_WST_SNIPPETS_VIEW);
-
 		// Bottom
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7f, editorArea);//$NON-NLS-1$
 		bottom.addView(ID_MARKERS_VIEW);
+		bottom.addView(ID_CONSOLE_VIEW);
 		
 		addDBViewIfPresent(layout, bottom);
 		
-
-
 		bottom.addPlaceholder(IPageLayout.ID_PROBLEM_VIEW);
-		bottom.addPlaceholder(ID_CONSOLE_VIEW);
 		bottom.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
 		bottom.addPlaceholder(ID_SEARCH_VIEW);
 

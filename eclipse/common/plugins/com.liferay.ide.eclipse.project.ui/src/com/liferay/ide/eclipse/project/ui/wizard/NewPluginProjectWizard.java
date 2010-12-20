@@ -27,7 +27,12 @@ import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.ant.internal.ui.model.AntProjectNode;
+import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
+import org.eclipse.ant.internal.ui.views.AntView;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -300,6 +305,33 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		Display.getDefault().asyncExec(new Runnable() {
 
 			public void run() {
+				refreshProjectExplorer();
+				addBuildInAntView();
+			}
+
+			private void addBuildInAntView() {
+				IProject project = getFacetedProject().getProject();
+
+				if (project != null) {
+					IFile buildXmlFile = project.getFile("build.xml");
+
+					if (buildXmlFile.exists()) {
+						String buildFileName = buildXmlFile.getFullPath().toString();
+						final AntProjectNode antProject = new AntProjectNodeProxy(buildFileName);
+						project.getName();
+
+						IViewPart antView =
+							PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+								"org.eclipse.ant.ui.views.AntView");
+
+						if (antView instanceof AntView) {
+							((AntView) antView).addProject(antProject);
+						}
+					}
+				}
+			}
+
+			private void refreshProjectExplorer() {
 				IViewPart view = null;
 
 				try {
