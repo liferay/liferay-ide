@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.Tomcat60Handler;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
@@ -96,10 +97,25 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 	public String[] getRuntimeVMArguments(IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv) {
 		List<String> runtimeVMArgs = new ArrayList<String>();
 
-		runtimeVMArgs.add("-Xmx1024m");
-		runtimeVMArgs.add("-XX:MaxPermSize=256m");
+		String[] memoryArgs = IPortalTomcatConstants.DEFAULT_MEMORY_ARGS.split(" ");
+		String userTimezone = IPortalTomcatConstants.DEFAULT_USER_TIMEZONE;
+
+		if (currentServer != null) {
+			IPortalTomcatServer portalTomcatServer =
+				(IPortalTomcatServer) currentServer.getAdapter(IPortalTomcatServer.class);
+			memoryArgs = DebugPlugin.parseArguments(portalTomcatServer.getMemoryArgs());
+
+			userTimezone = portalTomcatServer.getUserTimezone();
+		}
+
+		if (memoryArgs != null) {
+			for (String arg : memoryArgs) {
+				runtimeVMArgs.add(arg);
+			}
+		}
+
+		runtimeVMArgs.add("-Duser.timezone=" + userTimezone);
 		runtimeVMArgs.add("-Dfile.encoding=UTF8");
-		runtimeVMArgs.add("-Duser.timezone=GMT");
 		runtimeVMArgs.add("-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
 		runtimeVMArgs.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
 		runtimeVMArgs.add("-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"");

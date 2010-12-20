@@ -12,9 +12,12 @@
 package com.liferay.ide.eclipse.server.tomcat.ui.editor;
 
 import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatConstants;
+import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatServer;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
 import com.liferay.ide.eclipse.server.tomcat.ui.command.SetAutoDeployDirectoryCommand;
 import com.liferay.ide.eclipse.server.tomcat.ui.command.SetAutoDeployIntervalCommand;
+import com.liferay.ide.eclipse.server.tomcat.ui.command.SetMemoryArgsCommand;
+import com.liferay.ide.eclipse.server.tomcat.ui.command.SetUserTimezoneCommand;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
 
 import java.beans.PropertyChangeEvent;
@@ -79,6 +82,8 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 //	protected Button serverDirBrowse;
 //	protected Text deployDir;
 //	protected Button deployDirBrowse;
+	protected Text memoryArgs;
+	protected Text userTimezone;
 	protected Text autoDeployDir;
 	protected Button autoDeployDirBrowse;
 	protected boolean updating;
@@ -110,7 +115,9 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 			public void propertyChange(PropertyChangeEvent event) {
 				if (updating)
 					return;
+
 				updating = true;
+
 				if (ITomcatServer.PROPERTY_INSTANCE_DIR.equals(event.getPropertyName())
 						|| ITomcatServer.PROPERTY_TEST_ENVIRONMENT.equals(event.getPropertyName())) {
 					updateServerDirButtons();
@@ -122,15 +129,27 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 //					PortalServerLocationEditorSection.this.deployDir.setText(s);
 //					updateDefaultDeployLink();					
 //					validate();
-				} else if (IPortalTomcatConstants.PROPERTY_AUTO_DEPLOY_DIR.equals(event.getPropertyName())) {
+				}
+				else if (IPortalTomcatServer.PROPERTY_AUTO_DEPLOY_DIR.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
 					PortalServerLocationEditorSection.this.autoDeployDir.setText(s);
 					updateDefaultDeployLink();					
 					validate();
-				} else if (IPortalTomcatConstants.PROPERTY_AUTO_DEPLOY_INTERVAL.equals(event.getPropertyName())) {
+				}
+				else if (IPortalTomcatServer.PROPERTY_AUTO_DEPLOY_INTERVAL.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
 					PortalServerLocationEditorSection.this.autoDeployInterval.setText(s);
 					updateDefaultDeployLink();					
+					validate();
+				}
+				else if (IPortalTomcatServer.PROPERTY_MEMORY_ARGS.equals(event.getPropertyName())) {
+					String s = (String) event.getNewValue();
+					PortalServerLocationEditorSection.this.memoryArgs.setText(s);
+					validate();
+				}
+				else if (IPortalTomcatServer.PROPERTY_USER_TIMEZONE.equals(event.getPropertyName())) {
+					String s = (String) event.getNewValue();
+					PortalServerLocationEditorSection.this.userTimezone.setText(s);
 					validate();
 				}
 				updating = false;
@@ -161,18 +180,18 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 //								PortalServerLocationEditorSection.this.serverDir.setEnabled(allowRestrictedEditing && customServerDir);
 //							if (!PortalServerLocationEditorSection.this.serverDirBrowse.isDisposed())
 //								PortalServerLocationEditorSection.this.serverDirBrowse.setEnabled(allowRestrictedEditing && customServerDir);
-							if (!PortalServerLocationEditorSection.this.setDefaultDeployDir.isDisposed())
-								PortalServerLocationEditorSection.this.setDefaultDeployDir.setEnabled(allowRestrictedEditing);
+							// if (!PortalServerLocationEditorSection.this.setDefaultDeployDir.isDisposed())
+							// PortalServerLocationEditorSection.this.setDefaultDeployDir.setEnabled(allowRestrictedEditing);
 //							if (!PortalServerLocationEditorSection.this.deployDir.isDisposed())
 //								PortalServerLocationEditorSection.this.deployDir.setEnabled(allowRestrictedEditing);
 //							if (!PortalServerLocationEditorSection.this.deployDirBrowse.isDisposed())
 //								PortalServerLocationEditorSection.this.deployDirBrowse.setEnabled(allowRestrictedEditing);
-							if (!PortalServerLocationEditorSection.this.autoDeployDir.isDisposed())
-								PortalServerLocationEditorSection.this.autoDeployDir.setEnabled(allowRestrictedEditing);
-							if (!PortalServerLocationEditorSection.this.autoDeployDirBrowse.isDisposed())
-								PortalServerLocationEditorSection.this.autoDeployDirBrowse.setEnabled(allowRestrictedEditing);
-							if (!PortalServerLocationEditorSection.this.autoDeployInterval.isDisposed())
-								PortalServerLocationEditorSection.this.autoDeployInterval.setEnabled(allowRestrictedEditing);
+							// if (!PortalServerLocationEditorSection.this.autoDeployDir.isDisposed())
+							// PortalServerLocationEditorSection.this.autoDeployDir.setEnabled(allowRestrictedEditing);
+							// if (!PortalServerLocationEditorSection.this.autoDeployDirBrowse.isDisposed())
+							// PortalServerLocationEditorSection.this.autoDeployDirBrowse.setEnabled(allowRestrictedEditing);
+							// if (!PortalServerLocationEditorSection.this.autoDeployInterval.isDisposed())
+							// PortalServerLocationEditorSection.this.autoDeployInterval.setEnabled(allowRestrictedEditing);
 						}
 					});
 				}
@@ -194,7 +213,7 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 			| ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 //		section.setText(Messages.serverEditorLocationsSection);
 //		section.setDescription(Messages.serverEditorLocationsDescription);
-		section.setText("Deployment");
+		section.setText("Liferay settings");
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
 		Composite composite = toolkit.createComposite(section);
@@ -351,8 +370,57 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 //		});
 //		deployDirBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		
+
+		Label label = createLabel(toolkit, composite, "Memory args:");
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		label.setLayoutData(data);
+
+		memoryArgs = toolkit.createText(composite, null);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		memoryArgs.setLayoutData(data);
+		memoryArgs.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				if (updating)
+					return;
+				updating = true;
+				execute(new SetMemoryArgsCommand(tomcatServer, memoryArgs.getText().trim()));
+				updating = false;
+				validate();
+			}
+
+		});
+
+		label = createLabel(toolkit, composite, "");
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		label.setLayoutData(data);
+
+		label = createLabel(toolkit, composite, "User timezone:");
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		label.setLayoutData(data);
+
+		userTimezone = toolkit.createText(composite, null);
+		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		userTimezone.setLayoutData(data);
+		userTimezone.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				if (updating)
+					return;
+				updating = true;
+				execute(new SetUserTimezoneCommand(tomcatServer, userTimezone.getText().trim()));
+				updating = false;
+				validate();
+			}
+
+		});
+
+		label = createLabel(toolkit, composite, "");
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		label.setLayoutData(data);
+
 		// auto deploy directory
-		Label label = createLabel(toolkit, composite, "Auto deploy path:");
+		label = createLabel(toolkit, composite, "Auto deploy path:");
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 		
@@ -418,6 +486,10 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 				updating = true;
 //				execute(new SetDeployDirectoryCommand(tomcatServer, PortalTomcatServer.DEFAULT_DEPLOYDIR));
 //				deployDir.setText(PortalTomcatServer.DEFAULT_DEPLOYDIR);
+				execute(new SetMemoryArgsCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_MEMORY_ARGS));
+				memoryArgs.setText(IPortalTomcatConstants.DEFAULT_MEMORY_ARGS);
+				execute(new SetUserTimezoneCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_USER_TIMEZONE));
+				userTimezone.setText(IPortalTomcatConstants.DEFAULT_USER_TIMEZONE);
 				execute(new SetAutoDeployDirectoryCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOYDIR));
 				autoDeployDir.setText(IPortalTomcatConstants.DEFAULT_AUTO_DEPLOYDIR);
 				execute(new SetAutoDeployIntervalCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL));
@@ -481,7 +553,7 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 		// If not Tomcat 3.2, update description to mention catalina.base
 		if (runtime != null && runtime.getRuntimeType().getId().indexOf("32") < 0)
 //			section.setDescription(Messages.serverEditorLocationsDescription2);
-			section.setDescription("Configure Liferay portal deployment options.");
+			section.setDescription("Configure Liferay portal server settings.");
 		if (runtime != null)
 			installDirPath = runtime.getLocation();
 
@@ -510,15 +582,17 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 		updateDefaultDeployLink();
 		
 //		deployDir.setText(tomcatServer.getDeployDirectory());
+		memoryArgs.setText(tomcatServer.getMemoryArgs());
+		userTimezone.setText(tomcatServer.getUserTimezone());
 		autoDeployDir.setText(tomcatServer.getAutoDeployDirectory());
 		autoDeployInterval.setText(tomcatServer.getAutoDeployInterval());
 
-		setDefaultDeployDir.setEnabled(allowRestrictedEditing);
+		// setDefaultDeployDir.setEnabled(allowRestrictedEditing);
 //		deployDir.setEnabled(allowRestrictedEditing);
 //		deployDirBrowse.setEnabled(allowRestrictedEditing);
-		autoDeployDir.setEnabled(allowRestrictedEditing);
-		autoDeployDirBrowse.setEnabled(allowRestrictedEditing);
-		autoDeployInterval.setEnabled(allowRestrictedEditing);
+		// autoDeployDir.setEnabled(allowRestrictedEditing);
+		// autoDeployDirBrowse.setEnabled(allowRestrictedEditing);
+		// autoDeployInterval.setEnabled(allowRestrictedEditing);
 
 		updating = false;
 		validate();

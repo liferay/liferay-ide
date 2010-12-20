@@ -40,7 +40,8 @@ import org.eclipse.wst.server.core.ServerUtil;
 import org.eclipse.wst.server.core.internal.Server;
 
 @SuppressWarnings("restriction")
-public class PortalTomcatServer extends TomcatServer implements IPortalTomcatConstants, IPortalServer {
+public class PortalTomcatServer extends TomcatServer
+	implements IPortalTomcatConstants, IPortalTomcatServer, IPortalTomcatServerWorkingCopy, IPortalServer {
 	
 	public PortalTomcatServer() {
 		super();
@@ -111,11 +112,11 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 	}
 
 	public String getAutoDeployDirectory() {
-		return getAttribute(IPortalTomcatConstants.PROPERTY_AUTO_DEPLOY_DIR, "../deploy");
+		return getAttribute(PROPERTY_AUTO_DEPLOY_DIR, "../deploy");
 	}
 	
 	public void setAutoDeployDirectory(String dir) {
-		setAttribute(IPortalTomcatConstants.PROPERTY_AUTO_DEPLOY_DIR, dir);
+		setAttribute(PROPERTY_AUTO_DEPLOY_DIR, dir);
 	}
 
 	public IPortalTomcatConfiguration getPortalTomcatConfiguration() throws CoreException {
@@ -123,11 +124,11 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 	}
 
 	public String getAutoDeployInterval() {
-		return getAttribute(IPortalTomcatConstants.PROPERTY_AUTO_DEPLOY_INTERVAL, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL);
+		return getAttribute(PROPERTY_AUTO_DEPLOY_INTERVAL, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL);
 	}
 	
 	public void setAutoDeployInterval(String interval) {
-		setAttribute(IPortalTomcatConstants.PROPERTY_AUTO_DEPLOY_INTERVAL, interval);
+		setAttribute(PROPERTY_AUTO_DEPLOY_INTERVAL, interval);
 	}
 
 	@Override
@@ -226,6 +227,22 @@ public class PortalTomcatServer extends TomcatServer implements IPortalTomcatCon
 
 		super.modifyModules(add, remove, monitor);
 
+	}
+
+	public void setMemoryArgs(String memoryArgs) {
+		setAttribute(PROPERTY_MEMORY_ARGS, memoryArgs);
+	}
+
+	public void setUserTimezone(String userTimezone) {
+		setAttribute(PROPERTY_USER_TIMEZONE, userTimezone);
+	}
+
+	public String getMemoryArgs() {
+		return getAttribute(PROPERTY_MEMORY_ARGS, IPortalTomcatConstants.DEFAULT_MEMORY_ARGS);
+	}
+
+	public String getUserTimezone() {
+		return getAttribute(PROPERTY_USER_TIMEZONE, IPortalTomcatConstants.DEFAULT_USER_TIMEZONE);
 	}
 
 }

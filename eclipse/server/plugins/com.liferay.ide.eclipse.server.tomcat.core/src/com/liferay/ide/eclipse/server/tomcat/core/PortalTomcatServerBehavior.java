@@ -11,6 +11,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPluginPublisher;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
@@ -19,6 +20,8 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -29,6 +32,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatVersionHandler;
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
@@ -336,6 +342,36 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 	
 	public IPortalTomcatConfiguration getPortalTomcatConfiguration() throws CoreException {
 		return getPortalTomcatServer().getPortalTomcatConfiguration();
+	}
+
+	@Override
+	public void setupLaunchConfiguration(ILaunchConfigurationWorkingCopy workingCopy, IProgressMonitor monitor)
+		throws CoreException {
+
+		super.setupLaunchConfiguration(workingCopy, monitor);
+
+		String existingVMArgs =
+			workingCopy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null);
+
+		if (null != existingVMArgs) {
+			String[] parsedVMArgs = DebugPlugin.parseArguments(existingVMArgs);
+
+			List<String> memoryArgs = new ArrayList<String>();
+
+			if (!CoreUtil.isNullOrEmpty(parsedVMArgs)) {
+				for (String pArg : parsedVMArgs) {
+					if (pArg.startsWith("-Xm") || pArg.startsWith("-XX:")) {
+						memoryArgs.add(pArg);
+					}
+				}
+			}
+
+			String argsWithoutMem =
+				mergeArguments(existingVMArgs, getRuntimeVMArguments(), memoryArgs.toArray(new String[0]), false);
+			String fixedArgs = mergeArguments(argsWithoutMem, getRuntimeVMArguments(), null, false);
+
+			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, fixedArgs);
+		}
 	}
 
 }

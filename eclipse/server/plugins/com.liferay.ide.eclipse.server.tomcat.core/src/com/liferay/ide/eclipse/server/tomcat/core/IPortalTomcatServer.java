@@ -15,27 +15,32 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 
 /**
  * @author Greg Amerson
  */
-public interface IPortalTomcatConstants {
+@SuppressWarnings("restriction")
+public interface IPortalTomcatServer extends ITomcatServer {
 
-	IEclipsePreferences _defaultPrefs = new DefaultScope().getNode(PortalTomcatPlugin.PLUGIN_ID);
+	/**
+	 * Property which specifies the directory where liferay scans for
+	 * autodeployment
+	 */
+	String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
 
-	String DEFAULT_AUTO_DEPLOY_INTERVAL = "500";
+	String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
 
-	String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
+	String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
-	String DEFAULT_DEPLOYDIR = "webapps";
+	String PROPERTY_USER_TIMEZONE = "userTimezone";
 
-	String DEFAULT_MEMORY_ARGS = _defaultPrefs.get("default.memory.args", "");
+	String getAutoDeployDirectory();
 
-	String DEFAULT_USER_TIMEZONE = _defaultPrefs.get("default.user.timezone", "GMT");
+	String getAutoDeployInterval();
 
-	String[] LIB_EXCLUDES = _defaultPrefs.get("tomcat.lib.excludes", "").split(",");
+	String getMemoryArgs();
 
-	boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean("prevent.multi.ext.plugins.deploy", false);
+	String getUserTimezone();
+
 }

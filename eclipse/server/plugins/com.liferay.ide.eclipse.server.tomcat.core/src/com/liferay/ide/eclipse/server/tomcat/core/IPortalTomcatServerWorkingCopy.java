@@ -12,30 +12,18 @@
  * details.
  *
  *******************************************************************************/
-
 package com.liferay.ide.eclipse.server.tomcat.core;
 
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.jst.server.tomcat.core.internal.ITomcatServerWorkingCopy;
 
 /**
  * @author Greg Amerson
  */
-public interface IPortalTomcatConstants {
+@SuppressWarnings("restriction")
+public interface IPortalTomcatServerWorkingCopy extends ITomcatServerWorkingCopy {
 
-	IEclipsePreferences _defaultPrefs = new DefaultScope().getNode(PortalTomcatPlugin.PLUGIN_ID);
+	void setMemoryArgs(String memoryArgs);
 
-	String DEFAULT_AUTO_DEPLOY_INTERVAL = "500";
+	void setUserTimezone(String userTimezone);
 
-	String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
-
-	String DEFAULT_DEPLOYDIR = "webapps";
-
-	String DEFAULT_MEMORY_ARGS = _defaultPrefs.get("default.memory.args", "");
-
-	String DEFAULT_USER_TIMEZONE = _defaultPrefs.get("default.user.timezone", "GMT");
-
-	String[] LIB_EXCLUDES = _defaultPrefs.get("tomcat.lib.excludes", "").split(",");
-
-	boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean("prevent.multi.ext.plugins.deploy", false);
 }
