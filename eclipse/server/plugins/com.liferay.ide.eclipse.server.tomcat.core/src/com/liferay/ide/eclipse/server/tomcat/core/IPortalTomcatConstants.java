@@ -31,7 +31,7 @@ public interface IPortalTomcatConstants {
 
 	String DEFAULT_DEPLOYDIR = "webapps";
 
-	String DEFAULT_MEMORY_ARGS = _defaultPrefs.get("default.memory.args", "");
+	String DEFAULT_MEMORY_ARGS = _defaultPrefs.get("default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m");
 
 	String DEFAULT_USER_TIMEZONE = _defaultPrefs.get("default.user.timezone", "GMT");
 
