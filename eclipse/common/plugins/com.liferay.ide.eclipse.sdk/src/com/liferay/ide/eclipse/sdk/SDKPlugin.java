@@ -16,7 +16,9 @@
 package com.liferay.ide.eclipse.sdk;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
+import com.liferay.ide.eclipse.core.util.FileUtil;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,6 +104,14 @@ public class SDKPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context)
 		throws Exception {
+
+		// delete tmp folder
+		File createDir = getDefault().getStateLocation().append("create").toFile();
+
+		if (createDir.exists()) {
+			FileUtil.deleteDir(createDir, true);
+		}
+
 		plugin = null;
 		super.stop(context);
 	}
