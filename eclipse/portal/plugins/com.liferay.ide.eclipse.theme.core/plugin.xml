@@ -64,6 +64,9 @@
          <fixed
                facet="jst.web">
          </fixed>
+         <fixed
+               facet="jst.java">
+         </fixed>
          <fixed 
                facet="liferay.theme">
          </fixed>

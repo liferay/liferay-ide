@@ -28,6 +28,10 @@
                      facet="jst.web"
                      version="[2.4">
                </requires>
+               <requires
+                     facet="jst.java"
+                     version="[1.5">
+               </requires>
             </and>
             <!--
             <conflicts facet="liferay.hook"/>
