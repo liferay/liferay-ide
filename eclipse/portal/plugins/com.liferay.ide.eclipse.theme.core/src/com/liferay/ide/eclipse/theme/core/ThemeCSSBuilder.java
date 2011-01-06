@@ -42,7 +42,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.wst.server.core.IRuntime;
 
 @SuppressWarnings("rawtypes")
 public class ThemeCSSBuilder extends IncrementalProjectBuilder {
@@ -161,12 +160,17 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 		if (sdk == null) {
 			throw new CoreException(
-				ThemeCore.createErrorStatus("No SDK for project configured. Could not deploy theme module"));
+				ThemeCore.createErrorStatus("No SDK for project configured. Could not build theme."));
 		}
 
-		IRuntime runtime = ServerUtil.getRuntime(project);
+		IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
 
-		String appServerDir = runtime.getLocation().toOSString();
+		if (portalRuntime == null) {
+			throw new CoreException(
+				ThemeCore.createErrorStatus("Could not get portal runtime for project.  Could not build theme."));
+		}
+
+		String appServerDir = portalRuntime.getRuntimeLocation().toOSString();
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("app.server.type", "tomcat");
 		properties.put("app.server.dir", appServerDir);
@@ -202,7 +206,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				}
 			}
 
-			IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(runtime);
 			if (portalRuntime != null) {
 				ThemeDescriptorHelper.createDefaultFile(lookAndFeelFile, portalRuntime.getPortalVersion() + "+", id, name);
 			}

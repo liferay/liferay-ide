@@ -38,6 +38,8 @@ public interface IPortalRuntime extends IJavaRuntime {
 
 	public IRuntime getRuntime();
 
+	public IPath getRuntimeLocation();
+
 	public String[] getSupportedHookProperties();
 
 }

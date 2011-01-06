@@ -84,7 +84,7 @@ public class BuildServiceJob extends SDKJob {
 		String appServerDir = null;
 
 		try {
-			appServerDir = ServerUtil.getRuntime(getProject()).getLocation().toOSString();
+			appServerDir = ServerUtil.getPortalRuntime(getProject()).getRuntimeLocation().toOSString();
 		}
 		catch (CoreException e) {
 			return PortletCore.createErrorStatus(e);

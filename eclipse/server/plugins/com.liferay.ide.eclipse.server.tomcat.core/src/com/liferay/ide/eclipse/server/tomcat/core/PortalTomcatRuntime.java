@@ -52,9 +52,9 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 	public static final String RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
 
-	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
-
 	private IStatus runtimeDelegateStatus;
+
+	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
 
 	public PortalTomcatRuntime() {
 		releaseHelpers = new HashMap<IPath, ReleaseHelper>();
@@ -134,6 +134,10 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 	public IPath getRoot() {
 		return PortalTomcatUtil.getPortalRoot(getRuntime().getLocation());
+	}
+
+	public IPath getRuntimeLocation() {
+		return getRuntime().getLocation();
 	}
 
 	public String getServerInfo()
