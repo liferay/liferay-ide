@@ -23,13 +23,13 @@ import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
  */
 public class ScriptingCore extends Plugin {
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.scripting"; //$NON-NLS-1$
 
 	private static GroovyScriptingSupport groovyScriptingSupport;

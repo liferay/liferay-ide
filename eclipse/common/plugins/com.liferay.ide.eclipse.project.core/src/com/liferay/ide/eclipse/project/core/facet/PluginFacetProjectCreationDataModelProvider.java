@@ -305,13 +305,13 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			Object sdkVal = getModel().getProperty(LIFERAY_SDK_NAME);
 
 			if (sdkVal instanceof String && IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals(sdkVal)) {
-				return ProjectCorePlugin.createErrorStatus("Liferay SDK must be configured.");
+				return ProjectCorePlugin.createErrorStatus("Plugin SDK must be configured.");
 			}
 			else if (!CoreUtil.isNullOrEmpty(sdkVal.toString())) {
 				SDK sdk = SDKManager.getInstance().getSDK(sdkVal.toString());
 
 				if (sdk == null || !sdk.isValid()) {
-					return ProjectCorePlugin.createErrorStatus("Liferay SDK is invalid.");
+					return ProjectCorePlugin.createErrorStatus("Plugin SDK is invalid.");
 				}
 				else {
 					return Status.OK_STATUS;

@@ -99,7 +99,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		}
 
 		// IDE-195
-		// If the user has the plug-ins sdk in the workspace, trying to write to the P/foo-portlet/.settings/ will find
+		// If the user has the plugins sdk in the workspace, trying to write to the P/foo-portlet/.settings/ will find
 		// the file first in the the plugins-sdk that is in the workspace and will fail to find the file.
 		// lets do a research
 

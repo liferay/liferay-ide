@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="pluginPublishers" name="Liferay Plug-in Publishers" schema="schema/pluginPublishers.exsd"/>
+   <extension-point id="pluginPublishers" name="Liferay Plugin Publishers" schema="schema/pluginPublishers.exsd"/>
    <extension-point id="runtimeDelegateValidators" name="Liferay Runtime Delegate Validators" schema="schema/runtimeDelegateValidators.exsd"/>
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">

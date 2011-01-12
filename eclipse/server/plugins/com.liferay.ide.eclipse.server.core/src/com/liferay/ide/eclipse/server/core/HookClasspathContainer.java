@@ -36,7 +36,7 @@ public class HookClasspathContainer extends PluginClasspathContainer {
 	}
 
 	public String getDescription() {
-		return "Liferay Hook Plug-in API";
+		return "Liferay Hook Plugin API";
 	}
 
 	@Override

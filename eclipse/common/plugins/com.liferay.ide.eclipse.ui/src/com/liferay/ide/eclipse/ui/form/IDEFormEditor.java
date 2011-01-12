@@ -476,7 +476,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 //			setPropertyEditorPageKey((IFileEditorInput) input, pageId);
 		} else if (input instanceof IStorageEditorInput) {
 			// Triggered by opening a file NOT in the workspace
-			// e.g. From the Plug-in View
+			// e.g. From the Plugin View
 //			setDialogEditorPageKey(pageId);
 		}
 	}
@@ -539,7 +539,7 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 //			return getPropertyEditorPageKey((IFileEditorInput) input);
 //		} else if (input instanceof IStorageEditorInput) {
 //			// Triggered by opening a file NOT in the workspace
-//			// e.g. From the Plug-in View
+	// // e.g. From the Plugin View
 //			return getDialogEditorPageKey();
 //		}
 //		return null;

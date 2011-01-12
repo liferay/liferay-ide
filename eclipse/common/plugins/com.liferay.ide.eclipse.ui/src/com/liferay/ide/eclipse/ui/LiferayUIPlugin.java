@@ -49,7 +49,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
  */
@@ -60,7 +60,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 	public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL";
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.ui";
 
 	// The shared instance

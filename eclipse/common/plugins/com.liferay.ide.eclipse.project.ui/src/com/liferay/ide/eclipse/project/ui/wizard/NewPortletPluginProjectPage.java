@@ -63,7 +63,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 		setWizard(wizard);
 		setImageDescriptor(wizard.getDefaultPageImageDescriptor());
-		setTitle("Liferay Portlet Plug-in Project");
+		setTitle("Liferay Portlet Plugin Project");
 		setDescription("Choose from available portlet frameworks depending on which technology is most appropriate for this project.");
 	}
 

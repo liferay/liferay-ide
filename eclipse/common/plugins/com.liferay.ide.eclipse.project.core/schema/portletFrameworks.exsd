@@ -59,7 +59,7 @@
          <attribute name="shortName" type="string" use="required">
             <annotation>
                <documentation>
-                  This field should be identical to the flag that is passed into the plug-ins SDK for the value of the portlet.framework.
+                  This field should be identical to the flag that is passed into the plugins SDK for the value of the portlet.framework.
                </documentation>
             </annotation>
          </attribute>

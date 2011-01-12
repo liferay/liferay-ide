@@ -24,13 +24,13 @@ import org.eclipse.ui.IStartup;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
  */
 public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.server.tomcat.core";
 
 	// The shared instance

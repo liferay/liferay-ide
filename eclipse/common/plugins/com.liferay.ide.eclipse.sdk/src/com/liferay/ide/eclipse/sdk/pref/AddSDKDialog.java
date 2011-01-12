@@ -121,7 +121,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 
-		shell.setText((sdkToEdit == null ? "New" : "Edit") + " Liferay SDK");
+		shell.setText((sdkToEdit == null ? "New" : "Edit") + " Liferay Plugin SDK");
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle((sdkToEdit == null ? "Add" : "Edit") + " Liferay SDK");
+		setTitle((sdkToEdit == null ? "Add" : "Edit") + " Liferay Plugin SDK");
 
 		setMessage(getDefaultMessage());
 
@@ -186,7 +186,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 	protected void doBrowse() {
 		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
-		dd.setText("Select Liferay SDK folder");
+		dd.setText("Select Liferay Plugin SDK folder");
 
 		if (CoreUtil.isNullOrEmpty(location.getText())) {
 			dd.setFilterPath(location.getText());
@@ -208,7 +208,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 	}
 
 	protected String getDefaultMessage() {
-		return "Configure a Liferay SDK location.";
+		return "Configure a Liferay Plugin SDK location.";
 	}
 
 	protected void updateRuntimeItems() {
@@ -256,7 +256,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		}
 
 		if (!SDKUtil.isValidSDKLocation(lastLocation)) {
-			return CoreUtil.createErrorStatus("Location must be a valid Liferay SDK.");
+			return CoreUtil.createErrorStatus("Location must be a valid Liferay Plugin SDK.");
 		}
 
 		if (!SDKUtil.isSDKSupported(lastLocation)) {

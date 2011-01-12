@@ -53,7 +53,7 @@ public class LiferaySDKField {
 		this.selectionAdapter = selectionAdapter;
 		this.synchHelper = synchHelper;
 
-		SWTUtil.createLabel(parent, "Liferay Plug-ins SDK", 1);
+		SWTUtil.createLabel(parent, "Liferay Plugins SDK", 1);
 
 		Combo sdkCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));

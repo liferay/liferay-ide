@@ -36,7 +36,7 @@ public class ExtClasspathContainer extends PluginClasspathContainer {
 	}
 
 	public String getDescription() {
-		return "Liferay Ext Plug-in API";
+		return "Liferay Ext Plugin API";
 	}
 
 	@Override

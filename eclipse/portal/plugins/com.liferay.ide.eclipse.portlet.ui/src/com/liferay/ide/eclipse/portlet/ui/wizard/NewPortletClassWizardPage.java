@@ -237,7 +237,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected void createProjectNameGroup(Composite parent) {
 		// set up project name label
 		projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Portlet plug-in project:"); //$NON-NLS-1$
+		projectNameLabel.setText("Portlet plugin project:"); //$NON-NLS-1$
 
 		projectNameLabel.setLayoutData(new GridData());
 

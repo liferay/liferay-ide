@@ -234,7 +234,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 		data.colspan = 2;
 
 		section.setText("General");
-		section.setDescription("Specify plug-in package properties.");
+		section.setDescription("Specify plugin package properties.");
 		section.setLayout(FormLayoutFactory.createClearTableWrapLayout(false, 1));
 		section.setLayoutData(data);
 

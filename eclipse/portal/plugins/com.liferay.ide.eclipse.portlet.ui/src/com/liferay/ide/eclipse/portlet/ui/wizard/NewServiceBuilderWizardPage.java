@@ -139,7 +139,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 	protected void createProjectNameServiceFileGroup(Composite parent) {
 		// set up project name label
 		projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Plug-in project:"); //$NON-NLS-1$
+		projectNameLabel.setText("Plugin project:"); //$NON-NLS-1$
 		projectNameLabel.setLayoutData(new GridData());
 
 		// set up project name entry field

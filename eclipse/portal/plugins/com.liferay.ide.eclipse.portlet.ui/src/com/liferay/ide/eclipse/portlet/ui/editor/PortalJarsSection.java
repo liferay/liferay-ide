@@ -10,6 +10,18 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.portlet.ui.editor;
 
+import com.liferay.ide.eclipse.core.model.IBaseModel;
+import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
+import com.liferay.ide.eclipse.core.model.IModelChangedListener;
+import com.liferay.ide.eclipse.portlet.core.IPluginPackageModel;
+import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
+import com.liferay.ide.eclipse.portlet.ui.action.SortAction;
+import com.liferay.ide.eclipse.ui.form.DefaultContentProvider;
+import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
+import com.liferay.ide.eclipse.ui.form.TablePart;
+import com.liferay.ide.eclipse.ui.form.TableSection;
+import com.liferay.ide.eclipse.ui.wizard.ExternalFileSelectionDialog;
+
 import java.io.File;
 import java.util.Iterator;
 import java.util.Vector;
@@ -43,18 +55,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-
-import com.liferay.ide.eclipse.core.model.IBaseModel;
-import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
-import com.liferay.ide.eclipse.core.model.IModelChangedListener;
-import com.liferay.ide.eclipse.portlet.core.IPluginPackageModel;
-import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
-import com.liferay.ide.eclipse.portlet.ui.action.SortAction;
-import com.liferay.ide.eclipse.ui.form.DefaultContentProvider;
-import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
-import com.liferay.ide.eclipse.ui.form.TablePart;
-import com.liferay.ide.eclipse.ui.form.TableSection;
-import com.liferay.ide.eclipse.ui.wizard.ExternalFileSelectionDialog;
 
 public class PortalJarsSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
 
@@ -110,7 +110,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	public PortalJarsSection(DependenciesFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
 		getSection().setText("Portal Dependency Jars");
-		getSection().setDescription("Specify which jars the plug-in package requires.");
+		getSection().setDescription("Specify which jars the plugin package requires.");
 		getSection().getTextClient().getParent().layout(true);
 		getTablePart().setEditable(true);
 	}
@@ -433,7 +433,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 //					fImportViewer.refresh();
 //					// Get the last import added to the viewer
 //					IPluginImport lastImport = (IPluginImport) changedObjects[changedObjects.length - 1];
-//					// Find the corresponding bundle object for the plug-in import
+		// // Find the corresponding bundle object for the plugin import
 //					ImportObject lastImportObject = findImportObject(lastImport);
 //					if (lastImportObject != null) {
 //						fImportViewer.setSelection(new StructuredSelection(lastImportObject));

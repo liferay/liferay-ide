@@ -34,7 +34,7 @@ public class PluginPackageFormPage extends IDEFormPage {
 	protected FormToolkit toolkit;
 
 	public PluginPackageFormPage(PluginPackageEditor editor) {
-		super(editor, "pluginPackage", "Plug-in Package");
+		super(editor, "pluginPackage", "Plugin Package");
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class PluginPackageFormPage extends IDEFormPage {
 		FormToolkit toolkit = managedForm.getToolkit();
 		toolkit.decorateFormHeading(form.getForm());
 
-		form.setText("Plug-in Package Properties");
+		form.setText("Plugin Package Properties");
 		form.setImage(PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage());
 
 		toolkit = managedForm.getToolkit();

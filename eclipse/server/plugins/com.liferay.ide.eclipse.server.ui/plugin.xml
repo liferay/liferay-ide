@@ -146,7 +146,7 @@
       <classpathContainerPage
             class="com.liferay.ide.eclipse.server.ui.PortletPluginClasspathConatinerPage"
             id="com.liferay.ide.eclipse.server.portlet.library.container"
-            name="Liferay Portlet Plug-in API">
+            name="Liferay Portlet Plugin API">
       </classpathContainerPage>
    </extension>
 	-->

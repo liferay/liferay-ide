@@ -49,10 +49,10 @@ public class PortletPluginFacetInstallPage extends DataModelWizardPage
 		setImageDescriptor(ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
 			"/icons/wizban/plugin_project.png")));
 		
-		setTitle("Modify Liferay Plug-in Project");
+		setTitle("Modify Liferay Plugin Project");
 		
 		setMessage(
-			"Manually converting projects to Liferay plug-ins is currently not available.", IMessageProvider.WARNING);
+			"Manually converting projects to Liferay plugins is currently not available.", IMessageProvider.WARNING);
 	}
 
 	public void setConfig(Object config) {

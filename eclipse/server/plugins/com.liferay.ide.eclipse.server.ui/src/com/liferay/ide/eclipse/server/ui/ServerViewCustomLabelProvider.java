@@ -63,7 +63,7 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element instanceof PluginsContent) {
-			return "Liferay Plug-ins";
+			return "Liferay Plugins";
 		}
 		else {
 			return null;

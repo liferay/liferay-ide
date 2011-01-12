@@ -106,7 +106,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 	}
 
 	protected void createSDKVersionField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay SDK version:", 1);
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay Plugin SDK version:", 1);
 
 		sdkVersion = SWTUtil.createText(topComposite, 1);
 		this.synchHelper.synchText(sdkVersion, SDK_VERSION, null);
@@ -115,7 +115,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 	}
 
 	protected void createPluginTypeField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay plug-in type:", 1);
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay plugin type:", 1);
 
 		pluginType = SWTUtil.createText(topComposite, 1);
 		this.synchHelper.synchText(pluginType, PLUGIN_TYPE, null);

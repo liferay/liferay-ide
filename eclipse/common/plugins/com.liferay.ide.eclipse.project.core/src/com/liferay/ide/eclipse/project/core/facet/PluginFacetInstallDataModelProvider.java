@@ -96,13 +96,13 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
 			
 			if (CoreUtil.isNullOrEmpty(sdkName)) {
-				return ProjectCorePlugin.createErrorStatus("No Liferay SDK configured.");
+				return ProjectCorePlugin.createErrorStatus("No Plugin SDK configured.");
 			}
 			
 			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
 			
 			if (sdk == null) {
-				return ProjectCorePlugin.createErrorStatus("Liferay SDK (" + sdkName + ") is not defined.");
+				return ProjectCorePlugin.createErrorStatus("Plugin SDK (" + sdkName + ") is not defined.");
 			}
 			
 			return Status.OK_STATUS;

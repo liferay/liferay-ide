@@ -10,7 +10,7 @@
             Liferay Theme
          </label>
          <description>
-            Theme plug-in for Liferay portal.  Version cooresponds to Portal version.
+            Theme plugin for Liferay portal.  Version cooresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -59,7 +59,7 @@
       <template
             id="liferay.theme.template">
          <label>
-            Liferay Theme Plug-in Project
+            Liferay Theme Plugin Project
          </label>
          <fixed
                facet="jst.web">
@@ -80,10 +80,10 @@
       <static-preset
             id="liferay.theme.preset">
          <label>
-            Liferay theme plug-in 6.0 preset
+            Liferay theme plugin 6.0 preset
          </label>
          <description>
-            Preset for Liferay 6.0 theme plug-in
+            Preset for Liferay 6.0 theme plugin
          </description>
          <!--
          <facet

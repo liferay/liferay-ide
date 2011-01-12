@@ -111,7 +111,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		super(model, pageName);
 
 		setTitle("Import Liferay Projects");
-		setDescription("Select a Liferay SDK and import existing projects.");
+		setDescription("Select a Liferay Plugin SDK and import existing projects.");
 	}
 
 	public ProjectRecord[] getProjectRecords() {
@@ -365,7 +365,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	}
 
 	protected void createSDKLocationField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay SDK Location:", 1);
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay Plugin SDK Location:", 1);
 
 		sdkLocation = SWTUtil.createText(topComposite, 1);
 		((GridData) sdkLocation.getLayoutData()).widthHint = 300;
@@ -386,7 +386,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	}
 
 	protected void createSDKVersionField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay SDK Version:", 1);
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay Plugin SDK Version:", 1);
 
 		sdkVersion = SWTUtil.createText(topComposite, 1);
 		this.synchHelper.synchText(sdkVersion, SDK_VERSION, null);
@@ -584,7 +584,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	protected void handleFileBrowseButton(final Text text) {
 		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
 
-		dd.setText("Select Liferay SDK folder");
+		dd.setText("Select Liferay Plugin SDK folder");
 
 		if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
 			dd.setFilterPath(sdkLocation.getText());

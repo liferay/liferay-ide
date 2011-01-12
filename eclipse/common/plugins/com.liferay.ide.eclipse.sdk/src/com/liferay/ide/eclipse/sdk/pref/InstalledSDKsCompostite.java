@@ -307,7 +307,7 @@ public class InstalledSDKsCompostite extends Composite {
 	}
 
 	protected void createControl(Composite parent) {
-		SWTUtil.createLabel(parent, "Installed Liferay SDKs:", 2);
+		SWTUtil.createLabel(parent, "Installed Liferay Plugin SDKs:", 2);
 
 		this.table = new Table(parent, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
 
@@ -397,8 +397,8 @@ public class InstalledSDKsCompostite extends Composite {
 			public void handleEvent(Event event) {
 				boolean confirm =
 					MessageDialog.openConfirm(
-						InstalledSDKsCompostite.this.getShell(), "Installed SDKs",
-						"Download and install the latest Liferay Plug-ins SDK?");
+						InstalledSDKsCompostite.this.getShell(), "Install Plugin SDK",
+						"Download and install the latest Liferay Plugins SDK?");
 
 				if (!confirm) {
 					return;

@@ -173,7 +173,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 				return Status.OK_STATUS;
 			}
 			else {
-				return ProjectCorePlugin.createErrorStatus("Invalid Liferay SDK location.");
+				return ProjectCorePlugin.createErrorStatus("Invalid Plugin SDK location.");
 			}
 		}
 		else if (SDK_VERSION.equals(name)) {
@@ -183,7 +183,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 				return Status.OK_STATUS;
 			}
 			else {
-				return ProjectCorePlugin.createErrorStatus("Invalid Liferay SDK version, must be greater than " +
+				return ProjectCorePlugin.createErrorStatus("Invalid Plugin SDK version, must be greater than " +
 					SDKManager.getLeastValidVersion());
 			}
 		}

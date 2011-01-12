@@ -74,8 +74,8 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		super(model, pageName);
 
 		this.setImageDescriptor(wizard.getDefaultPageImageDescriptor());
-		this.setTitle("Liferay Plug-in Project");
-		this.setDescription("Create a new plug-in project for Liferay Portal.");
+		this.setTitle("Liferay Plugin Project");
+		this.setDescription("Create a new plugin project for Liferay Portal.");
 
 		primaryProjectFacet = IPluginFacetConstants.LIFERAY_PORTLET_FACET;
 
@@ -171,7 +171,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 
 		new LiferaySDKField(group, getModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper);
 
-		// SWTUtil.createLabel(group, "Liferay Plug-ins SDK", 1);
+		// SWTUtil.createLabel(group, "Liferay Plugins SDK", 1);
 		//
 		// Combo sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
 		// sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -248,7 +248,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 	}
 
 	protected void createPluginTypeGroup(Composite parent) {
-		Group group = SWTUtil.createGroup(parent, "Plug-in Type", 2);
+		Group group = SWTUtil.createGroup(parent, "Plugin Type", 2);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
 		portletType =
@@ -268,7 +268,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		extType =
 			SWTUtil.createRadioButton(
 				group, "Ext", getPluginImageDescriptor("/icons/e16/ext.png").createImage(), false, 1);
-		l = SWTUtil.createLabel(group, SWT.WRAP, "Light-weight extension environment for Liferay as a plug-in.", 1);
+		l = SWTUtil.createLabel(group, SWT.WRAP, "Light-weight extension environment for Liferay as a plugin.", 1);
 		l.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		this.synchHelper.synchCheckbox(extType, PLUGIN_TYPE_EXT, null);
 
@@ -296,7 +296,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 	}
 
 	protected void createSDKGroup(Composite parent) {
-		Group group = createDefaultGroup(parent, "Liferay SDK", 2);
+		Group group = createDefaultGroup(parent, "Liferay Plugin SDK", 2);
 		((GridData) group.getLayoutData()).grabExcessVerticalSpace = false;
 
 		// Composite labelContainer = new Composite(group, SWT.NONE);

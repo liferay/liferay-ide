@@ -27,13 +27,13 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
  */
 public class JSFUIPlugin extends AbstractUIPlugin {
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.jsf"; //$NON-NLS-1$
 
 	// The shared instance

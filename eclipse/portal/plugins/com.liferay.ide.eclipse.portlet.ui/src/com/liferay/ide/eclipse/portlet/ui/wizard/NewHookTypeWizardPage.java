@@ -71,7 +71,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 		super(model, pageName, "Create Liferay Hook", PortletUIPlugin.imageDescriptorFromPlugin(
 			PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
 
-		setDescription("Define a new hook plug-in.");
+		setDescription("Define a new hook plugin.");
 	}
 
 	protected void createHookTypesGroup(Composite parent) {
@@ -97,7 +97,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	protected void createProjectNameGroup(Composite parent) {
 		// set up project name label
 		projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Hook plug-in project:"); //$NON-NLS-1$
+		projectNameLabel.setText("Hook plugin project:"); //$NON-NLS-1$
 
 		projectNameLabel.setLayoutData(new GridData());
 

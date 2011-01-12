@@ -23,7 +23,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
  */
@@ -32,7 +32,7 @@ public class JSFCorePlugin extends Plugin {
 	public static final IProjectFacet JSF_FACET =
 		ProjectFacetsManager.getProjectFacet(IJSFCoreConstants.JSF_CORE_FACET_ID);
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.portlet.jsf.core"; //$NON-NLS-1$
 
 	// The shared instance

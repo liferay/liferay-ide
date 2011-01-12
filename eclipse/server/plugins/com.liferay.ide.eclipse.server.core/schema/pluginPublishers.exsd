@@ -3,7 +3,7 @@
 <schema targetNamespace="com.liferay.ide.eclipse.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.eclipse.server.core" id="pluginPublisher" name="Liferay Plug-in Publisher"/>
+         <meta.schema plugin="com.liferay.ide.eclipse.server.core" id="pluginPublisher" name="Liferay Plugin Publisher"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

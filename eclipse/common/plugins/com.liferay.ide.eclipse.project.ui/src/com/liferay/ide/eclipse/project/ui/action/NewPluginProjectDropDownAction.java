@@ -111,7 +111,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 							wizardAction.setImageDescriptor(ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
 								"/icons/n16/" + projectDef.getShortName() + "_new.png")));
 							wizardAction.setText(wizardAction.getText().replaceAll(
-								"Liferay Plug-in", projectDef.getDisplayName() + " Plug-in"));
+								"Liferay Plugin", projectDef.getDisplayName() + " Plugin"));
 						}
 
 						containers.add(wizardAction);

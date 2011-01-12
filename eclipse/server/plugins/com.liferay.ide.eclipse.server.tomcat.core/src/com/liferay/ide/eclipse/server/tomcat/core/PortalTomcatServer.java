@@ -202,7 +202,7 @@ public class PortalTomcatServer extends TomcatServer
 			if (existingSetting != Server.AUTO_PUBLISH_DISABLE) {
 				UIUtil.postInfo(
 					"Liferay Tomcat Server",
-					"Automatic publishing will be disabled now that an EXT plug-in is being added.  Any changes to the server module resources will have to be published manually using the Publish action.");
+					"Automatic publishing will be disabled now that an EXT plugin is being added.  Any changes to the server module resources will have to be published manually using the Publish action.");
 			}
 
 			IServerWorkingCopy wc = getServer().createWorkingCopy();
@@ -217,7 +217,7 @@ public class PortalTomcatServer extends TomcatServer
 			if (lastSetting != Server.AUTO_PUBLISH_DISABLE) {
 				UIUtil.postInfo(
 					"Liferay Tomcat Server",
-					"Removing the EXT Plug-in from the server only changes eclipse metadata.  The undeploy process does not reverse changes made to the portal files made by the initial deployment.  Also, automatic publishing will be re-enabled now that the EXT plug-in is being removed.  Any changes to server module resources will not be published automatically according to server settings.");
+					"Removing the EXT Plugin from the server only changes eclipse metadata.  The undeploy process does not reverse changes made to the portal files made by the initial deployment.  Also, automatic publishing will be re-enabled now that the EXT plugin is being removed.  Any changes to server module resources will not be published automatically according to server settings.");
 			}
 
 			IServerWorkingCopy wc = getServer().createWorkingCopy();

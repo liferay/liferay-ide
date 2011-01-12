@@ -51,7 +51,7 @@
             name="Liferay v6.0 CE Server (Tomcat 6)"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
-            startTimeout="300000"
+            startTimeout="900000"
             stopTimeout="300000"
             supportsRemoteHosts="false">
       </serverType>

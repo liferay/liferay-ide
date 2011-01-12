@@ -175,7 +175,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 	}
 
 	protected void createSDKGroup(Composite parent) {
-		Group group = createDefaultGroup(parent, "Liferay SDK", 2);
+		Group group = createDefaultGroup(parent, "Liferay Plugin SDK", 2);
 
 		((GridData) group.getLayoutData()).grabExcessVerticalSpace = false;
 

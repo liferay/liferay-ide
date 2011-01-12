@@ -65,7 +65,7 @@ public class SDKsPreferencePage extends LiferayUIPreferencePage implements IWork
 			return true;
 		}
 		else {
-			setMessage("Must have at least SDK checked as default", IMessageProvider.ERROR);
+			setMessage("Must have at least one SDK checked as default", IMessageProvider.ERROR);
 
 			return false;
 		}
@@ -83,7 +83,7 @@ public class SDKsPreferencePage extends LiferayUIPreferencePage implements IWork
 
 		SWTUtil.createWrapLabel(
 			parent,
-			"Add, remove or edit SDK definitions. By default, the checked SDK is used for new Liferay Plug-in projects.",
+			"Add, remove or edit SDK definitions. By default, the checked SDK is used for new Liferay Plugin projects.",
 			1, 100);
 		
 		SWTUtil.createVerticalSpacer(parent, 1, 1);

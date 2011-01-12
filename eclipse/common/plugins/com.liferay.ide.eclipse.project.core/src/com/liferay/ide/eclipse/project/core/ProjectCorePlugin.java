@@ -30,13 +30,13 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
  */
 public class ProjectCorePlugin extends CorePlugin {
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.project.core";
 
 	public static final String USE_PROJECT_SETTINGS = "use-project-settings";

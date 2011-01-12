@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="liferayProjects" name="Liferay Project Definitions" schema="schema/liferayProjects.exsd"/>
-   <extension-point id="portletFrameworks" name="Portlet Plug-in Frameworks" schema="schema/portletFrameworks.exsd"/>
+   <extension-point id="portletFrameworks" name="Portlet Plugin Frameworks" schema="schema/portletFrameworks.exsd"/>
    
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
@@ -11,10 +11,10 @@
       <category
             id="liferay.plugins">
          <label>
-            Liferay Plug-ins
+            Liferay Plugins
          </label>
          <description>
-            Liferay Portal Plug-in facets including, portlets, hooks, ext, themes, and layout templates.
+            Liferay Portal Plugin facets including, portlets, hooks, ext, themes, and layout templates.
          </description>
       </category>
      
@@ -24,7 +24,7 @@
             Liferay Portlet
          </label>
          <description>
-            Portlet plug-in for Liferay portal.  Version cooresponds to Portal version.
+            Portlet plugin for Liferay portal.  Version cooresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -77,7 +77,7 @@
       <template
             id="liferay.portlet.template">
          <label>
-            Liferay Portlet Plug-in Project
+            Liferay Portlet Plugin Project
          </label>
          <fixed
                facet="jst.java">
@@ -100,7 +100,7 @@
             Liferay Hook
          </label>
          <description>
-            Hook plug-in for Liferay portal.  Version cooresponds to Portal version.
+            Hook plugin for Liferay portal.  Version cooresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -153,7 +153,7 @@
       <template
             id="liferay.hook.template">
          <label>
-            Liferay Hook Plug-in Project
+            Liferay Hook Plugin Project
          </label>
          <fixed
                facet="jst.java">
@@ -167,7 +167,7 @@
          <preset
                id="liferay.portlet.preset">
             <label>
-               Liferay Portlet Plug-in Preset
+               Liferay Portlet Plugin Preset
             </label>
          </preset>
       </template>
@@ -181,7 +181,7 @@
             Liferay Ext
          </label>
          <description>
-            Ext plug-in for Liferay portal.  Version cooresponds to Portal version.
+            Ext plugin for Liferay portal.  Version cooresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -236,7 +236,7 @@
       <template
             id="liferay.ext.template">
          <label>
-            Liferay Ext Plug-in Project
+            Liferay Ext Plugin Project
          </label>
          <fixed
                facet="jst.java">
@@ -257,10 +257,10 @@
       <static-preset
             id="liferay.portlet.preset">
          <label>
-            Liferay portlet plug-in 6.0 preset
+            Liferay portlet plugin 6.0 preset
          </label>
          <description>
-            Preset for Liferay 6.0 portlet plug-in
+            Preset for Liferay 6.0 portlet plugin
          </description>
          <facet
                id="jst.java"
@@ -280,10 +280,10 @@
       <static-preset
             id="liferay.hook.preset">
          <label>
-            Liferay hook plug-in 6.0 preset
+            Liferay hook plugin 6.0 preset
          </label>
          <description>
-            Preset for Liferay 6.0 hook plug-in
+            Preset for Liferay 6.0 hook plugin
          </description>
          <facet
                id="jst.java"
@@ -302,10 +302,10 @@
       <static-preset
             id="liferay.ext.preset">
          <label>
-            Liferay ext plug-in 6.0 preset
+            Liferay ext plugin 6.0 preset
          </label>
          <description>
-            Preset for Liferay 6.0 ext plug-in
+            Preset for Liferay 6.0 ext plugin
          </description>
          <facet
                id="jst.java"
@@ -331,7 +331,7 @@
       <provider
             id="com.liferay.ide.eclipse.plugin.portlet.libraryProvider">
          <label>
-            Liferay portlet plug-in library
+            Liferay portlet plugin library
          </label>
          <enablement>
             <with
@@ -366,7 +366,7 @@
       <provider
             id="com.liferay.ide.eclipse.plugin.hook.libraryProvider">
          <label>
-            Liferay hook plug-in library
+            Liferay hook plugin library
          </label>
          <enablement>
             <with
@@ -404,7 +404,7 @@
       <provider
             id="com.liferay.ide.eclipse.plugin.ext.libraryProvider">
          <label>
-            Liferay ext plug-in library
+            Liferay ext plugin library
          </label>
          <enablement>
             <with

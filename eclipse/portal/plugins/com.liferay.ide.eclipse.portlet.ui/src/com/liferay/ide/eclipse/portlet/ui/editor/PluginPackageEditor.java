@@ -174,7 +174,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		try {
 			int index = addPage(new PluginPackageFormPage(this));
 
-			setPageText(index, "Plug-in Package");
+			setPageText(index, "Plugin Package");
 		}
 		catch (PartInitException e) {
 			PortletUIPlugin.logError(e);

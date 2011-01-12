@@ -27,7 +27,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  * 
  * @auther Greg Amerson
  */
@@ -35,7 +35,7 @@ public class PortalServerUIPlugin extends AbstractUIPlugin {
 
 	public static final String IMG_WIZ_RUNTIME = "imgWizRuntime";
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.server.ui";
 
 	// base url for icons

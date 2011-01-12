@@ -117,7 +117,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
 		setTitle("Convert Project");
 
-		setDescription("Convert existing project to Liferay plug-in.");
+		setDescription("Convert existing project to Liferay plugin.");
 	}
 
 	public void updateProjectsList(final String path) {
@@ -479,7 +479,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 	}
 
 	protected void createSDKLocationField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay SDK Location:", 1);
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay Plugin SDK Location:", 1);
 
 		sdkLocation = SWTUtil.createText(topComposite, 2);
 
@@ -488,7 +488,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 	}
 
 	protected void createSDKVersionField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay SDK Version:", 1);
+		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay Plugin SDK Version:", 1);
 
 		sdkVersion = SWTUtil.createText(topComposite, 2);
 

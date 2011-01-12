@@ -135,11 +135,11 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 		ExpandableComposite twistie;
 
 		int columns = 3;
-		twistie = createTwistie(body, "Liferay SDK", columns);
+		twistie = createTwistie(body, "Liferay Plugin SDK", columns);
 		Composite inner = createInnerComposite(parent, twistie, columns);
 
 		inner = createInnerComposite(parent, twistie, columns);
-		createCombo(inner, "SDK is not valid", ValidationPreferences.SDK_NOT_VALID);
+		createCombo(inner, "Liferay Plugin SDK is not valid", ValidationPreferences.SDK_NOT_VALID);
 
 		return parent;
 	}

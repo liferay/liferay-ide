@@ -4,11 +4,11 @@ import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plug-in life cycle
+ * The activator class controls the plugin life cycle
  */
 public class VaadinUI extends Plugin {
 
-	// The plug-in ID
+	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.vaadin.ui"; //$NON-NLS-1$
 
 	// The shared instance

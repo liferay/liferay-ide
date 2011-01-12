@@ -70,7 +70,7 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 		Hyperlink link = new Hyperlink(group, SWT.NULL);
 		link.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
 		link.setUnderlined(true);
-		link.setText("Configure installed Liferay SDKs.");
+		link.setText("Configure installed Liferay Plugin SDKs.");
 		link.addHyperlinkListener(new HyperlinkAdapter() {
 
 			public void linkActivated(HyperlinkEvent e) {

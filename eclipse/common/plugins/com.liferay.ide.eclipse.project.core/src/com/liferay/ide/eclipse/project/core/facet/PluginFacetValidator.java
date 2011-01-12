@@ -88,7 +88,7 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 				return;
 			}
 
-			String msg = "No Liferay SDK configured on project " + fproj.getProject().getName();
+			String msg = "No Liferay Plugin SDK configured on project " + fproj.getProject().getName();
 
 			if (severity.equals(IMarker.SEVERITY_ERROR)) {
 				fproj.createErrorMarker(msg);
@@ -104,7 +104,8 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 			IStatus status = projectSDK.validate();
 
 			if (!status.isOK()) {
-				fproj.createErrorMarker(MARKER_ID + ".sdkError", "Configured Liferay SDK is invalid: " +
+				fproj.createErrorMarker(
+					MARKER_ID + ".sdkError", "Configured Liferay Plugin SDK is invalid: " +
 					status.getMessage());
 			}
 		}

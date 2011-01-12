@@ -156,7 +156,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 					return Status.OK_STATUS;
 				}
 				else {
-					return ProjectCorePlugin.createErrorStatus("Project is not located in Liferay Plug-ins SDK.");
+					return ProjectCorePlugin.createErrorStatus("Project is not located in Liferay Plugins SDK.");
 				}
 			}
 
@@ -172,7 +172,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 					return Status.OK_STATUS;
 				}
 				else {
-					return ProjectCorePlugin.createErrorStatus("Invalid Liferay SDK version, must be greater than " +
+					return ProjectCorePlugin.createErrorStatus("Invalid Plugin SDK version, must be greater than " +
 						SDKManager.getLeastValidVersion());
 				}
 			}
@@ -185,7 +185,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 				return Status.OK_STATUS;
 			}
 			else {
-				return ProjectCorePlugin.createErrorStatus("Invalid Liferay plug-in type.");
+				return ProjectCorePlugin.createErrorStatus("Invalid Liferay plugin type.");
 			}
 		}
 		else if (FACET_RUNTIME.equals(name)) {

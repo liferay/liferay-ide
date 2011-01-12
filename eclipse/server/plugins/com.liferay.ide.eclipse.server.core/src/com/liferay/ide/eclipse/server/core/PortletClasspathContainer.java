@@ -34,7 +34,7 @@ public class PortletClasspathContainer extends PluginClasspathContainer {
 	}
 
 	public String getDescription() {
-		return "Liferay Portlet Plug-in API";
+		return "Liferay Portlet Plugin API";
 	}
 
 	@Override
