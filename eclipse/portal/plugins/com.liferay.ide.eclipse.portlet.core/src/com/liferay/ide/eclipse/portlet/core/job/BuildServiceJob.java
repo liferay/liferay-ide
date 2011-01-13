@@ -95,6 +95,8 @@ public class BuildServiceJob extends SDKJob {
 		properties.put("app.server.deploy.dir", appServerDir + "/webapps");
 		properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
 		properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
+		properties.put("service.file", serviceXmlFile.getRawLocation().toOSString());
+		properties.put("service.input.file", serviceXmlFile.getRawLocation().toOSString());
 
 		monitor.worked(10);
 
