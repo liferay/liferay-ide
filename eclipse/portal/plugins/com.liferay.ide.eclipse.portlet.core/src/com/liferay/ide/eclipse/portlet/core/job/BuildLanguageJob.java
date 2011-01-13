@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -41,7 +42,7 @@ public class BuildLanguageJob extends SDKJob {
 	protected IFile langFile;
 
 	public BuildLanguageJob(IFile langFile) {
-		super("Build languages");
+		super("Build Languages");
 
 		this.langFile = langFile;
 
@@ -62,65 +63,46 @@ public class BuildLanguageJob extends SDKJob {
 
 		try {
 			ResourcesPlugin.getWorkspace().setDescription(desc);
+
+			SDK sdk = getSDK();
+
+			Map<String, String> properties = new HashMap<String, String>();
+
+			IProject project = getProject();
+
+			String appServerDir = ServerUtil.getPortalRuntime(project).getRuntimeLocation().toOSString();
+
+			properties.put("app.server.type", "tomcat");
+			properties.put("app.server.dir", appServerDir);
+			properties.put("app.server.deploy.dir", appServerDir + "/webapps");
+			properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
+			properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
+
+			monitor.worked(10);
+
+			sdk.buildLanguage(project, langFile, properties);
+
+			monitor.worked(90);
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+			project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+
+			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 		catch (CoreException e1) {
 			return PortletCore.createErrorStatus(e1);
 		}
+		finally {
+			desc = ResourcesPlugin.getWorkspace().getDescription();
+			desc.setAutoBuilding(saveAutoBuild);
 
-		SDK sdk = getSDK();
-
-		Map<String, String> properties = new HashMap<String, String>();
-
-		String appServerDir = null;
-
-		try {
-			appServerDir = ServerUtil.getRuntime(getProject()).getLocation().toOSString();
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
-
-		properties.put("app.server.type", "tomcat");
-		properties.put("app.server.dir", appServerDir);
-		properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-		properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-		properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-
-		monitor.worked(10);
-
-		sdk.buildLanguage(getProject(), langFile, properties);
-
-		monitor.worked(90);
-
-		try {
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
-
-		try {
-			getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
-
-		try {
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
-
-		desc = ResourcesPlugin.getWorkspace().getDescription();
-		desc.setAutoBuilding(saveAutoBuild);
-
-		try {
-			ResourcesPlugin.getWorkspace().setDescription(desc);
-		}
-		catch (CoreException e1) {
-			return PortletCore.createErrorStatus(e1);
+			try {
+				ResourcesPlugin.getWorkspace().setDescription(desc);
+			}
+			catch (CoreException e1) {
+				return PortletCore.createErrorStatus(e1);
+			}
 		}
 
 		return Status.OK_STATUS;

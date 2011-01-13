@@ -186,9 +186,9 @@
                enablesFor="1"
                icon="icons/e16/liferay.png"
                id="com.liferay.ide.eclipse.portlet.ui.lang.popup.action"
-               label="Build languages"
+               label="Build Languages"
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Build languages">
+               tooltip="Build Languages">
          </action>
          <enablement>
          	<adapt type="org.eclipse.core.resources.IFile">
