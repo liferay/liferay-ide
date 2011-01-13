@@ -22,4 +22,11 @@
             licenseUrl="http://www.gnu.org/licenses/lgpl-2.1.txt">
       </runtime>
    </extension>
+   <extension
+         point="org.eclipse.jdt.launching.classpathProviders">
+      <classpathProvider
+            class="com.liferay.ide.eclipse.sdk.SDKClasspathProvider"
+            id="com.liferay.ide.eclipse.sdk.SDKClasspathProvider">
+      </classpathProvider>
+   </extension>
 </plugin>

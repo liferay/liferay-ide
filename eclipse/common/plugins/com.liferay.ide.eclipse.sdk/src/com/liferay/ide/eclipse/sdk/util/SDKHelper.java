@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,13 +16,14 @@
 package com.liferay.ide.eclipse.sdk.util;
 
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.SDKClasspathProvider;
 import com.liferay.ide.eclipse.sdk.SDKPlugin;
 import com.liferay.ide.eclipse.ui.util.LaunchHelper;
 
 import java.util.Map;
 
 import org.eclipse.ant.internal.ui.IAntUIConstants;
-import org.eclipse.ant.ui.launching.IAntLaunchConfigurationConstants;
+import org.eclipse.ant.launching.IAntLaunchConstants;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.DebugPlugin;
@@ -39,13 +40,14 @@ import org.eclipse.ui.externaltools.internal.model.IExternalToolConstants;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({
+	"restriction", "deprecation"
+})
 public class SDKHelper extends LaunchHelper {
 
 	public static final String ANT_CLASSPATH_PROVIDER = "org.eclipse.ant.ui.AntClasspathProvider";
 
-	public static final String ANT_LAUNCH_CONFIG_TYPE_ID =
-		IAntLaunchConfigurationConstants.ID_ANT_LAUNCH_CONFIGURATION_TYPE;
+	public static final String ANT_LAUNCH_CONFIG_TYPE_ID = IAntLaunchConstants.ID_ANT_LAUNCH_CONFIGURATION_TYPE;
 
 	protected IPath currentBuildFile;
 
@@ -66,7 +68,7 @@ public class SDKHelper extends LaunchHelper {
 	}
 
 	public ILaunchConfiguration createLaunchConfiguration(
-		IPath buildFile, String targets, Map<String, String> properties)
+		IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE)
 		throws CoreException {
 
 		ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
@@ -76,7 +78,7 @@ public class SDKHelper extends LaunchHelper {
 		launchConfig.setAttribute(
 			IExternalToolConstants.ATTR_WORKING_DIRECTORY, buildFile.removeLastSegments(1).toOSString());
 
-		launchConfig.setAttribute(IAntLaunchConfigurationConstants.ATTR_ANT_TARGETS, targets);
+		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_TARGETS, targets);
 
 		// set default for common settings
 		CommonTab tab = new CommonTab();
@@ -101,14 +103,21 @@ public class SDKHelper extends LaunchHelper {
 		// launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH,
 		// vmInstall.getVMInstallType().getId());
 
-		launchConfig.setAttribute(IAntLaunchConfigurationConstants.ATTR_ANT_PROPERTIES, properties);
-		launchConfig.setAttribute(IAntLaunchConfigurationConstants.ATTR_ANT_PROPERTY_FILES, (String) null);
+		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_PROPERTIES, properties);
+		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_PROPERTY_FILES, (String) null);
+
+		if (separateJRE) {
+			launchConfig.setAttribute(
+				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME);
+			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Xmx1024m");
+		}
 
 		return launchConfig;
 	}
 
 	public String getClasspathProviderAttributeValue() {
-		return ANT_CLASSPATH_PROVIDER;
+		// return ANT_CLASSPATH_PROVIDER;
+		return SDKClasspathProvider.ID;
 	}
 
 	/**
@@ -144,6 +153,12 @@ public class SDKHelper extends LaunchHelper {
 	public void runTarget(IPath buildFile, String targets, Map<String, String> properties)
 		throws CoreException {
 
+		runTarget(buildFile, targets, properties, false);
+	}
+
+	public void runTarget(IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE)
+		throws CoreException {
+
 		if (isLaunchRunning()) {
 			throw new IllegalStateException("Existing launch in progress");
 		}
@@ -152,7 +167,7 @@ public class SDKHelper extends LaunchHelper {
 
 		this.currentTargets = targets;
 
-		ILaunchConfiguration launchConfig = createLaunchConfiguration(buildFile, targets, properties);
+		ILaunchConfiguration launchConfig = createLaunchConfiguration(buildFile, targets, properties, separateJRE);
 
 		launch(launchConfig, ILaunchManager.RUN_MODE, null);
 

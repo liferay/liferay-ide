@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -73,7 +73,7 @@ public class SDK {
 		try {
 			antHelper.runTarget(
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_LANG_CMD,
-				properties);
+				properties, true);
 		}
 		catch (Exception e) {
 			return SDKPlugin.createErrorStatus(e);
@@ -92,7 +92,7 @@ public class SDK {
 		try {
 			antHelper.runTarget(
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_SERVICE,
-				properties);
+				properties, true);
 		}
 		catch (Exception e) {
 			return SDKPlugin.createErrorStatus(e);
@@ -111,7 +111,7 @@ public class SDK {
 		try {
 			antHelper.runTarget(
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_BUILD_WSDD,
-				properties);
+				properties, true);
 		}
 		catch (Exception e) {
 			return SDKPlugin.createErrorStatus(e);
@@ -126,7 +126,7 @@ public class SDK {
 		try {
 			antHelper.runTarget(
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_COMPILE,
-				properties);
+				properties, true);
 		}
 		catch (CoreException e) {
 			return SDKPlugin.createErrorStatus(e);
@@ -295,28 +295,13 @@ public class SDK {
 		return null;
 	}
 
-	public IStatus deployExtPlugin(IProject project, Map<String, String> properties) {
-		SDKHelper antHelper = new SDKHelper(this);
-
-		try {
-			antHelper.runTarget(
-				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_DEPLOY,
-				properties);
-		}
-		catch (CoreException e) {
-			return SDKPlugin.createErrorStatus(e);
-		}
-
-		return Status.OK_STATUS;
-	}
-
 	public IStatus directDeploy(IProject project, Map<String, String> properties) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
 			antHelper.runTarget(
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_DIRECT_DEPLOY,
-				properties);
+				properties, true);
 		}
 		catch (CoreException e) {
 			return SDKPlugin.createErrorStatus(e);
