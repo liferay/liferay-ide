@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -103,8 +103,8 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 	public void doSaveAs() {
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object getAdapter(Class adapterClass) {
 		Object adapter = super.getAdapter(adapterClass);
 
@@ -175,14 +175,14 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 				protected Control createButton(Composite composite) {
 					submitButton = new Button(composite, SWT.FLAT);
 
-					submitButton.setText("Build services "); //$NON-NLS-1$
+					submitButton.setText("Build Services"); //$NON-NLS-1$
 					submitButton.setImage(PortletUIPlugin.imageDescriptorFromPlugin(
 						PortletUIPlugin.PLUGIN_ID, "/icons/e16/service.png").createImage());
 					submitButton.setBackground(null);
 					submitButton.addListener(SWT.Selection, new Listener() {
 
 						public void handleEvent(Event e) {
-							doGenerateServices();
+							doBuildServices();
 						}
 					});
 
@@ -193,7 +193,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		submitButtonContribution.marginLeft = 10;
 
 		toolBarManager.add(submitButtonContribution);
-		
+
 		ToolBarButtonContribution wsddButtonContribution =
 			new ToolBarButtonContribution("com.liferay.ide.eclipse.portlet.ui.toolbars.buildwsdd") { //$NON-NLS-1$
 
@@ -216,7 +216,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 				}
 			};
 
-			wsddButtonContribution.marginLeft = 10;
+		wsddButtonContribution.marginLeft = 10;
 
 		toolBarManager.add(wsddButtonContribution);
 		toolBarManager.update(true);
@@ -596,7 +596,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		return composite;
 	}
 
-	protected void doGenerateServices() {
+	protected void doBuildServices() {
 		doSave(new NullProgressMonitor());
 
 		BuildServiceJob job = PortletCore.createBuildServiceJob(getEditorInput().getFile());
@@ -604,7 +604,7 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		job.schedule();
 
 	}
-	
+
 	protected void doGenerateWSDD() {
 		doSave(new NullProgressMonitor());
 

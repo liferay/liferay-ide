@@ -122,23 +122,24 @@
             id="com.liferay.ide.eclipse.portlet.ui.service.popup"
             objectClass="org.eclipse.core.resources.IResource">
          <action
-               class="com.liferay.ide.eclipse.portlet.ui.action.BuildServicesAction"
-               enablesFor="1"
-               icon="icons/e16/service.png"
-               id="com.liferay.ide.eclipse.portlet.ui.service.popup.action"
-               label="Build services"
-               menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Build services">
-         </action>
-         <action
                class="com.liferay.ide.eclipse.portlet.ui.action.BuildWSDDAction"
                enablesFor="1"
                icon="icons/e16/service.png"
                id="com.liferay.ide.eclipse.portlet.ui.wsdd.popup.action"
-               label="Build web services descriptor"
+               label="Build WSDD"
                menubarPath="liferayPopupMenuCategory/slot1"
                tooltip="Build web services descriptor">
          </action>
+         <action
+               class="com.liferay.ide.eclipse.portlet.ui.action.BuildServicesAction"
+               enablesFor="1"
+               icon="icons/e16/service.png"
+               id="com.liferay.ide.eclipse.portlet.ui.service.popup.action"
+               label="Build Services"
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Build services">
+         </action>
+         
          <enablement>
          	<adapt type="org.eclipse.core.resources.IResource">
 	          <or>

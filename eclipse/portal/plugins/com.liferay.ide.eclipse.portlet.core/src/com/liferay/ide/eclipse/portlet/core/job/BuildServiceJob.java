@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2010 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -72,53 +72,33 @@ public class BuildServiceJob extends SDKJob {
 
 		try {
 			ResourcesPlugin.getWorkspace().setDescription(desc);
-		}
-		catch (CoreException e1) {
-			return PortletCore.createErrorStatus(e1);
-		}
 
-		SDK sdk = getSDK();
+			SDK sdk = getSDK();
 
-		Map<String, String> properties = new HashMap<String, String>();
+			Map<String, String> properties = new HashMap<String, String>();
 
-		String appServerDir = null;
+			String appServerDir = null;
 
-		try {
 			appServerDir = ServerUtil.getPortalRuntime(getProject()).getRuntimeLocation().toOSString();
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
 
-		properties.put("app.server.type", "tomcat");
-		properties.put("app.server.dir", appServerDir);
-		properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-		properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-		properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-		properties.put("service.file", serviceXmlFile.getRawLocation().toOSString());
-		properties.put("service.input.file", serviceXmlFile.getRawLocation().toOSString());
+			properties.put("app.server.type", "tomcat");
+			properties.put("app.server.dir", appServerDir);
+			properties.put("app.server.deploy.dir", appServerDir + "/webapps");
+			properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
+			properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
+			properties.put("service.file", serviceXmlFile.getRawLocation().toOSString());
+			properties.put("service.input.file", serviceXmlFile.getRawLocation().toOSString());
 
-		monitor.worked(10);
+			monitor.worked(10);
 
-		sdk.buildService(getProject(), serviceXmlFile, properties);
+			sdk.buildService(getProject(), serviceXmlFile, properties);
 
-		monitor.worked(90);
+			monitor.worked(90);
 
-		try {
 			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
 
-		try {
 			getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
 
-		try {
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 
 				public void run(IProgressMonitor monitor)
@@ -141,25 +121,23 @@ public class BuildServiceJob extends SDKJob {
 
 				}
 			}, null);
-		}
-		catch (CoreException e2) {
-		}
 
-		try {
 			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException e) {
-			return PortletCore.createErrorStatus(e);
-		}
-
-		desc = ResourcesPlugin.getWorkspace().getDescription();
-		desc.setAutoBuilding(saveAutoBuild);
-
-		try {
-			ResourcesPlugin.getWorkspace().setDescription(desc);
 		}
 		catch (CoreException e1) {
 			return PortletCore.createErrorStatus(e1);
+		}
+		finally {
+			desc = ResourcesPlugin.getWorkspace().getDescription();
+
+			desc.setAutoBuilding(saveAutoBuild);
+
+			try {
+				ResourcesPlugin.getWorkspace().setDescription(desc);
+			}
+			catch (CoreException e) {
+				return PortletCore.createErrorStatus(e);
+			}
 		}
 
 		return Status.OK_STATUS;
