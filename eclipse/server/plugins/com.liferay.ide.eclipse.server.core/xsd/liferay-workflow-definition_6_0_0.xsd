@@ -13,17 +13,8 @@
 				<xs:element ref="name" />
 				<xs:element ref="description" minOccurs="0" />
 				<xs:element ref="execution-type" />
-				<xs:element name="script" type="xs:string" />
-				<xs:element name="script-language">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="groovy" />
-							<xs:enumeration value="javascript" />
-							<xs:enumeration value="python" />
-							<xs:enumeration value="ruby" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
+				<xs:element ref="script" />
+				<xs:element ref="script-language" />
 				<xs:element name="priority" type="xs:int" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
@@ -132,6 +123,18 @@
 				<xs:element ref="role" minOccurs="1" maxOccurs="unbounded" />
 			</xs:choice>
 		</xs:complexType>
+	</xs:element>
+	<xs:element name="script" type="xs:string" />
+	<xs:element name="script-language">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="beanshell" />
+				<xs:enumeration value="groovy" />
+				<xs:enumeration value="javascript" />
+				<xs:enumeration value="python" />
+				<xs:enumeration value="ruby" />
+			</xs:restriction>
+		</xs:simpleType>
 	</xs:element>
 	<xs:element name="state">
 		<xs:complexType>
