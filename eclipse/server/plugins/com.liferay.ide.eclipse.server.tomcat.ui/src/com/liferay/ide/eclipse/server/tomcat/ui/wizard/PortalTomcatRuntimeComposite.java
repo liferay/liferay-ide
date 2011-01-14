@@ -98,7 +98,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	public PortalTomcatRuntimeComposite(Composite parent, IWizardHandle wizard) {
 		super(parent, wizard);
 
-		wizard.setTitle("Liferay Runtime (Tomcat)");
+		wizard.setTitle("Liferay Tomcat Runtime");
 		wizard.setDescription("Specify the installation directory of the Tomcat configured with Liferay.");
 		wizard.setImageDescriptor(PortalServerUIPlugin.getImageDescriptor(PortalServerUIPlugin.IMG_WIZ_RUNTIME));
 	}

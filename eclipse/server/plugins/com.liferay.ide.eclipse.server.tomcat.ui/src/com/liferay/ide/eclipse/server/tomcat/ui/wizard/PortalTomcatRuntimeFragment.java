@@ -17,6 +17,9 @@ package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
 
 import com.liferay.ide.eclipse.server.tomcat.ui.PortalTomcatUIPlugin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jst.server.tomcat.ui.internal.TomcatRuntimeWizardFragment;
 import org.eclipse.swt.widgets.Composite;
@@ -25,8 +28,12 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({
+	"restriction", "rawtypes"
+})
 public class PortalTomcatRuntimeFragment extends TomcatRuntimeWizardFragment {
+
+	protected List childFragments;
 
 	public PortalTomcatRuntimeFragment() {
 		super();
@@ -39,6 +46,16 @@ public class PortalTomcatRuntimeFragment extends TomcatRuntimeWizardFragment {
 			"/icons/wizban/server_wiz.png")));
 		
 		return comp;
+	}
+
+	@Override
+	public List getChildFragments() {
+		if (childFragments == null) {
+			childFragments = new ArrayList();
+			childFragments.add(new PortalTomcatRuntimeOptionalFragment());
+		}
+
+		return childFragments;
 	}
 
 }
