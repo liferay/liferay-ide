@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -183,6 +184,20 @@ public class ProjectUtil {
 			}
 		}
 		return true;
+	}
+
+	public static String convertToDisplayName(String name) {
+		if (CoreUtil.isNullOrEmpty(name)) {
+			return "";
+		}
+
+		String displayName = removePluginSuffix(name);
+
+		displayName = displayName.replaceAll("-", " ").replaceAll("_", " ");
+
+		displayName = WordUtils.capitalize(displayName);
+
+		return displayName;
 	}
 
 	public static void createDefaultWebXml(File webxmlFile) {

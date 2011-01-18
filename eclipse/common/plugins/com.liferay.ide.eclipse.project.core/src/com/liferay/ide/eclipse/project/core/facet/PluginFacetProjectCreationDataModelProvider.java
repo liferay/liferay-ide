@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -97,8 +96,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			return getProperty(PROJECT_NAME);
 		}
 		else if (DISPLAY_NAME.equals(propertyName)) {
-			String displayName = StringUtils.capitalize(getStringProperty(PROJECT_NAME));
-			return ProjectUtil.removePluginSuffix(displayName);
+			return ProjectUtil.convertToDisplayName(getStringProperty(PROJECT_NAME));
 		}
 		else if (HOOK_NAME.equals(propertyName)) {
 			return getProperty(PROJECT_NAME);
