@@ -16,38 +16,24 @@
 package com.liferay.ide.eclipse.portlet.ui.action;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
 import com.liferay.ide.eclipse.portlet.core.job.BuildWSDDJob;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.project.ui.action.AbstractProjectAction;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * @author Greg Amerson
  */
-public class BuildWSDDAction implements IObjectActionDelegate {
-
-	protected ISelection fSelection;
+public class BuildWSDDAction extends AbstractProjectAction {
 
 	public BuildWSDDAction() {
-	}
-
-	public Display getDisplay() {
-		Display display = Display.getCurrent();
-
-		if (display == null)
-			display = Display.getDefault();
-
-		return display;
+		super();
 	}
 
 	public void run(IAction action) {
@@ -81,10 +67,4 @@ public class BuildWSDDAction implements IObjectActionDelegate {
 
 	}
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		fSelection = selection;
-	}
-
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
 }
