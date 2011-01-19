@@ -232,17 +232,6 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 		appendChildElement(newPortletElement, "css-class-wrapper", model.getStringProperty(CSS_CLASS_WRAPPER));
 
-		// TODO make sure role mapper elements are available and correct in the
-		// file.
-		// role mapper elements
-		// for (String roleName : DEFAULT_SECURITY_ROLE_NAMES) {
-		// Element newRoleMapperElement = appendChildElement(newPortletElement,
-		// "role-mapper");
-		// appendChildElement(newRoleMapperElement, "role-name", roleName);
-		// appendChildElement(newRoleMapperElement, "role-link",
-		// WordUtils.capitalize(roleName));
-		// }
-
 		// must append this before any role-mapper elements
 		Element firstRoleMapper = null;
 
