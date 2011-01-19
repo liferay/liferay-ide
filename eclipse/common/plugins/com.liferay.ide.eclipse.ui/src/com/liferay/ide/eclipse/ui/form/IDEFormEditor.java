@@ -883,7 +883,6 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 //		} else {
 //			// Synchronize with current form page
 //			// This currently does not work
-//			// TODO: Fix 'Link with Editor' functionality for form pages
 //			if (getFormOutline() != null) {
 //				getFormOutline().setSelection(getSelection());
 //			}
