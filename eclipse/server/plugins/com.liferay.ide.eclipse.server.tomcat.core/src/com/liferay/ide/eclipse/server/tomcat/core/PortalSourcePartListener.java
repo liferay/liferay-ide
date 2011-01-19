@@ -100,8 +100,7 @@ public class PortalSourcePartListener implements IPartListener2 {
 						ServerUtil.getPortalRuntime(this.classFile.getJavaProject().getProject());
 					
 					version = portalRuntime.getPortalVersion();
-					// TODO modify the url to download the source based on the
-					// version.
+					// to do: modify the url to download the source based on the version.
 
 				}
 				catch (CoreException e1) {
