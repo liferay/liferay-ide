@@ -936,7 +936,7 @@ public class ProjectUtil {
 			fixExtProjectSrcFolderLinks(project);
 		}
 		catch (Exception ex) {
-			ProjectCorePlugin.logError("Exception trying to fix EXT project classpath entries.", ex);
+			ProjectCorePlugin.logError("Exception trying to fix Ext project classpath entries.", ex);
 		}
 	}
 
