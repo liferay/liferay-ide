@@ -18,7 +18,9 @@ package com.liferay.ide.eclipse.server.tomcat.core.util;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
+import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatPlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
@@ -35,15 +37,24 @@ import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jst.server.tomcat.core.internal.xml.Factory;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Context;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.ServerEvent;
 import org.osgi.framework.Version;
 
 /**
@@ -51,6 +62,38 @@ import org.osgi.framework.Version;
  */
 @SuppressWarnings("restriction")
 public class PortalTomcatUtil {
+
+	public static boolean displayToggleQuestion(final String msg, final IPreferenceStore store, final String key) {
+		final boolean[] retval = new boolean[1];
+	
+		// first look up the key to see if the anser is always or never or prompt. If it is always return true
+		// if it is never return false and if it is prompt then do the prompt
+		String questionValue = store.getString(key);
+
+		if (CoreUtil.isNullOrEmpty(questionValue) || questionValue.equals(MessageDialogWithToggle.PROMPT)) {
+			Display.getDefault().syncExec(new Runnable() {
+
+				public void run() {
+					MessageDialogWithToggle dialog =
+						MessageDialogWithToggle.openYesNoQuestion(
+						Display.getDefault().getActiveShell(), "title", msg, "Remember my decision", false, store, key);
+					int code = dialog.getReturnCode();
+					System.out.println(code);
+				}
+			});
+
+		}
+		else {
+			if (questionValue.equals(MessageDialogWithToggle.ALWAYS)) {
+				retval[0] = true;
+			}
+			else if (questionValue.equals(MessageDialogWithToggle.NEVER)) {
+				retval[0] = false;
+			}
+		}
+	
+		return retval[0];
+	}
 
 	public static IPath[] getAllUserClasspathLibraries(IPath runtimeLocation) {
 		List<IPath> libs = new ArrayList<IPath>();
@@ -115,6 +158,13 @@ public class PortalTomcatUtil {
 		return runtimeLocation.append("webapps/ROOT");
 	}
 
+	public static IPortalTomcatRuntime getPortalTomcatRuntime(IRuntime runtime) {
+		if (runtime != null) {
+			return (IPortalTomcatRuntime) runtime.createWorkingCopy().loadAdapter(IPortalTomcatRuntime.class, null);
+		}
+
+		return null;
+	}
 
 	public static String[] getSupportedHookProperties(IPath runtimeLocation)
 		throws IOException {
@@ -201,10 +251,20 @@ public class PortalTomcatUtil {
 	}
 
 	public static boolean isExtProjectContext(Context context) {
-		String path = context.getPath();
-		String docBase = context.getDocBase();
 
 		return false;
+	}
+
+	public static boolean isLiferayModule(IModule module) {
+		boolean retval = false;
+
+		if (module != null) {
+			IProject project = module.getProject();
+
+			retval = ProjectUtil.isLiferayProject(project);
+		}
+
+		return retval;
 	}
 
 	public static Context loadContextFile(File contextFile) {
@@ -335,6 +395,54 @@ public class PortalTomcatUtil {
 		}
 	
 		return modifiedLocation;
+	}
+
+	public static void syncStopServer(final IServer server) {
+		if (server.getServerState() != IServer.STATE_STARTED) {
+			return;
+		}
+
+		Thread shutdownThread = new Thread() {
+
+			@Override
+			public void run() {
+				server.stop(false);
+				synchronized (server) {
+					try {
+						server.wait(5000);
+					}
+					catch (InterruptedException e) {
+					}
+
+					if (server.getServerState() != IServer.STATE_STOPPED) {
+						server.stop(true);
+					}
+				}
+			}
+
+		};
+
+		IServerListener shutdownListener = new IServerListener() {
+
+			public void serverChanged(ServerEvent event) {
+				if (event.getState() == IServer.STATE_STOPPED) {
+					synchronized (server) {
+						server.notifyAll();
+					}
+				}
+			}
+		};
+
+		server.addServerListener(shutdownListener);
+
+		try {
+			shutdownThread.start();
+			shutdownThread.join();
+		}
+		catch (InterruptedException e) {
+		}
+
+		server.removeServerListener(shutdownListener);
 	}
 
 	public static IStatus validateRuntimeStubLocation(IPath runtimeStubLocation) {

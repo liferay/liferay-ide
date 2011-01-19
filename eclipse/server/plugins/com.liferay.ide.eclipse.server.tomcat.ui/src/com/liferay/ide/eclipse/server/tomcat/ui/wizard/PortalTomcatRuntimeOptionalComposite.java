@@ -15,14 +15,12 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui.wizard;
 
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -38,7 +36,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
@@ -50,7 +47,7 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
  * @author Greg Amerson
  */
 @SuppressWarnings({
-	"restriction", "unchecked", "rawtypes"
+	"restriction"
 })
 public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite implements ModifyListener {
 
@@ -60,17 +57,17 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 		}
 	}
 
-	protected boolean ignoreModifyEvent;
-
 	protected Text bundleZipField;
+
+	protected boolean ignoreModifyEvent;
 
 	protected Text sourceFolderField;
 
 	public PortalTomcatRuntimeOptionalComposite(Composite parent, IWizardHandle wizard) {
 		super(parent, wizard);
 
-		wizard.setTitle("Liferay Tomcat Runtime (Optional)");
-		wizard.setDescription("");
+		wizard.setTitle("Liferay Runtime Tomcat Bundle");
+		wizard.setDescription("Specify extra settings for Liferay Tomcat bundle (required for Ext plugins)");
 		wizard.setImageDescriptor(PortalServerUIPlugin.getImageDescriptor(PortalServerUIPlugin.IMG_WIZ_RUNTIME));
 	}
 
@@ -82,38 +79,13 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 		}
 
 		if (e.getSource().equals(bundleZipField)) {
-			getRuntime().setLocation(new Path(bundleZipField.getText()));
+			getPortalTomcatRuntime().setBundleZipLocation(new Path(bundleZipField.getText()));
 		}
-		else if (e.getSource().equals(sourceFolderField)) {
-			getRuntime().setName(sourceFolderField.getText());
-		}
+		// else if (e.getSource().equals(sourceFolderField)) {
+		// getPortalTomcatRuntime().setPortalSourceLocation(new Path(sourceFolderField.getText()));
+		// }
 
 		validate();
-
-		IStatus status = getRuntime().validate(null);
-
-		if (!status.isOK() && e.getSource().equals(bundleZipField)) {
-			// check to see if we need to modify from a liferay folder down to
-			// embedded tomcat
-			IPath currentLocation = getRuntime().getLocation();
-
-			IPath modifiedLocation = PortalTomcatUtil.modifyLocationForBundle(currentLocation);
-
-			if (modifiedLocation != null) {
-				getRuntime().setLocation(modifiedLocation);
-
-				status = getRuntime().validate(null);
-
-				if (status.isOK()) {
-					ignoreModifyEvent = true;
-
-					bundleZipField.setText(modifiedLocation.toOSString());
-
-					validate();
-				}
-			}
-		}
-
 	}
 
 	@Override
@@ -157,39 +129,43 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 	}
 
 	protected void createFields() {
-		bundleZipField = createTextField("Liferay Tomcat bundle zip file (optional, required for EXT plugins)");
+		bundleZipField = createTextField("Liferay Tomcat bundle zip file (required for Ext plugins)");
+		bundleZipField.addModifyListener(this);
+
 		SWTUtil.createButton(this, "Browse...").addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog fd = new FileDialog(PortalTomcatRuntimeOptionalComposite.this.getShell());
 
-				fd.setText("Select Liferay Tomcat directory");
+				fd.setText("Select Liferay Tomcat bundle zip file");
 				fd.setFilterPath(bundleZipField.getText());
 
-				String selectedDir = fd.open();
+				String selectedFile = fd.open();
 
-				if (selectedDir != null) {
-					bundleZipField.setText(selectedDir);
+				if (selectedFile != null) {
+					bundleZipField.setText(selectedFile);
 				}
 			}
 		});
 
-		sourceFolderField = createTextField("Liferay Portal source folder (optional)");
-		SWTUtil.createButton(this, "Browse...").addSelectionListener(new SelectionAdapter() {
-
-			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dd = new DirectoryDialog(PortalTomcatRuntimeOptionalComposite.this.getShell());
-
-				dd.setMessage("Select Liferay Tomcat directory");
-				dd.setFilterPath(sourceFolderField.getText());
-
-				String selectedDir = dd.open();
-
-				if (selectedDir != null) {
-					sourceFolderField.setText(selectedDir);
-				}
-			}
-		});
+		// sourceFolderField = createTextField("Liferay Portal source folder (optional)");
+		// sourceFolderField.addModifyListener(this);
+		//
+		// SWTUtil.createButton(this, "Browse...").addSelectionListener(new SelectionAdapter() {
+		//
+		// public void widgetSelected(SelectionEvent e) {
+		// DirectoryDialog dd = new DirectoryDialog(PortalTomcatRuntimeOptionalComposite.this.getShell());
+		//
+		// dd.setMessage("Select Liferay Portal source folder directory");
+		// dd.setFilterPath(sourceFolderField.getText());
+		//
+		// String selectedDir = dd.open();
+		//
+		// if (selectedDir != null) {
+		// sourceFolderField.setText(selectedDir);
+		// }
+		// }
+		// });
 
 	}
 
@@ -224,12 +200,12 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 		return (IJavaRuntime) this.runtime;
 	}
 
-	protected IRuntimeWorkingCopy getRuntime() {
-		return this.runtimeWC;
+	protected IPortalTomcatRuntime getPortalTomcatRuntime() {
+		return PortalTomcatUtil.getPortalTomcatRuntime(this.runtimeWC);
 	}
 
-	protected IPortalRuntime getPortalRuntime() {
-		return ServerUtil.getPortalRuntime(this.runtimeWC.getOriginal());
+	protected IRuntimeWorkingCopy getRuntime() {
+		return this.runtimeWC;
 	}
 
 	@Override
@@ -238,9 +214,11 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 			return;
 		}
 
-		setFieldValue(bundleZipField, getRuntime().getName());
-		setFieldValue(sourceFolderField, getRuntime().getLocation() != null
-			? getRuntime().getLocation().toOSString() : "");
+		IPath bundleZipLocation = getPortalTomcatRuntime().getBundleZipLocation();
+		// IPath bundleSourceLocation = getPortalTomcatRuntime().getPortalSourceLocation();
+
+		setFieldValue(bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : "");
+		// setFieldValue(sourceFolderField, bundleSourceLocation != null ? bundleSourceLocation.toOSString() : "");
 	}
 
 }

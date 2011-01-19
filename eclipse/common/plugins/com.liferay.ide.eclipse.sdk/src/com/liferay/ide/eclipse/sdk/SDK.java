@@ -376,6 +376,20 @@ public class SDK {
 		// setRuntime(sdkElement.getString("runtime"));
 	}
 
+	public IStatus runTarget(IProject project, Map<String, String> properties, String target, boolean separateJRE) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), target, properties, separateJRE);
+		}
+		catch (CoreException e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
 	public void saveToMemento(IMemento child) {
 		child.putString("name", getName());
 		child.putString("location", getLocation().toPortableString());

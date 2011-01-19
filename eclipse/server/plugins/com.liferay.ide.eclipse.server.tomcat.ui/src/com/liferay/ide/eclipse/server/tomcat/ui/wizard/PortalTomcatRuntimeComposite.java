@@ -41,6 +41,8 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jst.server.core.IJavaRuntime;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
@@ -60,6 +62,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
@@ -143,9 +146,7 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 			}
 		}
 
-		if (status.isOK()) {
-			enableJREControls(true);
-		}
+		enableJREControls(true);
 
 		if (getTomcatRuntime().getVMInstall() != null) {
 			// check to see if selected VM is in same path as new server
@@ -361,6 +362,19 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 			}
 
 		});
+
+		createLink("For developing Ext plugins with this runtime, <a>additional configuration is available.</a>").addSelectionListener(
+			new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					if (wizard instanceof IWizardPage) {
+						IWizard parentWizard = ((IWizardPage) wizard).getWizard();
+						parentWizard.getContainer().showPage(((IWizardPage) wizard).getNextPage());
+					}
+				}
+
+			});
 	}
 
 	protected Label createLabel(String text) {
@@ -375,6 +389,15 @@ public class PortalTomcatRuntimeComposite extends TomcatRuntimeComposite impleme
 	protected Layout createLayout() {
 		GridLayout layout = new GridLayout(2, false);
 		return layout;
+	}
+
+	protected Link createLink(String linkText) {
+		Link link = new Link(this, SWT.NONE);
+		link.setText(linkText);
+
+		GridDataFactory.generate(link, 2, 1);
+
+		return link;
 	}
 
 	protected void createSpacer() {

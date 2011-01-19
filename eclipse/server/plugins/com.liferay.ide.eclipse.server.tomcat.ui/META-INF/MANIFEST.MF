@@ -7,7 +7,6 @@ Bundle-Activator: com.liferay.ide.eclipse.server.tomcat.ui.PortalTomcatUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)";visibility:=reexport,
  org.eclipse.debug.ui;visibility:=reexport,
  org.eclipse.jdt.debug.ui;visibility:=reexport,
  org.eclipse.jdt.launching;visibility:=reexport,

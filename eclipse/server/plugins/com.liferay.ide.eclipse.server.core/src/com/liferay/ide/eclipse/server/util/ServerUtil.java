@@ -15,12 +15,15 @@
 
 package com.liferay.ide.eclipse.server.util;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
@@ -56,20 +59,14 @@ public class ServerUtil {
 	protected static final IStatus invalidInstallDirStatus = createErrorStatus("Invalid installation directory.");
 
 	/*
-	 * public static ServerInstallSpec verifyInstallationPath(IPath path, String
-	 * serverId) { ServerInstallSpec spec = new ServerInstallSpec(); if (path ==
-	 * null) { spec.setStatus(emptyInstallDirStatus); return spec; } String dir
-	 * = path.toOSString(); if (dir.trim().length() == 0) {
-	 * spec.setStatus(emptyInstallDirStatus); return spec; } File file = new
-	 * File(dir); if (!file.exists()) { spec.setStatus(installDirDoesNotExist);
-	 * return spec; } if (!dir.endsWith(File.separator)) { dir +=
-	 * File.separator; } // need to figure out if we have a valid bundle
-	 * ServerInstallSpec[] serverSpecs =
-	 * PortalServerCorePlugin.readServerInstallSpecs(); for (ServerInstallSpec
-	 * serverSpec : serverSpecs) { IStatus result =
-	 * serverSpec.checkInstallationDir(dir); if (result != null &&
-	 * result.isOK()) { return serverSpec; } }
-	 * spec.setStatus(invalidInstallDirStatus); return spec; }
+	 * public static ServerInstallSpec verifyInstallationPath(IPath path, String serverId) { ServerInstallSpec spec =
+	 * new ServerInstallSpec(); if (path == null) { spec.setStatus(emptyInstallDirStatus); return spec; } String dir =
+	 * path.toOSString(); if (dir.trim().length() == 0) { spec.setStatus(emptyInstallDirStatus); return spec; } File
+	 * file = new File(dir); if (!file.exists()) { spec.setStatus(installDirDoesNotExist); return spec; } if
+	 * (!dir.endsWith(File.separator)) { dir += File.separator; } // need to figure out if we have a valid bundle
+	 * ServerInstallSpec[] serverSpecs = PortalServerCorePlugin.readServerInstallSpecs(); for (ServerInstallSpec
+	 * serverSpec : serverSpecs) { IStatus result = serverSpec.checkInstallationDir(dir); if (result != null &&
+	 * result.isOK()) { return serverSpec; } } spec.setStatus(invalidInstallDirStatus); return spec; }
 	 */
 
 	// public static PortalRuntime getPortalRuntime(IRuntime runtime) {
@@ -101,6 +98,20 @@ public class ServerUtil {
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, PortalServerCorePlugin.PLUGIN_ID, msg);
+	}
+
+	public static IServerWorkingCopy createServerForRuntime(IRuntime runtime) {
+		for (IServerType serverType : ServerCore.getServerTypes()) {
+			if (serverType.getRuntimeType().equals(runtime.getRuntimeType())) {
+				try {
+					return serverType.createServer("server", null, runtime, null);
+				}
+				catch (CoreException e) {
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public static IPath getAppServerDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime) {
@@ -216,18 +227,22 @@ public class ServerUtil {
 		return null;
 	}
 
-	public static IServerWorkingCopy getServerForRuntime(IRuntime runtime) {
-		for (IServerType serverType : ServerCore.getServerTypes()) {
-			if (serverType.getRuntimeType().equals(runtime.getRuntimeType())) {
-				try {
-					return serverType.createServer("server", null, runtime, null);
-				}
-				catch (CoreException e) {
+	public static IServer[] getServersForRuntime(IRuntime runtime) {
+		List<IServer> serverList = new ArrayList<IServer>();
+
+		if (runtime != null) {
+			IServer[] servers = ServerCore.getServers();
+
+			if (!CoreUtil.isNullOrEmpty(servers)) {
+				for (IServer server : servers) {
+					if (runtime.equals(server.getRuntime())) {
+						serverList.add(server);
+					}
 				}
 			}
 		}
 
-		return null;
+		return serverList.toArray(new IServer[0]);
 	}
 
 	public static boolean isExistingVMName(String name) {

@@ -24,4 +24,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.ws;bundle-version="[1.1.103,1.2.0)"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.server.ui
+Export-Package: com.liferay.ide.eclipse.server.ui,
+ com.liferay.ide.eclipse.server.ui.action

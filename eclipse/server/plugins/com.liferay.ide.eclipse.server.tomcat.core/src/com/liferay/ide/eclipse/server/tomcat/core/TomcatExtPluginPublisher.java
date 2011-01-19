@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
+import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.HashMap;
@@ -32,8 +33,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.IServerListener;
-import org.eclipse.wst.server.core.ServerEvent;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
@@ -79,7 +78,8 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 				addExtModule(delegate, moduleTree[0], monitor);
 			}
 			else if (deltaKind == ServerBehaviourDelegate.REMOVED) {
-				removeExtModule(moduleTree[0]);
+				// nothing to do right now
+				// removeExtModule(delegate, moduleTree[0], monitor);
 			}
 		}
 		catch (Exception e) {
@@ -106,7 +106,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 			delegate.getServer().getServerState() == IServer.STATE_STARTED ? delegate.getServer().getMode() : null;
 
 		if (mode != null) {
-			stopServer(delegate);
+			PortalTomcatUtil.syncStopServer(delegate.getServer());
 		}
 
 		IRuntime runtime = ServerUtil.getRuntime(project);
@@ -140,56 +140,9 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 		}
 	}
 
-	protected void removeExtModule(IModule module) {
+	protected void removeExtModule(ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor)
+		throws CoreException {
 
-		// TODO try to uninstall ext files
 	}
 
-	protected void stopServer(final ServerBehaviourDelegate delegate) {
-		if (delegate.getServer().getServerState() != IServer.STATE_STARTED) {
-			return;
-		}
-
-		Thread shutdownThread = new Thread() {
-
-			@Override
-			public void run() {
-				delegate.stop(false);
-				synchronized (delegate) {
-					try {
-						delegate.wait(5000);
-					}
-					catch (InterruptedException e) {
-					}
-
-					if (delegate.getServer().getServerState() != IServer.STATE_STOPPED) {
-						delegate.stop(true);
-					}
-				}
-			}
-
-		};
-
-		IServerListener shutdownListener = new IServerListener() {
-
-			public void serverChanged(ServerEvent event) {
-				if (event.getState() == IServer.STATE_STOPPED) {
-					synchronized (delegate) {
-						delegate.notifyAll();
-					}
-				}
-			}
-		};
-
-		delegate.getServer().addServerListener(shutdownListener);
-
-		try {
-			shutdownThread.start();
-			shutdownThread.join();
-		}
-		catch (InterruptedException e) {
-		}
-
-		delegate.getServer().removeServerListener(shutdownListener);
-	}
 }

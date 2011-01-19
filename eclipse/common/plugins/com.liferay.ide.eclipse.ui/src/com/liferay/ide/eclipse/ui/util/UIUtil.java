@@ -17,10 +17,13 @@ package com.liferay.ide.eclipse.ui.util;
 
 import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
 
+import java.io.IOException;
 import java.net.URL;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
@@ -63,6 +66,34 @@ public class UIUtil {
 
 			public void run() {
 				MessageDialog.openInformation(Display.getDefault().getActiveShell(), title, msg);
+			}
+
+		});
+	}
+
+	public static void postInfoWithToggle(
+		final String title, final String msg, final String toggleMessage, final boolean toggleState,
+		final IPersistentPreferenceStore store, final String key) {
+
+		if (store == null || key == null || store.getString(key).equals(MessageDialogWithToggle.NEVER)) {
+			return;
+		}
+
+		Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+				MessageDialogWithToggle dialog =
+					MessageDialogWithToggle.openInformation(
+						Display.getDefault().getActiveShell(), title, msg, toggleMessage, toggleState, store, key);
+
+				try {
+					if (dialog.getToggleState()) {
+						store.setValue(key, MessageDialogWithToggle.NEVER);
+						store.save();
+					}
+				}
+				catch (IOException e) {
+				}
 			}
 
 		});

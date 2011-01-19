@@ -15,6 +15,8 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -31,6 +33,10 @@ public class PortalTomcatUIPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static PortalTomcatUIPlugin plugin;
 
+	public static IStatus createErrorStatus(Exception ex) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
+	}
+
 	/**
 	 * Returns the shared instance
 	 * 
@@ -38,6 +44,10 @@ public class PortalTomcatUIPlugin extends AbstractUIPlugin {
 	 */
 	public static PortalTomcatUIPlugin getDefault() {
 		return plugin;
+	}
+
+	public static void logError(Exception ex) {
+		getDefault().getLog().log(createErrorStatus(ex));
 	}
 
 	/**

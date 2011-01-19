@@ -109,7 +109,7 @@ public class SDKHelper extends LaunchHelper {
 		if (separateJRE) {
 			launchConfig.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME);
-			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Xmx1024m");
+			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Xmx768m");
 		}
 
 		return launchConfig;

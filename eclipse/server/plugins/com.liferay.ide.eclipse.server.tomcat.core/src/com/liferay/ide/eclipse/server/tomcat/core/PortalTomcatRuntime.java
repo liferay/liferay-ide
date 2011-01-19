@@ -15,7 +15,6 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.util.JavaUtil;
@@ -29,8 +28,11 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -48,7 +50,11 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
 import org.osgi.framework.Version;
 
 @SuppressWarnings("restriction")
-public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime {
+public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatRuntime {
+
+	public static final String PROP_BUNDLE_SOURCE_LOCATION = "bundle-source-location";
+
+	public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location";
 
 	public static final String RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
 
@@ -64,12 +70,13 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 	public void dispose() {
 		super.dispose();
 	}
-	
+
 	public IVMInstall findPortalBundledJRE(boolean addVM) {
 		IPath jrePath = findBundledJREPath(getRuntime().getLocation());
-		if (jrePath == null) return null;
-		
-		//make sure we don't have an existing JRE that has the same path
+		if (jrePath == null)
+			return null;
+
+		// make sure we don't have an existing JRE that has the same path
 		for (IVMInstallType vmInstallType : JavaRuntime.getVMInstallTypes()) {
 			for (IVMInstall vmInstall : vmInstallType.getVMInstalls()) {
 				if (vmInstall.getInstallLocation().equals(jrePath.toFile())) {
@@ -77,47 +84,60 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 				}
 			}
 		}
-		
+
 		if (addVM) {
 			IVMInstallType installType = JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE);
 			VMStandin newVM = new VMStandin(installType, JavaUtil.createUniqueId(installType));
 			newVM.setInstallLocation(jrePath.toFile());
 			if (!CoreUtil.isNullOrEmpty(getRuntime().getName())) {
 				newVM.setName(getRuntime().getName() + " JRE");
-			} else {
+			}
+			else {
 				newVM.setName("Liferay JRE");
 			}
-			
-			//make sure the new VM name isn't the same as existing name 
+
+			// make sure the new VM name isn't the same as existing name
 			boolean existingVMWithSameName = ServerUtil.isExistingVMName(newVM.getName());
-			
+
 			int num = 1;
 			while (existingVMWithSameName) {
 				newVM.setName(getRuntime().getName() + " JRE (" + (num++) + ")");
 				existingVMWithSameName = ServerUtil.isExistingVMName(newVM.getName());
 			}
-			
+
 			return newVM.convertToRealVM();
 		}
-			
+
 		return null;
 	}
-	
+
 	public IPath[] getAllUserClasspathLibraries() {
 		IPath runtimeLocation = getRuntime().getLocation();
-		
+
 		return PortalTomcatUtil.getAllUserClasspathLibraries(runtimeLocation);
 
 	}
-	
+
 	public IPath getAppServerDir() {
 		return getRuntime().getLocation();
+	}
+
+	public IPath getBundleZipLocation() {
+		String zipLocation = getAttribute(PROP_BUNDLE_ZIP_LOCATION, (String) null);
+
+		return zipLocation != null ? new Path(zipLocation) : null;
 	}
 
 	public Properties getCategories() {
 		IPath runtimeLocation = getRuntime().getLocation();
 
 		return PortalTomcatUtil.getCategories(runtimeLocation);
+	}
+
+	public IPath getPortalSourceLocation() {
+		String sourceLocation = getAttribute(PROP_BUNDLE_SOURCE_LOCATION, (String) null);
+
+		return sourceLocation != null ? new Path(sourceLocation) : null;
 	}
 
 	public String getPortalVersion() {
@@ -220,7 +240,8 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			if (vmInstall != null) {
 				setVMInstall(vmInstall);
 				return vmInstall;
-			} else {
+			}
+			else {
 				return JavaRuntime.getDefaultVMInstall();
 			}
 		}
@@ -233,10 +254,23 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 				if (id.equals(vmInstalls[i].getId()))
 					return vmInstalls[i];
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// ignore
 		}
 		return null;
+	}
+
+	public void setBundleZipLocation(IPath path) {
+		if (path != null) {
+			setAttribute(PROP_BUNDLE_ZIP_LOCATION, path.toPortableString());
+		}
+	}
+
+	public void setPortalSourceLocation(IPath path) {
+		if (path != null) {
+			setAttribute(PROP_BUNDLE_SOURCE_LOCATION, path.toPortableString());
+		}
 	}
 
 	@Override
@@ -267,7 +301,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		}
 
 		if (!getRuntime().isStub()) {
-
 			String serverInfo = null;
 
 			try {
@@ -283,14 +316,58 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 			}
 		}
 
+		// need to check if this runtime is specifying a zip file for a bundle package, if so validate it
+		IPath bundleZip = getBundleZipLocation();
+
+		if (bundleZip != null && (!CoreUtil.isNullOrEmpty(bundleZip.toString()))) {
+			String rootEntryName = null;
+
+			try {
+				ZipFile zipFile = new ZipFile(bundleZip.toFile());
+
+				Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+				ZipEntry rootEntry = entries.nextElement();
+				rootEntryName = rootEntry.getName();
+
+				if (rootEntryName.endsWith("/")) {
+					rootEntryName = rootEntryName.substring(0, rootEntryName.length() - 1);
+				}
+
+				boolean foundTomcat = false;
+
+				while (entries.hasMoreElements() && !foundTomcat) {
+					ZipEntry entry = entries.nextElement();
+					String entryName = entry.getName();
+
+					if (entryName.startsWith(rootEntryName + "/tomcat-")) {
+						foundTomcat = true;
+					}
+				};
+			}
+			catch (Exception e) {
+				return PortalTomcatPlugin.createErrorStatus("Bundle zip location does not specify a valid Lifeary Tomcat bundle.");
+			}
+
+			// if we get here then the user has specified a good zip installation so now we need to see if the
+			// installation of the runtime will work for EXT plugins.
+			IPath location = getRuntime().getLocation();
+			String bundleDir = location.removeLastSegments(1).lastSegment();
+
+			if (!bundleDir.equals(rootEntryName)) {
+				return PortalTomcatPlugin.createErrorStatus("Runtime location directory layout does not match zip file.");
+			}
+		}
+
 		return status;
 	}
 
 	private IPath findBundledJREPath(IPath location) {
 		if (Platform.getOS().equals(Platform.OS_WIN32) && location != null && location.toFile().exists()) {
-			//look for jre dir
+			// look for jre dir
 			File tomcat = location.toFile();
 			String[] jre = tomcat.list(new FilenameFilter() {
+
 				public boolean accept(File dir, String name) {
 					return name.startsWith("jre");
 				}
@@ -331,11 +408,6 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 		return newHelper;
 	}
 
-	@Override
-	protected void initialize() {
-		super.initialize();
-	}
-
 	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile)
 		throws IOException {
 
@@ -345,10 +417,11 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalRuntime
 
 		IPath portalRoot = getRoot();
 
-		URL[] supportUrls = new URL[] {
+		URL[] supportUrls =
+			new URL[] {
 				FileLocator.toFileURL(PortalServerCorePlugin.getDefault().getBundle().getEntry(
 					"portal-support/portal-support.jar"))
-		};
+			};
 
 		PortalSupportHelper helper =
 			new PortalSupportHelper(

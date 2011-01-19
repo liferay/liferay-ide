@@ -20,7 +20,10 @@ import com.liferay.ide.eclipse.core.CorePlugin;
 import java.io.File;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.ui.IStartup;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -33,10 +36,17 @@ public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.server.tomcat.core";
 
+	public static final String PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY = "ADDED_EXT_PLUGIN_TOGGLE_KEY";
+
+	public static final String PREFERENCES_ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY =
+		"ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY";
+
+	public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY";
+
 	// The shared instance
 	private static PortalTomcatPlugin plugin;
 
-	private static PortalSourcePartListener portalSourcePartListener;
+	// private static PortalSourcePartListener portalSourcePartListener;
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(PLUGIN_ID, msg);
@@ -49,6 +59,10 @@ public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 	 */
 	public static PortalTomcatPlugin getDefault() {
 		return plugin;
+	}
+
+	public static IPersistentPreferenceStore getPreferenceStore() {
+		return new ScopedPreferenceStore(new InstanceScope(), PLUGIN_ID);
 	}
 
 	public static void logError(String msg, Exception e) {
