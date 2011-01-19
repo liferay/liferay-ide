@@ -22,6 +22,7 @@ import java.net.URL;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
 
 /**
@@ -53,6 +54,11 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 			catch (Exception e) {
 			}
 		}
+	}
+
+	@Override
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED;
 	}
 
 }

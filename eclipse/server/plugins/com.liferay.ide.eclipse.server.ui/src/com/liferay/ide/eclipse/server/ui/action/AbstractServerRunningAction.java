@@ -48,15 +48,18 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
 				if (obj instanceof IServer) {
 					selectedServer = (IServer) obj;
 					
-					action.setEnabled(selectedServer.getServerState() == IServer.STATE_STARTED);
+					action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
 				}
 				else if (obj instanceof IServerModule) {
 					selectedModule = (IServerModule) obj;
-					action.setEnabled(selectedModule.getServer().getServerState() == IServer.STATE_STARTED);
+
+					action.setEnabled((selectedModule.getServer().getServerState() & getRequiredServerState()) > 0);
 				}
 			}
 		}
 	}
+
+	protected abstract int getRequiredServerState();
 
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.activePart = targetPart;

@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.server.ui.action;
 
 import com.liferay.ide.eclipse.server.core.IPortalServer;
+import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
 import com.liferay.ide.eclipse.server.util.PortalServicesHelper;
 import com.liferay.ide.eclipse.ui.dialog.StringsFilteredDialog;
 
@@ -27,6 +28,7 @@ import java.util.Vector;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.ws.internal.explorer.LaunchOption;
 import org.eclipse.wst.ws.internal.explorer.LaunchOptions;
 import org.eclipse.wst.ws.internal.explorer.WSExplorerLauncherCommand;
@@ -37,6 +39,9 @@ import org.eclipse.wst.ws.internal.parser.wsil.WebServicesParser;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings({
+	"restriction", "rawtypes", "unchecked"
+})
 public class TestWebServicesAction extends AbstractServerRunningAction {
 
 	public TestWebServicesAction() {
@@ -60,8 +65,8 @@ public class TestWebServicesAction extends AbstractServerRunningAction {
 			try {
 				webServicesListURL = new URL(portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/axis");
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				PortalServerUIPlugin.logError(e);
+				return;
 			} 
 		}
 		
@@ -89,8 +94,9 @@ public class TestWebServicesAction extends AbstractServerRunningAction {
 		}
 	}
 	
-	protected void addLaunchOptions(Vector launchOptions, String wsdlURL, String stateLocation, String defaultFavoritesLocation)
-	  {
+	protected void addLaunchOptions(
+		Vector launchOptions, String wsdlURL, String stateLocation, String defaultFavoritesLocation) {
+
 		  GetMonitorCommand getMonitorCmd = new GetMonitorCommand();
 	      getMonitorCmd.setMonitorService(true);
 	      getMonitorCmd.setCreate(false);
@@ -107,4 +113,8 @@ public class TestWebServicesAction extends AbstractServerRunningAction {
 		  launchOptions.add(new LaunchOption(LaunchOptions.DEFAULT_FAVORITES_LOCATION,defaultFavoritesLocation));
 	  }
 
+	@Override
+	protected int getRequiredServerState() {
+		return IServer.STATE_STARTED;
+	}
 }
