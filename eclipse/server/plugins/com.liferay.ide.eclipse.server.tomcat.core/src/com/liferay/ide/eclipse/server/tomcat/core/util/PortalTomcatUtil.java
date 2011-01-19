@@ -23,6 +23,7 @@ import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatPlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
+import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerBehavior;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
 
 import java.io.File;
@@ -402,20 +403,20 @@ public class PortalTomcatUtil {
 			return;
 		}
 
+		final PortalTomcatServerBehavior serverBehavior =
+			(PortalTomcatServerBehavior) server.getAdapter(PortalTomcatServerBehavior.class);
+
 		Thread shutdownThread = new Thread() {
 
 			@Override
 			public void run() {
-				server.stop(false);
+				serverBehavior.stop(true);
+
 				synchronized (server) {
 					try {
 						server.wait(5000);
 					}
 					catch (InterruptedException e) {
-					}
-
-					if (server.getServerState() != IServer.STATE_STOPPED) {
-						server.stop(true);
 					}
 				}
 			}

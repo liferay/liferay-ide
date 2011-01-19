@@ -77,7 +77,7 @@ public class CleanAppServerAction extends AbstractProjectAction {
 
 			IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-			if (bundleZipLocation == null) {
+			if (bundleZipLocation == null || (!bundleZipLocation.toFile().exists())) {
 				boolean retval =
 					MessageDialog.openQuestion(
 						getDisplay().getActiveShell(), getTitle(),

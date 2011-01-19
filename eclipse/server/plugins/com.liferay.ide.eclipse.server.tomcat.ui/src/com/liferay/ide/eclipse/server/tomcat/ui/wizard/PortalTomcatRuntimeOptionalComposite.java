@@ -61,8 +61,6 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 
 	protected boolean ignoreModifyEvent;
 
-	protected Text sourceFolderField;
-
 	public PortalTomcatRuntimeOptionalComposite(Composite parent, IWizardHandle wizard) {
 		super(parent, wizard);
 
@@ -210,7 +208,7 @@ public class PortalTomcatRuntimeOptionalComposite extends TomcatRuntimeComposite
 
 	@Override
 	protected void init() {
-		if ((bundleZipField == null) || sourceFolderField == null || getRuntime() == null) {
+		if ((bundleZipField == null) || getRuntime() == null) {
 			return;
 		}
 
