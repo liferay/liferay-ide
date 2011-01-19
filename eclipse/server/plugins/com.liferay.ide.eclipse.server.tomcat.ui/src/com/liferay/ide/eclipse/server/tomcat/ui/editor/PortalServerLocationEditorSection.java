@@ -562,7 +562,6 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 		IPath basePath = tomcatServer.getRuntimeBaseDirectory();
 		if (!readOnly) {
 			// If server has not been published, or server is published with no modules, allow editing
-			// TODO Find better way to determine if server hasn't been published
 			if ((basePath != null && !basePath.append("conf").toFile().exists())
 					|| (server.getOriginal().getServerPublishState() == IServer.PUBLISH_STATE_NONE
 							&& server.getOriginal().getModules().length == 0)) {
