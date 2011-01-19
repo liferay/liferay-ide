@@ -379,7 +379,6 @@ public class ServiceBuilderEditor extends SharedHeaderFormEditor {
 		headerImage = newHeaderImage;
 
 		// avoid extra padding due to large title font
-		// TODO reset font in case tool bar is empty
 		// leftToolBar.getParent().setFont(JFaceResources.getDefaultFont());
 		getHeaderForm().getForm().reflow(true);
 	}
