@@ -325,7 +325,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 				ZipInputStream zis = new ZipInputStream(new FileInputStream(bundleZip.toFile()));
 
 				ZipEntry rootEntry = zis.getNextEntry();
-				rootEntryName = rootEntry.getName();
+				rootEntryName = new Path(rootEntry.getName()).segment(0);
 
 				if (rootEntryName.endsWith("/")) {
 					rootEntryName = rootEntryName.substring(0, rootEntryName.length() - 1);
