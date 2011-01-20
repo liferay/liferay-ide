@@ -17,15 +17,20 @@ package com.liferay.ide.eclipse.ui.pref;
 
 import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
@@ -34,6 +39,7 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.server.ui.ServerUIUtil;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Greg Amerson
@@ -109,6 +115,30 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 			public void linkActivated(HyperlinkEvent e) {
 				ServerUIUtil.showNewServerWizard(
 					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay.");
+			}
+
+		});
+
+		group = new Group(pageParent, SWT.NONE);
+		group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+		group.setText("Message dialogs");
+		group.setLayout(new GridLayout(2, false));
+
+		Label label = new Label(group, SWT.NONE);
+		label.setText("Clean all 'do not show again' settings and show all hidden dialogs again.");
+
+		final Button button = new Button(group, SWT.PUSH);
+		button.setText("Clear");
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+					LiferayUIPlugin.clearAllPersistentSettings();
+				}
+				catch (BackingStoreException e1) {
+					MessageDialog.openError(button.getShell(), "Liferay Preferences", "Unable to reset settings.");
+				}
 			}
 
 		});

@@ -66,6 +66,18 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	// The shared instance
 	private static LiferayUIPlugin plugin;
 
+	public static void clearAllPersistentSettings()
+		throws BackingStoreException {
+
+		IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode("com.liferay.ide.eclipse.server.tomcat.core");
+
+		tomcatCorePrefs.remove("ADDED_EXT_PLUGIN_TOGGLE_KEY");
+		tomcatCorePrefs.remove("ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY");
+		tomcatCorePrefs.remove("REMOVE_EXT_PLUGIN_TOGGLE_KEY");
+
+		tomcatCorePrefs.sync();
+	}
+
 	public static IStatus createErrorStatus(String string) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, string);
 	}
@@ -136,9 +148,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
 	 */
 	public void start(BundleContext context)
 		throws Exception {
@@ -150,9 +160,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
 	 */
 	public void stop(BundleContext context)
 		throws Exception {
