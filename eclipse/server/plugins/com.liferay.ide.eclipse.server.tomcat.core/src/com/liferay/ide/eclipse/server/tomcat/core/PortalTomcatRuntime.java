@@ -28,11 +28,10 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -323,11 +322,9 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 			String rootEntryName = null;
 
 			try {
-				ZipFile zipFile = new ZipFile(bundleZip.toFile());
+				ZipInputStream zis = new ZipInputStream(new FileInputStream(bundleZip.toFile()));
 
-				Enumeration<? extends ZipEntry> entries = zipFile.entries();
-
-				ZipEntry rootEntry = entries.nextElement();
+				ZipEntry rootEntry = zis.getNextEntry();
 				rootEntryName = rootEntry.getName();
 
 				if (rootEntryName.endsWith("/")) {
@@ -336,13 +333,16 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 
 				boolean foundTomcat = false;
 
-				while (entries.hasMoreElements() && !foundTomcat) {
-					ZipEntry entry = entries.nextElement();
+				ZipEntry entry = zis.getNextEntry();
+
+				while (entry != null && !foundTomcat) {
 					String entryName = entry.getName();
 
 					if (entryName.startsWith(rootEntryName + "/tomcat-")) {
 						foundTomcat = true;
 					}
+
+					entry = zis.getNextEntry();
 				};
 			}
 			catch (Exception e) {
