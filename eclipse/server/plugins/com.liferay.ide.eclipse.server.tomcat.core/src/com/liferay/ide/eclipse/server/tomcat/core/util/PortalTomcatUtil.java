@@ -44,11 +44,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.MessageDialogWithToggle;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jst.server.tomcat.core.internal.xml.Factory;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Context;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -63,38 +60,6 @@ import org.osgi.framework.Version;
  */
 @SuppressWarnings("restriction")
 public class PortalTomcatUtil {
-
-	public static boolean displayToggleQuestion(final String msg, final IPreferenceStore store, final String key) {
-		final boolean[] retval = new boolean[1];
-	
-		// first look up the key to see if the anser is always or never or prompt. If it is always return true
-		// if it is never return false and if it is prompt then do the prompt
-		String questionValue = store.getString(key);
-
-		if (CoreUtil.isNullOrEmpty(questionValue) || questionValue.equals(MessageDialogWithToggle.PROMPT)) {
-			Display.getDefault().syncExec(new Runnable() {
-
-				public void run() {
-					MessageDialogWithToggle dialog =
-						MessageDialogWithToggle.openYesNoQuestion(
-						Display.getDefault().getActiveShell(), "title", msg, "Remember my decision", false, store, key);
-					int code = dialog.getReturnCode();
-					System.out.println(code);
-				}
-			});
-
-		}
-		else {
-			if (questionValue.equals(MessageDialogWithToggle.ALWAYS)) {
-				retval[0] = true;
-			}
-			else if (questionValue.equals(MessageDialogWithToggle.NEVER)) {
-				retval[0] = false;
-			}
-		}
-	
-		return retval[0];
-	}
 
 	public static IPath[] getAllUserClasspathLibraries(IPath runtimeLocation) {
 		List<IPath> libs = new ArrayList<IPath>();
