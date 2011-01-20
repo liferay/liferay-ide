@@ -71,11 +71,12 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 
 		IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode("com.liferay.ide.eclipse.server.tomcat.core");
 
+
 		tomcatCorePrefs.remove("ADDED_EXT_PLUGIN_TOGGLE_KEY");
 		tomcatCorePrefs.remove("ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY");
 		tomcatCorePrefs.remove("REMOVE_EXT_PLUGIN_TOGGLE_KEY");
 
-		tomcatCorePrefs.sync();
+		tomcatCorePrefs.flush();
 	}
 
 	public static IStatus createErrorStatus(String string) {
