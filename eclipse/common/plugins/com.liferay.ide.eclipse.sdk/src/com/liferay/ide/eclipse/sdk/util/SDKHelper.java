@@ -182,7 +182,9 @@ public class SDKHelper extends LaunchHelper {
 		IPath[] antLibs = sdk.getAntLibraries();
 
 		for (IPath antLib : antLibs) {
-			model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(antLib));
+			if (antLib.toFile().exists()) {
+				model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(antLib));
+			}
 		}
 	}
 }
