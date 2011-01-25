@@ -346,7 +346,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 				};
 			}
 			catch (Exception e) {
-				return PortalTomcatPlugin.createErrorStatus("Bundle zip location does not specify a valid Liferay Tomcat bundle.");
+				return PortalTomcatPlugin.createWarningStatus("Bundle zip location does not specify a valid Liferay Tomcat bundle.");
 			}
 
 			// if we get here then the user has specified a good zip installation so now we need to see if the
@@ -355,7 +355,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 			String bundleDir = location.removeLastSegments(1).lastSegment();
 
 			if (!bundleDir.equals(rootEntryName)) {
-				return PortalTomcatPlugin.createErrorStatus("Runtime location directory layout does not match zip file.");
+				return PortalTomcatPlugin.createWarningStatus("Runtime location directory layout does not match zip file.");
 			}
 		}
 

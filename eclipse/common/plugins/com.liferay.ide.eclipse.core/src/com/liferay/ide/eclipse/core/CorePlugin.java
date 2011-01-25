@@ -56,6 +56,10 @@ public class CorePlugin extends Plugin {
 		return new Status(IStatus.ERROR, pluginId, t.getMessage(), t);
 	}
 
+	public static IStatus createWarningStatus(String message) {
+		return new Status(IStatus.WARNING, PLUGIN_ID, message);
+	}
+
 	/**
 	 * Returns the shared instance
 	 * 
@@ -89,9 +93,7 @@ public class CorePlugin extends Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
 	 */
 	public void start(BundleContext context)
 		throws Exception {
@@ -102,9 +104,7 @@ public class CorePlugin extends Plugin {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
+	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
 	 */
 	public void stop(BundleContext context)
 		throws Exception {
