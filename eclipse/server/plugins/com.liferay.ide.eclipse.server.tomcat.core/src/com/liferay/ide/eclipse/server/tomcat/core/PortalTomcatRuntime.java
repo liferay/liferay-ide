@@ -346,7 +346,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 				};
 			}
 			catch (Exception e) {
-				return PortalTomcatPlugin.createErrorStatus("Bundle zip location does not specify a valid Lifeary Tomcat bundle.");
+				return PortalTomcatPlugin.createErrorStatus("Bundle zip location does not specify a valid Liferay Tomcat bundle.");
 			}
 
 			// if we get here then the user has specified a good zip installation so now we need to see if the
