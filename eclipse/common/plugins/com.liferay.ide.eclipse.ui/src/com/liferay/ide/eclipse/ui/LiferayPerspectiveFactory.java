@@ -150,11 +150,11 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		topRight.addView(IPageLayout.ID_OUTLINE);
 		topRight.addView(ID_WST_SNIPPETS_VIEW);
 		
-		IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
+		// IViewDescriptor tlView = PlatformUI.getWorkbench().getViewRegistry().find(ID_TASKLIST_VIEW);
 		
-		if (tlView != null) {
-			topRight.addView(ID_TASKLIST_VIEW);
-		}
+		// if (tlView != null) {
+		// topRight.addView(ID_TASKLIST_VIEW);
+		// }
 
 		topRight.addPlaceholder(IPageLayout.ID_BOOKMARKS);
 
