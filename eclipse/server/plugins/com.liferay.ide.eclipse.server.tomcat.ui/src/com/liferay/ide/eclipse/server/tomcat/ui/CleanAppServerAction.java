@@ -27,6 +27,8 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -75,9 +77,11 @@ public class CleanAppServerAction extends AbstractProjectAction {
 				return;
 			}
 
+			IStatus status = runtime.validate(new NullProgressMonitor());
+
 			IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-			if (bundleZipLocation == null || (!bundleZipLocation.toFile().exists())) {
+			if (!status.isOK() || bundleZipLocation == null || (!bundleZipLocation.toFile().exists())) {
 				boolean retval =
 					MessageDialog.openQuestion(
 						getDisplay().getActiveShell(), getTitle(),
