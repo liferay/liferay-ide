@@ -210,7 +210,7 @@ public class PortalTomcatServer extends TomcatServer
 
 		if (!addingExt && removingExt) {
 			PortalTomcatUtil.displayToggleMessage(
-				"Removing the Ext plugin will only update the metadata, it will not actually restore any changes made by the Ext plugin.  To restore the server to its original state, use the \"Clean App Server\" action available in the project context menu.",
+				"Removing the Ext plugin will only update the metadata; it will not actually restore any changes made by the Ext plugin.  To restore the server to its original state, use the \"Clean App Server\" action available in the project context menu.",
 				PortalTomcatPlugin.PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY);
 		}
 		// int lastSetting =
