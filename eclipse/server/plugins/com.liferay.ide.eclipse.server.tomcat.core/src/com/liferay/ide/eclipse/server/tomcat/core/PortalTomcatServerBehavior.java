@@ -52,6 +52,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.w3c.dom.Document;
 
 /**
@@ -95,8 +96,10 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 
 						if (pluginPublisher != null) {
 							try {
+								IModuleResourceDelta[] delta = getPublishedResourceDelta(moduleTree);
+
 								shouldPublishModule =
-									pluginPublisher.prePublishModule(this, kind, deltaKind, moduleTree, monitor);
+									pluginPublisher.prePublishModule(this, kind, deltaKind, moduleTree, delta, monitor);
 							}
 							catch (Exception e) {
 								PortalTomcatPlugin.logError("Plugin deployer failed", e);
@@ -131,9 +134,13 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 					}
 				}
 			}
+
+			setModulePublishState(moduleTree, IServer.PUBLISH_STATE_NONE);
 		}
-		
-		setModulePublishState(moduleTree, IServer.PUBLISH_STATE_NONE);
+		else {
+			// wasn't able to publish module, should set to needs full publish
+			setModulePublishState(moduleTree, IServer.PUBLISH_STATE_FULL);
+		}
 	}
 	
 	@Override

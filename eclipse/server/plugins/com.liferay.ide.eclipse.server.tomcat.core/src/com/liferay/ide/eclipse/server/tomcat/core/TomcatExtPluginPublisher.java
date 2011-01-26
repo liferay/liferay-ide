@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
@@ -65,12 +66,19 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 	}
 
 	public boolean prePublishModule(
-		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor) {
+		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
+		IProgressMonitor monitor) {
 
-		boolean publish = false;
+		if (kind == IServer.PUBLISH_AUTO) {
+			PortalTomcatUtil.displayToggleMessage(
+				"The Ext plugin does not support auto-publishing.  To redeploy changes from this plugin you will need to manually publish the server from the Servers view.",
+				PortalTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY);
+
+			return false;
+		}
 
 		if (kind == IServer.PUBLISH_CLEAN || moduleTree == null) {
-			return publish;
+			return false;
 		}
 
 		try {
@@ -84,13 +92,15 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 		}
 		catch (Exception e) {
 			PortalTomcatPlugin.logError("Failed pre-publishing ext module.", e);
+			return false;
 		}
 
-		return publish;
+		return true;
 	}
 
 	protected void addExtModule(ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor)
 		throws CoreException {
+
 
 		SDK sdk = null;
 		IProject project = module.getProject();

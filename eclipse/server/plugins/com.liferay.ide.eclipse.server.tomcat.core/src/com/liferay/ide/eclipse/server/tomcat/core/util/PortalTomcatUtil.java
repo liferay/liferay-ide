@@ -25,6 +25,7 @@ import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatPlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerBehavior;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
+import com.liferay.ide.eclipse.ui.util.UIUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,6 +61,12 @@ import org.osgi.framework.Version;
  */
 @SuppressWarnings("restriction")
 public class PortalTomcatUtil {
+
+	public static void displayToggleMessage(String msg, String key) {
+		UIUtil.postInfoWithToggle(
+			"Liferay Tomcat Server", msg, "Do not show this message again", false,
+			PortalTomcatPlugin.getPreferenceStore(), key);
+	}
 
 	public static IPath[] getAllUserClasspathLibraries(IPath runtimeLocation) {
 		List<IPath> libs = new ArrayList<IPath>();

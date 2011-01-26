@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2003, 2010 IBM Corporation and others.
+ * Copyright (c) 2003, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPortalServer;
-import com.liferay.ide.eclipse.ui.util.UIUtil;
+import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,9 +35,7 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatServer;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerUtil;
-import org.eclipse.wst.server.core.internal.Server;
 
 @SuppressWarnings("restriction")
 public class PortalTomcatServer extends TomcatServer
@@ -194,33 +192,34 @@ public class PortalTomcatServer extends TomcatServer
 			}
 		}
 
-		if (addingExt && !removingExt) {
-			int existingSetting =
-				getServer().getAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
+		// if (addingExt && !removingExt) {
+		// int existingSetting =
+		// getServer().getAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
+		//
+		// if (existingSetting != Server.AUTO_PUBLISH_DISABLE) {
+		// PortalTomcatUtil.displayToggleMessage(
+		// "The Ext plugin Automatic publishing has been set to disabled since an Ext plugin has been added.  This setting will be restored once the Ext plugin is removed.",
+		// PortalTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY);
+		// }
+		//
+		// IServerWorkingCopy wc = getServer().createWorkingCopy();
+		// wc.setAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE);
+		// wc.setAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, existingSetting);
+		// wc.save(true, monitor);
+		// }
 
-			if (existingSetting != Server.AUTO_PUBLISH_DISABLE) {
-				displayToggleMessage(
-					"Automatic publishing has been set to disabled since an Ext plugin has been added.  This setting will be restored once the Ext plugin is removed.",
-					PortalTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY);
-			}
-
-			IServerWorkingCopy wc = getServer().createWorkingCopy();
-			wc.setAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE);
-			wc.setAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, existingSetting);
-			wc.save(true, monitor);
-		}
-		else if (!addingExt && removingExt) {
-			displayToggleMessage(
+		if (!addingExt && removingExt) {
+			PortalTomcatUtil.displayToggleMessage(
 				"Removing the Ext plugin will only update the metadata, it will not actually restore any changes made by the Ext plugin.  To restore the server to its original state, use the \"Clean App Server\" action available in the project context menu.",
 				PortalTomcatPlugin.PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY);
-
-			int lastSetting =
-				getServer().getAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
-
-			IServerWorkingCopy wc = getServer().createWorkingCopy();
-			wc.setAttribute(Server.PROP_AUTO_PUBLISH_SETTING, lastSetting);
-			wc.save(true, monitor);
 		}
+		// int lastSetting =
+		// getServer().getAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
+
+			// IServerWorkingCopy wc = getServer().createWorkingCopy();
+			// wc.setAttribute(Server.PROP_AUTO_PUBLISH_SETTING, lastSetting);
+			// wc.save(true, monitor);
+		// }
 
 		super.modifyModules(add, remove, monitor);
 
@@ -248,12 +247,6 @@ public class PortalTomcatServer extends TomcatServer
 
 	public void setUserTimezone(String userTimezone) {
 		setAttribute(PROPERTY_USER_TIMEZONE, userTimezone);
-	}
-
-	private void displayToggleMessage(String msg, String key) {
-		UIUtil.postInfoWithToggle(
-			"Liferay Tomcat Server", msg, "Do not show this message again", false,
-			PortalTomcatPlugin.getPreferenceStore(), key);
 	}
 
 }

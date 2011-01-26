@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 
@@ -18,6 +19,7 @@ public interface IPluginPublisher {
 	public String getRuntimeTypeId();
 
 	public boolean prePublishModule(
-		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor);
+		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
+		IProgressMonitor monitor);
 
 }
