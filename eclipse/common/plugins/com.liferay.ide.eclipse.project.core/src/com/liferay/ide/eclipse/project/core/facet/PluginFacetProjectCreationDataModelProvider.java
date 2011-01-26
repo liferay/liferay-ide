@@ -230,8 +230,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		// } else
 		if (FACET_PROJECT_NAME.equals(propertyName) || LIFERAY_SDK_NAME.equals(propertyName)) {
 			if (!(getProperty(LIFERAY_SDK_NAME).equals(IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE))) {
-				getNestedModel().setProperty(USE_DEFAULT_LOCATION, false);
-				getNestedModel().setProperty(USER_DEFINED_BASE_LOCATION, getProjectLocation());
+				updateProjectLocation();
 			}
 			// getNestedModel().setProperty(USER_DEFINED_LOCATION,
 			// getProjectLocation() + File.separator + propertyValue.toString()
@@ -447,6 +446,8 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	}
 
 	protected void setupProject(String facetId) {
+		updateProjectLocation();
+
 		IProjectDefinition projectDefinition = projectDefinitions.get(facetId);
 
 		if (projectDefinition != null) {
@@ -464,5 +465,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			projectDefinition.setupNewProject(getDataModel(), facetedProject);
 		}
+	}
+
+	protected void updateProjectLocation() {
+		getNestedModel().setProperty(USE_DEFAULT_LOCATION, false);
+		getNestedModel().setProperty(USER_DEFINED_BASE_LOCATION, getProjectLocation());
 	}
 }
