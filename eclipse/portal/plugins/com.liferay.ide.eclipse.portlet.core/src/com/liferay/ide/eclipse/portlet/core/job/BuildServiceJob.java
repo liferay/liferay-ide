@@ -34,6 +34,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -45,7 +46,9 @@ import org.eclipse.jdt.internal.core.ClasspathEntry;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({
+	"restriction", "deprecation"
+})
 public class BuildServiceJob extends SDKJob {
 
 	protected IFile serviceXmlFile;
@@ -70,6 +73,14 @@ public class BuildServiceJob extends SDKJob {
 
 		desc.setAutoBuilding(false);
 
+		Preferences resourcePrefs = ResourcesPlugin.getPlugin().getPluginPreferences();
+
+		boolean autoRefresh = resourcePrefs.getBoolean(ResourcesPlugin.PREF_AUTO_REFRESH);
+
+		if (autoRefresh) {
+			resourcePrefs.setValue(ResourcesPlugin.PREF_AUTO_REFRESH, false);
+		}
+
 		try {
 			ResourcesPlugin.getWorkspace().setDescription(desc);
 
@@ -89,7 +100,7 @@ public class BuildServiceJob extends SDKJob {
 			properties.put("service.file", serviceXmlFile.getRawLocation().toOSString());
 			properties.put("service.input.file", serviceXmlFile.getRawLocation().toOSString());
 
-			monitor.worked(10);
+			monitor.worked(50);
 
 			sdk.buildService(getProject(), serviceXmlFile, properties);
 
@@ -114,6 +125,10 @@ public class BuildServiceJob extends SDKJob {
 						updateClasspath(existingRawClasspath, javaProject);
 
 						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+						if (!(project.isSynchronized(IResource.DEPTH_INFINITE))) {
+							project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						}
 					}
 					catch (Exception e) {
 						PortletCore.logError(e);
@@ -131,6 +146,10 @@ public class BuildServiceJob extends SDKJob {
 			desc = ResourcesPlugin.getWorkspace().getDescription();
 
 			desc.setAutoBuilding(saveAutoBuild);
+
+			if (autoRefresh) {
+				resourcePrefs.setValue(ResourcesPlugin.PREF_AUTO_REFRESH, autoRefresh);
+			}
 
 			try {
 				ResourcesPlugin.getWorkspace().setDescription(desc);
