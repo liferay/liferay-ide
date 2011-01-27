@@ -1,0 +1,4 @@
+<div style="font-size:2em">Getting Started with Liferay IDE</div>
+
+{toc}
+
