@@ -217,7 +217,9 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 		// setMessage(DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription);
 		// }
 
-		projectsList.setChecked(selectedProjects[0], true);
+		if (!CoreUtil.isNullOrEmpty(selectedProjects)) {
+			projectsList.setChecked(selectedProjects[0], true);
+		}
 
 		setPageComplete(projectsList.getCheckedElements().length > 0);
 

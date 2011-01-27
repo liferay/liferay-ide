@@ -112,7 +112,8 @@ public class ProjectRecord {
 
 		String path =
 			projectSystemFile != null ? projectSystemFile.getParent() : (liferayProjectDir != null
-				? liferayProjectDir.getPath() : (project != null ? project.getRawLocation().toOSString() : ""));
+				? liferayProjectDir.getPath() : (project != null
+					? new Path(project.getLocationURI().getPath()).toOSString() : ""));
 
 		return NLS.bind("{0} ({1})", projectName, path);
 	}

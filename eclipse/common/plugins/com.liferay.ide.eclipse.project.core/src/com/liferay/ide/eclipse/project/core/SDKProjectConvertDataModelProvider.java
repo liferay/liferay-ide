@@ -20,12 +20,15 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -63,18 +66,32 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
 	@Override
 	public Object getDefaultProperty(String propertyName) {
 		if (SDK_LOCATION.equals(propertyName)) {
-			return this.project.getRawLocation().removeLastSegments(2).toOSString();
+			IPath rawLocation = this.project.getRawLocation();
+
+			if (rawLocation == null) {
+				URI absoluteUri = this.project.getLocationURI();
+				rawLocation = new Path(absoluteUri.getPath());
+			}
+
+			return rawLocation.removeLastSegments(2).toOSString();
 		}
 		else if (SDK_VERSION.equals(propertyName)) {
 			// see if we have a sdk location and extract the version
 			String sdkLoc = getStringProperty(SDK_LOCATION);
 			
 			try {
-				String sdkVersionValue = SDKUtil.readSDKVersion(sdkLoc);
+				boolean validSDKLocation = SDKUtil.isValidSDKLocation(sdkLoc);
 				
-				Version v = new Version(sdkVersionValue);
+				if (validSDKLocation) {
+					String sdkVersionValue = SDKUtil.readSDKVersion(sdkLoc);
 				
-				return v.toString();
+					Version v = new Version(sdkVersionValue);
+
+					return v.toString();
+				}
+				else {
+					return "";
+				}
 			}
 			catch (Exception e) {
 			}
