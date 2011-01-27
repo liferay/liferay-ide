@@ -385,6 +385,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 	protected String getProjectLocation() {
 		IPath sdkLoc = getSDKLocation();
 
+		if (sdkLoc == null) {
+			return null;
+		}
+
 		if (getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
 			return sdkLoc.append(ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER).toOSString();
 		}
