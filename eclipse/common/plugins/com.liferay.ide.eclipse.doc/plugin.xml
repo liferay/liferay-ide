@@ -7,6 +7,10 @@
             file="toc.xml"
             primary="true">
       </toc>
+      <toc
+            file="help/gettingstarted/gettingstarted-toc.xml"
+            primary="false">
+      </toc>
    </extension>
 
 </plugin>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Liferay IDE Developer Guide" topic="html/toc.html">
-   <topic label="Getting Started">
-      <anchor id="gettingstarted"/>
+<toc label="Liferay IDE Developer Guide">
+   <topic label="Getting Started 2">
+      <link toc="help/gettingstarted/gettingstarted-toc.xml"/>
    </topic>
 </toc>
