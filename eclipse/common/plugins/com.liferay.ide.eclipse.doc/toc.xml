@@ -2,7 +2,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Liferay IDE Developer Guide">
-   <topic label="Getting Started 2">
+   <topic label="Getting Started">
       <link toc="help/gettingstarted/gettingstarted-toc.xml"/>
+   </topic>
+   <topic label="Tasks">
+      <link toc="help/tasks/creating-portlets-toc.xml"/>
    </topic>
 </toc>

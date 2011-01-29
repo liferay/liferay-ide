@@ -11,6 +11,10 @@
             file="help/gettingstarted/gettingstarted-toc.xml"
             primary="false">
       </toc>
+      <toc
+            file="help/tasks/creating-portlets-toc.xml"
+            primary="false">
+      </toc>
    </extension>
 
 </plugin>
