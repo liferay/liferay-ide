@@ -27,6 +27,10 @@
 */
    </copyright>
 
+   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+      See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+   </license>
+
    <url>
       <update url="http://releases.liferay.com/tools/ide/eclipse/helios/stable"/>
    </url>
