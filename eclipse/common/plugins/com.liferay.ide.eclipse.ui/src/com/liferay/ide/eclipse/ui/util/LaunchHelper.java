@@ -42,7 +42,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
  * @author Greg Amerson
  */
 @SuppressWarnings( {
-	"restriction", "unchecked"
+	"restriction", "rawtypes", "unchecked"
 })
 public abstract class LaunchHelper implements IDebugEventSetListener {
 
@@ -77,8 +77,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener {
 		ILaunchConfigurationType type = manager.getLaunchConfigurationType(this.launchConfigTypeId);
 
 		String name =
-			DebugPlugin.getDefault().getLaunchManager().generateUniqueLaunchConfigurationNameFrom(
-				getNewLaunchConfigurationName());
+			DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(getNewLaunchConfigurationName());
 
 		ILaunchConfigurationWorkingCopy launchConfig = type.newInstance(null, name);
 

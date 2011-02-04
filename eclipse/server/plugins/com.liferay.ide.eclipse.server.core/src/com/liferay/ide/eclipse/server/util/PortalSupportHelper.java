@@ -122,23 +122,27 @@ public class PortalSupportHelper extends LaunchHelper {
 		if (supportLibs != null && supportLibs.length > 0) {
 			for (URL supportLib : supportLibs) {
 				model.addEntry(
-					ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(new Path(supportLib.getPath())));
+					ClasspathModel.USER,
+					JavaRuntime.newStringVariableClasspathEntry(new Path(supportLib.getPath()).toOSString()));
 			}
 		}
 		
 		for (String rootLib : rootLibs) {
-			model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(libRoot.append(rootLib)));
+			model.addEntry(
+				ClasspathModel.USER, JavaRuntime.newStringVariableClasspathEntry(libRoot.append(rootLib).toOSString()));
 		}
 
 		for (String portalLib : portalLibs) {
-			model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(portalRoot.append(
-				"WEB-INF/lib").append(portalLib)));
+			model.addEntry(
+				ClasspathModel.USER,
+				JavaRuntime.newStringVariableClasspathEntry(portalRoot.append("WEB-INF/lib").append(portalLib).toOSString()));
 		}
 
 		if (userLibs != null) {
 			for (String userLib : userLibs) {
-				model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(portalRoot.append(
-					"WEB-INF/lib").append(userLib)));
+				model.addEntry(
+					ClasspathModel.USER,
+					JavaRuntime.newStringVariableClasspathEntry(portalRoot.append("WEB-INF/lib").append(userLib).toOSString()));
 			}
 		}
 		else {
@@ -146,7 +150,7 @@ public class PortalSupportHelper extends LaunchHelper {
 				if (jarFile.endsWith(".jar")) {
 					model.addEntry(
 						ClasspathModel.USER,
-						JavaRuntime.newArchiveRuntimeClasspathEntry(portalRoot.append("WEB-INF/lib").append(jarFile)));
+						JavaRuntime.newStringVariableClasspathEntry(portalRoot.append("WEB-INF/lib").append(jarFile).toOSString()));
 				}
 			}
 		}
