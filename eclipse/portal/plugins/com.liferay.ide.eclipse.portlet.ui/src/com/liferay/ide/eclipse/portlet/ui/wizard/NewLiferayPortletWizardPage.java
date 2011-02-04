@@ -195,7 +195,9 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
 
 			public void propertyChanged(DataModelEvent event) {
-				if (INewJavaClassDataModelProperties.CLASS_NAME.equals(event.getPropertyName())) {
+				if (INewJavaClassDataModelProperties.CLASS_NAME.equals(event.getPropertyName()) ||
+					PORTLET_NAME.equals(event.getPropertyName())) {
+
 					synchHelper.synchAllUIWithModel();
 				}
 			}
