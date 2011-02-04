@@ -24,11 +24,34 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.ui;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.wst.ws.parser;bundle-version="[1.0.402,1.1.0)",
  javax.wsdl;bundle-version="[1.5.1,1.7.0)",
- org.eclipse.jst.common.frameworks;bundle-version="[1.1.300,1.2.0)"
+ org.eclipse.jst.common.frameworks;bundle-version="[1.1.300,1.2.0)",
+ org.apache.commons.logging,
+ org.apache.commons.collections
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.core,
- com.liferay.ide.eclipse.server.util
+ com.liferay.ide.eclipse.server.core.support,
+ com.liferay.ide.eclipse.server.util,
+ org.apache.commons.configuration,
+ org.apache.commons.configuration.beanutils,
+ org.apache.commons.configuration.event,
+ org.apache.commons.configuration.interpol,
+ org.apache.commons.configuration.plist,
+ org.apache.commons.configuration.reloading,
+ org.apache.commons.configuration.tree,
+ org.apache.commons.configuration.tree.xpath,
+ org.apache.commons.configuration.web,
+ org.apache.commons.lang,
+ org.apache.commons.lang.builder,
+ org.apache.commons.lang.enums,
+ org.apache.commons.lang.exception,
+ org.apache.commons.lang.math,
+ org.apache.commons.lang.mutable,
+ org.apache.commons.lang.reflect,
+ org.apache.commons.lang.text,
+ org.apache.commons.lang.time
 Bundle-ClassPath: .,
  portal-support/deps/portal-impl.jar,
- portal-support/deps/portal-service.jar
+ portal-support/deps/portal-service.jar,
+ lib/commons-configuration-1.6.jar,
+ lib/commons-lang-2.5.jar

@@ -15,17 +15,19 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPluginPublisher;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
+import com.liferay.ide.eclipse.server.tomcat.core.util.ExternalPropertiesConfiguration;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,7 +45,6 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
-import org.xml.sax.SAXException;
 
 /**
  * @author Greg Amerson
@@ -51,7 +52,9 @@ import org.xml.sax.SAXException;
 @SuppressWarnings("restriction")
 public class PortalTomcat60Handler extends Tomcat60Handler {
 
-	private IServer currentServer;
+	protected IServer currentServer;
+
+	protected IPortalTomcatServer portalServer;
 
 	@Override
 	public IStatus canAddModule(IModule module) {
@@ -97,12 +100,36 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 	public String[] getRuntimeVMArguments(IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv) {
 		List<String> runtimeVMArgs = new ArrayList<String>();
 
+		addUserVMArgs(runtimeVMArgs);
+
+		runtimeVMArgs.add("-Dfile.encoding=UTF8");
+		runtimeVMArgs.add("-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
+		runtimeVMArgs.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
+		runtimeVMArgs.add("-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"");
+		runtimeVMArgs.add("-Djava.util.logging.config.file=\"" + installPath.toOSString() +
+			"/conf/logging.properties\"");
+		runtimeVMArgs.add("-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"");
+
+		File externalPropertiesFile = getExternalPropertiesFile(installPath, configPath);
+
+		runtimeVMArgs.add("-Dexternal-properties=" + externalPropertiesFile.getAbsolutePath());
+
+		Collections.addAll(runtimeVMArgs, super.getRuntimeVMArguments(installPath, configPath, deployPath, isTestEnv));
+
+		return runtimeVMArgs.toArray(new String[runtimeVMArgs.size()]);
+	}
+
+	public void setCurrentServer(IServer server) {
+		this.currentServer = server;
+	}
+
+	private void addUserVMArgs(List<String> runtimeVMArgs) {
 		String[] memoryArgs = IPortalTomcatConstants.DEFAULT_MEMORY_ARGS.split(" ");
 		String userTimezone = IPortalTomcatConstants.DEFAULT_USER_TIMEZONE;
 
 		if (currentServer != null) {
-			IPortalTomcatServer portalTomcatServer =
-				(IPortalTomcatServer) currentServer.getAdapter(IPortalTomcatServer.class);
+			IPortalTomcatServer portalTomcatServer = getPortalServer();
+
 			memoryArgs = DebugPlugin.parseArguments(portalTomcatServer.getMemoryArgs());
 
 			userTimezone = portalTomcatServer.getUserTimezone();
@@ -115,34 +142,33 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 		}
 
 		runtimeVMArgs.add("-Duser.timezone=" + userTimezone);
-		runtimeVMArgs.add("-Dfile.encoding=UTF8");
-		runtimeVMArgs.add("-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false");
-		runtimeVMArgs.add("-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager");
-		runtimeVMArgs.add("-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"");
-		runtimeVMArgs.add("-Djava.util.logging.config.file=\"" + installPath.toOSString() +
-			"/conf/logging.properties\"");
-		runtimeVMArgs.add("-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"");
-
-		try {
-			ensurePortalIDEPropertiesExists(installPath, configPath);
-
-			runtimeVMArgs.add("-Dexternal-properties=portal-ide.properties");
-		}
-		catch (Exception e) {
-			PortalTomcatPlugin.logError(e);
-		}
-
-		Collections.addAll(runtimeVMArgs, super.getRuntimeVMArguments(installPath, configPath, deployPath, isTestEnv));
-
-		return runtimeVMArgs.toArray(new String[runtimeVMArgs.size()]);
 	}
 
-	public void setCurrentServer(IServer server) {
-		this.currentServer = server;
+	private File getExternalPropertiesFile(IPath installPath, IPath configPath) {
+		File retval = null;
+
+		IPortalTomcatServer portalServer = getPortalServer();
+
+		if (portalServer != null) {
+			File portalIdePropFile = ensurePortalIDEPropertiesExists(installPath, configPath);
+
+			retval = portalIdePropFile;
+
+			String externalProperties = portalServer.getExternalProperties();
+
+			if (!CoreUtil.isNullOrEmpty(externalProperties)) {
+				File externalPropertiesFile = setupExternalPropertiesFile(portalIdePropFile, externalProperties);
+
+				if (externalPropertiesFile != null) {
+					retval = externalPropertiesFile;
+				}
+			}
+		}
+
+		return retval;
 	}
 
-	protected void ensurePortalIDEPropertiesExists(IPath installPath, IPath configPath)
-		throws FileNotFoundException, IOException {
+	protected File ensurePortalIDEPropertiesExists(IPath installPath, IPath configPath) {
 
 		IPath idePropertiesPath = installPath.append("../portal-ide.properties");
 
@@ -154,7 +180,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 
 			hostName = server.getHost().getName();
 		}
-		catch (SAXException e) {
+		catch (Exception e) {
 			PortalTomcatPlugin.logError(e);
 		}
 
@@ -183,19 +209,18 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 		props.put("auto.deploy.tomcat.conf.dir", configPath.append("conf/Catalina/" + hostName).toOSString());
 
 		if (this.currentServer != null) {
-			PortalTomcatServer server =
-				(PortalTomcatServer) this.currentServer.loadAdapter(PortalTomcatServer.class, null);
+			IPortalTomcatServer portalServer = getPortalServer();
 
-			if (server != null) {
-				IPath runtimLocation = server.getTomcatRuntime().getRuntime().getLocation();
+			if (portalServer != null) {
+				IPath runtimLocation = getServer().getRuntime().getLocation();
 
-				String autoDeployDir = server.getAutoDeployDirectory();
+				String autoDeployDir = portalServer.getAutoDeployDirectory();
 
 				if (!IPortalTomcatConstants.DEFAULT_AUTO_DEPLOYDIR.equals(autoDeployDir)) {
 					IPath autoDeployDirPath = new Path(autoDeployDir);
 
 					if (autoDeployDirPath.isAbsolute() && autoDeployDirPath.toFile().exists()) {
-						props.put("auto.deploy.deploy.dir", server.getAutoDeployDirectory());
+						props.put("auto.deploy.deploy.dir", portalServer.getAutoDeployDirectory());
 					}
 					else {
 						File autoDeployDirFile = new File(runtimLocation.toFile(), autoDeployDir);
@@ -206,11 +231,61 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 					}
 				}
 
-				props.put("auto.deploy.interval", server.getAutoDeployInterval());
+				props.put("auto.deploy.interval", portalServer.getAutoDeployInterval());
 			}
 		}
 
-		props.store(new FileOutputStream(idePropertiesPath.toFile()), null);
+		File file = idePropertiesPath.toFile();
+
+		try {
+			props.store(new FileOutputStream(file), null);
+		}
+		catch (Exception e) {
+			PortalTomcatPlugin.logError(e);
+		}
+
+		return file;
+	}
+
+	protected IPortalTomcatServer getPortalServer() {
+		if (this.portalServer == null) {
+			this.portalServer = (IPortalTomcatServer) getServer().loadAdapter(IPortalTomcatServer.class, null);
+		}
+
+		return this.portalServer;
+	}
+
+	protected IServer getServer() {
+		return this.currentServer;
+	}
+
+	protected File setupExternalPropertiesFile(File portalIdePropFile, String externalPropertiesPath) {
+		File retval = null;
+		// first check to see if there is an external properties file
+		File externalPropertiesFile = new File(externalPropertiesPath);
+
+		if (externalPropertiesFile.exists()) {
+			ExternalPropertiesConfiguration props = new ExternalPropertiesConfiguration();
+			try {
+				props.load(new FileInputStream(externalPropertiesFile));
+
+				props.setProperty("include-and-override", portalIdePropFile.getAbsolutePath());
+
+				props.setHeader("# Last modified by Liferay IDE " + new Date());
+
+				props.save(new FileOutputStream(externalPropertiesFile));
+
+				retval = externalPropertiesFile;
+			}
+			catch (Exception e) {
+				retval = null;
+			}
+		}
+		else {
+			retval = null; // don't setup an external properties file
+		}
+
+		return retval;
 	}
 
 }

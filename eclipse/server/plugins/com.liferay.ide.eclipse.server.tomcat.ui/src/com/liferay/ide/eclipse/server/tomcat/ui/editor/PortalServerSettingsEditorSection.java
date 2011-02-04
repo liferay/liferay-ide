@@ -11,17 +11,21 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.ui.editor;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatConstants;
 import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatServer;
 import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
 import com.liferay.ide.eclipse.server.tomcat.ui.command.SetAutoDeployDirectoryCommand;
 import com.liferay.ide.eclipse.server.tomcat.ui.command.SetAutoDeployIntervalCommand;
+import com.liferay.ide.eclipse.server.tomcat.ui.command.SetExternalPropertiesCommand;
 import com.liferay.ide.eclipse.server.tomcat.ui.command.SetMemoryArgsCommand;
 import com.liferay.ide.eclipse.server.tomcat.ui.command.SetUserTimezoneCommand;
 import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -43,6 +47,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
@@ -66,11 +71,11 @@ import org.eclipse.wst.server.ui.editor.ServerEditorSection;
  * Portal Tomcat server location editor section
  */
 @SuppressWarnings("restriction")
-public class PortalServerLocationEditorSection extends ServerEditorSection {
+public class PortalServerSettingsEditorSection extends ServerEditorSection {
 	protected Section section;
 	protected PortalTomcatServer tomcatServer;
 
-	protected Hyperlink setDefaultDeployDir;
+	protected Hyperlink setDefault;
 	
 	protected boolean defaultDeployDirIsSet;
 	
@@ -84,8 +89,10 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 //	protected Button deployDirBrowse;
 	protected Text memoryArgs;
 	protected Text userTimezone;
+	protected Text externalProperties;
 	protected Text autoDeployDir;
 	protected Button autoDeployDirBrowse;
+	protected Button externalPropertiesBrowse;
 	protected boolean updating;
 
 	protected PropertyChangeListener listener;
@@ -103,7 +110,7 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 	/**
 	 * ServerGeneralEditorPart constructor comment.
 	 */
-	public PortalServerLocationEditorSection() {
+	public PortalServerSettingsEditorSection() {
 		// do nothing
 	}
 
@@ -132,24 +139,29 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 				}
 				else if (IPortalTomcatServer.PROPERTY_AUTO_DEPLOY_DIR.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					PortalServerLocationEditorSection.this.autoDeployDir.setText(s);
+					PortalServerSettingsEditorSection.this.autoDeployDir.setText(s);
 					updateDefaultDeployLink();					
 					validate();
 				}
 				else if (IPortalTomcatServer.PROPERTY_AUTO_DEPLOY_INTERVAL.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					PortalServerLocationEditorSection.this.autoDeployInterval.setText(s);
+					PortalServerSettingsEditorSection.this.autoDeployInterval.setText(s);
 					updateDefaultDeployLink();					
 					validate();
 				}
 				else if (IPortalTomcatServer.PROPERTY_MEMORY_ARGS.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					PortalServerLocationEditorSection.this.memoryArgs.setText(s);
+					PortalServerSettingsEditorSection.this.memoryArgs.setText(s);
 					validate();
 				}
 				else if (IPortalTomcatServer.PROPERTY_USER_TIMEZONE.equals(event.getPropertyName())) {
 					String s = (String) event.getNewValue();
-					PortalServerLocationEditorSection.this.userTimezone.setText(s);
+					PortalServerSettingsEditorSection.this.userTimezone.setText(s);
+					validate();
+				}
+				else if (IPortalTomcatServer.PROPERTY_EXTERNAL_PROPERTIES.equals(event.getPropertyName())) {
+					String s = (String) event.getNewValue();
+					PortalServerSettingsEditorSection.this.externalProperties.setText(s);
 					validate();
 				}
 				updating = false;
@@ -419,6 +431,46 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 
+		label = createLabel(toolkit, composite, "External properties:");
+		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
+		label.setLayoutData(data);
+
+		externalProperties = toolkit.createText(composite, null);
+		data = new GridData(SWT.FILL, SWT.CENTER, false, false);
+		data.widthHint = 150;
+		externalProperties.setLayoutData(data);
+		externalProperties.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				if (updating) {
+					return;
+				}
+
+				updating = true;
+				execute(new SetExternalPropertiesCommand(tomcatServer, externalProperties.getText().trim()));
+				updating = false;
+				validate();
+			}
+		});
+
+		externalPropertiesBrowse = toolkit.createButton(composite, Messages.editorBrowse, SWT.PUSH);
+		externalPropertiesBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		externalPropertiesBrowse.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent se) {
+				FileDialog dialog = new FileDialog(externalPropertiesBrowse.getShell());
+				dialog.setFilterPath(externalPropertiesBrowse.getText());
+				String selectedFile = dialog.open();
+				if (selectedFile != null && !selectedFile.equals(externalPropertiesBrowse.getText())) {
+					updating = true;
+					execute(new SetExternalPropertiesCommand(tomcatServer, selectedFile));
+					externalProperties.setText(selectedFile);
+					updating = false;
+					validate();
+				}
+			}
+		});
+
 		// auto deploy directory
 		label = createLabel(toolkit, composite, "Auto deploy path:");
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
@@ -480,8 +532,8 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 		
-		setDefaultDeployDir = toolkit.createHyperlink(composite, "Restore defaults.", SWT.WRAP);
-		setDefaultDeployDir.addHyperlinkListener(new HyperlinkAdapter() {
+		setDefault = toolkit.createHyperlink(composite, "Restore defaults.", SWT.WRAP);
+		setDefault.addHyperlinkListener(new HyperlinkAdapter() {
 			public void linkActivated(HyperlinkEvent e) {
 				updating = true;
 //				execute(new SetDeployDirectoryCommand(tomcatServer, PortalTomcatServer.DEFAULT_DEPLOYDIR));
@@ -490,18 +542,19 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 				memoryArgs.setText(IPortalTomcatConstants.DEFAULT_MEMORY_ARGS);
 				execute(new SetUserTimezoneCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_USER_TIMEZONE));
 				userTimezone.setText(IPortalTomcatConstants.DEFAULT_USER_TIMEZONE);
+				execute(new SetExternalPropertiesCommand(tomcatServer, ""));
+				externalProperties.setText("");
 				execute(new SetAutoDeployDirectoryCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOYDIR));
 				autoDeployDir.setText(IPortalTomcatConstants.DEFAULT_AUTO_DEPLOYDIR);
 				execute(new SetAutoDeployIntervalCommand(tomcatServer, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL));
 				autoDeployInterval.setText(IPortalTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL);
-				updateDefaultDeployLink();
 				updating = false;
 				validate();
 			}
 		});
 		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		data.horizontalSpan = 3;
-		setDefaultDeployDir.setLayoutData(data);
+		setDefault.setLayoutData(data);
 
 		initialize();
 	}
@@ -583,6 +636,7 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 //		deployDir.setText(tomcatServer.getDeployDirectory());
 		memoryArgs.setText(tomcatServer.getMemoryArgs());
 		userTimezone.setText(tomcatServer.getUserTimezone());
+		externalProperties.setText(tomcatServer.getExternalProperties());
 		autoDeployDir.setText(tomcatServer.getAutoDeployDirectory());
 		autoDeployInterval.setText(tomcatServer.getAutoDeployInterval());
 
@@ -717,6 +771,18 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 				return new IStatus [] {
 						new Status(IStatus.ERROR, PortalServerUIPlugin.PLUGIN_ID, Messages.errorDeployDirNotSpecified)};
 			}
+
+			String externalPropetiesValue = tomcatServer.getExternalProperties();
+
+			if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
+				File externalPropertiesFile = new File(externalPropetiesValue);
+
+				if ((!externalPropertiesFile.exists()) || (!ServerUtil.isValidPropertiesFile(externalPropertiesFile))) {
+					return new IStatus[] {
+						new Status(IStatus.ERROR, PortalServerUIPlugin.PLUGIN_ID, "Invalid external properties file")
+					};
+				}
+			}
 		}
 		// use default implementation to return success
 		return super.getSaveStatus();
@@ -763,6 +829,18 @@ public class PortalServerLocationEditorSection extends ServerEditorSection {
 			if (dir == null || dir.length() == 0) {
 				setErrorMessage(Messages.errorDeployDirNotSpecified);
 				return;
+			}
+
+			String externalPropetiesValue = tomcatServer.getExternalProperties();
+
+			if (!CoreUtil.isNullOrEmpty(externalPropetiesValue)) {
+				File externalPropertiesFile = new File(externalPropetiesValue);
+
+				if ((!externalPropertiesFile.exists()) || (!ServerUtil.isValidPropertiesFile(externalPropertiesFile))) {
+					setErrorMessage("Invalid external properties file");
+
+					return;
+				}
 			}
 		}
 		// All is okay, clear any previous error

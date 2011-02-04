@@ -53,6 +53,10 @@ public class PortalTomcatServer extends TomcatServer
 		return getAttribute(PROPERTY_AUTO_DEPLOY_INTERVAL, IPortalTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL);
 	}
 
+	public String getExternalProperties() {
+		return getAttribute(PROPERTY_EXTERNAL_PROPERTIES, "");
+	}
+
 	public String getMemoryArgs() {
 		return getAttribute(PROPERTY_MEMORY_ARGS, IPortalTomcatConstants.DEFAULT_MEMORY_ARGS);
 	}
@@ -239,6 +243,10 @@ public class PortalTomcatServer extends TomcatServer
 		setTestEnvironment(false);
 		setDeployDirectory(IPortalTomcatConstants.DEFAULT_DEPLOYDIR);
 		setSaveSeparateContextFiles(true);
+	}
+
+	public void setExternalProperties(String externalProperties) {
+		setAttribute(PROPERTY_EXTERNAL_PROPERTIES, externalProperties);
 	}
 
 	public void setMemoryArgs(String memoryArgs) {

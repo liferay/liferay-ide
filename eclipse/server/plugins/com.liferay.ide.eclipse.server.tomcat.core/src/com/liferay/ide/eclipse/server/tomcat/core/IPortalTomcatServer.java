@@ -31,6 +31,8 @@ public interface IPortalTomcatServer extends ITomcatServer {
 
 	String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
 
+	String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
+
 	String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
 	String PROPERTY_USER_TIMEZONE = "userTimezone";
@@ -38,6 +40,8 @@ public interface IPortalTomcatServer extends ITomcatServer {
 	String getAutoDeployDirectory();
 
 	String getAutoDeployInterval();
+
+	String getExternalProperties();
 
 	String getMemoryArgs();
 

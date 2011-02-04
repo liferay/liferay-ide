@@ -20,12 +20,14 @@ import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -266,5 +268,21 @@ public class ServerUtil {
 
 	public static boolean isPortalRuntime(IServer server) {
 		return getPortalRuntime(server) != null;
+	}
+
+	public static boolean isValidPropertiesFile(File file) {
+		if (file == null || !file.exists()) {
+			return false;
+		}
+
+		try {
+			new PropertiesConfiguration(file);
+		}
+		catch (Exception e) {
+			return false;
+		}
+
+		return true;
+
 	}
 }
