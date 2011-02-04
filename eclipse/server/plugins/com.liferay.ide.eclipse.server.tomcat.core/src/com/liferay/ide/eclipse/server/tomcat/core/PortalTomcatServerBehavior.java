@@ -357,6 +357,8 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 
 		super.setupLaunchConfiguration(workingCopy, monitor);
 
+		workingCopy.setAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8");
+
 		String existingVMArgs =
 			workingCopy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null);
 
