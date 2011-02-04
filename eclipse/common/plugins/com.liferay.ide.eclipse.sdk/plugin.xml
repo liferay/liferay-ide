@@ -16,8 +16,8 @@
    <extension
          point="org.eclipse.wst.server.core.installableRuntimes">
       <runtime
-            archivePath="liferay-plugins-sdk-6.0.2"
-            archiveUrl="http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.2/liferay-plugins-sdk-6.0.2.zip"
+            archivePath="liferay-plugins-sdk-6.0.5"
+            archiveUrl="http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.5/liferay-plugins-sdk-6.0.5.zip"
             id="com.liferay.ide.eclipse.sdk.60"
             licenseUrl="http://www.gnu.org/licenses/lgpl-2.1.txt">
       </runtime>
