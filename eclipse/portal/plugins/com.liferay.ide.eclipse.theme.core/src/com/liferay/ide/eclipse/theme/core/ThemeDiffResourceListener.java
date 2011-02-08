@@ -27,8 +27,6 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -121,17 +119,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 						ThemeCore.createErrorStatus("No SDK for project configured. Could not deploy theme module"));
 				}
 
-				IRuntime runtime = ServerUtil.getRuntime(project);
-
-				String appServerDir = runtime.getLocation().toOSString();
-				Map<String, String> properties = new HashMap<String, String>();
-				properties.put("app.server.type", "tomcat");
-				properties.put("app.server.dir", appServerDir);
-				properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-				properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-				properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-
-				IStatus status = sdk.compileThemePlugin(project, properties);
+				IStatus status = sdk.compileThemePlugin(project, null);
 
 				if (!status.isOK()) {
 					throw new CoreException(status);
@@ -160,7 +148,10 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 						}
 					}
 
+					IRuntime runtime = ServerUtil.getRuntime(project);
+
 					IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(runtime);
+
 					if (portalRuntime != null) {
 						ThemeDescriptorHelper.createDefaultFile(
 							lookAndFeelFile, portalRuntime.getPortalVersion() + "+", id, name);

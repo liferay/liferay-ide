@@ -74,6 +74,8 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_APP_SERVER_TYPE = "app.server.type";
 
+	public static final String PROPERTY_APP_ZIP_NAME = "app.server.zip.name";
+
 	public static final String PROPERTY_AUTO_DEPLOY_UNPACK_WAR = "auto.deploy.unpack.war";
 
 	public static final String PROPERTY_EXT_DISPLAY_NAME = "ext.display.name";
@@ -81,6 +83,8 @@ public interface ISDKConstants {
 	public static final String PROPERTY_EXT_NAME = "ext.name";
 
 	public static final String PROPERTY_EXT_PARENT_DIR = "ext.parent.dir";
+
+	public static final String PROPERTY_EXT_WORK_DIR = "ext.work.dir";
 
 	public static final String PROPERTY_HOOK_DISPLAY_NAME = "hook.display.name";
 
@@ -112,6 +116,8 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_PORTLET_PARENT_DIR = "portlet.parent.dir";
 
+	public static final String PROPERTY_SERVICE_FILE = "service.file";
+
 	public static final String PROPERTY_SERVICE_INPUT_FILE = "service.input.file";
 
 	public static final String PROPERTY_THEME_DISPLAY_NAME = "theme.display.name";
@@ -141,4 +147,5 @@ public interface ISDKConstants {
 	public static final String THEME_PLUGIN_PROJECT_FOLDER = "themes";
 
 	public static final String THEME_PLUGIN_PROJECT_SUFFIX = "-theme";
+
 }

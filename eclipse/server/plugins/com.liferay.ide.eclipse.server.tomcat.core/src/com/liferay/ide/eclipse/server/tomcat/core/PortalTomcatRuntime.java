@@ -14,6 +14,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.server.core.IAppServer;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
@@ -49,7 +50,7 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
 import org.osgi.framework.Version;
 
 @SuppressWarnings("restriction")
-public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatRuntime {
+public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatRuntime, IAppServer {
 
 	public static final String PROP_BUNDLE_SOURCE_LOCATION = "bundle-source-location";
 
@@ -121,6 +122,10 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 		return getRuntime().getLocation();
 	}
 
+	public String getAppServerType() {
+		return "tomcat";
+	}
+
 	public IPath getBundleZipLocation() {
 		String zipLocation = getAttribute(PROP_BUNDLE_ZIP_LOCATION, (String) null);
 
@@ -131,6 +136,18 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 		IPath runtimeLocation = getRuntime().getLocation();
 
 		return PortalTomcatUtil.getCategories(runtimeLocation);
+	}
+
+	public IPath getDeployDir() {
+		return getAppServerDir().append("/webapps");
+	}
+
+	public IPath getLibGlobalDir() {
+		return getAppServerDir().append("/lib/ext");
+	}
+
+	public IPath getPortalDir() {
+		return getAppServerDir().append("/webapps/ROOT");
 	}
 
 	public IPath getPortalSourceLocation() {

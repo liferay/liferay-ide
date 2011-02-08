@@ -18,12 +18,9 @@ package com.liferay.ide.eclipse.portlet.core.job;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -86,23 +83,9 @@ public class BuildServiceJob extends SDKJob {
 
 			SDK sdk = getSDK();
 
-			Map<String, String> properties = new HashMap<String, String>();
-
-			String appServerDir = null;
-
-			appServerDir = ServerUtil.getPortalRuntime(getProject()).getRuntimeLocation().toOSString();
-
-			properties.put("app.server.type", "tomcat");
-			properties.put("app.server.dir", appServerDir);
-			properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-			properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-			properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-			properties.put("service.file", serviceXmlFile.getRawLocation().toOSString());
-			properties.put("service.input.file", serviceXmlFile.getRawLocation().toOSString());
-
 			monitor.worked(50);
 
-			sdk.buildService(getProject(), serviceXmlFile, properties);
+			sdk.buildService(getProject(), serviceXmlFile, null);
 
 			monitor.worked(90);
 

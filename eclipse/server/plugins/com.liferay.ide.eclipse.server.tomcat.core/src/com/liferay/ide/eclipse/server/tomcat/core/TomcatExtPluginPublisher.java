@@ -20,10 +20,6 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -31,7 +27,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
@@ -101,7 +96,6 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 	protected void addExtModule(ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor)
 		throws CoreException {
 
-
 		SDK sdk = null;
 		IProject project = module.getProject();
 
@@ -119,17 +113,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 			PortalTomcatUtil.syncStopServer(delegate.getServer());
 		}
 
-		IRuntime runtime = ServerUtil.getRuntime(project);
-
-		String appServerDir = runtime.getLocation().toOSString();
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("app.server.type", "tomcat");
-		properties.put("app.server.dir", appServerDir);
-		properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-		properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-		properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-
-		IStatus status = sdk.directDeploy(project, properties);
+		IStatus status = sdk.directDeploy(project, null);
 
 		assertStatus(status);
 

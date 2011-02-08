@@ -42,6 +42,8 @@ public class SDKPlugin extends AbstractUIPlugin {
 	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.sdk";
 
+	public static final String PREF_KEY_OVERWRITE_USER_BUILD_FILE = "OVERWRITE_USER_BUILD_FILE";
+
 	// The shared instance
 	private static SDKPlugin plugin;
 

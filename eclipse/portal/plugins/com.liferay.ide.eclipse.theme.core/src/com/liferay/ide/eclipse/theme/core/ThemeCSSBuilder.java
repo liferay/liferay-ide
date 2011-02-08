@@ -27,7 +27,6 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -170,15 +169,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				ThemeCore.createErrorStatus("Could not get portal runtime for project.  Could not build theme."));
 		}
 
-		String appServerDir = portalRuntime.getRuntimeLocation().toOSString();
-		Map<String, String> properties = new HashMap<String, String>();
-		properties.put("app.server.type", "tomcat");
-		properties.put("app.server.dir", appServerDir);
-		properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-		properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-		properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-
-		IStatus status = sdk.compileThemePlugin(project, properties);
+		IStatus status = sdk.compileThemePlugin(project, null);
 
 		if (!status.isOK()) {
 			throw new CoreException(status);

@@ -23,6 +23,7 @@ import com.liferay.ide.eclipse.project.core.util.WebXMLDescriptorHelper;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.server.core.IAppServer;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
@@ -85,6 +86,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 
 	protected IProject project;
 
+	@SuppressWarnings("deprecation")
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
 		throws CoreException {
 
@@ -205,6 +207,17 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return false;
 	}
 
+	protected IAppServer getAppServer() {
+		try {
+			return ServerUtil.getAppServer(this.project);
+		}
+		catch (CoreException e) {
+			ProjectCorePlugin.logError(e);
+
+			return null;
+		}
+	}
+
 	protected IPath getAppServerDir() {
 		IRuntime serverRuntime;
 
@@ -240,19 +253,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return (IFacetedProjectWorkingCopy) this.model.getProperty(IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY);
 	}
 
-	protected IPath getPortalRoot() {
-		IRuntime serverRuntime;
-
-		if (masterModel != null) {
-			serverRuntime = (IRuntime) masterModel.getProperty(PluginFacetInstallDataModelProvider.FACET_RUNTIME);
-		}
-		else {
-			serverRuntime = getFacetedProject().getPrimaryRuntime();
-		}
-
-		return ServerUtil.getPortalRoot(serverRuntime);
-	}
-
 	// protected void copyTLDsFromPortal() throws CoreException {
 	// IPath portalTLDFolder = getPortalRoot().append("WEB-INF/tld");
 	// IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
@@ -274,6 +274,19 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 	// }
 	// }
 	// }
+
+	protected IPath getPortalRoot() {
+		IRuntime serverRuntime;
+
+		if (masterModel != null) {
+			serverRuntime = (IRuntime) masterModel.getProperty(PluginFacetInstallDataModelProvider.FACET_RUNTIME);
+		}
+		else {
+			serverRuntime = getFacetedProject().getPrimaryRuntime();
+		}
+
+		return ServerUtil.getPortalRoot(serverRuntime);
+	}
 
 	protected String getRuntimeLocation() {
 		try {

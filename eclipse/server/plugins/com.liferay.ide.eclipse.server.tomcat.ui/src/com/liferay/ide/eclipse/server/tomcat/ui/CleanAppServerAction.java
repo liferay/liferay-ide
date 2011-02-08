@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -92,6 +92,9 @@ public class CleanAppServerAction extends AbstractProjectAction {
 				if (retval) {
 					editRuntime(runtime);
 
+					// refresh the portalTomcatRuntime
+					portalTomcatRuntime = PortalTomcatUtil.getPortalTomcatRuntime(runtime);
+
 					bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
 					if (bundleZipLocation == null) {
@@ -122,9 +125,7 @@ public class CleanAppServerAction extends AbstractProjectAction {
 	protected void cleanAppServer(IProject project)
 		throws CoreException {
 
-		String[] labels = new String[] {
-			IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL
-		};
+		String[] labels = new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL };
 
 		MessageDialog dialog =
 			new MessageDialog(
@@ -133,6 +134,7 @@ public class CleanAppServerAction extends AbstractProjectAction {
 				null,
 				"Performing this action will delete the entire tomcat directory including all configuration, data, and deployed webapps.  If you have other plugins deployed they will have to be republished.\n\nDo you wish to continue?",
 				MessageDialog.WARNING, labels, 1);
+
 		int retval = dialog.open();
 
 		if (retval == MessageDialog.OK) {

@@ -60,7 +60,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 			String layoutTplName = this.masterModel.getStringProperty(LAYOUTTPL_NAME);
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
-			IPath newLayoutTplPath = sdk.createNewLayoutTplProject(layoutTplName, displayName, getRuntimeLocation());
+			IPath newLayoutTplPath = sdk.createNewLayoutTplProject(layoutTplName, displayName, getAppServer());
 			
 			processNewFiles(newLayoutTplPath.append(layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX), false);
 			

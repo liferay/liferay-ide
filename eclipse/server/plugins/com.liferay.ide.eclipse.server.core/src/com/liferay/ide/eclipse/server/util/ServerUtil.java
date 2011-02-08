@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.server.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.server.core.IAppServer;
 import com.liferay.ide.eclipse.server.core.IPortalConstants;
 import com.liferay.ide.eclipse.server.core.IPortalRuntime;
 import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
@@ -114,6 +115,13 @@ public class ServerUtil {
 		}
 
 		return null;
+	}
+
+	public static IAppServer getAppServer(IProject project)
+		throws CoreException {
+		
+		return (IAppServer) getRuntimeAdapter(
+			ProjectFacetsManager.create(project).getPrimaryRuntime(), IAppServer.class);
 	}
 
 	public static IPath getAppServerDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime) {
@@ -285,4 +293,5 @@ public class ServerUtil {
 		return true;
 
 	}
+
 }

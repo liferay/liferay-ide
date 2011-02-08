@@ -22,15 +22,11 @@ import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerBehavior;
 import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
@@ -82,23 +78,10 @@ public class CleanAppServerJob extends SDKJob {
 				}
 			}
 
-			String appServerDir = runtime.getLocation().toOSString();
-
-			Map<String, String> properties = new HashMap<String, String>();
-			properties.put("app.server.type", "tomcat");
-			properties.put("app.server.dir", appServerDir);
-			properties.put("app.server.deploy.dir", appServerDir + "/webapps");
-			properties.put("app.server.lib.global.dir", appServerDir + "/lib/ext");
-			properties.put("app.server.portal.dir", appServerDir + "/webapps/ROOT");
-
 			IPortalTomcatRuntime portalTomcatRuntime = PortalTomcatUtil.getPortalTomcatRuntime(runtime);
 			IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-			properties.put("app.server.zip.name", bundleZipLocation.toOSString());
-			IPath workPath = new Path(appServerDir).removeLastSegments(2);
-			properties.put("ext.work.dir", workPath.toOSString());
-
-			IStatus status = getSDK().runTarget(project, properties, "clean-app-server", true);
+			IStatus status = getSDK().cleanAppServer(project, bundleZipLocation);
 
 			assertStatus(status);
 
