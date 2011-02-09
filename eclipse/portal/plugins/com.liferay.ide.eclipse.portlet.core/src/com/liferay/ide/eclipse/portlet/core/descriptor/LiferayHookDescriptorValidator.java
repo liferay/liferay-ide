@@ -97,12 +97,15 @@ public class LiferayHookDescriptorValidator extends BaseValidator {
 
 		IFile liferayHookXml = (IFile) resource;
 
-		if (liferayHookXml.isAccessible() && ProjectUtil.isHookProject(resource.getProject())) {
+		IProject project = resource.getProject();
+
+		if (liferayHookXml.isAccessible() &&
+			(ProjectUtil.isHookProject(project) || ProjectUtil.isPortletProject(project))) {
 			IScopeContext[] scopes = new IScopeContext[] {
 				new InstanceScope(), new DefaultScope()
 			};
 
-			ProjectScope projectScope = new ProjectScope(liferayHookXml.getProject());
+			ProjectScope projectScope = new ProjectScope(project);
 
 			boolean useProjectSettings =
 				projectScope.getNode(PREFERENCE_NODE_QUALIFIER).getBoolean(

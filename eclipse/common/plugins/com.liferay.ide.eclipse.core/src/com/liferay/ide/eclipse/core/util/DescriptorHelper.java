@@ -56,8 +56,10 @@ public class DescriptorHelper {
 			}
 
 			IDOMModel domModel = null;
+
 			try {
 				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(this.file);
+
 				domModel.aboutToChangeModel();
 
 				IDOMDocument document = domModel.getDocument();
@@ -65,6 +67,7 @@ public class DescriptorHelper {
 				retval = doExecute(document);
 
 				domModel.changedModel();
+
 				domModel.save();
 			}
 			catch (Exception e) {
@@ -75,6 +78,7 @@ public class DescriptorHelper {
 					domModel.releaseFromEdit();
 				}
 			}
+
 			return retval;
 		}
 

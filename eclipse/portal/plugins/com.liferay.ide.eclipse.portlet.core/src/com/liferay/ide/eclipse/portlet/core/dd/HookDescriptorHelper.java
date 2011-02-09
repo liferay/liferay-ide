@@ -48,9 +48,10 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 		DOMModelEditOperation operation =
 			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
 
-			protected IStatus doExecute(IDOMDocument document) {
-				return doAddActionItems(document, actionItems);
-			}
+				protected IStatus doExecute(IDOMDocument document) {
+					return doAddActionItems(document, actionItems);
+				}
+
 			};
 
 		IStatus status = operation.execute();

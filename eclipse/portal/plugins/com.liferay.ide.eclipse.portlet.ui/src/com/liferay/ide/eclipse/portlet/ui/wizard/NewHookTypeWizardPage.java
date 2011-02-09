@@ -216,7 +216,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected boolean isProjectValid(IProject project) {
-		return ProjectUtil.isHookProject(project);
+		return ProjectUtil.isHookProject(project) || ProjectUtil.isPortletProject(project);
 	}
 
 	protected void setShellImage() {
