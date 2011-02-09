@@ -156,6 +156,8 @@ public class BuildServiceJob extends SDKJob {
 					if (!(project.isSynchronized(IResource.DEPTH_INFINITE))) {
 						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					}
+
+					reenableBuildAndRefresh(saveAutoBuild, saveAutoRefresh);
 				}
 				catch (Exception e) {
 					PortletCore.logError(e);
