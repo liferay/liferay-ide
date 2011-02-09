@@ -112,7 +112,7 @@ public class PortalTomcat60Handler extends Tomcat60Handler {
 
 		File externalPropertiesFile = getExternalPropertiesFile(installPath, configPath);
 
-		runtimeVMArgs.add("-Dexternal-properties=" + externalPropertiesFile.getAbsolutePath());
+		runtimeVMArgs.add("-Dexternal-properties=\"" + externalPropertiesFile.getAbsolutePath() + "\"");
 
 		Collections.addAll(runtimeVMArgs, super.getRuntimeVMArguments(installPath, configPath, deployPath, isTestEnv));
 
