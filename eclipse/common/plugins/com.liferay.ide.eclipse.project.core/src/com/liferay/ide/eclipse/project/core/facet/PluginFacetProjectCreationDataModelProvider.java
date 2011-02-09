@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -265,7 +265,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
 			IPortletFramework portletFramework = (IPortletFramework) getProperty(PORTLET_FRAMEWORK);
 
-			portletFramework.setupNewProject(getDataModel(), getFacetedProjectWorkingCopy());
+			setupPortletFramework(portletFramework);
 		}
 
 		return super.propertySet(propertyName, propertyValue);
@@ -447,6 +447,22 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		}
 
 		facetedProject.setProjectFacets(newFacetSet);
+	}
+
+	protected void setupPortletFramework(IPortletFramework portletFramework) {
+		IPortletFramework[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+
+		for (IPortletFramework framework : portletFrameworks) {
+			if (!framework.equals(portletFramework)) {
+				IProjectFacet[] facets = framework.getFacets();
+
+				for (IProjectFacet facet : facets) {
+					removeFacet(getFacetedProjectWorkingCopy(), facet);
+				}
+			}
+		}
+
+		portletFramework.configureNewProject(getDataModel(), getFacetedProjectWorkingCopy());
 	}
 
 	protected void setupProject(String facetId) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -51,36 +51,7 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 		super();
 	}
 
-	@Override
-	public IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject) {
-		/*
-		 * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
-		 * will overwrite our web.xml that comes with in the template
-		 */
-
-		SDK sdk = ProjectUtil.getSDK(facetedProject.getProject(), IPluginFacetConstants.LIFERAY_PORTLET_FACET);
-
-		if (sdk == null) {
-			return JSFCorePlugin.createErrorStatus("Could not get SDK from newly created project.");
-		}
-
-		try {
-			File originalWebXmlFile =
-				sdk.getLocation().append("tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml").toFile();
-
-			IFolder docroot = ProjectUtil.getDocroot(facetedProject.getProject());
-
-			docroot.getFile("WEB-INF/web.xml").setContents(
-				new FileInputStream(originalWebXmlFile), IResource.FORCE, null);
-		}
-		catch (Exception e) {
-			return JSFCorePlugin.createErrorStatus("Could not copy original web.xml from JSF template in SDK.", e);
-		}
-
-		return Status.OK_STATUS;
-	}
-
-	public IStatus setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
+	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
 		IProjectFacetVersion jsfFacetVersion = getJSFProjectFacet(facetedProject);
 		IProjectFacet jsfFacet = JSFCorePlugin.JSF_FACET;
 
@@ -112,6 +83,40 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 
 		if (noOpProvider != null) {
 			libraryInstallDelegate.setLibraryProvider(noOpProvider);
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	@Override
+	public IProjectFacet[] getFacets() {
+		return new IProjectFacet[] { JSFCorePlugin.JSF_FACET };
+	}
+
+	@Override
+	public IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject) {
+		/*
+		 * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
+		 * will overwrite our web.xml that comes with in the template
+		 */
+
+		SDK sdk = ProjectUtil.getSDK(facetedProject.getProject(), IPluginFacetConstants.LIFERAY_PORTLET_FACET);
+
+		if (sdk == null) {
+			return JSFCorePlugin.createErrorStatus("Could not get SDK from newly created project.");
+		}
+
+		try {
+			File originalWebXmlFile =
+				sdk.getLocation().append("tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml").toFile();
+
+			IFolder docroot = ProjectUtil.getDocroot(facetedProject.getProject());
+
+			docroot.getFile("WEB-INF/web.xml").setContents(
+				new FileInputStream(originalWebXmlFile), IResource.FORCE, null);
+		}
+		catch (Exception e) {
+			return JSFCorePlugin.createErrorStatus("Could not copy original web.xml from JSF template in SDK.", e);
 		}
 
 		return Status.OK_STATUS;

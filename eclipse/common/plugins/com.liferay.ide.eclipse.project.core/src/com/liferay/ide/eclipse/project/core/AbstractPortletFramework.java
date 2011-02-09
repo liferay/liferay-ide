@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 /**
  * @author Greg Amerson
@@ -53,6 +54,10 @@ public abstract class AbstractPortletFramework implements IPortletFramework {
 
 	public String getDisplayName() {
 		return displayName;
+	}
+
+	public IProjectFacet[] getFacets() {
+		return new IProjectFacet[0];
 	}
 
 	public URL getHelpUrl() {
@@ -111,5 +116,4 @@ public abstract class AbstractPortletFramework implements IPortletFramework {
 	public void setShortName(String shortName) {
 		this.shortName = shortName;
 	}
-
 }

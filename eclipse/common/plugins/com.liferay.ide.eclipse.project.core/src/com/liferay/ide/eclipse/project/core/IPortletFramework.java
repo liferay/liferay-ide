@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 /**
  * @author Greg Amerson
@@ -43,11 +44,15 @@ public interface IPortletFramework {
 
 	String SHORT_NAME = "shortName";
 
+	IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject);
+
 	String getBundleId();
 
 	String getDescription();
 
 	String getDisplayName();
+
+	IProjectFacet[] getFacets();
 
 	URL getHelpUrl();
 
@@ -60,7 +65,5 @@ public interface IPortletFramework {
 	boolean isDefault();
 
 	IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject);
-
-	IStatus setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject);
 
 }
