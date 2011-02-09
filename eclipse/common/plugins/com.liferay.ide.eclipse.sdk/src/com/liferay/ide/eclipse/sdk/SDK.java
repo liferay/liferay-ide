@@ -511,8 +511,8 @@ public class SDK {
 			public void run() {
 				String message =
 					MessageFormat.format(
-						"The {0} file has not been updated with the app server build properties.  Should these properties be written to the {0}?\n\nAnswering no will pass these properties directly to Ant and disregard any settings in the {0} file.",
-						new Object[] { userBuildFile.getName() });
+						"The user build.properties file in \"{0}\" SDK has not been updated with the latest app server build properties.  Should these properties be written to the file \"{1}\"?\n\nAnswering no will pass these properties directly to Ant and disregard any settings in the user build.properties file.",
+						new Object[] { getName(), userBuildFile.getName() });
 
 				MessageDialogWithToggle dialog =
 					MessageDialogWithToggle.openYesNoQuestion(
