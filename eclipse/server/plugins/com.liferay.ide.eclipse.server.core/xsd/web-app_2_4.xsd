@@ -97,8 +97,8 @@
     </xsd:documentation>
   </xsd:annotation>
 
-  <xsd:include schemaLocation="j2ee_1_4.xsd"/>
-  <xsd:include schemaLocation="jsp_2_0.xsd"/>
+  <xsd:include schemaLocation="http://java.sun.com/xml/ns/j2ee/j2ee_1_4.xsd"/>
+  <xsd:include schemaLocation="http://java.sun.com/xml/ns/j2ee/jsp_2_0.xsd"/>
 
 
 <!-- **************************************************** -->
