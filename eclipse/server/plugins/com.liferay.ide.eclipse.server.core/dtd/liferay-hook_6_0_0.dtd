@@ -7,7 +7,8 @@ This is the DTD for the Hook parameters for Liferay Portal.
 -->
 
 <!ELEMENT hook (portal-properties?, language-properties*, custom-jsp-dir?,
-service*)>
+custom-jsp-global?, service*, servlet-filter*, servlet-filter-mapping*,
+struts-action*)>
 
 <!--
 Not all portal properties can be overridden via a hook. The supported properties
@@ -24,6 +25,7 @@ auth.failure
 auth.max.failures
 auth.pipeline.post
 auth.pipeline.pre
+auth.public.paths
 auth.token.impl
 auto.login.hooks
 captcha.check.portal.create_account
@@ -96,8 +98,40 @@ value.object.listener.*
 
 <!ELEMENT custom-jsp-dir (#PCDATA)>
 
+<!ELEMENT custom-jsp-global (#PCDATA)>
+
 <!ELEMENT service (service-type, service-impl)>
 
 <!ELEMENT service-type (#PCDATA)>
 
 <!ELEMENT service-impl (#PCDATA)>
+
+<!ELEMENT servlet-filter (servlet-filter-name, servlet-filter-impl,
+init-param*)>
+
+<!ELEMENT servlet-filter-name (#PCDATA)>
+
+<!ELEMENT servlet-filter-impl (#PCDATA)>
+
+<!ELEMENT init-param (param-name, param-value)>
+
+<!ELEMENT param-name (#PCDATA)>
+
+<!ELEMENT param-value (#PCDATA)>
+
+<!ELEMENT servlet-filter-mapping (servlet-filter-name, (after-filter |
+before-filter)?, url-pattern+, dispatcher*)>
+
+<!ELEMENT after-filter (#PCDATA)>
+
+<!ELEMENT before-filter (#PCDATA)>
+
+<!ELEMENT url-pattern (#PCDATA)>
+
+<!ELEMENT dispatcher (#PCDATA)>
+
+<!ELEMENT struts-action (struts-action-path, struts-action-impl)>
+
+<!ELEMENT struts-action-path (#PCDATA)>
+
+<!ELEMENT struts-action-impl (#PCDATA)>

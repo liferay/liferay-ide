@@ -35,6 +35,7 @@ auth.failure
 auth.max.failures
 auth.pipeline.post
 auth.pipeline.pre
+auth.public.paths
 auth.token.impl
 auto.login.hooks
 captcha.check.portal.create_account

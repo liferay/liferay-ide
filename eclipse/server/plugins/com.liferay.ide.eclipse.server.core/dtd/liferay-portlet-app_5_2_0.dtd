@@ -17,8 +17,8 @@ a Liferay portlet application.
 The portlet element contains the declarative data of a portlet.
 -->
 <!ELEMENT portlet (portlet-name, icon?, virtual-path?, struts-path?,
-configuration-path?, configuration-action-class?, indexer-class?,
-open-search-class?, scheduler-class?, portlet-url-class?,
+parent-struts-path?, configuration-path?, configuration-action-class?,
+indexer-class?, open-search-class?, scheduler-class?, portlet-url-class?,
 friendly-url-mapper-class?, url-encoder-class?, portlet-data-handler-class?,
 portlet-layout-listener-class?, poller-processor-class?,
 pop-message-listener-class?, social-activity-interpreter-class?,
@@ -68,6 +68,13 @@ have access to this portlet. This is true for both portlet requests and regular
 servlet requests.
 -->
 <!ELEMENT struts-path (#PCDATA)>
+
+<!--
+The parent-struts-path must be the struts-path of another portlet in the same
+web application. The current portlet will be able to use all the struts
+mappings of the parent without duplicating them in struts-config.xml.
+-->
+<!ELEMENT parent-struts-path (#PCDATA)>
 
 <!--
 The configuration-path value is no longer available. Use
