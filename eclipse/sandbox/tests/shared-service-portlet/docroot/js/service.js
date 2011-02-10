@@ -1,0 +1,1 @@
+Liferay.Service.register("Liferay.Service.FOO", "shared.service");
