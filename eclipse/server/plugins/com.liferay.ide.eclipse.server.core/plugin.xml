@@ -65,9 +65,19 @@
                webURL="http://www.liferay.com/dtd/liferay-display_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Display 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-display_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-display_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Friendly URL Routes 6.0.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-friendly-url-routes_6_0_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-friendly-url-routes_6_0_0.dtd">
+         </public>
+         <public
+               publicId="-//Liferay//DTD Friendly URL Routes 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-friendly-url-routes_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-friendly-url-routes_6_1_0.dtd">
          </public>
          <public
                publicId="-//Liferay//DTD Hook 5.1.0//EN"
@@ -83,6 +93,11 @@
                publicId="-//Liferay//DTD Hook 6.0.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-hook_6_0_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-hook_6_0_0.dtd">
+         </public>
+         <public
+               publicId="-//Liferay//DTD Hook 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-hook_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-hook_6_1_0.dtd">
          </public>
          <public
                publicId="-//Liferay//DTD Layout Templates 3.6.0//EN"
@@ -120,6 +135,11 @@
                webURL="http://www.liferay.com/dtd/liferay-layout-templates_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Layout Templates 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-layout-templates_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-layout-templates_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Look and Feel 3.5.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-look-and-feel_3_5_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-look-and-feel_3_5_0.dtd">
@@ -155,6 +175,11 @@
                webURL="http://www.liferay.com/dtd/liferay-look-and-feel_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Look and Feel 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-look-and-feel_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-look-and-feel_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Plugin Package 4.3.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-plugin-package_4_3_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-plugin-package_4_3_0.dtd">
@@ -180,6 +205,11 @@
                webURL="http://www.liferay.com/dtd/liferay-plugin-package_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Plugin Package 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-plugin-package_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-plugin-package_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Plugin Repository 4.3.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-plugin-repository_4_3_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-plugin-repository_4_3_0.dtd">
@@ -203,6 +233,11 @@
                publicId="-//Liferay//DTD Plugin Repository 6.0.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-plugin-repository_6_0_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-plugin-repository_6_0_0.dtd">
+         </public>
+         <public
+               publicId="-//Liferay//DTD Plugin Repository 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-plugin-repository_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-plugin-repository_6_1_0.dtd">
          </public>
          <public
                publicId="-//Liferay//DTD PORTLET 2.0.0//EN"
@@ -285,6 +320,11 @@
                webURL="http://www.liferay.com/dtd/liferay-portlet-app_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Portlet Application 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-portlet-app_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Service Builder 3.5.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-service-builder_3_5_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-service-builder_3_5_0.dtd">
@@ -340,6 +380,11 @@
                webURL="http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Service Builder 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-service-builder_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD SKIN 2.0.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-skin_2_0_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-skin_2_0_0.dtd">
@@ -368,6 +413,11 @@
                publicId="-//Liferay//DTD Theme Loader 6.0.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-theme-loader_6_0_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-theme-loader_6_0_0.dtd">
+         </public>
+         <public
+               publicId="-//Liferay//DTD Theme Loader 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-theme-loader_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-theme-loader_6_1_0.dtd">
          </public>
          <public
                publicId="-//MuleSource //DTD mule-configuration XML V1.0//EN"
@@ -404,9 +454,26 @@
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/XMLSchema.dtd"
                webURL="http://www.w3.org/2001/XMLSchema.dtd">
          </public>
+         
+         <uri
+               name="http://java.sun.com/xml/ns/j2ee/j2ee_1_4.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/j2ee_1_4.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/j2ee/j2ee_web_services_client_1_1.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/j2ee_web_services_client_1_1.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/j2ee/jsp_2_0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/jsp_2_0.xsd">
+         </uri>
          <uri
                name="http://www.liferay.com/dtd/liferay-workflow-definition_6_0_0.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/liferay-workflow-definition_6_0_0.xsd">
+         </uri>
+         <uri
+               name="http://www.liferay.com/dtd/liferay-workflow-definition_6_1_0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/liferay-workflow-definition_6_1_0.xsd">
          </uri>
          <uri
                name="http://maven.apache.org/xsd/maven-4.0.0.xsd"
@@ -420,12 +487,17 @@
                name="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/portlet-app_2_0.xsd">
          </uri>  
-         <!--
+         
          <uri
                name="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-app_2_4.xsd">
          </uri>
-         -->
+         
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-facesconfig_1_2.xsd">
+         </uri>
+         
          <uri
                name="http://www.w3.org/2001/03/xml.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/xml.xsd">
