@@ -430,7 +430,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
 
-		IPath libRoot = location.append("lib/ext");
+		IPath[] libRoots = new IPath[] { location.append("lib"), location.append("lib/ext") };
 
 		IPath portalRoot = getRoot();
 
@@ -442,7 +442,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 
 		PortalSupportHelper helper =
 			new PortalSupportHelper(
-				libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
+				libRoots, portalRoot, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
 
 		try {
 			helper.launch(null);

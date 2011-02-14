@@ -279,7 +279,7 @@ public class PortalTomcatUtil {
 		
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetSupportedHookProperties";
 
-		IPath libRoot = runtimeLocation.append("lib/ext");
+		IPath[] libRoots = new IPath[] { runtimeLocation.append("lib"), runtimeLocation.append("lib/ext") };
 
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
@@ -290,7 +290,7 @@ public class PortalTomcatUtil {
 
 		PortalSupportHelper helper =
 			new PortalSupportHelper(
-				libRoot, portalRoot, portalSupportClass, hookPropertiesFile, errorFile, urls, new String[] {});
+				libRoots, portalRoot, portalSupportClass, hookPropertiesFile, errorFile, urls, new String[] {});
 
 		try {
 			helper.launch(null);
@@ -305,7 +305,7 @@ public class PortalTomcatUtil {
 		
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
 
-		IPath libRoot = runtimeLocation.append("lib/ext");
+		IPath[] libRoots = new IPath[] { runtimeLocation.append("lib"), runtimeLocation.append("lib/ext") };
 
 		IPath portalRoot = getPortalRoot(runtimeLocation);
 
@@ -316,7 +316,7 @@ public class PortalTomcatUtil {
 
 		PortalSupportHelper helper =
 			new PortalSupportHelper(
-				libRoot, portalRoot, portalSupportClass, versionInfoFile, errorFile, urls, new String[] {});
+				libRoots, portalRoot, portalSupportClass, versionInfoFile, errorFile, urls, new String[] {});
 
 		try {
 			helper.launch(null);

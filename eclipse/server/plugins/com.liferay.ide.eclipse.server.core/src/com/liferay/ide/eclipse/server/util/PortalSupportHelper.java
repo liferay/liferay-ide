@@ -15,9 +15,11 @@
 
 package com.liferay.ide.eclipse.server.util;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.ui.util.LaunchHelper;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 
 import org.eclipse.core.runtime.CoreException;
@@ -26,7 +28,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.CommonTab;
-import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jdt.internal.debug.ui.classpath.ClasspathModel;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaRuntime;
@@ -36,34 +37,34 @@ import org.eclipse.jdt.launching.JavaRuntime;
  */
 @SuppressWarnings("restriction")
 public class PortalSupportHelper extends LaunchHelper {
-
-	protected String[] rootLibs = new String[] {
-		"portal-service.jar"
-	};
 	
-	protected IPath libRoot;
+	protected File errorFile;
+	
+	protected IPath[] libRoots;
+	
+	protected File outputFile;
 	
 	protected String[] portalLibs = new String[] {
 		"portal-impl.jar", "spring-aop.jar"
 	};
-	
+
 	protected IPath portalRoot;
-	
-	protected String[] userLibs;
 
 	protected URL[] supportLibs;
 
-	protected File outputFile;
+	protected String[] userLibs;
 
 	public PortalSupportHelper(
-		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile, URL[] supportLibs,
+		IPath[] libRoots, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile,
+		URL[] supportLibs,
 		String[] userLibs) {
 
-		this(libRoot, portalRoot, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null);
+		this(libRoots, portalRoot, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null);
 	}
 
 	public PortalSupportHelper(
-		IPath libRoot, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile, URL[] supportLibs,
+		IPath[] libRoots, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile,
+		URL[] supportLibs,
 		String[] userLibs, String extraArg) {
 		
 		super(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
@@ -80,13 +81,15 @@ public class PortalSupportHelper extends LaunchHelper {
 
 		setOutputFile(outputFile);
 
+		setErrorFile(errorFile);
+
 		setLaunchArgs(new String[] {
 			portalSupportClass, outputFile.getAbsolutePath(), errorFile.getAbsolutePath(), extraArg
 		});
 
 		setMode(ILaunchManager.RUN_MODE);
 
-		this.libRoot = libRoot;
+		this.libRoots = libRoots;
 
 		this.portalRoot = portalRoot;
 
@@ -108,11 +111,27 @@ public class PortalSupportHelper extends LaunchHelper {
 		tab.setDefaults(config);
 		tab.dispose();
 
-		if (outputFile != null && outputFile.getParentFile().exists()) {
-			config.setAttribute(IDebugUIConstants.ATTR_CAPTURE_IN_FILE, outputFile.getAbsolutePath());
-		}
+		// if (outputFile != null && outputFile.getParentFile().exists()) {
+		// config.setAttribute(IDebugUIConstants.ATTR_CAPTURE_IN_FILE, outputFile.getAbsolutePath());
+		// }
 		
 		return config;		
+	}
+
+	public File getErrorFile() {
+		return this.errorFile;
+	}
+
+	public File getOutputFile() {
+		return outputFile;
+	}
+
+	public void setErrorFile(File errorFile) {
+		this.errorFile = errorFile;
+	}
+
+	public void setOutputFile(File outputFile) {
+		this.outputFile = outputFile;
 	}
 
 	@Override
@@ -127,9 +146,23 @@ public class PortalSupportHelper extends LaunchHelper {
 			}
 		}
 		
-		for (String rootLib : rootLibs) {
-			model.addEntry(
-				ClasspathModel.USER, JavaRuntime.newStringVariableClasspathEntry(libRoot.append(rootLib).toOSString()));
+		for (IPath libRoot : libRoots) {
+			File[] libFiles = libRoot.toFile().listFiles(new FilenameFilter() {
+
+				public boolean accept(File dir, String name) {
+					return name.endsWith(".jar");
+				}
+
+			});
+
+			if (!CoreUtil.isNullOrEmpty(libFiles)) {
+
+				for (File libFile : libFiles) {
+					model.addEntry(
+						ClasspathModel.USER, JavaRuntime.newStringVariableClasspathEntry(libFile.getAbsolutePath()));
+				}
+
+			}
 		}
 
 		for (String portalLib : portalLibs) {
@@ -155,13 +188,4 @@ public class PortalSupportHelper extends LaunchHelper {
 			}
 		}
 	}
-
-	public File getOutputFile() {
-		return outputFile;
-	}
-
-	public void setOutputFile(File outputFile) {
-		this.outputFile = outputFile;
-	}
-
 }
