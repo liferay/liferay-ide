@@ -15,6 +15,10 @@
             file="help/tasks/creating-portlets-toc.xml"
             primary="false">
       </toc>
+      <toc
+            file="help/tasks/importing-existing-projects-toc.xml"
+            primary="false">
+      </toc>
    </extension>
 
 </plugin>

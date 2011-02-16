@@ -7,5 +7,6 @@
    </topic>
    <topic label="Tasks">
       <link toc="help/tasks/creating-portlets-toc.xml"/>
+      <link toc="help/tasks/importing-existing-projects-toc.xml"/>
    </topic>
 </toc>

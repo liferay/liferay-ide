@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<toc topic="help/tasks/importing-existing-projects.html" label="importing-existing-projects">
+	<topic href="help/tasks/importing-existing-projects.html" label="Requirements for this Task"></topic>
+	<topic href="help/tasks/importing-existing-projects.html#ExistingProjectTypes" label="Existing Project Types"></topic>
+	<topic href="help/tasks/importing-existing-projects.html#ImportingGuidesbyType" label="Importing Guides by Type"></topic>
+	<topic href="help/tasks/importing-existing-projects.html#non-eclipse-guide" label="Import Guide: Existing Liferay Project not in an Eclipse workspace ">
+		<topic href="help/tasks/importing-existing-projects.html#option-1" label="Create Project from Existing Source wizard"></topic>
+		<topic href="help/tasks/importing-existing-projects.html#option-2" label="Create Multiple Projects from Existing SDK"></topic>
+	</topic>
+	<topic href="help/tasks/importing-existing-projects.html#non-ide-guide" label="Import Guide: Existing Eclipse, non-Liferay IDE project">
+		<topic href="help/tasks/importing-existing-projects.html#ConvertLiferayProjectWizard" label="Convert Liferay Project Wizard"></topic>
+	</topic>
+	<topic href="help/tasks/importing-existing-projects.html#ide-guide" label="Import Guide: Existing Liferay IDE project "></topic>
+	<topic href="help/tasks/importing-existing-projects.html#verify" label="Verify Project Import Success"></topic>
+</toc>
