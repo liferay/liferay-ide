@@ -54,11 +54,17 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_EXT_PRESET = "liferay.ext.preset";
 
+	public static final IProjectFacet LIFERAY_EXT_PROJECT_FACET =
+		ProjectFacetsManager.getProjectFacet(LIFERAY_EXT_FACET_ID);
+
 	public static final String LIFERAY_HOOK_FACET_ID = "liferay.hook";
 
 	public static final String LIFERAY_HOOK_FACET_TEMPLATE_ID = "liferay.hook.template";
 
 	public static final String LIFERAY_HOOK_PRESET = "liferay.hook.preset";
+
+	public static final IProjectFacet LIFERAY_HOOK_PROJECT_FACET =
+		ProjectFacetsManager.getProjectFacet(LIFERAY_HOOK_FACET_ID);
 
 	public static final String LIFERAY_LAYOUTTPL_FACET_ID = "liferay.layouttpl";
 
@@ -66,11 +72,17 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_LAYOUTTPL_PRESET = "liferay.layouttpl.preset";
 
+	public static final IProjectFacet LIFERAY_LAYOUTTPL_PROJECT_FACET =
+		ProjectFacetsManager.getProjectFacet(LIFERAY_LAYOUTTPL_FACET_ID);
+
 	public static final String LIFERAY_PORTLET_FACET_ID = "liferay.portlet";
 
 	public static final String LIFERAY_PORTLET_FACET_TEMPLATE_ID = "liferay.portlet.template";
 
 	public static final String LIFERAY_PORTLET_PRESET = "liferay.portlet.preset";
+
+	public static final IProjectFacet LIFERAY_PORTLET_PROJECT_FACET =
+		ProjectFacetsManager.getProjectFacet(LIFERAY_PORTLET_FACET_ID);
 
 	public static final String LIFERAY_SDK_NAME_DEFAULT_VALUE = "__NO__SDK__";
 
@@ -82,6 +94,9 @@ public class IPluginFacetConstants {
 
 	public static final String LIFERAY_THEME_PRESET = "liferay.theme.preset";
 
+	public static final IProjectFacet LIFERAY_THEME_PROJECT_FACET =
+		ProjectFacetsManager.getProjectFacet(LIFERAY_THEME_FACET_ID);
+
 	public static final String PORTLET_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
 
 	public static final String PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes";
@@ -89,19 +104,4 @@ public class IPluginFacetConstants {
 	public static final String PORTLET_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src";
 
 	public static final String THEME_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
-
-	public static final IProjectFacet LIFERAY_PORTLET_FACET =
-		ProjectFacetsManager.getProjectFacet(LIFERAY_PORTLET_FACET_ID);
-
-	public static final IProjectFacet LIFERAY_THEME_PLUGIN_FACET =
-	ProjectFacetsManager.getProjectFacet(LIFERAY_THEME_FACET_ID);
-
-	public static final IProjectFacet LIFERAY_EXT_FACET =
-	ProjectFacetsManager.getProjectFacet(LIFERAY_EXT_FACET_ID);
-
-	public static final IProjectFacet LIFERAY_HOOK_FACET =
-	ProjectFacetsManager.getProjectFacet(LIFERAY_HOOK_FACET_ID);
-
-	public static final IProjectFacet LIFERAY_LAYOUTTPL_FACET =
-	ProjectFacetsManager.getProjectFacet(LIFERAY_LAYOUTTPL_FACET_ID);
 }

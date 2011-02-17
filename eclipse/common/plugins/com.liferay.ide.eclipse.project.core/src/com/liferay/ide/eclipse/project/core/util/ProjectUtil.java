@@ -202,7 +202,10 @@ public class ProjectUtil {
 
 	public static void createDefaultWebXml(File webxmlFile) {
 		final String webXmlContents =
-			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.4\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd\">\n</web-app>"; //$NON-NLS-1$
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE web-app PUBLIC \"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN\" \"http://java.sun.com/dtd/web-app_2_3.dtd\">\n<web-app>\n</web-app>";
+
+		//"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.4\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd\">\n</web-app>"; //$NON-NLS-1$
+
 		try {
 			org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile(webxmlFile, webXmlContents);
 		}
@@ -691,11 +694,11 @@ public class ProjectUtil {
 	}
 
 	public static boolean isExtProject(IProject project) {
-		return hasFacet(project, IPluginFacetConstants.LIFERAY_EXT_FACET);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET);
 	}
 
 	public static boolean isHookProject(IProject project) {
-		return hasFacet(project, IPluginFacetConstants.LIFERAY_HOOK_FACET);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET);
 	}
 
 	public static boolean isJavaFacet(IProjectFacet facet) {
@@ -803,7 +806,7 @@ public class ProjectUtil {
 	}
 
 	public static boolean isPortletProject(IProject project) {
-		return hasFacet(project, IPluginFacetConstants.LIFERAY_PORTLET_FACET);
+		return hasFacet(project, IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET);
 	}
 
 	public static boolean isThemeProject(IProject project) {

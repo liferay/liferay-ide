@@ -204,7 +204,7 @@ public class LayoutTplUtil {
 	}
 
 	public static boolean isLayoutTplProject(IProject project) {
-		return ProjectUtil.hasFacet(project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET);
+		return ProjectUtil.hasFacet(project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET);
 	}
 
 

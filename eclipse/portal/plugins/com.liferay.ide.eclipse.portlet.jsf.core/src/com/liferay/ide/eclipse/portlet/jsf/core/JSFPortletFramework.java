@@ -100,7 +100,7 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 		 * will overwrite our web.xml that comes with in the template
 		 */
 
-		SDK sdk = ProjectUtil.getSDK(facetedProject.getProject(), IPluginFacetConstants.LIFERAY_PORTLET_FACET);
+		SDK sdk = ProjectUtil.getSDK(facetedProject.getProject(), IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET);
 
 		if (sdk == null) {
 			return JSFCorePlugin.createErrorStatus("Could not get SDK from newly created project.");

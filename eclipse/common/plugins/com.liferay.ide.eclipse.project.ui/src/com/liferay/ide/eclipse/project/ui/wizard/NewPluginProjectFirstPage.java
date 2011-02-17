@@ -77,7 +77,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 		this.setTitle("Liferay Plugin Project");
 		this.setDescription("Create a new plugin project for Liferay Portal.");
 
-		primaryProjectFacet = IPluginFacetConstants.LIFERAY_PORTLET_FACET;
+		primaryProjectFacet = IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET;
 
 	}
 

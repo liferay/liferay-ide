@@ -99,7 +99,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 		SDK sdk = null;
 		IProject project = module.getProject();
 
-		sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_EXT_FACET);
+		sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET);
 
 		if (sdk == null) {
 			throw new CoreException(

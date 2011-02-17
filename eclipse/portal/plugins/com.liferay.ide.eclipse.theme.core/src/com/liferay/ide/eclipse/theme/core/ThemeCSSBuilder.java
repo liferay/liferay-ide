@@ -155,7 +155,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 	public static IStatus cssBuild(IProject project)
 		throws CoreException {
 
-		SDK sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_THEME_PLUGIN_FACET);
+		SDK sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET);
 
 		if (sdk == null) {
 			throw new CoreException(

@@ -24,10 +24,13 @@ import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -49,6 +52,11 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
  * @author Greg Amerson
  */
 public class PluginFacetUtil {
+
+	public static final IProjectFacet[] LIFERAY_FACETS = new IProjectFacet[] {
+		IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET, IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET,
+		IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET, IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET,
+		IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET };
 
 	public static void configureJavaFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset) {
 		Action action = fpjwc.getProjectFacetAction(requiredFacet);
@@ -72,8 +80,6 @@ public class PluginFacetUtil {
 			javaConfig.setSourceFolder(new Path(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER));
 			javaConfig.setDefaultOutputFolder(new Path(IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER));
 
-			// TODO try to remove default output folder from project to ensure
-			// it gets setup correctly?
 			dm.setStringProperty(
 				IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
 				IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
@@ -204,7 +210,9 @@ public class PluginFacetUtil {
 		}
 	}
 
-	public static void configureWebFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset) {
+	public static void configureWebFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset)
+		throws CoreException {
+
 		Action action = fpjwc.getProjectFacetAction(requiredFacet);
 		Object config = action.getConfig();
 		IDataModel dm = (IDataModel) config;
@@ -216,16 +224,22 @@ public class PluginFacetUtil {
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
 				IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
+
+			addDefaultWebXml(fpjwc, dm);
 		}
 		else if (preset.getId().contains("hook")) {
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
+
+			addDefaultWebXml(fpjwc, dm);
 		}
 		else if (preset.getId().contains("ext")) {
 			dm.setStringProperty(
 				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+
+			addDefaultWebXml(fpjwc, dm);
 		}
 		else if (preset.getId().contains("layouttpl")) {
 			dm.setStringProperty(
@@ -305,6 +319,33 @@ public class PluginFacetUtil {
 		}
 
 		return sdkName;
+	}
+
+	private static void addDefaultWebXml(IFacetedProjectWorkingCopy fpjwc, IDataModel dm)
+		throws CoreException {
+
+		// check for existing web.xml file, if not there, add a default one
+		IPath webinfPath = fpjwc.getProjectLocation().append("docroot/WEB-INF");
+
+		if (ProjectUtil.isExtProject(fpjwc.getProject()) || fpjwc.getProjectLocation().lastSegment().endsWith("-ext")) {
+			fpjwc.getProjectLocation().append(IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+		}
+
+		if (webinfPath.toFile().exists()) {
+			File webXml = webinfPath.append("web.xml").toFile();
+
+			if (!webXml.exists()) {
+				ProjectUtil.setGenerateDD(dm, false);
+
+				ProjectUtil.createDefaultWebXml(webXml);
+
+				IProject project = fpjwc.getProject();
+
+				if (project != null) {
+					project.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			}
+		}
 	}
 
 }
