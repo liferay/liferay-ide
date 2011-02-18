@@ -116,8 +116,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 	}
 
 	protected void fullBuild(Map args, IProgressMonitor monitor) {
-		System.out.println("full build");
-
 		try {
 			if (shouldFullBuild(args)) {
 				cssBuild(getProject(args));
