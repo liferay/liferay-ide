@@ -9,6 +9,8 @@ public interface IPortalTomcatRuntime extends IPortalRuntime {
 
 	public IPath getBundleZipLocation();
 
+	public String getServerInfo();
+
 	public void setBundleZipLocation(IPath path);
 
 }

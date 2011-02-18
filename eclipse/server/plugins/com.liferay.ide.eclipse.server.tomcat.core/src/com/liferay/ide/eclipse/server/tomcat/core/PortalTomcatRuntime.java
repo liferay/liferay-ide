@@ -34,7 +34,6 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -176,9 +175,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 		return getRuntime().getLocation();
 	}
 
-	public String getServerInfo()
-		throws IOException {
-
+	public String getServerInfo() {
 		// check for existing server info
 		IPath location = getRuntime().getLocation();
 
@@ -317,13 +314,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 		}
 
 		if (!getRuntime().isStub()) {
-			String serverInfo = null;
-
-			try {
-				serverInfo = getServerInfo();
-			}
-			catch (IOException e) {
-			}
+			String serverInfo = getServerInfo();
 
 			if (CoreUtil.isNullOrEmpty(serverInfo) || serverInfo.indexOf(getExpectedServerInfo()) < 0) {
 				status =
@@ -425,29 +416,25 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 		return newHelper;
 	}
 
-	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile)
-		throws IOException {
-
+	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile) {
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
 
 		IPath[] libRoots = new IPath[] { location.append("lib"), location.append("lib/ext") };
 
 		IPath portalRoot = getRoot();
 
-		URL[] supportUrls =
-			new URL[] {
-				FileLocator.toFileURL(PortalServerCorePlugin.getDefault().getBundle().getEntry(
-					"portal-support/portal-support.jar"))
-			};
-
-		PortalSupportHelper helper =
-			new PortalSupportHelper(
-				libRoots, portalRoot, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
-
 		try {
+			URL[] supportUrls =
+				new URL[] { FileLocator.toFileURL(PortalServerCorePlugin.getDefault().getBundle().getEntry(
+					"portal-support/portal-support.jar")) };
+
+			PortalSupportHelper helper =
+				new PortalSupportHelper(
+					libRoots, portalRoot, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
+
 			helper.launch(null);
 		}
-		catch (CoreException e) {
+		catch (Exception e) {
 			PortalTomcatPlugin.logError(e);
 		}
 	}

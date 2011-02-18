@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatVersionHandler;
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatConfiguration;
@@ -229,6 +230,29 @@ public class PortalTomcatServer extends TomcatServer
 
 	}
 
+	@Override
+	public void saveConfiguration(IProgressMonitor monitor)
+		throws CoreException {
+
+		PortalTomcatRuntime portalRuntime =
+			(PortalTomcatRuntime) getServer().getRuntime().loadAdapter(PortalTomcatRuntime.class, monitor);
+
+		String serverInfo = portalRuntime.getServerInfo();
+
+		String expectedServerInfo = portalRuntime.getExpectedServerInfo();
+
+		if (serverInfo != null && expectedServerInfo != null) {
+			if (serverInfo.contains("Enterprise Edition") && !(expectedServerInfo.contains("Enterprise Edition"))) {
+
+				PortalTomcatUtil.displayToggleMessage(
+					"The runtime adapter for this Server is Liferay Portal CE (Community Edition). However, the actual runtime configured is Liferay Portal Enterprise Edition. Please consider switching to the Liferay Portal EE adapter for enhanced support.\n\nThe Liferay Portal EE adapter is found in Liferay Developer Studio which is available for free to EE customers.  More infomation is on the customer portal home page on http://www.liferay.com",
+					PortalTomcatPlugin.PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY);
+			}
+		}
+
+		super.saveConfiguration(monitor);
+	}
+
 	public void setAutoDeployDirectory(String dir) {
 		setAttribute(PROPERTY_AUTO_DEPLOY_DIR, dir);
 	}
@@ -255,6 +279,10 @@ public class PortalTomcatServer extends TomcatServer
 
 	public void setUserTimezone(String userTimezone) {
 		setAttribute(PROPERTY_USER_TIMEZONE, userTimezone);
+	}
+
+	protected IPersistentPreferenceStore getPrefStore() {
+		return PortalTomcatPlugin.getPreferenceStore();
 	}
 
 }

@@ -43,6 +43,8 @@ public class PortalTomcatPlugin extends CorePlugin implements IStartup {
 
 	public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY";
 
+	public static final String PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY = "EE_UPGRADE_MSG_TOGGLE_KEY";
+
 	// The shared instance
 	private static PortalTomcatPlugin plugin;
 
