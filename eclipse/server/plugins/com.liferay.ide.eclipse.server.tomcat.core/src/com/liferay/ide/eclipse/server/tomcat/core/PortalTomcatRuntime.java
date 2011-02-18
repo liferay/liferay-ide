@@ -400,7 +400,7 @@ public class PortalTomcatRuntime extends TomcatRuntime implements IPortalTomcatR
 	}
 
 	protected String getExpectedServerInfo() {
-		return "Liferay Portal Community Edition";
+		return "Liferay Portal";
 	}
 
 	protected Version getLeastSupportedVersion() {
