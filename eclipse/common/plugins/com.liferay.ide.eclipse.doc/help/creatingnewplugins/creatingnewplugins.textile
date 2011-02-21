@@ -1,0 +1,58 @@
+<div style="font-size:2em">Creating New Liferay Plug-in Projects</div>
+
+{toc}
+
+h1. Creating New Liferay Plug-in Projects
+
+# Liferay IDE supports development of five Liferay plug-in types: portlets, hooks, layout templates, themes, and EXT-style plug-ins.
+# To create a new plug-in project with Liferay IDE, select the Liferay Plug-in Project option from the Eclipse File menu. (Go to File > New > Liferay Plug-in Project). !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_creating_new_plugins_1.png!
+# Choose a project name for your plugin. The project name will serve as the file name of your project. Note that the project name cannot include any blank spaces.
+# Choose a display name for your plugin. The display name will serve as the title of your project and can include blank spaces.
+# Under Configuration, you will need to select a Plug-ins SDK and a Runtime. You should already have these installed if you followed the directions in the Getting Started section and can simply select them from a list. As defaults, you should use the latest Liferay Plug-ins SDK and the latest Liferay Portal Tomcat Server.
+# Under Plug-in Type, select Portlet.
+# Click Finish, and your project should automatically build for you. You can view and modify your project using the Package Explorer that sits at the left side of the screen when using the Liferay perspective within Eclipse.
+
+Alternatively, you can create a new portlet, hook, service, or layout template project by making the appropriate selection from the File menu of Eclipse.
+
+h1. Creating New Portlets
+
+# You can create a new portlet project with Liferay IDE by selecting Liferay Portlet from the Eclipse File menu (File > New > Liferay Portlet). !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_portlet.png!
+# You will input the information required to create a portlet class on this screen.
+# Under Portlet plug-in project, choose a name for your portlet.
+# The Source folder determines the location of the file directory for your portlet project.
+# Portet class specifies the name of the Java class that your portlet extends: NewPortlet.
+# Java package specifies the location of the Java objects that NewPortlet needs to use.
+# Superclass specifies the location of the location of the MVCPortlet object which NewPortlet extends. Click next.
+# !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_portlet2.png!
+# You will specify portlet deployment descriptor details on this screen.
+# Under Portlet Info, enter the name, display name, and title of your portlet.
+# Under Portlet Modes, you can choose whether or not you want your portlet to have view, edit, and display modes by checking or unchecking the appropriate boxes.
+# Under Liferay Portlet Modes, you can choose which of six modes available to Liferay portlets you want your portlet to have.
+# Under Resources, you can decide whether or not your portlet will create JSP files. If your portlet will do so, you have to specify a JSP folder. Additionally, you can decide whether or not your portlet will use a resource bundle file. If it will, then you have to specify the resource bundle file path. Click next.
+# !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_portlet3.png!
+# You will continue specifying portlet deployment descriptor details on this screen.
+# Under Liferay Portlet Info you can name your portlet and associate an icon to it. Check the Allow multiple instances button if you want your portlet to be instanceable. If your portlet will use CSS and Javascript you need to specify the locations of your portlet project's CSS and Javascript folder and give your portlet a CSS classname.
+# Under Liferay Display you can select a display category (default category: sample). There is a long list to choose from. Click next.
+!file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_portlet4.png!
+# On this last page you can specify modifiers, interfaces, and method stubs to generate within your portlet class.
+# For modifiers, you can choose public, abstract, or final.
+# You can add an interface by specifying its location. Click add, then browse to its location, then select.
+# If you would like to inherit constructors or abstract methods from your portlet's superclass, check the appropriate boxes. Then you can select the specific methods you would like to use for your portlet class.
+# When you are done, click Finish, and your project should automatically build for you.
+
+h1. Creating New Hooks
+
+# You can create a new hook plug-in project with Liferay IDE by selecting Liferay Hook from the Eclipse File menu. (File > New > Liferay Hook).
+# !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_hook.png!
+# First, you have to specify a name for your new hook project. Then you can select which hook type(s) to create by checking the appropriate boxes.
+
+h1. Creating New Services
+
+# You can create a new service plug-in project with Liferay IDE by selecting Liferay Service from the Eclipse File menu. (File > New > Liferay Service).
+# !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_service.png!
+# First, you have to specify a name for your new service project.
+
+h1. Creating Layout Templates
+
+# You can create a new layout template plug-in project with Liferay IDE by selecting Liferay Layout Template from the Eclipse File menu. (File > New > Liferay Layout Template).
+
