@@ -6,8 +6,8 @@
       <link toc="help/gettingstarted/gettingstarted-toc.xml"/>
    </topic>
    <topic label="Tasks">
-      <topic label="Creating New Plugins">
-         <link toc="help/creatingnewplugins/creatingnewplugins-toc.xml"/>
+      <topic label="Creating New Liferay Projects">
+         <link toc="help/tasks/creating-new-projects-toc.xml"/>
       </topic>
       <topic label="Importing Existing Projects">
          <link toc="help/tasks/importing-existing-projects-toc.xml"/>

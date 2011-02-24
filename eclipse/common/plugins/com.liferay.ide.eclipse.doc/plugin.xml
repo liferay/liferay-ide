@@ -16,7 +16,7 @@
             primary="false">
       </toc>
       <toc
-            file="help/creatingnewplugins/creatingnewplugins-toc.xml"
+            file="help/tasks/creating-new-projects-toc.xml"
             primary="false">
       </toc>
    </extension>
