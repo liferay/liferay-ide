@@ -27,7 +27,7 @@ h1. Creating New Portlets
 # You will specify portlet deployment descriptor details on this screen.
 # Under Portlet Info, enter the name, display name, and title of your portlet.
 # Under Portlet Modes, you can choose whether or not you want your portlet to have view, edit, and display modes by checking or unchecking the appropriate boxes.
-# Under Liferay Portlet Modes, you can choose which of six modes available to Liferay portlets you want your portlet to have.
+# Under Liferay Portlet Modes, you can choose which of six modes available to Liferay portlets you want your portlet to use.
 # Under Resources, you can decide whether or not your portlet will create JSP files. If your portlet will do so, you have to specify a JSP folder. Additionally, you can decide whether or not your portlet will use a resource bundle file. If it will, then you have to specify the resource bundle file path. Click next.
 # !file:///home/jesse/Documents/Liferay/code/workspaces/liferay-university/com.liferay.ide.eclipse.doc/images/lide_new_portlet3.png!
 # You will continue specifying portlet deployment descriptor details on this screen.
