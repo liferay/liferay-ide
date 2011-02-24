@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <toc topic="help/creatingnewplugins/creatingnewplugins.html" label="creatingnewplugins">
-   <topic href="help/creatingnewplugins/creatingnewplugins.html#Creating New Portlet Plugins" label="Creating New Portlet Plugins"></topic>
-   <topic href="help/creatingnewplugins/creatingnewplugins.html#Creating New Hook Plugins" label="Creating New Hook Plugins">
-   </topic>
+	<topic href="help/creatingnewplugins/creatingnewplugins.html" label="Creating New Liferay Plug-in Projects"></topic>
+	<topic href="help/creatingnewplugins/creatingnewplugins.html#CreatingNewPortlets" label="Creating New Portlets"></topic>
+	<topic href="help/creatingnewplugins/creatingnewplugins.html#CreatingNewHooks" label="Creating New Hooks"></topic>
+	<topic href="help/creatingnewplugins/creatingnewplugins.html#CreatingNewServices" label="Creating New Services"></topic>
+	<topic href="help/creatingnewplugins/creatingnewplugins.html#CreatingLayoutTemplates" label="Creating Layout Templates"></topic>
 </toc>

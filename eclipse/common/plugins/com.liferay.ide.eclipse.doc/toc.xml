@@ -6,7 +6,11 @@
       <link toc="help/gettingstarted/gettingstarted-toc.xml"/>
    </topic>
    <topic label="Tasks">
-      <link toc="help/tasks/creating-portlets-toc.xml"/>
-      <link toc="help/tasks/importing-existing-projects-toc.xml"/>
+      <topic label="Creating New Plugins">
+         <link toc="help/creatingnewplugins/creatingnewplugins-toc.xml"/>
+      </topic>
+      <topic label="Importing Existing Projects">
+         <link toc="help/tasks/importing-existing-projects-toc.xml"/>
+      </topic>
    </topic>
 </toc>
