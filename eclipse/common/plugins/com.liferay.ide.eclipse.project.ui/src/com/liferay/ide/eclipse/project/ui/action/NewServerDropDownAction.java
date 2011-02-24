@@ -46,8 +46,8 @@ public class NewServerDropDownAction extends Action implements IMenuCreator, IWo
 	public Action getDefaultAction(Shell shell) {
 		Action[] actions = getActions(shell);
 
-		if (actions.length > 1) {
-			return actions[1];
+		if (actions.length > 0) {
+			return actions[0];
 		}
 
 		return null;
@@ -55,7 +55,7 @@ public class NewServerDropDownAction extends Action implements IMenuCreator, IWo
 
 	protected Action[] getActions(Shell shell) {
 		return new Action[] {
-			new NewRuntimeAction(shell), new NewServerAction(shell)
+		/* new NewRuntimeAction(shell), */new NewServerAction(shell)
 		};
 	}
 
