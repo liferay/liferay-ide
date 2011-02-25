@@ -1,6 +1,6 @@
-def mapFile = new File("../com.liferay.ide.eclipse.releng/files/wtp-3.2.2.map")
-def depsFile = new File("../com.liferay.ide.eclipse.releng/files/wtp-3.2.2-deps.txt")
-def outputFile = new File("../com.liferay.ide.eclipse.releng/files/wtp-3.2.2-deps.map")
+def mapFile = new File("../com.liferay.ide.eclipse.releng/files/wtp-3.2.3.map")
+def depsFile = new File("../com.liferay.ide.eclipse.releng/files/wtp-3.2.3-deps.txt")
+def outputFile = new File("../com.liferay.ide.eclipse.releng/files/wtp-3.2.3-deps.map")
 
 def deps = depsFile.readLines();
 
@@ -13,5 +13,4 @@ mapFile.eachLine {
 			outputFile.append(it.toString() + "\n")
 		}
 	}
-	
 }
