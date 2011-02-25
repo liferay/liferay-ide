@@ -145,17 +145,21 @@ public class PortalTomcatServerBehavior extends TomcatServerBehaviour {
 	
 	@Override
 	protected void publishFinish(IProgressMonitor monitor) throws CoreException {
-		IStatus status;
+		IStatus status = Status.OK_STATUS;
 		IPath baseDir = getRuntimeBaseDirectory();
 		TomcatServer ts = getTomcatServer();
 		ITomcatVersionHandler tvh = getTomcatVersionHandler();
 		// Include or remove loader jar depending on state of serving directly 
-		status = tvh.prepareForServingDirectly(baseDir, getTomcatServer());
+
+		// TODO uncomment following line once we have serve directly enabled
+		// status = tvh.prepareForServingDirectly(baseDir, getTomcatServer());
+
 		if (status.isOK()) {
 			// If serving modules directly, update server.xml accordingly (includes project context.xmls)
 			if (ts.isServeModulesWithoutPublish()) {
-				status = getPortalTomcatConfiguration().updateContextsToServeDirectly(
-						baseDir, tvh.getSharedLoader(baseDir), monitor);
+				// TODO uncomment the following once we have serve direct enabled
+				// status = getPortalTomcatConfiguration().updateContextsToServeDirectly(
+				// baseDir, tvh.getSharedLoader(baseDir), monitor);
 			}
 			// Else serving normally. Add project context.xmls to server.xml
 			else {

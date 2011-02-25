@@ -40,10 +40,11 @@ public class PortalTomcat60Configuration extends Tomcat60Configuration implement
 		return super.publishContextConfig(baseDir, deployDir, monitor);
 	}
 
-	@Override
-	public IStatus updateContextsToServeDirectly(IPath baseDir, String loader, IProgressMonitor monitor) {
-		return super.updateContextsToServeDirectly(baseDir, loader, monitor);
-	}
+	// TODO uncomment this once we have serve directly enabled in tomcat publishing
+	// @Override
+	// public IStatus updateContextsToServeDirectly(IPath baseDir, String loader, IProgressMonitor monitor) {
+	// return super.updateContextsToServeDirectly(baseDir, loader, monitor);
+	// }
 
 	@Override
 	protected String getWebModuleURL(IModule webModule) {

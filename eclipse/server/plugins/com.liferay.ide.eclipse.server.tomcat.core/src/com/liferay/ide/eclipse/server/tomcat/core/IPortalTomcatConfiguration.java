@@ -31,6 +31,7 @@ public interface IPortalTomcatConfiguration {
 
 	public IStatus publishContextConfig(IPath baseDir, IPath serverDeployDirectory, IProgressMonitor monitor);
 
-	public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);
+	// TODO uncomment this fix this one we have "serve" directly re-enabled
+	// public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);
 
 }
