@@ -205,7 +205,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		for (DataModelPropertyDescriptor desc : validDescriptors) {
 			Object runtime = desc.getPropertyValue();
 
-			if (runtime instanceof BridgedRuntime && ServerUtil.isPortalRuntime((BridgedRuntime) runtime)) {
+			if (runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime((BridgedRuntime) runtime)) {
 				getDataModel().setProperty(FACET_RUNTIME, runtime);
 				break;
 			}
@@ -329,7 +329,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				return ProjectCorePlugin.createErrorStatus("Liferay Portal runtime must be configured and selected.");
 			}
 			else if (facetRuntime instanceof BridgedRuntime) {
-				if (ServerUtil.isPortalRuntime((BridgedRuntime) facetRuntime)) {
+				if (ServerUtil.isLiferayRuntime((BridgedRuntime) facetRuntime)) {
 					return Status.OK_STATUS;
 				}
 				else {
