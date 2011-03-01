@@ -76,6 +76,8 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_APP_ZIP_NAME = "app.server.zip.name";
 
+	public static final String PROPERTY_AUTO_DEPLOY_CUSTOM_PORTLET_XML = "auto.deploy.custom.portlet.xml";
+
 	public static final String PROPERTY_AUTO_DEPLOY_UNPACK_WAR = "auto.deploy.unpack.war";
 
 	public static final String PROPERTY_EXT_DISPLAY_NAME = "ext.display.name";
