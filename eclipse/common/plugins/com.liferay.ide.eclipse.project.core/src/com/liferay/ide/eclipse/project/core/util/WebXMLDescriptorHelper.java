@@ -15,9 +15,9 @@
 
 package com.liferay.ide.eclipse.project.core.util;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -44,7 +44,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper {
 	public WebXMLDescriptorHelper(IProject project) {
 		super(project);
 		
-		setDescriptorPath(IPortalConstants.WEB_XML_FILE);
+		setDescriptorPath(ILiferayConstants.WEB_XML_FILE);
 	}
 
 	public IStatus addTagLib(final TagLibRefType tagLibRefType) {
