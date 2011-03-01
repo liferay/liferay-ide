@@ -145,17 +145,6 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
 		if (project != null) {
 			propertyOverridesSection.setProject(project);
-
-			// try {
-			// ILiferayPortalRuntime portalRuntime =
-			// ServerUtil.getPortalRuntime(project);
-			// IPath portalRoot = portalRuntime.getPortalRoot();
-			// if (portalRoot != null && portalRoot.toFile().exists()) {
-			// propertyOverridesSection.setPortalRoot(portalRoot.toFile());
-			// }
-			// } catch (CoreException e) {
-			// PortletUIPlugin.logError(e);
-			// }
 		}
 	}
 

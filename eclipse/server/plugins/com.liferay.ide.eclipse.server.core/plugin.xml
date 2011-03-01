@@ -518,24 +518,5 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
-<!--
-   <extension-point id="portalBundles" name="Portal Bundles" schema="schema/portalBundles.exsd"/>
-   <extension
-         point="com.liferay.ide.eclipse.server.core.portalBundles">
-      <portalBundle
-            id="portal.bundle.60"
-            runtimeTypeId="com.liferay.ide.eclipse.server.portal.runtime.60">
-         <bundledServletContainer
-               bundledPath="tomcat-6.0.24"
-               bundledRuntimeTypeId="org.eclipse.jst.server.tomcat.runtime.60"
-               displayName="Tomcat 6.0">
-         </bundledServletContainer>
-         <bundledServletContainer
-               bundledPath="tomcat-5.5.20"
-               bundledRuntimeTypeId="org.eclipse.jst.server.tomcat.runtime.55"
-               displayName="Tomcat 5.5">
-         </bundledServletContainer>
-      </portalBundle>
-   </extension>
--->
+
 </plugin>

@@ -4,14 +4,6 @@
    
    
    <extension
-         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
-      <launchConfigurationTabGroup
-            class="com.liferay.ide.eclipse.server.ui.PortalLaunchConfigurationTabGroup"
-            id="com.liferay.ide.eclipse.server.ui.portal.launchConfigurationTabGroup"
-            type="com.liferay.ide.eclipse.server.portal.launchConfigurationType">
-      </launchConfigurationTabGroup>
-   </extension>
-   <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewerContentBinding
             viewerId="org.eclipse.wst.server.ui.ServersView">
