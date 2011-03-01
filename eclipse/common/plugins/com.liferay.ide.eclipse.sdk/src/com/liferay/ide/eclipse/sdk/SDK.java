@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.sdk;
 
 import com.liferay.ide.eclipse.sdk.util.SDKHelper;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
-import com.liferay.ide.eclipse.server.core.IAppServer;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
@@ -205,7 +205,7 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IPath createNewExtProject(String extName, String extDisplayName, IAppServer appServer) {
+	public IPath createNewExtProject(String extName, String extDisplayName, ILiferayRuntime appServer) {
 		try {
 			SDKHelper antHelper = new SDKHelper(this);
 
@@ -264,11 +264,11 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewLayoutTplProject(String layoutTplName, String layoutTplDisplayName, IAppServer appServer) {
+	public IPath createNewLayoutTplProject(String layoutTplName, String layoutTplDisplayName, ILiferayRuntime runtime) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(appServer);
+			Map<String, String> properties = configureAppServerProperties(runtime);
 
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layoutTplName);
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_DISPLAY_NAME, layoutTplDisplayName);
@@ -292,17 +292,17 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewPortletProject(String portletName, String portletDisplayName, IAppServer appServer) {
-		return createNewPortletProject(portletName, portletDisplayName, null, appServer);
+	public IPath createNewPortletProject(String portletName, String portletDisplayName, ILiferayRuntime runtime) {
+		return createNewPortletProject(portletName, portletDisplayName, null, runtime);
 	}
 
 	public IPath createNewPortletProject(
-		String portletName, String portletDisplayName, String portletFramework, IAppServer appServer) {
+		String portletName, String portletDisplayName, String portletFramework, ILiferayRuntime runtime) {
 
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(appServer);
+			Map<String, String> properties = configureAppServerProperties(runtime);
 
 			properties.put(ISDKConstants.PROPERTY_PORTLET_NAME, portletName);
 			properties.put(ISDKConstants.PROPERTY_PORTLET_DISPLAY_NAME, portletDisplayName);
@@ -527,7 +527,7 @@ public class SDK {
 		return retval[0];
 	}
 
-	protected Map<String, String> configureAppServerProperties(IAppServer appServer) {
+	protected Map<String, String> configureAppServerProperties(ILiferayRuntime appServer) {
 		Map<String, String> properties = new HashMap<String, String>();
 
 		String type = appServer.getAppServerType();
@@ -559,17 +559,16 @@ public class SDK {
 	protected Map<String, String> configureAppServerProperties(IProject project)
 		throws CoreException {
 
-		IAppServer appServer = null;
+		ILiferayRuntime runtime = null;
 
 		try {
-			// portalRuntime = ServerUtil.getPortalRuntime(project);
-			appServer = ServerUtil.getAppServer(project);
+			runtime = ServerUtil.getLiferayRuntime(project);
 		}
 		catch (CoreException e1) {
 			throw new CoreException(SDKPlugin.createErrorStatus(e1));
 		}
 
-		return configureAppServerProperties(appServer);
+		return configureAppServerProperties(runtime);
 	}
 
 	protected void persistAppServerProperties(Map<String, String> properties)
