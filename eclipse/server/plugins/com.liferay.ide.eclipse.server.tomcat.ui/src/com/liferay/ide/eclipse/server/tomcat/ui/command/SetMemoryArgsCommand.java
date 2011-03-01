@@ -11,7 +11,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.ui.command;
 
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
@@ -32,7 +32,7 @@ public class SetMemoryArgsCommand extends ServerCommand {
 	 *            a Tomcat server
 	 * @param memoryArgs
 	 */
-	public SetMemoryArgsCommand(PortalTomcatServer server, String memoryArgs) {
+	public SetMemoryArgsCommand(LiferayTomcatServer server, String memoryArgs) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
 		this.memoryArgs = memoryArgs;
 	}
@@ -41,14 +41,14 @@ public class SetMemoryArgsCommand extends ServerCommand {
 	 * Execute setting the memory args
 	 */
 	public void execute() {
-		oldMemoryArgs = ((PortalTomcatServer) server).getMemoryArgs();
-		((PortalTomcatServer) server).setMemoryArgs(memoryArgs);
+		oldMemoryArgs = ((LiferayTomcatServer) server).getMemoryArgs();
+		((LiferayTomcatServer) server).setMemoryArgs(memoryArgs);
 	}
 
 	/**
 	 * Restore prior memoryargs
 	 */
 	public void undo() {
-		((PortalTomcatServer) server).setMemoryArgs(oldMemoryArgs);
+		((LiferayTomcatServer) server).setMemoryArgs(oldMemoryArgs);
 	}
 }

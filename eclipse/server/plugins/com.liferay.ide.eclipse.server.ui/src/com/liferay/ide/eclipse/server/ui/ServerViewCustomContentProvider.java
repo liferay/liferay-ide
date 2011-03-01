@@ -15,6 +15,9 @@
 
 package com.liferay.ide.eclipse.server.ui;
 
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,9 +36,6 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 import org.eclipse.wst.server.ui.internal.viewers.BaseContentProvider;
-
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 /**
  * @author Greg Amerson
@@ -64,7 +64,7 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 
 		IServer server = (IServer) parentElement;
 
-		if (!ServerUtil.isPortalRuntime(server)) {
+		if (!ServerUtil.isLiferayRuntime(server)) {
 			return EMPTY;
 		}
 

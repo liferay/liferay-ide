@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Server UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.ui;singleton:=true
 Bundle-Version: 1.2.0.qualifier
-Bundle-Activator: com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin
+Bundle-Activator: com.liferay.ide.eclipse.server.ui.LiferayServerUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)";visibility:=reexport,

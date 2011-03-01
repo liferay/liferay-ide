@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.wizard;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.eclipse.layouttpl.core.operation.INewLayoutTplDataModelProperties;
@@ -25,7 +26,6 @@ import com.liferay.ide.eclipse.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.eclipse.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.eclipse.project.core.util.LiferayDataModelOperation;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -259,7 +259,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 	protected IStatus checkDescriptorFile(IProject project) {
 		IFolder docroot = ProjectUtil.getDocroot(project);
 
-		IFile layoutTplDescriptorFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_LAYOUTTPL_XML_FILE);
+		IFile layoutTplDescriptorFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE);
 
 		if (!layoutTplDescriptorFile.exists()) {
 			try {

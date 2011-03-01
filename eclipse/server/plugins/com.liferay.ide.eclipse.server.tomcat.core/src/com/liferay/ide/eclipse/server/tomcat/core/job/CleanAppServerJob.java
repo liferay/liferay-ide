@@ -16,10 +16,10 @@
 package com.liferay.ide.eclipse.server.tomcat.core.job;
 
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
-import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatRuntime;
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatPlugin;
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerBehavior;
-import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
+import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatRuntime;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServerBehavior;
+import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -50,7 +50,7 @@ public class CleanAppServerJob extends SDKJob {
 		throws CoreException {
 
 		if (status == null) {
-			throw new CoreException(PortalTomcatPlugin.createErrorStatus("null status"));
+			throw new CoreException(LiferayTomcatPlugin.createErrorStatus("null status"));
 		}
 
 		if (!status.isOK()) {
@@ -74,11 +74,11 @@ public class CleanAppServerJob extends SDKJob {
 				String mode = server.getServerState() == IServer.STATE_STARTED ? server.getMode() : null;
 
 				if (mode != null) {
-					PortalTomcatUtil.syncStopServer(server);
+					LiferayTomcatUtil.syncStopServer(server);
 				}
 			}
 
-			IPortalTomcatRuntime portalTomcatRuntime = PortalTomcatUtil.getPortalTomcatRuntime(runtime);
+			ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime(runtime);
 			IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
 			IStatus status = getSDK().cleanAppServer(project, bundleZipLocation);
@@ -94,7 +94,7 @@ public class CleanAppServerJob extends SDKJob {
 						mod
 					};
 
-					((PortalTomcatServerBehavior) server.getAdapter(PortalTomcatServerBehavior.class)).setModulePublishState2(
+					((LiferayTomcatServerBehavior) server.getAdapter(LiferayTomcatServerBehavior.class)).setModulePublishState2(
 						m, IServer.PUBLISH_STATE_FULL);
 				}
 			}
@@ -102,7 +102,7 @@ public class CleanAppServerJob extends SDKJob {
 
 		}
 		catch (Exception ex) {
-			retval = PortalTomcatPlugin.createErrorStatus(ex);
+			retval = LiferayTomcatPlugin.createErrorStatus(ex);
 		}
 
 		if (monitor != null) {

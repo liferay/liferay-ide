@@ -25,7 +25,7 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            class="com.liferay.ide.eclipse.server.tomcat.ui.PortalTomcatLaunchConfigTabGroup"
+            class="com.liferay.ide.eclipse.server.tomcat.ui.LiferayTomcatLaunchConfigTabGroup"
             id="com.liferay.ide.eclipse.server.tomcat60.ui.launchConfigurationTabGroup"
             type="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType">
       </launchConfigurationTabGroup>
@@ -33,7 +33,7 @@
    <extension
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
-            class="com.liferay.ide.eclipse.server.tomcat.ui.wizard.PortalTomcatRuntimeFragment"
+            class="com.liferay.ide.eclipse.server.tomcat.ui.wizard.LiferayTomcatRuntimeFragment"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60">
       </fragment>
@@ -62,21 +62,12 @@
    <extension
          point="org.eclipse.wst.server.ui.editorPageSections">
       <section
-            class="com.liferay.ide.eclipse.server.tomcat.ui.editor.PortalServerSettingsEditorSection"
+            class="com.liferay.ide.eclipse.server.tomcat.ui.editor.LiferayServerSettingsEditorSection"
             id="com.liferay.ide.eclipse.server.tomcat.editor.instance"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
       </section>
-      <!--
-      <section
-            class="com.liferay.ide.eclipse.server.tomcat.ui.editor.PortalServerGeneralEditorSection"
-            id="com.liferay.ide.eclipse.server.tomcat.editor.general"
-            insertionId="org.eclipse.wst.server.editor.overview.left"
-            order="5"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
-      </section>
-      -->
       <section
             class="org.eclipse.jst.server.tomcat.ui.internal.editor.ConfigurationMimeEditorSection"
             id="com.liferay.ide.eclipse.server.tomcat.configuration.editor.mime"
@@ -111,7 +102,7 @@
                id="com.liferay.ide.eclipse.server.tomcat.runtime.component">
          </runtime-component>
          <factory
-               class="com.liferay.ide.eclipse.server.tomcat.ui.PortalTomcatRuntimeComponentLabelProvider">
+               class="com.liferay.ide.eclipse.server.tomcat.ui.LiferayTomcatRuntimeComponentLabelProvider">
          </factory>
          <type
                class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider">
@@ -122,7 +113,7 @@
                id="com.liferay.ide.eclipse.server.tomcat.runtime.component">
          </runtime-component>
          <factory
-               class="com.liferay.ide.eclipse.server.tomcat.ui.PortalTomcatRuntimeDecorationsProvider">
+               class="com.liferay.ide.eclipse.server.tomcat.ui.LiferayTomcatRuntimeDecorationsProvider">
          </factory>
          <type
                class="org.eclipse.wst.common.project.facet.ui.IDecorationsProvider">

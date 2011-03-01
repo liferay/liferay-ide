@@ -15,13 +15,13 @@
 
 package com.liferay.ide.eclipse.portlet.core.operation;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.StringBufferOutputStream;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.dd.HookDescriptorHelper;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
@@ -69,7 +69,6 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties {
 
 	protected TemplateContextType contextType;
-
 	protected TemplateStore templateStore;
 
 	public AddHookOperation(IDataModel model, TemplateStore templateStore, TemplateContextType contextType) {
@@ -118,10 +117,10 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		return ProjectUtil.getProject(projectName);
 	}
 
-	private IStatus checkDescriptorFile(IProject project) {
+	protected IStatus checkDescriptorFile(IProject project) {
 		IFolder docroot = ProjectUtil.getDocroot(project);
 
-		IFile hookDescriptorFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_HOOK_XML_FILE);
+		IFile hookDescriptorFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE);
 
 		if (!hookDescriptorFile.exists()) {
 			try {
@@ -138,13 +137,13 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 	protected IFile copyPortalJSPToProject(String portalJsp, IFolder customFolder)
 		throws Exception {
 
-		IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(getTargetProject());
+		ILiferayRuntime runtime = ServerUtil.getLiferayRuntime(getTargetProject());
 
-		IPath portalRoot = portalRuntime.getRoot();
+		IPath portalDir = runtime.getPortalDir();
 
 		IPath portalJspPath = new Path(portalJsp);
 
-		IPath originalPortalJspPath = portalRoot.append(portalJsp);
+		IPath originalPortalJspPath = portalDir.append(portalJsp);
 
 		if (originalPortalJspPath.toFile().exists()) {
 			IFile newJspFile = customFolder.getFile(portalJspPath);

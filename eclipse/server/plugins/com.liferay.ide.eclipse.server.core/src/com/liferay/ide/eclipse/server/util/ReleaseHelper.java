@@ -15,7 +15,7 @@
 
 package com.liferay.ide.eclipse.server.util;
 
-import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
+import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -67,7 +67,7 @@ public class ReleaseHelper {
 			throw e;
 		}
 		catch (Throwable e) {
-			PortalServerCorePlugin.logError(e);
+			LiferayServerCorePlugin.logError(e);
 		}
 
 		return retval;

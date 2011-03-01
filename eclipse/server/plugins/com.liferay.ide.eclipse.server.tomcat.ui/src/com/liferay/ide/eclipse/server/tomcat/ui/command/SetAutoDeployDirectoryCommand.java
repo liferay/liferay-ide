@@ -11,7 +11,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.ui.command;
 
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
@@ -30,7 +30,7 @@ public class SetAutoDeployDirectoryCommand extends ServerCommand {
 	 * @param server a Tomcat server
 	 * @param deployDir deployment directory to set
 	 */
-	public SetAutoDeployDirectoryCommand(PortalTomcatServer server, String autoDeployDir) {
+	public SetAutoDeployDirectoryCommand(LiferayTomcatServer server, String autoDeployDir) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
 		this.autoDeployDir = autoDeployDir;
 	}
@@ -39,14 +39,14 @@ public class SetAutoDeployDirectoryCommand extends ServerCommand {
 	 * Execute setting the deploy directory
 	 */
 	public void execute() {
-		oldAutoDeployDir = ((PortalTomcatServer)server).getAutoDeployDirectory();
-		((PortalTomcatServer)server).setAutoDeployDirectory(autoDeployDir);
+		oldAutoDeployDir = ((LiferayTomcatServer)server).getAutoDeployDirectory();
+		((LiferayTomcatServer)server).setAutoDeployDirectory(autoDeployDir);
 	}
 
 	/**
 	 * Restore prior deploy directory
 	 */
 	public void undo() {
-		((PortalTomcatServer)server).setAutoDeployDirectory(oldAutoDeployDir);
+		((LiferayTomcatServer)server).setAutoDeployDirectory(oldAutoDeployDir);
 	}
 }

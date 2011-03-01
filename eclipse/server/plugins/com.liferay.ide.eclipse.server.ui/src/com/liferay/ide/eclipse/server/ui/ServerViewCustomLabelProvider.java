@@ -39,8 +39,8 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(Object element) {
 		if (element instanceof PluginsContent) {
-			return PortalServerUIPlugin.imageDescriptorFromPlugin(
-				PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage();
+			return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+				LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage();
 		}
 		else if (element instanceof ModuleServer) {			
 			try {
@@ -49,8 +49,8 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 				IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
 				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
 				IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(liferayFacet);
-				return PortalServerUIPlugin.imageDescriptorFromPlugin(
-					PortalServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png").createImage();
+				return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+					LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png").createImage();
 			}
 			catch (Exception ex) {
 				// best effort no need to log error

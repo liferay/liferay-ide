@@ -21,8 +21,7 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
 
@@ -160,9 +159,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				ThemeCore.createErrorStatus("No SDK for project configured. Could not build theme."));
 		}
 
-		IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
+		ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(project);
 
-		if (portalRuntime == null) {
+		if (liferayRuntime == null) {
 			throw new CoreException(
 				ThemeCore.createErrorStatus("Could not get portal runtime for project.  Could not build theme."));
 		}
@@ -175,7 +174,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 
 		IFolder docroot = ProjectUtil.getDocroot(project);
 
-		IFile lookAndFeelFile = docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE);
+		IFile lookAndFeelFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE);
 
 		if (!lookAndFeelFile.exists()) {
 			String id = project.getName().replaceAll(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "");
@@ -195,8 +194,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				}
 			}
 
-			if (portalRuntime != null) {
-				ThemeDescriptorHelper.createDefaultFile(lookAndFeelFile, portalRuntime.getPortalVersion() + "+", id, name);
+			if (liferayRuntime != null) {
+				ThemeDescriptorHelper.createDefaultFile(
+					lookAndFeelFile, liferayRuntime.getPortalVersion() + "+", id, name);
 			}
 		}
 

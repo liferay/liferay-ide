@@ -17,7 +17,7 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.eclipse.ui.wizard.StringArrayTableWizardSection;
@@ -192,18 +192,12 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 		}
 
 		protected void handleSelectEventButton(Text text) {
-			// if (portalRoot == null || !portalRoot.exists()) {
-			// MessageDialog.openWarning(getShell(), "Event Actions",
-			// "Could not find portal root.");
-			// return;
-			// }
-
 			String[] hookProperties = new String[] {};
 
-			IPortalRuntime runtime;
+			ILiferayRuntime runtime;
 
 			try {
-				runtime = ServerUtil.getPortalRuntime(project);
+				runtime = ServerUtil.getLiferayRuntime(project);
 
 				hookProperties = runtime.getSupportedHookProperties();
 			}
@@ -237,8 +231,6 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
 	protected String[] buttonLabels;
 
-	// protected File portalRoot;
-
 	// protected File eventActionPropertiesFile;
 
 	protected IProject project;
@@ -269,35 +261,5 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 			addStringArray(stringArray);
 		}
 	}
-
-	// public void setPortalRoot(File root) {
-	// this.portalRoot = root;
-	// }
-
-	// protected void loadEventActionsPropertiesFile()
-	// throws CoreException, FileNotFoundException, IOException {
-	//
-	// eventActionPropertiesFile =
-	// PortletUIPlugin.getDefault().getStateLocation().append("hook.overrides.properties").toFile();
-	//
-	// IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
-	//
-	// PortalSupportHelper helper =
-	// new PortalSupportHelper(
-	// portalRuntime.getRuntime().getLocation().append("lib/ext"),
-	// portalRuntime.getRoot(),
-	// "com.liferay.ide.eclipse.portlet.core.support.GetSupportedHookProperties",
-	// new String[] {
-	// eventActionPropertiesFile.getPath()
-	// }, null);
-	//
-	// try {
-	// helper.launch(null);
-	// }
-	// catch (CoreException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// }
 
 }

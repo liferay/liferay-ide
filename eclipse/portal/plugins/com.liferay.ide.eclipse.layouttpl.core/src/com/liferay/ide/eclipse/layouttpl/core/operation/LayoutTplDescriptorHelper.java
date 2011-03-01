@@ -15,10 +15,10 @@
 
 package com.liferay.ide.eclipse.layouttpl.core.operation;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -42,7 +42,7 @@ public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewL
 
 	public IStatus addNewLayoutTemplate(final IDataModel dm) {
 		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return doAddLayoutTemplate(document, dm);
@@ -105,7 +105,7 @@ public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewL
 		final boolean[] retval = new boolean[1];
 
 		DOMModelOperation operation =
-			new DOMModelReadOperation(getDescriptorFile(IPortalConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
+			new DOMModelReadOperation(getDescriptorFile(ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
 
 				@Override
 				protected IStatus doExecute(IDOMDocument document) {

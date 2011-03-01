@@ -15,6 +15,11 @@
 
 package com.liferay.ide.eclipse.server.ui;
 
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
+import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
+import com.liferay.ide.eclipse.ui.util.LaunchHelper;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -25,11 +30,6 @@ import org.eclipse.jdt.internal.debug.ui.classpath.ClasspathModel;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IModule;
-
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
-import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
-import com.liferay.ide.eclipse.ui.util.LaunchHelper;
 
 /**
  * @author Greg Amerson
@@ -65,7 +65,7 @@ public class PortletDeployer extends LaunchHelper {
 		tab.dispose();
 		
 		config.setAttribute(
-			IDebugUIConstants.ATTR_CAPTURE_IN_FILE, PortalServerCorePlugin.getDefault().getStateLocation().append(
+			IDebugUIConstants.ATTR_CAPTURE_IN_FILE, LiferayServerCorePlugin.getDefault().getStateLocation().append(
 				"portlet.deployer.log").toOSString());
 
 		config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, deployerClass);
@@ -88,9 +88,9 @@ public class PortletDeployer extends LaunchHelper {
 		throws CoreException {		
 		
 		if (module != null) {
-			IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(module.getProject());
+			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(module.getProject());
 			
-			IPath[] userlibs = portalRuntime.getAllUserClasspathLibraries();
+			IPath[] userlibs = liferayRuntime.getAllUserClasspathLibraries();
 			
 			for (IPath userlib : userlibs) {
 				model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(userlib));

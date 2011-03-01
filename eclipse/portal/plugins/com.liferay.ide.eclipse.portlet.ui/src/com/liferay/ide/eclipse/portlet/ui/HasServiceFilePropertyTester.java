@@ -15,8 +15,8 @@
 
 package com.liferay.ide.eclipse.portlet.ui;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
@@ -40,7 +40,7 @@ public class HasServiceFilePropertyTester extends PropertyTester {
 
 					if (docroot != null && docroot.exists()) {
 						IFile serviceFile =
-							docroot.getFile("WEB-INF/" + IPortalConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
+							docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
 
 						if (serviceFile.exists()) {
 							return true;

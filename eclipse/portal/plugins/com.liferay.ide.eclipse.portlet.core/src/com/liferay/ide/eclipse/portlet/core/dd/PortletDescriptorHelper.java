@@ -15,11 +15,11 @@
 
 package com.liferay.ide.eclipse.portlet.core.dd;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 	public IStatus addNewPortlet(final IDataModel model) {
 		DOMModelEditOperation domModelOperation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.PORTLET_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return updatePortletXML(document, model);
@@ -63,7 +63,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			return status;
 		}
 
-		domModelOperation = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_PORTLET_XML_FILE)) {
+		domModelOperation = new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_PORTLET_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				return updateLiferayPortletXML(document, model);
@@ -77,7 +77,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			return status;
 		}
 
-		domModelOperation = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_DISPLAY_XML_FILE)) {
+		domModelOperation = new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_DISPLAY_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				return updateLiferayDisplayXML(document, model);
@@ -93,7 +93,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 	public String[] getAllPortletNames() {
 		final List<String> allPortletNames = new ArrayList<String>();
 
-		DOMModelEditOperation op = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.PORTLET_XML_FILE)) {
+		DOMModelEditOperation op = new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				NodeList nodeList = document.getElementsByTagName("portlet-name");
@@ -115,7 +115,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
 	public IStatus removeAllPortlets() {
 		DOMModelEditOperation domModelOperation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.PORTLET_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.PORTLET_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return removeAllPortletElements(document);
@@ -129,7 +129,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			return status;
 		}
 
-		domModelOperation = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_PORTLET_XML_FILE)) {
+		domModelOperation = new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_PORTLET_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				return removeAllPortletElements(document);
@@ -143,7 +143,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 			return status;
 		}
 
-		domModelOperation = new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_DISPLAY_XML_FILE)) {
+		domModelOperation = new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_DISPLAY_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				return removeAllPortletElements(document);

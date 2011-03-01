@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.core.descriptor;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
@@ -23,7 +24,6 @@ import com.liferay.ide.eclipse.project.core.BaseValidator;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ValidationPreferences;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -83,7 +83,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator {
 		IFile liferayDisplayXml = (IFile) resource;
 
 		IFile portletXml =
-			DescriptorHelper.getDescriptorFile(liferayDisplayXml.getProject(), IPortalConstants.PORTLET_XML_FILE);
+			DescriptorHelper.getDescriptorFile(liferayDisplayXml.getProject(), ILiferayConstants.PORTLET_XML_FILE);
 
 		if (liferayDisplayXml.isAccessible() && portletXml != null && portletXml.isAccessible() &&
 			ProjectUtil.isPortletProject(resource.getProject())) {

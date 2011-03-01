@@ -14,9 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.theme.core;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -75,7 +75,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 		IFolder docroot = ProjectUtil.getDocroot(project);
 
 		if (docroot != null && docroot.exists()) {
-			if (!(docroot.exists(new Path("WEB-INF/" + IPortalConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE))) ||
+			if (!(docroot.exists(new Path("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE))) ||
 				!(docroot.exists(new Path("css")))) {
 
 				ThemeCSSBuilder.cssBuild(project);

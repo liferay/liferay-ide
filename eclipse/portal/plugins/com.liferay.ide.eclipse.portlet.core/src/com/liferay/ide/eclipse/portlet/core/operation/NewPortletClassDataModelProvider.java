@@ -21,7 +21,7 @@ import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -484,10 +484,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 						runtime = ServerUtil.getRuntime(project);
 					}
 
-					IPortalRuntime portalRuntime = (IPortalRuntime) runtime.createWorkingCopy().loadAdapter(
-							IPortalRuntime.class, null);
+					ILiferayRuntime portalRuntime = (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(
+							ILiferayRuntime.class, null);
 
-					categories = portalRuntime.getCategories();
+					categories = portalRuntime.getPortletCategories();
 				}
 				catch (Exception e) {
 					e.printStackTrace();

@@ -12,7 +12,7 @@
 
 package com.liferay.ide.eclipse.server.tomcat.ui.command;
 
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
@@ -31,7 +31,7 @@ public class SetExternalPropertiesCommand extends ServerCommand {
 	 * @param server a Tomcat server
 	 * @param deployDir deployment directory to set
 	 */
-	public SetExternalPropertiesCommand(PortalTomcatServer server, String externalProperties) {
+	public SetExternalPropertiesCommand(LiferayTomcatServer server, String externalProperties) {
 		super(server, "Set External properties");
 		this.externalProperties = externalProperties;
 	}
@@ -40,14 +40,14 @@ public class SetExternalPropertiesCommand extends ServerCommand {
 	 * Execute setting the external properties
 	 */
 	public void execute() {
-		oldExternalProperties = ((PortalTomcatServer) server).getExternalProperties();
-		((PortalTomcatServer) server).setExternalProperties(externalProperties);
+		oldExternalProperties = ((LiferayTomcatServer) server).getExternalProperties();
+		((LiferayTomcatServer) server).setExternalProperties(externalProperties);
 	}
 
 	/**
 	 * Restore prior external properties
 	 */
 	public void undo() {
-		((PortalTomcatServer) server).setExternalProperties(oldExternalProperties);
+		((LiferayTomcatServer) server).setExternalProperties(oldExternalProperties);
 	}
 }

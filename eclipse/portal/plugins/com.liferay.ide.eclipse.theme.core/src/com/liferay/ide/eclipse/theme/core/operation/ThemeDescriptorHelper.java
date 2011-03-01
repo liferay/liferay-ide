@@ -15,10 +15,10 @@
 
 package com.liferay.ide.eclipse.theme.core.operation;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.io.ByteArrayInputStream;
 
@@ -50,7 +50,7 @@ public class ThemeDescriptorHelper extends DescriptorHelper implements INewTheme
 
 	public IStatus addNewLayoutTemplate(final IDataModel dm) {
 		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return doAddLayoutTemplate(document, dm);
@@ -113,7 +113,7 @@ public class ThemeDescriptorHelper extends DescriptorHelper implements INewTheme
 		final boolean[] retval = new boolean[1];
 
 		DOMModelOperation operation =
-			new DOMModelReadOperation(getDescriptorFile(IPortalConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
+			new DOMModelReadOperation(getDescriptorFile(ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
 
 				@Override
 				protected IStatus doExecute(IDOMDocument document) {

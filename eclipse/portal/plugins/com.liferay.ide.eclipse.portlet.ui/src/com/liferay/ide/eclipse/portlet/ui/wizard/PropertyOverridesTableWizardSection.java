@@ -16,7 +16,7 @@
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.wizard.StringArrayTableWizardSection;
 
@@ -110,25 +110,18 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 		}
 
 		protected void handleSelectPropertyButton(Text text) {
-			// if (portalRoot == null || !portalRoot.exists()) {
-			// MessageDialog.openWarning(getShell(), "Event Actions",
-			// "Could not find portal root.");
-			// return;
-			// }
-
 			String[] hookProperties = new String[] {};
 
-			IPortalRuntime runtime;
+			ILiferayRuntime runtime;
 
 			try {
-				runtime = ServerUtil.getPortalRuntime(project);
+				runtime = ServerUtil.getLiferayRuntime(project);
 
 				hookProperties = runtime.getSupportedHookProperties();
 			}
 			catch (CoreException e) {
 				PortletUIPlugin.logError(e);
 			}
-
 
 			PropertiesFilteredDialog dialog = new PropertiesFilteredDialog(getParentShell());
 			dialog.setTitle("Property selection");
@@ -142,38 +135,9 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 			}
 		}
 
-		// protected void loadHookOverridesFile()
-		// throws CoreException {
-		//
-		// hookOverridesFile =
-		// PortletUIPlugin.getDefault().getStateLocation().append("hook.overrides.properties").toFile();
-		//
-		// IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
-		//
-		// IPath portalRoot = portalRuntime.getRoot();
-		//
-		// PortalSupportHelper helper =
-		// new PortalSupportHelper(
-		// portalRuntime.getRuntime().getLocation().append("lib/ext"),
-		// portalRoot,
-		// "com.liferay.ide.eclipse.portlet.core.support.GetSupportedHookProperties",
-		// new String[] {
-		// hookOverridesFile.getPath()
-		// }, null);
-		//
-		// try {
-		// helper.launch(null);
-		// }
-		// catch (CoreException e) {
-		// e.printStackTrace();
-		// }
-		// }
-
 	}
 
 	protected String[] buttonLabels;
-
-	// protected File portalRoot;
 
 	protected IProject project;
 
@@ -189,9 +153,6 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 		};
 	}
 
-	// public void setPortalRoot(File root) {
-	// this.portalRoot = root;
-	// }
 
 	public void setProject(IProject project) {
 		this.project = project;

@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.portlet.ui.wizard;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.eclipse.ui.wizard.StringArrayTableWizardSection;
@@ -211,7 +211,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection {
 			IProject project = ProjectUtil.getProject(model);
 
 			try {
-				IPortalRuntime runtime = ServerUtil.getPortalRuntime(project);
+				ILiferayRuntime runtime = ServerUtil.getLiferayRuntime(project);
 
 				IPath[] libs = runtime.getAllUserClasspathLibraries();
 

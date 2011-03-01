@@ -17,9 +17,9 @@ package com.liferay.ide.eclipse.server.tomcat.ui;
 
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.project.ui.action.AbstractProjectAction;
-import com.liferay.ide.eclipse.server.tomcat.core.IPortalTomcatRuntime;
+import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.job.CleanAppServerJob;
-import com.liferay.ide.eclipse.server.tomcat.core.util.PortalTomcatUtil;
+import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.List;
@@ -71,7 +71,7 @@ public class CleanAppServerAction extends AbstractProjectAction {
 
 			IRuntime runtime = ServerUtil.getRuntime(project);
 
-			IPortalTomcatRuntime portalTomcatRuntime = PortalTomcatUtil.getPortalTomcatRuntime(runtime);
+			ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime(runtime);
 
 			if (portalTomcatRuntime == null) {
 				return;
@@ -93,7 +93,7 @@ public class CleanAppServerAction extends AbstractProjectAction {
 					editRuntime(runtime);
 
 					// refresh the portalTomcatRuntime
-					portalTomcatRuntime = PortalTomcatUtil.getPortalTomcatRuntime(runtime);
+					portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime(runtime);
 
 					bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 

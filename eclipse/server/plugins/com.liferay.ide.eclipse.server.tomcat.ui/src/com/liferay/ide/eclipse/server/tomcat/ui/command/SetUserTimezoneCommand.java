@@ -11,7 +11,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.ui.command;
 
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
@@ -32,7 +32,7 @@ public class SetUserTimezoneCommand extends ServerCommand {
 	 *            a Tomcat server
 	 * @param userTimezone
 	 */
-	public SetUserTimezoneCommand(PortalTomcatServer server, String userTimezone) {
+	public SetUserTimezoneCommand(LiferayTomcatServer server, String userTimezone) {
 		super(server, Messages.serverEditorActionSetDeployDirectory);
 		this.userTimezone = userTimezone;
 	}
@@ -41,14 +41,14 @@ public class SetUserTimezoneCommand extends ServerCommand {
 	 * Execute setting the user timezone
 	 */
 	public void execute() {
-		oldUserTimezone = ((PortalTomcatServer) server).getUserTimezone();
-		((PortalTomcatServer) server).setUserTimezone(userTimezone);
+		oldUserTimezone = ((LiferayTomcatServer) server).getUserTimezone();
+		((LiferayTomcatServer) server).setUserTimezone(userTimezone);
 	}
 
 	/**
 	 * Restore prior userTimezone
 	 */
 	public void undo() {
-		((PortalTomcatServer) server).setUserTimezone(oldUserTimezone);
+		((LiferayTomcatServer) server).setUserTimezone(oldUserTimezone);
 	}
 }

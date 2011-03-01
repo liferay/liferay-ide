@@ -16,10 +16,9 @@
 package com.liferay.ide.eclipse.server.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.server.core.IAppServer;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
-import com.liferay.ide.eclipse.server.core.PortalServerCorePlugin;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
+import com.liferay.ide.eclipse.server.core.IServerConstants;
+import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
 import java.io.File;
 import java.io.InputStream;
@@ -80,7 +79,7 @@ public class ServerUtil {
 	public static URL checkForLatestInstallableRuntime(String id) {
 
 		try {
-			URL url = new URL(IPortalConstants.INSTALLABLE_UPDATE_URL);
+			URL url = new URL(IServerConstants.INSTALLABLE_UPDATE_URL);
 
 			InputStream is = url.openStream();
 
@@ -100,7 +99,7 @@ public class ServerUtil {
 	}
 
 	public static IStatus createErrorStatus(String msg) {
-		return new Status(IStatus.ERROR, PortalServerCorePlugin.PLUGIN_ID, msg);
+		return new Status(IStatus.ERROR, LiferayServerCorePlugin.PLUGIN_ID, msg);
 	}
 
 	public static IServerWorkingCopy createServerForRuntime(IRuntime runtime) {
@@ -117,64 +116,57 @@ public class ServerUtil {
 		return null;
 	}
 
-	public static IAppServer getAppServer(IProject project)
-		throws CoreException {
-		
-		return (IAppServer) getRuntimeAdapter(
-			ProjectFacetsManager.create(project).getPrimaryRuntime(), IAppServer.class);
-	}
-
 	public static IPath getAppServerDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime) {
-		IPortalRuntime runtime = (IPortalRuntime) getRuntimeAdapter(serverRuntime, IPortalRuntime.class);
+		ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter(serverRuntime, ILiferayRuntime.class);
 
 		return runtime != null ? runtime.getAppServerDir() : null;
 	}
 
-	public static IPath getPortalRoot(IJavaProject project) {
-		return getPortalRoot(project.getProject());
+	public static IPath getPortalDir(IJavaProject project) {
+		return getPortalDir(project.getProject());
 	}
 
-	public static IPath getPortalRoot(IProject project) {
+	public static IPath getPortalDir(IProject project) {
 		try {
 			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
 
 			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = facetedProject.getPrimaryRuntime();
 
 			if (runtime != null) {
-				return ServerUtil.getPortalRoot(runtime);
+				return ServerUtil.getPortalDir(runtime);
 			}
 		}
 		catch (CoreException e) {
-			PortalServerCorePlugin.logError(e);
+			LiferayServerCorePlugin.logError(e);
 		}
 
 		return null;
 	}
 
-	public static IPath getPortalRoot(org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime) {
-		IPortalRuntime runtime = (IPortalRuntime) getRuntimeAdapter(facetRuntime, IPortalRuntime.class);
+	public static IPath getPortalDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime) {
+		ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter(facetRuntime, ILiferayRuntime.class);
 
-		return runtime != null ? runtime.getRoot() : null;
+		return runtime != null ? runtime.getPortalDir() : null;
 	}
 
-	public static IPortalRuntime getPortalRuntime(IProject project)
+	public static ILiferayRuntime getLiferayRuntime(IProject project)
 		throws CoreException {
 
-		return (IPortalRuntime) getRuntimeAdapter(
-			ProjectFacetsManager.create(project).getPrimaryRuntime(), IPortalRuntime.class);
+		return (ILiferayRuntime) getRuntimeAdapter(
+			ProjectFacetsManager.create(project).getPrimaryRuntime(), ILiferayRuntime.class);
 	}
 
-	public static IPortalRuntime getPortalRuntime(IRuntime runtime) {
+	public static ILiferayRuntime getLiferayRuntime(IRuntime runtime) {
 		if (runtime != null) {
-			return (IPortalRuntime) runtime.createWorkingCopy().loadAdapter(IPortalRuntime.class, null);
+			return (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(ILiferayRuntime.class, null);
 		}
 
 		return null;
 	}
 
-	public static IPortalRuntime getPortalRuntime(IServer server) {
+	public static ILiferayRuntime getLiferayRuntime(IServer server) {
 		if (server != null) {
-			return getPortalRuntime(server.getRuntime());
+			return getLiferayRuntime(server.getRuntime());
 		}
 
 		return null;
@@ -230,7 +222,7 @@ public class ServerUtil {
 					runtimeWC = (IRuntimeWorkingCopy) runtime;
 				}
 
-				return (IPortalRuntime) runtimeWC.loadAdapter(adapterClass, null);
+				return (ILiferayRuntime) runtimeWC.loadAdapter(adapterClass, null);
 			}
 		}
 
@@ -264,18 +256,18 @@ public class ServerUtil {
 		return false;
 	}
 
-	public static boolean isPortalRuntime(BridgedRuntime bridgedRuntime) {
+	public static boolean isLiferayRuntime(BridgedRuntime bridgedRuntime) {
 		IRuntime runtime = ServerCore.findRuntime(bridgedRuntime.getProperty("id"));
 
-		return isPortalRuntime(runtime);
+		return isLiferayRuntime(runtime);
 	}
 
-	public static boolean isPortalRuntime(IRuntime runtime) {
-		return getPortalRuntime(runtime) != null;
+	public static boolean isLiferayRuntime(IRuntime runtime) {
+		return getLiferayRuntime(runtime) != null;
 	}
 
-	public static boolean isPortalRuntime(IServer server) {
-		return getPortalRuntime(server) != null;
+	public static boolean isLiferayRuntime(IServer server) {
+		return getLiferayRuntime(server) != null;
 	}
 
 	public static boolean isValidPropertiesFile(File file) {

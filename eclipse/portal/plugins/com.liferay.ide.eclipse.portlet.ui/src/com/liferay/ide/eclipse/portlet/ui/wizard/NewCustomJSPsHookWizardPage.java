@@ -19,7 +19,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalRuntime;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 import com.liferay.ide.eclipse.ui.wizard.StringArrayTableWizardSectionCallback;
@@ -118,7 +118,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
 		if (project != null) {
 			try {
-				IPortalRuntime portalRuntime = ServerUtil.getPortalRuntime(project);
+				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(project);
 
 				IPath portalRoot = portalRuntime.getRoot();
 

@@ -15,10 +15,10 @@
 
 package com.liferay.ide.eclipse.portlet.core.dd;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.DescriptorHelper;
 import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPortalConstants;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 
 	public IStatus addActionItems(final List<String[]> actionItems) {
 		DOMModelEditOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return doAddActionItems(document, actionItems);
@@ -65,7 +65,7 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 
 	public IStatus addLanguageProperties(final List<String> languageProperties) {
 		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				return doAddLanguageProperties(document, languageProperties);
@@ -131,7 +131,7 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 		final String[] retval = new String[1];
 
 		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
 
 			protected IStatus doExecute(IDOMDocument document) {
 				retval[0] = readCustomJSPFolder(document, model);
@@ -168,7 +168,7 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 
 	public IStatus setCustomJSPDir(final IDataModel model) {
 		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return doSetCustomJSPDir(document, model);
@@ -187,7 +187,7 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
 
 	public IStatus setPortalProperties(final IDataModel model, final String propertiesFile) {
 		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(IPortalConstants.LIFERAY_HOOK_XML_FILE)) {
+			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_HOOK_XML_FILE)) {
 
 				protected IStatus doExecute(IDOMDocument document) {
 					return doSetPortalProperties(document, model, propertiesFile);

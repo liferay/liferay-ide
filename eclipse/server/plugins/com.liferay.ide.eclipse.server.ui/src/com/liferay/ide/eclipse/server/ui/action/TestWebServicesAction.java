@@ -15,9 +15,9 @@
 
 package com.liferay.ide.eclipse.server.ui.action;
 
-import com.liferay.ide.eclipse.server.core.IPortalServer;
-import com.liferay.ide.eclipse.server.ui.PortalServerUIPlugin;
-import com.liferay.ide.eclipse.server.util.PortalServicesHelper;
+import com.liferay.ide.eclipse.server.core.ILiferayServer;
+import com.liferay.ide.eclipse.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.eclipse.server.util.WebServicesHelper;
 import com.liferay.ide.eclipse.ui.dialog.StringsFilteredDialog;
 
 import java.net.MalformedURLException;
@@ -55,22 +55,22 @@ public class TestWebServicesAction extends AbstractServerRunningAction {
 
 		URL webServicesListURL = null;
 		if (selectedServer != null) {
-			IPortalServer portalServer = (IPortalServer) selectedServer.getAdapter(IPortalServer.class);
+			ILiferayServer portalServer = (ILiferayServer) selectedServer.getAdapter(ILiferayServer.class);
 	
 			webServicesListURL = portalServer.getWebServicesListURL();		
 		}
 		else if (selectedModule != null) {
 			selectedModule.getModule()[0].getProject();
-			IPortalServer portalServer = (IPortalServer) selectedModule.getServer().getAdapter(IPortalServer.class);
+			ILiferayServer portalServer = (ILiferayServer) selectedModule.getServer().getAdapter(ILiferayServer.class);
 			try {
 				webServicesListURL = new URL(portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/axis");
 			} catch (MalformedURLException e) {
-				PortalServerUIPlugin.logError(e);
+				LiferayServerUIPlugin.logError(e);
 				return;
 			} 
 		}
 		
-		PortalServicesHelper helper = new PortalServicesHelper(webServicesListURL);
+		WebServicesHelper helper = new WebServicesHelper(webServicesListURL);
 		String[] names = helper.getWebServiceNames();
 		StringsFilteredDialog dialog = new StringsFilteredDialog(getActiveShell());
 		dialog.setTitle("Web Service selection");

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.eclipse.server.ui.action;
 
-import com.liferay.ide.eclipse.server.core.IPortalServer;
+import com.liferay.ide.eclipse.server.core.ILiferayServer;
 
 import java.net.URL;
 
@@ -37,7 +37,7 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 
 	public void run(IAction action) {
 		if (selectedServer != null) {
-			IPortalServer portalServer = (IPortalServer) selectedServer.getAdapter(IPortalServer.class);
+			ILiferayServer portalServer = (ILiferayServer) selectedServer.getAdapter(ILiferayServer.class);
 			
 			URL portalHome = portalServer.getPortalHomeUrl();
 			

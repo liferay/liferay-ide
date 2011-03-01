@@ -11,7 +11,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.server.tomcat.ui.command;
 
-import com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
@@ -29,7 +29,7 @@ public class SetAutoDeployIntervalCommand extends ServerCommand {
 	 * @param server a Tomcat server
 	 * @param deployDir deployment directory to set
 	 */
-	public SetAutoDeployIntervalCommand(PortalTomcatServer server, String autoDeployInterval) {
+	public SetAutoDeployIntervalCommand(LiferayTomcatServer server, String autoDeployInterval) {
 		super(server, "Set Auto Deploy Interval");
 		this.autoDeployInterval = autoDeployInterval;
 	}
@@ -38,14 +38,14 @@ public class SetAutoDeployIntervalCommand extends ServerCommand {
 	 * Execute setting the deploy directory
 	 */
 	public void execute() {
-		oldAutoDeployInterval = ((PortalTomcatServer)server).getAutoDeployInterval();
-		((PortalTomcatServer)server).setAutoDeployInterval(autoDeployInterval);
+		oldAutoDeployInterval = ((LiferayTomcatServer)server).getAutoDeployInterval();
+		((LiferayTomcatServer)server).setAutoDeployInterval(autoDeployInterval);
 	}
 
 	/**
 	 * Restore prior deploy directory
 	 */
 	public void undo() {
-		((PortalTomcatServer)server).setAutoDeployInterval(oldAutoDeployInterval);
+		((LiferayTomcatServer)server).setAutoDeployInterval(oldAutoDeployInterval);
 	}
 }

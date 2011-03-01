@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.wst.server.core.runtimeTypes">
       <runtimeType
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntime"
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntime"
             description="Liferay Portal Community Edition v6.0 bundled with Tomcat 6"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             name="Liferay v6.0 CE (Tomcat 6)"
@@ -33,7 +33,7 @@
    <extension
          point="org.eclipse.jst.server.core.runtimeClasspathProviders">
       <runtimeClasspathProvider
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntimeClasspathProvider"
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntimeClasspathProvider"
             id="com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider"
             runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.*">
       </runtimeClasspathProvider>
@@ -41,8 +41,8 @@
    <extension
          point="org.eclipse.wst.server.core.serverTypes">
       <serverType
-            behaviourClass="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerBehavior"
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServer"
+            behaviourClass="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServerBehavior"
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer"
             description="Liferay Portal Community Edition Server bundled with Tomcat 6"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.60"
@@ -59,7 +59,7 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            delegate="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatLaunchConfigDelegate"
+            delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             modes="run, debug, profile"
             name="Liferay v6.0 CE (Tomcat 6)"
@@ -70,7 +70,7 @@
    <extension
          point="org.eclipse.debug.core.sourcePathComputers">
       <sourcePathComputer
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatSourcePathComputer"
+            class="org.eclipse.jst.server.tomcat.core.internal.TomcatSourcePathComputerDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
       </sourcePathComputer>
    </extension>
@@ -88,7 +88,7 @@
    <extension
          point="org.eclipse.wst.server.core.publishTasks">
       <publishTask
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatPublishTask"
+            class="org.eclipse.jst.server.tomcat.core.internal.PublishTask"
             id="com.liferay.ide.eclipse.server.tomcat.publishTask"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
       </publishTask>
@@ -96,7 +96,7 @@
    <extension
          point="org.eclipse.wst.server.core.launchableAdapters">
       <launchableAdapter
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatLaunchableAdapter"
+            class="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchableAdapterDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.web">
       </launchableAdapter>
    </extension>
@@ -114,7 +114,7 @@
                id="com.liferay.ide.eclipse.server.tomcat.runtime.component">
          </runtime-component>
          <factory
-               class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntimeClasspathFactory">
+               class="com.liferay.ide.eclipse.server.tomcat.core.RuntimeClasspathFactory">
          </factory>
          <type
                class="org.eclipse.jst.common.project.facet.core.IClasspathProvider">
@@ -162,10 +162,6 @@
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             version="6.0">
       </runtimeFacetMapping>
-   </extension>
-   <extension
-         point="org.eclipse.ui.startup">
-      <startup></startup>
    </extension>
    <extension
          point="org.eclipse.wst.server.core.installableRuntimes">
