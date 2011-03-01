@@ -55,7 +55,8 @@
 		
 		<ant antfile="build-promote.xml" target="run" />
 		
-		<delete file="dist/liferay-ide-eclipse-updatesite-${version}.zip"></delete>
+		<delete dir="dist/" includes="*updatesite*.zip"/>
+		
 		<zip destfile="dist/liferay-ide-eclipse-updatesite-${version}.zip" basedir="dist/updatesite" includes="**/*"></zip>
 		
 <echo file="${basedir}/dist/updatesite/installable.properties">
