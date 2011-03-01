@@ -53,26 +53,26 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 		if (count != 2) {
 			throw new CoreException(
-				PortalServerCorePlugin.createErrorStatus("Invalid plugin classpath container should expecting 2 segments."));
+				LiferayServerCorePlugin.createErrorStatus("Invalid plugin classpath container should expecting 2 segments."));
 		}
 
 		String root = containerPath.segment(0);
 
 		if (!ID.equals(root)) {
 			throw new CoreException(
-				PortalServerCorePlugin.createErrorStatus("Invalid plugin classpath container, expecting container root " +
+				LiferayServerCorePlugin.createErrorStatus("Invalid plugin classpath container, expecting container root " +
 					ID));
 		}
 
 		String finalSegment = containerPath.segment(1);
 
-		IPath portalRoot = ServerUtil.getPortalRoot(project);
+		IPath portalDir = ServerUtil.getPortalDir(project);
 
-		if (portalRoot == null) {
+		if (portalDir == null) {
 			return;
 		}
 
-		classpathContainer = getCorrectContainer(containerPath, finalSegment, project, portalRoot);
+		classpathContainer = getCorrectContainer(containerPath, finalSegment, project, portalDir);
 
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
 			project
@@ -114,17 +114,17 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 		cpDecorations.save();
 
-		IPath portalRoot = null;
+		IPath portalDir = null;
 
 		if (containerSuggestion instanceof PluginClasspathContainer) {
-			portalRoot = ((PluginClasspathContainer) containerSuggestion).getPortalRoot();
+			portalDir = ((PluginClasspathContainer) containerSuggestion).getPortalDir();
 		}
 		else {
-			portalRoot = ServerUtil.getPortalRoot(project);
+			portalDir = ServerUtil.getPortalDir(project);
 		}
 
 		IClasspathContainer newContainer =
-			getCorrectContainer(containerPath, containerPath.segment(1), project, portalRoot);
+			getCorrectContainer(containerPath, containerPath.segment(1), project, portalDir);
 
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
 			project
@@ -134,22 +134,22 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 	}
 
 	protected IClasspathContainer getCorrectContainer(
-		IPath containerPath, String finalSegment, IJavaProject project, IPath portalRoot)
+		IPath containerPath, String finalSegment, IJavaProject project, IPath portalDir)
 		throws CoreException {
 
 		IClasspathContainer classpathContainer = null;
 
 		if (PortletClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new PortletClasspathContainer(containerPath, project, portalRoot);
+			classpathContainer = new PortletClasspathContainer(containerPath, project, portalDir);
 		}
 		else if (HookClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new HookClasspathContainer(containerPath, project, portalRoot);
+			classpathContainer = new HookClasspathContainer(containerPath, project, portalDir);
 		}
 		else if (ExtClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new ExtClasspathContainer(containerPath, project, portalRoot);
+			classpathContainer = new ExtClasspathContainer(containerPath, project, portalDir);
 		}
 		else {
-			throw new CoreException(PortalServerCorePlugin.createErrorStatus("Invalid final segment of type: " +
+			throw new CoreException(LiferayServerCorePlugin.createErrorStatus("Invalid final segment of type: " +
 				finalSegment));
 		}
 

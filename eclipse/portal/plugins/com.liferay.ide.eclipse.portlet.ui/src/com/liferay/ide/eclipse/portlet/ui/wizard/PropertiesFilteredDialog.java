@@ -105,7 +105,7 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 	protected static final String DIALOG_SETTINGS =
 		"com.liferay.ide.eclipse.portlet.ui.wizard.PropertiesFilteredDialog";
 
-	protected File portalRoot;
+	protected File portalDir;
 
 	public PropertiesFilteredDialog(Shell shell) {
 		this(shell, null);
@@ -124,9 +124,5 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
 
 		setHelpAvailable(false);
 	}
-
-	// public void setInput(File portalRoot) {
-	// this.portalRoot = portalRoot;
-	// }
 
 }

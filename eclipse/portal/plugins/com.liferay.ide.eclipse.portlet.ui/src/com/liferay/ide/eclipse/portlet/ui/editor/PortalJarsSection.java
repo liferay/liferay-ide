@@ -82,9 +82,11 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		fJars = new Vector<File>();
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
 		String[] portalJars = model.getPortalDependencyJars();
-		IPath portalRoot = ((PluginPackageEditor)getPage().getEditor()).getPortalRoot();
+		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
+
 		for (String portalJar : portalJars) {
-			File jarFile = new File(portalRoot.append("WEB-INF/lib").toFile(), portalJar.trim());
+			File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim());
+
 			if (jarFile.isFile() && jarFile.exists()) {
 				fJars.add(jarFile);
 			}
@@ -292,9 +294,9 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
 		String[] existingJars = model.getPortalDependencyJars();
 		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
-		IPath portalRoot = editor.getPortalRoot();
-		ExternalFileSelectionDialog dialog = new ExternalFileSelectionDialog(getPage().getShell(), new PortalJarViewerFilter(portalRoot.toFile(), new String[]{"WEB-INF","WEB-INF/lib"}, existingJars), true, false);
-		dialog.setInput(portalRoot.toFile());
+		IPath portalDir = editor.getPortalDir();
+		ExternalFileSelectionDialog dialog = new ExternalFileSelectionDialog(getPage().getShell(), new PortalJarViewerFilter(portalDir.toFile(), new String[]{"WEB-INF","WEB-INF/lib"}, existingJars), true, false);
+		dialog.setInput(portalDir.toFile());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			Object[] selectedFiles = dialog.getResult();
@@ -462,14 +464,12 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 //		}
 //	}
 
-	
 
 	public void setFocus() {
 		if (fViewer != null)
 			fViewer.getTable().setFocus();
 	}
 
-	
 	protected boolean createCount() {
 		return true;
 	}
@@ -487,11 +487,6 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		return false;
 	}
 
-	
-
-	
-
-	
 	private boolean isTreeViewerSorted() {
 		if (fSortAction == null) {
 			return false;

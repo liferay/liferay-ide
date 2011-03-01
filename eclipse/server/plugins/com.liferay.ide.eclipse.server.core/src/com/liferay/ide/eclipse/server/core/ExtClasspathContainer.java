@@ -31,8 +31,8 @@ public class ExtClasspathContainer extends PluginClasspathContainer {
 			"portal-impl.jar", "struts.jar", "struts-el.jar"
 		};
 
-	public ExtClasspathContainer(IPath containerPath, IJavaProject project, IPath portalRoot) {
-		super(containerPath, project, portalRoot);
+	public ExtClasspathContainer(IPath containerPath, IJavaProject project, IPath portalDir) {
+		super(containerPath, project, portalDir);
 	}
 
 	public String getDescription() {

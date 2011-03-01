@@ -49,7 +49,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected static final String SEPARATOR = "!";
 
 	static {
-		cpDecorations = new ClasspathDecorationsManager(PortalServerCorePlugin.PLUGIN_ID);
+		cpDecorations = new ClasspathDecorationsManager(LiferayServerCorePlugin.PLUGIN_ID);
 	}
 
 	public static String getDecorationManagerKey(IProject project, String container) {
@@ -64,21 +64,21 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 	protected IPath path;
 
-	protected IPath portalRoot;
+	protected IPath portalDir;
 
 	protected IJavaProject project;
 
-	public PluginClasspathContainer(IPath containerPath, IJavaProject project, IPath portalRoot) {
+	public PluginClasspathContainer(IPath containerPath, IJavaProject project, IPath portalDir) {
 		this.path = containerPath;
 		this.project = project;
-		this.portalRoot = portalRoot;
+		this.portalDir = portalDir;
 	}
 
 	public IClasspathEntry[] getClasspathEntries() {
 		if (this.classpathEntries == null) {
 			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 
-			if (this.portalRoot == null) {
+			if (this.portalDir == null) {
 				return entries.toArray(new IClasspathEntry[0]);
 			}
 
@@ -106,8 +106,8 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		return this.path;
 	}
 
-	public IPath getPortalRoot() {
-		return portalRoot;
+	public IPath getPortalDir() {
+		return portalDir;
 	}
 
 	protected IClasspathEntry createClasspathEntry(String pluginJar) {
@@ -115,7 +115,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		IPath sourceRootPath = null;
 		IAccessRule[] rules = new IAccessRule[] {};
 		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
-		IPath entryPath = this.portalRoot.append("/WEB-INF/lib/" + pluginJar);
+		IPath entryPath = this.portalDir.append("/WEB-INF/lib/" + pluginJar);
 
 		final ClasspathDecorations dec =
 			cpDecorations.getDecorations(
@@ -205,7 +205,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 						}
 					}
 					catch (Exception ex) {
-						PortalServerCorePlugin.logError(ex);
+						LiferayServerCorePlugin.logError(ex);
 					}
 				}
 

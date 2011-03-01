@@ -29,8 +29,8 @@ public class PortletClasspathContainer extends PluginClasspathContainer {
 		"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar",
 	};
 
-	public PortletClasspathContainer(IPath containerPath, IJavaProject project, IPath portalRoot) {
-		super(containerPath, project, portalRoot);
+	public PortletClasspathContainer(IPath containerPath, IJavaProject project, IPath portalDir) {
+		super(containerPath, project, portalDir);
 	}
 
 	public String getDescription() {

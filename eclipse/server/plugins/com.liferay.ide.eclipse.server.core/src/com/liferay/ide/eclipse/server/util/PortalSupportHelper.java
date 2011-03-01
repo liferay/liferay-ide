@@ -48,22 +48,22 @@ public class PortalSupportHelper extends LaunchHelper {
 		"portal-impl.jar", "spring-aop.jar"
 	};
 
-	protected IPath portalRoot;
+	protected IPath portalDir;
 
 	protected URL[] supportLibs;
 
 	protected String[] userLibs;
 
 	public PortalSupportHelper(
-		IPath[] libRoots, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile,
+		IPath[] libRoots, IPath portalDir, String portalSupportClass, File outputFile, File errorFile,
 		URL[] supportLibs,
 		String[] userLibs) {
 
-		this(libRoots, portalRoot, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null);
+		this(libRoots, portalDir, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null);
 	}
 
 	public PortalSupportHelper(
-		IPath[] libRoots, IPath portalRoot, String portalSupportClass, File outputFile, File errorFile,
+		IPath[] libRoots, IPath portalDir, String portalSupportClass, File outputFile, File errorFile,
 		URL[] supportLibs,
 		String[] userLibs, String extraArg) {
 		
@@ -91,7 +91,7 @@ public class PortalSupportHelper extends LaunchHelper {
 
 		this.libRoots = libRoots;
 
-		this.portalRoot = portalRoot;
+		this.portalDir = portalDir;
 
 		this.userLibs = userLibs;
 		
@@ -168,22 +168,22 @@ public class PortalSupportHelper extends LaunchHelper {
 		for (String portalLib : portalLibs) {
 			model.addEntry(
 				ClasspathModel.USER,
-				JavaRuntime.newStringVariableClasspathEntry(portalRoot.append("WEB-INF/lib").append(portalLib).toOSString()));
+				JavaRuntime.newStringVariableClasspathEntry(portalDir.append("WEB-INF/lib").append(portalLib).toOSString()));
 		}
 
 		if (userLibs != null) {
 			for (String userLib : userLibs) {
 				model.addEntry(
 					ClasspathModel.USER,
-					JavaRuntime.newStringVariableClasspathEntry(portalRoot.append("WEB-INF/lib").append(userLib).toOSString()));
+					JavaRuntime.newStringVariableClasspathEntry(portalDir.append("WEB-INF/lib").append(userLib).toOSString()));
 			}
 		}
 		else {
-			for (String jarFile : this.portalRoot.append("WEB-INF/lib").toFile().list()) {
+			for (String jarFile : this.portalDir.append("WEB-INF/lib").toFile().list()) {
 				if (jarFile.endsWith(".jar")) {
 					model.addEntry(
 						ClasspathModel.USER,
-						JavaRuntime.newStringVariableClasspathEntry(portalRoot.append("WEB-INF/lib").append(jarFile).toOSString()));
+						JavaRuntime.newStringVariableClasspathEntry(portalDir.append("WEB-INF/lib").append(jarFile).toOSString()));
 				}
 			}
 		}

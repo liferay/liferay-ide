@@ -82,9 +82,9 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		fTlds = new Vector<File>();
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
 		String[] portalTlds = model.getPortalDependencyTlds();
-		IPath portalRoot = ((PluginPackageEditor)getPage().getEditor()).getPortalRoot();
+		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
 		for (String portalTld : portalTlds) {
-			File tldFile = new File(portalRoot.append("WEB-INF/tld").toFile(), portalTld.trim());
+			File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim());
 			if (tldFile.isFile() && tldFile.exists()) {
 				fTlds.add(tldFile);
 			}
@@ -292,9 +292,11 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
 		String[] existingTlds = model.getPortalDependencyTlds();
 		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
-		IPath portalRoot = editor.getPortalRoot();
-		ExternalFileSelectionDialog dialog = new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(portalRoot.toFile(), new String[]{"WEB-INF","WEB-INF/tld"}, existingTlds), true, false);
-		dialog.setInput(portalRoot.toFile());
+		IPath portalDir = editor.getPortalDir();
+		ExternalFileSelectionDialog dialog =
+			new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(
+				portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);
+		dialog.setInput(portalDir.toFile());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			Object[] selectedFiles = dialog.getResult();

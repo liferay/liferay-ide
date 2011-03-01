@@ -136,7 +136,7 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 
 	protected Button addFromPortalButton;
 
-	protected File portalRoot;
+	protected File portalDir;
 
 	public CustomJSPsTableWizardSection(
 		Composite parent, String componentLabel, String dialogTitle, String addButtonLabel, String editButtonLabel,
@@ -146,8 +146,8 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 		super(parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles, fieldLabels, labelProviderImage, model, propertyName);
 	}
 
-	public void setPortalRoot(File root) {
-		this.portalRoot = root;
+	public void setPortalDir(File dir) {
+		this.portalDir = dir;
 	}
 
 	@Override
@@ -173,21 +173,21 @@ public class CustomJSPsTableWizardSection extends StringArrayTableWizardSection 
 	}
 
 	protected void handleAddFromPortalButtonSelected() {
-		if (portalRoot == null || !portalRoot.exists()) {
+		if (portalDir == null || !portalDir.exists()) {
 			MessageDialog.openWarning(getShell(), "Add JSP", "Could not find portal root.");
 
 			return;
 		}
 
-		IPath rootPath = new Path(portalRoot.getPath());
+		IPath rootPath = new Path(portalDir.getPath());
 
 		ExternalFileSelectionDialog dialog =
-			new ExternalFileSelectionDialog(getShell(), new JSPFileViewerFilter(portalRoot, new String[] {
+			new ExternalFileSelectionDialog(getShell(), new JSPFileViewerFilter(portalDir, new String[] {
 				"html"
 			}), true, false);
 		dialog.setTitle("Liferay Custom JSP");
 		dialog.setMessage("Select a JSP to customize:");
-		dialog.setInput(portalRoot);
+		dialog.setInput(portalDir);
 
 		if (dialog.open() == Window.OK) {
 			Object[] selected = dialog.getResult();

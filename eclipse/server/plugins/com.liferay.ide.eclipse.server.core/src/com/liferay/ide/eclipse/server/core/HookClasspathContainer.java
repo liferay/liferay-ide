@@ -31,8 +31,8 @@ public class HookClasspathContainer extends PluginClasspathContainer {
 			"portal-impl.jar", "struts.jar", "struts-el.jar"
 		};
 
-	public HookClasspathContainer(IPath containerPath, IJavaProject project, IPath portalRoot) {
-		super(containerPath, project, portalRoot);
+	public HookClasspathContainer(IPath containerPath, IJavaProject project, IPath portalDir) {
+		super(containerPath, project, portalDir);
 	}
 
 	public String getDescription() {

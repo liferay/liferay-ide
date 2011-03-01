@@ -87,9 +87,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		return (IFileEditorInput) super.getEditorInput();
 	}
 
-	public IPath getPortalRoot() {
+	public IPath getPortalDir() {
 		try {
-			return ServerUtil.getPortalRuntime(getEditorInput().getFile().getProject()).getRoot();
+			return ServerUtil.getLiferayRuntime(getEditorInput().getFile().getProject()).getPortalDir();
 		}
 		catch (CoreException e) {
 			PortletUIPlugin.logError(e);

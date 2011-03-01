@@ -119,23 +119,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		}
 		catch (CoreException e) {
 		}
-
-
-		// if (delta == null) {
-		// return;
-		// }
-		//		
-		// IPath[] deltaPath = new IPath[1];
-		//		
-		// findFileResourceInDelta(delta, , deltaPath);
-		//		
-		// if (deltaPath[0] != null && isLiferayPluginProject(deltaPath[0])) {
-		// try {
-		// processResourceChanged(deltaPath[0]);
-		// } catch (Exception ex) {
-		// PortalServerCorePlugin.logError(ex);
-		// }
-		// }
 	}
 
 	private IFile getWorkspaceFile(IPath path) {
@@ -206,7 +189,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 					
 					final IFolder tldFolder = webroot.getFolder("WEB-INF/tld");
 					
-					IPath portalRoot = ServerUtil.getPortalRoot(pluginPackagePropertiesFile.getProject());
+					IPath portalDir = ServerUtil.getPortalDir(pluginPackagePropertiesFile.getProject());
 					
 					final List<IPath> tldFilesToCopy = new ArrayList<IPath>();
 					
@@ -214,7 +197,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 						IFile tldFile = tldFolder.getFile(portalTld);
 						
 						if (!tldFile.exists()) {
-							IPath realPortalTld = portalRoot.append("WEB-INF/tld/" + portalTld);
+							IPath realPortalTld = portalDir.append("WEB-INF/tld/" + portalTld);
 							
 							if (realPortalTld.toFile().exists()) {
 								tldFilesToCopy.add(realPortalTld);
@@ -238,7 +221,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 										newTldFile.create(new FileInputStream(tldFileToCopy.toFile()), true, null);										
 									}
 									catch (FileNotFoundException e) {
-										throw new CoreException(PortalServerCorePlugin.createErrorStatus(e));
+										throw new CoreException(LiferayServerCorePlugin.createErrorStatus(e));
 									}
 								}
 								
@@ -251,7 +234,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 			}
 		}
 		catch (Exception e) {
-			PortalServerCorePlugin.logError(e);
+			LiferayServerCorePlugin.logError(e);
 		}
 
 	}
