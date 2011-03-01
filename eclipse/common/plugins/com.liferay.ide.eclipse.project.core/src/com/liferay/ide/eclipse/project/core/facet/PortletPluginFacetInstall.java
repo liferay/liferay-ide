@@ -64,7 +64,8 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 			String frameworkName = portletFramework.getShortName();
 			
-			IPath newPortletPath = sdk.createNewPortletProject(portletName, displayName, frameworkName, getAppServer());
+			IPath newPortletPath =
+				sdk.createNewPortletProject(portletName, displayName, frameworkName, getLiferayRuntime());
 
 			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
 
@@ -108,9 +109,9 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 	protected void copyPortletTLD()
 		throws CoreException {
 
-		IPath portalRoot = getPortalRoot();
+		IPath portalDir = getPortalDir();
 
-		IPath portletTld = portalRoot.append("WEB-INF/tld/liferay-portlet.tld");
+		IPath portletTld = portalDir.append("WEB-INF/tld/liferay-portlet.tld");
 
 		if (portletTld.toFile().exists()) {
 			IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
