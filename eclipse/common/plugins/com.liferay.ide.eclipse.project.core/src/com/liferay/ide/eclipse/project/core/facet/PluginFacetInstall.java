@@ -23,7 +23,7 @@ import com.liferay.ide.eclipse.project.core.util.WebXMLDescriptorHelper;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
-import com.liferay.ide.eclipse.server.core.IAppServer;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
@@ -207,9 +207,9 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		return false;
 	}
 
-	protected IAppServer getAppServer() {
+	protected ILiferayRuntime getLiferayRuntime() {
 		try {
-			return ServerUtil.getAppServer(this.project);
+			return ServerUtil.getLiferayRuntime(this.project);
 		}
 		catch (CoreException e) {
 			ProjectCorePlugin.logError(e);
@@ -217,7 +217,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 			return null;
 		}
 	}
-
+	
 	protected IPath getAppServerDir() {
 		IRuntime serverRuntime;
 
@@ -275,7 +275,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 	// }
 	// }
 
-	protected IPath getPortalRoot() {
+	protected IPath getPortalDir() {
 		IRuntime serverRuntime;
 
 		if (masterModel != null) {
@@ -285,7 +285,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 			serverRuntime = getFacetedProject().getPrimaryRuntime();
 		}
 
-		return ServerUtil.getPortalRoot(serverRuntime);
+		return ServerUtil.getPortalDir(serverRuntime);
 	}
 
 	protected String getRuntimeLocation() {

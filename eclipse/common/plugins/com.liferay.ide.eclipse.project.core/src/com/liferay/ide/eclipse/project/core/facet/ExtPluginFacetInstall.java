@@ -68,7 +68,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 			
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
-			IPath newExtPath = sdk.createNewExtProject(extName, displayName, getAppServer());
+			IPath newExtPath = sdk.createNewExtProject(extName, displayName, getLiferayRuntime());
 			
 			IPath tempInstallPath = newExtPath.append(extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX);
 			
