@@ -20,7 +20,7 @@ import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.SDKPlugin;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.InstallableRuntime2ConfigurationElement;
-import com.liferay.ide.eclipse.server.core.PortalInstallableRuntime2;
+import com.liferay.ide.eclipse.server.core.LiferayInstallableRuntime2;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
@@ -165,114 +165,6 @@ public class InstalledSDKsCompostite extends Composite {
 
 		return null;
 	}
-
-	// protected void downloadAndInstallSDK() {
-	// final Object mutex = new Object();
-	// final File[] installedSDK = new File[1];
-	// final String[] sdkInstallDir = new String[1];
-	// final File[] downloadedSDKFile = new File[1];
-	// final Display display = getShell().getDisplay();
-	// display.syncExec(new Runnable(){
-	// public void run() {
-	// DirectoryDialog dd = new DirectoryDialog(getShell());
-	// dd.setText("Choose directory to install SDK:");
-	// dd.setMessage("Choose directory to install SDK:");
-	// sdkInstallDir[0] = dd.open();
-	// }});
-	// try {
-	// new ProgressMonitorDialog(getShell()).run(false, true, new
-	// IRunnableWithProgress() {
-	// public void run(final IProgressMonitor monitor) throws
-	// InvocationTargetException, InterruptedException {
-	// DownloadHelper downloadHelper = new DownloadHelper();
-	// try {
-	// downloadHelper.downloadHttpFile(
-	// "http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.0/liferay-plugins-sdk-6.0.0.zip?use_mirror=hivelocity",
-	// new FileTransferCallback() {
-	// // boolean startedTask = false;
-	// // long bytesRecieved = 0;
-	// public void dataReceived(IIncomingFileTransferReceiveDataEvent event) {
-	// // final IIncomingFileTransfer fileTransfer = event.getSource();
-	// // if (!startedTask) {
-	// // display.asyncExec(new Runnable(){
-	// // public void run() {
-	// // monitor.beginTask("Downloading SDK...",
-	// (int)fileTransfer.getFileLength());
-	// // monitor.subTask("Downloading file...");
-	// // }});
-	// // startedTask = true;
-	// // } else {
-	// // final int worked = (int)(fileTransfer.getBytesReceived() -
-	// bytesRecieved);
-	// // bytesRecieved = fileTransfer.getBytesReceived();
-	// // display.asyncExec(new Runnable(){
-	// // public void run() {
-	// // monitor.worked(worked);
-	// // System.out.println(worked);
-	// // }});
-	// // }
-	// }
-	//
-	// public File getFileDownloadLocation(String fileName) {
-	// //just download sdk to plugin state location for temp
-	// File downloadDir =
-	// SDKPlugin.getDefault().getStateLocation().append("sdk_download").toFile();
-	// downloadDir.mkdirs();
-	//										
-	// //if everythign goes ok sdk file should be
-	// downloadedSDKFile[0] = new File(downloadDir, fileName);
-	// return downloadDir;
-	// }
-	//									
-	// public void transferComplete() {
-	// synchronized (mutex) {
-	// mutex.notifyAll();
-	// }
-	// File sdkInstallDirectory = new File(sdkInstallDir[0]);
-	// if (downloadedSDKFile[0].exists() && sdkInstallDirectory.exists()) {
-	// try {
-	// //create a new subdir in install dir that matches filename
-	// File installDir = new File(sdkInstallDirectory,
-	// downloadedSDKFile[0].getName().replaceAll("\\.zip$", ""));
-	// installDir.mkdirs();
-	// ZipUtil.unzip(downloadedSDKFile[0],installDir);
-	// installedSDK[0] = installDir;
-	// if (installedSDK[0].exists()) {
-	// final SDK newSdk = SDKManager.getInstance().createSDKFromLocation(new
-	// Path(installedSDK[0].getPath()));
-	// display.asyncExec(new Runnable(){
-	// public void run() {
-	// sdkList.add(newSdk);
-	// tableViewer.refresh();
-	// ensureDefaultSDK();
-	// tableViewer.refresh();
-	// }});
-	// }
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	//
-	// public void handleException(Exception e) {
-	// System.out.println(e);
-	// e.printStackTrace();
-	// }
-	// });
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//					
-	// synchronized (mutex) {
-	// mutex.wait();
-	// }
-	// }
-	// });
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	//		
-	// }
 
 	public SDK[] getSDKs() {
 		return sdkList.toArray(new SDK[sdkList.size()]);
@@ -436,7 +328,7 @@ public class InstalledSDKsCompostite extends Composite {
 								new InstallableRuntime2ConfigurationElement(
 									(InstallableRuntime2) ir, installableUrl.toString());
 
-							PortalInstallableRuntime2 pir = new PortalInstallableRuntime2(config);
+							LiferayInstallableRuntime2 pir = new LiferayInstallableRuntime2(config);
 
 							pir.install(selectedPath);
 
