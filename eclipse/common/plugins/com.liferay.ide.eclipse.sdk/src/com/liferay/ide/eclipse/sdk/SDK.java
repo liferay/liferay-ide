@@ -354,7 +354,7 @@ public class SDK {
 		return null;
 	}
 
-	public IStatus directDeploy(IProject project, Map<String, String> overrideProperties) {
+	public IStatus directDeploy(IProject project, Map<String, String> overrideProperties, boolean separateJRE) {
 		try {
 			SDKHelper antHelper = new SDKHelper(this);
 
@@ -366,7 +366,7 @@ public class SDK {
 
 			antHelper.runTarget(
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_DIRECT_DEPLOY,
-				properties, true);
+				properties, separateJRE);
 		}
 		catch (CoreException e) {
 			return SDKPlugin.createErrorStatus(e);

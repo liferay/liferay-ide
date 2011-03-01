@@ -113,7 +113,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 			LiferayTomcatUtil.syncStopServer(delegate.getServer());
 		}
 
-		IStatus status = sdk.directDeploy(project, null);
+		IStatus status = sdk.directDeploy(project, null, true);
 
 		assertStatus(status);
 
