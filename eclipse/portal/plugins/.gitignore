@@ -1,0 +1,10 @@
+com.liferay.ide.eclipse.layouttpl.core/bin/
+com.liferay.ide.eclipse.layouttpl.ui/bin/
+com.liferay.ide.eclipse.portlet.core/bin/
+com.liferay.ide.eclipse.portlet.jsf.core/bin/
+com.liferay.ide.eclipse.portlet.jsf.ui/bin/
+com.liferay.ide.eclipse.portlet.ui/bin/
+com.liferay.ide.eclipse.portlet.vaadin.core/bin/
+com.liferay.ide.eclipse.portlet.vaadin.ui/bin/
+com.liferay.ide.eclipse.theme.core/bin/
+com.liferay.ide.eclipse.theme.ui/bin/

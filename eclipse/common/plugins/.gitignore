@@ -1,0 +1,9 @@
+com.liferay.ide.eclipse.core/bin/
+com.liferay.ide.eclipse.doc/bin/
+com.liferay.ide.eclipse.ui/bin/
+com.liferay.ide.eclipse.project.core/bin/
+com.liferay.ide.eclipse.project.ui/bin/
+com.liferay.ide.eclipse.scripting.core/bin/
+com.liferay.ide.eclipse.sdk/bin/
+com.liferay.ide.eclipse.templates.core/bin/
+com.liferay.ide.eclipse.ui.snippets/bin/
