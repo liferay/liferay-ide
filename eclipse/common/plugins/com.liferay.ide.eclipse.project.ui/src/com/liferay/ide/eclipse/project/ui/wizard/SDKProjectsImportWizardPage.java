@@ -455,6 +455,8 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		refresh.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
+				// force a project refresh
+				lastModified = -1;
 				updateProjectsList(sdkLocation.getText().trim());
 			}
 		});

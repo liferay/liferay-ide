@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.sdk.util;
 
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.SDKManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -125,7 +126,16 @@ public class SDKUtil {
 		File sdkDir = projectDir.getParentFile().getParentFile();
 		
 		if (sdkDir.exists() && SDKUtil.isValidSDKLocation(sdkDir.getPath())) {
-			return createSDKFromLocation(new Path(sdkDir.getPath()));
+			Path sdkLocation = new Path(sdkDir.getPath());
+
+			SDK existingSDK = SDKManager.getInstance().getSDK(sdkLocation);
+
+			if (existingSDK != null) {
+				return existingSDK;
+			}
+			else {
+				return createSDKFromLocation(sdkLocation);
+			}
 		}
 			
 		return null;

@@ -59,8 +59,12 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
 
 		if (selectedProjects != null && selectedProjects.length > 0) {
+			SDK sdk = SDKManager.getInstance().getSDK(new Path(sdkLocation));
+
 			// need to add the SDK to workspace if not already available.
-			SDK sdk = SDKUtil.createSDKFromLocation(new Path(sdkLocation));
+			if (sdk == null) {
+				sdk = SDKUtil.createSDKFromLocation(new Path(sdkLocation));
+			}
 
 			if (sdk != null && sdk.isValid() && !(SDKManager.getInstance().containsSDK(sdk))) {
 				SDKManager.getInstance().addSDK(sdk);

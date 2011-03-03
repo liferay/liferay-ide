@@ -147,11 +147,12 @@ public class ProjectUtil {
 			else if (file.isFile() && file.getName().equals(dotProject)) {
 				if (!eclipseProjectFiles.contains(file) && isLiferayProjectDir(file.getParentFile())) {
 					eclipseProjectFiles.add(file);
-				}
 
-				// don't search sub-directories since we can't have nested
-				// projects
-				return true;
+					// don't search sub-directories since we can't have nested
+					// projects
+
+					return true;
+				}
 			}
 		}
 
