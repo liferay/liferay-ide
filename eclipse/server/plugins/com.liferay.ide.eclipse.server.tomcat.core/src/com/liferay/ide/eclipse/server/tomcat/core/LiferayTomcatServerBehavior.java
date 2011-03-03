@@ -12,11 +12,8 @@
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.IPluginPublisher;
-import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayPublishHelper;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +22,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,12 +43,8 @@ import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Host;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Server;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.w3c.dom.Document;
 
 /**
@@ -68,47 +60,10 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 	@Override
 	protected void publishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor)
 			throws CoreException {
-		boolean shouldPublishModule = true;
 		
-		if (moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null) {
-			IProject project = moduleTree[0].getProject();
-
-			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
-
-			if (facetedProject != null) {
-				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
-
-				if (liferayFacet != null) {
-					String facetId = liferayFacet.getId();
-
-					IRuntime runtime = null;
-
-					try {
-						runtime = ServerUtil.getRuntime(project);
-					}
-					catch (CoreException ce) {
-						// do nothing
-					}
-
-					if (runtime != null) {
-						IPluginPublisher pluginPublisher =
-							LiferayServerCorePlugin.getPluginPublisher(facetId, runtime.getRuntimeType().getId());
-
-						if (pluginPublisher != null) {
-							try {
-								IModuleResourceDelta[] delta = getPublishedResourceDelta(moduleTree);
-
-								shouldPublishModule =
-									pluginPublisher.prePublishModule(this, kind, deltaKind, moduleTree, delta, monitor);
-							}
-							catch (Exception e) {
-								LiferayTomcatPlugin.logError("Plugin deployer failed", e);
-							}
-						}
-					}
-				}
-			}
-		}
+		boolean shouldPublishModule =
+			LiferayPublishHelper.prePublishModule(
+				this, kind, deltaKind, moduleTree, getPublishedResourceDelta(moduleTree), monitor);
 
 		if (shouldPublishModule) {
 			try {
