@@ -46,17 +46,15 @@ public class NewServerDropDownAction extends Action implements IMenuCreator, IWo
 	public Action getDefaultAction(Shell shell) {
 		Action[] actions = getActions(shell);
 
-		if (actions.length > 0) {
-			return actions[0];
+		if (actions.length > 1) {
+			return actions[1];
 		}
 
 		return null;
 	}
 
 	protected Action[] getActions(Shell shell) {
-		return new Action[] {
-		/* new NewRuntimeAction(shell), */new NewServerAction(shell)
-		};
+		return new Action[] { new NewPluginsSDKAction(shell), new NewServerAction(shell) };
 	}
 
 	public Menu getMenu(Control parent) {

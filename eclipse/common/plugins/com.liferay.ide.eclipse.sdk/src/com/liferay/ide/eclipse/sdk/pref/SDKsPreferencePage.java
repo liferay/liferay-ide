@@ -120,6 +120,18 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
 	}
 
 	@Override
+	public void applyData(Object data) {
+		if ("new".equals(data)) {
+			this.getShell().getDisplay().asyncExec(new Runnable() {
+
+				public void run() {
+					installedSDKsComposite.addSDK();
+				}
+			});
+		}
+	}
+
+	@Override
 	protected void createFieldEditors() {
 		FieldEditor edit =
 			new RadioGroupFieldEditor(
