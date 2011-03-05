@@ -37,7 +37,7 @@
             category="com.liferay.ide.eclipse.newWizards"
             icon="icons/n16/service_new.png"
             id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"
-            name="Liferay Service">
+            name="Liferay Service Builder">
          <class class="com.liferay.ide.eclipse.portlet.ui.wizard.NewServiceBuilderWizard">
          	<parameter name="liferay_artifact" value="true"/>
             <parameter name="menuIndex" value="30" />

@@ -95,6 +95,9 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		else if (INewJavaClassDataModelProperties.OPEN_IN_EDITOR.equals(propertyName)) {
 			return true;
 		}
+		else if (propertyName.equals(USE_SAMPLE_TEMPLATE)) {
+			return true;
+		}
 
 		// if (CREATE_CUSTOM_JSPS.equals(propertyName)) {
 		// return true;
@@ -146,6 +149,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		propertyNames.add(AUTHOR);
 		propertyNames.add(CREATED_SERVICE_FILE);
 		propertyNames.add(INewJavaClassDataModelProperties.OPEN_IN_EDITOR);
+		propertyNames.add(USE_SAMPLE_TEMPLATE);
 		// propertyNames.add(CREATE_CUSTOM_JSPS);
 		// propertyNames.add(CREATE_PORTAL_PROPERTIES);
 		// propertyNames.add(CREATE_SERVICES);

@@ -51,7 +51,8 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
 	@Override
 	protected void doAddPages() {
 		addPage(new NewServiceBuilderWizardPage(
-			getDataModel(), "pageOne", "Create Liferay Service", "Create a new service builder file in a project."));
+			getDataModel(), "pageOne", "New Liferay Service Builder",
+			"Create a new service builder xml file in a project."));
 	}
 
 	@Override

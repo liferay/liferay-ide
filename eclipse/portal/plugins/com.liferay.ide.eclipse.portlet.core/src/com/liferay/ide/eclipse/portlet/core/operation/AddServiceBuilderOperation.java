@@ -94,7 +94,14 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 	protected void createDefaultServiceBuilderFile(IFile serviceBuilderFile)
 		throws UnsupportedEncodingException, CoreException, BadLocationException, TemplateException {
 
-		Template template = getTemplateStore().findTemplateById(SERVICE_FILE_TEMPLATE);
+		Template template = null;
+
+		if (getDataModel().getBooleanProperty(USE_SAMPLE_TEMPLATE)) {
+			template = getTemplateStore().findTemplateById(SAMPLE_SERVICE_FILE_TEMPLATE);
+		}
+		else {
+			template = getTemplateStore().findTemplateById(SERVICE_FILE_TEMPLATE);
+		}
 
 		IDocument document = new Document();
 

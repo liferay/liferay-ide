@@ -56,22 +56,15 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 	implements INewServiceBuilderDataModelProperties {
 
 	protected Text author;
-
 	protected Text namespace;
-
 	protected Button packageButton;
-
 	protected Label packageLabel;
-
 	protected Text packageText;
-
 	protected String projectName;
-
 	protected Combo projectNameCombo;
-
 	protected Label projectNameLabel;
-
 	protected Text serviceFile;
+	protected Button useSampleTemplate;
 
 	public NewServiceBuilderWizardPage(IDataModel dataModel, String pageName, String title, String description) {
 		super(dataModel, pageName, title, PortletUIPlugin.imageDescriptorFromPlugin(
@@ -131,6 +124,15 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 		SWTUtil.createLabel(group, SWT.LEAD, "Author", 1);
 		author = SWTUtil.createText(group, 1);
 		this.synchHelper.synchText(author, AUTHOR, null);
+		SWTUtil.createLabel(group, "", 1);
+
+		SWTUtil.createLabel(group, "", 1);
+		Composite checkboxParent = SWTUtil.createComposite(group, 1, 1, SWT.FILL, 0, 3);
+		useSampleTemplate =
+			SWTUtil.createCheckButton(checkboxParent, "Include sample entity in new file.", null, true, 1);
+		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		useSampleTemplate.setLayoutData(data);
+		this.synchHelper.synchCheckbox(useSampleTemplate, USE_SAMPLE_TEMPLATE, null);
 	}
 
 	/**
