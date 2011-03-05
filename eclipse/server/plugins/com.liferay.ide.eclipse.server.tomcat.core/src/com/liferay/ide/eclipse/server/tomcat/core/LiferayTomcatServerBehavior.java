@@ -113,13 +113,14 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 			// If serving modules directly, update server.xml accordingly (includes project context.xmls)
 			if (ts.isServeModulesWithoutPublish()) {
 				// TODO uncomment the following once we have serve direct enabled
-				// status = getPortalTomcatConfiguration().updateContextsToServeDirectly(
+				// status = getLiferayTomcatConfiguration().updateContextsToServeDirectly(
 				// baseDir, tvh.getSharedLoader(baseDir), monitor);
 			}
 			// Else serving normally. Add project context.xmls to server.xml
 			else {
 				// Publish context configuration for servers that support META-INF/context.xml
-				status = getPortalTomcatConfiguration().publishContextConfig(
+				status =
+					getLiferayTomcatConfiguration().publishContextConfig(
 						baseDir, getServerDeployDirectory(), monitor);
 			}
 			// Determine if context's path attribute should be removed
@@ -128,16 +129,16 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 			boolean serverStopped = getServer().getServerState() == IServer.STATE_STOPPED;
 			if (status.isOK() && ts.isSaveSeparateContextFiles()) {
 //				TomcatVersionHelper.moveContextsToSeparateFiles(baseDir, noPath, serverStopped, null);
-				status = moveContextsToAutoDeployDir(baseDir, new Path(getPortalTomcatServer().getAutoDeployDirectory()), noPath, serverStopped);
+				status = moveContextsToAutoDeployDir(baseDir, new Path(getLiferayTomcatServer().getAutoDeployDirectory()), noPath, serverStopped);
 			} else if (status.isOK()) {
-				status = copyContextsToAutoDeployDir(baseDir, new Path(getPortalTomcatServer().getAutoDeployDirectory()), noPath, serverStopped);
+				status = copyContextsToAutoDeployDir(baseDir, new Path(getLiferayTomcatServer().getAutoDeployDirectory()), noPath, serverStopped);
 			}
 		}
 		if (!status.isOK())
 			throw new CoreException(status);
 	}
 
-	public LiferayTomcatServer getPortalTomcatServer() {
+	public LiferayTomcatServer getLiferayTomcatServer() {
 		return (LiferayTomcatServer) getServer().loadAdapter(LiferayTomcatServer.class, null);
 	}
 	
@@ -306,8 +307,8 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 		return Status.OK_STATUS;
 	}	
 	
-	public ILiferayTomcatConfiguration getPortalTomcatConfiguration() throws CoreException {
-		return getPortalTomcatServer().getPortalTomcatConfiguration();
+	public ILiferayTomcatConfiguration getLiferayTomcatConfiguration() throws CoreException {
+		return getLiferayTomcatServer().getLiferayTomcatConfiguration();
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class LiferayTomcatServer extends TomcatServer
 		}
 	}
 
-	public ILiferayTomcatConfiguration getPortalTomcatConfiguration()
+	public ILiferayTomcatConfiguration getLiferayTomcatConfiguration()
 		throws CoreException {
 		return (ILiferayTomcatConfiguration) getTomcatConfiguration();
 	}
@@ -202,9 +202,9 @@ public class LiferayTomcatServer extends TomcatServer
 		// getServer().getAttribute(Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
 		//
 		// if (existingSetting != Server.AUTO_PUBLISH_DISABLE) {
-		// PortalTomcatUtil.displayToggleMessage(
+		// LiferayTomcatUtil.displayToggleMessage(
 		// "The Ext plugin Automatic publishing has been set to disabled since an Ext plugin has been added.  This setting will be restored once the Ext plugin is removed.",
-		// PortalTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY);
+		// LiferayTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY);
 		// }
 		//
 		// IServerWorkingCopy wc = getServer().createWorkingCopy();

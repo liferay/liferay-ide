@@ -80,7 +80,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 			geLiferayTomcatRuntime().setBundleZipLocation(new Path(bundleZipField.getText()));
 		}
 		// else if (e.getSource().equals(sourceFolderField)) {
-		// getPortalTomcatRuntime().setPortalSourceLocation(new Path(sourceFolderField.getText()));
+		// getLiferayTomcatRuntime().setPortalSourceLocation(new Path(sourceFolderField.getText()));
 		// }
 
 		validate();
@@ -152,7 +152,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 		// SWTUtil.createButton(this, "Browse...").addSelectionListener(new SelectionAdapter() {
 		//
 		// public void widgetSelected(SelectionEvent e) {
-		// DirectoryDialog dd = new DirectoryDialog(PortalTomcatRuntimeOptionalComposite.this.getShell());
+		// DirectoryDialog dd = new DirectoryDialog(LiferayTomcatRuntimeOptionalComposite.this.getShell());
 		//
 		// dd.setMessage("Select Liferay Portal source folder directory");
 		// dd.setFilterPath(sourceFolderField.getText());
@@ -213,7 +213,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 		}
 
 		IPath bundleZipLocation = geLiferayTomcatRuntime().getBundleZipLocation();
-		// IPath bundleSourceLocation = getPortalTomcatRuntime().getPortalSourceLocation();
+		// IPath bundleSourceLocation = getLiferayTomcatRuntime().getPortalSourceLocation();
 
 		setFieldValue(bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : "");
 		// setFieldValue(sourceFolderField, bundleSourceLocation != null ? bundleSourceLocation.toOSString() : "");

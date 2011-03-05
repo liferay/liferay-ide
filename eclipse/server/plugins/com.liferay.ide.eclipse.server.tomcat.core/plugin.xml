@@ -20,16 +20,7 @@
          </moduleType>
       </runtimeType>
    </extension>
-   <!--
-   <extension
-         point="org.eclipse.wst.server.core.runtimeLocators">
-      <runtimeLocator
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatRuntimeLocator"
-            id="com.liferay.ide.eclipse.server.tomcat.runtime.locator"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.*">
-      </runtimeLocator>
-   </extension>
-   -->
+   
    <extension
          point="org.eclipse.jst.server.core.runtimeClasspathProviders">
       <runtimeClasspathProvider
@@ -74,17 +65,7 @@
             id="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
       </sourcePathComputer>
    </extension>
-   <!--
-   <extension
-         point="org.eclipse.wst.server.core.serverLocators">
-      <serverLocator
-            class="com.liferay.ide.eclipse.server.tomcat.core.PortalTomcatServerLocator"
-            id="com.liferay.ide.eclipse.server.tomcat.serverLocator"
-            supportsRemoteHosts="false"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
-      </serverLocator>
-   </extension>
-   -->
+   
    <extension
          point="org.eclipse.wst.server.core.publishTasks">
       <publishTask
