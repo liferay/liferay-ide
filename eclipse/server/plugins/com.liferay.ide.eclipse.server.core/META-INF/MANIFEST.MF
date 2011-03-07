@@ -40,18 +40,8 @@ Export-Package: com.liferay.ide.eclipse.server.core,
  org.apache.commons.configuration.reloading,
  org.apache.commons.configuration.tree,
  org.apache.commons.configuration.tree.xpath,
- org.apache.commons.configuration.web,
- org.apache.commons.lang,
- org.apache.commons.lang.builder,
- org.apache.commons.lang.enums,
- org.apache.commons.lang.exception,
- org.apache.commons.lang.math,
- org.apache.commons.lang.mutable,
- org.apache.commons.lang.reflect,
- org.apache.commons.lang.text,
- org.apache.commons.lang.time
+ org.apache.commons.configuration.web
 Bundle-ClassPath: .,
  portal-support/deps/portal-impl.jar,
  portal-support/deps/portal-service.jar,
- lib/commons-configuration-1.6.jar,
- lib/commons-lang-2.5.jar
+ lib/commons-configuration-1.6.jar

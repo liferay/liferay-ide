@@ -20,4 +20,15 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.core,
  com.liferay.ide.eclipse.core.model,
- com.liferay.ide.eclipse.core.util
+ com.liferay.ide.eclipse.core.util,
+ org.apache.commons.lang,
+ org.apache.commons.lang.builder,
+ org.apache.commons.lang.enums,
+ org.apache.commons.lang.exception,
+ org.apache.commons.lang.math,
+ org.apache.commons.lang.mutable,
+ org.apache.commons.lang.reflect,
+ org.apache.commons.lang.text,
+ org.apache.commons.lang.time
+Bundle-ClassPath: .,
+ lib/commons-lang-2.5.jar

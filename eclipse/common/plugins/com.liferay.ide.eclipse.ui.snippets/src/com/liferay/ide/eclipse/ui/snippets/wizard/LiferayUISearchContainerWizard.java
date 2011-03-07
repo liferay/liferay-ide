@@ -15,49 +15,25 @@
 
 package com.liferay.ide.eclipse.ui.snippets.wizard;
 
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IEditorPart;
 
 /**
  * @author Greg Amerson
  */
-public class LiferayUISearchContainerWizard extends Wizard {
-
-	protected IEditorPart editorPart;
-
-	protected LiferayUISearchContainerWizardPage wizardPage;
+public class LiferayUISearchContainerWizard extends AbstractModelWizard {
 
 	public LiferayUISearchContainerWizard(IEditorPart fEditorPart) {
-		super();
+		super(fEditorPart);
 		setWindowTitle("Insert Search Container");
-		editorPart = fEditorPart;
 	}
 
 	@Override
-	public void addPages() {
-		wizardPage = new LiferayUISearchContainerWizardPage("liferayUISearchContainerWizardPage", editorPart);
-		addPage(wizardPage);
-	}
-
-	public String getModel() {
-		return wizardPage.getModel();
+	protected AbstractModelWizardPage createModelWizardPage(IEditorPart editorPart) {
+		return new LiferayUISearchContainerWizardPage("liferayUISearchContainerWizardPage", editorPart);
 	}
 
 	public String getModelClass() {
 		return wizardPage.getModelClass();
-	}
-
-	public String[] getPropertyColumns() {
-		return wizardPage.getPropertyColumns();
-	}
-
-	public String getVarName() {
-		return wizardPage.getVarName();
-	}
-
-	@Override
-	public boolean performFinish() {
-		return true;
 	}
 
 }

@@ -1472,6 +1472,24 @@
           </entity>
         </content>
       </item>
+      <item
+            class="com.liferay.ide.eclipse.ui.snippets.AddModelEntitySnippetInsertion"
+            id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_add_model_entity"
+            label="Add Model Entity"
+            largeicon="icons/snippets/tag-generic.gif"
+            smallicon="icons/snippets/tag-generic.gif">
+         <content>
+           try {
+			${model} ${varName} = ${varName}Persistence.create(CounterLocalServiceUtil.increment());
+			
+			${fields}
+			
+			${varName}Persistence.update(${varName}, true);
+		} catch (SystemException e) {
+			// TODO Handle exception
+		} 
+         </content>
+      </item>
       <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column" label="Primary Key Column" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
         <content>
           <column name="${name}Id" type="long" primary="true"/>
