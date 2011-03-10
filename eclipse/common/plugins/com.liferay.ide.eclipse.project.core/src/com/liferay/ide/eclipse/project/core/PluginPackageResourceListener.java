@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.project.core;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.FileInputStream;
@@ -284,7 +285,14 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 			return false;
 		}
 
-		return true;		
+		// make sure that the file is in the docroot
+		IFolder docroot = ProjectUtil.getDocroot(file.getProject());
+
+		if (docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf(file.getFullPath())) {
+			return true;
+		}
+
+		return false;
 	}
 
 	// private boolean findFileResourceInDelta(IResourceDelta delta, String

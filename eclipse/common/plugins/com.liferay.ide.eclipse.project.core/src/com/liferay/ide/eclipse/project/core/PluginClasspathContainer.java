@@ -70,7 +70,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 	protected IPath path;
 
-	protected IFile pluginPackageFile;
+	protected IPath pluginPackageFilePath;
 
 	protected IPath portalDir;
 
@@ -215,38 +215,28 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	protected IFile getPluginPackageFile() {
-		if (pluginPackageFile == null || (!pluginPackageFile.exists())) {
-			IVirtualComponent comp = ComponentCore.createComponent(this.javaProject.getProject());
+		IFile retval = null;
 
-			if (comp != null) {
-				IContainer resource = comp.getRootFolder().getUnderlyingFolder();
+		if (pluginPackageFilePath == null) {
+			retval = lookupPluginPackageFile();
 
-				if (resource instanceof IFolder) {
-					IFolder webroot = (IFolder) resource;
+			if (retval != null && retval.exists()) {
+				pluginPackageFilePath = retval.getFullPath();
 
-					pluginPackageFile =
-						webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+				return retval;
+			}
+		}
+		else {
+			retval = ResourcesPlugin.getWorkspace().getRoot().getFile(pluginPackageFilePath);
 
-					if (!pluginPackageFile.exists()) {
-						// IDE-226 the file may be missing because we are in an ext plugin which has a different layout
-						// check for ext-web in the path to the docroot
+			if (!retval.exists()) {
+				pluginPackageFilePath = null;
 
-						if (webroot.getFullPath().toPortableString().endsWith("WEB-INF/ext-web/docroot")) {
-							// look for packages file in first docroot
-							IPath parentDocroot = webroot.getFullPath().removeFirstSegments(1).removeLastSegments(3);
-							IFolder parentWebroot = this.javaProject.getProject().getFolder(parentDocroot);
-
-							if (parentWebroot.exists()) {
-								pluginPackageFile =
-									parentWebroot.getFile("WEB-INF/" +
-										ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
-							}						}
-					}
-				}
+				retval = lookupPluginPackageFile();
 			}
 		}
 
-		return pluginPackageFile;
+		return retval;
 	}
 
 	protected String[] getPortalDependencyJars() {
@@ -269,14 +259,14 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	protected abstract String[] getPortalJars();
-	
+
 	protected String getPropertyValue(String key, IFile propertiesFile) {
 		String retval = null;
 
 		try {
 			Properties props = new Properties();
 
-			props.load(pluginPackageFile.getContents());
+			props.load(getPluginPackageFile().getContents());
 
 			retval = props.getProperty(key, "");
 		}
@@ -285,7 +275,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 		return retval;
 	}
-
+	
 	protected String[] getRequiredDeploymentContexts() {
 		String[] jars = new String[0];
 
@@ -304,6 +294,42 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		}
 
 		return jars;
+	}
+
+	protected IFile lookupPluginPackageFile() {
+		IFile pluginPackageFile = null;
+
+		IVirtualComponent comp = ComponentCore.createComponent(this.javaProject.getProject());
+
+		if (comp != null) {
+			IContainer resource = comp.getRootFolder().getUnderlyingFolder();
+
+			if (resource instanceof IFolder) {
+				IFolder webroot = (IFolder) resource;
+
+				pluginPackageFile =
+					webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+
+				if (!pluginPackageFile.exists()) {
+					// IDE-226 the file may be missing because we are in an ext plugin which has a different layout
+					// check for ext-web in the path to the docroot
+
+					if (webroot.getFullPath().toPortableString().endsWith("WEB-INF/ext-web/docroot")) {
+						// look for packages file in first docroot
+						IPath parentDocroot = webroot.getFullPath().removeFirstSegments(1).removeLastSegments(3);
+						IFolder parentWebroot = this.javaProject.getProject().getFolder(parentDocroot);
+
+						if (parentWebroot.exists()) {
+							pluginPackageFile =
+								parentWebroot.getFile("WEB-INF/" +
+									ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+						}
+					}
+				}
+			}
+		}
+
+		return pluginPackageFile;
 	}
 
 }
