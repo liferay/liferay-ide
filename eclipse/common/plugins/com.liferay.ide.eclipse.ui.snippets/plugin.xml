@@ -1483,7 +1483,6 @@
 			${model} ${varName} = ${varName}Persistence.create(CounterLocalServiceUtil.increment());
 			
 			${fields}
-			
 			${varName}Persistence.update(${varName}, true);
 		} catch (SystemException e) {
 			// TODO Handle exception
@@ -1508,13 +1507,13 @@
           contenttypes="org.eclipse.jst.jsp.core.jspsource"
           description="Useful View Codef Liferay Theme Builder JavaScript Object"
           id="com.liferay.ide.eclipse.ui.snippets.category.theme.builder"
-          label="Useful View Code"
+          label="Theme Builder"
           largeicon="icons/snippets/search.png"
           smallicon="icons/snippets/search.png">
        <item
              class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
              id="com.liferay.ide.eclipse.ui.snippets.item.themeBuilderCompanyId"
-             label="Theme Builder Company Id"
+             label="Get Company Id"
              largeicon="icons/snippets/tag-generic.gif"
              smallicon="icons/snippets/tag-generic.gif">
           <content>
