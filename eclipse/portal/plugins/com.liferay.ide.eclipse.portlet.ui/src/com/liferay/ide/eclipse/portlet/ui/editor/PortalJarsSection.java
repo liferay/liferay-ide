@@ -15,7 +15,6 @@ import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.IModelChangedListener;
 import com.liferay.ide.eclipse.portlet.core.IPluginPackageModel;
 import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
-import com.liferay.ide.eclipse.portlet.ui.action.SortAction;
 import com.liferay.ide.eclipse.ui.form.DefaultContentProvider;
 import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
 import com.liferay.ide.eclipse.ui.form.IDEFormPage;
@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.ui.ISharedImages;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -68,7 +66,8 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	private Vector<File> fJars;
 	private Action fAddAction;
 	private Action fRemoveAction;
-	private Action fSortAction;
+
+	// private Action fSortAction;
 
 	class PortalJarsContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object parent) {
@@ -154,8 +153,8 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		});
 
 		// Add sort action to the tool bar
-		fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
-		toolBarManager.add(fSortAction);
+		// fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
+		// toolBarManager.add(fSortAction);
 
 		toolBarManager.update(true);
 
@@ -179,11 +178,11 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 
 	private void updateUpDownButtons() {
 		TablePart tablePart = getTablePart();
-		if (fSortAction.isChecked()) {
-			tablePart.setButtonEnabled(UP_INDEX, false);
-			tablePart.setButtonEnabled(DOWN_INDEX, false);
-			return;
-		}
+		// if (fSortAction.isChecked()) {
+		// tablePart.setButtonEnabled(UP_INDEX, false);
+		// tablePart.setButtonEnabled(DOWN_INDEX, false);
+		// return;
+		// }
 		Table table = getTablePart().getTableViewer().getTable();
 		TableItem[] selection = table.getSelection();
 		boolean hasSelection = selection.length > 0;
@@ -278,6 +277,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void handleRemove() {
 		IStructuredSelection ssel = (IStructuredSelection) fViewer.getSelection();
 		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
@@ -329,7 +329,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	}
 
 	public void swap(int index1, int index2) {
-		Table table = getTablePart().getTableViewer().getTable();
+		// Table table = getTablePart().getTableViewer().getTable();
 //		IPluginImport dep1 = ((ImportObject) table.getItem(index1).getData()).getImport();
 //		IPluginImport dep2 = ((ImportObject) table.getItem(index2).getData()).getImport();
 //
@@ -476,9 +476,9 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
-		if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
-			updateUpDownButtons();
-		}
+		// if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
+		// updateUpDownButtons();
+		// }
 	}
 
 	/* (non-Javadoc)
@@ -488,11 +488,11 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		return false;
 	}
 
-	private boolean isTreeViewerSorted() {
-		if (fSortAction == null) {
-			return false;
-		}
-		return fSortAction.isChecked();
-	}
+	// private boolean isTreeViewerSorted() {
+	// if (fSortAction == null) {
+	// return false;
+	// }
+	// return fSortAction.isChecked();
+	// }
 
 }

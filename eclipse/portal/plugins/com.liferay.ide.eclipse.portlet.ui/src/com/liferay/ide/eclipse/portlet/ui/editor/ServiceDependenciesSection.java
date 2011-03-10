@@ -16,20 +16,19 @@ import com.liferay.ide.eclipse.core.model.IModelChangedListener;
 import com.liferay.ide.eclipse.portlet.core.IPluginPackageModel;
 import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
 import com.liferay.ide.eclipse.portlet.ui.action.SortAction;
+import com.liferay.ide.eclipse.project.ui.dialog.LiferayProjectSelectionDialog;
 import com.liferay.ide.eclipse.ui.form.DefaultContentProvider;
 import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
 import com.liferay.ide.eclipse.ui.form.IDEFormPage;
 import com.liferay.ide.eclipse.ui.form.TablePart;
 import com.liferay.ide.eclipse.ui.form.TableSection;
-import com.liferay.ide.eclipse.ui.wizard.ExternalFileSelectionDialog;
 
-import java.io.File;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.ui.ISharedImages;
-import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -41,6 +40,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -53,63 +54,50 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.ide.IDE.SharedImages;
 
 public class ServiceDependenciesSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
 
-	private static final int ADD_INDEX = 0;
-	private static final int REMOVE_INDEX = 1;
-	private static final int UP_INDEX = 2;
-	private static final int DOWN_INDEX = 3;
-
-	private TableViewer fViewer;
-	private Vector<File> fJars;
-	private Action fAddAction;
-	private Action fRemoveAction;
-	private Action fSortAction;
-
-	class PortalJarsContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
+	class ServiceDependenciesContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object parent) {
-			if (fJars == null) {
-				createJarsArray();
+			if (serviceDeps == null) {
+				createServiceDepsArray();
 			}
-			return fJars.toArray();
+			return serviceDeps.toArray();
 		}
 	}
-	
-	protected void createJarsArray() {
-		fJars = new Vector<File>();
-		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] portalJars = model.getPortalDependencyJars();
-		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
-
-		for (String portalJar : portalJars) {
-			File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim());
-
-			if (jarFile.isFile() && jarFile.exists()) {
-				fJars.add(jarFile);
-			}
-		}
-	}
-	
-	class PortalJarsLabelProvider extends LabelProvider implements ITableLabelProvider {
+	class ServiceDependenciesLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			return JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_JAR);
+			return PlatformUI.getWorkbench().getSharedImages().getImage(SharedImages.IMG_OBJ_PROJECT);
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			if (element instanceof File) {
-				File file = (File)element;
-				return file.getName();
+			if (element instanceof String) {
+				return element.toString();
 			}
+
 			return "";
 		}
 		
 	}
+	private static final int ADD_INDEX = 0;
+	private static final int DOWN_INDEX = 3;
 
+	private static final int REMOVE_INDEX = 1;
+	private static final int UP_INDEX = 2;
+	private Action fAddAction;
+	private Action fRemoveAction;
+	private Action fSortAction;
+
+	private TableViewer fViewer;
+	
+	private Vector<String> serviceDeps;
+	
 	public ServiceDependenciesSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
 		getSection().setText("Service Dependencies");
@@ -124,8 +112,8 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		TablePart tablePart = getTablePart();
 		fViewer = tablePart.getTableViewer();
 
-		fViewer.setContentProvider(new PortalJarsContentProvider());
-		fViewer.setLabelProvider(new PortalJarsLabelProvider());
+		fViewer.setContentProvider(new ServiceDependenciesContentProvider());
+		fViewer.setLabelProvider(new ServiceDependenciesLabelProvider());
 		toolkit.paintBordersFor(container);
 		makeActions();
 		section.setClient(container);
@@ -134,85 +122,10 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		gd.grabExcessVerticalSpace = true;
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
-		section.setText("Portal Dependency Jars");
+		section.setText("Service Dependencies");
 		createSectionToolbar(section, toolkit);
 		initialize();
 	}
-
-	private void createSectionToolbar(Section section, FormToolkit toolkit) {
-		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
-		ToolBar toolbar = toolBarManager.createControl(section);
-		final Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
-		toolbar.setCursor(handCursor);
-		// Cursor needs to be explicitly disposed
-		toolbar.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				if ((handCursor != null) && (handCursor.isDisposed() == false)) {
-					handCursor.dispose();
-				}
-			}
-		});
-
-		// Add sort action to the tool bar
-		fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
-		toolBarManager.add(fSortAction);
-
-		toolBarManager.update(true);
-
-		section.setTextClient(toolbar);
-	}
-
-	protected void selectionChanged(IStructuredSelection sel) {
-		getPage().getFormEditor().setSelection(sel);
-		updateButtons();
-	}
-
-	private void updateButtons() {
-		Table table = getTablePart().getTableViewer().getTable();
-		TableItem[] selection = table.getSelection();
-		boolean hasSelection = selection.length > 0;
-		TablePart tablePart = getTablePart();
-		tablePart.setButtonEnabled(ADD_INDEX, isEditable());
-		updateUpDownButtons();
-		tablePart.setButtonEnabled(REMOVE_INDEX, isEditable() && hasSelection);
-	}
-
-	private void updateUpDownButtons() {
-		TablePart tablePart = getTablePart();
-		if (fSortAction.isChecked()) {
-			tablePart.setButtonEnabled(UP_INDEX, false);
-			tablePart.setButtonEnabled(DOWN_INDEX, false);
-			return;
-		}
-		Table table = getTablePart().getTableViewer().getTable();
-		TableItem[] selection = table.getSelection();
-		boolean hasSelection = selection.length > 0;
-		boolean canMove = table.getItemCount() > 1 && selection.length == 1;
-
-		tablePart.setButtonEnabled(UP_INDEX, canMove && isEditable() && hasSelection && table.getSelectionIndex() > 0);
-		tablePart.setButtonEnabled(DOWN_INDEX, canMove && hasSelection && isEditable() && table.getSelectionIndex() < table.getItemCount() - 1);
-	}
-
-	protected void handleDoubleClick(IStructuredSelection sel) {
-	}
-
-	protected void buttonSelected(int index) {
-		switch (index) {
-			case ADD_INDEX :
-				handleAdd();
-				break;
-			case REMOVE_INDEX :
-				handleRemove();
-				break;
-			case UP_INDEX :
-				handleUp();
-				break;
-			case DOWN_INDEX :
-				handleDown();
-				break;
-		}
-	}
-
 
 	public void dispose() {
 		
@@ -249,21 +162,51 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(java.lang.Object, java.lang.Object[])
-	 */
-	protected boolean canPaste(Object targetObject, Object[] sourceObjects) {
-		
-		return false;
+	public void initialize() {
+		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
+		if (model == null)
+			return;
+		fViewer.setInput(model);
+		updateButtons();
+		model.addModelChangedListener(this);
+		fAddAction.setEnabled(model.isEditable());
+		fRemoveAction.setEnabled(model.isEditable());
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(java.lang.Object, java.lang.Object[])
-	 */
-	protected void doPaste(Object targetObject, Object[] sourceObjects) {
-		// Get the model
+	public void modelChanged(IModelChangedEvent event) {
+		if (event.getChangeType() == IModelChangedEvent.WORLD_CHANGED) {
+			markStale();
+			return;
+		}
 		
+		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS ||
+			event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS ||
+			event.getChangedProperty() == IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS) {
+
+			refresh();
+			updateButtons();
+			return;
+		}
+
 	}
+
+	public void propertyChange(PropertyChangeEvent event) {
+		if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
+			updateUpDownButtons();
+		}
+	}
+
+	public void refresh() {
+		serviceDeps = null;
+		fViewer.refresh();
+		super.refresh();
+	}
+
+	public void setFocus() {
+		if (fViewer != null)
+			fViewer.getTable().setFocus();
+	}
+
 
 	public boolean setFormInput(Object object) {
 //		if (object instanceof IPluginImport) {
@@ -274,50 +217,82 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		return false;
 	}
 
-	protected void fillContextMenu(IMenuManager manager) {
-		
+	public void swap(int index1, int index2) {
+		Table table = getTablePart().getTableViewer().getTable();
+		String dep1 = (String) table.getItem(index1).getData();
+		String dep2 = (String) table.getItem(index2).getData();
+
+		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
+		model.swapDependencies(PluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, dep1, dep2);
 	}
 
-	private void handleRemove() {
-		IStructuredSelection ssel = (IStructuredSelection) fViewer.getSelection();
-		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
-		int i = 0;
-		String[] removedFiles = new String[ssel.size()];
-		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
-			removedFiles[i] = ((File)iter.next()).getName();
-		}
-		
-		model.removePortalDependencyJars(removedFiles);
-		updateButtons();
+	private void createSectionToolbar(Section section, FormToolkit toolkit) {
+		ToolBarManager toolBarManager = new ToolBarManager(SWT.FLAT);
+		ToolBar toolbar = toolBarManager.createControl(section);
+		final Cursor handCursor = new Cursor(Display.getCurrent(), SWT.CURSOR_HAND);
+		toolbar.setCursor(handCursor);
+		// Cursor needs to be explicitly disposed
+		toolbar.addDisposeListener(new DisposeListener() {
+			public void widgetDisposed(DisposeEvent e) {
+				if ((handCursor != null) && (handCursor.isDisposed() == false)) {
+					handCursor.dispose();
+				}
+			}
+		});
+
+		// Add sort action to the tool bar
+		fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
+		toolBarManager.add(fSortAction);
+
+		toolBarManager.update(true);
+
+		section.setTextClient(toolbar);
 	}
 
 	private void handleAdd() {
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] existingJars = model.getPortalDependencyJars();
-		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
-		IPath portalDir = editor.getPortalDir();
-		ExternalFileSelectionDialog dialog = new ExternalFileSelectionDialog(getPage().getShell(), new PortalJarViewerFilter(portalDir.toFile(), new String[]{"WEB-INF","WEB-INF/lib"}, existingJars), true, false);
-		dialog.setInput(portalDir.toFile());
+		final String[] existingServiceDeps = model.getRequiredDeploymentContexts();
+
+		ViewerFilter filter = new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (element instanceof IJavaProject) {
+					IProject project = ((IJavaProject) element).getProject();
+
+					for (String existingDep : existingServiceDeps) {
+						if (project.getName().equals(existingDep)) {
+							return false;
+						}
+					}
+
+					if (project.equals(getPage().getLiferayFormEditor().getCommonProject())) {
+						return false;
+					}
+
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		};
+
+		LiferayProjectSelectionDialog dialog = new LiferayProjectSelectionDialog(getPage().getShell(), filter);
 		dialog.create();
+
 		if (dialog.open() == Window.OK) {
-			Object[] selectedFiles = dialog.getResult();
+			Object[] selectedProjects = dialog.getResult();
 			try {
-				for (int i = 0; i < selectedFiles.length; i++) {
-					File jar = (File) selectedFiles[i];
-					if (jar.exists()) {
-						model.addPortalDependencyJar(jar.getName());
+				for (int i = 0; i < selectedProjects.length; i++) {
+					IJavaProject project = (IJavaProject) selectedProjects[i];
+					if (project.exists()) {
+						model.addRequiredDeploymentContext(project.getProject().getName());
 					}
 				}
 			} catch (Exception e) {
 			}
 		}
-	}
-	
-	private void handleUp() {
-		int index = getTablePart().getTableViewer().getTable().getSelectionIndex();
-		if (index < 1)
-			return;
-		swap(index, index - 1);
 	}
 
 	private void handleDown() {
@@ -328,29 +303,25 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		swap(index, index + 1);
 	}
 
-	public void swap(int index1, int index2) {
-		Table table = getTablePart().getTableViewer().getTable();
-//		IPluginImport dep1 = ((ImportObject) table.getItem(index1).getData()).getImport();
-//		IPluginImport dep2 = ((ImportObject) table.getItem(index2).getData()).getImport();
-//
-//		try {
-//			IPluginModelBase model = (IPluginModelBase) getPage().getModel();
-//			IPluginBase pluginBase = model.getPluginBase();
-//			pluginBase.swap(dep1, dep2);
-//		} catch (CoreException e) {
-//			PDEPlugin.logException(e);
-//		}
+	@SuppressWarnings("rawtypes")
+	private void handleRemove() {
+		IStructuredSelection ssel = (IStructuredSelection) fViewer.getSelection();
+		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
+		int i = 0;
+		String[] removedServiceDeps = new String[ssel.size()];
+		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
+			removedServiceDeps[i] = iter.next().toString();
+		}
+		
+		model.removeRequiredDeploymentContexts(removedServiceDeps);
+		updateButtons();
 	}
 
-	public void initialize() {
-		PluginPackageModel model = (PluginPackageModel)getPage().getModel();
-		if (model == null)
+	private void handleUp() {
+		int index = getTablePart().getTableViewer().getTable().getSelectionIndex();
+		if (index < 1)
 			return;
-		fViewer.setInput(model);
-		updateButtons();
-		model.addModelChangedListener(this);
-		fAddAction.setEnabled(model.isEditable());
-		fRemoveAction.setEnabled(model.isEditable());
+		swap(index, index - 1);
 	}
 
 	private void makeActions() {
@@ -365,120 +336,83 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 				handleRemove();
 			}
 		};
-		
+	}
+	
+	private void updateButtons() {
+		Table table = getTablePart().getTableViewer().getTable();
+		TableItem[] selection = table.getSelection();
+		boolean hasSelection = selection.length > 0;
+		TablePart tablePart = getTablePart();
+		tablePart.setButtonEnabled(ADD_INDEX, isEditable());
+		updateUpDownButtons();
+		tablePart.setButtonEnabled(REMOVE_INDEX, isEditable() && hasSelection);
 	}
 
-	public void refresh() {
-		fJars = null;
-		fViewer.refresh();
-		super.refresh();
-	}
-
-	public void modelChanged(IModelChangedEvent event) {
-		if (event.getChangeType() == IModelChangedEvent.WORLD_CHANGED) {
-			markStale();
+	private void updateUpDownButtons() {
+		TablePart tablePart = getTablePart();
+		if (fSortAction.isChecked()) {
+			tablePart.setButtonEnabled(UP_INDEX, false);
+			tablePart.setButtonEnabled(DOWN_INDEX, false);
 			return;
 		}
-		
-		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS) {
-			refresh();
-			updateButtons();
-			return;
-		}
-//		if (event.getChangedProperty() == IPluginBase.P_IMPORT_ORDER) {
-//			refresh();
-//			updateButtons();
-//			return;
-//		}
-//
-//		Object[] changedObjects = event.getChangedObjects();
-//		if (changedObjects[0] instanceof IPluginImport) {
-//			int index = 0;
-//			for (int i = 0; i < changedObjects.length; i++) {
-//				Object changeObject = changedObjects[i];
-//				IPluginImport iimport = (IPluginImport) changeObject;
-//				if (event.getChangeType() == IModelChangedEvent.INSERT) {
-//					ImportObject iobj = new ImportObject(iimport);
-//					if (fImports == null) {
-//						// createImportObjects method will find new addition
-//						createImportObjects();
-//					} else {
-//						int insertIndex = getImportInsertIndex();
-//						if (insertIndex < 0) {
-//							// Add Button
-//							fImports.add(iobj);
-//						} else {
-//							// DND
-//							fImports.add(insertIndex, iobj);
-//						}
-//					}
-//				} else {
-//					ImportObject iobj = findImportObject(iimport);
-//					if (iobj != null) {
-//						if (event.getChangeType() == IModelChangedEvent.REMOVE) {
-//							if (fImports == null)
-//								// createImportObjects method will not include the removed import
-//								createImportObjects();
-//							else
-//								fImports.remove(iobj);
-//							Table table = fImportViewer.getTable();
-//							index = table.getSelectionIndex();
-//							fImportViewer.remove(iobj);
-//						} else {
-//							fImportViewer.update(iobj, null);
-//						}
-//					}
-//				}
-//			}
-//			if (event.getChangeType() == IModelChangedEvent.INSERT) {
-//				if (changedObjects.length > 0) {
-//					// Refresh the viewer
-//					fImportViewer.refresh();
-//					// Get the last import added to the viewer
-//					IPluginImport lastImport = (IPluginImport) changedObjects[changedObjects.length - 1];
-		// // Find the corresponding bundle object for the plugin import
-//					ImportObject lastImportObject = findImportObject(lastImport);
-//					if (lastImportObject != null) {
-//						fImportViewer.setSelection(new StructuredSelection(lastImportObject));
-//					}
-//					fImportViewer.getTable().setFocus();
-//				}
-//			} else if (event.getChangeType() == IModelChangedEvent.REMOVE) {
-//				Table table = fImportViewer.getTable();
-//				table.setSelection(index < table.getItemCount() ? index : table.getItemCount() - 1);
-//			}
-//		} else {
-//			fImportViewer.update(((IStructuredSelection) fImportViewer.getSelection()).toArray(), null);
-//		}
+		Table table = getTablePart().getTableViewer().getTable();
+		TableItem[] selection = table.getSelection();
+		boolean hasSelection = selection.length > 0;
+		boolean canMove = table.getItemCount() > 1 && selection.length == 1;
+
+		tablePart.setButtonEnabled(UP_INDEX, canMove && isEditable() && hasSelection && table.getSelectionIndex() > 0);
+		tablePart.setButtonEnabled(DOWN_INDEX, canMove && hasSelection && isEditable() && table.getSelectionIndex() < table.getItemCount() - 1);
 	}
 
-//	public void modelsChanged(PluginModelDelta delta) {
-//		fImports = null;
-//		final Control control = fImportViewer.getControl();
-//		if (!control.isDisposed()) {
-//			control.getDisplay().asyncExec(new Runnable() {
-//				public void run() {
-//					if (!control.isDisposed())
-//						fImportViewer.refresh();
-//				}
-//			});
-//		}
-//	}
+	protected void buttonSelected(int index) {
+		switch (index) {
+			case ADD_INDEX :
+				handleAdd();
+				break;
+			case REMOVE_INDEX :
+				handleRemove();
+				break;
+			case UP_INDEX :
+				handleUp();
+				break;
+			case DOWN_INDEX :
+				handleDown();
+				break;
+		}
+	}
 
-
-	public void setFocus() {
-		if (fViewer != null)
-			fViewer.getTable().setFocus();
+	/* (non-Javadoc)
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(java.lang.Object, java.lang.Object[])
+	 */
+	protected boolean canPaste(Object targetObject, Object[] sourceObjects) {
+		
+		return false;
 	}
 
 	protected boolean createCount() {
 		return true;
 	}
 
-	public void propertyChange(PropertyChangeEvent event) {
-		if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
-			updateUpDownButtons();
-		}
+	protected void createServiceDepsArray() {
+		serviceDeps = new Vector<String>();
+		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
+		String[] requiredDeploymentContexts = model.getRequiredDeploymentContexts();
+		Collections.addAll(serviceDeps, requiredDeploymentContexts);
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#doPaste(java.lang.Object, java.lang.Object[])
+	 */
+	protected void doPaste(Object targetObject, Object[] sourceObjects) {
+		// Get the model
+		
+	}
+
+	protected void fillContextMenu(IMenuManager manager) {
+		
+	}
+
+	protected void handleDoubleClick(IStructuredSelection sel) {
 	}
 
 	/* (non-Javadoc)
@@ -488,11 +422,16 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		return false;
 	}
 
-	private boolean isTreeViewerSorted() {
-		if (fSortAction == null) {
-			return false;
-		}
-		return fSortAction.isChecked();
+	protected void selectionChanged(IStructuredSelection sel) {
+		getPage().getFormEditor().setSelection(sel);
+		updateButtons();
 	}
+
+	// private boolean isTreeViewerSorted() {
+	// if (fSortAction == null) {
+	// return false;
+	// }
+	// return fSortAction.isChecked();
+	// }
 
 }

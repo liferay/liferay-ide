@@ -66,13 +66,13 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 	protected IClasspathEntry[] classpathEntries;
 
-	protected IPath path;
-
-	protected IPath portalDir;
-
 	protected IJavaProject javaProject;
 
+	protected IPath path;
+
 	protected IFile pluginPackageFile;
+
+	protected IPath portalDir;
 
 	public PluginClasspathContainer(IPath containerPath, IJavaProject project, IPath portalDir) {
 		this.path = containerPath;
@@ -121,6 +121,24 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		return portalDir;
 	}
 
+	protected IClasspathEntry createClasspathEntry(IPath entryPath, IPath sourcePath) {
+		IPath sourceRootPath = null;
+		IAccessRule[] rules = new IAccessRule[] {};
+		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
+
+		final ClasspathDecorations dec =
+			cpDecorations.getDecorations(
+				getDecorationManagerKey(javaProject.getProject(), getPath().toString()), entryPath.toString());
+
+		if (dec != null) {
+			sourcePath = dec.getSourceAttachmentPath();
+			sourceRootPath = dec.getSourceAttachmentRootPath();
+			attrs = dec.getExtraAttributes();
+		}
+
+		return JavaCore.newLibraryEntry(entryPath, sourcePath, sourceRootPath, rules, attrs, false);
+	}
+
 	protected IClasspathEntry createContextClasspathEntry(String context) {
 		IClasspathEntry entry = null;
 
@@ -140,7 +158,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 				if (serviceJar.exists()) {
 					entry =
 						createClasspathEntry(
-							serviceJar.getFullPath(), serviceFolder.exists() ? serviceFolder.getFullPath() : null);
+							serviceJar.getLocation(), serviceFolder.exists() ? serviceFolder.getLocation() : null);
 
 					break;
 				}
@@ -177,24 +195,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		return createClasspathEntry(entryPath, null);
 	}
 
-	protected IClasspathEntry createClasspathEntry(IPath entryPath, IPath sourcePath) {
-		IPath sourceRootPath = null;
-		IAccessRule[] rules = new IAccessRule[] {};
-		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
-
-		final ClasspathDecorations dec =
-			cpDecorations.getDecorations(
-				getDecorationManagerKey(javaProject.getProject(), getPath().toString()), entryPath.toString());
-
-		if (dec != null) {
-			sourcePath = dec.getSourceAttachmentPath();
-			sourceRootPath = dec.getSourceAttachmentRootPath();
-			attrs = dec.getExtraAttributes();
-		}
-
-		return JavaCore.newLibraryEntry(entryPath, sourcePath, sourceRootPath, rules, attrs, false);
-	}
-
 	protected IClasspathEntry findSuggestedEntry(IPath jarPath, IClasspathEntry[] suggestedEntries) {
 		// compare jarPath to an existing entry
 		if (jarPath != null && (!CoreUtil.isNullOrEmpty(jarPath.toString())) &&
@@ -213,24 +213,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 		return null;
 	}
-
-	protected String getPropertyValue(String key, IFile propertiesFile) {
-		String retval = null;
-
-		try {
-			Properties props = new Properties();
-
-			props.load(pluginPackageFile.getContents());
-
-			retval = props.getProperty(key, "");
-		}
-		catch (Exception e) {
-		}
-
-		return retval;
-	}
-
-	protected abstract String[] getPortalJars();
 
 	protected IFile getPluginPackageFile() {
 		if (pluginPackageFile == null || (!pluginPackageFile.exists())) {
@@ -266,26 +248,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 		return pluginPackageFile;
 	}
-	
-	protected String[] getRequiredDeploymentContexts() {
-		String[] jars = new String[0];
-
-		IFile pluginPackageFile = getPluginPackageFile();
-
-		try {
-			String context = getPropertyValue("required-deployment-contexts", pluginPackageFile);
-
-			String[] split = context.split(",");
-
-			if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
-				return split;
-			}
-		}
-		catch (Exception e) {
-		}
-
-		return jars;
-	}
 
 	protected String[] getPortalDependencyJars() {
 		String[] jars = new String[0];
@@ -303,6 +265,44 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		}
 		catch (Exception e) {
 		}
+		return jars;
+	}
+
+	protected abstract String[] getPortalJars();
+	
+	protected String getPropertyValue(String key, IFile propertiesFile) {
+		String retval = null;
+
+		try {
+			Properties props = new Properties();
+
+			props.load(pluginPackageFile.getContents());
+
+			retval = props.getProperty(key, "");
+		}
+		catch (Exception e) {
+		}
+
+		return retval;
+	}
+
+	protected String[] getRequiredDeploymentContexts() {
+		String[] jars = new String[0];
+
+		IFile pluginPackageFile = getPluginPackageFile();
+
+		try {
+			String context = getPropertyValue("required-deployment-contexts", pluginPackageFile);
+
+			String[] split = context.split(",");
+
+			if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
+				return split;
+			}
+		}
+		catch (Exception e) {
+		}
+
 		return jars;
 	}
 

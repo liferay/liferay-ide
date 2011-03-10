@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -59,7 +60,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		}
 	}
 
-	public void addPortalDependency(String propertyName, String value) {
+	public void addDependency(String propertyName, String value) {
 		if (CoreUtil.isNullOrEmpty(value)) {
 			return;
 		}
@@ -74,28 +75,32 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 			}
 		}
 
-		String newPortalDeps = null;
+		String newDeps = null;
 
 		if (CoreUtil.isNullOrEmpty(existingDeps)) {
-			newPortalDeps = value;
+			newDeps = value;
 		}
 		else {
-			newPortalDeps = existingDeps + "," + value;
+			newDeps = existingDeps + "," + value;
 		}
 
-		pluginPackageProperties.setProperty(propertyName, newPortalDeps);
+		pluginPackageProperties.setProperty(propertyName, newDeps);
 
 		flushProperties();
 
-		fireModelChanged(new ModelChangedEvent(this, IModelChangedEvent.INSERT, newPortalDeps.split(","), propertyName));
+		fireModelChanged(new ModelChangedEvent(this, IModelChangedEvent.INSERT, newDeps.split(","), propertyName));
 	}
 
 	public void addPortalDependencyJar(String jar) {
-		addPortalDependency(PROPERTY_PORTAL_DEPENDENCY_JARS, jar);
+		addDependency(PROPERTY_PORTAL_DEPENDENCY_JARS, jar);
 	}
 
 	public void addPortalDependencyTld(String tldFile) {
-		addPortalDependency(PROPERTY_PORTAL_DEPENDENCY_TLDS, tldFile);
+		addDependency(PROPERTY_PORTAL_DEPENDENCY_TLDS, tldFile);
+	}
+
+	public void addRequiredDeploymentContext(String context) {
+		addDependency(PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, context);
 	}
 
 	@Override
@@ -169,6 +174,17 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		}
 	}
 
+	public String[] getRequiredDeploymentContexts() {
+		String contexts = pluginPackageProperties.getString(PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, null);
+
+		if (contexts != null) {
+			return contexts.split(",");
+		}
+		else {
+			return new String[0];
+		}
+	}
+
 	public String getShortDescription() {
 		return getStringProperty(PROPERTY_SHORT_DESCRIPTION);
 	}
@@ -212,7 +228,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		}
 	}
 
-	public void removePortalDependency(String propertyName, String[] removedValues) {
+	public void removeDependency(String propertyName, String[] removedValues) {
 		String portalDependencies = pluginPackageProperties.getString(propertyName, null);
 		
 		List<String> updatedValues = new ArrayList<String>();
@@ -238,7 +254,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 			pluginPackageProperties.setProperty(propertyName, "");
 			
 			for (String updatedValue : updatedValues) {
-				addPortalDependency(propertyName, updatedValue);
+				addDependency(propertyName, updatedValue);
 			}
 		}
 		else {
@@ -251,11 +267,15 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	}
 
 	public void removePortalDependencyJars(String[] removedJars) {
-		removePortalDependency(PROPERTY_PORTAL_DEPENDENCY_JARS, removedJars);
+		removeDependency(PROPERTY_PORTAL_DEPENDENCY_JARS, removedJars);
 	}
 
 	public void removePortalDependencyTlds(String[] removedTlds) {
-		removePortalDependency(PROPERTY_PORTAL_DEPENDENCY_TLDS, removedTlds);
+		removeDependency(PROPERTY_PORTAL_DEPENDENCY_TLDS, removedTlds);
+	}
+
+	public void removeRequiredDeploymentContexts(String[] contexts) {
+		removeDependency(PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, contexts);
 	}
 
 	public void setAuthor(String author) {
@@ -317,6 +337,41 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
 	public void setTags(String tags) {
 		setProperty(PROPERTY_TAGS, tags);
+	}
+
+	public void swapDependencies(String property, String dep1, String dep2) {
+		String[] deps = null;
+		String depsValue = pluginPackageProperties.getString(property, null);
+
+		if (depsValue != null) {
+			deps = depsValue.split(",");
+		}
+		else {
+			deps = new String[0];
+		}
+
+		ArrayList<String> list = new ArrayList<String>();
+		Collections.addAll(list, deps);
+
+		int index1 = list.indexOf(dep1);
+		int index2 = list.indexOf(dep2);
+		list.set(index2, dep1);
+		list.set(index1, dep2);
+
+		String[] newValues = list.toArray(new String[0]);
+
+		StringBuffer buffer = new StringBuffer();
+
+		for (String val : newValues) {
+			buffer.append(val + ",");
+		}
+
+		String newValue = buffer.toString().substring(0, buffer.length() - 1);
+		pluginPackageProperties.setProperty(property, newValue);
+
+		flushProperties();
+
+		fireModelChanged(new ModelChangedEvent(this, null, property, depsValue, newValue));
 	}
 
 	protected void flushProperties() {

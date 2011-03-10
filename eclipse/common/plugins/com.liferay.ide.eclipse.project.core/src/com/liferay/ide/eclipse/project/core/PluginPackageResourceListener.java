@@ -137,7 +137,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		return false;		
 	}
 
-
 	protected void processResourceChanged(IResourceDelta delta)
 		throws CoreException {
 
@@ -239,7 +238,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 
 	}
 
-
 	protected boolean shouldProcessResourceChangedEvent(IResourceChangeEvent event) {
 		if (event == null) {
 			return false;
@@ -261,7 +259,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 
 		return true;
 	}
-
 
 	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
 		if (delta == null) {

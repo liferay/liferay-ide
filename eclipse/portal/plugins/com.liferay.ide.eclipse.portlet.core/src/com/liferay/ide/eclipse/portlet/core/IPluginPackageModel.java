@@ -40,6 +40,8 @@ public interface IPluginPackageModel extends IModel, IModelChangeProvider {
 
 	String PROPERTY_PORTAL_DEPENDENCY_TLDS = "portal-dependency-tlds";
 
+	String PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS = "required-deployment-contexts";
+
 	String PROPERTY_SHORT_DESCRIPTION = "short-description";
 
 	String PROPERTY_SPEED_FILTERS_ENABLED = "speed-filters-enabled";

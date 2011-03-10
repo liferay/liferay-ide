@@ -183,11 +183,13 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
 		this.setForceSingleLine(true);
 		this.setSingleLine(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, false);
 		this.setSingleLine(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS, false);
+		this.setSingleLine(IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, false);
 	}
 
 	public boolean isWrappedProperty(String key) {
 		return key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS) ||
-			key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS);
+			key.equals(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) ||
+			key.equals(IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS);
 	}
 
 	public void save(Writer out)
