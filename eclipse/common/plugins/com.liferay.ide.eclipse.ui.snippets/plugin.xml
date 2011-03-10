@@ -1504,5 +1504,30 @@
         <variable default="String" description="Type to use for column" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.type_var" name="type"/>
       </item>
     </category>
+    <category
+          contenttypes="org.eclipse.jst.jsp.core.jspsource"
+          description="Useful View Codef Liferay Theme Builder JavaScript Object"
+          id="com.liferay.ide.eclipse.ui.snippets.category.theme.builder"
+          label="Useful View Code"
+          largeicon="icons/snippets/search.png"
+          smallicon="icons/snippets/search.png">
+       <item
+             class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
+             id="com.liferay.ide.eclipse.ui.snippets.item.themeBuilderCompanyId"
+             label="Theme Builder Company Id"
+             largeicon="icons/snippets/tag-generic.gif"
+             smallicon="icons/snippets/tag-generic.gif">
+          <content>
+&lt;%@ taglib uri=&quot;http://liferay.com/tld/theme&quot; prefix=&quot;theme&quot; %&gt;
+&lt;theme:defineObjects /&gt;
+
+Company Id:
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+	document.write(themeDisplay.getCompanyId());
+&lt;/script&gt;
+          </content>
+       </item>
+    </category>
   </extension>
  </plugin>

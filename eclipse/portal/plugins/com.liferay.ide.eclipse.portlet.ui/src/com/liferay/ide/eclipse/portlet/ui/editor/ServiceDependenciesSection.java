@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.ui.ISharedImages;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -51,13 +53,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-public class PortalTldsSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
+public class ServiceDependenciesSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
 
 	private static final int ADD_INDEX = 0;
 	private static final int REMOVE_INDEX = 1;
@@ -65,37 +65,39 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	private static final int DOWN_INDEX = 3;
 
 	private TableViewer fViewer;
-	private Vector<File> fTlds;
+	private Vector<File> fJars;
 	private Action fAddAction;
 	private Action fRemoveAction;
 	private Action fSortAction;
 
-	class PortalTldsContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
+	class PortalJarsContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object parent) {
-			if (fTlds == null) {
-				createTldsArray();
+			if (fJars == null) {
+				createJarsArray();
 			}
-			return fTlds.toArray();
+			return fJars.toArray();
 		}
 	}
 	
-	protected void createTldsArray() {
-		fTlds = new Vector<File>();
+	protected void createJarsArray() {
+		fJars = new Vector<File>();
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] portalTlds = model.getPortalDependencyTlds();
+		String[] portalJars = model.getPortalDependencyJars();
 		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
-		for (String portalTld : portalTlds) {
-			File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim());
-			if (tldFile.isFile() && tldFile.exists()) {
-				fTlds.add(tldFile);
+
+		for (String portalJar : portalJars) {
+			File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim());
+
+			if (jarFile.isFile() && jarFile.exists()) {
+				fJars.add(jarFile);
 			}
 		}
 	}
 	
-	class PortalTldsLabelProvider extends LabelProvider implements ITableLabelProvider {
+	class PortalJarsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FILE);
+			return JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_JAR);
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
@@ -108,10 +110,10 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		
 	}
 
-	public PortalTldsSection(IDEFormPage page, Composite parent, String[] labels) {
+	public ServiceDependenciesSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
-		getSection().setText("Portal Dependency Tlds");
-		getSection().setDescription("Specify which TLDs the plugin package requires.");
+		getSection().setText("Service Dependencies");
+		getSection().setDescription("Specify which services this plugin requires.");
 		getSection().getTextClient().getParent().layout(true);
 		getTablePart().setEditable(true);
 	}
@@ -122,8 +124,8 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		TablePart tablePart = getTablePart();
 		fViewer = tablePart.getTableViewer();
 
-		fViewer.setContentProvider(new PortalTldsContentProvider());
-		fViewer.setLabelProvider(new PortalTldsLabelProvider());
+		fViewer.setContentProvider(new PortalJarsContentProvider());
+		fViewer.setLabelProvider(new PortalJarsLabelProvider());
 		toolkit.paintBordersFor(container);
 		makeActions();
 		section.setClient(container);
@@ -132,7 +134,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		gd.grabExcessVerticalSpace = true;
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
-		section.setText("Portal Dependency Tlds");
+		section.setText("Portal Dependency Jars");
 		createSectionToolbar(section, toolkit);
 		initialize();
 	}
@@ -285,27 +287,25 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 			removedFiles[i] = ((File)iter.next()).getName();
 		}
 		
-		model.removePortalDependencyTlds(removedFiles);
+		model.removePortalDependencyJars(removedFiles);
 		updateButtons();
 	}
 
 	private void handleAdd() {
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] existingTlds = model.getPortalDependencyTlds();
+		String[] existingJars = model.getPortalDependencyJars();
 		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
 		IPath portalDir = editor.getPortalDir();
-		ExternalFileSelectionDialog dialog =
-			new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(
-				portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);
+		ExternalFileSelectionDialog dialog = new ExternalFileSelectionDialog(getPage().getShell(), new PortalJarViewerFilter(portalDir.toFile(), new String[]{"WEB-INF","WEB-INF/lib"}, existingJars), true, false);
 		dialog.setInput(portalDir.toFile());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			Object[] selectedFiles = dialog.getResult();
 			try {
 				for (int i = 0; i < selectedFiles.length; i++) {
-					File tld = (File) selectedFiles[i];
-					if (tld.exists()) {
-						model.addPortalDependencyTld(tld.getName());
+					File jar = (File) selectedFiles[i];
+					if (jar.exists()) {
+						model.addPortalDependencyJar(jar.getName());
 					}
 				}
 			} catch (Exception e) {
@@ -369,7 +369,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	public void refresh() {
-		fTlds = null;
+		fJars = null;
 		fViewer.refresh();
 		super.refresh();
 	}
@@ -380,11 +380,76 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 			return;
 		}
 		
-		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) {
+		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS) {
 			refresh();
 			updateButtons();
 			return;
 		}
+//		if (event.getChangedProperty() == IPluginBase.P_IMPORT_ORDER) {
+//			refresh();
+//			updateButtons();
+//			return;
+//		}
+//
+//		Object[] changedObjects = event.getChangedObjects();
+//		if (changedObjects[0] instanceof IPluginImport) {
+//			int index = 0;
+//			for (int i = 0; i < changedObjects.length; i++) {
+//				Object changeObject = changedObjects[i];
+//				IPluginImport iimport = (IPluginImport) changeObject;
+//				if (event.getChangeType() == IModelChangedEvent.INSERT) {
+//					ImportObject iobj = new ImportObject(iimport);
+//					if (fImports == null) {
+//						// createImportObjects method will find new addition
+//						createImportObjects();
+//					} else {
+//						int insertIndex = getImportInsertIndex();
+//						if (insertIndex < 0) {
+//							// Add Button
+//							fImports.add(iobj);
+//						} else {
+//							// DND
+//							fImports.add(insertIndex, iobj);
+//						}
+//					}
+//				} else {
+//					ImportObject iobj = findImportObject(iimport);
+//					if (iobj != null) {
+//						if (event.getChangeType() == IModelChangedEvent.REMOVE) {
+//							if (fImports == null)
+//								// createImportObjects method will not include the removed import
+//								createImportObjects();
+//							else
+//								fImports.remove(iobj);
+//							Table table = fImportViewer.getTable();
+//							index = table.getSelectionIndex();
+//							fImportViewer.remove(iobj);
+//						} else {
+//							fImportViewer.update(iobj, null);
+//						}
+//					}
+//				}
+//			}
+//			if (event.getChangeType() == IModelChangedEvent.INSERT) {
+//				if (changedObjects.length > 0) {
+//					// Refresh the viewer
+//					fImportViewer.refresh();
+//					// Get the last import added to the viewer
+//					IPluginImport lastImport = (IPluginImport) changedObjects[changedObjects.length - 1];
+		// // Find the corresponding bundle object for the plugin import
+//					ImportObject lastImportObject = findImportObject(lastImport);
+//					if (lastImportObject != null) {
+//						fImportViewer.setSelection(new StructuredSelection(lastImportObject));
+//					}
+//					fImportViewer.getTable().setFocus();
+//				}
+//			} else if (event.getChangeType() == IModelChangedEvent.REMOVE) {
+//				Table table = fImportViewer.getTable();
+//				table.setSelection(index < table.getItemCount() ? index : table.getItemCount() - 1);
+//			}
+//		} else {
+//			fImportViewer.update(((IStructuredSelection) fImportViewer.getSelection()).toArray(), null);
+//		}
 	}
 
 //	public void modelsChanged(PluginModelDelta delta) {
@@ -400,14 +465,12 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 //		}
 //	}
 
-	
 
 	public void setFocus() {
 		if (fViewer != null)
 			fViewer.getTable().setFocus();
 	}
 
-	
 	protected boolean createCount() {
 		return true;
 	}
@@ -425,11 +488,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		return false;
 	}
 
-	
-
-	
-
-	
 	private boolean isTreeViewerSorted() {
 		if (fSortAction == null) {
 			return false;

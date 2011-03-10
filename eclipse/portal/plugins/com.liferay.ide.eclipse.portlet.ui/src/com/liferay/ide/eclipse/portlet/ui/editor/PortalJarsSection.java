@@ -18,6 +18,7 @@ import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
 import com.liferay.ide.eclipse.portlet.ui.action.SortAction;
 import com.liferay.ide.eclipse.ui.form.DefaultContentProvider;
 import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
+import com.liferay.ide.eclipse.ui.form.IDEFormPage;
 import com.liferay.ide.eclipse.ui.form.TablePart;
 import com.liferay.ide.eclipse.ui.form.TableSection;
 import com.liferay.ide.eclipse.ui.wizard.ExternalFileSelectionDialog;
@@ -109,7 +110,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		
 	}
 
-	public PortalJarsSection(DependenciesFormPage page, Composite parent, String[] labels) {
+	public PortalJarsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
 		getSection().setText("Portal Dependency Jars");
 		getSection().setDescription("Specify which jars the plugin package requires.");

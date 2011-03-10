@@ -10,6 +10,10 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.portlet.ui.editor;
 
+import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
+import com.liferay.ide.eclipse.ui.form.IDEFormPage;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -18,10 +22,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
-import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
-import com.liferay.ide.eclipse.ui.form.IDEFormPage;
-
 public class DependenciesFormPage extends IDEFormPage {
 
 	public static final String PAGE_ID = "dependencies"; //$NON-NLS-1$
@@ -29,7 +29,6 @@ public class DependenciesFormPage extends IDEFormPage {
 	public DependenciesFormPage(FormEditor editor) {
 		super(editor, PAGE_ID, "Dependencies");
 	}
-	
 
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
@@ -38,6 +37,7 @@ public class DependenciesFormPage extends IDEFormPage {
 		form.setText("Dependencies");
 		Composite body = form.getBody();
 		body.setLayout(FormLayoutFactory.createFormGridLayout(true, 2));
+
 		Composite left, right;
 		FormToolkit toolkit = managedForm.getToolkit();
 		left = toolkit.createComposite(body, SWT.NONE);
@@ -57,8 +57,6 @@ public class DependenciesFormPage extends IDEFormPage {
 //		managedForm.addPart(new PortalJarsSection(this, left, getRequiredSectionLabels()));
 	}
 
-
-
 	private String[] getRequiredSectionLabels() {
 		return new String[] {
 			"Add...",
@@ -67,6 +65,5 @@ public class DependenciesFormPage extends IDEFormPage {
 //			"Down"
 		};
 	}
-
 
 }

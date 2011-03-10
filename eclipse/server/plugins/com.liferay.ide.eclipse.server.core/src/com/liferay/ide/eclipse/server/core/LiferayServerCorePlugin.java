@@ -21,8 +21,6 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -42,8 +40,6 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 	// The shared instance
 	private static LiferayServerCorePlugin plugin;
-
-	private static PluginPackageResourceListener pluginPackageResourceListener;
 
 	private static IPluginPublisher[] pluginPublishers = null;
 
@@ -177,7 +173,6 @@ public class LiferayServerCorePlugin extends CorePlugin {
 	 * The constructor
 	 */
 	public LiferayServerCorePlugin() {
-		pluginPackageResourceListener = new PluginPackageResourceListener();
 	}
 
 	/*
@@ -190,8 +185,6 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 		plugin = this;
 
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(
-			pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/*
@@ -204,8 +197,5 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 		super.stop(context);
 
-		if (pluginPackageResourceListener != null) {
-			ResourcesPlugin.getWorkspace().removeResourceChangeListener(pluginPackageResourceListener);
-		}
 	}
 }

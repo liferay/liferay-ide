@@ -477,6 +477,13 @@
          </facet>
       </validator>
    </extension>
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="com.liferay.ide.eclipse.project.core.PluginClasspathContainerInitializer"
+            id="com.liferay.ide.eclipse.server.plugin.container">
+      </classpathContainerInitializer>
+   </extension>
    
  
 </plugin>

@@ -15,7 +15,6 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor;
 
-import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.IModelChangedListener;
 import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
@@ -145,7 +144,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		try {
 			index = addPage(editor, getEditorInput());
 
-			setPageText(index, ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+			setPageText(index, "Source");
 		}
 		catch (PartInitException e) {
 			PortletUIPlugin.logError(e);
@@ -166,7 +165,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 	@Override
 	protected void addPages() {
 		addPluginPackageFormPage();
-		addDependenciesFormPage();
+		// addDependenciesFormPage();
 		addPropertiesEditorPage();
 	}
 
@@ -174,7 +173,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		try {
 			int index = addPage(new PluginPackageFormPage(this));
 
-			setPageText(index, "Plugin Package");
+			setPageText(index, "Properties");
 		}
 		catch (PartInitException e) {
 			PortletUIPlugin.logError(e);
@@ -213,12 +212,10 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		InputContext context = null;
 
 		if (object instanceof IFile) {
-			String name = ((IFile) object).getName();
-
-			fInputContextManager.findContext((IFile) object);
+			context = fInputContextManager.findContext((IFile) object);
 		}
 
-		return null;
+		return context;
 	}
 
 	@Override

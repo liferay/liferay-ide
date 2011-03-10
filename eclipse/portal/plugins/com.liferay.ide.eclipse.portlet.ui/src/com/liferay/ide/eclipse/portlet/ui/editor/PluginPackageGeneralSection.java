@@ -37,7 +37,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
 
 /**
  * @author Greg Amerson
@@ -45,25 +44,15 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 public class PluginPackageGeneralSection extends IDESection implements IContextPart, IModelChangedListener {
 
 	protected FormEntry authorEntry;
-
 	protected FormEntry changeLogEntry;
-
 	protected FormEntry licensesEntry;
-
 	protected FormEntry moduleGroupIdEntry;
-
 	protected FormEntry moduleIncrementalVersionEntry;
-
 	protected FormEntry nameEntry;
-
 	protected PluginPackageFormPage page;
-
 	protected FormEntry pageUrlEntry;
-
 	protected FormEntry shortDescriptionEntry;
-
 	protected boolean speedFilterEnabledModifying = false;
-
 	protected Button speedFilters;
 
 	protected FormEntry tagsEntry;
@@ -230,39 +219,30 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 
 	@Override
 	protected void createClient(Section section, FormToolkit toolkit) {
-		TableWrapData data = new TableWrapData(TableWrapData.FILL_GRAB);
-		data.colspan = 2;
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.minimumWidth = 250;
+		gd.grabExcessVerticalSpace = true;
 
 		section.setText("General");
 		section.setDescription("Specify plugin package properties.");
 		section.setLayout(FormLayoutFactory.createClearTableWrapLayout(false, 1));
-		section.setLayoutData(data);
+		section.setLayoutData(gd);
 
 		Composite client = toolkit.createComposite(section);
-		client.setLayout(FormLayoutFactory.createSectionClientGridLayout(false, 6));
+		client.setLayout(FormLayoutFactory.createSectionClientGridLayout(false, 3));
 
 		IActionBars actionBars = page.getEditor().getEditorSite().getActionBars();
 
 		createNameEntry(client, toolkit, actionBars);
-
 		createChangeLogEntry(client, toolkit, actionBars);
-
 		createModuleGroupIdEntry(client, toolkit, actionBars);
-
 		createPageUrlEntry(client, toolkit, actionBars);
-
 		createModuleIncrementalVersionEntry(client, toolkit, actionBars);
-
 		createAuthorEntry(client, toolkit, actionBars);
-
 		createTagsEntry(client, toolkit, actionBars);
-
 		createLicensesEntry(client, toolkit, actionBars);
-
 		createShortDescriptionEntry(client, toolkit, actionBars);
-
 		createSpeedFiltersEntry(client, toolkit, actionBars);
-
 		toolkit.paintBordersFor(client);
 
 		section.setClient(client);

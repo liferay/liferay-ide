@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -43,6 +45,8 @@ public class ProjectCorePlugin extends CorePlugin {
 
 	// The shared instance
 	private static ProjectCorePlugin plugin;
+
+	private static PluginPackageResourceListener pluginPackageResourceListener;
 
 	private static IPortletFramework[] portletFrameworks;
 
@@ -206,6 +210,7 @@ public class ProjectCorePlugin extends CorePlugin {
 	 * The constructor
 	 */
 	public ProjectCorePlugin() {
+		pluginPackageResourceListener = new PluginPackageResourceListener();
 	}
 
 	/*
@@ -220,6 +225,9 @@ public class ProjectCorePlugin extends CorePlugin {
 		super.start(context);
 		
 		plugin = this;
+
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(
+			pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE);
 	}
 
 	/*
@@ -234,6 +242,10 @@ public class ProjectCorePlugin extends CorePlugin {
 		plugin = null;
 		
 		super.stop(context);
+
+		if (pluginPackageResourceListener != null) {
+			ResourcesPlugin.getWorkspace().removeResourceChangeListener(pluginPackageResourceListener);
+		}
 	}
 
 

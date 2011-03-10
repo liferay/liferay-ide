@@ -15,8 +15,8 @@
 
 package com.liferay.ide.eclipse.project.core.library;
 
-import com.liferay.ide.eclipse.server.core.PluginClasspathContainerInitializer;
-import com.liferay.ide.eclipse.server.core.PortletClasspathContainer;
+import com.liferay.ide.eclipse.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.eclipse.project.core.PortletClasspathContainer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;

@@ -4,13 +4,6 @@
    <extension-point id="pluginPublishers" name="Liferay Plugin Publishers" schema="schema/pluginPublishers.exsd"/>
    <extension-point id="runtimeDelegateValidators" name="Liferay Runtime Delegate Validators" schema="schema/runtimeDelegateValidators.exsd"/>
    <extension
-         point="org.eclipse.jdt.core.classpathContainerInitializer">
-      <classpathContainerInitializer
-            class="com.liferay.ide.eclipse.server.core.PluginClasspathContainerInitializer"
-            id="com.liferay.ide.eclipse.server.plugin.container">
-      </classpathContainerInitializer>
-   </extension>
-   <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
       <catalogContribution>
         <public

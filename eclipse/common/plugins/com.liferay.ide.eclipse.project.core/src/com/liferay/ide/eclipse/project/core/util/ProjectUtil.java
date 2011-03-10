@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.project.core.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.IProjectDefinition;
+import com.liferay.ide.eclipse.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
@@ -25,7 +26,6 @@ import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationData
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
-import com.liferay.ide.eclipse.server.core.PluginClasspathContainerInitializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -740,6 +740,7 @@ public class ProjectUtil {
 
 		try {
 			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
+
 			if (facetedProject != null) {
 				for (IProjectFacetVersion facet : facetedProject.getProjectFacets()) {
 					IProjectFacet projectFacet = facet.getProjectFacet();
@@ -754,6 +755,7 @@ public class ProjectUtil {
 		}
 		catch (Exception e) {
 		}
+
 		return retval;
 	}
 
