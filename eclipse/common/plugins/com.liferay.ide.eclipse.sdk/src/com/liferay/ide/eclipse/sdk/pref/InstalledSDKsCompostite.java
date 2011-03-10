@@ -19,24 +19,13 @@ import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.SDKPlugin;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
-import com.liferay.ide.eclipse.server.core.InstallableRuntime2ConfigurationElement;
-import com.liferay.ide.eclipse.server.core.LiferayInstallableRuntime2;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -56,13 +45,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.wst.server.core.internal.InstallableRuntime2;
-import org.eclipse.wst.server.core.internal.ServerPlugin;
 
 /**
  * @author Greg Amerson
@@ -129,21 +115,12 @@ public class InstalledSDKsCompostite extends Composite {
 	}
 
 	protected Button fAddButton;
-
-	protected Button fDownloadButton;
-
 	protected Button fEditButton;
-
 	protected ISelection fPrevSelection;
-
 	protected Button fRemoveButton;
-
 	protected PreferencePage page;
-
 	protected List<SDK> sdkList = new ArrayList<SDK>();
-
 	protected Table table;
-
 	protected CheckboxTableViewer tableViewer;
 
 	public InstalledSDKsCompostite(Composite parent, int style) {
@@ -282,93 +259,7 @@ public class InstalledSDKsCompostite extends Composite {
 			}
 
 		});
-
-		fDownloadButton = SWTUtil.createPushButton(buttons, "Download...", null);
-		fDownloadButton.addListener(SWT.Selection, new Listener() {
-
-			public void handleEvent(Event event) {
-				boolean confirm =
-					MessageDialog.openConfirm(
-						InstalledSDKsCompostite.this.getShell(), "Install Plugin SDK",
-						"Download and install the latest Liferay Plugins SDK?");
-
-				if (!confirm) {
-					return;
-				}
-
-				final InstallableRuntime2 ir =
-					(InstallableRuntime2) ServerPlugin.findInstallableRuntime("com.liferay.ide.eclipse.sdk.60");
-
-				DirectoryDialog dialog = new DirectoryDialog(InstalledSDKsCompostite.this.getShell());
-
-				dialog.setMessage("Select SDK installation directory:");
-
-				String selectedDirectory = dialog.open();
-
-				if (selectedDirectory != null) {
-					final IPath selectedPath =
-						new Path(selectedDirectory).append(((InstallableRuntime2) ir).getArchivePath());
-
-					new Job("Installable SDK runtime update") {
-
-						@Override
-						protected IStatus run(IProgressMonitor monitor) {
-							URL installableUrl = ServerUtil.checkForLatestInstallableRuntime(ir.getId());
-
-							if (installableUrl == null) {
-								try {
-									installableUrl = new URL(((InstallableRuntime2) ir).getArchiveUrl());
-								}
-								catch (MalformedURLException e) {
-									return SDKPlugin.createErrorStatus(e);
-								}
-							}
-
-							InstallableRuntime2ConfigurationElement config =
-								new InstallableRuntime2ConfigurationElement(
-									(InstallableRuntime2) ir, installableUrl.toString());
-
-							LiferayInstallableRuntime2 pir = new LiferayInstallableRuntime2(config);
-
-							pir.install(selectedPath);
-
-							final SDK newSDK = SDKUtil.createSDKFromLocation(selectedPath);
-
-							SDK existingSDK = SDKManager.getInstance().getSDK(newSDK.getName());
-
-							int count = 1;
-
-							String originalName = newSDK.getName();
-
-							while (existingSDK != null) {
-								newSDK.setName(originalName + "(" + (count++) + ")");
-
-								existingSDK = SDKManager.getInstance().getSDK(newSDK.getName());
-							}
-
-							SDKManager.getInstance().addSDK(newSDK);
-
-							InstalledSDKsCompostite.this.getDisplay().asyncExec(new Runnable() {
-
-								public void run() {
-									sdkList.add(newSDK);
-
-									InstalledSDKsCompostite.this.tableViewer.refresh();
-
-									ensureDefaultSDK();
-
-									InstalledSDKsCompostite.this.tableViewer.refresh();
-								}
-							});
-
-							return Status.OK_STATUS;
-						}
-
-					}.schedule();
-				}
-			}
-		});
-
+	
 		setSDKs(SDKManager.getInstance().getSDKs());
 
 		enableButtons();

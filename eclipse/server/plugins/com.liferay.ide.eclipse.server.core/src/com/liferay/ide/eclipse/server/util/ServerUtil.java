@@ -17,15 +17,11 @@ package com.liferay.ide.eclipse.server.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
-import com.liferay.ide.eclipse.server.core.IServerConstants;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IProject;
@@ -59,44 +55,6 @@ public class ServerUtil {
 	protected static final IStatus installDirDoesNotExist = createErrorStatus("Install directory does not exist.");
 
 	protected static final IStatus invalidInstallDirStatus = createErrorStatus("Invalid installation directory.");
-
-	/*
-	 * public static ServerInstallSpec verifyInstallationPath(IPath path, String serverId) { ServerInstallSpec spec =
-	 * new ServerInstallSpec(); if (path == null) { spec.setStatus(emptyInstallDirStatus); return spec; } String dir =
-	 * path.toOSString(); if (dir.trim().length() == 0) { spec.setStatus(emptyInstallDirStatus); return spec; } File
-	 * file = new File(dir); if (!file.exists()) { spec.setStatus(installDirDoesNotExist); return spec; } if
-	 * (!dir.endsWith(File.separator)) { dir += File.separator; } // need to figure out if we have a valid bundle
-	 * ServerInstallSpec[] serverSpecs = PortalServerCorePlugin.readServerInstallSpecs(); for (ServerInstallSpec
-	 * serverSpec : serverSpecs) { IStatus result = serverSpec.checkInstallationDir(dir); if (result != null &&
-	 * result.isOK()) { return serverSpec; } } spec.setStatus(invalidInstallDirStatus); return spec; }
-	 */
-
-	// public static PortalRuntime getPortalRuntime(IRuntime runtime) {
-	// return runtime != null ? (PortalRuntime)
-	// runtime.loadAdapter(PortalRuntime.class, null) : null;
-	// }
-
-	public static URL checkForLatestInstallableRuntime(String id) {
-
-		try {
-			URL url = new URL(IServerConstants.INSTALLABLE_UPDATE_URL);
-
-			InputStream is = url.openStream();
-
-			Properties props = new Properties();
-
-			props.load(is);
-
-			String installableUrl = props.getProperty(id);
-
-			return new URL(installableUrl);
-		}
-		catch (Exception e) {
-			// best effort
-		}
-
-		return null;
-	}
 
 	public static IStatus createErrorStatus(String msg) {
 		return new Status(IStatus.ERROR, LiferayServerCorePlugin.PLUGIN_ID, msg);
