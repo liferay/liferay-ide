@@ -60,8 +60,8 @@
 		<zip destfile="dist/liferay-ide-eclipse-updatesite-${version}.zip" basedir="dist/updatesite" includes="**/*"></zip>
 		
 <echo file="${basedir}/dist/updatesite/installable.properties">
-com.liferay.ide.eclipse.server.tomcat.runtime.60=http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.5/liferay-portal-tomcat-6.0.5.zip
-com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.5/liferay-plugins-sdk-6.0.5.zip
+com.liferay.ide.eclipse.server.tomcat.runtime.60=http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.6/liferay-portal-tomcat-6.0.6-20110225.zip
+com.liferay.ide.eclipse.sdk.60=http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.0.6/liferay-plugins-sdk-6.0.6-20110225.zip
 </echo>
 		
 	</target>
