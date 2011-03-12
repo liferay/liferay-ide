@@ -60,17 +60,17 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.ide.IDE.SharedImages;
 
-public class ServiceDependenciesSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
+public class RequiredDeploymentContextsSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
 
-	class ServiceDependenciesContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
+	class ContextsContentProvider extends DefaultContentProvider implements IStructuredContentProvider {
 		public Object[] getElements(Object parent) {
-			if (serviceDeps == null) {
+			if (contexts == null) {
 				createServiceDepsArray();
 			}
-			return serviceDeps.toArray();
+			return contexts.toArray();
 		}
 	}
-	class ServiceDependenciesLabelProvider extends LabelProvider implements ITableLabelProvider {
+	class ContextsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(SharedImages.IMG_OBJ_PROJECT);
@@ -96,12 +96,12 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 
 	private TableViewer fViewer;
 	
-	private Vector<String> serviceDeps;
+	private Vector<String> contexts;
 	
-	public ServiceDependenciesSection(IDEFormPage page, Composite parent, String[] labels) {
+	public RequiredDeploymentContextsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
-		getSection().setText("Service Dependencies");
-		getSection().setDescription("Specify which services this plugin requires.");
+		getSection().setText("Required Deployment Contexts");
+		getSection().setDescription("Specify which plugins are required to be deployed before this plugin.");
 		getSection().getTextClient().getParent().layout(true);
 		getTablePart().setEditable(true);
 	}
@@ -112,8 +112,8 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 		TablePart tablePart = getTablePart();
 		fViewer = tablePart.getTableViewer();
 
-		fViewer.setContentProvider(new ServiceDependenciesContentProvider());
-		fViewer.setLabelProvider(new ServiceDependenciesLabelProvider());
+		fViewer.setContentProvider(new ContextsContentProvider());
+		fViewer.setLabelProvider(new ContextsLabelProvider());
 		toolkit.paintBordersFor(container);
 		makeActions();
 		section.setClient(container);
@@ -197,7 +197,7 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 	}
 
 	public void refresh() {
-		serviceDeps = null;
+		contexts = null;
 		fViewer.refresh();
 		super.refresh();
 	}
@@ -394,10 +394,10 @@ public class ServiceDependenciesSection extends TableSection implements IModelCh
 	}
 
 	protected void createServiceDepsArray() {
-		serviceDeps = new Vector<String>();
+		contexts = new Vector<String>();
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
 		String[] requiredDeploymentContexts = model.getRequiredDeploymentContexts();
-		Collections.addAll(serviceDeps, requiredDeploymentContexts);
+		Collections.addAll(contexts, requiredDeploymentContexts);
 	}
 
 	/* (non-Javadoc)

@@ -79,12 +79,12 @@ public class PluginPackageFormPage extends IDEFormPage {
 		PortalTldsSection tldsSection = new PortalTldsSection(this, right, getPortalSectionLabels());
 		managedForm.addPart(tldsSection);
 
-		ServiceDependenciesSection serviceSection =
-			new ServiceDependenciesSection(this, right, getServiceSectionLabels());
-		managedForm.addPart(serviceSection);
+		RequiredDeploymentContextsSection contextsSection =
+			new RequiredDeploymentContextsSection(this, right, getContextsSectionLabels());
+		managedForm.addPart(contextsSection);
 	}
 
-	private String[] getServiceSectionLabels() {
+	private String[] getContextsSectionLabels() {
 		return new String[] { "Add...", "Remove", "Up", "Down" };
 	}
 

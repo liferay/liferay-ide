@@ -222,7 +222,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 
-		if (this.lastPageIndex == 2 && newPageIndex != 2) {
+		if (this.lastPageIndex == 1 && newPageIndex != 1) {
 			String props = editor.getDocumentProvider().getDocument(getEditorInput()).get();
 
 			try {
