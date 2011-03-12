@@ -152,6 +152,18 @@
 					<adapt type="org.eclipse.core.resources.IProject">
 			  			<test forcePluginActivation="true"
 							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.hook" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
+							value="true" />
+					</adapt>
+				</and>
+				<and>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
 							value="liferay.portlet" />
 					</adapt>
 					<adapt type="org.eclipse.core.resources.IProject">
