@@ -20,6 +20,8 @@ import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -69,6 +71,10 @@ public abstract class SDKJob extends Job {
 		}
 
 		return null;
+	}
+
+	protected IWorkspace getWorkspace() {
+		return ResourcesPlugin.getWorkspace();
 	}
 
 	protected void setProject(IProject project) {

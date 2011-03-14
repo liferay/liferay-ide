@@ -362,6 +362,26 @@ public class ProjectUtil {
 		return fpjwc.getProject();
 	}
 
+	public static IFile findServiceJarForContext(String context) {
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+		for (IProject project : projects) {
+			if (project.getName().equals(context)) {
+				IFolder docroot = getDocroot(project);
+
+				if (docroot != null && docroot.exists()) {
+					IFile serviceJar = docroot.getFile("WEB-INF/lib/" + project.getName() + "-service.jar");
+
+					if (serviceJar.exists()) {
+						return serviceJar;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
 	/** IDE-270 */
 	public static void fixExtProjectSrcFolderLinks(IProject extProject)
 		throws JavaModelException {

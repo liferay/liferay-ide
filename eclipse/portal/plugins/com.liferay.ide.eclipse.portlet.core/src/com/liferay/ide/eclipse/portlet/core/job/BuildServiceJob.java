@@ -19,34 +19,28 @@ import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
-import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.core.ClasspathEntry;
+import org.eclipse.jst.common.jdt.internal.classpath.FlexibleProjectContainer;
+import org.eclipse.jst.j2ee.internal.common.classpath.J2EEComponentClasspathContainerUtils;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "deprecation"
-})
+@SuppressWarnings("restriction")
 public class BuildServiceJob extends SDKJob {
 
 	protected IFile serviceXmlFile;
@@ -59,49 +53,13 @@ public class BuildServiceJob extends SDKJob {
 		setProject(serviceXmlFile.getProject());
 	}
 
-	protected void disableBuildAndRefresh()
-		throws CoreException {
 
-		IWorkspaceDescription desc = getWorkspace().getDescription();
-		desc.setAutoBuilding(false);
-
-		Preferences resourcePrefs = ResourcesPlugin.getPlugin().getPluginPreferences();
-		resourcePrefs.setValue(ResourcesPlugin.PREF_AUTO_REFRESH, false);
-
-		getWorkspace().setDescription(desc);
-	}
-
-	protected IWorkspace getWorkspace() {
-		return ResourcesPlugin.getWorkspace();
-	}
-
-	protected void reenableBuildAndRefresh(boolean saveAutoBuild, boolean saveAutoRefresh)
-		throws CoreException {
-
-		IWorkspaceDescription desc = getWorkspace().getDescription();
-
-		desc.setAutoBuilding(saveAutoBuild);
-
-		final Preferences resourcePrefs = ResourcesPlugin.getPlugin().getPluginPreferences();
-
-		resourcePrefs.setValue(ResourcesPlugin.PREF_AUTO_REFRESH, saveAutoRefresh);
-
-		getWorkspace().setDescription(desc);
-	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		final IStatus[] retval = new IStatus[1];
+		IStatus retval = null;
 
 		monitor.beginTask("Building Liferay services...", 100);
-
-		IWorkspaceDescription desc = getWorkspace().getDescription();
-
-		final boolean saveAutoBuild = desc.isAutoBuilding();
-
-		final Preferences resourcePrefs = ResourcesPlugin.getPlugin().getPluginPreferences();
-
-		final boolean saveAutoRefresh = resourcePrefs.getBoolean(ResourcesPlugin.PREF_AUTO_REFRESH);
 
 		try {
 			getWorkspace().run(new IWorkspaceRunnable() {
@@ -109,66 +67,23 @@ public class BuildServiceJob extends SDKJob {
 				public void run(IProgressMonitor monitor)
 					throws CoreException {
 
-					disableBuildAndRefresh();
-
 					runBuildService(monitor);
 
-					reenableBuildAndRefresh(saveAutoBuild, saveAutoRefresh);
-
 					getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+					ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+
+					updateClasspath(project);
 				}
 			}, monitor);
 
 			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 		catch (CoreException e1) {
-			retval[0] = PortletCore.createErrorStatus(e1);
-		}
-		finally {
-			try {
-				getWorkspace().run(new IWorkspaceRunnable() {
-
-					public void run(IProgressMonitor monitor)
-						throws CoreException {
-
-						reenableBuildAndRefresh(saveAutoBuild, saveAutoRefresh);
-					}
-				}, monitor);
-			}
-			catch (CoreException e1) {
-				retval[0] = PortletCore.createErrorStatus(e1);
-			}
+			retval = PortletCore.createErrorStatus(e1);
 		}
 
-		new Job("Build service classpath update") {
-
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					IJavaProject javaProject = JavaCore.create(project);
-
-					List<IClasspathEntry> existingRawClasspath = Arrays.asList(javaProject.getRawClasspath());
-
-					updateClasspath(existingRawClasspath, javaProject);
-
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-
-					if (!(project.isSynchronized(IResource.DEPTH_INFINITE))) {
-						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					}
-
-					reenableBuildAndRefresh(saveAutoBuild, saveAutoRefresh);
-				}
-				catch (Exception e) {
-					PortletCore.logError(e);
-				}
-
-				return Status.OK_STATUS;
-			}
-
-		}.schedule();
-
-		return retval[0] == null || retval[0].isOK() ? Status.OK_STATUS : retval[0];
+		return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
 	}
 
 	protected void runBuildService(IProgressMonitor monitor) {
@@ -181,37 +96,31 @@ public class BuildServiceJob extends SDKJob {
 		monitor.worked(90);
 	}
 
-	protected IStatus updateClasspath(List<IClasspathEntry> existingRawClasspath, IJavaProject javaProject) {
-		for (IClasspathEntry entry : existingRawClasspath) {
-			if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-				entry.getPath().toString().equals("org.eclipse.jst.j2ee.internal.web.container")) {
+	protected IStatus updateClasspath(IProject project) throws CoreException {
+		FlexibleProjectContainer container =
+			J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
-				try {
-					IClasspathContainer container = JavaCore.getClasspathContainer(entry.getPath(), javaProject);
+		container.refresh(true);
+		
+		container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
-					IClasspathEntry[] webappEntries = container.getClasspathEntries();
+		IClasspathEntry[] webappEntries = container.getClasspathEntries();
 
-					for (IClasspathEntry entry2 : webappEntries) {
-						if (entry2.getPath().lastSegment().equals(getProject().getName() + "-service.jar")) {
-							((ClasspathEntry) entry2).sourceAttachmentPath =
-								getProject().getFolder("docroot/WEB-INF/service").getFullPath();
-
-							break;
-						}
-					}
-
-					ClasspathContainerInitializer initializer =
-						JavaCore.getClasspathContainerInitializer("org.eclipse.jst.j2ee.internal.web.container");
-
-					initializer.requestClasspathContainerUpdate(entry.getPath(), javaProject, container);
-				}
-				catch (Exception e) {
-					return PortletCore.createErrorStatus(e);
-				}
+		for (IClasspathEntry entry2 : webappEntries) {
+			if (entry2.getPath().lastSegment().equals(getProject().getName() + "-service.jar")) {
+				((ClasspathEntry) entry2).sourceAttachmentPath =
+					getProject().getFolder("docroot/WEB-INF/service").getFullPath();
 
 				break;
 			}
 		}
+
+		ClasspathContainerInitializer initializer =
+			JavaCore.getClasspathContainerInitializer("org.eclipse.jst.j2ee.internal.web.container");
+
+		IJavaProject javaProject = JavaCore.create(project);
+
+		initializer.requestClasspathContainerUpdate(container.getPath(), javaProject, container);
 
 		return Status.OK_STATUS;
 	}

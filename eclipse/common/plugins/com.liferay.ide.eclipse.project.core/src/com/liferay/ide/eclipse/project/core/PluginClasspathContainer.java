@@ -93,13 +93,15 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 					entries.add(createPortalJarClasspathEntry(pluginPackageJar));
 				}			}
 
-			for (String context : getRequiredDeploymentContexts()) {
-				IClasspathEntry entry = createContextClasspathEntry(context);
+			// following code is now done by PluginPackageResourceListener.processRequiredDeploymentContexts
 
-				if (entry != null) {
-					entries.add(entry);
-				}
-			}
+			// for (String context : getRequiredDeploymentContexts()) {
+			// IClasspathEntry entry = createContextClasspathEntry(context);
+			//
+			// if (entry != null) {
+			// entries.add(entry);
+			// }
+			// }
 
 			this.classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
 		}
@@ -142,27 +144,15 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected IClasspathEntry createContextClasspathEntry(String context) {
 		IClasspathEntry entry = null;
 
-		// first look for jar in a project with same name as context
-		// if it is not available, look for a project in deployed
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		IFile serviceJar = ProjectUtil.findServiceJarForContext(context);
 
-		for (IProject project : projects) {
-			if (project.getName().equals(context)) {
-				// check to see if the project that has a service jar
+		if (serviceJar.exists()) {
+			IFolder docroot = ProjectUtil.getDocroot(serviceJar.getProject());
+			IFolder serviceFolder = docroot.getFolder("WEB-INF/service");
 
-				IFolder docroot = ProjectUtil.getDocroot(project);
-
-				IFile serviceJar = docroot.getFile("WEB-INF/lib/" + project.getName() + "-service.jar");
-				IFolder serviceFolder = docroot.getFolder("WEB-INF/service");
-
-				if (serviceJar.exists()) {
-					entry =
-						createClasspathEntry(
-							serviceJar.getLocation(), serviceFolder.exists() ? serviceFolder.getLocation() : null);
-
-					break;
-				}
-			}
+			entry =
+				createClasspathEntry(serviceJar.getLocation(), serviceFolder.exists()
+					? serviceFolder.getLocation() : null);
 		}
 
 		if (entry == null) {
@@ -176,13 +166,13 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 				ProjectUtil.isPortletProject(project) ? "portlets" : ProjectUtil.isHookProject(project)
 					? "hooks" : ProjectUtil.isExtProject(project) ? "ext" : "";
 
-			IPath serviceJar =
+			IPath serviceJarPath =
 				sdkLocation.append(type).append(context).append("docroot/WEB-INF/lib").append(context + "-service.jar");
 
-			if (serviceJar.toFile().exists()) {
-				IPath servicePath = serviceJar.removeLastSegments(2).append("service");
+			if (serviceJarPath.toFile().exists()) {
+				IPath servicePath = serviceJarPath.removeLastSegments(2).append("service");
 
-				entry = createClasspathEntry(serviceJar, servicePath.toFile().exists() ? servicePath : null);
+				entry = createClasspathEntry(serviceJarPath, servicePath.toFile().exists() ? servicePath : null);
 			}
 		}
 

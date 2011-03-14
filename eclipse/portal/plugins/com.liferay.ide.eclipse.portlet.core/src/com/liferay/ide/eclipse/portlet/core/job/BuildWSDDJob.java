@@ -19,26 +19,15 @@ import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.IClasspathContainer;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.core.ClasspathEntry;
 
 /**
  * @author Greg Amerson
@@ -60,110 +49,40 @@ public class BuildWSDDJob extends SDKJob {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
+		IStatus retval = null;
+
 		monitor.beginTask("Building Liferay web services deployment descriptor...", 100);
 
-		IWorkspaceDescription desc = ResourcesPlugin.getWorkspace().getDescription();
-
-		boolean saveAutoBuild = desc.isAutoBuilding();
-
-		desc.setAutoBuilding(false);
-
 		try {
-			ResourcesPlugin.getWorkspace().setDescription(desc);
-
-			SDK sdk = getSDK();
-
-			monitor.worked(10);
-
-			sdk.buildWSDD(getProject(), serviceXmlFile, null);
-
-			monitor.worked(90);
-
-			final IProject project = getProject();
-
-			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-			project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-
-			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
+			getWorkspace().run(new IWorkspaceRunnable() {
 
 				public void run(IProgressMonitor monitor)
 					throws CoreException {
 
-					List<IClasspathEntry> existingRawClasspath = null;
+					SDK sdk = getSDK();
 
-					try {
-						IJavaProject javaProject = JavaCore.create(project);
+					monitor.worked(10);
 
-						existingRawClasspath = Arrays.asList(javaProject.getRawClasspath());
+					sdk.buildWSDD(getProject(), serviceXmlFile, null);
 
-						updateClasspath(existingRawClasspath, javaProject);
+					monitor.worked(90);
 
-						project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					}
-					catch (Exception e) {
-						PortletCore.logError(e);
-					}
+					final IProject project = getProject();
 
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 				}
-			}, null);
+			}, monitor);
 
-			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-
+			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}
 		catch (CoreException e1) {
-			return PortletCore.createErrorStatus(e1);
-		}
-		finally {
-			desc = ResourcesPlugin.getWorkspace().getDescription();
-
-			desc.setAutoBuilding(saveAutoBuild);
-
-			try {
-				ResourcesPlugin.getWorkspace().setDescription(desc);
-			}
-			catch (CoreException e) {
-				return PortletCore.createErrorStatus(e);
-			}
+			retval = PortletCore.createErrorStatus(e1);
 		}
 
-		return Status.OK_STATUS;
-	}
-
-	protected IStatus updateClasspath(List<IClasspathEntry> existingRawClasspath, IJavaProject javaProject) {
-		for (IClasspathEntry entry : existingRawClasspath) {
-			if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-				entry.getPath().toString().equals("org.eclipse.jst.j2ee.internal.web.container")) {
-
-				try {
-					IClasspathContainer container = JavaCore.getClasspathContainer(entry.getPath(), javaProject);
-
-					IClasspathEntry[] webappEntries = container.getClasspathEntries();
-
-					for (IClasspathEntry entry2 : webappEntries) {
-						if (entry2.getPath().lastSegment().equals(getProject().getName() + "-service.jar")) {
-							((ClasspathEntry) entry2).sourceAttachmentPath =
-								getProject().getFolder("docroot/WEB-INF/service").getFullPath();
-
-							break;
-						}
-					}
-				}
-				catch (JavaModelException e) {
-					return PortletCore.createErrorStatus(e);
-				}
-
-				break;
-			}
-		}
-
-		try {
-			javaProject.setRawClasspath(existingRawClasspath.toArray(new IClasspathEntry[0]), null);
-		}
-		catch (JavaModelException e) {
-			return PortletCore.createErrorStatus(e);
-		}
-
-		return Status.OK_STATUS;
+		return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
 	}
 
 }
