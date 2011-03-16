@@ -17,7 +17,7 @@ Additionally, you can create a new portlet, hook, service, or layout template wi
 h1. Creating New Portlets
 
 # You can create a new portlet within an existing project by selecting Liferay Portlet from the Eclipse File menu (File > New > Liferay Portlet). <br/><br/>!images/lide_new_portlet.png!<br/><br/>
-# You will input the information required to create a portlet class on this screen.
+# On this page, you will input the information required to create a portlet class.
 # Under Portlet plug-in project, choose a name for your portlet.
 # The Source folder determines the location of the file directory for your portlet project.
 # Portet class specifies the name of the Java class that your portlet extends: NewPortlet.
@@ -53,5 +53,9 @@ h1. Creating New Services
 
 h1. Creating Layout Templates
 
-# You can create a new layout template plug-in project with Liferay IDE by selecting Liferay Layout Template from the Eclipse File menu. (File > New > Liferay Layout Template).
+# You can create a new layout template with Liferay IDE by selecting Liferay Layout Template from the Eclipse File menu. (File > New > Liferay Layout Template). <br/><br/>!images/lide_new_layout_template.png!<br/><br/>
+# To create a liferay layout template, you first need to select a Layout plug-in project.
+# You need to enter a name and an ID for your layout template.
+# You also need to specify the location of both a template file and WAP template file for your layout temple.
+# After you specify the location of a thumbnail file for your template, click Finish and your project should build for you.
 
