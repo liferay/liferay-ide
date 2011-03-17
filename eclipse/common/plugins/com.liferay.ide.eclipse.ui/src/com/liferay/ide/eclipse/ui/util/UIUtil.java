@@ -26,6 +26,7 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -45,6 +46,19 @@ public class UIUtil {
 				// ignore
 			}
 		}
+	}
+
+	public static Shell getActiveShell() {
+		final Shell[] retval = new Shell[1];
+
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				retval[0] = Display.getDefault().getActiveShell();
+			}
+		});
+
+		return retval[0];
 	}
 
 	public static ImageDescriptor getPluginImageDescriptor(String symbolicName, String imagePath) {
@@ -97,6 +111,19 @@ public class UIUtil {
 			}
 
 		});
+	}
+
+	public static boolean promptQuestion(final String title, final String message) {
+		final boolean[] retval = new boolean[1];
+
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				retval[0] = MessageDialog.openQuestion(getActiveShell(), title, message);
+			}
+		});
+
+		return retval[0];
 	}
 
 	public static IViewPart showView(String viewId) {
