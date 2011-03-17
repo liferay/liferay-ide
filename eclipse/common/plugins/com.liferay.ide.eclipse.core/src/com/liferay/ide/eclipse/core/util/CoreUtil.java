@@ -36,8 +36,10 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.osgi.framework.Version;
 
 /**
@@ -128,6 +130,10 @@ public class CoreUtil {
 		return val == null || val.equals("") || val.trim().equals("");
 	}
 
+	public static IProgressMonitor newSubMonitor(final IProgressMonitor parent, final int ticks) {
+		return (parent == null ? null : new SubProgressMonitor(parent, ticks));
+	}
+
 	public static void prepareFolder(IFolder folder)
 		throws CoreException {
 
@@ -175,7 +181,6 @@ public class CoreUtil {
 		return out.toString();
 	}
 
-
 	public static Version readVersionFile(File versionInfoFile) {
 		String versionContents = FileUtil.readContents(versionInfoFile);
 
@@ -194,5 +199,4 @@ public class CoreUtil {
 
 		return version;
 	}
-
 }
