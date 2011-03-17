@@ -53,8 +53,6 @@ public class BuildServiceJob extends SDKJob {
 		setProject(serviceXmlFile.getProject());
 	}
 
-
-
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		IStatus retval = null;
@@ -86,8 +84,13 @@ public class BuildServiceJob extends SDKJob {
 		return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
 	}
 
-	protected void runBuildService(IProgressMonitor monitor) {
+	protected void runBuildService(IProgressMonitor monitor) throws CoreException {
 		SDK sdk = getSDK();
+
+		if (sdk == null) {
+			throw new CoreException(
+				PortletCore.createErrorStatus("Could not determine the SDK name for project. Specify correct SDK in Liferay Project Properties page"));
+		}
 
 		monitor.worked(50);
 
