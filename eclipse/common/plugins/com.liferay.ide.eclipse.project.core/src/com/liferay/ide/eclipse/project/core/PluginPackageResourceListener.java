@@ -434,6 +434,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		IFolder docroot = ProjectUtil.getDocroot(file.getProject());
 
 		if (docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf(file.getFullPath())) {
+			System.out.println("processing change to file: " + file.getFullPath());
 			return true;
 		}
 

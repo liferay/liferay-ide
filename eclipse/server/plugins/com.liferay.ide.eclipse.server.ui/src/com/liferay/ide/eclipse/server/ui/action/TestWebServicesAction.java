@@ -55,13 +55,14 @@ public class TestWebServicesAction extends AbstractServerRunningAction {
 
 		URL webServicesListURL = null;
 		if (selectedServer != null) {
-			ILiferayServer portalServer = (ILiferayServer) selectedServer.getAdapter(ILiferayServer.class);
+			ILiferayServer portalServer = (ILiferayServer) selectedServer.loadAdapter(ILiferayServer.class, null);
 	
 			webServicesListURL = portalServer.getWebServicesListURL();		
 		}
 		else if (selectedModule != null) {
 			selectedModule.getModule()[0].getProject();
-			ILiferayServer portalServer = (ILiferayServer) selectedModule.getServer().getAdapter(ILiferayServer.class);
+			ILiferayServer portalServer =
+				(ILiferayServer) selectedModule.getServer().loadAdapter(ILiferayServer.class, null);
 			try {
 				webServicesListURL = new URL(portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/axis");
 			} catch (MalformedURLException e) {

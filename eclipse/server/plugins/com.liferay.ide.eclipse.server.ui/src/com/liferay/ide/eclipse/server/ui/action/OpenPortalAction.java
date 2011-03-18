@@ -16,10 +16,12 @@
 package com.liferay.ide.eclipse.server.ui.action;
 
 import com.liferay.ide.eclipse.server.core.ILiferayServer;
+import com.liferay.ide.eclipse.server.ui.LiferayServerUIPlugin;
 
 import java.net.URL;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wst.server.core.IServer;
@@ -37,10 +39,17 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 
 	public void run(IAction action) {
 		if (selectedServer != null) {
-			ILiferayServer portalServer = (ILiferayServer) selectedServer.getAdapter(ILiferayServer.class);
+			ILiferayServer portalServer = (ILiferayServer) selectedServer.loadAdapter(ILiferayServer.class, null);
 			
 			URL portalHome = portalServer.getPortalHomeUrl();
 			
+			if (portalHome == null) {
+				MessageDialog.openError(
+					getActiveShell(), "Open Portal Home",
+					"Could not determine portal home URL. Please make sure the server is properly configured.");
+				return;
+			}
+
 			try {
 				IWorkbenchBrowserSupport browserSupport =
 					ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
@@ -52,6 +61,7 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 				browser.openURL(portalHome);
 			}
 			catch (Exception e) {
+				LiferayServerUIPlugin.logError(e);
 			}
 		}
 	}
