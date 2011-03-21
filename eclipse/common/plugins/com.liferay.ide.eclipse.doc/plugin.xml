@@ -8,7 +8,7 @@
             primary="true">
       </toc>
       <toc
-            file="help/gettingstarted/gettingstarted-toc.xml"
+            file="help/gettingstarted/getting-started-toc.xml"
             primary="false">
       </toc>
       <toc
@@ -17,6 +17,10 @@
       </toc>
       <toc
             file="help/tasks/creating-new-projects-toc.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/gettingstarted/installing-ide-toc.xml"
             primary="false">
       </toc>
    </extension>

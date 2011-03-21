@@ -1,14 +1,14 @@
-<div style="font-size:2em">Importing Existing Projects into Liferay IDE</div>
+h1. Importing Existing Projects
 
 {toc}
 
-h1. Requirements for this Task
+h2. Requirements for this Task
 
 * Liferay IDE 1.2 "See Installation Guide":http://www.liferay.com/de/community/wiki/-/wiki/Main/Liferay+IDE+Installation+Guide 
 * Liferay Portal 6.0.x
 * Liferay Plugins SDK 6.0.x
 
-h1. Existing Project Types
+h2. Existing Project Types
 
 p. Below are the types of projects that are possible to import as Liferay IDE projects.
 
@@ -16,7 +16,7 @@ p. Below are the types of projects that are possible to import as Liferay IDE pr
 * Projects already in Eclipse but not Liferay IDE (don't have Liferay facet or target runtime)
 * Existing Liferay IDE projects from another version of Liferay IDE or workspace
 
-h1. Importing Guides by Type
+h2. Importing Guides by Type
 
 p. Depending on which type of project you are importing (from previous section) you will need to choose that particular type guide from below (links to other sections in this document)
 
@@ -24,13 +24,13 @@ p. Depending on which type of project you are importing (from previous section) 
 * "Import Guide: Existing Eclipse project but not a Liferay IDE project":#non-ide-guide
 * "Import Guide: Existing Liferay IDE project":#ide-guide
 
-h1(#non-eclipse-guide). Import Guide: Existing Liferay Project not in an Eclipse workspace 
+h2(#non-eclipse-guide). Import Guide: Existing Liferay Project not in an Eclipse workspace 
 
 p. An existing Liferay project that has been created by the Plugins SDK but has not yet been added to an Eclipse workspace or have not been added to the current workspace open in Eclipse/Liferay IDE.  These projects may or may not have .project or .classpath files.  Whether they do or don't this guide will use the same wizard.
 
 p. There are two options for create projects from existing source, "Option #1":#option-1 is for just one project, "Option 2":#option-2 is for performing the import for multiple projects in the same SDK. 
 
-h2(#option-1). Create Project from Existing Source wizard
+h3(#option-1). Create Project from Existing Source wizard
 
 p. **Note** This option assumes that you have Liferay plug-ins SDK directory structure and you have previously created projects inside of that directory structure.  
 
@@ -41,7 +41,7 @@ p. **Note** This option assumes that you have Liferay plug-ins SDK directory str
 # Click Finish to perform the import
 # See the section "Verify Correct Project Configuration":#verify to verify that your project was configured correctly as a Liferay IDE project.
 
-h2(#option-2). Create Multiple Projects from Existing SDK
+h3(#option-2). Create Multiple Projects from Existing SDK
 
 **Note** This option assumes that you have Liferay plug-ins SDK and you have previous created projects inside of that directory structure.  
 
@@ -57,13 +57,13 @@ h2(#option-2). Create Multiple Projects from Existing SDK
 # Click Finish
 # See the section "Verify Correct Project Configuration":#verify to verify that your project was configured correctly as a Liferay IDE project.
 
-h1(#non-ide-guide). Import Guide: Existing Eclipse, non-Liferay IDE project
+h2(#non-ide-guide). Import Guide: Existing Eclipse, non-Liferay IDE project
 
 p. If your project is not in your Eclipse workspace, you can use the first set of steps above "(Create Project from Existing Source wizard)":#non-eclipse-guide
     
 p. If your project is already in your workspace (see it in project explorer) but is not yet a Liferay IDE project, the following steps can be used to convert the project.
 
-h2. Convert Liferay Project Wizard
+h3. Convert Liferay Project Wizard
 
 # In Eclipse, right click the eclipse project that you want to convert, select Liferay > Convert to Liferay plug-in project. <br/><br/>!images/existing-project-convert-action.png!<br/><br/>
 **Note** if you don't have a convert action available it means the project is either already a Liferay IDE project or it is not a faceted project with Java and Dynamic Web project facets configured and will need to be configured accordingly.
@@ -73,7 +73,7 @@ h2. Convert Liferay Project Wizard
 # Click Finish
 # See the section "Verify Correct Project Configuration":#verify to verify that your project was configured correctly as a Liferay IDE project.
 
-h1(#ide-guide). Import Guide: Existing Liferay IDE project 
+h2(#ide-guide). Import Guide: Existing Liferay IDE project 
 
 p. If you have previously created or converted a Liferay IDE project in your workspace but it is no longer in the current workspace there are a couple of options for importing this project.  Either use "(Create Project from Existing Source wizard)":#non-eclipse-guide or follow the steps listed below:
 
@@ -86,9 +86,7 @@ p. If you have previously created or converted a Liferay IDE project in your wor
 
 p. **Note** if you have any errors it may be that either the SDK name used in that project or the runtime id used doesn't exist in your new workspace.  You can modify the SDK name in the __Project Properties > Liferay page__ and you can modify the targeted runtime in the __Project properties > Targeted Runtimes page__.
 
-h1(#verify). Verify Project Import Success
-
-
+h2(#verify). Verify Project Import Success
 
 # Once the project import process is finished, you should see a new project inside Eclipse and it should have a "L" overlay image to show its a Liferay project.  <br/><br/>!images/existing-project_overlay.png!<br/><br/>
 # Secondly, to make sure the project is now a "Liferay IDE" project is to check the target runtime project property (right-click project > properties > target runtimes) and also check the project facets to make sure both Liferay runtime and Liferay plug-in facets are properly configured. <br/><br/>!images/existing-project_runtime.png!<br/><br/> !images/existing-project_facets.png!<br/><br/>

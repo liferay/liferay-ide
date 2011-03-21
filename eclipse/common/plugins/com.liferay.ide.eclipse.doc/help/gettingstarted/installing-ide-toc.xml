@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<toc topic="help/gettingstarted/installing-ide.html" label="installing-ide">
+	<topic href="help/gettingstarted/installing-ide.html" label="Installing Liferay IDE">
+		<topic href="help/gettingstarted/installing-ide.html#Introduction" label="Introduction"></topic>
+		<topic href="help/gettingstarted/installing-ide.html#Requirements" label="Requirements"></topic>
+		<topic href="help/gettingstarted/installing-ide.html#InstallationSteps" label="Installation Steps"></topic>
+		<topic href="help/gettingstarted/installing-ide.html#Alternativeinstallation" label="Alternative installation"></topic>
+		<topic href="help/gettingstarted/installing-ide.html#NextSteps" label="Next Steps"></topic>
+	</topic>
+</toc>

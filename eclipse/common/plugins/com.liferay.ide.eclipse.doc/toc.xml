@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Liferay IDE Developer Guide">
+<toc label="Liferay Developer Tools Guide">
    <topic label="Getting Started">
-      <link toc="help/gettingstarted/gettingstarted-toc.xml"/>
+      <link toc="help/gettingstarted/installing-ide-toc.xml"/>
+      <link toc="help/gettingstarted/getting-started-toc.xml"/>
    </topic>
    <topic label="Tasks">
       <topic label="Creating New Liferay Projects">
          <link toc="help/tasks/creating-new-projects-toc.xml"/>
       </topic>
-      <topic label="Importing Existing Projects">
-         <link toc="help/tasks/importing-existing-projects-toc.xml"/>
-      </topic>
+      <link toc="help/tasks/importing-existing-projects-toc.xml"/>
    </topic>
 </toc>
