@@ -29,7 +29,7 @@ h2. Installation Steps
 
 h2. Alternative installation
 
-# Insted of typing in URL you can download the the archived update site from this link<br/><br/>"liferay-ide-eclipse-updatesite-1.2.2.zip":http://sourceforge.net/projects/lportal/files/Liferay%20IDE/1.2.2/liferay-ide-eclipse-updatesite-1.2.2.zip/download  <br/><br/>
+# Instead of typing in URL you can download the archived update site from this link<br/><br/>"liferay-ide-eclipse-updatesite-1.2.2.zip":http://sourceforge.net/projects/lportal/files/Liferay%20IDE/1.2.2/liferay-ide-eclipse-updatesite-1.2.2.zip/download  <br/><br/>
 # In Add Site dialog, click the "Archive" button and browse to the location of the downloaded zip file.
 # Installation proceeds the same as previous section
 

@@ -3,13 +3,15 @@
 
 <toc label="Liferay Developer Tools Guide">
    <topic label="Getting Started">
-      <link toc="help/gettingstarted/installing-ide-toc.xml"/>
-      <link toc="help/gettingstarted/getting-started-toc.xml"/>
+      <anchor id="getting-started-begin"/>
+      <anchor id="getting-started-end"/>
    </topic>
    <topic label="Tasks">
+      <anchor id="tasks-begin"/>
       <topic label="Creating New Liferay Projects">
          <link toc="help/tasks/creating-new-projects-toc.xml"/>
       </topic>
       <link toc="help/tasks/importing-existing-projects-toc.xml"/>
+      <anchor id="tasks-end"/>
    </topic>
 </toc>

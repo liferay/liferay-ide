@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<toc topic="help/gettingstarted/installing-ide.html" label="installing-ide">
+<toc label="installing-ide" link_to="../com.liferay.ide.eclipse.doc/toc.xml#getting-started-end" topic="help/gettingstarted/installing-ide.html">
 	<topic href="help/gettingstarted/installing-ide.html" label="Installing Liferay IDE">
 		<topic href="help/gettingstarted/installing-ide.html#Introduction" label="Introduction"></topic>
 		<topic href="help/gettingstarted/installing-ide.html#Requirements" label="Requirements"></topic>
