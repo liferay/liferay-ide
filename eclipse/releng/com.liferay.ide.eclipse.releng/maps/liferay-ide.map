@@ -4,6 +4,7 @@ plugin@com.liferay.ide.eclipse.tools.branding=SVN,url=http://svn.liferay.com/rep
 
 #common
 plugin@com.liferay.ide.eclipse.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.core,username=guest,password=guest
+plugin@com.liferay.ide.eclipse.doc=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.doc,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.project.core=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.project.core,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.project.ui=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.project.ui,username=guest,password=guest
 plugin@com.liferay.ide.eclipse.sdk=SVN,url=http://svn.liferay.com/repos/public/tools,tag=trunk,path=ide/eclipse/common/plugins/com.liferay.ide.eclipse.sdk,username=guest,password=guest
