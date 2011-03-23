@@ -89,19 +89,6 @@
       <startup
             class="com.liferay.ide.eclipse.ui.LiferayUIPlugin">
       </startup>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="help/gettingstarted/installing-ide-toc.xml"
-            primary="false">
-      </toc>
-      <toc
-            file="help/gettingstarted/getting-started-toc.xml"
-            primary="false">
-      </toc>
-   </extension>
-  
-   
+   </extension>   
 
 </plugin>

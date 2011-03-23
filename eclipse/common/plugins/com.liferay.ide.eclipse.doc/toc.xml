@@ -4,6 +4,7 @@
 <toc label="Liferay Developer Tools Guide">
    <topic label="Getting Started">
       <anchor id="getting-started-begin"/>
+      <link toc="help/gettingstarted/getting-started-toc.xml"/>
       <anchor id="getting-started-end"/>
    </topic>
    <topic label="Tasks">

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<toc label="getting-started" link_to="../com.liferay.ide.eclipse.doc/toc.xml#getting-started-end" topic="help/gettingstarted/getting-started.html">
+<toc label="getting-started" topic="help/gettingstarted/getting-started.html">
 	<topic href="help/gettingstarted/getting-started.html" label="Getting Started with Liferay IDE">
 		<topic href="help/gettingstarted/getting-started.html#Introduction" label="Introduction"></topic>
 		<topic href="help/gettingstarted/getting-started.html#Requirements" label="Requirements"></topic>

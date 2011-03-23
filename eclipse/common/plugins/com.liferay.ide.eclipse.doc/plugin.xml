@@ -20,7 +20,7 @@
             primary="false">
       </toc>
       <toc
-            file="help/gettingstarted/installing-ide-toc.xml"
+            file="help/gettingstarted/getting-started-toc.xml"
             primary="false">
       </toc>
    </extension>
