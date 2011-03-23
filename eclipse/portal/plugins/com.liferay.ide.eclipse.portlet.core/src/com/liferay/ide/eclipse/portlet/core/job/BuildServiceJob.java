@@ -103,7 +103,7 @@ public class BuildServiceJob extends SDKJob {
 		FlexibleProjectContainer container =
 			J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
-		container.refresh(true);
+		container.refresh();
 		
 		container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
