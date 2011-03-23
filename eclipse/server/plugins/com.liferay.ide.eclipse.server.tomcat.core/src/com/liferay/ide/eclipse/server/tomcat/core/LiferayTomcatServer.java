@@ -245,7 +245,12 @@ public class LiferayTomcatServer extends TomcatServer
 			if (serverInfo.contains("Enterprise Edition") && !(expectedServerInfo.contains("Enterprise Edition"))) {
 
 				LiferayTomcatUtil.displayToggleMessage(
-					"The runtime adapter for this Server is Liferay Portal CE (Community Edition). However, the actual runtime configured is Liferay Portal Enterprise Edition. Please consider switching to the Liferay Portal EE adapter for enhanced support.\n\nThe Liferay Portal EE adapter is found in Liferay Developer Studio which is available for free to EE customers.  More infomation is on the customer portal home page on http://www.liferay.com",
+					"The runtime type for this Server is Liferay Portal CE (Community Edition). However, the actual "
+						+ "runtime configured is Liferay Portal Enterprise Edition. The current server will work correctly "
+						+ "but please consider switching to the Liferay Portal EE runtime type for enhanced support.\n\n"
+						+ "The Liferay Portal EE adapter is found in Liferay Developer Studio which is available for free "
+						+ "to EE customers.  More infomation is on the customer portal home page on "
+						+ "http://www.liferay.com/group/customer",
 					LiferayTomcatPlugin.PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY);
 			}
 		}
