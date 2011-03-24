@@ -135,6 +135,10 @@ public class LiferayTomcatUtil {
 		return null;
 	}
 
+	public static IPath getPortalDir(IPath appServerDir) {
+		return appServerDir.append("/webapps/ROOT");
+	}
+
 	public static String[] getSupportedHookProperties(IPath runtimeLocation, IPath portalDir)
 		throws IOException {
 		
@@ -423,9 +427,5 @@ public class LiferayTomcatUtil {
 			return LiferayTomcatPlugin.createErrorStatus(e);
 		}
 
-	}
-
-	public static IPath getPortalDir(IPath appServerDir) {
-		return appServerDir.append("/webapps/ROOT");
 	}
 }

@@ -73,18 +73,18 @@
             id="com.liferay.ide.eclipse.server.ui.popup.server"
             objectClass="org.eclipse.wst.server.core.IServer">
          <visibility>
-         	<or>
+         	<and>
 	            <objectState
 	                  name="serverType"
 	                  value="com.liferay.*">
 	            </objectState>
-            </or>
+            </and>
          </visibility>
          <action
                class="com.liferay.ide.eclipse.server.ui.action.TestWebServicesAction"
                enablesFor="1"
                icon="icons/e16/test_web_services_16x16.png"
-               id="com.liferay.ide.eclipse.server.ui.action.testWebServices"
+               id="com.liferay.ide.eclipse.server.ui.action.testWebServices.server"
                label="Test Liferay Web Services...">
          </action>
          <action
@@ -104,7 +104,7 @@
                class="com.liferay.ide.eclipse.server.ui.action.TestWebServicesAction"
                enablesFor="1"
                icon="icons/e16/test_web_services_16x16.png"
-               id="com.liferay.ide.eclipse.server.ui.action.testWebServices"
+               id="com.liferay.ide.eclipse.server.ui.action.testWebServices.plugin"
                label="Test Liferay Web Services...">
          </action>
          
