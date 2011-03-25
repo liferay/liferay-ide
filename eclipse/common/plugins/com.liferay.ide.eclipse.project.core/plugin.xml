@@ -262,7 +262,7 @@
          </facet>
          <facet
                id="jst.web"
-               version="2.3">
+               version="2.5">
          </facet>
          <facet
                id="liferay.portlet"
@@ -285,7 +285,7 @@
          </facet>
          <facet
                id="jst.web"
-               version="2.3">
+               version="2.5">
          </facet>
          <facet
                id="liferay.hook"
@@ -307,7 +307,7 @@
          </facet>
          <facet
                id="jst.web"
-               version="2.3">
+               version="2.5">
          </facet>
          <facet
                id="liferay.ext"

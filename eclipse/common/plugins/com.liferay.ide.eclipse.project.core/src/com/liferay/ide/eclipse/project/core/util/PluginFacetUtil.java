@@ -160,7 +160,7 @@ public class PluginFacetUtil {
 		// fpjwc.setSelectedPreset(
 		// FacetedProjectFramework.DEFAULT_CONFIGURATION_PRESET_ID );
 
-		// IFacetedProjectTemplate template = getLiferayTemplateForProject(fpjwc);
+		IFacetedProjectTemplate template = getLiferayTemplateForProject(fpjwc);
 		IPreset preset = getLiferayPresetForProject(fpjwc);
 
 		if (preset == null) {
@@ -168,23 +168,22 @@ public class PluginFacetUtil {
 				ProjectCorePlugin.createErrorStatus("No facet preset found, make sure your project is a valid liferay plugins sdk project with an expected prefix, e.g. -portlet, -hook, etc."));
 		}
 
-		Set<IProjectFacetVersion> currentProjectFacets = fpjwc.getProjectFacets();
+		Set<IProjectFacetVersion> currentProjectFacetVersions = fpjwc.getProjectFacets();
 
-		// Set<IProjectFacet> requiredFacets = template.getFixedProjectFacets();
-		Set<IProjectFacetVersion> requiredFacetVersions = preset.getProjectFacets();
+		Set<IProjectFacet> requiredFacets = template.getFixedProjectFacets();
 
-		for (IProjectFacetVersion requiredFacetVersion : requiredFacetVersions) {
+		for (IProjectFacet requiredFacet : requiredFacets) {
 			boolean hasRequiredFacet = false;
 
-			for (IProjectFacetVersion pfv : currentProjectFacets) {
-				if (pfv.getProjectFacet().equals(requiredFacetVersion.getProjectFacet())) {
-					int cmp = pfv.compareTo(requiredFacetVersion);
+			for (IProjectFacetVersion currentFacetVersion : currentProjectFacetVersions) {
+				if (currentFacetVersion.getProjectFacet().equals(requiredFacet)) {
+					boolean supports = runtime.supports(currentFacetVersion);
 
-					if (cmp >= 0) {
+					if (supports) {
 						hasRequiredFacet = true;
 					}
 					else {
-						fpjwc.removeProjectFacet(pfv);
+						fpjwc.removeProjectFacet(currentFacetVersion);
 					}
 
 					break;
@@ -192,24 +191,40 @@ public class PluginFacetUtil {
 			}
 
 			if (!hasRequiredFacet) {
-				fpjwc.addProjectFacet(requiredFacetVersion);
+				IProjectFacetVersion requiredFacetVersion = getRequiredFacetVersionFromPreset(requiredFacet, preset);
 
-				if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
-					configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
-				}
-				else if (ProjectUtil.isLiferayFacet(requiredFacetVersion)) {
-					configureLiferayFacet(fpjwc, requiredFacetVersion, sdkLocation);
-				}
-				else if (ProjectUtil.isDynamicWebFacet(requiredFacetVersion)) {
-					configureWebFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+				if (requiredFacetVersion != null) {
+					fpjwc.addProjectFacet(requiredFacetVersion);
+
+					if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
+						configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+					}
+					else if (ProjectUtil.isLiferayFacet(requiredFacetVersion)) {
+						configureLiferayFacet(fpjwc, requiredFacetVersion, sdkLocation);
+					}
+					else if (ProjectUtil.isDynamicWebFacet(requiredFacetVersion)) {
+						configureWebFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+					}
 				}
 			}
 			else {
-				if (ProjectUtil.isJavaFacet(requiredFacetVersion)) {
-					configureJavaFacet(fpjwc, requiredFacetVersion.getProjectFacet(), preset);
+				if (ProjectUtil.isJavaFacet(requiredFacet)) {
+					configureJavaFacet(fpjwc, requiredFacet, preset);
 				}
 			}
 		}
+	}
+
+	private static IProjectFacetVersion getRequiredFacetVersionFromPreset(IProjectFacet requiredFacet, IPreset preset) {
+		Set<IProjectFacetVersion> facets = preset.getProjectFacets();
+
+		for (IProjectFacetVersion facet : facets) {
+			if (facet.getProjectFacet().equals(requiredFacet)) {
+				return facet;
+			}
+		}
+
+		return null;
 	}
 
 	public static void configureWebFacet(IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset)
