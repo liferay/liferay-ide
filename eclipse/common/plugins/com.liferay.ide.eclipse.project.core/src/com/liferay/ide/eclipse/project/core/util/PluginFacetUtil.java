@@ -178,7 +178,9 @@ public class PluginFacetUtil {
 
 			for (IProjectFacetVersion pfv : currentProjectFacets) {
 				if (pfv.getProjectFacet().equals(requiredFacetVersion.getProjectFacet())) {
-					if (pfv.getVersionString().equals(requiredFacetVersion.getVersionString())) {
+					int cmp = pfv.compareTo(requiredFacetVersion);
+
+					if (cmp >= 0) {
 						hasRequiredFacet = true;
 					}
 					else {
@@ -215,43 +217,53 @@ public class PluginFacetUtil {
 
 		Action action = fpjwc.getProjectFacetAction(requiredFacet);
 		Object config = action.getConfig();
-		IDataModel dm = (IDataModel) config;
 
-		if (preset.getId().contains("portlet")) {
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
-				IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
-				IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
+		if (config instanceof IDataModel) {
+			IDataModel dm = (IDataModel) config;
 
-			addDefaultWebXml(fpjwc, dm);
-		}
-		else if (preset.getId().contains("hook")) {
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
+			if (preset.getId().contains("portlet")) {
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+					IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
+					IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
 
-			addDefaultWebXml(fpjwc, dm);
-		}
-		else if (preset.getId().contains("ext")) {
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+				addDefaultWebXml(fpjwc, dm);
+			}
+			else if (preset.getId().contains("hook")) {
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+					IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER);
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
+					IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER);
 
-			addDefaultWebXml(fpjwc, dm);
+				addDefaultWebXml(fpjwc, dm);
+			}
+			else if (preset.getId().contains("ext")) {
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+					IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER);
+
+				addDefaultWebXml(fpjwc, dm);
+			}
+			else if (preset.getId().contains("layouttpl")) {
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+					IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER);
+				ProjectUtil.setGenerateDD(dm, false);
+			}
+			else if (preset.getId().contains("theme")) {
+				dm.setStringProperty(
+					IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+					IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER);
+				ProjectUtil.setGenerateDD(dm, false);
+			}
+
 		}
-		else if (preset.getId().contains("layouttpl")) {
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
-				IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER);
-			ProjectUtil.setGenerateDD(dm, false);
-		}
-		else if (preset.getId().contains("theme")) {
-			dm.setStringProperty(
-				IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER);
-			ProjectUtil.setGenerateDD(dm, false);
-		}
+
+
 	}
 
 	public static IPreset getLiferayPresetForProject(IFacetedProjectWorkingCopy fpjwc) {

@@ -67,4 +67,10 @@ org.eclipse.jst.jsf.common
 org.eclipse.jst.jsf.common.ui
 org.eclipse.jst.jsf.common.runtime
 
+org.eclipse.jst.ws.axis.consumption.core
+org.eclipse.jst.ws.axis.consumption.ui
+org.eclipse.jst.ws.axis.creation.ui
+org.eclipse.jst.ws.consumption
+org.eclipse.jst.ws.consumption.ui
+
 

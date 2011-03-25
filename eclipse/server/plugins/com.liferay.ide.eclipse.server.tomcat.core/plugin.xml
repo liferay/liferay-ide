@@ -12,7 +12,7 @@
             version="6.0">
          <moduleType
                types="jst.web"
-               versions="2.4,2.5">
+               versions="2.3,2.4,2.5">
          </moduleType>
          <moduleType
                types="jst.utility"
@@ -108,7 +108,7 @@
          </runtime-component>
          <facet
                id="jst.web"
-               version="2.4,2.5">
+               version="2.3,2.4,2.5">
          </facet>
          <facet
                id="jst.utility"
