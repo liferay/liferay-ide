@@ -5,7 +5,7 @@
 h1. Creating New Liferay Plug-in Projects
 
 # Liferay IDE supports development of five Liferay plug-in types: portlets, hooks, layout templates, themes, and EXT-style plug-ins.
-# To create a new plug-in project with Liferay IDE, select the Liferay Plug-in Project option from the Eclipse File menu. (Go to File > New > Liferay Plug-in Project). <br/><br/>!file:images/lide_creating_new_plugins_1.png!<br/><br/>
+# To create a new plug-in project with Liferay IDE, select the Liferay Plug-in Project option from the Eclipse File menu. (Go to File > New > Liferay Plug-in Project). <br/><br/>!images/lide_creating_new_plugins_1.png!<br/><br/>
 # Choose a project name for your plugin. The project name will serve as the file name of your project. Note that the project name cannot include any blank spaces.
 # Choose a display name for your plugin. The display name will serve as the title of your project and can include blank spaces.
 # Under Configuration, you will need to select a Plug-ins SDK and a Runtime. You should already have these installed if you followed the directions in the Getting Started section and can simply select them from a list. As defaults, you should use the latest Liferay Plug-ins SDK and the latest Liferay Portal Tomcat Server.
