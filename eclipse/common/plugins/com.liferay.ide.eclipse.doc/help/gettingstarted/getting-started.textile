@@ -50,7 +50,7 @@ h2. Testing/Launching Liferay Tomcat Server
 h2. Creating New Liferay Projects
 
 # Now that an SDK and portal server have been configured you can create a new Liferay plug-in project. Go to File > New Project... > Liferay > Liferay Plug-in Project. <br/><br/>!images/lide_getting_started_11a.png!<br/><br/>
-# In the Liferay project wizard page, the newly configured SDK and Liferay Runtime should be pre-selected.  Also the plugin type "portlet" is the default.  Simply time in a project name and cooresponding display name and click Finish. <br/><br/>!images/lide_getting_started_12a.png!<br/><br/>
+# In the Liferay project wizard page, the newly configured SDK and Liferay Runtime should be pre-selected.  Also the plugin type "portlet" is the default.  Simply time in a project name and corresponding display name and click Finish. <br/><br/>!images/lide_getting_started_12a.png!<br/><br/>
 # If it worked you should see a new plugin project in the package explorer. <br/><br/>!images/lide_getting_started_13a.png!<br/><br/>
 
 h2. Deploying New Liferay Projects to Liferay Server
