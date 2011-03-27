@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.wst.server.core.IServer;
@@ -62,19 +63,27 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 		return IServer.STATE_STARTED;
 	}
 
-	protected void openBrowser(URL url, String browserTitle) {
-		try {
-			IWorkbenchBrowserSupport browserSupport = ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
+	protected void openBrowser(final URL url, final String browserTitle) {
+		Display.getDefault().asyncExec(new Runnable() {
 
-			IWebBrowser browser =
-				browserSupport.createBrowser(IWorkbenchBrowserSupport.LOCATION_BAR |
-					IWorkbenchBrowserSupport.NAVIGATION_BAR, null, browserTitle, null);
+			public void run() {
+				try {
+					IWorkbenchBrowserSupport browserSupport =
+						ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
 
-			browser.openURL(url);
-		}
-		catch (Exception e) {
-			LiferayServerUIPlugin.logError(e);
-		}	}
+					IWebBrowser browser =
+						browserSupport.createBrowser(IWorkbenchBrowserSupport.LOCATION_BAR |
+							IWorkbenchBrowserSupport.NAVIGATION_BAR, null, browserTitle, null);
+
+					browser.openURL(url);
+				}
+				catch (Exception e) {
+					LiferayServerUIPlugin.logError(e);
+				}
+			}
+		});
+
+	}
 
 	protected void openPortal(ILiferayServer portalServer) {
 		URL portalHome = portalServer.getPortalHomeUrl();
