@@ -136,7 +136,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 				});
 			}
 		}
-		catch (CoreException e) {
+		catch (Exception e) {
+			ProjectCorePlugin.logError("Exception in plugin package resource listener", e);
 		}
 	}
 

@@ -4,7 +4,9 @@ h1. Getting Started with Liferay IDE
 
 h2. Introduction
 
-Liferay IDE is an extension for the Eclipse platform that supports development of plug-in projects for the Liferay Portal platform. Its available as a set of Eclipse plug-ins installable from an update-site. The latest version supports developing 5 Liferay plug-in types: portlets, hooks, layout templates, themes, and EXT-style plug-ins. Liferay IDE requires the Eclipse Helios Java EE developer package.
+p. **NOTICE** If you are using Liferay Developer Studio, please note there is a more appropriate tutorial for getting started with that product located here:  "Getting Started with Liferay Developer Studio":PLUGINS_ROOT/com.liferay.studio.eclipse.doc/help/gettingstarted/getting-started.html
+
+p. Liferay IDE is an extension for the Eclipse platform that supports development of plug-in projects for the Liferay Portal platform. Its available as a set of Eclipse plug-ins installable from an update-site. The latest version supports developing 5 Liferay plug-in types: portlets, hooks, layout templates, themes, and EXT-style plug-ins. Liferay IDE requires the Eclipse Helios Java EE developer package.
 
 h2. Requirements
 
