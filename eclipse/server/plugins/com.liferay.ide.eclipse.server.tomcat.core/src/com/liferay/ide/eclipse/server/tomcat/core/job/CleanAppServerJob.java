@@ -94,7 +94,7 @@ public class CleanAppServerJob extends SDKJob {
 						mod
 					};
 
-					((LiferayTomcatServerBehavior) server.getAdapter(LiferayTomcatServerBehavior.class)).setModulePublishState2(
+					((LiferayTomcatServerBehavior) server.loadAdapter(LiferayTomcatServerBehavior.class, monitor)).setModulePublishState2(
 						m, IServer.PUBLISH_STATE_FULL);
 				}
 			}

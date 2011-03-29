@@ -373,7 +373,7 @@ public class LiferayTomcatUtil {
 		}
 
 		final LiferayTomcatServerBehavior serverBehavior =
-			(LiferayTomcatServerBehavior) server.getAdapter(LiferayTomcatServerBehavior.class);
+			(LiferayTomcatServerBehavior) server.loadAdapter(LiferayTomcatServerBehavior.class, null);
 
 		Thread shutdownThread = new Thread() {
 
