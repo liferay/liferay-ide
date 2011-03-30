@@ -1,8 +1,18 @@
-#Fri Mar 25 02:04:33 CDT 2011
+#Tue Mar 29 23:53:22 EDT 2011
 eclipse.preferences.version=1
 encoding//help/gettingstarted/getting-started.html=utf-8
+encoding//help/tasks/creating-new-hooks-toc.xml=utf-8
+encoding//help/tasks/creating-new-hooks.html=utf-8
+encoding//help/tasks/creating-new-layout-templates-toc.xml=utf-8
+encoding//help/tasks/creating-new-layout-templates.html=utf-8
+encoding//help/tasks/creating-new-liferay-plugin-projects-toc.xml=utf-8
+encoding//help/tasks/creating-new-liferay-plugin-projects.html=utf-8
+encoding//help/tasks/creating-new-portlets-toc.xml=utf-8
+encoding//help/tasks/creating-new-portlets.html=utf-8
 encoding//help/tasks/creating-new-projects-toc.xml=utf-8
 encoding//help/tasks/creating-new-projects.html=utf-8
+encoding//help/tasks/creating-new-services-toc.xml=utf-8
+encoding//help/tasks/creating-new-services.html=utf-8
 encoding//help/tasks/creating-portlets-toc.xml=utf-8
 encoding//help/tasks/creating-portlets.html=utf-8
 encoding//help/tasks/importing-existing-projects-toc.xml=utf-8

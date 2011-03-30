@@ -14,5 +14,10 @@
       </topic>
       <link toc="help/tasks/importing-existing-projects-toc.xml"/>
       <anchor id="tasks-end"/>
+      <link toc="help/tasks/creating-new-portlets-toc.xml"/>
+      <link toc="help/tasks/creating-new-liferay-plugin-projects-toc.xml"/>
+      <link toc="help/tasks/creating-new-hooks-toc.xml"/>
+      <link toc="help/tasks/creating-new-services-toc.xml"/>
+      <link toc="help/tasks/creating-new-layout-templates-toc.xml"/>
    </topic>
 </toc>

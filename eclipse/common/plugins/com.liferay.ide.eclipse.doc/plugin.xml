@@ -23,6 +23,22 @@
             file="help/gettingstarted/getting-started-toc.xml"
             primary="false">
       </toc>
+      <toc
+            file="help/tasks/creating-new-liferay-plugin-projects-toc.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/tasks/creating-new-hooks-toc.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/tasks/creating-new-services-toc.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/tasks/creating-new-layout-templates-toc.xml"
+            primary="false">
+      </toc>
    </extension>
 
 </plugin>
