@@ -1,0 +1,7 @@
+h1. Creating Layout Templates
+
+# You can create a new layout template with Liferay IDE by selecting Liferay Layout Template from the Eclipse File menu. (File > New > Liferay Layout Template). <br/><br/>!images/lide_new_layout_template.png!<br/><br/>
+# To create a liferay layout template, you first need to select a Layout plug-in project.
+# You need to enter a name and an ID for your layout template.
+# You also need to specify the location of both a template file and WAP template file for your layout temple.
+# After you specify the location of a thumbnail file for your template, click Finish and your project should build for you.

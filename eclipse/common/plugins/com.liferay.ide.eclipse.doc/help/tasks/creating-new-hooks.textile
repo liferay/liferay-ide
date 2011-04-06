@@ -1,0 +1,8 @@
+h1. Creating New Hooks
+
+# You can create a new hook within a Liferay hook project by selecting Liferay Hook from the Eclipse File menu. (File > New > Liferay Hook). <br/><br/>!images/lide_new_hook.png!<br/><br/>
+# First, you need to select a name for your new hook project. Then you can specify which hook type(s) to create by checking the appropriate boxes. After making your selections, click Next. <br/><br/>!images/lide_new_hook2.png!<br/><br/>
+# If you selected Create JSPs, you will need to create a custom JSP folder and specify specific JSP files to overwrite. Click next. <br/><br/>!images/lide_new_hook3.png!<br/><br/>
+# If you selected Portal properties, you will need to either define actions to be executed on portal events or specify portal properties to override. Click next. <br/><br/>!images/lide_new_hook4.png!<br/><br/>
+# If you selected services, you will need to specify which Liferay services to extend. Click next. <br/><br/>!images/lide_new_hook5.png!<br/><br/>
+# If you selected Language properties, you will need to create a folder for new language properties files and add the files. Click Finish to complete your hook project.
