@@ -39,6 +39,10 @@
             file="help/tasks/creating-new-layout-templates-toc.xml"
             primary="false">
       </toc>
+      <toc
+            file="help/tasks/creating-new-vaadin-portlets-toc.xml"
+            primary="false">
+      </toc>
    </extension>
 
 </plugin>

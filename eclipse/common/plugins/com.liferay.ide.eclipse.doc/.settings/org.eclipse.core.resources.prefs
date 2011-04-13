@@ -1,4 +1,4 @@
-#Tue Mar 29 23:53:22 EDT 2011
+#Tue Apr 12 21:17:22 EDT 2011
 eclipse.preferences.version=1
 encoding//help/gettingstarted/getting-started.html=utf-8
 encoding//help/tasks/creating-new-hooks-toc.xml=utf-8
@@ -13,6 +13,8 @@ encoding//help/tasks/creating-new-projects-toc.xml=utf-8
 encoding//help/tasks/creating-new-projects.html=utf-8
 encoding//help/tasks/creating-new-services-toc.xml=utf-8
 encoding//help/tasks/creating-new-services.html=utf-8
+encoding//help/tasks/creating-new-vaadin-portlets-toc.xml=utf-8
+encoding//help/tasks/creating-new-vaadin-portlets.html=utf-8
 encoding//help/tasks/creating-portlets-toc.xml=utf-8
 encoding//help/tasks/creating-portlets.html=utf-8
 encoding//help/tasks/importing-existing-projects-toc.xml=utf-8
