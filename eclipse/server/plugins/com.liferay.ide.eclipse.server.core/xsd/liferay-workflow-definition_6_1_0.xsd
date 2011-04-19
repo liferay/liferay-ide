@@ -29,10 +29,7 @@
 	<xs:element name="assignments">
 		<xs:complexType>
 			<xs:choice>
-				<xs:element ref="resource-actions" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="roles" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="scripted-assignment" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="user" minOccurs="0" maxOccurs="1" />
+				<xs:group ref="assignments-group" />
 			</xs:choice>
 		</xs:complexType>
 	</xs:element>
@@ -46,12 +43,33 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="description" type="xs:string" />
+	<xs:element name="delay">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="duration" type="xs:double" />
+				<xs:element name="scale">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="second" />
+							<xs:enumeration value="minute" />
+							<xs:enumeration value="hour" />
+							<xs:enumeration value="day" />
+							<xs:enumeration value="week" />
+							<xs:enumeration value="month" />
+							<xs:enumeration value="year" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="execution-type">
 		<xs:simpleType>
 			<xs:restriction base="xs:string">
 				<xs:enumeration value="onAssignment" />
 				<xs:enumeration value="onEntry" />
 				<xs:enumeration value="onExit" />
+				<xs:enumeration value="onTimer" />
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:element>
@@ -61,6 +79,7 @@
 				<xs:element ref="name" />
 				<xs:element ref="description" minOccurs="0" />
 				<xs:element ref="actions" minOccurs="0" />
+				<xs:element ref="timers" minOccurs="0" />
 				<xs:element ref="transitions" />
 			</xs:sequence>
 		</xs:complexType>
@@ -71,6 +90,7 @@
 				<xs:element ref="name" />
 				<xs:element ref="description" minOccurs="0" />
 				<xs:element ref="actions" minOccurs="0" />
+				<xs:element ref="timers" minOccurs="0" />
 				<xs:element ref="transitions" />
 			</xs:sequence>
 		</xs:complexType>
@@ -105,6 +125,13 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="reassignments">
+		<xs:complexType>
+			<xs:choice>
+				<xs:group ref="assignments-group" />
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
 	<xs:element name="recipients">
 		<xs:complexType>
 			<xs:group ref="recipients-group" />
@@ -113,7 +140,7 @@
 	<xs:element name="resource-actions">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="resource-action" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+				<xs:element name="resource-action" type="xs:string" maxOccurs="unbounded" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -137,8 +164,8 @@
 	</xs:element>
 	<xs:element name="roles">
 		<xs:complexType>
-			<xs:choice minOccurs="0" maxOccurs="1">
-				<xs:element ref="role" minOccurs="1" maxOccurs="unbounded" />
+			<xs:choice minOccurs="0">
+				<xs:element ref="role" maxOccurs="unbounded" />
 			</xs:choice>
 		</xs:complexType>
 	</xs:element>
@@ -146,8 +173,8 @@
 	<xs:element name="scripted-assignment">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="script" minOccurs="1" maxOccurs="1" />
-				<xs:element ref="script-language" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="script" />
+				<xs:element ref="script-language" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -170,6 +197,7 @@
 				<xs:element ref="description" minOccurs="0" />
 				<xs:element name="initial" type="xs:boolean" minOccurs="0" />
 				<xs:element ref="actions" minOccurs="0" />
+				<xs:element ref="timers" minOccurs="0" />
 				<xs:element ref="transitions" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
@@ -179,23 +207,29 @@
 			<xs:sequence>
 				<xs:element ref="name" />
 				<xs:element ref="description" minOccurs="0" />
-				<xs:element name="due-date-duration" type="xs:double" minOccurs="0" />
-				<xs:element name="due-date-scale" minOccurs="0">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="second" />
-							<xs:enumeration value="minute" />
-							<xs:enumeration value="hour" />
-							<xs:enumeration value="day" />
-							<xs:enumeration value="week" />
-							<xs:enumeration value="month" />
-							<xs:enumeration value="year" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
 				<xs:element ref="actions" minOccurs="0" />
 				<xs:element ref="assignments" />
+				<xs:element ref="timers" minOccurs="0" />
 				<xs:element ref="transitions" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="task-timer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name" />
+				<xs:element ref="description" minOccurs="0" />
+				<xs:element name="default" type="xs:boolean" minOccurs="0" default="false" />
+				<xs:element ref="delay" />
+				<xs:element ref="actions" minOccurs="0" />
+				<xs:element ref="reassignments" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="task-timers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="task-timer" maxOccurs="unbounded" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -205,7 +239,7 @@
 				<xs:element ref="name" />
 				<xs:element name="target" type="xs:string" />
 				<xs:element name="default" type="xs:boolean" minOccurs="0" default="true" />
-				<xs:element ref="condition" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="condition" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -213,6 +247,23 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="transition" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="timer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name" />
+				<xs:element ref="description" minOccurs="0" />
+				<xs:element ref="delay" />
+				<xs:element ref="actions" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="timers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="timer" maxOccurs="unbounded" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -239,6 +290,14 @@
 		<xs:choice>
 			<xs:element ref="action" />
 			<xs:element ref="notification" />
+		</xs:choice>
+	</xs:group>
+	<xs:group name="assignments-group">
+		<xs:choice>
+			<xs:element ref="resource-actions" minOccurs="0" />
+			<xs:element ref="roles" minOccurs="0" />
+			<xs:element ref="scripted-assignment" minOccurs="0" />
+			<xs:element ref="user" minOccurs="0" />
 		</xs:choice>
 	</xs:group>
 	<xs:group name="nodes-group">

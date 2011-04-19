@@ -31,11 +31,11 @@ preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
 show-portlet-inactive?, action-url-redirect?, restore-current-view?,
 maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
 remoteable?, scopeable?, user-principal-strategy?, private-request-attributes?,
-private-session-attributes?, render-weight?, ajaxable?, header-portal-css*,
-header-portlet-css*, header-portal-javascript*, header-portlet-javascript*,
-footer-portal-css*, footer-portlet-css*, footer-portal-javascript*,
-footer-portlet-javascript*, css-class-wrapper?, facebook-integration?,
-add-default-resource?, system?, active?, include?)>
+private-session-attributes?, action-timeout?, render-timeout?, render-weight?,
+ajaxable?, header-portal-css*, header-portlet-css*, header-portal-javascript*,
+header-portlet-javascript*, footer-portal-css*, footer-portlet-css*,
+footer-portal-javascript*, footer-portlet-javascript*, css-class-wrapper?,
+facebook-integration?, add-default-resource?, system?, active?, include?)>
 
 <!--
 The portlet-name element contains the unique name of the portlet. This name must
@@ -574,6 +574,26 @@ session attributes with the portal. The default value is true. The property
 attributes are shared even when the private-session-attributes value is true.
 -->
 <!ELEMENT private-session-attributes (#PCDATA)>
+
+<!--
+The default value of action-timeout is 0. If set to a value greater than 0,
+and monitoring-spring.xml is enabled via the property "spring.configs" in
+portal.properties, and the property "monitoring.portlet.action.request" in
+portal.properties is set to true, then the portlet's action phase processing
+will be timed. If the execution time is longer than action-timeout, it will be
+recorded as a timeout request processing. The time unit is millisecond.
+-->
+<!ELEMENT action-timeout (#PCDATA)>
+
+<!--
+The default value of render-timeout is 0. If set to a value greater than 0,
+and monitoring-spring.xml is enabled via the property "spring.configs" in
+portal.properties, and the property "monitoring.portlet.render.request" in
+portal.properties is set to true, then the portlet's render phase processing
+will be timed. If the execution time is longer than render-timeout, it will be
+recorded as a timeout request processing. The time unit is millisecond.
+-->
+<!ELEMENT render-timeout (#PCDATA)>
 
 <!--
 The default value of render-weight is 1. If set to a value less than 1, the

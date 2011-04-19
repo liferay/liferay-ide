@@ -181,57 +181,57 @@ For example:
 	mapping-table="Foo_Organizations"
 />
 
-The id-type and id-param values are used in order to create an auto-generated, 
-auto-incrementing primary key when inserting records into a table. This can be 
-implemented in 4 different ways, depending on the type of database being used. 
-In all cases, the primary key of the model object should be assigned a value of 
-null, and Hibernate will know to replace the null value with an auto-generated, 
-auto-incremented value. If no id-type value is used, it is assumed that the 
+The id-type and id-param values are used in order to create an auto-generated,
+auto-incrementing primary key when inserting records into a table. This can be
+implemented in 4 different ways, depending on the type of database being used.
+In all cases, the primary key of the model object should be assigned a value of
+null, and Hibernate will know to replace the null value with an auto-generated,
+auto-incremented value. If no id-type value is used, it is assumed that the
 primary key will be assigned and not auto-generated.
 
-The first implementation uses a class to generate a primary key. 
+The first implementation uses a class to generate a primary key.
 
 For example:
 
-<column 
-	name="id" 
-	type="Integer" 
-	primary="true" 
-	id-type="class" 
-	id-param="com.liferay.counter.service.persistence.IDGenerator" 
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="class"
+	id-param="com.liferay.counter.service.persistence.IDGenerator"
 />
 
 In this implementation, the class specified in the id-param value will be called
-to retrieve a unique identifier (in the example above, an Integer) that will be 
-used as the primary key for the new record. This implementation works for all 
+to retrieve a unique identifier (in the example above, an Integer) that will be
+used as the primary key for the new record. This implementation works for all
 supported databases.
 
-The second implementation generates identifiers that are unique only when no 
+The second implementation generates identifiers that are unique only when no
 other process is inserting data into the same table. This implementation should
-NOT be used in a clustered environment, but it does work for all supported 
+NOT be used in a clustered environment, but it does work for all supported
 databases.
 
 For example:
 
-<column 
-	name="id" 
-	type="Integer" 
-	primary="true" 
-	id-type="increment" 
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="increment"
 />
 
 The third implementation uses an identity column to generate a primary key.
 
 For example:
 
-<column 
-	name="id" 
-	type="Integer" 
-	primary="true" 
-	id-type="identity" 
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="identity"
 />
 
-In this implementation, the create table SQL generated for this entity will 
+In this implementation, the create table SQL generated for this entity will
 create an identity column that natively auto-generates a primary key whenever
 an insert occurs. This implementation is only supported by DB2, MySQL, and
 MS SQL Server.
@@ -240,16 +240,16 @@ The fourth implementation uses a sequence to generate a primary key.
 
 For example:
 
-<column 
-	name="id" 
-	type="Integer" 
-	primary="true" 
-	id-type="sequence" 
-	id-param="id_sequence" 
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="sequence"
+	id-param="id_sequence"
 />
 
 In this implementation, a create sequence SQL statement is created based on
-the id-param value (stored in /sql/sequences.sql). This sequence is then 
+the id-param value (stored in /sql/sequences.sql). This sequence is then
 accessed to generate a unique identifier whenever an insert occurs. This
 implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
 

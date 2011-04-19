@@ -318,6 +318,16 @@
                webURL="http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
          </public>
          <public
+               publicId="-//Liferay//DTD Resource Action Mapping 6.0.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-resource-action-mapping_6_0_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-resource-action-mapping_6_0_0.dtd">
+         </public>
+         <public
+               publicId="-//Liferay//DTD Resource Action Mapping 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-resource-action-mapping_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-resource-action-mapping_6_1_0.dtd">
+         </public>
+         <public
                publicId="-//Liferay//DTD Service Builder 3.5.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-service-builder_3_5_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-service-builder_3_5_0.dtd">

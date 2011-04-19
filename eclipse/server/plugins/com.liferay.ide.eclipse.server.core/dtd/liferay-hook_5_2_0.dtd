@@ -16,6 +16,7 @@ are:
 admin.default.group.names
 admin.default.role.names
 admin.default.user.group.names
+asset.publisher.display.styles
 auth.forward.by.last.path
 auto.deploy.listeners
 application.startup.events
