@@ -25,7 +25,7 @@ public interface ILiferayTomcatConstants {
 
 	IEclipsePreferences _defaultPrefs = new DefaultScope().getNode(LiferayTomcatPlugin.PLUGIN_ID);
 
-	String DEFAULT_AUTO_DEPLOY_INTERVAL = "500";
+	String DEFAULT_AUTO_DEPLOY_INTERVAL = _defaultPrefs.get("default.auto.deploy.interval", "500");
 
 	String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
 
