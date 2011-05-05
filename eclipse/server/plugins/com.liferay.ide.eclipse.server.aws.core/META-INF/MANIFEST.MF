@@ -5,6 +5,19 @@ Bundle-SymbolicName: com.liferay.ide.eclipse.server.aws.core;singleton:=true
 Bundle-Version: 1.3.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.server.aws.core.AWSCorePlugin
 Bundle-Vendor: Liferay, Inc.
-Require-Bundle: org.eclipse.core.runtime
+Require-Bundle: org.eclipse.core.runtime,
+ com.liferay.ide.eclipse.server.core,
+ com.liferay.ide.eclipse.server.tomcat.core,
+ org.eclipse.jst.server.core,
+ org.eclipse.jst.server.tomcat.core,
+ org.eclipse.wst.server.core,
+ org.eclipse.jst.common.project.facet.core,
+ org.eclipse.wst.common.core,
+ org.eclipse.wst.common.project.facet.core,
+ com.liferay.ide.eclipse.theme.core,
+ org.eclipse.equinox.security,
+ org.apache.commons.httpclient
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.eclipse.server.aws.core,
+ com.liferay.ide.eclipse.server.aws.core.util
