@@ -22,6 +22,8 @@ import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -109,6 +111,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		try {
 			if (shouldProcessResourceChangedEvent(event)) {
 				IResourceDelta delta = event.getDelta();
+
 				delta.accept(new IResourceDeltaVisitor() {
 
 					public boolean visit(IResourceDelta delta)
@@ -264,6 +267,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		final IClasspathContainer webAppLibrariesContainer =
 			J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
+		if (webAppLibrariesContainer == null) {
+			return;
+		}
+
 		IClasspathEntry[] existingEntries = webAppLibrariesContainer.getClasspathEntries();
 
 		for (IClasspathEntry entry : existingEntries) {
@@ -346,9 +353,11 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		}
 
 		Properties props = new Properties();
-		
+		InputStream contents = null;
+
 		try {
-			props.load(pluginPackagePropertiesFile.getContents());
+			contents = pluginPackagePropertiesFile.getContents();
+			props.load(contents);
 			
 			processPortalDependencyTlds(props, pluginPackagePropertiesFile.getProject());
 
@@ -356,6 +365,16 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		}
 		catch (Exception e) {
 			ProjectCorePlugin.logError(e);
+		}
+		finally {
+			if (contents != null) {
+				try {
+					contents.close();
+				}
+				catch (IOException e) {
+					// ignore, this is best effort
+				}
+			}
 		}
 
 	}

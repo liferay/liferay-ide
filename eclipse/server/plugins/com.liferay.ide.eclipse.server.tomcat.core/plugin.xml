@@ -69,7 +69,7 @@
    <extension
          point="org.eclipse.wst.server.core.publishTasks">
       <publishTask
-            class="org.eclipse.jst.server.tomcat.core.internal.PublishTask"
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayPublishTask"
             id="com.liferay.ide.eclipse.server.tomcat.publishTask"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
       </publishTask>

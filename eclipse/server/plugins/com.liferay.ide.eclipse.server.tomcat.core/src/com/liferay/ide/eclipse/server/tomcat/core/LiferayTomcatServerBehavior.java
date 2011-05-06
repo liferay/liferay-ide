@@ -12,6 +12,7 @@
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayPublishHelper;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 
@@ -45,6 +46,9 @@ import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.model.IModuleResource;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
+import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 import org.w3c.dom.Document;
 
 /**
@@ -66,29 +70,10 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 				this, kind, deltaKind, moduleTree, getPublishedResourceDelta(moduleTree), monitor);
 
 		if (shouldPublishModule) {
-			try {
-				super.publishModule(kind, deltaKind, moduleTree, monitor);
-			} catch (CoreException ex) {
-				//if we are deleting try to catch errors with locked jars
-				if (deltaKind != ADDED) {
-					if (ex.getStatus().isMultiStatus()) {
-						boolean eatError = true;
-						for (IStatus childStatus : ex.getStatus().getChildren()) {
-							if (!(childStatus.getMessage().contains("Could not delete") && 
-									childStatus.getMessage().contains("WEB-INF"+File.separator+"lib") &&
-									childStatus.getMessage().contains(".jar"))) {
-								eatError = false;
-								break;
-							}
-						}
-						if (eatError) {
-							return;
-						} else {
-							throw ex;
-						}
-					}
+			if (getServer().getServerState() != IServer.STATE_STOPPED) {
+				if (deltaKind == ServerBehaviourDelegate.ADDED || deltaKind == ServerBehaviourDelegate.REMOVED)
+					setServerRestartState(true);
 				}
-			}
 
 			setModulePublishState(moduleTree, IServer.PUBLISH_STATE_NONE);
 		}
@@ -142,6 +127,14 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 		return (LiferayTomcatServer) getServer().loadAdapter(LiferayTomcatServer.class, null);
 	}
 	
+	public IModuleResourceDelta[] getPublishedResourceDelta(IModule[] module) {
+		return super.getPublishedResourceDelta(module);
+	}
+
+	public IModuleResource[] getResources(IModule[] module) {
+		return super.getResources(module);
+	}
+
 	public IStatus moveContextsToAutoDeployDir(IPath baseDir, IPath autoDeployDir, boolean noPath, boolean serverStopped) {
 		IPath confDir = baseDir.append("conf");
 		IPath serverXml = confDir.append("server.xml");
@@ -157,7 +150,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 			Host host = publishedInstance.getHost();
 			Context[] wtpContexts = publishedInstance.getContexts();
 			if (wtpContexts != null && wtpContexts.length > 0) {
-//				IPath contextPath = publishedInstance.getContextXmlDirectory(serverXml.removeLastSegments(1));
+				IPath tomcatContextPath = publishedInstance.getContextXmlDirectory(serverXml.removeLastSegments(1));
 				IPath contextPath = null;
 				if (autoDeployDir.isAbsolute()) {
 					contextPath = autoDeployDir;
@@ -189,6 +182,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 						context.setAttributeValue("antiResourceLocking", "false");
 					
 					File contextFile = new File(contextDir, name + ".xml");
+					File tomcatContextFile = new File(tomcatContextPath.toFile(), name + ".xml");
 					Context existingContext = LiferayTomcatUtil.loadContextFile(contextFile);
 					// If server is stopped or if contexts are not the equivalent, write the context file
 					if (!LiferayTomcatUtil.isExtProjectContext(context) && (serverStopped || !context.isEquivalent(existingContext))) {
@@ -201,10 +195,12 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 							context.setDocBase(getServerDeployDirectory().append(new Path(context.getDocBase())).toOSString());
 						}
 						
-						DocumentBuilder builder = XMLUtil.getDocumentBuilder();
-						Document contextDoc = builder.newDocument();
-						contextDoc.appendChild(contextDoc.importNode(context.getElementNode(), true));
-						XMLUtil.save(contextFile.getAbsolutePath(), contextDoc);
+						if (!tomcatContextFile.exists()) {
+							DocumentBuilder builder = XMLUtil.getDocumentBuilder();
+							Document contextDoc = builder.newDocument();
+							contextDoc.appendChild(contextDoc.importNode(context.getElementNode(), true));
+							XMLUtil.save(contextFile.getAbsolutePath(), contextDoc);
+						}
 					}
 
 					host.removeElement("Context", i);
@@ -341,6 +337,21 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 
 			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, fixedArgs);
 		}
+	}
+
+	public void redeployContext(String contextName) {
+		IPath baseDir = getRuntimeBaseDirectory();
+		IPath confDir = baseDir.append("conf");
+		IPath contextPath = confDir.append("Catalina/localhost/" + contextName + ".xml");
+
+		if (contextPath.toFile().exists()) {
+			IPath autoDeployDir = new Path(getLiferayTomcatServer().getAutoDeployDirectory());
+			if (!autoDeployDir.isAbsolute()) {
+				autoDeployDir = baseDir.append(autoDeployDir);
+			}
+			FileUtil.copyFileToDir(contextPath.toFile(), autoDeployDir.toFile());
+		}
+
 	}
 
 }

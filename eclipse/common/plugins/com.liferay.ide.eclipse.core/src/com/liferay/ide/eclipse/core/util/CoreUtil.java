@@ -30,16 +30,19 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.osgi.framework.Version;
 
 /**
@@ -48,6 +51,40 @@ import org.osgi.framework.Version;
  * @author Greg Amerson
  */
 public class CoreUtil {
+
+	public static boolean containsMember(IModuleResourceDelta delta, String path) {
+		if (delta == null) {
+			return false;
+		}
+
+		// iterate over the path and find matching child delta
+		IModuleResourceDelta[] currentChildren = delta.getAffectedChildren();
+
+		if (currentChildren == null) {
+			IFile file = (IFile) delta.getModuleResource().getAdapter(IFile.class);
+			
+			if (file != null && file.getFullPath().toString().contains(path)) {
+				return true;
+			}
+			return false;
+		}
+
+		for (int j = 0, jmax = currentChildren.length; j < jmax; j++) {
+			IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
+			if (moduleRelativePath.toString().equals(path) || moduleRelativePath.lastSegment().equals(path)) {
+				return true;
+			}
+			else {
+				boolean childContains = containsMember(currentChildren[j], path);
+
+				if (childContains) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	public static IStatus createErrorStatus(String msg) {
 
