@@ -107,6 +107,13 @@
                id="com.liferay.ide.eclipse.server.ui.action.testWebServices.plugin"
                label="Test Liferay Web Services...">
          </action>
+         <action
+               class="com.liferay.ide.eclipse.server.ui.action.RedeployAction"
+               enablesFor="1"
+               icon="icons/e16/redeploy_16x16.gif"
+               id="com.liferay.ide.eclipse.server.ui.action.redeploy"
+               label="Redeploy">
+         </action>
          
       </objectContribution>
    </extension>

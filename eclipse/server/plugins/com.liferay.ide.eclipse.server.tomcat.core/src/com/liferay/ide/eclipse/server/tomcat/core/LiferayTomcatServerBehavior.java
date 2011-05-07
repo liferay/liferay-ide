@@ -13,6 +13,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayPublishHelper;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,7 +34,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
-import org.eclipse.jst.server.tomcat.core.internal.ITomcatVersionHandler;
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatServer;
@@ -55,7 +56,7 @@ import org.w3c.dom.Document;
  * @author gregory.amerson@liferay.com
  */
 @SuppressWarnings("restriction")
-public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
+public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implements ILiferayServerBehavior {
 
 	public LiferayTomcatServerBehavior() {
 		super();
@@ -88,7 +89,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 		IStatus status = Status.OK_STATUS;
 		IPath baseDir = getRuntimeBaseDirectory();
 		TomcatServer ts = getTomcatServer();
-		ITomcatVersionHandler tvh = getTomcatVersionHandler();
+		// ITomcatVersionHandler tvh = getTomcatVersionHandler();
 		// Include or remove loader jar depending on state of serving directly 
 
 		// TODO uncomment following line once we have serve directly enabled
@@ -352,6 +353,21 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour {
 			FileUtil.copyFileToDir(contextPath.toFile(), autoDeployDir.toFile());
 		}
 
+	}
+
+	public void redeployModule(IModule[] module) {
+		setModulePublishState(module, IServer.PUBLISH_STATE_FULL);
+
+		IAdaptable info = new IAdaptable() {
+
+			@SuppressWarnings("rawtypes")
+			public Object getAdapter(Class adapter) {
+				if (String.class.equals(adapter))
+					return "user";
+				return null;
+			}
+		};
+		getServer().publish(IServer.PUBLISH_FULL, null, info, null);
 	}
 
 }
