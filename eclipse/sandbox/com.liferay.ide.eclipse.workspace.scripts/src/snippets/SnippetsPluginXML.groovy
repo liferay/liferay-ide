@@ -1,49 +1,16 @@
 package snippets;
 
-import groovy.util.XmlNodePrinter 
-import groovy.util.XmlParser 
-import java.io.PrintWriter 
-import java.io.StringWriter 
+import groovy.util.XmlNodePrinter
+import groovy.util.XmlParser
 
-File workspaceDir = new File("..")
-File outputXml = new File(workspaceDir, "com.liferay.ide.eclipse.ui.snippets/plugin.xml")
+import java.io.PrintWriter
+import java.io.StringWriter
+
+File outputXml = new File("../../common/plugins/com.liferay.ide.eclipse.ui.snippets/plugin.xml")
 String contenttypesVal = "org.eclipse.jst.jsp.core.jspsource"
 String categoryIdPrefix = "com.liferay.ide.eclipse.ui.snippets.category"
 String itemIdPrefix = "com.liferay.ide.eclipse.ui.snippets.item"
 String iconPrefix = "icons/snippets"
-
-def searchContainer = '''
-<extension
-         point="org.eclipse.wst.common.snippets.SnippetContributions">
-	<category
-    		contenttypes="org.eclipse.jst.jsp.core.jspsource"
-        	description="Liferay Search Container"
-        	id="com.liferay.ide.eclipse.ui.snippets.category.search"
-        	label="Liferay Search Container"
-        	smallicon="icons/e16/portlet_tld.png">
-        <item
-        		class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
-            	description="actionURL"
-            	id="com.liferay.ide.eclipse.ui.snippets.item.search"
-            	label="actionURL"
-            	smallicon="icons/e16/tag-generic.gif">
-            <content>
-               &lt;portlet:actionURL ${name}${var}/&gt;</content>
-            <variable
-                  description="Name"
-                  id="name"
-                  name="name">
-            </variable>
-            <variable
-                  description="Var"
-                  id="var"
-                  name="var">
-            </variable>
-         </item>
-      </category>
-   </extension>
-'''
-
 
 def mappings = [
 			aui : [
@@ -52,6 +19,7 @@ def mappings = [
 				icon16 : "liferay_aui_tld_16x16.png",
 				icon32 : "liferay_aui_tld_32x32.png",
 				url : "http://liferay.com/tld/aui",
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			"liferay-portlet" : [
 				desc : "Liferay Portlet Ext Taglib",
@@ -59,6 +27,7 @@ def mappings = [
 				icon16 : "portlet_ext_tld_16x16.png",
 				icon32 : "portlet_ext_tld_32x32.png",
 				url : "http://liferay.com/tld/portlet",
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			portlet : [
 				desc : "Portlet Taglib",
@@ -66,6 +35,7 @@ def mappings = [
 				icon16 : "portlet_tld_16x16.png",
 				icon32 : "portlet_tld_32x32.png",
 				url : "http://java.sun.com/portlet",
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			theme : [
 				desc : "Liferay Theme Taglib",
@@ -73,6 +43,7 @@ def mappings = [
 				icon16 : "liferay_theme_tld_16x16.png",
 				icon32 : "liferay_theme_tld_32x32.png",
 				url : "http://liferay.com/tld/theme",
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			"liferay-ui" : [
 				desc : "Liferay UI Taglib",
@@ -80,13 +51,15 @@ def mappings = [
 				icon16 : "liferay_ui_tld_16x16.png",
 				icon32 : "liferay_ui_tld_32x32.png",
 				url : "http://liferay.com/tld/ui",
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			alloy : [
-				desc : "AlloyUI Component Taglib",
-				label : "AlloyUI Component Taglib",
+				desc : "Alloy Taglib",
+				label : "Alloy Taglib",
 				icon16 : "alloy_tld_16x16.png",
 				icon32 : "alloy_tld_32x32.png",
 				url : "http://alloy.liferay.com/tld/alloy",
+				clazz : "com.liferay.ide.eclipse.ui.snippets.AlloyTagSnippetInsertion"
 			]
 		]
 
@@ -182,7 +155,7 @@ tldFiles.each {
 		def itemName = it.name.text()
 		
 		def itemAttrs = [
-					class : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion",
+					class : mappings[name]["clazz"],
 					description : itemName,
 					id : "${itemIdPrefix}.${itemName}",
 					label : itemName,

@@ -1,6 +1,133 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.4"?>
 <plugin>
+  <extension id="jsp" name="JSP" point="org.eclipse.wst.common.snippets.SnippetContributions">
+    <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Search Container" id="com.liferay.ide.eclipse.ui.snippets.search_container" label="Liferay UI Search Container" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
+      <item class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.portal_model_search_container" label="Model Search Container" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;liferay-ui:search-container&gt;
+	&lt;liferay-ui:search-container-results
+		results=&quot;&lt;%= ${model}LocalServiceUtil.get${model}s(searchContainer.getStart(), searchContainer.getEnd()) %&gt;&quot;
+		total=&quot;&lt;%= ${model}LocalServiceUtil.get${model}sCount() %&gt;&quot;
+	/&gt;
+
+	&lt;liferay-ui:search-container-row
+		className=&quot;${modelClass}&quot;
+		modelVar=&quot;${varName}&quot;
+	&gt;
+	
+		${columns}
+	&lt;/liferay-ui:search-container-row&gt;
+
+	&lt;liferay-ui:search-iterator /&gt;
+&lt;/liferay-ui:search-container&gt;
+        </content>
+      </item>
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text" label="Search Container Column Text" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;liferay-ui:search-container-column-text property=&quot;${property}&quot; name=&quot;${name}&quot; /&gt;
+        </content>
+        <variable id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.property" name="property"/>
+        <variable id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.name" name="name"/>
+      </item>
+    </category>
+    <category contenttypes="org.eclipse.wst.xml.core.xmlsource" description="Service Builder" id="com.liferay.ide.eclipse.ui.snippets.service_builder" label="Service Builder" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_entity" label="Sample Entity" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;entity name=&quot;Foo&quot; local-service=&quot;true&quot; remote-service=&quot;true&quot;&gt;
+
+		&lt;!-- PK fields --&gt;
+
+		&lt;column name=&quot;fooId&quot; type=&quot;long&quot; primary=&quot;true&quot; /&gt;
+
+		&lt;!-- Audit fields --&gt;
+
+		&lt;column name=&quot;companyId&quot; type=&quot;long&quot; /&gt;
+		&lt;column name=&quot;userId&quot; type=&quot;long&quot; /&gt;
+		&lt;column name=&quot;userName&quot; type=&quot;String&quot; /&gt;
+		&lt;column name=&quot;createDate&quot; type=&quot;Date&quot; /&gt;
+		&lt;column name=&quot;modifiedDate&quot; type=&quot;Date&quot; /&gt;
+
+		&lt;!-- Other fields --&gt;
+
+		&lt;column name=&quot;field1&quot; type=&quot;String&quot; /&gt;
+		&lt;column name=&quot;field2&quot; type=&quot;boolean&quot; /&gt;
+		&lt;column name=&quot;field3&quot; type=&quot;int&quot; /&gt;
+		&lt;column name=&quot;field4&quot; type=&quot;Date&quot; /&gt;
+		&lt;column name=&quot;field5&quot; type=&quot;String&quot; /&gt;
+
+		&lt;!-- Order --&gt;
+
+		&lt;order by=&quot;asc&quot;&gt;
+			&lt;order-column name=&quot;field1&quot; /&gt;
+		&lt;/order&gt;
+
+		&lt;!-- Finder methods --&gt;
+
+		&lt;finder name=&quot;Field2&quot; return-type=&quot;Collection&quot;&gt;
+			&lt;finder-column name=&quot;field2&quot; /&gt;
+		&lt;/finder&gt;
+	&lt;/entity&gt;
+          <entity name="Foo" local-service="true" remote-service="true">
+            <column name="fooId" type="long" primary="true"/>
+            <column name="companyId" type="long"/>
+            <column name="userId" type="long"/>
+            <column name="userName" type="String"/>
+            <column name="createDate" type="Date"/>
+            <column name="modifiedDate" type="Date"/>
+            <column name="field1" type="String"/>
+            <column name="field2" type="boolean"/>
+            <column name="field3" type="int"/>
+            <column name="field4" type="Date"/>
+            <column name="field5" type="String"/>
+            <order by="asc">
+              <order-column name="field1"/>
+            </order>
+            <finder name="Field2" return-type="Collection">
+              <finder-column name="field2"/>
+            </finder>
+          </entity>
+        </content>
+      </item>
+      <item class="com.liferay.ide.eclipse.ui.snippets.AddModelEntitySnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_add_model_entity" label="Add Model Entity" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          try {
+			${model} ${varName} = ${varName}Persistence.create(CounterLocalServiceUtil.increment());
+			
+			${fields}
+			${varName}Persistence.update(${varName}, true);
+		} catch (SystemException e) {
+			// TODO Handle exception
+		}
+        </content>
+      </item>
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column" label="Primary Key Column" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          <column name="${name}Id" type="long" primary="true"/>
+        </content>
+        <variable description="Name to use for prefix of primary key (will end with &quot;Id&quot;)" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column.id_name_var" name="name"/>
+      </item>
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column" label="Column" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          <column name="${name}" type="${type}"/>
+        </content>
+        <variable description="Column name" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.var_name" name="name"/>
+        <variable default="String" description="Type to use for column" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.type_var" name="type"/>
+      </item>
+    </category>
+    <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Useful View Codef Liferay Theme Builder JavaScript Object" id="com.liferay.ide.eclipse.ui.snippets.category.theme.builder" label="Theme Builder" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.themeBuilderCompanyId" label="Get Company Id" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;%@ taglib uri=&quot;http://liferay.com/tld/theme&quot; prefix=&quot;theme&quot; %&gt;
+&lt;theme:defineObjects /&gt;
+
+Company Id:
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+	document.write(themeDisplay.getCompanyId());
+&lt;/script&gt;
+        </content>
+      </item>
+    </category>
+  </extension>
   <extension id="taglib" point="org.eclipse.wst.common.snippets.SnippetContributions">
     <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Taglib imports" id="com.liferay.ide.eclipse.ui.snippets.category.taglib_imports" label="Taglib imports" smallicon="icons/snippets/jsptaglib.gif">
       <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Liferay AUI Taglib" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.aui" label="Liferay AUI Taglib Import" smallicon="icons/snippets/tag-generic.gif">
@@ -28,7 +155,7 @@
           &lt;%@ taglib uri=&quot;http://liferay.com/tld/ui&quot; prefix=&quot;liferay-ui&quot; %&gt;
         </content>
       </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="AlloyUI Component Taglib" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.alloy" label="AlloyUI Component Taglib Import" smallicon="icons/snippets/tag-generic.gif">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Alloy Taglib" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.alloy" label="Alloy Taglib Import" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;%@ taglib uri=&quot;http://alloy.liferay.com/tld/alloy&quot; prefix=&quot;alloy&quot; %&gt;
         </content>
@@ -198,10 +325,11 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="preview" id="com.liferay.ide.eclipse.ui.snippets.item.preview" label="preview" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-portlet:preview${portletName}${queryString}${width}&gt;&lt;/liferay-portlet:preview&gt;
+          &lt;liferay-portlet:preview${portletName}${queryString}${showBorders}${width}&gt;&lt;/liferay-portlet:preview&gt;
         </content>
         <variable description="" id="portletName" name="portletName"/>
         <variable description="" id="queryString" name="queryString"/>
+        <variable description="" id="showBorders" name="showBorders"/>
         <variable description="" id="width" name="width"/>
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="renderURL" id="com.liferay.ide.eclipse.ui.snippets.item.renderURL" label="renderURL" smallicon="icons/snippets/tag-generic.gif">
@@ -257,6 +385,11 @@
       </item>
     </category>
     <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.liferay-ui" label="Liferay UI Taglib" smallicon="icons/snippets/liferay_ui_tld_16x16.png" largeicon="icons/snippets/liferay_ui_tld_32x32.png">
+      <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-categories-error" id="com.liferay.ide.eclipse.ui.snippets.item.asset-categories-error" label="asset-categories-error" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;liferay-ui:asset-categories-error&gt;&lt;/liferay-ui:asset-categories-error&gt;
+        </content>
+      </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-categories-navigation" id="com.liferay.ide.eclipse.ui.snippets.item.asset-categories-navigation" label="asset-categories-navigation" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:asset-categories-navigation${hidePortletWhenEmpty}${vocabularyIds}&gt;&lt;/liferay-ui:asset-categories-navigation&gt;
@@ -291,11 +424,12 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="asset-tags-navigation" id="com.liferay.ide.eclipse.ui.snippets.item.asset-tags-navigation" label="asset-tags-navigation" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:asset-tags-navigation${classNameId}${displayStyle}${hidePortletWhenEmpty}${showAssetCount}${showZeroAssetCount}&gt;&lt;/liferay-ui:asset-tags-navigation&gt;
+          &lt;liferay-ui:asset-tags-navigation${classNameId}${displayStyle}${hidePortletWhenEmpty}${maxAssetTags}${showAssetCount}${showZeroAssetCount}&gt;&lt;/liferay-ui:asset-tags-navigation&gt;
         </content>
         <variable description="" id="classNameId" name="classNameId"/>
         <variable description="" id="displayStyle" name="displayStyle"/>
         <variable description="" id="hidePortletWhenEmpty" name="hidePortletWhenEmpty"/>
+        <variable description="" id="maxAssetTags" name="maxAssetTags"/>
         <variable description="" id="showAssetCount" name="showAssetCount"/>
         <variable description="" id="showZeroAssetCount" name="showZeroAssetCount"/>
       </item>
@@ -459,6 +593,19 @@
         <variable description="" id="width" name="width"/>
         <variable description="" id="wmode" name="wmode"/>
       </item>
+      <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="form-navigator" id="com.liferay.ide.eclipse.ui.snippets.item.form-navigator" label="form-navigator" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;liferay-ui:form-navigator${backURL}${categoryNames}${categorySections}${formName}${htmlBottom}${htmlTop}${jspPath}${showButtons}&gt;&lt;/liferay-ui:form-navigator&gt;
+        </content>
+        <variable description="" id="backURL" name="backURL"/>
+        <variable description="" id="categoryNames" name="categoryNames"/>
+        <variable description="" id="categorySections" name="categorySections"/>
+        <variable description="" id="formName" name="formName"/>
+        <variable description="" id="htmlBottom" name="htmlBottom"/>
+        <variable description="" id="htmlTop" name="htmlTop"/>
+        <variable description="" id="jspPath" name="jspPath"/>
+        <variable description="" id="showButtons" name="showButtons"/>
+      </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="group-search" id="com.liferay.ide.eclipse.ui.snippets.item.group-search" label="group-search" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:group-search${groupParams}${portletURL}${rowChecker}&gt;&lt;/liferay-ui:group-search&gt;
@@ -523,10 +670,12 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="icon-menu" id="com.liferay.ide.eclipse.ui.snippets.item.icon-menu" label="icon-menu" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:icon-menu${align}${cssClass}${icon}${id}${message}${showExpanded}${showArrow}${showWhenSingleIcon}&gt;&lt;/liferay-ui:icon-menu&gt;
+          &lt;liferay-ui:icon-menu${align}${cssClass}${direction}${extended}${icon}${id}${message}${showExpanded}${showArrow}${showWhenSingleIcon}&gt;&lt;/liferay-ui:icon-menu&gt;
         </content>
         <variable description="" id="align" name="align"/>
         <variable description="" id="cssClass" name="cssClass"/>
+        <variable description="" id="direction" name="direction"/>
+        <variable description="" id="extended" name="extended"/>
         <variable description="" id="icon" name="icon"/>
         <variable description="" id="id" name="id"/>
         <variable description="" id="message" name="message"/>
@@ -572,8 +721,9 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-editor" id="com.liferay.ide.eclipse.ui.snippets.item.input-editor" label="input-editor" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:input-editor${cssClass}${editorImpl}${height}${initMethod}${name}${onChangeMethod}${toolbarSet}${width}&gt;&lt;/liferay-ui:input-editor&gt;
+          &lt;liferay-ui:input-editor${configParams}${cssClass}${editorImpl}${height}${initMethod}${name}${onChangeMethod}${toolbarSet}${width}&gt;&lt;/liferay-ui:input-editor&gt;
         </content>
+        <variable description="" id="configParams" name="configParams"/>
         <variable description="" id="cssClass" name="cssClass"/>
         <variable description="" id="editorImpl" name="editorImpl"/>
         <variable description="" id="height" name="height"/>
@@ -585,7 +735,7 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-field" id="com.liferay.ide.eclipse.ui.snippets.item.input-field" label="input-field" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:input-field${bean}${cssClass}${defaultValue}${disabled}${field}${fieldParam}${formName}${format}${model}&gt;&lt;/liferay-ui:input-field&gt;
+          &lt;liferay-ui:input-field${bean}${cssClass}${defaultValue}${disabled}${field}${fieldParam}${formName}${format}${languageId}${model}&gt;&lt;/liferay-ui:input-field&gt;
         </content>
         <variable description="" id="bean" name="bean"/>
         <variable description="" id="cssClass" name="cssClass"/>
@@ -595,14 +745,17 @@
         <variable description="" id="fieldParam" name="fieldParam"/>
         <variable description="" id="formName" name="formName"/>
         <variable description="" id="format" name="format"/>
+        <variable description="" id="languageId" name="languageId"/>
         <variable description="" id="model" name="model"/>
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="input-localized" id="com.liferay.ide.eclipse.ui.snippets.item.input-localized" label="input-localized" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:input-localized${cssClass}${disabled}${name}${type}${xml}&gt;&lt;/liferay-ui:input-localized&gt;
+          &lt;liferay-ui:input-localized${cssClass}${disabled}${formName}${languageId}${name}${type}${xml}&gt;&lt;/liferay-ui:input-localized&gt;
         </content>
         <variable description="" id="cssClass" name="cssClass"/>
         <variable description="" id="disabled" name="disabled"/>
+        <variable description="" id="formName" name="formName"/>
+        <variable description="" id="languageId" name="languageId"/>
         <variable description="" id="name" name="name"/>
         <variable description="" id="type" name="type"/>
         <variable description="" id="xml" name="xml"/>
@@ -732,6 +885,16 @@
         <variable description="" id="languageIds" name="languageIds"/>
         <variable description="" id="name" name="name"/>
       </item>
+      <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="logo-selector" id="com.liferay.ide.eclipse.ui.snippets.item.logo-selector" label="logo-selector" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;liferay-ui:logo-selector${defaultLogoURL}${editLogoURL}${imageId}${logoDisplaySelector}${showBackground}&gt;&lt;/liferay-ui:logo-selector&gt;
+        </content>
+        <variable description="" id="defaultLogoURL" name="defaultLogoURL"/>
+        <variable description="" id="editLogoURL" name="editLogoURL"/>
+        <variable description="" id="imageId" name="imageId"/>
+        <variable description="" id="logoDisplaySelector" name="logoDisplaySelector"/>
+        <variable description="" id="showBackground" name="showBackground"/>
+      </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="message" id="com.liferay.ide.eclipse.ui.snippets.item.message" label="message" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:message${arguments}${key}${translateArguments}&gt;&lt;/liferay-ui:message&gt;
@@ -777,12 +940,13 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="panel" id="com.liferay.ide.eclipse.ui.snippets.item.panel" label="panel" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:panel${collapsible}${cssClass}${defaultState}${extended}${id}${persistState}${title}&gt;&lt;/liferay-ui:panel&gt;
+          &lt;liferay-ui:panel${collapsible}${cssClass}${defaultState}${extended}${helpMessage}${id}${persistState}${title}&gt;&lt;/liferay-ui:panel&gt;
         </content>
         <variable description="" id="collapsible" name="collapsible"/>
         <variable description="" id="cssClass" name="cssClass"/>
         <variable description="" id="defaultState" name="defaultState"/>
         <variable description="" id="extended" name="extended"/>
+        <variable description="" id="helpMessage" name="helpMessage"/>
         <variable description="" id="id" name="id"/>
         <variable description="" id="persistState" name="persistState"/>
         <variable description="" id="title" name="title"/>
@@ -876,10 +1040,11 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-button" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-button" label="search-container-column-button" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:search-container-column-button${align}${colspan}${href}${index}${name}${valign}&gt;&lt;/liferay-ui:search-container-column-button&gt;
+          &lt;liferay-ui:search-container-column-button${align}${colspan}${cssClass}${href}${index}${name}${valign}&gt;&lt;/liferay-ui:search-container-column-button&gt;
         </content>
         <variable description="" id="align" name="align"/>
         <variable description="" id="colspan" name="colspan"/>
+        <variable description="" id="cssClass" name="cssClass"/>
         <variable description="" id="href" name="href"/>
         <variable description="" id="index" name="index"/>
         <variable description="" id="name" name="name"/>
@@ -887,10 +1052,11 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-jsp" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-jsp" label="search-container-column-jsp" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:search-container-column-jsp${align}${colspan}${index}${name}${path}${valign}&gt;&lt;/liferay-ui:search-container-column-jsp&gt;
+          &lt;liferay-ui:search-container-column-jsp${align}${colspan}${cssClass}${index}${name}${path}${valign}&gt;&lt;/liferay-ui:search-container-column-jsp&gt;
         </content>
         <variable description="" id="align" name="align"/>
         <variable description="" id="colspan" name="colspan"/>
+        <variable description="" id="cssClass" name="cssClass"/>
         <variable description="" id="index" name="index"/>
         <variable description="" id="name" name="name"/>
         <variable description="" id="path" name="path"/>
@@ -906,11 +1072,12 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="search-container-column-text" id="com.liferay.ide.eclipse.ui.snippets.item.search-container-column-text" label="search-container-column-text" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:search-container-column-text${align}${buffer}${colspan}${href}${index}${name}${orderable}${orderableProperty}${property}${target}${title}${translate}${valign}${value}&gt;&lt;/liferay-ui:search-container-column-text&gt;
+          &lt;liferay-ui:search-container-column-text${align}${buffer}${colspan}${cssClass}${href}${index}${name}${orderable}${orderableProperty}${property}${target}${title}${translate}${valign}${value}&gt;&lt;/liferay-ui:search-container-column-text&gt;
         </content>
         <variable description="" id="align" name="align"/>
         <variable description="" id="buffer" name="buffer"/>
         <variable description="" id="colspan" name="colspan"/>
+        <variable description="" id="cssClass" name="cssClass"/>
         <variable description="" id="href" name="href"/>
         <variable description="" id="index" name="index"/>
         <variable description="" id="name" name="name"/>
@@ -1106,8 +1273,9 @@
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="toggle-value" id="com.liferay.ide.eclipse.ui.snippets.item.toggle-value" label="toggle-value" smallicon="icons/snippets/tag-generic.gif">
         <content>
-          &lt;liferay-ui:toggle-value${id}&gt;&lt;/liferay-ui:toggle-value&gt;
+          &lt;liferay-ui:toggle-value${defaultValue}${id}&gt;&lt;/liferay-ui:toggle-value&gt;
         </content>
+        <variable description="" id="defaultValue" name="defaultValue"/>
         <variable description="" id="id" name="id"/>
       </item>
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="upload-progress" id="com.liferay.ide.eclipse.ui.snippets.item.upload-progress" label="upload-progress" smallicon="icons/snippets/tag-generic.gif">
@@ -1383,150 +1551,6 @@
         <variable description="" id="page" name="page"/>
       </item>
     </category>
+    
   </extension>
-  <extension id="jsp" name="JSP" point="org.eclipse.wst.common.snippets.SnippetContributions">
-    <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Search Container" id="com.liferay.ide.eclipse.ui.snippets.search_container" label="Liferay UI Search Container" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
-      <item class="com.liferay.ide.eclipse.ui.snippets.SearchContainerSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.portal_model_search_container" label="Model Search Container" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
-        <content>
-          &lt;liferay-ui:search-container&gt;
-	&lt;liferay-ui:search-container-results
-		results=&quot;&lt;%= ${model}LocalServiceUtil.get${model}s(searchContainer.getStart(), searchContainer.getEnd()) %&gt;&quot;
-		total=&quot;&lt;%= ${model}LocalServiceUtil.get${model}sCount() %&gt;&quot;
-	/&gt;
-
-	&lt;liferay-ui:search-container-row
-		className=&quot;${modelClass}&quot;
-		modelVar=&quot;${varName}&quot;
-	&gt;
-	
-		${columns}
-	&lt;/liferay-ui:search-container-row&gt;
-
-	&lt;liferay-ui:search-iterator /&gt;
-&lt;/liferay-ui:search-container&gt;
-        </content>
-      </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text" label="Search Container Column Text" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
-        <content>
-          &lt;liferay-ui:search-container-column-text property=&quot;${property}&quot; name=&quot;${name}&quot; /&gt;
-        </content>
-        <variable id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.property" name="property"/>
-        <variable id="com.liferay.ide.eclipse.ui.snippets.item.search_container_column_text.name" name="name"/>
-      </item>
-    </category>
-    <category contenttypes="org.eclipse.wst.xml.core.xmlsource" description="Service Builder" id="com.liferay.ide.eclipse.ui.snippets.service_builder" label="Service Builder" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_entity" label="Sample Entity" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
-        <content>
-          &lt;entity name=&quot;Foo&quot; local-service=&quot;true&quot; remote-service=&quot;true&quot;&gt;
-
-		&lt;!-- PK fields --&gt;
-
-		&lt;column name=&quot;fooId&quot; type=&quot;long&quot; primary=&quot;true&quot; /&gt;
-
-		&lt;!-- Audit fields --&gt;
-
-		&lt;column name=&quot;companyId&quot; type=&quot;long&quot; /&gt;
-		&lt;column name=&quot;userId&quot; type=&quot;long&quot; /&gt;
-		&lt;column name=&quot;userName&quot; type=&quot;String&quot; /&gt;
-		&lt;column name=&quot;createDate&quot; type=&quot;Date&quot; /&gt;
-		&lt;column name=&quot;modifiedDate&quot; type=&quot;Date&quot; /&gt;
-
-		&lt;!-- Other fields --&gt;
-
-		&lt;column name=&quot;field1&quot; type=&quot;String&quot; /&gt;
-		&lt;column name=&quot;field2&quot; type=&quot;boolean&quot; /&gt;
-		&lt;column name=&quot;field3&quot; type=&quot;int&quot; /&gt;
-		&lt;column name=&quot;field4&quot; type=&quot;Date&quot; /&gt;
-		&lt;column name=&quot;field5&quot; type=&quot;String&quot; /&gt;
-
-		&lt;!-- Order --&gt;
-
-		&lt;order by=&quot;asc&quot;&gt;
-			&lt;order-column name=&quot;field1&quot; /&gt;
-		&lt;/order&gt;
-
-		&lt;!-- Finder methods --&gt;
-
-		&lt;finder name=&quot;Field2&quot; return-type=&quot;Collection&quot;&gt;
-			&lt;finder-column name=&quot;field2&quot; /&gt;
-		&lt;/finder&gt;
-	&lt;/entity&gt;
-          <entity name="Foo" local-service="true" remote-service="true">
-            <column name="fooId" type="long" primary="true"/>
-            <column name="companyId" type="long"/>
-            <column name="userId" type="long"/>
-            <column name="userName" type="String"/>
-            <column name="createDate" type="Date"/>
-            <column name="modifiedDate" type="Date"/>
-            <column name="field1" type="String"/>
-            <column name="field2" type="boolean"/>
-            <column name="field3" type="int"/>
-            <column name="field4" type="Date"/>
-            <column name="field5" type="String"/>
-            <order by="asc">
-              <order-column name="field1"/>
-            </order>
-            <finder name="Field2" return-type="Collection">
-              <finder-column name="field2"/>
-            </finder>
-          </entity>
-        </content>
-      </item>
-      <item
-            class="com.liferay.ide.eclipse.ui.snippets.AddModelEntitySnippetInsertion"
-            id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_add_model_entity"
-            label="Add Model Entity"
-            largeicon="icons/snippets/tag-generic.gif"
-            smallicon="icons/snippets/tag-generic.gif">
-         <content>
-           try {
-			${model} ${varName} = ${varName}Persistence.create(CounterLocalServiceUtil.increment());
-			
-			${fields}
-			${varName}Persistence.update(${varName}, true);
-		} catch (SystemException e) {
-			// TODO Handle exception
-		} 
-         </content>
-      </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column" label="Primary Key Column" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
-        <content>
-          <column name="${name}Id" type="long" primary="true"/>
-        </content>
-        <variable description="Name to use for prefix of primary key (will end with &quot;Id&quot;)" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_primary_key_column.id_name_var" name="name"/>
-      </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column" label="Column" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
-        <content>
-          <column name="${name}" type="${type}"/>
-        </content>
-        <variable description="Column name" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.var_name" name="name"/>
-        <variable default="String" description="Type to use for column" id="com.liferay.ide.eclipse.ui.snippets.item.service_builder_column.type_var" name="type"/>
-      </item>
-    </category>
-    <category
-          contenttypes="org.eclipse.jst.jsp.core.jspsource"
-          description="Useful View Codef Liferay Theme Builder JavaScript Object"
-          id="com.liferay.ide.eclipse.ui.snippets.category.theme.builder"
-          label="Theme Builder"
-          largeicon="icons/snippets/search.png"
-          smallicon="icons/snippets/search.png">
-       <item
-             class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion"
-             id="com.liferay.ide.eclipse.ui.snippets.item.themeBuilderCompanyId"
-             label="Get Company Id"
-             largeicon="icons/snippets/tag-generic.gif"
-             smallicon="icons/snippets/tag-generic.gif">
-          <content>
-&lt;%@ taglib uri=&quot;http://liferay.com/tld/theme&quot; prefix=&quot;theme&quot; %&gt;
-&lt;theme:defineObjects /&gt;
-
-Company Id:
-
-&lt;script type=&quot;text/javascript&quot;&gt;
-	document.write(themeDisplay.getCompanyId());
-&lt;/script&gt;
-          </content>
-       </item>
-    </category>
-  </extension>
- </plugin>
+</plugin>

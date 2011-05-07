@@ -20,4 +20,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.ui.snippets,
- com.liferay.ide.eclipse.ui.snippets.util
+ com.liferay.ide.eclipse.ui.snippets.util,
+ com.liferay.ide.eclipse.ui.snippets.wizard
+Bundle-ClassPath: .
