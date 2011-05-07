@@ -105,7 +105,7 @@ public class BeanstalkServerWizardFragment extends WizardFragment {
 
 	@Override
 	public void exit() {
-		if (lastServerStatus.getSeverity() != IStatus.ERROR) {
+		if (lastServerStatus != null && lastServerStatus.getSeverity() != IStatus.ERROR) {
 			AWSCorePlugin.getPreferences().put(
 				BeanstalkServer.PREF_DEFAULT_SERVER_HOSTNAME_PREFIX + getServerWorkingCopy().getServerType().getId(),
 				getServerWorkingCopy().getHost());
