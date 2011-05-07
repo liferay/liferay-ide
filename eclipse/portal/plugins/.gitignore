@@ -6,5 +6,8 @@ com.liferay.ide.eclipse.portlet.jsf.ui/bin/
 com.liferay.ide.eclipse.portlet.ui/bin/
 com.liferay.ide.eclipse.portlet.vaadin.core/bin/
 com.liferay.ide.eclipse.portlet.vaadin.ui/bin/
+com.liferay.ide.eclipse.service.core/bin/
+com.liferay.ide.eclipse.service.ui/bin/
+com.liferay.ide.eclipse.taglib.ui/bin/
 com.liferay.ide.eclipse.theme.core/bin/
 com.liferay.ide.eclipse.theme.ui/bin/

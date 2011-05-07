@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Service Builder Core
+Bundle-SymbolicName: com.liferay.ide.eclipse.service.core;singleton:=true
+Bundle-Version: 1.3.0.qualifier
+Bundle-Activator: com.liferay.ide.eclipse.service.core.ServiceCore
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.sapphire.modeling;bundle-version="0.3.0";visibility:=reexport,
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.3.0";visibility:=reexport
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.eclipse.service.core,
+ com.liferay.ide.eclipse.service.core.model,
+ com.liferay.ide.eclipse.service.core.model.internal

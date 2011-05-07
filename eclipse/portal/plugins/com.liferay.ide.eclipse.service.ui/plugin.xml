@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.liferay.ide.eclipse.service.ui.ServiceBuilderEditor"
+           	icon="icons/e16/service.png"
+            id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
+            name="Service Builder Editor (Experimental)"
+            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+        <contentTypeBinding
+               contentTypeId="com.liferay.ide.eclipse.portlet.core.servicebuildercontent">
+         </contentTypeBinding>
+      </editor>
+      
+   </extension>
+  
+</plugin>
