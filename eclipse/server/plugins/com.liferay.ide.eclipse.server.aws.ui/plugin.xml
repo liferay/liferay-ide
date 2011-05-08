@@ -32,7 +32,7 @@
          point="org.eclipse.wst.common.project.facet.core.runtimes">
       <adapter>
          <runtime-component
-               id="com.liferay.ide.eclipse.server.aws.runtime.component">
+               id="com.liferay.ide.eclipse.server.aws.beanstalk.runtime.component">
          </runtime-component>
          <factory
                class="com.liferay.ide.eclipse.server.aws.ui.BeanstalkFacetRuntimeComponentLabelProvider">
@@ -43,7 +43,7 @@
       </adapter>
       <adapter>
          <runtime-component
-               id="com.liferay.ide.eclipse.server.aws.runtime.component">
+               id="com.liferay.ide.eclipse.server.aws.beanstalk.runtime.component">
          </runtime-component>
          <factory
                class="com.liferay.ide.eclipse.server.aws.ui.BeanstalkRuntimeDecorationsProvider">
@@ -57,7 +57,7 @@
          point="org.eclipse.wst.common.project.facet.ui.images">
       <image
             path="icons/aws-box.gif"
-            runtime-component-type="com.liferay.ide.eclipse.server.aws.runtime.component">
+            runtime-component-type="com.liferay.ide.eclipse.server.aws.beanstalk.runtime.component">
       </image>
    </extension>
    <extension

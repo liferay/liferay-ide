@@ -18,7 +18,7 @@ public class TaglibSnippetInsertion extends AbstractSnippetInsertion {
 	protected String getResolvedString(Shell host) {
 		String insertString = null;
 		if (fItem.getVariables().length > 0) {
-			insertString = TaglibVariableItemHelper.getInsertString(host, fItem);
+			insertString = TaglibVariableItemHelper.getInsertString(host, fEditorPart, fItem);
 		}
 		else {
 			insertString = StringUtils.replace(fItem.getContentString(), "${cursor}", ""); //$NON-NLS-1$ //$NON-NLS-2$

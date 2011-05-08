@@ -14,6 +14,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.wst.common.snippets.core.ISnippetItem;
 import org.eclipse.wst.common.snippets.internal.VariableInsertionDialog;
 
@@ -25,16 +26,16 @@ import org.eclipse.wst.common.snippets.internal.VariableInsertionDialog;
 @SuppressWarnings("restriction")
 public class TaglibVariableItemHelper {
 
-	public static String getInsertString(Shell host, ISnippetItem item) {
-		return getInsertString(host, item, true);
+	public static String getInsertString(Shell host, IEditorPart editor, ISnippetItem item) {
+		return getInsertString(host, editor, item, true);
 	}
 
-	public static String getInsertString(final Shell host, ISnippetItem item, boolean clearModality) {
+	public static String getInsertString(final Shell host, IEditorPart editor, ISnippetItem item, boolean clearModality) {
 		if (item == null)
 			return ""; //$NON-NLS-1$
 		String insertString = null;
 		if (item.getVariables().length > 0) {
-			VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, clearModality);
+			VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, editor, clearModality);
 			dialog.setItem(item);
 			// The editor itself influences the insertion's actions, so we
 			// can't

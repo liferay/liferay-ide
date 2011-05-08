@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.wst.common.snippets.core.ISnippetVariable;
 import org.eclipse.wst.common.snippets.internal.VariableInsertionDialog;
 import org.eclipse.wst.common.snippets.internal.palette.SnippetVariable;
@@ -16,8 +18,11 @@ import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 @SuppressWarnings("restriction")
 public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 
-	public TaglibVariableInsertionDialog(Shell parentShell, boolean clearModality) {
+	protected IEditorPart editor;
+
+	public TaglibVariableInsertionDialog(Shell parentShell, IEditorPart editor, boolean clearModality) {
 		super(parentShell, clearModality);
+		this.editor = editor;
 	}
 
 	@Override
@@ -38,6 +43,19 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 
 	@Override
 	protected void prepareText() {
+		// check the editor, if it is freemarker then prepare freemarker, else use JSP
+		
+		String text = prepareJSPText();
+		
+		if (isFreemarkerEditor(editor)) {
+			text = text.replaceAll("<([a-z]+):", "<@$1\\.");
+			text = text.replaceAll("</([a-z]+):", "</@$1\\.");
+		}
+			
+		setPreparedText(text);
+	}
+
+	private String prepareJSPText() {
 		// this could be horribly inefficient
 		String text = fItem.getContentString();
 		ISnippetVariable[] variables = fItem.getVariables();
@@ -61,8 +79,21 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 		if (!"\n".equals(systemEOL) && systemEOL != null) { //$NON-NLS-1$
 			text = StringUtils.replace(text, "\n", systemEOL); //$NON-NLS-1$
 		}
+		
+		return text;
+	}
 
-		setPreparedText(text);
+	private static boolean isFreemarkerEditor(IEditorPart editorPart) {
+		try {
+			if (((IStorageEditorInput) editorPart.getEditorInput()).getStorage().getName().endsWith(".ftl")) {
+				return true;
+			}
+		}
+		catch (Exception e) {
+			// ignore just return false
+		}
+
+		return false;
 	}
 
 	protected void replaceUIText(Composite parent, String search, String replace) {
