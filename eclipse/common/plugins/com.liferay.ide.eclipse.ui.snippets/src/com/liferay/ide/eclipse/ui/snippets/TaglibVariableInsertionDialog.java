@@ -2,6 +2,9 @@ package com.liferay.ide.eclipse.ui.snippets;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -48,8 +51,18 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog {
 		String text = prepareJSPText();
 		
 		if (isFreemarkerEditor(editor)) {
-			text = text.replaceAll("<([a-z]+):", "<@$1\\.");
-			text = text.replaceAll("</([a-z]+):", "</@$1\\.");
+			Pattern p1 = Pattern.compile("(.*)-([a-z])(.*)");
+			Matcher m1 = p1.matcher(text);
+			while (m1.matches()) {
+				text = m1.replaceFirst(m1.group(1) + m1.group(2).toUpperCase() + m1.group(3));
+				m1 = p1.matcher(text);
+			}
+
+			text = text.replaceAll("<([a-zA-Z]+):", "<@$1\\.");
+			text = text.replaceAll("</([a-zA-Z]+):", "</@$1\\.");
+
+			setPreparedText(text);
+			return;
 		}
 			
 		setPreparedText(text);

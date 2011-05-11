@@ -47,6 +47,7 @@ import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
@@ -356,18 +357,35 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 	}
 
 	public void redeployModule(IModule[] module) {
-		setModulePublishState(module, IServer.PUBLISH_STATE_FULL);
+		IServerWorkingCopy wc = getServer().createWorkingCopy();
+		try {
+			wc.modifyModules(null, module, null);
+			wc.save(true, null);
 
-		IAdaptable info = new IAdaptable() {
+			IAdaptable info = new IAdaptable() {
 
-			@SuppressWarnings("rawtypes")
-			public Object getAdapter(Class adapter) {
-				if (String.class.equals(adapter))
-					return "user";
-				return null;
-			}
-		};
-		getServer().publish(IServer.PUBLISH_FULL, null, info, null);
+				@SuppressWarnings("rawtypes")
+				public Object getAdapter(Class adapter) {
+					if (String.class.equals(adapter))
+						return "user";
+					return null;
+				}
+			};
+
+			getServer().publish(IServer.PUBLISH_FULL, null, info, null);
+
+			wc = getServer().createWorkingCopy();
+			wc.modifyModules(module, null, null);
+			wc.save(true, null);
+
+			getServer().publish(IServer.PUBLISH_FULL, null, info, null);
+		}
+		catch (Exception e) {
+			LiferayTomcatPlugin.logError(e);
+		}
+
+		// setModulePublishState(module, IServer.PUBLISH_STATE_FULL);
+	
 	}
 
 }

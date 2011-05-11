@@ -630,7 +630,7 @@ public class BeanstalkServerBehavior extends ServerBehaviourDelegate implements 
 			return IServer.PUBLISH_STATE_FULL;
 		}
 
-		submon.subTask("Preparing contents for deploying " + moduleProject.getName() + " to WebSphere...");
+		submon.subTask("Preparing contents for deploying " + moduleProject.getName() + " to AWS Beanstalk...");
 
 		IPath deployPreparePath = AWSCorePlugin.getTempLocation("deployment", "");
 
@@ -659,7 +659,7 @@ public class BeanstalkServerBehavior extends ServerBehaviourDelegate implements 
 			return IServer.PUBLISH_STATE_FULL;
 		}
 
-		submon.subTask("Publishing " + moduleProject.getName() + " to WebSphere...");
+		submon.subTask("Publishing " + moduleProject.getName() + " to AWS Beanstalk...");
 
 		Object error = null;
 
@@ -755,29 +755,29 @@ public class BeanstalkServerBehavior extends ServerBehaviourDelegate implements 
 		 * it
 		 */
 
-		monitor.beginTask("Undeploying " + moduleProject.getName() + " from WebSphere...", 100);
+		monitor.beginTask("Undeploying " + moduleProject.getName() + " from AWS Beanstalk...", 100);
 
 		String appName = BeanstalkUtil.getAppName(moduleProject);
 
 		setModuleStatus(module, AWSCorePlugin.createInfoStatus("Uninstalling..."));
 
-		monitor.subTask("Getting WebSphere admin connection...");
+		// monitor.subTask("Getting WebSphere admin connection...");
 
 		IBeanstalkAdminService adminService = getAdminConnection();
 
 		monitor.worked(25); // 25%
 
-		File scriptFile = getScriptFile("publish/uninstallApplicationScript.groovy");
+		// File scriptFile = getScriptFile("publish/uninstallApplicationScript.groovy");
 
-		monitor.subTask("Uninstalling " + moduleProject.getName() + " from WebSphere...");
+		monitor.subTask("Uninstalling " + moduleProject.getName() + " from AWS Beanstalk...");
 
-		Object error = adminService.uninstallApplication(scriptFile, appName, monitor);
+		// Object error = adminService.uninstallApplication(scriptFile, appName, monitor);
 
 		monitor.worked(75); // 100%
 
-		if (error != null) {
-			throw new CoreException(AWSCorePlugin.createErrorStatus(error.toString()));
-		}
+		// if (error != null) {
+		// throw new CoreException(AWSCorePlugin.createErrorStatus(error.toString()));
+		// }
 
 		setModuleStatus(module, null);
 

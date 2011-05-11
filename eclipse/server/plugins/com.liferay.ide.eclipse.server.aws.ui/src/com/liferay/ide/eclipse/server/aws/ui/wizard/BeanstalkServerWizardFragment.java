@@ -12,6 +12,9 @@
 package com.liferay.ide.eclipse.server.aws.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.ZipUtil;
+import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.aws.core.AWSCorePlugin;
 import com.liferay.ide.eclipse.server.aws.core.BeanstalkServer;
 import com.liferay.ide.eclipse.server.aws.core.IBeanstalkServerWorkingCopy;
@@ -181,14 +184,16 @@ public class BeanstalkServerWizardFragment extends WizardFragment {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
 				Repository repo = createGitRepo(sdkname, remoteName, host);
-				importProject(sdkname, repo);
+				IProject project = importProject(sdkname, repo);
+				SDK sdk = SDKUtil.createSDKFromLocation(project.getLocation());
+				SDKManager.getInstance().addSDK(sdk);
 				return Status.OK_STATUS;
 			}
 		}.schedule();
 
 	}
 
-	protected void importProject(String projectname, Repository repo) {
+	protected IProject importProject(String projectname, Repository repo) {
 		IProject newProject = createNewProject(projectname);
 
 		try {
@@ -201,11 +206,13 @@ public class BeanstalkServerWizardFragment extends WizardFragment {
 			// newProject.delete(false, true, null);
 			ConnectProviderOperation cpo = new ConnectProviderOperation(newProject, repo.getDirectory());
 			cpo.execute(new NullProgressMonitor());
-
+			return newProject;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		return null;
 	}
 
 	public URI getProjectLocationURI(String path) {
@@ -269,7 +276,7 @@ public class BeanstalkServerWizardFragment extends WizardFragment {
 			Activator.getDefault().getRepositoryUtil().addConfiguredRepository(repoFile);
 
 			RemoteConfig remoteConfig = new RemoteConfig(newRepo.getConfig(), remoteName);
-			URIish pushUri = new URIish("ssh://ec2user@" + host + "/" + remoteName);
+			URIish pushUri = new URIish("ssh://ec2-user@" + host + "/home/ec2-user/" + remoteName);
 			remoteConfig.addPushURI(pushUri);
 			remoteConfig.update(newRepo.getConfig());
 			return newRepo;

@@ -22,6 +22,8 @@ import org.eclipse.sapphire.modeling.internal.MemoryResource;
 
 public class RelationshipsBinding extends ListBindingImpl {
 
+	protected List<Resource> localResources = new ArrayList<Resource>();
+
 	@Override
 	public List<Resource> read() {
 		List<Resource> resources = new ArrayList<Resource>();
@@ -62,6 +64,8 @@ public class RelationshipsBinding extends ListBindingImpl {
 			}
 		}
 
+		resources.addAll(localResources);
+
 		return resources;
 	}
 
@@ -84,19 +88,27 @@ public class RelationshipsBinding extends ListBindingImpl {
 
 	@Override
 	public Resource add(ModelElementType type) {
-		// TODO implement add method on class RelationshipsBinding
-		return null;
+		IRelationship rel = IRelationship.TYPE.instantiate();
+
+		Resource resource = new RelationshipResource(getEntity().resource(), rel);
+		localResources.add(resource);
+
+		return resource;
 	}
 
 	@Override
 	public void remove(Resource resource) {
-		// TODO Implement remove method on class RelationshipsBinding
-		System.out.println("remove");
+		if (localResources.contains(resource)) {
+			localResources.remove(resource);
+		}
+
 	}
 
 	@Override
 	public void init(IModelElement element, ModelProperty property, String[] params) {
 		super.init(element, property, params);
+
+		localResources.clear();
 
 		MemoryResource memory = new MemoryResource(IRelationship.TYPE);
 		memory.init(element);

@@ -52,7 +52,7 @@ public class BeanstalkLaunchConfigDelegate extends AbstractJavaLaunchConfigurati
 
 		if (state != IServer.STATE_STARTED) {
 			throw new CoreException(
-				AWSCorePlugin.createErrorStatus("Server is not running. The WebSphere server adapter only supports connecting to already running instance of WebSphere."));
+				AWSCorePlugin.createErrorStatus("Server is not running. The beanstalk server adapter only supports connecting to already running instance of Liferay running on Beanstalk."));
 		}
 
 		if (ILaunchManager.RUN_MODE.equals(mode)) {

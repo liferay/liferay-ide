@@ -142,7 +142,7 @@ The [b]cache-enabled[/b] value specifies whether or not to cache this queries fo
                                             </hint>
                                             <hint>
                                                 <name>read.only</name>
-                                                <value>true</value>
+                                                <value>false</value>
                                             </hint>
                                             <child-property>name</child-property>
                                             <child-property>type</child-property>
@@ -814,7 +814,7 @@ development of services.</content>
             </connection-binding>
             <tool-palette-image>
                 <id>entityImage</id>
-                <path>images/Entity_16x16.gif</path>
+                <path>icons/Entity_16x16.gif</path>
             </tool-palette-image>
             <model-element-type>IEntity</model-element-type>
         </node>
@@ -827,6 +827,10 @@ development of services.</content>
             </endpoint2>
             <id>Relationship</id>
             <tool-palette-label>relationship</tool-palette-label>
+            <tool-palette-image>
+                <id>relationshipImage</id>
+                <path>icons/references_16x16.png</path>
+            </tool-palette-image>
         </connection>
     </diagram-page>
 	

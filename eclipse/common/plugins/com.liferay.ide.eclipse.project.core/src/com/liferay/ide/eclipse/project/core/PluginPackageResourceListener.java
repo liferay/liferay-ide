@@ -130,7 +130,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 								return false;
 							}
 						}
-						catch (Exception e) {
+						catch (Throwable e) {
 							// do nothing
 						}
 
@@ -139,8 +139,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 				});
 			}
 		}
-		catch (Exception e) {
-			ProjectCorePlugin.logError("Exception in plugin package resource listener", e);
+		catch (Throwable e) {
+			ProjectCorePlugin.logError("Exception in plugin package resource listener: " + e.getMessage());
 		}
 	}
 

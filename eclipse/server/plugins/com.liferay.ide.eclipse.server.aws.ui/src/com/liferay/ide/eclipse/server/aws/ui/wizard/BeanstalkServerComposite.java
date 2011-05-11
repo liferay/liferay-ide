@@ -160,11 +160,12 @@ public class BeanstalkServerComposite extends Composite
 				Instance instance = instanceTable.getSelectedInstance();
 
 				if (instance != null) {
-					String ipAddress = instance.getPublicIpAddress();
+					String hostname = instance.getPublicDnsName();
 
-					if (!CoreUtil.isNullOrEmpty(ipAddress)) {
-						textHostname.setText(ipAddress);
-						lastHost = ipAddress;
+					if (!CoreUtil.isNullOrEmpty(hostname)) {
+						textHostname.setText(hostname);
+						lastHost = hostname;
+						validate();
 					}
 				}
 			}
