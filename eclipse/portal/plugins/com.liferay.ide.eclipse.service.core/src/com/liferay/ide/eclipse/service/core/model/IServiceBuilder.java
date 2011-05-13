@@ -8,7 +8,6 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -27,7 +26,6 @@ public interface IServiceBuilder extends IModelElement {
 
 	@XmlBinding(path = "@package-path")
 	@Label(standard = "&Package path")
-	@Required
 	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath");
 
 	Value<String> getPackagePath();
@@ -73,7 +71,6 @@ public interface IServiceBuilder extends IModelElement {
 	@Type(base = IEntity.class)
 	@Label(standard = "Entities")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "entity", type = IEntity.class))
-	@CountConstraint(min = 1)
 	ListProperty PROP_ENTITIES = new ListProperty(TYPE, "Entities");
 
 	ModelElementList<IEntity> getEntities();
@@ -86,5 +83,12 @@ public interface IServiceBuilder extends IModelElement {
 	ListProperty PROP_EXCEPTIONS = new ListProperty(TYPE, "Exceptions");
 
 	ModelElementList<IException> getExceptions();
+
+	@Type(base = IServiceBuilderImport.class)
+	@Label(standard = "service builder imports")
+	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "service-builder-import", type = IServiceBuilderImport.class))
+	ListProperty PROP_SERVICE_BUILDER_IMPORTS = new ListProperty(TYPE, "ServiceBuilderImports");
+
+	ModelElementList<IServiceBuilderImport> getServiceBuilderImports();
 
 }

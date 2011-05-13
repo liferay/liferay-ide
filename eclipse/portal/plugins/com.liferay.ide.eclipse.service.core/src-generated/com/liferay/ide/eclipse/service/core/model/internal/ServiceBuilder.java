@@ -3,6 +3,7 @@ package com.liferay.ide.eclipse.service.core.model.internal;
 import com.liferay.ide.eclipse.service.core.model.IEntity;
 import com.liferay.ide.eclipse.service.core.model.IException;
 import com.liferay.ide.eclipse.service.core.model.IServiceBuilder;
+import com.liferay.ide.eclipse.service.core.model.IServiceBuilderImport;
 import org.eclipse.sapphire.modeling.IModelParticle;
 import org.eclipse.sapphire.modeling.ListBindingImpl;
 import org.eclipse.sapphire.modeling.ModelElement;
@@ -26,6 +27,7 @@ public final class ServiceBuilder
     private ModelElementList<IException> exceptions;
     private Value<String> namespace;
     private Value<String> packagePath;
+    private ModelElementList<IServiceBuilderImport> serviceBuilderImports;
     
     public ServiceBuilder( final IModelParticle parent, final ModelProperty parentProperty, final Resource resource )
     {
@@ -208,6 +210,19 @@ public final class ServiceBuilder
         }
     }
     
+    public ModelElementList<IServiceBuilderImport> getServiceBuilderImports()
+    {
+        synchronized( root() )
+        {
+            if( this.serviceBuilderImports == null )
+            {
+                refresh( PROP_SERVICE_BUILDER_IMPORTS, true );
+            }
+            
+            return this.serviceBuilderImports;
+        }
+    }
+    
     protected void refreshProperty( ModelProperty property, final boolean force )
     {
         synchronized( root() )
@@ -368,6 +383,29 @@ public final class ServiceBuilder
                     }
                 }
             }
+            else if( property == PROP_SERVICE_BUILDER_IMPORTS )
+            {
+                if( this.serviceBuilderImports == null )
+                {
+                    if( force == true )
+                    {
+                        this.serviceBuilderImports = new ModelElementList<IServiceBuilderImport>( this, PROP_SERVICE_BUILDER_IMPORTS );
+                        final ListBindingImpl binding = resource().binding( PROP_SERVICE_BUILDER_IMPORTS );
+                        this.serviceBuilderImports.init( binding );
+                        refreshPropertyEnabledStatus( PROP_SERVICE_BUILDER_IMPORTS );
+                    }
+                }
+                else
+                {
+                    final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_SERVICE_BUILDER_IMPORTS );
+                    final boolean notified = this.serviceBuilderImports.refresh();
+                    
+                    if( ! notified && propertyEnabledStatusChanged )
+                    {
+                        notifyPropertyChangeListeners( PROP_SERVICE_BUILDER_IMPORTS );
+                    }
+                }
+            }
         }
     }
     
@@ -398,6 +436,10 @@ public final class ServiceBuilder
         else if( property == PROP_PACKAGE_PATH )
         {
             return getPackagePath();
+        }
+        else if( property == PROP_SERVICE_BUILDER_IMPORTS )
+        {
+            return getServiceBuilderImports();
         }
         
         return super.read( property );

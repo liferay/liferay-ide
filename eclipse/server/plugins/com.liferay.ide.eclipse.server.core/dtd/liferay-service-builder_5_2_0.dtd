@@ -13,13 +13,14 @@ portlets. The Service Builder saves the developer time by generating Spring
 utilities, SOAP utilities, and Hibernate persistence classes to ease the
 development of services.
 -->
-<!ELEMENT service-builder (author?, namespace, entity+, exceptions?)>
+<!ELEMENT service-builder (author?, namespace?, entity*, exceptions?,
+service-builder-import*)>
 
 <!--
 The package-path value specifies the package of the generated code.
 -->
 <!ATTLIST service-builder
-	package-path CDATA #REQUIRED
+	package-path CDATA #IMPLIED
 >
 
 <!--
@@ -432,3 +433,20 @@ a lot of typing, but can still be helpful.
 See the comments in exceptions element.
 -->
 <!ELEMENT exception (#PCDATA)>
+
+<!--
+The service-builder-import allows you to split up a large Service Builder file
+into smaller files by aggregrating the smaller Service Builder into one file.
+Note that there can be at most one author element among all the files. There can
+also only be one and only one namespace element among all the files.
+
+The attribute file is interpreted as relative to the file that is importing it.
+-->
+<!ELEMENT service-builder-import (#PCDATA)>
+
+<!--
+Set the comments in the service-builder-import element.
+-->
+<!ATTLIST service-builder-import
+	file CDATA #REQUIRED
+>

@@ -201,10 +201,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		else if (PACKAGE_PATH.equals(propertyName)) {
 			String packagePath = getStringProperty(propertyName);
 
-			if (CoreUtil.isNullOrEmpty(packagePath)) {
-				return PortletCore.createErrorStatus("Package path cannot be empty.");
-			}
-			else {
+			if (!CoreUtil.isNullOrEmpty(packagePath)) {
 				return validateJavaPackage(packagePath);
 			}
 		}

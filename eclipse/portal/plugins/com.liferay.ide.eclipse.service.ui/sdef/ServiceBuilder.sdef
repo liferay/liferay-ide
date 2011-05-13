@@ -5,6 +5,7 @@
         <package>com.liferay.ide.eclipse.service.core.model</package>
         <package>com.liferay.ide.eclipse.service.core.model.internal</package>
         <package>com.liferay.ide.eclipse.service.ui</package>
+        <package>org.eclipse.sapphire.workspace.ui</package>
     </import>
     <editor></editor>
     <editor-page>
@@ -142,7 +143,7 @@ The [b]cache-enabled[/b] value specifies whether or not to cache this queries fo
                                             </hint>
                                             <hint>
                                                 <name>read.only</name>
-                                                <value>false</value>
+                                                <value>true</value>
                                             </hint>
                                             <child-property>name</child-property>
                                             <child-property>type</child-property>
@@ -737,6 +738,44 @@ If an entity does have columns, then the value object, the POJO class that is ma
                         </documentation>
                     </section>
                     <image>images/jrtexception_obj_16x16.gif</image>
+                </node>
+                <node>
+                    <label>Imports</label>
+                    <image>images/import_16x16.gif</image>
+                    <section>
+                        <content>
+                            <action-link>
+                                <label>Add an Import</label>
+                                <show-image></show-image>
+                                <action-id>Sapphire.ADD</action-id>
+                            </action-link>
+                            <separator></separator>
+                            <property-editor>
+                                <property>serviceBuilderImports</property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
+                                <hint>
+                                    <name>read.only</name>
+                                    <value>true</value>
+                                </hint>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <node-factory>
+                        <property>serviceBuilderImports</property>
+                        <case>
+                            <label>${file == null ? &quot;&lt;import&gt;&quot; : file}</label>
+                            <use-model-element-image></use-model-element-image>
+                            <section>
+                                <label>Service Builder Import</label>
+                                <content>
+                                    <property-editor>file</property-editor>
+                                </content>
+                            </section>
+                        </case>
+                    </node-factory>
                 </node>
             </node>
         </root-node>

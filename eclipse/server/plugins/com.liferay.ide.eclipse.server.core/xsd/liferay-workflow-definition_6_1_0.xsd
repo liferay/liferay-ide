@@ -154,6 +154,7 @@
 							<xs:enumeration value="community" />
 							<xs:enumeration value="regular" />
 							<xs:enumeration value="organization" />
+							<xs:enumeration value="site" />
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:element>
