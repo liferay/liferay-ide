@@ -15,6 +15,7 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.serialization.ValueSerializationService;
 
@@ -75,6 +76,7 @@ public final class Entity
             }
             
             value = PROP_CACHE_ENABLED.decodeKeywords( value );
+            value = service( PROP_CACHE_ENABLED, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_CACHE_ENABLED, true );
             
@@ -127,6 +129,7 @@ public final class Entity
             }
             
             value = PROP_DATA_SOURCE.decodeKeywords( value );
+            value = service( PROP_DATA_SOURCE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_DATA_SOURCE, true );
             
@@ -174,6 +177,7 @@ public final class Entity
             }
             
             value = PROP_HUMAN_NAME.decodeKeywords( value );
+            value = service( PROP_HUMAN_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_HUMAN_NAME, true );
             
@@ -208,6 +212,7 @@ public final class Entity
             }
             
             value = PROP_LOCAL_SERVICE.decodeKeywords( value );
+            value = service( PROP_LOCAL_SERVICE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_LOCAL_SERVICE, true );
             
@@ -247,6 +252,7 @@ public final class Entity
             }
             
             value = PROP_NAME.decodeKeywords( value );
+            value = service( PROP_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAME, true );
             
@@ -294,6 +300,7 @@ public final class Entity
             }
             
             value = PROP_PERSISTENCE_CLASS.decodeKeywords( value );
+            value = service( PROP_PERSISTENCE_CLASS, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_PERSISTENCE_CLASS, true );
             
@@ -354,6 +361,7 @@ public final class Entity
             }
             
             value = PROP_REMOTE_SERVICE.decodeKeywords( value );
+            value = service( PROP_REMOTE_SERVICE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_REMOTE_SERVICE, true );
             
@@ -393,6 +401,7 @@ public final class Entity
             }
             
             value = PROP_SESSION_FACTORY.decodeKeywords( value );
+            value = service( PROP_SESSION_FACTORY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_SESSION_FACTORY, true );
             
@@ -427,6 +436,7 @@ public final class Entity
             }
             
             value = PROP_TABLE.decodeKeywords( value );
+            value = service( PROP_TABLE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_TABLE, true );
             
@@ -461,6 +471,7 @@ public final class Entity
             }
             
             value = PROP_TX_MANAGER.decodeKeywords( value );
+            value = service( PROP_TX_MANAGER, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_TX_MANAGER, true );
             
@@ -508,6 +519,7 @@ public final class Entity
             }
             
             value = PROP_UUID.decodeKeywords( value );
+            value = service( PROP_UUID, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_UUID, true );
             
@@ -538,7 +550,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_CACHE_ENABLED ).read();
                     
-                    this.cacheEnabled = new Value<Boolean>( this, PROP_CACHE_ENABLED, PROP_CACHE_ENABLED.encodeKeywords( val ) );
+                    this.cacheEnabled = new Value<Boolean>( this, PROP_CACHE_ENABLED, service( PROP_CACHE_ENABLED, ValueNormalizationService.class ).normalize( PROP_CACHE_ENABLED.encodeKeywords( val ) ) );
                     this.cacheEnabled.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_CACHE_ENABLED );
@@ -588,7 +600,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_DATA_SOURCE ).read();
                     
-                    this.dataSource = new Value<String>( this, PROP_DATA_SOURCE, PROP_DATA_SOURCE.encodeKeywords( val ) );
+                    this.dataSource = new Value<String>( this, PROP_DATA_SOURCE, service( PROP_DATA_SOURCE, ValueNormalizationService.class ).normalize( PROP_DATA_SOURCE.encodeKeywords( val ) ) );
                     this.dataSource.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_DATA_SOURCE );
@@ -638,7 +650,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_HUMAN_NAME ).read();
                     
-                    this.humanName = new Value<String>( this, PROP_HUMAN_NAME, PROP_HUMAN_NAME.encodeKeywords( val ) );
+                    this.humanName = new Value<String>( this, PROP_HUMAN_NAME, service( PROP_HUMAN_NAME, ValueNormalizationService.class ).normalize( PROP_HUMAN_NAME.encodeKeywords( val ) ) );
                     this.humanName.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_HUMAN_NAME );
@@ -665,7 +677,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_LOCAL_SERVICE ).read();
                     
-                    this.localService = new Value<Boolean>( this, PROP_LOCAL_SERVICE, PROP_LOCAL_SERVICE.encodeKeywords( val ) );
+                    this.localService = new Value<Boolean>( this, PROP_LOCAL_SERVICE, service( PROP_LOCAL_SERVICE, ValueNormalizationService.class ).normalize( PROP_LOCAL_SERVICE.encodeKeywords( val ) ) );
                     this.localService.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_LOCAL_SERVICE );
@@ -692,7 +704,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
@@ -741,7 +753,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_PERSISTENCE_CLASS ).read();
                     
-                    this.persistenceClass = new Value<String>( this, PROP_PERSISTENCE_CLASS, PROP_PERSISTENCE_CLASS.encodeKeywords( val ) );
+                    this.persistenceClass = new Value<String>( this, PROP_PERSISTENCE_CLASS, service( PROP_PERSISTENCE_CLASS, ValueNormalizationService.class ).normalize( PROP_PERSISTENCE_CLASS.encodeKeywords( val ) ) );
                     this.persistenceClass.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_PERSISTENCE_CLASS );
@@ -814,7 +826,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_REMOTE_SERVICE ).read();
                     
-                    this.remoteService = new Value<Boolean>( this, PROP_REMOTE_SERVICE, PROP_REMOTE_SERVICE.encodeKeywords( val ) );
+                    this.remoteService = new Value<Boolean>( this, PROP_REMOTE_SERVICE, service( PROP_REMOTE_SERVICE, ValueNormalizationService.class ).normalize( PROP_REMOTE_SERVICE.encodeKeywords( val ) ) );
                     this.remoteService.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_REMOTE_SERVICE );
@@ -841,7 +853,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_SESSION_FACTORY ).read();
                     
-                    this.sessionFactory = new Value<String>( this, PROP_SESSION_FACTORY, PROP_SESSION_FACTORY.encodeKeywords( val ) );
+                    this.sessionFactory = new Value<String>( this, PROP_SESSION_FACTORY, service( PROP_SESSION_FACTORY, ValueNormalizationService.class ).normalize( PROP_SESSION_FACTORY.encodeKeywords( val ) ) );
                     this.sessionFactory.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_SESSION_FACTORY );
@@ -868,7 +880,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_TABLE ).read();
                     
-                    this.table = new Value<String>( this, PROP_TABLE, PROP_TABLE.encodeKeywords( val ) );
+                    this.table = new Value<String>( this, PROP_TABLE, service( PROP_TABLE, ValueNormalizationService.class ).normalize( PROP_TABLE.encodeKeywords( val ) ) );
                     this.table.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_TABLE );
@@ -895,7 +907,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_TX_MANAGER ).read();
                     
-                    this.txManager = new Value<String>( this, PROP_TX_MANAGER, PROP_TX_MANAGER.encodeKeywords( val ) );
+                    this.txManager = new Value<String>( this, PROP_TX_MANAGER, service( PROP_TX_MANAGER, ValueNormalizationService.class ).normalize( PROP_TX_MANAGER.encodeKeywords( val ) ) );
                     this.txManager.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_TX_MANAGER );
@@ -945,7 +957,7 @@ public final class Entity
                     
                     final String val = resource().binding( PROP_UUID ).read();
                     
-                    this.uuid = new Value<Boolean>( this, PROP_UUID, PROP_UUID.encodeKeywords( val ) );
+                    this.uuid = new Value<Boolean>( this, PROP_UUID, service( PROP_UUID, ValueNormalizationService.class ).normalize( PROP_UUID.encodeKeywords( val ) ) );
                     this.uuid.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_UUID );

@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 
 public final class Exception
@@ -49,6 +50,7 @@ public final class Exception
             }
             
             value = PROP_EXCEPTION.decodeKeywords( value );
+            value = service( PROP_EXCEPTION, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_EXCEPTION, true );
             
@@ -74,7 +76,7 @@ public final class Exception
                     
                     final String val = resource().binding( PROP_EXCEPTION ).read();
                     
-                    this.exception = new Value<String>( this, PROP_EXCEPTION, PROP_EXCEPTION.encodeKeywords( val ) );
+                    this.exception = new Value<String>( this, PROP_EXCEPTION, service( PROP_EXCEPTION, ValueNormalizationService.class ).normalize( PROP_EXCEPTION.encodeKeywords( val ) ) );
                     this.exception.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_EXCEPTION );

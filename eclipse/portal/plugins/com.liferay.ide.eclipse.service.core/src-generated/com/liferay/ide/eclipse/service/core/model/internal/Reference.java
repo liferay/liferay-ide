@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 
 public final class Reference
@@ -50,6 +51,7 @@ public final class Reference
             }
             
             value = PROP_ENTITY.decodeKeywords( value );
+            value = service( PROP_ENTITY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_ENTITY, true );
             
@@ -84,6 +86,7 @@ public final class Reference
             }
             
             value = PROP_PACKAGE_PATH.decodeKeywords( value );
+            value = service( PROP_PACKAGE_PATH, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_PACKAGE_PATH, true );
             
@@ -109,7 +112,7 @@ public final class Reference
                     
                     final String val = resource().binding( PROP_ENTITY ).read();
                     
-                    this.entity = new Value<String>( this, PROP_ENTITY, PROP_ENTITY.encodeKeywords( val ) );
+                    this.entity = new Value<String>( this, PROP_ENTITY, service( PROP_ENTITY, ValueNormalizationService.class ).normalize( PROP_ENTITY.encodeKeywords( val ) ) );
                     this.entity.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_ENTITY );
@@ -136,7 +139,7 @@ public final class Reference
                     
                     final String val = resource().binding( PROP_PACKAGE_PATH ).read();
                     
-                    this.packagePath = new Value<String>( this, PROP_PACKAGE_PATH, PROP_PACKAGE_PATH.encodeKeywords( val ) );
+                    this.packagePath = new Value<String>( this, PROP_PACKAGE_PATH, service( PROP_PACKAGE_PATH, ValueNormalizationService.class ).normalize( PROP_PACKAGE_PATH.encodeKeywords( val ) ) );
                     this.packagePath.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_PACKAGE_PATH );

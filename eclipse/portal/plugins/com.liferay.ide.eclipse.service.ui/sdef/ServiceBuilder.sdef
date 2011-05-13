@@ -742,7 +742,7 @@ If an entity does have columns, then the value object, the POJO class that is ma
         </root-node>
         <id>serviceBuilderPage</id>
         <page-header-text>Service Builder</page-header-text>
-        <image>icons/e16/service.png</image>
+        <page-header-image>icons/e16/service.png</page-header-image>
         <documentation>
             <content>
 The service-builder element is the root of the deployment descriptor for

@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 
 public final class Attribute
@@ -119,6 +120,7 @@ public final class Attribute
             }
             
             value = PROP_VALUE.decodeKeywords( value );
+            value = service( PROP_VALUE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_VALUE, true );
             
@@ -144,7 +146,7 @@ public final class Attribute
                     
                     final String val = resource().binding( PROP_DEFAULT_VALUE ).read();
                     
-                    this.defaultValue = new Value<String>( this, PROP_DEFAULT_VALUE, PROP_DEFAULT_VALUE.encodeKeywords( val ) );
+                    this.defaultValue = new Value<String>( this, PROP_DEFAULT_VALUE, service( PROP_DEFAULT_VALUE, ValueNormalizationService.class ).normalize( PROP_DEFAULT_VALUE.encodeKeywords( val ) ) );
                     this.defaultValue.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_DEFAULT_VALUE );
@@ -171,7 +173,7 @@ public final class Attribute
                     
                     final String val = resource().binding( PROP_DESCRIPTION ).read();
                     
-                    this.description = new Value<String>( this, PROP_DESCRIPTION, PROP_DESCRIPTION.encodeKeywords( val ) );
+                    this.description = new Value<String>( this, PROP_DESCRIPTION, service( PROP_DESCRIPTION, ValueNormalizationService.class ).normalize( PROP_DESCRIPTION.encodeKeywords( val ) ) );
                     this.description.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_DESCRIPTION );
@@ -198,7 +200,7 @@ public final class Attribute
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
@@ -225,7 +227,7 @@ public final class Attribute
                     
                     final String val = resource().binding( PROP_REQUIRED ).read();
                     
-                    this.required = new Value<Boolean>( this, PROP_REQUIRED, PROP_REQUIRED.encodeKeywords( val ) );
+                    this.required = new Value<Boolean>( this, PROP_REQUIRED, service( PROP_REQUIRED, ValueNormalizationService.class ).normalize( PROP_REQUIRED.encodeKeywords( val ) ) );
                     this.required.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_REQUIRED );
@@ -252,7 +254,7 @@ public final class Attribute
                     
                     final String val = resource().binding( PROP_TYPE ).read();
                     
-                    this.type = new Value<String>( this, PROP_TYPE, PROP_TYPE.encodeKeywords( val ) );
+                    this.type = new Value<String>( this, PROP_TYPE, service( PROP_TYPE, ValueNormalizationService.class ).normalize( PROP_TYPE.encodeKeywords( val ) ) );
                     this.type.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_TYPE );
@@ -279,7 +281,7 @@ public final class Attribute
                     
                     final String val = resource().binding( PROP_VALUE ).read();
                     
-                    this.value = new Value<String>( this, PROP_VALUE, PROP_VALUE.encodeKeywords( val ) );
+                    this.value = new Value<String>( this, PROP_VALUE, service( PROP_VALUE, ValueNormalizationService.class ).normalize( PROP_VALUE.encodeKeywords( val ) ) );
                     this.value.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_VALUE );

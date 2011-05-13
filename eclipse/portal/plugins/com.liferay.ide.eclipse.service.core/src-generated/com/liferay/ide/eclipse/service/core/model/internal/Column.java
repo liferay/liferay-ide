@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.serialization.ValueSerializationService;
 
@@ -61,6 +62,7 @@ public final class Column
             }
             
             value = PROP_CONVERT_NULL.decodeKeywords( value );
+            value = service( PROP_CONVERT_NULL, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_CONVERT_NULL, true );
             
@@ -100,6 +102,7 @@ public final class Column
             }
             
             value = PROP_DB_NAME.decodeKeywords( value );
+            value = service( PROP_DB_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_DB_NAME, true );
             
@@ -134,6 +137,7 @@ public final class Column
             }
             
             value = PROP_ENTITY.decodeKeywords( value );
+            value = service( PROP_ENTITY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_ENTITY, true );
             
@@ -168,6 +172,7 @@ public final class Column
             }
             
             value = PROP_FILTER_PRIMARY.decodeKeywords( value );
+            value = service( PROP_FILTER_PRIMARY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_FILTER_PRIMARY, true );
             
@@ -207,6 +212,7 @@ public final class Column
             }
             
             value = PROP_ID_PARAM.decodeKeywords( value );
+            value = service( PROP_ID_PARAM, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_ID_PARAM, true );
             
@@ -241,6 +247,7 @@ public final class Column
             }
             
             value = PROP_ID_TYPE.decodeKeywords( value );
+            value = service( PROP_ID_TYPE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_ID_TYPE, true );
             
@@ -275,6 +282,7 @@ public final class Column
             }
             
             value = PROP_LOCALIZED.decodeKeywords( value );
+            value = service( PROP_LOCALIZED, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_LOCALIZED, true );
             
@@ -314,6 +322,7 @@ public final class Column
             }
             
             value = PROP_MAPPING_KEY.decodeKeywords( value );
+            value = service( PROP_MAPPING_KEY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_MAPPING_KEY, true );
             
@@ -348,6 +357,7 @@ public final class Column
             }
             
             value = PROP_MAPPING_TABLE.decodeKeywords( value );
+            value = service( PROP_MAPPING_TABLE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_MAPPING_TABLE, true );
             
@@ -382,6 +392,7 @@ public final class Column
             }
             
             value = PROP_NAME.decodeKeywords( value );
+            value = service( PROP_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAME, true );
             
@@ -416,6 +427,7 @@ public final class Column
             }
             
             value = PROP_PRIMARY.decodeKeywords( value );
+            value = service( PROP_PRIMARY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_PRIMARY, true );
             
@@ -455,6 +467,7 @@ public final class Column
             }
             
             value = PROP_TYPE.decodeKeywords( value );
+            value = service( PROP_TYPE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_TYPE, true );
             
@@ -480,7 +493,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_CONVERT_NULL ).read();
                     
-                    this.convertNull = new Value<Boolean>( this, PROP_CONVERT_NULL, PROP_CONVERT_NULL.encodeKeywords( val ) );
+                    this.convertNull = new Value<Boolean>( this, PROP_CONVERT_NULL, service( PROP_CONVERT_NULL, ValueNormalizationService.class ).normalize( PROP_CONVERT_NULL.encodeKeywords( val ) ) );
                     this.convertNull.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_CONVERT_NULL );
@@ -507,7 +520,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_DB_NAME ).read();
                     
-                    this.dbName = new Value<String>( this, PROP_DB_NAME, PROP_DB_NAME.encodeKeywords( val ) );
+                    this.dbName = new Value<String>( this, PROP_DB_NAME, service( PROP_DB_NAME, ValueNormalizationService.class ).normalize( PROP_DB_NAME.encodeKeywords( val ) ) );
                     this.dbName.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_DB_NAME );
@@ -534,7 +547,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_ENTITY ).read();
                     
-                    this.entity = new Value<String>( this, PROP_ENTITY, PROP_ENTITY.encodeKeywords( val ) );
+                    this.entity = new Value<String>( this, PROP_ENTITY, service( PROP_ENTITY, ValueNormalizationService.class ).normalize( PROP_ENTITY.encodeKeywords( val ) ) );
                     this.entity.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_ENTITY );
@@ -561,7 +574,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_FILTER_PRIMARY ).read();
                     
-                    this.filterPrimary = new Value<Boolean>( this, PROP_FILTER_PRIMARY, PROP_FILTER_PRIMARY.encodeKeywords( val ) );
+                    this.filterPrimary = new Value<Boolean>( this, PROP_FILTER_PRIMARY, service( PROP_FILTER_PRIMARY, ValueNormalizationService.class ).normalize( PROP_FILTER_PRIMARY.encodeKeywords( val ) ) );
                     this.filterPrimary.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_FILTER_PRIMARY );
@@ -588,7 +601,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_ID_PARAM ).read();
                     
-                    this.idParam = new Value<String>( this, PROP_ID_PARAM, PROP_ID_PARAM.encodeKeywords( val ) );
+                    this.idParam = new Value<String>( this, PROP_ID_PARAM, service( PROP_ID_PARAM, ValueNormalizationService.class ).normalize( PROP_ID_PARAM.encodeKeywords( val ) ) );
                     this.idParam.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_ID_PARAM );
@@ -615,7 +628,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_ID_TYPE ).read();
                     
-                    this.idType = new Value<String>( this, PROP_ID_TYPE, PROP_ID_TYPE.encodeKeywords( val ) );
+                    this.idType = new Value<String>( this, PROP_ID_TYPE, service( PROP_ID_TYPE, ValueNormalizationService.class ).normalize( PROP_ID_TYPE.encodeKeywords( val ) ) );
                     this.idType.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_ID_TYPE );
@@ -642,7 +655,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_LOCALIZED ).read();
                     
-                    this.localized = new Value<Boolean>( this, PROP_LOCALIZED, PROP_LOCALIZED.encodeKeywords( val ) );
+                    this.localized = new Value<Boolean>( this, PROP_LOCALIZED, service( PROP_LOCALIZED, ValueNormalizationService.class ).normalize( PROP_LOCALIZED.encodeKeywords( val ) ) );
                     this.localized.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_LOCALIZED );
@@ -669,7 +682,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_MAPPING_KEY ).read();
                     
-                    this.mappingKey = new Value<String>( this, PROP_MAPPING_KEY, PROP_MAPPING_KEY.encodeKeywords( val ) );
+                    this.mappingKey = new Value<String>( this, PROP_MAPPING_KEY, service( PROP_MAPPING_KEY, ValueNormalizationService.class ).normalize( PROP_MAPPING_KEY.encodeKeywords( val ) ) );
                     this.mappingKey.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_MAPPING_KEY );
@@ -696,7 +709,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_MAPPING_TABLE ).read();
                     
-                    this.mappingTable = new Value<String>( this, PROP_MAPPING_TABLE, PROP_MAPPING_TABLE.encodeKeywords( val ) );
+                    this.mappingTable = new Value<String>( this, PROP_MAPPING_TABLE, service( PROP_MAPPING_TABLE, ValueNormalizationService.class ).normalize( PROP_MAPPING_TABLE.encodeKeywords( val ) ) );
                     this.mappingTable.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_MAPPING_TABLE );
@@ -723,7 +736,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
@@ -750,7 +763,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_PRIMARY ).read();
                     
-                    this.primary = new Value<Boolean>( this, PROP_PRIMARY, PROP_PRIMARY.encodeKeywords( val ) );
+                    this.primary = new Value<Boolean>( this, PROP_PRIMARY, service( PROP_PRIMARY, ValueNormalizationService.class ).normalize( PROP_PRIMARY.encodeKeywords( val ) ) );
                     this.primary.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_PRIMARY );
@@ -777,7 +790,7 @@ public final class Column
                     
                     final String val = resource().binding( PROP_TYPE ).read();
                     
-                    this.type = new Value<String>( this, PROP_TYPE, PROP_TYPE.encodeKeywords( val ) );
+                    this.type = new Value<String>( this, PROP_TYPE, service( PROP_TYPE, ValueNormalizationService.class ).normalize( PROP_TYPE.encodeKeywords( val ) ) );
                     this.type.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_TYPE );

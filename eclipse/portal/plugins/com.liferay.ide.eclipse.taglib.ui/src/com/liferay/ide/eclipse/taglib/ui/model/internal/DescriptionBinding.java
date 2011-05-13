@@ -16,7 +16,7 @@ public class DescriptionBinding extends XmlValueBindingImpl {
 		XmlElement desc = element.getChildElement("description", false);
 
 		if (desc != null) {
-			value = desc.getText(true);
+			value = desc.getText();
 
 			// remove everything that is in a comment
 			if (value != null) {

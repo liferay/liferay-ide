@@ -9,6 +9,7 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 
 public final class Order
@@ -53,6 +54,7 @@ public final class Order
             }
             
             value = PROP_BY.decodeKeywords( value );
+            value = service( PROP_BY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_BY, true );
             
@@ -91,7 +93,7 @@ public final class Order
                     
                     final String val = resource().binding( PROP_BY ).read();
                     
-                    this.by = new Value<String>( this, PROP_BY, PROP_BY.encodeKeywords( val ) );
+                    this.by = new Value<String>( this, PROP_BY, service( PROP_BY, ValueNormalizationService.class ).normalize( PROP_BY.encodeKeywords( val ) ) );
                     this.by.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_BY );

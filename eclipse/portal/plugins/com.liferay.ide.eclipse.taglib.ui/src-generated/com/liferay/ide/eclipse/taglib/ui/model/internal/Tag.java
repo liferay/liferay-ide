@@ -10,6 +10,7 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 
 public final class Tag
     
@@ -163,7 +164,7 @@ public final class Tag
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
@@ -213,7 +214,7 @@ public final class Tag
                     
                     final String val = resource().binding( PROP_PREFIX ).read();
                     
-                    this.prefix = new Value<String>( this, PROP_PREFIX, PROP_PREFIX.encodeKeywords( val ) );
+                    this.prefix = new Value<String>( this, PROP_PREFIX, service( PROP_PREFIX, ValueNormalizationService.class ).normalize( PROP_PREFIX.encodeKeywords( val ) ) );
                     this.prefix.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_PREFIX );
@@ -240,7 +241,7 @@ public final class Tag
                     
                     final String val = service( PROP_PREVIEW, DerivedValueService.class ).getDerivedValue();
                     
-                    this.preview = new Value<String>( this, PROP_PREVIEW, PROP_PREVIEW.encodeKeywords( val ) );
+                    this.preview = new Value<String>( this, PROP_PREVIEW, service( PROP_PREVIEW, ValueNormalizationService.class ).normalize( PROP_PREVIEW.encodeKeywords( val ) ) );
                     this.preview.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_PREVIEW );
@@ -290,7 +291,7 @@ public final class Tag
                     
                     final String val = service( PROP_SOURCE, DerivedValueService.class ).getDerivedValue();
                     
-                    this.source = new Value<String>( this, PROP_SOURCE, PROP_SOURCE.encodeKeywords( val ) );
+                    this.source = new Value<String>( this, PROP_SOURCE, service( PROP_SOURCE, ValueNormalizationService.class ).normalize( PROP_SOURCE.encodeKeywords( val ) ) );
                     this.source.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_SOURCE );

@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 
 public final class TxRequired
@@ -49,6 +50,7 @@ public final class TxRequired
             }
             
             value = PROP_TX_REQUIRED.decodeKeywords( value );
+            value = service( PROP_TX_REQUIRED, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_TX_REQUIRED, true );
             
@@ -74,7 +76,7 @@ public final class TxRequired
                     
                     final String val = resource().binding( PROP_TX_REQUIRED ).read();
                     
-                    this.txRequired = new Value<String>( this, PROP_TX_REQUIRED, PROP_TX_REQUIRED.encodeKeywords( val ) );
+                    this.txRequired = new Value<String>( this, PROP_TX_REQUIRED, service( PROP_TX_REQUIRED, ValueNormalizationService.class ).normalize( PROP_TX_REQUIRED.encodeKeywords( val ) ) );
                     this.txRequired.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_TX_REQUIRED );

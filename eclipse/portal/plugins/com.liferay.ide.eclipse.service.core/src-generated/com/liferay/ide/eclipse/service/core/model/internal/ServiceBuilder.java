@@ -10,6 +10,7 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.serialization.ValueSerializationService;
 
@@ -59,6 +60,7 @@ public final class ServiceBuilder
             }
             
             value = PROP_AUTHOR.decodeKeywords( value );
+            value = service( PROP_AUTHOR, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_AUTHOR, true );
             
@@ -93,6 +95,7 @@ public final class ServiceBuilder
             }
             
             value = PROP_AUTO_NAMESPACE_TABLES.decodeKeywords( value );
+            value = service( PROP_AUTO_NAMESPACE_TABLES, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_AUTO_NAMESPACE_TABLES, true );
             
@@ -158,6 +161,7 @@ public final class ServiceBuilder
             }
             
             value = PROP_NAMESPACE.decodeKeywords( value );
+            value = service( PROP_NAMESPACE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAMESPACE, true );
             
@@ -192,6 +196,7 @@ public final class ServiceBuilder
             }
             
             value = PROP_PACKAGE_PATH.decodeKeywords( value );
+            value = service( PROP_PACKAGE_PATH, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_PACKAGE_PATH, true );
             
@@ -217,7 +222,7 @@ public final class ServiceBuilder
                     
                     final String val = resource().binding( PROP_AUTHOR ).read();
                     
-                    this.author = new Value<String>( this, PROP_AUTHOR, PROP_AUTHOR.encodeKeywords( val ) );
+                    this.author = new Value<String>( this, PROP_AUTHOR, service( PROP_AUTHOR, ValueNormalizationService.class ).normalize( PROP_AUTHOR.encodeKeywords( val ) ) );
                     this.author.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_AUTHOR );
@@ -244,7 +249,7 @@ public final class ServiceBuilder
                     
                     final String val = resource().binding( PROP_AUTO_NAMESPACE_TABLES ).read();
                     
-                    this.autoNamespaceTables = new Value<Boolean>( this, PROP_AUTO_NAMESPACE_TABLES, PROP_AUTO_NAMESPACE_TABLES.encodeKeywords( val ) );
+                    this.autoNamespaceTables = new Value<Boolean>( this, PROP_AUTO_NAMESPACE_TABLES, service( PROP_AUTO_NAMESPACE_TABLES, ValueNormalizationService.class ).normalize( PROP_AUTO_NAMESPACE_TABLES.encodeKeywords( val ) ) );
                     this.autoNamespaceTables.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_AUTO_NAMESPACE_TABLES );
@@ -317,7 +322,7 @@ public final class ServiceBuilder
                     
                     final String val = resource().binding( PROP_NAMESPACE ).read();
                     
-                    this.namespace = new Value<String>( this, PROP_NAMESPACE, PROP_NAMESPACE.encodeKeywords( val ) );
+                    this.namespace = new Value<String>( this, PROP_NAMESPACE, service( PROP_NAMESPACE, ValueNormalizationService.class ).normalize( PROP_NAMESPACE.encodeKeywords( val ) ) );
                     this.namespace.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAMESPACE );
@@ -344,7 +349,7 @@ public final class ServiceBuilder
                     
                     final String val = resource().binding( PROP_PACKAGE_PATH ).read();
                     
-                    this.packagePath = new Value<String>( this, PROP_PACKAGE_PATH, PROP_PACKAGE_PATH.encodeKeywords( val ) );
+                    this.packagePath = new Value<String>( this, PROP_PACKAGE_PATH, service( PROP_PACKAGE_PATH, ValueNormalizationService.class ).normalize( PROP_PACKAGE_PATH.encodeKeywords( val ) ) );
                     this.packagePath.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_PACKAGE_PATH );

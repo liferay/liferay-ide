@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.serialization.ValueSerializationService;
 
@@ -52,6 +53,7 @@ public final class OrderColumn
             }
             
             value = PROP_CASE_SENSITIVE.decodeKeywords( value );
+            value = service( PROP_CASE_SENSITIVE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_CASE_SENSITIVE, true );
             
@@ -91,6 +93,7 @@ public final class OrderColumn
             }
             
             value = PROP_NAME.decodeKeywords( value );
+            value = service( PROP_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAME, true );
             
@@ -125,6 +128,7 @@ public final class OrderColumn
             }
             
             value = PROP_ORDER_BY.decodeKeywords( value );
+            value = service( PROP_ORDER_BY, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_ORDER_BY, true );
             
@@ -150,7 +154,7 @@ public final class OrderColumn
                     
                     final String val = resource().binding( PROP_CASE_SENSITIVE ).read();
                     
-                    this.caseSensitive = new Value<Boolean>( this, PROP_CASE_SENSITIVE, PROP_CASE_SENSITIVE.encodeKeywords( val ) );
+                    this.caseSensitive = new Value<Boolean>( this, PROP_CASE_SENSITIVE, service( PROP_CASE_SENSITIVE, ValueNormalizationService.class ).normalize( PROP_CASE_SENSITIVE.encodeKeywords( val ) ) );
                     this.caseSensitive.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_CASE_SENSITIVE );
@@ -177,7 +181,7 @@ public final class OrderColumn
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
@@ -204,7 +208,7 @@ public final class OrderColumn
                     
                     final String val = resource().binding( PROP_ORDER_BY ).read();
                     
-                    this.orderBy = new Value<String>( this, PROP_ORDER_BY, PROP_ORDER_BY.encodeKeywords( val ) );
+                    this.orderBy = new Value<String>( this, PROP_ORDER_BY, service( PROP_ORDER_BY, ValueNormalizationService.class ).normalize( PROP_ORDER_BY.encodeKeywords( val ) ) );
                     this.orderBy.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_ORDER_BY );

@@ -6,6 +6,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.serialization.ValueSerializationService;
 
@@ -53,6 +54,7 @@ public final class FinderColumn
             }
             
             value = PROP_ARRAYABLE_OPERATOR.decodeKeywords( value );
+            value = service( PROP_ARRAYABLE_OPERATOR, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_ARRAYABLE_OPERATOR, true );
             
@@ -87,6 +89,7 @@ public final class FinderColumn
             }
             
             value = PROP_CASE_SENSITIVE.decodeKeywords( value );
+            value = service( PROP_CASE_SENSITIVE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_CASE_SENSITIVE, true );
             
@@ -126,6 +129,7 @@ public final class FinderColumn
             }
             
             value = PROP_COMPARATOR.decodeKeywords( value );
+            value = service( PROP_COMPARATOR, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_COMPARATOR, true );
             
@@ -160,6 +164,7 @@ public final class FinderColumn
             }
             
             value = PROP_NAME.decodeKeywords( value );
+            value = service( PROP_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAME, true );
             
@@ -185,7 +190,7 @@ public final class FinderColumn
                     
                     final String val = resource().binding( PROP_ARRAYABLE_OPERATOR ).read();
                     
-                    this.arrayableOperator = new Value<String>( this, PROP_ARRAYABLE_OPERATOR, PROP_ARRAYABLE_OPERATOR.encodeKeywords( val ) );
+                    this.arrayableOperator = new Value<String>( this, PROP_ARRAYABLE_OPERATOR, service( PROP_ARRAYABLE_OPERATOR, ValueNormalizationService.class ).normalize( PROP_ARRAYABLE_OPERATOR.encodeKeywords( val ) ) );
                     this.arrayableOperator.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_ARRAYABLE_OPERATOR );
@@ -212,7 +217,7 @@ public final class FinderColumn
                     
                     final String val = resource().binding( PROP_CASE_SENSITIVE ).read();
                     
-                    this.caseSensitive = new Value<Boolean>( this, PROP_CASE_SENSITIVE, PROP_CASE_SENSITIVE.encodeKeywords( val ) );
+                    this.caseSensitive = new Value<Boolean>( this, PROP_CASE_SENSITIVE, service( PROP_CASE_SENSITIVE, ValueNormalizationService.class ).normalize( PROP_CASE_SENSITIVE.encodeKeywords( val ) ) );
                     this.caseSensitive.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_CASE_SENSITIVE );
@@ -239,7 +244,7 @@ public final class FinderColumn
                     
                     final String val = resource().binding( PROP_COMPARATOR ).read();
                     
-                    this.comparator = new Value<String>( this, PROP_COMPARATOR, PROP_COMPARATOR.encodeKeywords( val ) );
+                    this.comparator = new Value<String>( this, PROP_COMPARATOR, service( PROP_COMPARATOR, ValueNormalizationService.class ).normalize( PROP_COMPARATOR.encodeKeywords( val ) ) );
                     this.comparator.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_COMPARATOR );
@@ -266,7 +271,7 @@ public final class FinderColumn
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );

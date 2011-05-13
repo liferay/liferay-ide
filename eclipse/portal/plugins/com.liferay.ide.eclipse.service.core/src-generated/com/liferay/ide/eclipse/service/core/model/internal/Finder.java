@@ -9,6 +9,7 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.serialization.ValueSerializationService;
 
@@ -58,6 +59,7 @@ public final class Finder
             }
             
             value = PROP_DB_INDEX.decodeKeywords( value );
+            value = service( PROP_DB_INDEX, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_DB_INDEX, true );
             
@@ -110,6 +112,7 @@ public final class Finder
             }
             
             value = PROP_NAME.decodeKeywords( value );
+            value = service( PROP_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAME, true );
             
@@ -144,6 +147,7 @@ public final class Finder
             }
             
             value = PROP_RETURN_TYPE.decodeKeywords( value );
+            value = service( PROP_RETURN_TYPE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_RETURN_TYPE, true );
             
@@ -178,6 +182,7 @@ public final class Finder
             }
             
             value = PROP_UNIQUE.decodeKeywords( value );
+            value = service( PROP_UNIQUE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_UNIQUE, true );
             
@@ -217,6 +222,7 @@ public final class Finder
             }
             
             value = PROP_WHERE.decodeKeywords( value );
+            value = service( PROP_WHERE, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_WHERE, true );
             
@@ -242,7 +248,7 @@ public final class Finder
                     
                     final String val = resource().binding( PROP_DB_INDEX ).read();
                     
-                    this.dbIndex = new Value<Boolean>( this, PROP_DB_INDEX, PROP_DB_INDEX.encodeKeywords( val ) );
+                    this.dbIndex = new Value<Boolean>( this, PROP_DB_INDEX, service( PROP_DB_INDEX, ValueNormalizationService.class ).normalize( PROP_DB_INDEX.encodeKeywords( val ) ) );
                     this.dbIndex.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_DB_INDEX );
@@ -292,7 +298,7 @@ public final class Finder
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new Value<String>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new Value<String>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
@@ -319,7 +325,7 @@ public final class Finder
                     
                     final String val = resource().binding( PROP_RETURN_TYPE ).read();
                     
-                    this.returnType = new Value<String>( this, PROP_RETURN_TYPE, PROP_RETURN_TYPE.encodeKeywords( val ) );
+                    this.returnType = new Value<String>( this, PROP_RETURN_TYPE, service( PROP_RETURN_TYPE, ValueNormalizationService.class ).normalize( PROP_RETURN_TYPE.encodeKeywords( val ) ) );
                     this.returnType.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_RETURN_TYPE );
@@ -346,7 +352,7 @@ public final class Finder
                     
                     final String val = resource().binding( PROP_UNIQUE ).read();
                     
-                    this.unique = new Value<Boolean>( this, PROP_UNIQUE, PROP_UNIQUE.encodeKeywords( val ) );
+                    this.unique = new Value<Boolean>( this, PROP_UNIQUE, service( PROP_UNIQUE, ValueNormalizationService.class ).normalize( PROP_UNIQUE.encodeKeywords( val ) ) );
                     this.unique.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_UNIQUE );
@@ -373,7 +379,7 @@ public final class Finder
                     
                     final String val = resource().binding( PROP_WHERE ).read();
                     
-                    this.where = new Value<String>( this, PROP_WHERE, PROP_WHERE.encodeKeywords( val ) );
+                    this.where = new Value<String>( this, PROP_WHERE, service( PROP_WHERE, ValueNormalizationService.class ).normalize( PROP_WHERE.encodeKeywords( val ) ) );
                     this.where.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_WHERE );

@@ -7,6 +7,7 @@ import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.Resource;
+import org.eclipse.sapphire.modeling.ValueNormalizationService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 
 public final class Relationship
@@ -50,6 +51,7 @@ public final class Relationship
             }
             
             value = PROP_NAME.decodeKeywords( value );
+            value = service( PROP_NAME, ValueNormalizationService.class ).normalize( value );
             
             refresh( PROP_NAME, true );
             
@@ -75,7 +77,7 @@ public final class Relationship
                     
                     final String val = resource().binding( PROP_NAME ).read();
                     
-                    this.name = new ReferenceValue<String,IEntity>( this, PROP_NAME, PROP_NAME.encodeKeywords( val ) );
+                    this.name = new ReferenceValue<String,IEntity>( this, PROP_NAME, service( PROP_NAME, ValueNormalizationService.class ).normalize( PROP_NAME.encodeKeywords( val ) ) );
                     this.name.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_NAME );
