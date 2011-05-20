@@ -17,9 +17,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Greg Amerson
@@ -28,8 +26,6 @@ public interface ILiferayTomcatConfiguration {
 
 	public void load(IFolder folder, IProgressMonitor monitor)
 		throws CoreException;
-
-	public IStatus publishContextConfig(IPath baseDir, IPath serverDeployDirectory, IProgressMonitor monitor);
 
 	// TODO uncomment this fix this one we have "serve" directly re-enabled
 	// public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);

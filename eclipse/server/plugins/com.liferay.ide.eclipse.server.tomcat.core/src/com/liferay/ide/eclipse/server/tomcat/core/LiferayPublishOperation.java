@@ -23,10 +23,13 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jst.server.core.IJ2EEModule;
 import org.eclipse.jst.server.core.IWebModule;
 import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
+import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
+import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResource;
@@ -131,6 +134,21 @@ public class LiferayPublishOperation extends PublishOperation {
 				|| server.getTomcatServer().isServeModulesWithoutPublish()) {
 			File f = path.toFile();
 			if (f.exists()) {
+				try {
+					IPath baseDir = server.getRuntimeBaseDirectory();
+					IPath serverXml = baseDir.append("conf").append("server.xml");
+					ServerInstance oldInstance = TomcatVersionHelper.getCatalinaServerInstance(serverXml, null, null);
+					IPath contextDir = oldInstance.getContextXmlDirectory(baseDir.append("conf"));
+					File contextFile = contextDir.append(path.lastSegment() + ".xml").toFile();
+
+					if (contextFile.exists()) {
+						contextFile.delete();
+					}
+				}
+				catch (Exception e) {
+					LiferayTomcatPlugin.logError("Could not delete context xml file.", e);
+				}
+
 				IStatus[] stat = PublishHelper.deleteDirectory(f, monitor);
 				addArrayToList(status, stat);
 			}
@@ -140,10 +158,17 @@ public class LiferayPublishOperation extends PublishOperation {
 				return;
 		}
 		
+		IPath baseDir = server.getTomcatServer().getRuntimeBaseDirectory();
+		IPath autoDeployDir = new Path(server.getLiferayTomcatServer().getAutoDeployDirectory());
+		boolean serverStopped = server.getServer().getServerState() == IServer.STATE_STOPPED;
+
 		if (kind == IServer.PUBLISH_CLEAN || kind == IServer.PUBLISH_FULL) {
 			IModuleResource[] mr = server.getResources(module);
 			IStatus[] stat = helper.publishFull(mr, path, monitor);
 			addArrayToList(status, stat);
+
+			server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
+
 			return;
 		}
 		
@@ -159,12 +184,12 @@ public class LiferayPublishOperation extends PublishOperation {
 			if (CoreUtil.containsMember(del, "WEB-INF/portlet.xml") ||
 				CoreUtil.containsMember(del, "WEB-INF/web.xml") ||
 				CoreUtil.containsMember(del, "WEB-INF/liferay-portlet.xml") ||
-				CoreUtil.containsMember(del, "WEB-INF/liferay-display.xml")) {
-				// IModuleResource[] mr = server.getResources(module);
-				// IStatus[] stat = helper.publishFull(mr, path, monitor);
-				// addArrayToList(status, stat);
+				CoreUtil.containsMember(del, "WEB-INF/liferay-display.xml") ||
+				CoreUtil.containsMember(del, "WEB-INF/liferay-look-and-feel.xml") ||
+				CoreUtil.containsMember(del, "WEB-INF/liferay-layout-templates.xml")) {
 
-				server.redeployContext(module2.getName());
+				server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
+				break;
 			}
 		}
 	}

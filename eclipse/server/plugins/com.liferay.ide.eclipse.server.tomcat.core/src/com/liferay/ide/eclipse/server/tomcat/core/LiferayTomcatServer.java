@@ -271,7 +271,7 @@ public class LiferayTomcatServer extends TomcatServer
 		super.setDefaults(monitor);
 		setTestEnvironment(false);
 		setDeployDirectory(ILiferayTomcatConstants.DEFAULT_DEPLOYDIR);
-		setSaveSeparateContextFiles(true);
+		setSaveSeparateContextFiles(false);
 	}
 
 	public void setExternalProperties(String externalProperties) {

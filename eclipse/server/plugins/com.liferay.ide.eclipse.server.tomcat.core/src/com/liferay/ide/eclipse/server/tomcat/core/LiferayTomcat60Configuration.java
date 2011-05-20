@@ -22,6 +22,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jst.server.tomcat.core.internal.ITomcatWebModule;
 import org.eclipse.jst.server.tomcat.core.internal.Tomcat60Configuration;
 import org.eclipse.wst.server.core.IModule;
 
@@ -36,15 +38,10 @@ public class LiferayTomcat60Configuration extends Tomcat60Configuration implemen
 	}
 
 	@Override
-	public IStatus publishContextConfig(IPath baseDir, IPath deployDir, IProgressMonitor monitor) {
-		return super.publishContextConfig(baseDir, deployDir, monitor);
+	public void addWebModule(int index, ITomcatWebModule module) {
+		isServerDirty = true;
+		firePropertyChangeEvent(ADD_WEB_MODULE_PROPERTY, null, module);
 	}
-
-	// TODO uncomment this once we have serve directly enabled in tomcat publishing
-	// @Override
-	// public IStatus updateContextsToServeDirectly(IPath baseDir, String loader, IProgressMonitor monitor) {
-	// return super.updateContextsToServeDirectly(baseDir, loader, monitor);
-	// }
 
 	@Override
 	protected String getWebModuleURL(IModule webModule) {
@@ -54,6 +51,19 @@ public class LiferayTomcat60Configuration extends Tomcat60Configuration implemen
 		}
 
 		return super.getWebModuleURL(webModule);
+	}
+
+	@Override
+	protected IStatus cleanupServer(
+		IPath baseDir, IPath installDir, boolean removeKeptContextFiles, IProgressMonitor monitor) {
+		// don't cleanupServer
+		return Status.OK_STATUS;
+	}
+
+	@Override
+	public void removeWebModule(int index) {
+		isServerDirty = true;
+		firePropertyChangeEvent(REMOVE_WEB_MODULE_PROPERTY, null, new Integer(index));
 	}
 
 }
