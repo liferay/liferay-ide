@@ -137,10 +137,10 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 				// context.setAttributeValue("antiJARLocking", "true");
 
 				// check to see if we need to move from conf folder
-				IPath existingContextPath = confDir.append("Catalina/localhost").append(contextFile.getName());
-				if (existingContextPath.toFile().exists()) {
-					existingContextPath.toFile().delete();
-				}
+				// IPath existingContextPath = confDir.append("Catalina/localhost").append(contextFile.getName());
+				// if (existingContextPath.toFile().exists()) {
+				// existingContextPath.toFile().delete();
+				// }
 
 				DocumentBuilder builder = XMLUtil.getDocumentBuilder();
 				Document contextDoc = builder.newDocument();

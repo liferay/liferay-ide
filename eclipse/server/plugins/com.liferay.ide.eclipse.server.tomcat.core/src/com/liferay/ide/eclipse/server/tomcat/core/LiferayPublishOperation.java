@@ -11,6 +11,7 @@
 package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -139,10 +140,19 @@ public class LiferayPublishOperation extends PublishOperation {
 					IPath serverXml = baseDir.append("conf").append("server.xml");
 					ServerInstance oldInstance = TomcatVersionHelper.getCatalinaServerInstance(serverXml, null, null);
 					IPath contextDir = oldInstance.getContextXmlDirectory(baseDir.append("conf"));
-					File contextFile = contextDir.append(path.lastSegment() + ".xml").toFile();
+					String contextFileName = path.lastSegment() + ".xml";
+					File contextFile = contextDir.append(contextFileName).toFile();
 
 					if (contextFile.exists()) {
 						contextFile.delete();
+					}
+
+					File autoDeployDir =
+						baseDir.append(server.getLiferayTomcatServer().getAutoDeployDirectory()).toFile();
+					File autoDeployFile = new File(autoDeployDir, contextFileName);
+
+					if (autoDeployFile.exists()) {
+						autoDeployFile.delete();
 					}
 				}
 				catch (Exception e) {
@@ -180,16 +190,24 @@ public class LiferayPublishOperation extends PublishOperation {
 			addArrayToList(status, stat);
 		}
 
-		for (IModuleResourceDelta del : delta) {
-			if (CoreUtil.containsMember(del, "WEB-INF/portlet.xml") ||
-				CoreUtil.containsMember(del, "WEB-INF/web.xml") ||
-				CoreUtil.containsMember(del, "WEB-INF/liferay-portlet.xml") ||
-				CoreUtil.containsMember(del, "WEB-INF/liferay-display.xml") ||
-				CoreUtil.containsMember(del, "WEB-INF/liferay-look-and-feel.xml") ||
-				CoreUtil.containsMember(del, "WEB-INF/liferay-layout-templates.xml")) {
+		if (ProjectUtil.isHookProject(module2.getProject())) {
+			// always redeploy hooks since they involve modifying portal
+			server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
+		}
+		else {
+			for (IModuleResourceDelta del : delta) {
+				if (CoreUtil.containsMember(del, "WEB-INF/portlet.xml") ||
+					CoreUtil.containsMember(del, "WEB-INF/web.xml") ||
+					CoreUtil.containsMember(del, "WEB-INF/liferay-portlet.xml") ||
+					CoreUtil.containsMember(del, "WEB-INF/liferay-display.xml") ||
+					CoreUtil.containsMember(del, "WEB-INF/liferay-look-and-feel.xml") ||
+					CoreUtil.containsMember(del, "WEB-INF/liferay-layout-templates.xml") ||
+					CoreUtil.containsMember(del, "WEB-INF/liferay-plugin-package.properties") ||
+					CoreUtil.containsMember(del, "WEB-INF/liferay-plugin-package.xml")) {
 
-				server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
-				break;
+					server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
+					break;
+				}
 			}
 		}
 	}
