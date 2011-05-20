@@ -738,27 +738,36 @@ If an entity does have columns, then the value object, the POJO class that is ma
                         </documentation>
                     </section>
                     <image>images/jrtexception_obj_16x16.gif</image>
+                    <node-factory>
+                        <property>exceptions</property>
+                        <case>
+                            <section>
+                                <label>Exception</label>
+                                <content>
+                                    <property-editor>
+                                        <property>exception</property>
+                                        <hint>
+                                            <name>show.label</name>
+                                            <value>false</value>
+                                        </hint>
+                                    </property-editor>
+                                </content>
+                            </section>
+                            <use-model-element-image></use-model-element-image>
+                            <label>${exception == null ? &quot;&lt;exception&gt;&quot; : exception}</label>
+                        </case>
+                    </node-factory>
                 </node>
                 <node>
                     <label>Imports</label>
                     <image>images/import_16x16.gif</image>
                     <section>
                         <content>
-                            <action-link>
-                                <label>Add an Import</label>
-                                <show-image></show-image>
-                                <action-id>Sapphire.ADD</action-id>
-                            </action-link>
-                            <separator></separator>
                             <property-editor>
                                 <property>serviceBuilderImports</property>
                                 <hint>
                                     <name>show.label</name>
                                     <value>false</value>
-                                </hint>
-                                <hint>
-                                    <name>read.only</name>
-                                    <value>true</value>
                                 </hint>
                             </property-editor>
                         </content>
@@ -836,9 +845,48 @@ development of services.</content>
             <label>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</label>
             <properties-view>
                 <page>
-                    <label>general</label>
+                    <label>required</label>
                     <content>
                         <property-editor>name</property-editor>
+                    </content>
+                </page>
+                <page>
+                    <label>optional</label>
+                    <content>
+                    	<property-editor>
+	                              <property>localService</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+	                          <property-editor>
+	                              <property>remoteService</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+	                    <property-editor>humanName</property-editor>
+	                          <property-editor>table</property-editor>
+	                          <property-editor>
+	                              <property>uuid</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+	                    <property-editor>persistenceClass</property-editor>
+	                    <property-editor>dataSource</property-editor>
+	                    <property-editor>sessionFactory</property-editor>
+	                    <property-editor>txManager</property-editor>
+	                          <property-editor>
+	                              <property>cacheEnabled</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
                     </content>
                 </page>
             </properties-view>
@@ -870,7 +918,39 @@ development of services.</content>
                 <id>relationshipImage</id>
                 <path>icons/references_16x16.png</path>
             </tool-palette-image>
+            <line-style>dash</line-style>
         </connection>
+        <properties-view>
+            <page>
+                <label>general</label>
+                <content>
+                    <property-editor>
+                                <property>entities</property>
+                                <child-property>
+                                    <property>name</property>
+                                    <hint>
+                                        <name>browse.only</name>
+                                        <value>true</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>localService</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>remoteService</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </child-property>
+                            </property-editor>
+                </content>
+            </page>
+        </properties-view>
     </diagram-page>
 	
 </definition>

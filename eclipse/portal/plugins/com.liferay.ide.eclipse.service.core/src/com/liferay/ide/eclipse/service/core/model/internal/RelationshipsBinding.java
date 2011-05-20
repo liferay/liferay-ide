@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListBindingImpl;
 import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.modeling.ModelElementListener;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ModelPath;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -23,6 +24,7 @@ import org.eclipse.sapphire.modeling.internal.MemoryResource;
 public class RelationshipsBinding extends ListBindingImpl {
 
 	protected List<Resource> localResources = new ArrayList<Resource>();
+	private RelationshipListener listener;
 
 	@Override
 	public List<Resource> read() {
@@ -90,8 +92,10 @@ public class RelationshipsBinding extends ListBindingImpl {
 	public Resource add(ModelElementType type) {
 		IRelationship rel = IRelationship.TYPE.instantiate();
 
-		Resource resource = new RelationshipResource(getEntity().resource(), rel);
+		RelationshipResource resource = new RelationshipResource(getEntity().resource(), rel);
 		localResources.add(resource);
+		// IModelElement e = resource.binding(IRelationship.PROP_NAME).element();
+		// resource.element().addListener(listener);
 
 		return resource;
 	}
@@ -100,13 +104,15 @@ public class RelationshipsBinding extends ListBindingImpl {
 	public void remove(Resource resource) {
 		if (localResources.contains(resource)) {
 			localResources.remove(resource);
+			resource.element().removeListener(listener);
 		}
-
 	}
 
 	@Override
 	public void init(IModelElement element, ModelProperty property, String[] params) {
 		super.init(element, property, params);
+
+		listener = new RelationshipListener();
 
 		localResources.clear();
 
@@ -117,22 +123,54 @@ public class RelationshipsBinding extends ListBindingImpl {
 
 			@Override
 			public void handlePropertyChangedEvent(ModelPropertyChangeEvent event) {
-				handleColumnsChangedEvent(event);
+				handleRelationshipsChangedEvent(event);
 			}
-		}, new ModelPath("Columns"));
+		}, new ModelPath("Relationships"));
 
-		for (IColumn column : getColumns()) {
-			column.addListener(new ModelPropertyListener() {
+		
+	}
 
-				@Override
-				public void handlePropertyChangedEvent(ModelPropertyChangeEvent event) {
-
-				}
-			}, "Name");
+	protected void handleRelationshipsChangedEvent(ModelPropertyChangeEvent event) {
+		// loop through relationships and add necessary columns if they don't exist
+		IEntity entity = (IEntity) event.getModelElement();
+		for (IRelationship rel : entity.getRelationships()) {
+			rel.addListener(listener);
 		}
 	}
 
-	protected void handleColumnsChangedEvent(ModelPropertyChangeEvent event) {
-		((IEntity) event.getModelElement()).getColumns();
+	protected void handleNameChangedEvent(ModelPropertyChangeEvent event) {
+		// loop through relationships and add necessary columns if they don't exist
+
+	}
+
+	public class RelationshipListener extends ModelElementListener {
+
+		@Override
+		public void propertyChanged(ModelPropertyChangeEvent event) {
+			IRelationship rel = (IRelationship) event.getModelElement();
+			IEntity e = rel.getName().resolve();
+			if (e != null) {
+				IEntity entity = RelationshipsBinding.this.getEntity();
+				for (IColumn col : e.getColumns()) {
+					if (col.isPrimary().getContent()) {
+						boolean hasForeignKey = false;
+						for (IColumn col2 : entity.getColumns()) {
+							if ((!col2.isPrimary().getContent()) &&
+								col2.getName().getContent().equals(col.getName().getContent())) {
+								hasForeignKey = true;
+							}
+						}
+						if (hasForeignKey) {
+							entity.getRelationships().remove(rel);
+						}
+						else {
+							IColumn foreignColumn = entity.getColumns().addNewElement();
+							foreignColumn.setName(col.getName().getContent());
+							foreignColumn.setType(col.getType().getContent());
+						}
+					}
+				}
+			}
+		}
 	}
 }

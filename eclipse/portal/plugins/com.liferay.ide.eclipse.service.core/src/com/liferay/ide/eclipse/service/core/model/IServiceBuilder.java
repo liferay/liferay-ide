@@ -10,7 +10,6 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -59,7 +58,6 @@ public interface IServiceBuilder extends IModelElement {
 
 	@XmlBinding(path = "namespace")
 	@Label(standard = "&Namespace")
-	@Required
 	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace");
 
 	Value<String> getNamespace();

@@ -1,10 +1,10 @@
 package com.liferay.ide.eclipse.service.core.model.internal;
 
 import com.liferay.ide.eclipse.service.core.model.IServiceBuilderImport;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelParticle;
 import org.eclipse.sapphire.modeling.ModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueNormalizationService;
@@ -17,7 +17,7 @@ public final class ServiceBuilderImport
     implements IServiceBuilderImport
     
 {
-    private Value<IPath> file;
+    private Value<Path> file;
     
     public ServiceBuilderImport( final IModelParticle parent, final ModelProperty parentProperty, final Resource resource )
     {
@@ -29,7 +29,7 @@ public final class ServiceBuilderImport
         super( TYPE, null, null, resource );
     }
     
-    public Value<IPath> getFile()
+    public Value<Path> getFile()
     {
         synchronized( root() )
         {
@@ -64,7 +64,7 @@ public final class ServiceBuilderImport
         }
     }
     
-    public void setFile( final IPath value )
+    public void setFile( final Path value )
     {
         setFile( value != null ? service( PROP_FILE, ValueSerializationService.class ).encode( value ) : null );
     }
@@ -79,11 +79,11 @@ public final class ServiceBuilderImport
             {
                 if( this.file != null || force == true )
                 {
-                    final Value<IPath> oldValue = this.file;
+                    final Value<Path> oldValue = this.file;
                     
                     final String val = resource().binding( PROP_FILE ).read();
                     
-                    this.file = new Value<IPath>( this, PROP_FILE, service( PROP_FILE, ValueNormalizationService.class ).normalize( PROP_FILE.encodeKeywords( val ) ) );
+                    this.file = new Value<Path>( this, PROP_FILE, service( PROP_FILE, ValueNormalizationService.class ).normalize( PROP_FILE.encodeKeywords( val ) ) );
                     this.file.init();
                     
                     final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_FILE );
@@ -125,7 +125,7 @@ public final class ServiceBuilderImport
         {
             if( ! ( value instanceof String ) )
             {
-                setFile( (IPath) value );
+                setFile( (Path) value );
             }
             else
             {
