@@ -23,7 +23,7 @@
   <artifactId>com.liferay.ide.eclipse-repository</artifactId>
   <packaging>eclipse-repository</packaging>
 
-  <name>Liferay IDE Update Site</name>
+  <name>Liferay IDE Repository</name>
   <!-- see http://issues.sonatype.org/browse/TYCHO-313 -->
   <version>1.3.0-SNAPSHOT</version>
 
@@ -34,7 +34,7 @@
         <artifactId>tycho-p2-repository-plugin</artifactId>
 		<version>${tycho-version}</version>
 		<configuration>
-			<includeAllDependencies>true</includeAllDependencies>
+			<includeAllDependencies>false</includeAllDependencies>
 		</configuration>
       </plugin>
     </plugins>

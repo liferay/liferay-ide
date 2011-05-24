@@ -6,8 +6,8 @@
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.eclipse.tools.branding">
 
-   <description url="http://www.liferay.com">
-      Liferay IDE
+   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+      Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
    </description>
 
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">

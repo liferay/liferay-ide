@@ -8,7 +8,7 @@
    </feature>
    <category-def name="Liferay Tools" label="Liferay Tools">
       <description>
-         Liferay Tools
+         Liferay Developer Tools
       </description>
    </category-def>
 </site>
