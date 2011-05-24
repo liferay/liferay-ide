@@ -196,20 +196,22 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
 		else {
 			for (IModuleResourceDelta del : delta) {
-				if (CoreUtil.containsMember(del, "WEB-INF/portlet.xml") ||
-					CoreUtil.containsMember(del, "WEB-INF/web.xml") ||
-					CoreUtil.containsMember(del, "WEB-INF/liferay-portlet.xml") ||
-					CoreUtil.containsMember(del, "WEB-INF/liferay-display.xml") ||
-					CoreUtil.containsMember(del, "WEB-INF/liferay-look-and-feel.xml") ||
-					CoreUtil.containsMember(del, "WEB-INF/liferay-layout-templates.xml") ||
-					CoreUtil.containsMember(del, "WEB-INF/liferay-plugin-package.properties") ||
-					CoreUtil.containsMember(del, "WEB-INF/liferay-plugin-package.xml")) {
-
+				if ( deltaNeedsAutoDeploy( del ) ) {
 					server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
 					break;
 				}
 			}
 		}
+	}
+
+	private boolean deltaNeedsAutoDeploy( IModuleResourceDelta del ) {
+		String[] paths =
+			new String[] { "WEB-INF/portlet.xml", "WEB-INF/web.xml", "WEB-INF/liferay-portlet.xml",
+				"WEB-INF/liferay-display.xml", "WEB-INF/liferay-look-and-feel.xml",
+				"WEB-INF/liferay-layout-templates.xml", "WEB-INF/liferay-plugin-package.properties",
+				"WEB-INF/liferay-plugin-package.xml", "WEB-INF/server-config.wsdd", };
+
+		return CoreUtil.containsMember( del, paths );
 	}
 
 	private void publishJar(String jarURI, Properties p, List status, IProgressMonitor monitor) throws CoreException {

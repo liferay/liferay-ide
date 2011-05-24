@@ -52,7 +52,7 @@ import org.osgi.framework.Version;
  */
 public class CoreUtil {
 
-	public static boolean containsMember(IModuleResourceDelta delta, String path) {
+	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
 		if (delta == null) {
 			return false;
 		}
@@ -63,23 +63,33 @@ public class CoreUtil {
 		if (currentChildren == null) {
 			IFile file = (IFile) delta.getModuleResource().getAdapter(IFile.class);
 			
-			if (file != null && file.getFullPath().toString().contains(path)) {
-				return true;
+			if ( file != null ) {
+				String filePath = file.getFullPath().toString();
+
+				for (String path : paths) {
+					if ( filePath.contains( path ) ) {
+						return true;
+					}
+				}
 			}
 			return false;
 		}
 
 		for (int j = 0, jmax = currentChildren.length; j < jmax; j++) {
 			IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
-			if (moduleRelativePath.toString().equals(path) || moduleRelativePath.lastSegment().equals(path)) {
-				return true;
-			}
-			else {
-				boolean childContains = containsMember(currentChildren[j], path);
+			String moduleRelativePathValue = moduleRelativePath.toString();
+			String moduleRelativeLastSegment = moduleRelativePath.lastSegment();
 
-				if (childContains) {
+			for (String path : paths) {
+				if ( moduleRelativePathValue.equals( path ) || moduleRelativeLastSegment.equals( path ) ) {
 					return true;
 				}
+			}
+
+			boolean childContains = containsMember( currentChildren[j], paths );
+
+			if ( childContains ) {
+				return true;
 			}
 		}
 
