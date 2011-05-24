@@ -35,6 +35,10 @@
       <update url="http://releases.liferay.com/tools/ide/eclipse/helios/stable"/>
    </url>
 
+   <requires>
+      <import feature="org.eclipse.sapphire.ui" version="0.3.0.201105201434"/>
+   </requires>
+
    <plugin
          id="com.liferay.ide.eclipse.core"
          download-size="0"

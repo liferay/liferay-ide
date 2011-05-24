@@ -89,7 +89,7 @@
     <module>common/features/com.liferay.ide.eclipse.tools</module>
 <!--     <module>common/features/com.liferay.ide.eclipse.source-feature</module> -->
 
-    <!--<module>releng/com.liferay.ide.eclipse-repository</module>-->
+    <module>releng/com.liferay.ide.eclipse-repository</module>
     <module>releng/com.liferay.ide.eclipse-updatesite</module>
    </modules>
 
