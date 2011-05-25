@@ -98,16 +98,6 @@
       <url>${eclipse-site}</url>
     </repository>
     <repository>
-      <id>swtbot</id>
-      <layout>p2</layout>
-      <url>${swtbot-site}</url>
-    </repository>
-    <repository>
-      <id>wikitext</id>
-      <layout>p2</layout>
-      <url>${wikitext-site}</url>
-    </repository>
-    <repository>
       <id>orbit</id>
       <layout>p2</layout>
       <url>${orbit-site}</url>
