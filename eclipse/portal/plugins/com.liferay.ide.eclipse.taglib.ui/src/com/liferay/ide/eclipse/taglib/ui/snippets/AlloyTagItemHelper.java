@@ -11,6 +11,7 @@
 package com.liferay.ide.eclipse.taglib.ui.snippets;
 
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.taglib.ui.TaglibUI;
 import com.liferay.ide.eclipse.taglib.ui.model.ITag;
 import com.liferay.ide.eclipse.ui.snippets.SnippetsUIPlugin;
 
@@ -39,7 +40,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.wst.common.snippets.core.ISnippetItem;
 import org.eclipse.wst.common.snippets.core.ISnippetsEntry;
 import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -123,29 +123,24 @@ public class AlloyTagItemHelper {
 		XmlResourceStore store = null;
 		IFile editorFile = ((IFileEditorInput) editorInput).getFile();
 
-		tldFile = ProjectUtil.getDocroot(editorFile.getProject()).getFile("WEB-INF/tld/alloy.tld");
-
+		Document tldDocument = null;
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-		Document tldDocument = null;
+		tldFile = ProjectUtil.getDocroot(editorFile.getProject()).getFile("WEB-INF/tld/alloy.tld");
 
 		if (tldFile.exists()) {
-			IDOMModel tldModel;
 			try {
-				tldModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead(tldFile);
+				IDOMModel tldModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( tldFile );
 				tldDocument = tldModel.getDocument();
 			}
 			catch (Exception e) {
 				SnippetsUIPlugin.logError(e);
 			}
-			
 		}
-
-		if (tldDocument == null) {
+		else {
 			// read alloy from plugin
 			try {
-				URL alloyURL =
-					FileLocator.toFileURL(SnippetsUIPlugin.getDefault().getBundle().getEntry("lib/alloy.tld"));
+				URL alloyURL = FileLocator.toFileURL( TaglibUI.getDefault().getBundle().getEntry( "deps/alloy.tld" ) );
 				File alloyFile = new File(alloyURL.getFile());
 				tldDocument = docFactory.newDocumentBuilder().parse(alloyFile);
 			}
@@ -205,7 +200,7 @@ public class AlloyTagItemHelper {
 				try {
 					Element attr = (Element) attrs.item(i);
 					String desc =
-						((IDOMElement) attr.getElementsByTagName("description").item(0)).getFirstChild().getNodeValue();
+						( (Element) attr.getElementsByTagName( "description" ).item( 0 ) ).getFirstChild().getNodeValue();
 					String json = desc.substring(desc.indexOf("<!--") + 4, desc.indexOf("-->"));
 					JSONObject jsonObject = new JSONObject(json);
 					Node newAttr = null;
@@ -227,6 +222,7 @@ public class AlloyTagItemHelper {
 					}
 				}
 				catch (Exception e) {
+					TaglibUI.logError( e );
 				}
 			}
 
@@ -245,7 +241,7 @@ public class AlloyTagItemHelper {
 			store = new XmlResourceStore(xmlString.getBytes());
 		}
 		catch (Exception e) {
-			SnippetsUIPlugin.logError(e);
+			TaglibUI.logError( e );
 		}
 
 		return ITag.TYPE.instantiate(new RootXmlResource(store));

@@ -1,5 +1,7 @@
 package com.liferay.ide.eclipse.taglib.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -45,6 +47,10 @@ public class TaglibUI extends AbstractUIPlugin {
 	 */
 	public static TaglibUI getDefault() {
 		return plugin;
+	}
+
+	public static void logError( Exception e ) {
+		getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
 	}
 
 }
