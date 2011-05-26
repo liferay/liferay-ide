@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<site associateSitesURL="associateSites.xml">
+<!-- Using this remote URL (at github) for the associate sites until TYCHO bug has been fixed
+      -->
+<site associateSitesURL="https://gist.github.com/raw/992055/c5ce1a3cd80275eef8c1fa05b79c47ab368277bb/liferay-ide-associate-sites.xml">
    <description url="Liferay IDE">
       Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
    </description>
