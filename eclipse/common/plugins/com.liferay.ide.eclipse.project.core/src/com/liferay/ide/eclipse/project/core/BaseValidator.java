@@ -125,22 +125,50 @@ public abstract class BaseValidator extends AbstractValidator {
 					if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
 						IPath entryPath = entry.getPath();
 						IPath classResourcePath = entryPath.append(classResource);
+
 						classResourceValue =
 							javaProject.getJavaModel().getWorkspace().getRoot().findMember(classResourcePath);
+
+						if ( classResourceValue != null ) {
+							break;
+						}
+
+						IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) );
+
+						classResourceValue =
+							javaProject.getJavaModel().getWorkspace().getRoot().findMember( qualifiedResourcePath );
+
+						if ( classResourceValue != null ) {
+							break;
+						}
+
+						String resourceName = classResourcePath.lastSegment();
 
 						if (classResourceValue == null && classResourcePath.segmentCount() > 0) {
 							// check for a .properties of the same resource path in case of a resource bundle element
 							// that doesn't append the .properties
-							String resourceName = classResourcePath.lastSegment();
-							IPath propertiesClassResourcePath =
-								classResourcePath.removeLastSegments(1).append(resourceName + ".properties");
+							IPath parent = classResourcePath.removeLastSegments( 1 );
+
+							IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" );
+
 							classResourceValue =
 								javaProject.getJavaModel().getWorkspace().getRoot().findMember(
-									propertiesClassResourcePath);
-						}
+									propertiesClassResourcePath );
 
-						if (classResourceValue != null) {
-							break;
+							if ( classResourceValue != null ) {
+								break;
+							}
+
+							propertiesClassResourcePath =
+								parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" );
+
+							classResourceValue =
+								javaProject.getJavaModel().getWorkspace().getRoot().findMember(
+									propertiesClassResourcePath );
+
+							if ( classResourceValue != null ) {
+								break;
+							}
 						}
 					}
 				}
