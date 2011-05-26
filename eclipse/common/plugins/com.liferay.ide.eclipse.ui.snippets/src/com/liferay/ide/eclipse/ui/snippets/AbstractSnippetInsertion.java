@@ -3,6 +3,7 @@ package com.liferay.ide.eclipse.ui.snippets;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.widgets.Shell;
@@ -20,12 +21,23 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 
 	protected ISnippetItem fItem;
 
+	private static Object lastEventContent;
+
+	private static int lastEventTime;
+
 	/**
 	 * Copied from DefaultSnippetInsertion.dragSetData() version 1.7 (WTP 3.2.1)
 	 */
 	@Override
 	public void dragSetData(DragSourceEvent event, ISnippetItem item) {
-		boolean isSimpleText = TextTransfer.getInstance().isSupportedType(event.dataType);
+		// IDE-334 watch for double/triple drops
+		if ( Platform.OS_LINUX.equals( Platform.getOS() ) && lastEventTime == event.time ) {
+			event.data = lastEventContent;
+			// avoid double drop
+			return;
+		}
+
+		boolean isSimpleText = TextTransfer.getInstance().isSupportedType( event.dataType );
 		if (isSimpleText) {
 			// set variable values to ""
 			IWorkbenchWindow window = SnippetsUIPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
@@ -59,6 +71,11 @@ public abstract class AbstractSnippetInsertion extends DefaultSnippetInsertion {
 			 * use this to prompt the user for the correct insertion data
 			 */
 			event.data = EntrySerializer.getInstance().toXML(item);
+		}
+
+		if ( Platform.OS_LINUX.equals( Platform.getOS() ) ) {
+			lastEventTime = event.time;
+			lastEventContent = event.data;
 		}
 	}
 
