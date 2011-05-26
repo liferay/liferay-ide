@@ -33,8 +33,6 @@
 
    <url>
       <update url="http://releases.liferay.com/tools/ide/eclipse/helios/stable"/>
-      <discovery label="Sapphire Integration Site" url="https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/lastSuccessfulBuild/artifact/build/repository/"/>
-      <discovery label="Graphiti Nightly" url="http://download.eclipse.org/graphiti/updates/nightly"/>
    </url>
 
    <requires>
