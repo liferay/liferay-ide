@@ -87,6 +87,13 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
+                                            <property-editor>
+                                                <property>jsonEnabled</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
                                     	</content>
                                     </group>
                                 </content>
@@ -121,7 +128,11 @@ used in conjunction with data-source. See data-source-spring.xml.
 [br/][br/]
 The [b]tx-manager[/b] value specifies the transaction manager that Spring uses. The default value is the Spring Hibernate transaction manager that wraps the Liferay data source and session factory. See data-source-spring.xml. Set this attribute to &quot;none&quot; to disable transaction management.
 [br/][br/]
-The [b]cache-enabled[/b] value specifies whether or not to cache this queries for this entity. Set this to false if data in the table will be updated by other programs. The default value is true.</content>
+The [b]cache-enabled[/b] value specifies whether or not to cache this queries for this entity. Set this to false if data in the table will be updated by other programs. The default value is true.
+[br/][br/]
+The [b]json-enabled[/b] value specifies whether or not the entity should be annotated
+for JSON serialization. By default, if the remote-service value is true, then
+the json-enabled value is true.</content>
                                     <title>Entity</title>
                                 </documentation>
                             </section>
@@ -140,10 +151,6 @@ The [b]cache-enabled[/b] value specifies whether or not to cache this queries fo
                                             <hint>
                                                 <name>show.label</name>
                                                 <value>false</value>
-                                            </hint>
-                                            <hint>
-                                                <name>read.only</name>
-                                                <value>true</value>
                                             </hint>
                                             <child-property>name</child-property>
                                             <child-property>type</child-property>
@@ -202,6 +209,13 @@ The [b]cache-enabled[/b] value specifies whether or not to cache this queries fo
                                                                 <value>leading.label</value>
                                                             </hint>
                                                         </property-editor>
+                                                        <property-editor>
+		                                                <property>jsonEnabled</property>
+			                                                <hint>
+			                                                    <name>checkbox.layout</name>
+			                                                    <value>leading.label</value>
+			                                                </hint>
+			                                            </property-editor>
                                                     </content>
                                                 </group>
                                             </content>
@@ -451,10 +465,6 @@ Set the by attribute to &quot;asc&quot; or &quot;desc&quot; to order by ascendin
                                         <property-editor>
                                             <property>finders</property>
                                             <hint>
-                                                <name>read.only</name>
-                                                <value>true</value>
-                                            </hint>
-                                            <hint>
                                                 <name>show.label</name>
                                                 <value>false</value>
                                             </hint>
@@ -529,10 +539,6 @@ SQL index for this finder. The default value is true.</content>
                                                     <property-editor>
                                                         <property>finderColumns</property>
                                                         <child-property>name</child-property>
-                                                        <hint>
-                                                            <name>read.only</name>
-                                                            <value>true</value>
-                                                        </hint>
                                                         <hint>
                                                             <name>show.label</name>
                                                             <value>false</value>
@@ -683,10 +689,6 @@ resourceLocalService and resourceService.</content>
                                     <name>show.label</name>
                                     <value>false</value>
                                 </hint>
-                                <hint>
-                                    <name>read.only</name>
-                                    <value>true</value>
-                                </hint>
                                 <child-property>
                                     <property>name</property>
                                     <hint>
@@ -771,6 +773,14 @@ If an entity does have columns, then the value object, the POJO class that is ma
                                 </hint>
                             </property-editor>
                         </content>
+                        <documentation>
+                            <content>The service-builder-import allows you to split up a large Service Builder file
+into smaller files by aggregrating the smaller Service Builder into one file.
+Note that there can be at most one author element among all the files. There can
+also only be one and only one namespace element among all the files.
+[br/][br/]
+The [b]attribute file[/b] is interpreted as relative to the file that is importing it.</content>
+                        </documentation>
                     </section>
                     <node-factory>
                         <property>serviceBuilderImports</property>
@@ -951,6 +961,9 @@ development of services.</content>
                 </content>
             </page>
         </properties-view>
+        <grid>
+            <visible>true</visible>
+        </grid>
     </diagram-page>
 	
 </definition>

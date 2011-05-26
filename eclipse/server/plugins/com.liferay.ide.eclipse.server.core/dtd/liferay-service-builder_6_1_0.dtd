@@ -103,6 +103,10 @@ to "none" to disable transaction management.
 The cache-enabled value specifies whether or not to cache this queries for this
 entity. Set this to false if data in the table will be updated by other
 programs. The default value is true.
+
+The json-enabled value specifies whether or not the entity should be annotated
+for JSON serialization. By default, if the remote-service value is true, then
+the json-enabled value is true.
 -->
 <!ATTLIST entity
 	name CDATA #REQUIRED
@@ -116,6 +120,7 @@ programs. The default value is true.
 	session-factory CDATA #IMPLIED
 	tx-manager CDATA #IMPLIED
 	cache-enabled CDATA #IMPLIED
+	json-enabled CDATA #IMPLIED
 >
 
 <!--
@@ -277,6 +282,10 @@ to issue unnecessary updates. The default value is true.
 
 The localized value specifies whether or not the value of the column can have
 different values for different locales. The default value is false.
+
+The json-enabled value specifies whether or not the column should be annotated
+for JSON serialization. By default, if the json-enabled value in the entity
+element is true, then the json-enabled value in the column element is true.
 -->
 <!ATTLIST column
 	name CDATA #REQUIRED
@@ -291,6 +300,7 @@ different values for different locales. The default value is false.
 	id-param CDATA #IMPLIED
 	convert-null CDATA #IMPLIED
 	localized CDATA #IMPLIED
+	json-enabled CDATA #IMPLIED
 >
 
 <!--

@@ -5,9 +5,11 @@
          point="org.eclipse.ui.editors">
       <editor
             class="com.liferay.ide.eclipse.service.ui.ServiceBuilderEditor"
-           	icon="icons/e16/service.png"
-            id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
-            name="Service Builder Editor (Experimental)"
+            contributorClass="com.liferay.ide.eclipse.service.ui.ServiceBuilderEditorActionBarContributor"
+            default="true"
+            icon="icons/e16/service.png"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.servicebuilder"
+            name="Service Builder Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
                contentTypeId="com.liferay.ide.eclipse.portlet.core.servicebuildercontent">

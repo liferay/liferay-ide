@@ -22,6 +22,7 @@ public final class Column
     private Value<Boolean> filterPrimary;
     private Value<String> idParam;
     private Value<String> idType;
+    private Value<Boolean> jsonEnabled;
     private Value<Boolean> localized;
     private Value<String> mappingKey;
     private Value<String> mappingTable;
@@ -257,6 +258,46 @@ public final class Column
                 refresh( PROP_ID_TYPE, false );
             }
         }
+    }
+    
+    public Value<Boolean> isJsonEnabled()
+    {
+        synchronized( root() )
+        {
+            if( this.jsonEnabled == null )
+            {
+                refresh( PROP_JSON_ENABLED, true );
+            }
+            
+            return this.jsonEnabled;
+        }
+    }
+    
+    public void setJsonEnabled( String value )
+    {
+        synchronized( root() )
+        {
+            if( value != null && value.equals( "" ) )
+            {
+                value = null;
+            }
+            
+            value = PROP_JSON_ENABLED.decodeKeywords( value );
+            value = service( PROP_JSON_ENABLED, ValueNormalizationService.class ).normalize( value );
+            
+            refresh( PROP_JSON_ENABLED, true );
+            
+            if( ! equal( this.jsonEnabled.getText( false ), value ) )
+            {
+                resource().binding( PROP_JSON_ENABLED ).write( value );
+                refresh( PROP_JSON_ENABLED, false );
+            }
+        }
+    }
+    
+    public void setJsonEnabled( final Boolean value )
+    {
+        setJsonEnabled( value != null ? service( PROP_JSON_ENABLED, ValueSerializationService.class ).encode( value ) : null );
     }
     
     public Value<Boolean> isLocalized()
@@ -647,6 +688,33 @@ public final class Column
                     }
                 }
             }
+            else if( property == PROP_JSON_ENABLED )
+            {
+                if( this.jsonEnabled != null || force == true )
+                {
+                    final Value<Boolean> oldValue = this.jsonEnabled;
+                    
+                    final String val = resource().binding( PROP_JSON_ENABLED ).read();
+                    
+                    this.jsonEnabled = new Value<Boolean>( this, PROP_JSON_ENABLED, service( PROP_JSON_ENABLED, ValueNormalizationService.class ).normalize( PROP_JSON_ENABLED.encodeKeywords( val ) ) );
+                    this.jsonEnabled.init();
+                    
+                    final boolean propertyEnabledStatusChanged = refreshPropertyEnabledStatus( PROP_JSON_ENABLED );
+                    
+                    if( oldValue != null )
+                    {
+                        if( this.jsonEnabled.equals( oldValue ) )
+                        {
+                            this.jsonEnabled = oldValue;
+                        }
+                        
+                        if( this.jsonEnabled != oldValue || propertyEnabledStatusChanged )
+                        {
+                            notifyPropertyChangeListeners( PROP_JSON_ENABLED );
+                        }
+                    }
+                }
+            }
             else if( property == PROP_LOCALIZED )
             {
                 if( this.localized != null || force == true )
@@ -840,6 +908,10 @@ public final class Column
         {
             return getIdType();
         }
+        else if( property == PROP_JSON_ENABLED )
+        {
+            return isJsonEnabled();
+        }
         else if( property == PROP_LOCALIZED )
         {
             return isLocalized();
@@ -916,6 +988,19 @@ public final class Column
         else if( property == PROP_ID_TYPE )
         {
             setIdType( (String) value );
+            return;
+        }
+        else if( property == PROP_JSON_ENABLED )
+        {
+            if( ! ( value instanceof String ) )
+            {
+                setJsonEnabled( (Boolean) value );
+            }
+            else
+            {
+                setJsonEnabled( (String) value );
+            }
+            
             return;
         }
         else if( property == PROP_LOCALIZED )

@@ -38,6 +38,7 @@ dl.file.entry.drafts.enabled
 dl.hook.impl
 dl.webdav.auto.unlock
 dl.webdav.save.to.single.version
+dockbar.add.portlets
 field.enable.com.liferay.portal.model.Contact.birthday
 field.enable.com.liferay.portal.model.Contact.male
 field.enable.com.liferay.portal.model.Organization.status
@@ -50,9 +51,11 @@ layout.types
 layout.user.private.layouts.auto.create
 layout.user.private.layouts.enabled
 layout.user.private.layouts.modifiable
+layout.user.private.layouts.power.user.required
 layout.user.public.layouts.auto.create
 layout.user.public.layouts.enabled
 layout.user.public.layouts.modifiable
+layout.user.public.layouts.power.user.required
 ldap.attrs.transformer.impl
 login.create.account.allow.custom.password
 login.events.post

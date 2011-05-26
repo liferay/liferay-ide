@@ -80,18 +80,6 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.liferay.ide.eclipse.portlet.ui.editor.ServiceBuilderEditor"
-            contributorClass="com.liferay.ide.eclipse.portlet.ui.editor.ServiceBuilderEditorActionBarContributor"
-            default="true"
-            icon="icons/e16/service.png"
-            id="com.liferay.ide.eclipse.portlet.ui.editor.servicebuilder"
-            name="Service Builder Editor"
-            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
-         <contentTypeBinding
-               contentTypeId="com.liferay.ide.eclipse.portlet.core.servicebuildercontent">
-         </contentTypeBinding>
-      </editor>
-      <editor
             class="com.liferay.ide.eclipse.portlet.ui.editor.PluginPackageEditor"
             contributorClass="com.liferay.ide.eclipse.portlet.ui.editor.PluginPackageEditorActionBarContributor"
             default="true"

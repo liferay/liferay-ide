@@ -162,4 +162,17 @@ public interface IColumn extends IModelElement {
 
 	void setLocalized(Boolean value);
 
+	// *** Json Enabled
+
+	@Type( base = Boolean.class )
+	@Label( standard = "&JSON enabled" )
+	@XmlBinding( path = "@json-enabled" )
+	@DefaultValue( text = "true" )
+	ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" );
+
+	Value<Boolean> isJsonEnabled();
+
+	void setJsonEnabled( String value );
+
+	void setJsonEnabled( Boolean value );
 }
