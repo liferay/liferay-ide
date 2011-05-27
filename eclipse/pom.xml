@@ -44,7 +44,7 @@
   </licenses>
 
   <properties>
-    <tycho-version>0.13.0-SNAPSHOT</tycho-version>
+    <tycho-version>0.12.0</tycho-version>
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/S20110124210048/repository</orbit-site>
