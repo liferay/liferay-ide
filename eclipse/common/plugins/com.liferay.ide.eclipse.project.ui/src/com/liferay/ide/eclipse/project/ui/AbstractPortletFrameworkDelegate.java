@@ -15,14 +15,22 @@
 
 package com.liferay.ide.eclipse.project.ui;
 
+import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
+
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractPortletFrameworkDelegate implements IPortletFrameworkDelegate {
+public abstract class AbstractPortletFrameworkDelegate implements IPortletFrameworkDelegate, IDataModelListener {
 
 	protected String bundleId = null;
+
+	protected IDataModel dataModel;
 
 	protected boolean fragmentEnabled = false;
 
@@ -30,8 +38,24 @@ public abstract class AbstractPortletFrameworkDelegate implements IPortletFramew
 
 	protected String iconUrl = null;
 
+	public Composite createNewProjectOptionsComposite( Composite parent, IDataModel newProjectDataModel ) {
+		this.dataModel = newProjectDataModel;
+
+		this.dataModel.addListener( this );
+
+		Composite composite = createNewProjectOptionsComposite( parent );
+
+		updateFragmentEnabled( this.dataModel );
+
+		return composite;
+	}
+
 	public String getBundleId() {
 		return bundleId;
+	}
+
+	public IDataModel getDataModel() {
+		return dataModel;
 	}
 
 	public String getFrameworkId() {
@@ -50,6 +74,14 @@ public abstract class AbstractPortletFrameworkDelegate implements IPortletFramew
 		return fragmentEnabled;
 	}
 
+	public void propertyChanged( DataModelEvent event ) {
+		if ( event.getPropertyName().equals( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME ) ||
+			event.getPropertyName().equals( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK ) ) {
+
+			updateFragmentEnabled( event.getDataModel() );
+		}
+	}
+
 	public void setBundleId(String bundleId) {
 		this.bundleId = bundleId;
 	}
@@ -65,5 +97,9 @@ public abstract class AbstractPortletFrameworkDelegate implements IPortletFramew
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
 	}
+
+	protected abstract Composite createNewProjectOptionsComposite( Composite parent );
+
+	protected abstract void updateFragmentEnabled( IDataModel dataModel );
 
 }

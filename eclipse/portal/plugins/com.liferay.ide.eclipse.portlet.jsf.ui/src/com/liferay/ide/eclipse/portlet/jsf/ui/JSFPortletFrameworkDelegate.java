@@ -15,6 +15,8 @@
 
 package com.liferay.ide.eclipse.portlet.jsf.ui;
 
+import com.liferay.ide.eclipse.portlet.jsf.core.JSFPortletFramework;
+import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
 
 import org.eclipse.swt.widgets.Composite;
@@ -29,8 +31,17 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
 		super();
 	}
 
-	public Composite createNewProjectOptionsComposite(Composite parent, IDataModel iDataModel) {
+	public Composite createNewProjectOptionsComposite( Composite parent ) {
 		return null;
+	}
+
+	@Override
+	protected void updateFragmentEnabled( IDataModel dataModel ) {
+		Object framework = dataModel.getProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK );
+
+		if ( framework instanceof JSFPortletFramework ) {
+			dataModel.setBooleanProperty( IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, false );
+		}
 	}
 
 }

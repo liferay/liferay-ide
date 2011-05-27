@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui;
 
+import com.liferay.ide.eclipse.portlet.core.MVCPortletFramework;
 import com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
@@ -34,17 +35,13 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  */
 public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegate {
 
-	protected IDataModel createProjectDataModel;
-
 	protected IPluginWizardFragment wizardFragment;
 
 	public MVCPortletFrameworkDelegate() {
 		super();
 	}
 
-	public Composite createNewProjectOptionsComposite(Composite parent, IDataModel createProjectDataModel) {
-		this.createProjectDataModel = createProjectDataModel;
-
+	public Composite createNewProjectOptionsComposite( Composite parent ) {
 		Group group = SWTUtil.createGroup(parent, "Additional Options", 1);
 
 		final Button createCustomClassButton = new Button(group, SWT.CHECK);
@@ -54,7 +51,7 @@ public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				setFragmentEnabled(createCustomClassButton.getSelection());
-				MVCPortletFrameworkDelegate.this.createProjectDataModel.setBooleanProperty(
+				MVCPortletFrameworkDelegate.this.getDataModel().setBooleanProperty(
 					IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, createCustomClassButton.getSelection());
 			}
 
@@ -71,6 +68,16 @@ public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
 		}
 
 		return wizardFragment;
+	}
+
+	@Override
+	protected void updateFragmentEnabled( IDataModel dataModel ) {
+		Object framework = dataModel.getProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK );
+
+		if ( framework instanceof MVCPortletFramework ) {
+			dataModel.setBooleanProperty(
+				IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, isFragmentEnabled() );
+		}
 	}
 
 }
