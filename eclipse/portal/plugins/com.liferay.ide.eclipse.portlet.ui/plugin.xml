@@ -180,7 +180,7 @@
       <objectContribution
             adaptable="true"
             id="com.liferay.ide.eclipse.portlet.ui.lang.popup"
-            objectClass="org.eclipse.core.resources.IFile">
+            objectClass="org.eclipse.core.resources.IResource">
          <action
                class="com.liferay.ide.eclipse.portlet.ui.action.BuildLanguagesAction"
                enablesFor="1"
@@ -191,10 +191,50 @@
                tooltip="Build Languages">
          </action>
          <enablement>
-         	<adapt type="org.eclipse.core.resources.IFile">
-	  			<test forcePluginActivation="true"
-					property="com.liferay.ide.eclipse.portlet.ui.isLangFile"
-					value="true" />
+         	<adapt type="org.eclipse.core.resources.IResource">
+         		<or>
+         			<adapt type="org.eclipse.core.resources.IFile">
+			  			<test forcePluginActivation="true"
+							property="com.liferay.ide.eclipse.portlet.ui.isLangFile"
+							value="true" />
+					</adapt>
+					<and>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.hook" />
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="com.liferay.ide.eclipse.portlet.ui.hasLangFile"
+								value="true" />
+						</adapt>
+					</and>
+					<and>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.portlet" />
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="com.liferay.ide.eclipse.portlet.ui.hasLangFile"
+								value="true" />
+						</adapt>
+					</and>
+					<and>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.ext" />
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="com.liferay.ide.eclipse.portlet.ui.hasLangFile"
+								value="true" />
+						</adapt>
+					</and>
+				</or>
 			</adapt>
          </enablement>
       </objectContribution>
@@ -206,6 +246,13 @@
             id="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
             namespace="com.liferay.ide.eclipse.portlet.ui"
             properties="hasServiceFile"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.eclipse.portlet.ui.HasLangFilePropertyTester"
+            id="com.liferay.ide.eclipse.portlet.ui.hasLangFile"
+            namespace="com.liferay.ide.eclipse.portlet.ui"
+            properties="hasLangFile"
             type="org.eclipse.core.resources.IProject">
       </propertyTester>
       <propertyTester

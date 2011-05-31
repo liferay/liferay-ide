@@ -18,19 +18,46 @@ package com.liferay.ide.eclipse.portlet.ui;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * @author Greg Amerson
  */
-public class LangFilePropertyTester extends PropertyTester {
+public class HasLangFilePropertyTester extends PropertyTester {
 
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver instanceof IFile) {
-			IFile file = (IFile) receiver;
+		if (receiver instanceof IProject) {
+			IProject project = (IProject) receiver;
 
-			if ( file.exists() && file.getName().matches( "Language.*\\.properties" ) ) {
-				return ProjectUtil.isLiferayProject(file.getProject());
+			boolean isLiferayProject = ProjectUtil.isLiferayProject(project);
+
+			if (isLiferayProject) {
+				try {
+					IFolder[] srcFolders = ProjectUtil.getSourceFolders( project );
+
+					for (IFolder src : srcFolders) {
+						IResource[] members = src.members();
+
+						for (IResource member : members) {
+							if ( member.getType() == IResource.FOLDER && member.getName().equals( "content" ) ) {
+								IResource[] content = ( (IFolder) member ).members();
+
+								for (IResource res : content) {
+									if ( res.getType() == IResource.FILE &&
+										res.getName().matches( "Language.*\\.properties" ) ) {
+
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+				catch (Throwable t) {
+					// ignore
+				}
 			}
 		}
 
