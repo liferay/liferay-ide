@@ -247,6 +247,8 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 					IFile createdFile = ProjectUtil.createEmptyProjectFile(languagePropertyFile[0], contentFolder);
 
 					if (createdFile != null) {
+						createdFile.setCharset( "UTF-8", null );
+
 						Set<IFile> languageFilesCreated =
 							(Set<IFile>) dm.getProperty(LANGUAGE_PROPERTIES_FILES_CREATED);
 

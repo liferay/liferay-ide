@@ -43,6 +43,10 @@ public class PortletUIPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static PortletUIPlugin plugin;
 
+	public static IStatus createErrorStatus( Exception e ) {
+		return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
+	}
+
 	public static IStatus createErrorStatus(String string) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, string);
 	}
