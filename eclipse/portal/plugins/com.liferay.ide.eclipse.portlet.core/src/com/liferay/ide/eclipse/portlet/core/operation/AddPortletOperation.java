@@ -73,7 +73,11 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 	public IStatus doExecute(IProgressMonitor monitor, IAdaptable info)
 		throws ExecutionException {
 
-		IStatus status = super.doExecute(monitor, info);
+		IStatus status = Status.OK_STATUS;
+
+		if ( getDataModel().getBooleanProperty( CREATE_NEW_PORTLET_CLASS ) ) {
+			status = super.doExecute( monitor, info );
+		}
 
 		if (!status.isOK()) {
 			return status;

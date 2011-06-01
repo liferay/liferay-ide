@@ -64,6 +64,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -83,10 +84,10 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "deprecation"
-})
+@SuppressWarnings( { "restriction", "deprecation" } )
 public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements INewPortletClassDataModelProperties {
+
+	protected Button createNewClassRadio;
 
 	protected Button customButton;
 
@@ -110,209 +111,244 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 	protected Combo superCombo;
 
+	protected Button useDefaultPortletRadio;
+
 	public NewPortletClassWizardPage(
-		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment) {
-		super(model, pageName, pageDesc, pageTitle, IModuleConstants.JST_WEB_MODULE);
+		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment ) {
+		super( model, pageName, pageDesc, pageTitle, IModuleConstants.JST_WEB_MODULE );
 
 		this.projectName = null;
 		this.fragment = fragment;
 	}
 
-	protected void createClassnameGroup(Composite parent) {
+	protected void createClassnameGroup( Composite parent ) {
 		// class name
-		classLabel = new Label(parent, SWT.LEFT);
-		classLabel.setText("Portlet class:");
-		classLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		classLabel = new Label( parent, SWT.LEFT );
+		classLabel.setText( "Portlet class:" );
+		classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-		classText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		classText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		synchHelper.synchText(classText, INewJavaClassDataModelProperties.CLASS_NAME, null);
+		classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
+		classText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+		synchHelper.synchText( classText, INewJavaClassDataModelProperties.CLASS_NAME, null );
 
-		new Label(parent, SWT.LEFT);
+		new Label( parent, SWT.LEFT );
 	}
 
 	/**
 	 * Add folder group to composite
 	 */
-	protected void createFolderGroup(Composite composite) {
+	protected void createFolderGroup( Composite composite ) {
 		// folder
-		Label folderLabel = new Label(composite, SWT.LEFT);
-		folderLabel.setText(J2EEUIMessages.FOLDER_LABEL);
-		folderLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		Label folderLabel = new Label( composite, SWT.LEFT );
+		folderLabel.setText( J2EEUIMessages.FOLDER_LABEL );
+		folderLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-		folderText = new Text(composite, SWT.SINGLE | SWT.BORDER);
-		folderText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		synchHelper.synchText(folderText, INewJavaClassDataModelProperties.SOURCE_FOLDER, null);
+		folderText = new Text( composite, SWT.SINGLE | SWT.BORDER );
+		folderText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+		synchHelper.synchText( folderText, INewJavaClassDataModelProperties.SOURCE_FOLDER, null );
 
 		IPackageFragmentRoot root = getSelectedPackageFragmentRoot();
 
-		String projectName = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+		String projectName = model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
 
-		if (projectName != null && projectName.length() > 0) {
-			IProject targetProject = ProjectUtilities.getProject(projectName);
+		if ( projectName != null && projectName.length() > 0 ) {
+			IProject targetProject = ProjectUtilities.getProject( projectName );
 
-			if (root == null || !root.getJavaProject().getProject().equals(targetProject)) {
-				IFolder folder = getDefaultJavaSourceFolder(targetProject);
+			if ( root == null || !root.getJavaProject().getProject().equals( targetProject ) ) {
+				IFolder folder = getDefaultJavaSourceFolder( targetProject );
 
-				if (folder != null) {
-					folderText.setText(folder.getFullPath().toPortableString());
+				if ( folder != null ) {
+					folderText.setText( folder.getFullPath().toPortableString() );
 				}
 			}
 			else {
-				folderText.setText(root.getPath().toString());
+				folderText.setText( root.getPath().toString() );
 			}
 		}
 
-		folderButton = new Button(composite, SWT.PUSH);
-		folderButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-		folderButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-		folderButton.addSelectionListener(new SelectionListener() {
+		folderButton = new Button( composite, SWT.PUSH );
+		folderButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
+		folderButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+		folderButton.addSelectionListener( new SelectionListener() {
 
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected( SelectionEvent e ) {
 				// Do nothing
 			}
 
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected( SelectionEvent e ) {
 				handleFolderButtonPressed();
 			}
 
-		});
+		} );
 	}
 
-	protected void createPackageGroup(Composite parent) {
-		// package
-		packageLabel = new Label(parent, SWT.LEFT);
-		packageLabel.setText(J2EEUIMessages.JAVA_PACKAGE_LABEL);
-		packageLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+	protected void createNewPortletClassGroup( Composite parent ) {
+		new Label( parent, SWT.LEFT );
 
-		packageText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		synchHelper.synchText(packageText, INewJavaClassDataModelProperties.JAVA_PACKAGE, null);
+		Composite composite = new Composite( parent, SWT.NONE );
+		composite.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+		composite.setLayout( new GridLayout( 2, false ) );
+
+		createNewClassRadio = new Button( composite, SWT.RADIO );
+		createNewClassRadio.setText( "Create new portlet" );
+
+		useDefaultPortletRadio = new Button( composite, SWT.RADIO );
+		useDefaultPortletRadio.setText( "Use default portlet (MVCPortlet)" );
+
+		new Label( parent, SWT.NONE );
+
+		synchHelper.synchRadio( createNewClassRadio, CREATE_NEW_PORTLET_CLASS, null );
+		synchHelper.synchRadio( useDefaultPortletRadio, USE_DEFAULT_PORTLET_CLASS, null );
+
+		createNewClassRadio.addSelectionListener( new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected( SelectionEvent e ) {
+				classText.setEnabled( createNewClassRadio.getSelection() );
+				packageText.setEnabled( createNewClassRadio.getSelection() );
+				superCombo.setEnabled( createNewClassRadio.getSelection() );
+			}
+		} );
+	}
+
+	protected void createPackageGroup( Composite parent ) {
+		// package
+		packageLabel = new Label( parent, SWT.LEFT );
+		packageLabel.setText( J2EEUIMessages.JAVA_PACKAGE_LABEL );
+		packageLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+
+		packageText = new Text( parent, SWT.SINGLE | SWT.BORDER );
+		packageText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+		synchHelper.synchText( packageText, INewJavaClassDataModelProperties.JAVA_PACKAGE, null );
 
 		IPackageFragment packageFragment = getSelectedPackageFragment();
 
-		String targetProject = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+		String targetProject = model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
 
-		if (packageFragment != null && packageFragment.exists() &&
-			packageFragment.getJavaProject().getElementName().equals(targetProject)) {
+		if ( packageFragment != null && packageFragment.exists() &&
+			packageFragment.getJavaProject().getElementName().equals( targetProject ) ) {
 
-			IPackageFragmentRoot root = getPackageFragmentRoot(packageFragment);
+			IPackageFragmentRoot root = getPackageFragmentRoot( packageFragment );
 
-			if (root != null) {
-				folderText.setText(root.getPath().toString());
+			if ( root != null ) {
+				folderText.setText( root.getPath().toString() );
 			}
 
-			model.setProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName());
+			model.setProperty( INewJavaClassDataModelProperties.JAVA_PACKAGE, packageFragment.getElementName() );
 		}
 
-		if (this.fragment) {
-			SWTUtil.createLabel(parent, "", 1);
+		if ( this.fragment ) {
+			SWTUtil.createLabel( parent, "", 1 );
 		}
 		else {
-			packageButton = new Button(parent, SWT.PUSH);
-			packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-			packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-			packageButton.addSelectionListener(new SelectionListener() {
+			packageButton = new Button( parent, SWT.PUSH );
+			packageButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
+			packageButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+			packageButton.addSelectionListener( new SelectionListener() {
 
-				public void widgetDefaultSelected(SelectionEvent e) {
+				public void widgetDefaultSelected( SelectionEvent e ) {
 					// Do nothing
 				}
 
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected( SelectionEvent e ) {
 					handlePackageButtonPressed();
 				}
-			});
+			} );
 		}
 	}
 
-	protected void createPortletClassGroup(Composite parent) {
-		createClassnameGroup(parent);
-		createPackageGroup(parent);
-		createSuperclassGroup(parent);
+	protected void createPortletClassGroup( Composite parent ) {
+		if ( !this.fragment && getDataModel().getBooleanProperty( SHOW_NEW_CLASS_OPTION ) ) {
+			createNewPortletClassGroup( parent );
+		}
+
+		createClassnameGroup( parent );
+		createPackageGroup( parent );
+		createSuperclassGroup( parent );
 	}
 
 	/**
 	 * Add project group
 	 */
-	protected void createProjectNameGroup(Composite parent) {
+	protected void createProjectNameGroup( Composite parent ) {
 		// set up project name label
-		projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Portlet plugin project:"); //$NON-NLS-1$
+		projectNameLabel = new Label( parent, SWT.NONE );
+		projectNameLabel.setText( "Portlet plugin project:" ); //$NON-NLS-1$
 
-		projectNameLabel.setLayoutData(new GridData());
+		projectNameLabel.setLayoutData( new GridData() );
 
 		// set up project name entry field
-		projectNameCombo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
+		projectNameCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
 
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		GridData data = new GridData( GridData.FILL_HORIZONTAL );
 		data.widthHint = 300;
 		data.horizontalSpan = 1;
 
-		projectNameCombo.setLayoutData(data);
-		projectNameCombo.addSelectionListener(new SelectionAdapter() {
+		projectNameCombo.setLayoutData( data );
+		projectNameCombo.addSelectionListener( new SelectionAdapter() {
 
-			public void widgetSelected(SelectionEvent e) {
-				super.widgetSelected(e);
-				IProject project = CoreUtil.getProject(projectNameCombo.getText());
-				validateProjectRequirements(project);
+			public void widgetSelected( SelectionEvent e ) {
+				super.widgetSelected( e );
+				IProject project = CoreUtil.getProject( projectNameCombo.getText() );
+				validateProjectRequirements( project );
 			}
-		});
-		synchHelper.synchCombo(projectNameCombo, IArtifactEditOperationDataModelProperties.PROJECT_NAME, null);
+		} );
+		synchHelper.synchCombo( projectNameCombo, IArtifactEditOperationDataModelProperties.PROJECT_NAME, null );
 
 		initializeProjectList();
 
-		new Label(parent, SWT.NONE);
+		new Label( parent, SWT.NONE );
 	}
 
-	protected void createSuperclassGroup(Composite parent) {
+	protected void createSuperclassGroup( Composite parent ) {
 		// superclass
-		superLabel = new Label(parent, SWT.LEFT);
-		superLabel.setText(J2EEUIMessages.SUPERCLASS_LABEL);
-		superLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		superLabel = new Label( parent, SWT.LEFT );
+		superLabel.setText( J2EEUIMessages.SUPERCLASS_LABEL );
+		superLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
 		// superText = new Text(parent, SWT.SINGLE | SWT.BORDER);
 		// superText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		// synchHelper.synchText(superText,
 		// INewJavaClassDataModelProperties.SUPERCLASS, null);
 
-		superCombo = new Combo(parent, SWT.DROP_DOWN);
-		superCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		synchHelper.synchCombo(superCombo, INewJavaClassDataModelProperties.SUPERCLASS, null);
+		superCombo = new Combo( parent, SWT.DROP_DOWN );
+		superCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+		synchHelper.synchCombo( superCombo, INewJavaClassDataModelProperties.SUPERCLASS, null );
 
-		if (this.fragment) {
-			SWTUtil.createLabel(parent, "", 1);
+		if ( this.fragment ) {
+			SWTUtil.createLabel( parent, "", 1 );
 		}
 		else {
-			superButton = new Button(parent, SWT.PUSH);
-			superButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-			superButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-			superButton.addSelectionListener(new SelectionListener() {
+			superButton = new Button( parent, SWT.PUSH );
+			superButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
+			superButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+			superButton.addSelectionListener( new SelectionListener() {
 
-				public void widgetDefaultSelected(SelectionEvent e) {
+				public void widgetDefaultSelected( SelectionEvent e ) {
 					// Do nothing
 				}
 
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected( SelectionEvent e ) {
 					// handleSuperButtonPressed();
 					handleClassButtonSelected(
 						superCombo, "javax.portlet.GenericPortlet", J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE,
-						J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC);
+						J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC );
 				}
-			});
+			} );
 		}
 	}
 
 	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite composite = SWTUtil.createTopComposite(parent, 3);
+	protected Composite createTopLevelComposite( Composite parent ) {
+		Composite composite = SWTUtil.createTopComposite( parent, 3 );
 
-		if (!this.fragment) {
-			createProjectNameGroup(composite);
-			createFolderGroup(composite);
-			addSeperator(composite, 3);
+		if ( !this.fragment ) {
+			createProjectNameGroup( composite );
+			createFolderGroup( composite );
+			addSeperator( composite, 3 );
 		}
 
-		createPortletClassGroup(composite);
+		createPortletClassGroup( composite );
 
 		setFocusOnClassText();
 
@@ -331,28 +367,28 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected ViewerFilter getContainerDialogViewerFilter() {
 		return new ViewerFilter() {
 
-			public boolean select(Viewer viewer, Object parent, Object element) {
-				if (element instanceof IProject) {
+			public boolean select( Viewer viewer, Object parent, Object element ) {
+				if ( element instanceof IProject ) {
 
 					IProject project = (IProject) element;
 
 					return project.getName().equals(
-						model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+						model.getProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
 				}
-				else if (element instanceof IFolder) {
+				else if ( element instanceof IFolder ) {
 					IFolder folder = (IFolder) element;
 
 					// only show source folders
 					IProject project =
-						ProjectUtilities.getProject(model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+						ProjectUtilities.getProject( model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
 
-					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
+					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
 
 					for (int i = 0; i < sourceFolders.length; i++) {
-						if (sourceFolders[i].getResource() != null && sourceFolders[i].getResource().equals(folder)) {
+						if ( sourceFolders[i].getResource() != null && sourceFolders[i].getResource().equals( folder ) ) {
 							return true;
 						}
-						else if (ProjectUtil.isParent(folder, sourceFolders[i].getResource())) {
+						else if ( ProjectUtil.isParent( folder, sourceFolders[i].getResource() ) ) {
 							return true;
 						}
 					}
@@ -363,15 +399,15 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		};
 	}
 
-	protected IFolder getDefaultJavaSourceFolder(IProject project) {
-		if (project == null) {
+	protected IFolder getDefaultJavaSourceFolder( IProject project ) {
+		if ( project == null ) {
 			return null;
 		}
 
-		IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers(project);
+		IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers( project );
 
 		// Try and return the first source folder
-		if (sources.length > 0) {
+		if ( sources.length > 0 ) {
 			try {
 				return (IFolder) sources[0].getCorrespondingResource();
 			}
@@ -389,31 +425,31 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected IPackageFragment getSelectedPackageFragment() {
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-		if (window == null) {
+		if ( window == null ) {
 			return null;
 		}
 
 		ISelection selection = window.getSelectionService().getSelection();
 
-		if (selection == null) {
+		if ( selection == null ) {
 			return null;
 		}
 
-		IJavaElement element = getInitialJavaElement(selection);
+		IJavaElement element = getInitialJavaElement( selection );
 
-		if (element != null) {
-			if (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
+		if ( element != null ) {
+			if ( element.getElementType() == IJavaElement.PACKAGE_FRAGMENT ) {
 				return (IPackageFragment) element;
 			}
-			else if (element.getElementType() == IJavaElement.COMPILATION_UNIT) {
-				IJavaElement parent = ((ICompilationUnit) element).getParent();
+			else if ( element.getElementType() == IJavaElement.COMPILATION_UNIT ) {
+				IJavaElement parent = ( (ICompilationUnit) element ).getParent();
 
-				if (parent.getElementType() == IJavaElement.PACKAGE_FRAGMENT) {
+				if ( parent.getElementType() == IJavaElement.PACKAGE_FRAGMENT ) {
 					return (IPackageFragment) parent;
 				}
 			}
-			else if (element.getElementType() == IJavaElement.TYPE) {
-				return ((IType) element).getPackageFragment();
+			else if ( element.getElementType() == IJavaElement.TYPE ) {
+				return ( (IType) element ).getPackageFragment();
 			}
 		}
 
@@ -423,23 +459,23 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected IPackageFragmentRoot getSelectedPackageFragmentRoot() {
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-		if (window == null) {
+		if ( window == null ) {
 			return null;
 		}
 
 		ISelection selection = window.getSelectionService().getSelection();
 
-		if (selection == null) {
+		if ( selection == null ) {
 			return null;
 		}
 
 		// StructuredSelection stucturedSelection = (StructuredSelection)
 		// selection;
 
-		IJavaElement element = getInitialJavaElement(selection);
+		IJavaElement element = getInitialJavaElement( selection );
 
-		if (element != null) {
-			if (element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT) {
+		if ( element != null ) {
+			if ( element.getElementType() == IJavaElement.PACKAGE_FRAGMENT_ROOT ) {
 				return (IPackageFragmentRoot) element;
 			}
 		}
@@ -450,59 +486,59 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 	protected IProject getSelectedProject() {
 		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-		if (window == null) {
+		if ( window == null ) {
 			return null;
 		}
 
 		ISelection selection = window.getSelectionService().getSelection();
 
-		if (selection == null) {
+		if ( selection == null ) {
 			return null;
 		}
 
-		if (!(selection instanceof IStructuredSelection)) {
+		if ( !( selection instanceof IStructuredSelection ) ) {
 			return null;
 		}
 
-		IJavaElement element = getInitialJavaElement(selection);
+		IJavaElement element = getInitialJavaElement( selection );
 
-		if (element != null && element.getJavaProject() != null) {
+		if ( element != null && element.getJavaProject() != null ) {
 			return element.getJavaProject().getProject();
 		}
 
 		IStructuredSelection stucturedSelection = (IStructuredSelection) selection;
 
-		if (stucturedSelection.getFirstElement() instanceof EObject) {
-			return ProjectUtilities.getProject(stucturedSelection.getFirstElement());
+		if ( stucturedSelection.getFirstElement() instanceof EObject ) {
+			return ProjectUtilities.getProject( stucturedSelection.getFirstElement() );
 		}
 
-		return getExtendedSelectedProject(stucturedSelection.getFirstElement());
+		return getExtendedSelectedProject( stucturedSelection.getFirstElement() );
 	}
 
 	protected String[] getValidationPropertyNames() {
 		List<String> validationPropertyNames = new ArrayList<String>();
 
-		if (this.fragment) {
-			return new String[] {
-				IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
+		if ( this.fragment ) {
+			return new String[] { IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
 				INewJavaClassDataModelProperties.JAVA_PACKAGE, INewJavaClassDataModelProperties.CLASS_NAME,
-				INewJavaClassDataModelProperties.SUPERCLASS
-			};
+				INewJavaClassDataModelProperties.SUPERCLASS };
 		}
 		else {
-			Collections.addAll(validationPropertyNames, super.getValidationPropertyNames());
+			validationPropertyNames.add( CREATE_NEW_PORTLET_CLASS );
+			validationPropertyNames.add( USE_DEFAULT_PORTLET_CLASS );
+			Collections.addAll( validationPropertyNames, super.getValidationPropertyNames() );
 		}
 
-		return validationPropertyNames.toArray(new String[0]);
+		return validationPropertyNames.toArray( new String[0] );
 	}
 
-	protected void handleClassButtonSelected(Control control, String baseClass, String title, String message) {
-		getControl().setCursor(new Cursor(getShell().getDisplay(), SWT.CURSOR_WAIT));
+	protected void handleClassButtonSelected( Control control, String baseClass, String title, String message ) {
+		getControl().setCursor( new Cursor( getShell().getDisplay(), SWT.CURSOR_WAIT ) );
 
 		IPackageFragmentRoot packRoot =
-			(IPackageFragmentRoot) model.getProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT);
+			(IPackageFragmentRoot) model.getProperty( INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT );
 
-		if (packRoot == null) {
+		if ( packRoot == null ) {
 			return;
 		}
 
@@ -514,16 +550,16 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		IJavaSearchScope scope = null;
 
 		try {
-			IType type = packRoot.getJavaProject().findType(baseClass);
+			IType type = packRoot.getJavaProject().findType( baseClass );
 
-			if (type == null) {
+			if ( type == null ) {
 				return;
 			}
 
-			scope = BasicSearchEngine.createHierarchyScope(type);
+			scope = BasicSearchEngine.createHierarchyScope( type );
 		}
 		catch (JavaModelException e) {
-			PortletUIPlugin.logError(e);
+			PortletUIPlugin.logError( e );
 			return;
 		}
 
@@ -534,32 +570,32 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		// IJavaElement[] {root.getJavaProject()} );
 		FilteredTypesSelectionDialog dialog =
 			new FilteredTypesSelectionDialogEx(
-				getShell(), false, getWizard().getContainer(), scope, IJavaSearchConstants.CLASS);
-		dialog.setTitle(title);
-		dialog.setMessage(message);
+				getShell(), false, getWizard().getContainer(), scope, IJavaSearchConstants.CLASS );
+		dialog.setTitle( title );
+		dialog.setMessage( message );
 
-		if (dialog.open() == Window.OK) {
+		if ( dialog.open() == Window.OK ) {
 			IType type = (IType) dialog.getFirstResult();
 
 			String classFullPath = J2EEUIMessages.EMPTY_STRING;
 
-			if (type != null) {
+			if ( type != null ) {
 				classFullPath = type.getFullyQualifiedName();
 			}
 
-			if (control instanceof Text) {
-				((Text) control).setText(classFullPath);
+			if ( control instanceof Text ) {
+				( (Text) control ).setText( classFullPath );
 			}
-			else if (control instanceof Combo) {
-				((Combo) control).setText(classFullPath);
+			else if ( control instanceof Combo ) {
+				( (Combo) control ).setText( classFullPath );
 			}
 
-			getControl().setCursor(null);
+			getControl().setCursor( null );
 
 			return;
 		}
 
-		getControl().setCursor(null);
+		getControl().setCursor( null );
 	}
 
 	protected void handleCustomButtonSelected() {
@@ -589,36 +625,36 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		ILabelProvider labelProvider =
 			new DecoratingLabelProvider(
-				new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator());
+				new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
 
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, contentProvider);
-		dialog.setValidator(validator);
-		dialog.setTitle(J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE);
-		dialog.setMessage(J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC);
-		dialog.addFilter(filter);
+		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
+		dialog.setValidator( validator );
+		dialog.setTitle( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE );
+		dialog.setMessage( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC );
+		dialog.addFilter( filter );
 
-		String projectName = model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME);
+		String projectName = model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
 
-		if (projectName == null || projectName.length() == 0) {
+		if ( projectName == null || projectName.length() == 0 ) {
 			return;
 		}
 
-		IProject project = ProjectUtilities.getProject(projectName);
+		IProject project = ProjectUtilities.getProject( projectName );
 
-		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
+		dialog.setInput( ResourcesPlugin.getWorkspace().getRoot() );
 
-		if (project != null) {
-			dialog.setInitialSelection(project);
+		if ( project != null ) {
+			dialog.setInitialSelection( project );
 		}
 
-		if (dialog.open() == Window.OK) {
+		if ( dialog.open() == Window.OK ) {
 			Object element = dialog.getFirstResult();
 
 			try {
-				if (element instanceof IContainer) {
+				if ( element instanceof IContainer ) {
 					IContainer container = (IContainer) element;
 
-					folderText.setText(container.getFullPath().toString());
+					folderText.setText( container.getFullPath().toString() );
 					// dealWithSelectedContainerResource(container);
 				}
 			}
@@ -637,32 +673,32 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		for (int i = 0; i < workspaceProjects.length; i++) {
 			IProject project = workspaceProjects[i];
 
-			if (isProjectValid(project)) {
-				items.add(project.getName());
+			if ( isProjectValid( project ) ) {
+				items.add( project.getName() );
 			}
 		}
 
-		if (items.isEmpty()) {
+		if ( items.isEmpty() ) {
 			return;
 		}
 
 		String[] names = new String[items.size()];
 
 		for (int i = 0; i < items.size(); i++) {
-			names[i] = (String) items.get(i);
+			names[i] = (String) items.get( i );
 		}
 
-		projectNameCombo.setItems(names);
+		projectNameCombo.setItems( names );
 
 		IProject selectedProject = null;
 
 		try {
-			if (model != null) {
+			if ( model != null ) {
 				String projectNameFromModel =
-					model.getStringProperty(IArtifactEditOperationDataModelProperties.COMPONENT_NAME);
+					model.getStringProperty( IArtifactEditOperationDataModelProperties.COMPONENT_NAME );
 
-				if (projectNameFromModel != null && projectNameFromModel.length() > 0) {
-					selectedProject = CoreUtil.getProject(projectNameFromModel);
+				if ( projectNameFromModel != null && projectNameFromModel.length() > 0 ) {
+					selectedProject = CoreUtil.getProject( projectNameFromModel );
 				}
 			}
 		}
@@ -670,58 +706,58 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 		};
 
 		try {
-			if (selectedProject == null) {
+			if ( selectedProject == null ) {
 				selectedProject = getSelectedProject();
 			}
 
-			if (selectedProject != null && selectedProject.isAccessible() &&
-				selectedProject.hasNature(IModuleConstants.MODULE_NATURE_ID)) {
+			if ( selectedProject != null && selectedProject.isAccessible() &&
+				selectedProject.hasNature( IModuleConstants.MODULE_NATURE_ID ) ) {
 
-				projectNameCombo.setText(selectedProject.getName());
+				projectNameCombo.setText( selectedProject.getName() );
 
-				validateProjectRequirements(selectedProject);
+				validateProjectRequirements( selectedProject );
 
-				model.setProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, selectedProject.getName());
+				model.setProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, selectedProject.getName() );
 			}
 		}
 		catch (CoreException ce) {
 			// Ignore
 		}
 
-		if (projectName == null && names.length > 0) {
+		if ( projectName == null && names.length > 0 ) {
 			projectName = names[0];
 		}
 
-		if ((projectNameCombo.getText() == null || projectNameCombo.getText().length() == 0) && projectName != null) {
-			projectNameCombo.setText(projectName);
+		if ( ( projectNameCombo.getText() == null || projectNameCombo.getText().length() == 0 ) && projectName != null ) {
+			projectNameCombo.setText( projectName );
 
-			validateProjectRequirements(CoreUtil.getProject(projectName));
+			validateProjectRequirements( CoreUtil.getProject( projectName ) );
 
-			model.setProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName);
+			model.setProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName );
 		}
 
 	}
 
-	protected boolean isProjectValid(IProject project) {
-		return super.isProjectValid(project) && ProjectUtil.isPortletProject(project);
+	protected boolean isProjectValid( IProject project ) {
+		return super.isProjectValid( project ) && ProjectUtil.isPortletProject( project );
 	}
 
 	protected void setFocusOnClassText() {
-		if (classText != null) {
+		if ( classText != null ) {
 			classText.setFocus();
 		}
 	}
 
 	protected void setShellImage() {
-		URL url = PortletUIPlugin.getDefault().getBundle().getEntry("/icons/e16/portlet.png");
+		URL url = PortletUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/portlet.png" );
 
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
+		Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 
-		getShell().setImage(shellImage);
+		getShell().setImage( shellImage );
 	}
 
-	protected void validateProjectRequirements(IProject project) {
-		super.validateProjectRequirements(project);
+	protected void validateProjectRequirements( IProject project ) {
+		super.validateProjectRequirements( project );
 	}
 
 }

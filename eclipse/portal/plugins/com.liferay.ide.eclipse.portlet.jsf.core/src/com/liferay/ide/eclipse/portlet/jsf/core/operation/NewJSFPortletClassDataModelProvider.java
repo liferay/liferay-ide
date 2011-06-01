@@ -91,6 +91,9 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
 			return "/xhtml/" + getProperty(PORTLET_NAME).toString().toLowerCase();
 		}
+		else if ( SHOW_NEW_CLASS_OPTION.equals( propertyName ) ) {
+			return false;
+		}
 
 		return super.getDefaultProperty(propertyName);
 	}

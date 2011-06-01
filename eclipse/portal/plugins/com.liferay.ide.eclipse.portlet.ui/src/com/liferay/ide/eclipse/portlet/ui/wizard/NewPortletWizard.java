@@ -20,15 +20,23 @@ import com.liferay.ide.eclipse.portlet.core.operation.NewPortletClassDataModelPr
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.PortletTemplateContextTypeIds;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -113,6 +121,31 @@ public class NewPortletWizard extends NewWebArtifactWizard
 	}
 
 	@Override
+	protected void openJavaClass() {
+		if ( getDataModel().getBooleanProperty( USE_DEFAULT_PORTLET_CLASS ) ) {
+			try {
+				String jspsFolder = getDataModel().getStringProperty( CREATE_JSPS_FOLDER );
+				IProject project =
+					ResourcesPlugin.getWorkspace().getRoot().getProject(
+						getDataModel().getStringProperty( PROJECT_NAME ) );
+
+				IFolder docroot = ProjectUtil.getDocroot( project );
+
+				IFile viewFile = docroot.getFile( jspsFolder + "/view.jsp" );
+
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				IDE.openEditor( page, viewFile, true );
+			}
+			catch (Exception e) {
+				// eat this exception this is just best effort
+			}
+		}
+		else {
+			super.openJavaClass();
+		}
+	}
+
+	@Override
 	protected void postPerformFinish()
 		throws InvocationTargetException {
 
@@ -129,5 +162,4 @@ public class NewPortletWizard extends NewWebArtifactWizard
 			return true;
 		}
 	}
-
 }

@@ -22,7 +22,6 @@ import com.liferay.ide.eclipse.ui.wizard.LiferayDataModelWizardPage;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -171,7 +170,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
 
 			public void propertyChanged(DataModelEvent event) {
-				if (INewJavaClassDataModelProperties.CLASS_NAME.equals(event.getPropertyName())) {
+				if ( CLASS_NAME.equals( event.getPropertyName() ) || PORTLET_NAME.equals( event.getPropertyName() ) ) {
 					synchHelper.synchAllUIWithModel();
 				}
 			}

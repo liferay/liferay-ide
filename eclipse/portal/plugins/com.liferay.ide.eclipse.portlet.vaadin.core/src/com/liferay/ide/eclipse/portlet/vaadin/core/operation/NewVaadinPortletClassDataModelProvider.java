@@ -76,6 +76,9 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 		else if (CONSTRUCTOR.equals(propertyName)) {
 			return false;
 		}
+		else if ( SHOW_NEW_CLASS_OPTION.equals( propertyName ) ) {
+			return false;
+		}
 
 		return super.getDefaultProperty(propertyName);
 	}

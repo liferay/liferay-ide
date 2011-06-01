@@ -123,7 +123,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return true;
 		}
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
-			return "/html/" + getProperty(CLASS_NAME).toString().toLowerCase();
+			if ( getBooleanProperty( CREATE_NEW_PORTLET_CLASS ) ) {
+				return "/html/" + getProperty( CLASS_NAME ).toString().toLowerCase();
+			}
+			else {
+				return "/html/" + getProperty( PORTLET_NAME ).toString().toLowerCase();
+			}
+
 		}
 		else if (ICON_FILE.equals(propertyName)) {
 			return "/icon.png";
@@ -151,6 +157,20 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		}
 		else if (CATEGORY.equals(propertyName)) {
 			return "category.sample";
+		}
+		else if ( SHOW_NEW_CLASS_OPTION.equals( propertyName ) ) {
+			return true;
+		}
+		else if ( CREATE_NEW_PORTLET_CLASS.equals( propertyName ) ) {
+			return true;
+		}
+		else if ( USE_DEFAULT_PORTLET_CLASS.equals( propertyName ) ) {
+			return false;
+		}
+		else if ( QUALIFIED_CLASS_NAME.equals( propertyName ) ) {
+			if ( getBooleanProperty( USE_DEFAULT_PORTLET_CLASS ) ) {
+				return QUALIFIED_MVC_PORTLET;
+			}
 		}
 
 		return super.getDefaultProperty(propertyName);
@@ -254,6 +274,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(FACET_RUNTIME);
 		propertyNames.add(REMOVE_EXISTING_ARTIFACTS);
 
+		propertyNames.add( SHOW_NEW_CLASS_OPTION );
+		propertyNames.add( CREATE_NEW_PORTLET_CLASS );
+		propertyNames.add( USE_DEFAULT_PORTLET_CLASS );
+
 		return propertyNames;
 	}
 
@@ -304,6 +328,12 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
 			return PortletSupertypesValidator.isLiferayPortletSuperclass(getDataModel(), true);
 		}
+		else if ( CLASS_NAME.equals( propertyName ) || JAVA_PACKAGE.equals( propertyName ) ||
+			SUPERCLASS.equals( propertyName ) ) {
+
+			return getBooleanProperty( CREATE_NEW_PORTLET_CLASS );
+		}
+
 		return super.isPropertyEnabled(propertyName);
 	}
 

@@ -60,6 +60,9 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String CREATE_JSPS_FOLDER = "INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER";
 
+	public static final String CREATE_NEW_PORTLET_CLASS =
+		"INewPortletClassDataModelProperties.CREATE_NEW_PORTLET_CLASS";
+
 	public static final String CREATE_RESOURCE_BUNDLE_FILE =
 		"INewPortletClassDataModelProperties.CREATE_RESOURCE_BUNDLE_FILE";
 
@@ -146,9 +149,14 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String SHORT_TITLE = "INewPortletClassDataModelProperties.SHORT_TITLE";
 
+	public static final String SHOW_NEW_CLASS_OPTION = "INewPortletClassDataModelProperties.SHOW_NEW_CLASS_OPTION";
+
 	public static final String TEMPLATE_STORE = "INewPortletClassDataModelProperties.TEMPLATE_STORE";
 
 	public static final String TITLE = "INewPortletClassDataModelProperties.TITLE";
+
+	public static final String USE_DEFAULT_PORTLET_CLASS =
+		"INewPortletClassDataModelProperties.USE_DEFAULT_PORTLET_CLASS";
 
 	// portlet view modes
 	public static final String VIEW_MODE = "INewPortletClassDataModelProperties.VIEW_MODE";
