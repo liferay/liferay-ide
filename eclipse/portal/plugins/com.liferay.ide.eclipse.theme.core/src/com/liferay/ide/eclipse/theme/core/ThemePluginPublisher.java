@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.theme.core;
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
+import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -56,7 +57,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 
 		if (deltaKind != ServerBehaviourDelegate.REMOVED) {
 			try {
-				addThemeModule(moduleTree[0]);
+				addThemeModule( delegate, moduleTree[0] );
 			}
 			catch (Exception e) {
 				ThemeCore.logError("Unable to pre-publish module.", e);
@@ -66,7 +67,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 		return publish;
 	}
 
-	protected void addThemeModule(IModule module)
+	protected void addThemeModule( ServerBehaviourDelegate delegate, IModule module )
 		throws CoreException {
 
 		IProject project = module.getProject();
@@ -79,6 +80,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 				!(docroot.exists(new Path("css")))) {
 
 				ThemeCSSBuilder.cssBuild(project);
+				( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
 			}
 		}
 	}

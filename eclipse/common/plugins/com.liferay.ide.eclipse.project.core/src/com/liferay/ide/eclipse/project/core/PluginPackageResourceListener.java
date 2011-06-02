@@ -134,7 +134,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 							// do nothing
 						}
 
-						return delta.getResource() != null && delta.getResource().getType() != IResource.FILE;
+						return delta != null && delta.getResource() != null &&
+							delta.getResource().getType() != IResource.FILE;
 					}
 				});
 			}
