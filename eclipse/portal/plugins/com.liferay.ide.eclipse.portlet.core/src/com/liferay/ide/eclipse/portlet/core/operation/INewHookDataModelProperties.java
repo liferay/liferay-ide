@@ -40,6 +40,9 @@ public interface INewHookDataModelProperties extends IArtifactEditOperationDataM
 	// new custom jsps properties
 	public static final String CUSTOM_JSPS_FOLDER = "INewHookDataModelProperties.CUSTOM_JSPS_FOLDER";
 
+	public static final String DISABLE_CUSTOM_JSP_FOLDER_VALIDATION =
+		"INewHookDataModelProperties.DISABLE_CUSTOM_JSP_FOLDER_VALIDATION";
+
 	public static final String CUSTOM_JSPS_ITEMS = "INewHookDataModelProperties.CUSTOM_JSPS_ITEMS";
 
 	public static final String HOOK_DESCRIPTOR_TEMPLATE = "com.liferay.ide.eclipse.templates.hook.descriptor";

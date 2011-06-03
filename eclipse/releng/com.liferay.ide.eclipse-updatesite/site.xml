@@ -27,6 +27,9 @@
    <feature url="features/org.eclipse.sapphire.ui.swt.graphiti_0.0.0.qualifer.jar" id="org.eclipse.sapphire.ui.swt.graphiti" version="0.0.0">
       <category name="deps"/>
    </feature> 
+   <feature url="features/org.eclipse.sapphire.ui.swt.xml.editor_0.0.0.qualifer.jar" id="org.eclipse.sapphire.ui.swt.xml.editor" version="0.0.0">
+      <category name="deps"/>
+   </feature> 
    <feature url="features/org.eclipse.graphiti.feature_0.0.0.qualifer.jar" id="org.eclipse.graphiti.feature" version="0.0.0">
       <category name="deps"/>
    </feature>
