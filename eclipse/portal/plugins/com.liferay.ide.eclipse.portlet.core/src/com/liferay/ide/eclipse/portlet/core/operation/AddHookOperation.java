@@ -59,6 +59,16 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.validation.Validator;
+import org.eclipse.wst.validation.internal.ConfigurationManager;
+import org.eclipse.wst.validation.internal.ProjectConfiguration;
+import org.eclipse.wst.validation.internal.ValManager;
+import org.eclipse.wst.validation.internal.ValManager.UseProjectPreferences;
+import org.eclipse.wst.validation.internal.ValPrefManagerProject;
+import org.eclipse.wst.validation.internal.ValidatorMutable;
+import org.eclipse.wst.validation.internal.model.FilterGroup;
+import org.eclipse.wst.validation.internal.model.FilterRule;
+import org.eclipse.wst.validation.internal.model.ProjectPreferences;
 
 /**
  * @author Greg Amerson
@@ -115,6 +125,72 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		String projectName = model.getStringProperty(PROJECT_NAME);
 
 		return ProjectUtil.getProject(projectName);
+	}
+
+	protected void addJSPSyntaxValidationExclude( IFolder customFolder ) {
+		try {
+			IProject project = getTargetProject();
+
+			Validator[] vals =
+				ValManager.getDefault().getValidatorsConfiguredForProject( project, UseProjectPreferences.MustUse );
+
+			ValidatorMutable[] validators = new ValidatorMutable[vals.length];
+
+			for (int i = 0; i < vals.length; i++) {
+				validators[i] = new ValidatorMutable( vals[i] );
+
+				if ( "org.eclipse.jst.jsp.core.JSPBatchValidator".equals( validators[i].getId() ) ) {
+					// check for exclude group
+					FilterGroup excludeGroup = null;
+
+					for (FilterGroup group : validators[i].getGroups()) {
+						if ( group.isExclude() ) {
+							excludeGroup = group;
+							break;
+						}
+					}
+
+					String customJSPFolderPattern =
+						customFolder.getFullPath().makeRelativeTo( customFolder.getProject().getFullPath() ).toPortableString();
+
+					FilterRule folderRule =
+						FilterRule.createFile( customJSPFolderPattern, true, FilterRule.File.FileTypeFolder );
+
+					if ( excludeGroup == null ) {
+						excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
+						validators[i].add( excludeGroup );
+					}
+					else {
+						boolean hasCustomJSPFolderRule = false;
+
+						for (FilterRule rule : excludeGroup.getRules()) {
+							if ( customJSPFolderPattern.equals( rule.getPattern() ) ) {
+								hasCustomJSPFolderRule = true;
+								break;
+							}
+						}
+
+						if ( !hasCustomJSPFolderRule ) {
+							validators[i].replaceFilterGroup(
+								excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
+						}
+					}
+
+
+				}
+			}
+
+			ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
+			pc.setDoesProjectOverride( true );
+
+			ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
+
+			ValPrefManagerProject vpm = new ValPrefManagerProject( project );
+			vpm.savePreferences( pp, validators );
+		}
+		catch (Exception e) {
+			PortletCore.logError( "Unable to add jsp syntax validation folder exclude rule.", e );
+		}
 	}
 
 	protected IStatus checkDescriptorFile(IProject project) {
@@ -203,6 +279,10 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 		HookDescriptorHelper hookDescHelper = new HookDescriptorHelper(getTargetProject());
 
 		IStatus status = hookDescHelper.setCustomJSPDir(this.model);
+
+		if ( this.model.getBooleanProperty( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION ) ) {
+			addJSPSyntaxValidationExclude( customFolder );
+		}
 
 		return status;
 	}

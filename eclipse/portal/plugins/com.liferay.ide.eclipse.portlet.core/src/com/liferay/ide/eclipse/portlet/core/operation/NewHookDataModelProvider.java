@@ -125,6 +125,9 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 		else if (LANGUAGE_PROPERTIES_FILES_CREATED.equals(propertyName)) {
 			return new HashSet<IFile>();
 		}
+		else if ( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION.equals( propertyName ) ) {
+			return true;
+		}
 
 		return super.getDefaultProperty(propertyName);
 	}
@@ -150,6 +153,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 		propertyNames.add(SOURCE_FOLDER);
 		propertyNames.add(JAVA_SOURCE_FOLDER);
 		propertyNames.add(JAVA_PACKAGE_FRAGMENT_ROOT);
+		propertyNames.add( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION );
 
 		return propertyNames;
 	}

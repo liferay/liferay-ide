@@ -63,6 +63,8 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
 	protected Text customJSPsFolder;
 
+	protected Button disableJSPFolderValidation;
+
 	protected CustomJSPsTableWizardSection jspItemsSection;
 
 	public NewCustomJSPsHookWizardPage(IDataModel dataModel, String pageName) {
@@ -70,30 +72,6 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 			PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
 
 		setDescription("Create customs JSP folder and select JSPs to override.");
-	}
-
-	private void createJSPFolderGroup(Composite topComposite) {
-		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
-
-		GridLayout gl = new GridLayout(3, false);
-		gl.marginLeft = 5;
-
-		composite.setLayout(gl);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-
-		SWTUtil.createLabel(composite, SWT.LEAD, "Custom JSP folder:", 1);
-
-		customJSPsFolder = SWTUtil.createText(composite, 1);
-		this.synchHelper.synchText(customJSPsFolder, CUSTOM_JSPS_FOLDER, null);
-
-		Button iconFileBrowse = SWTUtil.createPushButton(composite, "Browse...", null);
-		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(NewCustomJSPsHookWizardPage.this.customJSPsFolder);
-			}
-		});
 	}
 
 	protected void createCustomJSPsGroup(Composite parent) {
@@ -133,6 +111,44 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
 	}
 
+	protected void createDisableJSPFolderValidation( Composite topComposite ) {
+		Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
+
+		GridLayout gl = new GridLayout( 1, false );
+		// gl.marginLeft = 5;
+
+		composite.setLayout( gl );
+		composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+
+		disableJSPFolderValidation = new Button( composite, SWT.CHECK );
+		disableJSPFolderValidation.setText( "Disable JSP syntax validation for custom JSP folder (recommended)." );
+		this.synchHelper.synchCheckbox( disableJSPFolderValidation, DISABLE_CUSTOM_JSP_FOLDER_VALIDATION, null );
+	}
+
+	protected void createJSPFolderGroup( Composite topComposite ) {
+		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
+
+		GridLayout gl = new GridLayout(3, false);
+		// gl.marginLeft = 5;
+
+		composite.setLayout(gl);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+
+		SWTUtil.createLabel(composite, SWT.LEAD, "Custom JSP folder:", 1);
+
+		customJSPsFolder = SWTUtil.createText(composite, 1);
+		this.synchHelper.synchText(customJSPsFolder, CUSTOM_JSPS_FOLDER, null);
+
+		Button iconFileBrowse = SWTUtil.createPushButton(composite, "Browse...", null);
+		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				handleFileBrowseButton(NewCustomJSPsHookWizardPage.this.customJSPsFolder);
+			}
+		});
+	}
+
 	@Override
 	protected Composite createTopLevelComposite(Composite parent) {
 		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
@@ -140,6 +156,8 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 		createJSPFolderGroup(topComposite);
 
 		createCustomJSPsGroup(topComposite);
+
+		createDisableJSPFolderValidation( topComposite );
 
 		return topComposite;
 	}
