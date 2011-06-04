@@ -269,6 +269,7 @@
     		<param name="featureId" value="com.liferay.ide.eclipse.tools.feature.group"/>
     	</antcall>
     	
+    	<!--
     	<antcall target="install-feature">
     		<param name="repositoryURL" value="http://download.jboss.org/jbosstools/updates/stable/helios/"/>
     		<param name="featureId" value="org.jboss.ide.eclipse.freemarker.feature.feature.group"/>
@@ -278,7 +279,8 @@
     		<param name="repositoryURL" value="http://veloeclipse.googlecode.com/svn/trunk/update/"/>
     		<param name="featureId" value="com.googlecode.veloeclipse.ui.feature.group"/>
     	</antcall>
-
+		-->
+    	
    	</target>
 
 	<target name="clean-output-dir">
@@ -292,74 +294,14 @@
     	<if>
     		<isset property="isUnix" />
     		<then>
-    			<if>
-    				<isset property="isMac"/>
-    				<then>
-						<exec dir="${work.dir}" executable="tar">
-    						<arg value="cf" />
-    						<arg value="../${output.dir}/${output.tar.name}" />
-    						<arg value="--exclude" />
-    						<arg value="MacOS/eclipse" />
-    						<arg value="eclipse" />
-    					</exec>
-    					
-						<exec dir="${work.dir}" executable="tar">
-    						<arg value="rf" />
-    						<arg value="../${output.dir}/${output.tar.name}" />
-    						<arg value="--mode" />
-    						<arg value="755" />
-    						<arg value="eclipse/Eclipse.app/Contents/MacOS/eclipse" />
-    					</exec>
-    				</then>
-    				<else>
-    					<exec dir="${work.dir}" executable="tar">
-    						<arg value="cf" />
-    						<arg value="../${output.dir}/${output.tar.name}" />
-    						<arg value="--exclude" />
-    						<arg value="eclipse/eclipse" />
-    						<arg value="eclipse" />
-    					</exec>
-    					
-						<exec dir="${work.dir}" executable="tar">
-    						<arg value="rf" />
-    						<arg value="../${output.dir}/${output.tar.name}" />
-    						<arg value="--mode" />
-    						<arg value="755" />
-    						<arg value="eclipse/eclipse" />
-    					</exec>
-    				</else>
-    			</if>
-    			
-    			<gzip destfile="${output.dir}/${output.gz.name}" src="${output.dir}/${output.tar.name}" />
+				<tar destfile="${output.dir}${output.gz.name}" basedir="${work.dir}" compression="gzip"/>
+    			<!--<gzip destfile="${output.dir}${output.gz.name}" src="${output.dir}${output.tar.name}" />-->
     		</then>
     		<else>
     			<zip destfile="${output.dir}/${output.zip.name}" basedir="${work.dir}" />
     		</else>
     	</if>
 		
-	</target>
-	
-	<target name="upload-output-file">
-		<exec dir="${output.dir}" executable="ncftpput">
-			<arg value="-u"/>
-			<arg value="anonymous"/>
-			<arg value="ftp.liferay.com"/>
-			<arg value="."/>
-			<arg value="${upload.output.file}"/>
-		</exec>
-	</target>
-	
-	<target name="email">
-		<mail from="root" tolist="gregory.amerson@liferay.com" subject="${subject}">
-			<message>
-http://ftp.liferay.com/${output.win32.zip.name}
-http://ftp.liferay.com/${output.win64.zip.name}
-http://ftp.liferay.com/${output.linux.gz.name}
-http://ftp.liferay.com/${output.linux64.gz.name}
-http://ftp.liferay.com/${output.macosx.gz.name}
-http://ftp.liferay.com/${output.macosx64.gz.name}
-			</message>
-		</mail>
 	</target>
 
 </project>
