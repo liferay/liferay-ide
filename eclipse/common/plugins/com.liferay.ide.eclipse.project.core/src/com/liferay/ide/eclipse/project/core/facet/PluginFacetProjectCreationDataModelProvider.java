@@ -286,9 +286,9 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				return ProjectCorePlugin.createErrorStatus("A project already exists with that name.");
 			}
 
-			// before we do a basic java validation we need to strip "-"
+			// before we do a basic java validation we need to strip "-" and "." characters
 
-			String nameValidation = testProjectName.replaceAll("-", "");
+			String nameValidation = testProjectName.replaceAll( "-", "" ).replaceAll( "\\.", "" );
 
 			IStatus status =
 				JavaConventions.validateIdentifier(
