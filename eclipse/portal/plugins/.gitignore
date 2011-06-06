@@ -14,10 +14,12 @@ com.liferay.ide.eclipse.portlet.vaadin.core/bin/
 com.liferay.ide.eclipse.portlet.vaadin.core/target/
 com.liferay.ide.eclipse.portlet.vaadin.ui/bin/
 com.liferay.ide.eclipse.portlet.vaadin.ui/target/
+com.liferay.ide.eclipse.service.core/.apt_generated/
 com.liferay.ide.eclipse.service.core/bin/
 com.liferay.ide.eclipse.service.core/target/
 com.liferay.ide.eclipse.service.ui/bin/
 com.liferay.ide.eclipse.service.ui/target/
+com.liferay.ide.eclipse.taglib.ui/.apt_generated/
 com.liferay.ide.eclipse.taglib.ui/bin/
 com.liferay.ide.eclipse.taglib.ui/target/
 com.liferay.ide.eclipse.theme.core/bin/
