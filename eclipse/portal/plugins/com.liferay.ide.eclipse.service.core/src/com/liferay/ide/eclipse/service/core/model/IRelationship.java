@@ -5,6 +5,7 @@ import com.liferay.ide.eclipse.service.core.model.internal.EntityRelationshipSer
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
+import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -29,5 +30,11 @@ public interface IRelationship extends IModelElement {
 	ReferenceValue<String, IEntity> getName();
 
 	void setName(String value);
+
+	ValueProperty PROP_FOREIGN_KEY_COLUMN_NAME = new ValueProperty( TYPE, "ForeignKeyColumnName" );
+
+    Value<String> getForeignKeyColumnName();
+
+	void setForeignKeyColumnName( String value );
 
 }

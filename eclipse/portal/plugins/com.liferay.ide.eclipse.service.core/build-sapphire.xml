@@ -1,4 +1,4 @@
-<project name="Build Sapphire" default="build-sapphire">
+<project name="Build Sapphire" default="pre.@dot">
 
   <!-- ===================================================================== -->
   <!-- Steps to do before the compilation target <name>                      -->
@@ -10,7 +10,7 @@
   <!--                      reference to the classpath structure.            -->
   <!-- ===================================================================== -->
 
-  <target name="build-sapphire">
+  <target name="pre.@dot">
 
     <taskdef resource="net/sf/antcontrib/antlib.xml">
       <classpath>

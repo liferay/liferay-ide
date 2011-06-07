@@ -41,6 +41,24 @@ public class RelationshipResource extends Resource {
 
 			return binding;
 		}
+		else if ( property == IRelationship.PROP_FOREIGN_KEY_COLUMN_NAME ) {
+			ValueBindingImpl binding = new ValueBindingImpl() {
+
+				@Override
+				public String read() {
+					return getBase().getForeignKeyColumnName().getText( false );
+				}
+
+				@Override
+				public void write( final String value ) {
+					getBase().setForeignKeyColumnName( value );
+				}
+			};
+
+			binding.init( element(), IRelationship.PROP_NAME, null );
+
+			return binding;
+		}
 
 		return null;
 	}

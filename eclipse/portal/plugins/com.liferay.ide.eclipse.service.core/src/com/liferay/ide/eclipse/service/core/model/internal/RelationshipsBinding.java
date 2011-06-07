@@ -1,5 +1,6 @@
 package com.liferay.ide.eclipse.service.core.model.internal;
 
+import com.liferay.ide.eclipse.service.core.ServiceCore;
 import com.liferay.ide.eclipse.service.core.model.IColumn;
 import com.liferay.ide.eclipse.service.core.model.IEntity;
 import com.liferay.ide.eclipse.service.core.model.IRelationship;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListBindingImpl;
+import org.eclipse.sapphire.modeling.ModelElementDisposedEvent;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementListener;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -28,9 +30,9 @@ public class RelationshipsBinding extends ListBindingImpl {
 
 	@Override
 	public List<Resource> read() {
-		List<Resource> resources = new ArrayList<Resource>();
+		final List<Resource> resources = new ArrayList<Resource>();
 
-		IEntity thisEntity = getEntity();
+		final IEntity thisEntity = getEntity();
 		IServiceBuilder root = (IServiceBuilder) this.element().root();
 
 		List<IColumn> primaryColumns = new ArrayList<IColumn>();
@@ -45,22 +47,39 @@ public class RelationshipsBinding extends ListBindingImpl {
 			}
 		}
 
-		for (IColumn column : getColumns()) {
+		for (final IColumn column : getColumns()) {
 			if (!(column.isPrimary().getContent())) {
-				for (IColumn primaryColumn : primaryColumns) {
+				for (final IColumn primaryColumn : primaryColumns) {
 					try {
 						if (primaryColumn.getName().getContent().equals(column.getName().getContent()) &&
 							primaryColumn.getType().getContent().equals(column.getType().getContent())) {
 
 							IRelationship rel = IRelationship.TYPE.instantiate();
 							rel.setName(((IEntity) primaryColumn.parent().parent()).getName().getContent());
+							rel.setForeignKeyColumnName( column.getName().getContent() );
 
-							Resource resource = new RelationshipResource(thisEntity.resource(), rel);
+							final Resource resource = new RelationshipResource( thisEntity.resource(), rel );
 							resources.add(resource);
+
+							column.addListener( new ModelElementListener() {
+
+								@Override
+								public void propertyChanged( ModelPropertyChangeEvent event ) {
+									if ( "Name".equals( event.getProperty().getName() ) ||
+										"Type".equals( event.getProperty().getName() ) ) {
+										if ( !( primaryColumn.getName().getContent().equals( column.getName().getContent() ) ) ||
+											!( primaryColumn.getType().getContent().equals( column.getType().getContent() ) ) ) {
+											localResources.remove( resource );
+										}
+
+										thisEntity.refresh();
+									}
+								}
+							} );
 						}
 					}
 					catch (Throwable e) {
-						e.printStackTrace();
+						ServiceCore.logError( e );
 					}
 				}
 			}
@@ -102,10 +121,36 @@ public class RelationshipsBinding extends ListBindingImpl {
 
 	@Override
 	public void remove(Resource resource) {
-		if (localResources.contains(resource)) {
+		if ( resource instanceof RelationshipResource ) {
+			RelationshipResource relResource = (RelationshipResource) resource;
+
+			IModelElement parentElement = resource.parent().element();
+
+			if ( parentElement instanceof IEntity ) {
+				IEntity referringEntity = (IEntity) parentElement;
+				String fkColumnName = relResource.getBase().getForeignKeyColumnName().getContent();
+
+				IColumn remove = null;
+
+				for (IColumn col : referringEntity.getColumns()) {
+					if ( col.getName().getContent().equals( fkColumnName ) ) {
+						remove = col;
+						break;
+					}
+				}
+
+				if ( remove != null ) {
+					referringEntity.getColumns().remove( remove );
+				}
+			}
+		}
+
+		if ( localResources.contains( resource ) ) {
 			localResources.remove(resource);
 			resource.element().removeListener(listener);
 		}
+
+		getEntity().refresh();
 	}
 
 	@Override
@@ -127,6 +172,13 @@ public class RelationshipsBinding extends ListBindingImpl {
 			}
 		}, new ModelPath("Relationships"));
 
+		element.addListener( new ModelElementListener() {
+
+			@Override
+			public void handleElementDisposedEvent( ModelElementDisposedEvent event ) {
+				System.out.println( event );
+			}
+		} );
 		
 	}
 
@@ -140,7 +192,7 @@ public class RelationshipsBinding extends ListBindingImpl {
 
 	protected void handleNameChangedEvent(ModelPropertyChangeEvent event) {
 		// loop through relationships and add necessary columns if they don't exist
-
+		System.out.println( event );
 	}
 
 	public class RelationshipListener extends ModelElementListener {

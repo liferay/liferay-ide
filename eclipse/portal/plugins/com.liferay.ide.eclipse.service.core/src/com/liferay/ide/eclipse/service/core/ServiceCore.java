@@ -1,5 +1,7 @@
 package com.liferay.ide.eclipse.service.core;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -14,6 +16,19 @@ public class ServiceCore extends AbstractUIPlugin {
 	// The shared instance
 	private static ServiceCore plugin;
 	
+	/**
+	 * Returns the shared instance
+	 *
+	 * @return the shared instance
+	 */
+	public static ServiceCore getDefault() {
+		return plugin;
+	}
+
+	public static void logError( Throwable t ) {
+		getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
+	}
+
 	/**
 	 * The constructor
 	 */
@@ -36,15 +51,6 @@ public class ServiceCore extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-	}
-
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static ServiceCore getDefault() {
-		return plugin;
 	}
 
 }
