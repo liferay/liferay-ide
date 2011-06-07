@@ -48,7 +48,7 @@
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
 <!--     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/S20110124210048/repository</orbit-site> -->
-    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/379/artifact/build/repository</sapphire-site>
+    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/382/artifact/build/repository</sapphire-site>
 	<graphiti-site>http://download.eclipse.org/graphiti/updates/milestones/S-0.8.0RC3-201105270852</graphiti-site>
   </properties>
 
