@@ -67,8 +67,8 @@ public class AlloyTagItemHelper {
 		ITag model = getTagModel(editorInput, item);
 
 		AlloyTagInsertDialog dialog =
-			new AlloyTagInsertDialog(
-				host, model, "com.liferay.ide.eclipse.taglib.ui/sdef/AlloyTag.sdef!tagInsertDialog", clearModality);
+			new AlloyTagInsertDialog( host, model, TaglibUI.PLUGIN_ID +
+				"/com/liferay/ide/eclipse/taglib/ui/snippets/AlloyTag.sdef!tagInsertDialog", clearModality );
 
 		// VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, clearModality);
 		// dialog.setItem(item);

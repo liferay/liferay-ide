@@ -73,6 +73,25 @@ public class RelationshipResource extends Resource {
 
 			return binding;
 		}
+		else if ( property == IRelationship.PROP_LABEL ) {
+			ValueBindingImpl binding = new ValueBindingImpl() {
+
+				@Override
+				public String read() {
+					return getBase().getLabel().getText( false );
+				}
+
+				@Override
+				public void write( final String value ) {
+					// read only
+					System.out.println( value );
+				}
+			};
+
+			binding.init( element(), IRelationship.PROP_LABEL, null );
+
+			return binding;
+		}
 
 		return null;
 	}

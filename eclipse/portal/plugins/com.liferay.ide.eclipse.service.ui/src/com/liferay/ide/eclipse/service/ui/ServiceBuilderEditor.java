@@ -36,12 +36,14 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 		super(ServiceUI.PLUGIN_ID);
 
 		setRootModelElementType(IServiceBuilder.TYPE);
-		setEditorDefinitionPath(ServiceUI.PLUGIN_ID + "/sdef/ServiceBuilder.sdef/serviceBuilderPage");
+		setEditorDefinitionPath( ServiceUI.PLUGIN_ID +
+			"/com/liferay/ide/eclipse/service/ui/ServiceBuilder.sdef/serviceBuilderPage" );
 	}
 
 	@Override
 	protected void createDiagramPages() throws PartInitException {
-		IPath path = new Path(ServiceUI.PLUGIN_ID + "/sdef/ServiceBuilder.sdef/diagramPage");
+		IPath path =
+			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilder.sdef/diagramPage" );
 		this.pageDiagram = new SapphireDiagramEditor(this.getModelElement(), path);
 		SapphireDiagramEditorInput diagramEditorInput = null;
 

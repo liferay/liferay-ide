@@ -21,8 +21,10 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DerivedValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
+import org.eclipse.sapphire.modeling.annotations.ReadOnly;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -50,5 +52,11 @@ public interface IRelationship extends IModelElement {
     Value<String> getForeignKeyColumnName();
 
 	void setForeignKeyColumnName( String value );
+
+	@ReadOnly
+	@DerivedValue( service = RelationshipLabelService.class )
+	ValueProperty PROP_LABEL = new ValueProperty( TYPE, "Label" );
+
+	Value<String> getLabel();
 
 }
