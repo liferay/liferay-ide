@@ -84,7 +84,6 @@ public class RelationshipResource extends Resource {
 				@Override
 				public void write( final String value ) {
 					// read only
-					System.out.println( value );
 				}
 			};
 

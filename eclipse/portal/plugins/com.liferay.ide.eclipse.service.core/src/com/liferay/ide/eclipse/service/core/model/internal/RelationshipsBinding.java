@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListBindingImpl;
-import org.eclipse.sapphire.modeling.ModelElementDisposedEvent;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementListener;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -186,13 +185,12 @@ public class RelationshipsBinding extends ListBindingImpl {
 			}
 		}, new ModelPath("Relationships"));
 
-		element.addListener( new ModelElementListener() {
-
-			@Override
-			public void handleElementDisposedEvent( ModelElementDisposedEvent event ) {
-				System.out.println( event );
-			}
-		} );
+		// element.addListener( new ModelElementListener() {
+		//
+		// @Override
+		// public void handleElementDisposedEvent( ModelElementDisposedEvent event ) {
+		// }
+		// } );
 		
 	}
 

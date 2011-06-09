@@ -63,7 +63,7 @@ public interface IColumn extends IModelElement {
 	@Label(standard = "type")
 	@XmlBinding(path = "@type")
 	@Required
-	@PossibleValues(values = { "String", "long", "boolean", "int", "Date", "Collection" }, invalidValueMessage = "{0} is not a valid type.")
+	@PossibleValues( values = { "String", "long", "boolean", "int", "double", "Date", "Collection" }, invalidValueMessage = "{0} is not a valid type." )
 	ValueProperty PROP_TYPE = new ValueProperty(TYPE, "Type");
 
 	Value<String> getType();

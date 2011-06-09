@@ -22,10 +22,12 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -102,5 +104,16 @@ public interface IServiceBuilder extends IModelElement {
 	ListProperty PROP_SERVICE_BUILDER_IMPORTS = new ListProperty(TYPE, "ServiceBuilderImports");
 
 	ModelElementList<IServiceBuilderImport> getServiceBuilderImports();
+
+	@Type( base = Boolean.class )
+	@DefaultValue( text = "true" )
+	@CustomXmlValueBinding( impl = ShowRelationshipLabelsBinding.class )
+	ValueProperty PROP_SHOW_RELATIONSHIP_LABELS = new ValueProperty( TYPE, "ShowRelationshipLabels" );
+
+	Value<Boolean> getShowRelationshipLabels();
+
+	void setShowRelationshipLabels( String value );
+
+	void setShowRelationshipLabels( Boolean value );
 
 }
