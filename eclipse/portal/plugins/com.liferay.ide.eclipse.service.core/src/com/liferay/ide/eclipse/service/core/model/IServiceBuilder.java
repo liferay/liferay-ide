@@ -15,6 +15,7 @@
 package com.liferay.ide.eclipse.service.core.model;
 
 import com.liferay.ide.eclipse.service.core.model.internal.ServiceBuilderRootElementController;
+import com.liferay.ide.eclipse.service.core.model.internal.ShowRelationshipLabelsBinding;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;

@@ -33,14 +33,4 @@
 
   <name>Liferay Portlet Core</name>
 
- <build>
-     <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-source-plugin</artifactId>
-        <version>1.5.0-SNAPSHOT</version>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>

@@ -55,9 +55,9 @@
     <tycho-version>0.12.0</tycho-version>
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
-<!--     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/S20110124210048/repository</orbit-site> -->
+    <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
     <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/393/artifact/build/repository</sapphire-site>
-	<graphiti-site>http://download.eclipse.org/graphiti/updates/milestones/S-0.8.0RC3-201105270852</graphiti-site>
+	<graphiti-site>http://download.eclipse.org/graphiti/updates/milestones/S-0.8.0RC4-201106071252</graphiti-site>
   </properties>
 
   
@@ -68,6 +68,7 @@
     <module>common/plugins/com.liferay.ide.eclipse.project.core</module>
     <module>common/plugins/com.liferay.ide.eclipse.project.ui</module>
     <module>common/plugins/com.liferay.ide.eclipse.sdk</module>
+    <module>common/plugins/com.liferay.ide.eclipse.scripting.core</module>
     <module>common/plugins/com.liferay.ide.eclipse.templates.core</module>
     <module>common/plugins/com.liferay.ide.eclipse.tools.branding</module>
     <module>common/plugins/com.liferay.ide.eclipse.ui</module>
@@ -105,13 +106,11 @@
       <layout>p2</layout>
       <url>${eclipse-site}</url>
     </repository>
-    <!--
     <repository>
       <id>orbit</id>
       <layout>p2</layout>
       <url>${orbit-site}</url>
     </repository>
-    -->
     <repository>
       <id>sapphire</id>
       <layout>p2</layout>

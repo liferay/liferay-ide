@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.tools.branding</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Tools</name>
+  <name>Liferay IDE Branding</name>
 
 </project>

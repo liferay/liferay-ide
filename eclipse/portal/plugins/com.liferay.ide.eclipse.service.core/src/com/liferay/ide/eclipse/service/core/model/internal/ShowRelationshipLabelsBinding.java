@@ -1,4 +1,4 @@
-package com.liferay.ide.eclipse.service.core.model;
+package com.liferay.ide.eclipse.service.core.model.internal;
 
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
