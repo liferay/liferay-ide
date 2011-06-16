@@ -20,6 +20,7 @@ com.liferay.ide.eclipse.service.core/target/
 com.liferay.ide.eclipse.service.ui/bin/
 com.liferay.ide.eclipse.service.ui/target/
 com.liferay.ide.eclipse.taglib.ui/.apt_generated/
+com.liferay.ide.eclipse.taglib.ui/.resources/
 com.liferay.ide.eclipse.taglib.ui/bin/
 com.liferay.ide.eclipse.taglib.ui/target/
 com.liferay.ide.eclipse.theme.core/bin/
