@@ -167,6 +167,7 @@ the json-enabled value is true.</content>
                                             </hint>
                                             <child-property>name</child-property>
                                             <child-property>type</child-property>
+                                            <child-property>primary</child-property>
                                         </property-editor>
                                     </content>
                                     <label>Columns</label>

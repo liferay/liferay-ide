@@ -41,6 +41,13 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 	}
 
 	@Override
+	public void doSave(final IProgressMonitor monitor) {
+		super.doSave(monitor);
+
+		this.pageDiagram.doSave(monitor);
+	}
+
+	@Override
 	protected void createDiagramPages() throws PartInitException {
 		IPath path =
 			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilder.sdef/diagramPage" );
@@ -63,9 +70,9 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 	}
 
 	@Override
-	public void doSave(final IProgressMonitor monitor) {
-		super.doSave(monitor);
+	protected void createFormPages() throws PartInitException {
+		super.createFormPages();
 
-		this.pageDiagram.doSave(monitor);
+		setPageText( 0, "Overview" );
 	}
 }
