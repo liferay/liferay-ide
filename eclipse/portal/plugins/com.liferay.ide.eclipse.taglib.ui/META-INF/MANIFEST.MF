@@ -14,9 +14,7 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.project.core;bundle-version="1.5.0",
  org.eclipse.ui.ide,
  org.eclipse.wst.sse.core,
- org.eclipse.wst.xml.core,
- org.eclipse.sapphire.sdk.build.processor;bundle-version="0.3.0";resolution:=optional,
- org.eclipse.sapphire.sdk;bundle-version="0.3.0";resolution:=optional
+ org.eclipse.wst.xml.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
