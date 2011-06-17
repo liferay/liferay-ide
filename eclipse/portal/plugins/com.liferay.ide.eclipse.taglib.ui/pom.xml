@@ -30,7 +30,27 @@
   <artifactId>com.liferay.ide.eclipse.taglib.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Taglib UI</name>
+  <name>Liferay IDE Taglib UI</name>
+
+<dependencies>
+	<dependency>
+	     <groupId>ant-contrib</groupId>
+	     <artifactId>ant-contrib</artifactId>
+	     <version>1.0b3</version>
+	     <exclusions>
+	       <exclusion>
+	         <groupId>ant</groupId>
+	         <artifactId>ant</artifactId>
+	       </exclusion>
+	     </exclusions>
+	   </dependency>
+	   <dependency>
+	     <groupId>ant</groupId>
+	     <artifactId>ant-nodeps</artifactId>
+	     <version>1.6.5</version>
+	   </dependency>
+  </dependencies>
+
 
  <build>
      <plugins>

@@ -15,11 +15,8 @@
 
   <target name="build-sapphire">
 
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-      <classpath>
-      	<pathelement location="${basedir}/../../../releng/com.liferay.ide.eclipse-repository/bundle/lib/ant-contrib-1.0b3.jar"/>
-      </classpath>
-    </taskdef>
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.runtime.classpath"/>
 
 	<delete dir=".apt_generated" quiet="true"/>
     <mkdir dir=".apt_generated"/>
