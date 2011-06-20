@@ -52,7 +52,7 @@
   </licenses>
 
   <properties>
-    <tycho-version>0.12.0</tycho-version>
+    <tycho-version>0.13.0-SNAPSHOT</tycho-version>
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
@@ -128,6 +128,16 @@
 		<url>${wtp-site}</url>
 	</repository>
   </repositories>
+  
+  <pluginRepositories>
+        <pluginRepository>
+            <id>tycho</id>
+            <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
   
   <build>
   	<sourceDirectory>src</sourceDirectory>
