@@ -1,7 +1,3 @@
-com.liferay.ide.eclipse.server.aws.core/bin/
-com.liferay.ide.eclipse.server.aws.core/target/
-com.liferay.ide.eclipse.server.aws.ui/bin/
-com.liferay.ide.eclipse.server.aws.ui/target/
 com.liferay.ide.eclipse.server.core/bin/
 com.liferay.ide.eclipse.server.core/target/
 com.liferay.ide.eclipse.server.tomcat.core/bin/
