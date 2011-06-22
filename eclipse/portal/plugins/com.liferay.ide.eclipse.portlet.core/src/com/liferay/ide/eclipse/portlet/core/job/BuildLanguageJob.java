@@ -75,6 +75,14 @@ public class BuildLanguageJob extends SDKJob {
 			project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
 			project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+			// check generated properties files and set to UTF8
+			for ( IResource file : langFile.getParent().members() ) {
+				if ( file.getName().matches( "Language_.*\\.properties" ) ) {
+					IFile generatedLangFile = (IFile) file;
+					generatedLangFile.setCharset( "UTF-8", monitor );
+				}
+			}
 		}
 		catch (CoreException e1) {
 			return PortletCore.createErrorStatus(e1);
