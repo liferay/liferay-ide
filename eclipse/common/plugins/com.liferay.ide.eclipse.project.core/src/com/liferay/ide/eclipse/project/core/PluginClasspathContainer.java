@@ -21,6 +21,7 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -253,14 +254,26 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected String getPropertyValue(String key, IFile propertiesFile) {
 		String retval = null;
 
+		InputStream contents = null;
+
 		try {
 			Properties props = new Properties();
-
-			props.load(getPluginPackageFile().getContents());
+			contents = getPluginPackageFile().getContents();
+			props.load( contents );
 
 			retval = props.getProperty(key, "");
 		}
 		catch (Exception e) {
+		}
+		finally {
+			if ( contents != null ) {
+				try {
+					contents.close();
+				}
+				catch ( Exception e ) {
+					// best effort
+				}
+			}
 		}
 
 		return retval;

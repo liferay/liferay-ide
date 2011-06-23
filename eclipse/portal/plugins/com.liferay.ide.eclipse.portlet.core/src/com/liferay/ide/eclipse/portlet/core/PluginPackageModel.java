@@ -20,7 +20,6 @@ import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.ModelChangedEvent;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -52,8 +51,9 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
 		try {
 			pluginPackageProperties = new PluginPropertiesConfiguration();
-
-			pluginPackageProperties.load(new File(file.getLocation().toOSString()));
+			InputStream is = file.getContents();
+			pluginPackageProperties.load( is );
+			is.close();
 		}
 		catch (Exception e) {
 			PortletCore.logError(e);

@@ -76,7 +76,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class PluginPackageResourceListener implements IResourceChangeListener {
+public class PluginPackageResourceListener implements IResourceChangeListener, IResourceDeltaVisitor {
 
 	public static boolean isLiferayProject(IProject project) {
 		boolean retval = false;
@@ -109,40 +109,51 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		}
 
 		try {
-			if (shouldProcessResourceChangedEvent(event)) {
-				IResourceDelta delta = event.getDelta();
+			event.getDelta().accept( this );
+		}
+		catch ( Throwable e ) {
+			e.printStackTrace();
+			// ignore
+		}
+	}
+	
+	protected boolean shouldProcessResourceChangedEvent(IResourceChangeEvent event) {
+		if (event == null) {
+			return false;
+		}
 
-				delta.accept(new IResourceDeltaVisitor() {
+		IResourceDelta delta = event.getDelta();
+		
+		int deltaKind = delta.getKind();
+		
+		if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
+			return false;
+		}
 
-					public boolean visit(IResourceDelta delta)
-						throws CoreException {
+		return true;
+	}
+	
+	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
+		IPath fullPath = delta.getFullPath();
+		
+		if ( fullPath.lastSegment() != null &&
+			fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ) {
 
-						try {
-							int deltaKind = delta.getKind();
+			IFolder docroot = ProjectUtil.getDocroot( delta.getResource().getProject() );
 
-							if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
-								return false;
-							}
+			if ( docroot == null ) {
+				return false;
+			}
 
-							if (shouldProcessResourceDelta(delta)) {
-								processResourceChanged(delta);
+			IPath filePath =
+				docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ).getFullPath();
 
-								return false;
-							}
-						}
-						catch (Throwable e) {
-							// do nothing
-						}
-
-						return delta != null && delta.getResource() != null &&
-							delta.getResource().getType() != IResource.FILE;
-					}
-				});
+			if ( filePath.equals( fullPath ) ) {
+				return true;
 			}
 		}
-		catch (Throwable e) {
-			ProjectCorePlugin.logError("Exception in plugin package resource listener: " + e.getMessage());
-		}
+
+		return false;
 	}
 
 	private IFile getWorkspaceFile(IPath path) {
@@ -319,13 +330,27 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		}.schedule();
 	}
 
-	protected void processResourceChanged(IResourceDelta delta)
+	protected void processResourceChanged( IResourceDelta delta )
 		throws CoreException {
-
+		
 		IPath deltaPath = delta.getFullPath();
-		
-		IFile pluginPackagePropertiesFile = getWorkspaceFile(deltaPath);
-		
+
+		final IFile pluginPackagePropertiesFile = getWorkspaceFile( deltaPath );
+
+		new WorkspaceJob( "Processing plugin package resource." ) {
+
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor)
+				throws CoreException {
+				
+				processPropertiesFile(pluginPackagePropertiesFile);
+
+				return Status.OK_STATUS;
+			}
+		}.schedule();
+	}
+	
+	protected void processPropertiesFile( IFile pluginPackagePropertiesFile ) throws CoreException {
 		IProject project = pluginPackagePropertiesFile.getProject();
 		
 		IJavaProject javaProject = JavaCore.create(project);
@@ -405,63 +430,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 		processVirtualRef(rootComponent, ref, new RemoveReferenceDataModelProvider());
 	}
 
-	protected boolean shouldProcessResourceChangedEvent(IResourceChangeEvent event) {
-		if (event == null) {
-			return false;
-		}
-
-		int eventType = event.getType();
-
-		if (eventType != IResourceChangeEvent.POST_CHANGE) {
-			return false;
-		}
-
-		IResourceDelta delta = event.getDelta();
-		
-		int deltaKind = delta.getKind();
-		
-		if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
-			return false;
-		}
-
-		return true;
-	}
-
-	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
-		if (delta == null) {
-			return false;
-		}
-		
-		int deltaKind = delta.getKind();
-
-		if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
-			return false;
-		}
-
-		IPath fullPath = delta.getFullPath();
-		
-		if (fullPath == null ||
-			!(ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE.equals(fullPath.lastSegment()))) {
-			return false;
-		}
-
-		IFile file = getWorkspaceFile(fullPath);
-
-		if (file == null || !file.exists() || !file.isAccessible()) {
-			return false;
-		}
-
-		// make sure that the file is in the docroot
-		IFolder docroot = ProjectUtil.getDocroot(file.getProject());
-
-		if (docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf(file.getFullPath())) {
-			System.out.println("processing change to file: " + file.getFullPath());
-			return true;
-		}
-
-		return false;
-	}
-
 	protected void updateVirtualComponent(
 		IVirtualComponent rootComponent, List<IVirtualReference> removeRefs, List<IVirtualReference> addRefs)
 		throws CoreException {
@@ -515,6 +483,38 @@ public class PluginPackageResourceListener implements IResourceChangeListener {
 			JavaCore.getClasspathContainerInitializer("org.eclipse.jst.j2ee.internal.web.container");
 
 		initializer.requestClasspathContainerUpdate(container.getPath(), javaProject, container);
+	}
+
+	public boolean visit( final IResourceDelta delta ) throws CoreException {
+		switch ( delta.getResource().getType() ) {
+		case IResource.ROOT:
+		case IResource.PROJECT:
+		case IResource.FOLDER:
+			return true;
+
+		case IResource.FILE: {
+
+			if ( shouldProcessResourceDelta( delta ) ) {
+				new WorkspaceJob( "Processing plugin package resource." ) {
+
+					@Override
+					public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException {
+
+						final IResource resource = delta.getResource();
+
+						processPropertiesFile( (IFile) resource );
+
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+			}
+
+			return false;
+			}
+
+		}
+
+		return false;
 	}
 
 }

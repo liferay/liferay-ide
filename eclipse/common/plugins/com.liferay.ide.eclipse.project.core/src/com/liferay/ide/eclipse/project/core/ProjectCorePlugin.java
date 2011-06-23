@@ -227,7 +227,7 @@ public class ProjectCorePlugin extends CorePlugin {
 		plugin = this;
 
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(
-			pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE);
+			pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
 	}
 
 	/*

@@ -78,9 +78,6 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 			}
 		}
-
-
-
 	}
 
 	private IFile getWorkspaceFile(IPath path) {
