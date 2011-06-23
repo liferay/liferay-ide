@@ -15,7 +15,6 @@
 package com.liferay.ide.eclipse.portlet.jsf.core;
 
 import com.liferay.ide.eclipse.project.core.AbstractPortletFramework;
-import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 
@@ -100,7 +99,7 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 		 * will overwrite our web.xml that comes with in the template
 		 */
 
-		SDK sdk = ProjectUtil.getSDK(facetedProject.getProject(), IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET);
+		SDK sdk = ProjectUtil.getSDK( facetedProject.getProject() );
 
 		if (sdk == null) {
 			return JSFCorePlugin.createErrorStatus("Could not get SDK from newly created project.");

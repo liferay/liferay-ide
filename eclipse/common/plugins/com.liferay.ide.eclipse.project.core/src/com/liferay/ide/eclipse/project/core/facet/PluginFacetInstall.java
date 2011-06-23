@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.project.core.facet;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.project.core.util.WebXMLDescriptorHelper;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
@@ -65,7 +64,6 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
-import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Greg Amerson
@@ -132,14 +130,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		// (masterModel.getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
 		// installLayoutTplTemplate();
 		// }
-
-		// need to save SDK path to facet property
-		try {
-			ProjectUtil.setSDK(project, fv.getProjectFacet(), getSDK());
-		}
-		catch (BackingStoreException e) {
-			ProjectCorePlugin.logError(e);
-		}
 	}
 
 	protected void configWebXML() {

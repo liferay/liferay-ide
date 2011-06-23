@@ -15,17 +15,11 @@
 
 package com.liferay.ide.eclipse.project.ui;
 
-import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
-import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.pref.SDKsPreferencePage;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -36,18 +30,16 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
 
 /**
  * @author Greg Amerson
@@ -55,69 +47,11 @@ import org.osgi.service.prefs.Preferences;
 public class LiferayProjectPropertyPage extends PropertyPage
 	implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties {
 
-	protected Combo sdkCombo;
-
 	public LiferayProjectPropertyPage() {
 		super();
 
 		setImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
 			ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png"));
-	}
-
-	@Override
-	public boolean isValid() {
-		boolean valid = super.isValid();
-
-		if (!valid) {
-			return valid;
-		}
-
-		int index = sdkCombo.getSelectionIndex();
-
-		if (index < 0) {
-			valid = false;
-		}
-		else {
-			String sdkName = sdkCombo.getItem(sdkCombo.getSelectionIndex());
-
-			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
-
-			valid = sdk != null;
-		}
-
-		return valid;
-	}
-
-	@Override
-	public boolean performOk() {
-		if (!isValid()) {
-			setErrorMessage("Current values are invalid.");
-
-			return false;
-		}
-
-		boolean retval = false;
-
-		String sdkName = sdkCombo.getItem(sdkCombo.getSelectionIndex());
-
-		SDK sdk = SDKManager.getInstance().getSDK(sdkName);
-
-		if (sdk != null) {
-			IFacetedProject facetedProject = getFacetedProject();
-
-			IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
-
-			try {
-				ProjectUtil.setSDK(facetedProject.getProject(), liferayFacet, sdk);
-
-				retval = true;
-			}
-			catch (Exception e) {
-				ProjectUIPlugin.logError(e);
-			}
-		}
-
-		return retval;
 	}
 
 	protected void configureSDKsLinkSelected(SelectionEvent e) {
@@ -133,8 +67,6 @@ public class LiferayProjectPropertyPage extends PropertyPage
 		int retval = dialog.open();
 
 		if (retval == Window.OK) {
-			setupSDKCombo();
-
 			getContainer().updateButtons();
 		}
 
@@ -156,7 +88,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 	@Override
 	protected Control createContents(Composite parent) {
-		Composite top = SWTUtil.createTopComposite(parent, 1);
+		Composite top = SWTUtil.createTopComposite( parent, 3 );
 
 		createSDKGroup(top);
 
@@ -175,38 +107,24 @@ public class LiferayProjectPropertyPage extends PropertyPage
 	}
 
 	protected void createSDKGroup(Composite parent) {
-		Group group = createDefaultGroup(parent, "Liferay Plugin SDK", 2);
+		new Label( parent, SWT.LEFT ).setText( "Liferay Plugin SDK:" );
 
-		((GridData) group.getLayoutData()).grabExcessVerticalSpace = false;
+		Text sdkLabel = new Text( parent, SWT.READ_ONLY | SWT.BORDER );
 
-		// Composite labelContainer = new Composite(group, SWT.NONE);
+		sdkLabel.setEnabled( false );
+		sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
-		// GridData gd = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		SDK sdk = ProjectUtil.getSDK( getProject() );
 
-		// labelContainer.setLayoutData(gd);
-
-		GridLayout gl = new GridLayout(1, false);
-
-		gl.marginHeight = 3;
-		gl.marginWidth = 0;
-
-		sdkCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
-
-		sdkCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		sdkCombo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				getContainer().updateButtons();
-			}
-
-		});
+		if ( sdk != null ) {
+			sdkLabel.setText( sdk.getName() );
+		}
 
 		// labelContainer = new Composite(group, SWT.NONE);
 		// labelContainer.setLayout(gl);
 		// labelContainer.setLayoutData(gd);
 
-		Link configureSDKsLink = new Link(group, SWT.UNDERLINE_LINK);
+		Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
 
 		configureSDKsLink.setText("<a href=\"#\">Configure SDKs</a>");
 		configureSDKsLink.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
@@ -219,18 +137,12 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
 		});
 
-		setupSDKCombo();
-
-		// modelHelper.synchCombo(sdkCombo, LIFERAY_SDK_NAME, new Control[] {
-		// configureSDKsLink });
 	}
 
 	protected IFacetedProject getFacetedProject() {
 		IFacetedProject retval = null;
 
-		IAdaptable adaptable = getElement();
-
-		IProject project = (IProject) adaptable.getAdapter(IProject.class);
+		IProject project = getProject();
 
 		if (project != null) {
 			retval = ProjectUtil.getFacetedProject(project);
@@ -239,59 +151,12 @@ public class LiferayProjectPropertyPage extends PropertyPage
 		return retval;
 	}
 
-	@Override
-	protected void performDefaults() {
-		SDK defaultSdk = SDKManager.getInstance().getDefaultSDK();
+	protected IProject getProject() {
+		IAdaptable adaptable = getElement();
 
-		if (defaultSdk != null) {
-			setupSDKCombo();
-
-			String[] items = sdkCombo.getItems();
-
-			for (int i = 0; i < items.length; i++) {
-				String sdkItemName = sdkCombo.getItem(i);
-
-				if (defaultSdk.getName().equals(sdkItemName)) {
-					sdkCombo.select(i);
-
-					break;
-				}
-			}
-		}
-
-		super.performDefaults();
+		IProject project = (IProject) adaptable.getAdapter( IProject.class );
+		return project;
 	}
 
-	protected void setupSDKCombo() {
-		List<String> sdkNames = new ArrayList<String>();
 
-		SDK[] allSDKs = SDKManager.getInstance().getSDKs();
-
-		for (SDK sdk : allSDKs) {
-			sdkNames.add(sdk.getName());
-		}
-
-		sdkCombo.setItems(sdkNames.toArray(new String[0]));
-
-		IFacetedProject facetedProject = getFacetedProject();
-
-		if (facetedProject != null) {
-			IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
-
-			try {
-				Preferences prefs = facetedProject.getPreferences(liferayFacet).node("liferay-plugin-project");
-
-				String sdkName = prefs.get(ISDKConstants.PROPERTY_NAME, "");
-
-				SDK sdk = SDKManager.getInstance().getSDK(sdkName);
-
-				if (!CoreUtil.isNullOrEmpty(sdkName) && sdk != null) {
-					sdkCombo.select(sdkNames.indexOf(sdk.getName()));
-				}
-			}
-			catch (BackingStoreException e) {
-				ProjectUIPlugin.logError(e);
-			}
-		}
-	}
 }

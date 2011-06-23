@@ -15,7 +15,6 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
-import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
@@ -99,7 +98,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 		SDK sdk = null;
 		IProject project = module.getProject();
 
-		sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET);
+		sdk = ProjectUtil.getSDK( project );
 
 		if (sdk == null) {
 			throw new CoreException(

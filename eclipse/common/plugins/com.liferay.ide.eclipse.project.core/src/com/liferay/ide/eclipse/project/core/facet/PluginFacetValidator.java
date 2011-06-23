@@ -74,7 +74,7 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 		SDK projectSDK = null;
 
 		try {
-			projectSDK = ProjectUtil.getSDK(fproj, getProjectFacet());
+			projectSDK = ProjectUtil.getSDK( fproj.getProject() );
 		}
 		catch (Exception e) {
 			ProjectCorePlugin.logError(e);

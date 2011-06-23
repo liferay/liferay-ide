@@ -125,17 +125,6 @@ public class PluginFacetUtil {
 			IDataModel dm = (IDataModel) config;
 			dm.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, getSDKName( sdkLocation ) );
 		}
-		else {
-			SDK sdk = SDKManager.getInstance().getSDK( new Path( sdkLocation ) );
-			if ( sdk != null ) {
-				try {
-					ProjectUtil.setSDK( fpjwc.getProject(), requiredFacet, sdk );
-				}
-				catch (Exception e) {
-					ProjectCorePlugin.logError( "Error saving SDK setting.", e );
-				}
-			}
-		}
 	}
 
 	public static void configureLiferayFacet(

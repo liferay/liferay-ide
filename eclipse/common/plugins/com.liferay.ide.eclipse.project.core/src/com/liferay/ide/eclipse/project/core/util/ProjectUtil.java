@@ -26,6 +26,7 @@ import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationData
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -85,8 +86,6 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
 
 /**
  * @author Greg Amerson
@@ -545,49 +544,23 @@ public class ProjectUtil {
 		return retval.startsWith("/") ? retval : "/" + retval;
 	}
 
-	public static SDK getSDK(IFacetedProject facetedProject, IProjectFacet facet)
-		throws BackingStoreException {
-
-		Preferences prefs = facetedProject.getPreferences(facet).node("liferay-plugin-project");
-		String name = prefs.get(ISDKConstants.PROPERTY_NAME, null);
-
-		return SDKManager.getInstance().getSDK(name);
-	}
-
 	public static SDK getSDK(IProject project) {
 		SDK retval = null;
 
-		if (isLiferayProject(project)) {
-			IFacetedProject facetedProject = getFacetedProject(project);
+		// try to determine SDK based on project location
+		IPath sdkLocation = project.getRawLocation().removeLastSegments( 2 );
 
-			if (facetedProject != null) {
-				IProjectFacet liferayFacet = getLiferayFacet(facetedProject);
+		retval = SDKManager.getInstance().getSDK( sdkLocation );
 
-				if (liferayFacet != null) {
-					try {
-						retval = getSDK(facetedProject, liferayFacet);
-					}
-					catch (BackingStoreException e) {
-					}
-				}
+		if ( retval == null ) {
+			retval = SDKUtil.createSDKFromLocation( sdkLocation );
+
+			if ( retval != null ) {
+				SDKManager.getInstance().addSDK( retval );
 			}
 		}
 
 		return retval;
-	}
-
-	public static SDK getSDK(IProject proj, IProjectFacet projectFacet) {
-		IFacetedProject facetedProject = getFacetedProject(proj);
-		SDK sdk = null;
-
-		try {
-			sdk = getSDK(facetedProject, projectFacet);
-		}
-		catch (BackingStoreException e) {
-			ProjectCorePlugin.logError("Could not get SDK.", e);
-		}
-
-		return sdk;
 	}
 
 	public static IPackageFragmentRoot[] getSourceContainers(IProject project) {
@@ -894,13 +867,6 @@ public class ProjectUtil {
 		if (ddModel != null) {
 			ddModel.setBooleanProperty(IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD);
 		}
-	}
-
-	public static void setSDK(IProject project, IProjectFacet facet, SDK sdk)
-		throws BackingStoreException, CoreException {
-		Preferences prefs = ProjectFacetsManager.create(project).getPreferences(facet).node("liferay-plugin-project");
-		prefs.put(ISDKConstants.PROPERTY_NAME, sdk.getName());
-		prefs.flush();
 	}
 
 	private static void fixExtProjectClasspathEntries(IProject project) {

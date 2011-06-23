@@ -17,7 +17,6 @@ package com.liferay.ide.eclipse.theme.core;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
@@ -111,7 +110,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 				IProject project = delta.getResource().getProject();
 
-				SDK sdk = ProjectUtil.getSDK(project, IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET);
+				SDK sdk = ProjectUtil.getSDK( project );
 
 				if (sdk == null) {
 					throw new CoreException(
