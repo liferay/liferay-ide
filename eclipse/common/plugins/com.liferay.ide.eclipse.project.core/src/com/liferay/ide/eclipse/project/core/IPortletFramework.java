@@ -62,6 +62,8 @@ public interface IPortletFramework {
 
 	String getShortName();
 
+	IStatus getUnsupportedSDKErrorMsg();
+
 	boolean isDefault();
 
 	IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject);

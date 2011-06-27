@@ -76,6 +76,11 @@ public abstract class AbstractPortletFramework implements IPortletFramework {
 		return shortName;
 	}
 
+	public IStatus getUnsupportedSDKErrorMsg() {
+		return ProjectCorePlugin.createErrorStatus( "At least SDK version " + requiredSDKVersion +
+			" is required to use the selected portlet framework." );
+	}
+
 	public boolean isDefault() {
 		return isDefault;
 	}

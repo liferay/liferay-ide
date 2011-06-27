@@ -93,6 +93,13 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 	}
 
 	@Override
+	public IStatus getUnsupportedSDKErrorMsg() {
+		return JSFCorePlugin.createErrorStatus( "JSF framework requires SDK version " + requiredSDKVersion +
+			". Download a compatible SDK at www.portletfaces.org/projects/portletfaces-bridge/liferay-ide" );
+	}
+
+
+	@Override
 	public IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject) {
 		/*
 		 * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
@@ -120,7 +127,6 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 
 		return Status.OK_STATUS;
 	}
-
 
 	protected IProjectFacetVersion getJSFProjectFacet(IFacetedProjectWorkingCopy project) {
 		Set<IProjectFacetVersion> facets = project.getProjectFacets();

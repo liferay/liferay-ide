@@ -359,8 +359,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			Version requiredSDKVersion = new Version(framework.getRequiredSDKVersion());
 
 			if (sdkVersion.compareTo(requiredSDKVersion) < 0) {
-				return ProjectCorePlugin.createErrorStatus("At least SDK version " + requiredSDKVersion +
-					" is required to use the selected portlet framework.");
+				return framework.getUnsupportedSDKErrorMsg();
 			}
 			else {
 				return Status.OK_STATUS;
