@@ -53,10 +53,11 @@
 
   <properties>
     <tycho-version>0.13.0-SNAPSHOT</tycho-version>
-    <platform-version-name>indigo</platform-version-name>
+    <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
     <sapphire-site>http://download.eclipse.org/sapphire/0.3.0/repository</sapphire-site>
+    <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.0</graphiti-site>
 	<wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
 
@@ -115,6 +116,11 @@
       <id>sapphire</id>
       <layout>p2</layout>
       <url>${sapphire-site}</url>
+    </repository>
+    <repository>
+      <id>graphiti</id>
+      <layout>p2</layout>
+      <url>${graphiti-site}</url>
     </repository>
 	<repository>
 		<id>wtp</id>
@@ -253,37 +259,5 @@
       </plugins>
     </pluginManagement>
   </build>
-  
-  <profiles>
-    <profile>
-      <id>platform-helios</id>
-      <activation>
-      	<property>
-          <name>platform-version-name</name>
-          <value>helios</value>
-        </property>
-      </activation>
-      <properties>
-        <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
-        <platform-version>[3.6,3.7)</platform-version>
-        <swtbot-site>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</swtbot-site>
-      </properties>
-    </profile>
-    <profile>
-      <id>platform-indigo</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-        <property>
-          <name>platform-version-name</name>
-          <value>indigo</value>
-        </property>
-      </activation>
-      <properties>
-        <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
-        <platform-version>[3.7,3.8)</platform-version>
-        <swtbot-site>http://download.eclipse.org/technology/swtbot/indigo/dev-build/update-site</swtbot-site>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>
