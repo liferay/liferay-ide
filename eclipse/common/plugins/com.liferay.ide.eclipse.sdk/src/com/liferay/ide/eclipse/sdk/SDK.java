@@ -15,11 +15,13 @@
 
 package com.liferay.ide.eclipse.sdk;
 
+import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.sdk.util.SDKHelper;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -54,6 +56,9 @@ public class SDK {
 	private static final String MSG_MANAGED_BY_LIFERAY_IDE =
 		"Managed by Liferay IDE (remove this comment to prevent future updates)";
 
+	private static final String PROJECT_FILE_PATTERN =
+		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<projectDescription>\n\t<name>{0}</name>\n\t<comment></comment>\n\t<projects></projects>\n\t<buildSpec></buildSpec>\n\t<natures></natures>\n</projectDescription>\n";
+
 	public static String createXMLNameValuePair(String name, String value) {
 		return name + "=\"" + value + "\" ";
 	}
@@ -79,6 +84,29 @@ public class SDK {
 
 	public SDK(IPath location) {
 		this.location = location;
+	}
+
+	public void addProjectFile() {
+		if ( hasProjectFile() ) {
+			return;
+		}
+
+		if (this.location.toFile().exists()) {
+			//check for existing project file
+			File projectFile = this.location.append( ".project" ).toFile();
+			
+			if (!projectFile.exists()) {
+				try {
+					FileUtil.writeFileFromStream(
+						projectFile,
+						new ByteArrayInputStream( MessageFormat.format(
+							PROJECT_FILE_PATTERN, new Object[] { this.name } ).getBytes( "UTF-8" ) ) );
+				}
+				catch ( Exception e ) {
+					SDKPlugin.logError( e );
+				}
+			}
+		}
 	}
 
 	public IStatus buildLanguage(IProject project, IFile langFile, Map<String, String> overrideProperties) {
@@ -406,6 +434,10 @@ public class SDK {
 
 	public String getVersion() {
 		return version;
+	}
+
+	public boolean hasProjectFile() {
+		return this.location != null && this.location.append( ".project" ).toFile().exists();
 	}
 
 	public boolean isContributed() {

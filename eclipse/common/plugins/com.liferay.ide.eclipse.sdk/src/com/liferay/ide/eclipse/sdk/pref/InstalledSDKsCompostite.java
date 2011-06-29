@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.sdk.pref;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.SDKPlugin;
@@ -25,6 +26,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -53,7 +60,6 @@ import org.eclipse.swt.widgets.TableColumn;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
 public class InstalledSDKsCompostite extends Composite {
 
 	protected class SDKContentProvider implements IStructuredContentProvider {
@@ -116,6 +122,7 @@ public class InstalledSDKsCompostite extends Composite {
 
 	protected Button fAddButton;
 	protected Button fEditButton;
+	protected Button fOpenInEclipse;
 	protected ISelection fPrevSelection;
 	protected Button fRemoveButton;
 	protected PreferencePage page;
@@ -164,6 +171,15 @@ public class InstalledSDKsCompostite extends Composite {
 
 			SDK newSDK = SDKUtil.createSDKFromLocation(new Path(dialog.getLocation()));
 			newSDK.setName(name);
+
+			if ( dialog.getAddProject() ) {
+				newSDK.addProjectFile();
+
+				if ( dialog.getOpenInEclipse() ) {
+					openInEclipse( newSDK );
+				}
+			}
+
 
 			sdkList.add(newSDK);
 
@@ -259,6 +275,15 @@ public class InstalledSDKsCompostite extends Composite {
 			}
 
 		});
+
+		fOpenInEclipse = SWTUtil.createPushButton( buttons, "Open in Eclipse", null );
+		fOpenInEclipse.addListener( SWT.Selection, new Listener() {
+
+			public void handleEvent( Event event ) {
+				openInEclipse( getFirstSelectedSDK() );
+			}
+
+		} );
 	
 		setSDKs(SDKManager.getInstance().getSDKs());
 
@@ -308,13 +333,13 @@ public class InstalledSDKsCompostite extends Composite {
 			}
 
 			fEditButton.setEnabled(true);
-
 			fRemoveButton.setEnabled(true);
+			fOpenInEclipse.setEnabled( true );
 		}
 		else {
 			fEditButton.setEnabled(false);
-
 			fRemoveButton.setEnabled(false);
+			fOpenInEclipse.setEnabled( false );
 		}
 	}
 
@@ -346,6 +371,32 @@ public class InstalledSDKsCompostite extends Composite {
 
 	protected boolean isContributed(SDK install) {
 		return install.isContributed();
+	}
+
+	protected void openInEclipse( SDK sdk ) {
+		if ( !sdk.hasProjectFile() ) {
+			sdk.addProjectFile();
+		}
+
+		IProject sdkProject = CoreUtil.getProject( sdk.getName() );
+
+		if ( sdkProject == null || ( !sdkProject.exists() ) ) {
+			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+
+			IProjectDescription description = workspace.newProjectDescription( sdk.getName() );
+			description.setLocationURI( sdk.getLocation().toFile().toURI() );
+
+			IProgressMonitor npm = new NullProgressMonitor();
+
+			try {
+				sdkProject.create( description, npm );
+				sdkProject.open( npm );
+			}
+			catch ( Exception e ) {
+				SDKPlugin.logError( e );
+			}
+		}
 	}
 
 	protected void removeSDKs(SDK[] sdks) {

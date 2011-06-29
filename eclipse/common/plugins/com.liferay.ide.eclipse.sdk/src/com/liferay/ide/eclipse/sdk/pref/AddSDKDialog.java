@@ -69,6 +69,10 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 	protected Combo serverTargetCombo;
 
+	protected boolean shouldAddProject = true;
+
+	protected boolean shouldOpenInEclipse = false;
+
 	public AddSDKDialog(Shell parent, SDK[] existingSDKs) {
 		super(parent);
 		configure(existingSDKs);
@@ -80,12 +84,20 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		configure(existingSDKs);
 	}
 
+	public boolean getAddProject() {
+		return this.shouldAddProject;
+	}
+
 	public String getLocation() {
 		return lastLocation;
 	}
 
 	public String getName() {
 		return lastName;
+	}
+
+	public boolean getOpenInEclipse() {
+		return this.shouldOpenInEclipse;
 	}
 
 	public void modifyText(ModifyEvent e) {
@@ -155,6 +167,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 			}
 
 		});
+
 		if (sdkToEdit == null) {
 			location.addModifyListener(this);
 		}
@@ -175,7 +188,40 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 		name.addModifyListener(this);
 
-		SWTUtil.createLabel(container, "", 1);
+		SWTUtil.createLabel( container, "", 1 );// spacer
+
+		SWTUtil.createLabel( container, "", 1 );// spacer
+
+		final Button addProject =
+			SWTUtil.createCheckButton( container, "Add Eclipse .project file (if it does not exist).", null, true, 1 );
+
+
+		SWTUtil.createLabel( container, "", 1 ); // spacer
+
+		SWTUtil.createLabel( container, "", 1 );// spacer
+
+		final Button openInEclipse = SWTUtil.createCheckButton( container, "Open in Eclipse", null, true, 1 );
+		openInEclipse.addSelectionListener( new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected( SelectionEvent e ) {
+				AddSDKDialog.this.shouldOpenInEclipse = openInEclipse.getSelection();
+			}
+		} );
+
+		openInEclipse.setEnabled( shouldAddProject );
+		openInEclipse.setSelection( shouldOpenInEclipse );
+
+		addProject.addSelectionListener( new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected( SelectionEvent e ) {
+				boolean selection = addProject.getSelection();
+				AddSDKDialog.this.shouldAddProject = selection;
+				openInEclipse.setEnabled( selection );
+			}
+
+		} );
 
 		if (sdkToEdit != null) {
 			validate();
