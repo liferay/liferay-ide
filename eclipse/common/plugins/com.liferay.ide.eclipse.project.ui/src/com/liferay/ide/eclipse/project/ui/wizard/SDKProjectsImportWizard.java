@@ -17,6 +17,7 @@ package com.liferay.ide.eclipse.project.ui.wizard;
 
 import com.liferay.ide.eclipse.project.core.SDKProjectsImportDataModelProvider;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
+import com.liferay.ide.eclipse.sdk.SDK;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
@@ -31,10 +32,12 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 @SuppressWarnings("restriction")
 public class SDKProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard {
 
-	private SDKProjectsImportWizardPage sdkProjectsImportWizardPage;
+	protected SDKProjectsImportWizardPage sdkProjectsImportWizardPage;
+
+	protected SDK sdk;
 
 	public SDKProjectsImportWizard() {
-		this(null);
+		this( (IDataModel) null );
 	}
 
 	public SDKProjectsImportWizard(IDataModel dataModel) {
@@ -44,6 +47,12 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
 		
 		setDefaultPageImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
 			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
+	}
+
+	public SDKProjectsImportWizard( SDK sdk ) {
+		this( (IDataModel) null );
+
+		this.sdk = sdk;
 	}
 
 	@Override
@@ -56,10 +65,16 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
 
 	@Override
 	protected void doAddPages() {
+		if ( sdk != null ) {
+			IDataModel model = getDataModel();
+			model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
+		}
+
 		sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage(getDataModel(), "pageOne");
-		
+
 		addPage(sdkProjectsImportWizardPage);
 	}
+
 
 	@Override
 	protected IDataModelProvider getDefaultProvider() {
@@ -70,5 +85,6 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
 	protected boolean runForked() {
 		return false;
 	}
+
 
 }

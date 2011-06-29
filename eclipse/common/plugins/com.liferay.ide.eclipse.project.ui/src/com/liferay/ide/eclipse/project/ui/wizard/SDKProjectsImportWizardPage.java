@@ -20,6 +20,8 @@ import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelPropertie
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
+import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import java.io.File;
@@ -543,6 +545,19 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		createTargetRuntimeGroup(topComposite);
 
 		return topComposite;
+	}
+
+	@Override
+	protected void enter() {
+		String sdkName = getDataModel().getStringProperty( LIFERAY_SDK_NAME );
+
+		if ( sdkName != null ) {
+			SDK initialSdk = SDKManager.getInstance().getSDK( sdkName );
+
+			if ( initialSdk != null ) {
+				updateProjectsList( initialSdk.getLocation().toOSString() );
+			}
+		}
 	}
 
 	// @Override

@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.project.core.LiferayProjectImportDataModelProvide
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
@@ -33,9 +34,10 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 public class LiferayProjectImportWizard extends DataModelWizard implements IWorkbenchWizard, INewProjectWizard {
 
 	protected LiferayProjectImportWizardPage liferayProjectImportWizardPage;
+	protected IFolder folder;
 
 	public LiferayProjectImportWizard() {
-		this(null);
+		this( (IDataModel) null );
 	}
 
 	public LiferayProjectImportWizard(IDataModel dataModel) {
@@ -45,6 +47,12 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 		setDefaultPageImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
 			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
 		setNeedsProgressMonitor(true);
+	}
+
+	public LiferayProjectImportWizard( IFolder folder ) {
+		this( (IDataModel) null );
+
+		this.folder = folder;
 	}
 
 	@Override
@@ -57,8 +65,18 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 
 	@Override
 	protected void doAddPages() {
+		if (folder != null) {
+			IDataModel model = getDataModel();
+			model.setProperty(
+				LiferayProjectImportDataModelProvider.PROJECT_LOCATION, folder.getRawLocation().toOSString() );
+
+		}
+		
 		liferayProjectImportWizardPage = new LiferayProjectImportWizardPage(getDataModel(), "pageOne", this);
-		liferayProjectImportWizardPage.setWizard(this);
+
+		if ( folder != null ) {
+			liferayProjectImportWizardPage.updateProjectRecord( folder.getRawLocation().toOSString() );
+		}
 		
 		addPage(liferayProjectImportWizardPage);
 	}

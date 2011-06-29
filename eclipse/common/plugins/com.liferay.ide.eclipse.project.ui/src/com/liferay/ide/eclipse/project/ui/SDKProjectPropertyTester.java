@@ -18,20 +18,16 @@ package com.liferay.ide.eclipse.project.ui;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 /**
  * @author Greg Amerson
  */
-public class LiferayProjectPropertyTester extends PropertyTester {
+public class SDKProjectPropertyTester extends PropertyTester {
 
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
 		if (receiver instanceof IProject) {
-			return ProjectUtil.isLiferayProject((IProject) receiver);
-		}
-		else if ( receiver instanceof IFolder ) {
-			return ProjectUtil.isLiferayProject( (IFolder) receiver );
+			return ProjectUtil.isSDKProject( (IProject) receiver );
 		}
 		
 		return false;

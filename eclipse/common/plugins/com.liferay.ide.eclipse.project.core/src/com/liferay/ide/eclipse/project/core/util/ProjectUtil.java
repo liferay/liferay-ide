@@ -724,6 +724,11 @@ public class ProjectUtil {
 				ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith(type) || ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith(type));
 	}
 
+	public static boolean isLiferayProject( IFolder folder ) {
+		return folder != null && folder.exists() && folder.getRawLocation() != null &&
+			isLiferayProjectDir( folder.getRawLocation().toFile() );
+	}
+
 	public static boolean isLiferayProject(IProject project) {
 		boolean retval = false;
 
@@ -803,6 +808,14 @@ public class ProjectUtil {
 
 	public static boolean isPortletProject(IProject project) {
 		return hasFacet(project, IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET);
+	}
+
+	public static boolean isSDKProject( IProject project ) {
+		if (project == null || (!project.exists()) || (!project.isAccessible())) {
+			return false;
+		}
+		
+		return SDKUtil.isValidSDKLocation( project.getLocation().toOSString() );
 	}
 
 	public static boolean isThemeProject(IProject project) {

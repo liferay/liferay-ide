@@ -217,7 +217,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 		}
 	}
 
-	protected void updateProjectRecord(String projectLocation) {
+	protected void updateProjectRecord( String projectLocation ) {
 		if (CoreUtil.isNullOrEmpty(projectLocation)) {
 			return;
 		}
