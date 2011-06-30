@@ -18,24 +18,26 @@ The portlet element contains the declarative data of a portlet.
 -->
 <!ELEMENT portlet (portlet-name, icon?, virtual-path?, struts-path?,
 parent-struts-path?, configuration-path?, configuration-action-class?,
-indexer-class?, open-search-class?, scheduler-entry*, portlet-url-class?,
+indexer-class*, open-search-class?, scheduler-entry*, portlet-url-class?,
 friendly-url-mapper-class?, friendly-url-mapping?, friendly-url-routes?,
 url-encoder-class?, portlet-data-handler-class?, portlet-layout-listener-class?,
 poller-processor-class?, pop-message-listener-class?,
 social-activity-interpreter-class?, social-request-interpreter-class?,
 webdav-storage-token?, webdav-storage-class?, xml-rpc-method-class?,
 control-panel-entry-category?, control-panel-entry-weight?,
-control-panel-entry-class?, asset-renderer-factory*, custom-attributes-display*,
-workflow-handler*, preferences-company-wide?, preferences-unique-per-layout?,
-preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
-show-portlet-inactive?, action-url-redirect?, restore-current-view?,
-maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
-remoteable?, scopeable?, user-principal-strategy?, private-request-attributes?,
-private-session-attributes?, action-timeout?, render-timeout?, render-weight?,
-ajaxable?, header-portal-css*, header-portlet-css*, header-portal-javascript*,
-header-portlet-javascript*, footer-portal-css*, footer-portlet-css*,
-footer-portal-javascript*, footer-portlet-javascript*, css-class-wrapper?,
-facebook-integration?, add-default-resource?, system?, active?, include?)>
+control-panel-entry-class?, asset-renderer-factory*, atom-collection-adapter*,
+custom-attributes-display*, workflow-handler*, preferences-company-wide?,
+preferences-unique-per-layout?, preferences-owned-by-group?,
+use-default-template?, show-portlet-access-denied?, show-portlet-inactive?,
+action-url-redirect?, restore-current-view?, maximize-edit?, maximize-help?,
+pop-up-print?, layout-cacheable?, instanceable?, remoteable?, scopeable?,
+user-principal-strategy?, private-request-attributes?,
+private-session-attributes?, autopropagated-parameters?, action-timeout?,
+render-timeout?, render-weight?, ajaxable?, header-portal-css*,
+header-portlet-css*, header-portal-javascript*, header-portlet-javascript*,
+footer-portal-css*, footer-portlet-css*, footer-portal-javascript*,
+footer-portlet-javascript*, css-class-wrapper?, facebook-integration?,
+add-default-resource?, system?, active?, include?)>
 
 <!--
 The portlet-name element contains the unique name of the portlet. This name must
@@ -374,6 +376,12 @@ http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portlet/a
 <!ELEMENT asset-renderer-factory (#PCDATA)>
 
 <!--
+The atom-collection-adapter value must be a class that implements
+com.liferay.portal.kernel.atom.AtomCollectionAdapter.
+-->
+<!ELEMENT atom-collection-adapter (#PCDATA)>
+
+<!--
 The custom-attributes-display value must be a class that implements
 com.liferay.portlet.expando.model.CustomAttributesDisplay and is called by the
 custom fields administration UI.
@@ -574,6 +582,12 @@ session attributes with the portal. The default value is true. The property
 attributes are shared even when the private-session-attributes value is true.
 -->
 <!ELEMENT private-session-attributes (#PCDATA)>
+
+<!--
+Set the autopropagated-parameters value to a comma delimited list of parameter
+names that will be automatically propagated through the portlet.
+-->
+<!ELEMENT autopropagated-parameters (#PCDATA)>
 
 <!--
 The default value of action-timeout is 0. If set to a value greater than 0,

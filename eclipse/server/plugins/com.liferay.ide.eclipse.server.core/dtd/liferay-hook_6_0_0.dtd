@@ -57,6 +57,7 @@ layout.user.public.layouts.enabled
 layout.user.public.layouts.modifiable
 layout.user.public.layouts.power.user.required
 ldap.attrs.transformer.impl
+locales.beta
 login.create.account.allow.custom.password
 login.events.post
 login.events.pre
@@ -78,6 +79,7 @@ servlet.session.destroy.events
 servlet.service.events.post
 servlet.service.events.pre
 session.phishing.protected.attributes
+session.store.password
 terms.of.use.required
 theme.css.fast.load
 theme.images.fast.load

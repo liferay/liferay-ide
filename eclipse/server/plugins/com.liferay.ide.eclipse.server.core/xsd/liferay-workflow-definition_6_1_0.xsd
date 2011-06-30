@@ -36,9 +36,13 @@
 	<xs:element name="condition">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element ref="name" />
 				<xs:element ref="description" minOccurs="0" />
 				<xs:element ref="script" />
 				<xs:element ref="script-language" />
+				<xs:element ref="actions" minOccurs="0" />
+				<xs:element ref="timers" minOccurs="0" />
+				<xs:element ref="transitions" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -151,7 +155,6 @@
 				<xs:element name="role-type" minOccurs="0" default="regular">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:enumeration value="community" />
 							<xs:enumeration value="regular" />
 							<xs:enumeration value="organization" />
 							<xs:enumeration value="site" />
@@ -240,7 +243,6 @@
 				<xs:element ref="name" />
 				<xs:element name="target" type="xs:string" />
 				<xs:element name="default" type="xs:boolean" minOccurs="0" default="true" />
-				<xs:element ref="condition" minOccurs="0" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -303,6 +305,7 @@
 	</xs:group>
 	<xs:group name="nodes-group">
 		<xs:choice>
+			<xs:element ref="condition" />
 			<xs:element ref="fork" />
 			<xs:element ref="join" />
 			<xs:element ref="state" />

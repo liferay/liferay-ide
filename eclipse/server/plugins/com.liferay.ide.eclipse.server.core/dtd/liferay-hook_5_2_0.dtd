@@ -45,9 +45,11 @@ layout.types
 layout.user.private.layouts.auto.create
 layout.user.private.layouts.enabled
 layout.user.private.layouts.modifiable
+layout.user.private.layouts.power.user.required
 layout.user.public.layouts.auto.create
 layout.user.public.layouts.enabled
 layout.user.public.layouts.modifiable
+layout.user.public.layouts.power.user.required
 ldap.attrs.transformer.impl
 login.create.account.allow.custom.password
 login.events.post
