@@ -839,5 +839,41 @@
             type="java.lang.Object">
       </propertyTester>
    </extension>
+   <extension
+         point="org.eclipse.wst.server.core.runtimeTypes">
+      <runtimeType
+            class="com.liferay.ide.eclipse.server.core.LiferayRuntime"
+            description="Liferay Runtime"
+            id="com.liferay.ide.eclipse.server.runtime"
+            name="Liferay Runtime"
+            vendor="Liferay, Inc.">
+      </runtimeType>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.serverTypes">
+      <serverType
+            behaviourClass="com.liferay.ide.eclipse.server.remote.RemoteServerBehavior"
+            class="com.liferay.ide.eclipse.server.remote.RemoteServer"
+            description="Liferay Portal Server running at a remote IP address"
+            hasConfiguration="true"
+            id="com.liferay.ide.eclipse.server.remote"
+            name="Remote Liferay Server"
+            runtime="false"
+            runtimeTypeId="com.liferay.ide.eclipse.server.runtime"
+            supportsRemoteHosts="true">
+      </serverType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="com.liferay.ide.eclipse.server.remote.RemoteLaunchConfigDelegate"
+            id="com.liferay.ide.eclipse.server.remote.launchConfigurationType"
+            modes="run, debug"
+            name="Liferay Server (Remote)"
+            public="true"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+            sourcePathComputerId="org.eclipse.jst.server.generic.core.sourcePathComputer">
+      </launchConfigurationType>
+   </extension>
 
 </plugin>
