@@ -153,4 +153,13 @@
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
       </liferayPluginPublisher>
    </extension>
+ <extension
+       point="com.liferay.ide.eclipse.server.core.runtimeStubs">
+    <liferayRuntimeStub
+          class="com.liferay.ide.eclipse.server.tomcat.core.LiferayRuntimeStub"
+          default="true"
+          name="Liferay Tomcat Bundle"
+          runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+    </liferayRuntimeStub>
+ </extension>
 </plugin>

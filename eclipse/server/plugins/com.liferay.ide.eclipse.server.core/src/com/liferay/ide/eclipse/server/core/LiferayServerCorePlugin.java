@@ -17,14 +17,21 @@ package com.liferay.ide.eclipse.server.core;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.server.remote.IRemoteConnection;
+import com.liferay.ide.eclipse.server.remote.IRemoteServer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerLifecycleListener;
+import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 import org.osgi.framework.BundleContext;
 
@@ -38,12 +45,16 @@ public class LiferayServerCorePlugin extends CorePlugin {
 	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.server.core";
 
+	private static Map<String, IRemoteConnection> connections = null;
+
 	// The shared instance
 	private static LiferayServerCorePlugin plugin;
 
 	private static IPluginPublisher[] pluginPublishers = null;
 
 	private static IRuntimeDelegateValidator[] runtimeDelegateValidators;
+
+	private static ILiferayRuntimeStub[] runtimeStubs;
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(PLUGIN_ID, msg);
@@ -197,5 +208,108 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 		super.stop(context);
 
+	}
+
+	public static ILiferayRuntimeStub[] getRuntimeStubs() {
+		if ( runtimeStubs == null ) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor( ILiferayRuntimeStub.EXTENSION_ID );
+
+			if ( !CoreUtil.isNullOrEmpty( elements ) ) {
+				List<ILiferayRuntimeStub> stubs = new ArrayList<ILiferayRuntimeStub>();
+
+				for ( IConfigurationElement element : elements ) {
+					String runtimeTypeId = element.getAttribute( ILiferayRuntimeStub.RUNTIME_TYPE_ID );
+					String name = element.getAttribute( ILiferayRuntimeStub.NAME );
+					boolean isDefault = Boolean.parseBoolean( element.getAttribute( ILiferayRuntimeStub.DEFAULT ) );
+
+					try {
+						LiferayRuntimeStub stub = new LiferayRuntimeStub();
+						stub.setRuntimeTypeId( runtimeTypeId );
+						stub.setName( name );
+						stub.setDefault( isDefault );
+
+						stubs.add( stub );
+					}
+					catch ( Exception e ) {
+						logError( "Could not create liferay runtime stub.", e );
+					}
+				}
+
+				runtimeStubs = stubs.toArray( new ILiferayRuntimeStub[0] );
+			}
+		}
+
+		return runtimeStubs;
+	}
+
+	public static ILiferayRuntimeStub getRuntimeStub( String stubTypeId ) {
+		ILiferayRuntimeStub retval = null;
+
+		ILiferayRuntimeStub[] stubs = getRuntimeStubs();
+
+		if ( !CoreUtil.isNullOrEmpty( stubs ) ) {
+			for ( ILiferayRuntimeStub stub : stubs ) {
+				if ( stub.getRuntimeStubTypeId().equals( stubTypeId ) ) {
+					retval = stub;
+					break;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	public static void updateConnectionSettings( IRemoteServer server ) {
+		updateConnectionSettings( server, getRemoteConnection( server ) );
+	}
+
+	public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection service ) {
+		// Map options = new HashMap();
+		// options.put("connectorHost", server.getHost());
+		// options.put("connectorPort", server.getSOAPPort());
+		// options.put("connectorType", "SOAP");
+		// options.put("securityEnabled", server.getSecurityEnabled());
+		// options.put(IWebsphereServer.ATTR_USERNAME, server.getUsername());
+		// options.put(IWebsphereServer.ATTR_PASSWORD, server.getPassword());
+		// service.setOptions(options);
+	}
+
+	public static IRemoteConnection getRemoteConnection( final IRemoteServer server ) {
+		if ( connections == null ) {
+			connections = new HashMap<String, IRemoteConnection>();
+
+			ServerCore.addServerLifecycleListener( new IServerLifecycleListener() {
+
+				public void serverAdded( IServer server ) {
+				}
+
+				public void serverChanged( IServer server ) {
+				}
+
+				public void serverRemoved( IServer s ) {
+					if ( server.equals( s ) ) {
+						IRemoteConnection service = connections.get( server.getId() );
+
+						if ( service != null ) {
+							service = null;
+							connections.put( server.getId(), null );
+						}
+					}
+				}
+			} );
+		}
+
+		IRemoteConnection service = connections.get( server.getId() );
+
+		if ( service == null ) {
+			service = new RemoteConnection();
+
+			updateConnectionSettings( server, service );
+
+			connections.put( server.getId(), service );
+		}
+
+		return service;
 	}
 }

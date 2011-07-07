@@ -29,11 +29,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunch;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 import org.eclipse.wst.server.core.IRuntime;
@@ -244,4 +250,67 @@ public class ServerUtil {
 
 	}
 
+	public static boolean isLiferayProject( IProject project ) {
+		boolean retval = false;
+
+		if ( project == null ) {
+			return retval;
+		}
+
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+
+			if ( facetedProject != null ) {
+				for ( IProjectFacetVersion facet : facetedProject.getProjectFacets() ) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
+
+					if ( projectFacet.getId().startsWith( "liferay" ) ) {
+						retval = true;
+						break;
+					}
+				}
+			}
+		}
+		catch ( Exception e ) {
+		}
+
+		return retval;
+	}
+
+	public static boolean isExtProject( IProject project ) {
+		return hasFacet( project, ProjectFacetsManager.getProjectFacet( "liferay.ext" ) );
+	}
+
+	public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet ) {
+		boolean retval = false;
+		if ( project == null || checkProjectFacet == null ) {
+			return retval;
+		}
+
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+			if ( facetedProject != null && checkProjectFacet != null ) {
+				for ( IProjectFacetVersion facet : facetedProject.getProjectFacets() ) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
+					if ( checkProjectFacet.equals( projectFacet ) ) {
+						retval = true;
+						break;
+					}
+				}
+			}
+		}
+		catch ( CoreException e ) {
+		}
+		return retval;
+	}
+
+	public static void terminateLaunchesForConfig( ILaunchConfigurationWorkingCopy config ) throws DebugException {
+		ILaunch[] launches = DebugPlugin.getDefault().getLaunchManager().getLaunches();
+
+		for ( ILaunch launch : launches ) {
+			if ( launch.getLaunchConfiguration().equals( config ) ) {
+				launch.terminate();
+			}
+		}
+	}
 }

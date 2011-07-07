@@ -124,6 +124,72 @@
             id="com.liferay.ide.eclipse.server.remote.image"
             typeIds="com.liferay.ide.eclipse.server.remote">
       </image>
+      <image
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.eclipse.server.runtime.stub.image"
+            typeIds="com.liferay.ide.eclipse.server.runtime.stub">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.ui.wizardFragments">
+      <fragment
+            class="com.liferay.ide.eclipse.server.ui.wizard.LiferayRuntimeStubWizardFragment"
+            id="com.liferay.ide.eclipse.server.runtime.stub.fragment"
+            typeIds="com.liferay.ide.eclipse.server.runtime.stub">
+      </fragment>
+      <fragment
+            class="com.liferay.ide.eclipse.server.ui.wizard.RemoteServerWizardFragment"
+            id="com.liferay.ide.eclipse.server.remote.fragment"
+            typeIds="com.liferay.ide.eclipse.server.remote">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="com.liferay.ide.eclipse.server.ui.RemoteLaunchConfigTabGroup"
+            id="com.liferay.ide.eclipse.server.remote.launchConfigurationTabGroup"
+            type="com.liferay.ide.eclipse.server.remote.launchConfigurationType">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="com.liferay.ide.eclipse.server.remote.launchConfigurationType"
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.eclipse.server.remote.launchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.runtimes">
+      <adapter>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.runtime.stub.component">
+         </runtime-component>
+         <factory
+               class="com.liferay.ide.eclipse.server.ui.LiferayRuntimeStubFacetComponentLabelProvider">
+         </factory>
+         <type
+               class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider">
+         </type>
+      </adapter>
+      <adapter>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.runtime.stub.component">
+         </runtime-component>
+         <factory
+               class="com.liferay.ide.eclipse.server.ui.LiferayRuntimeStubDecorationsProvider">
+         </factory>
+         <type
+               class="org.eclipse.wst.common.project.facet.ui.IDecorationsProvider">
+         </type>
+      </adapter>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.ui.images">
+      <image
+            path="icons/e16/server.png"
+            runtime-component-type="com.liferay.ide.eclipse.server.runtime.stub.component">
+      </image>
    </extension>
    
    
