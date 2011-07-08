@@ -194,7 +194,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 	}
 
 	protected IStatus checkDescriptorFile(IProject project) {
-		IFolder docroot = ProjectUtil.getDocroot(project);
+		IFolder docroot = CoreUtil.getDocroot( project );
 
 		IFile hookDescriptorFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE);
 

@@ -15,10 +15,10 @@
 
 package com.liferay.ide.eclipse.layouttpl.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.eclipse.layouttpl.ui.util.LayoutTplUtil;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 import com.liferay.ide.eclipse.ui.wizard.LiferayDataModelWizardPage;
 
@@ -186,7 +186,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
 	@Override
 	protected IFolder getDocroot() {
-		return ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+		return CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	@Override

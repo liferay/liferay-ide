@@ -13,16 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.tomcat.core.util;
+package com.liferay.ide.eclipse.server.util;
 
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.IPluginPublisher;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
-import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -45,10 +41,10 @@ public class LiferayPublishHelper {
 		if (moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null) {
 			IProject project = moduleTree[0].getProject();
 
-			IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
+			IFacetedProject facetedProject = ServerUtil.getFacetedProject( project );
 
 			if (facetedProject != null) {
-				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
+				IProjectFacet liferayFacet = ServerUtil.getLiferayFacet( facetedProject );
 
 				if (liferayFacet != null) {
 					String facetId = liferayFacet.getId();
@@ -57,25 +53,20 @@ public class LiferayPublishHelper {
 
 					try {
 						runtime = ServerUtil.getRuntime(project);
-					}
-					catch (CoreException ce) {
-						// do nothing
-					}
 
-					if (runtime != null) {
-						IPluginPublisher pluginPublisher =
-							LiferayServerCorePlugin.getPluginPublisher(facetId, runtime.getRuntimeType().getId());
+						if ( runtime != null ) {
+							IPluginPublisher pluginPublisher =
+								LiferayServerCorePlugin.getPluginPublisher( facetId, runtime.getRuntimeType().getId() );
 
-						if (pluginPublisher != null) {
-							try {
+							if ( pluginPublisher != null ) {
 								retval =
 									pluginPublisher.prePublishModule(
-										delegate, kind, deltaKind, moduleTree, resourceDelta, monitor);
-							}
-							catch (Exception e) {
-								LiferayTomcatPlugin.logError("Plugin publisher failed", e);
+										delegate, kind, deltaKind, moduleTree, resourceDelta, monitor );
 							}
 						}
+					}
+					catch ( Exception e ) {
+						LiferayServerCorePlugin.logError( "Plugin publisher failed", e );
 					}
 				}
 			}

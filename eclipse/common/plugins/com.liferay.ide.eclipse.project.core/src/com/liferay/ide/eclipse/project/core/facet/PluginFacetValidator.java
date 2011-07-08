@@ -17,8 +17,8 @@ package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ValidationPreferences;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ProjectScope;
@@ -74,7 +74,7 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator {
 		SDK projectSDK = null;
 
 		try {
-			projectSDK = ProjectUtil.getSDK( fproj.getProject() );
+			projectSDK = SDKUtil.getSDK( fproj.getProject() );
 		}
 		catch (Exception e) {
 			ProjectCorePlugin.logError(e);

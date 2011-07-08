@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
 import java.io.InputStream;
@@ -148,7 +149,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		IFile serviceJar = ProjectUtil.findServiceJarForContext(context);
 
 		if (serviceJar.exists()) {
-			IFolder docroot = ProjectUtil.getDocroot(serviceJar.getProject());
+			IFolder docroot = CoreUtil.getDocroot(serviceJar.getProject());
 			IFolder serviceFolder = docroot.getFolder("WEB-INF/service");
 
 			entry =
@@ -159,7 +160,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		if (entry == null) {
 			IProject project = this.javaProject.getProject();
 
-			SDK sdk = ProjectUtil.getSDK(project);
+			SDK sdk = SDKUtil.getSDK( project );
 
 			IPath sdkLocation = sdk.getLocation();
 

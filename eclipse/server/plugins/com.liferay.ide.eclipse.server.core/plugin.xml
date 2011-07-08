@@ -867,6 +867,7 @@
             description="Liferay Portal Server running at a remote IP address"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.remote"
+            launchConfigId="com.liferay.ide.eclipse.server.remote.launchConfigurationType"
             name="Remote Liferay Server"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.runtime.stub"

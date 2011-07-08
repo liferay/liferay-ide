@@ -132,7 +132,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 	}
 
 	protected IFolder getDocroot() {
-		return ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+		return CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	@Override

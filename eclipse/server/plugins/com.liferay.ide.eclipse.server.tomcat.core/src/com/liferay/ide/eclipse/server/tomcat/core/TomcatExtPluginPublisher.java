@@ -17,8 +17,12 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
+
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -98,7 +102,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 		SDK sdk = null;
 		IProject project = module.getProject();
 
-		sdk = ProjectUtil.getSDK( project );
+		sdk = SDKUtil.getSDK( project );
 
 		if (sdk == null) {
 			throw new CoreException(
@@ -112,7 +116,9 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher {
 			LiferayTomcatUtil.syncStopServer(delegate.getServer());
 		}
 
-		IStatus status = sdk.directDeploy(project, null, true);
+		Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+		IStatus status = sdk.directDeploy( project, null, true, appServerProperties );
 
 		assertStatus(status);
 

@@ -11,6 +11,8 @@
 
 package com.liferay.ide.eclipse.server.remote;
 
+import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
+
 import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
@@ -18,26 +20,50 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMConnector;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Greg Amerson
  */
 public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate {
 
-	// public static final String HAS_WSADMIN_CONNECTION = "has-wsadmin-connection";
-
 	public static final String SERVER_ID = "server-id";
 
 	public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor)
 		throws CoreException {
 
+		String serverId = configuration.getAttribute( SERVER_ID, "" );
+		IServer server = ServerCore.findServer( serverId );
 
+		if ( server == null ) {
+			// server has been deleted
+			launch.terminate();
+			return;
+		}
+
+		int state = server.getServerState();
+
+		if ( state != IServer.STATE_STARTED ) {
+			throw new CoreException(
+				LiferayServerCorePlugin.createErrorStatus( "Server is not running. The WebSphere server adapter only supports connecting to already running instance of WebSphere." ) );
+		}
+
+		if ( ILaunchManager.RUN_MODE.equals( mode ) ) {
+			runLaunch( server, configuration, launch, monitor );
+		}
+		else if ( ILaunchManager.DEBUG_MODE.equals( mode ) ) {
+			debugLaunch( server, configuration, launch, monitor );
+		}
+		else {
+			throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Profile mode is not supported." ) );
+		}
 	}
 
 	@SuppressWarnings({
@@ -109,7 +135,14 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
 		IServer server, ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor)
 		throws CoreException {
 
+		IRemoteConnection connection =
+			LiferayServerCorePlugin.getRemoteConnection( (IRemoteServer) server.loadAdapter(
+				IRemoteServer.class, monitor ) );
 
+		RemoteMonitorProcess process = new RemoteMonitorProcess( server, connection, launch );
+
+		launch.addProcess( process );
 	}
+
 
 }

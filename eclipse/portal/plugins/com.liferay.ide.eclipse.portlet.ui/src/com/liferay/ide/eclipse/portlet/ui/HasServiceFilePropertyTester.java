@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.portlet.ui;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
@@ -36,7 +37,7 @@ public class HasServiceFilePropertyTester extends PropertyTester {
 
 			if (isLiferayProject) {
 				try {
-					IFolder docroot = ProjectUtil.getDocroot(project);
+					IFolder docroot = CoreUtil.getDocroot(project);
 
 					if (docroot != null && docroot.exists()) {
 						IFile serviceFile =

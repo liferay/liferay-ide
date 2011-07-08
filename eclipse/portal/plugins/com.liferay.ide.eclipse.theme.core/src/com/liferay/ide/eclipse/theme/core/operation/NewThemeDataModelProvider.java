@@ -175,7 +175,7 @@ public class NewThemeDataModelProvider extends ArtifactEditOperationDataModelPro
 		}
 		else if (LAYOUT_TEMPLATE_FILE.equals(propertyName)) {
 			IFile templateFile =
-				ProjectUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_TEMPLATE_FILE));
+				CoreUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_TEMPLATE_FILE));
 
 			if (templateFile.exists()) {
 				return ThemeCore.createWarningStatus("Template file already exists and will be overwritten.");
@@ -183,7 +183,7 @@ public class NewThemeDataModelProvider extends ArtifactEditOperationDataModelPro
 		}
 		else if (LAYOUT_WAP_TEMPLATE_FILE.equals(propertyName)) {
 			IFile wapTemplateFile =
-				ProjectUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
+				CoreUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
 
 			if (wapTemplateFile.exists()) {
 				return ThemeCore.createWarningStatus("WAP template file already exists and will be overwritten.");
@@ -191,7 +191,7 @@ public class NewThemeDataModelProvider extends ArtifactEditOperationDataModelPro
 		}
 		else if (LAYOUT_THUMBNAIL_FILE.equals(propertyName)) {
 			IFile thumbnailFile =
-				ProjectUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_THUMBNAIL_FILE));
+				CoreUtil.getDocroot(getTargetProject()).getFile(getStringProperty(LAYOUT_THUMBNAIL_FILE));
 
 			if (thumbnailFile.exists()) {
 				return ThemeCore.createWarningStatus("Thumbnail file already exists and will be overwritten.");

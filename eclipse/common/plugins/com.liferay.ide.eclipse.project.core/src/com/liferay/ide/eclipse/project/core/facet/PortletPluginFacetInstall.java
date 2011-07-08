@@ -23,9 +23,11 @@ import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -64,8 +66,10 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 			String frameworkName = portletFramework.getShortName();
 			
+			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
 			IPath newPortletPath =
-				sdk.createNewPortletProject(portletName, displayName, frameworkName, getLiferayRuntime());
+				sdk.createNewPortletProject( portletName, displayName, frameworkName, appServerProperties );
 
 			processNewFiles(newPortletPath.append(portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX), false);
 
@@ -81,7 +85,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 					// IDE-205 remove view.jsp
 					try {
 						if (fragmentModel.getBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS)) {
-							IFolder docroot = ProjectUtil.getDocroot(this.project);
+							IFolder docroot = CoreUtil.getDocroot(this.project);
 							IFile viewJsp = docroot.getFile("view.jsp");
 							if (viewJsp.exists()) {
 								viewJsp.delete(true, monitor);

@@ -139,7 +139,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		if ( fullPath.lastSegment() != null &&
 			fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ) {
 
-			IFolder docroot = ProjectUtil.getDocroot( delta.getResource().getProject() );
+			IFolder docroot = CoreUtil.getDocroot( delta.getResource().getProject() );
 
 			if ( docroot == null ) {
 				return false;

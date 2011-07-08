@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
@@ -82,7 +83,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 					for (String segment : fullResourcePath.segments()) {
 						if ("_diffs".equals(segment)) {
 							if (docroot == null) {
-								docroot = ProjectUtil.getDocroot(getProject());
+								docroot = CoreUtil.getDocroot(getProject());
 							}
 							
 							IFolder diffs = docroot.getFolder("_diffs");
@@ -131,7 +132,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 	protected boolean shouldFullBuild(Map args)
 		throws CoreException {
 		// check to see if there is any files in the _diffs folder
-		IFolder docroot = ProjectUtil.getDocroot(getProject());
+		IFolder docroot = CoreUtil.getDocroot(getProject());
 
 		if (docroot != null) {
 			IFolder diffs = docroot.getFolder("_diffs");
@@ -151,7 +152,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 	public static IStatus cssBuild(IProject project)
 		throws CoreException {
 
-		SDK sdk = ProjectUtil.getSDK( project );
+		SDK sdk = SDKUtil.getSDK( project );
 
 		if (sdk == null) {
 			throw new CoreException(
@@ -165,13 +166,15 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 				ThemeCore.createErrorStatus("Could not get portal runtime for project.  Could not build theme."));
 		}
 
-		IStatus status = sdk.compileThemePlugin(project, null);
+		Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+		IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
 
 		if (!status.isOK()) {
 			throw new CoreException(status);
 		}
 
-		IFolder docroot = ProjectUtil.getDocroot(project);
+		IFolder docroot = CoreUtil.getDocroot(project);
 
 		IFile lookAndFeelFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE);
 

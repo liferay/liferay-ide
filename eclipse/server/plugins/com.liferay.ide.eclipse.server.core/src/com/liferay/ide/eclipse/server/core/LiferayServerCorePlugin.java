@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -58,6 +59,10 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 	public static IStatus createErrorStatus(String msg) {
 		return createErrorStatus(PLUGIN_ID, msg);
+	}
+
+	public static IStatus createInfoStatus( String msg ) {
+		return new Status( IStatus.INFO, PLUGIN_ID, msg );
 	}
 
 	/**
@@ -264,15 +269,15 @@ public class LiferayServerCorePlugin extends CorePlugin {
 		updateConnectionSettings( server, getRemoteConnection( server ) );
 	}
 
-	public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection service ) {
-		// Map options = new HashMap();
-		// options.put("connectorHost", server.getHost());
-		// options.put("connectorPort", server.getSOAPPort());
-		// options.put("connectorType", "SOAP");
-		// options.put("securityEnabled", server.getSecurityEnabled());
-		// options.put(IWebsphereServer.ATTR_USERNAME, server.getUsername());
-		// options.put(IWebsphereServer.ATTR_PASSWORD, server.getPassword());
-		// service.setOptions(options);
+	public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection remoteConnection ) {
+		remoteConnection.setHost( server.getHost() );
+		remoteConnection.setHttpPort( server.getHTTPPort() );
+		remoteConnection.setManagerContextPath( server.getServerManagerContextPath() );
+	}
+
+	public static IPath getTempLocation( String prefix, String fileName ) {
+		return getDefault().getStateLocation().append( "tmp" ).append(
+			prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? "" : "/" + fileName ) );
 	}
 
 	public static IRemoteConnection getRemoteConnection( final IRemoteServer server ) {

@@ -18,8 +18,6 @@ package com.liferay.ide.eclipse.sdk;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.sdk.util.SDKHelper;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
-import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -109,11 +107,15 @@ public class SDK {
 		}
 	}
 
-	public IStatus buildLanguage(IProject project, IFile langFile, Map<String, String> overrideProperties) {
+	public IStatus buildLanguage(
+		IProject project, IFile langFile, Map<String, String> overrideProperties,
+		Map<String, String> appServerProperties ) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(project);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			if (overrideProperties != null) {
 				properties.putAll(overrideProperties);
@@ -137,11 +139,15 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IStatus buildService(IProject project, IFile serviceXmlFile, Map<String, String> overrideProperties) {
+	public IStatus buildService(
+		IProject project, IFile serviceXmlFile, Map<String, String> overrideProperties,
+		Map<String, String> appServerProperties ) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(project);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			if (overrideProperties != null) {
 				properties.putAll(overrideProperties);
@@ -163,11 +169,15 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IStatus buildWSDD(IProject project, IFile serviceXmlFile, Map<String, String> overrideProperties) {
+	public IStatus buildWSDD(
+		IProject project, IFile serviceXmlFile, Map<String, String> overrideProperties,
+		Map<String, String> appServerProperties ) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(project);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			if (overrideProperties != null) {
 				properties.putAll(overrideProperties);
@@ -189,9 +199,11 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IStatus cleanAppServer(IProject project, IPath bundleZipLocation) {
+	public IStatus cleanAppServer( IProject project, IPath bundleZipLocation, Map<String, String> appServerProperties ) {
 		try {
-			Map<String, String> properties = configureAppServerProperties(project);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			String appServerDir = properties.get(ISDKConstants.PROPERTY_APP_SERVER_DIR);
 			IPath workPath = new Path(appServerDir).removeLastSegments(2);
@@ -212,11 +224,14 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IStatus compileThemePlugin(IProject project, Map<String, String> overrideProperties) {
+	public IStatus compileThemePlugin(
+		IProject project, Map<String, String> overrideProperties, Map<String, String> appServerProperties ) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(project);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			if (overrideProperties != null) {
 				properties.putAll(overrideProperties);
@@ -226,18 +241,22 @@ public class SDK {
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_COMPILE,
 				properties, true);
 		}
-		catch (CoreException e) {
+		catch ( Exception e ) {
 			return SDKPlugin.createErrorStatus(e);
 		}
 
 		return Status.OK_STATUS;
 	}
 
-	public IPath createNewExtProject(String extName, String extDisplayName, ILiferayRuntime appServer) {
+	public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties ) {
 		try {
 			SDKHelper antHelper = new SDKHelper(this);
 
-			Map<String, String> properties = configureAppServerProperties(appServer);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
+
+			properties.putAll( appServerProperties );
 
 			properties.put(ISDKConstants.PROPERTY_EXT_NAME, extName);
 			properties.put(ISDKConstants.PROPERTY_EXT_DISPLAY_NAME, extDisplayName);
@@ -258,7 +277,7 @@ public class SDK {
 
 			return tempPath;
 		}
-		catch (CoreException e) {
+		catch ( Exception e ) {
 			SDKPlugin.logError(e);
 		}
 
@@ -292,11 +311,16 @@ public class SDK {
 		return null;
 	}
 
-	public IPath createNewLayoutTplProject(String layoutTplName, String layoutTplDisplayName, ILiferayRuntime runtime) {
+	public IPath createNewLayoutTplProject(
+		String layoutTplName, String layoutTplDisplayName, Map<String, String> appServerProperties ) {
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(runtime);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
+
+			properties.putAll( appServerProperties );
 
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layoutTplName);
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_DISPLAY_NAME, layoutTplDisplayName);
@@ -313,24 +337,27 @@ public class SDK {
 
 			return newLayoutTplPath;
 		}
-		catch (CoreException e) {
+		catch ( Exception e ) {
 			SDKPlugin.logError(e);
 		}
 
 		return null;
 	}
 
-	public IPath createNewPortletProject(String portletName, String portletDisplayName, ILiferayRuntime runtime) {
-		return createNewPortletProject(portletName, portletDisplayName, null, runtime);
+	public IPath createNewPortletProject(
+		String portletName, String portletDisplayName, Map<String, String> appServerProperties ) {
+		return createNewPortletProject( portletName, portletDisplayName, null, appServerProperties );
 	}
 
 	public IPath createNewPortletProject(
-		String portletName, String portletDisplayName, String portletFramework, ILiferayRuntime runtime) {
+		String portletName, String portletDisplayName, String portletFramework, Map<String, String> appServerProperties ) {
 
 		SDKHelper antHelper = new SDKHelper(this);
 
 		try {
-			Map<String, String> properties = configureAppServerProperties(runtime);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			properties.put(ISDKConstants.PROPERTY_PORTLET_NAME, portletName);
 			properties.put(ISDKConstants.PROPERTY_PORTLET_DISPLAY_NAME, portletDisplayName);
@@ -348,7 +375,7 @@ public class SDK {
 
 			return newPortletPath;
 		}
-		catch (CoreException e) {
+		catch ( Exception e ) {
 			SDKPlugin.logError(e);
 		}
 
@@ -382,11 +409,15 @@ public class SDK {
 		return null;
 	}
 
-	public IStatus directDeploy(IProject project, Map<String, String> overrideProperties, boolean separateJRE) {
+	public IStatus directDeploy(
+		IProject project, Map<String, String> overrideProperties, boolean separateJRE,
+		Map<String, String> appServerProperties ) {
 		try {
 			SDKHelper antHelper = new SDKHelper(this);
 
-			Map<String, String> properties = configureAppServerProperties(project);
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
 
 			if (overrideProperties != null) {
 				properties.putAll(overrideProperties);
@@ -396,7 +427,7 @@ public class SDK {
 				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), ISDKConstants.TARGET_DIRECT_DEPLOY,
 				properties, separateJRE);
 		}
-		catch (CoreException e) {
+		catch ( Exception e ) {
 			return SDKPlugin.createErrorStatus(e);
 		}
 
@@ -559,49 +590,7 @@ public class SDK {
 		return retval[0];
 	}
 
-	protected Map<String, String> configureAppServerProperties(ILiferayRuntime appServer) {
-		Map<String, String> properties = new HashMap<String, String>();
 
-		String type = appServer.getAppServerType();
-
-		String dir = appServer.getAppServerDir().toOSString();
-
-		String deployDir = appServer.getDeployDir().toOSString();
-
-		String libGlobalDir = appServer.getLibGlobalDir().toOSString();
-
-		String portalDir = appServer.getPortalDir().toOSString();
-
-		properties.put(ISDKConstants.PROPERTY_APP_SERVER_TYPE, type);
-		properties.put(ISDKConstants.PROPERTY_APP_SERVER_DIR, dir);
-		properties.put(ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir);
-		properties.put(ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir);
-		properties.put(ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir);
-
-		try {
-			persistAppServerProperties(properties);
-		}
-		catch (Exception e) {
-			SDKPlugin.logError(e);
-		}
-
-		return properties;
-	}
-
-	protected Map<String, String> configureAppServerProperties(IProject project)
-		throws CoreException {
-
-		ILiferayRuntime runtime = null;
-
-		try {
-			runtime = ServerUtil.getLiferayRuntime(project);
-		}
-		catch (CoreException e1) {
-			throw new CoreException(SDKPlugin.createErrorStatus(e1));
-		}
-
-		return configureAppServerProperties(runtime);
-	}
 
 	protected void persistAppServerProperties(Map<String, String> properties)
 		throws FileNotFoundException, IOException, ConfigurationException {

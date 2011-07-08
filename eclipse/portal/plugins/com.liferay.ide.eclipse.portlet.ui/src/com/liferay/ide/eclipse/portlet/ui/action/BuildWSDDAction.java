@@ -16,9 +16,9 @@
 package com.liferay.ide.eclipse.portlet.ui.action;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildWSDDJob;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.project.ui.action.AbstractProjectAction;
 
 import org.eclipse.core.resources.IFile;
@@ -51,7 +51,7 @@ public class BuildWSDDAction extends AbstractProjectAction {
 			else if (elem instanceof IProject) {
 				IProject project = (IProject) elem;
 
-				IFolder docroot = ProjectUtil.getDocroot(project);
+				IFolder docroot = CoreUtil.getDocroot(project);
 
 				if (docroot != null && docroot.exists()) {
 					servicesFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);

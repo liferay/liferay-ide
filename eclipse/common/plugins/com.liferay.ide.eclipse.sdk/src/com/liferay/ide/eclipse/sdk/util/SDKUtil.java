@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Version;
@@ -155,5 +156,24 @@ public class SDKUtil {
 		}
 	
 		return null;
+	}
+
+	public static SDK getSDK( IProject project ) {
+		SDK retval = null;
+
+		// try to determine SDK based on project location
+		IPath sdkLocation = project.getRawLocation().removeLastSegments( 2 );
+
+		retval = SDKManager.getInstance().getSDK( sdkLocation );
+
+		if ( retval == null ) {
+			retval = SDKUtil.createSDKFromLocation( sdkLocation );
+
+			if ( retval != null ) {
+				SDKManager.getInstance().addSDK( retval );
+			}
+		}
+
+		return retval;
 	}
 }

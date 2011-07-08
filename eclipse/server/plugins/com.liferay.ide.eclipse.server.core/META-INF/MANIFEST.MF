@@ -27,23 +27,17 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.common.frameworks;bundle-version="[1.1.300,1.2.0)",
  org.apache.commons.logging,
  org.apache.commons.collections,
- org.eclipse.jst.common.project.facet.core
+ org.eclipse.jst.common.project.facet.core,
+ org.apache.commons.httpclient,
+ org.apache.commons.codec;visibility:=reexport,
+ org.apache.commons.io;visibility:=reexport,
+ com.liferay.ide.eclipse.sdk
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.core,
  com.liferay.ide.eclipse.server.core.support,
  com.liferay.ide.eclipse.server.remote,
- com.liferay.ide.eclipse.server.util,
- org.apache.commons.configuration,
- org.apache.commons.configuration.beanutils,
- org.apache.commons.configuration.event,
- org.apache.commons.configuration.interpol,
- org.apache.commons.configuration.plist,
- org.apache.commons.configuration.reloading,
- org.apache.commons.configuration.tree,
- org.apache.commons.configuration.tree.xpath,
- org.apache.commons.configuration.web
+ com.liferay.ide.eclipse.server.util
 Bundle-ClassPath: .,
  portal-support/deps/portal-impl.jar,
- portal-support/deps/portal-service.jar,
- lib/commons-configuration-1.6.jar
+ portal-support/deps/portal-service.jar

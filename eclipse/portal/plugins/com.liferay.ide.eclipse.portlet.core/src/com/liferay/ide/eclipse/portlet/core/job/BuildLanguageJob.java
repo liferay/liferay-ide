@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.job;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -66,7 +67,7 @@ public class BuildLanguageJob extends SDKJob {
 
 			monitor.worked(10);
 
-			sdk.buildLanguage(project, langFile, null);
+			sdk.buildLanguage( project, langFile, null, ServerUtil.configureAppServerProperties( project ) );
 
 			monitor.worked(90);
 

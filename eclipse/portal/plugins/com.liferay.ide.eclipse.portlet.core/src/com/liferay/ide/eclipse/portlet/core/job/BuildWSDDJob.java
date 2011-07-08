@@ -18,6 +18,9 @@ package com.liferay.ide.eclipse.portlet.core.job;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
+
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -63,7 +66,9 @@ public class BuildWSDDJob extends SDKJob {
 
 					monitor.worked(10);
 
-					sdk.buildWSDD(getProject(), serviceXmlFile, null);
+					Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+					sdk.buildWSDD( getProject(), serviceXmlFile, null, appServerProperties );
 
 					monitor.worked(90);
 

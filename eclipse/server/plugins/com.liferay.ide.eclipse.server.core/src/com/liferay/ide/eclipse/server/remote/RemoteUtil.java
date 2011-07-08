@@ -6,8 +6,7 @@ import org.eclipse.wst.server.core.IServer;
 public class RemoteUtil {
 
 	public static String detectServerManagerContextPath( RemoteServer remoteServer, IProgressMonitor monitor ) {
-		// TODO
-		return null;
+		return IRemoteServer.DEFAULT_SERVER_MANAGER_CONTEXT_PATH;
 	}
 
 	public static IRemoteServer getRemoteServer( IServer server ) {

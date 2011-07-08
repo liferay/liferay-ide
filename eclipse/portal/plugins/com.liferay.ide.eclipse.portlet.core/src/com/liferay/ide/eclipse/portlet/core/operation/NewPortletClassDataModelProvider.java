@@ -442,7 +442,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			IProject targetProject = getTargetProject();
 
 			if ((!CoreUtil.isNullOrEmpty(folderValue)) && targetProject != null) {
-				IFolder docroot = ProjectUtil.getDocroot(targetProject);
+				IFolder docroot = CoreUtil.getDocroot(targetProject);
 				String errorMsg = FileUtil.validateNewFolder(docroot, folderValue);
 
 				if (errorMsg != null) {

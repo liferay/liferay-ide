@@ -42,6 +42,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.osgi.framework.Version;
 
@@ -51,6 +55,24 @@ import org.osgi.framework.Version;
  * @author Greg Amerson
  */
 public class CoreUtil {
+
+	public static IFolder getDocroot( String projectName ) {
+		IProject project = getProject( projectName );
+
+		return getDocroot( project );
+	}
+
+	public static boolean isResourceInDocroot( IModuleResource resource ) {
+		IFile file = (IFile) resource.getAdapter( IFile.class );
+
+		if ( file != null ) {
+			IFolder docroot = getDocroot( file.getProject() );
+
+			return docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf( file.getFullPath() );
+		}
+
+		return false;
+	}
 
 	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
 		if (delta == null) {
@@ -245,5 +267,23 @@ public class CoreUtil {
 		}
 
 		return version;
+	}
+
+	public static IFolder getDocroot( IProject project ) {
+		IContainer retval = null;
+
+		if ( project != null ) {
+			IVirtualComponent comp = ComponentCore.createComponent( project );
+
+			if ( comp != null ) {
+				IVirtualFolder rootFolder = comp.getRootFolder();
+
+				if ( rootFolder != null ) {
+					retval = rootFolder.getUnderlyingFolder();
+				}
+			}
+		}
+
+		return retval instanceof IFolder ? (IFolder) retval : null;
 	}
 }

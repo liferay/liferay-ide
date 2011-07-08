@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.taglib.ui.snippets;
 
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.taglib.ui.TaglibUI;
 import com.liferay.ide.eclipse.taglib.ui.model.ITag;
 import com.liferay.ide.eclipse.ui.snippets.SnippetsUIPlugin;
@@ -126,7 +126,7 @@ public class AlloyTagItemHelper {
 		Document tldDocument = null;
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-		tldFile = ProjectUtil.getDocroot(editorFile.getProject()).getFile("WEB-INF/tld/alloy.tld");
+		tldFile = CoreUtil.getDocroot(editorFile.getProject()).getFile("WEB-INF/tld/alloy.tld");
 
 		if (tldFile.exists()) {
 			try {

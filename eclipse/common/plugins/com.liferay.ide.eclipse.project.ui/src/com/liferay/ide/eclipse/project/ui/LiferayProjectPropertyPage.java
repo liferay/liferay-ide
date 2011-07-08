@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelPropert
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.pref.SDKsPreferencePage;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -114,7 +115,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 		sdkLabel.setEnabled( false );
 		sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
-		SDK sdk = ProjectUtil.getSDK( getProject() );
+		SDK sdk = SDKUtil.getSDK( getProject() );
 
 		if ( sdk != null ) {
 			sdkLabel.setText( sdk.getName() );

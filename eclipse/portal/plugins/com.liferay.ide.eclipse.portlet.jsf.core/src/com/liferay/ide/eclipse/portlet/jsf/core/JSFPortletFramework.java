@@ -14,9 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.portlet.jsf.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.AbstractPortletFramework;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,7 +107,7 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 		 * will overwrite our web.xml that comes with in the template
 		 */
 
-		SDK sdk = ProjectUtil.getSDK( facetedProject.getProject() );
+		SDK sdk = SDKUtil.getSDK( facetedProject.getProject() );
 
 		if (sdk == null) {
 			return JSFCorePlugin.createErrorStatus("Could not get SDK from newly created project.");
@@ -116,7 +117,7 @@ public class JSFPortletFramework extends AbstractPortletFramework implements IJS
 			File originalWebXmlFile =
 				sdk.getLocation().append("tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml").toFile();
 
-			IFolder docroot = ProjectUtil.getDocroot(facetedProject.getProject());
+			IFolder docroot = CoreUtil.getDocroot( facetedProject.getProject() );
 
 			docroot.getFile("WEB-INF/web.xml").setContents(
 				new FileInputStream(originalWebXmlFile), IResource.FORCE, null);

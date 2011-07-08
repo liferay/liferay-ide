@@ -15,7 +15,7 @@
 package com.liferay.ide.eclipse.theme.core;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.AbstractPluginPublisher;
 import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
 
@@ -73,7 +73,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher {
 		IProject project = module.getProject();
 
 		// check to make sure they have a look-and-feel.xml file
-		IFolder docroot = ProjectUtil.getDocroot(project);
+		IFolder docroot = CoreUtil.getDocroot(project);
 
 		if (docroot != null && docroot.exists()) {
 			if (!(docroot.exists(new Path("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE))) ||

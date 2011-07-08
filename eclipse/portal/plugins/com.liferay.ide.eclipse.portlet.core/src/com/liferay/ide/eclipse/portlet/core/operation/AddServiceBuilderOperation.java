@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.project.core.util.LiferayDataModelOperation;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -75,7 +74,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 	}
 
 	private IStatus createServiceBuilderFile(IProject project) {
-		IFolder docroot = ProjectUtil.getDocroot(project);
+		IFolder docroot = CoreUtil.getDocroot( project );
 
 		IFile serviceBuilderFile = docroot.getFile("WEB-INF/" + getDataModel().getStringProperty(SERVICE_FILE));
 

@@ -15,13 +15,13 @@
 
 package com.liferay.ide.eclipse.portlet.jsf.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.jsf.core.operation.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.eclipse.portlet.jsf.core.operation.NewJSFPortletClassDataModelProvider;
 import com.liferay.ide.eclipse.portlet.jsf.ui.JSFPortletTemplateContextTypeIds;
 import com.liferay.ide.eclipse.portlet.jsf.ui.JSFUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.wizard.NewLiferayPortletWizardPage;
 import com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -97,7 +97,7 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 				IProject project =
 					ResourcesPlugin.getWorkspace().getRoot().getProject(getDataModel().getStringProperty(PROJECT_NAME));
 
-				IFolder docroot = ProjectUtil.getDocroot(project);
+				IFolder docroot = CoreUtil.getDocroot(project);
 
 				IFile viewFile = docroot.getFile(jspsFolder + "/portletViewMode.xhtml");
 

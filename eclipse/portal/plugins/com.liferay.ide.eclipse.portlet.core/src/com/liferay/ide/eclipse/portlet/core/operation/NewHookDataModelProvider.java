@@ -83,10 +83,10 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
 				if (customJspFolder != null) {
 					// folder should be relative to docroot
-					return ProjectUtil.getDocroot(targetProject).getFolder(customJspFolder).getFullPath().toPortableString();
+					return CoreUtil.getDocroot(targetProject).getFolder(customJspFolder).getFullPath().toPortableString();
 				}
 
-				return ProjectUtil.getDocroot(targetProject).getFullPath().append("custom_jsps").toPortableString();
+				return CoreUtil.getDocroot(targetProject).getFullPath().append("custom_jsps").toPortableString();
 			}
 		}
 		else if (PORTAL_PROPERTIES_FILE.equals(propertyName)) {

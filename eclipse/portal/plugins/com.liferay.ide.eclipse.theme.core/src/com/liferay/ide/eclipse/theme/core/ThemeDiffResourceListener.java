@@ -20,11 +20,13 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 import com.liferay.ide.eclipse.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -107,20 +109,22 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 
 				IProject project = delta.getResource().getProject();
 
-				SDK sdk = ProjectUtil.getSDK( project );
+				SDK sdk = SDKUtil.getSDK( project );
 
 				if (sdk == null) {
 					throw new CoreException(
 						ThemeCore.createErrorStatus("No SDK for project configured. Could not deploy theme module"));
 				}
 
-				IStatus status = sdk.compileThemePlugin(project, null);
+				Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+				IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
 
 				if (!status.isOK()) {
 					throw new CoreException(status);
 				}
 
-				IFolder docroot = ProjectUtil.getDocroot(project);
+				IFolder docroot = CoreUtil.getDocroot(project);
 
 				IFile lookAndFeelFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE);
 
@@ -181,7 +185,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener {
 	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
 		IPath fullPath = delta.getFullPath();
 		
-		IFolder docroot = ProjectUtil.getDocroot(delta.getResource().getProject());
+		IFolder docroot = CoreUtil.getDocroot(delta.getResource().getProject());
 
 		if (docroot == null) {
 			return false;

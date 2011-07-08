@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
@@ -180,7 +181,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
 	@Override
 	protected IFolder getDocroot() {
-		return ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
+		return CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
 	}
 
 	protected IPackageFragmentRoot getPackageFragmentRoot(IPackageFragment packageFragment) {

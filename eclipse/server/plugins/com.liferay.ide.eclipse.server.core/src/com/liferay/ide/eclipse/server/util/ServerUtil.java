@@ -16,18 +16,32 @@
 package com.liferay.ide.eclipse.server.util;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.IOUtils;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -49,6 +63,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
  * @author Greg Amerson
@@ -312,5 +327,252 @@ public class ServerUtil {
 				launch.terminate();
 			}
 		}
+	}
+
+	public static IFacetedProject getFacetedProject( IProject project ) {
+		try {
+			return ProjectFacetsManager.create( project );
+		}
+		catch ( CoreException e ) {
+			return null;
+		}
+	}
+
+	public static IProjectFacet getLiferayFacet( IFacetedProject facetedProject ) {
+		for ( IProjectFacetVersion projectFacet : facetedProject.getProjectFacets() ) {
+			if ( isLiferayFacet( projectFacet.getProjectFacet() ) ) {
+				return projectFacet.getProjectFacet();
+			}
+		}
+		return null;
+	}
+
+	public static boolean isLiferayFacet( IProjectFacet projectFacet ) {
+		return projectFacet != null && projectFacet.getId().startsWith( "liferay" );
+	}
+
+	public static Map<String, String> configureAppServerProperties( ILiferayRuntime appServer ) {
+		Map<String, String> properties = new HashMap<String, String>();
+
+		String type = appServer.getAppServerType();
+
+		String dir = appServer.getAppServerDir().toOSString();
+
+		String deployDir = appServer.getDeployDir().toOSString();
+
+		String libGlobalDir = appServer.getLibGlobalDir().toOSString();
+
+		String portalDir = appServer.getPortalDir().toOSString();
+
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir );
+
+		return properties;
+	}
+
+	public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException {
+
+		ILiferayRuntime runtime = null;
+
+		try {
+			runtime = ServerUtil.getLiferayRuntime( project );
+		}
+		catch ( CoreException e1 ) {
+			throw new CoreException( LiferayServerCorePlugin.createErrorStatus( e1 ) );
+		}
+
+		return configureAppServerProperties( runtime );
+	}
+
+	private static void processResourceDeltasZip(
+		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries ) throws IOException,
+		CoreException {
+
+		for ( IModuleResourceDelta delta : deltas ) {
+			int deltaKind = delta.getKind();
+
+			IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
+
+			IProject deltaProject = deltaResource.getProject();
+
+			IFolder docroot = CoreUtil.getDocroot( deltaProject );
+
+			IPath deltaPath =
+				new Path( deltaProject.getName() + ".war/" +
+					deltaResource.getFullPath().makeRelativeTo( docroot.getFullPath() ) );
+
+			if ( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED ) {
+				addToZip( deltaPath, deltaResource, zip );
+			}
+			else if ( deltaKind == IModuleResourceDelta.REMOVED ) {
+				addRemoveProps( deltaPath, deltaResource, zip, deleteEntries );
+			}
+			else if ( deltaKind == IModuleResourceDelta.NO_CHANGE ) {
+				IModuleResourceDelta[] children = delta.getAffectedChildren();
+				processResourceDeltasZip( children, zip, deleteEntries );
+			}
+		}
+	}
+
+	private static String removeArchive( String archive ) {
+		int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) );
+
+		if ( index >= 0 ) {
+			return archive.substring( 0, index + 5 );
+		}
+
+		return "";
+	}
+
+	private static void addRemoveProps(
+		IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries )
+		throws IOException {
+
+		String archive = removeArchive( deltaPath.toPortableString() );
+
+		ZipEntry zipEntry = null;
+
+		// check to see if we already have an entry for this archive
+		for ( ZipEntry entry : deleteEntries.keySet() ) {
+			if ( entry.getName().startsWith( archive ) ) {
+				zipEntry = entry;
+			}
+		}
+
+		if ( zipEntry == null ) {
+			zipEntry = new ZipEntry( archive + "META-INF/ibm-partialapp-delete.props" );
+		}
+
+		String existingFiles = deleteEntries.get( zipEntry );
+
+		// String file = encodeRemovedPath(deltaPath.toPortableString().substring(archive.length()));
+		String file = deltaPath.toPortableString().substring( archive.length() );
+
+		if ( deltaResource.getType() == IResource.FOLDER ) {
+			file += "/.*";
+		}
+
+		deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : "" ) + ( file + "\n" ) );
+	}
+
+	private static void addToZip( IPath path, IResource resource, ZipOutputStream zip ) throws IOException,
+		CoreException {
+
+		switch ( resource.getType() ) {
+		case IResource.FILE:
+			ZipEntry zipEntry = new ZipEntry( path.toString() );
+
+			zip.putNextEntry( zipEntry );
+
+			InputStream contents = ( (IFile) resource ).getContents();
+
+			try {
+				IOUtils.copy( contents, zip );
+			}
+			finally {
+				contents.close();
+			}
+
+			break;
+
+		case IResource.FOLDER:
+		case IResource.PROJECT:
+			IContainer container = (IContainer) resource;
+
+			IResource[] members = container.members();
+
+			for ( IResource res : members ) {
+				addToZip( path.append( res.getName() ), res, zip );
+			}
+		}
+	}
+
+	public static File createPartialEAR( String archiveName, IModuleResourceDelta[] deltas ) {
+		IPath path = LiferayServerCorePlugin.getTempLocation( "partial-ear", archiveName );
+
+		FileOutputStream outputStream = null;
+		ZipOutputStream zip = null;
+		File file = path.toFile();
+
+		file.getParentFile().mkdirs();
+
+		try {
+			outputStream = new FileOutputStream( file );
+			zip = new ZipOutputStream( outputStream );
+
+			Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
+
+			processResourceDeltasZip( deltas, zip, deleteEntries );
+
+			for ( ZipEntry entry : deleteEntries.keySet() ) {
+				zip.putNextEntry( entry );
+				zip.write( deleteEntries.get( entry ).getBytes() );
+			}
+
+			// if ((removedResources != null) && (removedResources.size() > 0)) {
+			// writeRemovedResources(removedResources, zip);
+			// }
+		}
+		catch ( Exception ex ) {
+			ex.printStackTrace();
+		}
+		finally {
+			if ( zip != null ) {
+				try {
+					zip.close();
+				}
+				catch ( IOException localIOException1 ) {
+
+				}
+			}
+		}
+
+		return file;
+	}
+
+	public static File createPartialWAR( String archiveName, IModuleResourceDelta[] deltas ) {
+		IPath path = LiferayServerCorePlugin.getTempLocation( "partial-war", archiveName );
+
+		FileOutputStream outputStream = null;
+		ZipOutputStream zip = null;
+		File file = path.toFile();
+
+		file.getParentFile().mkdirs();
+
+		try {
+			outputStream = new FileOutputStream( file );
+			zip = new ZipOutputStream( outputStream );
+
+			Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
+
+			processResourceDeltasZip( deltas, zip, deleteEntries );
+
+			for ( ZipEntry entry : deleteEntries.keySet() ) {
+				zip.putNextEntry( entry );
+				zip.write( deleteEntries.get( entry ).getBytes() );
+			}
+
+			// if ((removedResources != null) && (removedResources.size() > 0)) {
+			// writeRemovedResources(removedResources, zip);
+			// }
+		}
+		catch ( Exception ex ) {
+			ex.printStackTrace();
+		}
+		finally {
+			if ( zip != null ) {
+				try {
+					zip.close();
+				}
+				catch ( IOException localIOException1 ) {
+
+				}
+			}
+		}
+
+		return file;
 	}
 }

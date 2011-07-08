@@ -15,8 +15,8 @@
 
 package com.liferay.ide.eclipse.project.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.NodeUtil;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -217,7 +217,7 @@ public abstract class BaseValidator extends AbstractValidator {
 		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
 
 		if (docrootResource != null && docrootResource.length() > 0) {
-			IFolder docroot = ProjectUtil.getDocroot(project);
+			IFolder docroot = CoreUtil.getDocroot(project);
 
 			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
 

@@ -13,8 +13,8 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
-import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayPublishHelper;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
+import com.liferay.ide.eclipse.server.util.LiferayPublishHelper;
 
 import java.io.File;
 import java.io.FileInputStream;

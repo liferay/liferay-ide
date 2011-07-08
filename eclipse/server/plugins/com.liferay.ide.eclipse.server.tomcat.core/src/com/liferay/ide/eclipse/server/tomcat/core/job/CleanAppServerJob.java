@@ -22,6 +22,8 @@ import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -81,7 +83,9 @@ public class CleanAppServerJob extends SDKJob {
 			ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime(runtime);
 			IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-			IStatus status = getSDK().cleanAppServer(project, bundleZipLocation);
+			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+			IStatus status = getSDK().cleanAppServer( project, bundleZipLocation, appServerProperties );
 
 			assertStatus(status);
 

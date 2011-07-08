@@ -108,10 +108,10 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		// hookDescriptorHelper.getCustomJSPFolder(getDataModel());
 		// if (customJspFolder != null) {
 		// return
-		// ProjectUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
+		// CoreUtil.getDocroot(getTargetProject()).getFolder(customJspFolder).getFullPath().toPortableString();
 		// }
 		// return
-		// ProjectUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
+		// CoreUtil.getDocroot(getTargetProject()).getFullPath().append("custom_jsps").toPortableString();
 		// } else if (PORTAL_PROPERTIES_FILE.equals(propertyName)) {
 		// return
 		// PortletUtil.getFirstSrcFolder(getTargetProject()).getFullPath().append("portal.properties").toPortableString();
@@ -402,7 +402,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 			return null;
 		}
 
-		IFolder docroot = ProjectUtil.getDocroot(getTargetProject());
+		IFolder docroot = CoreUtil.getDocroot(getTargetProject());
 
 		if (docroot == null) {
 			return null;

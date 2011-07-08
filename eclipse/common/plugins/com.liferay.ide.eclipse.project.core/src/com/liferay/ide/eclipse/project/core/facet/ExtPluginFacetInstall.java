@@ -20,10 +20,12 @@ import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -68,7 +70,9 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 			
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
-			IPath newExtPath = sdk.createNewExtProject(extName, displayName, getLiferayRuntime());
+			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+			IPath newExtPath = sdk.createNewExtProject( extName, displayName, appServerProperties );
 			
 			IPath tempInstallPath = newExtPath.append(extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX);
 			

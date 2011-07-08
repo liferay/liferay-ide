@@ -18,6 +18,7 @@ package com.liferay.ide.eclipse.portlet.core.job;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -94,7 +95,7 @@ public class BuildServiceJob extends SDKJob {
 
 		monitor.worked(50);
 
-		sdk.buildService(getProject(), serviceXmlFile, null);
+		sdk.buildService( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( project ) );
 
 		monitor.worked(90);
 	}

@@ -234,7 +234,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 				if (element instanceof IFolder) {
 					IFolder folder = (IFolder) element;
 
-					if (folder.equals(ProjectUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME)))) {
+					if (folder.equals(CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME)))) {
 						folder = folder.getFolder("custom_jsps");
 					}
 

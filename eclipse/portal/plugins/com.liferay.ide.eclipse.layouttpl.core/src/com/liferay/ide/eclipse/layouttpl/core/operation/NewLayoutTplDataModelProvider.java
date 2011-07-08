@@ -172,7 +172,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
 			if (targetProject != null) {
 				IFile templateFile =
-					ProjectUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_TEMPLATE_FILE));
+					CoreUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_TEMPLATE_FILE));
 
 				if (templateFile.exists()) {
 					return LayoutTplCore.createWarningStatus("Template file already exists and will be overwritten.");
@@ -184,7 +184,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
 			if (targetProject != null) {
 				IFile wapTemplateFile =
-					ProjectUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
+					CoreUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_WAP_TEMPLATE_FILE));
 
 				if (wapTemplateFile.exists()) {
 					return LayoutTplCore.createWarningStatus("WAP template file already exists and will be overwritten.");
@@ -196,7 +196,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
 			if (targetProject != null) {
 				IFile thumbnailFile =
-					ProjectUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_THUMBNAIL_FILE));
+					CoreUtil.getDocroot(targetProject).getFile(getStringProperty(LAYOUT_THUMBNAIL_FILE));
 
 				if (thumbnailFile.exists()) {
 					return LayoutTplCore.createWarningStatus("Thumbnail file already exists and will be overwritten.");

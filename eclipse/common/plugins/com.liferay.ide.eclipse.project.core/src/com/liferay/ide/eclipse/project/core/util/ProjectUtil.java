@@ -24,8 +24,6 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
-import com.liferay.ide.eclipse.sdk.SDK;
-import com.liferay.ide.eclipse.sdk.SDKManager;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import java.io.ByteArrayInputStream;
@@ -38,7 +36,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -366,7 +363,7 @@ public class ProjectUtil {
 
 		for (IProject project : projects) {
 			if (project.getName().equals(context)) {
-				IFolder docroot = getDocroot(project);
+				IFolder docroot = CoreUtil.getDocroot( project );
 
 				if (docroot != null && docroot.exists()) {
 					IFile serviceJar = docroot.getFile("WEB-INF/lib/" + project.getName() + "-service.jar");
@@ -423,30 +420,6 @@ public class ProjectUtil {
 				}
 			}
 		}
-	}
-
-	public static IFolder getDocroot(IProject project) {
-		IContainer retval = null;
-
-		if (project != null) {
-			IVirtualComponent comp = ComponentCore.createComponent(project);
-
-			if (comp != null) {
-				IVirtualFolder rootFolder = comp.getRootFolder();
-
-				if (rootFolder != null) {
-					retval = rootFolder.getUnderlyingFolder();
-				}
-			}
-		}
-
-		return retval instanceof IFolder ? (IFolder) retval : null;
-	}
-
-	public static IFolder getDocroot(String projectName) {
-		IProject project = CoreUtil.getProject(projectName);
-
-		return getDocroot(project);
 	}
 
 	public static IFacetedProject getFacetedProject(IProject project) {
@@ -533,7 +506,7 @@ public class ProjectUtil {
 	}
 
 	public static String getRelativePathFromDocroot(IProject project, String path) {
-		IFolder docroot = getDocroot(project);
+		IFolder docroot = CoreUtil.getDocroot( project );
 
 		IPath pathValue = new Path(path);
 
@@ -542,25 +515,6 @@ public class ProjectUtil {
 		String retval = relativePath.toPortableString();
 
 		return retval.startsWith("/") ? retval : "/" + retval;
-	}
-
-	public static SDK getSDK(IProject project) {
-		SDK retval = null;
-
-		// try to determine SDK based on project location
-		IPath sdkLocation = project.getRawLocation().removeLastSegments( 2 );
-
-		retval = SDKManager.getInstance().getSDK( sdkLocation );
-
-		if ( retval == null ) {
-			retval = SDKUtil.createSDKFromLocation( sdkLocation );
-
-			if ( retval != null ) {
-				SDKManager.getInstance().addSDK( retval );
-			}
-		}
-
-		return retval;
 	}
 
 	public static IPackageFragmentRoot[] getSourceContainers(IProject project) {

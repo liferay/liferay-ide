@@ -15,12 +15,12 @@
 
 package com.liferay.ide.eclipse.portlet.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.eclipse.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.PortletTemplateContextTypeIds;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
 
 import java.lang.reflect.InvocationTargetException;
@@ -129,7 +129,7 @@ public class NewPortletWizard extends NewWebArtifactWizard
 					ResourcesPlugin.getWorkspace().getRoot().getProject(
 						getDataModel().getStringProperty( PROJECT_NAME ) );
 
-				IFolder docroot = ProjectUtil.getDocroot( project );
+				IFolder docroot = CoreUtil.getDocroot( project );
 
 				IFile viewFile = docroot.getFile( jspsFolder + "/view.jsp" );
 

@@ -21,9 +21,11 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -60,7 +62,9 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 			String layoutTplName = this.masterModel.getStringProperty(LAYOUTTPL_NAME);
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
-			IPath newLayoutTplPath = sdk.createNewLayoutTplProject(layoutTplName, displayName, getLiferayRuntime());
+			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+
+			IPath newLayoutTplPath = sdk.createNewLayoutTplProject( layoutTplName, displayName, appServerProperties );
 			
 			processNewFiles(newLayoutTplPath.append(layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX), false);
 			
