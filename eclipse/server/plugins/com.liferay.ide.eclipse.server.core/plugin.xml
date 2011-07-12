@@ -888,6 +888,13 @@
    </extension>
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
+      <runtime-component-version
+            type="com.liferay.ide.eclipse.server.runtime.stub.component"
+            version="6.0">
+      </runtime-component-version>
+      <runtime-component-type
+            id="com.liferay.ide.eclipse.server.runtime.stub.component">
+      </runtime-component-type>
       <adapter>
          <runtime-component
                id="com.liferay.ide.eclipse.server.runtime.stub.component">
@@ -899,14 +906,10 @@
                class="org.eclipse.jst.common.project.facet.core.IClasspathProvider">
          </type>
       </adapter>
-      <runtime-component-version
-            type="com.liferay.ide.eclipse.server.runtime.stub.component"
-            version="6">
-      </runtime-component-version>
       <supported>
          <runtime-component
                id="com.liferay.ide.eclipse.server.runtime.stub.component"
-               version="6">
+               version="6.0">
          </runtime-component>
          <facet
                id="jst.web"
@@ -943,7 +946,7 @@
       <runtimeFacetMapping
             runtime-component="com.liferay.ide.eclipse.server.runtime.stub.component"
             runtimeTypeId="com.liferay.ide.eclipse.server.runtime.stub"
-            version="6">
+            version="6.0">
       </runtimeFacetMapping>
    </extension>
    <extension

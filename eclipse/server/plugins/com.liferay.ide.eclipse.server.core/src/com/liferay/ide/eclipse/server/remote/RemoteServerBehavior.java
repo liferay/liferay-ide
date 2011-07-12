@@ -358,13 +358,13 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 		monitor.beginTask( "Updating server status...", 100 );
 
-		int websphereState = getRemoteServerState( currentServerState, monitor );
+		int remoteState = getRemoteServerState( currentServerState, monitor );
 
-		if ( websphereState == IServer.STATE_STARTED ) {
+		if ( remoteState == IServer.STATE_STARTED ) {
 			setServerState( IServer.STATE_STARTED );
 			launchServer( monitor );
 		}
-		else if ( websphereState == IServer.STATE_STOPPED ) {
+		else if ( remoteState == IServer.STATE_STOPPED ) {
 			terminateLaunch();
 			setServerState( IServer.STATE_STOPPED );
 		}
@@ -508,7 +508,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 		monitor.subTask( "Creating partial " + moduleProject.getName() + " update archive..." );
 
-		File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta );
+		File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta, "liferay" );
 
 		monitor.worked( 25 );
 
@@ -516,11 +516,11 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 			return IServer.PUBLISH_STATE_UNKNOWN;
 		}
 
-		monitor.subTask( "Getting WebSphere admin connection..." );
+		monitor.subTask( "Getting Liferay connection..." );
 
 		IRemoteConnection connection = getRemoteConnection();
 
-		monitor.subTask( "Updating " + moduleProject.getName() + " on WebSphere..." );
+		monitor.subTask( "Updating " + moduleProject.getName() + " on Liferay..." );
 
 		Object error = connection.updateApplication( appName, partialWar.getAbsolutePath(), monitor );
 
@@ -565,17 +565,19 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		File warFile = deployPath.append( moduleProject.getName() + ".war" ).toFile();
 		warFile.getParentFile().mkdirs();
 
+		properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE, warFile.getAbsolutePath() );
+
 		submon.worked( 10 ); // 10% complete
 
 		if ( monitor.isCanceled() ) {
 			return IServer.PUBLISH_STATE_FULL;
 		}
 
-		submon.subTask( "Pre-deploying " + moduleProject.getName() + " contents..." );
+		submon.subTask( "Deploying " + moduleProject.getName() + "..." );
 
 		Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( moduleProject );
 
-		IStatus directDeployStatus = sdk.directDeploy( moduleProject, properties, true, appServerProperties );
+		IStatus directDeployStatus = sdk.war( moduleProject, properties, true, appServerProperties );
 
 		if ( !directDeployStatus.isOK() || ( !warFile.exists() ) ) {
 			throw new CoreException( directDeployStatus );
@@ -599,7 +601,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 			return IServer.PUBLISH_STATE_FULL;
 		}
 
-		submon.subTask( "Publishing " + moduleProject.getName() + " to WebSphere..." );
+		submon.subTask( "Publishing " + moduleProject.getName() + " to Liferay..." );
 
 		Object error = null;
 
@@ -676,17 +678,17 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		}
 
 		/*
-		 * First look to see if this module (ear plugin) is actually installed on websphere, and if it is then uninstall
+		 * First look to see if this module (ear plugin) is actually installed on liferay, and if it is then uninstall
 		 * it
 		 */
 
-		monitor.beginTask( "Undeploying " + moduleProject.getName() + " from WebSphere...", 100 );
+		monitor.beginTask( "Undeploying " + moduleProject.getName() + " from Liferay...", 100 );
 
 		String appName = moduleProject.getName();
 
 		setModuleStatus( module, LiferayServerCorePlugin.createInfoStatus( "Uninstalling..." ) );
 
-		monitor.subTask( "Getting WebSphere admin connection..." );
+		monitor.subTask( "Getting remote connection..." );
 
 		IRemoteConnection remoteConnection = getRemoteConnection();
 
@@ -694,7 +696,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 		// File scriptFile = getScriptFile( "publish/uninstallApplicationScript.groovy" );
 
-		monitor.subTask( "Uninstalling " + moduleProject.getName() + " from WebSphere..." );
+		monitor.subTask( "Uninstalling " + moduleProject.getName() + " from Liferay..." );
 
 		Object error = remoteConnection.uninstallApplication( appName, monitor );
 

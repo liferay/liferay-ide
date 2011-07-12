@@ -412,6 +412,7 @@ public class SDK {
 	public IStatus directDeploy(
 		IProject project, Map<String, String> overrideProperties, boolean separateJRE,
 		Map<String, String> appServerProperties ) {
+
 		try {
 			SDKHelper antHelper = new SDKHelper(this);
 
@@ -561,6 +562,32 @@ public class SDK {
 
 		if (!buildXmlExists) {
 			return SDKPlugin.createErrorStatus("build.xml file does not exist.");
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	public IStatus war(
+		IProject project, Map<String, String> overrideProperties, boolean separateJRE,
+		Map<String, String> appServerProperties ) {
+
+		try {
+			SDKHelper antHelper = new SDKHelper( this );
+
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
+
+			if ( overrideProperties != null ) {
+				properties.putAll( overrideProperties );
+			}
+
+			antHelper.runTarget(
+				project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(), ISDKConstants.TARGET_WAR,
+				properties, separateJRE );
+		}
+		catch ( Exception e ) {
+			return SDKPlugin.createErrorStatus( e );
 		}
 
 		return Status.OK_STATUS;

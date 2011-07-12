@@ -42,7 +42,7 @@ public class RemoteLogStream extends BufferedInputStream {
 		IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
 
 		try {
-			return new URL( "/FileTransfer/transfer/logs/" + log + "?compress=false&deleteOnCompletion=false" );
+			return new URL( connection.getManagerURI() + "/log/" + log );
 		}
 		catch (MalformedURLException e) {
 		}

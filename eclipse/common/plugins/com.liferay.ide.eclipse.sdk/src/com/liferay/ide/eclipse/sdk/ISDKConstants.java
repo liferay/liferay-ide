@@ -24,6 +24,7 @@ import org.osgi.framework.Version;
  */
 public interface ISDKConstants {
 
+	@SuppressWarnings( "deprecation" )
 	public static final IEclipsePreferences _defaultPrefs = new DefaultScope().getNode(SDKPlugin.PLUGIN_ID);
 	
 	public static final String[] ANT_LIBRARIES = _defaultPrefs.get("ant.libraries", "").split(",");
@@ -62,7 +63,7 @@ public interface ISDKConstants {
 
 	public static final String PORTLET_PLUGIN_ZIP_PATH = _defaultPrefs.get("portlet.plugin.zip.path", null);
 
-	static final String PROJECT_BUILD_XML = _defaultPrefs.get("project.build.xml", null);
+	public static final String PROJECT_BUILD_XML = _defaultPrefs.get( "project.build.xml", null );
 
 	public static final String PROPERTY_APP_SERVER_DEPLOY_DIR = "app.server.deploy.dir";
 
@@ -143,6 +144,8 @@ public interface ISDKConstants {
 	public static final String TARGET_DEPLOY = "deploy";
 
 	public static final String TARGET_DIRECT_DEPLOY = "direct-deploy";
+
+	public static final String TARGET_WAR = "war";
 
 	public static final String THEME_PLUGIN_ANT_BUILD = _defaultPrefs.get("theme.plugin.ant.build", null);
 

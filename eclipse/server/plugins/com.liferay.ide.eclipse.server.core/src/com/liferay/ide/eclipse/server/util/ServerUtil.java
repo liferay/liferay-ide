@@ -236,9 +236,18 @@ public class ServerUtil {
 	}
 
 	public static boolean isLiferayRuntime(BridgedRuntime bridgedRuntime) {
-		IRuntime runtime = ServerCore.findRuntime(bridgedRuntime.getProperty("id"));
+		if ( bridgedRuntime != null ) {
+			String id = bridgedRuntime.getProperty( "id" );
 
-		return isLiferayRuntime(runtime);
+			if ( id != null ) {
+				IRuntime runtime = ServerCore.findRuntime( id );
+
+				return isLiferayRuntime( runtime );
+			}
+		}
+
+
+		return false;
 	}
 
 	public static boolean isLiferayRuntime(IRuntime runtime) {
@@ -388,8 +397,8 @@ public class ServerUtil {
 	}
 
 	private static void processResourceDeltasZip(
-		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries ) throws IOException,
-		CoreException {
+		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix )
+		throws IOException, CoreException {
 
 		for ( IModuleResourceDelta delta : deltas ) {
 			int deltaKind = delta.getKind();
@@ -408,11 +417,11 @@ public class ServerUtil {
 				addToZip( deltaPath, deltaResource, zip );
 			}
 			else if ( deltaKind == IModuleResourceDelta.REMOVED ) {
-				addRemoveProps( deltaPath, deltaResource, zip, deleteEntries );
+				addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
 			}
 			else if ( deltaKind == IModuleResourceDelta.NO_CHANGE ) {
 				IModuleResourceDelta[] children = delta.getAffectedChildren();
-				processResourceDeltasZip( children, zip, deleteEntries );
+				processResourceDeltasZip( children, zip, deleteEntries, deletePrefix );
 			}
 		}
 	}
@@ -428,7 +437,8 @@ public class ServerUtil {
 	}
 
 	private static void addRemoveProps(
-		IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries )
+		IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
+		String deletePrefix )
 		throws IOException {
 
 		String archive = removeArchive( deltaPath.toPortableString() );
@@ -443,7 +453,7 @@ public class ServerUtil {
 		}
 
 		if ( zipEntry == null ) {
-			zipEntry = new ZipEntry( archive + "META-INF/ibm-partialapp-delete.props" );
+			zipEntry = new ZipEntry( archive + "META-INF/" + deletePrefix + "-partialapp-delete.props" );
 		}
 
 		String existingFiles = deleteEntries.get( zipEntry );
@@ -490,7 +500,7 @@ public class ServerUtil {
 		}
 	}
 
-	public static File createPartialEAR( String archiveName, IModuleResourceDelta[] deltas ) {
+	public static File createPartialEAR( String archiveName, IModuleResourceDelta[] deltas, String deletePrefix ) {
 		IPath path = LiferayServerCorePlugin.getTempLocation( "partial-ear", archiveName );
 
 		FileOutputStream outputStream = null;
@@ -505,7 +515,7 @@ public class ServerUtil {
 
 			Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
-			processResourceDeltasZip( deltas, zip, deleteEntries );
+			processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix );
 
 			for ( ZipEntry entry : deleteEntries.keySet() ) {
 				zip.putNextEntry( entry );
@@ -533,7 +543,7 @@ public class ServerUtil {
 		return file;
 	}
 
-	public static File createPartialWAR( String archiveName, IModuleResourceDelta[] deltas ) {
+	public static File createPartialWAR( String archiveName, IModuleResourceDelta[] deltas, String deletePrefix ) {
 		IPath path = LiferayServerCorePlugin.getTempLocation( "partial-war", archiveName );
 
 		FileOutputStream outputStream = null;
@@ -548,7 +558,7 @@ public class ServerUtil {
 
 			Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
-			processResourceDeltasZip( deltas, zip, deleteEntries );
+			processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix );
 
 			for ( ZipEntry entry : deleteEntries.keySet() ) {
 				zip.putNextEntry( entry );

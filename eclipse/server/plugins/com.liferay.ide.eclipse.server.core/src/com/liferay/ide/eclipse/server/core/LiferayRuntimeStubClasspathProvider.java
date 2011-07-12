@@ -38,6 +38,7 @@ public class LiferayRuntimeStubClasspathProvider extends RuntimeClasspathProvide
 				if ( runtimeTypeIds.contains( runtimeStubTypeId ) ) {
 					try {
 						stubDelegate = (RuntimeClasspathProviderDelegate) element.createExecutableExtension( "class" );
+						break;
 					}
 					catch ( CoreException e ) {
 						e.printStackTrace();

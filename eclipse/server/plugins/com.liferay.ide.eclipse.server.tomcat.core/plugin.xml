@@ -26,7 +26,7 @@
       <runtimeClasspathProvider
             class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntimeClasspathProvider"
             id="com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider"
-            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.*">
+            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60">
       </runtimeClasspathProvider>
    </extension>
    <extension
