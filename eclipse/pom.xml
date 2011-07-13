@@ -61,7 +61,36 @@
 	<wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
 
-  
+  <profiles>
+    <profile>
+      <id>helios</id>
+      <activation>
+        <property>
+          <name>platform-version-name</name>
+          <value>helios</value>
+        </property>
+      </activation>
+      <properties>
+        <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
+        <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
+        <platform-version>[3.6,3.7)</platform-version>
+      </properties>
+    </profile>
+    <profile>
+      <id>indigo</id>
+      <activation>
+        <property>
+          <name>platform-version-name</name>
+          <value>indigo</value>
+        </property>
+      </activation>
+      <properties>
+        <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
+        <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+        <platform-version>[3.7,3.8)</platform-version>
+      </properties>
+    </profile>
+  </profiles>
 
   <modules>
     <module>common/plugins/com.liferay.ide.eclipse.core</module>
@@ -259,5 +288,6 @@
       </plugins>
     </pluginManagement>
   </build>
+  
 
 </project>
