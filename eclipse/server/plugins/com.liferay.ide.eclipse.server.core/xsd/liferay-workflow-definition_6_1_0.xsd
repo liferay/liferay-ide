@@ -7,283 +7,221 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
 	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
-	<xs:element name="action">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="execution-type" />
-				<xs:element ref="script" />
-				<xs:element ref="script-language" />
-				<xs:element name="priority" type="xs:int" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="actions">
-		<xs:complexType>
-			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:group ref="actions-group" />
-			</xs:choice>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="assignments">
-		<xs:complexType>
+	<xs:complexType name="abstract-timer-complex-type" abstract="true">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+			<xs:element name="delay" type="time-delay-complex-type" />
+			<xs:element name="recurrence" type="time-delay-complex-type" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="abstract-workflow-node-complex-type" abstract="true">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+			<xs:element name="metadata" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="action-complex-type">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+			<xs:element name="script" type="xs:string" />
+			<xs:element name="script-language" type="script-language-type" />
+			<xs:element name="priority" type="xs:int" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="action-timer-workflow-node-complex-type">
+		<xs:complexContent>
+			<xs:extension base="abstract-workflow-node-complex-type">
+				<xs:sequence>
+					<xs:element name="actions" minOccurs="0">
+						<xs:complexType>
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:group ref="actions-group" />
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="timers" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="timer" type="timer-complex-type" maxOccurs="unbounded" />
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="notification-complex-type">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+			<xs:element name="template" type="xs:string" />
+			<xs:element name="template-language" type="template-language-type" />
+			<xs:element name="notification-type" type="notification-transport-type" maxOccurs="unbounded" />
+			<xs:element name="recipients" minOccurs="0">
+				<xs:complexType>
+					<xs:group ref="recipients-group" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="role-complex-type">
+		<xs:sequence>
 			<xs:choice>
-				<xs:group ref="assignments-group" />
+				<xs:element name="role-id" type="xs:long" minOccurs="0" />
+				<xs:sequence>
+					<xs:element name="role-type" type="role-type" minOccurs="0" default="regular" />
+					<xs:element name="name" type="xs:string" minOccurs="0" />
+					<xs:element name="auto-create" type="xs:boolean" minOccurs="0" default="true" />
+				</xs:sequence>
 			</xs:choice>
-		</xs:complexType>
-	</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="task-timer-complex-type">
+		<xs:complexContent>
+			<xs:extension base="abstract-timer-complex-type">
+				<xs:sequence>
+					<xs:element name="blocking" type="xs:boolean" minOccurs="0" default="false" />
+					<xs:element name="timer-actions">
+						<xs:complexType>
+							<xs:choice maxOccurs="unbounded">
+								<xs:group ref="task-timer-actions-group" />
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="time-delay-complex-type">
+		<xs:sequence>
+			<xs:element name="duration" type="xs:double" />
+			<xs:element name="scale" type="time-scale-type" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="timer-complex-type">
+		<xs:complexContent>
+			<xs:extension base="abstract-timer-complex-type">
+				<xs:sequence>
+					<xs:element name="timer-actions" minOccurs="0">
+						<xs:complexType>
+							<xs:choice maxOccurs="unbounded">
+								<xs:group ref="timer-actions-group" />
+							</xs:choice>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="user-complex-type">
+		<xs:choice>
+			<xs:element name="user-id" type="xs:long" minOccurs="0" />
+			<xs:element name="screen-name" type="xs:string" minOccurs="0" />
+			<xs:element name="email-address" type="xs:string" minOccurs="0" />
+		</xs:choice>
+	</xs:complexType>
 	<xs:element name="condition">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="script" />
-				<xs:element ref="script-language" />
-				<xs:element ref="actions" minOccurs="0" />
-				<xs:element ref="timers" minOccurs="0" />
-				<xs:element ref="transitions" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="action-timer-workflow-node-complex-type">
+					<xs:sequence>
+						<xs:element name="script" type="xs:string" />
+						<xs:element name="script-language" type="script-language-type" />
+						<xs:element ref="transitions" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
 		</xs:complexType>
-	</xs:element>
-	<xs:element name="description" type="xs:string" />
-	<xs:element name="delay">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="duration" type="xs:double" />
-				<xs:element name="scale">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="second" />
-							<xs:enumeration value="minute" />
-							<xs:enumeration value="hour" />
-							<xs:enumeration value="day" />
-							<xs:enumeration value="week" />
-							<xs:enumeration value="month" />
-							<xs:enumeration value="year" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="execution-type">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="onAssignment" />
-				<xs:enumeration value="onEntry" />
-				<xs:enumeration value="onExit" />
-				<xs:enumeration value="onTimer" />
-			</xs:restriction>
-		</xs:simpleType>
 	</xs:element>
 	<xs:element name="fork">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="actions" minOccurs="0" />
-				<xs:element ref="timers" minOccurs="0" />
-				<xs:element ref="transitions" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="action-timer-workflow-node-complex-type">
+					<xs:sequence>
+						<xs:element ref="transitions" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="join">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="actions" minOccurs="0" />
-				<xs:element ref="timers" minOccurs="0" />
-				<xs:element ref="transitions" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="action-timer-workflow-node-complex-type">
+					<xs:sequence>
+						<xs:element ref="transitions" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
 		</xs:complexType>
-	</xs:element>
-	<xs:element name="name" type="xs:string" />
-	<xs:element name="notification">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="execution-type" />
-				<xs:element name="template" type="xs:string" />
-				<xs:element name="template-language">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="freemarker" />
-							<xs:enumeration value="text" />
-							<xs:enumeration value="velocity" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="notification-type" maxOccurs="unbounded">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="email" />
-							<xs:enumeration value="im" />
-							<xs:enumeration value="private-message" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element ref="recipients" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="reassignments">
-		<xs:complexType>
-			<xs:choice>
-				<xs:group ref="assignments-group" />
-			</xs:choice>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="recipients">
-		<xs:complexType>
-			<xs:group ref="recipients-group" />
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="resource-actions">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="resource-action" type="xs:string" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="role">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="role-id" type="xs:long" minOccurs="0" />
-				<xs:element name="role-type" minOccurs="0" default="regular">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="regular" />
-							<xs:enumeration value="organization" />
-							<xs:enumeration value="site" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:element>
-				<xs:element name="name" type="xs:string" minOccurs="0" />
-				<xs:element name="auto-create" type="xs:boolean" minOccurs="0" default="true" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="roles">
-		<xs:complexType>
-			<xs:choice minOccurs="0">
-				<xs:element ref="role" maxOccurs="unbounded" />
-			</xs:choice>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="script" type="xs:string" />
-	<xs:element name="scripted-assignment">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="script" />
-				<xs:element ref="script-language" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="script-language">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="beanshell" />
-				<xs:enumeration value="drl" />
-				<xs:enumeration value="groovy" />
-				<xs:enumeration value="javascript" />
-				<xs:enumeration value="python" />
-				<xs:enumeration value="ruby" />
-			</xs:restriction>
-		</xs:simpleType>
 	</xs:element>
 	<xs:element name="state">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element name="initial" type="xs:boolean" minOccurs="0" />
-				<xs:element ref="actions" minOccurs="0" />
-				<xs:element ref="timers" minOccurs="0" />
-				<xs:element ref="transitions" minOccurs="0" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="action-timer-workflow-node-complex-type">
+					<xs:sequence>
+						<xs:element name="initial" type="xs:boolean" minOccurs="0" default="false" />
+						<xs:element ref="transitions" minOccurs="0" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="task">
 		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="actions" minOccurs="0" />
-				<xs:element ref="assignments" />
-				<xs:element ref="timers" minOccurs="0" />
-				<xs:element ref="transitions" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="task-timer">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element name="default" type="xs:boolean" minOccurs="0" default="false" />
-				<xs:element ref="delay" />
-				<xs:element ref="actions" minOccurs="0" />
-				<xs:element ref="reassignments" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="task-timers">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="task-timer" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="transition">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element name="target" type="xs:string" />
-				<xs:element name="default" type="xs:boolean" minOccurs="0" default="true" />
-			</xs:sequence>
+			<xs:complexContent>
+				<xs:extension base="abstract-workflow-node-complex-type">
+					<xs:sequence>
+						<xs:element name="actions">
+							<xs:complexType>
+								<xs:choice>
+									<xs:group ref="task-actions-group" maxOccurs="unbounded" />
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="assignments">
+							<xs:complexType>
+								<xs:choice>
+									<xs:group ref="assignments-group" />
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="task-timers" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="task-timer" type="task-timer-complex-type" maxOccurs="unbounded" />
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element ref="transitions" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="transitions">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="transition" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="timer">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
-				<xs:element ref="delay" />
-				<xs:element ref="actions" minOccurs="0" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="timers">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element ref="timer" maxOccurs="unbounded" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="user">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="user-id" type="xs:long" minOccurs="0" />
-				<xs:element name="screen-name" type="xs:string" minOccurs="0" />
-				<xs:element name="email-address" type="xs:string" minOccurs="0" />
+				<xs:element name="transition" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="name" type="xs:string" />
+							<xs:element name="target" type="xs:string" />
+							<xs:element name="default" type="xs:boolean" minOccurs="0" default="true" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="workflow-definition">
 		<xs:complexType>
 			<xs:choice minOccurs="0" maxOccurs="unbounded">
-				<xs:element ref="name" />
-				<xs:element ref="description" minOccurs="0" />
+				<xs:element name="name" type="xs:string" />
+				<xs:element name="description" type="xs:string" minOccurs="0" />
 				<xs:element name="version" type="xs:int" />
 				<xs:group ref="nodes-group" />
 			</xs:choice>
@@ -291,16 +229,55 @@
 	</xs:element>
 	<xs:group name="actions-group">
 		<xs:choice>
-			<xs:element ref="action" />
-			<xs:element ref="notification" />
+			<xs:element name="action">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="action-complex-type">
+							<xs:sequence>
+								<xs:element name="execution-type" type="execution-type" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="notification">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="notification-complex-type">
+							<xs:sequence>
+								<xs:element name="execution-type" type="execution-type" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:choice>
 	</xs:group>
 	<xs:group name="assignments-group">
 		<xs:choice>
-			<xs:element ref="resource-actions" minOccurs="0" />
-			<xs:element ref="roles" minOccurs="0" />
-			<xs:element ref="scripted-assignment" minOccurs="0" />
-			<xs:element ref="user" minOccurs="0" />
+			<xs:element name="resource-actions">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="resource-action" type="xs:string" maxOccurs="unbounded" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="roles">
+				<xs:complexType>
+					<xs:choice minOccurs="0">
+						<xs:element name="role" type="role-complex-type" maxOccurs="unbounded" />
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="scripted-assignment">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="script" type="xs:string" />
+						<xs:element name="script-language" type="script-language-type" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="user" type="user-complex-type" />
 		</xs:choice>
 	</xs:group>
 	<xs:group name="nodes-group">
@@ -313,10 +290,115 @@
 		</xs:choice>
 	</xs:group>
 	<xs:group name="recipients-group">
-		<xs:choice>
+		<xs:sequence>
 			<xs:element name="address" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element ref="role" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element ref="user" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="role" type="role-complex-type" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="user" type="user-complex-type" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:group>
+	<xs:group name="task-actions-group">
+		<xs:choice>
+			<xs:element name="action">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="action-complex-type">
+							<xs:sequence>
+								<xs:element name="execution-type" type="task-execution-type" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="notification">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="notification-complex-type">
+							<xs:sequence>
+								<xs:element name="execution-type" type="task-execution-type" />
+							</xs:sequence>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:choice>
 	</xs:group>
+	<xs:group name="task-timer-actions-group">
+		<xs:choice>
+			<xs:element name="timer-action" type="action-complex-type" />
+			<xs:element name="timer-notification" type="notification-complex-type" />
+			<xs:element name="reassignments" minOccurs="0">
+				<xs:complexType>
+					<xs:choice>
+						<xs:group ref="assignments-group" />
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="timer-actions-group">
+		<xs:choice>
+			<xs:element name="timer-action" type="action-complex-type" />
+			<xs:element name="timer-notification" type="notification-complex-type" />
+		</xs:choice>
+	</xs:group>
+	<xs:simpleType name="execution-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="onEntry" />
+			<xs:enumeration value="onExit" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="notification-transport-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="email" />
+			<xs:enumeration value="im" />
+			<xs:enumeration value="private-message" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="role-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="regular" />
+			<xs:enumeration value="organization" />
+			<xs:enumeration value="site" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="script-language-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="beanshell" />
+			<xs:enumeration value="drl" />
+			<xs:enumeration value="groovy" />
+			<xs:enumeration value="javascript" />
+			<xs:enumeration value="python" />
+			<xs:enumeration value="ruby" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="task-execution-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="onAssignment" />
+			<xs:enumeration value="onEntry" />
+			<xs:enumeration value="onExit" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="template-language-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="freemarker" />
+			<xs:enumeration value="text" />
+			<xs:enumeration value="velocity" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="timer-execution-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="onTimer" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="time-scale-type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="second" />
+			<xs:enumeration value="minute" />
+			<xs:enumeration value="hour" />
+			<xs:enumeration value="day" />
+			<xs:enumeration value="week" />
+			<xs:enumeration value="month" />
+			<xs:enumeration value="year" />
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
