@@ -98,7 +98,7 @@ public final class ZipUtil {
 			final Enumeration<? extends ZipEntry> entries = zip.entries();
 
 			final int totalWork = zip.size();
-			monitor.beginTask(Resources.progressUnzipping, totalWork);
+			monitor.beginTask( "Unzipping file: " + file.getName() + " " + Resources.progressUnzipping, totalWork );
 
 			int c = 0;
 
@@ -107,7 +107,8 @@ public final class ZipUtil {
 
 				monitor.worked(1);
 
-				final String taskMsg = NLS.bind(Resources.progressUnzipped, c++, totalWork);
+				final String taskMsg =
+					NLS.bind( Resources.progressUnzipped, new Object[] { file.getName(), c++, totalWork } );
 				monitor.setTaskName(taskMsg);
 
 				if (entry.isDirectory())
