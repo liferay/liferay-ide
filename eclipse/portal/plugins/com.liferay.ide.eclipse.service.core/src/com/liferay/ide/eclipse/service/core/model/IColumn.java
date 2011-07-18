@@ -162,6 +162,18 @@ public interface IColumn extends IModelElement {
 
 	void setConvertNull(Boolean value);
 
+	@Type( base = Boolean.class )
+	@Label( standard = "&lazy" )
+	@XmlBinding( path = "@lazy" )
+	@DefaultValue( text = "true" )
+	ValueProperty PROP_LAZY = new ValueProperty( TYPE, "Lazy" );
+
+	Value<Boolean> isLazy();
+
+	void setLazy( String value );
+
+	void setLazy( Boolean value );
+
 	// *** Localized ***
 
 	@Type(base = Boolean.class)

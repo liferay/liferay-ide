@@ -217,6 +217,13 @@ the json-enabled value is true.</content>
                                                             </hint>
                                                         </property-editor>
                                                         <property-editor>
+                                                            <property>lazy</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>
                                                             <property>localized</property>
                                                             <hint>
                                                                 <name>checkbox.layout</name>
@@ -385,8 +392,16 @@ the type value is String. This is particularly useful if your entity is
 referencing a read only table or a database view so that Hibernate does not try
 to issue unnecessary updates. The default value is true.
 [br/][br/]
+The lazy value is only valid when type is Blob. It specifies whether or not to
+do a lazy fetch for Blob. The default value is true.
+[br/][br/]
 The localized value specifies whether or not the value of the column can have
-different values for different locales. The default value is false.</content>
+different values for different locales. The default value is false.
+[br/][br/]
+The json-enabled value specifies whether or not the column should be annotated
+for JSON serialization. By default, if the json-enabled value in the entity
+element is true, then the json-enabled value in the column element is true.
+</content>
                                             </documentation>
                                         </section>
                                         <use-model-element-image></use-model-element-image>
