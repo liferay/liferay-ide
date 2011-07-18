@@ -137,9 +137,7 @@ public class RemoteLogStream extends BufferedInputStream {
 		boolean goodUrl = false;
 
 		while (!goodUrl) {
-			URL newUrl =
-				new URL(baseUrl, log + "?" + baseUrl.getQuery() + "&rangeStart=" + range + "&rangeEnd=" +
-					(range + LOG_QUERY_RANGE));
+			URL newUrl = new URL( baseUrl.toExternalForm() + "/" + range );
 
 			try {
 				goodUrl = urlPeek(newUrl);
