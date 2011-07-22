@@ -55,15 +55,6 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 		}
 	}
 
-	public void exit() {
-		// IRuntimeWorkingCopy runtimeStub = getRuntimeStubWorkingCopy();
-		// IWebsphereRuntimeWorkingCopy websphereRuntime = getWebsphereRuntimeWorkingCopy();
-		//
-		// if (websphereRuntime != null) {
-		// websphereRuntime.setRuntimeStubTypeId(LiferayTomcatRuntime.RUNTIME_TYPE_ID);
-		// }
-	}
-
 	public boolean hasComposite() {
 		return true;
 	}
@@ -77,17 +68,7 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 
 		IStatus status = runtime.validate(null);
 
-		// if (!status.isOK() && status.getCode() == WebsphereRuntime.INVALID_STUB_CODE) {
-		// status = Status.OK_STATUS;
-		// }
-
-		// IRuntimeWorkingCopy runtimeStub = getRuntimeStubWorkingCopy();
-		//
-		// if (runtimeStub == null) {
-		// return false;
-		// }
-
-		return (status == null || status.getSeverity() != IStatus.ERROR);
+		return status != null && status.getSeverity() != IStatus.ERROR;
 	}
 
 	protected ILiferayRuntime getLiferayRuntime() {
@@ -95,15 +76,5 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 		ILiferayRuntime liferayRuntime = (ILiferayRuntime) runtimeWC.loadAdapter( ILiferayRuntime.class, null );
 		return liferayRuntime;
 	}
-
-	// protected IWebsphereRuntimeWorkingCopy getWebsphereRuntimeWorkingCopy() {
-	// IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
-	//
-	// if (runtime != null) {
-	// return (IWebsphereRuntimeWorkingCopy) runtime.loadAdapter(IWebsphereRuntimeWorkingCopy.class, null);
-	// }
-	//
-	// return null;
-	// }
 
 }

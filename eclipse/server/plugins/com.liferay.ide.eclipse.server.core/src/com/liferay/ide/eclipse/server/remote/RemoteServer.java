@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.jst.server.core.IWebModule;
 import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 
 /**
@@ -51,14 +52,32 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return getServer().getId();
 	}
 
+	public void setAdjustDeploymentTimestamp( boolean adjustTimestamp ) {
+		setAttribute( ATTR_ADJUST_DEPLOYMENT_TIMESTAMP, adjustTimestamp );
+	}
+
 	public URL getModuleRootURL( IModule module ) {
 		return getPortalHomeUrl();
 	}
 
+	@SuppressWarnings( "restriction" )
 	@Override
 	public void setDefaults( IProgressMonitor monitor ) {
 		super.setDefaults( monitor );
 		// getServerWorkingCopy().setAttribute( Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE );
+		String baseName = "Remote Liferay Server at " + getServer().getHost();
+		String defaultName = baseName;
+
+		int collision = 1;
+		while ( ServerPlugin.isNameInUse( getServer(), defaultName ) ) {
+			defaultName = baseName + " (" + ( collision++ ) + ")";
+		}
+
+		getServerWorkingCopy().setName( defaultName );
+	}
+
+	public boolean getAdjustDeploymentTimestamp() {
+		return getAttribute( ATTR_ADJUST_DEPLOYMENT_TIMESTAMP, DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP );
 	}
 
 	@Override
@@ -213,8 +232,44 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	}
 
 	public IStatus validate( IProgressMonitor monitor ) {
-		// TODO Implement validate method on class IRemoteServerWorkingCopy
-		return Status.OK_STATUS;
+		IStatus status = null;
+
+		try {
+			String host = getServerWorkingCopy().getHost();
+
+			if ( monitor != null ) {
+				monitor.beginTask( "Validating connection to " + host + ":" + getHTTPPort(), IProgressMonitor.UNKNOWN );
+			}
+
+			if ( !canMakeHttpConnection() ) {
+				return LiferayServerCorePlugin.createWarningStatus( "Server is not available at " + host + ":" +
+					getHTTPPort() );
+			}
+
+			IRemoteConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );
+
+			status =
+				connection.isAlive()
+					? Status.OK_STATUS
+					: LiferayServerCorePlugin.createErrorStatus( "Could not connect to Liferay server manager." );
+
+			if ( status.isOK() ) {
+				URL url = getPortalHomeUrl();
+
+				if ( url == null ) {
+					status = LiferayServerCorePlugin.createErrorStatus( "Could not find Liferay server manager." );
+				}
+			}
+
+			if ( monitor != null ) {
+				monitor.done();
+			}
+		}
+		catch ( Exception e ) {
+			status = LiferayServerCorePlugin.createErrorStatus( e );
+		}
+
+		return status;
 	}
 
 	public boolean canMakeHttpConnection() {

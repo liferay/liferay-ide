@@ -191,6 +191,16 @@
             runtime-component-type="com.liferay.ide.eclipse.server.runtime.stub.component">
       </image>
    </extension>
+   <extension
+         point="org.eclipse.wst.server.ui.editorPageSections">
+      <section
+            class="com.liferay.ide.eclipse.server.ui.RemoteSettingsEditorSection"
+            id="com.liferay.ide.eclipse.server.remote.remoteSettings"
+            insertionId="org.eclipse.wst.server.editor.overview.left"
+            order="0"
+            typeIds="com.liferay.ide.eclipse.server.remote">
+      </section>
+   </extension>
    
    
    

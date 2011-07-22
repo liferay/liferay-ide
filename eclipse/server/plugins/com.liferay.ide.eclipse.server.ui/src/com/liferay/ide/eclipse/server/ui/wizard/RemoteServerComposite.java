@@ -34,7 +34,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,27 +47,19 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 /**
  * @author Greg Amerson
  */
-public class RemoteServerComposite extends Composite
-	implements ModifyListener, SelectionListener, PropertyChangeListener {
+public class RemoteServerComposite extends Composite implements ModifyListener, PropertyChangeListener {
 
-	// protected Button checkboxCustomPortletXml;
-	// protected Button checkboxSecurity;
-	// protected Button detectButton;
 	protected boolean disableValidation;
 	protected RemoteServerWizardFragment fragment;
 	protected boolean ignoreModifyEvents;
 	protected Label labelServerManagerContextPath;
 	protected Label labelLiferayPortalContextPath;
-//	protected Label labelPassword;
 	protected Label labelHttpPort;
-//	protected Label labelUsername;
 	protected IServerWorkingCopy serverWC;
 	protected Text textServerManagerContextPath;
 	protected Text textLiferayPortalContextPath;
 	protected Text textHostname;
-//	protected Text textPassword;
 	protected Text textHTTP;
-//	protected Text textUsername;
 	protected IRemoteServerWorkingCopy remoteServerWC;
 	protected IWizardHandle wizard;
 
@@ -93,27 +84,19 @@ public class RemoteServerComposite extends Composite
 		else if (src.equals(textHTTP)) {
 			this.remoteServerWC.setHTTPPort( textHTTP.getText() );
 		}
-//		else if (src.equals(textUsername)) {
-//			this.remoteServerWC.setUsername( textUsername.getText() );
-		// }
-//		else if (src.equals(textPassword)) {
-//			this.remoteServerWC.setPassword( textPassword.getText() );
-//		}
 		else if ( src.equals( textServerManagerContextPath ) ) {
 			this.remoteServerWC.setServerManagerContextPath( textServerManagerContextPath.getText() );
 		}
 		else if ( src.equals( textLiferayPortalContextPath ) ) {
 			this.remoteServerWC.setLiferayPortalContextPath( textLiferayPortalContextPath.getText() );
 		}
+
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ( IRemoteServer.ATTR_HOSTNAME.equals( evt.getPropertyName() ) ||
 			IRemoteServer.ATTR_HTTP_PORT.equals( evt.getPropertyName() ) ||
-			IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( evt.getPropertyName() ) ) { // ||
-		// IRemoteServer.ATTR_USERNAME.equals( evt.getPropertyName() ) ||
-		// IRemoteServer.ATTR_PASSWORD.equals( evt.getPropertyName() ) ||
-		// IRemoteServer.ATTR_SECURITY_ENABLED.equals( evt.getPropertyName() ) ) {
+			IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( evt.getPropertyName() ) ) {
 
 			LiferayServerCorePlugin.updateConnectionSettings( (IRemoteServer) serverWC.loadAdapter(
 				IRemoteServer.class, null ) );
@@ -136,33 +119,12 @@ public class RemoteServerComposite extends Composite
 		initialize();
 		disableValidation = false;
 		validate();
-		// detectAppName();
-	}
-
-	public void widgetDefaultSelected(SelectionEvent e) {
-		widgetSelected(e);
-	}
-
-	public void widgetSelected(SelectionEvent e) {
-		Object src = e.getSource();
-
-		if (src == null) {
-			return;
-		}
-
-		// if (src.equals(checkboxSecurity)) {
-		// this.remoteServerWC.setSecurityEnabled( checkboxSecurity.getSelection() );
-		// }
-		// else if (src.equals(checkboxCustomPortletXml)) {
-		// this.remoteServerWC.setDeployCustomPortletXml( checkboxCustomPortletXml.getSelection() );
-		// }
 	}
 
 	protected void createControl() {
 		setLayout(new GridLayout(1, false));
 
 		disableValidation = true;
-
 		Group connectionGroup = SWTUtil.createGroup( this, "Connection Settings", 2 );
 		connectionGroup.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
 
@@ -179,28 +141,6 @@ public class RemoteServerComposite extends Composite
 		textHTTP = new Text( connectionGroup, SWT.BORDER );
 		textHTTP.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		textHTTP.addModifyListener(this);
-
-		// checkboxSecurity = new Button(websphereGroup, SWT.CHECK);
-		// checkboxSecurity.setText("Security enabled on this server");
-		// checkboxSecurity.addSelectionListener(this);
-
-		// labelUsername = new Label(websphereGroup, SWT.NONE);
-		// labelUsername.setEnabled(false);
-		// labelUsername.setText("Username:");
-		//
-		// textUsername = new Text(websphereGroup, SWT.BORDER);
-		// textUsername.setEnabled(false);
-		// textUsername.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		// textUsername.addModifyListener(this);
-		//
-		// labelPassword = new Label(websphereGroup, SWT.NONE);
-		// labelPassword.setEnabled(false);
-		// labelPassword.setText("Password:");
-		//
-		// textPassword = new Text(websphereGroup, SWT.BORDER | SWT.PASSWORD);
-		// textPassword.setEnabled(false);
-		// textPassword.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		// textPassword.addModifyListener(this);
 	
 		labelLiferayPortalContextPath = new Label( connectionGroup, SWT.NONE );
 		labelLiferayPortalContextPath.setText( "Liferay Portal Context Path:" );
@@ -217,25 +157,6 @@ public class RemoteServerComposite extends Composite
 		textServerManagerContextPath = new Text( connectionGroup, SWT.BORDER );
 		textServerManagerContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 		textServerManagerContextPath.addModifyListener( this );
-
-		// detectButton = new Button( connectionGroup, SWT.PUSH );
-		// detectButton.setText("Detect");
-		// detectButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-		// detectButton.addSelectionListener(new SelectionAdapter() {
-		//
-		// @Override
-		// public void widgetSelected(SelectionEvent e) {
-		// detectContextUrl();
-		// }
-		// });
-
-		// deploymentGroup = SWTUtil.createGroup(this, "Deployment Settings", 1);
-		// deploymentGroup.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-
-		// checkboxCustomPortletXml = new Button(deploymentGroup, SWT.CHECK);
-		// checkboxCustomPortletXml.setText("Use portlet-custom.xml for deployment (required for WebSphere 6.x)");
-		// checkboxCustomPortletXml.addSelectionListener(this);
-		// checkboxCustomPortletXml.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
 
 		Composite validateComposite = new Composite(this, SWT.NONE);
 		validateComposite.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, true));
@@ -256,40 +177,6 @@ public class RemoteServerComposite extends Composite
 
 		validate();
 	}
-
-	// protected void detectContextUrl() {
-	// final String[] contextPath = new String[1];
-	//
-	// try {
-	// IRunnableWithProgress runnable = new IRunnableWithProgress() {
-	//
-	// public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException {
-	// RemoteServer rs = getRemoteServer();
-	//
-	// if ( rs.canMakeHttpConnection() ) {
-	// contextPath[0] = RemoteUtil.detectServerManagerContextPath( rs, monitor );
-	//
-	// remoteServerWC.setServerManagerContextPath( contextPath[0] );
-	// }
-	// }
-	// };
-	//
-	// wizard.run( true, true, runnable );
-	//
-	// if ( !CoreUtil.isNullOrEmpty( contextPath[0] ) ) {
-	// ignoreModifyEvents = true;
-	// textContextPath.setText( contextPath[0] );
-	// ignoreModifyEvents = false;
-	// }
-	//
-	// validate();
-	//
-	// wizard.update();
-	// }
-	// catch ( Exception ex ) {
-	//
-	// }
-	// }
 
 	protected RemoteServer getRemoteServer() {
 		if (serverWC != null) {
@@ -399,25 +286,6 @@ public class RemoteServerComposite extends Composite
 		if (status == null) {
 			status = remoteServerWC.validate( monitor );
 		}
-
-		// if (status.getException() instanceof ServerCertificateException) {
-		// boolean answer =
-		// UIUtil.promptQuestion(
-		// "WebSphere Server",
-		// "Could not connect to WebSphere because of untrusted certificate.  Do you want to accept the server certificate at "
-		// +
-		// host + ":" + port);
-		//
-		// if (answer) {
-		// boolean accepted = remoteServerWC.acceptServerCertificate();
-		//
-		// if (accepted) {
-		// UIUtil.postInfo(
-		// "WebSphere Server",
-		// "SSL Certificate accepted. The Eclipse workbench will have to be restarted for changes to take into effect.");
-		// }
-		// }
-		// }
 
 		if (status.getSeverity() == IStatus.ERROR) {
 			fragment.lastServerStatus =

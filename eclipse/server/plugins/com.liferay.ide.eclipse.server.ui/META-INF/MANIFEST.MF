@@ -22,8 +22,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.ws.parser;bundle-version="[1.0.402,1.1.0)",
  org.eclipse.wst.ws.explorer;bundle-version="[1.0.408,1.1.0)",
  org.eclipse.wst.ws;bundle-version="[1.1.103,1.2.0)",
- org.eclipse.wst.common.project.facet.ui
+ org.eclipse.wst.common.project.facet.ui,
+ org.eclipse.ui.forms;visibility:=reexport
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.ui,
- com.liferay.ide.eclipse.server.ui.action
+ com.liferay.ide.eclipse.server.ui.action,
+ com.liferay.ide.eclipse.server.ui.cmd,
+ com.liferay.ide.eclipse.server.ui.wizard

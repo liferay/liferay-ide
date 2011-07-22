@@ -22,11 +22,11 @@ import org.eclipse.wst.common.project.facet.ui.IDecorationsProvider;
 @SuppressWarnings("rawtypes")
 public class LiferayRuntimeStubDecorationsProvider implements IAdapterFactory {
 
-	public class WebsphereDecorationsProvider implements IDecorationsProvider {
+	public class LiferayDecorationsProvider implements IDecorationsProvider {
 
 		// private IRuntime runtime;
 
-		public WebsphereDecorationsProvider(IRuntime adaptableObject) {
+		public LiferayDecorationsProvider(IRuntime adaptableObject) {
 			// runtime = adaptableObject;
 		}
 
@@ -43,7 +43,7 @@ public class LiferayRuntimeStubDecorationsProvider implements IAdapterFactory {
 
 	public Object getAdapter(Object adaptableObject, Class adapterType) {
 		if (IDecorationsProvider.class.equals(adapterType)) {
-			return new WebsphereDecorationsProvider((IRuntime) adaptableObject);
+			return new LiferayDecorationsProvider((IRuntime) adaptableObject);
 		}
 		else {
 			return null;

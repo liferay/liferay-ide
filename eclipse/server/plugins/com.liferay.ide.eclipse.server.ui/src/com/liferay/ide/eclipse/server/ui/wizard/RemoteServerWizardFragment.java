@@ -55,8 +55,8 @@ public class RemoteServerWizardFragment extends WizardFragment {
 
 		composite = new RemoteServerComposite(parent, this, wizard);
 
-		wizard.setTitle("WebSphere Server for Liferay v6 EE");
-		wizard.setDescription("Configure WebSphere server instance running Liferay v6 Enteprise Edition.");
+		wizard.setTitle( "Remote Liferay Server" );
+		wizard.setDescription( "Configure remote Liferay server instance." );
 		wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
 			"/icons/wizban/server_wiz.png")));
 
@@ -72,15 +72,6 @@ public class RemoteServerWizardFragment extends WizardFragment {
 
 			composite.setServer(serverWC);
 		}
-	}
-
-	@Override
-	public void exit() {
-		// if (lastServerStatus.getSeverity() != IStatus.ERROR) {
-		// WebsphereCore.getPreferences().put(
-		// WebsphereServer.PREF_DEFAULT_SERVER_HOSTNAME_PREFIX + getServerWorkingCopy().getServerType().getId(),
-		// getServerWorkingCopy().getHost());
-		// }
 	}
 
 	@Override

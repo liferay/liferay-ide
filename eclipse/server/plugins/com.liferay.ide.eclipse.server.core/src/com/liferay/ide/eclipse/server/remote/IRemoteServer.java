@@ -31,6 +31,8 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider {
 	public static final IEclipsePreferences defaultPrefs =
 		new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
 
+	String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp";
+
 	String ATTR_HOSTNAME = "hostname";
 
 	String ATTR_HTTP_PORT = "http-port";
@@ -49,10 +51,16 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider {
 
 	String getLiferayPortalContextPath();
 
+	boolean getAdjustDeploymentTimestamp();
+
+	boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true );
+
 	String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", "" );
 
 	String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
 
 	String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
+
+	void setAdjustDeploymentTimestamp( boolean adjustDemploymentTimestamp );
 
 }

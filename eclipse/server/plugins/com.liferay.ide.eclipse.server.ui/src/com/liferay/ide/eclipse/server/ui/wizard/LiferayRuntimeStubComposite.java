@@ -24,8 +24,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -39,7 +37,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
@@ -48,12 +45,12 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
  */
 public class LiferayRuntimeStubComposite extends Composite {
 
-	protected boolean ignoreModifyEvent = false;
 	protected Combo comboRuntimeStubType;
+	protected boolean ignoreModifyEvent = false;
+	protected ILiferayRuntime liferayRuntime;
 	protected IRuntimeWorkingCopy runtimeWC;
 	protected Text textInstallDir;
 	protected Text textName;
-	protected ILiferayRuntime liferayRuntime;
 
 	protected IWizardHandle wizard;
 
@@ -115,9 +112,7 @@ public class LiferayRuntimeStubComposite extends Composite {
 			public void widgetSelected( SelectionEvent e ) {
 				int index = comboRuntimeStubType.getSelectionIndex();
 				ILiferayRuntimeStub selectedStub = LiferayServerCorePlugin.getRuntimeStubs()[index];
-				LiferayRuntimeStubDelegate delegate =
-					(LiferayRuntimeStubDelegate) runtimeWC.loadAdapter(
-						LiferayRuntimeStubDelegate.class, new NullProgressMonitor() );
+				LiferayRuntimeStubDelegate delegate = getStubDelegate();
 				delegate.setRuntimeStubTypeId( selectedStub.getRuntimeStubTypeId() );
 				validate();
 			}
@@ -148,7 +143,7 @@ public class LiferayRuntimeStubComposite extends Composite {
 
 			public void widgetSelected(SelectionEvent se) {
 				DirectoryDialog dialog = new DirectoryDialog(LiferayRuntimeStubComposite.this.getShell());
-				dialog.setMessage("Select WebSphere installation directory.");
+				dialog.setMessage( "Select runtime stub directory." );
 				dialog.setFilterPath(textInstallDir.getText());
 				String selectedDirectory = dialog.open();
 
@@ -188,12 +183,17 @@ public class LiferayRuntimeStubComposite extends Composite {
 		return text;
 	}
 
+	protected ILiferayRuntime getLiferayRuntime() {
+		return this.liferayRuntime;
+	}
+
 	protected IRuntimeWorkingCopy getRuntime() {
 		return this.runtimeWC;
 	}
 
-	protected ILiferayRuntime getLiferayRuntime() {
-		return this.liferayRuntime;
+	protected LiferayRuntimeStubDelegate getStubDelegate() {
+		return (LiferayRuntimeStubDelegate) runtimeWC.loadAdapter(
+			LiferayRuntimeStubDelegate.class, new NullProgressMonitor() );
 	}
 
 	protected void initialize() {
@@ -217,55 +217,13 @@ public class LiferayRuntimeStubComposite extends Composite {
 			textInstallDir.setText("");
 		}
 
+
 		updateStubs();
 
-		// if (websphereRuntimeWC.getRuntimeStubLocation() != null) {
-		// textStubDir.setText(websphereRuntimeWC.getRuntimeStubLocation().toOSString());
-		// }
-		// else {
-		// textStubDir.setText("");
-		// }
 
 		ignoreModifyEvent = false;
 	}
 
-	protected void updateStubs() {
-		ILiferayRuntimeStub[] stubs = LiferayServerCorePlugin.getRuntimeStubs();
-
-		if ( CoreUtil.isNullOrEmpty( stubs ) ) {
-			return;
-		}
-
-		String[] names = new String[stubs.length];
-
-		for ( int i = 0; i < stubs.length; i++ ) {
-			names[i] = stubs[i].getName();
-		}
-
-		comboRuntimeStubType.setItems( names );
-	}
-
-	protected boolean showPreferencePage() {
-		String id = "org.eclipse.jdt.debug.ui.preferences.VMPreferencePage";
-
-		// should be using the following API, but it only allows a single preference page instance.
-		// see bug 168211 for details
-		String[] displayedIds = new String[] {
-			id
-		};
-		PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(getShell(), id, displayedIds, null);
-
-		return (dialog.open() == Window.OK);
-
-		// PreferenceManager manager = PlatformUI.getWorkbench().getPreferenceManager();
-		// IPreferenceNode node = manager.find("org.eclipse.jdt.ui.preferences.JavaBasePreferencePage").findSubNode(id);
-		// PreferenceManager manager2 = new PreferenceManager();
-		// manager2.addToRoot(node);
-		// PreferenceDialog dialog = new PreferenceDialog(getShell(), manager2);
-		// dialog.create();
-		// return (dialog.open() == Window.OK);
-	}
-	
 	protected void textInstallDirChanged(String text) {
 		if (ignoreModifyEvent) {
 			return;
@@ -279,24 +237,34 @@ public class LiferayRuntimeStubComposite extends Composite {
 
 	}
 
-	protected void textStubInstallDirChanged(String text) {
-		if (ignoreModifyEvent) {
+	protected void updateStubs() {
+		ILiferayRuntimeStub[] stubs = LiferayServerCorePlugin.getRuntimeStubs();
+
+		if ( CoreUtil.isNullOrEmpty( stubs ) ) {
 			return;
 		}
 
-		// Path location = new Path(text);
-		// websphereRuntimeWC.setRuntimeStubLocation(location);
-		// IStatus status = validate();
-		//
-		// if (status.getSeverity() == IStatus.ERROR) {
-		// IPath newStubLocation = LiferayTomcatUtil.modifyLocationForBundle(location);
-		//
-		// if (newStubLocation != null && newStubLocation.toFile().exists()) {
-		// textStubDir.setText(newStubLocation.toOSString());
-		// }
-		// }
-	}
+		String[] names = new String[stubs.length];
 
+		LiferayRuntimeStubDelegate delegate = getStubDelegate();
+			
+		String stubId = delegate.getRuntimeStubTypeId();
+
+		int stubIndex = -1;
+
+		for ( int i = 0; i < stubs.length; i++ ) {
+			names[i] = stubs[i].getName();
+			if ( stubs[i].getRuntimeStubTypeId().equals( stubId ) ) {
+				stubIndex = i;
+			}
+		}
+
+		comboRuntimeStubType.setItems( names );
+
+		if ( stubIndex >= 0 ) {
+			comboRuntimeStubType.select( stubIndex );
+		}
+	}
 
 	protected IStatus validate() {
 		if ( liferayRuntime == null ) {
