@@ -25,9 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -397,7 +401,8 @@ public class ServerUtil {
 	}
 
 	private static void processResourceDeltasZip(
-		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix )
+		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
+		String deltaPrefix, boolean adjustGMTOffset )
 		throws IOException, CoreException {
 
 		for ( IModuleResourceDelta delta : deltas ) {
@@ -410,18 +415,17 @@ public class ServerUtil {
 			IFolder docroot = CoreUtil.getDocroot( deltaProject );
 
 			IPath deltaPath =
-				new Path( deltaProject.getName() + ".war/" +
-					deltaResource.getFullPath().makeRelativeTo( docroot.getFullPath() ) );
+				new Path( deltaPrefix + deltaResource.getFullPath().makeRelativeTo( docroot.getFullPath() ) );
 
 			if ( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED ) {
-				addToZip( deltaPath, deltaResource, zip );
+				addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
 			}
 			else if ( deltaKind == IModuleResourceDelta.REMOVED ) {
 				addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
 			}
 			else if ( deltaKind == IModuleResourceDelta.NO_CHANGE ) {
 				IModuleResourceDelta[] children = delta.getAffectedChildren();
-				processResourceDeltasZip( children, zip, deleteEntries, deletePrefix );
+				processResourceDeltasZip( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
 			}
 		}
 	}
@@ -468,7 +472,8 @@ public class ServerUtil {
 		deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : "" ) + ( file + "\n" ) );
 	}
 
-	private static void addToZip( IPath path, IResource resource, ZipOutputStream zip ) throws IOException,
+	private static void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
+		throws IOException,
 		CoreException {
 
 		switch ( resource.getType() ) {
@@ -478,6 +483,20 @@ public class ServerUtil {
 			zip.putNextEntry( zipEntry );
 
 			InputStream contents = ( (IFile) resource ).getContents();
+
+			if ( adjustGMTOffset ) {
+				TimeZone currentTimeZone = TimeZone.getDefault();
+				Calendar currentDt = new GregorianCalendar( currentTimeZone, Locale.getDefault() );
+
+				// Get the Offset from GMT taking current TZ into account
+				int gmtOffset =
+						currentTimeZone.getOffset(
+							currentDt.get( Calendar.ERA ), currentDt.get( Calendar.YEAR ),
+							currentDt.get( Calendar.MONTH ), currentDt.get( Calendar.DAY_OF_MONTH ),
+							currentDt.get( Calendar.DAY_OF_WEEK ), currentDt.get( Calendar.MILLISECOND ) );
+
+				zipEntry.setTime( System.currentTimeMillis() + ( gmtOffset * -1 ) );
+			}
 
 			try {
 				IOUtils.copy( contents, zip );
@@ -495,12 +514,14 @@ public class ServerUtil {
 			IResource[] members = container.members();
 
 			for ( IResource res : members ) {
-				addToZip( path.append( res.getName() ), res, zip );
+				addToZip( path.append( res.getName() ), res, zip, adjustGMTOffset );
 			}
 		}
 	}
 
-	public static File createPartialEAR( String archiveName, IModuleResourceDelta[] deltas, String deletePrefix ) {
+	public static File createPartialEAR(
+		String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, String deltaPrefix,
+		boolean adjustGMTOffset ) {
 		IPath path = LiferayServerCorePlugin.getTempLocation( "partial-ear", archiveName );
 
 		FileOutputStream outputStream = null;
@@ -515,7 +536,7 @@ public class ServerUtil {
 
 			Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
-			processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix );
+			processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
 
 			for ( ZipEntry entry : deleteEntries.keySet() ) {
 				zip.putNextEntry( entry );
@@ -543,7 +564,8 @@ public class ServerUtil {
 		return file;
 	}
 
-	public static File createPartialWAR( String archiveName, IModuleResourceDelta[] deltas, String deletePrefix ) {
+	public static File createPartialWAR(
+		String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset ) {
 		IPath path = LiferayServerCorePlugin.getTempLocation( "partial-war", archiveName );
 
 		FileOutputStream outputStream = null;
@@ -558,7 +580,7 @@ public class ServerUtil {
 
 			Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
-			processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix );
+			processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, "", adjustGMTOffset );
 
 			for ( ZipEntry entry : deleteEntries.keySet() ) {
 				zip.putNextEntry( entry );

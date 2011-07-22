@@ -296,7 +296,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		try {
 			config = getServer().getLaunchConfiguration( true, null ).getWorkingCopy();
 			IRemoteConnection remoteConnection = getRemoteConnection();
-			int debugPort = remoteConnection.getDebugPort();
+			Integer debugPort = remoteConnection.getDebugPort();
 
 			if ( debugPort > 0 ) {
 				Map connectMap = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_CONNECT_MAP, (Map) null );
@@ -307,7 +307,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 				}
 
 				connectMap.put( "hostname", getServer().getHost() );
-				connectMap.put( "port", debugPort );
+				connectMap.put( "port", debugPort.toString() );
 
 				launchMode = ILaunchManager.DEBUG_MODE;
 			}
@@ -525,7 +525,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 		monitor.subTask( "Creating partial " + moduleProject.getName() + " update archive..." );
 
-		File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta, "liferay" );
+		File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta, "liferay", true );
 
 		monitor.worked( 25 );
 
@@ -594,7 +594,8 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 		Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( moduleProject );
 
-		IStatus directDeployStatus = sdk.war( moduleProject, properties, true, appServerProperties );
+		IStatus directDeployStatus =
+			sdk.war( moduleProject, properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" } );
 
 		if ( !directDeployStatus.isOK() || ( !warFile.exists() ) ) {
 			throw new CoreException( directDeployStatus );

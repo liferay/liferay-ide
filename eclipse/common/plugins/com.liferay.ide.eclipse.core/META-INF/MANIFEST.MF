@@ -29,6 +29,8 @@ Export-Package: com.liferay.ide.eclipse.core,
  org.apache.commons.lang.mutable,
  org.apache.commons.lang.reflect,
  org.apache.commons.lang.text,
- org.apache.commons.lang.time
+ org.apache.commons.lang.time,
+ org.json
 Bundle-ClassPath: .,
- lib/commons-lang-2.5.jar
+ lib/commons-lang-2.5.jar,
+ lib/json.jar

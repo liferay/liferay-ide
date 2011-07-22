@@ -45,12 +45,16 @@ public class RemoteLogStream extends BufferedInputStream {
 		IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
 
 		try {
-			return new URL( connection.getManagerURI() + "/log/" + log );
+			return new URL( getLogURI( connection, log ) + getFormatQuery() );
 		}
 		catch (MalformedURLException e) {
 		}
 
 		return null;
+	}
+
+	protected static String getLogURI( IRemoteConnection connection, String log ) {
+		return connection.getManagerURI() + "/log/" + log;
 	}
 
 	protected static InputStream createInputStream(
@@ -91,10 +95,13 @@ public class RemoteLogStream extends BufferedInputStream {
 
 	protected long range = 0;
 
+	protected IRemoteConnection connection;
+
 	public RemoteLogStream( IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
 		super( createInputStream( server, remoteServer, connection, log ), 8192 );
 		this.baseUrl = createBaseUrl( server, remoteServer, connection, log );
 		this.log = log;
+		this.connection = connection;
 	}
 
 	@Override
@@ -137,7 +144,7 @@ public class RemoteLogStream extends BufferedInputStream {
 		boolean goodUrl = false;
 
 		while (!goodUrl) {
-			URL newUrl = new URL( baseUrl.toExternalForm() + "/" + range );
+			URL newUrl = new URL( getLogURI( connection, log ) + "/" + range + getFormatQuery() );
 
 			try {
 				goodUrl = urlPeek(newUrl);
@@ -157,6 +164,10 @@ public class RemoteLogStream extends BufferedInputStream {
 			catch (InterruptedException e) {
 			}
 		}
+	}
+
+	protected static String getFormatQuery() {
+		return "?format=raw";
 	}
 
 	boolean urlPeek(URL url)

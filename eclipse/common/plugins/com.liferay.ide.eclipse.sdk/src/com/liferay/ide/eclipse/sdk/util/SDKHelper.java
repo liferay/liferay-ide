@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.sdk.util;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKClasspathProvider;
 import com.liferay.ide.eclipse.sdk.SDKPlugin;
@@ -54,6 +55,8 @@ public class SDKHelper extends LaunchHelper {
 	protected String currentTargets;
 
 	protected SDK sdk;
+
+	private String[] additionalVMArgs;
 
 	public SDKHelper(SDK sdk) {
 		super(ANT_LAUNCH_CONFIG_TYPE_ID);
@@ -109,10 +112,22 @@ public class SDKHelper extends LaunchHelper {
 		if (separateJRE) {
 			launchConfig.setAttribute(
 				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME);
-			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Xmx768m");
+			launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, getVMArgumentsAttr() );
 		}
 
 		return launchConfig;
+	}
+
+	private String getVMArgumentsAttr() {
+		StringBuffer args = new StringBuffer( "-Xmx768m" );
+
+		if ( !CoreUtil.isNullOrEmpty( additionalVMArgs ) ) {
+			for ( String vmArg : additionalVMArgs ) {
+				args.append( " " + vmArg );
+			}
+		}
+
+		return args.toString();
 	}
 
 	public String getClasspathProviderAttributeValue() {
@@ -186,5 +201,9 @@ public class SDKHelper extends LaunchHelper {
 				model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(antLib));
 			}
 		}
+	}
+
+	public void setVMArgs( String[] vmargs ) {
+		this.additionalVMArgs = vmargs;
 	}
 }

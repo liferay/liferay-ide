@@ -34,13 +34,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.jst.server.core.IWebModule;
 import org.eclipse.wst.server.core.IModule;
-import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy {
 
 	public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list";
@@ -60,7 +58,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	@Override
 	public void setDefaults( IProgressMonitor monitor ) {
 		super.setDefaults( monitor );
-		getServerWorkingCopy().setAttribute( Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE );
+		// getServerWorkingCopy().setAttribute( Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE );
 	}
 
 	@Override

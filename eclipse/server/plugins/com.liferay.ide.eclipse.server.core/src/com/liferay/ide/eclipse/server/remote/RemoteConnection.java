@@ -13,12 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.core;
+package com.liferay.ide.eclipse.server.remote;
 
-import com.liferay.ide.eclipse.server.remote.IRemoteConnection;
 
 import java.io.File;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -31,6 +30,9 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Greg Amerson
@@ -67,11 +69,19 @@ public class RemoteConnection implements IRemoteConnection {
 					// Read the response body.
 					byte[] body = method.getResponseBody();
 
-					return Integer.parseInt( new String( body ) );
+					String response = new String( body );
+					JSONObject jsonObject = new JSONObject( response );
+
+					if ( isSuccess( jsonObject ) ) {
+						String debugPortOutput = jsonObject.getString( "output-stream" );
+
+						return Integer.parseInt( new String( debugPortOutput ) );
+					}
+
 				}
 			}
 			catch ( Exception e ) {
-
+				e.printStackTrace();
 			}
 
 		}
@@ -79,8 +89,47 @@ public class RemoteConnection implements IRemoteConnection {
 		return -1;
 	}
 
+	private boolean isSuccess( JSONObject jsonObject ) throws JSONException {
+		String success = jsonObject.getString( "success" );
+		return "0".equals( success );
+	}
+
 	public List<String> getLiferayPlugins() {
-		return Collections.emptyList();
+		List<String> retval = new ArrayList<String>();
+
+		try {
+			GetMethod method = new GetMethod( getPluginsURI() );
+
+			int statusCode = getHttpClient().executeMethod( method );
+
+			if ( statusCode != HttpStatus.SC_OK ) {
+				System.err.println( "Method failed: " + method.getStatusLine() );
+			}
+			else {
+				// Read the response body.
+				byte[] body = method.getResponseBody();
+
+				JSONObject json = new JSONObject( new String( body ) );
+
+				if ( isSuccess( json ) ) {
+					String output = getJSONOutput( json );
+					JSONArray jsonPlugins = new JSONArray( output );
+
+					for ( int i = 0; i < jsonPlugins.length(); i++ ) {
+						retval.add( jsonPlugins.get( i ).toString() );
+					}
+				}
+			}
+		}
+		catch ( Exception e ) {
+			e.printStackTrace();
+		}
+
+		return retval;
+	}
+
+	private String getJSONOutput( JSONObject json ) throws JSONException {
+		return json.getString( "output-stream" );
 	}
 
 	public String getManagerURI() {
@@ -100,7 +149,7 @@ public class RemoteConnection implements IRemoteConnection {
 		try {
 			File f = new File( absolutePath );
 
-			PostMethod filePost = new PostMethod( getDeployURI() );
+			PostMethod filePost = new PostMethod( getDeployURI( appName ) );
 			Part[] parts = { new FilePart( "deployWar", f ) };
 			filePost.setRequestEntity( new MultipartRequestEntity( parts, filePost.getParams() ) );
 
@@ -111,7 +160,13 @@ public class RemoteConnection implements IRemoteConnection {
 			}
 
 			String responseString = filePost.getResponseBodyAsString();
-			System.out.println( "Response : \n\n" + responseString );
+
+			JSONObject json = new JSONObject( responseString );
+
+			if ( isSuccess( json ) ) {
+				System.out.println( "installApplication: Sucess.\n\n" );
+			}
+
 			filePost.releaseConnection();
 		}
 		catch ( Exception e ) {
@@ -133,24 +188,85 @@ public class RemoteConnection implements IRemoteConnection {
 			else {
 				// Read the response body.
 				byte[] body = method.getResponseBody();
-				int isAliveInt = Integer.parseInt( new String( body ) );
 
-				if ( isAliveInt == 1 ) {
+				if ( isSuccess( new JSONObject( new String( body ) ) ) ) {
 					return true;
 				}
 			}
 		}
 		catch ( Exception e ) {
+			e.printStackTrace();
 		}
 
 		return false;
 	}
 
 	public boolean isAppInstalled( String appName ) {
+		try {
+			GetMethod method = new GetMethod( getPluginURI( appName ) );
+
+			int statusCode = getHttpClient().executeMethod( method );
+
+			if ( statusCode != HttpStatus.SC_OK ) {
+				System.err.println( "Method failed: " + method.getStatusLine() );
+			}
+			else {
+				// Read the response body.
+				byte[] body = method.getResponseBody();
+
+				JSONObject json = new JSONObject( new String( body ) );
+
+				if ( isSuccess( json ) ) {
+					String output = getJSONOutput( json );
+					JSONObject jsonOutput = new JSONObject( output );
+
+					Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "installed" ) );
+
+					if ( installed ) {
+						return true;
+					}
+				}
+			}
+		}
+		catch ( Exception e ) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 
-	public boolean isLiferayPluginStarted( String name ) {
+	public boolean isLiferayPluginStarted( String appName ) {
+		try {
+			GetMethod method = new GetMethod( getPluginURI( appName ) );
+
+			int statusCode = getHttpClient().executeMethod( method );
+
+			if ( statusCode != HttpStatus.SC_OK ) {
+				System.err.println( "Method failed: " + method.getStatusLine() );
+			}
+			else {
+				// Read the response body.
+				byte[] body = method.getResponseBody();
+
+				JSONObject json = new JSONObject( new String( body ) );
+
+				if ( isSuccess( json ) ) {
+					String output = getJSONOutput( json );
+
+					JSONObject jsonOutput = new JSONObject( output );
+
+					Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "started" ) );
+
+					if ( installed ) {
+						return true;
+					}
+				}
+			}
+		}
+		catch ( Exception e ) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 
@@ -174,7 +290,7 @@ public class RemoteConnection implements IRemoteConnection {
 
 	public Object uninstallApplication( String appName, IProgressMonitor monitor ) {
 		try {
-			DeleteMethod undeployMethod = new DeleteMethod( getUndeployURI() + "/" + appName );
+			DeleteMethod undeployMethod = new DeleteMethod( getUndeployURI( appName ) );
 
 			int status = getHttpClient().executeMethod( undeployMethod );
 
@@ -183,7 +299,11 @@ public class RemoteConnection implements IRemoteConnection {
 			}
 
 			String responseString = undeployMethod.getResponseBodyAsString();
-			System.out.println( "Response : \n\n" + responseString );
+
+			if ( isSuccess( new JSONObject( responseString ) ) ) {
+				System.out.println( "uninstallApplication: success." );
+			}
+
 			undeployMethod.releaseConnection();
 		}
 		catch ( Exception e ) {
@@ -208,7 +328,10 @@ public class RemoteConnection implements IRemoteConnection {
 			}
 
 			String responseString = filePut.getResponseBodyAsString();
-			System.out.println( "Response : \n\n" + responseString );
+			if ( isSuccess( new JSONObject( responseString ) ) ) {
+				System.out.println( "updateApplication: success." );
+			}
+
 			filePut.releaseConnection();
 		}
 		catch ( Exception e ) {
@@ -230,8 +353,21 @@ public class RemoteConnection implements IRemoteConnection {
 	private String getDebugPortURI() {
 		return getManagerURI() + "/debug-port";
 	}
-	private String getDeployURI() {
-		return getManagerURI() + "/deploy";
+
+	private String getUndeployURI( String appName ) {
+		return getManagerURI() + "/undeploy/" + appName;
+	}
+
+	private String getDeployURI( String appName ) {
+		return getManagerURI() + "/deploy/" + appName;
+	}
+
+	private String getPluginsURI() {
+		return getManagerURI() + "/plugins";
+	}
+
+	private String getPluginURI( String appName ) {
+		return getPluginsURI() + "/" + appName;
 	}
 
 	private HttpClient getHttpClient() {
@@ -254,12 +390,8 @@ public class RemoteConnection implements IRemoteConnection {
 		return getManagerURI() + "/is-alive";
 	}
 
-	private String getUndeployURI() {
-		return getManagerURI() + "/undeploy";
-	}
-
 	private String getUpdateURI( String appName ) {
-		return getDeployURI() + "/" + appName;
+		return getDeployURI( appName );
 	}
 
 }

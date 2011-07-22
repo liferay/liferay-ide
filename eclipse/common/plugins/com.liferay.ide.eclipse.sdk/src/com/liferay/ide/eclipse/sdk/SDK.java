@@ -571,8 +571,16 @@ public class SDK {
 		IProject project, Map<String, String> overrideProperties, boolean separateJRE,
 		Map<String, String> appServerProperties ) {
 
+		return war( project, overrideProperties, separateJRE, appServerProperties, null );
+	}
+
+	public IStatus war(
+		IProject project, Map<String, String> overrideProperties, boolean separateJRE,
+		Map<String, String> appServerProperties, String[] vmargs ) {
+
 		try {
 			SDKHelper antHelper = new SDKHelper( this );
+			antHelper.setVMArgs( vmargs );
 
 			persistAppServerProperties( appServerProperties );
 

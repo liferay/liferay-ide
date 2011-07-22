@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.core.CorePlugin;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.remote.IRemoteConnection;
 import com.liferay.ide.eclipse.server.remote.IRemoteServer;
+import com.liferay.ide.eclipse.server.remote.RemoteConnection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
