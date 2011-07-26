@@ -212,7 +212,14 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 					@Override
 					protected IStatus run( IProgressMonitor monitor ) {
-						return updateServerState( state, monitor );
+						try {
+							return updateServerState( state, monitor );
+						}
+						catch ( Exception e ) {
+							LiferayServerCorePlugin.logError( e );
+						}
+
+						return Status.OK_STATUS;
 					}
 
 				};

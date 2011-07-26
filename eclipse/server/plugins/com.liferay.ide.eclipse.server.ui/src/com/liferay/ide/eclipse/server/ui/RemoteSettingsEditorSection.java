@@ -274,6 +274,14 @@ public class RemoteSettingsEditorSection extends ServerEditorSection {
 							String s = (String) event.getNewValue();
 							textHttpPort.setText( s );
 						}
+						else if ( IRemoteServer.ATTR_LIFERAY_PORTAL_CONTEXT_PATH.equals( event.getPropertyName() ) ) {
+							String s = (String) event.getNewValue();
+							textLiferayPortalContextPath.setText( s );
+						}
+						else if ( IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( event.getPropertyName() ) ) {
+							String s = (String) event.getNewValue();
+							textServerManagerContextPath.setText( s );
+						}
 					}
 				} );
 
