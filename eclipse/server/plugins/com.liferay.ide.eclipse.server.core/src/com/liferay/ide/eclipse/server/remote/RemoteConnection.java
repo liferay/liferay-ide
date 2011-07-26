@@ -22,6 +22,8 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -45,15 +47,19 @@ public class RemoteConnection implements IRemoteConnection {
 	private String httpPort;
 	private GetMethod isAliveMethod;
 	private String managerContextPath;
+	private String password;
+	private String username;
 
 	public RemoteConnection() {
-		this( null, null, null );
+		this( null, null, null, null, null );
 	}
 
-	public RemoteConnection( String host, String httpPort, String managerContextPath ) {
+	public RemoteConnection( String host, String httpPort, String username, String pw, String managerContextPath ) {
 		this.host = host;
 		this.httpPort = httpPort;
 		this.managerContextPath = managerContextPath;
+		this.username = username;
+		this.password = pw;
 	}
 
 	public int getDebugPort() {
@@ -87,11 +93,6 @@ public class RemoteConnection implements IRemoteConnection {
 		}
 
 		return -1;
-	}
-
-	private boolean isSuccess( JSONObject jsonObject ) throws JSONException {
-		String success = jsonObject.getString( "success" );
-		return "0".equals( success );
 	}
 
 	public List<String> getLiferayPlugins() {
@@ -128,12 +129,12 @@ public class RemoteConnection implements IRemoteConnection {
 		return retval;
 	}
 
-	private String getJSONOutput( JSONObject json ) throws JSONException {
-		return json.getString( "output-stream" );
-	}
-
 	public String getManagerURI() {
 		return "http://" + host + ":" + httpPort + managerContextPath;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	public String getServerState() {
@@ -145,11 +146,16 @@ public class RemoteConnection implements IRemoteConnection {
 		}
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
 	public Object installApplication( String absolutePath, String appName, IProgressMonitor submon ) {
 		try {
 			File f = new File( absolutePath );
 
 			PostMethod filePost = new PostMethod( getDeployURI( appName ) );
+
 			Part[] parts = { new FilePart( "deployWar", f ) };
 			filePost.setRequestEntity( new MultipartRequestEntity( parts, filePost.getParams() ) );
 
@@ -288,6 +294,16 @@ public class RemoteConnection implements IRemoteConnection {
 		this.debugPortMethod = null;
 	}
 
+	public void setPassword( String pw ) {
+		this.httpClient = null;
+		this.password = pw;
+	}
+
+	public void setUsername( String user ) {
+		this.httpClient = null;
+		this.username = user;
+	}
+
 	public Object uninstallApplication( String appName, IProgressMonitor monitor ) {
 		try {
 			DeleteMethod undeployMethod = new DeleteMethod( getUndeployURI( appName ) );
@@ -354,25 +370,16 @@ public class RemoteConnection implements IRemoteConnection {
 		return getManagerURI() + "/debug-port";
 	}
 
-	private String getUndeployURI( String appName ) {
-		return getManagerURI() + "/undeploy/" + appName;
-	}
-
 	private String getDeployURI( String appName ) {
-		return getManagerURI() + "/deploy/" + appName;
-	}
-
-	private String getPluginsURI() {
-		return getManagerURI() + "/plugins";
-	}
-
-	private String getPluginURI( String appName ) {
 		return getPluginsURI() + "/" + appName;
 	}
 
 	private HttpClient getHttpClient() {
 		if ( httpClient == null ) {
 			httpClient = new HttpClient();
+			httpClient.getParams().setAuthenticationPreemptive( true );
+			UsernamePasswordCredentials creds = new UsernamePasswordCredentials( username, password );
+			httpClient.getState().setCredentials( new AuthScope( host, Integer.parseInt( httpPort ) ), creds );
 		}
 
 		return httpClient;
@@ -390,8 +397,29 @@ public class RemoteConnection implements IRemoteConnection {
 		return getManagerURI() + "/is-alive";
 	}
 
+	private String getJSONOutput( JSONObject json ) throws JSONException {
+		return json.getString( "output-stream" );
+	}
+
+	private String getPluginsURI() {
+		return getManagerURI() + "/plugins";
+	}
+
+	private String getPluginURI( String appName ) {
+		return getPluginsURI() + "/" + appName;
+	}
+
+	private String getUndeployURI( String appName ) {
+		return getDeployURI( appName );
+	}
+
 	private String getUpdateURI( String appName ) {
 		return getDeployURI( appName );
+	}
+
+	private boolean isSuccess( JSONObject jsonObject ) throws JSONException {
+		String success = jsonObject.getString( "success" );
+		return "0".equals( success );
 	}
 
 }

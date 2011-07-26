@@ -125,6 +125,44 @@ public class LiferayServerCorePlugin extends CorePlugin {
 		return pluginPublishers;
 	}
 
+	public static IRemoteConnection getRemoteConnection( final IRemoteServer server ) {
+		if ( connections == null ) {
+			connections = new HashMap<String, IRemoteConnection>();
+
+			ServerCore.addServerLifecycleListener( new IServerLifecycleListener() {
+
+				public void serverAdded( IServer server ) {
+				}
+
+				public void serverChanged( IServer server ) {
+				}
+
+				public void serverRemoved( IServer s ) {
+					if ( server.equals( s ) ) {
+						IRemoteConnection service = connections.get( server.getId() );
+
+						if ( service != null ) {
+							service = null;
+							connections.put( server.getId(), null );
+						}
+					}
+				}
+			} );
+		}
+
+		IRemoteConnection service = connections.get( server.getId() );
+
+		if ( service == null ) {
+			service = new RemoteConnection();
+
+			updateConnectionSettings( server, service );
+
+			connections.put( server.getId(), service );
+		}
+
+		return service;
+	}
+
 	public static IRuntimeDelegateValidator[] getRuntimeDelegateValidators() {
 		if (runtimeDelegateValidators == null) {
 			IConfigurationElement[] elements =
@@ -154,12 +192,79 @@ public class LiferayServerCorePlugin extends CorePlugin {
 		return runtimeDelegateValidators;
 	}
 
+	public static ILiferayRuntimeStub getRuntimeStub( String stubTypeId ) {
+		ILiferayRuntimeStub retval = null;
+
+		ILiferayRuntimeStub[] stubs = getRuntimeStubs();
+
+		if ( !CoreUtil.isNullOrEmpty( stubs ) ) {
+			for ( ILiferayRuntimeStub stub : stubs ) {
+				if ( stub.getRuntimeStubTypeId().equals( stubTypeId ) ) {
+					retval = stub;
+					break;
+				}
+			}
+		}
+
+		return retval;
+	}
+
+	public static ILiferayRuntimeStub[] getRuntimeStubs() {
+		if ( runtimeStubs == null ) {
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor( ILiferayRuntimeStub.EXTENSION_ID );
+
+			if ( !CoreUtil.isNullOrEmpty( elements ) ) {
+				List<ILiferayRuntimeStub> stubs = new ArrayList<ILiferayRuntimeStub>();
+
+				for ( IConfigurationElement element : elements ) {
+					String runtimeTypeId = element.getAttribute( ILiferayRuntimeStub.RUNTIME_TYPE_ID );
+					String name = element.getAttribute( ILiferayRuntimeStub.NAME );
+					boolean isDefault = Boolean.parseBoolean( element.getAttribute( ILiferayRuntimeStub.DEFAULT ) );
+
+					try {
+						LiferayRuntimeStub stub = new LiferayRuntimeStub();
+						stub.setRuntimeTypeId( runtimeTypeId );
+						stub.setName( name );
+						stub.setDefault( isDefault );
+
+						stubs.add( stub );
+					}
+					catch ( Exception e ) {
+						logError( "Could not create liferay runtime stub.", e );
+					}
+				}
+
+				runtimeStubs = stubs.toArray( new ILiferayRuntimeStub[0] );
+			}
+		}
+
+		return runtimeStubs;
+	}
+
+	public static IPath getTempLocation( String prefix, String fileName ) {
+		return getDefault().getStateLocation().append( "tmp" ).append(
+			prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? "" : "/" + fileName ) );
+	}
+
 	public static void logError(Exception e) {
 		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
 	}
 
 	public static void logError(String msg, Exception e) {
 		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+	}
+
+	public static void updateConnectionSettings( IRemoteServer server ) {
+		updateConnectionSettings( server, getRemoteConnection( server ) );
+	}
+
+	public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection remoteConnection ) {
+		remoteConnection.setHost( server.getHost() );
+		remoteConnection.setHttpPort( server.getHTTPPort() );
+		remoteConnection.setManagerContextPath( server.getServerManagerContextPath() );
+		remoteConnection.setUsername( server.getUsername() );
+		remoteConnection.setPassword( server.getPassword() );
 	}
 
 	public static IStatus validateRuntimeDelegate(RuntimeDelegate runtimeDelegate) {
@@ -214,108 +319,5 @@ public class LiferayServerCorePlugin extends CorePlugin {
 
 		super.stop(context);
 
-	}
-
-	public static ILiferayRuntimeStub[] getRuntimeStubs() {
-		if ( runtimeStubs == null ) {
-			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor( ILiferayRuntimeStub.EXTENSION_ID );
-
-			if ( !CoreUtil.isNullOrEmpty( elements ) ) {
-				List<ILiferayRuntimeStub> stubs = new ArrayList<ILiferayRuntimeStub>();
-
-				for ( IConfigurationElement element : elements ) {
-					String runtimeTypeId = element.getAttribute( ILiferayRuntimeStub.RUNTIME_TYPE_ID );
-					String name = element.getAttribute( ILiferayRuntimeStub.NAME );
-					boolean isDefault = Boolean.parseBoolean( element.getAttribute( ILiferayRuntimeStub.DEFAULT ) );
-
-					try {
-						LiferayRuntimeStub stub = new LiferayRuntimeStub();
-						stub.setRuntimeTypeId( runtimeTypeId );
-						stub.setName( name );
-						stub.setDefault( isDefault );
-
-						stubs.add( stub );
-					}
-					catch ( Exception e ) {
-						logError( "Could not create liferay runtime stub.", e );
-					}
-				}
-
-				runtimeStubs = stubs.toArray( new ILiferayRuntimeStub[0] );
-			}
-		}
-
-		return runtimeStubs;
-	}
-
-	public static ILiferayRuntimeStub getRuntimeStub( String stubTypeId ) {
-		ILiferayRuntimeStub retval = null;
-
-		ILiferayRuntimeStub[] stubs = getRuntimeStubs();
-
-		if ( !CoreUtil.isNullOrEmpty( stubs ) ) {
-			for ( ILiferayRuntimeStub stub : stubs ) {
-				if ( stub.getRuntimeStubTypeId().equals( stubTypeId ) ) {
-					retval = stub;
-					break;
-				}
-			}
-		}
-
-		return retval;
-	}
-
-	public static void updateConnectionSettings( IRemoteServer server ) {
-		updateConnectionSettings( server, getRemoteConnection( server ) );
-	}
-
-	public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection remoteConnection ) {
-		remoteConnection.setHost( server.getHost() );
-		remoteConnection.setHttpPort( server.getHTTPPort() );
-		remoteConnection.setManagerContextPath( server.getServerManagerContextPath() );
-	}
-
-	public static IPath getTempLocation( String prefix, String fileName ) {
-		return getDefault().getStateLocation().append( "tmp" ).append(
-			prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? "" : "/" + fileName ) );
-	}
-
-	public static IRemoteConnection getRemoteConnection( final IRemoteServer server ) {
-		if ( connections == null ) {
-			connections = new HashMap<String, IRemoteConnection>();
-
-			ServerCore.addServerLifecycleListener( new IServerLifecycleListener() {
-
-				public void serverAdded( IServer server ) {
-				}
-
-				public void serverChanged( IServer server ) {
-				}
-
-				public void serverRemoved( IServer s ) {
-					if ( server.equals( s ) ) {
-						IRemoteConnection service = connections.get( server.getId() );
-
-						if ( service != null ) {
-							service = null;
-							connections.put( server.getId(), null );
-						}
-					}
-				}
-			} );
-		}
-
-		IRemoteConnection service = connections.get( server.getId() );
-
-		if ( service == null ) {
-			service = new RemoteConnection();
-
-			updateConnectionSettings( server, service );
-
-			connections.put( server.getId(), service );
-		}
-
-		return service;
 	}
 }

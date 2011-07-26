@@ -52,15 +52,19 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 	protected boolean disableValidation;
 	protected RemoteServerWizardFragment fragment;
 	protected boolean ignoreModifyEvents;
-	protected Label labelServerManagerContextPath;
-	protected Label labelLiferayPortalContextPath;
 	protected Label labelHttpPort;
+	protected Label labelLiferayPortalContextPath;
+	protected Label labelPassword;
+	protected Label labelServerManagerContextPath;
+	protected Label labelUsername;
+	protected IRemoteServerWorkingCopy remoteServerWC;
 	protected IServerWorkingCopy serverWC;
-	protected Text textServerManagerContextPath;
-	protected Text textLiferayPortalContextPath;
 	protected Text textHostname;
 	protected Text textHTTP;
-	protected IRemoteServerWorkingCopy remoteServerWC;
+	protected Text textLiferayPortalContextPath;
+	protected Text textPassword;
+	protected Text textServerManagerContextPath;
+	protected Text textUsername;
 	protected IWizardHandle wizard;
 
 	public RemoteServerComposite(Composite parent, RemoteServerWizardFragment fragment, IWizardHandle wizard) {
@@ -90,12 +94,21 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 		else if ( src.equals( textLiferayPortalContextPath ) ) {
 			this.remoteServerWC.setLiferayPortalContextPath( textLiferayPortalContextPath.getText() );
 		}
+		else if ( src.equals( textUsername ) ) {
+			this.remoteServerWC.setUsername( textUsername.getText() );
+		}
+		else if ( src.equals( textPassword ) ) {
+			this.remoteServerWC.setPassword( textPassword.getText() );
+		}
 
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ( IRemoteServer.ATTR_HOSTNAME.equals( evt.getPropertyName() ) ||
 			IRemoteServer.ATTR_HTTP_PORT.equals( evt.getPropertyName() ) ||
+			IRemoteServer.ATTR_USERNAME.equals( evt.getPropertyName() ) ||
+			IRemoteServer.ATTR_PASSWORD.equals( evt.getPropertyName() ) ||
+			IRemoteServer.ATTR_LIFERAY_PORTAL_CONTEXT_PATH.equals( evt.getPropertyName() ) ||
 			IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( evt.getPropertyName() ) ) {
 
 			LiferayServerCorePlugin.updateConnectionSettings( (IRemoteServer) serverWC.loadAdapter(
@@ -137,10 +150,24 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 
 		labelHttpPort = new Label( connectionGroup, SWT.NONE );
 		labelHttpPort.setText( "HTTP port:" );
-		
+
 		textHTTP = new Text( connectionGroup, SWT.BORDER );
-		textHTTP.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		textHTTP.addModifyListener(this);
+		textHTTP.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+		textHTTP.addModifyListener( this );
+
+		labelUsername = new Label( connectionGroup, SWT.NONE );
+		labelUsername.setText( "Username:" );
+
+		textUsername = new Text( connectionGroup, SWT.BORDER );
+		textUsername.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+		textUsername.addModifyListener( this );
+
+		labelPassword = new Label( connectionGroup, SWT.NONE );
+		labelPassword.setText( "Password:" );
+
+		textPassword = new Text( connectionGroup, SWT.BORDER | SWT.PASSWORD );
+		textPassword.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+		textPassword.addModifyListener( this );
 	
 		labelLiferayPortalContextPath = new Label( connectionGroup, SWT.NONE );
 		labelLiferayPortalContextPath.setText( "Liferay Portal Context Path:" );
@@ -195,8 +222,8 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 			this.textLiferayPortalContextPath.setText( this.remoteServerWC.getLiferayPortalContextPath() );
 			this.textServerManagerContextPath.setText( this.remoteServerWC.getServerManagerContextPath() );
 			// this.checkboxSecurity.setSelection( this.remoteServerWC.getSecurityEnabled() );
-			// this.textUsername.setText( this.remoteServerWC.getUsername() );
-			// this.textPassword.setText( this.remoteServerWC.getPassword() );
+			this.textUsername.setText( this.remoteServerWC.getUsername() );
+			this.textPassword.setText( this.remoteServerWC.getPassword() );
 			ignoreModifyEvents = false;
 		}
 	}
@@ -271,23 +298,25 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 	protected IStatus validateServer(IProgressMonitor monitor) {
 		String host = serverWC.getHost();
 
-		IStatus status = null;
-
 		if (CoreUtil.isNullOrEmpty(host)) {
-			status = LiferayServerUIPlugin.createErrorStatus( "Must specify hostname" );
+			return LiferayServerUIPlugin.createErrorStatus( "Must specify hostname" );
+		}
+
+		String username = remoteServerWC.getUsername();
+
+		if ( CoreUtil.isNullOrEmpty( username ) ) {
+			return LiferayServerUIPlugin.createErrorStatus( "Must specify username and password" );
 		}
 
 		String port = remoteServerWC.getHTTPPort();
 
 		if (CoreUtil.isNullOrEmpty(port)) {
-			status = LiferayServerUIPlugin.createErrorStatus( "Must specify SOAP port" );
+			return LiferayServerUIPlugin.createErrorStatus( "Must specify HTTP port" );
 		}
 
-		if (status == null) {
-			status = remoteServerWC.validate( monitor );
-		}
+		IStatus status = remoteServerWC.validate( monitor );
 
-		if (status.getSeverity() == IStatus.ERROR) {
+		if ( status != null && status.getSeverity() == IStatus.ERROR ) {
 			fragment.lastServerStatus =
 				new Status(IStatus.WARNING, status.getPlugin(), status.getMessage(), status.getException());
 		}

@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.wst.server.core.IServer;
@@ -53,34 +54,13 @@ public class RemoteLogStream extends BufferedInputStream {
 		return null;
 	}
 
-	protected static String getLogURI( IRemoteConnection connection, String log ) {
-		return connection.getManagerURI() + "/log/" + log;
-	}
-
 	protected static InputStream createInputStream(
 		IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
 
 		try {
 			URL url = createBaseUrl( server, remoteServer, connection, log );
 
-			URLConnection conn = null;
-
-			// if (websphereServer.getSecurityEnabled()) {
-			// String username = websphereServer.getUsername();
-			// String password = websphereServer.getPassword();
-			//
-			// String authString = username + ":" + password;
-			// byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
-			// String authStringEnc = new String(authEncBytes);
-			//
-			// conn = url.openConnection();
-			// conn.setRequestProperty("Authorization", "Basic " + authStringEnc);
-			// }
-			// else {
-				conn = url.openConnection();
-			// }
-
-			return conn.getInputStream();
+			return openInputStream( connection, url );
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -89,13 +69,35 @@ public class RemoteLogStream extends BufferedInputStream {
 		return null;
 	}
 
+	protected static String getFormatQuery() {
+		return "?format=raw";
+	}
+
+	protected static String getLogURI( IRemoteConnection connection, String log ) {
+		return connection.getManagerURI() + "/log/" + log;
+	}
+
+	protected static InputStream openInputStream( IRemoteConnection remote, URL url ) throws IOException {
+		String username = remote.getUsername();
+		String password = remote.getPassword();
+
+		String authString = username + ":" + password;
+		byte[] authEncBytes = Base64.encodeBase64( authString.getBytes() );
+		String authStringEnc = new String( authEncBytes );
+
+		URLConnection conn = url.openConnection();
+		conn.setRequestProperty( "Authorization", "Basic " + authStringEnc );
+
+		return conn.getInputStream();
+	}
+
 	protected URL baseUrl = null;
+
+	protected IRemoteConnection connection;
 
 	protected String log;
 
 	protected long range = 0;
-
-	protected IRemoteConnection connection;
 
 	public RemoteLogStream( IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
 		super( createInputStream( server, remoteServer, connection, log ), 8192 );
@@ -154,7 +156,7 @@ public class RemoteLogStream extends BufferedInputStream {
 			}
 
 			if (goodUrl) {
-				this.in = newUrl.openStream();
+				this.in = openInputStream( connection, newUrl );
 				return;
 			}
 
@@ -166,15 +168,10 @@ public class RemoteLogStream extends BufferedInputStream {
 		}
 	}
 
-	protected static String getFormatQuery() {
-		return "?format=raw";
-	}
-
-	boolean urlPeek(URL url)
-		throws IOException {
+	boolean urlPeek( URL url ) throws IOException {
 		byte[] buf = new byte[256];
 
-		int bufRead = new BufferedInputStream(url.openStream(), 256).read(buf);
+		int bufRead = new BufferedInputStream( openInputStream( connection, url ), 256 ).read( buf );
 
 		if (bufRead != -1) {
 			String peek = new String(buf);

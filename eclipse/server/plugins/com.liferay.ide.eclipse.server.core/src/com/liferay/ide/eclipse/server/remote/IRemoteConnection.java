@@ -30,7 +30,11 @@ public interface IRemoteConnection {
 
 	String getManagerURI();
 
+	String getPassword();
+
 	String getServerState();
+
+	String getUsername();
 
 	Object installApplication( String absolutePath, String appName, IProgressMonitor monitor );
 
@@ -45,6 +49,10 @@ public interface IRemoteConnection {
 	void setHttpPort( String port );
 
 	void setManagerContextPath( String path );
+
+	void setPassword( String password );
+
+	void setUsername( String username );
 
 	Object uninstallApplication( String appName, IProgressMonitor monitor );
 

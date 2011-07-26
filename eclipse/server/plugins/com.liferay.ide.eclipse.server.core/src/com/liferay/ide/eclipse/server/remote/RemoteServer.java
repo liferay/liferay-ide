@@ -31,53 +31,59 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.jst.server.core.IWebModule;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.internal.ServerPlugin;
+import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings( "restriction" )
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy {
 
 	public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list";
+
+	protected ISecurePreferences securePreferencesNode;
 
 	public RemoteServer() {
 		super();
 	}
 
-	public String getId() {
-		return getServer().getId();
-	}
+	public boolean canMakeHttpConnection() {
+		String host = getServer().getHost();
+		String http = getHTTPPort();
 
-	public void setAdjustDeploymentTimestamp( boolean adjustTimestamp ) {
-		setAttribute( ATTR_ADJUST_DEPLOYMENT_TIMESTAMP, adjustTimestamp );
-	}
+		final Socket socket = new Socket();
 
-	public URL getModuleRootURL( IModule module ) {
-		return getPortalHomeUrl();
-	}
+		new Thread() {
 
-	@SuppressWarnings( "restriction" )
-	@Override
-	public void setDefaults( IProgressMonitor monitor ) {
-		super.setDefaults( monitor );
-		// getServerWorkingCopy().setAttribute( Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE );
-		String baseName = "Remote Liferay Server at " + getServer().getHost();
-		String defaultName = baseName;
+			@Override
+			public void run() {
+				try {
+					sleep( 3000 );
+					socket.close();
+				}
+				catch ( Exception e ) {
+				}
+			}
 
-		int collision = 1;
-		while ( ServerPlugin.isNameInUse( getServer(), defaultName ) ) {
-			defaultName = baseName + " (" + ( collision++ ) + ")";
+		}.start();
+
+		IStatus status = null;
+
+		try {
+			status = SocketUtil.canConnect( socket, host, http );
+		}
+		catch ( Exception e ) {
 		}
 
-		getServerWorkingCopy().setName( defaultName );
-	}
-
-	public boolean getAdjustDeploymentTimestamp() {
-		return getAttribute( ATTR_ADJUST_DEPLOYMENT_TIMESTAMP, DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP );
+		return status != null && status.isOK();
 	}
 
 	@Override
@@ -130,6 +136,10 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return Status.OK_STATUS;
 	}
 
+	public boolean getAdjustDeploymentTimestamp() {
+		return getAttribute( ATTR_ADJUST_DEPLOYMENT_TIMESTAMP, DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP );
+	}
+
 	@Override
 	public IModule[] getChildModules( IModule[] module ) {
 		if ( CoreUtil.isNullOrEmpty( module ) ) {
@@ -158,6 +168,45 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return childModules.toArray( new IModule[0] );
 	}
 
+	public String getHost() {
+		return getServer().getHost();
+	}
+
+	public String getHTTPPort() {
+		return getAttribute( ATTR_HTTP_PORT, DEFAULT_HTTP_PORT );
+	}
+
+	public String getId() {
+		return getServer().getId();
+	}
+
+	public String getLiferayPortalContextPath() {
+		return getAttribute( ATTR_LIFERAY_PORTAL_CONTEXT_PATH, DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH );
+	}
+
+	public URL getModuleRootURL( IModule module ) {
+		return getPortalHomeUrl();
+	}
+
+	public String getPassword() {
+		return getSecurePreference( IRemoteServer.ATTR_PASSWORD );
+	}
+
+	public URL getPortalHomeUrl() {
+		String httpPort = getHTTPPort();
+		String contextUrl = getLiferayPortalContextPath();
+
+		if ( httpPort != null && ( !CoreUtil.isNullOrEmpty( contextUrl ) ) ) {
+			try {
+				return new URL( "http://" + getServer().getHost() + ":" + httpPort + contextUrl );
+			}
+			catch ( MalformedURLException e ) {
+			}
+		}
+
+		return null;
+	}
+
 	@Override
 	public IModule[] getRootModules( IModule module ) throws CoreException {
 
@@ -170,6 +219,25 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		}
 
 		return modules;
+	}
+
+	public String getServerManagerContextPath() {
+		return getAttribute( ATTR_SERVER_MANAGER_CONTEXT_PATH, DEFAULT_SERVER_MANAGER_CONTEXT_PATH );
+	}
+
+	public String getUsername() {
+		return getAttribute( ATTR_USERNAME, "" );
+	}
+
+	public URL getWebServicesListURL() {
+		try {
+			return new URL( "http://" + getServer().getHost() + ":" + getHTTPPort() + "/tunnel-web/axis" );
+		}
+		catch ( MalformedURLException e ) {
+			LiferayServerCorePlugin.logError( "Unable to get web services list URL", e );
+		}
+
+		return null;
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -201,34 +269,46 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		}
 	}
 
-	protected String getModuleListAttr() {
-		return ATTR_REMOTE_SERVER_MODULE_IDS_LIST;
+	public void setAdjustDeploymentTimestamp( boolean adjustTimestamp ) {
+		setAttribute( ATTR_ADJUST_DEPLOYMENT_TIMESTAMP, adjustTimestamp );
 	}
 
-	public URL getPortalHomeUrl() {
-		String httpPort = getHTTPPort();
-		String contextUrl = getLiferayPortalContextPath();
+	@Override
+	public void setDefaults( IProgressMonitor monitor ) {
+		super.setDefaults( monitor );
+		// getServerWorkingCopy().setAttribute( Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE );
+		String baseName = "Remote Liferay Server at " + getServer().getHost();
+		String defaultName = baseName;
 
-		if ( httpPort != null && ( !CoreUtil.isNullOrEmpty( contextUrl ) ) ) {
-			try {
-				return new URL( "http://" + getServer().getHost() + ":" + httpPort + contextUrl );
-			}
-			catch ( MalformedURLException e ) {
-			}
+		int collision = 1;
+		while ( ServerPlugin.isNameInUse( getServer(), defaultName ) ) {
+			defaultName = baseName + " (" + ( collision++ ) + ")";
 		}
 
-		return null;
+		getServerWorkingCopy().setName( defaultName );
 	}
 
-	public URL getWebServicesListURL() {
-		try {
-			return new URL( "http://" + getServer().getHost() + ":" + getHTTPPort() + "/tunnel-web/axis" );
-		}
-		catch ( MalformedURLException e ) {
-			LiferayServerCorePlugin.logError( "Unable to get web services list URL", e );
-		}
+	public void setHTTPPort( String httpPort ) {
+		setAttribute( ATTR_HTTP_PORT, httpPort );
+	}
 
-		return null;
+	public void setLiferayPortalContextPath( String path ) {
+		setAttribute( ATTR_LIFERAY_PORTAL_CONTEXT_PATH, path );
+	}
+
+	public void setPassword( String pw ) {
+		String oldPw = getSecurePreference( "password" );
+		setSecurePreference( "password", pw, true );
+
+		( (ServerWorkingCopy) getServerWorkingCopy() ).firePropertyChangeEvent( "password", oldPw, pw );
+	}
+
+	public void setServerManagerContextPath( String path ) {
+		setAttribute( ATTR_SERVER_MANAGER_CONTEXT_PATH, path );
+	}
+
+	public void setUsername( String username ) {
+		setAttribute( ATTR_USERNAME, username );
 	}
 
 	public IStatus validate( IProgressMonitor monitor ) {
@@ -272,63 +352,38 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return status;
 	}
 
-	public boolean canMakeHttpConnection() {
-		String host = getServer().getHost();
-		String http = getHTTPPort();
+	protected String getModuleListAttr() {
+		return ATTR_REMOTE_SERVER_MODULE_IDS_LIST;
+	}
 
-		final Socket socket = new Socket();
-
-		new Thread() {
-
-			@Override
-			public void run() {
-				try {
-					sleep( 3000 );
-					socket.close();
-				}
-				catch ( Exception e ) {
-				}
-			}
-
-		}.start();
-
-		IStatus status = null;
+	protected String getSecurePreference( String key ) {
+		String retval = null;
 
 		try {
-			status = SocketUtil.canConnect( socket, host, http );
+			retval = getSecurePreferencesNode().get( key, "" );
 		}
-		catch ( Exception e ) {
+		catch ( StorageException e ) {
+			LiferayServerCorePlugin.logError( "Unable to retrieve " + key + " from secure pref store.", e );
 		}
 
-		return status != null && status.isOK();
+		return retval;
 	}
 
-	public String getHost() {
-		return getServer().getHost();
+	protected ISecurePreferences getSecurePreferencesNode() {
+		if ( securePreferencesNode == null ) {
+			ISecurePreferences root = SecurePreferencesFactory.getDefault();
+			securePreferencesNode = root.node( "liferay/studio/websphere/" + this.getServer().getId() );
+		}
+
+		return securePreferencesNode;
 	}
 
-	public String getHTTPPort() {
-		return getAttribute( ATTR_HTTP_PORT, DEFAULT_HTTP_PORT );
+	protected void setSecurePreference( String key, String value, boolean encrypt ) {
+		try {
+			getSecurePreferencesNode().put( key, value, encrypt );
+		}
+		catch ( StorageException e ) {
+			LiferayServerCorePlugin.logError( "Unable to put " + key + " to secure pref store.", e );
+		}
 	}
-
-	public String getServerManagerContextPath() {
-		return getAttribute( ATTR_SERVER_MANAGER_CONTEXT_PATH, DEFAULT_SERVER_MANAGER_CONTEXT_PATH );
-	}
-
-	public void setHTTPPort( String httpPort ) {
-		setAttribute( ATTR_HTTP_PORT, httpPort );
-	}
-
-	public void setServerManagerContextPath( String path ) {
-		setAttribute( ATTR_SERVER_MANAGER_CONTEXT_PATH, path );
-	}
-
-	public String getLiferayPortalContextPath() {
-		return getAttribute( ATTR_LIFERAY_PORTAL_CONTEXT_PATH, DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH );
-	}
-
-	public void setLiferayPortalContextPath( String path ) {
-		setAttribute( ATTR_LIFERAY_PORTAL_CONTEXT_PATH, path );
-	}
-
 }

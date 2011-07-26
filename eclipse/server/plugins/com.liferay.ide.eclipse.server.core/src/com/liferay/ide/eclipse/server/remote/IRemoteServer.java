@@ -37,9 +37,23 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider {
 
 	String ATTR_HTTP_PORT = "http-port";
 
+	String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path";
+
+	String ATTR_PASSWORD = "password";
+
 	String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path";
 
-	String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path";
+	String ATTR_USERNAME = "username";
+
+	boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true );
+
+	String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", "" );
+
+	String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
+
+	String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
+
+	boolean getAdjustDeploymentTimestamp();
 
 	String getHost();
 
@@ -47,19 +61,13 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider {
 
 	String getId();
 
-	String getServerManagerContextPath();
-
 	String getLiferayPortalContextPath();
 
-	boolean getAdjustDeploymentTimestamp();
+	String getPassword();
 
-	boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true );
+	String getServerManagerContextPath();
 
-	String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", "" );
-
-	String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
-
-	String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
+	String getUsername();
 
 	void setAdjustDeploymentTimestamp( boolean adjustDemploymentTimestamp );
 

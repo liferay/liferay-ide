@@ -27,7 +27,11 @@ public interface IRemoteServerWorkingCopy extends IRemoteServer {
 
 	void setLiferayPortalContextPath( String path );
 
+	void setPassword( String password );
+
 	void setServerManagerContextPath( String path );
+
+	void setUsername( String username );
 
 	IStatus validate( IProgressMonitor monitor );
 
