@@ -560,6 +560,13 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		}
 	}
 
+	protected IProject[] getProjectsInWorkspace() {
+		if (wsProjects == null) {
+			wsProjects = IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
+		}
+		return wsProjects;
+	}
+
 	// @Override
 	// protected void enter() {
 	// super.enter();
@@ -583,13 +590,6 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	// }
 	// }
 	// }
-
-	protected IProject[] getProjectsInWorkspace() {
-		if (wsProjects == null) {
-			wsProjects = IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
-		}
-		return wsProjects;
-	}
 
 	@Override
 	protected String[] getValidationPropertyNames() {
@@ -635,4 +635,10 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 		return false;
 	}
+
+	@Override
+	protected boolean showValidationErrorsOnEnter() {
+		return true;
+	}
+
 }
