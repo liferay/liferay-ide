@@ -202,7 +202,19 @@
       </section>
    </extension>
    
-   
+   <extension
+         point="org.eclipse.wst.sse.ui.breakpoint">
+      <breakpointContribution
+            id="com.liferay.ide.eclipse.server.remote.jsp.breakpoint">
+            <provider
+                  contentTypes="org.eclipse.jst.jsp.core.jspsource"
+                  id="com.liferay.ide.eclipse.server.remote.jsp.breakpoint">
+				<class class="com.liferay.ide.eclipse.server.ui.RemoteJSPBreakpointProvider">
+					<parameter name="org.eclipse.jst.jsp.core.jspsource" value="org.apache.jsp*"/>
+				</class>
+			</provider>
+      </breakpointContribution>
+   </extension>
    
    <!--
    <extension

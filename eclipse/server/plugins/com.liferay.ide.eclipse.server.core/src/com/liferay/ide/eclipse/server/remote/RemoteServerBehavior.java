@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
+import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.eclipse.server.util.LiferayPublishHelper;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -55,11 +56,12 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 /**
  * @author Greg Amerson
  */
-public class RemoteServerBehavior extends ServerBehaviourDelegate implements IServerLifecycleListener {
+public class RemoteServerBehavior extends ServerBehaviourDelegate
+	implements ILiferayServerBehavior, IServerLifecycleListener {
 
 	protected ILaunch currentLaunch;
-	protected Job remoteServerUpdateJob;
 	protected IRemoteConnection remoteConnection;
+	protected Job remoteServerUpdateJob;
 
 	public RemoteServerBehavior() {
 		super();
@@ -67,10 +69,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 
 	public boolean canConnect() {
 		return SocketUtil.canConnect( getServer().getHost(), getRemoteServer().getHTTPPort() ).isOK();
-	}
-
-	protected IRemoteServer getRemoteServer() {
-		return RemoteUtil.getRemoteServer( getServer() );
 	}
 
 	@Override
@@ -113,6 +111,45 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		remoteServerUpdateJob = null;
 	}
 
+	public int getRemoteServerState( int currentServerState, IProgressMonitor monitor ) {
+		try {
+			if ( currentServerState == IServer.STATE_STOPPED ) {
+				monitor.beginTask( "Updating server state for " + getServer().getName(), 100 );
+			}
+
+			Object retval = null;
+
+			IRemoteConnection remoteConnection = getRemoteConnection();
+
+			try {
+				retval = remoteConnection.getServerState();
+			}
+			catch ( Exception e ) {
+				e.printStackTrace();
+			}
+
+			if ( retval == null ) {
+				setServerStatus( LiferayServerCorePlugin.createErrorStatus( "Check connection settings." ) );
+				return IServer.STATE_UNKNOWN;
+			}
+
+			String serverState = retval.toString();
+
+			if ( "STARTED".equals( serverState ) ) {
+				return IServer.STATE_STARTED;
+			}
+			else if ( "STOPPED".equals( serverState ) ) {
+				return IServer.STATE_STOPPED;
+			}
+		}
+		catch ( Exception e ) {
+			LiferayServerCorePlugin.logError( "Could not get server state.", e );
+			return IServer.STATE_UNKNOWN;
+		}
+
+		return IServer.STATE_UNKNOWN;
+	}
+
 	public void redeployModule( IModule[] module ) {
 		setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
 
@@ -150,44 +187,8 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 	}
 
 	@Override
-	protected void publishFinish( IProgressMonitor monitor ) throws CoreException {
-		super.publishFinish( monitor );
-
-		setServerPublishState( IServer.PUBLISH_STATE_NONE );
-	}
-
-	protected void terminateLaunch() {
-		if ( currentLaunch != null ) {
-			try {
-				currentLaunch.terminate();
-			}
-			catch ( DebugException e ) {
-			}
-
-			currentLaunch = null;
-		}
-	}
-
-	@Override
-	protected void initialize( IProgressMonitor monitor ) {
-		ServerCore.addServerLifecycleListener( this );
-		remoteServerUpdateJob = createRemoteServerUpdateJob();
-
-		remoteServerUpdateJob.setSystem( true );
-		remoteServerUpdateJob.schedule();
-	}
-
-	@Override
 	public void stop( boolean force ) {
 		setServerState( IServer.STATE_STOPPED );
-	}
-
-	protected IRemoteConnection getRemoteConnection() {
-		if ( remoteConnection == null ) {
-			remoteConnection = LiferayServerCorePlugin.getRemoteConnection( getRemoteServer() );
-		}
-
-		return remoteConnection;
 	}
 
 	protected Job checkRemoteServerState( IProgressMonitor monitor ) {
@@ -291,6 +292,69 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		return updateServerJob;
 	}
 
+	protected Job createRemoteServerUpdateJob() {
+		return new Job( "Remote server update." ) {
+
+			@Override
+			protected IStatus run( IProgressMonitor monitor ) {
+				Job updateServerJob = checkRemoteServerState( monitor );
+
+				if ( updateServerJob != null ) {
+					updateServerJob.schedule();
+
+					try {
+						updateServerJob.join();
+					}
+					catch ( InterruptedException e ) {
+					}
+				}
+
+				if ( remoteServerUpdateJob != null ) {
+					remoteServerUpdateJob.schedule( getRemoteServerUpdateDelay() );
+				}
+
+				return Status.OK_STATUS;
+			}
+		};
+	}
+
+	protected IRemoteConnection getRemoteConnection() {
+		if ( remoteConnection == null ) {
+			remoteConnection = LiferayServerCorePlugin.getRemoteConnection( getRemoteServer() );
+		}
+
+		return remoteConnection;
+	}
+
+	protected IRemoteServer getRemoteServer() {
+		return RemoteUtil.getRemoteServer( getServer() );
+	}
+
+	protected long getRemoteServerUpdateDelay() {
+		return 5000;
+	}
+
+	@Override
+	protected void initialize( IProgressMonitor monitor ) {
+		ServerCore.addServerLifecycleListener( this );
+		remoteServerUpdateJob = createRemoteServerUpdateJob();
+
+		remoteServerUpdateJob.setSystem( true );
+		remoteServerUpdateJob.schedule();
+	}
+
+	protected boolean isModuleInstalled( IModule[] module ) {
+		for ( IModule m : module ) {
+			String appName = m.getProject().getName();
+
+			if ( getRemoteConnection().isAppInstalled( appName ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@SuppressWarnings( { "unchecked", "rawtypes" } )
 	protected void launchServer( IProgressMonitor monitor ) {
 		if ( currentLaunch != null && ( !currentLaunch.isTerminated() ) ) {
@@ -345,138 +409,11 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		}
 	}
 
-	protected Job createRemoteServerUpdateJob() {
-		return new Job( "Remote server update." ) {
+	@Override
+	protected void publishFinish( IProgressMonitor monitor ) throws CoreException {
+		super.publishFinish( monitor );
 
-			@Override
-			protected IStatus run( IProgressMonitor monitor ) {
-				Job updateServerJob = checkRemoteServerState( monitor );
-
-				if ( updateServerJob != null ) {
-					updateServerJob.schedule();
-
-					try {
-						updateServerJob.join();
-					}
-					catch ( InterruptedException e ) {
-					}
-				}
-
-				if ( remoteServerUpdateJob != null ) {
-					remoteServerUpdateJob.schedule( getRemoteServerUpdateDelay() );
-				}
-
-				return Status.OK_STATUS;
-			}
-		};
-	}
-
-	protected long getRemoteServerUpdateDelay() {
-		return 5000;
-	}
-
-	protected IStatus updateServerState( int currentServerState, IProgressMonitor monitor ) {
-		if ( getServer() == null ) {
-			return Status.OK_STATUS;
-		}
-
-		monitor.beginTask( "Updating server status...", 100 );
-
-		int remoteState = getRemoteServerState( currentServerState, monitor );
-
-		if ( remoteState == IServer.STATE_STARTED ) {
-			setServerState( IServer.STATE_STARTED );
-			launchServer( monitor );
-		}
-		else if ( remoteState == IServer.STATE_STOPPED ) {
-			terminateLaunch();
-			setServerState( IServer.STATE_STOPPED );
-		}
-
-		// check modules
-		IModule[] modules = getServer().getModules();
-
-		if ( !CoreUtil.isNullOrEmpty( modules ) ) {
-			List<String> plugins = getRemoteConnection().getLiferayPlugins();
-
-			for ( IModule module : modules ) {
-				if ( ServerUtil.isLiferayProject( module.getProject() ) ) {
-					String appName = module.getProject().getName();
-
-					if ( plugins.contains( appName ) ) {
-						updateModuleState( module );
-					}
-					else {
-						setModuleState( new IModule[] { module }, IServer.STATE_UNKNOWN );
-					}
-				}
-			}
-		}
-
-		return Status.OK_STATUS;
-	}
-
-	protected IStatus updateModuleState( IModule module ) {
-		String appName = module.getProject().getName();
-
-		boolean appStarted = getRemoteConnection().isLiferayPluginStarted( appName );
-
-		IModule[] module2 = new IModule[] { module };
-
-		setModuleState( module2, appStarted ? IServer.STATE_STARTED : IServer.STATE_STOPPED );
-
-		return Status.OK_STATUS;
-	}
-
-	public int getRemoteServerState( int currentServerState, IProgressMonitor monitor ) {
-		try {
-			if ( currentServerState == IServer.STATE_STOPPED ) {
-				monitor.beginTask( "Updating server state for " + getServer().getName(), 100 );
-			}
-
-			Object retval = null;
-
-			IRemoteConnection remoteConnection = getRemoteConnection();
-
-			try {
-				retval = remoteConnection.getServerState();
-			}
-			catch ( Exception e ) {
-				e.printStackTrace();
-			}
-
-			if ( retval == null ) {
-				setServerStatus( LiferayServerCorePlugin.createErrorStatus( "Check connection settings." ) );
-				return IServer.STATE_UNKNOWN;
-			}
-
-			String serverState = retval.toString();
-
-			if ( "STARTED".equals( serverState ) ) {
-				return IServer.STATE_STARTED;
-			}
-			else if ( "STOPPED".equals( serverState ) ) {
-				return IServer.STATE_STOPPED;
-			}
-		}
-		catch ( Exception e ) {
-			LiferayServerCorePlugin.logError( "Could not get server state.", e );
-			return IServer.STATE_UNKNOWN;
-		}
-
-		return IServer.STATE_UNKNOWN;
-	}
-
-	protected boolean isModuleInstalled( IModule[] module ) {
-		for ( IModule m : module ) {
-			String appName = m.getProject().getName();
-
-			if ( getRemoteConnection().isAppInstalled( appName ) ) {
-				return true;
-			}
-		}
-
-		return false;
+		setServerPublishState( IServer.PUBLISH_STATE_NONE );
 	}
 
 	@Override
@@ -770,6 +707,71 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate implements ISe
 		}
 
 		return retval;
+	}
+
+	protected void terminateLaunch() {
+		if ( currentLaunch != null ) {
+			try {
+				currentLaunch.terminate();
+			}
+			catch ( DebugException e ) {
+			}
+
+			currentLaunch = null;
+		}
+	}
+
+	protected IStatus updateModuleState( IModule module ) {
+		String appName = module.getProject().getName();
+
+		boolean appStarted = getRemoteConnection().isLiferayPluginStarted( appName );
+
+		IModule[] module2 = new IModule[] { module };
+
+		setModuleState( module2, appStarted ? IServer.STATE_STARTED : IServer.STATE_STOPPED );
+
+		return Status.OK_STATUS;
+	}
+
+	protected IStatus updateServerState( int currentServerState, IProgressMonitor monitor ) {
+		if ( getServer() == null ) {
+			return Status.OK_STATUS;
+		}
+
+		monitor.beginTask( "Updating server status...", 100 );
+
+		int remoteState = getRemoteServerState( currentServerState, monitor );
+
+		if ( remoteState == IServer.STATE_STARTED ) {
+			setServerState( IServer.STATE_STARTED );
+			launchServer( monitor );
+		}
+		else if ( remoteState == IServer.STATE_STOPPED ) {
+			terminateLaunch();
+			setServerState( IServer.STATE_STOPPED );
+		}
+
+		// check modules
+		IModule[] modules = getServer().getModules();
+
+		if ( !CoreUtil.isNullOrEmpty( modules ) ) {
+			List<String> plugins = getRemoteConnection().getLiferayPlugins();
+
+			for ( IModule module : modules ) {
+				if ( ServerUtil.isLiferayProject( module.getProject() ) ) {
+					String appName = module.getProject().getName();
+
+					if ( plugins.contains( appName ) ) {
+						updateModuleState( module );
+					}
+					else {
+						setModuleState( new IModule[] { module }, IServer.STATE_UNKNOWN );
+					}
+				}
+			}
+		}
+
+		return Status.OK_STATUS;
 	}
 
 }

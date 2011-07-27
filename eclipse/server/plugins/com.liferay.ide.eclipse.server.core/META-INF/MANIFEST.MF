@@ -30,7 +30,8 @@ Require-Bundle: org.eclipse.ui,
  org.apache.commons.codec;visibility:=reexport,
  org.apache.commons.io;visibility:=reexport,
  com.liferay.ide.eclipse.sdk,
- org.eclipse.equinox.security;visibility:=reexport
+ org.eclipse.equinox.security;visibility:=reexport,
+ org.eclipse.emf.common
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.core,

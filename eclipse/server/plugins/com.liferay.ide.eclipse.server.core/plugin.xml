@@ -883,7 +883,7 @@
             name="Liferay Server (Remote)"
             public="true"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="org.eclipse.jst.server.generic.core.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.eclipse.server.remote.sourcePathComputer">
       </launchConfigurationType>
    </extension>
    <extension
@@ -956,6 +956,13 @@
             id="com.liferay.ide.eclipse.server.runtime.stub.runtimeClasspathProvider"
             runtimeTypeIds="com.liferay.ide.eclipse.server.runtime.stub">
       </runtimeClasspathProvider>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourcePathComputers">
+      <sourcePathComputer
+            class="com.liferay.ide.eclipse.server.remote.RemoteSourcePathComputerDelegate"
+            id="com.liferay.ide.eclipse.server.remote.sourcePathComputer">
+      </sourcePathComputer>
    </extension>
 
 </plugin>
