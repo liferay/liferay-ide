@@ -115,8 +115,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 				this.getButton(IDialogConstants.OK_ID).setEnabled(false);
 				break;
 			}
-		}
-		else {
+		} else {
 			this.getButton(IDialogConstants.OK_ID).setEnabled(true);
 			setMessage(getDefaultMessage(), IMessageProvider.NONE);
 		}
@@ -126,14 +125,16 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		this.existingSDKs = existingSdks;
 		setShellStyle(getShellStyle() | SWT.RESIZE);
 		setTitleImage(ImageDescriptor.createFromURL(
-			SDKPlugin.getDefault().getBundle().getEntry("/icons/wizban/sdk_wiz.png")).createImage());
+				SDKPlugin.getDefault().getBundle()
+						.getEntry("/icons/wizban/sdk_wiz.png")).createImage());
 	}
 
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 
-		shell.setText((sdkToEdit == null ? "New" : "Edit") + " Liferay Plugin SDK");
+		shell.setText((sdkToEdit == null ? "New" : "Edit")
+				+ " Liferay Plugin SDK");
 	}
 
 	@Override
@@ -152,7 +153,8 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		setMessage(getDefaultMessage());
 
 		Composite container = (Composite) SWTUtil.createTopComposite(parent, 3);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
+				1));
 
 		SWTUtil.createLabel(container, "Location", 1);
 
@@ -170,8 +172,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 		if (sdkToEdit == null) {
 			location.addModifyListener(this);
-		}
-		else {
+		} else {
 			location.setText(sdkToEdit.getLocation().toOSString());
 			location.setEnabled(false);
 
@@ -188,40 +189,42 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 		name.addModifyListener(this);
 
-		SWTUtil.createLabel( container, "", 1 );// spacer
+		SWTUtil.createLabel(container, "", 1);// spacer
 
-		SWTUtil.createLabel( container, "", 1 );// spacer
+		SWTUtil.createLabel(container, "", 1);// spacer
 
-		final Button addProject =
-			SWTUtil.createCheckButton( container, "Add Eclipse .project file (if it does not exist).", null, true, 1 );
+		final Button addProject = SWTUtil.createCheckButton(container,
+				"Add Eclipse .project file (if it does not exist).", null,
+				true, 1);
 
+		SWTUtil.createLabel(container, "", 1); // spacer
 
-		SWTUtil.createLabel( container, "", 1 ); // spacer
+		SWTUtil.createLabel(container, "", 1);// spacer
 
-		SWTUtil.createLabel( container, "", 1 );// spacer
-
-		final Button openInEclipse = SWTUtil.createCheckButton( container, "Open in Eclipse", null, true, 1 );
-		openInEclipse.addSelectionListener( new SelectionAdapter() {
+		final Button openInEclipse = SWTUtil.createCheckButton(container,
+				"Open in Eclipse", null, true, 1);
+		openInEclipse.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected( SelectionEvent e ) {
-				AddSDKDialog.this.shouldOpenInEclipse = openInEclipse.getSelection();
+			public void widgetSelected(SelectionEvent e) {
+				AddSDKDialog.this.shouldOpenInEclipse = openInEclipse
+						.getSelection();
 			}
-		} );
+		});
 
-		openInEclipse.setEnabled( shouldAddProject );
-		openInEclipse.setSelection( shouldOpenInEclipse );
+		openInEclipse.setEnabled(shouldAddProject);
+		openInEclipse.setSelection(shouldOpenInEclipse);
 
-		addProject.addSelectionListener( new SelectionAdapter() {
+		addProject.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected( SelectionEvent e ) {
+			public void widgetSelected(SelectionEvent e) {
 				boolean selection = addProject.getSelection();
 				AddSDKDialog.this.shouldAddProject = selection;
-				openInEclipse.setEnabled( selection );
+				openInEclipse.setEnabled(selection);
 			}
 
-		} );
+		});
 
 		if (sdkToEdit != null) {
 			validate();
@@ -232,7 +235,17 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 	protected void doBrowse() {
 		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
-		dd.setText("Select Liferay Plugin SDK folder");
+
+		/*
+		 * Fixed: IDE-392
+		 */
+		String filterPath = location.getText();
+		if (filterPath != null) {
+			dd.setFilterPath(filterPath);
+			dd.setText("Select Liferay Plugin SDK folder - " + filterPath);
+		} else {
+			dd.setText("Select Liferay Plugin SDK folder");
+		}
 
 		if (CoreUtil.isNullOrEmpty(location.getText())) {
 			dd.setFilterPath(location.getText());
@@ -243,7 +256,8 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		if (!CoreUtil.isNullOrEmpty(dir)) {
 			location.setText(dir);
 
-			if (SDKUtil.isValidSDKLocation(dir) && CoreUtil.isNullOrEmpty(name.getText())) {
+			if (SDKUtil.isValidSDKLocation(dir)
+					&& CoreUtil.isNullOrEmpty(name.getText())) {
 				IPath path = new Path(dir);
 
 				if (path.isValidPath(dir)) {
@@ -261,7 +275,8 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		Collection<String> validRuntimes = new HashSet<String>();
 
 		for (IRuntime runtime : ServerCore.getRuntimes()) {
-			if (runtime.getRuntimeType().getId().startsWith("com.liferay.ide.eclipse.server")) {
+			if (runtime.getRuntimeType().getId()
+					.startsWith("com.liferay.ide.eclipse.server")) {
 				validRuntimes.add(runtime.getName());
 			}
 		}
@@ -302,12 +317,14 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		}
 
 		if (!SDKUtil.isValidSDKLocation(lastLocation)) {
-			return CoreUtil.createErrorStatus("Location must be a valid Liferay Plugin SDK.");
+			return CoreUtil
+					.createErrorStatus("Location must be a valid Liferay Plugin SDK.");
 		}
 
 		if (!SDKUtil.isSDKSupported(lastLocation)) {
-			return CoreUtil.createErrorStatus("SDK version must be greater or equal to " +
-				ISDKConstants.LEAST_SUPPORTED_SDK_VERSION);
+			return CoreUtil
+					.createErrorStatus("SDK version must be greater or equal to "
+							+ ISDKConstants.LEAST_SUPPORTED_SDK_VERSION);
 		}
 
 		return Status.OK_STATUS;
