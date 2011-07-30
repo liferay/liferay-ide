@@ -73,15 +73,15 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 	protected boolean shouldOpenInEclipse = false;
 
-	public AddSDKDialog(Shell parent, SDK[] existingSDKs) {
-		super(parent);
-		configure(existingSDKs);
+	public AddSDKDialog( Shell parent, SDK[] existingSDKs ) {
+		super( parent );
+		configure( existingSDKs );
 	}
 
-	public AddSDKDialog(Shell shell, SDK[] existingSDKs, SDK sdk) {
-		super(shell);
+	public AddSDKDialog( Shell shell, SDK[] existingSDKs, SDK sdk ) {
+		super( shell );
 		this.sdkToEdit = sdk;
-		configure(existingSDKs);
+		configure( existingSDKs );
 	}
 
 	public boolean getAddProject() {
@@ -100,133 +100,129 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		return this.shouldOpenInEclipse;
 	}
 
-	public void modifyText(ModifyEvent e) {
+	public void modifyText( ModifyEvent e ) {
 		IStatus status = validate();
 
-		if (!status.isOK()) {
-			switch (status.getSeverity()) {
+		if ( !status.isOK() ) {
+			switch ( status.getSeverity() ) {
 
 			case IStatus.WARNING:
-				setMessage(status.getMessage(), IMessageProvider.WARNING);
+				setMessage( status.getMessage(), IMessageProvider.WARNING );
 				break;
 
 			case IStatus.ERROR:
-				setMessage(status.getMessage(), IMessageProvider.ERROR);
-				this.getButton(IDialogConstants.OK_ID).setEnabled(false);
+				setMessage( status.getMessage(), IMessageProvider.ERROR );
+				this.getButton( IDialogConstants.OK_ID ).setEnabled( false );
 				break;
 			}
-		} else {
-			this.getButton(IDialogConstants.OK_ID).setEnabled(true);
-			setMessage(getDefaultMessage(), IMessageProvider.NONE);
+		}
+		else {
+			this.getButton( IDialogConstants.OK_ID ).setEnabled( true );
+			setMessage( getDefaultMessage(), IMessageProvider.NONE );
 		}
 	}
 
-	protected void configure(SDK[] existingSdks) {
+	protected void configure( SDK[] existingSdks ) {
 		this.existingSDKs = existingSdks;
-		setShellStyle(getShellStyle() | SWT.RESIZE);
-		setTitleImage(ImageDescriptor.createFromURL(
-				SDKPlugin.getDefault().getBundle()
-						.getEntry("/icons/wizban/sdk_wiz.png")).createImage());
+		setShellStyle( getShellStyle() | SWT.RESIZE );
+		setTitleImage( ImageDescriptor.createFromURL(
+			SDKPlugin.getDefault().getBundle().getEntry( "/icons/wizban/sdk_wiz.png" ) ).createImage() );
 	}
 
 	@Override
-	protected void configureShell(Shell shell) {
-		super.configureShell(shell);
+	protected void configureShell( Shell shell ) {
+		super.configureShell( shell );
 
-		shell.setText((sdkToEdit == null ? "New" : "Edit")
-				+ " Liferay Plugin SDK");
+		shell.setText( ( sdkToEdit == null ? "New" : "Edit" ) + " Liferay Plugin SDK" );
 	}
 
 	@Override
-	protected Control createButtonBar(Composite parent) {
-		Control control = super.createButtonBar(parent);
+	protected Control createButtonBar( Composite parent ) {
+		Control control = super.createButtonBar( parent );
 
-		getButton(IDialogConstants.OK_ID).setEnabled(false);
+		getButton( IDialogConstants.OK_ID ).setEnabled( false );
 
 		return control;
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
-		setTitle((sdkToEdit == null ? "Add" : "Edit") + " Liferay Plugin SDK");
+	protected Control createDialogArea( Composite parent ) {
+		setTitle( ( sdkToEdit == null ? "Add" : "Edit" ) + " Liferay Plugin SDK" );
 
-		setMessage(getDefaultMessage());
+		setMessage( getDefaultMessage() );
 
-		Composite container = (Composite) SWTUtil.createTopComposite(parent, 3);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-				1));
+		Composite container = (Composite) SWTUtil.createTopComposite( parent, 3 );
+		container.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
-		SWTUtil.createLabel(container, "Location", 1);
+		SWTUtil.createLabel( container, "Location", 1 );
 
-		location = SWTUtil.createSingleText(container, 1);
+		location = SWTUtil.createSingleText( container, 1 );
 
-		Button browse = SWTUtil.createButton(container, "Browse");
-		browse.addSelectionListener(new SelectionAdapter() {
+		Button browse = SWTUtil.createButton( container, "Browse" );
+		browse.addSelectionListener( new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected( SelectionEvent e ) {
 				doBrowse();
 			}
 
-		});
+		} );
 
-		if (sdkToEdit == null) {
-			location.addModifyListener(this);
-		} else {
-			location.setText(sdkToEdit.getLocation().toOSString());
-			location.setEnabled(false);
+		if ( sdkToEdit == null ) {
+			location.addModifyListener( this );
+		}
+		else {
+			location.setText( sdkToEdit.getLocation().toOSString() );
+			location.setEnabled( false );
 
-			browse.setEnabled(false);
+			browse.setEnabled( false );
 		}
 
-		SWTUtil.createLabel(container, "Name", 1);
+		SWTUtil.createLabel( container, "Name", 1 );
 
-		name = SWTUtil.createSingleText(container, 1);
+		name = SWTUtil.createSingleText( container, 1 );
 
-		if (sdkToEdit != null) {
-			name.setText(sdkToEdit.getName());
+		if ( sdkToEdit != null ) {
+			name.setText( sdkToEdit.getName() );
 		}
 
-		name.addModifyListener(this);
+		name.addModifyListener( this );
 
-		SWTUtil.createLabel(container, "", 1);// spacer
+		SWTUtil.createLabel( container, "", 1 );// spacer
 
-		SWTUtil.createLabel(container, "", 1);// spacer
+		SWTUtil.createLabel( container, "", 1 );// spacer
 
-		final Button addProject = SWTUtil.createCheckButton(container,
-				"Add Eclipse .project file (if it does not exist).", null,
-				true, 1);
+		final Button addProject =
+			SWTUtil.createCheckButton( container, "Add Eclipse .project file (if it does not exist).", null, true, 1 );
 
-		SWTUtil.createLabel(container, "", 1); // spacer
+		SWTUtil.createLabel( container, "", 1 ); // spacer
 
-		SWTUtil.createLabel(container, "", 1);// spacer
+		SWTUtil.createLabel( container, "", 1 );// spacer
 
-		final Button openInEclipse = SWTUtil.createCheckButton(container,
-				"Open in Eclipse", null, true, 1);
-		openInEclipse.addSelectionListener(new SelectionAdapter() {
+		final Button openInEclipse = SWTUtil.createCheckButton( container, "Open in Eclipse", null, true, 1 );
+		openInEclipse.addSelectionListener( new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				AddSDKDialog.this.shouldOpenInEclipse = openInEclipse
-						.getSelection();
+			public void widgetSelected( SelectionEvent e ) {
+				AddSDKDialog.this.shouldOpenInEclipse = openInEclipse.getSelection();
 			}
-		});
+		} );
 
-		openInEclipse.setEnabled(shouldAddProject);
-		openInEclipse.setSelection(shouldOpenInEclipse);
+		openInEclipse.setEnabled( shouldAddProject );
+		openInEclipse.setSelection( shouldOpenInEclipse );
 
-		addProject.addSelectionListener(new SelectionAdapter() {
+		addProject.addSelectionListener( new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected( SelectionEvent e ) {
 				boolean selection = addProject.getSelection();
 				AddSDKDialog.this.shouldAddProject = selection;
-				openInEclipse.setEnabled(selection);
+				openInEclipse.setEnabled( selection );
 			}
 
-		});
+		} );
 
-		if (sdkToEdit != null) {
+		if ( sdkToEdit != null ) {
 			validate();
 		}
 
@@ -234,34 +230,34 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 	}
 
 	protected void doBrowse() {
-		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
+		DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
 
 		/*
 		 * Fixed: IDE-392
 		 */
 		String filterPath = location.getText();
-		if (filterPath != null) {
-			dd.setFilterPath(filterPath);
-			dd.setText("Select Liferay Plugin SDK folder - " + filterPath);
-		} else {
-			dd.setText("Select Liferay Plugin SDK folder");
+		if ( filterPath != null ) {
+			dd.setFilterPath( filterPath );
+			dd.setText( "Select Liferay Plugin SDK folder - " + filterPath );
+		}
+		else {
+			dd.setText( "Select Liferay Plugin SDK folder" );
 		}
 
-		if (CoreUtil.isNullOrEmpty(location.getText())) {
-			dd.setFilterPath(location.getText());
+		if ( CoreUtil.isNullOrEmpty( location.getText() ) ) {
+			dd.setFilterPath( location.getText() );
 		}
 
 		String dir = dd.open();
 
-		if (!CoreUtil.isNullOrEmpty(dir)) {
-			location.setText(dir);
+		if ( !CoreUtil.isNullOrEmpty( dir ) ) {
+			location.setText( dir );
 
-			if (SDKUtil.isValidSDKLocation(dir)
-					&& CoreUtil.isNullOrEmpty(name.getText())) {
-				IPath path = new Path(dir);
+			if ( SDKUtil.isValidSDKLocation( dir ) && CoreUtil.isNullOrEmpty( name.getText() ) ) {
+				IPath path = new Path( dir );
 
-				if (path.isValidPath(dir)) {
-					name.setText(path.lastSegment());
+				if ( path.isValidPath( dir ) ) {
+					name.setText( path.lastSegment() );
 				}
 			}
 		}
@@ -274,57 +270,54 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 	protected void updateRuntimeItems() {
 		Collection<String> validRuntimes = new HashSet<String>();
 
-		for (IRuntime runtime : ServerCore.getRuntimes()) {
-			if (runtime.getRuntimeType().getId()
-					.startsWith("com.liferay.ide.eclipse.server")) {
-				validRuntimes.add(runtime.getName());
+		for ( IRuntime runtime : ServerCore.getRuntimes() ) {
+			if ( runtime.getRuntimeType().getId().startsWith( "com.liferay.ide.eclipse.server" ) ) {
+				validRuntimes.add( runtime.getName() );
 			}
 		}
 
-		String[] runtimes = validRuntimes.toArray(new String[0]);
+		String[] runtimes = validRuntimes.toArray( new String[0] );
 
-		serverTargetCombo.setItems(runtimes);
+		serverTargetCombo.setItems( runtimes );
 
-		if (serverTargetCombo.getSelectionIndex() < 0 && runtimes.length > 0) {
-			serverTargetCombo.select(0);
+		if ( serverTargetCombo.getSelectionIndex() < 0 && runtimes.length > 0 ) {
+			serverTargetCombo.select( 0 );
 		}
 	}
 
 	protected IStatus validate() {
 		lastName = name.getText();
 
-		if (CoreUtil.isNullOrEmpty(lastName)) {
-			return CoreUtil.createErrorStatus("Name must have a value.");
+		if ( CoreUtil.isNullOrEmpty( lastName ) ) {
+			return CoreUtil.createErrorStatus( "Name must have a value." );
 		}
 
 		// make sure new sdk name doesn't collide with existing one
-		if (existingSDKs != null) {
-			for (SDK sdk : existingSDKs) {
-				if (lastName.equals(sdk.getName())) {
-					return CoreUtil.createErrorStatus("Name already exists.");
+		if ( existingSDKs != null ) {
+			for ( SDK sdk : existingSDKs ) {
+				if ( lastName.equals( sdk.getName() ) ) {
+					return CoreUtil.createErrorStatus( "Name already exists." );
 				}
 			}
 		}
 
 		lastLocation = location.getText();
 
-		if (CoreUtil.isNullOrEmpty(lastLocation)) {
-			return CoreUtil.createErrorStatus("Location must have a value.");
+		if ( CoreUtil.isNullOrEmpty( lastLocation ) ) {
+			return CoreUtil.createErrorStatus( "Location must have a value." );
 		}
 
-		if (!new File(lastLocation).exists()) {
-			return CoreUtil.createErrorStatus("Location must exist.");
+		if ( !new File( lastLocation ).exists() ) {
+			return CoreUtil.createErrorStatus( "Location must exist." );
 		}
 
-		if (!SDKUtil.isValidSDKLocation(lastLocation)) {
-			return CoreUtil
-					.createErrorStatus("Location must be a valid Liferay Plugin SDK.");
+		if ( !SDKUtil.isValidSDKLocation( lastLocation ) ) {
+			return CoreUtil.createErrorStatus( "Location must be a valid Liferay Plugin SDK." );
 		}
 
-		if (!SDKUtil.isSDKSupported(lastLocation)) {
-			return CoreUtil
-					.createErrorStatus("SDK version must be greater or equal to "
-							+ ISDKConstants.LEAST_SUPPORTED_SDK_VERSION);
+		if ( !SDKUtil.isSDKSupported( lastLocation ) ) {
+			return CoreUtil.createErrorStatus( "SDK version must be greater or equal to " +
+				ISDKConstants.LEAST_SUPPORTED_SDK_VERSION );
 		}
 
 		return Status.OK_STATUS;
