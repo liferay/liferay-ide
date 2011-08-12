@@ -31,14 +31,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.jst.server.core.IWebModule;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.internal.ServerPlugin;
-import org.eclipse.wst.server.core.internal.ServerWorkingCopy;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 
 /**
@@ -48,8 +44,6 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy {
 
 	public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list";
-
-	protected ISecurePreferences securePreferencesNode;
 
 	public RemoteServer() {
 		super();
@@ -189,7 +183,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	}
 
 	public String getPassword() {
-		return getSecurePreference( IRemoteServer.ATTR_PASSWORD );
+		return getAttribute( ATTR_PASSWORD, "" );
 	}
 
 	public URL getPortalHomeUrl() {
@@ -297,10 +291,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	}
 
 	public void setPassword( String pw ) {
-		String oldPw = getSecurePreference( "password" );
-		setSecurePreference( "password", pw, true );
-
-		( (ServerWorkingCopy) getServerWorkingCopy() ).firePropertyChangeEvent( "password", oldPw, pw );
+		setAttribute( ATTR_PASSWORD, pw );
 	}
 
 	public void setServerManagerContextPath( String path ) {
@@ -356,34 +347,4 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return ATTR_REMOTE_SERVER_MODULE_IDS_LIST;
 	}
 
-	protected String getSecurePreference( String key ) {
-		String retval = null;
-
-		try {
-			retval = getSecurePreferencesNode().get( key, "" );
-		}
-		catch ( StorageException e ) {
-			LiferayServerCorePlugin.logError( "Unable to retrieve " + key + " from secure pref store.", e );
-		}
-
-		return retval;
-	}
-
-	protected ISecurePreferences getSecurePreferencesNode() {
-		if ( securePreferencesNode == null ) {
-			ISecurePreferences root = SecurePreferencesFactory.getDefault();
-			securePreferencesNode = root.node( "liferay/studio/websphere/" + this.getServer().getId() );
-		}
-
-		return securePreferencesNode;
-	}
-
-	protected void setSecurePreference( String key, String value, boolean encrypt ) {
-		try {
-			getSecurePreferencesNode().put( key, value, encrypt );
-		}
-		catch ( StorageException e ) {
-			LiferayServerCorePlugin.logError( "Unable to put " + key + " to secure pref store.", e );
-		}
-	}
 }

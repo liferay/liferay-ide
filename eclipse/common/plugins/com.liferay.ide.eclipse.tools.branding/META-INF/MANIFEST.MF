@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Tools
 Bundle-SymbolicName: com.liferay.ide.eclipse.tools.branding
-Bundle-Version: 1.3.0.qualifier
+Bundle-Version: 1.3.1.qualifier
 Bundle-Vendor: Liferay, Inc.
