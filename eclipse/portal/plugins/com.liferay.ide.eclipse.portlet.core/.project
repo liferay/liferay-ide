@@ -5,11 +5,12 @@
 	<projects>
 	</projects>
 	<buildSpec>
-        <buildCommand>
+		<buildCommand>
 			<name>org.eclipse.emf.codegen.JETBuilder</name>
 			<arguments>
 			</arguments>
-		</buildCommand>		<buildCommand>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
 			</arguments>
@@ -24,8 +25,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.emf.codegen.jet.IJETNature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
