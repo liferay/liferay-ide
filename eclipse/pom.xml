@@ -16,26 +16,25 @@
  *******************************************************************************/
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <prerequisites>
-    <maven>3.0</maven>
-  </prerequisites>
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
 
-  <groupId>com.liferay.ide.eclipse</groupId>
-  <artifactId>ide-parent</artifactId>
-  <version>1.3.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <groupId>com.liferay.ide.eclipse</groupId>
+    <artifactId>ide-parent</artifactId>
+    <version>1.3.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-  <name>Liferay IDE Parent</name>
+    <name>Liferay IDE Parent</name>
 
-  <licenses>
-    <license>
-      <name>GNU Lesser General Public License v2.1</name>
-      <comments>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v2.1</name>
+            <comments>
       	Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  
 		This library is free software; you can redistribute it and/or modify it under
@@ -48,117 +47,181 @@
 		FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
 		details.
       </comments>
-    </license>
-  </licenses>
+        </license>
+    </licenses>
 
-  <properties>
-    <tycho-version>0.13.0-SNAPSHOT</tycho-version>
-    <platform-version-name>helios</platform-version-name>
-    <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
-    <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-    <sapphire-site>http://download.eclipse.org/sapphire/0.3.0/repository</sapphire-site>
-    <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.0</graphiti-site>
-	<wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
-  </properties>
+    <properties>
+        <tycho-version>0.13.0-SNAPSHOT</tycho-version>
+        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
+    <!-- sapphire-site>http://download.eclipse.org/sapphire/0.3.0/repository</sapphire-site -->
+        <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.0</graphiti-site>
+        <sapphire-site>file:/E:/liferay/dependencies/sapphire-repository-0.3.x/repository/</sapphire-site>
+    </properties>
 
-  <profiles>
-    <profile>
-      <id>helios</id>
-      <activation>
-        <property>
-          <name>platform-version-name</name>
-          <value>helios</value>
-        </property>
-      </activation>
-      <properties>
-        <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
-        <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
-        <platform-version>[3.6,3.7)</platform-version>
-      </properties>
-    </profile>
-    <profile>
-      <id>indigo</id>
-      <activation>
-        <property>
-          <name>platform-version-name</name>
-          <value>indigo</value>
-        </property>
-      </activation>
-      <properties>
-        <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
-        <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
-        <platform-version>[3.7,3.8)</platform-version>
-      </properties>
-    </profile>
-  </profiles>
+    <profiles>
+        <profile>
+            <id>helios</id>
+            <activation>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>helios</value>
+                </property>
+            </activation>
+            <properties>
+                <platform-version-name>helios</platform-version-name>
+                <eclipse.project.version>3.6</eclipse.project.version>
+                <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/${eclipse.project.version}</eclipse-project-update-site>
+                <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
 
-  <modules>
-    <module>common/plugins/com.liferay.ide.eclipse.core</module>
-    <module>common/plugins/com.liferay.ide.eclipse.doc</module>
-    <module>common/plugins/com.liferay.ide.eclipse.project.core</module>
-    <module>common/plugins/com.liferay.ide.eclipse.project.ui</module>
-    <module>common/plugins/com.liferay.ide.eclipse.sdk</module>
-    <module>common/plugins/com.liferay.ide.eclipse.scripting.core</module>
-    <module>common/plugins/com.liferay.ide.eclipse.templates.core</module>
-    <module>common/plugins/com.liferay.ide.eclipse.tools.branding</module>
-    <module>common/plugins/com.liferay.ide.eclipse.ui</module>
-    <module>common/plugins/com.liferay.ide.eclipse.ui.snippets</module>
-    
-    <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.core</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.ui</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.portlet.core</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.portlet.jsf.core</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.portlet.jsf.ui</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.portlet.ui</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.core</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.ui</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.service.core</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.service.ui</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.taglib.ui</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.theme.core</module>
-    <module>portal/plugins/com.liferay.ide.eclipse.theme.ui</module>
-    
-    <module>server/plugins/com.liferay.ide.eclipse.server.core</module>
-    <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.core</module>
-    <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.ui</module>
-    <module>server/plugins/com.liferay.ide.eclipse.server.ui</module>
-    
-    <module>common/features/com.liferay.ide.eclipse.tools</module>
+                <platform-version>[3.6,3.7)</platform-version>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>eclipse-site</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-site}</url>
+                </repository>
+                <repository>
+                    <id>eclipse-project</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-project-update-site}</url>
+                </repository>
+                <repository>
+                    <id>orbit</id>
+                    <layout>p2</layout>
+                    <url>${orbit-site}</url>
+                </repository>
+                <repository>
+                    <id>sapphire</id>
+                    <layout>p2</layout>
+                    <url>${sapphire-site}</url>
+                </repository>
+                <repository>
+                    <id>graphiti</id>
+                    <layout>p2</layout>
+                    <url>${graphiti-site}</url>
+                </repository>
+                <repository>
+                    <id>wtp</id>
+                    <layout>p2</layout>
+                    <url>${wtp-site}</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>indigo</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>platform-version-name</name>
+                    <value>indigo</value>
+                </property>
+            </activation>
+            <properties>
+                <platform-version-name>indigo</platform-version-name>
+                <eclipse.project.version>3.7</eclipse.project.version>
+                <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/${eclipse.project.version}</eclipse-project-update-site>
+                <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+                <platform-version>[3.7,3.8)</platform-version>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>eclipse-site</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-site}</url>
+                </repository>
+                <repository>
+                    <id>eclipse-project</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-project-update-site}</url>
+                </repository>
+                <repository>
+                    <id>orbit</id>
+                    <layout>p2</layout>
+                    <url>${orbit-site}</url>
+                </repository>
+                <repository>
+                    <id>graphiti</id>
+                    <layout>p2</layout>
+                    <url>${graphiti-site}</url>
+                </repository>
+                <repository>
+                    <id>sapphire</id>
+                    <layout>p2</layout>
+                    <url>${sapphire-site}</url>
+                </repository>
+                <repository>
+                    <id>wtp</id>
+                    <layout>p2</layout>
+                    <url>${wtp-site}</url>
+                </repository>
+			<!-- Added for resolving the some external OSGI bundles-->
+                <repository>
+                    <id>com.springsource.repository.bundles.release</id>
+                    <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
+                    <url>http://repository.springsource.com/maven/bundles/release</url>
+                </repository>
+                <repository>
+                    <id>com.springsource.repository.bundles.external</id>
+                    <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+                    <url>http://repository.springsource.com/maven/bundles/external</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <modules>
+        <module>common/plugins/com.liferay.ide.eclipse.core</module>
+        <module>common/plugins/com.liferay.ide.eclipse.doc</module>
+        <module>common/plugins/com.liferay.ide.eclipse.project.core</module>
+        <module>common/plugins/com.liferay.ide.eclipse.project.ui</module>
+        <module>common/plugins/com.liferay.ide.eclipse.sdk</module>
+        <module>common/plugins/com.liferay.ide.eclipse.scripting.core</module>
+        <module>common/plugins/com.liferay.ide.eclipse.templates.core</module>
+        <module>common/plugins/com.liferay.ide.eclipse.tools.branding</module>
+        <module>common/plugins/com.liferay.ide.eclipse.ui</module>
+        <module>common/plugins/com.liferay.ide.eclipse.ui.snippets</module>
+
+        <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.portlet.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.portlet.jsf.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.portlet.jsf.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.portlet.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.service.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.service.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.taglib.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.theme.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.theme.ui</module>
+
+        <module>server/plugins/com.liferay.ide.eclipse.server.core</module>
+        <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.core</module>
+        <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.ui</module>
+        <module>server/plugins/com.liferay.ide.eclipse.server.ui</module>
+
+        <module>common/features/com.liferay.ide.eclipse.tools</module>
+        
+        <!-- Tests and Test Harness-->
+
+        <module>tests/plugins/com.liferay.ide.eclipse.tests</module>
+        <module>releng/com.liferay.ide.eclipse.target-definition</module>
+        
 <!--     <module>common/features/com.liferay.ide.eclipse.source-feature</module> -->
+        <!-- Release Management -->
+        <!-- Its failing here hence commented it out , need to check on it -->
+        <!--  module>releng/com.liferay.ide.eclipse-repository</module -->
+        <!-- module>releng/com.liferay.ide.eclipse-updatesite</module  -->
 
-    <module>releng/com.liferay.ide.eclipse-repository</module>
-    <module>releng/com.liferay.ide.eclipse-updatesite</module>
-   </modules>
 
-  <repositories>
-    <repository>
-      <id>helios</id>
-      <layout>p2</layout>
-      <url>${eclipse-site}</url>
-    </repository>
-    <repository>
-      <id>orbit</id>
-      <layout>p2</layout>
-      <url>${orbit-site}</url>
-    </repository>
-    <repository>
-      <id>sapphire</id>
-      <layout>p2</layout>
-      <url>${sapphire-site}</url>
-    </repository>
-    <repository>
-      <id>graphiti</id>
-      <layout>p2</layout>
-      <url>${graphiti-site}</url>
-    </repository>
-	<repository>
-		<id>wtp</id>
-		<layout>p2</layout>
-		<url>${wtp-site}</url>
-	</repository>
-  </repositories>
-  
-  <pluginRepositories>
+
+    </modules>
+
+
+    <pluginRepositories>
         <pluginRepository>
             <id>tycho</id>
             <url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
@@ -167,73 +230,81 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-  
-  <build>
-  	<sourceDirectory>src</sourceDirectory>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>${tycho-version}</version>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>target-platform-configuration</artifactId>
-        <version>${tycho-version}</version>
-        <configuration>
-          <resolver>p2</resolver>
-          <ignoreTychoRepositories>true</ignoreTychoRepositories>
-          <environments>
-          		 <environment>
-					<os>win32</os>
-					<ws>win32</ws>
-					<arch>x86_64</arch>
-				</environment>
-				<environment>
-					<os>win32</os>
-					<ws>win32</ws>
-					<arch>x86</arch>
-				</environment> 
-				<environment>
-					<os>macosx</os>
-					<ws>cocoa</ws>
-					<arch>x86</arch>
-				</environment>
-				
-				<environment>
-					<os>macosx</os>
-					<ws>cocoa</ws>
-					<arch>x86_64</arch>
-				</environment>				
-				<environment>
-					<os>linux</os>
-					<ws>gtk</ws>
-					<arch>x86</arch>
-				</environment>
-				
-				<environment>
-					<os>linux</os>
-					<ws>gtk</ws>
-					<arch>x86_64</arch>
-				</environment> 
-				
-		</environments>
-		</configuration>
-      </plugin>
-      <plugin>
-			<groupId>org.eclipse.tycho</groupId>
-			<artifactId>tycho-packaging-plugin</artifactId>
-			<version>${tycho-version}</version>
-			<configuration>
-				<format>'v'yyyyMMddHHmm</format>
-				<archiveSite>true</archiveSite>
-				<environments>
-					<environment>
-						<os>win32</os>
-						<ws>win32</ws>
-						<arch>x86_64</arch>
-					</environment>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <resolver>p2</resolver>
+                    <target>
+                        <artifact>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>com.liferay.ide.eclipse.target-definition</artifactId>
+                            <version>0.0.1-SNAPSHOT</version>
+                            <classifier>indigo</classifier>
+                        </artifact>
+                    </target>
+                    <ignoreTychoRepositories>true</ignoreTychoRepositories>
+                    <environments>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86</arch>
+                        </environment>
+
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86</arch>
+                        </environment>
+
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                    </environments>
+                    <pomDependencies>consider</pomDependencies>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-packaging-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <format>'v'yyyyMMddHHmm</format>
+                    <archiveSite>true</archiveSite>
+                    <environments>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86_64</arch>
+                        </environment>
 				<!--
 					<environment>
 						<os>macosx</os>
@@ -262,37 +333,78 @@
 						<arch>x86_64</arch>
 					</environment>
 					-->
-				</environments>
-			</configuration>
-		</plugin>
-      
-    </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.tycho</groupId>
-          <artifactId>tycho-compiler-plugin</artifactId>
-          <version>${tycho-version}</version>
-          <configuration>
-            <encoding>UTF-8</encoding>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>2.4.1</version>
-          <configuration>
-            <encoding>ISO-8859-1</encoding>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.3</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
-  
+                    </environments>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-toolchains-plugin</artifactId>
+                    <version>1.0</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>toolchain</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <toolchains>
+                            <jdk>
+                                <version>1.6</version>
+                                <vendor>sun</vendor>
+                            </jdk>
+                        </toolchains>
+                    </configuration>
+                </plugin>
 
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>apt-maven-plugin</artifactId>
+                    <version>1.0-alpha-4</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <fork>true</fork>
+                        <encoding>UTF-8</encoding>
+                        <factory>org.eclipse.sapphire.sdk.build.processor.internal.APFactory</factory>
+                        <sourceOutputDirectory>.apt_generated</sourceOutputDirectory>
+                        <outputDirectory>.apt_generated</outputDirectory>
+                        <meminitial>256m</meminitial>
+                        <maxmem>512m</maxmem>
+					<!-- used for staleness checking -->
+                        <outputFileEndings>
+                            <outputFileEnding>.xml</outputFileEnding>
+                        </outputFileEndings>
+					<!-- force skips stale checking and always generate -->
+					<!-- force>true</force  -->
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-compiler-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.4.1</version>
+                    <configuration>
+                        <encoding>ISO-8859-1</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
