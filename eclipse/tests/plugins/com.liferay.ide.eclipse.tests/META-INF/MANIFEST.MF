@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Tests
+Bundle-SymbolicName: com.liferay.ide.eclipse.tests;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.liferay.ide.eclipse.tests.Activator
+Bundle-Vendor: LIFERAY
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.osgi.framework;version="1.3.0"
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.sapphire.java;bundle-version="0.3.1",
+ org.eclipse.sapphire.java.jdt;bundle-version="0.3.1",
+ org.eclipse.sapphire.modeling;bundle-version="0.3.1",
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.3.1",
+ org.eclipse.sapphire.platform;bundle-version="0.3.1",
+ org.eclipse.sapphire.workspace;bundle-version="0.3.1",
+ com.liferay.ide.eclipse.portlet.core;bundle-version="1.5.0",
+ org.junit;bundle-version="4.8.2"
+Bundle-ClassPath: .,
+ lib/com.springsource.org.apache.xmlcommons-1.3.4.jar,
+ lib/com.springsource.org.custommonkey.xmlunit-1.2.0.jar
