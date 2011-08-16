@@ -41,6 +41,7 @@ public interface IQNamed extends IModelElement {
 
 	@Label( standard = "Local Part" )
 	@DefaultValue( text = "LOCAL_PART" )
+	@XmlBinding( path = "qname" )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 
