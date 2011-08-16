@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	id="ID_001">
+    <portlet>
+        <portlet-name>portlet-1</portlet-name>
+        <display-name>Portlet One</display-name>
+        <portlet-class>com.liferay.eclipse.ide.portlets.PortletOne</portlet-class>
+        <supports>
+            <mime-type>text/html</mime-type>
+        </supports>
+    </portlet>
+</portlet-app>  

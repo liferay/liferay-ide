@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.custommonkey.xmlunit.DetailedDiff;
+import org.custommonkey.xmlunit.Difference;
 import org.custommonkey.xmlunit.XMLTestCase;
 import org.eclipse.sapphire.modeling.ByteArrayResourceStore;
 import org.xml.sax.InputSource;
@@ -54,6 +55,16 @@ public abstract class AbstractTestCase extends XMLTestCase {
 		DetailedDiff myDiff = new DetailedDiff( compareXML( myControlXML, myTestXML ) );
 		@SuppressWarnings( "rawtypes" )
 		List allDifferences = myDiff.getAllDifferences();
+		if ( !allDifferences.isEmpty() ) {
+			printDiffs( allDifferences );
+		}
 		assertEquals( myDiff.toString(), 0, allDifferences.size() );
+	}
+
+	private void printDiffs( List allDifferences ) {
+		for ( Object object : allDifferences ) {
+			System.out.println( ( (Difference) object ).getDescription() );
+		}
+
 	}
 }
