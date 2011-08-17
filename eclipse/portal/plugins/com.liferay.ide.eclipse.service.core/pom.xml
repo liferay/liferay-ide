@@ -15,10 +15,9 @@
  *
  *******************************************************************************/
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.liferay.ide.eclipse</groupId>
@@ -27,34 +26,38 @@
     <relativePath>../../..</relativePath>
   </parent>
 
-  <artifactId>com.liferay.ide.eclipse.service.core</artifactId>
-  <packaging>eclipse-plugin</packaging>
+    <artifactId>com.liferay.ide.eclipse.service.core</artifactId>
+    <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay IDE Service Core</name>
+    <name>Liferay IDE Service Core</name>
 
-<dependencies>
-	<dependency>
-	     <groupId>ant-contrib</groupId>
-	     <artifactId>ant-contrib</artifactId>
-	     <version>1.0b3</version>
-	     <exclusions>
-	       <exclusion>
-	         <groupId>ant</groupId>
-	         <artifactId>ant</artifactId>
-	       </exclusion>
-	     </exclusions>
-	   </dependency>
-	   <dependency>
-	     <groupId>ant</groupId>
-	     <artifactId>ant-nodeps</artifactId>
-	     <version>1.6.5</version>
-	   </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ant</groupId>
+                    <artifactId>ant</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant-nodeps</artifactId>
+            <version>1.6.5</version>
+        </dependency>
+    </dependencies>
 
 
- <build>
-     <plugins>
-      <plugin>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+            </plugin>
+      <!--  plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.6</version>
@@ -72,8 +75,8 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-    </plugins>
-  </build>
+      </plugin -->
+        </plugins>
+    </build>
 
 </project>

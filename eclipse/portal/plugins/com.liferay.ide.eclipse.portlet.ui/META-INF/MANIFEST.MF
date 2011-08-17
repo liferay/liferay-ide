@@ -37,7 +37,18 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)",
  org.eclipse.wst.sse.ui;bundle-version="[1.1.102,2.0.0)",
  org.eclipse.core.expressions;bundle-version="3.4.101",
- org.eclipse.wst.xsl.ui;bundle-version="[1.0.100,1.2.0)"
+ org.eclipse.wst.xsl.ui;bundle-version="[1.0.100,1.2.0)",
+ org.eclipse.sapphire.java.jdt;bundle-version="0.3.1",
+ org.eclipse.sapphire.java.jdt.ui;bundle-version="0.3.1",
+ org.eclipse.sapphire.modeling;bundle-version="0.3.1",
+ org.eclipse.sapphire.osgi;bundle-version="0.3.1",
+ org.eclipse.sapphire.platform;bundle-version="0.3.1",
+ org.eclipse.sapphire.ui;bundle-version="0.3.1",
+ org.eclipse.sapphire.ui.swt.graphiti;bundle-version="0.3.1",
+ org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="0.3.1",
+ org.eclipse.sapphire.workspace;bundle-version="0.3.1",
+ org.eclipse.sapphire.workspace.ui;bundle-version="0.3.1",
+ org.eclipse.help;bundle-version="3.5.100"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.portlet.ui,

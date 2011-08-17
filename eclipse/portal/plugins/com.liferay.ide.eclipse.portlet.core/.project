@@ -5,11 +5,12 @@
 	<projects>
 	</projects>
 	<buildSpec>
-        <buildCommand>
+		<buildCommand>
 			<name>org.eclipse.emf.codegen.JETBuilder</name>
 			<arguments>
 			</arguments>
-		</buildCommand>		<buildCommand>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
 			</arguments>

@@ -89,6 +89,15 @@
             name="Plugin Package Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
       </editor>
+      <editor
+            class="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
+            default="false"
+            filenames="portlet.xml"
+            icon="icons/e16/portlet.png"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
+            name="Portlet Xml Editor"
+            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
