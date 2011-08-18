@@ -65,6 +65,7 @@
         <profile>
             <id>helios</id>
             <activation>
+            	<activeByDefault>true</activeByDefault>
                 <property>
                     <name>platform-version-name</name>
                     <value>helios</value>
@@ -115,7 +116,7 @@
         <profile>
             <id>indigo</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                
                 <property>
                     <name>platform-version-name</name>
                     <value>indigo</value>
@@ -160,18 +161,7 @@
                     <layout>p2</layout>
                     <url>${wtp-site}</url>
                 </repository>
-			<!-- Added for resolving the some external OSGI bundles-->
-                <repository>
-                    <id>com.springsource.repository.bundles.release</id>
-                    <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
-                    <url>http://repository.springsource.com/maven/bundles/release</url>
-                </repository>
-                <repository>
-                    <id>com.springsource.repository.bundles.external</id>
-                    <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-                    <url>http://repository.springsource.com/maven/bundles/external</url>
-                </repository>
-            </repositories>
+               </repositories>
         </profile>
     </profiles>
 
@@ -208,19 +198,10 @@
 
         <module>common/features/com.liferay.ide.eclipse.tools</module>
         
-        <!-- Tests and Test Harness-->
-
-        <module>tests/plugins/com.liferay.ide.eclipse.tests</module>
-        <module>releng/com.liferay.ide.eclipse.target-definition</module>
-        
 <!--     <module>common/features/com.liferay.ide.eclipse.source-feature</module> -->
         <!-- Release Management -->
-        <!-- Its failing here hence commented it out , need to check on it -->
-        <!--  module>releng/com.liferay.ide.eclipse-repository</module -->
-        <!-- module>releng/com.liferay.ide.eclipse-updatesite</module  -->
-
-
-
+    	<module>releng/com.liferay.ide.eclipse-repository</module>
+    	<module>releng/com.liferay.ide.eclipse-updatesite</module>
     </modules>
 
 
@@ -249,14 +230,6 @@
                 <version>${tycho-version}</version>
                 <configuration>
                     <resolver>p2</resolver>
-                    <target>
-                        <artifact>
-                            <groupId>${project.groupId}</groupId>
-                            <artifactId>com.liferay.ide.eclipse.target-definition</artifactId>
-                            <version>0.0.1-SNAPSHOT</version>
-                            <classifier>indigo</classifier>
-                        </artifact>
-                    </target>
                     <ignoreTychoRepositories>true</ignoreTychoRepositories>
                     <environments>
                         <environment>
@@ -292,7 +265,6 @@
                             <arch>x86_64</arch>
                         </environment>
                     </environments>
-                    <pomDependencies>consider</pomDependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -308,7 +280,6 @@
                             <ws>win32</ws>
                             <arch>x86_64</arch>
                         </environment>
-				<!--
 					<environment>
 						<os>macosx</os>
 						<ws>cocoa</ws>
@@ -335,34 +306,12 @@
 						<ws>gtk</ws>
 						<arch>x86_64</arch>
 					</environment>
-					-->
-                    </environments>
+					</environments>
                 </configuration>
             </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-toolchains-plugin</artifactId>
-                    <version>1.0</version>
-                    <executions>
-                        <execution>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>toolchain</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <toolchains>
-                            <jdk>
-                                <version>1.6</version>
-                                <vendor>sun</vendor>
-                            </jdk>
-                        </toolchains>
-                    </configuration>
-                </plugin>
 
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
