@@ -1,6 +1,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import static com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants.LOCAL_PART_DEFAULT_VALUE;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
@@ -46,11 +48,11 @@ extends XmlValueBindingImpl
 	 */
 	@Override
 	public String read() {
-		String value = null;
+		String value = LOCAL_PART_DEFAULT_VALUE;
 
-		final XmlElement eventDefintion = xml( false );
+		final XmlElement qNameElement = xml( false );
 
-		final XmlElement qNameElement = eventDefintion.getChildElement( params[0], false );
+		// final XmlElement qNameElement = eventDefintion.getChildElement( params[0], false );
 
 		// System.out.println( "Reading VALUE for Element  ___________________ " + qNameElement );
 
@@ -93,7 +95,20 @@ extends XmlValueBindingImpl
 	public void write( final String value ) {
 		String val = value;
 		XmlElement parent = xml( true );
-		XmlElement qNameElement = parent.getChildElement( params[0], true );
+
+		/*
+		 * In some cases the parent node and the child nodes will be same, we need to ensure that we dont create them
+		 * accidentally again
+		 */
+		// System.out.println( "QNameLocalPartValueBinding.write() - Parent local name:" + parent.getLocalName() );
+		XmlElement qNameElement = null;
+		if ( parent.getLocalName().equals( params[0] ) ) {
+			qNameElement = parent;
+		}
+		else {
+			qNameElement = parent.getChildElement( params[0], true );
+		}
+
 		// System.out.println( "VALUE ___________________ " + val );
 
 		if ( val != null ) {
@@ -101,8 +116,9 @@ extends XmlValueBindingImpl
 		}
 
 		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
-
-		qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+		if ( qNameElement != null ) {
+			qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+		}
 
 		// // For debugging purposes
 		// try {

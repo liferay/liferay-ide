@@ -28,19 +28,22 @@
 		<relativePath>../../..</relativePath>
 	</parent>
 
-	<artifactId>com.liferay.ide.eclipse.portlet.core</artifactId>
-	<packaging>eclipse-plugin</packaging>
-	<version>1.5.0-SNAPSHOT</version>
+    <artifactId>com.liferay.ide.eclipse.portlet.core</artifactId>
+    <packaging>eclipse-plugin</packaging>
+    <version>1.5.0-SNAPSHOT</version>
 
-	<name>Liferay Portlet Core</name>
+    <name>Liferay Portlet Core</name>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>apt-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <configuration>
+                    <force>true</force>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

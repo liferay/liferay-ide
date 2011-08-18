@@ -406,10 +406,6 @@
 				<node-factory>
 					<property>EventDefinitions</property>
 					<case>
-						<label>${((Name ==null &amp;&amp; Qname ==null) || (Name
-							=='EVENT_NAME' &amp;&amp; Qname =='Q_NAME'))?
-							&quot;&lt;event-definintion&gt;&quot;: (Name
-							=='EVENT_NAME'?Qname:Name)}</label>
 						<use-model-element-image></use-model-element-image>
 						<section>
 							<label>Info</label>
@@ -428,7 +424,6 @@
 							<content>
 								<property-editor>Id</property-editor>
 								<property-editor>Name</property-editor>
-								<property-editor>QName</property-editor>
 								<group>
                                     <label>Qualified Name</label>
                                     <indent>true</indent>
@@ -454,6 +449,7 @@
 							<collapsible>true</collapsible>
 							<indent>true</indent>
 						</section>
+                        <label>${((Name ==null) || (Name=='EVENT_NAME'))?&quot;&lt;event-definintion&gt;&quot;: (Name =='EVENT_NAME'?(concat('{',NamespaceURI,'}',LocalPart)):Name)}</label>
 					</case>
 				</node-factory>
 				<section>
@@ -478,10 +474,6 @@
 				<node-factory>
 					<property>PublicRenderParameters</property>
 					<case>
-						<label>${((Name ==null &amp;&amp; Qname ==null) || (Name
-							=='PARAM_NAME' &amp;&amp; Qname =='Q_NAME'))?
-							&quot;&lt;param-name&gt;&quot;: (Name =='PARAM_NAME'?Qname:Name)}
-						</label>
 						<use-model-element-image></use-model-element-image>
 						<section>
 							<label>General</label>
@@ -493,11 +485,11 @@
 							<label>Details</label>
 							<content>
 								<property-editor>Id</property-editor>
-								<property-editor>Qname</property-editor>
 								<property-editor>Name</property-editor>
 								<property-editor>Aliases</property-editor>
 							</content>
 						</section>
+                        <label>${((Name ==null) || (Name=='PARAM_NAME'))?&quot;&lt;param-name&gt;&quot;: (Name =='PARAM_NAME'?(concat('{',NamespaceURI,'}',LocalPart)):Name)}</label>
 					</case>
 				</node-factory>
 				<node-factory>

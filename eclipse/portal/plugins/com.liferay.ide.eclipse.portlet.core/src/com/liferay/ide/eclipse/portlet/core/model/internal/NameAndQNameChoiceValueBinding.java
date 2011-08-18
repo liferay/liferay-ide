@@ -45,15 +45,20 @@ public final class NameAndQNameChoiceValueBinding extends XmlValueBindingImpl {
 	@Override
 	public String read() {
 		final XmlElement parent = xml( false );
+		// System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + parent );
 		String value = null;
 		if ( parent != null ) {
+			// System.out.println( "NameAndQNameChoiceValueBinding.read()" + params[0] );
 			final XmlElement eventNameElement = parent.getChildElement( NAME, false );
 			final XmlElement eventQNameElement = parent.getChildElement( Q_NAME, false );
 
 			if ( eventNameElement != null && NAME.equals( params[0] ) ) {
+				// System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + eventNameElement );
 				value = eventNameElement.getText();
 			}
 			else if ( eventQNameElement != null && Q_NAME.equals( params[0] ) ) {
+
+				// System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + eventQNameElement );
 				value = eventQNameElement.getText();
 			}
 		}

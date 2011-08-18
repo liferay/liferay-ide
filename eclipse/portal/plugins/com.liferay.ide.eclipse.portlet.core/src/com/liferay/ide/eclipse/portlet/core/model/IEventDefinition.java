@@ -16,7 +16,6 @@ import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.DerivedValue;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -29,30 +28,41 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
-import com.liferay.ide.eclipse.portlet.core.model.internal.QNameDerivedValueService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNameLocalPartValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNamespaceValueBinding;
 
 /**
  * @author kamesh.sampath TODO:Qname validation
  */
 @GenerateImpl
 @Image( path = "images/elcl16/event.gif" )
-public interface IEventDefinition extends IModelElement, IIdentifiable, IDescribeable, IQNamed {
+public interface IEventDefinition extends IModelElement, IIdentifiable, IDescribeable {
 
 	ModelElementType TYPE = new ModelElementType( IEventDefinition.class );
 
-	// *** Qname ***
+	//
+	// *** NamespaceURI ***
 
-	@Label( standard = "Qname" )
-	@Whitespace( trim = true )
-	@XmlBinding( path = "qname" )
-	@DefaultValue( text = "Q_NAME" )
-	@DerivedValue( service = QNameDerivedValueService.class )
-	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "qname" } )
-	ValueProperty PROP_QnAME = new ValueProperty( TYPE, "Qname" );
+	@Label( standard = "Namespace URI" )
+	@DefaultValue( text = "NAMESPACE_URI" )
+	@XmlBinding( path = "event-definition/qname" )
+	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
+	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
-	Value<String> getQname();
+	Value<String> getNamespaceURI();
 
-	void setQname( String value );
+	void setNamespaceURI( String value );
+
+	// *** LocalPart ***
+
+	@Label( standard = "Local Part" )
+	@DefaultValue( text = "LOCAL_PART" )
+	@XmlBinding( path = "event-definition/qname" )
+	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
+	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
+
+	Value<String> getLocalPart();
+	void setLocalPart( String value );
 
 	// *** Name ***
 
@@ -60,7 +70,7 @@ public interface IEventDefinition extends IModelElement, IIdentifiable, IDescrib
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
 	@DefaultValue( text = "EVENT_NAME" )
-	@Enablement( expr = "${Qname == 'Q_NAME'}" )
+	@Enablement( expr = "${NamespaceURI == 'NAMESPACE_URI' AND LocalPart=='LOCAL_PART'}" )
 	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
@@ -70,12 +80,12 @@ public interface IEventDefinition extends IModelElement, IIdentifiable, IDescrib
 
 	// *** Aliases ***
 
-	@Type( base = IAlias.class )
+	@Type( base = IAliasQName.class )
 	@Label( standard = "Aliases" )
-	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = IAlias.class ) } )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = IAliasQName.class ) } )
 	ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" );
 
-	ModelElementList<IAlias> getAliases();
+	ModelElementList<IAliasQName> getAliases();
 
 	// *** Event Value Type ***
 

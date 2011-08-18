@@ -6,6 +6,8 @@ package com.liferay.ide.eclipse.portlet.core.model.internal;
 
 import static org.eclipse.sapphire.modeling.util.MiscUtil.equal;
 
+import javax.xml.namespace.QName;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ReferenceService;
@@ -31,7 +33,6 @@ public class EventDefinitionReferenceService extends ReferenceService {
 	 */
 	@Override
 	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		// TODO Auto-generated method stub
 		super.init( element, property, params );
 		this.params = params;
 	}
@@ -53,7 +54,7 @@ public class EventDefinitionReferenceService extends ReferenceService {
 					}
 				}
 				else if ( QUERY_BY_QNAME.equals( this.params[0] ) ) {
-					if ( equal( eventDefinition.getQname().getContent(), reference ) ) {
+					if ( equal( getQName( eventDefinition ), reference ) ) {
 						return eventDefinition;
 					}
 				}
@@ -62,5 +63,17 @@ public class EventDefinitionReferenceService extends ReferenceService {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param eventDefinition
+	 * @return
+	 */
+	private String getQName( IEventDefinition eventDefinition ) {
+		QName qName = null;
+		String nsURI = eventDefinition.getNamespaceURI().getContent();
+		String localPart = eventDefinition.getLocalPart().getContent();
+		qName = new QName( nsURI, localPart );
+		return qName.toString();
 	}
 }

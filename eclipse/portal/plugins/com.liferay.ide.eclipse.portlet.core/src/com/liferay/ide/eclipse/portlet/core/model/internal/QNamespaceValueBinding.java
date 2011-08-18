@@ -4,6 +4,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import static com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants.NAMESPACE_URI_DEFAULT_VALUE;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlAttribute;
@@ -43,9 +45,9 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 	 */
 	@Override
 	public String read() {
-		String value = null;
-		XmlElement parent = xml( true );
-		XmlElement qNameElement = parent.getChildElement( params[0], false );
+		String value = NAMESPACE_URI_DEFAULT_VALUE;
+		XmlElement qNameElement = xml( true );
+		// XmlElement qNameElement = parent.getChildElement( params[0], false );
 		if ( qNameElement != null ) {
 			XmlAttribute xmlAttribute =
 				qNameElement.getAttribute( PortletAppModelConstants.DEFAULT_QNAME_PREFIX, false );
@@ -53,7 +55,7 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 				value = xmlAttribute.getText();
 			}
 		}
-		return value;
+		return value != null ? value.trim() : value;
 	}
 
 	/*
@@ -71,12 +73,25 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 		}
 
 		XmlElement parent = xml( true );
-		XmlElement qNameElement = parent.getChildElement( params[0], true );
+		/*
+		 * In some cases the parent node and the child nodes will be same, we need to ensure that we dont create them
+		 * accidentally again
+		 */
+		// System.out.println( "QNamespaceValueBinding.write() - Parent local name:" + parent.getLocalName() );
+		XmlElement qNameElement = null;
+		if ( parent.getLocalName().equals( params[0] ) ) {
+			qNameElement = parent;
+		}
+		else {
+			qNameElement = parent.getChildElement( params[0], true );
+		}
 
-		// System.out.println( "QNamespaceValueBinding.write() - 1" );
-		Element qnameDef = qNameElement.getDomNode();
-		qnameDef.setAttributeNS( "http://www.w3.org/2000/xmlns/", "xmlns:" +
-			PortletAppModelConstants.DEFAULT_QNAME_PREFIX, val );
+		if ( qNameElement != null ) {
+			// System.out.println( "QNamespaceValueBinding.write() - 1" );
+			Element qnameDef = qNameElement.getDomNode();
+			qnameDef.setAttributeNS( "http://www.w3.org/2000/xmlns/", "xmlns:" +
+				PortletAppModelConstants.DEFAULT_QNAME_PREFIX, val );
+		}
 		// parent.getDomNode().appendChild( qnameDef );
 
 		// // Only for debugging purposes

@@ -15,6 +15,8 @@ import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -22,6 +24,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNameLocalPartValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNamespaceValueBinding;
 
 /**
  * @author kamesh.sampath
@@ -32,17 +36,42 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 
 	ModelElementType TYPE = new ModelElementType( IPublicRenderParameter.class );
 
-	// *** Qname ***
-	@Label( standard = "Qname" )
-	@Whitespace( trim = true )
+	// *** Identifier ***
+
+	@Label( standard = "Identifier" )
+	@MustExist
+	@Required
+	@XmlBinding( path = "identifier" )
+	ValueProperty PROP_IDENTIFIER = new ValueProperty( TYPE, "Identifier" );
+
+	Value<String> getIdentifier();
+
+	void setIdentifier( String value );
+
+
+	// *** NamespaceURI ***
+
+	@Label( standard = "Namespace URI" )
+	@DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
-	@DefaultValue( text = "Q_NAME" )
-	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "qname" } )
-	ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" );
+	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
+	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
-	Value<String> getQname();
+	Value<String> getNamespaceURI();
 
-	void setQname( String value );
+	void setNamespaceURI( String value );
+
+	// *** LocalPart ***
+
+	@Label( standard = "Local Part" )
+	@DefaultValue( text = "LOCAL_PART" )
+	@XmlBinding( path = "qname" )
+	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
+	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
+
+	Value<String> getLocalPart();
+
+	void setLocalPart( String value );
 
 	// *** Name ***
 
@@ -50,7 +79,7 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
 	@DefaultValue( text = "PARAM_NAME" )
-	@Enablement( expr = "${Qname == 'Q_NAME'}" )
+	@Enablement( expr = "${NamespaceURI == 'NAMESPACE_URI' AND LocalPart=='LOCAL_PART'}" )
 	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
@@ -60,11 +89,11 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 
 	// *** Aliases ***
 
-	@Type( base = IAlias.class )
+	@Type( base = IAliasQName.class )
 	@Label( standard = "Aliases" )
-	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = IAlias.class ) } )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = IAliasQName.class ) } )
 	ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" );
 
-	ModelElementList<IAlias> getAliases();
+	ModelElementList<IAliasQName> getAliases();
 
 }
