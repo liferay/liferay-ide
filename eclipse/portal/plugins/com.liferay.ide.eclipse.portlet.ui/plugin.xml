@@ -92,11 +92,13 @@
       <editor
             class="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
             default="false"
-            filenames="portlet.xml"
             icon="icons/e16/portlet.png"
             id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
-            name="Portlet Xml Editor"
+            name="Portlet Xml Editor (Experimental)"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <contentTypeBinding
+               contentTypeId="liferayportletxml">
+         </contentTypeBinding>
       </editor>
    </extension>
    <extension
