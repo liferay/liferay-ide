@@ -18,6 +18,9 @@
    <feature url="features/org.eclipse.sapphire.java_0.0.0.qualifier.jar" id="org.eclipse.sapphire.java" version="0.0.0">
       <category name="deps"/>
    </feature>
+   <feature url="features/org.eclipse.sapphire.java.jdt_0.0.0.qualifier.jar" id="org.eclipse.sapphire.java.jdt" version="0.0.0">
+      <category name="deps"/>
+   </feature>
    <feature url="features/org.eclipse.sapphire.osgi_0.0.0.qualifier.jar" id="org.eclipse.sapphire.osgi" version="0.0.0">
       <category name="deps"/>
    </feature>
