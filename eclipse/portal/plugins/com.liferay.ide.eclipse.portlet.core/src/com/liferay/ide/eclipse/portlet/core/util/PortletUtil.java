@@ -15,24 +15,24 @@
 
 package com.liferay.ide.eclipse.portlet.core.util;
 
-import com.liferay.ide.eclipse.core.util.CoreUtil;
-
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class PortletUtil {
 
-	public static IFolder getFirstSrcFolder(IProject project) {
-		IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
+	public static IFolder getFirstSrcFolder( IProject project ) {
+		IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
 
-		if (sourceFolders != null && sourceFolders.length > 0) {
+		if ( sourceFolders != null && sourceFolders.length > 0 ) {
 			IResource resource = sourceFolders[0].getResource();
 
 			return resource instanceof IFolder ? (IFolder) resource : null;
@@ -41,10 +41,24 @@ public class PortletUtil {
 		return null;
 	}
 
-	public static IFolder getFirstSrcFolder(String projectName) {
-		IProject project = CoreUtil.getProject(projectName);
+	public static IFolder getFirstSrcFolder( String projectName ) {
+		IProject project = CoreUtil.getProject( projectName );
 
-		return getFirstSrcFolder(project);
+		return getFirstSrcFolder( project );
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static String stripPrefix( String value ) {
+		String strippedValue = value;
+		int colonIndex = value.indexOf( PortletAppModelConstants.COLON );
+		if ( colonIndex != -1 ) {
+			strippedValue = strippedValue.substring( colonIndex + 1, strippedValue.length() );
+		}
+		return strippedValue;
+
 	}
 
 }

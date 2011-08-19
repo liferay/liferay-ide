@@ -20,7 +20,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.EventDefinitionReferenceService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNamedTextNodeValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNamesPossibleValuesService;
 
 /**
  * @author kamesh.sampath
@@ -37,9 +38,8 @@ public interface IEventDefinitionRef extends IModelElement, IIdentifiable, IDesc
 	@Whitespace( trim = true )
 	@DefaultValue( text = "Q_NAME" )
 	@NoDuplicates
-	@PossibleValues( property = "/EventDefinitions/Qname" )
-	@Service( impl = EventDefinitionReferenceService.class, params = { "qname" } )
-	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "qname" } )
+	@Service( impl = QNamesPossibleValuesService.class, params = { "Q_NAME" } )
+	@CustomXmlValueBinding( impl = QNamedTextNodeValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" );
 
 	Value<String> getQname();

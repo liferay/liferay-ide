@@ -1,13 +1,17 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import javax.xml.namespace.QName;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.modeling.xml.XmlAttribute;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.w3c.dom.Element;
 
 import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
@@ -16,7 +20,7 @@ import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
  * @author kamesh.sampath
  */
 
-public final class QNameLocalPartValueBinding
+public final class QNamedTextNodeValueBinding
 
 extends XmlValueBindingImpl
 
@@ -33,10 +37,9 @@ extends XmlValueBindingImpl
 	@Override
 	public void init( final IModelElement element, final ModelProperty property, final String[] params ) {
 		super.init( element, property, params );
-
+		this.params = params;
 		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
 		this.path = new XmlPath( params[0], xmlNamespaceResolver );
-		this.params = params;
 
 		// System.out.println( "TextNodeValueBinding.init()" + this.path );
 	}
@@ -51,32 +54,23 @@ extends XmlValueBindingImpl
 
 		final XmlElement parent = xml( false );
 
-		// Fix for Alias QName not displayed in list
-		XmlElement qNameElement = null;
-		if ( parent.getLocalName().equals( params[0] ) ) {
-			qNameElement = parent;
-		}
-		else {
-			qNameElement = parent.getChildElement( params[0], false );
-		}
+		if ( parent != null ) {
+			XmlElement qNamedElement = parent.getChildElement( this.params[0], false );
+			if ( qNamedElement != null ) {
+				XmlAttribute qnsAttribute = qNamedElement.getAttribute( "qns", false );
+				value = qNamedElement.getText();
 
-		// System.out.println( "Reading VALUE for Element  ___________________ " + qNameElement );
+				if ( value != null ) {
+					value = PortletUtil.stripPrefix( value.trim() );
+					QName qname = new QName( qnsAttribute.getText(), value );
+					value = qname.toString();
 
-		if ( qNameElement != null ) {
-
-			value = qNameElement.getText();
-
-			if ( value != null ) {
-				value = value.trim();
-				value = PortletUtil.stripPrefix( value );
+				}
 			}
-
 		}
-
+		// System.out.println( "QNamedTextNodeValueBinding.read()" + value );
 		return value;
 	}
-
-
 
 	/*
 	 * (non-Javadoc)
@@ -84,29 +78,28 @@ extends XmlValueBindingImpl
 	 */
 	@Override
 	public void write( final String value ) {
-		String val = value;
+		String qNameAsString = value;
 		XmlElement parent = xml( true );
+		// System.out.println( "VALUE ___________________ " + qNameAsString );
 
-		/*
-		 * In some cases the parent node and the child nodes will be same, we need to ensure that we dont create them
-		 * accidentally again
-		 */
-		// System.out.println( "QNameLocalPartValueBinding.write() - Parent local name:" + parent.getLocalName() );
-		XmlElement qNameElement = null;
-		if ( parent.getLocalName().equals( params[0] ) ) {
-			qNameElement = parent;
+		if ( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) ) {
+			qNameAsString = value.trim();
+			QName qName = QName.valueOf( qNameAsString );
+			String namespaceURI = PortletAppModelConstants.XMLNS_NS_URI;
+			String qualifiedName = PortletAppModelConstants.DEFAULT_QNAME_NS_DECL;
+			String localPart =
+				PortletAppModelConstants.DEFAULT_QNAME_PREFIX + PortletAppModelConstants.COLON + qName.getLocalPart();
+			XmlElement qNamedElement = parent.getChildElement( this.params[0], true );
+			Element domNode = qNamedElement.getDomNode();
+			domNode.setAttributeNS( namespaceURI, qualifiedName, qName.getNamespaceURI() );
+			qNamedElement.setText( localPart );
 		}
 		else {
-			qNameElement = parent.getChildElement( params[0], true );
+			// System.out.println( "Remove:" + params[0] + " from " + parent );
+			parent.remove();
 		}
-
-		// System.out.println( "VALUE ___________________ " + val );
 
 		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
-		if ( qNameElement != null && val != null ) {
-			val = value.trim();
-			qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
-		}
 
 	}
 

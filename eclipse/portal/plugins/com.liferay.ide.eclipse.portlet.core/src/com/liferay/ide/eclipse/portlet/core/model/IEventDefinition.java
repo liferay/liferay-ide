@@ -40,12 +40,12 @@ public interface IEventDefinition extends IModelElement, IIdentifiable, IDescrib
 
 	ModelElementType TYPE = new ModelElementType( IEventDefinition.class );
 
-	//
 	// *** NamespaceURI ***
 
 	@Label( standard = "Namespace URI" )
+	@Whitespace( trim = true )
 	@DefaultValue( text = "NAMESPACE_URI" )
-	@XmlBinding( path = "event-definition/qname" )
+	@XmlBinding( path = "qname" )
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
@@ -56,12 +56,14 @@ public interface IEventDefinition extends IModelElement, IIdentifiable, IDescrib
 	// *** LocalPart ***
 
 	@Label( standard = "Local Part" )
+	@Whitespace( trim = true )
 	@DefaultValue( text = "LOCAL_PART" )
-	@XmlBinding( path = "event-definition/qname" )
+	@XmlBinding( path = "qname" )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 
 	Value<String> getLocalPart();
+
 	void setLocalPart( String value );
 
 	// *** Name ***
@@ -70,7 +72,7 @@ public interface IEventDefinition extends IModelElement, IIdentifiable, IDescrib
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
 	@DefaultValue( text = "EVENT_NAME" )
-	@Enablement( expr = "${NamespaceURI == 'NAMESPACE_URI' AND LocalPart=='LOCAL_PART'}" )
+	@Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
 	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 

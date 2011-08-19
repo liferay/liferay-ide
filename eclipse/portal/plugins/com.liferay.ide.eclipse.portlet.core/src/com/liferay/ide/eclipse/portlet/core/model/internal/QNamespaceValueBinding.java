@@ -4,8 +4,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import static com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants.NAMESPACE_URI_DEFAULT_VALUE;
-
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlAttribute;
@@ -14,6 +12,7 @@ import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
@@ -45,16 +44,27 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 	 */
 	@Override
 	public String read() {
-		String value = NAMESPACE_URI_DEFAULT_VALUE;
-		XmlElement qNameElement = xml( true );
-		// XmlElement qNameElement = parent.getChildElement( params[0], false );
+		String value = null;
+		XmlElement parent = xml( false );
+		XmlElement qNameElement = null;
+		// Fix for Alias QName not displayed in list
+		if ( parent.getLocalName().equals( params[0] ) ) {
+			qNameElement = parent;
+		}
+		else {
+			qNameElement = parent.getChildElement( params[0], false );
+		}
 		if ( qNameElement != null ) {
+			// System.out.println( qNameElement );
 			XmlAttribute xmlAttribute =
 				qNameElement.getAttribute( PortletAppModelConstants.DEFAULT_QNAME_PREFIX, false );
 			if ( xmlAttribute != null ) {
 				value = xmlAttribute.getText();
 			}
 		}
+
+		// System.out.println( "QNamespaceValueBinding.read() - Value:" + value );
+
 		return value != null ? value.trim() : value;
 	}
 
@@ -67,10 +77,6 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 		String val = value;
 
 		// System.out.println( "VALUE ___________________ " + val );
-
-		if ( val != null ) {
-			val = value.trim();
-		}
 
 		XmlElement parent = xml( true );
 		/*
@@ -86,26 +92,31 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 			qNameElement = parent.getChildElement( params[0], true );
 		}
 
-		if ( qNameElement != null ) {
+		if ( qNameElement != null && val != null ) {
 			// System.out.println( "QNamespaceValueBinding.write() - 1" );
+			val = value.trim();
 			Element qnameDef = qNameElement.getDomNode();
-			qnameDef.setAttributeNS( "http://www.w3.org/2000/xmlns/", "xmlns:" +
-				PortletAppModelConstants.DEFAULT_QNAME_PREFIX, val );
-		}
-		// parent.getDomNode().appendChild( qnameDef );
+			/*
+			 * Check to ensure that the attribute is not added multiple times, check if the attribute already exist if
+			 * yes remove it add add it afresh
+			 */
+			Attr oldQnsAttribute = qnameDef.getAttributeNode( PortletAppModelConstants.DEFAULT_QNAME_NS_DECL );
+			if ( oldQnsAttribute == null ) {
+				// System.out.println( "QNamespaceValueBinding.write() - Attrib does not exist" );
+				qnameDef.setAttributeNS(
+					PortletAppModelConstants.XMLNS_NS_URI, PortletAppModelConstants.DEFAULT_QNAME_NS_DECL, val );
+			}
+			else {
+				// System.out.println( "QNamespaceValueBinding.write() - Attrib  exist" );
+				qnameDef.removeAttributeNode( oldQnsAttribute );
+				qnameDef.setAttributeNS(
+					PortletAppModelConstants.XMLNS_NS_URI, PortletAppModelConstants.DEFAULT_QNAME_NS_DECL, val );
+			}
 
-		// // Only for debugging purposes
-		// try {
-		// printDocument( parent.getDomNode().getOwnerDocument(), System.out );
-		// }
-		// catch ( IOException e ) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// catch ( TransformerException e ) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		}// Remove the nod/e if it exists and current value is null
+		else if ( qNameElement != null && val == null ) {
+			qNameElement.remove();
+		}
 
 	}
 
@@ -116,24 +127,11 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 	@Override
 	public XmlNode getXmlNode() {
 		final XmlElement element = xml( false );
-
 		if ( element != null ) {
 			return element.getChildNode( this.path, false );
 		}
 
 		return null;
 	}
-
-	// private void printDocument( Document doc, OutputStream out ) throws IOException, TransformerException {
-	// TransformerFactory tf = TransformerFactory.newInstance();
-	// Transformer transformer = tf.newTransformer();
-	// transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "no" );
-	// transformer.setOutputProperty( OutputKeys.METHOD, "xml" );
-	// transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
-	// transformer.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
-	// transformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" );
-	//
-	// transformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( out, "UTF-8" ) ) );
-	// }
 
 }

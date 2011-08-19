@@ -15,7 +15,7 @@ import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.MustExist;
+import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
@@ -39,8 +39,8 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 	// *** Identifier ***
 
 	@Label( standard = "Identifier" )
-	@MustExist
 	@Required
+	@NoDuplicates
 	@XmlBinding( path = "identifier" )
 	ValueProperty PROP_IDENTIFIER = new ValueProperty( TYPE, "Identifier" );
 
@@ -79,7 +79,7 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
 	@DefaultValue( text = "PARAM_NAME" )
-	@Enablement( expr = "${NamespaceURI == 'NAMESPACE_URI' AND LocalPart=='LOCAL_PART'}" )
+	@Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
 	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
