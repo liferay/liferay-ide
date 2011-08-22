@@ -36,13 +36,13 @@
       </controlProperties>
     </control>
     <control controlID="38" controlTypeID="com.balsamiq.mockups::HelpButton" x="1027" y="67" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="8" locked="false" isInGroup="-1"/>
-    <control controlID="43" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="111" w="268" h="627" measuredW="300" measuredH="500" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="111" w="268" h="627" measuredW="300" measuredH="269" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <hrefs>%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml</hrefs>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C114%2C274%2C137%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C137%2C274%2C160%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_1%22/%3E%0A</map>
         <selectedIndex>0</selectedIndex>
-        <text>%5B-%5D%20Portlet%20Application%0A%20%5B-%5D%20Portlets%0A%20%20%5B-%5D%20portlet-1%20%0A%20%20%20-%20Supports%0A%20%20%5B-%5Dportlet-2%0A%20%20%20-%20Supports%0A%20%5B-%5D%20Filters%0A%20%20-%20filter-1%0A%20%20-%20filter-mapping-1%0A%20%5B-%5D%20Listeners%0A%20%5B-%5D%20Event%20Defintions%0A%20%20-%20event-1%0A%20%20-%20%7Bhttp%3A//liferay.com%7Devent-2%0A%20%5B-%5D%20Public%20Render%20Parameters%0A%20%20-%20id-1%0A%20%20-%20id-2%0A%20%20-%20id-3%0A%20%5B-%5D%20Portlet%20Modes%0A%20%20-mode-1%0A%20%20-mode-2%0A%20%20-mode-3%0A%20%5B-%5D%20Window%20States%0A%20%20-state-1%0A%20%20-state-2%0A%20%20-state-3%0A%20%5B-%5D%20User%20Attributes%0A%20%5B-%5D%20Security%20Constraints%0A%20%5B-%5D%20Runtime%20options</text>
+        <text>%5B-%5D%20Portlet%20Application%0A%20%5B+%5D%20Portlets%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B+%5D%20Public%20Render%20Parameters%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B+%5D%20Security%20Constraints%0A%20%5B+%5D%20Runtime%20options</text>
         <verticalScrollbar>true</verticalScrollbar>
       </controlProperties>
     </control>

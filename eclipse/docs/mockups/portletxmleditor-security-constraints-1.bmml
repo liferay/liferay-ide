@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1440" measuredH="739" mockupW="1309" mockupH="739">
+<mockup version="1.0" skin="sketch" measuredW="1511" measuredH="739" mockupW="1380" mockupH="739">
   <controls>
     <control controlID="38" controlTypeID="com.balsamiq.mockups::HelpButton" x="1007" y="67" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="1" locked="false" isInGroup="-1"/>
     <control controlID="44" controlTypeID="com.balsamiq.mockups::Label" x="230" y="62" w="555" h="29" measuredW="166" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
@@ -45,8 +45,8 @@
     <control controlID="58" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="120" w="268" h="581" measuredW="300" measuredH="311" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
-        <hrefs>%2Cportletxmleditor-portlets%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%2C%2C%2C%2C%2C%2C%2C%2Cportletxmleditor-events%26bm%3Bportletxmleditor-events.bmml%26bm%3Bportletxmleditor-events.bmml%26bm%3Bportletxmleditor-events.bmml%2C%2C%2C%2C%2C%2C%2C%2C</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C151%2C283%2C174%22%20href%3D%22portletxmleditor-portlets.bmml%22%20alt%3D%22portletxmleditor-portlets%22%20id%3D%2258_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C335%2C283%2C358%22%20href%3D%22portletxmleditor-events.bmml%22%20alt%3D%22portletxmleditor-events%22%20id%3D%2258_1%22/%3E%0A</map>
+        <hrefs>%2Cportletxmleditor-portlets%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%2C%2C%2C%2C%2C%2C%2C%2Cportletxmleditor-security-constraints%26bm%3Bportletxmleditor-security-constraints.bmml%26bm%3Bportletxmleditor-security-constraints.bmml%26bm%3Bportletxmleditor-security-constraints.bmml%2Cportletxmleditor-security-constraints-1%26bm%3Bportletxmleditor-security-constraints-1.bmml%26bm%3Bportletxmleditor-security-constraints-1.bmml%26bm%3Bportletxmleditor-security-constraints-1.bmml%2Cportletxmleditor-security-constraints-2%26bm%3Bportletxmleditor-security-constraints-2.bmml%26bm%3Bportletxmleditor-security-constraints-2.bmml%26bm%3Bportletxmleditor-security-constraints-2.bmml%2C</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C151%2C283%2C174%22%20href%3D%22portletxmleditor-portlets.bmml%22%20alt%3D%22portletxmleditor-portlets%22%20id%3D%2258_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C335%2C283%2C358%22%20href%3D%22portletxmleditor-security-constraints.bmml%22%20alt%3D%22portletxmleditor-security-constraints%22%20id%3D%2258_1%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C358%2C283%2C381%22%20href%3D%22portletxmleditor-security-constraints-1.bmml%22%20alt%3D%22portletxmleditor-security-constraints-1%22%20id%3D%2258_2%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C381%2C283%2C404%22%20href%3D%22portletxmleditor-security-constraints-2.bmml%22%20alt%3D%22portletxmleditor-security-constraints-2%22%20id%3D%2258_3%22/%3E%0A</map>
         <selectedIndex>1</selectedIndex>
         <text>%5B-%5D%20Portlet%20Application%0A%20%5B+%5D%20Portlets%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B+%5D%20Public%20Render%20Parameters%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B-%5D%20Security%20Constraints%0A%20%20-%20Portlet%20Collection%0A%20%20-%20User%20Data%20Constraint%0A%20%5B+%5D%20Runtime%20options</text>
         <verticalScrollbar>true</verticalScrollbar>
@@ -62,29 +62,29 @@
         <text>General</text>
       </controlProperties>
     </control>
-    <control controlID="65" controlTypeID="com.balsamiq.mockups::FieldSet" x="430" y="278" w="610" h="182" measuredW="200" measuredH="170" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::FieldSet" x="430" y="278" w="610" h="165" measuredW="200" measuredH="170" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Details</text>
       </controlProperties>
     </control>
-    <control controlID="66" controlTypeID="com.balsamiq.mockups::DataGrid" x="684" y="304" w="335" h="110" measuredW="150" measuredH="114" zOrder="12" locked="false" isInGroup="-1">
+    <control controlID="68" controlTypeID="com.balsamiq.mockups::DataGrid" x="669" y="306" w="335" h="110" measuredW="105" measuredH="114" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Portlet%20Display%20Name%0AHello%20World%0AMvc%20Demo%0ASpring%20Demo</text>
+        <text>Portlet%20%20Name%0Aportlet-1%0Aportlet-2%0Aportlet-3</text>
       </controlProperties>
     </control>
-    <control controlID="67" controlTypeID="com.balsamiq.mockups::Label" x="445" y="304" w="-1" h="-1" measuredW="144" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="69" controlTypeID="com.balsamiq.mockups::Label" x="430" y="306" w="-1" h="-1" measuredW="118" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Portlet%20display%20names%3A</text>
+        <text>Portlet%20Collection%3A</text>
       </controlProperties>
     </control>
     <control controlID="70" controlTypeID="com.balsamiq.mockups::StickyNote" x="541" y="173" w="288" h="64" measuredW="109" measuredH="123" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>information%20about%20%20Security%20constraint</text>
+        <text>information%20about%20%20Portlet%20Collection</text>
       </controlProperties>
     </control>
-    <control controlID="72" controlTypeID="com.balsamiq.mockups::StickyNote" x="1113" y="241" w="327" h="123" measuredW="109" measuredH="123" zOrder="15" locked="false" isInGroup="-1">
+    <control controlID="71" controlTypeID="com.balsamiq.mockups::StickyNote" x="1154" y="261" w="357" h="123" measuredW="109" measuredH="123" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Clicking%20on%20portlet%20display%20name%20will%20jump%20to%20the%20respective%20portlet%20child%20nodes%20under%20Portlets</text>
+        <text>Clicking%20on%20portlet-name%20will%20jump%20to%20the%20respective%20portlet%20child%20nodes%20under%20Portlets</text>
       </controlProperties>
     </control>
   </controls>
