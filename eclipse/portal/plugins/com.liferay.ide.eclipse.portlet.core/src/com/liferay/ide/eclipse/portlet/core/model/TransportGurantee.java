@@ -8,7 +8,7 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  * @author kamesh
  */
 @Label( standard = "Transport Gurantee" )
-public enum ITransportGurantee {
+public enum TransportGurantee {
 	@Label( standard = "NONE" )
 	@EnumSerialization( primary = "NONE" )
 	NONE,
