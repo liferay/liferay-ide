@@ -97,7 +97,7 @@
             name="Portlet Xml Editor (Experimental)"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
-               contentTypeId="liferayportletxml">
+               contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">
          </contentTypeBinding>
       </editor>
    </extension>
