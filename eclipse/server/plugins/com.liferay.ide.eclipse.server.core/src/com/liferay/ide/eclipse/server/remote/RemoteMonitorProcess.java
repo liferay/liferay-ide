@@ -69,13 +69,13 @@ public class RemoteMonitorProcess extends Process implements IProcess {
 
 	public String getAttribute(String key) {
 		// return (/* IProcess.ATTR_PROCESS_TYPE.equals(key) || */IProcess.ATTR_PROCESS_LABEL.equals(key))
-		// ? "WebSphere Admin Server Monitor" : null;
+		// ? "Remote Liferay Server Monitor" : null;
 		return null;
 	}
 
 	@Override
 	public InputStream getErrorStream() {
-		return new RemoteLogStream( server, remoteServer, remoteConnection, "syserr" );
+		return new RemoteLogStream( server, remoteServer, remoteConnection, "error" );
 	}
 
 	public int getExitValue()
@@ -86,7 +86,7 @@ public class RemoteMonitorProcess extends Process implements IProcess {
 
 	@Override
 	public InputStream getInputStream() {
-		return new RemoteLogStream( server, remoteServer, remoteConnection, "sysout" );
+		return new RemoteLogStream( server, remoteServer, remoteConnection, "output" );
 	}
 
 	public String getLabel() {

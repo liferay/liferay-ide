@@ -74,7 +74,7 @@ public class RemoteLogStream extends BufferedInputStream {
 	}
 
 	protected static String getLogURI( IRemoteConnection connection, String log ) {
-		return connection.getManagerURI() + "/log/" + log;
+		return connection.getManagerURI() + "/server/log/" + log;
 	}
 
 	protected static InputStream openInputStream( IRemoteConnection remote, URL url ) throws IOException {

@@ -79,7 +79,7 @@ public class RemoteConnection implements IRemoteConnection {
 					JSONObject jsonObject = new JSONObject( response );
 
 					if ( isSuccess( jsonObject ) ) {
-						String debugPortOutput = jsonObject.getString( "output-stream" );
+						String debugPortOutput = getJSONOutput( jsonObject );
 
 						return Integer.parseInt( new String( debugPortOutput ) );
 					}
@@ -367,7 +367,7 @@ public class RemoteConnection implements IRemoteConnection {
 	}
 
 	private String getDebugPortURI() {
-		return getManagerURI() + "/debug-port";
+		return getManagerURI() + "/server/debug-port";
 	}
 
 	private String getDeployURI( String appName ) {
@@ -394,11 +394,11 @@ public class RemoteConnection implements IRemoteConnection {
 	}
 
 	private String getIsAliveURI() {
-		return getManagerURI() + "/is-alive";
+		return getManagerURI() + "/status";
 	}
 
 	private String getJSONOutput( JSONObject json ) throws JSONException {
-		return json.getString( "output-stream" );
+		return json.getString( "output" );
 	}
 
 	private String getPluginsURI() {
@@ -418,7 +418,7 @@ public class RemoteConnection implements IRemoteConnection {
 	}
 
 	private boolean isSuccess( JSONObject jsonObject ) throws JSONException {
-		String success = jsonObject.getString( "success" );
+		String success = jsonObject.getString( "status" );
 		return "0".equals( success );
 	}
 
