@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1378" measuredH="767" mockupW="1238" mockupH="739">
+<mockup version="1.0" skin="sketch" measuredW="1372" measuredH="767" mockupW="1232" mockupH="741">
   <controls>
     <control controlID="11" controlTypeID="com.balsamiq.mockups::FieldSet" x="432" y="422" w="580" h="306" measuredW="200" measuredH="170" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
@@ -40,7 +40,7 @@
       <controlProperties>
         <bold>false</bold>
         <hrefs>%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C114%2C274%2C137%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C137%2C274%2C160%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_1%22/%3E%0A</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C116%2C274%2C139%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C139%2C274%2C162%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_1%22/%3E%0A</map>
         <selectedIndex>0</selectedIndex>
         <text>%5B-%5D%20Portlet%20Application%0A%20%5B+%5D%20Portlets%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B+%5D%20Public%20Render%20Parameters%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B+%5D%20Security%20Constraints%0A%20%5B+%5D%20Runtime%20options</text>
         <verticalScrollbar>true</verticalScrollbar>
@@ -81,13 +81,13 @@
     <control controlID="52" controlTypeID="com.balsamiq.mockups::TabBar" x="140" y="28" w="929" h="739" measuredW="279" measuredH="100" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
         <hrefs>portlet-xml-basic%26bm%3Bportlet-xml-basic.bmml%26bm%3Bportlet-xml-basic.bmml%26bm%3Bportlet-xml-basic.bmml%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportlet-xml-filters%26bm%3Bportlet-xml-filters.bmml%26bm%3Bportlet-xml-filters.bmml%26bm%3Bportlet-xml-filters.bmml%2Cportlet-xml-ipc%26bm%3Bportlet-xml-ipc.bmml%26bm%3Bportlet-xml-ipc.bmml%26bm%3Bportlet-xml-ipc.bmml%2Cportlet-xml-other%26bm%3Bportlet-xml-other.bmml%26bm%3Bportlet-xml-other.bmml%26bm%3Bportlet-xml-other.bmml</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2220%2C714%2C147%2C739%22%20href%3D%22portlet-xml-basic.bmml%22%20alt%3D%22portlet-xml-basic%22%20id%3D%2252_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22147%2C714%2C205%2C739%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2252_1%22/%3E%0A</map>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2220%2C716%2C147%2C741%22%20href%3D%22portlet-xml-basic.bmml%22%20alt%3D%22portlet-xml-basic%22%20id%3D%2252_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22147%2C716%2C205%2C741%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2252_1%22/%3E%0A</map>
         <selectedIndex>0</selectedIndex>
         <tabVPosition>bottom</tabVPosition>
         <text>Portlet%20Application%2C%20Source</text>
       </controlProperties>
     </control>
-    <control controlID="53" controlTypeID="com.balsamiq.mockups::StickyNote" x="1123" y="80" w="255" h="406" measuredW="109" measuredH="123" zOrder="16" locked="false" isInGroup="-1">
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::StickyNote" x="1114" y="206" w="255" h="406" measuredW="109" measuredH="123" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
         <text>-%20removed%20the%20label%20%22List%20of%20Portlets%22%0A-%20removed%20the%20ID%20section%2C%20not%20important%20enough%0A-%20remove%20the%20version%2C%20we%20are%20only%20going%20to%20support%202.0%20at%20first%0A%20-%20removed%20the%20resources%20bundle%20it%20is%20going%20to%20have%20its%20own%20section</text>
       </controlProperties>
@@ -105,6 +105,11 @@
     <control controlID="60" controlTypeID="com.balsamiq.mockups::Label" x="441" y="531" w="-1" h="-1" measuredW="120" measuredH="21" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Resource%20bundles%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::StickyNote" x="1052" y="26" w="320" h="123" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GA%20-%20Should%20the%20quick%20links%20be%20re-arranged%20to%20add%20portlets%20and%20more%20important%20things%20first%3F%20</text>
       </controlProperties>
     </control>
   </controls>

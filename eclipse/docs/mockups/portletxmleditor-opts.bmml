@@ -83,5 +83,10 @@
         <text>Each%20name%20node%20will%20jump%20to%20its%20corresponding%20detailed%20child%20node</text>
       </controlProperties>
     </control>
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::StickyNote" x="1177" y="346" w="199" h="192" measuredW="109" measuredH="123" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GA%20-%20lets%20put%20the%20value%20in%20a%20table%20column%20on%20that%20options%20table%20on%20this%20screen</text>
+      </controlProperties>
+    </control>
   </controls>
 </mockup>

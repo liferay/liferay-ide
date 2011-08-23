@@ -36,7 +36,6 @@
     <control controlID="52" controlTypeID="com.balsamiq.mockups::TabBar" x="140" y="28" w="929" h="739" measuredW="279" measuredH="100" zOrder="0" locked="false" isInGroup="-1">
       <controlProperties>
         <hrefs>portlet-xml-basic%26bm%3Bportlet-xml-basic.bmml%26bm%3Bportlet-xml-basic.bmml%26bm%3Bportlet-xml-basic.bmml%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportlet-xml-filters%26bm%3Bportlet-xml-filters.bmml%26bm%3Bportlet-xml-filters.bmml%26bm%3Bportlet-xml-filters.bmml%2Cportlet-xml-ipc%26bm%3Bportlet-xml-ipc.bmml%26bm%3Bportlet-xml-ipc.bmml%26bm%3Bportlet-xml-ipc.bmml%2Cportlet-xml-other%26bm%3Bportlet-xml-other.bmml%26bm%3Bportlet-xml-other.bmml%26bm%3Bportlet-xml-other.bmml</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2220%2C714%2C147%2C739%22%20href%3D%22portlet-xml-basic.bmml%22%20alt%3D%22portlet-xml-basic%22%20id%3D%2252_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22147%2C714%2C205%2C739%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2252_1%22/%3E%0A</map>
         <selectedIndex>0</selectedIndex>
         <tabVPosition>bottom</tabVPosition>
         <text>Portlet%20Application%2C%20Source</text>
@@ -51,7 +50,6 @@
       <controlProperties>
         <bold>false</bold>
         <hrefs>%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportletxmleditor-supports%26bm%3Bportletxmleditor-supports.bmml%26bm%3Bportletxmleditor-supports.bmml%26bm%3Bportletxmleditor-supports.bmml%2C%2Cportletxmleditor-supports%26bm%3Bportletxmleditor-supports.bmml%26bm%3Bportletxmleditor-supports.bmml%26bm%3Bportletxmleditor-supports.bmml%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C114%2C274%2C137%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2258_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C137%2C274%2C160%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2258_1%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C160%2C274%2C183%22%20href%3D%22portletxmleditor-supports.bmml%22%20alt%3D%22portletxmleditor-supports%22%20id%3D%2258_2%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C206%2C274%2C229%22%20href%3D%22portletxmleditor-supports.bmml%22%20alt%3D%22portletxmleditor-supports%22%20id%3D%2258_3%22/%3E%0A</map>
         <selectedIndex>2</selectedIndex>
         <text>%5B-%5D%20Portlet%20Application%0A%20%5B-%5D%20Portlets%0A%20%20%5B-%5D%20portlet-1%20%0A%20%20%20-%20Supports%0A%20%20%5B-%5Dportlet-2%0A%20%20%20-%20Supports%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B+%5D%20Public%20Render%20Parameters%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B+%5D%20Security%20Constraints%0A%20%5B+%5D%20Runtime%20options</text>
         <verticalScrollbar>true</verticalScrollbar>
@@ -170,6 +168,11 @@
     <control controlID="81" controlTypeID="com.balsamiq.mockups::TextInput" x="601" y="529" w="271" h="-1" measuredW="80" measuredH="26" zOrder="32" locked="false" isInGroup="-1">
       <controlProperties>
         <text>hello%2Cworld</text>
+      </controlProperties>
+    </control>
+    <control controlID="82" controlTypeID="com.balsamiq.mockups::StickyNote" x="1099" y="494" w="279" h="244" measuredW="109" measuredH="123" zOrder="33" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>GA%20-%20I%20think%20that%20we%20should%20split%20out%20init%20params%20and%20resource%20bundles%20into%20their%20own%20content%20node%20under%20portlets%2C%20just%20like%20thesupports%20node.%20%20That%20way%20init%20params%20and%20resource%20bundles%20may%20not%20be%20crammed%20onto%20the%20same%20page.</text>
       </controlProperties>
     </control>
   </controls>
