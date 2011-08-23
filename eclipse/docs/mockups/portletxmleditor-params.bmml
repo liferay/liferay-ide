@@ -1,4 +1,4 @@
-<mockup version="1.0" skin="sketch" measuredW="1387" measuredH="739" mockupW="1256" mockupH="739">
+<mockup version="1.0" skin="sketch" measuredW="1420" measuredH="739" mockupW="1289" mockupH="739">
   <controls>
     <control controlID="38" controlTypeID="com.balsamiq.mockups::HelpButton" x="1007" y="67" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="1" locked="false" isInGroup="-1"/>
     <control controlID="44" controlTypeID="com.balsamiq.mockups::Label" x="230" y="62" w="555" h="29" measuredW="166" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
@@ -42,30 +42,30 @@
         <text>Portlet%20Application%2C%20Source</text>
       </controlProperties>
     </control>
-    <control controlID="58" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="111" w="268" h="581" measuredW="300" measuredH="353" zOrder="8" locked="false" isInGroup="-1">
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="111" w="268" h="581" measuredW="300" measuredH="311" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
-        <hrefs>%2Cportletxmleditor-portlets%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C%2C</hrefs>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C142%2C283%2C165%22%20href%3D%22portletxmleditor-portlets.bmml%22%20alt%3D%22portletxmleditor-portlets%22%20id%3D%2258_0%22/%3E%0A</map>
+        <hrefs>%2Cportletxmleditor-portlets%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%26bm%3Bportletxmleditor-portlets.bmml%2C%2C%2Cportletxmleditor-filters%26bm%3Bportletxmleditor-filters.bmml%26bm%3Bportletxmleditor-filters.bmml%26bm%3Bportletxmleditor-filters.bmml%2C%2C%2C%2C%2Cportletxmleditor-events%26bm%3Bportletxmleditor-events.bmml%26bm%3Bportletxmleditor-events.bmml%26bm%3Bportletxmleditor-events.bmml%2C%2C%2Cportletxmleditor-params%26bm%3Bportletxmleditor-params.bmml%26bm%3Bportletxmleditor-params.bmml%26bm%3Bportletxmleditor-params.bmml%2C%2C%2Cportletxmleditor-bundles%26bm%3Bportletxmleditor-bundles.bmml%26bm%3Bportletxmleditor-bundles.bmml%26bm%3Bportletxmleditor-bundles.bmml%2C%2Cportletxmleditor-opts%26bm%3Bportletxmleditor-opts.bmml%26bm%3Bportletxmleditor-opts.bmml%26bm%3Bportletxmleditor-opts.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C142%2C283%2C165%22%20href%3D%22portletxmleditor-portlets.bmml%22%20alt%3D%22portletxmleditor-portlets%22%20id%3D%2258_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C211%2C283%2C234%22%20href%3D%22portletxmleditor-filters.bmml%22%20alt%3D%22portletxmleditor-filters%22%20id%3D%2258_1%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C326%2C283%2C349%22%20href%3D%22portletxmleditor-events.bmml%22%20alt%3D%22portletxmleditor-events%22%20id%3D%2258_2%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C395%2C283%2C418%22%20href%3D%22portletxmleditor-params.bmml%22%20alt%3D%22portletxmleditor-params%22%20id%3D%2258_3%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C464%2C283%2C487%22%20href%3D%22portletxmleditor-bundles.bmml%22%20alt%3D%22portletxmleditor-bundles%22%20id%3D%2258_4%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%2215%2C510%2C283%2C533%22%20href%3D%22portletxmleditor-opts.bmml%22%20alt%3D%22portletxmleditor-opts%22%20id%3D%2258_5%22/%3E%0A</map>
         <selectedIndex>1</selectedIndex>
-        <text>%5B-%5D%20Portlet%20Application%0A%20%5B-%5D%20Portlets%0A%20%20%5B-%5D%20portlet-1%20%0A%20%20%20-%20Supports%0A%20%20%5B-%5Dportlet-2%0A%20%20%20-%20Supports%20%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B+%5D%20Public%20Render%20Parameters%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B+%5D%20Security%20Constraints%0A%20%5B+%5D%20Runtime%20options</text>
+        <text>%5B-%5D%20Portlet%20Application%0A%20%5B+%5D%20Portlets%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B-%5D%20Public%20Render%20Parameters%0A%20%20-%20id-1%0A%20%20-%20id-2%0A%20%20-%20id-3%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B+%5D%20Security%20Constraints</text>
         <verticalScrollbar>true</verticalScrollbar>
       </controlProperties>
     </control>
-    <control controlID="61" controlTypeID="com.balsamiq.mockups::DataGrid" x="431" y="183" w="587" h="389" measuredW="436" measuredH="114" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="61" controlTypeID="com.balsamiq.mockups::DataGrid" x="431" y="183" w="587" h="389" measuredW="326" measuredH="114" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <hLines>false</hLines>
-        <text>Name%2CDisplay%20Name%2CPortlet%20class%0Aportlet-1%2CHello%20World%2Ccom.liferay.ide.portlet.HelloWorldPortlet%0Aportlet-2%2CMvcPortlet%2Ccom.liferay.ide.portlet.HelloMVCProtlet%0Aportlet-3%2CStrutusPortlet%2Ccom.liferay.ide.portlet.HelloStrutsProtlet</text>
+        <text>Identifier%2CName%2CQualified%20name%0Aid-1%2Cparam-1%2C%0Aid-2%2C%2C%7Bhttp%3A//liferay.com%7Dparam-1%0Aid-3%2C%2C%7Bhttp%3A//liferay.com%7Dparam-3</text>
       </controlProperties>
     </control>
-    <control controlID="62" controlTypeID="com.balsamiq.mockups::LinkBar" x="640" y="126" w="-1" h="-1" measuredW="367" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+    <control controlID="62" controlTypeID="com.balsamiq.mockups::LinkBar" x="651" y="126" w="-1" h="-1" measuredW="367" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Add%20Parameter%2C%20Add%20Filter%2C%20Add%20Event%2C%20Add%20Portlet</text>
       </controlProperties>
     </control>
-    <control controlID="63" controlTypeID="com.balsamiq.mockups::StickyNote" x="1124" y="147" w="263" h="215" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="63" controlTypeID="com.balsamiq.mockups::StickyNote" x="1143" y="191" w="277" h="123" measuredW="109" measuredH="123" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Each%20name%20element%20in%20the%20row%20will%20have%20a%20jump%20action%20to%20the%20corresponding%20element%20for%20details%20%0Ae.g.%20%0A%20%20%0Aportlet-1%20will%20jump%20to%20the%20portlet-1%20</text>
+        <text>Each%20id%20linkon%20each%20row%20will%20jump%20to%20details%20of%20the%20Parameters</text>
       </controlProperties>
     </control>
   </controls>

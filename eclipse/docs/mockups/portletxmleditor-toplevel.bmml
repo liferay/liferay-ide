@@ -1,100 +1,79 @@
 <mockup version="1.0" skin="sketch" measuredW="1378" measuredH="767" mockupW="1238" mockupH="739">
   <controls>
-    <control controlID="11" controlTypeID="com.balsamiq.mockups::FieldSet" x="429" y="366" w="493" h="99" measuredW="200" measuredH="170" zOrder="1" locked="false" isInGroup="-1">
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::FieldSet" x="432" y="422" w="580" h="306" measuredW="200" measuredH="170" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Details</text>
       </controlProperties>
     </control>
-    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="447" y="396" w="73" h="21" measuredW="22" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Label" x="448" y="450" w="73" h="21" measuredW="22" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Id%3A</text>
       </controlProperties>
     </control>
-    <control controlID="14" controlTypeID="com.balsamiq.mockups::TextInput" x="623" y="383" w="165" h="-1" measuredW="46" measuredH="26" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::TextInput" x="622" y="450" w="173" h="-1" measuredW="46" measuredH="26" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
         <text>%3CID%3E</text>
       </controlProperties>
     </control>
-    <control controlID="19" controlTypeID="com.balsamiq.mockups::FieldSet" x="429" y="125" w="493" h="220" measuredW="200" measuredH="170" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::FieldSet" x="432" y="161" w="580" h="224" measuredW="200" measuredH="170" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
         <text>General</text>
       </controlProperties>
     </control>
-    <control controlID="20" controlTypeID="com.balsamiq.mockups::StickyNote" x="447" y="142" w="454" h="186" measuredW="109" measuredH="123" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="20" controlTypeID="com.balsamiq.mockups::StickyNote" x="463" y="176" w="517" h="194" measuredW="109" measuredH="123" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
         <text>This%20section%20will%20have%20drief%20description%20about%20the%20%20Portlet%20Application%0A%20%0A-%20could%20we%20specify%20an%20example%20of%20the%20description%20so%20I%20can%20get%20an%20idea%20of%20why%20we%20need%20this%20section%3F%20%20Perhaps%20it%20could%20be%20a%20section%20that%20would%20have%20some%20small%20help%20text%20with%20some%20links%20to%20very%20frequent%20actions%20or%20next%20steps%0A-%20JSR%20spec%20link%0A-%20Link%20to%20other%20Liferay%20docs</text>
       </controlProperties>
     </control>
-    <control controlID="26" controlTypeID="com.balsamiq.mockups::Label" x="447" y="423" w="-1" h="-1" measuredW="131" measuredH="21" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::Label" x="441" y="488" w="-1" h="-1" measuredW="131" measuredH="21" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
         <text>Default%20namespace%3A</text>
       </controlProperties>
     </control>
-    <control controlID="27" controlTypeID="com.balsamiq.mockups::TextInput" x="626" y="417" w="271" h="-1" measuredW="120" measuredH="26" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::TextInput" x="622" y="486" w="279" h="-1" measuredW="120" measuredH="26" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
         <text>http%3A//liferay.com</text>
       </controlProperties>
     </control>
-    <control controlID="33" controlTypeID="com.balsamiq.mockups::Link" x="429" y="89" w="-1" h="-1" measuredW="76" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
-      <controlProperties>
-        <href>portlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22289%2C61%2C365%2C82%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2233%22/%3E</map>
-        <text>Add%20Portlet</text>
-      </controlProperties>
-    </control>
-    <control controlID="35" controlTypeID="com.balsamiq.mockups::Link" x="517" y="88" w="-1" h="-1" measuredW="69" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
-      <controlProperties>
-        <href>portlet-xml-ipc%26bm%3Bportlet-xml-ipc.bmml%26bm%3Bportlet-xml-ipc.bmml%26bm%3Bportlet-xml-ipc.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22377%2C60%2C446%2C81%22%20href%3D%22portlet-xml-ipc.bmml%22%20alt%3D%22portlet-xml-ipc%22%20id%3D%2235%22/%3E</map>
-        <text>Add%20Event</text>
-      </controlProperties>
-    </control>
-    <control controlID="37" controlTypeID="com.balsamiq.mockups::Link" x="678" y="88" w="-1" h="-1" measuredW="107" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
-      <controlProperties>
-        <href>portlet-xml-other%26bm%3Bportlet-xml-other.bmml%26bm%3Bportlet-xml-other.bmml%26bm%3Bportlet-xml-other.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22538%2C60%2C645%2C81%22%20href%3D%22portlet-xml-other.bmml%22%20alt%3D%22portlet-xml-other%22%20id%3D%2237%22/%3E</map>
-        <text>Add%20Parameters</text>
-      </controlProperties>
-    </control>
-    <control controlID="38" controlTypeID="com.balsamiq.mockups::HelpButton" x="942" y="62" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="11" locked="false" isInGroup="-1"/>
-    <control controlID="43" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="111" w="268" h="627" measuredW="300" measuredH="416" zOrder="12" locked="false" isInGroup="-1">
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::HelpButton" x="1027" y="67" w="-1" h="-1" measuredW="18" measuredH="18" zOrder="8" locked="false" isInGroup="-1"/>
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::Tree" x="146" y="111" w="268" h="627" measuredW="300" measuredH="269" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>false</bold>
         <hrefs>%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%2Cportlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml</hrefs>
         <map>%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C114%2C274%2C137%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%226%2C137%2C274%2C160%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2243_1%22/%3E%0A</map>
         <selectedIndex>0</selectedIndex>
-        <text>%5B-%5D%20Portlet%20Application%0A%20%5B-%5D%20Portlets%0A%20%20-%20portlet-1%20%0A%20%20-%20portlet-2%0A%20%5B-%5D%20Filters%0A%20%20-%20filter-1%0A%20%20-%20filter-mapping-1%0A%20%5B-%5D%20Listeners%0A%20%20-%20listener-1%0A%20%5B-%5D%20Event%20Defintions%0A%20%20-%20event-1%0A%20%20-%20event-2%0A%20%5B-%5D%20Public%20Render%20Parameters%0A%20%20-%20param-1%0A%20%20-%20param-2%0A%20%5B-%5D%20Resource%20bundles%0A%20%20-%20bundle-1%0A%20%5B-%5D%20Runtime%20options</text>
+        <text>%5B-%5D%20Portlet%20Application%0A%20%5B+%5D%20Portlets%0A%20%5B+%5D%20Filters%0A%20%5B+%5D%20Listeners%0A%20%5B+%5D%20Event%20Defintions%0A%20%5B+%5D%20Public%20Render%20Parameters%0A%20%5B+%5D%20Portlet%20Modes%0A%20%5B+%5D%20Window%20States%0A%20%5B+%5D%20User%20Attributes%0A%20%5B+%5D%20Security%20Constraints%0A%20%5B+%5D%20Runtime%20options</text>
         <verticalScrollbar>true</verticalScrollbar>
       </controlProperties>
     </control>
-    <control controlID="44" controlTypeID="com.balsamiq.mockups::Label" x="230" y="62" w="555" h="29" measuredW="166" measuredH="27" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::Label" x="230" y="62" w="555" h="29" measuredW="166" measuredH="27" zOrder="10" locked="false" isInGroup="-1">
       <controlProperties>
         <bold>true</bold>
         <size>18</size>
         <text>Portlet%20Application</text>
       </controlProperties>
     </control>
-    <control controlID="45" controlTypeID="com.balsamiq.mockups::Icon" x="173" y="60" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="14" locked="false" isInGroup="-1">
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::Icon" x="173" y="60" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>StopIcon%7Cmedium</icon>
       </controlProperties>
     </control>
-    <control controlID="47" controlTypeID="com.balsamiq.mockups::Icon" x="290" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="15" locked="false" isInGroup="-1">
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::Icon" x="290" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="12" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>SquaredMinusIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="48" controlTypeID="com.balsamiq.mockups::Icon" x="350" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="16" locked="false" isInGroup="-1">
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::Icon" x="350" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>CircledPlusIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="49" controlTypeID="com.balsamiq.mockups::Icon" x="320" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="17" locked="false" isInGroup="-1">
+    <control controlID="49" controlTypeID="com.balsamiq.mockups::Icon" x="320" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="14" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>SquaredPlusIcon%7Csmall</icon>
       </controlProperties>
     </control>
-    <control controlID="50" controlTypeID="com.balsamiq.mockups::Icon" x="376" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+    <control controlID="50" controlTypeID="com.balsamiq.mockups::Icon" x="376" y="87" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="15" locked="false" isInGroup="-1">
       <controlProperties>
         <icon>GearIcon%7Csmall</icon>
       </controlProperties>
@@ -108,16 +87,24 @@
         <text>Portlet%20Application%2C%20Source</text>
       </controlProperties>
     </control>
-    <control controlID="53" controlTypeID="com.balsamiq.mockups::StickyNote" x="1123" y="80" w="255" h="406" measuredW="109" measuredH="123" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="53" controlTypeID="com.balsamiq.mockups::StickyNote" x="1123" y="80" w="255" h="406" measuredW="109" measuredH="123" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
         <text>-%20removed%20the%20label%20%22List%20of%20Portlets%22%0A-%20removed%20the%20ID%20section%2C%20not%20important%20enough%0A-%20remove%20the%20version%2C%20we%20are%20only%20going%20to%20support%202.0%20at%20first%0A%20-%20removed%20the%20resources%20bundle%20it%20is%20going%20to%20have%20its%20own%20section</text>
       </controlProperties>
     </control>
-    <control controlID="57" controlTypeID="com.balsamiq.mockups::Link" x="601" y="88" w="-1" h="-1" measuredW="66" measuredH="21" zOrder="20" locked="false" isInGroup="-1">
+    <control controlID="58" controlTypeID="com.balsamiq.mockups::LinkBar" x="645" y="119" w="-1" h="-1" measuredW="367" measuredH="21" zOrder="17" locked="false" isInGroup="-1">
       <controlProperties>
-        <href>portlet-xml-display%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml%26bm%3Bportlet-xml-display.bmml</href>
-        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22461%2C60%2C527%2C81%22%20href%3D%22portlet-xml-display.bmml%22%20alt%3D%22portlet-xml-display%22%20id%3D%2257%22/%3E</map>
-        <text>Add%20Filter</text>
+        <text>Add%20Parameter%2C%20Add%20Filter%2C%20Add%20Event%2C%20Add%20Portlet</text>
+      </controlProperties>
+    </control>
+    <control controlID="59" controlTypeID="com.balsamiq.mockups::DataGrid" x="622" y="531" w="373" h="176" measuredW="133" measuredH="174" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Resource%20Bundle%0Acontent.Language1%0Acontent.Language2%0Acontent.Language3%0Acontent.Language4%0Acontent.Language5</text>
+      </controlProperties>
+    </control>
+    <control controlID="60" controlTypeID="com.balsamiq.mockups::Label" x="441" y="531" w="-1" h="-1" measuredW="120" measuredH="21" zOrder="19" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Resource%20bundles%3A</text>
       </controlProperties>
     </control>
   </controls>
