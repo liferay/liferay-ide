@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Path;
  */
 public class ExtPluginLibraryInstallOperation extends PluginLibraryInstallOperation {
 
-	protected IPath createClasspathContainerPath() {
+	protected IPath getClasspathContainerPath() {
 		return new Path(PluginClasspathContainerInitializer.ID + "/" + ExtClasspathContainer.SEGMENT_PATH);
 	}
 

@@ -48,7 +48,17 @@ public abstract class PluginLibraryInstallOperation extends LibraryProviderOpera
 		
 		IJavaProject javaProject = JavaCore.create(project);
 		
-		IPath container = createClasspathContainerPath();
+		IPath containerPath = getClasspathContainerPath();
+
+		// IDE-413 check to make sure that the containerPath doesn't already existing.
+
+		IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+		for ( IClasspathEntry entry : entries ) {
+			if ( entry.getPath().equals( containerPath ) ) {
+				return;
+			}
+		}
 
 		IAccessRule[] accessRules = new IAccessRule[] {};
 
@@ -56,19 +66,17 @@ public abstract class PluginLibraryInstallOperation extends LibraryProviderOpera
 			JavaCore.newClasspathAttribute(IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, "")
 		};
 
-		IClasspathEntry entry = JavaCore.newContainerEntry(container, accessRules, attributes, false);
-		
-		IClasspathEntry[] entries = javaProject.getRawClasspath();
+		IClasspathEntry newEntry = JavaCore.newContainerEntry( containerPath, accessRules, attributes, false );
 		
 		IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
 		
 		System.arraycopy(entries, 0, newEntries, 0, entries.length);
 		
-		newEntries[entries.length] = entry;
+		newEntries[entries.length] = newEntry;
 		
 		javaProject.setRawClasspath(newEntries, monitor);
 	}
 
-	protected abstract IPath createClasspathContainerPath();
+	protected abstract IPath getClasspathContainerPath();
 
 }

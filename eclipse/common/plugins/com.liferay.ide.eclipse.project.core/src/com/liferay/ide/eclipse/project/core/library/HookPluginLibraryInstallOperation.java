@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Path;
  */
 public class HookPluginLibraryInstallOperation extends PluginLibraryInstallOperation {
 
-	protected IPath createClasspathContainerPath() {
+	protected IPath getClasspathContainerPath() {
 		return new Path(PluginClasspathContainerInitializer.ID + "/" + HookClasspathContainer.SEGMENT_PATH);
 	}
 

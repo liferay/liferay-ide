@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Path;
  */
 public class PortletPluginLibraryInstallOperation extends PluginLibraryInstallOperation {
 
-	protected IPath createClasspathContainerPath() {
+	protected IPath getClasspathContainerPath() {
 		return new Path(PluginClasspathContainerInitializer.ID + "/" + PortletClasspathContainer.SEGMENT_PATH);
 	}
 }

@@ -168,7 +168,9 @@ public class PluginFacetUtil {
 
 		if (preset == null) {
 			throw new CoreException(
-				ProjectCorePlugin.createErrorStatus("No facet preset found, make sure your project is a valid liferay plugins sdk project with an expected prefix, e.g. -portlet, -hook, etc."));
+				ProjectCorePlugin.createErrorStatus( "No facet preset found for project name " +
+					fpjwc.getProjectName() +
+					", make sure your project is a valid liferay plugins sdk project with an expected prefix, e.g. -portlet, -hook, etc." ) );
 		}
 
 		Set<IProjectFacetVersion> currentProjectFacetVersions = fpjwc.getProjectFacets();
