@@ -5,12 +5,10 @@
 package com.liferay.ide.eclipse.portlet.ui.action;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphirePropertyEditor;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.swt.widgets.Text;
 
 import com.liferay.ide.eclipse.portlet.ui.util.PortletUIHelper;
 
@@ -36,12 +34,13 @@ public class JavaClassContentAssistHandler extends SapphireActionHandler {
 
 		if ( sapphirePart instanceof SapphirePropertyEditor ) {
 
-			SapphirePropertyEditor propertyEditor = (SapphirePropertyEditor) sapphirePart;
-
-			ModelProperty property = propertyEditor.getProperty();
-
-			Text text = SapphirePropertyEditor.findControlForProperty( context.getComposite(), property, Text.class );
-			PortletUIHelper.addTypeFieldAssistToText( propertyEditor, text, project, scope );
+			// SapphirePropertyEditor propertyEditor = (SapphirePropertyEditor) sapphirePart;
+			//
+			// ModelProperty property = propertyEditor.getProperty();
+			//
+			// Text text = SapphirePropertyEditor.findControlForProperty( context.getComposite(), property, Text.class
+			// );
+			// PortletUIHelper.addTypeFieldAssistToText( propertyEditor, text, project, scope );
 		}
 		return null;
 	}
