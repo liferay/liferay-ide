@@ -19,7 +19,7 @@ import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildWSDDJob;
-import com.liferay.ide.eclipse.project.ui.action.AbstractProjectAction;
+import com.liferay.ide.eclipse.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -30,7 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Greg Amerson
  */
-public class BuildWSDDAction extends AbstractProjectAction {
+public class BuildWSDDAction extends AbstractObjectAction {
 
 	public BuildWSDDAction() {
 		super();

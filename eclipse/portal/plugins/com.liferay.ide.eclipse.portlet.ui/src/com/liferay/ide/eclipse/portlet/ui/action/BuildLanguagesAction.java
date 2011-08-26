@@ -19,7 +19,7 @@ import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildLanguageJob;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.project.ui.action.AbstractProjectAction;
+import com.liferay.ide.eclipse.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -38,7 +38,7 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Greg Amerson
  */
-public class BuildLanguagesAction extends AbstractProjectAction {
+public class BuildLanguagesAction extends AbstractObjectAction {
 
 	public BuildLanguagesAction() {
 		super();

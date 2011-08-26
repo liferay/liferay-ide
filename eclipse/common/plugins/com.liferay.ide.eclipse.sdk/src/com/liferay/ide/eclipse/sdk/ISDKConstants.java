@@ -129,21 +129,37 @@ public interface ISDKConstants {
 
 	public static final String PROPERTY_THEME_PARENT_DIR = "theme.parent.dir";
 
+	public static final String TARGET_ALL = "all";
+
+	public static final String TARGET_BUILD_CLIENT = "build-client";
+
+	public static final String TARGET_BUILD_DB = "build-db";
+
+	public static final String TARGET_BUILD_LANG = "build-lang";
+
 	public static final String TARGET_BUILD_LANG_CMD = "build-lang-cmd";
 
 	public static final String TARGET_BUILD_SERVICE = "build-service";
 
 	public static final String TARGET_BUILD_WSDD = "build-wsdd";
 
+	public static final String TARGET_CLEAN = "clean";
+
 	public static final String TARGET_CLEAN_APP_SERVER = "clean-app-server";
 
 	public static final String TARGET_COMPILE = "compile";
+
+	public static final String TARGET_COMPILE_TEST = "compile-test";
 
 	public static final String TARGET_CREATE = "create";
 
 	public static final String TARGET_DEPLOY = "deploy";
 
 	public static final String TARGET_DIRECT_DEPLOY = "direct-deploy";
+
+	public static final String TARGET_MERGE = "merge";
+
+	public static final String TARGET_TEST = "test";
 
 	public static final String TARGET_WAR = "war";
 

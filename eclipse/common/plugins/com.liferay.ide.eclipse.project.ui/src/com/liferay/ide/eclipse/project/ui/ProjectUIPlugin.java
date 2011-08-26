@@ -105,11 +105,11 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 	}
 
 	public static void logError(Exception e) {
-		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+		getDefault().getLog().log( createErrorStatus( e.getMessage(), e ) );
 	}
 
 	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+		getDefault().getLog().log( createErrorStatus( msg, e ) );
 	}
 
 	/**
@@ -184,5 +184,9 @@ public class ProjectUIPlugin extends AbstractUIPlugin {
 		plugin = null;
 		
 		super.stop(context);
+	}
+
+	public static IStatus createErrorStatus( String msg, Exception e ) {
+		return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
 	}
 }

@@ -104,6 +104,13 @@
             properties="isLiferayProjectFolder"
             type="org.eclipse.core.resources.IFolder">
       </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.eclipse.project.ui.BuildFilePropertyTester"
+            id="com.liferay.ide.eclipse.project.ui.isBuildFile"
+            namespace="com.liferay.ide.eclipse.project.ui"
+            properties="isBuildFile"
+            type="org.eclipse.core.resources.IFile">
+      </propertyTester>
    </extension>
    <extension
          point="org.eclipse.ui.keywords">
@@ -376,4 +383,205 @@
          </action>
       </actionSet>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.eclipse.ui.popupmenu"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               icon="icons/e16/liferay.png"
+               id="liferayPopupMenuCategory"
+               label="Liferay">
+            <separator
+                  name="slot1">
+            </separator>
+            <groupMarker
+                  name="sdk">
+            </groupMarker>
+         </menu>
+         <menu
+               icon="icons/e16/sdk.png"
+               id="liferayPopupMenuSDKCategory"
+               label="SDK"
+               path="liferayPopupMenuCategory/sdk">
+            <groupMarker
+                  name="all">
+            </groupMarker>
+            <groupMarker
+                  name="build-client">
+            </groupMarker>
+            <groupMarker
+                  name="build-db">
+            </groupMarker>
+            <groupMarker
+                  name="build-lang">
+            </groupMarker>
+            <groupMarker
+                  name="clean">
+            </groupMarker>
+            <groupMarker
+                  name="compile">
+            </groupMarker>
+            <groupMarker
+                  name="compile-test">
+            </groupMarker>
+            <groupMarker
+                  name="deploy">
+            </groupMarker>
+            <groupMarker
+                  name="direct-deploy">
+            </groupMarker>
+            <groupMarker
+                  name="merge">
+            </groupMarker>
+            <groupMarker
+                  name="test">
+            </groupMarker>
+            <groupMarker
+                  name="war">
+            </groupMarker>
+         </menu>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.eclipse.project.ui.sdk.popup"
+            objectClass="org.eclipse.core.resources.IResource">
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.AllAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.all"
+               label="all"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/all">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.BuildClientAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.build-client"
+               label="build-client"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-client">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.BuildDBAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.build-db"
+               label="build-db"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-db">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.BuildLangAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.build-lang"
+               label="build-lang"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-lang">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.CleanAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.clean"
+               label="clean"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/clean">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.CompileAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.compile"
+               label="compile"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/compile">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.CompileTestAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.compile-test"
+               label="compile-test"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/compile-test">
+         </action>         
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.DeployAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.deploy"
+               label="deploy"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/deploy">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.DirectDeployAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.direct-deploy"
+               label="direct-deploy"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/direct-deploy">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.MergeAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.merge"
+               label="merge"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/merge">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.TestAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.test"
+               label="test"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/test">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.WarAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.war"
+               label="war"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/war">
+         </action> 
+         <enablement>
+         	<adapt type="org.eclipse.core.resources.IResource">
+	          <or>
+	          	<adapt type="org.eclipse.core.resources.IFile">
+		  			<test forcePluginActivation="true"
+						property="com.liferay.ide.eclipse.project.ui.isBuildFile"
+						value="true" />
+				</adapt>
+				<or>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.portlet" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.hook" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.ext" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.layouttpl" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.theme" />
+					</adapt>
+				</or>
+			  </or>
+			</adapt>
+         </enablement>
+      </objectContribution>
+  </extension>
 </plugin>

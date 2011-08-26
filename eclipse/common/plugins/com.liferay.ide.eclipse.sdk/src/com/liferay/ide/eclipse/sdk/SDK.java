@@ -505,6 +505,130 @@ public class SDK {
 		// setRuntime(sdkElement.getString("runtime"));
 	}
 
+	protected void persistAppServerProperties(Map<String, String> properties)
+		throws FileNotFoundException, IOException, ConfigurationException {
+
+		IPath loc = getLocation();
+
+		// check for build.<username>.properties
+
+		String userName = System.getProperty("user.name");
+
+		File userBuildFile = loc.append("build." + userName + ".properties").toFile();
+
+		if (userBuildFile.exists()) {
+			/*
+			 * the build file exists so we need to check the following conditions 1. if the header in the comment
+			 * contains the text written by a previous SDK operation then we can write it again 2. if the file was not
+			 * previously written by us we will need to prompt the user with permission yes/no to update the
+			 * build.<username>.properties file
+			 */
+
+			PropertiesConfiguration propsConfig = new PropertiesConfiguration(userBuildFile);
+
+			String header = propsConfig.getHeader();
+
+			boolean shouldUpdateBuildFile = false;
+
+			if (header != null && header.contains(MSG_MANAGED_BY_LIFERAY_IDE)) {
+				shouldUpdateBuildFile = true;
+			}
+			else {
+				String overwrite = getPrefStore().getString(SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE);
+
+				if (MessageDialogWithToggle.ALWAYS.equals(overwrite)) {
+					shouldUpdateBuildFile = true;
+				}
+				else if (MessageDialogWithToggle.NEVER.equals(overwrite)) {
+					shouldUpdateBuildFile = false;
+				}
+				else {
+					shouldUpdateBuildFile = promptForOverwrite(userBuildFile);
+				}
+			}
+
+			if (shouldUpdateBuildFile) {
+				for (String key : properties.keySet()) {
+					propsConfig.setProperty(key, properties.get(key));
+				}
+
+				propsConfig.setHeader(MSG_MANAGED_BY_LIFERAY_IDE);
+				propsConfig.save(userBuildFile);
+			}
+
+		}
+		else {
+			Properties props = new Properties();
+
+			props.putAll(properties);
+
+			props.store(new FileOutputStream(userBuildFile), MSG_MANAGED_BY_LIFERAY_IDE);
+		}
+
+	}
+
+	private boolean promptForOverwrite(final File userBuildFile) {
+		final boolean[] retval = new boolean[1];
+
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				String message =
+					MessageFormat.format(
+						"The user build.properties file in \"{0}\" SDK has not been updated with the latest app server build properties.  Should these properties be written to the file \"{1}\"?\n\nAnswering no will pass these properties directly to Ant and disregard any settings in the user build.properties file.",
+						new Object[] { getName(), userBuildFile.getName() });
+
+				MessageDialogWithToggle dialog =
+					MessageDialogWithToggle.openYesNoQuestion(
+						Display.getDefault().getActiveShell(), "Plugins SDK", message,
+						"Remember this answer for future SDK operations.", false, getPrefStore(),
+						SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE);
+
+				retval[0] = dialog.getReturnCode() == IDialogConstants.YES_ID;
+			}
+		});
+
+		return retval[0];
+	}
+
+	public IStatus runCommand(
+		IProject project, IFile buildXmlFile, String command, Map<String, String> overrideProperties,
+		Map<String, String> appServerProperties ) {
+
+		SDKHelper antHelper = new SDKHelper( this );
+
+		try {
+			persistAppServerProperties( appServerProperties );
+
+			Map<String, String> properties = new HashMap<String, String>();
+
+			if ( overrideProperties != null ) {
+				properties.putAll( overrideProperties );
+			}
+
+			antHelper.runTarget( buildXmlFile.getRawLocation(), command, properties, true );
+		}
+		catch ( Exception e ) {
+			return SDKPlugin.createErrorStatus( e );
+		}
+
+		return Status.OK_STATUS;
+	}
+
+	protected IStatus runTarget(IProject project, Map<String, String> properties, String target, boolean separateJRE) {
+		SDKHelper antHelper = new SDKHelper(this);
+
+		try {
+			antHelper.runTarget(
+				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), target, properties, separateJRE);
+		}
+		catch (CoreException e) {
+			return SDKPlugin.createErrorStatus(e);
+		}
+
+		return Status.OK_STATUS;
+	}
+
 	public void saveToMemento(IMemento child) {
 		child.putString("name", getName());
 		child.putString("location", getLocation().toPortableString());
@@ -596,108 +720,6 @@ public class SDK {
 		}
 		catch ( Exception e ) {
 			return SDKPlugin.createErrorStatus( e );
-		}
-
-		return Status.OK_STATUS;
-	}
-
-	private boolean promptForOverwrite(final File userBuildFile) {
-		final boolean[] retval = new boolean[1];
-
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				String message =
-					MessageFormat.format(
-						"The user build.properties file in \"{0}\" SDK has not been updated with the latest app server build properties.  Should these properties be written to the file \"{1}\"?\n\nAnswering no will pass these properties directly to Ant and disregard any settings in the user build.properties file.",
-						new Object[] { getName(), userBuildFile.getName() });
-
-				MessageDialogWithToggle dialog =
-					MessageDialogWithToggle.openYesNoQuestion(
-						Display.getDefault().getActiveShell(), "Plugins SDK", message,
-						"Remember this answer for future SDK operations.", false, getPrefStore(),
-						SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE);
-
-				retval[0] = dialog.getReturnCode() == IDialogConstants.YES_ID;
-			}
-		});
-
-		return retval[0];
-	}
-
-
-
-	protected void persistAppServerProperties(Map<String, String> properties)
-		throws FileNotFoundException, IOException, ConfigurationException {
-
-		IPath loc = getLocation();
-
-		// check for build.<username>.properties
-
-		String userName = System.getProperty("user.name");
-
-		File userBuildFile = loc.append("build." + userName + ".properties").toFile();
-
-		if (userBuildFile.exists()) {
-			/*
-			 * the build file exists so we need to check the following conditions 1. if the header in the comment
-			 * contains the text written by a previous SDK operation then we can write it again 2. if the file was not
-			 * previously written by us we will need to prompt the user with permission yes/no to update the
-			 * build.<username>.properties file
-			 */
-
-			PropertiesConfiguration propsConfig = new PropertiesConfiguration(userBuildFile);
-
-			String header = propsConfig.getHeader();
-
-			boolean shouldUpdateBuildFile = false;
-
-			if (header != null && header.contains(MSG_MANAGED_BY_LIFERAY_IDE)) {
-				shouldUpdateBuildFile = true;
-			}
-			else {
-				String overwrite = getPrefStore().getString(SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE);
-
-				if (MessageDialogWithToggle.ALWAYS.equals(overwrite)) {
-					shouldUpdateBuildFile = true;
-				}
-				else if (MessageDialogWithToggle.NEVER.equals(overwrite)) {
-					shouldUpdateBuildFile = false;
-				}
-				else {
-					shouldUpdateBuildFile = promptForOverwrite(userBuildFile);
-				}
-			}
-
-			if (shouldUpdateBuildFile) {
-				for (String key : properties.keySet()) {
-					propsConfig.setProperty(key, properties.get(key));
-				}
-
-				propsConfig.setHeader(MSG_MANAGED_BY_LIFERAY_IDE);
-				propsConfig.save(userBuildFile);
-			}
-
-		}
-		else {
-			Properties props = new Properties();
-
-			props.putAll(properties);
-
-			props.store(new FileOutputStream(userBuildFile), MSG_MANAGED_BY_LIFERAY_IDE);
-		}
-
-	}
-
-	protected IStatus runTarget(IProject project, Map<String, String> properties, String target, boolean separateJRE) {
-		SDKHelper antHelper = new SDKHelper(this);
-
-		try {
-			antHelper.runTarget(
-				project.getFile(ISDKConstants.PROJECT_BUILD_XML).getRawLocation(), target, properties, separateJRE);
-		}
-		catch (CoreException e) {
-			return SDKPlugin.createErrorStatus(e);
 		}
 
 		return Status.OK_STATUS;

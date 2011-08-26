@@ -16,11 +16,11 @@
 package com.liferay.ide.eclipse.server.tomcat.ui;
 
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
-import com.liferay.ide.eclipse.project.ui.action.AbstractProjectAction;
 import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.job.CleanAppServerJob;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
+import com.liferay.ide.eclipse.ui.action.AbstractObjectAction;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class CleanAppServerAction extends AbstractProjectAction {
+public class CleanAppServerAction extends AbstractObjectAction {
 
 	public CleanAppServerAction() {
 		super();

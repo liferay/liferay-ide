@@ -204,7 +204,7 @@ public class LiferayTomcat60Handler extends Tomcat60Handler {
 
 		Properties props = new Properties();
 
-		props.put("include-and-override", "portal-developer.properties");
+		// props.put("include-and-override", "portal-developer.properties");
 
 		props.put("auto.deploy.tomcat.conf.dir", configPath.append("conf/Catalina/" + hostName).toOSString());
 

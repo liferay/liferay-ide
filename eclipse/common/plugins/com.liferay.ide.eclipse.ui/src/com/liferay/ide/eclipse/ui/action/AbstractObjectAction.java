@@ -1,4 +1,4 @@
-package com.liferay.ide.eclipse.project.ui.action;
+package com.liferay.ide.eclipse.ui.action;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -7,7 +7,7 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 
-public abstract class AbstractProjectAction implements IObjectActionDelegate {
+public abstract class AbstractObjectAction implements IObjectActionDelegate {
 
 	protected ISelection fSelection;
 
