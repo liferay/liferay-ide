@@ -96,9 +96,11 @@
             id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
             name="Portlet Xml Editor (Experimental)"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <!-- don't enable until we are ready for this to be default
          <contentTypeBinding
                contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">
          </contentTypeBinding>
+         -->
       </editor>
    </extension>
    <extension
