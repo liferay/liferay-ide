@@ -419,6 +419,9 @@
                   name="build-lang">
             </groupMarker>
             <groupMarker
+                  name="build-service">
+            </groupMarker>
+            <groupMarker
                   name="clean">
             </groupMarker>
             <groupMarker
@@ -479,6 +482,14 @@
                id="com.liferay.ide.eclipse.sdk.popup.action.build-lang"
                label="build-lang"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-lang">
+         </action>
+          <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.BuildServiceAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.build-lang"
+               label="build-service"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-service">
          </action>
          <action
                class="com.liferay.ide.eclipse.project.ui.action.sdk.CleanAction"
