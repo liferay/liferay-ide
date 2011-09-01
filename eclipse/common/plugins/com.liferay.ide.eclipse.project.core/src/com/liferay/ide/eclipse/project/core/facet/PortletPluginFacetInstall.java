@@ -20,7 +20,6 @@ import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -33,9 +32,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.jst.jsp.core.internal.JSPCorePlugin;
+import org.eclipse.jst.jsp.core.internal.preferences.JSPCorePreferenceNames;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -43,6 +46,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings( "restriction" )
 public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 	@Override
@@ -108,6 +112,19 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 		configWebXML();
 
 		this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+
+		// IDE-417 set a project preference for disabling JSP fragment validation
+		try {
+			IEclipsePreferences node =
+				new ProjectScope( this.project ).getNode( JSPCorePlugin.getDefault().getBundle().getSymbolicName() );
+			node.putBoolean( JSPCorePreferenceNames.VALIDATE_FRAGMENTS, false );
+			node.putBoolean( JSPCorePreferenceNames.VALIDATION_USE_PROJECT_SETTINGS, true );
+			node.flush();
+		}
+		catch ( Exception e ) {
+			ProjectCorePlugin.logError( "Could not store jsp fragment validation preference", e );
+		}
+
 	}
 
 	protected void copyPortletTLD()
