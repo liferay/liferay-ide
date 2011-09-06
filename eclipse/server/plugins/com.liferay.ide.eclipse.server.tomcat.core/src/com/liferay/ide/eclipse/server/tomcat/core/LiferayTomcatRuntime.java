@@ -15,6 +15,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.eclipse.server.util.JavaUtil;
@@ -289,7 +290,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 		Version portalVersion = Version.parseVersion(version);
 
-		if (portalVersion != null && (portalVersion.compareTo(getLeastSupportedVersion()) < 0)) {
+		if ( portalVersion != null && ( SDKUtil.compareVersions( portalVersion, getLeastSupportedVersion() ) < 0 ) ) {
 			status =
 				LiferayTomcatPlugin.createErrorStatus("Portal version not supported.  Need at least " +
 					getLeastSupportedVersion());

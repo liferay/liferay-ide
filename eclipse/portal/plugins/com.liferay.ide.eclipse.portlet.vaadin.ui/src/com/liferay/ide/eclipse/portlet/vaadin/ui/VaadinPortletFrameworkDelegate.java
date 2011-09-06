@@ -7,6 +7,7 @@ import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
+import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -48,7 +49,8 @@ public class VaadinPortletFrameworkDelegate extends AbstractPortletFrameworkDele
 			if ( sdk != null ) {
 				Version sdkVersion = new Version( sdk.getVersion() );
 
-				if ( v61.compareTo( sdkVersion ) > 0 ) { // user has selected sdk 6.0.x so use vaadin portlet wizard
+				if ( SDKUtil.compareVersions( v61, sdkVersion ) > 0 ) {
+					// user has selected sdk 6.0.x so use vaadin portlet wizard
 					setFragmentEnabled( true );
 				}
 				else {

@@ -55,13 +55,91 @@ public class SDKUtil {
 	// return false;
 	// }
 
+	public static int compareVersions( Version sdk, Version otherSdk ) {
+		if ( otherSdk == sdk ) { // quicktest
+			return 0;
+		}
+
+		int result = sdk.getMajor() - otherSdk.getMajor();
+		if ( result != 0 ) {
+			return result;
+		}
+
+		result = sdk.getMinor() - otherSdk.getMinor();
+		if ( result != 0 ) {
+			return result;
+		}
+
+		result = sdk.getMicro() - otherSdk.getMicro();
+		if ( result != 0 ) {
+			return result;
+		}
+
+		return sdk.getQualifier().compareTo( otherSdk.getQualifier() );
+	}
+
+	public static SDK createSDKFromLocation(IPath path) {
+		try {
+			SDK sdk = new SDK(path);
+	
+			sdk.setVersion(readSDKVersion(path.toString()));
+			sdk.setName(path.lastSegment());
+	
+			return sdk;
+		}
+		catch (Exception e) {
+			// ignore errors
+		}
+	
+		return null;
+	}
+
+	public static SDK getSDK( IProject project ) {
+		SDK retval = null;
+
+		// try to determine SDK based on project location
+		IPath sdkLocation = project.getRawLocation().removeLastSegments( 2 );
+
+		retval = SDKManager.getInstance().getSDK( sdkLocation );
+
+		if ( retval == null ) {
+			retval = SDKUtil.createSDKFromLocation( sdkLocation );
+
+			if ( retval != null ) {
+				SDKManager.getInstance().addSDK( retval );
+			}
+		}
+
+		return retval;
+	}
+
+	public static SDK getSDKFromProjectDir(File projectDir) {
+		File sdkDir = projectDir.getParentFile().getParentFile();
+		
+		if (sdkDir.exists() && SDKUtil.isValidSDKLocation(sdkDir.getPath())) {
+			Path sdkLocation = new Path(sdkDir.getPath());
+
+			SDK existingSDK = SDKManager.getInstance().getSDK(sdkLocation);
+
+			if (existingSDK != null) {
+				return existingSDK;
+			}
+			else {
+				return createSDKFromLocation(sdkLocation);
+			}
+		}
+			
+		return null;
+	}
+
+
 	public static boolean isSDKSupported(String location) {
 		boolean retval = false;
 
 		try {
 			String version = SDKUtil.readSDKVersion(location);
 
-			retval = new Version(version).compareTo(ISDKConstants.LEAST_SUPPORTED_SDK_VERSION) >= 0;
+			retval = compareVersions( new Version( version ), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION ) >= 0;
 		}
 		catch (Exception e) {
 			// best effort we didn't find a valid location
@@ -106,7 +184,7 @@ public class SDKUtil {
 			// ignore means we don't have valid version
 		}
 
-		if (sdkVersionValue != null && sdkVersionValue.compareTo(lowestValidVersion) >= 0) {
+		if ( sdkVersionValue != null && compareVersions( sdkVersionValue, lowestValidVersion ) >= 0 ) {
 			return true;
 		}
 
@@ -120,60 +198,5 @@ public class SDKUtil {
 		properties.load(new FileInputStream(new Path(path).append("build.properties").toFile()));
 
 		return properties.getProperty("lp.version");
-	}
-
-
-	public static SDK getSDKFromProjectDir(File projectDir) {
-		File sdkDir = projectDir.getParentFile().getParentFile();
-		
-		if (sdkDir.exists() && SDKUtil.isValidSDKLocation(sdkDir.getPath())) {
-			Path sdkLocation = new Path(sdkDir.getPath());
-
-			SDK existingSDK = SDKManager.getInstance().getSDK(sdkLocation);
-
-			if (existingSDK != null) {
-				return existingSDK;
-			}
-			else {
-				return createSDKFromLocation(sdkLocation);
-			}
-		}
-			
-		return null;
-	}
-
-	public static SDK createSDKFromLocation(IPath path) {
-		try {
-			SDK sdk = new SDK(path);
-	
-			sdk.setVersion(readSDKVersion(path.toString()));
-			sdk.setName(path.lastSegment());
-	
-			return sdk;
-		}
-		catch (Exception e) {
-			// ignore errors
-		}
-	
-		return null;
-	}
-
-	public static SDK getSDK( IProject project ) {
-		SDK retval = null;
-
-		// try to determine SDK based on project location
-		IPath sdkLocation = project.getRawLocation().removeLastSegments( 2 );
-
-		retval = SDKManager.getInstance().getSDK( sdkLocation );
-
-		if ( retval == null ) {
-			retval = SDKUtil.createSDKFromLocation( sdkLocation );
-
-			if ( retval != null ) {
-				SDKManager.getInstance().addSDK( retval );
-			}
-		}
-
-		return retval;
 	}
 }

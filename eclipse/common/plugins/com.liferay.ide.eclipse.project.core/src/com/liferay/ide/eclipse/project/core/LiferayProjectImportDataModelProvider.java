@@ -168,7 +168,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 			if (locationStatus.isOK()) {
 				Version version = new Version(getStringProperty(SDK_VERSION));
 
-				if (version.compareTo(SDKManager.getLeastValidVersion()) >= 0) {
+				if ( SDKUtil.compareVersions( version, SDKManager.getLeastValidVersion() ) >= 0 ) {
 					return Status.OK_STATUS;
 				}
 				else {
