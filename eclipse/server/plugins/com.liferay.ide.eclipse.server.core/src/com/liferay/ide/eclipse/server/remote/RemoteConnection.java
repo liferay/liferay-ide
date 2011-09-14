@@ -360,7 +360,8 @@ public class RemoteConnection implements IRemoteConnection {
 
 	private GetMethod getDebugPortMethod() {
 		if ( debugPortMethod == null ) {
-			debugPortMethod = new GetMethod( getDebugPortURI() );
+			// debugPortMethod = new GetMethod( getDebugPortURI() );
+			return new GetMethod( getDebugPortURI() );
 		}
 
 		return debugPortMethod;
@@ -376,10 +377,11 @@ public class RemoteConnection implements IRemoteConnection {
 
 	private HttpClient getHttpClient() {
 		if ( httpClient == null ) {
-			httpClient = new HttpClient();
-			httpClient.getParams().setAuthenticationPreemptive( true );
+			HttpClient httpClient2 = new HttpClient();
+			httpClient2.getParams().setAuthenticationPreemptive( true );
 			UsernamePasswordCredentials creds = new UsernamePasswordCredentials( username, password );
-			httpClient.getState().setCredentials( new AuthScope( host, Integer.parseInt( httpPort ) ), creds );
+			httpClient2.getState().setCredentials( new AuthScope( host, Integer.parseInt( httpPort ) ), creds );
+			return httpClient2;
 		}
 
 		return httpClient;
@@ -387,7 +389,8 @@ public class RemoteConnection implements IRemoteConnection {
 
 	private GetMethod getIsAliveMethod() {
 		if ( isAliveMethod == null ) {
-			isAliveMethod = new GetMethod( getIsAliveURI() );
+			// isAliveMethod = new GetMethod( getIsAliveURI() );
+			return new GetMethod( getIsAliveURI() );
 		}
 
 		return isAliveMethod;
