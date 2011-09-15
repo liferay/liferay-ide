@@ -6,12 +6,12 @@
       <image
             icon="icons/e16/server.png"
             id="com.liferay.ide.eclipse.server.tomcat.ui.image"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70">
       </image>
       <image
             icon="icons/e16/server.png"
             id="com.liferay.ide.eclipse.server.tomcat.runtime.ui.image"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.60">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.60,com.liferay.ide.eclipse.server.tomcat.70">
       </image>
    </extension>
    <extension
@@ -19,7 +19,12 @@
       <launchConfigurationTypeImage
             configTypeID="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             icon="icons/e16/server.png"
-            id="com.liferay.ide.eclipse.server.tomcat.ui.launchConfigurationTypeImage">
+            id="com.liferay.ide.eclipse.server.tomcat.ui.launchConfigurationTypeImage.60">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.eclipse.server.tomcat.ui.launchConfigurationTypeImage.70">
       </launchConfigurationTypeImage>
    </extension>
    <extension
@@ -29,13 +34,18 @@
             id="com.liferay.ide.eclipse.server.tomcat60.ui.launchConfigurationTabGroup"
             type="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType">
       </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="com.liferay.ide.eclipse.server.tomcat.ui.LiferayTomcatLaunchConfigTabGroup"
+            id="com.liferay.ide.eclipse.server.tomcat70.ui.launchConfigurationTabGroup"
+            type="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType">
+      </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
             class="com.liferay.ide.eclipse.server.tomcat.ui.wizard.LiferayTomcatRuntimeFragment"
-            id="com.liferay.ide.eclipse.server.tomcat.runtime.60"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+            id="com.liferay.ide.eclipse.server.tomcat.runtime"
+            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70">
       </fragment>
    </extension>
    <extension

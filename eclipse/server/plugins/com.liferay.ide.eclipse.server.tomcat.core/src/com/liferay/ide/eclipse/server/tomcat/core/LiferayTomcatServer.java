@@ -107,6 +107,9 @@ public class LiferayTomcatServer extends TomcatServer
 			if (id.indexOf("60") > 0) {
 				configuration = new LiferayTomcat60Configuration(folder);
 			}
+			else if ( id.indexOf( "70" ) > 0 ) {
+				configuration = new LiferayTomcat70Configuration( folder );
+			}
 			try {
 				((ILiferayTomcatConfiguration) configuration).load(folder, null);
 			}
@@ -122,8 +125,8 @@ public class LiferayTomcatServer extends TomcatServer
 	@Override
 	public ITomcatVersionHandler getTomcatVersionHandler() {
 		ITomcatVersionHandler handler = super.getTomcatVersionHandler();
-		if (handler instanceof LiferayTomcat60Handler) {
-			((LiferayTomcat60Handler) handler).setCurrentServer(getServer());
+		if ( handler instanceof ILiferayTomcatHandler ) {
+			( (ILiferayTomcatHandler) handler ).setCurrentServer( getServer() );
 		}
 		return handler;
 	}
@@ -156,6 +159,9 @@ public class LiferayTomcatServer extends TomcatServer
 		IFolder folder = getServer().getServerConfiguration();
 		if (id.indexOf("60") > 0) {
 			configuration = new LiferayTomcat60Configuration(folder);
+		}
+		else if ( id.indexOf( "70" ) > 0 ) {
+			configuration = new LiferayTomcat70Configuration( folder );
 		}
 
 		if (path.toFile().exists()) {

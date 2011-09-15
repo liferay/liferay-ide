@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jst.server.tomcat.core.internal.Tomcat60Handler;
+import org.eclipse.jst.server.tomcat.core.internal.Tomcat70Handler;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 
@@ -31,7 +31,7 @@ import org.eclipse.wst.server.core.IServer;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class LiferayTomcat60Handler extends Tomcat60Handler implements ILiferayTomcatHandler {
+public class LiferayTomcat70Handler extends Tomcat70Handler implements ILiferayTomcatHandler {
 
 	protected IServer currentServer;
 

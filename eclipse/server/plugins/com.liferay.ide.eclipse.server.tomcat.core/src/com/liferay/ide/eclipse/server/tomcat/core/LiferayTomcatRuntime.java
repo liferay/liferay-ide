@@ -55,8 +55,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 	public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location";
 
-	public static final String RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.tomcat.runtime.60";
-
 	private IStatus runtimeDelegateStatus;
 
 	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
@@ -225,6 +223,9 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		String id = getRuntime().getRuntimeType().getId();
 		if (id.indexOf("runtime.60") > 0) {
 			return new LiferayTomcat60Handler();
+		}
+		else if ( id.indexOf( "runtime.70" ) > 0 ) {
+			return new LiferayTomcat70Handler();
 		}
 
 		return null;

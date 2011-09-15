@@ -19,6 +19,22 @@
                versions="1.0">
          </moduleType>
       </runtimeType>
+      <runtimeType
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntime"
+            description="Liferay Portal Community Edition v6.1 bundled with Tomcat 7"
+            id="com.liferay.ide.eclipse.server.tomcat.runtime.70"
+            name="Liferay v6.1 CE (Tomcat 7)"
+            vendor="Liferay, Inc."
+            version="7.0">
+         <moduleType
+               types="jst.web"
+               versions="2.3,2.4,2.5,3.0">
+         </moduleType>
+         <moduleType
+               types="jst.utility"
+               versions="1.0">
+         </moduleType>
+      </runtimeType>
    </extension>
    
    <extension
@@ -26,7 +42,7 @@
       <runtimeClasspathProvider
             class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntimeClasspathProvider"
             id="com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider"
-            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.*">
       </runtimeClasspathProvider>
    </extension>
    <extension
@@ -46,6 +62,21 @@
             stopTimeout="300000"
             supportsRemoteHosts="false">
       </serverType>
+      <serverType
+            behaviourClass="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServerBehavior"
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServer"
+            description="Liferay Portal 6.1 Community Edition Server bundled with Tomcat 7"
+            hasConfiguration="true"
+            id="com.liferay.ide.eclipse.server.tomcat.70"
+            initialState="stopped"
+            launchConfigId="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
+            name="Liferay v6.1 CE Server (Tomcat 7)"
+            runtime="true"
+            runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70"
+            startTimeout="900000"
+            stopTimeout="300000"
+            supportsRemoteHosts="false">
+      </serverType>
    </extension>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
@@ -54,6 +85,14 @@
             id="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             modes="run, debug, profile"
             name="Liferay v6.0 CE (Tomcat 6)"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+            sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
+            id="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
+            modes="run, debug, profile"
+            name="Liferay v6.1 CE (Tomcat 7)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
             sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
@@ -89,6 +128,10 @@
       <runtime-component-version
             type="com.liferay.ide.eclipse.server.tomcat.runtime.component"
             version="6.0">
+      </runtime-component-version>
+      <runtime-component-version
+            type="com.liferay.ide.eclipse.server.tomcat.runtime.component"
+            version="7.0">
       </runtime-component-version>
       <adapter>
          <runtime-component
@@ -135,6 +178,40 @@
                version="6.0">
          </facet>
       </supported>
+      <supported>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.tomcat.runtime.component"
+               version="7.0">
+         </runtime-component>
+         <facet
+               id="jst.web"
+               version="2.3,2.4,2.5,3.0">
+         </facet>
+         <facet
+               id="jst.utility"
+               version="1.0">
+         </facet>
+         <facet
+               id="liferay.portlet"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.hook"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.ext"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.layouttpl"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.theme"
+               version="6.0">
+         </facet>
+      </supported>
    </extension>
    <extension
          point="org.eclipse.jst.server.core.runtimeFacetMappings">
@@ -142,6 +219,11 @@
             runtime-component="com.liferay.ide.eclipse.server.tomcat.runtime.component"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             version="6.0">
+      </runtimeFacetMapping>
+      <runtimeFacetMapping
+            runtime-component="com.liferay.ide.eclipse.server.tomcat.runtime.component"
+            runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70"
+            version="7.0">
       </runtimeFacetMapping>
    </extension>
 
@@ -152,14 +234,23 @@
             facetId="liferay.ext"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
       </liferayPluginPublisher>
+      <liferayPluginPublisher
+            class="com.liferay.ide.eclipse.server.tomcat.core.TomcatExtPluginPublisher"
+            facetId="liferay.ext"
+            runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70">
+      </liferayPluginPublisher>
    </extension>
  <extension
        point="com.liferay.ide.eclipse.server.core.runtimeStubs">
     <liferayRuntimeStub
           class="com.liferay.ide.eclipse.server.tomcat.core.LiferayRuntimeStub"
           default="true"
-          name="Liferay Tomcat Bundle"
+          name="Liferay v6.0 (Tomcat 6) Bundle"
           runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+    </liferayRuntimeStub>
+    <liferayRuntimeStub
+          name="Liferay v6.1 (Tomcat 7) Bundle"
+          runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70">
     </liferayRuntimeStub>
  </extension>
 </plugin>

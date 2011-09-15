@@ -469,7 +469,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
 		monitor.subTask( "Creating partial " + moduleProject.getName() + " update archive..." );
 
-		File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta, "liferay", true );
+		File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta, "liferay", false );
 
 		monitor.worked( 25 );
 

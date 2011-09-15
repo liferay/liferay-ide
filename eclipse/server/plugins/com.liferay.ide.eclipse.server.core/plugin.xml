@@ -845,9 +845,9 @@
          point="org.eclipse.wst.server.core.runtimeTypes">
       <runtimeType
             class="com.liferay.ide.eclipse.server.core.LiferayRuntimeStubDelegate"
-            description="Liferay Runtime Stub"
+            description="Liferay v6.x Runtime Stub"
             id="com.liferay.ide.eclipse.server.runtime.stub"
-            name="Liferay Runtime Stub"
+            name="Liferay v6.x Runtime Stub"
             vendor="Liferay, Inc.">
          <moduleType
                types="jst.web"
