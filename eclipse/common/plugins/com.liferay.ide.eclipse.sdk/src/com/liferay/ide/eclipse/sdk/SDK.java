@@ -205,7 +205,7 @@ public class SDK {
 
 			Map<String, String> properties = new HashMap<String, String>();
 
-			String appServerDir = properties.get(ISDKConstants.PROPERTY_APP_SERVER_DIR);
+			String appServerDir = appServerProperties.get( ISDKConstants.PROPERTY_APP_SERVER_DIR );
 			IPath workPath = new Path(appServerDir).removeLastSegments(2);
 
 			properties.put(ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation.toOSString());
