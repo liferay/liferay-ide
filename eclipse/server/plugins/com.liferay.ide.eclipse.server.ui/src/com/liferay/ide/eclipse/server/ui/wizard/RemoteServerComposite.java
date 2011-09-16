@@ -83,7 +83,16 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 		}
 
 		if (src.equals(textHostname)) {
+			// IDE-425 check server name and if it has current host name, update it to the new hostname
+			String previousName = this.serverWC.getName();
+			String previousHost = this.serverWC.getHost();
+
 			this.serverWC.setHost(textHostname.getText());
+
+			if ( previousName != null && previousName.contains( previousHost ) ) {
+				this.serverWC.setName( previousName.replaceAll( previousHost, textHostname.getText() ) );
+			}
+
 		}
 		else if (src.equals(textHTTP)) {
 			this.remoteServerWC.setHTTPPort( textHTTP.getText() );
