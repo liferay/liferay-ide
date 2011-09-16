@@ -155,11 +155,13 @@ Company Id:
           &lt;%@ taglib uri=&quot;http://liferay.com/tld/ui&quot; prefix=&quot;liferay-ui&quot; %&gt;
         </content>
       </item>
+      <!--
       <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Alloy Taglib" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.alloy" label="Alloy Taglib Import" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;%@ taglib uri=&quot;http://alloy.liferay.com/tld/alloy&quot; prefix=&quot;alloy&quot; %&gt;
         </content>
       </item>
+      -->
     </category>
     <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Portlet Taglib" id="com.liferay.ide.eclipse.ui.snippets.category.portlet" label="Portlet Taglib" smallicon="icons/snippets/portlet_tld_16x16.png" largeicon="icons/snippets/portlet_tld_32x32.png">
       <item class="com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion" description="actionURL" id="com.liferay.ide.eclipse.ui.snippets.item.actionURL" label="actionURL" smallicon="icons/snippets/tag-generic.gif">
