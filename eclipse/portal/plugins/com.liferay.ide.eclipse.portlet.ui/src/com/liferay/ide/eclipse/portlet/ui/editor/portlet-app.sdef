@@ -68,12 +68,24 @@
 				</node>
 				<node>
 					<label>ResourceBundles</label>
+                    <section>
+                        <content>
+                            <include>resource.bundle.composite</include>
+                        </content>
+                    </section>
 				</node>
 				<node>
 					<label>SecurityConstraints</label>
 				</node>
 				<node>
-					<label>EventDefinitions</label>
+					<label>Events</label>
+                    <section>
+                        <label>Quick Edit</label>
+                        <content>
+                            <property-editor>EventDefinitions</property-editor>
+                        </content>
+                    </section>
+                    <node-include>EventDefinitionsList</node-include>
 				</node>
 				<node>
 					<label>PublicRenderParameters</label>
@@ -131,8 +143,20 @@
 					<collapsed-initially>true</collapsed-initially>
 				</section>
 			</node>
+            <section>
+                <content>
+                    <include>portlet.basic.composite</include>
+                    <include>init.param.composite</include>
+                    <include>resource.bundle.composite</include>
+                </content>
+            </section>
 		</case>
 	</node-factory>
+	<node-factory>
+        <id>EventDefinitionsList</id>
+        <property>EventDefinitions</property>
+        <case></case>
+    </node-factory>
 	<composite>
 		<id>portlet.basic.composite</id>
 		<content>
@@ -179,7 +203,7 @@
 			</property-editor>
 		</content>
 	</composite>
-	<composite>
+    <composite>
 		<id>id.name.desc.composite</id>
 		<content>
 			<property-editor>Id</property-editor>
@@ -187,4 +211,10 @@
 			<property-editor>Description</property-editor>
 		</content>
 	</composite>
+    <composite>
+        <id>resource.bundle.composite</id>
+        <content>
+            <property-editor>ResourceBundles</property-editor>
+        </content>
+    </composite>
 </definition>
