@@ -41,8 +41,13 @@
          point="org.eclipse.jst.server.core.runtimeClasspathProviders">
       <runtimeClasspathProvider
             class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntimeClasspathProvider"
-            id="com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider"
-            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.*">
+            id="com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider.60"
+            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60">
+      </runtimeClasspathProvider>
+      <runtimeClasspathProvider
+            class="com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntimeClasspathProvider"
+            id="com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider.70"
+            runtimeTypeIds="com.liferay.ide.eclipse.server.tomcat.runtime.70">
       </runtimeClasspathProvider>
    </extension>
    <extension
