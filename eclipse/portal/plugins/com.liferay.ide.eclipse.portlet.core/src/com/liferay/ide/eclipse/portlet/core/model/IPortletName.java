@@ -13,11 +13,9 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.PortletReferenceService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.TextNodeValueBinding;
 
 /**
  * @author kamesh.sampath
@@ -31,8 +29,8 @@ public interface IPortletName extends IModelElement {
 
 	@Label( standard = "Name" )
 	@Whitespace( trim = true )
-	@XmlBinding( path = "portlet-name" )
-	@CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "portlet-name" } )
+	@XmlBinding( path = "" )
+	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "portlet-name" } )
 	@PossibleValues( property = "/Portlets/PortletName" )
 	@Service( impl = PortletReferenceService.class, params = { "portlet-name" } )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );

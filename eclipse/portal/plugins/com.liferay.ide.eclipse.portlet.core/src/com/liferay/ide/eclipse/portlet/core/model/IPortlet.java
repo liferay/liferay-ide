@@ -132,7 +132,7 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 	// *** ResourceBundles ***
 
 	@Type( base = IResourceBundle.class )
-	@Label( standard = "Resource Bundle" )
+	@Label( standard = "Resource Bundles" )
 	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "resource-bundle", type = IResourceBundle.class ) )
 	ListProperty PROP_RESOURCE_BUNDLES = new ListProperty( TYPE, "ResourceBundles" );
 

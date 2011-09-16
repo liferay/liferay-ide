@@ -18,7 +18,11 @@ package com.liferay.ide.eclipse.portlet.core.util;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
@@ -30,6 +34,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 public class PortletUtil {
 
 	public static IFolder getFirstSrcFolder( IProject project ) {
+		@SuppressWarnings( "deprecation" )
 		IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
 
 		if ( sourceFolders != null && sourceFolders.length > 0 ) {
@@ -59,6 +64,24 @@ public class PortletUtil {
 		}
 		return strippedValue;
 
+	}
+
+	/**
+	 * @param project
+	 * @return
+	 */
+	public static IClasspathEntry[] getClasspathEntries( IProject project ) {
+		if ( project != null ) {
+			IJavaProject javaProject = JavaCore.create( project );
+			try {
+				IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
+				return classPathEntries;
+			}
+			catch ( JavaModelException e ) {
+				// TODO log the exception
+			}
+		}
+		return null;
 	}
 
 }

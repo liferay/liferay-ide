@@ -11,10 +11,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.TextNodeValueBinding;
 
 /**
  * @author kamesh.sampath
@@ -28,8 +25,8 @@ public interface ISupportedLocales extends IModelElement {
 
 	@Label( standard = "Supported Locale" )
 	@Whitespace( trim = true )
-	@XmlBinding( path = "supported-locale" )
-	@CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = "supported-locale" )
+	@XmlBinding( path = "" )
+	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = "supported-locale" )
 	ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty( TYPE, "SupportedLocale" );
 
 	Value<String> getSupportedLocale();

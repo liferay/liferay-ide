@@ -11,9 +11,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.TextNodeValueBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author kamesh.sampath
@@ -27,7 +25,8 @@ public interface IOptionValue extends IModelElement {
 
 	@Label( standard = "Option Value" )
 	@Whitespace( trim = true )
-	@CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "value" } )
+	@XmlBinding( path = "" )
+	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "value" } )
 	ValueProperty PROP_OPTION_VALUE = new ValueProperty( TYPE, "OptionValue" );
 
 	Value<String> getOptionValue();

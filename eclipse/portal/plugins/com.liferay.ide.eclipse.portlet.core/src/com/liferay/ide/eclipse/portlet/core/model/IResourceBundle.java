@@ -6,19 +6,20 @@ package com.liferay.ide.eclipse.portlet.core.model;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
+import org.eclipse.sapphire.modeling.annotations.FileExtensions;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.TextNodeValueBinding;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
+import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
- * @author kamesh.sampath TODO: Change to browse type
+ * @author kamesh.sampath
  */
 @GenerateImpl
 @Image( path = "images/resource_bundle.png" )
@@ -27,15 +28,17 @@ public interface IResourceBundle extends IModelElement {
 	ModelElementType TYPE = new ModelElementType( IResourceBundle.class );
 
 	// *** ResourceBundle ***
-
-	@Label( standard = "Resource Bundle" )
-	@Whitespace( trim = true )
-	@XmlBinding( path = "resource-bundle" )
-	@CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = "resource-bundle" )
+	@Type( base = Path.class )
+	@AbsolutePath
+	@MustExist
+	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
+	@FileExtensions( expr = "properties" )
 	ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" );
 
-	Value<String> getResourceBundle();
+	Value<Path> getResourceBundle();
 
 	void setResourceBundle( String value );
+
+	void setResourceBundle( Path value );
 
 }

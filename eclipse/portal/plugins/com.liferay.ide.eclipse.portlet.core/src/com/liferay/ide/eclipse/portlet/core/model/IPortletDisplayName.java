@@ -13,11 +13,9 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.PortletReferenceService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.TextNodeValueBinding;
 
 /**
  * @author kamesh.sampath
@@ -31,10 +29,10 @@ public interface IPortletDisplayName extends IModelElement {
 
 	@Label( standard = "Display Name" )
 	@Whitespace( trim = true )
-	@XmlBinding( path = "display-name" )
+	@XmlBinding( path = "" )
 	@PossibleValues( property = "/Portlets/DisplayName" )
 	@Service( impl = PortletReferenceService.class, params = { "display-name" } )
-	@CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "display-name" } )
+	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "display-name" } )
 	ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" );
 
 	Value<String> getDisplayName();
