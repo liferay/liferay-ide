@@ -1,220 +1,362 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition>
-	<import>
-		<package>com.liferay.ide.eclipse.portlet.ui</package>
-		<package>com.liferay.ide.eclipse.portlet.ui.action</package>
-		<package>com.liferay.ide.eclipse.portlet.core.model</package>
-		<package>com.liferay.ide.eclipse.portlet.core.model.internal</package>
-		<package>com.liferay.ide.eclipse.portlet.ui.parts</package>
-		<package>com.liferay.ide.eclipse.portlet.ui.action.filters</package>
-	</import>
-	<editor-page>
-		<id>portlet-app.editor</id>
-		<page-name>Portlet Application</page-name>
-		<outline-header-text>Portlet Application</outline-header-text>
-		<page-header-text>Portlet Application</page-header-text>
-		<root-node>
-			<node>
-				<action-handler>
-					<action>Sapphire.Add</action>
-					<id>Sapphire.Add.Override</id>
-					<image>icons/etool16/portlet_new.png</image>
-					<label>Add Portlet</label>
-					<impl>AddPortletActionHandler</impl>
-					<description>Overriding the Add Portlet Action to call the Wizard
-					</description>
-					<condition>PortletAddActionHandlerCondition</condition>
-					<context>Sapphire.EditorPage.Outline.Node</context>
-					<location>before:Sapphire.Add.ICustomPortletMode</location>
-				</action-handler>
+    <import>
+        <package>com.liferay.ide.eclipse.portlet.ui</package>
+        <package>com.liferay.ide.eclipse.portlet.ui.action</package>
+        <package>com.liferay.ide.eclipse.portlet.core.model</package>
+        <package>com.liferay.ide.eclipse.portlet.core.model.internal
+        </package>
+        <package>com.liferay.ide.eclipse.portlet.ui.parts</package>
+        <package>com.liferay.ide.eclipse.portlet.ui.action.filters
+        </package>
+    </import>
+    <editor-page>
+        <id>portlet-app.editor</id>
+        <page-name>Portlet Application</page-name>
+        <outline-header-text>Portlet Application</outline-header-text>
+        <page-header-text>Portlet Application</page-header-text>
+        <root-node>
+            <node>
+                <label>Portlet Application</label>
+                <section>
+                    <label>Basic</label>
+                    <content>
+                        <property-editor>Id</property-editor>
+                        <property-editor>Version</property-editor>
+                        <property-editor>DefaultNameSpace
+                        </property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <scroll-vertically>true</scroll-vertically>
+                    <scroll-horizontally>true</scroll-horizontally>
+                    <indent>true</indent>
+                </section>
+                <section>
+                    <label>Quick Actions</label>
+                    <content>
+                        <action-link>
+                            <label>Add Portlet</label>
+                            <show-image></show-image>
+                            <action-id>Sapphire.Add</action-id>
+                            <action-handler-id>Sapphire.Add.IPortlet</action-handler-id>
+                        </action-link>
+                        <action-link>
+                            <label>Add Event</label>
+                            <action-id>Sapphire.Add</action-id>
+                            <action-handler-id>Sapphire.Add.IEventDefinition
+                            </action-handler-id>
+                            <show-image></show-image>
+                        </action-link>
+                    </content>
+                </section>
+                <node>
+                    <action-handler>
+                        <action>Sapphire.Add</action>
+                        <id>Sapphire.Add.Override</id>
+                        <image>icons/etool16/portlet_new.png</image>
+                        <label>Add Portlet</label>
+                        <impl>AddPortletActionHandler</impl>
+                        <description>Overriding the Add Portlet Action
+                            to call the Wizard
+                        </description>
+                        <condition>PortletAddActionHandlerCondition
+                        </condition>
+                        <context>Sapphire.EditorPage.Outline.Node
+                        </context>
+                        <location>before:Sapphire.Add.ICustomPortletMode
+                        </location>
+                    </action-handler>
 
-				<action-handler-filter>
-					<impl>AddPortletActionFilter</impl>
-					<context>Sapphire.EditorPage.Outline.Node</context>
-				</action-handler-filter>
-				<label>Portlet Application</label>
-				<section>
-					<label>Basic</label>
-					<content>
-						<property-editor>Id</property-editor>
-						<property-editor>Version</property-editor>
-                        <property-editor>DefaultNameSpace</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<scroll-vertically>true</scroll-vertically>
-					<scroll-horizontally>true</scroll-horizontally>
-					<indent>true</indent>
-				</section>
-				<node>
+                    <action-handler-filter>
+                        <impl>AddPortletActionFilter</impl>
+                        <context>Sapphire.EditorPage.Outline.Node
+                        </context>
+                    </action-handler-filter>
+
                     <label>Portlets</label>
                     <section>
                         <label>Quick Edit</label>
                         <content>
                             <property-editor>
                                 <property>Portlets</property>
-                                <child-property>PortletName</child-property>
-                                <child-property>PortletClass</child-property>
-                                <child-property>DisplayName</child-property>
+                                <child-property>PortletName
+                                </child-property>
+                                <child-property>PortletClass
+                                </child-property>
+                                <child-property>DisplayName
+                                </child-property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
                             </property-editor>
                         </content>
                     </section>
                     <node-include>PortletsNodeList</node-include>
                 </node>
-				<node>
-					<label>Listeners</label>
-				</node>
-				<node>
-					<label>Filters and Mappings</label>
-				</node>
-				<node>
-					<label>ResourceBundles</label>
+                <node>
+                    <label>Listeners</label>
+                </node>
+                <node>
+                    <label>Filters and Mappings</label>
+                </node>
+                <node>
+                    <label>ResourceBundles</label>
                     <section>
                         <content>
-                            <include>resource.bundle.composite</include>
+                            <property-editor>
+                                <property>ResourceBundles</property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
+                            </property-editor>
                         </content>
                     </section>
-				</node>
-				<node>
-					<label>SecurityConstraints</label>
-				</node>
-				<node>
-					<label>Events</label>
+                </node>
+                <node>
+                    <label>SecurityConstraints</label>
+                </node>
+                <node>
+                    <label>Events</label>
                     <section>
                         <label>Quick Edit</label>
                         <content>
-                            <property-editor>EventDefinitions</property-editor>
+                            <include>event.def.quickedit.composite
+                            </include>
                         </content>
                     </section>
                     <node-include>EventDefinitionsList</node-include>
-				</node>
-				<node>
-					<label>PublicRenderParameters</label>
-				</node>
-				<node>
-					<label>Custom</label>
-					<node>
-						<label>Portlet Modes</label>
-					</node>
-					<node>
-						<label>Window States</label>
-					</node>
-				</node>
+                </node>
                 <node>
-					<label>ContainerRuntimeOptions</label>
-				</node>
-			</node>
-		</root-node>
-
-	</editor-page>
-	<node-factory>
-		<id>PortletsNodeList</id>
-		<property>Portlets</property>
-		<case>
-			<label>${ PortletName == null ? '&lt;portlet-name&gt;':PortletName}
-			</label>
-			<use-model-element-image></use-model-element-image>
-			<node>
-				<label>Supports</label>
-				<property>Supports</property>
-				<section>
-					<label>General</label>
-					<content>
-						<label>Use this section to configure the Mime Type, Portlet
-							modes and Portlet Window States
-						</label>
-						<spacer></spacer>
-						<property-editor>MimeType</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-				</section>
-				<section>
-					<label>Portlet Modes</label>
-					<collapsible>true</collapsible>
-					<content>
-						<property-editor>PortletModes</property-editor>
-					</content>
-				</section>
-				<section>
-					<label>Window States</label>
-					<content>
-						<property-editor>WindowStates</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>true</collapsed-initially>
-				</section>
-			</node>
+                    <label>PublicRenderParameters</label>
+                </node>
+                <node>
+                    <label>Custom</label>
+                    <node>
+                        <label>Portlet Modes</label>
+                    </node>
+                    <node>
+                        <label>Window States</label>
+                    </node>
+                </node>
+                <node>
+                    <label>ContainerRuntimeOptions</label>
+                </node>            </node>
+        </root-node>
+    </editor-page>
+    <node-factory>
+        <id>PortletsNodeList</id>
+        <property>Portlets</property>
+        <case>
+            <label>${ PortletName == null ?
+                '&lt;portlet-name&gt;':PortletName}</label>
+            <use-model-element-image></use-model-element-image>
+            <node>
+                <label>Supports</label>
+                <property>Supports</property>
+                <section>
+                    <label>General</label>
+                    <content>
+                        <label>Use this section to configure the Mime
+                            Type, Portlet
+                            modes and Portlet Window States
+                        </label>
+                        <spacer></spacer>
+                        <property-editor>MimeType</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                </section>
+                <section>
+                    <label>Portlet Modes</label>
+                    <collapsible>true</collapsible>
+                    <content>
+                        <property-editor>PortletModes</property-editor>
+                    </content>
+                </section>
+                <section>
+                    <label>Window States</label>
+                    <content>
+                        <property-editor>WindowStates</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>true</collapsed-initially>
+                </section>
+            </node>
             <section>
                 <content>
                     <include>portlet.basic.composite</include>
                     <include>init.param.composite</include>
-                    <include>resource.bundle.composite</include>
+                    <property-editor>
+                        <property>ResourceBundles</property>
+                        <hint>
+                            <name>show.label</name>
+                            <value>true</value>
+                        </hint>
+                    </property-editor>
+                </content>
+                <label>Basic</label>
+            </section>
+            <section>
+                <label>Advanced</label>
+                <collapsible>true</collapsible>
+                <collapsed-initially>true</collapsed-initially>
+                <content>
+                    <include>
+                        <part>support.eventdef.composite</part>
+                        <param>
+                            <name>Property</name>
+                            <value>SupportedProcessingEvents</value>
+                        </param>
+                    </include>
+                    <include>
+                        <part>support.eventdef.composite</part>
+                        <param>
+                            <name>Property</name>
+                            <value>SupportedPublishingEvents</value>
+                        </param>
+                    </include>
                 </content>
             </section>
-		</case>
-	</node-factory>
-	<node-factory>
+        </case>
+    </node-factory>
+    <node-factory>
         <id>EventDefinitionsList</id>
         <property>EventDefinitions</property>
-        <case></case>
+        <case>
+            <use-model-element-image></use-model-element-image>
+            <section>
+                <label>Info</label>
+                <content>
+                    <label>The event-definitionType is used to declare
+                        events the
+                        portlet can either receive or emit.
+                        The name must be unique and
+                        must be the one the
+                        portlet is using in its code for
+                        referencing this
+                        event. Used in: portlet-app
+                    </label>
+                </content>
+                <collapsible>true</collapsible>
+                <indent>true</indent>
+            </section>
+            <section>
+                <label>Details</label>
+                <content>
+                    <property-editor>Id</property-editor>
+                    <property-editor>Name</property-editor>
+                    <group>
+                        <label>Qualified Name</label>
+                        <indent>true</indent>
+                        <content>
+                            <property-editor>NamespaceURI
+                            </property-editor>
+                            <property-editor>LocalPart</property-editor>
+                        </content>
+                    </group>
+                    <property-editor>Aliases</property-editor>
+                    <property-editor>
+                        <property>EventValueType</property>
+                        <hint>
+                            <name>browse.only</name>
+                            <value>false</value>
+                        </hint>
+                        <action>
+                            <id>Sapphire.Jump</id>
+                            <label>Open Class</label>
+                            <context>Sapphire.ValuePropertyEditor
+                            </context>
+                        </action>
+                    </property-editor>
+                </content>
+                <collapsible>true</collapsible>
+                <indent>true</indent>
+            </section>
+            <label>${( (empty Name AND empty NamespaceURI AND empty
+                LocalPart ) || (Name=='EVENT_NAME' &amp;&amp;
+                NamespaceURI =='NAMESPACE_URI' &amp;&amp;
+                LocalPart=='LOCAL_PART') ) ? '&lt;event-definition&gt;'
+                : ((empty Name || Name ==
+                'EVENT_NAME')?(concat('{',NamespaceURI,'}',LocalPart)):Name)}
+            </label>
+        </case>
     </node-factory>
-	<composite>
-		<id>portlet.basic.composite</id>
-		<content>
-			<property-editor>Id</property-editor>
-			<property-editor>PortletName</property-editor>
-			<property-editor>DisplayName</property-editor>
-			<property-editor>Description</property-editor>
-			<property-editor>
-				<property>PortletClass</property>
-				<action>
-					<id>Sapphire.Jump</id>
-					<label>Open Class</label>
-					<description>Calls the System Sapphire.Jump Action to open the Java
-						Class in the Editor
-					</description>
-				</action>
-				<listener>TypeContentProposalListener</listener>
-			</property-editor>
-		</content>
-		<indent>true</indent>
-		<scroll-vertically>true</scroll-vertically>
-		<scroll-horizontally>true</scroll-horizontally>
-	</composite>
-	<composite>
-		<id>init.param.composite</id>
-		<indent>true</indent>
-		<scroll-vertically>true</scroll-vertically>
-		<scroll-horizontally>true</scroll-horizontally>
-		<content>
-			<property-editor>
-				<property>InitParams</property>
-				<child-property>Name</child-property>
-				<child-property>Value</child-property>
-			</property-editor>
-		</content>
-	</composite>
-	<composite>
-		<id>container.runtime.options</id>
-		<content>
-			<property-editor>
-				<property>ContainerRuntimeOptions</property>
-				<child-property>Name</child-property>
-				<child-property>Options</child-property>
-			</property-editor>
-		</content>
-	</composite>
     <composite>
-		<id>id.name.desc.composite</id>
-		<content>
-			<property-editor>Id</property-editor>
-			<property-editor>Name</property-editor>
-			<property-editor>Description</property-editor>
-		</content>
-	</composite>
-    <composite>
-        <id>resource.bundle.composite</id>
+        <id>portlet.basic.composite</id>
         <content>
-            <property-editor>ResourceBundles</property-editor>
+            <property-editor>Id</property-editor>
+            <property-editor>PortletName</property-editor>
+            <property-editor>DisplayName</property-editor>
+            <property-editor>Description</property-editor>
+            <property-editor>
+                <property>PortletClass</property>
+                <action>
+                    <id>Sapphire.Jump</id>
+                    <label>Open Class</label>
+                    <description>Calls the System Sapphire.Jump Action
+                        to open the Java
+                        Class in the Editor
+                    </description>
+                </action>
+                <listener>TypeContentProposalListener</listener>
+            </property-editor>
+        </content>
+        <indent>true</indent>
+        <scroll-vertically>true</scroll-vertically>
+        <scroll-horizontally>true</scroll-horizontally>
+    </composite>
+    <composite>
+        <id>init.param.composite</id>
+        <indent>true</indent>
+        <scroll-vertically>true</scroll-vertically>
+        <scroll-horizontally>true</scroll-horizontally>
+        <content>
+            <property-editor>
+                <property>InitParams</property>
+                <child-property>Name</child-property>
+                <child-property>Value</child-property>
+            </property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>container.runtime.options</id>
+        <content>
+            <property-editor>
+                <property>ContainerRuntimeOptions</property>
+                <child-property>Name</child-property>
+                <child-property>Options</child-property>
+            </property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>id.name.desc.composite</id>
+        <content>
+            <property-editor>Id</property-editor>
+            <property-editor>Name</property-editor>
+            <property-editor>Description</property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>support.eventdef.composite</id>
+        <content>
+            <property-editor>@{Property}</property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>event.def.quickedit.composite</id>
+        <content>
+            <property-editor>
+                <property>EventDefinitions</property>
+                <child-property>NamespaceURI</child-property>
+                <child-property>LocalPart</child-property>
+                <child-property>Name</child-property>
+                <child-property>EventValueType</child-property>
+                <hint>
+                    <name>show.label</name>
+                    <value>false</value>
+                </hint>
+            </property-editor>
         </content>
     </composite>
 </definition>
