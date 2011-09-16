@@ -51,7 +51,11 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider {
 
 	String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
 
+	String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", "" );
+
 	String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
+
+	String DEFAULT_USERNAME = defaultPrefs.get( "default.username", "" );
 
 	boolean getAdjustDeploymentTimestamp();
 

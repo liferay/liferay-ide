@@ -183,7 +183,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	}
 
 	public String getPassword() {
-		return getAttribute( ATTR_PASSWORD, "" );
+		return getAttribute( ATTR_PASSWORD, DEFAULT_PASSWORD );
 	}
 
 	public URL getPortalHomeUrl() {
@@ -220,7 +220,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 	}
 
 	public String getUsername() {
-		return getAttribute( ATTR_USERNAME, "" );
+		return getAttribute( ATTR_USERNAME, DEFAULT_USERNAME );
 	}
 
 	public URL getWebServicesListURL() {
