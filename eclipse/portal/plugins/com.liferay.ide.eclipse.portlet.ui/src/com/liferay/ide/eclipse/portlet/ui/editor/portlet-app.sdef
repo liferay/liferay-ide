@@ -38,6 +38,7 @@
 					<content>
 						<property-editor>Id</property-editor>
 						<property-editor>Version</property-editor>
+                        <property-editor>DefaultNameSpace</property-editor>
 					</content>
 					<collapsible>true</collapsible>
 					<scroll-vertically>true</scroll-vertically>
@@ -45,43 +46,49 @@
 					<indent>true</indent>
 				</section>
 				<node>
-					<label>Portlets</label>
-					<node-include>PortletsNodeList</node-include>
-					<section>
-						<label>Info</label>
-						<content>
-							<html>
-								<content>The portlet element contains the declarative data of a
-									portlet. Used in: portlet-app
-
-									Use this page to quickly configure
-									the Portlet, if you need to
-									configure the portlet in detail,
-									please click on the Portlet
-									Name and get to details of the
-									portlet(s)
-
-									Please see &lt;a href=&quot;#&quot;&gt;More
-									details&lt;/a&gt; </content>
-							</html>
-						</content>
-						<collapsible>true</collapsible>
-					</section>
-					<section>
-						<label>List of Portlets</label>
-						<content>
-							<property-editor>
-								<property>Portlets</property>
-								<child-property>PortletName</child-property>
-								<child-property>PortletClass</child-property>
-								<child-property>DisplayName</child-property>
-							</property-editor>
-						</content>
-						<collapsible>true</collapsible>
-						<indent>true</indent>
-						<scroll-vertically>true</scroll-vertically>
-						<scroll-horizontally>false</scroll-horizontally>
-					</section>
+                    <label>Portlets</label>
+                    <section>
+                        <label>Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>Portlets</property>
+                                <child-property>PortletName</child-property>
+                                <child-property>PortletClass</child-property>
+                                <child-property>DisplayName</child-property>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <node-include>PortletsNodeList</node-include>
+                </node>
+				<node>
+					<label>Listeners</label>
+				</node>
+				<node>
+					<label>Filters and Mappings</label>
+				</node>
+				<node>
+					<label>ResourceBundles</label>
+				</node>
+				<node>
+					<label>SecurityConstraints</label>
+				</node>
+				<node>
+					<label>EventDefinitions</label>
+				</node>
+				<node>
+					<label>PublicRenderParameters</label>
+				</node>
+				<node>
+					<label>Custom</label>
+					<node>
+						<label>Portlet Modes</label>
+					</node>
+					<node>
+						<label>Window States</label>
+					</node>
+				</node>
+                <node>
+					<label>ContainerRuntimeOptions</label>
 				</node>
 			</node>
 		</root-node>
@@ -94,21 +101,6 @@
 			<label>${ PortletName == null ? '&lt;portlet-name&gt;':PortletName}
 			</label>
 			<use-model-element-image></use-model-element-image>
-			<section>
-				<label>basic</label>
-				<content>
-					<include>portlet.basic.composite</include>
-				</content>
-			</section>
-			<section>
-				<label>InitParams</label>
-				<content>
-					<include>init.param.composite</include>
-					<spacer></spacer>
-				</content>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-			</section>
 			<node>
 				<label>Supports</label>
 				<property>Supports</property>
@@ -138,7 +130,6 @@
 					<collapsible>true</collapsible>
 					<collapsed-initially>true</collapsed-initially>
 				</section>
-				<use-model-element-image></use-model-element-image>
 			</node>
 		</case>
 	</node-factory>
