@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. and Accenture Services Pvt Ltd., All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -10,6 +10,8 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
+ *  Greg Amerson - Initial API and Implementation
+ *  Kamesh Sampath - [IDE-301, IDE-405] Portlet xml editor implementation and reorgnization
  *
  *******************************************************************************/
 
@@ -29,6 +31,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 /**
  * @author Greg Amerson
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @SuppressWarnings( "restriction" )
 public class PortletUtil {

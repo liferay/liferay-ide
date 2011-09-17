@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/ 
+
+ -->
 <definition>
 	<import>
 		<package>com.liferay.ide.eclipse.portlet.ui</package>
@@ -75,6 +94,12 @@
 
 					<label>Portlets</label>
 					<section>
+						<label>About</label>
+						<collapsible>true</collapsible>
+						<collapsed-initially>true</collapsed-initially>
+					</section>
+					<node-include>PortletsNodeList</node-include>
+					<section>
 						<label>Quick Edit</label>
 						<content>
 							<property-editor>
@@ -92,13 +117,38 @@
 							</property-editor>
 						</content>
 					</section>
-					<node-include>PortletsNodeList</node-include>
+					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>Listeners</label>
+					<section>
+						<label>About</label>
+						<collapsible>true</collapsible>
+						<collapsed-initially>true</collapsed-initially>
+					</section>
+					<node-include>ListenersNodeList</node-include>
+					<section>
+						<label>Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>Listeners</property>
+								<hint>
+									<value>false</value>
+									<name>show.label</name>
+								</hint>
+								<child-property>Implementation</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>Filters and Mappings</label>
+					<section>
+						<label>About</label>
+						<collapsible>true</collapsible>
+						<collapsed-initially>true</collapsed-initially>
+					</section>
 					<section>
 						<label>Filters</label>
 						<collapsible>true</collapsible>
@@ -107,13 +157,15 @@
 								<property>Filters</property>
 								<child-property>Name</child-property>
 								<child-property>Implementation</child-property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
 							</property-editor>
 						</content>
 					</section>
+					<node-include>FiltersNodeList</node-include>
+					<node-include>FilterMappingsNodeList</node-include>
 					<section>
 						<label>Mappings</label>
 						<collapsible>true</collapsible>
@@ -122,18 +174,22 @@
 								<property>FilterMappings</property>
 								<child-property>Filter</child-property>
 								<child-property>Portlet</child-property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
 							</property-editor>
 						</content>
 					</section>
-                    <node-include>FiltersNodeList</node-include>
-					<node-include>FilterMappingsNodeList</node-include>
+					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>ResourceBundles</label>
+					<section>
+						<label>About</label>
+						<collapsible>true</collapsible>
+						<collapsed-initially>true</collapsed-initially>
+					</section>
 					<section>
 						<content>
 							<property-editor>
@@ -149,12 +205,34 @@
 							</property-editor>
 						</content>
 					</section>
+					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>SecurityConstraints</label>
+					<section>
+						<label>About</label>
+					</section>
+					<node-include>SecurityConstraintNodeList</node-include>
+					<section>
+						<label>Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>SecurityConstraints</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+							</property-editor>
+						</content>
+					</section>
+					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>Events</label>
+					<section>
+						<label>About</label>
+					</section>
+					<node-include>EventDefinitionsList</node-include>
 					<section>
 						<label>Quick Edit</label>
 						<content>
@@ -162,22 +240,106 @@
 							</include>
 						</content>
 					</section>
-					<node-include>EventDefinitionsList</node-include>
+					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>PublicRenderParameters</label>
+					<section>
+						<label>About</label>
+					</section>
+					<section>
+						<label>Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>PublicRenderParameters</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+								<child-property>Identifier</child-property>
+								<child-property>NamespaceURI</child-property>
+								<child-property>LocalPart</child-property>
+								<child-property>Name</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<use-model-element-image></use-model-element-image>
+					<node-include>PublicRenderParametersList</node-include>
 				</node>
 				<node>
-					<label>Custom</label>
+					<label>Customizations</label>
 					<node>
 						<label>Portlet Modes</label>
+						<section>
+							<label>About</label>
+							<collapsible>true</collapsible>
+							<collapsed-initially>true</collapsed-initially>
+						</section>
+						<node-include>CustomPortletModesNodeList</node-include>
+						<section>
+							<label>Quick Edit</label>
+							<content>
+								<property-editor>
+									<property>CustomPortletModes</property>
+									<hint>
+										<name>show.label</name>
+										<value>false</value>
+									</hint>
+									<child-property>PortletMode</child-property>
+									<child-property>PortletManaged</child-property>
+								</property-editor>
+							</content>
+						</section>
 					</node>
 					<node>
 						<label>Window States</label>
+						<section>
+							<label>About</label>
+							<collapsible>true</collapsible>
+							<collapsed-initially>true</collapsed-initially>
+						</section>
+						<node-include>CustomWindowModesNodeList</node-include>
+						<section>
+							<label>Quick Edit</label>
+							<content>
+								<property-editor>
+									<property>CustomWindowStates</property>
+									<hint>
+										<value>false</value>
+										<name>show.label</name>
+									</hint>
+									<child-property>WindowState</child-property>
+								</property-editor>
+							</content>
+						</section>
 					</node>
+					<use-model-element-image></use-model-element-image>
+					<section>
+						<label>About</label>
+						<collapsible>true</collapsible>
+						<collapsed-initially>true</collapsed-initially>
+					</section>
 				</node>
 				<node>
 					<label>ContainerRuntimeOptions</label>
+					<use-model-element-image></use-model-element-image>
+					<section>
+						<label>About</label>
+					</section>
+					<section>
+						<label>Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>ContainerRuntimeOptions</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+								<child-property>Name</child-property>
+							</property-editor>
+						</content>
+					</section>
+                    <node-include>ContainerRuntimeOptionsNodeList</node-include>
 				</node>
 			</node>
 		</root-node>
@@ -458,6 +620,238 @@
 				<content>
 					<property-editor>Filter</property-editor>
 					<property-editor>Portlet</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>SecurityConstraintNodeList</id>
+		<property>SecurityConstraints</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>About</label>
+				<content>
+					<label>About Security Constraint</label>
+				</content>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+			</section>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Id</property-editor>
+				</content>
+			</section>
+			<label>Security Constraint</label>
+			<node>
+				<use-model-element-image></use-model-element-image>
+				<property>PortletCollection</property>
+				<label>Portlet Collection</label>
+				<section>
+					<label>General</label>
+					<content>
+						<label>Info about Portlet Collection</label>
+					</content>
+				</section>
+				<section>
+					<label>Portlet Names</label>
+					<content>
+						<property-editor>
+							<property>PortletNames</property>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+						</property-editor>
+					</content>
+				</section>
+			</node>
+			<node>
+				<label>User Data Constraint</label>
+				<use-model-element-image></use-model-element-image>
+				<property>UserDataConstraint</property>
+				<section>
+					<label>General</label>
+					<content>
+						<label>Info about the section</label>
+					</content>
+				</section>
+				<section>
+					<label>Details</label>
+					<content>
+						<property-editor>Id</property-editor>
+						<property-editor>Description</property-editor>
+						<property-editor>TransportGurantee</property-editor>
+					</content>
+				</section>
+			</node>
+			<section>
+				<label>Portlet Display Names</label>
+				<content>
+					<property-editor>
+						<property>PortletDisplayNames</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>CustomPortletModesNodeList</id>
+		<property>CustomPortletModes</property>
+		<case>
+			<label>${PortletMode ==null ?
+				&quot;&lt;custom-portlet-mode&gt;&quot;:concat(&quot;Custom
+				Portlet
+				Mode - &quot;,PortletMode)}</label>
+			<section>
+				<label>About</label>
+				<content>
+					<label>About Custom Portlet Mode</label>
+				</content>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+			</section>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<content>
+					<property-editor>
+						<property>PortletMode</property>
+						<hint>
+							<name>mode-view</name>
+							<value>VIEW</value>
+						</hint>
+						<hint>
+							<name>mode-edit</name>
+							<value>EDIT</value>
+						</hint>
+						<hint>
+							<name>mode-help</name>
+							<value>HELP</value>
+						</hint>
+					</property-editor>
+					<property-editor>
+						<property>PortletManaged</property>
+						<hint>
+							<name>true</name>
+							<value>true</value>
+						</hint>
+						<hint>
+							<name>false</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+				<label>Portlet Modes</label>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>CustomWindowModesNodeList</id>
+		<property>CustomWindowStates</property>
+		<case>
+			<section>
+				<label>About</label>
+				<content>
+					<label>Info about Custom Window Mode</label>
+				</content>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+			</section>
+			<label>${WindowState ==null ?
+				&quot;&lt;custom-window-state&gt;&quot;:concat(&quot;Custom
+				Window
+				State - &quot;,WindowState)}</label>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>Window States</label>
+				<content>
+					<property-editor>Id</property-editor>
+					<property-editor>Description</property-editor>
+					<property-editor>WindowState</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>ListenersNodeList</id>
+		<property>Listeners</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<label>Listener</label>
+			<section>
+				<label>About</label>
+				<content>
+					<label>Info about Listener</label>
+				</content>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+			</section>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Description</property-editor>
+					<property-editor>Implementation</property-editor>
+				</content>
+				<collapsible>true</collapsible>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>PublicRenderParametersList</id>
+		<property>PublicRenderParameters</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>About</label>
+				<content>
+					<label>Documantation about public render parameters</label>
+				</content>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+			</section>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Id</property-editor>
+					<property-editor>Identifier</property-editor>
+					<property-editor>Name</property-editor>
+					<group>
+						<label>Qualified Name</label>
+						<indent>true</indent>
+						<content>
+							<property-editor>NamespaceURI</property-editor>
+							<property-editor>LocalPart</property-editor>
+						</content>
+					</group>
+					<property-editor>Aliases</property-editor>
+				</content>
+			</section>
+			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;:
+				Identifier}
+			</label>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>ContainerRuntimeOptionsNodeList</id>
+		<property>ContainerRuntimeOptions</property>
+		<case>
+			<label>${Name
+				==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>About</label>
+				<collapsible>true</collapsible>
+			</section>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Name</property-editor>
+					<property-editor>Options</property-editor>
 				</content>
 			</section>
 		</case>

@@ -15,7 +15,6 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Documentation;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -33,9 +32,8 @@ public interface IListener extends IModelElement, IDescribeable {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@Label( standard = "implementation class", full = "listener implementation class" )
+	@Label( standard = "Implementation", full = "Listener implementation class" )
 	@Required
-	@MustExist
 	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletContextListener" )
 	@XmlBinding( path = "listener-class" )
 	@Documentation( content = "The listener implementation class." )
