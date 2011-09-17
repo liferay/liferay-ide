@@ -18,10 +18,12 @@
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.sapphire.modeling.Path;
@@ -32,32 +34,29 @@ import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class DocrootRelativePathService extends RelativePathService {
+public class ProjectRelativePathService extends RelativePathService {
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.modeling.RelativePathService#roots()
 	 */
-	@SuppressWarnings( "unchecked" )
 	@Override
 	public List<Path> roots() {
+		List<Path> roots = new ArrayList<Path>();
 		IProject project = adapt( IProject.class );
-		IClasspathEntry[] classpathEntries = PortletUtil.getClasspathEntries( project );
-		if ( classpathEntries != null ) {
-			List<Path> roots = new ArrayList<Path>();
-			for ( int i = 0; i < classpathEntries.length; i++ ) {
-				IClasspathEntry classpathEntry = classpathEntries[i];
-				if ( IClasspathEntry.CPE_SOURCE == classpathEntry.getEntryKind() ) {
-					IPath entryPath = classpathEntry.getPath();
-					roots.add( Path.fromOSString( entryPath.toOSString() ) );
-
+		if ( project != null ) {
+			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
+				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
+					IWorkspace workspace = ResourcesPlugin.getWorkspace();
+					IWorkspaceRoot wroot = workspace.getRoot();
+					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+					roots.add( new Path( entryPath.toPortableString() ) );
 				}
 			}
-			return roots;
+
 		}
-		else {
-			return Collections.EMPTY_LIST;
-		}
+		return roots;
 
 	}
 }
