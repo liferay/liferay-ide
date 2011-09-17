@@ -19,7 +19,6 @@ import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -49,7 +48,6 @@ public interface IFilter extends IModelElement, IDescribeable {
 
 	@Label( standard = "name" )
 	@Required
-	@MustExist
 	@XmlBinding( path = "filter-name" )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
@@ -61,10 +59,10 @@ public interface IFilter extends IModelElement, IDescribeable {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@Label( standard = "implementation class", full = "filter implementation class" )
+	@Label( standard = "implementation class", full = "Filter implementation class" )
 	@Required
-	@MustExist
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.portlet.Filter" )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.filter.ResourceFilter",
+		"javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter" } )
 	@XmlBinding( path = "filter-class" )
 	ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" );
 

@@ -46,10 +46,10 @@ public class ProjectRelativePathService extends RelativePathService {
 		IProject project = adapt( IProject.class );
 		if ( project != null ) {
 			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			IWorkspaceRoot wroot = workspace.getRoot();
 			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
-					IWorkspace workspace = ResourcesPlugin.getWorkspace();
-					IWorkspaceRoot wroot = workspace.getRoot();
 					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
 					roots.add( new Path( entryPath.toPortableString() ) );
 				}

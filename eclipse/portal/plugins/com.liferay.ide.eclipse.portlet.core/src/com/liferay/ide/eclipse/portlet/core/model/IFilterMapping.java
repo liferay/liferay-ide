@@ -12,7 +12,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -39,7 +38,6 @@ public interface IFilterMapping extends IModelElement {
 	@Service( impl = FilterReferenceService.class )
 	@Label( standard = "filter" )
 	@Required
-	@MustExist
 	@PossibleValues( property = "/Filters/Name" )
 	@XmlBinding( path = "filter-name" )
 	@DefaultValue( text = "FILTER" )
@@ -55,7 +53,6 @@ public interface IFilterMapping extends IModelElement {
 	@Service( impl = PortletReferenceService.class )
 	@Label( standard = "portlet" )
 	@Required
-	@MustExist
 	@PossibleValues( property = "/Portlets/PortletName" )
 	@XmlValueBinding( path = "portlet-name", removeNodeOnSetIfNull = false )
 	ValueProperty PROP_PORTLET = new ValueProperty( TYPE, "Portlet" );
