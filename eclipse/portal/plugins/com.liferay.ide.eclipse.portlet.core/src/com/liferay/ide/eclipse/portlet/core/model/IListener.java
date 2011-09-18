@@ -34,7 +34,7 @@ public interface IListener extends IModelElement, IDescribeable {
 	@Reference( target = JavaType.class )
 	@Label( standard = "Implementation", full = "Listener implementation class" )
 	@Required
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletContextListener" )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.servlet.ServletContextListener" )
 	@XmlBinding( path = "listener-class" )
 	@Documentation( content = "The listener implementation class." )
 	ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" );

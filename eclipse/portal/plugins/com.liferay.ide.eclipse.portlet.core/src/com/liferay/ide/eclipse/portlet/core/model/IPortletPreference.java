@@ -58,8 +58,8 @@ public interface IPortletPreference extends IModelElement, IIdentifiable {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.PreferenceValidator" } )
-	@Label( standard = "Preferernce Validator" )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.PreferencesValidator" } )
+	@Label( standard = "Preference Validator" )
 	@NoDuplicates
 	@XmlBinding( path = "preferences-validator" )
 	ValueProperty PROP_PREFERERNCE_VALIDATOR = new ValueProperty( TYPE, "PreferernceValidator" );

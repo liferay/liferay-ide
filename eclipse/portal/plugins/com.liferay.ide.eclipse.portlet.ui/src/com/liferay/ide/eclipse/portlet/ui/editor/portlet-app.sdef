@@ -1,23 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-/*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Services Pvt Ltd., All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- ******************************************************************************/ 
-
- -->
+<!-- /******************************************************************************* 
+	* Copyright (c) 2000-2011 Accenture Services Services Pvt Ltd., All rights 
+	reserved. * * This library is free software; you can redistribute it and/or 
+	modify it under * the terms of the GNU Lesser General Public License as published 
+	by the Free * Software Foundation; either version 2.1 of the License, or 
+	(at your option) * any later version. * * This library is distributed in 
+	the hope that it will be useful, but WITHOUT * ANY WARRANTY; without even 
+	the implied warranty of MERCHANTABILITY or FITNESS * FOR A PARTICULAR PURPOSE. 
+	See the GNU Lesser General Public License for more * details. * * Contributors: 
+	* Kamesh Sampath - initial implementation ******************************************************************************/ -->
 <definition>
 	<import>
 		<package>com.liferay.ide.eclipse.portlet.ui</package>
@@ -117,7 +108,6 @@
 							</property-editor>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>Listeners</label>
@@ -140,7 +130,6 @@
 							</property-editor>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>Filters and Mappings</label>
@@ -181,7 +170,6 @@
 							</property-editor>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>ResourceBundles</label>
@@ -205,7 +193,6 @@
 							</property-editor>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>SecurityConstraints</label>
@@ -225,7 +212,6 @@
 							</property-editor>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>Events</label>
@@ -240,7 +226,6 @@
 							</include>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 				</node>
 				<node>
 					<label>PublicRenderParameters</label>
@@ -263,7 +248,6 @@
 							</property-editor>
 						</content>
 					</section>
-					<use-model-element-image></use-model-element-image>
 					<node-include>PublicRenderParametersList</node-include>
 				</node>
 				<node>
@@ -313,7 +297,6 @@
 							</content>
 						</section>
 					</node>
-					<use-model-element-image></use-model-element-image>
 					<section>
 						<label>About</label>
 						<collapsible>true</collapsible>
@@ -322,7 +305,6 @@
 				</node>
 				<node>
 					<label>ContainerRuntimeOptions</label>
-					<use-model-element-image></use-model-element-image>
 					<section>
 						<label>About</label>
 					</section>
@@ -339,7 +321,7 @@
 							</property-editor>
 						</content>
 					</section>
-                    <node-include>ContainerRuntimeOptionsNodeList</node-include>
+					<node-include>ContainerRuntimeOptionsNodeList</node-include>
 				</node>
 			</node>
 		</root-node>
@@ -349,9 +331,63 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}
-			</label>
+				'&lt;portlet-name&gt;':PortletName}</label>
 			<use-model-element-image></use-model-element-image>
+			<section>
+				<content>
+					<include>portlet.basic.composite</include>
+					<include>init.param.composite</include>
+				</content>
+				<label>Basic</label>
+				<collapsible>true</collapsible>
+			</section>
+			<section>
+				<label>Internationalization and Localization</label>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+				<content>
+					<property-editor>
+						<property>ResourceBundles</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+						<hint>
+							<name>browse.only</name>
+							<value>true</value>
+						</hint>
+					</property-editor>
+					<property-editor>
+						<property>SupportedLocales</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+			</section>
+			<node>
+				<label>Portlet Information</label>
+				<property>PortletInfo</property>
+				<use-model-element-image></use-model-element-image>
+				<section>
+					<label>About</label>
+					<content>
+						<label>Describle the portlet information like title, keywords
+							etc,. here
+						</label>
+					</content>
+				</section>
+				<section>
+					<label>Details</label>
+					<content>
+						<property-editor>Id</property-editor>
+						<property-editor>Title</property-editor>
+						<property-editor>ShortTitle</property-editor>
+						<property-editor>Keywords</property-editor>
+					</content>
+				</section>
+			</node>
 			<node>
 				<label>Supports</label>
 				<property>Supports</property>
@@ -383,44 +419,102 @@
 					<collapsible>true</collapsible>
 					<collapsed-initially>true</collapsed-initially>
 				</section>
+				<use-model-element-image></use-model-element-image>
 			</node>
-			<section>
-				<content>
-					<include>portlet.basic.composite</include>
-					<include>init.param.composite</include>
-					<property-editor>
-						<property>ResourceBundles</property>
-						<hint>
-							<name>show.label</name>
-							<value>true</value>
-						</hint>
-						<hint>
-							<name>browse.only</name>
-							<value>true</value>
-						</hint>
-					</property-editor>
-				</content>
-				<label>Basic</label>
-			</section>
+			<node>
+				<label>Preferences</label>
+				<use-model-element-image></use-model-element-image>
+				<section>
+					<label>About</label>
+					<content>
+						<label>Portlet preferences can be configured here</label>
+					</content>
+				</section>
+				<section>
+					<label>Portlet Preferences</label>
+					<collapsible>true</collapsible>
+					<content>
+						<property-editor>Id</property-editor>
+                        <property-editor>
+                            <property>PortletPreferences</property>
+                            <child-property>Id</child-property>
+                            <child-property>Name</child-property>
+                            <child-property>Value</child-property>
+                            <child-property>ReadOnly</child-property>
+                            <child-property>Description</child-property>
+                        </property-editor>
+						<property-editor>PreferernceValidator</property-editor>
+					</content>
+				</section>
+				<property>PortletPreference</property>
+			</node>
+			<node-include>ContainerRuntimeOptionsNodeList</node-include>
 			<section>
 				<label>Advanced</label>
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
 				<content>
-					<include>
-						<part>support.eventdef.composite</part>
-						<param>
-							<name>Property</name>
-							<value>SupportedProcessingEvents</value>
-						</param>
-					</include>
-					<include>
-						<part>support.eventdef.composite</part>
-						<param>
-							<name>Property</name>
-							<value>SupportedPublishingEvents</value>
-						</param>
-					</include>
+					<group>
+						<label>Security</label>
+						<property-editor>
+							<property>SecurityRoleRefs</property>
+							<child-property>Id</child-property>
+							<child-property>RoleName</child-property>
+							<child-property>RoleLink</child-property>
+							<child-property>Description</child-property>
+							<hint>
+								<name>show.label.above</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
+					</group>
+					<group>
+						<label>Inter Portlet Communication</label>
+						<content>
+							<property-editor>
+								<property>SupportedPublicRenderParameters
+								</property>
+								<hint>
+									<name>show.header</name>
+									<value>false</value>
+								</hint>
+								<hint>
+									<name>show.label.above</name>
+									<value>true</value>
+								</hint>
+							</property-editor>
+							<include>
+								<part>support.eventdef.composite</part>
+								<param>
+									<name>Property</name>
+									<value>SupportedProcessingEvents</value>
+								</param>
+							</include>
+							<include>
+								<part>support.eventdef.composite</part>
+								<param>
+									<name>Property</name>
+									<value>SupportedPublishingEvents</value>
+								</param>
+							</include>
+						</content>
+					</group>
+					<group>
+						<label>Caching</label>
+						<content>
+							<property-editor>ExpirationCache</property-editor>
+							<property-editor>CacheScope</property-editor>
+						</content>
+					</group>
+					<group>
+						<label>Runtime Options</label>
+						<content>
+							<property-editor>
+								<property>ContainerRuntimeOptions</property>
+								<child-property>Name</child-property>
+							</property-editor>
+						</content>
+					</group>
 				</content>
 			</section>
 		</case>
@@ -549,7 +643,17 @@
 	<composite>
 		<id>support.eventdef.composite</id>
 		<content>
-			<property-editor>@{Property}</property-editor>
+			<property-editor>
+				<property>@{Property}</property>
+				<child-property>Id</child-property>
+				<child-property>Qname</child-property>
+				<child-property>Name</child-property>
+				<child-property>Description</child-property>
+				<hint>
+					<name>show.label.above</name>
+					<value>true</value>
+				</hint>
+			</property-editor>
 		</content>
 	</composite>
 	<composite>
