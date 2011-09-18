@@ -326,7 +326,8 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}</label>
+				'&lt;portlet-name&gt;':PortletName}
+			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -339,27 +340,15 @@
 								<path>Supports</path>
 								<default-panel>
 									<content>
-                                        <property-editor>
-                                            <property>MimeType</property>
-                                            <hint>
-                                                <name>width</name>
-                                                <value>10%</value>
-                                            </hint>
-                                        </property-editor>
-                                        <property-editor>
-                                            <property>PortletModes</property>
-                                            <hint>
-                                                <name>width</name>
-                                                <value>45%</value>
-                                            </hint>
-                                        </property-editor>
-                                        <property-editor>
-                                            <property>WindowStates</property>
-                                            <hint>
-                                                <name>width</name>
-                                                <value>45%</value>
-                                            </hint>
-                                        </property-editor>
+										<property-editor>
+											<property>MimeType</property>
+											<related-content-width>80</related-content-width>
+										</property-editor>
+										<property-editor>
+											<property>PortletModes</property>
+											<related-content-width>50</related-content-width>
+										</property-editor>
+										<property-editor>WindowStates</property-editor>
 									</content>
 								</default-panel>
 								<hint>
@@ -377,10 +366,23 @@
 								<label>Portlet Information</label>
 								<default-panel>
 									<content>
-										<property-editor>Id</property-editor>
-										<property-editor>Title</property-editor>
-										<property-editor>ShortTitle</property-editor>
-										<property-editor>Keywords</property-editor>
+										<property-editor>
+											<property>Id</property>
+											<related-content-width>80</related-content-width>
+										</property-editor>
+										<property-editor>
+											<property>Title</property>
+											<related-content-width>60</related-content-width>
+											<related-content>
+												<property-editor>
+													<property>ShortTitle</property>
+													<related-content-width>60</related-content-width>
+													<related-content>
+														<property-editor>Keywords</property-editor>
+													</related-content>
+												</property-editor>
+											</related-content>
+										</property-editor>
 									</content>
 								</default-panel>
 							</with>
@@ -413,6 +415,7 @@
 							<name>browse.only</name>
 							<value>true</value>
 						</hint>
+						<related-content-width>50</related-content-width>
 					</property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>
@@ -435,7 +438,13 @@
 								<path>PortletPreference</path>
 								<default-panel>
 									<content>
-										<property-editor>Id</property-editor>
+                                        <property-editor>
+                                            <property>Id</property>
+                                            <related-content-width>70</related-content-width>
+                                            <related-content>
+                                                <property-editor>PreferernceValidator</property-editor>
+                                            </related-content>
+                                        </property-editor>
 										<property-editor>
 											<property>PortletPreferences</property>
 											<child-property>Id</child-property>
@@ -444,7 +453,6 @@
 											<child-property>ReadOnly</child-property>
 											<child-property>Description</child-property>
 										</property-editor>
-										<property-editor>PreferernceValidator</property-editor>
 									</content>
 								</default-panel>
 							</with>
@@ -500,26 +508,31 @@
 					<group>
 						<label>Caching</label>
 						<content>
-							<property-editor>ExpirationCache</property-editor>
-							<property-editor>CacheScope</property-editor>
+							<property-editor>
+								<property>ExpirationCache</property>
+								<related-content-width>50</related-content-width>
+								<related-content>
+									<property-editor>CacheScope</property-editor>
+								</related-content>
+							</property-editor>
 						</content>
 					</group>
 					<group>
 						<label>Runtime Options</label>
-                        <content>
-                            <property-editor>
-                                <property>ContainerRuntimeOptions</property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
-                                <child-property>Name</child-property>
-                            </property-editor>
-                        </content>
+						<content>
+							<property-editor>
+								<property>ContainerRuntimeOptions</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+								<child-property>Name</child-property>
+							</property-editor>
+						</content>
 					</group>
 				</content>
 			</section>
-            <node-include>ContainerRuntimeOptionsNodeList</node-include>
+			<node-include>ContainerRuntimeOptionsNodeList</node-include>
 		</case>
 	</node-factory>
 	<node-factory>
@@ -594,19 +607,17 @@
 			<property-editor>Id</property-editor>
 			<property-editor>
 				<property>PortletName</property>
+				<related-content>
+					<property-editor>PortletClass</property-editor>
+				</related-content>
+				<related-content-width>70</related-content-width>
 			</property-editor>
-			<property-editor>DisplayName</property-editor>
-			<property-editor>Description</property-editor>
 			<property-editor>
-				<property>PortletClass</property>
-				<action>
-					<id>Sapphire.Jump</id>
-					<label>Open Class</label>
-					<description>Calls the System Sapphire.Jump Action
-						to open the Java
-						Class in the Editor
-					</description>
-				</action>
+				<property>DisplayName</property>
+				<related-content>
+					<property-editor>Description</property-editor>
+				</related-content>
+				<related-content-width>70</related-content-width>
 			</property-editor>
 		</content>
 		<indent>true</indent>
