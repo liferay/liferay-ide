@@ -32,7 +32,13 @@
 					<label>Basic</label>
 					<content>
 						<property-editor>Id</property-editor>
-						<property-editor>Version</property-editor>
+						<property-editor>
+							<property>Version</property>
+							<hint>
+								<name>prefer.combo</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
 					</content>
@@ -41,48 +47,7 @@
 					<scroll-horizontally>true</scroll-horizontally>
 					<indent>true</indent>
 				</section>
-				<section>
-					<label>Quick Actions</label>
-					<content>
-						<action-link>
-							<label>Add Portlet</label>
-							<show-image></show-image>
-							<action-id>Sapphire.Add</action-id>
-							<action-handler-id>Sapphire.Add.IPortlet</action-handler-id>
-						</action-link>
-						<action-link>
-							<label>Add Event</label>
-							<action-id>Sapphire.Add</action-id>
-							<action-handler-id>Sapphire.Add.IEventDefinition
-							</action-handler-id>
-							<show-image></show-image>
-						</action-link>
-					</content>
-				</section>
 				<node>
-					<action-handler>
-						<action>Sapphire.Add</action>
-						<id>Sapphire.Add.Override</id>
-						<image>icons/etool16/portlet_new.png</image>
-						<label>Add Portlet</label>
-						<impl>AddPortletActionHandler</impl>
-						<description>Overriding the Add Portlet Action
-							to call the Wizard
-						</description>
-						<condition>PortletAddActionHandlerCondition
-						</condition>
-						<context>Sapphire.EditorPage.Outline.Node
-						</context>
-						<location>before:Sapphire.Add.ICustomPortletMode
-						</location>
-					</action-handler>
-
-					<action-handler-filter>
-						<impl>AddPortletActionFilter</impl>
-						<context>Sapphire.EditorPage.Outline.Node
-						</context>
-					</action-handler-filter>
-
 					<label>Portlets</label>
 					<section>
 						<label>About</label>
@@ -105,9 +70,21 @@
 									<name>show.label</name>
 									<value>false</value>
 								</hint>
+
 							</property-editor>
 						</content>
 					</section>
+					<action>
+						<id>Element.Details</id>
+						<label>Details</label>
+						<context>Sapphire.ListPropertyEditor</context>
+						<group>mygroup</group>
+					</action>
+					<action-handler>
+						<action>Element.Details</action>
+						<id>Element.Details</id>
+						<impl>ElementDetailsHandler</impl>
+					</action-handler>
 				</node>
 				<node>
 					<label>Listeners</label>
@@ -323,8 +300,26 @@
 					</section>
 					<node-include>ContainerRuntimeOptionsNodeList</node-include>
 				</node>
+				<section>
+					<label>Quick Actions</label>
+					<content>
+						<action-link>
+							<action-id>Sapphire.Add</action-id>
+							<action-handler-id>Sapphire.Add.IPortlet</action-handler-id>
+							<label>Add a new Portlet</label>
+						</action-link>
+						<action-link>
+							<action-id>Sapphire.Add</action-id>
+							<action-handler-id>Sapphire.Add.IEventDefinition
+							</action-handler-id>
+							<label>Add a new Event</label>
+						</action-link>
+					</content>
+				</section>
+
 			</node>
 		</root-node>
+		<initial-selection>Portlets</initial-selection>
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>
@@ -336,10 +331,72 @@
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
-					<include>init.param.composite</include>
+
+					<group>
+						<label>Supports</label>
+						<content>
+							<with>
+								<path>Supports</path>
+								<default-panel>
+									<content>
+                                        <property-editor>
+                                            <property>MimeType</property>
+                                            <hint>
+                                                <name>width</name>
+                                                <value>10%</value>
+                                            </hint>
+                                        </property-editor>
+                                        <property-editor>
+                                            <property>PortletModes</property>
+                                            <hint>
+                                                <name>width</name>
+                                                <value>45%</value>
+                                            </hint>
+                                        </property-editor>
+                                        <property-editor>
+                                            <property>WindowStates</property>
+                                            <hint>
+                                                <name>width</name>
+                                                <value>45%</value>
+                                            </hint>
+                                        </property-editor>
+									</content>
+								</default-panel>
+								<hint>
+									<name>width</name>
+									<value>100</value>
+								</hint>
+							</with>
+						</content>
+					</group>
+					<group>
+						<label>Portlet Information</label>
+						<content>
+							<with>
+								<path>PortletInfo</path>
+								<label>Portlet Information</label>
+								<default-panel>
+									<content>
+										<property-editor>Id</property-editor>
+										<property-editor>Title</property-editor>
+										<property-editor>ShortTitle</property-editor>
+										<property-editor>Keywords</property-editor>
+									</content>
+								</default-panel>
+							</with>
+						</content>
+					</group>
 				</content>
 				<label>Basic</label>
 				<collapsible>true</collapsible>
+			</section>
+			<section>
+				<label>Initialization Parameters</label>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+				<content>
+					<include>init.param.composite</include>
+				</content>
 			</section>
 			<section>
 				<label>Internationalization and Localization</label>
@@ -366,107 +423,48 @@
 					</property-editor>
 				</content>
 			</section>
-			<node>
-				<label>Portlet Information</label>
-				<property>PortletInfo</property>
-				<use-model-element-image></use-model-element-image>
-				<section>
-					<label>About</label>
-					<content>
-						<label>Describle the portlet information like title, keywords
-							etc,. here
-						</label>
-					</content>
-				</section>
-				<section>
-					<label>Details</label>
-					<content>
-						<property-editor>Id</property-editor>
-						<property-editor>Title</property-editor>
-						<property-editor>ShortTitle</property-editor>
-						<property-editor>Keywords</property-editor>
-					</content>
-				</section>
-			</node>
-			<node>
-				<label>Supports</label>
-				<property>Supports</property>
-				<section>
-					<label>General</label>
-					<content>
-						<label>Use this section to configure the Mime
-							Type, Portlet
-							modes
-							and Portlet Window States
-						</label>
-						<spacer></spacer>
-						<property-editor>MimeType</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-				</section>
-				<section>
-					<label>Portlet Modes</label>
-					<collapsible>true</collapsible>
-					<content>
-						<property-editor>PortletModes</property-editor>
-					</content>
-				</section>
-				<section>
-					<label>Window States</label>
-					<content>
-						<property-editor>WindowStates</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>true</collapsed-initially>
-				</section>
-				<use-model-element-image></use-model-element-image>
-			</node>
-			<node>
-				<label>Preferences</label>
-				<use-model-element-image></use-model-element-image>
-				<section>
-					<label>About</label>
-					<content>
-						<label>Portlet preferences can be configured here</label>
-					</content>
-				</section>
-				<section>
-					<label>Portlet Preferences</label>
-					<collapsible>true</collapsible>
-					<content>
-						<property-editor>Id</property-editor>
-                        <property-editor>
-                            <property>PortletPreferences</property>
-                            <child-property>Id</child-property>
-                            <child-property>Name</child-property>
-                            <child-property>Value</child-property>
-                            <child-property>ReadOnly</child-property>
-                            <child-property>Description</child-property>
-                        </property-editor>
-						<property-editor>PreferernceValidator</property-editor>
-					</content>
-				</section>
-				<property>PortletPreference</property>
-			</node>
-			<node-include>ContainerRuntimeOptionsNodeList</node-include>
 			<section>
 				<label>Advanced</label>
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
 				<content>
 					<group>
+						<label>Preferences</label>
+						<content>
+							<with>
+								<path>PortletPreference</path>
+								<default-panel>
+									<content>
+										<property-editor>Id</property-editor>
+										<property-editor>
+											<property>PortletPreferences</property>
+											<child-property>Id</child-property>
+											<child-property>Name</child-property>
+											<child-property>Value</child-property>
+											<child-property>ReadOnly</child-property>
+											<child-property>Description</child-property>
+										</property-editor>
+										<property-editor>PreferernceValidator</property-editor>
+									</content>
+								</default-panel>
+							</with>
+						</content>
+					</group>
+					<group>
 						<label>Security</label>
-						<property-editor>
-							<property>SecurityRoleRefs</property>
-							<child-property>Id</child-property>
-							<child-property>RoleName</child-property>
-							<child-property>RoleLink</child-property>
-							<child-property>Description</child-property>
-							<hint>
-								<name>show.label.above</name>
-								<value>true</value>
-							</hint>
-						</property-editor>
+						<content>
+							<property-editor>
+								<property>SecurityRoleRefs</property>
+								<child-property>Id</child-property>
+								<child-property>RoleName</child-property>
+								<child-property>RoleLink</child-property>
+								<child-property>Description</child-property>
+								<hint>
+									<name>show.label.above</name>
+									<value>true</value>
+								</hint>
+							</property-editor>
+						</content>
 					</group>
 					<group>
 						<label>Inter Portlet Communication</label>
@@ -508,15 +506,20 @@
 					</group>
 					<group>
 						<label>Runtime Options</label>
-						<content>
-							<property-editor>
-								<property>ContainerRuntimeOptions</property>
-								<child-property>Name</child-property>
-							</property-editor>
-						</content>
+                        <content>
+                            <property-editor>
+                                <property>ContainerRuntimeOptions</property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
+                                <child-property>Name</child-property>
+                            </property-editor>
+                        </content>
 					</group>
 				</content>
 			</section>
+            <node-include>ContainerRuntimeOptionsNodeList</node-include>
 		</case>
 	</node-factory>
 	<node-factory>
@@ -589,7 +592,9 @@
 		<id>portlet.basic.composite</id>
 		<content>
 			<property-editor>Id</property-editor>
-			<property-editor>PortletName</property-editor>
+			<property-editor>
+				<property>PortletName</property>
+			</property-editor>
 			<property-editor>DisplayName</property-editor>
 			<property-editor>Description</property-editor>
 			<property-editor>
@@ -602,7 +607,6 @@
 						Class in the Editor
 					</description>
 				</action>
-				<listener>TypeContentProposalListener</listener>
 			</property-editor>
 		</content>
 		<indent>true</indent>
