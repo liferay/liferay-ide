@@ -23,7 +23,7 @@
             default="true"
             icon="icons/e16/service.png"
             id="com.liferay.ide.eclipse.portlet.ui.editor.servicebuilder"
-            name="Service Builder Editor"
+            name="Service Builder Configuration Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
                contentTypeId="com.liferay.ide.eclipse.portlet.core.servicebuildercontent">
