@@ -29,7 +29,7 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 
-public final class TextNodeValueBinding
+public final class ResourceBundleValueBinding
 
 extends XmlValueBindingImpl
 
@@ -47,9 +47,10 @@ extends XmlValueBindingImpl
 		super.init( element, property, params );
 
 		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-		this.path = new XmlPath( params[0], xmlNamespaceResolver );
+		if ( params != null && params.length > 0 ) {
+			this.path = new XmlPath( params[0], xmlNamespaceResolver );
+		}
 
-		// System.out.println( "TextNodeValueBinding.init()" + this.path );
 	}
 
 	/*
@@ -87,7 +88,7 @@ extends XmlValueBindingImpl
 		// System.out.println( "VALUE ___________________ " + val );
 
 		if ( val != null ) {
-			val = value.trim();
+			val = convertToJavaName( value.trim() );
 		}
 
 		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
@@ -110,4 +111,21 @@ extends XmlValueBindingImpl
 		return null;
 	}
 
+	/**
+	 * this will convert the IO file name of the resource bundle to java package name
+	 * 
+	 * @param value
+	 *            - the io file name
+	 * @return - the java package name of the resource bundle
+	 */
+	private String convertToJavaName( String value ) {
+		String javaName = value;
+		if ( javaName.indexOf( '.' ) != -1 ) {
+			// Strip the extension
+			javaName = value.substring( 0, value.lastIndexOf( '.' ) );
+			// Replace all "/" by "."
+			javaName = javaName.replace( '/', '.' );
+		}
+		return javaName;
+	}
 }

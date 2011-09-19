@@ -1,6 +1,19 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
@@ -14,7 +27,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -26,7 +38,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
 /**
  * The root container model class that will have &lt;portlet-app&gt; TODO: Update the comments
  * 
- * @author kamesh
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> <br/>
  */
 @GenerateImpl
 @Image( path = "images/obj16/portlet_model_obj.gif" )
@@ -41,10 +53,8 @@ public interface IPortletApp extends IModelElement, IIdentifiable {
 
 	@Type( base = PortletAppVersion.class )
 	@Label( standard = "Version" )
-	@NoDuplicates
 	@DefaultValue( text = "2.0" )
 	@Required
-	@MustExist
 	@XmlBinding( path = "@version" )
 	ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" );
 

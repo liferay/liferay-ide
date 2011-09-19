@@ -22,13 +22,13 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
+import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class CreatePortletActionHandler extends SapphireActionHandler {
+public class DefinePortletEventHandler extends SapphireActionHandler {
 
 	/*
 	 * (non-Javadoc)
@@ -36,19 +36,19 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-
+		// System.out.println( "DefinePortletEventHandler.run()" );
 		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
-		IPortlet portlet = rootModel.getPortlets().addNewElement();
-		portlet.setPortletName( "new-portlet" );
+		IEventDefinition eventDefintion = rootModel.getEventDefinitions().addNewElement();
 
 		// Select the node
 
 		final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
 		final MasterDetailsContentNode root = page.getContentOutline().getRoot();
-		final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
+		final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
 		if ( node != null ) {
 			node.select();
 		}
-		return portlet;
+
+		return eventDefintion;
 	}
 }
