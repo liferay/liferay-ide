@@ -84,10 +84,8 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
 	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.GenericPortlet" } )
-	@MustExist
 	@Label( standard = "Portlet class" )
 	@Required
-	@NoDuplicates
 	@XmlBinding( path = "portlet-class" )
 	ValueProperty PROP_PORTLET_CLASS = new ValueProperty( TYPE, "PortletClass" );
 
