@@ -23,13 +23,12 @@
 	<editor-page>
 		<id>portlet-app.editor</id>
 		<page-name>Portlet Application</page-name>
-		<outline-header-text>Portlet Application</outline-header-text>
 		<page-header-text>Portlet Application</page-header-text>
 		<root-node>
 			<node>
 				<label>Portlet Application</label>
 				<section>
-					<label>Basic</label>
+					<label>Portlet Application</label>
 					<content>
 						<property-editor>Id</property-editor>
 						<property-editor>
@@ -42,18 +41,13 @@
 						<property-editor>DefaultNameSpace
 						</property-editor>
 					</content>
-					<collapsible>true</collapsible>
+					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
 					<scroll-horizontally>true</scroll-horizontally>
 					<indent>true</indent>
 				</section>
 				<node>
 					<label>Portlets</label>
-					<section>
-						<label>About</label>
-						<collapsible>true</collapsible>
-						<collapsed-initially>true</collapsed-initially>
-					</section>
 					<node-include>PortletsNodeList</node-include>
 					<section>
 						<label>Quick Edit</label>
@@ -88,11 +82,6 @@
 				</node>
 				<node>
 					<label>Listeners</label>
-					<section>
-						<label>About</label>
-						<collapsible>true</collapsible>
-						<collapsed-initially>true</collapsed-initially>
-					</section>
 					<node-include>ListenersNodeList</node-include>
 					<section>
 						<label>Quick Edit</label>
@@ -110,11 +99,6 @@
 				</node>
 				<node>
 					<label>Filters and Mappings</label>
-					<section>
-						<label>About</label>
-						<collapsible>true</collapsible>
-						<collapsed-initially>true</collapsed-initially>
-					</section>
 					<section>
 						<label>Filters</label>
 						<collapsible>true</collapsible>
@@ -151,11 +135,6 @@
 				<node>
 					<label>ResourceBundles</label>
 					<section>
-						<label>About</label>
-						<collapsible>true</collapsible>
-						<collapsed-initially>true</collapsed-initially>
-					</section>
-					<section>
 						<content>
 							<property-editor>
 								<property>ResourceBundles</property>
@@ -173,9 +152,6 @@
 				</node>
 				<node>
 					<label>SecurityConstraints</label>
-					<section>
-						<label>About</label>
-					</section>
 					<node-include>SecurityConstraintNodeList</node-include>
 					<section>
 						<label>Quick Edit</label>
@@ -192,9 +168,6 @@
 				</node>
 				<node>
 					<label>Events</label>
-					<section>
-						<label>About</label>
-					</section>
 					<node-include>EventDefinitionsList</node-include>
 					<section>
 						<label>Quick Edit</label>
@@ -206,9 +179,6 @@
 				</node>
 				<node>
 					<label>PublicRenderParameters</label>
-					<section>
-						<label>About</label>
-					</section>
 					<section>
 						<label>Quick Edit</label>
 						<content>
@@ -231,11 +201,6 @@
 					<label>Customizations</label>
 					<node>
 						<label>Portlet Modes</label>
-						<section>
-							<label>About</label>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-						</section>
 						<node-include>CustomPortletModesNodeList</node-include>
 						<section>
 							<label>Quick Edit</label>
@@ -254,11 +219,6 @@
 					</node>
 					<node>
 						<label>Window States</label>
-						<section>
-							<label>About</label>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-						</section>
 						<node-include>CustomWindowModesNodeList</node-include>
 						<section>
 							<label>Quick Edit</label>
@@ -274,17 +234,9 @@
 							</content>
 						</section>
 					</node>
-					<section>
-						<label>About</label>
-						<collapsible>true</collapsible>
-						<collapsed-initially>true</collapsed-initially>
-					</section>
 				</node>
 				<node>
 					<label>ContainerRuntimeOptions</label>
-					<section>
-						<label>About</label>
-					</section>
 					<section>
 						<label>Quick Edit</label>
 						<content>
@@ -300,26 +252,47 @@
 					</section>
 					<node-include>ContainerRuntimeOptionsNodeList</node-include>
 				</node>
-				<section>
-					<label>Quick Actions</label>
-					<content>
-						<action-link>
-							<action-id>Sapphire.Add</action-id>
-							<action-handler-id>Sapphire.Add.IPortlet</action-handler-id>
-							<label>Add a new Portlet</label>
-						</action-link>
-						<action-link>
-							<action-id>Sapphire.Add</action-id>
-							<action-handler-id>Sapphire.Add.IEventDefinition
-							</action-handler-id>
-							<label>Add a new Event</label>
-						</action-link>
-					</content>
-				</section>
 
 			</node>
 		</root-node>
 		<initial-selection>Portlets</initial-selection>
+		<action>
+			<id>Liferay.Create.Portlet</id>
+			<label>Create new Portlet</label>
+			<description>this will call the Liferay IDE New Portlet Wizard Page
+			</description>
+			<image>/icons/n16/portlet_new.png</image>
+			<hint>
+				<name>style</name>
+				<value>image</value>
+			</hint>
+			<context>Sapphire.ActionLink</context>
+            <context>Sapphire.Section</context>
+            <context>Sapphire.EditorPage</context>
+		</action>
+		<action-handler>
+			<action>Liferay.Create.Portlet</action>
+			<id>Liferay.Create.Portlet</id>
+			<label>Create a new Portlet</label>
+			<impl>CreatePortletActionHandler</impl>
+		</action-handler>
+		<action>
+			<id>Define.Event</id>
+			<hint>
+				<name>style</name>
+				<value>image+text</value>
+			</hint>
+			<context>Sapphire.EditorPage</context>
+			<label>Define Event</label>
+            <context>Sapphire.Section</context>
+            <context>Sapphire.ActionLink</context>
+		</action>
+		<action-handler>
+			<action>Define.Event</action>
+			<id>Define.Event</id>
+			<impl>DefinePortletEventHandler</impl>
+		</action-handler>
+
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>
@@ -389,7 +362,7 @@
 						</content>
 					</group>
 				</content>
-				<label>Basic</label>
+				<label>Portlet</label>
 				<collapsible>true</collapsible>
 			</section>
 			<section>
@@ -438,13 +411,13 @@
 								<path>PortletPreference</path>
 								<default-panel>
 									<content>
-                                        <property-editor>
-                                            <property>Id</property>
-                                            <related-content-width>70</related-content-width>
-                                            <related-content>
-                                                <property-editor>PreferernceValidator</property-editor>
-                                            </related-content>
-                                        </property-editor>
+										<property-editor>
+											<property>Id</property>
+											<related-content-width>70</related-content-width>
+											<related-content>
+												<property-editor>PreferernceValidator</property-editor>
+											</related-content>
+										</property-editor>
 										<property-editor>
 											<property>PortletPreferences</property>
 											<child-property>Id</child-property>
@@ -541,23 +514,6 @@
 		<case>
 			<use-model-element-image></use-model-element-image>
 			<section>
-				<label>Info</label>
-				<content>
-					<label>The event-definitionType is used to declare
-						events the
-						portlet can either receive or emit.
-						The name must be unique and
-						must be the one the
-						portlet is using in its code for
-						referencing
-						this
-						event. Used in: portlet-app
-					</label>
-				</content>
-				<collapsible>true</collapsible>
-				<indent>true</indent>
-			</section>
-			<section>
 				<label>Details</label>
 				<content>
 					<property-editor>Id</property-editor>
@@ -608,16 +564,15 @@
 			<property-editor>
 				<property>PortletName</property>
 				<related-content>
-					<property-editor>PortletClass</property-editor>
+					<property-editor>
+						<property>DisplayName</property>
+						<related-content-width>80</related-content-width>
+						<related-content>
+							<property-editor>PortletClass</property-editor>
+						</related-content>
+					</property-editor>
 				</related-content>
-				<related-content-width>70</related-content-width>
-			</property-editor>
-			<property-editor>
-				<property>DisplayName</property>
-				<related-content>
-					<property-editor>Description</property-editor>
-				</related-content>
-				<related-content-width>70</related-content-width>
+				<related-content-width>80</related-content-width>
 			</property-editor>
 		</content>
 		<indent>true</indent>
@@ -695,12 +650,6 @@
 			<label>${Name
 				==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
 			<section>
-				<label>General</label>
-				<content>
-					<label>Info about Filter</label>
-				</content>
-			</section>
-			<section>
 				<label>Filter</label>
 				<collapsible>true</collapsible>
 				<content>
@@ -728,13 +677,6 @@
 			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
-				<label>General</label>
-				<collapsible>true</collapsible>
-				<content>
-					<label>Info about filter</label>
-				</content>
-			</section>
-			<section>
 				<label>Mappings</label>
 				<content>
 					<property-editor>Filter</property-editor>
@@ -748,14 +690,6 @@
 		<property>SecurityConstraints</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<section>
-				<label>About</label>
-				<content>
-					<label>About Security Constraint</label>
-				</content>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-			</section>
 			<section>
 				<label>Details</label>
 				<content>
@@ -827,14 +761,6 @@
 				&quot;&lt;custom-portlet-mode&gt;&quot;:concat(&quot;Custom
 				Portlet
 				Mode - &quot;,PortletMode)}</label>
-			<section>
-				<label>About</label>
-				<content>
-					<label>About Custom Portlet Mode</label>
-				</content>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-			</section>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -873,14 +799,6 @@
 		<id>CustomWindowModesNodeList</id>
 		<property>CustomWindowStates</property>
 		<case>
-			<section>
-				<label>About</label>
-				<content>
-					<label>Info about Custom Window Mode</label>
-				</content>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-			</section>
 			<label>${WindowState ==null ?
 				&quot;&lt;custom-window-state&gt;&quot;:concat(&quot;Custom
 				Window
@@ -926,14 +844,6 @@
 		<case>
 			<use-model-element-image></use-model-element-image>
 			<section>
-				<label>About</label>
-				<content>
-					<label>Documantation about public render parameters</label>
-				</content>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-			</section>
-			<section>
 				<label>Details</label>
 				<content>
 					<property-editor>Id</property-editor>
@@ -962,10 +872,6 @@
 			<label>${Name
 				==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
 			<use-model-element-image></use-model-element-image>
-			<section>
-				<label>About</label>
-				<collapsible>true</collapsible>
-			</section>
 			<section>
 				<label>Details</label>
 				<content>
