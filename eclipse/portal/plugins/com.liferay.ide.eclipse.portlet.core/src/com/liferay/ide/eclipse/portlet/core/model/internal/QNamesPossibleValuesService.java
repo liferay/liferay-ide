@@ -63,14 +63,15 @@ public class QNamesPossibleValuesService extends PossibleValuesService {
 			ModelElementList<IEventDefinition> eventDefs = portletApp.getEventDefinitions();
 			for ( IEventDefinition eventDefinition : eventDefs ) {
 				values.add( getQName(
-					eventDefinition.getNamespaceURI().getContent(), eventDefinition.getLocalPart().getContent() ) );
+					eventDefinition.getNamespaceURI().getContent( false ), eventDefinition.getLocalPart().getContent() ) );
 			}
 		}
 		else if ( imodelElement instanceof ISupportedPublicRenderParameter ) {
 			ModelElementList<IPublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 			for ( IPublicRenderParameter publicRenderParam : publicRenderParameters ) {
 				values.add( getQName(
-					publicRenderParam.getNamespaceURI().getContent(), publicRenderParam.getLocalPart().getContent() ) );
+					publicRenderParam.getNamespaceURI().getContent( false ),
+					publicRenderParam.getLocalPart().getContent() ) );
 			}
 		}
 

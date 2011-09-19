@@ -284,10 +284,8 @@
 		</root-node>
 		<initial-selection>Portlets</initial-selection>
 		<action>
-			<id>Liferay.Create.Portlet</id>
-			<label>Create new Portlet</label>
-			<description>this will call the Liferay IDE New Portlet Wizard Page
-			</description>
+			<id>Create.Portlet</id>
+			<description>This will create new Portlet</description>
 			<image>/icons/n16/portlet_new.png</image>
 			<hint>
 				<name>style</name>
@@ -296,12 +294,13 @@
 			<context>Sapphire.ActionLink</context>
             <context>Sapphire.Section</context>
             <context>Sapphire.EditorPage</context>
+            <label>Create new Portlet</label>
 		</action>
 		<action-handler>
-			<action>Liferay.Create.Portlet</action>
+			<action>Create.Portlet</action>
 			<id>Liferay.Create.Portlet</id>
-			<label>Create a new Portlet</label>
-			<impl>CreatePortletActionHandler</impl>
+			<label>Create Liferay Portlet</label>
+			<impl>CreateLiferayPortletActionHandler</impl>
 		</action-handler>
 		<action>
 			<id>Define.Event</id>
@@ -314,7 +313,7 @@
             <context>Sapphire.Section</context>
             <context>Sapphire.ActionLink</context>
 		</action>
-		<action-handler>
+        <action-handler>
 			<action>Define.Event</action>
 			<id>Define.Event</id>
 			<impl>DefinePortletEventHandler</impl>

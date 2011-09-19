@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import java.util.List;
+
 import javax.xml.namespace.QName;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -27,6 +29,7 @@ import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
@@ -73,14 +76,18 @@ extends XmlValueBindingImpl
 		if ( parent != null ) {
 			XmlElement qNamedElement = parent.getChildElement( this.params[0], false );
 			if ( qNamedElement != null ) {
-				XmlAttribute qnsAttribute = qNamedElement.getAttribute( "qns", false );
-				value = qNamedElement.getText();
+				List<XmlAttribute> listOfAttibutes = qNamedElement.getAttributes();
 
-				if ( value != null ) {
-					value = PortletUtil.stripPrefix( value.trim() );
-					QName qname = new QName( qnsAttribute.getText(), value );
-					value = qname.toString();
+				XmlAttribute qnsAttribute = listOfAttibutes != null ? listOfAttibutes.get( 0 ) : null;
+				if ( qnsAttribute != null ) {
+					value = qNamedElement.getText();
 
+					if ( value != null ) {
+						value = PortletUtil.stripPrefix( value.trim() );
+						QName qname = new QName( qnsAttribute.getText(), value );
+						value = qname.toString();
+
+					}
 				}
 			}
 		}
@@ -96,7 +103,7 @@ extends XmlValueBindingImpl
 	public void write( final String value ) {
 		String qNameAsString = value;
 		XmlElement parent = xml( true );
-		// System.out.println( "VALUE ___________________ " + qNameAsString );
+		System.out.println( "VALUE ___________________ " + qNameAsString );
 
 		if ( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) ) {
 			qNameAsString = value.trim();
@@ -107,7 +114,11 @@ extends XmlValueBindingImpl
 				PortletAppModelConstants.DEFAULT_QNAME_PREFIX + PortletAppModelConstants.COLON + qName.getLocalPart();
 			XmlElement qNamedElement = parent.getChildElement( this.params[0], true );
 			Element domNode = qNamedElement.getDomNode();
-			domNode.setAttributeNS( namespaceURI, qualifiedName, qName.getNamespaceURI() );
+			Attr attr = domNode.getAttributeNodeNS( qName.getNamespaceURI(), qName.getLocalPart() );
+			if ( attr == null ) {
+				domNode.setAttributeNS( namespaceURI, qualifiedName, qName.getNamespaceURI() );
+			}
+			
 			qNamedElement.setText( localPart );
 		}
 		else {
