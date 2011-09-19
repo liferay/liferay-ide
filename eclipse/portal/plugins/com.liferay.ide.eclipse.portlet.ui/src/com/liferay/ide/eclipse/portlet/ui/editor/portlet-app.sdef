@@ -199,41 +199,68 @@
 				</node>
 				<node>
 					<label>Customizations</label>
-					<node>
-						<label>Portlet Modes</label>
-						<node-include>CustomPortletModesNodeList</node-include>
-						<section>
-							<label>Quick Edit</label>
-							<content>
-								<property-editor>
-									<property>CustomPortletModes</property>
-									<hint>
-										<name>show.label</name>
-										<value>false</value>
-									</hint>
-									<child-property>PortletMode</child-property>
-									<child-property>PortletManaged</child-property>
-								</property-editor>
-							</content>
-						</section>
-					</node>
-					<node>
-						<label>Window States</label>
-						<node-include>CustomWindowModesNodeList</node-include>
-						<section>
-							<label>Quick Edit</label>
-							<content>
-								<property-editor>
-									<property>CustomWindowStates</property>
-									<hint>
-										<value>false</value>
-										<name>show.label</name>
-									</hint>
-									<child-property>WindowState</child-property>
-								</property-editor>
-							</content>
-						</section>
-					</node>
+                    <section>
+                        <label>Portlet Modes</label>
+                        <collapsible>true</collapsible>
+                        <content>
+                            <property-editor>
+                                <property>CustomPortletModes</property>
+                                <child-property>
+                                    <property>Id</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>10</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>PortletMode</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>40</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>PortletManaged</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>30</value>
+                                    </hint>
+                                </child-property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <section>
+                        <label>Window States</label>
+                        <collapsible>true</collapsible>
+                        <content>
+                            <property-editor>
+                                <property>CustomWindowStates</property>
+                                <child-property>
+                                    <property>Id</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>10</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>WindowState</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>40</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>Description</child-property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
+                            </property-editor>
+                        </content>
+                    </section>
 				</node>
 				<node>
 					<label>ContainerRuntimeOptions</label>
@@ -313,21 +340,11 @@
 								<path>Supports</path>
 								<default-panel>
 									<content>
-										<property-editor>
-											<property>MimeType</property>
-											<related-content-width>80</related-content-width>
-										</property-editor>
-										<property-editor>
-											<property>PortletModes</property>
-											<related-content-width>50</related-content-width>
-										</property-editor>
-										<property-editor>WindowStates</property-editor>
+										<property-editor>MimeType</property-editor>
+                                        <property-editor>PortletModes</property-editor>
+                                        <property-editor>WindowStates</property-editor>
 									</content>
 								</default-panel>
-								<hint>
-									<name>width</name>
-									<value>100</value>
-								</hint>
 							</with>
 						</content>
 					</group>
@@ -522,25 +539,21 @@
 						<label>Qualified Name</label>
 						<indent>true</indent>
 						<content>
-							<property-editor>NamespaceURI
-							</property-editor>
-							<property-editor>LocalPart</property-editor>
+                            <property-editor>
+                                <property>NamespaceURI
+							</property>
+                                <related-content-width>50</related-content-width>
+                                <related-content>
+                                    <property-editor>LocalPart</property-editor>
+                                </related-content>
+                            </property-editor>
 						</content>
 					</group>
-					<property-editor>Aliases</property-editor>
-					<property-editor>
-						<property>EventValueType</property>
-						<hint>
-							<name>browse.only</name>
-							<value>false</value>
-						</hint>
-						<action>
-							<id>Sapphire.Jump</id>
-							<label>Open Class</label>
-							<context>Sapphire.ValuePropertyEditor
-							</context>
-						</action>
-					</property-editor>
+                    <property-editor>EventValueType</property-editor>
+                    <property-editor>
+                        <property>Aliases</property>
+                        <related-content-width>30</related-content-width>
+                    </property-editor>
 				</content>
 				<collapsible>true</collapsible>
 				<indent>true</indent>
@@ -754,67 +767,6 @@
 		</case>
 	</node-factory>
 	<node-factory>
-		<id>CustomPortletModesNodeList</id>
-		<property>CustomPortletModes</property>
-		<case>
-			<label>${PortletMode ==null ?
-				&quot;&lt;custom-portlet-mode&gt;&quot;:concat(&quot;Custom
-				Portlet
-				Mode - &quot;,PortletMode)}</label>
-			<use-model-element-image></use-model-element-image>
-			<section>
-				<content>
-					<property-editor>
-						<property>PortletMode</property>
-						<hint>
-							<name>mode-view</name>
-							<value>VIEW</value>
-						</hint>
-						<hint>
-							<name>mode-edit</name>
-							<value>EDIT</value>
-						</hint>
-						<hint>
-							<name>mode-help</name>
-							<value>HELP</value>
-						</hint>
-					</property-editor>
-					<property-editor>
-						<property>PortletManaged</property>
-						<hint>
-							<name>true</name>
-							<value>true</value>
-						</hint>
-						<hint>
-							<name>false</name>
-							<value>false</value>
-						</hint>
-					</property-editor>
-				</content>
-				<label>Portlet Modes</label>
-			</section>
-		</case>
-	</node-factory>
-	<node-factory>
-		<id>CustomWindowModesNodeList</id>
-		<property>CustomWindowStates</property>
-		<case>
-			<label>${WindowState ==null ?
-				&quot;&lt;custom-window-state&gt;&quot;:concat(&quot;Custom
-				Window
-				State - &quot;,WindowState)}</label>
-			<use-model-element-image></use-model-element-image>
-			<section>
-				<label>Window States</label>
-				<content>
-					<property-editor>Id</property-editor>
-					<property-editor>Description</property-editor>
-					<property-editor>WindowState</property-editor>
-				</content>
-			</section>
-		</case>
-	</node-factory>
-	<node-factory>
 		<id>ListenersNodeList</id>
 		<property>Listeners</property>
 		<case>
@@ -881,4 +833,24 @@
 			</section>
 		</case>
 	</node-factory>
+    <dialog>
+        <id>new.portlet.wizard</id>
+        <content>
+            <property-editor>PortletName</property-editor>
+            <property-editor>PortletClass</property-editor>
+            <with>
+                <path>Supports</path>
+                <label>Supports</label>
+                <default-panel>
+                    <content>
+                        <property-editor>MimeType</property-editor>
+                    </content>
+                </default-panel>
+            </with>
+        </content>
+        <label>Create new Portlet</label>
+        <initial-focus>PortletName</initial-focus>
+        <scroll-vertically>true</scroll-vertically>
+        <scroll-horizontally>true</scroll-horizontally>
+    </dialog>
 </definition>

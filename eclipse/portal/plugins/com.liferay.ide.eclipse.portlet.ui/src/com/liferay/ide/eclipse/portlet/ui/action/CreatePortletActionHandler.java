@@ -17,10 +17,13 @@
 
 package com.liferay.ide.eclipse.portlet.ui.action;
 
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
+import org.eclipse.sapphire.ui.swt.SapphireDialog;
 
 import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
@@ -30,25 +33,46 @@ import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
  */
 public class CreatePortletActionHandler extends SapphireActionHandler {
 
+	private static final String NEW_PORTLET_WIZARD_DEF =
+		"com.liferay.ide.eclipse.portlet.ui/com/liferay/ide/eclipse/portlet/ui/editor/portlet-app.sdef!new.portlet.wizard";
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-
 		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
 		IPortlet portlet = rootModel.getPortlets().addNewElement();
-		portlet.setPortletName( "new-portlet" );
-
-		// Select the node
-
-		final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-		final MasterDetailsContentNode root = page.getContentOutline().getRoot();
-		final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
-		if ( node != null ) {
-			node.select();
+		// Open the dialog to capture the mandatory properties
+		final SapphireDialog dialog = new SapphireDialog( context.getShell(), portlet, NEW_PORTLET_WIZARD_DEF );
+		if ( dialog != null && Dialog.OK == dialog.open() ) {
+			// Select the node
+			final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
+			final MasterDetailsContentNode root = page.getContentOutline().getRoot();
+			final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
+			if ( node != null ) {
+				node.select();
+			}
+			try {
+				rootModel.resource().save();
+			}
+			catch ( ResourceStoreException e ) {
+				// Log it in PorletUI Plugin
+			}
+			return portlet;
 		}
-		return portlet;
+		else {
+			rootModel.getPortlets().remove( portlet );
+			portlet = null;
+			try {
+				rootModel.resource().save();
+			}
+			catch ( ResourceStoreException e ) {
+				// Log it in PorletUI Plugin
+			}
+			return null;
+		}
+
 	}
 }
