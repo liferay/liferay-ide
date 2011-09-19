@@ -197,7 +197,7 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 	// *** Supported Publishing Events ***
 
 	@Type( base = IEventDefinitionRef.class )
-	@Label( standard = "Supported Processing Events" )
+	@Label( standard = "Supported Publishing Events" )
 	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "supported-publishing-event", type = IEventDefinitionRef.class ) )
 	ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty( TYPE, "SupportedPublishingEvents" );
 

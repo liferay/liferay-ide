@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import java.util.List;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlAttribute;
@@ -69,8 +71,8 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 		}
 		if ( qNameElement != null ) {
 			// System.out.println( qNameElement );
-			XmlAttribute xmlAttribute =
-				qNameElement.getAttribute( PortletAppModelConstants.DEFAULT_QNAME_PREFIX, false );
+			List<XmlAttribute> listOfAttibutes = qNameElement.getAttributes();
+			XmlAttribute xmlAttribute = listOfAttibutes != null ? listOfAttibutes.get( 0 ) : null;
 			if ( xmlAttribute != null ) {
 				value = xmlAttribute.getText();
 			}
