@@ -303,21 +303,25 @@
 			<impl>CreateLiferayPortletActionHandler</impl>
 		</action-handler>
 		<action>
-			<id>Define.Event</id>
+			<id>Quick.Actions</id>
 			<hint>
 				<name>style</name>
 				<value>image+text</value>
 			</hint>
 			<context>Sapphire.EditorPage</context>
-			<label>Define Event</label>
             <context>Sapphire.Section</context>
             <context>Sapphire.ActionLink</context>
+            <label>Quick Actions</label>
 		</action>
-        <action-handler>
-			<action>Define.Event</action>
-			<id>Define.Event</id>
-			<impl>DefinePortletEventHandler</impl>
-		</action-handler>
+        <action-handler-factory>
+            <action>Quick.Actions</action>
+            <description>The Quick actions that appear on the Editor Page Header</description>
+            <impl>QuickActionsHandlerFactory</impl>
+            <param>
+                <name>MODEL_PROPERTIES</name>
+                <value>EventDefinitions,Filters</value>
+            </param>
+        </action-handler-factory>
 
 	</editor-page>
 	<node-factory>
