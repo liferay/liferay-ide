@@ -39,7 +39,7 @@ public interface IWindowState extends IModelElement {
 	 * state
 	 */
 
-	@Label( standard = "state", full = "Window State" )
+	@Label( standard = "state", full = "Window States" )
 	@NoDuplicates
 	@Whitespace( trim = true )
 	@XmlBinding( path = "" )

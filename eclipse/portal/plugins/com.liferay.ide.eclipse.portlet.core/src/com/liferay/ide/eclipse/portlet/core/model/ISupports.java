@@ -57,7 +57,7 @@ public interface ISupports extends IModelElement {
 	// *** PortletModes ***
 
 	@Type( base = IPortletMode.class )
-	@Label( standard = "Portlet Mode" )
+	@Label( standard = "Portlet Modes" )
 	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet-mode", type = IPortletMode.class ) )
 	ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" );
 
