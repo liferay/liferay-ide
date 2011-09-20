@@ -30,7 +30,6 @@
 				<section>
 					<label>Portlet Application</label>
 					<content>
-						<property-editor>Id</property-editor>
 						<property-editor>
 							<property>Version</property>
 							<hint>
@@ -50,7 +49,7 @@
 					<label>Portlets</label>
 					<node-include>PortletsNodeList</node-include>
 					<section>
-						<label>Quick Edit</label>
+						<label>Portlets Quick Edit</label>
 						<content>
 							<property-editor>
 								<property>Portlets</property>
@@ -68,23 +67,12 @@
 							</property-editor>
 						</content>
 					</section>
-					<action>
-						<id>Element.Details</id>
-						<label>Details</label>
-						<context>Sapphire.ListPropertyEditor</context>
-						<group>mygroup</group>
-					</action>
-					<action-handler>
-						<action>Element.Details</action>
-						<id>Element.Details</id>
-						<impl>ElementDetailsHandler</impl>
-					</action-handler>
 				</node>
 				<node>
 					<label>Listeners</label>
 					<node-include>ListenersNodeList</node-include>
 					<section>
-						<label>Quick Edit</label>
+						<label>Listeners Quick Edit</label>
 						<content>
 							<property-editor>
 								<property>Listeners</property>
@@ -100,7 +88,7 @@
 				<node>
 					<label>Filters and Mappings</label>
 					<section>
-						<label>Filters</label>
+						<label>Filters Quick Edit</label>
 						<collapsible>true</collapsible>
 						<content>
 							<property-editor>
@@ -117,7 +105,7 @@
 					<node-include>FiltersNodeList</node-include>
 					<node-include>FilterMappingsNodeList</node-include>
 					<section>
-						<label>Mappings</label>
+						<label>Filter Mappings Quick Edit</label>
 						<collapsible>true</collapsible>
 						<content>
 							<property-editor>
@@ -154,7 +142,7 @@
 					<label>SecurityConstraints</label>
 					<node-include>SecurityConstraintNodeList</node-include>
 					<section>
-						<label>Quick Edit</label>
+						<label>Security Constraints Quick Edit</label>
 						<content>
 							<property-editor>
 								<property>SecurityConstraints</property>
@@ -170,7 +158,7 @@
 					<label>Events</label>
 					<node-include>EventDefinitionsList</node-include>
 					<section>
-						<label>Quick Edit</label>
+						<label>Events Quick Edit</label>
 						<content>
 							<include>event.def.quickedit.composite
 							</include>
@@ -180,7 +168,7 @@
 				<node>
 					<label>PublicRenderParameters</label>
 					<section>
-						<label>Quick Edit</label>
+						<label>Public Render Parameters Quick Edit</label>
 						<content>
 							<property-editor>
 								<property>PublicRenderParameters</property>
@@ -199,73 +187,59 @@
 				</node>
 				<node>
 					<label>Customizations</label>
-                    <section>
-                        <label>Portlet Modes</label>
-                        <collapsible>true</collapsible>
-                        <content>
-                            <property-editor>
-                                <property>CustomPortletModes</property>
-                                <child-property>
-                                    <property>Id</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>10</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>
-                                    <property>PortletMode</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>40</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>
-                                    <property>PortletManaged</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>30</value>
-                                    </hint>
-                                </child-property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <section>
-                        <label>Window States</label>
-                        <collapsible>true</collapsible>
-                        <content>
-                            <property-editor>
-                                <property>CustomWindowStates</property>
-                                <child-property>
-                                    <property>Id</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>10</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>
-                                    <property>WindowState</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>40</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>Description</child-property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
-                            </property-editor>
-                        </content>
-                    </section>
+					<section>
+						<label>Portlet Modes</label>
+						<collapsible>true</collapsible>
+						<content>
+							<property-editor>
+								<property>CustomPortletModes</property>
+								<child-property>
+									<property>PortletMode</property>
+									<hint>
+										<name>column.widths</name>
+										<value>40</value>
+									</hint>
+								</child-property>
+								<child-property>
+									<property>PortletManaged</property>
+									<hint>
+										<name>column.widths</name>
+										<value>30</value>
+									</hint>
+								</child-property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+							</property-editor>
+						</content>
+					</section>
+					<section>
+						<label>Window States</label>
+						<collapsible>true</collapsible>
+						<content>
+							<property-editor>
+								<property>CustomWindowStates</property>
+								<child-property>
+									<property>WindowState</property>
+									<hint>
+										<name>column.widths</name>
+										<value>40</value>
+									</hint>
+								</child-property>
+								<child-property>Description</child-property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+							</property-editor>
+						</content>
+					</section>
 				</node>
 				<node>
 					<label>ContainerRuntimeOptions</label>
 					<section>
-						<label>Quick Edit</label>
+						<label>Container Runtime Options Quick Edit</label>
 						<content>
 							<property-editor>
 								<property>ContainerRuntimeOptions</property>
@@ -284,44 +258,29 @@
 		</root-node>
 		<initial-selection>Portlets</initial-selection>
 		<action>
-			<id>Create.Portlet</id>
-			<description>This will create new Portlet</description>
-			<image>/icons/n16/portlet_new.png</image>
-			<hint>
-				<name>style</name>
-				<value>image</value>
-			</hint>
-			<context>Sapphire.ActionLink</context>
-            <context>Sapphire.Section</context>
-            <context>Sapphire.EditorPage</context>
-            <label>Create new Portlet</label>
-		</action>
-		<action-handler>
-			<action>Create.Portlet</action>
-			<id>Liferay.Create.Portlet</id>
-			<label>Create Liferay Portlet</label>
-			<impl>CreateLiferayPortletActionHandler</impl>
-		</action-handler>
-		<action>
 			<id>Quick.Actions</id>
 			<hint>
 				<name>style</name>
 				<value>image+text</value>
 			</hint>
 			<context>Sapphire.EditorPage</context>
-            <context>Sapphire.Section</context>
-            <context>Sapphire.ActionLink</context>
-            <label>Quick Actions</label>
+			<label>Add New</label>
+			<image>icons/n16/portlet_new.png</image>
+			<description>This will configure a set of quick actions that will be
+				placed on the Editor Page header
+			</description>
 		</action>
-        <action-handler-factory>
-            <action>Quick.Actions</action>
-            <description>The Quick actions that appear on the Editor Page Header</description>
-            <impl>QuickActionsHandlerFactory</impl>
-            <param>
-                <name>MODEL_PROPERTIES</name>
-                <value>EventDefinitions,Filters</value>
-            </param>
-        </action-handler-factory>
+		<action-handler-factory>
+			<action>Quick.Actions</action>
+			<description>The Quick actions that appear on the Editor Page Header
+			</description>
+			<impl>QuickActionsHandlerFactory</impl>
+			<param>
+				<name>MODEL_PROPERTIES</name>
+				<value>Portlets,EventDefinitions,Filters,PublicRenderParameters
+				</value>
+			</param>
+		</action-handler-factory>
 
 	</editor-page>
 	<node-factory>
@@ -329,70 +288,61 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}
-			</label>
+				'&lt;portlet-name&gt;':PortletName}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
-
-					<group>
-						<label>Supports</label>
-						<content>
-							<with>
-								<path>Supports</path>
-								<default-panel>
-									<content>
-										<property-editor>MimeType</property-editor>
-                                        <property-editor>PortletModes</property-editor>
-                                        <property-editor>WindowStates</property-editor>
-									</content>
-								</default-panel>
-							</with>
-						</content>
-					</group>
-					<group>
-						<label>Portlet Information</label>
-						<content>
-							<with>
-								<path>PortletInfo</path>
-								<label>Portlet Information</label>
-								<default-panel>
-									<content>
-										<property-editor>
-											<property>Id</property>
-											<related-content-width>80</related-content-width>
-										</property-editor>
-										<property-editor>
-											<property>Title</property>
-											<related-content-width>60</related-content-width>
-											<related-content>
-												<property-editor>
-													<property>ShortTitle</property>
-													<related-content-width>60</related-content-width>
-													<related-content>
-														<property-editor>Keywords</property-editor>
-													</related-content>
-												</property-editor>
-											</related-content>
-										</property-editor>
-									</content>
-								</default-panel>
-							</with>
-						</content>
-					</group>
 				</content>
-				<label>Portlet</label>
-				<collapsible>true</collapsible>
+				<label>${PortletName != null ? PortletName: '&lt;portlet-name&gt;'}
+				</label>
+				<collapsible>false</collapsible>			
 			</section>
 			<section>
-				<label>Initialization Parameters</label>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
+				<label>Supports</label>
 				<content>
-					<include>init.param.composite</include>
+					<with>
+						<path>Supports</path>
+						<default-panel>
+							<content>
+								<property-editor>MimeType</property-editor>
+								<property-editor>PortletModes</property-editor>
+								<property-editor>WindowStates</property-editor>
+							</content>
+						</default-panel>
+					</with>
 				</content>
 			</section>
+			<section>
+				<label>Portlet Information</label>
+
+				<collapsible>true</collapsible>
+				<content>
+					<with>
+						<path>PortletInfo</path>
+						<default-panel>
+							<content>
+								<property-editor>
+									<property>Title</property>
+									<related-content-width>50</related-content-width>
+									<related-content>
+										<property-editor>ShortTitle</property-editor>
+									</related-content>
+								</property-editor>
+								<property-editor>Keywords</property-editor>
+							</content>
+						</default-panel>
+					</with>
+				</content>
+			</section>
+			<node>
+				<label>Initializaiton Parameters</label>
+				<section>
+					<content>
+						<include>init.param.composite</include>
+					</content>
+				</section>
+			</node>
 			<section>
 				<label>Internationalization and Localization</label>
 				<collapsible>true</collapsible>
@@ -419,113 +369,112 @@
 					</property-editor>
 				</content>
 			</section>
-			<section>
-				<label>Advanced</label>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-				<content>
-					<group>
-						<label>Preferences</label>
-						<content>
-							<with>
-								<path>PortletPreference</path>
-								<default-panel>
-									<content>
-										<property-editor>
-											<property>Id</property>
-											<related-content-width>70</related-content-width>
-											<related-content>
-												<property-editor>PreferernceValidator</property-editor>
-											</related-content>
-										</property-editor>
-										<property-editor>
-											<property>PortletPreferences</property>
-											<child-property>Id</child-property>
-											<child-property>Name</child-property>
-											<child-property>Value</child-property>
-											<child-property>ReadOnly</child-property>
-											<child-property>Description</child-property>
-										</property-editor>
-									</content>
-								</default-panel>
-							</with>
-						</content>
-					</group>
-					<group>
-						<label>Security</label>
-						<content>
-							<property-editor>
-								<property>SecurityRoleRefs</property>
-								<child-property>Id</child-property>
-								<child-property>RoleName</child-property>
-								<child-property>RoleLink</child-property>
-								<child-property>Description</child-property>
-								<hint>
-									<name>show.label.above</name>
-									<value>true</value>
-								</hint>
-							</property-editor>
-						</content>
-					</group>
-					<group>
-						<label>Inter Portlet Communication</label>
-						<content>
-							<property-editor>
-								<property>SupportedPublicRenderParameters
-								</property>
-								<hint>
-									<name>show.header</name>
-									<value>false</value>
-								</hint>
-								<hint>
-									<name>show.label.above</name>
-									<value>true</value>
-								</hint>
-							</property-editor>
-							<include>
-								<part>support.eventdef.composite</part>
-								<param>
-									<name>Property</name>
-									<value>SupportedProcessingEvents</value>
-								</param>
-							</include>
-							<include>
-								<part>support.eventdef.composite</part>
-								<param>
-									<name>Property</name>
-									<value>SupportedPublishingEvents</value>
-								</param>
-							</include>
-						</content>
-					</group>
-					<group>
-						<label>Caching</label>
-						<content>
-							<property-editor>
-								<property>ExpirationCache</property>
-								<related-content-width>50</related-content-width>
-								<related-content>
-									<property-editor>CacheScope</property-editor>
-								</related-content>
-							</property-editor>
-						</content>
-					</group>
-					<group>
-						<label>Runtime Options</label>
-						<content>
-							<property-editor>
-								<property>ContainerRuntimeOptions</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
-								<child-property>Name</child-property>
-							</property-editor>
-						</content>
-					</group>
-				</content>
-			</section>
+
 			<node-include>ContainerRuntimeOptionsNodeList</node-include>
+			<node>
+				<label>Advanced</label>
+				<section>
+					<label>Security</label>
+					<content>
+						<property-editor>
+							<property>SecurityRoleRefs</property>
+							<child-property>RoleName</child-property>
+							<child-property>RoleLink</child-property>
+							<child-property>Description</child-property>
+							<hint>
+								<name>show.label.above</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+				<section>
+					<label>Inter Portlet Communication</label>
+					<content>
+						<property-editor>
+							<property>SupportedPublicRenderParameters
+							</property>
+							<hint>
+								<name>show.header</name>
+								<value>false</value>
+							</hint>
+							<hint>
+								<name>show.label.above</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<name>Property</name>
+								<value>SupportedProcessingEvents</value>
+							</param>
+						</include>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<name>Property</name>
+								<value>SupportedPublishingEvents</value>
+							</param>
+						</include>
+					</content>
+					<collapsible>true</collapsible>
+                    <collapsed-initially>true</collapsed-initially>
+				</section>
+
+				<section>
+					<label>Preferences</label>
+					<content>
+						<with>
+							<path>PortletPreference</path>
+							<default-panel>
+								<content>
+									<property-editor>
+										<property>PortletPreferences</property>
+										<child-property>Name</child-property>
+										<child-property>Value</child-property>
+										<child-property>ReadOnly</child-property>
+										<child-property>Description</child-property>
+									</property-editor>
+								</content>
+							</default-panel>
+						</with>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>true</collapsed-initially>
+				</section>
+				<section>
+					<label>Caching</label>
+					<content>
+						<property-editor>
+							<property>ExpirationCache</property>
+							<related-content-width>50</related-content-width>
+							<related-content>
+								<property-editor>CacheScope</property-editor>
+							</related-content>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>true</collapsed-initially>
+				</section>
+				<section>
+					<label>Runtime Options</label>
+					<content>
+						<property-editor>
+							<property>ContainerRuntimeOptions</property>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+							<child-property>Name</child-property>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>true</collapsed-initially>
+				</section>
+			</node>
 		</case>
 	</node-factory>
 	<node-factory>
@@ -536,27 +485,26 @@
 			<section>
 				<label>Details</label>
 				<content>
-					<property-editor>Id</property-editor>
 					<property-editor>Name</property-editor>
 					<group>
 						<label>Qualified Name</label>
 						<indent>true</indent>
 						<content>
-                            <property-editor>
-                                <property>NamespaceURI
-							</property>
-                                <related-content-width>50</related-content-width>
-                                <related-content>
-                                    <property-editor>LocalPart</property-editor>
-                                </related-content>
-                            </property-editor>
+							<property-editor>
+								<property>NamespaceURI
+								</property>
+								<related-content-width>50</related-content-width>
+								<related-content>
+									<property-editor>LocalPart</property-editor>
+								</related-content>
+							</property-editor>
 						</content>
 					</group>
-                    <property-editor>EventValueType</property-editor>
-                    <property-editor>
-                        <property>Aliases</property>
-                        <related-content-width>30</related-content-width>
-                    </property-editor>
+					<property-editor>EventValueType</property-editor>
+					<property-editor>
+						<property>Aliases</property>
+						<related-content-width>30</related-content-width>
+					</property-editor>
 				</content>
 				<collapsible>true</collapsible>
 				<indent>true</indent>
@@ -576,20 +524,14 @@
 	<composite>
 		<id>portlet.basic.composite</id>
 		<content>
-			<property-editor>Id</property-editor>
 			<property-editor>
 				<property>PortletName</property>
+				<related-content-width>50</related-content-width>
 				<related-content>
-					<property-editor>
-						<property>DisplayName</property>
-						<related-content-width>80</related-content-width>
-						<related-content>
-							<property-editor>PortletClass</property-editor>
-						</related-content>
-					</property-editor>
+					<property-editor>DisplayName</property-editor>
 				</related-content>
-				<related-content-width>80</related-content-width>
 			</property-editor>
+			<property-editor>PortletClass</property-editor>
 		</content>
 		<indent>true</indent>
 		<scroll-vertically>true</scroll-vertically>
@@ -621,7 +563,6 @@
 	<composite>
 		<id>id.name.desc.composite</id>
 		<content>
-			<property-editor>Id</property-editor>
 			<property-editor>Name</property-editor>
 			<property-editor>Description</property-editor>
 		</content>
@@ -631,7 +572,6 @@
 		<content>
 			<property-editor>
 				<property>@{Property}</property>
-				<child-property>Id</child-property>
 				<child-property>Qname</child-property>
 				<child-property>Name</child-property>
 				<child-property>Description</child-property>
@@ -706,12 +646,6 @@
 		<property>SecurityConstraints</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<section>
-				<label>Details</label>
-				<content>
-					<property-editor>Id</property-editor>
-				</content>
-			</section>
 			<label>Security Constraint</label>
 			<node>
 				<use-model-element-image></use-model-element-image>
@@ -749,7 +683,6 @@
 				<section>
 					<label>Details</label>
 					<content>
-						<property-editor>Id</property-editor>
 						<property-editor>Description</property-editor>
 						<property-editor>TransportGurantee</property-editor>
 					</content>
@@ -801,7 +734,6 @@
 			<section>
 				<label>Details</label>
 				<content>
-					<property-editor>Id</property-editor>
 					<property-editor>Identifier</property-editor>
 					<property-editor>Name</property-editor>
 					<group>
@@ -836,24 +768,24 @@
 			</section>
 		</case>
 	</node-factory>
-    <dialog>
-        <id>new.portlet.wizard</id>
-        <content>
-            <property-editor>PortletName</property-editor>
-            <property-editor>PortletClass</property-editor>
-            <with>
-                <path>Supports</path>
-                <label>Supports</label>
-                <default-panel>
-                    <content>
-                        <property-editor>MimeType</property-editor>
-                    </content>
-                </default-panel>
-            </with>
-        </content>
-        <label>Create new Portlet</label>
-        <initial-focus>PortletName</initial-focus>
-        <scroll-vertically>true</scroll-vertically>
-        <scroll-horizontally>true</scroll-horizontally>
-    </dialog>
+	<dialog>
+		<id>new.portlet.wizard</id>
+		<content>
+			<property-editor>PortletName</property-editor>
+			<property-editor>PortletClass</property-editor>
+			<with>
+				<path>Supports</path>
+				<label>Supports</label>
+				<default-panel>
+					<content>
+						<property-editor>MimeType</property-editor>
+					</content>
+				</default-panel>
+			</with>
+		</content>
+		<label>Create new Portlet</label>
+		<initial-focus>PortletName</initial-focus>
+		<scroll-vertically>true</scroll-vertically>
+		<scroll-horizontally>true</scroll-horizontally>
+	</dialog>
 </definition>
