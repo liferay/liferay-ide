@@ -15,18 +15,20 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.ui.action;
+package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
+import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
+import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 
-import com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard;
+import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
+import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
+public class DefinePortletEventHandler extends SapphireActionHandler {
 
 	/*
 	 * (non-Javadoc)
@@ -34,11 +36,19 @@ public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-		NewPortletWizard newPortletWizard = new NewPortletWizard();
-		WizardDialog wizardDialog = new WizardDialog( context.getShell(), newPortletWizard );
-		wizardDialog.create();
-		wizardDialog.open();
-		return null;
-	}
+		// System.out.println( "DefinePortletEventHandler.run()" );
+		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
+		IEventDefinition eventDefintion = rootModel.getEventDefinitions().addNewElement();
 
+		// Select the node
+
+		final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
+		final MasterDetailsContentNode root = page.getContentOutline().getRoot();
+		final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
+		if ( node != null ) {
+			node.select();
+		}
+
+		return eventDefintion;
+	}
 }
