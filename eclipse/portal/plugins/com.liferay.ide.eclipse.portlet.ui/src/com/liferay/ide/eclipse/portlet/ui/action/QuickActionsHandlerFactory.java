@@ -20,24 +20,27 @@ package com.liferay.ide.eclipse.portlet.ui.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
+import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
-	private static final String ACTION_PREFIX = "Add new  ";
 	private String[] modelProperties;
 
 	@Override
@@ -47,6 +50,10 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		if ( strModelElementNames != null ) {
 			this.modelProperties = strModelElementNames.split( "," );
 		}
+		else {
+			throw new IllegalStateException( Resources.bind( Resources.message, "MODEL_PROPERTIES" ) );
+		}
+
 	}
 
 	/*
@@ -56,11 +63,19 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 	@Override
 	public List<SapphireActionHandler> create() {
 		List<SapphireActionHandler> listOfHandlers = new ArrayList<SapphireActionHandler>();
-		listOfHandlers.add( new CreateLiferayPortletActionHandler() );
-		for ( int i = 0; i < modelProperties.length; i++ ) {
-			String modelProperty = modelProperties[i];
-			listOfHandlers.add( new Handler( modelProperty ) );
+
+		for ( int i = 0; i < this.modelProperties.length; i++ ) {
+			String modelProperty = this.modelProperties[i];
+			if ( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) ) {
+				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
+				handler.setLabel( getActionLabel( "Portlets" ) );
+				listOfHandlers.add( handler );
+			}
+			else {
+				listOfHandlers.add( new Handler( modelProperty ) );
+			}
 		}
+		// System.out.println( "QuickActionsHandlerFactory.created" + listOfHandlers.size() + " handlers " );
 		return listOfHandlers;
 	}
 
@@ -69,11 +84,21 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 	 */
 	private static final class Handler extends SapphireActionHandler {
 
-		private final String modelProperty;
+		private final String strModelProperty;
 
 		public Handler( String modelProperty ) {
-			this.modelProperty = modelProperty;
+			this.strModelProperty = modelProperty;
+		}
 
+		@Override
+		public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
+			super.init( action, def );
+			final IModelElement rootModel = action.getPart().getModelElement();
+			// System.out.println( "QuickActionsHandlerFactory.Handler.init()" + rootModel );
+			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );
+			String labelText = modelProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, true );
+			String actionLabel = getActionLabel( labelText );
+			setLabel( actionLabel );
 		}
 
 		/*
@@ -82,13 +107,23 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		 */
 		@Override
 		protected Object run( SapphireRenderingContext context ) {
-			final IModelElement rootModel = context.getPart().getModelElement();
-			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.modelProperty );
-			ModelElementType elementType = modelProperty.getModelElementType();
-			IModelElement mElement = elementType.instantiate();
-			setLabel( ACTION_PREFIX + elementType.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, true ) );
-			// Select the node
 
+			final IModelElement rootModel = context.getPart().getModelElement();
+			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );
+			Object obj = rootModel.read( modelProperty );
+			IModelElement mElement = null;
+
+			if ( obj instanceof ModelElementList<?> ) {
+				// System.out.println( "QuickActionsHandlerFactory.Handler.run()" + obj.getClass() );
+				ModelElementList<?> list = (ModelElementList<?>) obj;
+				mElement = list.addNewElement();
+			}
+			else {
+				throw new UnsupportedOperationException( Resources.bind(
+					Resources.unsuportedOperation, this.strModelProperty ) );
+			}
+
+			// Select the ndoe
 			final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
 			final MasterDetailsContentNode root = page.getContentOutline().getRoot();
 			final MasterDetailsContentNode node = root.findNodeByModelElement( mElement );
@@ -98,7 +133,26 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
 			return mElement;
 		}
+	}
 
+	/**
+	 * This is make a compact and singular label text
+	 */
+	private static String getActionLabel( String labelText ) {
+		if ( labelText.endsWith( "s" ) ) {
+			labelText = labelText.substring( 0, labelText.lastIndexOf( "s" ) );
+		}
+		return labelText;
+
+	}
+
+	private static final class Resources extends NLS {
+
+		public static String message;
+		public static String unsuportedOperation;
+		static {
+			initializeMessages( ResourceBundleValidationService.class.getName(), Resources.class );
+		}
 	}
 
 }
