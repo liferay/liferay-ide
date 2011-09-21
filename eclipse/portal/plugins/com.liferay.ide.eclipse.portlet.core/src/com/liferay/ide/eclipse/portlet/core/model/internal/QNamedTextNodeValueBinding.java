@@ -103,7 +103,7 @@ extends XmlValueBindingImpl
 	public void write( final String value ) {
 		String qNameAsString = value;
 		XmlElement parent = xml( true );
-		System.out.println( "VALUE ___________________ " + qNameAsString );
+		// System.out.println( "VALUE ___________________ " + qNameAsString );
 
 		if ( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) ) {
 			qNameAsString = value.trim();
@@ -118,7 +118,7 @@ extends XmlValueBindingImpl
 			if ( attr == null ) {
 				domNode.setAttributeNS( namespaceURI, qualifiedName, qName.getNamespaceURI() );
 			}
-			
+
 			qNamedElement.setText( localPart );
 		}
 		else {
