@@ -2,7 +2,7 @@
  * 
  */
 
-package com.liferay.ide.eclipse.portlet.ui.action;
+package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.SapphireCondition;

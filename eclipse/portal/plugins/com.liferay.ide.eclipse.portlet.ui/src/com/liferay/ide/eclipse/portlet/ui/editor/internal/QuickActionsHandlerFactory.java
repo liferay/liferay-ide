@@ -15,11 +15,12 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.ui.action;
+package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -34,6 +35,7 @@ import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
 
 /**
@@ -68,6 +70,8 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 			String modelProperty = this.modelProperties[i];
 			if ( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) ) {
 				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
+				handler.addImage( ImageDescriptor.createFromImage( getPart().getImageCache().getImage(
+					IPortlet.TYPE.image() ) ) );
 				handler.setLabel( getActionLabel( "Portlets" ) );
 				listOfHandlers.add( handler );
 			}
@@ -99,6 +103,8 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 			String labelText = modelProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, true );
 			String actionLabel = getActionLabel( labelText );
 			setLabel( actionLabel );
+			addImage( ImageDescriptor.createFromImage( getPart().getImageCache().getImage(
+				getModelElement().getModelElementType().image() ) ) );
 		}
 
 		/*

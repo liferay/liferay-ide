@@ -15,26 +15,20 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.ui.action;
+package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
-import org.eclipse.sapphire.ui.swt.SapphireDialog;
 
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
+import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class CreatePortletActionHandler extends SapphireActionHandler {
-
-	private static final String NEW_PORTLET_WIZARD_DEF =
-		"com.liferay.ide.eclipse.portlet.ui/com/liferay/ide/eclipse/portlet/ui/editor/portlet-app.sdef!new.portlet.wizard";
+public class DefinePortletEventHandler extends SapphireActionHandler {
 
 	/*
 	 * (non-Javadoc)
@@ -42,37 +36,19 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
+		// System.out.println( "DefinePortletEventHandler.run()" );
 		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
-		IPortlet portlet = rootModel.getPortlets().addNewElement();
-		// Open the dialog to capture the mandatory properties
-		final SapphireDialog dialog = new SapphireDialog( context.getShell(), portlet, NEW_PORTLET_WIZARD_DEF );
-		if ( dialog != null && Dialog.OK == dialog.open() ) {
-			// Select the node
-			final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-			final MasterDetailsContentNode root = page.getContentOutline().getRoot();
-			final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
-			if ( node != null ) {
-				node.select();
-			}
-			try {
-				rootModel.resource().save();
-			}
-			catch ( ResourceStoreException e ) {
-				// Log it in PorletUI Plugin
-			}
-			return portlet;
-		}
-		else {
-			rootModel.getPortlets().remove( portlet );
-			portlet = null;
-			try {
-				rootModel.resource().save();
-			}
-			catch ( ResourceStoreException e ) {
-				// Log it in PorletUI Plugin
-			}
-			return null;
+		IEventDefinition eventDefintion = rootModel.getEventDefinitions().addNewElement();
+
+		// Select the node
+
+		final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
+		final MasterDetailsContentNode root = page.getContentOutline().getRoot();
+		final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
+		if ( node != null ) {
+			node.select();
 		}
 
+		return eventDefintion;
 	}
 }

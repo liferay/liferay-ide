@@ -15,7 +15,7 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.ui.action;
+package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.SapphireActionHandler;

@@ -2,7 +2,7 @@
  * 
  */
 
-package com.liferay.ide.eclipse.portlet.ui.action;
+package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.sapphire.ui.SapphireActionHandler;

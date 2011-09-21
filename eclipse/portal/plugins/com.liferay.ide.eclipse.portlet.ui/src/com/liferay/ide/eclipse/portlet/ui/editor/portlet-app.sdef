@@ -19,6 +19,7 @@
 		<package>com.liferay.ide.eclipse.portlet.ui.parts</package>
 		<package>com.liferay.ide.eclipse.portlet.ui.action.filters
 		</package>
+		<package>com.liferay.ide.eclipse.portlet.ui.editor.internal</package>
 	</import>
 	<editor-page>
 		<id>portlet-app.editor</id>
@@ -53,9 +54,15 @@
 						<content>
 							<property-editor>
 								<property>Portlets</property>
-								<child-property>PortletName
+								<child-property>
+									<property>PortletName</property>
 								</child-property>
-								<child-property>PortletClass
+								<child-property>
+									<property>PortletClass</property>
+									<action>
+										<id>Sapphire.Jump</id>
+										<label>Open Class</label>
+									</action>
 								</child-property>
 								<child-property>DisplayName
 								</child-property>
@@ -63,10 +70,10 @@
 									<name>show.label</name>
 									<value>false</value>
 								</hint>
-
 							</property-editor>
 						</content>
 					</section>
+
 				</node>
 				<node>
 					<label>Listeners</label>
@@ -94,7 +101,13 @@
 							<property-editor>
 								<property>Filters</property>
 								<child-property>Name</child-property>
-								<child-property>Implementation</child-property>
+								<child-property>
+									<property>Implementation</property>
+									<action>
+										<id>Sapphire.Jump</id>
+										<label>Open Class</label>
+									</action>
+								</child-property>
 								<hint>
 									<name>show.label</name>
 									<value>false</value>
@@ -281,14 +294,14 @@
 				</value>
 			</param>
 		</action-handler-factory>
-
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}</label>
+				'&lt;portlet-name&gt;':PortletName}
+			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -296,7 +309,7 @@
 				</content>
 				<label>${PortletName != null ? PortletName: '&lt;portlet-name&gt;'}
 				</label>
-				<collapsible>false</collapsible>			
+				<collapsible>false</collapsible>
 			</section>
 			<section>
 				<label>Supports</label>
@@ -421,7 +434,7 @@
 						</include>
 					</content>
 					<collapsible>true</collapsible>
-                    <collapsed-initially>true</collapsed-initially>
+					<collapsed-initially>true</collapsed-initially>
 				</section>
 
 				<section>
@@ -475,6 +488,7 @@
 					<collapsed-initially>true</collapsed-initially>
 				</section>
 			</node>
+
 		</case>
 	</node-factory>
 	<node-factory>
@@ -500,7 +514,13 @@
 							</property-editor>
 						</content>
 					</group>
-					<property-editor>EventValueType</property-editor>
+					<property-editor>
+						<property>EventValueType</property>
+						<action>
+							<id>Sapphire.Jump</id>
+							<label>Open Class</label>
+						</action>
+					</property-editor>
 					<property-editor>
 						<property>Aliases</property>
 						<related-content-width>30</related-content-width>
@@ -531,7 +551,13 @@
 					<property-editor>DisplayName</property-editor>
 				</related-content>
 			</property-editor>
-			<property-editor>PortletClass</property-editor>
+			<property-editor>
+				<property>PortletClass</property>
+				<action>
+					<id>Sapphire.Jump</id>
+					<label>Open Class</label>
+				</action>
+			</property-editor>
 		</content>
 		<indent>true</indent>
 		<scroll-vertically>true</scroll-vertically>
@@ -590,7 +616,13 @@
 				<child-property>NamespaceURI</child-property>
 				<child-property>LocalPart</child-property>
 				<child-property>Name</child-property>
-				<child-property>EventValueType</child-property>
+				<child-property>
+					<property>EventValueType</property>
+					<action>
+						<id>Sapphire.Jump</id>
+						<label>Open Class</label>
+					</action>
+				</child-property>
 				<hint>
 					<name>show.label</name>
 					<value>false</value>
@@ -616,7 +648,6 @@
 						<action>
 							<id>Sapphire.Jump</id>
 							<label>Open Class</label>
-							<context>Sapphire.ValuePropertyEditor</context>
 						</action>
 					</property-editor>
 					<property-editor>LifeCycle</property-editor>
@@ -720,7 +751,13 @@
 				<label>Details</label>
 				<content>
 					<property-editor>Description</property-editor>
-					<property-editor>Implementation</property-editor>
+					<property-editor>
+						<property>Implementation</property>
+						<action>
+							<id>Sapphire.Jump</id>
+							<label>Open Class</label>
+						</action>
+					</property-editor>
 				</content>
 				<collapsible>true</collapsible>
 			</section>
