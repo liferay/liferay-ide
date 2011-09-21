@@ -330,6 +330,7 @@
 						</default-panel>
 					</with>
 				</content>
+                <collapsible>true</collapsible>
 			</section>
 			<section>
 				<label>Portlet Information</label>
