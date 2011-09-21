@@ -295,14 +295,28 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-'&lt;portlet-name&gt;':PortletName}</label>
+				'&lt;portlet-name&gt;':PortletName}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${PortletName != null ? concat(PortletName,' Details'): '&lt;portlet-name&gt;'}</label>
+				<label>${PortletName != null ? concat(PortletName,' Details'):
+					'&lt;portlet-name&gt;'}</label>
 				<collapsible>false</collapsible>
+				<action>
+					<id>LiferayIDE.PortletNode.Expand</id>
+					<context>Sapphire.Section</context>
+					<type>TOGGLE</type>
+					<label>More Details</label>
+					<image>icons/e16/toggle_on.png</image>
+					<location>before:Sapphire.Restore.Defaults</location>
+				</action>
+				<action-handler>
+					<action>LiferayIDE.PortletNode.Expand</action>
+					<id>LiferayIDE.PortletNode.Expand</id>
+					<impl>ExpandSectionOutlineNodeHandler</impl>
+				</action-handler>
 			</section>
 			<section>
 				<label>Supports</label>
@@ -330,7 +344,7 @@
 						</default-panel>
 					</with>
 				</content>
-                <collapsible>true</collapsible>
+				<collapsible>true</collapsible>
 			</section>
 			<section>
 				<label>Portlet Information</label>
@@ -440,44 +454,44 @@
 				<section>
 					<label>Supported Public Render Parameters</label>
 					<content>
-                        <property-editor>
-                            <property>SupportedPublicRenderParameters
+						<property-editor>
+							<property>SupportedPublicRenderParameters
 							</property>
-                            <hint>
-                                <name>show.label</name>
-                                <value>false</value>
-                            </hint>
-                        </property-editor>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+						</property-editor>
 					</content>
 					<collapsible>true</collapsible>
 					<collapsed-initially>false</collapsed-initially>
 				</section>
-                <section>
-                    <label>Supported Processing Events</label>
-                    <content>
-                        <include>
-                            <part>support.eventdef.composite</part>
-                            <param>
-                                <value>SupportedProcessingEvents</value>
-                                <name>Property</name>
-                            </param>
-                        </include>
-                    </content>
-                    <collapsible>true</collapsible>
-                </section>
-                <section>
-                    <label>Supported Publishing Events</label>
-                    <collapsible>true</collapsible>
-                    <content>
-                        <include>
-                            <part>support.eventdef.composite</part>
-                            <param>
-                                <name>Property</name>
-                                <value>SupportedPublishingEvents</value>
-                            </param>
-                        </include>
-                    </content>
-                </section>
+				<section>
+					<label>Supported Processing Events</label>
+					<content>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<value>SupportedProcessingEvents</value>
+								<name>Property</name>
+							</param>
+						</include>
+					</content>
+					<collapsible>true</collapsible>
+				</section>
+				<section>
+					<label>Supported Publishing Events</label>
+					<collapsible>true</collapsible>
+					<content>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<name>Property</name>
+								<value>SupportedPublishingEvents</value>
+							</param>
+						</include>
+					</content>
+				</section>
 			</node>
 			<section>
 				<label>Internationalization and Localization</label>
@@ -506,6 +520,7 @@
 				</content>
 			</section>
 			<node-include>ContainerRuntimeOptionsNodeList</node-include>
+
 
 		</case>
 	</node-factory>
