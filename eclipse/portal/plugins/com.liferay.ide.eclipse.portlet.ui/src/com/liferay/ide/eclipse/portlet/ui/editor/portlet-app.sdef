@@ -134,7 +134,7 @@
 					</section>
 				</node>
 				<node>
-					<label>ResourceBundles</label>
+					<label>Resource Bundles</label>
 					<section>
 						<content>
 							<property-editor>
@@ -179,7 +179,7 @@
 					</section>
 				</node>
 				<node>
-					<label>PublicRenderParameters</label>
+					<label>Public Render Parameters</label>
 					<section>
 						<label>Public Render Parameters Quick Edit</label>
 						<content>
@@ -201,7 +201,7 @@
 				<node>
 					<label>Customizations</label>
 					<section>
-						<label>Portlet Modes</label>
+						<label>Customizations</label>
 						<collapsible>true</collapsible>
 						<content>
 							<property-editor>
@@ -222,15 +222,10 @@
 								</child-property>
 								<hint>
 									<name>show.label</name>
-									<value>false</value>
+									<value>true</value>
 								</hint>
 							</property-editor>
-						</content>
-					</section>
-					<section>
-						<label>Window States</label>
-						<collapsible>true</collapsible>
-						<content>
+							<spacer></spacer>
 							<property-editor>
 								<property>CustomWindowStates</property>
 								<child-property>
@@ -243,14 +238,14 @@
 								<child-property>Description</child-property>
 								<hint>
 									<name>show.label</name>
-									<value>false</value>
+									<value>true</value>
 								</hint>
 							</property-editor>
 						</content>
 					</section>
 				</node>
 				<node>
-					<label>ContainerRuntimeOptions</label>
+					<label>Container Runtime Options</label>
 					<section>
 						<label>Container Runtime Options Quick Edit</label>
 						<content>
@@ -300,15 +295,13 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}
-			</label>
+'&lt;portlet-name&gt;':PortletName}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${PortletName != null ? PortletName: '&lt;portlet-name&gt;'}
-				</label>
+				<label>${PortletName != null ? concat(PortletName,' Details'): '&lt;portlet-name&gt;'}</label>
 				<collapsible>false</collapsible>
 			</section>
 			<section>
@@ -319,8 +312,20 @@
 						<default-panel>
 							<content>
 								<property-editor>MimeType</property-editor>
-								<property-editor>PortletModes</property-editor>
-								<property-editor>WindowStates</property-editor>
+								<property-editor>
+									<property>PortletModes</property>
+									<hint>
+										<name>browse.only</name>
+										<value>true</value>
+									</hint>
+								</property-editor>
+								<property-editor>
+									<property>WindowStates</property>
+									<hint>
+										<name>browse.only</name>
+										<value>true</value>
+									</hint>
+								</property-editor>
 							</content>
 						</default-panel>
 					</with>
@@ -348,42 +353,15 @@
 					</with>
 				</content>
 			</section>
-			<node>
-				<label>Initializaiton Parameters</label>
-				<section>
-					<content>
-						<include>init.param.composite</include>
-					</content>
-				</section>
-			</node>
 			<section>
-				<label>Internationalization and Localization</label>
+				<content>
+					<include>init.param.composite</include>
+				</content>
+				<label>Initialization Parameters</label>
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
-				<content>
-					<property-editor>
-						<property>ResourceBundles</property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
-						<hint>
-							<name>browse.only</name>
-							<value>true</value>
-						</hint>
-						<related-content-width>50</related-content-width>
-					</property-editor>
-					<property-editor>
-						<property>SupportedLocales</property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
-					</property-editor>
-				</content>
 			</section>
 
-			<node-include>ContainerRuntimeOptionsNodeList</node-include>
 			<node>
 				<label>Advanced</label>
 				<section>
@@ -403,39 +381,7 @@
 					<collapsible>true</collapsible>
 					<collapsed-initially>false</collapsed-initially>
 				</section>
-				<section>
-					<label>Inter Portlet Communication</label>
-					<content>
-						<property-editor>
-							<property>SupportedPublicRenderParameters
-							</property>
-							<hint>
-								<name>show.header</name>
-								<value>false</value>
-							</hint>
-							<hint>
-								<name>show.label.above</name>
-								<value>true</value>
-							</hint>
-						</property-editor>
-						<include>
-							<part>support.eventdef.composite</part>
-							<param>
-								<name>Property</name>
-								<value>SupportedProcessingEvents</value>
-							</param>
-						</include>
-						<include>
-							<part>support.eventdef.composite</part>
-							<param>
-								<name>Property</name>
-								<value>SupportedPublishingEvents</value>
-							</param>
-						</include>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>true</collapsed-initially>
-				</section>
+
 
 				<section>
 					<label>Preferences</label>
@@ -456,7 +402,7 @@
 						</with>
 					</content>
 					<collapsible>true</collapsible>
-					<collapsed-initially>true</collapsed-initially>
+					<collapsed-initially>false</collapsed-initially>
 				</section>
 				<section>
 					<label>Caching</label>
@@ -488,6 +434,77 @@
 					<collapsed-initially>true</collapsed-initially>
 				</section>
 			</node>
+			<node>
+				<label>Inter Portlet Communication</label>
+				<section>
+					<label>Supported Public Render Parameters</label>
+					<content>
+                        <property-editor>
+                            <property>SupportedPublicRenderParameters
+							</property>
+                            <hint>
+                                <name>show.label</name>
+                                <value>false</value>
+                            </hint>
+                        </property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+                <section>
+                    <label>Supported Processing Events</label>
+                    <content>
+                        <include>
+                            <part>support.eventdef.composite</part>
+                            <param>
+                                <value>SupportedProcessingEvents</value>
+                                <name>Property</name>
+                            </param>
+                        </include>
+                    </content>
+                    <collapsible>true</collapsible>
+                </section>
+                <section>
+                    <label>Supported Publishing Events</label>
+                    <collapsible>true</collapsible>
+                    <content>
+                        <include>
+                            <part>support.eventdef.composite</part>
+                            <param>
+                                <name>Property</name>
+                                <value>SupportedPublishingEvents</value>
+                            </param>
+                        </include>
+                    </content>
+                </section>
+			</node>
+			<section>
+				<label>Internationalization and Localization</label>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+				<content>
+					<property-editor>
+						<property>ResourceBundles</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+						<hint>
+							<name>browse.only</name>
+							<value>true</value>
+						</hint>
+						<related-content-width>50</related-content-width>
+					</property-editor>
+					<property-editor>
+						<property>SupportedLocales</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+			</section>
+			<node-include>ContainerRuntimeOptionsNodeList</node-include>
 
 		</case>
 	</node-factory>
@@ -573,6 +590,10 @@
 				<property>InitParams</property>
 				<child-property>Name</child-property>
 				<child-property>Value</child-property>
+				<hint>
+					<name>show.label</name>
+					<value>false</value>
+				</hint>
 			</property-editor>
 		</content>
 	</composite>

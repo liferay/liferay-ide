@@ -25,8 +25,11 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.PortletModePossibleValueService;
 
 /**
  * @author kamesh
@@ -45,7 +48,7 @@ public interface IPortletMode extends IModelElement {
 	@NoDuplicates
 	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
-	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = "portlet-mode" )
+	@Service( impl = PortletModePossibleValueService.class )
 	ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" );
 
 	void setPortletMode( String mode );

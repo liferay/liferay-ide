@@ -66,6 +66,7 @@ public interface ISupports extends IModelElement {
 	// *** Window States ***
 
 	@Type( base = IWindowState.class )
+	@Label( standard = "Window States" )
 	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "window-state", type = IWindowState.class ) )
 	ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" );
 

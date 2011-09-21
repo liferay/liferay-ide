@@ -24,8 +24,11 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStatesPossibleValueService;
 
 /**
  * @author kamesh
@@ -43,7 +46,7 @@ public interface IWindowState extends IModelElement {
 	@NoDuplicates
 	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
-	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = "window-state" )
+	@Service( impl = WindowStatesPossibleValueService.class )
 	ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" );
 
 	Value<String> getWindowState();
