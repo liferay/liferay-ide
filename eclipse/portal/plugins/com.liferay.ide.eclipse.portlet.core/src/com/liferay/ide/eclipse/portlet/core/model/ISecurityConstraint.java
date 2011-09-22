@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.DefaultXmlBinding;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImpliedElementProperty;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -32,13 +34,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.DefaultXmlBinding;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/lock.png" )
+@Image( path = "images/elcl16/security_constraint_16x16.gif" )
 public interface ISecurityConstraint extends IModelElement, IIdentifiable {
 
 	ModelElementType TYPE = new ModelElementType( ISecurityConstraint.class );

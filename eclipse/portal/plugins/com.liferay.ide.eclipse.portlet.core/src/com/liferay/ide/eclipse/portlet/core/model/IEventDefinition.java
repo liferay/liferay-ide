@@ -47,7 +47,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/elcl16/event.gif" )
+@Image( path = "images/elcl16/event_16x16.gif" )
 @Label( full = "Event Definition", standard = "Event Definition" )
 public interface IEventDefinition extends IQName, IIdentifiable, IDescribeable {
 

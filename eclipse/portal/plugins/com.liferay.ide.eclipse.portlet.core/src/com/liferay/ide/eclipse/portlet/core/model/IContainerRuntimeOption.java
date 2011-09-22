@@ -31,7 +31,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author kamesh.sampath
  */
 @GenerateImpl
-@Image( path = "images/obj16/contianer_runtime.gif" )
+@Image( path = "images/elcl16/option_16x16.gif" )
 public interface IContainerRuntimeOption extends IModelElement, INameable {
 
 	ModelElementType TYPE = new ModelElementType( IContainerRuntimeOption.class );

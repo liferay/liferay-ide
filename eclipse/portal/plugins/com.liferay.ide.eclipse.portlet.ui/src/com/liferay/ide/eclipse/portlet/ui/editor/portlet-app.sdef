@@ -150,6 +150,7 @@
 							</property-editor>
 						</content>
 					</section>
+                    <image>images/folder_16x16.gif</image>
 				</node>
 				<node>
 					<label>SecurityConstraints</label>
@@ -260,7 +261,9 @@
 						</content>
 					</section>
 					<node-include>ContainerRuntimeOptionsNodeList</node-include>
+                    <image>images/runtime_16x16.gif</image>
 				</node>
+                <image>images/portlet.png</image>
 
 			</node>
 		</root-node>
@@ -289,6 +292,7 @@
 				</value>
 			</param>
 		</action-handler-factory>
+        <page-header-image>images/portlet.png</page-header-image>
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>
@@ -448,9 +452,10 @@
 					<collapsible>true</collapsible>
 					<collapsed-initially>true</collapsed-initially>
 				</section>
+                <image>images/settings_16x16.gif</image>
 			</node>
 			<node>
-				<label>Inter Portlet Communication</label>
+				<label>Inter-Portlet Communication</label>
 				<section>
 					<label>Supported Public Render Parameters</label>
 					<content>
@@ -492,6 +497,7 @@
 						</include>
 					</content>
 				</section>
+                <image>images/ipc_16x16.gif</image>
 			</node>
 			<section>
 				<label>Internationalization and Localization</label>

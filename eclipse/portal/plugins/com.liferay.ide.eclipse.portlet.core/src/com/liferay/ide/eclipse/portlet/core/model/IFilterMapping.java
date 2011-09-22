@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.FilterReferenceService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.PortletReferenceService;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
@@ -32,15 +35,12 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlValueBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.FilterReferenceService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.PortletReferenceService;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @Label( standard = "filter mapping" )
 @GenerateImpl
-@Image( path = "images/elcl16/filter_mapping.gif" )
+@Image( path = "images/elcl16/filter_mapping_16x16.gif" )
 public interface IFilterMapping extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IFilterMapping.class );

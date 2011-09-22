@@ -45,7 +45,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "/images/obj16/pub_obj.gif" )
+@Image( path = "/images/elcl16/parameter_16x16.gif" )
 @Label( full = "Public Render Parameter", standard = "Public Render Parameter" )
 public interface IPublicRenderParameter extends IQName, IIdentifiable {
 

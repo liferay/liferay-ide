@@ -42,7 +42,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/elcl16/filter.gif" )
+@Image( path = "images/elcl16/filter_16x16.gif" )
 public interface IFilter extends IModelElement, IDescribeable {
 
 	ModelElementType TYPE = new ModelElementType( IFilter.class );
