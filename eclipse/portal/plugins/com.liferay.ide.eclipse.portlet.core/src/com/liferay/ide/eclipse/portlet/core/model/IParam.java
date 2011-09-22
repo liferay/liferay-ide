@@ -26,7 +26,7 @@ import org.eclipse.sapphire.modeling.annotations.Image;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/obj16/param_obj.gif" )
+@Image( path = "images/elcl16/parameter_16x16.gif" )
 public interface IParam extends IModelElement, IIdentifiable, IDescribeable, INameValue {
 
 	ModelElementType TYPE = new ModelElementType( IParam.class );

@@ -309,7 +309,7 @@
 					<context>Sapphire.Section</context>
 					<type>TOGGLE</type>
 					<label>More Details</label>
-					<image>icons/e16/toggle_on.png</image>
+					<image>icons/elcl16/toggle_info_16x16.png</image>
 					<location>before:Sapphire.Restore.Defaults</location>
 				</action>
 				<action-handler>
