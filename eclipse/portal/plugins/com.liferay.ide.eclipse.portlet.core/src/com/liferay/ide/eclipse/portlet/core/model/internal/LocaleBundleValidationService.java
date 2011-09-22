@@ -45,7 +45,7 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 		final String locale = target().getText();
 		final String localeDisplayString = PortletUtil.getLocaleDisplayString( locale );
 		final String localeString = PortletUtil.getLocaleString( locale );
-		boolean isDefaultLocale = ( locale == null || DEFAULT_LOCALE.toString().equals( locale ) );
+		boolean isDefaultLocale = DEFAULT_LOCALE.toString().equals( localeString );
 		IPortlet portlet = nearest( IPortlet.class );
 		List<IResourceBundle> resourceBundles = portlet.getResourceBundles();
 
@@ -56,16 +56,12 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 				String bundleName = iResourceBundle.getResourceBundle().getText();
 				if ( bundleName != null && bundleName.lastIndexOf( '.' ) != -1 ) {
 
-					bundleName = bundleName.substring( bundleName.lastIndexOf( '.' ), bundleName.length() );
+					bundleName = bundleName.substring( bundleName.lastIndexOf( '.' ) + 1, bundleName.length() );
 
 					if ( !isDefaultLocale ) {
-						if ( bundleName.indexOf( "_" ) == -1 ) {
-							return Status.createWarningStatus( Resources.bind( Resources.message, new Object[] {
-								localeDisplayString, localeString } ) );
-						}
-						else {
+						if ( bundleName.indexOf( "_" ) != -1 ) {
 							String rbLocale = bundleName.substring( bundleName.indexOf( "_" ) + 1, bundleName.length() );
-							if ( !locale.equals( rbLocale ) ) {
+							if ( !localeString.equals( rbLocale ) ) {
 								return Status.createWarningStatus( Resources.bind( Resources.message, new Object[] {
 									localeDisplayString, localeString } ) );
 							}

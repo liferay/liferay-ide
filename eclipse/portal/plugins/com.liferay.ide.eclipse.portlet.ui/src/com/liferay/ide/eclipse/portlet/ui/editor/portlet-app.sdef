@@ -60,11 +60,7 @@
 								<child-property>DisplayName
 								</child-property>
 								<child-property>
-									<property>PortletClass</property>
-									<action>
-										<id>Sapphire.Jump</id>
-										<label>Open Class</label>
-									</action>
+									<property>PortletClass</property>								
 								</child-property>
 								<hint>
 									<name>show.label</name>
@@ -103,10 +99,6 @@
 								<child-property>Name</child-property>
 								<child-property>
 									<property>Implementation</property>
-									<action>
-										<id>Sapphire.Jump</id>
-										<label>Open Class</label>
-									</action>
 								</child-property>
 							</property-editor>
 							<property-editor>
@@ -550,10 +542,6 @@
 					</group>
 					<property-editor>
 						<property>EventValueType</property>
-						<action>
-							<id>Sapphire.Jump</id>
-							<label>Open Class</label>
-						</action>
 					</property-editor>
 					<property-editor>
 						<property>Aliases</property>
@@ -585,13 +573,7 @@
 					<property-editor>DisplayName</property-editor>
 				</related-content>
 			</property-editor>
-			<property-editor>
-				<property>PortletClass</property>
-				<action>
-					<id>Sapphire.Jump</id>
-					<label>Open Class</label>
-				</action>
-			</property-editor>
+			<property-editor>PortletClass</property-editor>
 		</content>
 		<indent>true</indent>
 		<scroll-vertically>true</scroll-vertically>
@@ -656,10 +638,6 @@
 				<child-property>Name</child-property>
 				<child-property>
 					<property>EventValueType</property>
-					<action>
-						<id>Sapphire.Jump</id>
-						<label>Open Class</label>
-					</action>
 				</child-property>
 				<hint>
 					<name>show.label</name>
@@ -683,10 +661,6 @@
 					<property-editor>Name</property-editor>
 					<property-editor>
 						<property>Implementation</property>
-						<action>
-							<id>Sapphire.Jump</id>
-							<label>Open Class</label>
-						</action>
 					</property-editor>
 					<property-editor>LifeCycle</property-editor>
 					<property-editor>InitParams</property-editor>
@@ -777,10 +751,6 @@
 					<property-editor>Description</property-editor>
 					<property-editor>
 						<property>Implementation</property>
-						<action>
-							<id>Sapphire.Jump</id>
-							<label>Open Class</label>
-						</action>
 					</property-editor>
 				</content>
 				<collapsible>false</collapsible>
