@@ -17,10 +17,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.ProjectRelativePathService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
-
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Path;
@@ -34,11 +30,15 @@ import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.ProjectRelativePathService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
+
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/elcl16/defaultFile_16x16.gif" )
+@Image( path = "images/elcl16/resources_16x16.gif" )
 public interface IResourceBundle extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IResourceBundle.class );

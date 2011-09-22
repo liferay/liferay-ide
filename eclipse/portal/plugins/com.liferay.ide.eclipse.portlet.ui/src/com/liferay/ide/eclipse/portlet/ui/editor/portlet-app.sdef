@@ -87,17 +87,17 @@
 									<name>show.label</name>
 								</hint>
 								<child-property>Description</child-property>
-                                <child-property>Implementation</child-property>
+								<child-property>Implementation</child-property>
 							</property-editor>
 						</content>
 					</section>
-                    <image>icons/elcl16/listener_16x16.gif</image>
+					<image>icons/elcl16/listener_16x16.gif</image>
 				</node>
 				<node>
 					<label>Filters and Mappings</label>
-                    <section>
-                        <label>Filters and Mappings Quick Edit</label>
-                        <content>
+					<section>
+						<label>Filters and Mappings Quick Edit</label>
+						<content>
 							<property-editor>
 								<property>Filters</property>
 								<child-property>Name</child-property>
@@ -115,7 +115,7 @@
 								<child-property>Portlet</child-property>
 							</property-editor>
 						</content>
-                    </section>
+					</section>
 					<node-include>FiltersNodeList</node-include>
 					<node-include>FilterMappingsNodeList</node-include>
 				</node>
@@ -136,23 +136,23 @@
 							</property-editor>
 						</content>
 					</section>
-                    <image>icons/elcl16/resources_16x16.gif</image>
+					<image>icons/elcl16/resources_16x16.gif</image>
 				</node>
 				<node>
 					<label>Security Constraints</label>
 					<node-include>SecurityConstraintNodeList</node-include>
 					<section>
 						<label>Security Constraints Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>SecurityConstraints</property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
-                            </property-editor>
-                           
-                        </content>
+						<content>
+							<property-editor>
+								<property>SecurityConstraints</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+							</property-editor>
+
+						</content>
 					</section>
 				</node>
 				<node>
@@ -231,7 +231,7 @@
 							</property-editor>
 						</content>
 					</section>
-                
+
 				</node>
 				<node>
 					<label>Container Runtime Options</label>
@@ -249,9 +249,9 @@
 						</content>
 					</section>
 					<node-include>ContainerRuntimeOptionsNodeList</node-include>
-                    <image>images/runtime_16x16.gif</image>
+					<image>images/runtime_16x16.gif</image>
 				</node>
-                <image>images/portlet.png</image>
+				<image>images/portlet.png</image>
 
 			</node>
 		</root-node>
@@ -280,29 +280,31 @@
 				</value>
 			</param>
 		</action-handler-factory>
-        <page-header-image>images/portlet.png</page-header-image>
-        <action>
-            <id>Sapphire.ShowInSource</id>
-            <label>Show in Source</label>
-            <hint>
-                <name>style</name>
-                <value>image+text</value>
-            </hint>
-            <context>Sapphire.EditorPage.Outline.Node</context>
-        </action>
+		<page-header-image>images/portlet.png</page-header-image>
+		<action>
+			<id>Sapphire.ShowInSource</id>
+			<label>Show in Source</label>
+			<hint>
+				<name>style</name>
+				<value>image+text</value>
+			</hint>
+			<context>Sapphire.EditorPage.Outline.Node</context>
+		</action>
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}</label>
+				'&lt;portlet-name&gt;':PortletName}
+			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${PortletName != null ? concat(PortletName,' Details'):'&lt;portlet-name&gt;'}</label>
+				<label>${PortletName != null ? concat(PortletName,'
+					Details'):'&lt;portlet-name&gt;'}</label>
 				<collapsible>false</collapsible>
 				<action>
 					<id>LiferayIDE.PortletNode.Expand</id>
@@ -419,7 +421,7 @@
 						</include>
 					</content>
 				</section>
-                <image>images/ipc_16x16.gif</image>
+				<image>images/ipc_16x16.gif</image>
 			</node>
 			<node>
 				<label>Advanced</label>
@@ -455,10 +457,10 @@
 										<child-property>Value</child-property>
 										<child-property>ReadOnly</child-property>
 										<child-property>Description</child-property>
-                                        <hint>
-                                            <name>show.label</name>
-                                            <value>false</value>
-                                        </hint>
+										<hint>
+											<name>show.label</name>
+											<value>false</value>
+										</hint>
 									</property-editor>
 								</content>
 							</default-panel>
@@ -496,7 +498,7 @@
 					<collapsible>true</collapsible>
 					<collapsed-initially>true</collapsed-initially>
 				</section>
-                <image>images/settings_16x16.gif</image>
+				<image>images/settings_16x16.gif</image>
 			</node>
 			<section>
 				<label>Internationalization and Localization</label>
@@ -509,11 +511,14 @@
 							<name>show.label</name>
 							<value>false</value>
 						</hint>
-						<hint>
-							<name>browse.only</name>
-							<value>true</value>
-						</hint>
-						<related-content-width>50</related-content-width>
+                        <child-property>
+                            <property>ResourceBundle</property>
+                            <action-handler>
+                            	<action>Sapphire.Jump</action>
+                            	<label>Open</label>
+                            	<impl>ResourceBundleJumpActionHandler</impl>
+                            </action-handler>
+                        </child-property>
 					</property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>
@@ -565,7 +570,8 @@
 				<collapsible>false</collapsible>
 				<indent>true</indent>
 			</section>
-			<label>${( (empty Name AND empty NamespaceURI AND empty	LocalPart ) ||
+			<label>${( (empty Name AND empty NamespaceURI AND empty LocalPart )
+				||
 				(Name=='EVENT_NAME' &amp;&amp;
 				NamespaceURI =='NAMESPACE_URI'
 				&amp;&amp;
@@ -699,7 +705,8 @@
 		<id>FilterMappingsNodeList</id>
 		<property>FilterMappings</property>
 		<case>
-			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}</label>
+			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}
+			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<label>Mappings</label>
@@ -741,13 +748,13 @@
 					<label>Details</label>
 					<content>
 						<property-editor>Description</property-editor>
-                        <property-editor>
-                            <property>TransportGurantee</property>
-                            <hint>
-                                <name>prefer.combo</name>
-                                <value>true</value>
-                            </hint>
-                        </property-editor>
+						<property-editor>
+							<property>TransportGurantee</property>
+							<hint>
+								<name>prefer.combo</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
 					</content>
 				</section>
 			</node>

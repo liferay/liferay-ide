@@ -22,6 +22,8 @@ import java.util.SortedSet;
 
 import org.eclipse.sapphire.modeling.PossibleValuesService;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> TODO: this need to filter from Liferay
  *         Portal Properties
@@ -36,9 +38,8 @@ public class LocalePossibleValueService extends PossibleValuesService {
 	protected void fillPossibleValues( SortedSet<String> values ) {
 		Locale[] locales = Locale.getAvailableLocales();
 		for ( Locale locale : locales ) {
-			values.add( locale.getDisplayName() );
+			values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
 		}
 
 	}
-
 }

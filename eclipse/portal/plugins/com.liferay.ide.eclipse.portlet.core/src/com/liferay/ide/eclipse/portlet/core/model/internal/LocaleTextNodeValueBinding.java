@@ -22,6 +22,8 @@ import java.util.Locale;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
@@ -43,14 +45,14 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 
 			value = xml( true ).getText();
 
-			// System.out.println( "Reading VALUE ___________________ " + value );
+			// System.out.println( "Locale Reading VALUE ___________________ " + value );
 
 			if ( value != null ) {
 				value = value.trim();
 				for ( int i = 0; i < AVAILABLE_LOCALES.length; i++ ) {
 					Locale locale = AVAILABLE_LOCALES[i];
 					if ( value.equals( locale.toString() ) ) {
-						value = locale.getDisplayName();
+						value = PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale );
 						break;
 					}
 				}
@@ -68,20 +70,14 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 	public void write( String value ) {
 		String val = value;
 
-		// System.out.println( "VALUE ___________________ " + val );
+		// System.out.println( "Locale : VALUE ___________________ " + val );
 
 		if ( val != null ) {
-			val = value.trim();
-			for ( int i = 0; i < AVAILABLE_LOCALES.length; i++ ) {
-				Locale locale = AVAILABLE_LOCALES[i];
-				if ( value.equals( locale.toString() ) ) {
-					value = locale.toString();
-					break;
-				}
-			}
+			val = PortletUtil.getLocaleString( value.trim() );
+
 		}
 
-		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
+		// System.out.println( "LocaleTextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
 
 		xml( true ).setText( val );
 

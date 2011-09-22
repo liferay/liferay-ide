@@ -17,10 +17,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
-import com.liferay.ide.eclipse.portlet.core.model.IPublicRenderParameter;
-import com.liferay.ide.eclipse.portlet.core.model.IQName;
-
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -28,6 +24,10 @@ import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
+
+import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
+import com.liferay.ide.eclipse.portlet.core.model.IPublicRenderParameter;
+import com.liferay.ide.eclipse.portlet.core.model.IQName;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -97,7 +97,6 @@ public class NameOrQnameValidationService extends ModelPropertyValidationService
 
 		public static String message;
 		public static String invalidQname;
-		public static String invalidValue;
 
 		static {
 			initializeMessages( NameOrQnameValidationService.class.getName(), Resources.class );

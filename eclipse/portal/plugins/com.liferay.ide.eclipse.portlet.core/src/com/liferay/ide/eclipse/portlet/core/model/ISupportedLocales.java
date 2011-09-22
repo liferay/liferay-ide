@@ -22,14 +22,23 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleBundleValidationService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.LocalePossibleValueService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleTextNodeValueBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Image( path = "images/elcl16/locale_16x16.gif" )
 public interface ISupportedLocales extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( ISupportedLocales.class );
@@ -39,7 +48,9 @@ public interface ISupportedLocales extends IModelElement {
 	@Label( standard = "Supported Locale" )
 	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
-	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = "supported-locale" )
+	@Services( value = { @Service( impl = LocalePossibleValueService.class ),
+		@Service( impl = LocaleBundleValidationService.class ) } )
+	@CustomXmlValueBinding( impl = LocaleTextNodeValueBinding.class )
 	ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty( TYPE, "SupportedLocale" );
 
 	Value<String> getSupportedLocale();

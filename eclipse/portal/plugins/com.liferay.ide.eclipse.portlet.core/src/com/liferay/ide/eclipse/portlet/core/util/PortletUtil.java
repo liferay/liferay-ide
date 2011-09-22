@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.util;
 
+import java.util.Locale;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -85,6 +87,54 @@ public class PortletUtil {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param text
+	 * @return
+	 */
+	public static String getLocaleString( String text ) {
+		int dash = text.indexOf( "-" );
+		String localeString = text.substring( dash + 1, text.length() );
+		return localeString.trim();
+	}
+
+	/**
+	 * @param text
+	 * @return
+	 */
+	public static String getLocaleDisplayString( String text ) {
+		int dash = text.indexOf( "-" );
+		String localeDisplatString = text.substring( 0, dash );
+		return localeDisplatString.trim();
+	}
+
+	/**
+	 * @param displayName
+	 * @param locale
+	 * @return
+	 */
+	public static String buildLocaleDisplayString( String displayName, Locale locale ) {
+		StringBuilder builder = new StringBuilder( displayName );
+		builder.append( " - " );
+		builder.append( locale.toString() );
+		return builder.toString();
+	}
+
+	/**
+	 * This method is used to convert the java package name file to a io file name e.g. com.liferay.Test will be
+	 * returned as com/liferay/Test.properties
+	 * 
+	 * @param value
+	 *            - the resource bundle name without .properties
+	 * @return - actual io file name like value.properties
+	 */
+	public static String convertToFileName( String value ) {
+		// Replace all "." by "/"
+		String strFileName = value.replace( '.', '/' );
+		// Attach extension
+		strFileName = strFileName + ".properties";
+		return strFileName;
 	}
 
 }

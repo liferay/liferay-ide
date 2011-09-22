@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import java.util.List;
+import java.util.Locale;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -25,11 +28,15 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.IModelParticle;
 import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
 
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
+import com.liferay.ide.eclipse.portlet.core.model.IResourceBundle;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
@@ -48,7 +55,7 @@ public class ResourceBundleValidationService extends ModelPropertyValidationServ
 			IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			IWorkspaceRoot wroot = workspace.getRoot();
 			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
-			String ioFileName = convertToFileName( text );
+			String ioFileName = PortletUtil.convertToFileName( text );
 			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
 					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
@@ -68,7 +75,14 @@ public class ResourceBundleValidationService extends ModelPropertyValidationServ
 		}
 
 		if ( resourceBundleExists ) {
-			return Status.createOkStatus();
+			if ( isResourceBundleForDefaultLocale( element(), text ) ) {
+				return Status.createOkStatus();
+			}
+			else {
+				return Status.createWarningStatus( Resources.bind( Resources.noDefaultRBMessage, new Object[] {
+					Locale.getDefault().getDisplayName(), Locale.getDefault().toString() } ) );
+			}
+
 		}
 		else {
 			return Status.createErrorStatus( Resources.bind( Resources.message, text ) );
@@ -77,24 +91,49 @@ public class ResourceBundleValidationService extends ModelPropertyValidationServ
 	}
 
 	/**
-	 * This method is used to convert the java package name file to a io file name e.g. com.liferay.Test will be
-	 * returned as com/liferay/Test.properties
-	 * 
-	 * @param value
-	 *            - the resource bundle name without .properties
-	 * @return - actual io file name like value.properties
+	 * @param iModelElement
+	 * @param newBundleName
+	 * @return
 	 */
-	private String convertToFileName( String value ) {
-		// Replace all "." by "/"
-		String strFileName = value.replace( '.', '/' );
-		// Attach extension
-		strFileName = strFileName + ".properties";
-		return strFileName;
+	private boolean isResourceBundleForDefaultLocale( IModelElement iModelElement, String newBundleName ) {
+		IModelParticle parent = iModelElement.parent() != null ? iModelElement.parent().parent() : null;
+		if ( parent != null && parent instanceof IPortlet ) {
+			IPortlet portlet = (IPortlet) parent;
+			List<IResourceBundle> resourceBundles = portlet.getResourceBundles();
+			// Check for default locale
+			String bundleName = null;
+			for ( IResourceBundle iResourceBundle : resourceBundles ) {
+				bundleName = iResourceBundle.getResourceBundle().getText();
+				if ( bundleName != null && bundleName.lastIndexOf( '.' ) != -1 ) {
+					bundleName = bundleName.substring( bundleName.lastIndexOf( '.' ), bundleName.length() );
+					if ( bundleName.indexOf( "_" ) == -1 ) {
+						return true;
+					}
+				}
+
+			}
+
+			// Also check the newly added bundle
+			bundleName = newBundleName;
+			if ( bundleName != null && bundleName.lastIndexOf( '.' ) != -1 ) {
+				bundleName = bundleName.substring( bundleName.lastIndexOf( '.' ), bundleName.length() );
+				if ( bundleName.indexOf( "_" ) == -1 ) {
+					return true;
+				}
+			}
+
+		}
+		else {
+			// As this is not applicable for other elements we return true always
+			return true;
+		}
+		return false;
 	}
 
 	private static final class Resources extends NLS {
 
 		public static String message;
+		public static String noDefaultRBMessage;
 
 		static {
 			initializeMessages( ResourceBundleValidationService.class.getName(), Resources.class );
