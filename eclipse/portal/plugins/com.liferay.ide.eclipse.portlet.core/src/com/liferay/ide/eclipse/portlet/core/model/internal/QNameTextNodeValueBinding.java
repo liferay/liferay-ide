@@ -109,6 +109,7 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 			String localPart =
 				PortletAppModelConstants.DEFAULT_QNAME_PREFIX + PortletAppModelConstants.COLON + qName.getLocalPart();
 			XmlElement qNamedElement = parent.getChildElement( this.params[0], true );
+			// TODO Handling with existing prefix
 			Element domNode = qNamedElement.getDomNode();
 			Attr attr = domNode.getAttributeNodeNS( qName.getNamespaceURI(), qName.getLocalPart() );
 			if ( attr == null ) {
