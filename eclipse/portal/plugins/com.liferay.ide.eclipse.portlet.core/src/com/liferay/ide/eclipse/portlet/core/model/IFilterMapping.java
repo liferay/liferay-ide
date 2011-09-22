@@ -24,7 +24,6 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -53,7 +52,6 @@ public interface IFilterMapping extends IModelElement {
 	@Required
 	@PossibleValues( property = "/Filters/Name" )
 	@XmlBinding( path = "filter-name" )
-	@DefaultValue( text = "FILTER" )
 	ValueProperty PROP_FILTER = new ValueProperty( TYPE, "Filter" );
 
 	ReferenceValue<String, IFilter> getFilter();

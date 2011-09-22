@@ -77,7 +77,6 @@
 				</node>
 				<node>
 					<label>Listeners</label>
-					<node-include>ListenersNodeList</node-include>
 					<section>
 						<label>Listeners Quick Edit</label>
 						<content>
@@ -87,17 +86,18 @@
 									<value>false</value>
 									<name>show.label</name>
 								</hint>
-								<child-property>Implementation</child-property>
+								<child-property>Description</child-property>
+                                <child-property>Implementation</child-property>
 							</property-editor>
 						</content>
 					</section>
+                    <image>icons/elcl16/listener_16x16.gif</image>
 				</node>
 				<node>
 					<label>Filters and Mappings</label>
-					<section>
-						<label>Filters Quick Edit</label>
-						<collapsible>true</collapsible>
-						<content>
+                    <section>
+                        <label>Filters and Mappings Quick Edit</label>
+                        <content>
 							<property-editor>
 								<property>Filters</property>
 								<child-property>Name</child-property>
@@ -108,30 +108,16 @@
 										<label>Open Class</label>
 									</action>
 								</child-property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
 							</property-editor>
-						</content>
-					</section>
-					<node-include>FiltersNodeList</node-include>
-					<node-include>FilterMappingsNodeList</node-include>
-					<section>
-						<label>Filter Mappings Quick Edit</label>
-						<collapsible>true</collapsible>
-						<content>
 							<property-editor>
 								<property>FilterMappings</property>
 								<child-property>Filter</child-property>
 								<child-property>Portlet</child-property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
 							</property-editor>
 						</content>
-					</section>
+                    </section>
+					<node-include>FiltersNodeList</node-include>
+					<node-include>FilterMappingsNodeList</node-include>
 				</node>
 				<node>
 					<label>Resource Bundles</label>
@@ -150,7 +136,7 @@
 							</property-editor>
 						</content>
 					</section>
-                    <image>images/folder_16x16.gif</image>
+                    <image>icons/elcl16/resources_16x16.gif</image>
 				</node>
 				<node>
 					<label>Security Constraints</label>
@@ -158,7 +144,13 @@
 					<section>
 						<label>Security Constraints Quick Edit</label>
                         <content>
-                            <property-editor>SecurityConstraints</property-editor>
+                            <property-editor>
+                                <property>SecurityConstraints</property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>false</value>
+                                </hint>
+                            </property-editor>
                            
                         </content>
 					</section>
@@ -271,7 +263,7 @@
 				<value>image+text</value>
 			</hint>
 			<context>Sapphire.EditorPage</context>
-			<label>Add New</label>
+			<label>New...</label>
 			<image>icons/elcl16/quick_actions_16x16.gif</image>
 			<description>This will configure a set of quick actions that will be
 				placed on the Editor Page header
@@ -310,8 +302,7 @@
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${PortletName != null ? concat(PortletName,' Details'):
-					'&lt;portlet-name&gt;'}</label>
+				<label>${PortletName != null ? concat(PortletName,' Details'):'&lt;portlet-name&gt;'}</label>
 				<collapsible>false</collapsible>
 				<action>
 					<id>LiferayIDE.PortletNode.Expand</id>
@@ -464,6 +455,10 @@
 										<child-property>Value</child-property>
 										<child-property>ReadOnly</child-property>
 										<child-property>Description</child-property>
+                                        <hint>
+                                            <name>show.label</name>
+                                            <value>false</value>
+                                        </hint>
 									</property-editor>
 								</content>
 							</default-panel>
@@ -567,11 +562,10 @@
 						<related-content-width>30</related-content-width>
 					</property-editor>
 				</content>
-				<collapsible>true</collapsible>
+				<collapsible>false</collapsible>
 				<indent>true</indent>
 			</section>
-			<label>${( (empty Name AND empty NamespaceURI AND empty
-				LocalPart ) ||
+			<label>${( (empty Name AND empty NamespaceURI AND empty	LocalPart ) ||
 				(Name=='EVENT_NAME' &amp;&amp;
 				NamespaceURI =='NAMESPACE_URI'
 				&amp;&amp;
@@ -684,7 +678,7 @@
 				==null?&quot;&lt;filter&gt;&quot;:Name}</label>
 			<section>
 				<label>Filter</label>
-				<collapsible>true</collapsible>
+				<collapsible>false</collapsible>
 				<content>
 					<property-editor>DisplayName</property-editor>
 					<property-editor>Name</property-editor>
@@ -789,7 +783,7 @@
 						</action>
 					</property-editor>
 				</content>
-				<collapsible>true</collapsible>
+				<collapsible>false</collapsible>
 			</section>
 		</case>
 	</node-factory>
