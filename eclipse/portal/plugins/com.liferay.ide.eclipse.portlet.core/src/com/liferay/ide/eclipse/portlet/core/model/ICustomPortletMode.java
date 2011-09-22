@@ -33,6 +33,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.InvertingBooleanXmlValueBinding;
 import com.liferay.ide.eclipse.portlet.core.model.internal.PortletModeImageService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.PortletModePossibleValueService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -46,19 +47,19 @@ public interface ICustomPortletMode extends IModelElement, IDescribeable, IIdent
 
 	// *** PortletMode ***
 
-	@Type( base = IPortletMode.class )
 	@Required
 	@NoDuplicates
 	@DefaultValue( text = "VIEW" )
 	@Label( standard = "Portlet Mode" )
 	@XmlBinding( path = "portlet-mode" )
+	@Service( impl = PortletModePossibleValueService.class )
 	ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" );
 
-	Value<IPortletMode> getPortletMode();
+	Value<String> getPortletMode();
 
 	void setPortletMode( String value );
 
-	void setPortletMode( IPortletMode value );
+	// void setPortletMode( IPortletMode value );
 
 	/*
 	 * Portlet Managed

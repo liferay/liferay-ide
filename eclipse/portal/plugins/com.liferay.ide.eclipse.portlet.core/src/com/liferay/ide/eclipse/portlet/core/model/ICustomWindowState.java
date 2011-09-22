@@ -23,11 +23,12 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStateImageService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStatesPossibleValueService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -40,16 +41,14 @@ public interface ICustomWindowState extends IModelElement, IDescribeable, IIdent
 	ModelElementType TYPE = new ModelElementType( ICustomWindowState.class );
 
 	// *** WindowState ***
-
-	@Type( base = IWindowState.class )
 	@Label( standard = "Window State" )
+	@NoDuplicates
 	@XmlBinding( path = "window-state" )
+	@Service( impl = WindowStatesPossibleValueService.class )
 	ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" );
 
-	Value<IWindowState> getWindowState();
+	Value<String> getWindowState();
 
 	void setWindowState( String value );
-
-	void setWindowState( IWindowState value );
 
 }

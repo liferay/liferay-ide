@@ -28,9 +28,12 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.PortletModePossibleValueService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -58,6 +61,7 @@ public interface ISupports extends IModelElement {
 
 	@Type( base = IPortletMode.class )
 	@Label( standard = "Portlet Modes" )
+	@Service( impl = PortletModePossibleValueService.class )
 	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet-mode", type = IPortletMode.class ) )
 	ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" );
 

@@ -17,13 +17,13 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.ICustomPortletMode;
-import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
-
 import java.util.List;
 import java.util.SortedSet;
 
 import org.eclipse.sapphire.modeling.PossibleValuesService;
+
+import com.liferay.ide.eclipse.portlet.core.model.ICustomPortletMode;
+import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -48,9 +48,10 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 		List<ICustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
 		for ( ICustomPortletMode iCustomPortletMode : customPortletModes ) {
 			String customPortletMode = iCustomPortletMode.getPortletMode().getText( false );
-			if ( iCustomPortletMode != null ) {
+			if ( customPortletMode != null ) {
 				values.add( customPortletMode );
 			}
+
 		}
 
 	}

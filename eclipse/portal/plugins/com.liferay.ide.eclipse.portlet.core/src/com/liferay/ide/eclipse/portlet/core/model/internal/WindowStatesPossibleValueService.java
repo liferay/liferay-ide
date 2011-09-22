@@ -17,13 +17,13 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.ICustomWindowState;
-import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
-
 import java.util.List;
 import java.util.SortedSet;
 
 import org.eclipse.sapphire.modeling.PossibleValuesService;
+
+import com.liferay.ide.eclipse.portlet.core.model.ICustomWindowState;
+import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -47,9 +47,9 @@ public class WindowStatesPossibleValueService extends PossibleValuesService {
 		// Add the ones defined in portlet.xml
 		List<ICustomWindowState> customWindowStates = portletApp.getCustomWindowStates();
 		for ( ICustomWindowState iCustomWindowState : customWindowStates ) {
-			String customPortletMode = iCustomWindowState.getWindowState().getText( false );
-			if ( iCustomWindowState != null ) {
-				values.add( customPortletMode );
+			String customWindowState = iCustomWindowState.getWindowState().getText( false );
+			if ( customWindowState != null ) {
+				values.add( customWindowState );
 			}
 		}
 
