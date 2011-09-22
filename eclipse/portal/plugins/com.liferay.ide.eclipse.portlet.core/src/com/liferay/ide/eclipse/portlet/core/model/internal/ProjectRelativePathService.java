@@ -59,4 +59,25 @@ public class ProjectRelativePathService extends RelativePathService {
 		return roots;
 
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.modeling.RelativePathService#convertToRelative(org.eclipse.sapphire.modeling.Path)
+	 */
+	@Override
+	public Path convertToRelative( Path path ) {
+		// TODO Auto-generated method stub
+		return super.convertToRelative( path );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.modeling.RelativePathService#convertToAbsolute(org.eclipse.sapphire.modeling.Path)
+	 */
+	@Override
+	public Path convertToAbsolute( Path path ) {
+		// TODO Auto-generated method stub
+		return super.convertToAbsolute( path );
+	}
+
 }

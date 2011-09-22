@@ -503,7 +503,6 @@
 							<name>show.label</name>
 							<value>false</value>
 						</hint>
-                        <child-property>ResourceBundle</child-property>
 					</property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>

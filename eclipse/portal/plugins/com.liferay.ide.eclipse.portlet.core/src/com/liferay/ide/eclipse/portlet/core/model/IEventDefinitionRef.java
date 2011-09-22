@@ -22,6 +22,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -52,6 +53,7 @@ public interface IEventDefinitionRef extends IModelElement, IIdentifiable, IDesc
 	@DefaultValue( text = "Q_NAME" )
 	@NoDuplicates
 	@Service( impl = QNamesPossibleValuesService.class, params = { "Q_NAME" } )
+	@DependsOn( { "/EventDefinitions/NamespaceURI", "/EventDefinitions/LocalPart" } )
 	@CustomXmlValueBinding( impl = QNameTextNodeValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" );
 
