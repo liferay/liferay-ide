@@ -25,6 +25,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
@@ -34,6 +35,7 @@ import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
+import org.eclipse.swt.graphics.Image;
 
 import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
@@ -100,11 +102,22 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 			final IModelElement rootModel = action.getPart().getModelElement();
 			// System.out.println( "QuickActionsHandlerFactory.Handler.init()" + rootModel );
 			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );
+
 			String labelText = modelProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, true );
 			String actionLabel = getActionLabel( labelText );
 			setLabel( actionLabel );
-			addImage( ImageDescriptor.createFromImage( getPart().getImageCache().getImage(
-				getModelElement().getModelElementType().image() ) ) );
+
+			addImage( ImageDescriptor.createFromImage( getModelElementImage( modelProperty ) ) );
+		}
+
+		/**
+		 * @param modelProperty
+		 * @return
+		 */
+		private Image getModelElementImage( ModelProperty modelProperty ) {
+			ModelElementType propModelElementType = modelProperty.getType();
+			Image image = getPart().getImageCache().getImage( propModelElementType );
+			return image;
 		}
 
 		/*

@@ -272,7 +272,7 @@
 			</hint>
 			<context>Sapphire.EditorPage</context>
 			<label>Add New</label>
-			<image>icons/n16/portlet_new.png</image>
+			<image>icons/elcl16/quick_actions_16x16.gif</image>
 			<description>This will configure a set of quick actions that will be
 				placed on the Editor Page header
 			</description>
@@ -295,8 +295,7 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}
-			</label>
+				'&lt;portlet-name&gt;':PortletName}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -377,9 +376,8 @@
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
 			</section>
-
 			<node>
-				<label>Inter Portlet Communication</label>
+				<label>Inter-Portlet Communication</label>
 				<section>
 					<label>Supported Public Render Parameters</label>
 					<content>
@@ -421,6 +419,7 @@
 						</include>
 					</content>
 				</section>
+                <image>images/ipc_16x16.gif</image>
 			</node>
 			<node>
 				<label>Advanced</label>
@@ -494,51 +493,6 @@
 					<collapsed-initially>true</collapsed-initially>
 				</section>
                 <image>images/settings_16x16.gif</image>
-			</node>
-			<node>
-				<label>Inter-Portlet Communication</label>
-				<section>
-					<label>Supported Public Render Parameters</label>
-					<content>
-						<property-editor>
-							<property>SupportedPublicRenderParameters
-							</property>
-							<hint>
-								<name>show.label</name>
-								<value>false</value>
-							</hint>
-						</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>false</collapsed-initially>
-				</section>
-				<section>
-					<label>Supported Processing Events</label>
-					<content>
-						<include>
-							<part>support.eventdef.composite</part>
-							<param>
-								<value>SupportedProcessingEvents</value>
-								<name>Property</name>
-							</param>
-						</include>
-					</content>
-					<collapsible>true</collapsible>
-				</section>
-				<section>
-					<label>Supported Publishing Events</label>
-					<collapsible>true</collapsible>
-					<content>
-						<include>
-							<part>support.eventdef.composite</part>
-							<param>
-								<name>Property</name>
-								<value>SupportedPublishingEvents</value>
-							</param>
-						</include>
-					</content>
-				</section>
-                <image>images/ipc_16x16.gif</image>
 			</node>
 			<section>
 				<label>Internationalization and Localization</label>
@@ -718,7 +672,7 @@
 		<case>
 			<use-model-element-image></use-model-element-image>
 			<label>${Name
-				==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
+				==null?&quot;&lt;filter&gt;&quot;:Name}</label>
 			<section>
 				<label>Filter</label>
 				<collapsible>true</collapsible>
@@ -742,8 +696,7 @@
 		<id>FilterMappingsNodeList</id>
 		<property>FilterMappings</property>
 		<case>
-			<label>${Filter==null?&quot;&lt;FilterMapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}
-			</label>
+			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<label>Mappings</label>
@@ -785,7 +738,13 @@
 					<label>Details</label>
 					<content>
 						<property-editor>Description</property-editor>
-						<property-editor>TransportGurantee</property-editor>
+                        <property-editor>
+                            <property>TransportGurantee</property>
+                            <hint>
+                                <name>prefer.combo</name>
+                                <value>true</value>
+                            </hint>
+                        </property-editor>
 					</content>
 				</section>
 			</node>
@@ -809,14 +768,6 @@
 		<case>
 			<use-model-element-image></use-model-element-image>
 			<label>Listener</label>
-			<section>
-				<label>About</label>
-				<content>
-					<label>Info about Listener</label>
-				</content>
-				<collapsible>true</collapsible>
-				<collapsed-initially>true</collapsed-initially>
-			</section>
 			<section>
 				<label>Details</label>
 				<content>
