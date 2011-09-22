@@ -1,4 +1,3 @@
-
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
 import org.eclipse.sapphire.ui.SapphireActionHandler;

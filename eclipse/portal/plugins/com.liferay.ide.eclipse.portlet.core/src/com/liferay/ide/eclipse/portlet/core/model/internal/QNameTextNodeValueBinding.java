@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -32,18 +35,11 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
-import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 
-public final class QNamedTextNodeValueBinding
-
-extends XmlValueBindingImpl
-
-{
+public final class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 
 	private XmlPath path;
 	private String[] params;
@@ -103,7 +99,7 @@ extends XmlValueBindingImpl
 	public void write( final String value ) {
 		String qNameAsString = value;
 		XmlElement parent = xml( true );
-		System.out.println( "VALUE ___________________ " + qNameAsString );
+		// System.out.println( "VALUE ___________________ " + qNameAsString );
 
 		if ( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) ) {
 			qNameAsString = value.trim();
@@ -118,7 +114,7 @@ extends XmlValueBindingImpl
 			if ( attr == null ) {
 				domNode.setAttributeNS( namespaceURI, qualifiedName, qName.getNamespaceURI() );
 			}
-			
+
 			qNamedElement.setText( localPart );
 		}
 		else {

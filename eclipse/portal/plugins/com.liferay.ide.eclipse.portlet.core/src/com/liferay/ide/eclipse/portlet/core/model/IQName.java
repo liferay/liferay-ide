@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Accenture Services Pvt. Ltd., All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,55 +17,34 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
 import com.liferay.ide.eclipse.portlet.core.model.internal.NameOrQnameValidationService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.QNameLocalPartValueBinding;
 import com.liferay.ide.eclipse.portlet.core.model.internal.QNamespaceValueBinding;
 
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
-import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
-import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "/images/obj16/pub_obj.gif" )
-@Label( full = "Public Render Parameter", standard = "Public Render Parameter" )
-public interface IPublicRenderParameter extends IQName, IIdentifiable {
+public interface IQName extends IModelElement {
 
-	ModelElementType TYPE = new ModelElementType( IPublicRenderParameter.class );
-
-	// *** Identifier ***
-
-	@Label( standard = "Identifier" )
-	@Required
-	@NoDuplicates
-	@XmlBinding( path = "identifier" )
-	ValueProperty PROP_IDENTIFIER = new ValueProperty( TYPE, "Identifier" );
-
-	Value<String> getIdentifier();
-
-	void setIdentifier( String value );
+	ModelElementType TYPE = new ModelElementType( IQName.class );
 
 	// *** NamespaceURI ***
 
 	@Label( standard = "Namespace URI" )
+	@Whitespace( trim = true )
 	@DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
 	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
@@ -79,38 +58,15 @@ public interface IPublicRenderParameter extends IQName, IIdentifiable {
 	// *** LocalPart ***
 
 	@Label( standard = "Local Part" )
+	@Whitespace( trim = true )
 	@DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "qname" )
 	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
-	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
+	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname", "localpart" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 
 	Value<String> getLocalPart();
 
 	void setLocalPart( String value );
-
-	// *** Name ***
-
-	@Label( standard = "Name" )
-	@XmlBinding( path = "name" )
-	@Whitespace( trim = true )
-	@DefaultValue( text = "PARAM_NAME" )
-	@Service( impl = NameOrQnameValidationService.class )
-	@Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
-	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
-	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
-
-	Value<String> getName();
-
-	void setName( String value );
-
-	// *** Aliases ***
-
-	@Type( base = IAliasQName.class )
-	@Label( standard = "Aliases" )
-	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = IAliasQName.class ) } )
-	ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" );
-
-	ModelElementList<IAliasQName> getAliases();
 
 }

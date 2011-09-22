@@ -33,7 +33,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.EventDefinitionReferenceService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.QNamedTextNodeValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNameTextNodeValueBinding;
 import com.liferay.ide.eclipse.portlet.core.model.internal.QNamesPossibleValuesService;
 
 /**
@@ -52,7 +52,7 @@ public interface IEventDefinitionRef extends IModelElement, IIdentifiable, IDesc
 	@DefaultValue( text = "Q_NAME" )
 	@NoDuplicates
 	@Service( impl = QNamesPossibleValuesService.class, params = { "Q_NAME" } )
-	@CustomXmlValueBinding( impl = QNamedTextNodeValueBinding.class, params = { "qname" } )
+	@CustomXmlValueBinding( impl = QNameTextNodeValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" );
 
 	Value<String> getQname();
