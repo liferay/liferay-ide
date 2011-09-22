@@ -57,14 +57,14 @@
 								<child-property>
 									<property>PortletName</property>
 								</child-property>
+								<child-property>DisplayName
+								</child-property>
 								<child-property>
 									<property>PortletClass</property>
 									<action>
 										<id>Sapphire.Jump</id>
 										<label>Open Class</label>
 									</action>
-								</child-property>
-								<child-property>DisplayName
 								</child-property>
 								<hint>
 									<name>show.label</name>
@@ -153,19 +153,14 @@
                     <image>images/folder_16x16.gif</image>
 				</node>
 				<node>
-					<label>SecurityConstraints</label>
+					<label>Security Constraints</label>
 					<node-include>SecurityConstraintNodeList</node-include>
 					<section>
 						<label>Security Constraints Quick Edit</label>
-						<content>
-							<property-editor>
-								<property>SecurityConstraints</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
-							</property-editor>
-						</content>
+                        <content>
+                            <property-editor>SecurityConstraints</property-editor>
+                           
+                        </content>
 					</section>
 				</node>
 				<node>
@@ -203,7 +198,7 @@
 					<label>Customizations</label>
 					<section>
 						<label>Customizations</label>
-						<collapsible>true</collapsible>
+						<collapsible>false</collapsible>
 						<content>
 							<property-editor>
 								<property>CustomPortletModes</property>
@@ -244,6 +239,7 @@
 							</property-editor>
 						</content>
 					</section>
+                
 				</node>
 				<node>
 					<label>Container Runtime Options</label>
@@ -299,7 +295,8 @@
 		<property>Portlets</property>
 		<case>
 			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}</label>
+				'&lt;portlet-name&gt;':PortletName}
+			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -381,6 +378,50 @@
 				<collapsed-initially>true</collapsed-initially>
 			</section>
 
+			<node>
+				<label>Inter Portlet Communication</label>
+				<section>
+					<label>Supported Public Render Parameters</label>
+					<content>
+						<property-editor>
+							<property>SupportedPublicRenderParameters
+							</property>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+				<section>
+					<label>Supported Processing Events</label>
+					<content>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<value>SupportedProcessingEvents</value>
+								<name>Property</name>
+							</param>
+						</include>
+					</content>
+					<collapsible>true</collapsible>
+				</section>
+				<section>
+					<label>Supported Publishing Events</label>
+					<collapsible>true</collapsible>
+					<content>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<name>Property</name>
+								<value>SupportedPublishingEvents</value>
+							</param>
+						</include>
+					</content>
+				</section>
+			</node>
 			<node>
 				<label>Advanced</label>
 				<section>
@@ -724,12 +765,6 @@
 				<property>PortletCollection</property>
 				<label>Portlet Collection</label>
 				<section>
-					<label>General</label>
-					<content>
-						<label>Info about Portlet Collection</label>
-					</content>
-				</section>
-				<section>
 					<label>Portlet Names</label>
 					<content>
 						<property-editor>
@@ -746,12 +781,6 @@
 				<label>User Data Constraint</label>
 				<use-model-element-image></use-model-element-image>
 				<property>UserDataConstraint</property>
-				<section>
-					<label>General</label>
-					<content>
-						<label>Info about the section</label>
-					</content>
-				</section>
 				<section>
 					<label>Details</label>
 					<content>
