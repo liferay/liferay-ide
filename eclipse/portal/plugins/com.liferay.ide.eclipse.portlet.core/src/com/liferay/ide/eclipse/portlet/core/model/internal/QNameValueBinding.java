@@ -37,6 +37,8 @@ import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 import org.w3c.dom.Document;
 
+import com.liferay.ide.eclipse.portlet.core.PortletCore;
+
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
@@ -91,12 +93,10 @@ public final class QNameValueBinding extends XmlValueBindingImpl {
 			printDocument( parent.getDomNode().getOwnerDocument(), System.out );
 		}
 		catch ( IOException e ) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			PortletCore.logError( e );
 		}
 		catch ( TransformerException e ) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			PortletCore.logError( e );
 		}
 
 	}

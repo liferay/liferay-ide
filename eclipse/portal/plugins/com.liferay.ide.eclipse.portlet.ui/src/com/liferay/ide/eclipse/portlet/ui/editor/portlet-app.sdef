@@ -289,6 +289,15 @@
 			</param>
 		</action-handler-factory>
         <page-header-image>images/portlet.png</page-header-image>
+        <action>
+            <id>Sapphire.ShowInSource</id>
+            <label>Show in Source</label>
+            <hint>
+                <name>style</name>
+                <value>image+text</value>
+            </hint>
+            <context>Sapphire.EditorPage.Outline.Node</context>
+        </action>
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>
