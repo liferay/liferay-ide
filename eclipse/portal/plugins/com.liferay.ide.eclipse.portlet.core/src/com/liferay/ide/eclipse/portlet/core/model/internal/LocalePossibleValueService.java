@@ -38,6 +38,7 @@ public class LocalePossibleValueService extends PossibleValuesService {
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
+		// System.out.println( "LocalePossibleValueService.fillPossibleValues()-1" );
 		for ( Locale locale : locales ) {
 			values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
 		}

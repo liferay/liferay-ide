@@ -40,13 +40,7 @@
 						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
-                        <property-editor>
-                            <property>ResourceBundle</property>
-                            <hint>
-                                <name>browse.only</name>
-                                <value>true</value>
-                            </hint>
-                        </property-editor>
+						<property-editor>ResourceBundle</property-editor>
 					</content>
 					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
@@ -67,7 +61,7 @@
 								<child-property>DisplayName
 								</child-property>
 								<child-property>
-									<property>PortletClass</property>								
+									<property>PortletClass</property>
 								</child-property>
 								<hint>
 									<name>show.label</name>
@@ -275,13 +269,15 @@
 		<id>PortletsNodeList</id>
 		<property>Portlets</property>
 		<case>
-			<label>${ PortletName == null ? '&lt;portlet-name&gt;' : PortletName }</label>
+			<label>${ PortletName == null ? '&lt;portlet-name&gt;' : PortletName
+				}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${ PortletName != null ? concat( PortletName, ' Details' ) : '&lt;portlet-name&gt;' }</label>
+				<label>${ PortletName != null ? concat( PortletName, ' Details' ) :
+					'&lt;portlet-name&gt;' }</label>
 				<collapsible>false</collapsible>
 				<action>
 					<id>LiferayIDE.PortletNode.Expand</id>
@@ -482,13 +478,25 @@
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
 				<content>
-                    <property-editor>
-                        <property>ResourceBundle</property>
-                        <hint>
-                            <name>browse.only</name>
-                            <value>true</value>
-                        </hint>
-                    </property-editor>
+					<property-editor>
+						<property>ResourceBundle</property>
+						<action>
+							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<label>Create Locale Bundles</label>
+							<image>icons/elcl16/new_doc_16x16.png</image>
+							<hint>
+								<name>style</name>
+								<value>image</value>
+							</hint>
+							<context>Sapphire.ValuePropertyEditor</context>
+							<location>after:Sapphire.Browse</location>
+						</action>
+						<action-handler>
+							<action>LiferayIDE.PortletApp.RB.Create</action>
+							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<impl>CreateResourceBundleActionHandler</impl>
+						</action-handler>
+					</property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>
 						<hint>
@@ -761,7 +769,8 @@
 					<property-editor>Aliases</property-editor>
 				</content>
 			</section>
-			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;: Identifier}
+			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;:
+				Identifier}
 			</label>
 		</case>
 	</node-factory>
@@ -769,7 +778,8 @@
 		<id>ContainerRuntimeOptionsNodeList</id>
 		<property>ContainerRuntimeOptions</property>
 		<case>
-			<label>${Name ==null ? '&lt;container-runtime-option&gt;' : Name }</label>
+			<label>${Name ==null ? '&lt;container-runtime-option&gt;' : Name }
+			</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<label>Details</label>

@@ -24,13 +24,19 @@ import java.util.Locale;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
@@ -47,6 +53,53 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 
 	final Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
 	final Locale DEFAULT_LOCALE = Locale.getDefault();
+
+	IModelElement modelElement;
+
+	ModelProperty property;
+
+	/**
+	 * 
+	 */
+	private final IResourceChangeListener listener = new IResourceChangeListener() {
+
+		public void resourceChanged( IResourceChangeEvent event ) {
+			try {
+				if ( event.getType() == IResourceChangeEvent.POST_CHANGE ) {
+					event.getDelta().accept( new IResourceDeltaVisitor() {
+
+						public boolean visit( IResourceDelta delta ) throws CoreException {
+
+							if ( delta.getResource().getName().endsWith( ".properties" ) ) {
+								modelElement.refresh( property );
+								return true;
+							}
+
+							return false;
+						}
+					} );
+				}
+			}
+			catch ( CoreException e ) {
+				// LOG the error
+			}
+
+		}
+	};
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.modeling.ModelPropertyService#init(org.eclipse.sapphire.modeling.IModelElement,
+	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+	 */
+	@Override
+	public void init( IModelElement element, ModelProperty property, String[] params ) {
+
+		super.init( element, property, params );
+		this.modelElement = element;
+		ResourcesPlugin.getWorkspace().addResourceChangeListener( listener );
+
+	}
 
 	/**
 	 * 
@@ -82,6 +135,16 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 
 		}
 		return Status.createOkStatus();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.modeling.ModelService#dispose()
+	 */
+	@Override
+	public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener( listener );
+		super.dispose();
 	}
 
 	private static final class Resources extends NLS {

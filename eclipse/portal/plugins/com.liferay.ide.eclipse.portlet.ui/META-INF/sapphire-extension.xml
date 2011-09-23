@@ -11,4 +11,25 @@
 		<impl>com.liferay.ide.eclipse.portlet.ui.editor.internal.ResourceBundleJumpActionHandler
 		</impl>
 	</action-handler>
+	
+	 <action>
+            <id>LiferayIDE.Refresh</id>
+            <label>Refresh</label>
+        <location>after:Quick.Actions</location>
+        <location>after:Sapphire.Add</location>
+        <group>LiferayIDE.Group</group>
+            <context>Sapphire.EditorPage</context>
+            <hint>
+                <name>style</name>
+                <value>image+text</value>
+            </hint>
+            <image>icons/elcl16/e_refresh.gif</image>
+            <context>Sapphire.EditorPage.Outline</context>
+            <context>Sapphire.EditorPage.Outline.Node</context>
+        </action>
+        <action-handler>
+            <action>LiferayIDE.Refresh</action>
+            <id>LiferayIDE.Refresh</id>
+            <impl>com.liferay.ide.eclipse.portlet.ui.editor.internal.ModelRefreshActionHandler</impl>
+        </action-handler>
 </extension>

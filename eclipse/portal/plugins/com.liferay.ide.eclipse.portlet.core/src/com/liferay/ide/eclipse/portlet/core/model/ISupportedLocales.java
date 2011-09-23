@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
@@ -46,8 +47,9 @@ public interface ISupportedLocales extends IModelElement {
 
 	// *** SupportedLocale ***
 
-	@Label( standard = "Supported Locale" )
+	@Label( standard = "Locale" )
 	@Whitespace( trim = true )
+	@NoDuplicates
 	@XmlBinding( path = "" )
 	@Services( value = { @Service( impl = LocalePossibleValueService.class ),
 		@Service( impl = LocaleBundleValidationService.class ) } )
