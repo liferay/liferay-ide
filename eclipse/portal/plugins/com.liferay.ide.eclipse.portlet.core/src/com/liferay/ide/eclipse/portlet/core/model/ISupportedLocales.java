@@ -30,7 +30,6 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleBundleValidationService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.LocalePossibleValueService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleTextNodeValueBinding;
 
@@ -48,8 +47,7 @@ public interface ISupportedLocales extends IModelElement {
 	@Label( standard = "Supported Locale" )
 	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
-	@Services( value = { @Service( impl = LocalePossibleValueService.class ),
-		@Service( impl = LocaleBundleValidationService.class ) } )
+	@Services( value = { @Service( impl = LocalePossibleValueService.class ) } )
 	@CustomXmlValueBinding( impl = LocaleTextNodeValueBinding.class )
 	ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty( TYPE, "SupportedLocale" );
 

@@ -17,13 +17,13 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
-import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
-import org.eclipse.sapphire.modeling.xml.XmlNode;
-import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -35,7 +35,7 @@ extends XmlValueBindingImpl
 
 {
 
-	private XmlPath path;
+	private String[] params;
 
 	/*
 	 * (non-Javadoc)
@@ -45,11 +45,7 @@ extends XmlValueBindingImpl
 	@Override
 	public void init( final IModelElement element, final ModelProperty property, final String[] params ) {
 		super.init( element, property, params );
-
-		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-		if ( params != null && params.length > 0 ) {
-			this.path = new XmlPath( params[0], xmlNamespaceResolver );
-		}
+		this.params = params;
 
 	}
 
@@ -60,20 +56,21 @@ extends XmlValueBindingImpl
 	@Override
 	public String read() {
 		String value = null;
+		final XmlElement parent = xml( false );
+		if ( this.params != null && parent != null ) {
+			final XmlElement element = parent.getChildElement( this.params[0], false );
 
-		final XmlElement element = xml( false );
+			if ( element != null ) {
 
-		if ( element != null ) {
+				value = element.getText();
 
-			value = xml( true ).getText();
+				// System.out.println( "Reading VALUE ___________________ " + value );
 
-			// System.out.println( "Reading VALUE ___________________ " + value );
-
-			if ( value != null ) {
-				value = value.trim();
+				if ( value != null ) {
+					value = value.trim();
+				}
 			}
 		}
-
 		return value;
 	}
 
@@ -84,48 +81,17 @@ extends XmlValueBindingImpl
 	@Override
 	public void write( final String value ) {
 		String val = value;
+		IProject project = element().adapt( IProject.class );
 
 		// System.out.println( "VALUE ___________________ " + val );
 
 		if ( val != null ) {
-			val = convertToJavaName( value.trim() );
+			val = PortletUtil.convertIOToJavaFileName( project, value.trim() );
 		}
 
 		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
-
-		xml( true ).setText( val );
+		final XmlElement element = xml( false ).getChildElement( this.params[0], true );
+		element.setText( val );
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl#getXmlNode()
-	 */
-	@Override
-	public XmlNode getXmlNode() {
-		final XmlElement element = xml( false );
-
-		if ( element != null ) {
-			return element.getChildNode( this.path, false );
-		}
-
-		return null;
-	}
-
-	/**
-	 * this will convert the IO file name of the resource bundle to java package name
-	 * 
-	 * @param value
-	 *            - the io file name
-	 * @return - the java package name of the resource bundle
-	 */
-	private String convertToJavaName( String value ) {
-		String javaName = value;
-		if ( javaName.indexOf( '.' ) != -1 ) {
-			// Strip the extension
-			javaName = value.substring( 0, value.lastIndexOf( '.' ) );
-			// Replace all "/" by "."
-			javaName = javaName.replace( '/', '.' );
-		}
-		return javaName;
-	}
 }

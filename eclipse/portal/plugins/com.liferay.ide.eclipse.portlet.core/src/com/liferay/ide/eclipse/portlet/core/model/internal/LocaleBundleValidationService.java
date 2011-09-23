@@ -17,22 +17,34 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import static com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
 
 import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
-import com.liferay.ide.eclipse.portlet.core.model.IResourceBundle;
+import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class LocaleBundleValidationService extends ModelPropertyValidationService<Value<String>> {
+public class LocaleBundleValidationService extends ModelPropertyValidationService<Value<Path>> {
 
 	final Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
 	final Locale DEFAULT_LOCALE = Locale.getDefault();
@@ -42,38 +54,59 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 	 */
 	@Override
 	public Status validate() {
-		final String locale = target().getText();
-		final String localeDisplayString = PortletUtil.getLocaleDisplayString( locale );
-		final String localeString = PortletUtil.getLocaleString( locale );
-		boolean isDefaultLocale = DEFAULT_LOCALE.toString().equals( localeString );
-		IPortlet portlet = nearest( IPortlet.class );
-		List<IResourceBundle> resourceBundles = portlet.getResourceBundles();
+		IModelElement modelElement = element();
+		if ( modelElement instanceof IPortlet ) {
+			final IProject project = modelElement.adapt( IProject.class );
+			final IPortlet portlet = modelElement.nearest( IPortlet.class );
+			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			final IWorkspaceRoot wroot = workspace.getRoot();
+			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			String bundleName = target().getText( false );
+			if ( bundleName != null ) {
+				Vector<String> missingLocales = new Vector<String>();
+				List<ISupportedLocales> supportedLocales = portlet.getSupportedLocales();
+				if ( supportedLocales != null && !supportedLocales.isEmpty() ) {
+					for ( IClasspathEntry iClasspathEntry : cpEntries ) {
+						if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
+							for ( ISupportedLocales iSupportedLocales : supportedLocales ) {
+								IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+								String supportedLocale = iSupportedLocales.getSupportedLocale().getText( false );
+								if ( supportedLocale != null ) {
+									String localeString = PortletUtil.localeString( supportedLocale );
+									String ioFileName =
+										PortletUtil.convertJavaToIoFileName(
+											bundleName, RB_FILE_EXTENSION, localeString );
+									entryPath = entryPath.append( ioFileName );
+									IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
+									// System.out.println( "ResourceBundleValidationService.validate():" +
+									// resourceBundleFile );
+									if ( resourceBundleFile != null && !resourceBundleFile.exists() ) {
+										missingLocales.add( supportedLocale );
+									}
+								}
 
-		if ( locale != null ) {
-
-			// Check for other locales
-			for ( IResourceBundle iResourceBundle : resourceBundles ) {
-				String bundleName = iResourceBundle.getResourceBundle().getText();
-				if ( bundleName != null && bundleName.lastIndexOf( '.' ) != -1 ) {
-
-					bundleName = bundleName.substring( bundleName.lastIndexOf( '.' ) + 1, bundleName.length() );
-
-					if ( !isDefaultLocale ) {
-						if ( bundleName.indexOf( "_" ) != -1 ) {
-							String rbLocale = bundleName.substring( bundleName.indexOf( "_" ) + 1, bundleName.length() );
-							if ( !localeString.equals( rbLocale ) ) {
-								return Status.createWarningStatus( Resources.bind( Resources.message, new Object[] {
-									localeDisplayString, localeString } ) );
 							}
+
 						}
 					}
 
+					if ( !missingLocales.isEmpty() ) {
+						StringBuilder msgMissingLocales = new StringBuilder();
+						String sampleLocale = "";
+						for ( String missingLocale : missingLocales ) {
+							sampleLocale = PortletUtil.localeString( missingLocale );
+							msgMissingLocales.append( PortletUtil.localeDisplayString( missingLocale ) );
+							msgMissingLocales.append( "," );
+						}
+
+						return Status.createWarningStatus( Resources.bind( Resources.message, new Object[] {
+							msgMissingLocales.toString(), sampleLocale } ) );
+					}
 				}
 
 			}
 
 		}
-
 		return Status.createOkStatus();
 	}
 

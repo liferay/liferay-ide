@@ -22,16 +22,20 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.ProjectRelativePathService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleBundleValidationService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
 
 /**
@@ -45,10 +49,13 @@ public interface IResourceBundle extends IModelElement {
 
 	// *** ResourceBundle ***
 	@Type( base = Path.class )
-	@Services( value = { @Service( impl = ProjectRelativePathService.class ),
-		@Service( impl = ResourceBundleValidationService.class ) } )
+	@Services( value = { @Service( impl = ResourceBundleRelativePathService.class ),
+		@Service( impl = LocaleBundleValidationService.class ) } )
 	@FileExtensions( expr = "properties" )
-	@CustomXmlValueBinding( impl = ResourceBundleValueBinding.class )
+	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
+	@XmlBinding( path = "resource-bundle" )
+	@DependsOn( "/Portlets/SupportedLocales" )
+	@CustomXmlValueBinding( impl = ResourceBundleValueBinding.class, params = { "resource-bundle" } )
 	ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" );
 
 	Value<Path> getResourceBundle();

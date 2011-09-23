@@ -17,7 +17,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -43,7 +42,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
 @GenerateImpl
 @Image( path = "images/obj16/portlet_model_obj.gif" )
 @XmlRootBinding( namespace = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd", schemaLocation = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd", elementName = "portlet-app" )
-public interface IPortletApp extends IModelElement, IIdentifiable {
+public interface IPortletApp extends IResourceBundle, IIdentifiable {
 
 	ModelElementType TYPE = new ModelElementType( IPortletApp.class );
 
@@ -107,15 +106,6 @@ public interface IPortletApp extends IModelElement, IIdentifiable {
 	ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty( TYPE, "SecurityConstraints" );
 
 	ModelElementList<ISecurityConstraint> getSecurityConstraints();
-
-	// *** ResourceBundles ***
-
-	@Type( base = IResourceBundle.class )
-	@Label( standard = "Resource Bundle" )
-	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "resource-bundle", type = IResourceBundle.class ) )
-	ListProperty PROP_RESOURCE_BUNDLES = new ListProperty( TYPE, "ResourceBundles" );
-
-	ModelElementList<IResourceBundle> getResourceBundles();
 
 	// *** Filters ***
 

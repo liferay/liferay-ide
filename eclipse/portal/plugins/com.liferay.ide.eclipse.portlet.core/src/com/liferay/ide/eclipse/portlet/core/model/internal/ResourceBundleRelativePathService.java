@@ -34,7 +34,11 @@ import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class ProjectRelativePathService extends RelativePathService {
+public class ResourceBundleRelativePathService extends RelativePathService {
+
+	public static final String RB_FILE_EXTENSION = "properties";
+	final IWorkspace WORKSPACE = ResourcesPlugin.getWorkspace();
+	final IWorkspaceRoot WORKSPACE_ROOT = WORKSPACE.getRoot();
 
 	/*
 	 * (non-Javadoc)
@@ -42,15 +46,13 @@ public class ProjectRelativePathService extends RelativePathService {
 	 */
 	@Override
 	public List<Path> roots() {
+		final IProject project = adapt( IProject.class );
 		List<Path> roots = new ArrayList<Path>();
-		IProject project = adapt( IProject.class );
 		if ( project != null ) {
 			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
-			IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			IWorkspaceRoot wroot = workspace.getRoot();
 			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
-					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+					IPath entryPath = WORKSPACE_ROOT.getFolder( iClasspathEntry.getPath() ).getLocation();
 					roots.add( new Path( entryPath.toPortableString() ) );
 				}
 			}
@@ -58,26 +60,6 @@ public class ProjectRelativePathService extends RelativePathService {
 		}
 		return roots;
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.RelativePathService#convertToRelative(org.eclipse.sapphire.modeling.Path)
-	 */
-	@Override
-	public Path convertToRelative( Path path ) {
-		// TODO Auto-generated method stub
-		return super.convertToRelative( path );
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.RelativePathService#convertToAbsolute(org.eclipse.sapphire.modeling.Path)
-	 */
-	@Override
-	public Path convertToAbsolute( Path path ) {
-		// TODO Auto-generated method stub
-		return super.convertToAbsolute( path );
 	}
 
 }

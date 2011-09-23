@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import static com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -51,8 +53,30 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 	 */
 	@Override
 	protected boolean computeEnablementState() {
-		// TODO Based on file existence
-		return true;
+		final IModelElement element = getModelElement();
+		IProject project = element.adapt( IProject.class );
+
+		final ValueProperty property = getProperty();
+
+		final String text = element.read( property ).getText( true );
+		boolean isEnabled = super.computeEnablementState();
+		if ( isEnabled && text != null ) {
+			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			final IWorkspaceRoot wroot = workspace.getRoot();
+			final IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
+				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
+					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+					entryPath = entryPath.append( ioFileName );
+					IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
+					if ( resourceBundleFile != null && resourceBundleFile.exists() ) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/*
@@ -62,24 +86,22 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
 
-		System.out.println( "ResourceBundleJumpActionHandler.run()" );
-
 		final IModelElement element = getModelElement();
 
 		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
 		final ValueProperty property = getProperty();
 
-		IProject project = element.adapt( IProject.class );
+		final IProject project = element.adapt( IProject.class );
 
 		final Value<Path> value = element.read( property );
 
 		final String text = value.getText( false );
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IWorkspaceRoot wroot = workspace.getRoot();
-		IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
-		String ioFileName = PortletUtil.convertToFileName( text );
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final IWorkspaceRoot wroot = workspace.getRoot();
+		final IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+		String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
 
 		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {

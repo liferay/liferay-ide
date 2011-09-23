@@ -17,9 +17,6 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValidationService;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,8 @@ import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 import org.eclipse.swt.graphics.Image;
+
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -174,7 +173,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		public static String message;
 		public static String unsuportedOperation;
 		static {
-			initializeMessages( ResourceBundleValidationService.class.getName(), Resources.class );
+			initializeMessages( QuickActionsHandlerFactory.class.getName(), Resources.class );
 		}
 	}
 

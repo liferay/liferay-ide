@@ -40,6 +40,7 @@
 						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
+                        <property-editor>ResourceBundle</property-editor>
 					</content>
 					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
@@ -110,25 +111,6 @@
 					</section>
 					<node-include>FiltersNodeList</node-include>
 					<node-include>FilterMappingsNodeList</node-include>
-				</node>
-				<node>
-					<label>Resource Bundles</label>
-					<section>
-						<content>
-							<property-editor>
-								<property>ResourceBundles</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
-								<hint>
-									<name>browse.only</name>
-									<value>true</value>
-								</hint>
-							</property-editor>
-						</content>
-					</section>
-					<image>icons/elcl16/resources_16x16.gif</image>
 				</node>
 				<node>
 					<label>Security Constraints</label>
@@ -295,8 +277,7 @@
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${PortletName != null ? concat(PortletName,'
-					Details'):'&lt;portlet-name&gt;'}</label>
+				<label>${PortletName != null ? concat(PortletName,' ','Details'):'&lt;portlet-name&gt;'}</label>
 				<collapsible>false</collapsible>
 				<action>
 					<id>LiferayIDE.PortletNode.Expand</id>
@@ -497,13 +478,7 @@
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
 				<content>
-					<property-editor>
-						<property>ResourceBundles</property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
-					</property-editor>
+					<property-editor>ResourceBundle</property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>
 						<hint>

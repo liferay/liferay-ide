@@ -19,9 +19,14 @@ package com.liferay.ide.eclipse.portlet.core.util;
 
 import java.util.Locale;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -93,7 +98,7 @@ public class PortletUtil {
 	 * @param text
 	 * @return
 	 */
-	public static String getLocaleString( String text ) {
+	public static String localeString( String text ) {
 		int dash = text.indexOf( "-" );
 		String localeString = text.substring( dash + 1, text.length() );
 		return localeString.trim();
@@ -103,7 +108,7 @@ public class PortletUtil {
 	 * @param text
 	 * @return
 	 */
-	public static String getLocaleDisplayString( String text ) {
+	public static String localeDisplayString( String text ) {
 		int dash = text.indexOf( "-" );
 		String localeDisplatString = text.substring( 0, dash );
 		return localeDisplatString.trim();
@@ -122,18 +127,61 @@ public class PortletUtil {
 	}
 
 	/**
+	 * this will convert the IO file name of the resource bundle to java package name
+	 * 
+	 * @param project
+	 * @param value
+	 *            - the io file name
+	 * @return - the java package name of the resource bundle
+	 */
+	public static String convertIOToJavaFileName( IProject project, String value ) {
+		String rbIOFile = value.substring( value.lastIndexOf( "/" ) + 1 );
+		IFile resourceBundleFile = null;
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot wroot = workspace.getRoot();
+		IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
+			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
+				IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+				entryPath = entryPath.append( rbIOFile );
+				resourceBundleFile = wroot.getFileForLocation( entryPath );
+				// System.out.println( "ResourceBundleValidationService.validate():" + resourceBundleFile );
+				if ( resourceBundleFile != null && resourceBundleFile.exists() ) {
+					break;
+				}
+			}
+		}
+
+		String javaName = resourceBundleFile.getProjectRelativePath().toPortableString();
+		if ( javaName.indexOf( '.' ) != -1 ) {
+			// Strip the extension
+			javaName = value.substring( 0, value.lastIndexOf( '.' ) );
+			// Replace all "/" by "."
+			javaName = javaName.replace( '/', '.' );
+		}
+		return javaName;
+	}
+
+	/**
 	 * This method is used to convert the java package name file to a io file name e.g. com.liferay.Test will be
 	 * returned as com/liferay/Test.properties
 	 * 
 	 * @param value
-	 *            - the resource bundle name without .properties
-	 * @return - actual io file name like value.properties
+	 *            - the file name without extension in java packaging format
+	 * @param extension
+	 *            - the extension that needs to be attached to the file
+	 * @param locales
+	 *            - the locale String
+	 * @return - actual io file name like value.<extension>
 	 */
-	public static String convertToFileName( String value ) {
+	public static String convertJavaToIoFileName( String value, String extension, String... locales ) {
 		// Replace all "." by "/"
 		String strFileName = value.replace( '.', '/' );
 		// Attach extension
-		strFileName = strFileName + ".properties";
+		if ( locales != null && locales.length > 0 ) {
+			strFileName = strFileName + "_" + locales[0];
+		}
+		strFileName = strFileName + "." + extension;
 		return strFileName;
 	}
 

@@ -21,7 +21,6 @@ import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImpliedElementProperty;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
@@ -50,7 +49,7 @@ import com.liferay.ide.eclipse.portlet.core.model.internal.DefaultXmlBinding;
  */
 @GenerateImpl
 @Image( path = "images/obj16/portlet_class_obj.gif" )
-public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
+public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable {
 
 	ModelElementType TYPE = new ModelElementType( IPortlet.class );
 
@@ -139,15 +138,6 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 	ListProperty PROP_SUPPORTED_LOCALES = new ListProperty( TYPE, "SupportedLocales" );
 
 	ModelElementList<ISupportedLocales> getSupportedLocales();
-
-	// *** ResourceBundles ***
-
-	@Type( base = IResourceBundle.class )
-	@Label( standard = "Resource Bundles" )
-	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "resource-bundle", type = IResourceBundle.class ) )
-	ListProperty PROP_RESOURCE_BUNDLES = new ListProperty( TYPE, "ResourceBundles" );
-
-	ModelElementList<IResourceBundle> getResourceBundles();
 
 	// *** PortletInfo ***
 

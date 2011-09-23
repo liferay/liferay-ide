@@ -19,11 +19,11 @@ package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.RelativePathService;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphirePropertyEditor;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
-
-import com.liferay.ide.eclipse.portlet.core.model.IResourceBundle;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -36,7 +36,8 @@ public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEd
 		final IModelElement element = part.getModelElement();
 		final ModelProperty property = part.getProperty();
 
-		return ( element instanceof IResourceBundle && property instanceof ValueProperty );
+		return ( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) && element.service(
+			property, RelativePathService.class ) != null );
 	}
 
 }

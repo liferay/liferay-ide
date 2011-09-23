@@ -73,13 +73,12 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl {
 		// System.out.println( "Locale : VALUE ___________________ " + val );
 
 		if ( val != null ) {
-			val = PortletUtil.getLocaleString( value.trim() );
+			val = PortletUtil.localeString( value.trim() );
+			xml( true ).setText( val );
 
 		}
 
 		// System.out.println( "LocaleTextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
-
-		xml( true ).setText( val );
 
 	}
 
