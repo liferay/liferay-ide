@@ -30,13 +30,14 @@ import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
  */
 public class LocalePossibleValueService extends PossibleValuesService {
 
+	static final Locale[] locales = Locale.getAvailableLocales();
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
-		Locale[] locales = Locale.getAvailableLocales();
 		for ( Locale locale : locales ) {
 			values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
 		}
