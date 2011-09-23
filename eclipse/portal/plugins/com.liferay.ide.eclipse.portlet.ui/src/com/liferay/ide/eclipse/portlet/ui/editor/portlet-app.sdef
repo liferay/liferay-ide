@@ -275,15 +275,13 @@
 		<id>PortletsNodeList</id>
 		<property>Portlets</property>
 		<case>
-			<label>${ PortletName == null ?
-				'&lt;portlet-name&gt;':PortletName}
-			</label>
+			<label>${ PortletName == null ? '&lt;portlet-name&gt;' : PortletName }</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
 				</content>
-				<label>${PortletName != null ? concat(PortletName,' ','Details'):'&lt;portlet-name&gt;'}</label>
+				<label>${ PortletName != null ? concat( PortletName, ' Details' ) : '&lt;portlet-name&gt;' }</label>
 				<collapsible>false</collapsible>
 				<action>
 					<id>LiferayIDE.PortletNode.Expand</id>
@@ -637,8 +635,7 @@
 		<property>Filters</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<label>${Name
-				==null?&quot;&lt;filter&gt;&quot;:Name}</label>
+			<label>${ Name == null ? &quot;&lt;filter&gt;&quot; : Name }</label>
 			<section>
 				<label>Filter</label>
 				<collapsible>false</collapsible>
@@ -764,8 +761,7 @@
 					<property-editor>Aliases</property-editor>
 				</content>
 			</section>
-			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;:
-				Identifier}
+			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;: Identifier}
 			</label>
 		</case>
 	</node-factory>
@@ -773,8 +769,7 @@
 		<id>ContainerRuntimeOptionsNodeList</id>
 		<property>ContainerRuntimeOptions</property>
 		<case>
-			<label>${Name
-				==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
+			<label>${Name ==null ? '&lt;container-runtime-option&gt;' : Name }</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<label>Details</label>
