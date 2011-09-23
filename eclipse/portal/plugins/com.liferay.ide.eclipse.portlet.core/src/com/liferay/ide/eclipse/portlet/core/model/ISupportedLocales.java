@@ -21,6 +21,7 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -30,6 +31,7 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleBundleValidationService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.LocalePossibleValueService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleTextNodeValueBinding;
 
@@ -47,8 +49,10 @@ public interface ISupportedLocales extends IModelElement {
 	@Label( standard = "Supported Locale" )
 	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
-	@Services( value = { @Service( impl = LocalePossibleValueService.class ) } )
+	@Services( value = { @Service( impl = LocalePossibleValueService.class ),
+		@Service( impl = LocaleBundleValidationService.class ) } )
 	@CustomXmlValueBinding( impl = LocaleTextNodeValueBinding.class )
+	@DependsOn( { "/Portlets/ResourceBundle" } )
 	ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty( TYPE, "SupportedLocale" );
 
 	Value<String> getSupportedLocale();

@@ -40,7 +40,13 @@
 						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
-                        <property-editor>ResourceBundle</property-editor>
+                        <property-editor>
+                            <property>ResourceBundle</property>
+                            <hint>
+                                <name>browse.only</name>
+                                <value>true</value>
+                            </hint>
+                        </property-editor>
 					</content>
 					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
@@ -478,7 +484,13 @@
 				<collapsible>true</collapsible>
 				<collapsed-initially>true</collapsed-initially>
 				<content>
-					<property-editor>ResourceBundle</property-editor>
+                    <property-editor>
+                        <property>ResourceBundle</property>
+                        <hint>
+                            <name>browse.only</name>
+                            <value>true</value>
+                        </hint>
+                    </property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>
 						<hint>

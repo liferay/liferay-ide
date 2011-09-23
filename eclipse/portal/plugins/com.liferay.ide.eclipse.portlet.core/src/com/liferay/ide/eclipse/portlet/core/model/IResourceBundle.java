@@ -34,7 +34,6 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.LocaleBundleValidationService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
 
@@ -49,12 +48,11 @@ public interface IResourceBundle extends IModelElement {
 
 	// *** ResourceBundle ***
 	@Type( base = Path.class )
-	@Services( value = { @Service( impl = ResourceBundleRelativePathService.class ),
-		@Service( impl = LocaleBundleValidationService.class ) } )
+	@Services( value = { @Service( impl = ResourceBundleRelativePathService.class ) } )
 	@FileExtensions( expr = "properties" )
 	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
 	@XmlBinding( path = "resource-bundle" )
-	@DependsOn( "/Portlets/SupportedLocales" )
+	@DependsOn( { "/Portlets/SupportedLocales" } )
 	@CustomXmlValueBinding( impl = ResourceBundleValueBinding.class, params = { "resource-bundle" } )
 	ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" );
 
