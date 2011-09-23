@@ -24,6 +24,7 @@ import java.util.Locale;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -61,31 +62,7 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 	/**
 	 * 
 	 */
-	private final IResourceChangeListener listener = new IResourceChangeListener() {
-
-		public void resourceChanged( IResourceChangeEvent event ) {
-			try {
-				if ( event.getType() == IResourceChangeEvent.POST_CHANGE ) {
-					event.getDelta().accept( new IResourceDeltaVisitor() {
-
-						public boolean visit( IResourceDelta delta ) throws CoreException {
-
-							if ( delta.getResource().getName().endsWith( ".properties" ) ) {
-								modelElement.refresh( property );
-								return true;
-							}
-
-							return false;
-						}
-					} );
-				}
-			}
-			catch ( CoreException e ) {
-				// LOG the error
-			}
-
-		}
-	};
+	IResourceChangeListener listener;
 
 	/*
 	 * (non-Javadoc)
@@ -97,6 +74,44 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 
 		super.init( element, property, params );
 		this.modelElement = element;
+		listener = new IResourceChangeListener() {
+
+			final IProject iProject = element().adapt( IProject.class );
+
+			public void resourceChanged( IResourceChangeEvent event ) {
+				// System.out.println( "1" );
+				try {
+					if ( event.getType() == IResourceChangeEvent.POST_CHANGE ) {
+						// System.out.println( "2" );
+						event.getDelta().accept( new IResourceDeltaVisitor() {
+
+							public boolean visit( IResourceDelta delta ) throws CoreException {
+								System.out.println( "3" + delta.getResource().getType() );
+								IProject tempProject = delta.getResource().getProject();
+								switch ( delta.getResource().getType() ) {
+								case IResource.FILE: {
+									System.out.println( "4" + delta.getResource().getName() );
+									if ( RB_FILE_EXTENSION.equals( delta.getResource().getFileExtension() ) &&
+										iProject.getName().equals( tempProject.getName() ) ) {
+										// System.out.println( "4-" );
+										modelElement.refresh( property(), true, true );
+										return true;
+									}
+								}
+								default: {
+									return false;
+								}
+								}
+							}
+						} );
+					}
+				}
+				catch ( CoreException e ) {
+					// log the error
+				}
+
+			}
+		};
 		ResourcesPlugin.getWorkspace().addResourceChangeListener( listener );
 
 	}
