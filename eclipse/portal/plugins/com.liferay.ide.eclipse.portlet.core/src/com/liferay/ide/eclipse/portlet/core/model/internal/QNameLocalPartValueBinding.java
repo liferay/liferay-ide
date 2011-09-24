@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,9 +17,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
@@ -27,6 +24,9 @@ import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+
+import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

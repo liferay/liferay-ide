@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,11 +16,6 @@
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
-import com.liferay.ide.eclipse.portlet.core.model.internal.NameOrQnameValidationService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.QNameLocalPartValueBinding;
-import com.liferay.ide.eclipse.portlet.core.model.internal.QNamespaceValueBinding;
 
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
@@ -40,6 +35,11 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.NameOrQnameValidationService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNameLocalPartValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNamespaceValueBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
