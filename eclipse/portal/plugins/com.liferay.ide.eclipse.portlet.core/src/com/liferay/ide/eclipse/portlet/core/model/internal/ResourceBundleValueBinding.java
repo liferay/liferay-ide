@@ -80,18 +80,13 @@ extends XmlValueBindingImpl
 	 */
 	@Override
 	public void write( final String value ) {
-		String val = value;
-		IProject project = element().adapt( IProject.class );
-
-		// System.out.println( "VALUE ___________________ " + val );
-
-		if ( val != null ) {
-			val = PortletUtil.convertIOToJavaFileName( project, value.trim() );
-		}
-
-		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
 		final XmlElement element = xml( false ).getChildElement( this.params[0], true );
-		element.setText( val );
+		if ( value != null && ( value.endsWith( ".properties" ) || value.indexOf( "/" ) != -1 ) ) {
+			IProject project = element().adapt( IProject.class );
+			element.setText( PortletUtil.convertIOToJavaFileName( project, value.trim() ) );
+		}
+		else {
+			element.setText( value );
+		}
 	}
-
 }

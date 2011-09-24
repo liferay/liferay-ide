@@ -51,7 +51,25 @@
 						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
-						<property-editor>ResourceBundle</property-editor>
+                        <property-editor>
+                            <property>ResourceBundle</property>
+                            <action>
+							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<label>Create Bundle</label>
+							<image>icons/elcl16/new_doc_16x16.png</image>
+							<hint>
+								<name>style</name>
+								<value>image</value>
+							</hint>
+							<context>Sapphire.ValuePropertyEditor</context>
+							<location>after:Sapphire.Browse</location>
+						</action>
+						<action-handler>
+							<action>LiferayIDE.PortletApp.RB.Create</action>
+							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<impl>CreatePortletAppResourceBundleActionHandler</impl>
+						</action-handler>
+                        </property-editor>
 					</content>
 					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
@@ -493,7 +511,7 @@
 					<property-editor>
 						<property>ResourceBundle</property>
 						<action>
-							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<id>LiferayIDE.Portlet.RB.Create</id>
 							<label>Create Locale Bundles</label>
 							<image>icons/elcl16/new_doc_16x16.png</image>
 							<hint>
@@ -504,9 +522,9 @@
 							<location>after:Sapphire.Browse</location>
 						</action>
 						<action-handler>
-							<action>LiferayIDE.PortletApp.RB.Create</action>
-							<id>LiferayIDE.PortletApp.RB.Create</id>
-							<impl>CreateResourceBundleActionHandler</impl>
+							<action>LiferayIDE.Portlet.RB.Create</action>
+							<id>LiferayIDE.Portlet.RB.Create</id>
+							<impl>CreatePortletResourceBundleActionHandler</impl>
 						</action-handler>
 					</property-editor>
 					<property-editor>
