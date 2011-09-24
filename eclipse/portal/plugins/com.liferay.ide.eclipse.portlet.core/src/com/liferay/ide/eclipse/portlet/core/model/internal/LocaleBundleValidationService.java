@@ -24,20 +24,13 @@ import java.util.Locale;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
@@ -54,67 +47,6 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 
 	final Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
 	final Locale DEFAULT_LOCALE = Locale.getDefault();
-
-	IModelElement modelElement;
-
-	ModelProperty property;
-
-	/**
-	 * 
-	 */
-	IResourceChangeListener listener;
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ModelPropertyService#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-
-		super.init( element, property, params );
-		this.modelElement = element;
-		listener = new IResourceChangeListener() {
-
-			final IProject iProject = element().adapt( IProject.class );
-
-			public void resourceChanged( IResourceChangeEvent event ) {
-				// System.out.println( "1" );
-				try {
-					if ( event.getType() == IResourceChangeEvent.POST_CHANGE ) {
-						// System.out.println( "2" );
-						event.getDelta().accept( new IResourceDeltaVisitor() {
-
-							public boolean visit( IResourceDelta delta ) throws CoreException {
-								System.out.println( "3" + delta.getResource().getType() );
-								IProject tempProject = delta.getResource().getProject();
-								switch ( delta.getResource().getType() ) {
-								case IResource.FILE: {
-									System.out.println( "4" + delta.getResource().getName() );
-									if ( RB_FILE_EXTENSION.equals( delta.getResource().getFileExtension() ) &&
-										iProject.getName().equals( tempProject.getName() ) ) {
-										// System.out.println( "4-" );
-										modelElement.refresh( property(), true, true );
-										return true;
-									}
-								}
-								default: {
-									return false;
-								}
-								}
-							}
-						} );
-					}
-				}
-				catch ( CoreException e ) {
-					// log the error
-				}
-
-			}
-		};
-		ResourcesPlugin.getWorkspace().addResourceChangeListener( listener );
-
-	}
 
 	/**
 	 * 
@@ -150,16 +82,6 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 
 		}
 		return Status.createOkStatus();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ModelService#dispose()
-	 */
-	@Override
-	public void dispose() {
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener( listener );
-		super.dispose();
 	}
 
 	private static final class Resources extends NLS {
