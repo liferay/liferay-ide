@@ -17,9 +17,6 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -32,8 +29,8 @@ import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
+
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -104,19 +101,9 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 		if ( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) ) {
 			qNameAsString = value.trim();
 			QName qName = QName.valueOf( qNameAsString );
-			String namespaceURI = PortletAppModelConstants.XMLNS_NS_URI;
-			String qualifiedName = PortletAppModelConstants.DEFAULT_QNAME_NS_DECL;
-			String localPart =
-				PortletAppModelConstants.DEFAULT_QNAME_PREFIX + PortletAppModelConstants.COLON + qName.getLocalPart();
 			XmlElement qNamedElement = parent.getChildElement( this.params[0], true );
-			// TODO Handling with existing prefix
-			Element domNode = qNamedElement.getDomNode();
-			Attr attr = domNode.getAttributeNodeNS( qName.getNamespaceURI(), qName.getLocalPart() );
-			if ( attr == null ) {
-				domNode.setAttributeNS( namespaceURI, qualifiedName, qName.getNamespaceURI() );
-			}
-
-			qNamedElement.setText( localPart );
+			String qualifiedNodeValue = PortletModelUtil.defineNS( qNamedElement, qName.getNamespaceURI(), qName );
+			qNamedElement.setText( qualifiedNodeValue );
 		}
 		else {
 			// System.out.println( "Remove:" + params[0] + " from " + parent );

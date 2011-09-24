@@ -18,15 +18,8 @@
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -35,7 +28,6 @@ import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
-import org.w3c.dom.Document;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 
@@ -90,7 +82,7 @@ public final class QNameValueBinding extends XmlValueBindingImpl {
 
 		// Only for debugging purposes
 		try {
-			printDocument( parent.getDomNode().getOwnerDocument(), System.out );
+			PortletModelUtil.printDocument( parent.getDomNode().getOwnerDocument(), System.out );
 		}
 		catch ( IOException e ) {
 			PortletCore.logError( e );
@@ -112,18 +104,6 @@ public final class QNameValueBinding extends XmlValueBindingImpl {
 		}
 
 		return null;
-	}
-
-	private void printDocument( Document doc, OutputStream out ) throws IOException, TransformerException {
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
-		transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "no" );
-		transformer.setOutputProperty( OutputKeys.METHOD, "xml" );
-		transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
-		transformer.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
-		transformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" );
-
-		transformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( out, "UTF-8" ) ) );
 	}
 
 }
