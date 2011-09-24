@@ -63,20 +63,6 @@ public class PortletUtil {
 	}
 
 	/**
-	 * @param value
-	 * @return
-	 */
-	public static String stripPrefix( String value ) {
-		String strippedValue = value;
-		int colonIndex = value.indexOf( PortletAppModelConstants.COLON );
-		if ( colonIndex != -1 ) {
-			strippedValue = strippedValue.substring( colonIndex + 1, strippedValue.length() );
-		}
-		return strippedValue;
-
-	}
-
-	/**
 	 * @param project
 	 * @return
 	 */
@@ -183,6 +169,34 @@ public class PortletUtil {
 		}
 		strFileName = strFileName + "." + extension;
 		return strFileName;
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static String stripPrefix( String value ) {
+		String strippedValue = value;
+		int colonIndex = value.indexOf( PortletAppModelConstants.COLON );
+		if ( colonIndex != -1 ) {
+			strippedValue = strippedValue.substring( colonIndex + 1, strippedValue.length() );
+		}
+		return strippedValue;
+
+	}
+
+	/**
+	 * @param value
+	 * @return
+	 */
+	public static String stripSuffix( String value ) {
+		String strippedValue = value;
+		int colonIndex = value.indexOf( PortletAppModelConstants.COLON );
+		if ( colonIndex != -1 ) {
+			strippedValue = strippedValue.substring( 0, colonIndex );
+		}
+		return strippedValue;
+
 	}
 
 }

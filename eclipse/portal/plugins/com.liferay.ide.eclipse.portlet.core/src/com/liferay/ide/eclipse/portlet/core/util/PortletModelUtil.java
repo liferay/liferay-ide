@@ -15,7 +15,7 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core.model.internal;
+package com.liferay.ide.eclipse.portlet.core.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,8 +33,6 @@ import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -65,23 +63,29 @@ public class PortletModelUtil {
 	 * @param currValue
 	 * @return
 	 */
-	public static String defineNS( XmlElement element, String namespaceURI, QName currValueAsQName ) {
+	public static String defineNS( XmlElement element, QName currValueAsQName ) {
 		String qualifiedNodeValue = null;
+		String namespaceURI = currValueAsQName.getNamespaceURI();
 		String defaultPrefix = PortletAppModelConstants.DEFAULT_QNAME_PREFIX;
 		Element domNode = element.getDomNode();
 		boolean nsDefined = false;
 		String currNodeValue = element.getText();
 		Attr attrib = null;
 		if ( currNodeValue != null && currNodeValue.indexOf( ":" ) != -1 ) {
-			String name = currNodeValue.substring( 0, currNodeValue.indexOf( ":" ) );
+			String name = PortletUtil.stripSuffix( currNodeValue );
 			// Check if the NS is already declared
 			attrib = domNode.getAttributeNode( String.format( PortletAppModelConstants.NS_DECL, name ) );
 			if ( attrib != null ) {
 				String nsURI = attrib.getValue();
-				if ( nsURI != null && namespaceURI.equals( nsURI ) ) {
+				if ( namespaceURI.equals( nsURI ) ) {
 					nsDefined = true;
 					defaultPrefix = name;
 				}
+				else { // only NS changed, update it and send the existing value
+					attrib.setNodeValue( namespaceURI );
+					return element.getText();
+				}
+
 			}
 
 		}
@@ -94,9 +98,9 @@ public class PortletModelUtil {
 		}
 		// update the element
 		String qualifiedName = String.format( PortletAppModelConstants.NS_DECL, defaultPrefix );
-		Attr attr = domNode.getAttributeNodeNS( currValueAsQName.getNamespaceURI(), currValueAsQName.getLocalPart() );
+		Attr attr = domNode.getAttributeNodeNS( namespaceURI, defaultPrefix );
 		if ( attr == null ) {
-			domNode.setAttributeNS( namespaceURI, qualifiedName, currValueAsQName.getNamespaceURI() );
+			domNode.setAttributeNS( namespaceURI, qualifiedName, namespaceURI );
 		}
 
 		qualifiedNodeValue = defaultPrefix + ":" + currValueAsQName.getLocalPart();

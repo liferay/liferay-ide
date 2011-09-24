@@ -17,19 +17,20 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import java.util.List;
-
 import javax.xml.namespace.QName;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.xml.XmlAttribute;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
+import com.liferay.ide.eclipse.portlet.core.util.PortletModelUtil;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
@@ -69,19 +70,18 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 		if ( parent != null ) {
 			XmlElement qNamedElement = parent.getChildElement( this.params[0], false );
 			if ( qNamedElement != null ) {
-				List<XmlAttribute> listOfAttibutes = qNamedElement.getAttributes();
-
-				XmlAttribute qnsAttribute = listOfAttibutes != null ? listOfAttibutes.get( 0 ) : null;
-				if ( qnsAttribute != null ) {
-					value = qNamedElement.getText();
-
-					if ( value != null ) {
-						value = PortletUtil.stripPrefix( value.trim() );
-						QName qname = new QName( qnsAttribute.getText(), value );
+				Element domNode = qNamedElement.getDomNode();
+				value = qNamedElement.getText();
+				if ( value != null ) {
+					String prefix = PortletUtil.stripSuffix( value.trim() );
+					Attr attrib = domNode.getAttributeNode( String.format( PortletAppModelConstants.NS_DECL, prefix ) );
+					if ( attrib != null ) {
+						QName qname = new QName( attrib.getValue(), PortletUtil.stripPrefix( value ) );
 						value = qname.toString();
-
 					}
+
 				}
+
 			}
 		}
 		// System.out.println( "QNamedTextNodeValueBinding.read()" + value );
@@ -102,7 +102,7 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl {
 			qNameAsString = value.trim();
 			QName qName = QName.valueOf( qNameAsString );
 			XmlElement qNamedElement = parent.getChildElement( this.params[0], true );
-			String qualifiedNodeValue = PortletModelUtil.defineNS( qNamedElement, qName.getNamespaceURI(), qName );
+			String qualifiedNodeValue = PortletModelUtil.defineNS( qNamedElement, qName );
 			qNamedElement.setText( qualifiedNodeValue );
 		}
 		else {
