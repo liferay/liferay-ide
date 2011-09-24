@@ -162,6 +162,8 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 					}
 					getModelElement().refresh( getProperty(), true );
 					getModelElement().refresh( IPortlet.PROP_SUPPORTED_LOCALES, true, true );
+					// TODO: Actually this needs to be automatically done using worksapce resource chnage listener
+					setEnabled( false );
 					monitor.done();
 
 				}

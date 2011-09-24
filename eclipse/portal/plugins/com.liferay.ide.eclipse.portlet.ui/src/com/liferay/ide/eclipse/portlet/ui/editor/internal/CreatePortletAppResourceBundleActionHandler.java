@@ -98,6 +98,8 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 						final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
 						rbFile.create( new ByteArrayInputStream( rbFileBuffer.toString().getBytes() ), true, monitor );
 						getModelElement().refresh( getProperty(), true );
+						// TODO: Actually this needs to be automatically done using worksapce resource chnage listener
+						setEnabled( false );
 						monitor.worked( 1 );
 					}
 					catch ( CoreException e ) {
