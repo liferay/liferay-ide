@@ -17,21 +17,32 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import java.io.ByteArrayInputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.ListIterator;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
+import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -106,4 +117,49 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 		}
 		return null;
 	}
+
+	/**
+	 * @param rbFiles
+	 * @param rbFileBuffer
+	 */
+	protected final void createFiles(
+		final SapphireRenderingContext context, final List<IFile> rbFiles, final StringBuilder rbFileBuffer ) {
+		if ( !rbFiles.isEmpty() ) {
+			final int workUnit = rbFiles.size() + 1;
+			final IRunnableWithProgress rbCreationProc = new IRunnableWithProgress() {
+
+				public void run( final IProgressMonitor monitor ) throws InvocationTargetException,
+					InterruptedException {
+					monitor.beginTask( "", workUnit );
+					ListIterator<IFile> rbFilesIterator = rbFiles.listIterator();
+					while ( rbFilesIterator.hasNext() ) {
+						try {
+							IFile rbFile = rbFilesIterator.next();
+							rbFile.create(
+								new ByteArrayInputStream( rbFileBuffer.toString().getBytes() ), true, monitor );
+							monitor.worked( 1 );
+						}
+						catch ( CoreException e ) {
+							PortletUIPlugin.logError( e );
+						}
+					}
+
+					monitor.done();
+
+				}
+			};
+
+			try {
+				( new ProgressMonitorDialog( context.getShell() ) ).run( false, false, rbCreationProc );
+				rbFiles.clear();
+			}
+			catch ( InvocationTargetException e ) {
+				PortletUIPlugin.logError( e );
+			}
+			catch ( InterruptedException e ) {
+				PortletUIPlugin.logError( e );
+			}
+		}
+	}
+
 }

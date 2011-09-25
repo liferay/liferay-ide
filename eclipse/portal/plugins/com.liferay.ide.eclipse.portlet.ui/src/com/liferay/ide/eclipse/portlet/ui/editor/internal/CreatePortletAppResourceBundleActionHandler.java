@@ -17,16 +17,12 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import java.io.ByteArrayInputStream;
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
@@ -38,10 +34,10 @@ import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -85,39 +81,13 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 
 		final IPath entryPath = getResourceBundleFolderLocation( project, defaultRBFileName );
 		if ( getModelElement() instanceof IPortletApp ) {
-			final IRunnableWithProgress rbCreationProc = new IRunnableWithProgress() {
-
-				public void run( final IProgressMonitor monitor ) throws InvocationTargetException,
-					InterruptedException {
-					monitor.beginTask( "Creating resource bundle " + defaultRBFileName, 2 );
-
-					final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" );
-					monitor.worked( 1 );
-
-					try {
-						final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
-						rbFile.create( new ByteArrayInputStream( rbFileBuffer.toString().getBytes() ), true, monitor );
-						getModelElement().refresh( getProperty(), true );
-						// TODO: Actually this needs to be automatically done using worksapce resource chnage listener
-						setEnabled( false );
-						monitor.worked( 1 );
-					}
-					catch ( CoreException e ) {
-						PortletUIPlugin.logError( e );
-					}
-
-				}
-			};
-
-			try {
-				( new ProgressMonitorDialog( context.getShell() ) ).run( false, false, rbCreationProc );
-			}
-			catch ( InvocationTargetException e ) {
-				PortletUIPlugin.logError( e );
-			}
-			catch ( InterruptedException e ) {
-				PortletUIPlugin.logError( e );
-			}
+			List<IFile> missingRBFiles = new ArrayList<IFile>();
+			final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" );
+			final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
+			missingRBFiles.add( rbFile );
+			createFiles( context, missingRBFiles, rbFileBuffer );
+			setEnabled( false );
+			getModelElement().refresh( getProperty(), true );
 		}
 		return null;
 	}

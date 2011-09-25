@@ -17,19 +17,12 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import java.io.ByteArrayInputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
@@ -44,7 +37,6 @@ import com.liferay.ide.eclipse.portlet.core.model.IPortletInfo;
 import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -141,45 +133,10 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 			}
 		}
 
-		if ( !missingRBFiles.isEmpty() ) {
-			final int workUnit = missingRBFiles.size() + 1;
-			final IRunnableWithProgress rbCreationProc = new IRunnableWithProgress() {
-
-				public void run( final IProgressMonitor monitor ) throws InvocationTargetException,
-					InterruptedException {
-					monitor.beginTask( "", workUnit );
-					ListIterator<IFile> rbFilesIterator = missingRBFiles.listIterator();
-					while ( rbFilesIterator.hasNext() ) {
-						try {
-							IFile rbFile = rbFilesIterator.next();
-							rbFile.create(
-								new ByteArrayInputStream( rbFileBuffer.toString().getBytes() ), true, monitor );
-							monitor.worked( 1 );
-						}
-						catch ( CoreException e ) {
-							PortletUIPlugin.logError( e );
-						}
-					}
-					getModelElement().refresh( getProperty(), true );
-					getModelElement().refresh( IPortlet.PROP_SUPPORTED_LOCALES, true, true );
-					// TODO: Actually this needs to be automatically done using worksapce resource chnage listener
-					setEnabled( false );
-					monitor.done();
-
-				}
-			};
-
-			try {
-				( new ProgressMonitorDialog( context.getShell() ) ).run( false, false, rbCreationProc );
-				missingRBFiles.clear();
-			}
-			catch ( InvocationTargetException e ) {
-				PortletUIPlugin.logError( e );
-			}
-			catch ( InterruptedException e ) {
-				PortletUIPlugin.logError( e );
-			}
-		}
+		createFiles( context, missingRBFiles, rbFileBuffer );
+		setEnabled( false );
+		getModelElement().refresh( getProperty(), true );
+		getModelElement().refresh( IPortlet.PROP_SUPPORTED_LOCALES, true, true );
 
 		return null;
 	}
