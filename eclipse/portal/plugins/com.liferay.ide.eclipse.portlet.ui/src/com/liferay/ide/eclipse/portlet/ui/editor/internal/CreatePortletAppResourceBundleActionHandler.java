@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -34,7 +35,6 @@ import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
@@ -75,17 +75,19 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 		final IProject project = element.adapt( IProject.class );
 		final ModelProperty property = getProperty();
 		final Value<Path> resourceBundle = element.read( (ValueProperty) property );
+		final String packageName = resourceBundle.getText().substring( 0, resourceBundle.getText().lastIndexOf( "." ) );
 		final String defaultRBFileName =
 			PortletUtil.convertJavaToIoFileName(
 				resourceBundle.getText(), ResourceBundleRelativePathService.RB_FILE_EXTENSION );
 
-		final IPath entryPath = getResourceBundleFolderLocation( project, defaultRBFileName );
+		final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
+		final IPath entryPath = rbSourecFolder.getLocation();
 		if ( getModelElement() instanceof IPortletApp ) {
 			List<IFile> missingRBFiles = new ArrayList<IFile>();
 			final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" );
 			final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
 			missingRBFiles.add( rbFile );
-			createFiles( context, missingRBFiles, rbFileBuffer );
+			createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
 			setEnabled( false );
 			getModelElement().refresh( getProperty(), true );
 		}
