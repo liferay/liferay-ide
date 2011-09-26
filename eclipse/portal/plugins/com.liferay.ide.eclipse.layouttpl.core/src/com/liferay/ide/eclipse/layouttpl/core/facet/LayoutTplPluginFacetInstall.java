@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc and Accenture Services Pvt., Ltd.,. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -43,33 +43,42 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * @author Greg Amerson
+ * @author kamesh.sampath - [IDE-450]
  */
 public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 
 	@Override
-	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
+	public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
 		throws CoreException {
-		
-		super.execute(project, fv, config, monitor);
+
+		super.execute( project, fv, config, monitor );
 
 		IDataModel model = (IDataModel) config;
-		IDataModel masterModel = (IDataModel) model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
-		
-		if (masterModel != null && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
+		IDataModel masterModel = (IDataModel) model.getProperty( FacetInstallDataModelProvider.MASTER_PROJECT_DM );
+
+		if ( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) ) {
 			// get the template zip for layouttpl and extract into the project
 			SDK sdk = getSDK();
 
-			String layoutTplName = this.masterModel.getStringProperty(LAYOUTTPL_NAME);
-			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
+			String layoutTplName = this.masterModel.getStringProperty( LAYOUTTPL_NAME );
+			// FIX IDE-450
+			if ( layoutTplName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ) {
+				layoutTplName =
+					layoutTplName.substring( 0, layoutTplName.indexOf( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) );
+			}
+			// END FIX IDE-450
+
+			String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
 
 			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
 
 			IPath newLayoutTplPath = sdk.createNewLayoutTplProject( layoutTplName, displayName, appServerProperties );
-			
-			processNewFiles(newLayoutTplPath.append(layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX), false);
-			
+
+			processNewFiles(
+				newLayoutTplPath.append( layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ), false );
+
 			// cleanup files
-			FileUtil.deleteDir(newLayoutTplPath.toFile(), true);
+			FileUtil.deleteDir( newLayoutTplPath.toFile(), true );
 		}
 		else {
 			setupDefaultOutputLocation();
@@ -77,54 +86,54 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 
 		removeUnneededClasspathEntries();
 
-		IResource libRes = project.findMember("docroot/WEB-INF/lib");
+		IResource libRes = project.findMember( "docroot/WEB-INF/lib" );
 
-		if (libRes != null && libRes.exists()) {
+		if ( libRes != null && libRes.exists() ) {
 			IFolder libFolder = (IFolder) libRes;
-			IResource[] libFiles = libFolder.members(true);
-			if (CoreUtil.isNullOrEmpty(libFiles)) {
-				libRes.delete(true, monitor);
+			IResource[] libFiles = libFolder.members( true );
+			if ( CoreUtil.isNullOrEmpty( libFiles ) ) {
+				libRes.delete( true, monitor );
 			}
 		}
 
-		this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 	}
 
 	protected void removeUnneededClasspathEntries() {
 		IFacetedProjectWorkingCopy facetedProject = getFacetedProject();
-		IJavaProject javaProject = JavaCore.create(facetedProject.getProject());
+		IJavaProject javaProject = JavaCore.create( facetedProject.getProject() );
 
 		try {
 			IClasspathEntry[] existingClasspath = javaProject.getRawClasspath();
 			List<IClasspathEntry> newClasspath = new ArrayList<IClasspathEntry>();
 
-			for (IClasspathEntry entry : existingClasspath) {
-				if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+			for ( IClasspathEntry entry : existingClasspath ) {
+				if ( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE ) {
 					continue;
 				}
-				else if (entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER) {
+				else if ( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER ) {
 					String path = entry.getPath().toPortableString();
 
-					if (path.contains("org.eclipse.jdt.launching.JRE_CONTAINER") ||
-						path.contains("org.eclipse.jst.j2ee.internal.web.container") ||
-						path.contains("org.eclipse.jst.j2ee.internal.module.container")) {
+					if ( path.contains( "org.eclipse.jdt.launching.JRE_CONTAINER" ) ||
+						path.contains( "org.eclipse.jst.j2ee.internal.web.container" ) ||
+						path.contains( "org.eclipse.jst.j2ee.internal.module.container" ) ) {
 						continue;
 					}
 				}
 
-				newClasspath.add(entry);
+				newClasspath.add( entry );
 			}
 
-			javaProject.setRawClasspath(newClasspath.toArray(new IClasspathEntry[0]), null);
+			javaProject.setRawClasspath( newClasspath.toArray( new IClasspathEntry[0] ), null );
 
 			IResource sourceFolder =
-				javaProject.getProject().findMember(IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
+				javaProject.getProject().findMember( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
 
-			if (sourceFolder.exists()) {
-				sourceFolder.delete(true, null);
+			if ( sourceFolder.exists() ) {
+				sourceFolder.delete( true, null );
 			}
 		}
-		catch (Exception e) {
+		catch ( Exception e ) {
 
 		}
 	}

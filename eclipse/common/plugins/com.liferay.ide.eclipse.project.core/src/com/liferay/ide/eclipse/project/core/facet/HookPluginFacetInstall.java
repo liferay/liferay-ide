@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2011 Liferay and Accenture Services Pvt., Ltd, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,6 +30,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * @author Greg Amerson
+ * @author kamesh.sampath [IDE-450]
  */
 public class HookPluginFacetInstall extends PluginFacetInstall {
 
@@ -47,6 +48,12 @@ public class HookPluginFacetInstall extends PluginFacetInstall {
 			SDK sdk = getSDK();
 
 			String hookName = this.masterModel.getStringProperty(HOOK_NAME);
+			
+			// FIX IDE-450
+			if ( hookName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ) {
+				hookName = hookName.substring( 0, hookName.indexOf( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) );
+			}
+			// END FIX IDE-450
 			
 			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
 
