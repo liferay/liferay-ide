@@ -50,11 +50,11 @@ public class NewPortletWizard extends NewWebArtifactWizard
 	implements IPluginWizardFragment, INewPortletClassDataModelProperties {
 
 	protected boolean fragment;
-
 	protected IWizardPage hostPage;
+	protected IProject initialProject;
 
 	public NewPortletWizard() {
-		this(null);
+		this( (IDataModel) null );
 	}
 
 	public NewPortletWizard(IDataModel model) {
@@ -62,34 +62,17 @@ public class NewPortletWizard extends NewWebArtifactWizard
 		setDefaultPageImageDescriptor(getImage());
 	}
 
-	public IDataModelProvider getDataModelProvider() {
-		return getDefaultProvider();
-	}
+	public NewPortletWizard( IProject project ) {
+		this( (IDataModel) null );
 
-	public String getTitle() {
-		return "New Liferay Portlet";
-	}
-
-	public void initFragmentDataModel(IDataModel parentDataModel, String projectName) {
-		getDataModel().setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
-		getDataModel().setProperty(
-			IPluginWizardFragmentProperties.FACET_RUNTIME,
-			parentDataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME));
-		getDataModel().setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName);
-	}
-
-	public void setFragment(boolean fragment) {
-		this.fragment = fragment;
-	}
-
-	public void setHostPage(IWizardPage hostPage) {
-		this.hostPage = hostPage;
+		this.initialProject = project;
 	}
 
 	@Override
 	protected void doAddPages() {
 		addPage(new NewPortletClassWizardPage(
-			getDataModel(), "pageOne", "Create a portlet class.", getDefaultPageTitle(), this.fragment));
+			getDataModel(), "pageOne", "Create a portlet class.", getDefaultPageTitle(), this.fragment,
+			( initialProject != null ) ) );
 		addPage(new NewPortletOptionsWizardPage(
 			getDataModel(), "pageTwo", "Specify portlet deployment descriptor details.", getDefaultPageTitle(),
 			this.fragment));
@@ -100,6 +83,10 @@ public class NewPortletWizard extends NewWebArtifactWizard
 			getDataModel(), "pageFour",
 			"Specify modifiers, interfaces, and method stubs to generate in Portlet class.", getDefaultPageTitle(),
 			this.fragment));
+	}
+
+	public IDataModelProvider getDataModelProvider() {
+		return getDefaultProvider();
 	}
 
 	protected String getDefaultPageTitle() {
@@ -113,11 +100,23 @@ public class NewPortletWizard extends NewWebArtifactWizard
 		TemplateContextType contextType =
 			PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(PortletTemplateContextTypeIds.NEW);
 
-		return new NewPortletClassDataModelProvider(templateStore, contextType, this.fragment);
+		return new NewPortletClassDataModelProvider( templateStore, contextType, this.fragment, initialProject );
 	}
 
 	protected ImageDescriptor getImage() {
 		return PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/wizban/portlet_wiz.png");
+	}
+
+	public String getTitle() {
+		return "New Liferay Portlet";
+	}
+
+	public void initFragmentDataModel(IDataModel parentDataModel, String projectName) {
+		getDataModel().setBooleanProperty(IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS, true);
+		getDataModel().setProperty(
+			IPluginWizardFragmentProperties.FACET_RUNTIME,
+			parentDataModel.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME));
+		getDataModel().setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName);
 	}
 
 	@Override
@@ -161,5 +160,13 @@ public class NewPortletWizard extends NewWebArtifactWizard
 		else {
 			return true;
 		}
+	}
+
+	public void setFragment(boolean fragment) {
+		this.fragment = fragment;
+	}
+
+	public void setHostPage(IWizardPage hostPage) {
+		this.hostPage = hostPage;
 	}
 }

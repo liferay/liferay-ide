@@ -97,6 +97,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 	protected boolean fragment;
 
+	protected boolean initialProject;
+
 	protected Button portletClassButton;
 
 	protected Label portletClassLabel;
@@ -119,6 +121,13 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
 		this.projectName = null;
 		this.fragment = fragment;
+	}
+
+	public NewPortletClassWizardPage(
+		IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment, boolean initialProject ) {
+		this( model, pageName, pageDesc, pageTitle, fragment );
+
+		this.initialProject = initialProject;
 	}
 
 	protected void createClassnameGroup( Composite parent ) {
@@ -736,6 +745,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 			model.setProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName );
 		}
 
+		projectNameLabel.setEnabled( !initialProject );
+		projectNameCombo.setEnabled( !initialProject );
 	}
 
 	protected boolean isProjectValid( IProject project ) {

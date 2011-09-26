@@ -13,9 +13,13 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Greg Amerson - IDE-405
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
+
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +34,13 @@ import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
+import org.eclipse.sapphire.ui.SapphireEditor;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 import org.eclipse.swt.graphics.Image;
-
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -69,19 +72,28 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
 		for ( int i = 0; i < this.modelProperties.length; i++ ) {
 			String modelProperty = this.modelProperties[i];
-			if ( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) ) {
+
+			if ( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) && isPartInLiferayProject() ) {
 				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
 				handler.addImage( ImageDescriptor.createFromImage( getPart().getImageCache().getImage(
 					IPortlet.TYPE.image() ) ) );
 				handler.setLabel( getActionLabel( "Portlets" ) );
+
 				listOfHandlers.add( handler );
 			}
 			else {
 				listOfHandlers.add( new Handler( modelProperty ) );
 			}
 		}
+
 		// System.out.println( "QuickActionsHandlerFactory.created" + listOfHandlers.size() + " handlers " );
 		return listOfHandlers;
+	}
+
+	private boolean isPartInLiferayProject() {
+		SapphireEditor editor = this.getPart().nearest( SapphireEditor.class );
+
+		return editor != null && ProjectUtil.isLiferayProject( editor.getProject() );
 	}
 
 	/**

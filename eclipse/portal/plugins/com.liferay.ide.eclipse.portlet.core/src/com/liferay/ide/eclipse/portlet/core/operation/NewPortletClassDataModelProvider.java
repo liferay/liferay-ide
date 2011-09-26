@@ -58,12 +58,14 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 	implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties {
 
 	protected Properties categories;
-
 	protected TemplateContextType contextType;
-
+	protected boolean fragment;
+	protected IProject initialProject;
 	protected TemplateStore templateStore;
 
-	protected boolean fragment;
+	public NewPortletClassDataModelProvider() {
+		super();
+	}
 
 	public NewPortletClassDataModelProvider(
 		TemplateStore templateStore, TemplateContextType contextType, boolean fragment) {
@@ -73,9 +75,76 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		this.contextType = contextType;
 		this.fragment = fragment;
 	}
+	public NewPortletClassDataModelProvider(
+		TemplateStore templateStore, TemplateContextType contextType, boolean fragment, IProject initialProject ) {
+		this( templateStore, contextType, fragment );
 
-	public NewPortletClassDataModelProvider() {
-		super();
+		this.initialProject = initialProject;
+	}
+
+	protected ParamValue[] createDefaultParamValuesForModes(String[] modes, String[] names, String[] values) {
+		Assert.isTrue(modes != null && names != null && values != null && (modes.length == names.length) &&
+			(names.length == values.length));
+
+		List<ParamValue> defaultParams = new ArrayList<ParamValue>();
+
+		// for each path value need to prepend a path that will be specific to
+		// the portlet being created
+		String prependPath = getDataModel().getStringProperty(CREATE_JSPS_FOLDER);
+
+		for (int i = 0; i < modes.length; i++) {
+			if (getBooleanProperty(modes[i])) {
+				ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
+
+				paramValue.setName(names[i]);
+
+				if (CoreUtil.isNullOrEmpty(prependPath)) {
+					paramValue.setValue(values[i]);
+				}
+				else {
+					if (CoreUtil.isNullOrEmpty(prependPath) || (!prependPath.startsWith("/"))) {
+						prependPath = "/" + prependPath;
+					}
+					paramValue.setValue(prependPath + values[i]);
+				}
+
+				defaultParams.add(paramValue);
+			}
+		}
+
+		return defaultParams.toArray(new ParamValue[0]);
+	}
+
+	protected Properties getCategories() {
+		if (categories == null) {
+			IProject project = (IProject) getProperty(PROJECT);
+
+			if (project != null) {
+				try {
+					IRuntime runtime = null;
+
+					if (this.fragment) {
+						org.eclipse.wst.common.project.facet.core.runtime.IRuntime bRuntime =
+							(org.eclipse.wst.common.project.facet.core.runtime.IRuntime) getDataModel().getProperty(
+								FACET_RUNTIME);
+						runtime = ServerUtil.getRuntime(bRuntime);
+					} 
+					else {
+						runtime = ServerUtil.getRuntime(project);
+					}
+
+					ILiferayRuntime portalRuntime = (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(
+							ILiferayRuntime.class, null);
+
+					categories = portalRuntime.getPortletCategories();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return categories;
 	}
 
 	@Override
@@ -171,8 +240,38 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 				return QUALIFIED_MVC_PORTLET;
 			}
 		}
+		else if ( PROJECT_NAME.equals( propertyName ) && initialProject != null ) {
+			return initialProject.getName();
+		}
 
 		return super.getDefaultProperty(propertyName);
+	}
+
+	protected Object getInitParams() {
+		List<ParamValue> initParams = new ArrayList<ParamValue>();
+
+		// if the user is using MVCPortlet and creating JSPs then we need to
+		// define init-params for each view mode that is checked
+		if (/* getStringProperty(SUPERCLASS).equals(QUALIFIED_MVC_PORTLET) && */getBooleanProperty(CREATE_JSPS)) {
+			String[] modes = ALL_PORTLET_MODES;
+
+			String[] names =
+				{
+					"view-jsp", "edit-jsp", "help-jsp", "about-jsp", "config-jsp", "edit-defaults-jsp",
+					"edit-guest-jsp", "preview-jsp", "print-jsp"
+				};
+
+			String[] values =
+				{
+					"/view.jsp", "/edit.jsp", "/help.jsp", "/about.jsp", "/config.jsp", "/edit-defaults.jsp",
+					"/edit-guest.jsp", "/preview.jsp", "/print.jsp"
+				};
+			ParamValue[] paramVals = createDefaultParamValuesForModes(modes, names, values);
+
+			Collections.addAll(initParams, paramVals);
+		}
+
+		return initParams;
 	}
 
 	@Override
@@ -299,6 +398,19 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		}
 
 		return super.getValidPropertyDescriptors(propertyName);
+	}
+
+	protected IFile getWorkspaceFile(IPath file) {
+		IFile retval = null;
+
+		try {
+			retval = ResourcesPlugin.getWorkspace().getRoot().getFile(file);
+		}
+		catch (Exception e) {
+			// best effort
+		}
+
+		return retval;
 	}
 
 	@Override
@@ -462,113 +574,4 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		return super.validate(propertyName);
 	}
 
-	protected ParamValue[] createDefaultParamValuesForModes(String[] modes, String[] names, String[] values) {
-		Assert.isTrue(modes != null && names != null && values != null && (modes.length == names.length) &&
-			(names.length == values.length));
-
-		List<ParamValue> defaultParams = new ArrayList<ParamValue>();
-
-		// for each path value need to prepend a path that will be specific to
-		// the portlet being created
-		String prependPath = getDataModel().getStringProperty(CREATE_JSPS_FOLDER);
-
-		for (int i = 0; i < modes.length; i++) {
-			if (getBooleanProperty(modes[i])) {
-				ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
-
-				paramValue.setName(names[i]);
-
-				if (CoreUtil.isNullOrEmpty(prependPath)) {
-					paramValue.setValue(values[i]);
-				}
-				else {
-					if (CoreUtil.isNullOrEmpty(prependPath) || (!prependPath.startsWith("/"))) {
-						prependPath = "/" + prependPath;
-					}
-					paramValue.setValue(prependPath + values[i]);
-				}
-
-				defaultParams.add(paramValue);
-			}
-		}
-
-		return defaultParams.toArray(new ParamValue[0]);
-	}
-
-	protected Properties getCategories() {
-		if (categories == null) {
-			IProject project = (IProject) getProperty(PROJECT);
-
-			if (project != null) {
-				try {
-					IRuntime runtime = null;
-
-					if (this.fragment) {
-						org.eclipse.wst.common.project.facet.core.runtime.IRuntime bRuntime =
-							(org.eclipse.wst.common.project.facet.core.runtime.IRuntime) getDataModel().getProperty(
-								FACET_RUNTIME);
-						runtime = ServerUtil.getRuntime(bRuntime);
-					} 
-					else {
-						runtime = ServerUtil.getRuntime(project);
-					}
-
-					ILiferayRuntime portalRuntime = (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(
-							ILiferayRuntime.class, null);
-
-					categories = portalRuntime.getPortletCategories();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return categories;
-	}
-
-	protected Object getInitParams() {
-		List<ParamValue> initParams = new ArrayList<ParamValue>();
-
-		// if the user is using MVCPortlet and creating JSPs then we need to
-		// define init-params for each view mode that is checked
-		if (/* getStringProperty(SUPERCLASS).equals(QUALIFIED_MVC_PORTLET) && */getBooleanProperty(CREATE_JSPS)) {
-			String[] modes = ALL_PORTLET_MODES;
-
-			String[] names =
-				{
-					"view-jsp", "edit-jsp", "help-jsp", "about-jsp", "config-jsp", "edit-defaults-jsp",
-					"edit-guest-jsp", "preview-jsp", "print-jsp"
-				};
-
-			String[] values =
-				{
-					"/view.jsp", "/edit.jsp", "/help.jsp", "/about.jsp", "/config.jsp", "/edit-defaults.jsp",
-					"/edit-guest.jsp", "/preview.jsp", "/print.jsp"
-				};
-			ParamValue[] paramVals = createDefaultParamValuesForModes(modes, names, values);
-
-			Collections.addAll(initParams, paramVals);
-		}
-
-		return initParams;
-	}
-
-	protected IFile getWorkspaceFile(IPath file) {
-		IFile retval = null;
-
-		try {
-			retval = ResourcesPlugin.getWorkspace().getRoot().getFile(file);
-		}
-		catch (Exception e) {
-			// best effort
-		}
-
-		return retval;
-	}
-
-	@Override
-	protected IStatus validateJavaClassName(String className) {
-		return super.validateJavaClassName(className);
-	}
 }

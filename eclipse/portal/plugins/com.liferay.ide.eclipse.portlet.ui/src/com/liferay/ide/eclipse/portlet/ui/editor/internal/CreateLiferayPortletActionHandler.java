@@ -13,15 +13,18 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Greg Amerson - IDE-405
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor;
+import com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-
-import com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -34,7 +37,14 @@ public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-		NewPortletWizard newPortletWizard = new NewPortletWizard();
+		IProject currentProject = null;
+
+		if ( context.getPart().getParentPart() instanceof PortletXmlEditor ) {
+			PortletXmlEditor portletXmlEditor = (PortletXmlEditor) context.getPart().getParentPart();
+			currentProject = portletXmlEditor.getProject();
+		}
+
+		NewPortletWizard newPortletWizard = new NewPortletWizard( currentProject );
 		WizardDialog wizardDialog = new WizardDialog( context.getShell(), newPortletWizard );
 		wizardDialog.create();
 		wizardDialog.open();
