@@ -63,6 +63,24 @@ public class PortletUtil {
 	}
 
 	/**
+	 * This method will return the first source folder of the Java project
+	 * 
+	 * @param javaProject
+	 *            - the java project where the source folder needs to be indentified
+	 * @return
+	 * @throws JavaModelException
+	 */
+	public static IPackageFragmentRoot getSourceFolder( IJavaProject javaProject ) throws JavaModelException {
+		for ( IPackageFragmentRoot root : javaProject.getPackageFragmentRoots() ) {
+			if ( root.getKind() == IPackageFragmentRoot.K_SOURCE ) {
+				return root;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * @param project
 	 * @return
 	 */

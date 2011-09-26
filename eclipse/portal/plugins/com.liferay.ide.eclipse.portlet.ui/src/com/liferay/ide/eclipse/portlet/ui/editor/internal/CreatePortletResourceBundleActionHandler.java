@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -104,7 +105,10 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 			PortletUtil.convertJavaToIoFileName(
 				resourceBundle.getText(), ResourceBundleRelativePathService.RB_FILE_EXTENSION );
 
-		IPath entryPath = getResourceBundleFolderLocation( project, defaultRBFileName );
+		final String packageName = resourceBundle.getText().substring( 0, resourceBundle.getText().lastIndexOf( "." ) );
+
+		final IFolder rbSourceFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
+		final IPath entryPath = rbSourceFolder.getLocation();
 
 		IPortletInfo portletInfo = portlet.getPortletInfo();
 		final StringBuilder rbFileBuffer = buildDefaultRBContent( portletInfo );
@@ -133,7 +137,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 			}
 		}
 
-		createFiles( context, missingRBFiles, rbFileBuffer );
+		createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
 		setEnabled( false );
 		getModelElement().refresh( getProperty(), true );
 		getModelElement().refresh( IPortlet.PROP_SUPPORTED_LOCALES, true, true );
