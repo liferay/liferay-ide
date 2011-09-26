@@ -1,638 +1,603 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	/*******************************************************************************
+	* Copyright (c) 2000-2011 Accenture Services Pvt. Ltd., All rights reserved.
+	* 
+	* This library is free software; you can redistribute it and/or modify it 
+	* the terms of the GNU Lesser General Public License as published by the 
+	* Free Software Foundation; either version 2.1 of the License, or (at your option)
+	* any later version
+	*
+	* This library is distributed in the hope that it will be useful, but WITHOUT
+	* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+	* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for 
+	* more details.
+	*
+	* Contributors:
+	* Kamesh Sampath - initial implementation
+	******************************************************************************/
+-->
+
+
 <definition>
 	<import>
 		<package>com.liferay.ide.eclipse.portlet.ui</package>
 		<package>com.liferay.ide.eclipse.portlet.ui.action</package>
 		<package>com.liferay.ide.eclipse.portlet.core.model</package>
-		<package>com.liferay.ide.eclipse.portlet.core.model.internal</package>
+		<package>com.liferay.ide.eclipse.portlet.core.model.internal
+		</package>
 		<package>com.liferay.ide.eclipse.portlet.ui.parts</package>
-        <package>com.liferay.ide.eclipse.portlet.ui.action.filters</package>
+		<package>com.liferay.ide.eclipse.portlet.ui.action.filters
+		</package>
+		<package>com.liferay.ide.eclipse.portlet.ui.editor.internal</package>
 	</import>
 	<editor-page>
 		<id>portlet-app.editor</id>
-		<page-name>Portlets</page-name>
+		<page-name>Portlet Application</page-name>
 		<page-header-text>Portlet Application</page-header-text>
-		<initial-selection>Basic</initial-selection>
 		<root-node>
 			<node>
-				<action-handler>
-					<action>Sapphire.Add</action>
-					<id>Sapphire.Add.Override</id>
-					<image>icons/etool16/portlet_new.png</image>
-					<label>Add Portlet</label>
-					<impl>AddPortletActionHandler</impl>
-					<description>Overriding the Add Portlet Action to call the Wizard
-					</description>
-					<condition>PortletAddActionHandlerCondition</condition>
-					<context>Sapphire.EditorPage.Outline.Node</context>
-					 <location>before:Sapphire.Add.ICustomPortletMode</location>
-				</action-handler>
-
-				<action-handler-filter>
-					<impl>AddPortletActionFilter</impl>
-					<context>Sapphire.EditorPage.Outline.Node</context>
-				</action-handler-filter>
 				<label>Portlet Application</label>
 				<section>
-					<label>Basic</label>
+					<label>Portlet Application</label>
 					<content>
-						<property-editor>Id</property-editor>
-						<property-editor>Version</property-editor>
+						<property-editor>
+							<property>Version</property>
+							<hint>
+								<name>prefer.combo</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
+						<property-editor>DefaultNameSpace
+						</property-editor>
+                        <property-editor>
+                            <property>ResourceBundle</property>
+                            <action>
+							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<label>Create Bundle</label>
+							<image>icons/elcl16/new_doc_16x16.png</image>
+							<hint>
+								<name>style</name>
+								<value>image</value>
+							</hint>
+							<context>Sapphire.ValuePropertyEditor</context>
+							<location>after:Sapphire.Browse</location>
+						</action>
+						<action-handler>
+							<action>LiferayIDE.PortletApp.RB.Create</action>
+							<id>LiferayIDE.PortletApp.RB.Create</id>
+							<impl>CreatePortletAppResourceBundleActionHandler</impl>
+						</action-handler>
+                        </property-editor>
 					</content>
-					<collapsible>true</collapsible>
+					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
 					<scroll-horizontally>true</scroll-horizontally>
 					<indent>true</indent>
 				</section>
-				<node-factory>
-					<property>Portlets</property>
-					<case>
-						<label>${ PortletName == null ? &quot;&lt;portlet&gt;&quot;
-							:PortletName}
-						</label>
-						<section>
-							<content>
-								<include>portlet.basic.composite</include>
-								<spacer></spacer>
-							</content>
-						</section>
-						<use-model-element-image></use-model-element-image>
-						<section>
-							<label>InitParams</label>
-							<content>
-								<include>init.param.composite</include>
-								<spacer></spacer>
-							</content>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-						</section>
-						<node>
-							<label>Supports</label>
-							<property>Supports</property>
-							<section>
-								<label>General</label>
-								<content>
-									<label>Use this section to configure the Mime Type, Portlet
-										modes and Portlet Window States
-									</label>
-									<spacer></spacer>
-									<property-editor>MimeType</property-editor>
-								</content>
-								<collapsible>true</collapsible>
-							</section>
-							<section>
-								<label>Portlet Modes</label>
-								<collapsible>true</collapsible>
-								<content>
-									<property-editor>PortletModes</property-editor>
-								</content>
-							</section>
-							<section>
-								<label>Window States</label>
-								<content>
-									<property-editor>WindowStates</property-editor>
-								</content>
-								<collapsible>true</collapsible>
-								<collapsed-initially>true</collapsed-initially>
-							</section>
-							<use-model-element-image></use-model-element-image>
-						</node>
-						<section>
-							<label>Internationalization and Localization</label>
-							<collapsible>true</collapsible>
-							<content>
-								<property-editor>SupportedLocales</property-editor>
-								<spacer></spacer>
-								<property-editor>ResourceBundles</property-editor>
-							</content>
-							<collapsed-initially>true</collapsed-initially>
-						</section>
-						<node>
-							<label>Portlet Information</label>
-							<property>PortletInfo</property>
-							<use-model-element-image></use-model-element-image>
-							<section>
-								<label>General</label>
-								<content>
-									<label>Describle the portlet information like title, keywords
-										etc,. here
-									</label>
-								</content>
-							</section>
-							<section>
-								<label>Details</label>
-								<content>
-									<property-editor>Id</property-editor>
-									<property-editor>Title</property-editor>
-									<property-editor>ShortTitle</property-editor>
-									<property-editor>Keywords</property-editor>
-								</content>
-							</section>
-						</node>
-						<section>
-							<label>Security</label>
-							<content>
-								<property-editor>SecurityRoleRefs</property-editor>
-							</content>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-						</section>
-						<node>
-							<label>Portlet Preferences</label>
-							<use-model-element-image></use-model-element-image>
-							<property>PortletPreference</property>
-							<section>
-								<label>General</label>
-								<content>
-									<label>Portlet preferences can be configured here</label>
-								</content>
-							</section>
-							<section>
-								<label>Portlet Preferences</label>
-								<collapsible>true</collapsible>
-								<content>
-									<property-editor>Id</property-editor>
-									<property-editor>PortletPreferences</property-editor>
-									<property-editor>PreferernceValidator</property-editor>
-								</content>
-							</section>
-						</node>
-						<section>
-							<label>Supported Processing Events</label>
-							<content>
-								<property-editor>SupportedProcessingEvents</property-editor>
-							</content>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-						</section>
-						<section>
-							<label>Supported Publishing Events</label>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-							<content>
-								<property-editor>SupportedPublishingEvents</property-editor>
-							</content>
-						</section>
-						<section>
-							<label>Miscellaneous</label>
-							<collapsible>true</collapsible>
-							<collapsed-initially>true</collapsed-initially>
-							<content>
-								<property-editor>ExpirationCache</property-editor>
-								<property-editor>CacheScope</property-editor>
-								<property-editor>SupportedPublicRenderParameters
-								</property-editor>
-							</content>
-						</section>
-						<node-factory>
-							<property>ContainerRuntimeOptions</property>
-							<case>
-								<use-model-element-image></use-model-element-image>
-								<section>
-									<label>General</label>
-								</section>
-								<section>
-									<label>Details</label>
-									<content>
-										<property-editor>Name</property-editor>
-										<property-editor>Options</property-editor>
-									</content>
-								</section>
-								<label>${Name ==null ?
-									&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
-							</case>
-						</node-factory>
-					</case>
-				</node-factory>
-				<use-model-element-image></use-model-element-image>
-				<node-factory>
-					<property>CustomPortletModes</property>
-					<case>
-						<label>${PortletMode ==null ?
-							&quot;&lt;custom-portlet-mode&gt;&quot;:concat(&quot;Custom
-							Portlet Mode - &quot;,PortletMode)}</label>
-						<section>
-							<content>
-								<property-editor>
+				<node>
+					<label>Portlets</label>
+					<node-include>PortletsNodeList</node-include>
+					<section>
+						<label>Portlets Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>Portlets</property>
+								<child-property>
+									<property>PortletName</property>
+								</child-property>
+								<child-property>DisplayName
+								</child-property>
+								<child-property>
+									<property>PortletClass</property>
+								</child-property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+							</property-editor>
+						</content>
+					</section>
+
+				</node>
+				<node>
+					<label>Listeners</label>
+					<section>
+						<label>Listeners Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>Listeners</property>
+								<hint>
+									<value>false</value>
+									<name>show.label</name>
+								</hint>
+								<child-property>Description</child-property>
+								<child-property>Implementation</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<image>icons/elcl16/listener_16x16.gif</image>
+				</node>
+				<node>
+					<label>Filters and Mappings</label>
+					<section>
+						<label>Filters and Mappings Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>Filters</property>
+								<child-property>Name</child-property>
+								<child-property>
+									<property>Implementation</property>
+								</child-property>
+							</property-editor>
+							<property-editor>
+								<property>FilterMappings</property>
+								<child-property>Filter</child-property>
+								<child-property>Portlet</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<node-include>FiltersNodeList</node-include>
+					<node-include>FilterMappingsNodeList</node-include>
+				</node>
+				<node>
+					<label>Security Constraints</label>
+					<node-include>SecurityConstraintNodeList</node-include>
+					<section>
+						<label>Security Constraints Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>SecurityConstraints</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+							</property-editor>
+
+						</content>
+					</section>
+				</node>
+				<node>
+					<label>Events</label>
+					<node-include>EventDefinitionsList</node-include>
+					<section>
+						<label>Events Quick Edit</label>
+						<content>
+							<include>event.def.quickedit.composite
+							</include>
+						</content>
+					</section>
+				</node>
+				<node>
+					<label>Public Render Parameters</label>
+					<section>
+						<label>Public Render Parameters Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>PublicRenderParameters</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+								<child-property>Identifier</child-property>
+								<child-property>NamespaceURI</child-property>
+								<child-property>LocalPart</child-property>
+								<child-property>Name</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<node-include>PublicRenderParametersList</node-include>
+				</node>
+				<node>
+					<label>Customizations</label>
+					<section>
+						<label>Customizations</label>
+						<collapsible>false</collapsible>
+						<content>
+							<property-editor>
+								<property>CustomPortletModes</property>
+								<child-property>
 									<property>PortletMode</property>
 									<hint>
-										<name>mode-view</name>
-										<value>VIEW</value>
+										<name>column.widths</name>
+										<value>40</value>
 									</hint>
-									<hint>
-										<name>mode-edit</name>
-										<value>EDIT</value>
-									</hint>
-									<hint>
-										<name>mode-help</name>
-										<value>HELP</value>
-									</hint>
-								</property-editor>
-								<property-editor>
+								</child-property>
+								<child-property>
 									<property>PortletManaged</property>
 									<hint>
-										<name>true</name>
-										<value>true</value>
+										<name>column.widths</name>
+										<value>30</value>
 									</hint>
-									<hint>
-										<name>false</name>
-										<value>false</value>
-									</hint>
-								</property-editor>
-							</content>
-							<label>Portlet Mode</label>
-						</section>
-						<use-model-element-image></use-model-element-image>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>CustomWindowStates</property>
-					<case>
-						<section>
-							<label>Window States</label>
-							<content>
-								<property-editor>
+								</child-property>
+								<hint>
+									<name>show.label</name>
+									<value>true</value>
+								</hint>
+							</property-editor>
+							<spacer></spacer>
+							<property-editor>
+								<property>CustomWindowStates</property>
+								<child-property>
 									<property>WindowState</property>
 									<hint>
-										<name>MAX</name>
-										<value>MAXIMIZED</value>
+										<name>column.widths</name>
+										<value>40</value>
 									</hint>
-									<hint>
-										<name>MIN</name>
-										<value>MINIMIZED</value>
-									</hint>
-								</property-editor>
-							</content>
-						</section>
-						<label>${WindowState ==null ?
-							&quot;&lt;custom-window-state&gt;&quot;:concat(&quot;Custom
-							Window State - &quot;,WindowState)}</label>
-						<use-model-element-image></use-model-element-image>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>UserAttributes</property>
-					<case>
-						<use-model-element-image></use-model-element-image>
-						<label>${Name ==null?&quot;&lt;user-attribute&gt;&quot;:Name}
-						</label>
-						<section>
-							<label>General</label>
+								</child-property>
+								<child-property>Description</child-property>
+								<hint>
+									<name>show.label</name>
+									<value>true</value>
+								</hint>
+							</property-editor>
+						</content>
+					</section>
+
+				</node>
+				<node>
+					<label>Container Runtime Options</label>
+					<section>
+						<label>Container Runtime Options Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>ContainerRuntimeOptions</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+								<child-property>Name</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<node-include>ContainerRuntimeOptionsNodeList</node-include>
+					<image>images/runtime_16x16.gif</image>
+				</node>
+				<image>images/portlet.png</image>
+
+			</node>
+		</root-node>
+		<initial-selection>Portlets</initial-selection>
+		<action>
+			<id>Quick.Actions</id>
+			<hint>
+				<name>style</name>
+				<value>image+text</value>
+			</hint>
+			<context>Sapphire.EditorPage</context>
+			<label>New...</label>
+			<image>icons/elcl16/quick_actions_16x16.gif</image>
+			<description>This will configure a set of quick actions that will be
+				placed on the Editor Page header
+			</description>
+		</action>
+		<action-handler-factory>
+			<action>Quick.Actions</action>
+			<description>The Quick actions that appear on the Editor Page Header
+			</description>
+			<impl>QuickActionsHandlerFactory</impl>
+			<param>
+				<name>MODEL_PROPERTIES</name>
+				<value>Portlets,EventDefinitions,Filters,PublicRenderParameters
+				</value>
+			</param>
+		</action-handler-factory>
+		<page-header-image>images/portlet.png</page-header-image>
+		<action>
+			<id>Sapphire.ShowInSource</id>
+			<label>Show in Source</label>
+			<hint>
+				<name>style</name>
+				<value>image+text</value>
+			</hint>
+			<context>Sapphire.EditorPage.Outline.Node</context>
+		</action>
+	</editor-page>
+	<node-factory>
+		<id>PortletsNodeList</id>
+		<property>Portlets</property>
+		<case>
+		<!-- 
+			<label>${ PortletName == null ? '&lt;portlet-name&gt;' : 
+				DisplayName == null ? 'foo' :
+				concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' )}</label>
+		-->
+			<label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<content>
+					<include>portlet.basic.composite</include>
+				</content>
+				<label>${ PortletName != null ? concat( PortletName, ' Details' ) : '&lt;portlet-name&gt;' }</label>
+				<collapsible>false</collapsible>
+				<action>
+					<id>LiferayIDE.PortletNode.Expand</id>
+					<context>Sapphire.Section</context>
+					<type>TOGGLE</type>
+					<label>More Details</label>
+					<image>icons/elcl16/toggle_info_16x16.png</image>
+					<location>before:Sapphire.Restore.Defaults</location>
+				</action>
+				<action-handler>
+					<action>LiferayIDE.PortletNode.Expand</action>
+					<id>LiferayIDE.PortletNode.Expand</id>
+					<impl>ExpandSectionOutlineNodeHandler</impl>
+				</action-handler>
+			</section>
+			<section>
+				<label>Supports</label>
+				<content>
+					<with>
+						<path>Supports</path>
+						<default-panel>
 							<content>
-								<label>Document info of User Attribute</label>
-							</content>
-							<collapsible>true</collapsible>
-						</section>
-						<section>
-							<label>Details</label>
-							<collapsible>true</collapsible>
-							<content>
-								<property-editor>Id</property-editor>
-								<property-editor>Description</property-editor>
-								<property-editor>Name</property-editor>
-							</content>
-						</section>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>SecurityConstraints</property>
-					<case>
-						<use-model-element-image></use-model-element-image>
-						<section>
-							<label>General</label>
-							<content>
-								<label>Document info on Security Constraint</label>
-							</content>
-						</section>
-						<section>
-							<label>Portlet Details</label>
-							<content>
-								<property-editor>PortletDisplayNames</property-editor>
-							</content>
-						</section>
-						<label>Security Constraint</label>
-						<node>
-							<use-model-element-image></use-model-element-image>
-							<property>PortletCollection</property>
-							<label>Portlet Collection</label>
-							<section>
-								<label>General</label>
-								<content>
-									<label>Info about Portlet Collection</label>
-								</content>
-							</section>
-							<section>
-								<label>Portlet Names</label>
-								<content>
-									<property-editor>PortletNames</property-editor>
-								</content>
-							</section>
-						</node>
-						<node>
-							<label>User Data Constraint</label>
-							<use-model-element-image></use-model-element-image>
-							<property>UserDataConstraint</property>
-							<section>
-								<label>General</label>
-								<content>
-									<label>Info about the section</label>
-								</content>
-							</section>
-							<section>
-								<label>Details</label>
-								<content>
-									<property-editor>Id</property-editor>
-									<property-editor>Description</property-editor>
-									<property-editor>TransportGurantee</property-editor>
-								</content>
-							</section>
-						</node>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>Filters</property>
-					<case>
-						<use-model-element-image></use-model-element-image>
-						<label>${Name
-							==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
-						<section>
-							<label>General</label>
-							<content>
-								<label>Info about Filter</label>
-							</content>
-						</section>
-						<section>
-							<label>Filter</label>
-							<collapsible>true</collapsible>
-							<content>
-								<property-editor>DisplayName</property-editor>
-								<property-editor>Name</property-editor>
+								<property-editor>MimeType</property-editor>
 								<property-editor>
-									<property>Implementation</property>
-									<action>
-										<id>Sapphire.Jump</id>
-										<label>Open Class</label>
-										<context>Sapphire.ValuePropertyEditor</context>
-									</action>
-								</property-editor>
-								<property-editor>LifeCycle</property-editor>
-								<property-editor>InitParams</property-editor>
-							</content>
-						</section>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>FilterMappings</property>
-					<case>
-						<label>${Filter==null?&quot;&lt;FilterMapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}
-						</label>
-						<use-model-element-image></use-model-element-image>
-						<section>
-							<label>General</label>
-							<collapsible>true</collapsible>
-							<content>
-								<label>Info about filter</label>
-							</content>
-						</section>
-						<section>
-							<label>Mappings</label>
-							<content>
-								<property-editor>Filter</property-editor>
-								<property-editor>Portlet</property-editor>
-							</content>
-						</section>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>EventDefinitions</property>
-					<case>
-						<use-model-element-image></use-model-element-image>
-						<section>
-							<label>Info</label>
-							<content>
-								<label>The event-definitionType is used to declare events the
-									portlet can either receive or emit. The name must be unique and
-									must be the one the portlet is using in its code for
-									referencing this event. Used in: portlet-app
-								</label>
-							</content>
-							<collapsible>true</collapsible>
-							<indent>true</indent>
-						</section>
-						<section>
-							<label>Details</label>
-							<content>
-								<property-editor>Id</property-editor>
-								<property-editor>Name</property-editor>
-								<group>
-                                    <label>Qualified Name</label>
-                                    <indent>true</indent>
-                                    <content>
-                                        <property-editor>NamespaceURI</property-editor>
-                                        <property-editor>LocalPart</property-editor>
-                                    </content>
-                                </group>
-                                <property-editor>Aliases</property-editor>
-                                <property-editor>
-									<property>EventValueType</property>
+									<property>PortletModes</property>
 									<hint>
 										<name>browse.only</name>
-										<value>false</value>
+										<value>true</value>
 									</hint>
-									<action>
-										<id>Sapphire.Jump</id>
-										<label>Open Class</label>
-										<context>Sapphire.ValuePropertyEditor</context>
-									</action>
+								</property-editor>
+								<property-editor>
+									<property>WindowStates</property>
+									<hint>
+										<name>browse.only</name>
+										<value>true</value>
+									</hint>
 								</property-editor>
 							</content>
-							<collapsible>true</collapsible>
-							<indent>true</indent>
-						</section>
-                        <label>${( (empty Name  AND  empty NamespaceURI AND empty  LocalPart ) || (Name=='EVENT_NAME' &amp;&amp; NamespaceURI =='NAMESPACE_URI'  &amp;&amp;  LocalPart=='LOCAL_PART') ) ? '&lt;event-definition&gt;' :  ((empty Name || Name == 'EVENT_NAME')?(concat('{',NamespaceURI,'}',LocalPart)):Name)}</label>
-					</case>
-				</node-factory>
+						</default-panel>
+					</with>
+				</content>
+				<collapsible>true</collapsible>
+			</section>
+			<section>
+				<label>Portlet Information</label>
+
+				<collapsible>true</collapsible>
+				<content>
+					<with>
+						<path>PortletInfo</path>
+						<default-panel>
+							<content>
+								<property-editor>
+									<property>Title</property>
+									<related-content-width>50</related-content-width>
+									<related-content>
+										<property-editor>ShortTitle</property-editor>
+									</related-content>
+								</property-editor>
+								<property-editor>Keywords</property-editor>
+							</content>
+						</default-panel>
+					</with>
+				</content>
+			</section>
+			<section>
+				<content>
+					<include>init.param.composite</include>
+				</content>
+				<label>Initialization Parameters</label>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+			</section>
+			<node>
+				<label>Inter-Portlet Communication</label>
 				<section>
-					<label>Other Details</label>
+					<label>Supported Public Render Parameters</label>
 					<content>
 						<property-editor>
-							<property>ResourceBundles</property>
+							<property>SupportedPublicRenderParameters
+							</property>
 							<hint>
-								<name>browse.only</name>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+				<section>
+					<label>Supported Processing Events</label>
+					<content>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<value>SupportedProcessingEvents</value>
+								<name>Property</name>
+							</param>
+						</include>
+					</content>
+					<collapsible>true</collapsible>
+				</section>
+				<section>
+					<label>Supported Publishing Events</label>
+					<collapsible>true</collapsible>
+					<content>
+						<include>
+							<part>support.eventdef.composite</part>
+							<param>
+								<name>Property</name>
+								<value>SupportedPublishingEvents</value>
+							</param>
+						</include>
+					</content>
+				</section>
+				<image>images/ipc_16x16.gif</image>
+			</node>
+			<node>
+				<label>Advanced</label>
+				<section>
+					<label>Security</label>
+					<content>
+						<property-editor>
+							<property>SecurityRoleRefs</property>
+							<child-property>RoleName</child-property>
+							<child-property>RoleLink</child-property>
+							<child-property>Description</child-property>
+							<hint>
+								<name>show.label.above</name>
 								<value>true</value>
 							</hint>
-							<action>
-								<id>Sapphire.Browse</id>
-								<label>Select Resource Bundle</label>
-							</action>
 						</property-editor>
-						<property-editor>DefaultNameSpace</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+
+
+				<section>
+					<label>Preferences</label>
+					<content>
+						<with>
+							<path>PortletPreference</path>
+							<default-panel>
+								<content>
+									<property-editor>
+										<property>PortletPreferences</property>
+										<child-property>Name</child-property>
+										<child-property>Value</child-property>
+										<child-property>ReadOnly</child-property>
+										<child-property>Description</child-property>
+										<hint>
+											<name>show.label</name>
+											<value>false</value>
+										</hint>
+									</property-editor>
+								</content>
+							</default-panel>
+						</with>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+				<section>
+					<label>Caching</label>
+					<content>
+						<property-editor>
+							<property>ExpirationCache</property>
+							<related-content-width>50</related-content-width>
+							<related-content>
+								<property-editor>CacheScope</property-editor>
+							</related-content>
+						</property-editor>
 					</content>
 					<collapsible>true</collapsible>
 					<collapsed-initially>true</collapsed-initially>
 				</section>
-				<node-factory>
-					<property>PublicRenderParameters</property>
-					<case>
-						<use-model-element-image></use-model-element-image>
-						<section>
-							<label>General</label>
-							<content>
-								<label>Documantation about public render parameters</label>
-							</content>
-						</section>
-						<section>
-							<label>Details</label>
-							<content>
-								<property-editor>Id</property-editor>
-                                <property-editor>Identifier</property-editor>
-								<property-editor>Name</property-editor>
-                                <group>
-                                    <label>Qualified Name</label>
-                                    <indent>true</indent>
-                                    <content>
-                                        <property-editor>NamespaceURI</property-editor>
-                                        <property-editor>LocalPart</property-editor>
-                                    </content>
-                                </group>
-								<property-editor>Aliases</property-editor>
-							</content>
-						</section>
-                        <label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;: Identifier}</label>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>ContainerRuntimeOptions</property>
-					<case>
-						<label>${Name
-							==null?&quot;&lt;container-runtime-option&gt;&quot;:Name}</label>
-						<use-model-element-image></use-model-element-image>
-						<section>
-							<label>General</label>
-							<collapsible>true</collapsible>
-						</section>
-						<section>
-							<label>Details</label>
-							<content>
-								<property-editor>Name</property-editor>                                
-								<property-editor>Options</property-editor>
-							</content>
-						</section>
-					</case>
-				</node-factory>
-				<node-factory>
-					<property>Listeners</property>
-					<case>
-						<use-model-element-image></use-model-element-image>
-						<label>Listener</label>
-						<section>
-							<label>General</label>
-							<content>
-								<label>Info about Listener</label>
-							</content>
-							<collapsible>true</collapsible>
-						</section>
-						<section>
-							<label>Details</label>
-							<content>
-								<property-editor>Implementation</property-editor>
-							</content>
-							<collapsible>true</collapsible>
-						</section>
-					</case>
-				</node-factory>
-
-
+				<section>
+					<label>Runtime Options</label>
+					<content>
+						<property-editor>
+							<property>ContainerRuntimeOptions</property>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+							<child-property>Name</child-property>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>true</collapsed-initially>
+				</section>
+				<image>images/settings_16x16.gif</image>
 			</node>
-		</root-node>
-		<outline-header-text>List of Portlets</outline-header-text>
-		<action>
-			<id>Liferay.Create.Portlet</id>
-			<label>Create new Portlet</label>
-			<description>this will call the Liferay IDE New Portlet Wizard Page
-			</description>
-			<image>/icons/n16/portlet_new.png</image>
-			<hint>
-				<name>style</name>
-				<value>image</value>
-			</hint>
-			<context>Sapphire.EditorPage.Outline.Header</context>
-		</action>
-		<action>
-			<id>Liferay.Configure.Existing.Portlet</id>
-			<label>Configure an existing Portlet</label>
-			<hint>
-				<name>style</name>
-				<value>image</value>
-			</hint>
-			<description>this will configure an existing portlet that has not
-				been added to the portlet.xml
-			</description>
-			<image>icons/e16/configure_portlet.gif</image>
-			<context>Sapphire.EditorPage.Outline.Header</context>
-		</action>
-		<action-handler>
-			<action>Liferay.Create.Portlet</action>
-			<id>Liferay.Create.Portlet</id>
-			<label>Create a new Portlet</label>
-			<impl>CreatePortletActionHandler</impl>           
-		</action-handler>
-		<action-handler>
-			<action>Liferay.Configure.Existing.Portlet</action>
-			<id>Liferay.Configure.Existing.Portlet</id>
-			<label>Configure an existing portlet</label>
-			<impl>ConfigurePortletActionHandler</impl>
-		</action-handler>
-		<page-header-image>icons/e16/portlet.png</page-header-image>
-
-
-	</editor-page>
-	<dialog>
-		<id>configure.portlet.dialog</id>
-		<label>Configure existing Portlet</label>
-		<content>
-			<include>portlet.basic.composite</include>
-			<include>init.param.composite</include>
-		</content>
-		<initial-focus>PortletName</initial-focus>
-		<hint>
-			<name>height</name>
-			<value>300</value>
-		</hint>
-		<hint>
-			<name>width</name>
-			<value>350</value>
-		</hint>
-	</dialog>
-
+			<section>
+				<label>Internationalization and Localization</label>
+				<collapsible>true</collapsible>
+				<collapsed-initially>true</collapsed-initially>
+				<content>
+					<property-editor>
+						<property>ResourceBundle</property>
+						<action>
+							<id>LiferayIDE.Portlet.RB.Create</id>
+							<label>Create Locale Bundles</label>
+							<image>icons/elcl16/new_doc_16x16.png</image>
+							<hint>
+								<name>style</name>
+								<value>image</value>
+							</hint>
+							<context>Sapphire.ValuePropertyEditor</context>
+							<location>after:Sapphire.Browse</location>
+						</action>
+						<action-handler>
+							<action>LiferayIDE.Portlet.RB.Create</action>
+							<id>LiferayIDE.Portlet.RB.Create</id>
+							<impl>CreatePortletResourceBundleActionHandler</impl>
+						</action-handler>
+					</property-editor>
+					<property-editor>
+						<property>SupportedLocales</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+			</section>
+			<node-include>ContainerRuntimeOptionsNodeList</node-include>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>EventDefinitionsList</id>
+		<property>EventDefinitions</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Name</property-editor>
+					<group>
+						<label>Qualified Name</label>
+						<indent>true</indent>
+						<content>
+							<property-editor>
+								<property>NamespaceURI
+								</property>
+								<related-content-width>50</related-content-width>
+								<related-content>
+									<property-editor>LocalPart</property-editor>
+								</related-content>
+							</property-editor>
+						</content>
+					</group>
+					<property-editor>
+						<property>EventValueType</property>
+					</property-editor>
+					<property-editor>
+						<property>Aliases</property>
+						<related-content-width>30</related-content-width>
+					</property-editor>
+				</content>
+				<collapsible>false</collapsible>
+				<indent>true</indent>
+			</section>
+			<label>${( (empty Name AND empty NamespaceURI AND empty LocalPart )
+				||
+				(Name=='EVENT_NAME' &amp;&amp;
+				NamespaceURI =='NAMESPACE_URI'
+				&amp;&amp;
+				LocalPart=='LOCAL_PART') ) ? '&lt;event-definition&gt;'
+				:
+				((empty Name || Name ==
+				'EVENT_NAME')?(concat('{',NamespaceURI,'}',LocalPart)):Name)}
+			</label>
+		</case>
+	</node-factory>
 	<composite>
 		<id>portlet.basic.composite</id>
 		<content>
-			<property-editor>Id</property-editor>
-			<property-editor>PortletName</property-editor>
-			<property-editor>DisplayName</property-editor>
-			<property-editor>Description</property-editor>
 			<property-editor>
-				<property>PortletClass</property>
-				<action>
-					<id>Sapphire.Jump</id>
-					<label>Open Class</label>
-					<description>Calls the System Sapphire.Jump Action to open the Java
-						Class in the Editor
-					</description>
-				</action>
-				<action>
-					<id>Attach.Java.Content.Assist</id>
-					<label>Attach Java Content Assist</label>
-					<context>Sapphire.ValuePropertyEditor</context>
-				</action>
-				<action-handler>
-					<action>Attach.Java.Content.Assist</action>
-					<id>Attach.Java.Content.Assist</id>
-					<impl>JavaClassContentAssistHandler</impl>
-				</action-handler>
-				<listener>TypeContentProposalListener</listener>
+				<property>PortletName</property>
+				<related-content-width>50</related-content-width>
+				<related-content>
+					<property-editor>DisplayName</property-editor>
+				</related-content>
 			</property-editor>
+			<property-editor>PortletClass</property-editor>
 		</content>
 		<indent>true</indent>
 		<scroll-vertically>true</scroll-vertically>
@@ -648,6 +613,10 @@
 				<property>InitParams</property>
 				<child-property>Name</child-property>
 				<child-property>Value</child-property>
+				<hint>
+					<name>show.label</name>
+					<value>false</value>
+				</hint>
 			</property-editor>
 		</content>
 	</composite>
@@ -664,9 +633,209 @@
 	<composite>
 		<id>id.name.desc.composite</id>
 		<content>
-			<property-editor>Id</property-editor>
 			<property-editor>Name</property-editor>
 			<property-editor>Description</property-editor>
 		</content>
 	</composite>
+	<composite>
+		<id>support.eventdef.composite</id>
+		<content>
+			<property-editor>
+				<property>@{Property}</property>
+				<child-property>Qname</child-property>
+				<child-property>Name</child-property>
+				<child-property>Description</child-property>
+				<hint>
+					<name>show.label.above</name>
+					<value>true</value>
+				</hint>
+			</property-editor>
+		</content>
+	</composite>
+	<composite>
+		<id>event.def.quickedit.composite</id>
+		<content>
+			<property-editor>
+				<property>EventDefinitions</property>
+				<child-property>NamespaceURI</child-property>
+				<child-property>LocalPart</child-property>
+				<child-property>Name</child-property>
+				<child-property>
+					<property>EventValueType</property>
+				</child-property>
+				<hint>
+					<name>show.label</name>
+					<value>false</value>
+				</hint>
+			</property-editor>
+		</content>
+	</composite>
+	<node-factory>
+		<id>FiltersNodeList</id>
+		<property>Filters</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<label>${ Name == null ? &quot;&lt;filter&gt;&quot; : Name }</label>
+			<section>
+				<label>Filter</label>
+				<collapsible>false</collapsible>
+				<content>
+					<property-editor>DisplayName</property-editor>
+					<property-editor>Name</property-editor>
+					<property-editor>
+						<property>Implementation</property>
+					</property-editor>
+					<property-editor>LifeCycle</property-editor>
+					<property-editor>InitParams</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>FilterMappingsNodeList</id>
+		<property>FilterMappings</property>
+		<case>
+			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}</label>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>Mappings</label>
+				<content>
+					<property-editor>Filter</property-editor>
+					<property-editor>Portlet</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>SecurityConstraintNodeList</id>
+		<property>SecurityConstraints</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<label>Security Constraint</label>
+			<node>
+				<use-model-element-image></use-model-element-image>
+				<property>PortletCollection</property>
+				<label>Portlet Collection</label>
+				<section>
+					<label>Portlet Names</label>
+					<content>
+						<property-editor>
+							<property>PortletNames</property>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+						</property-editor>
+					</content>
+				</section>
+			</node>
+			<node>
+				<label>User Data Constraint</label>
+				<use-model-element-image></use-model-element-image>
+				<property>UserDataConstraint</property>
+				<section>
+					<label>Details</label>
+					<content>
+						<property-editor>Description</property-editor>
+						<property-editor>
+							<property>TransportGurantee</property>
+							<hint>
+								<name>prefer.combo</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
+					</content>
+				</section>
+			</node>
+			<section>
+				<label>Portlet Display Names</label>
+				<content>
+					<property-editor>
+						<property>PortletDisplayNames</property>
+						<hint>
+							<name>show.label</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>ListenersNodeList</id>
+		<property>Listeners</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<label>Listener</label>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Description</property-editor>
+					<property-editor>
+						<property>Implementation</property>
+					</property-editor>
+				</content>
+				<collapsible>false</collapsible>
+			</section>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>PublicRenderParametersList</id>
+		<property>PublicRenderParameters</property>
+		<case>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Identifier</property-editor>
+					<property-editor>Name</property-editor>
+					<group>
+						<label>Qualified Name</label>
+						<indent>true</indent>
+						<content>
+							<property-editor>NamespaceURI</property-editor>
+							<property-editor>LocalPart</property-editor>
+						</content>
+					</group>
+					<property-editor>Aliases</property-editor>
+				</content>
+			</section>
+			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;: Identifier} </label>
+		</case>
+	</node-factory>
+	<node-factory>
+		<id>ContainerRuntimeOptionsNodeList</id>
+		<property>ContainerRuntimeOptions</property>
+		<case>
+			<label>${Name ==null ? '&lt;container-runtime-option&gt;' : Name }</label>
+			<use-model-element-image></use-model-element-image>
+			<section>
+				<label>Details</label>
+				<content>
+					<property-editor>Name</property-editor>
+					<property-editor>Options</property-editor>
+				</content>
+			</section>
+		</case>
+	</node-factory>
+	<dialog>
+		<id>new.portlet.wizard</id>
+		<content>
+			<property-editor>PortletName</property-editor>
+			<property-editor>PortletClass</property-editor>
+			<with>
+				<path>Supports</path>
+				<label>Supports</label>
+				<default-panel>
+					<content>
+						<property-editor>MimeType</property-editor>
+					</content>
+				</default-panel>
+			</with>
+		</content>
+		<label>Create new Portlet</label>
+		<initial-focus>PortletName</initial-focus>
+		<scroll-vertically>true</scroll-vertically>
+		<scroll-horizontally>true</scroll-horizontally>
+	</dialog>
 </definition>

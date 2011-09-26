@@ -1,6 +1,19 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
@@ -20,7 +33,7 @@ import com.liferay.ide.eclipse.portlet.core.model.IPublicRenderParameter;
 import com.liferay.ide.eclipse.portlet.core.model.ISupportedPublicRenderParameter;
 
 /**
- * @author kamesh.sampath
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 public class QNamesPossibleValuesService extends PossibleValuesService {
 
@@ -50,14 +63,15 @@ public class QNamesPossibleValuesService extends PossibleValuesService {
 			ModelElementList<IEventDefinition> eventDefs = portletApp.getEventDefinitions();
 			for ( IEventDefinition eventDefinition : eventDefs ) {
 				values.add( getQName(
-					eventDefinition.getNamespaceURI().getContent(), eventDefinition.getLocalPart().getContent() ) );
+					eventDefinition.getNamespaceURI().getContent( false ), eventDefinition.getLocalPart().getContent() ) );
 			}
 		}
 		else if ( imodelElement instanceof ISupportedPublicRenderParameter ) {
 			ModelElementList<IPublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 			for ( IPublicRenderParameter publicRenderParam : publicRenderParameters ) {
 				values.add( getQName(
-					publicRenderParam.getNamespaceURI().getContent(), publicRenderParam.getLocalPart().getContent() ) );
+					publicRenderParam.getNamespaceURI().getContent( false ),
+					publicRenderParam.getLocalPart().getContent() ) );
 			}
 		}
 

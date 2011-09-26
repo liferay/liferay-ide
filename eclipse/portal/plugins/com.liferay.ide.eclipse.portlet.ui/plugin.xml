@@ -91,11 +91,14 @@
       </editor>
       <editor
             class="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
-            default="false"
+            default="true"
             icon="icons/e16/portlet.png"
             id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
-            name="Portlet Xml Editor (Experimental)"
+            name="Portlet Application Configuration Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <contentTypeBinding
+               contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">
+         </contentTypeBinding>
          <!-- don't enable until we are ready for this to be default
          <contentTypeBinding
                contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">

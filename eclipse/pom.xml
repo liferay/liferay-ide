@@ -56,9 +56,9 @@
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
 <!--     <sapphire-site>http://download.eclipse.org/sapphire/0.3.0/repository</sapphire-site> -->
-    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/512/artifact/build/repository/</sapphire-site>
+    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
     <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.0</graphiti-site>
-	<wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
+    <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
 
     <profiles>
@@ -205,16 +205,17 @@
     </modules>
 
 
-            <!--<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>-->
+<!--
     <pluginRepositories>
         <pluginRepository>
             <id>tycho</id>
-		<url>https://repository.sonatype.org/content/repositories/tycho-002/</url>
+		<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+-->
 
     <build>
         <sourceDirectory>src</sourceDirectory>

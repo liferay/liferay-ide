@@ -1,8 +1,23 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
+
+import java.util.List;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -18,7 +33,7 @@ import org.w3c.dom.Element;
 import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
 
 /**
- * @author kamesh.sampath
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 public class QNamespaceValueBinding extends XmlValueBindingImpl {
 
@@ -56,8 +71,8 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 		}
 		if ( qNameElement != null ) {
 			// System.out.println( qNameElement );
-			XmlAttribute xmlAttribute =
-				qNameElement.getAttribute( PortletAppModelConstants.DEFAULT_QNAME_PREFIX, false );
+			List<XmlAttribute> listOfAttibutes = qNameElement.getAttributes();
+			XmlAttribute xmlAttribute = listOfAttibutes != null ? listOfAttibutes.get( 0 ) : null;
 			if ( xmlAttribute != null ) {
 				value = xmlAttribute.getText();
 			}

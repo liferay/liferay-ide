@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
@@ -13,7 +29,7 @@ import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
- * @author kamesh.sampath
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 
 public final class QNameLocalPartValueBinding
@@ -76,8 +92,6 @@ extends XmlValueBindingImpl
 		return value;
 	}
 
-
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
@@ -100,12 +114,26 @@ extends XmlValueBindingImpl
 			qNameElement = parent.getChildElement( params[0], true );
 		}
 
-		// System.out.println( "VALUE ___________________ " + val );
-
 		// System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
-		if ( qNameElement != null && val != null ) {
-			val = value.trim();
-			qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+		if ( qNameElement != null ) {
+			val = val != null ? value.trim() : "";
+			if ( params.length == 2 && "localpart".equals( params[1] ) ) { // update only local part
+				// System.out.println( "VALUE ___________________ " + val );
+				String existingText = qNameElement.getText();
+				if ( existingText != null && existingText.indexOf( ":" ) != -1 ) {
+					String updatedLocalPart = existingText.substring( 0, ( existingText.indexOf( ":" ) + 1 ) );
+					updatedLocalPart = updatedLocalPart + val;
+					// System.out.println( "Updated value ___________________ " + updatedLocalPart );
+					qNameElement.setText( updatedLocalPart );
+				}
+				else {
+					qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+				}
+
+			}
+			else {
+				qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+			}
 		}
 
 	}

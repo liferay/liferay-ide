@@ -1,6 +1,19 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
@@ -8,7 +21,6 @@ import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImpliedElementProperty;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
@@ -33,11 +45,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 import com.liferay.ide.eclipse.portlet.core.model.internal.DefaultXmlBinding;
 
 /**
- * @author kamesh
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
 @Image( path = "images/obj16/portlet_class_obj.gif" )
-public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
+public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable {
 
 	ModelElementType TYPE = new ModelElementType( IPortlet.class );
 
@@ -71,10 +83,8 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
 	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.GenericPortlet" } )
-	@MustExist
 	@Label( standard = "Portlet class" )
 	@Required
-	@NoDuplicates
 	@XmlBinding( path = "portlet-class" )
 	ValueProperty PROP_PORTLET_CLASS = new ValueProperty( TYPE, "PortletClass" );
 
@@ -129,15 +139,6 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 
 	ModelElementList<ISupportedLocales> getSupportedLocales();
 
-	// *** ResourceBundles ***
-
-	@Type( base = IResourceBundle.class )
-	@Label( standard = "Resource Bundle" )
-	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "resource-bundle", type = IResourceBundle.class ) )
-	ListProperty PROP_RESOURCE_BUNDLES = new ListProperty( TYPE, "ResourceBundles" );
-
-	ModelElementList<IResourceBundle> getResourceBundles();
-
 	// *** PortletInfo ***
 
 	@Type( base = IPortletInfo.class )
@@ -186,7 +187,7 @@ public interface IPortlet extends IModelElement, IIdentifiable, IDescribeable {
 	// *** Supported Publishing Events ***
 
 	@Type( base = IEventDefinitionRef.class )
-	@Label( standard = "Supported Processing Events" )
+	@Label( standard = "Supported Publishing Events" )
 	@XmlListBinding( mappings = @XmlListBinding.Mapping( element = "supported-publishing-event", type = IEventDefinitionRef.class ) )
 	ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty( TYPE, "SupportedPublishingEvents" );
 

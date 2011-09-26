@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension xmlns="http://www.eclipse.org/sapphire/xmlns/extension"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<action-handler>
+		<action>Sapphire.Jump</action>
+		<label>Open</label>
+		<context>Sapphire.ListPropertyEditor</context>
+		<context>Sapphire.ValuePropertyEditor</context>
+		<condition>com.liferay.ide.eclipse.portlet.ui.editor.internal.ResourceBundleJumpActionHandlerCondition
+		</condition>
+		<impl>com.liferay.ide.eclipse.portlet.ui.editor.internal.ResourceBundleJumpActionHandler
+		</impl>
+	</action-handler>
+	
+	 <action>
+            <id>LiferayIDE.Refresh</id>
+            <label>Refresh Model</label>
+        <location>after:Quick.Actions</location>
+        <location>after:Sapphire.Add</location>
+        <group>LiferayIDE.Group</group>
+        <context>Sapphire.EditorPage.Outline</context>
+            <hint>
+                <name>style</name>
+                <value>image</value>
+            </hint>
+            <image>icons/elcl16/e_refresh.gif</image>
+            <context>Sapphire.EditorPage.Outline.Header</context>
+        </action>
+        <action-handler>
+            <action>LiferayIDE.Refresh</action>
+            <id>LiferayIDE.Refresh</id>
+            <impl>com.liferay.ide.eclipse.portlet.ui.editor.internal.ModelRefreshActionHandler</impl>
+        </action-handler>
+</extension>

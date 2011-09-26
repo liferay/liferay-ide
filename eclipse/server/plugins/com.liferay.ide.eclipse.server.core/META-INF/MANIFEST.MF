@@ -31,9 +31,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.core,
- com.liferay.ide.eclipse.server.core.support,
  com.liferay.ide.eclipse.server.remote,
  com.liferay.ide.eclipse.server.util
-Bundle-ClassPath: .,
- portal-support/deps/portal-impl.jar,
- portal-support/deps/portal-service.jar
+Bundle-ClassPath: .

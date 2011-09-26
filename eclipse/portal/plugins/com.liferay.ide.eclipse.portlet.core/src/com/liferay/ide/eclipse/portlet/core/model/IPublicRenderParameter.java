@@ -1,10 +1,22 @@
-/**
- * 
- */
+/*******************************************************************************
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -17,6 +29,7 @@ import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -24,15 +37,17 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.NameOrQnameValidationService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.QNameLocalPartValueBinding;
 import com.liferay.ide.eclipse.portlet.core.model.internal.QNamespaceValueBinding;
 
 /**
- * @author kamesh.sampath
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "/images/obj16/pub_obj.gif" )
-public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
+@Image( path = "/images/elcl16/parameter_16x16.gif" )
+@Label( full = "Public Render Parameter", standard = "Public Render Parameter" )
+public interface IPublicRenderParameter extends IQName, IIdentifiable {
 
 	ModelElementType TYPE = new ModelElementType( IPublicRenderParameter.class );
 
@@ -48,12 +63,12 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 
 	void setIdentifier( String value );
 
-
 	// *** NamespaceURI ***
 
 	@Label( standard = "Namespace URI" )
 	@DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
+	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
@@ -66,6 +81,7 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 	@Label( standard = "Local Part" )
 	@DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "qname" )
+	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 
@@ -79,6 +95,7 @@ public interface IPublicRenderParameter extends IModelElement, IIdentifiable {
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
 	@DefaultValue( text = "PARAM_NAME" )
+	@Service( impl = NameOrQnameValidationService.class )
 	@Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
 	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
