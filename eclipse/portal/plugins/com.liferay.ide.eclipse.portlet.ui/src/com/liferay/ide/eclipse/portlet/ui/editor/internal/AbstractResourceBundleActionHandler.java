@@ -145,6 +145,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 						if ( rbPackageFragment != null && !rbPackageFragment.exists() ) {
 							pkgSrc.createPackageFragment( packageName, true, monitor );
 						}
+						monitor.worked( 1 );
 						ListIterator<IFile> rbFilesIterator = rbFiles.listIterator();
 						while ( rbFilesIterator.hasNext() ) {
 
