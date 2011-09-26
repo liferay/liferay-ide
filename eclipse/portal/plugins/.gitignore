@@ -9,6 +9,7 @@ com.liferay.ide.eclipse.portlet.jsf.core/bin/
 com.liferay.ide.eclipse.portlet.jsf.core/target/
 com.liferay.ide.eclipse.portlet.jsf.ui/bin/
 com.liferay.ide.eclipse.portlet.jsf.ui/target/
+com.liferay.ide.eclipse.portlet.ui/.resources/
 com.liferay.ide.eclipse.portlet.ui/bin/
 com.liferay.ide.eclipse.portlet.ui/target/
 com.liferay.ide.eclipse.portlet.vaadin.core/bin/
