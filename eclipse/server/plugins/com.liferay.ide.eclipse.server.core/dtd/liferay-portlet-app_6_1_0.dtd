@@ -26,12 +26,12 @@ social-activity-interpreter-class?, social-request-interpreter-class?,
 webdav-storage-token?, webdav-storage-class?, xml-rpc-method-class?,
 control-panel-entry-category?, control-panel-entry-weight?,
 control-panel-entry-class?, asset-renderer-factory*, atom-collection-adapter*,
-custom-attributes-display*, workflow-handler*, preferences-company-wide?,
-preferences-unique-per-layout?, preferences-owned-by-group?,
-use-default-template?, show-portlet-access-denied?, show-portlet-inactive?,
-action-url-redirect?, restore-current-view?, maximize-edit?, maximize-help?,
-pop-up-print?, layout-cacheable?, instanceable?, remoteable?, scopeable?,
-user-principal-strategy?, private-request-attributes?,
+custom-attributes-display*, permission-propagator?, workflow-handler*,
+preferences-company-wide?, preferences-unique-per-layout?,
+preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
+show-portlet-inactive?, action-url-redirect?, restore-current-view?,
+maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
+remoteable?, scopeable?, user-principal-strategy?, private-request-attributes?,
 private-session-attributes?, autopropagated-parameters?, action-timeout?,
 render-timeout?, render-weight?, ajaxable?, header-portal-css*,
 header-portlet-css*, header-portal-javascript*, header-portlet-javascript*,
@@ -391,6 +391,13 @@ See:
 http://docs.liferay.com/portal/6.0/javadocs/portal-service/com/liferay/portlet/expando/model/CustomAttributesDisplay.html
 -->
 <!ELEMENT custom-attributes-display (#PCDATA)>
+
+<!--
+The permission-propagator value must be a class that implements
+com.liferay.portal.security.permission.PermissionPropagator and is called to
+propagate permissions.
+-->
+<!ELEMENT permission-propagator (#PCDATA)>
 
 <!--
 -->

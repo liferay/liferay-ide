@@ -71,6 +71,10 @@ service. This column will automatically be populated with a UUID. Developers
 will also be able to find and remove based on that UUID. The default value is
 false.
 
+If the uuid-accessor value is true, then the service will generate a UUID column
+accessor for the service. This accessor will provide a fast and type-safe way to
+access entity's UUID.
+
 If the local-service value is true, then the service will generate the local
 interfaces for the service. The default value is false.
 
@@ -113,6 +117,7 @@ the json-enabled value is true.
 	human-name CDATA #IMPLIED
 	table CDATA #IMPLIED
 	uuid CDATA #IMPLIED
+	uuid-accessor CDATA #IMPLIED
 	local-service CDATA #IMPLIED
 	remote-service CDATA #IMPLIED
 	persistence-class CDATA #IMPLIED
@@ -269,6 +274,10 @@ the id-param value (stored in /sql/sequences.sql). This sequence is then
 accessed to generate a unique identifier whenever an insert occurs. This
 implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
 
+This accessor value specifies whether or not to generate an accessor for this
+column. This accessor will provide a fast and type-safe way to access column 
+value.
+
 The filter-primary value specifies the column to use as the primary key column
 when using filter finders. Only one column should ever have this value set to
 true. If no column has this set to true, then the default primary column be
@@ -295,6 +304,7 @@ element is true, then the json-enabled value in the column element is true.
 	db-name CDATA #IMPLIED
 	type CDATA #REQUIRED
 	primary CDATA #IMPLIED
+	accessor CDATA #IMPLIED
 	filter-primary CDATA #IMPLIED
 	entity CDATA #IMPLIED
 	mapping-key CDATA #IMPLIED
