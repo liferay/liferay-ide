@@ -159,6 +159,8 @@ public interface ISDKConstants {
 
 	public static final String TARGET_MERGE = "merge";
 
+	public static final String TARGET_FORMAT_SOURCE = "format-source";
+
 	public static final String TARGET_TEST = "test";
 
 	public static final String TARGET_WAR = "war";

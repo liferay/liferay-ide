@@ -74,7 +74,9 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 	public void dispose() {
 		super.dispose();
 
-		getModel().dispose();
+		if ( getModel() != null ) {
+			getModel().dispose();
+		}
 	}
 
 	public String getContextId() {

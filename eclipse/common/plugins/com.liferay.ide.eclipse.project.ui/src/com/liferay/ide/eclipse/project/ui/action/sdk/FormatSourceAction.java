@@ -13,26 +13,18 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.ui.editor;
+package com.liferay.ide.eclipse.project.ui.action.sdk;
 
-import com.liferay.ide.eclipse.core.model.IBaseModel;
-import com.liferay.ide.eclipse.ui.form.IDEFormEditor;
-
-import org.eclipse.ui.IFileEditorInput;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-public class PluginPackageInputContextManager extends InputContextManager {
-
-	public PluginPackageInputContextManager(IDEFormEditor editor) {
-		super(editor);
-	}
+public class FormatSourceAction extends SDKCommandAction {
 
 	@Override
-	public IBaseModel getModel() {
-		InputContext context = findContext(((IFileEditorInput) this.editor.getEditorInput()).getFile());
-		return context != null ? context.getModel() : null;
+	protected String getSDKCommand() {
+		return ISDKConstants.TARGET_FORMAT_SOURCE;
 	}
 
 }

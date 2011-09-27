@@ -437,6 +437,9 @@
                   name="direct-deploy">
             </groupMarker>
             <groupMarker
+                  name="formatsource">
+            </groupMarker>
+            <groupMarker
                   name="merge">
             </groupMarker>
             <groupMarker
@@ -530,6 +533,14 @@
                id="com.liferay.ide.eclipse.sdk.popup.action.direct-deploy"
                label="direct-deploy"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/direct-deploy">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.FormatSourceAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.formatsource"
+               label="format-source"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/formatsource">
          </action>
          <action
                class="com.liferay.ide.eclipse.project.ui.action.sdk.MergeAction"
