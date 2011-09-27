@@ -83,15 +83,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay project location:", 1);
 
 		projectLocation = SWTUtil.createText(topComposite, 1);
-		this.synchHelper.synchText(projectLocation, PROJECT_LOCATION, null);
-		// FIX:IDE-242
-		SDKManager sdkManager = SDKManager.getInstance();
-		SDK defaultSDK = sdkManager.getDefaultSDK();
-		if ( defaultSDK != null ) {
-			String sdkLocation = defaultSDK.getLocation().toOSString();
-			getDataModel().setStringProperty( PROJECT_LOCATION, sdkLocation );
-		}
-		// END FIX:IDE-242
+		this.synchHelper.synchText(projectLocation, PROJECT_LOCATION, null);		
 		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
 
 			public void propertyChanged(DataModelEvent event) {
@@ -219,6 +211,15 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 
 		if (!CoreUtil.isNullOrEmpty(projectLocation.getText())) {
 			dd.setFilterPath(projectLocation.getText());
+		}else{
+			// FIX:IDE-242
+			SDKManager sdkManager = SDKManager.getInstance();
+			SDK defaultSDK = sdkManager.getDefaultSDK();
+			if ( defaultSDK != null ) {
+				String sdkLocation = defaultSDK.getLocation().toOSString();
+				dd.setFilterPath(sdkLocation );
+			}
+			// END FIX:IDE-242
 		}
 
 		String dir = dd.open();
