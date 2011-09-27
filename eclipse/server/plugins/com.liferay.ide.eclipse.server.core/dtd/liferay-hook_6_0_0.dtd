@@ -73,6 +73,8 @@ my.places.show.user.public.sites.with.no.layouts
 passwords.passwordpolicytoolkit.generator
 passwords.passwordpolicytoolkit.static
 portlet.add.default.resource.check.enabled
+portlet.add.default.resource.check.whitelist
+portlet.add.default.resource.check.whitelist.actions
 sanitizer.impl
 servlet.session.create.events
 servlet.session.destroy.events

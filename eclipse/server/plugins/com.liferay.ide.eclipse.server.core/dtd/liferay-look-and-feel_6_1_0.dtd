@@ -225,7 +225,7 @@ The settings element contain a list of settings that are available to the
 theme display object at runtime. They are described with a key value pair.
 
 For example, you can access it with the command:
-themeDisplay.getSetting("hello").
+themeDisplay.getThemeSetting("hello").
 
 Set the configurable attribute to true if the setting is configurable from the
 user interface at runtime. This allows administrators to change the settings for
@@ -238,6 +238,14 @@ Set the options attribute with a comma delimited list to specify the options for
 the HTML input.
 
 Set the value attribute to specify the default value.
+
+Include a CDATA section containing JavaScript to alter the behavior of the
+field, to bind advanced controls such as a color picker, or to perform
+validation. Use the token [@NAMESPACE@] in conjunction with the key of the
+setting in order to identify the field from JavaScript.
+
+For example, you can access the html field of the setting with:
+AUI().one('#[@NAMESPACE@]hello')
 -->
 <!ELEMENT settings (setting*)>
 

@@ -36,6 +36,7 @@ convert.processes
 default.landing.page.path
 dl.file.entry.drafts.enabled
 dl.file.entry.processors
+dl.store.antivirus.impl
 dl.store.impl
 dl.webdav.auto.unlock
 dl.webdav.save.to.single.version
@@ -44,7 +45,6 @@ field.enable.com.liferay.portal.model.Contact.birthday
 field.enable.com.liferay.portal.model.Contact.male
 field.enable.com.liferay.portal.model.Organization.status
 hot.deploy.listeners
-image.hook.impl
 javascript.fast.load
 layout.static.portlets.all
 layout.template.cache.enabled
@@ -65,15 +65,15 @@ login.events.pre
 logout.events.post
 logout.events.pre
 mail.hook.impl
-my.places.show.community.private.sites.with.no.layouts
-my.places.show.community.public.sites.with.no.layouts
-my.places.show.organization.private.sites.with.no.layouts
-my.places.show.organization.public.sites.with.no.layouts
-my.places.show.user.private.sites.with.no.layouts
-my.places.show.user.public.sites.with.no.layouts
+my.sites.show.private.sites.with.no.layouts
+my.sites.show.public.sites.with.no.layouts
+my.sites.show.user.private.sites.with.no.layouts
+my.sites.show.user.public.sites.with.no.layouts
 passwords.passwordpolicytoolkit.generator
 passwords.passwordpolicytoolkit.static
 portlet.add.default.resource.check.enabled
+portlet.add.default.resource.check.whitelist
+portlet.add.default.resource.check.whitelist.actions
 sanitizer.impl
 servlet.session.create.events
 servlet.session.destroy.events
@@ -81,6 +81,7 @@ servlet.service.events.post
 servlet.service.events.pre
 session.phishing.protected.attributes
 session.store.password
+social.bookmark.*
 terms.of.use.required
 theme.css.fast.load
 theme.images.fast.load
@@ -89,6 +90,7 @@ theme.portlet.decorate.default
 theme.portlet.sharing.default
 theme.shortcut.icon
 upgrade.processes
+user.notification.event.confirmation.enabled
 users.email.address.generator
 users.email.address.required
 users.form.add.identification
