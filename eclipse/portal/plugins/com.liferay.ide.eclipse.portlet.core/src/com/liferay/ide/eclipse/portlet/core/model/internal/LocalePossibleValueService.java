@@ -17,12 +17,12 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 import java.util.Locale;
 import java.util.SortedSet;
 
 import org.eclipse.sapphire.modeling.PossibleValuesService;
-
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> TODO: this need to filter from Liferay

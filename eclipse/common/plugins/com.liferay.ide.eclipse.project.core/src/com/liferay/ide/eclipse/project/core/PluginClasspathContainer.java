@@ -95,16 +95,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 					entries.add(createPortalJarClasspathEntry(pluginPackageJar));
 				}			}
 
-			// following code is now done by PluginPackageResourceListener.processRequiredDeploymentContexts
-
-			// for (String context : getRequiredDeploymentContexts()) {
-			// IClasspathEntry entry = createContextClasspathEntry(context);
-			//
-			// if (entry != null) {
-			// entries.add(entry);
-			// }
-			// }
-
 			this.classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
 		}
 

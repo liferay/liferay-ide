@@ -12,13 +12,16 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.ui.draw2d;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.swt.SWT;
 
-
+/**
+ * @author Gregory Amerson
+ */
 public class FeedbackRoundedRectangle extends RoundedRectangle {
 
 	public FeedbackRoundedRectangle() {

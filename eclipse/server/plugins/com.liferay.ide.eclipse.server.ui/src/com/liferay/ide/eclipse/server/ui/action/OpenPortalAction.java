@@ -82,8 +82,7 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 				}
 			}
 		});
-
-	}
+	}
 
 	protected void openPortal(ILiferayServer portalServer) {
 		URL portalHome = portalServer.getPortalHomeUrl();

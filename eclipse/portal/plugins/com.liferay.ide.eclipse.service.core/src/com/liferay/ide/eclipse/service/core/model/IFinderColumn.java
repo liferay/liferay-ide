@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.service.core.model;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -27,6 +28,9 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 
+/**
+ * @author Gregory Amerson
+ */
 @GenerateImpl
 @Image(path = "images/finder_column_16x16.png")
 public interface IFinderColumn extends IModelElement {

@@ -17,10 +17,10 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
+
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-
-import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

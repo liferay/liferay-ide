@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Path;
@@ -33,9 +36,6 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

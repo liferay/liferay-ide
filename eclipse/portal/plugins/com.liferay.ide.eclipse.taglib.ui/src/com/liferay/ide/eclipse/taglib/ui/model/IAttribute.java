@@ -27,7 +27,9 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-
+/**
+ * @author Gregory Amerson
+ */
 @GenerateImpl
 public interface IAttribute extends IModelElement {
 

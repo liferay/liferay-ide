@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
+
 import java.util.List;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -29,8 +31,6 @@ import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
-
-import com.liferay.ide.eclipse.portlet.core.util.PortletAppModelConstants;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

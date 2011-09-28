@@ -17,6 +17,12 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
+import com.liferay.ide.eclipse.portlet.core.model.IPortletInfo;
+import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +38,6 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
-
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
-import com.liferay.ide.eclipse.portlet.core.model.IPortletInfo;
-import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

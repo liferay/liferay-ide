@@ -17,6 +17,10 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.EventDefinitionReferenceService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNameTextNodeValueBinding;
+import com.liferay.ide.eclipse.portlet.core.model.internal.QNamesPossibleValuesService;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
@@ -32,10 +36,6 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.EventDefinitionReferenceService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.QNameTextNodeValueBinding;
-import com.liferay.ide.eclipse.portlet.core.model.internal.QNamesPossibleValuesService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

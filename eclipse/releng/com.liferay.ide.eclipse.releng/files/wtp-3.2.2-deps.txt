@@ -65,6 +65,4 @@ org.eclipse.jst.jsf.facesconfig
 org.eclipse.jst.jsf.facesconfig.ui
 org.eclipse.jst.jsf.common
 org.eclipse.jst.jsf.common.ui
-org.eclipse.jst.jsf.common.runtime
-
-
+org.eclipse.jst.jsf.common.runtime 

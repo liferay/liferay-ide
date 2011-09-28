@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStateImageService;
+import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStatesPossibleValueService;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
@@ -27,14 +30,10 @@ import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStateImageService;
-import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStatesPossibleValueService;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-// @Image( path = "images/window_states.png" )
 @Service( impl = WindowStateImageService.class )
 public interface ICustomWindowState extends IModelElement, IDescribeable, IIdentifiable {
 

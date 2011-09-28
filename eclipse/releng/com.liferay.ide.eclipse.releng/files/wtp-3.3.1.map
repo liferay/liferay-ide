@@ -1,4 +1,3 @@
-
 plugin@org.eclipse.wst.common.infopop=v201004280700,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.infopop
 plugin@org.eclipse.wst.validation.infopop=v200806041506,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/docs/org.eclipse.wst.validation.infopop
 plugin@org.eclipse.wst.common.api.doc=v200807181737,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/docs/org.eclipse.wst.common.api.doc

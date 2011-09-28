@@ -19,6 +19,10 @@ package com.liferay.ide.eclipse.portlet.core.model.internal;
 
 import static com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
 
+import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
+import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 import java.util.Locale;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -35,10 +39,6 @@ import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
-
-import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
-import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

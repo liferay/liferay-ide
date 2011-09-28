@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.service.core.model;
 
 import com.liferay.ide.eclipse.service.core.model.internal.ColumnImageService;
@@ -29,9 +30,10 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-
+/**
+ * @author Gregory Amerson
+ */
 @GenerateImpl
-// @Image(path = "images/column_16x16.gif")
 @Service(impl = ColumnImageService.class)
 public interface IColumn extends IModelElement {
 

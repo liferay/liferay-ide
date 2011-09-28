@@ -72,5 +72,3 @@ org.eclipse.jst.ws.axis.consumption.ui
 org.eclipse.jst.ws.axis.creation.ui
 org.eclipse.jst.ws.consumption
 org.eclipse.jst.ws.consumption.ui
-
-

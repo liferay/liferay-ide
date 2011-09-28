@@ -17,6 +17,10 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
+
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -44,10 +48,6 @@ import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
-import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

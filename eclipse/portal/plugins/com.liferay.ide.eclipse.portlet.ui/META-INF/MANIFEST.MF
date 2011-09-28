@@ -54,7 +54,10 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.portlet.ui,
  com.liferay.ide.eclipse.portlet.ui.action,
+ com.liferay.ide.eclipse.portlet.ui.action.filters,
  com.liferay.ide.eclipse.portlet.ui.editor,
+ com.liferay.ide.eclipse.portlet.ui.editor.internal,
  com.liferay.ide.eclipse.portlet.ui.pref,
  com.liferay.ide.eclipse.portlet.ui.template,
+ com.liferay.ide.eclipse.portlet.ui.util,
  com.liferay.ide.eclipse.portlet.ui.wizard

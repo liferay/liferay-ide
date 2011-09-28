@@ -17,6 +17,12 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
+import com.liferay.ide.eclipse.portlet.core.model.IEventDefinitionRef;
+import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
+import com.liferay.ide.eclipse.portlet.core.model.IPublicRenderParameter;
+import com.liferay.ide.eclipse.portlet.core.model.ISupportedPublicRenderParameter;
+
 import java.util.SortedSet;
 
 import javax.xml.namespace.QName;
@@ -25,12 +31,6 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.PossibleValuesService;
-
-import com.liferay.ide.eclipse.portlet.core.model.IEventDefinition;
-import com.liferay.ide.eclipse.portlet.core.model.IEventDefinitionRef;
-import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
-import com.liferay.ide.eclipse.portlet.core.model.IPublicRenderParameter;
-import com.liferay.ide.eclipse.portlet.core.model.ISupportedPublicRenderParameter;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

@@ -301,7 +301,6 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 				}
 			});
 		}
-
 	}
 
 	protected IStatus validateServer(IProgressMonitor monitor) {
