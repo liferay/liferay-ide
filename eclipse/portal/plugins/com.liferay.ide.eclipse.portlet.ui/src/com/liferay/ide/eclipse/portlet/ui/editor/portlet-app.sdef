@@ -15,7 +15,8 @@
 	* more details.
 	*
 	* Contributors:
-	* Kamesh Sampath - initial implementation
+	* 	Kamesh Sampath - initial implementation
+	* 	Greg Amerson - IDE-438
 	******************************************************************************/
 -->
 
@@ -99,6 +100,7 @@
 							</property-editor>
 						</content>
 					</section>
+                    <image>images/portlets_16x16.png</image>
 
 				</node>
 				<node>
@@ -140,6 +142,7 @@
 					</section>
 					<node-include>FiltersNodeList</node-include>
 					<node-include>FilterMappingsNodeList</node-include>
+                    <image>images/filters_mappings_16x16.png</image>
 				</node>
 				<node>
 					<label>Security Constraints</label>
@@ -157,6 +160,7 @@
 
 						</content>
 					</section>
+                    <image>images/constraints_16x16.png</image>
 				</node>
 				<node>
 					<label>Events</label>
@@ -168,6 +172,7 @@
 							</include>
 						</content>
 					</section>
+                    <image>images/events_16x16.png</image>
 				</node>
 				<node>
 					<label>Public Render Parameters</label>
@@ -188,6 +193,7 @@
 						</content>
 					</section>
 					<node-include>PublicRenderParametersList</node-include>
+                    <image>images/parameters_16x16.png</image>
 				</node>
 				<node>
 					<label>Customizations</label>
@@ -234,6 +240,7 @@
 							</property-editor>
 						</content>
 					</section>
+                    <image>images/customizations_16x16.gif</image>
 
 				</node>
 				<node>
@@ -252,7 +259,7 @@
 						</content>
 					</section>
 					<node-include>ContainerRuntimeOptionsNodeList</node-include>
-					<image>images/runtime_16x16.gif</image>
+					<image>images/options_16x16.gif</image>
 				</node>
 				<image>images/portlet.png</image>
 

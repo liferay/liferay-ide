@@ -13,9 +13,12 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Greg Amerson - IDE-438
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
+
+import com.liferay.ide.eclipse.portlet.core.model.internal.DefaultXmlBinding;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
@@ -42,13 +45,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.DefaultXmlBinding;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/obj16/portlet_class_obj.gif" )
+@Image( path = "images/elcl16/portlet_16x16.png" )
 public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable {
 
 	ModelElementType TYPE = new ModelElementType( IPortlet.class );
