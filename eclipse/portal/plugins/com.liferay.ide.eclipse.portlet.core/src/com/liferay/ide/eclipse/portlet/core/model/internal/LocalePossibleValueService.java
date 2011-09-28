@@ -17,21 +17,20 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.ICustomPortletMode;
-import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
-import java.util.List;
+import java.util.Locale;
 import java.util.SortedSet;
 
 import org.eclipse.sapphire.modeling.PossibleValuesService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> TODO: this need to filter from Liferay
+ *         Portal Properties
  */
-public class PortletModePossibleValueService extends PossibleValuesService {
+public class LocalePossibleValueService extends PossibleValuesService {
 
-	// provided by Portlet Specification and Liferay
-	private static final String[] DEFAULT_MODES = { "VIEW", "EDIT", "HELP", "CONFIG" };
+	static final Locale[] locales = Locale.getAvailableLocales();
 
 	/*
 	 * (non-Javadoc)
@@ -39,19 +38,9 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
-		IPortletApp portletApp = nearest( IPortletApp.class );
-		for ( int i = 0; i < DEFAULT_MODES.length; i++ ) {
-			values.add( DEFAULT_MODES[i] );
-		}
-
-		// Add the ones defined in portlet.xml
-		List<ICustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
-		for ( ICustomPortletMode iCustomPortletMode : customPortletModes ) {
-			String customPortletMode = iCustomPortletMode.getPortletMode().getText( false );
-			if ( customPortletMode != null ) {
-				values.add( customPortletMode );
-			}
-
+		// System.out.println( "LocalePossibleValueService.fillPossibleValues()-1" );
+		for ( Locale locale : locales ) {
+			values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
 		}
 
 	}

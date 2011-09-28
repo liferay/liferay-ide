@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Pvt. Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,7 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.ICustomPortletMode;
+import com.liferay.ide.eclipse.portlet.core.model.ICustomWindowState;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 import java.util.List;
@@ -28,10 +28,10 @@ import org.eclipse.sapphire.modeling.PossibleValuesService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class PortletModePossibleValueService extends PossibleValuesService {
+public class WindowStatesPossibleValueService extends PossibleValuesService {
 
-	// provided by Portlet Specification and Liferay
-	private static final String[] DEFAULT_MODES = { "VIEW", "EDIT", "HELP", "CONFIG" };
+	// provided by Portlet Specification
+	private static final String[] DEFAULT_STATES = { "MAXIMIZED", "MINIMIZED", "NORMAL" };
 
 	/*
 	 * (non-Javadoc)
@@ -40,18 +40,17 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
 		IPortletApp portletApp = nearest( IPortletApp.class );
-		for ( int i = 0; i < DEFAULT_MODES.length; i++ ) {
-			values.add( DEFAULT_MODES[i] );
+		for ( int i = 0; i < DEFAULT_STATES.length; i++ ) {
+			values.add( DEFAULT_STATES[i] );
 		}
 
 		// Add the ones defined in portlet.xml
-		List<ICustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
-		for ( ICustomPortletMode iCustomPortletMode : customPortletModes ) {
-			String customPortletMode = iCustomPortletMode.getPortletMode().getText( false );
-			if ( customPortletMode != null ) {
-				values.add( customPortletMode );
+		List<ICustomWindowState> customWindowStates = portletApp.getCustomWindowStates();
+		for ( ICustomWindowState iCustomWindowState : customWindowStates ) {
+			String customWindowState = iCustomWindowState.getWindowState().getText( false );
+			if ( customWindowState != null ) {
+				values.add( customWindowState );
 			}
-
 		}
 
 	}
