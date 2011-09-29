@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.InvertingBooleanXmlValueBinding;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
@@ -26,13 +28,11 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.InvertingBooleanXmlValueBinding;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-public interface IPreference extends IModelElement, IIdentifiable, IDescribeable, INameValue {
+public interface IPreference extends IModelElement, IIdentifiable, INameValue {
 
 	ModelElementType TYPE = new ModelElementType( IPreference.class );
 

@@ -40,7 +40,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 @GenerateImpl
 @Image( path = "images/elcl16/listener_16x16.gif" )
-public interface IListener extends IModelElement, IDescribeable {
+public interface IListener extends IModelElement, IDescribeable, IDisplayable {
 
 	ModelElementType TYPE = new ModelElementType( IListener.class );
 
@@ -48,9 +48,9 @@ public interface IListener extends IModelElement, IDescribeable {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.servlet.ServletContextListener" )
 	@Label( standard = "Implementation", full = "Listener implementation class" )
 	@Required
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.servlet.ServletContextListener" )
 	@XmlBinding( path = "listener-class" )
 	@Documentation( content = "The listener implementation class." )
 	ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" );

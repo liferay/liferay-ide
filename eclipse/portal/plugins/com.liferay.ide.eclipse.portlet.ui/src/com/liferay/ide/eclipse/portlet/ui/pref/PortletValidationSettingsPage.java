@@ -139,6 +139,11 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 		Composite inner = createInnerComposite(parent, twistie, columns);
 
 		createCombo(inner, "Portlet class not found", ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND);
+
+		createCombo( inner, "Filter class not found", ValidationPreferences.PORTLET_XML_FILTER_CLASS_NOT_FOUND );
+
+		createCombo( inner, "Listener class not found", ValidationPreferences.PORTLET_XML_LISTENER_CLASS_NOT_FOUND );
+
 		createCombo(inner, "Resource bundle not found", ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND);
 
 		twistie = createTwistie(body, "Liferay Portlet XML Descriptor", columns);

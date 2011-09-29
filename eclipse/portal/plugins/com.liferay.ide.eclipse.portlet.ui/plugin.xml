@@ -99,11 +99,6 @@
          <contentTypeBinding
                contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">
          </contentTypeBinding>
-         <!-- don't enable until we are ready for this to be default
-         <contentTypeBinding
-               contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">
-         </contentTypeBinding>
-         -->
       </editor>
    </extension>
    <extension

@@ -41,17 +41,17 @@ public interface IUserDataConstraint extends IModelElement, IIdentifiable, IDesc
 	 * Transport Gurantee
 	 */
 
-	@Type( base = TransportGurantee.class )
+	@Type( base = TransportGuarantee.class )
 	@Label( standard = "Transport Guarantee" )
 	@NoDuplicates
 	@Required
 	@XmlBinding( path = "transport-guarantee" )
 	@DefaultValue( text = "NONE" )
-	ValueProperty PROP_TRANSPORT_GURANTEE = new ValueProperty( TYPE, "TransportGurantee" );
+	ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty( TYPE, "TransportGuarantee" );
 
-	Value<TransportGurantee> getTransportGurantee();
+	Value<TransportGuarantee> getTransportGuarantee();
 
-	void setTransportGurantee( TransportGurantee version );
+	void setTransportGuarantee( TransportGuarantee version );
 
-	void setTransportGurantee( String version );
+	void setTransportGuarantee( String version );
 }

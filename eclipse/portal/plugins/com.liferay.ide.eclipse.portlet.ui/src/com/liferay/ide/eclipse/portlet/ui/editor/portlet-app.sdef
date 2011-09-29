@@ -104,24 +104,6 @@
 
 				</node>
 				<node>
-					<label>Listeners</label>
-					<section>
-						<label>Listeners Quick Edit</label>
-						<content>
-							<property-editor>
-								<property>Listeners</property>
-								<hint>
-									<value>false</value>
-									<name>show.label</name>
-								</hint>
-								<child-property>Description</child-property>
-								<child-property>Implementation</child-property>
-							</property-editor>
-						</content>
-					</section>
-					<image>icons/elcl16/listener_16x16.gif</image>
-				</node>
-				<node>
 					<label>Filters and Mappings</label>
 					<section>
 						<label>Filters and Mappings Quick Edit</label>
@@ -156,6 +138,7 @@
 									<name>show.label</name>
 									<value>false</value>
 								</hint>
+                                <child-property>DisplayName</child-property>
 							</property-editor>
 
 						</content>
@@ -196,6 +179,25 @@
                     <image>images/parameters_16x16.png</image>
 				</node>
 				<node>
+					<label>Listeners</label>
+					<section>
+						<label>Listeners Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>Listeners</property>
+								<hint>
+									<value>false</value>
+									<name>show.label</name>
+								</hint>
+								<child-property>Description</child-property>
+								<child-property>DisplayName</child-property>
+                                <child-property>Implementation</child-property>
+							</property-editor>
+						</content>
+					</section>
+					<image>icons/elcl16/listener_16x16.gif</image>
+				</node>
+				<node>
 					<label>Customizations</label>
 					<section>
 						<label>Customizations</label>
@@ -221,6 +223,7 @@
 									<name>show.label</name>
 									<value>true</value>
 								</hint>
+                                <child-property>Description</child-property>
 							</property-editor>
 							<spacer></spacer>
 							<property-editor>
@@ -391,6 +394,82 @@
 				<collapsed-initially>true</collapsed-initially>
 			</section>
 			<node>
+				<label>Additional Settings</label>
+				<section>
+					<label>Security</label>
+					<content>
+						<property-editor>
+							<property>SecurityRoleRefs</property>
+							<child-property>RoleName</child-property>
+							<child-property>RoleLink</child-property>
+							<child-property>Description</child-property>
+							<hint>
+								<name>show.label.above</name>
+								<value>true</value>
+							</hint>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+
+
+				<section>
+					<label>Preferences</label>
+					<content>
+						<with>
+							<path>PortletPreference</path>
+							<default-panel>
+								<content>
+									<property-editor>
+										<property>PortletPreferences</property>
+										<child-property>Name</child-property>
+										<child-property>Value</child-property>
+										<child-property>ReadOnly</child-property>
+										<hint>
+											<name>show.label</name>
+											<value>false</value>
+										</hint>
+									</property-editor>
+								</content>
+							</default-panel>
+						</with>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>false</collapsed-initially>
+				</section>
+				<section>
+					<label>Caching</label>
+					<content>
+						<property-editor>
+							<property>ExpirationCache</property>
+							<related-content-width>50</related-content-width>
+							<related-content>
+								<property-editor>CacheScope</property-editor>
+							</related-content>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>true</collapsed-initially>
+				</section>
+				<section>
+					<label>Runtime Options</label>
+					<content>
+						<property-editor>
+							<property>ContainerRuntimeOptions</property>
+							<hint>
+								<name>show.label</name>
+								<value>false</value>
+							</hint>
+							<child-property>Name</child-property>
+						</property-editor>
+					</content>
+					<collapsible>true</collapsible>
+					<collapsed-initially>true</collapsed-initially>
+				</section>
+				<image>images/settings_16x16.gif</image>
+			</node>
+			<node>
 				<label>Inter-Portlet Communication</label>
 				<section>
 					<label>Supported Public Render Parameters</label>
@@ -435,83 +514,6 @@
 				</section>
 				<image>images/ipc_16x16.gif</image>
 			</node>
-			<node>
-				<label>Advanced</label>
-				<section>
-					<label>Security</label>
-					<content>
-						<property-editor>
-							<property>SecurityRoleRefs</property>
-							<child-property>RoleName</child-property>
-							<child-property>RoleLink</child-property>
-							<child-property>Description</child-property>
-							<hint>
-								<name>show.label.above</name>
-								<value>true</value>
-							</hint>
-						</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>false</collapsed-initially>
-				</section>
-
-
-				<section>
-					<label>Preferences</label>
-					<content>
-						<with>
-							<path>PortletPreference</path>
-							<default-panel>
-								<content>
-									<property-editor>
-										<property>PortletPreferences</property>
-										<child-property>Name</child-property>
-										<child-property>Value</child-property>
-										<child-property>ReadOnly</child-property>
-										<child-property>Description</child-property>
-										<hint>
-											<name>show.label</name>
-											<value>false</value>
-										</hint>
-									</property-editor>
-								</content>
-							</default-panel>
-						</with>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>false</collapsed-initially>
-				</section>
-				<section>
-					<label>Caching</label>
-					<content>
-						<property-editor>
-							<property>ExpirationCache</property>
-							<related-content-width>50</related-content-width>
-							<related-content>
-								<property-editor>CacheScope</property-editor>
-							</related-content>
-						</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>true</collapsed-initially>
-				</section>
-				<section>
-					<label>Runtime Options</label>
-					<content>
-						<property-editor>
-							<property>ContainerRuntimeOptions</property>
-							<hint>
-								<name>show.label</name>
-								<value>false</value>
-							</hint>
-							<child-property>Name</child-property>
-						</property-editor>
-					</content>
-					<collapsible>true</collapsible>
-					<collapsed-initially>true</collapsed-initially>
-				</section>
-				<image>images/settings_16x16.gif</image>
-			</node>
 			<section>
 				<label>Internationalization and Localization</label>
 				<collapsible>true</collapsible>
@@ -545,7 +547,23 @@
 					</property-editor>
 				</content>
 			</section>
-			<node-include>ContainerRuntimeOptionsNodeList</node-include>
+            <node>
+                <label>Container Runtime Options</label>
+                <node-include>ContainerRuntimeOptionsNodeList</node-include>
+                <image>images/options_16x16.gif</image>
+                <section>
+                    <label>Container Runtime Options Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>ContainerRuntimeOptions</property>
+                            <hint>
+                                <name>show.label</name>
+                                <value>false</value>
+                            </hint>
+                        </property-editor>
+                    </content>
+                </section>
+            </node>
 		</case>
 	</node-factory>
 	<node-factory>
@@ -653,8 +671,8 @@
 				<child-property>Name</child-property>
 				<child-property>Description</child-property>
 				<hint>
-					<name>show.label.above</name>
-					<value>true</value>
+					<name>show.label</name>
+					<value>false</value>
 				</hint>
 			</property-editor>
 		</content>
@@ -718,52 +736,38 @@
 		<property>SecurityConstraints</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<label>Security Constraint</label>
-			<node>
-				<use-model-element-image></use-model-element-image>
-				<property>PortletCollection</property>
-				<label>Portlet Collection</label>
-				<section>
-					<label>Portlet Names</label>
-					<content>
-						<property-editor>
-							<property>PortletNames</property>
-							<hint>
-								<name>show.label</name>
-								<value>false</value>
-							</hint>
-						</property-editor>
-					</content>
-				</section>
-			</node>
-			<node>
-				<label>User Data Constraint</label>
-				<use-model-element-image></use-model-element-image>
-				<property>UserDataConstraint</property>
-				<section>
-					<label>Details</label>
-					<content>
-						<property-editor>Description</property-editor>
-						<property-editor>
-							<property>TransportGurantee</property>
-							<hint>
-								<name>prefer.combo</name>
-								<value>true</value>
-							</hint>
-						</property-editor>
-					</content>
-				</section>
-			</node>
+			<label>${DisplayName != null ? DisplayName : 'Security Constraint'}</label>
 			<section>
-				<label>Portlet Display Names</label>
+				<label>Security Constraint Details</label>
+				<content>
+					<property-editor>DisplayName</property-editor>
+				</content>
+			</section>
+			<section>
+				<label>Portlet Names</label>
 				<content>
 					<property-editor>
-						<property>PortletDisplayNames</property>
+						<property>PortletNames</property>
 						<hint>
 							<name>show.label</name>
 							<value>false</value>
 						</hint>
 					</property-editor>
+				</content>
+			</section>
+			<section>
+				<label>User Data Constraint</label>
+				<content>
+                    <with>
+                        <panel>
+                            <content>
+                                <property-editor>Description</property-editor>
+                                <property-editor>TransportGuarantee</property-editor>
+                            </content>
+                            <key>UserDataConstraint</key>
+                        </panel>
+                        <path>UserDataConstraint</path>
+                    </with>
 				</content>
 			</section>
 		</case>

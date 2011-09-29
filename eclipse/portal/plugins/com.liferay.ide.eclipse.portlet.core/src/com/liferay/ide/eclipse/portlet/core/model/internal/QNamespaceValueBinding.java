@@ -72,7 +72,8 @@ public class QNamespaceValueBinding extends XmlValueBindingImpl {
 		if ( qNameElement != null ) {
 			// System.out.println( qNameElement );
 			List<XmlAttribute> listOfAttibutes = qNameElement.getAttributes();
-			XmlAttribute xmlAttribute = listOfAttibutes != null ? listOfAttibutes.get( 0 ) : null;
+			XmlAttribute xmlAttribute =
+				listOfAttibutes != null && listOfAttibutes.size() > 0 ? listOfAttibutes.get( 0 ) : null;
 			if ( xmlAttribute != null ) {
 				value = xmlAttribute.getText();
 			}

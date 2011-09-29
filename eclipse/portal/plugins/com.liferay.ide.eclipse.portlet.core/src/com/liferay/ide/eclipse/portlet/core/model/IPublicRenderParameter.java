@@ -27,7 +27,6 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -66,7 +65,7 @@ public interface IPublicRenderParameter extends IQName, IIdentifiable {
 	// *** NamespaceURI ***
 
 	@Label( standard = "Namespace URI" )
-	@DefaultValue( text = "NAMESPACE_URI" )
+	// @DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
 	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
@@ -79,7 +78,7 @@ public interface IPublicRenderParameter extends IQName, IIdentifiable {
 	// *** LocalPart ***
 
 	@Label( standard = "Local Part" )
-	@DefaultValue( text = "LOCAL_PART" )
+	// @DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "qname" )
 	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
@@ -94,7 +93,7 @@ public interface IPublicRenderParameter extends IQName, IIdentifiable {
 	@Label( standard = "Name" )
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
-	@DefaultValue( text = "PARAM_NAME" )
+	// @DefaultValue( text = "PARAM_NAME" )
 	@Service( impl = NameOrQnameValidationService.class )
 	@Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
 	@CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )

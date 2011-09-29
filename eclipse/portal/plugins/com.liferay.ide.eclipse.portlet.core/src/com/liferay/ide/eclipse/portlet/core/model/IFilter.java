@@ -43,19 +43,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  */
 @GenerateImpl
 @Image( path = "images/elcl16/filter_16x16.gif" )
-public interface IFilter extends IModelElement, IDescribeable {
+public interface IFilter extends IModelElement, IDescribeable, IDisplayable {
 
 	ModelElementType TYPE = new ModelElementType( IFilter.class );
-
-	// *** DisplayName ***
-
-	@Label( standard = "display name" )
-	@XmlBinding( path = "display-name" )
-	ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" );
-
-	Value<String> getDisplayName();
-
-	void setDisplayName( String value );
 
 	// *** Name ***
 

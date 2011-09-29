@@ -21,7 +21,6 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
@@ -40,7 +39,7 @@ public interface IIdentifiable extends IModelElement {
 	@Label( standard = "Id" )
 	@XmlBinding( path = "@id" )
 	@Whitespace( trim = true )
-	@DefaultValue( text = "ID" )
+	// @DefaultValue( text = "ID" )
 	ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
 
 	Value<String> getId();

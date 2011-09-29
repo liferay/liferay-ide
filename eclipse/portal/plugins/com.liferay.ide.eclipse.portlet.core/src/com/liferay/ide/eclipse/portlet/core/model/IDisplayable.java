@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -10,10 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- *    Kamesh Sampath - initial implementation
- ******************************************************************************/
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
@@ -23,33 +20,30 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.PossibleValues;
-import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.PortletReferenceService;
-
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 @GenerateImpl
-public interface IPortletDisplayName extends IModelElement {
+public interface IDisplayable extends IModelElement {
 
-	ModelElementType TYPE = new ModelElementType( IPortletDisplayName.class );
+	ModelElementType TYPE = new ModelElementType( IDisplayable.class );
 
-	// *** DisplayName ***
+	/*
+	 * Display name Element
+	 */
 
-	@Label( standard = "Display Name" )
+	@Label( standard = "Display name" )
+	@NoDuplicates
+	@XmlBinding( path = "display-name" )
 	@Whitespace( trim = true )
-	@XmlBinding( path = "" )
-	@PossibleValues( property = "/Portlets/DisplayName" )
-	@Service( impl = PortletReferenceService.class, params = { "display-name" } )
-	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "display-name" } )
 	ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" );
 
 	Value<String> getDisplayName();
 
-	void setDisplayName( String value );
+	void setDisplayName( String displayName );
 
 }

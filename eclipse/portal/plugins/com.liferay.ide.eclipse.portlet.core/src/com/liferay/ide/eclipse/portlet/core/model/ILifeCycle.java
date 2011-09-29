@@ -21,7 +21,6 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -41,7 +40,7 @@ public interface ILifeCycle extends IModelElement {
 	@Label( standard = "life cyle name" )
 	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "lifecycle" } )
 	@XmlBinding( path = "" )
-	@DefaultValue( text = "ACTION_PHASE" )
+	// @DefaultValue( text = "ACTION_PHASE" )
 	ValueProperty PROP_LIFE_CYCLE = new ValueProperty( TYPE, "LifeCycle" );
 
 	Value<LifeCycleType> getLifeCycle();

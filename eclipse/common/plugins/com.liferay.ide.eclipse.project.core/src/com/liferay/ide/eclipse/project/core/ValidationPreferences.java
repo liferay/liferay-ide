@@ -73,6 +73,10 @@ public class ValidationPreferences {
 	public static final String LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND =
 		"validation-liferay-portlet-xml-portlet-name-not-found";
 
+	public static final String PORTLET_XML_FILTER_CLASS_NOT_FOUND = "validation-portlet-xml-filter-class-not-found";
+
+	public static final String PORTLET_XML_LISTENER_CLASS_NOT_FOUND = "validation-portlet-xml-listener-class-not-found";
+
 	public static final String PORTLET_XML_PORTLET_CLASS_NOT_FOUND = "validation-portlet-xml-portlet-class-not-found";
 
 	public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =

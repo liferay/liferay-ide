@@ -53,7 +53,17 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 public class PortletDescriptorValidator extends BaseValidator {
 
+	public static final String FILTER_CLASS_ELEMENT = "filter-class";
+
+	public static final String LISTENER_CLASS_ELEMENT = "listener-class";
+
 	public static final String MARKER_TYPE = "com.liferay.ide.eclipse.portlet.core.portletDescriptorMarker";
+
+	public static final String MESSAGE_FILTER_CLASS_NOT_FOUND =
+		"The filter class {0} was not found on the Java Build Path";
+
+	public static final String MESSAGE_LISTENER_CLASS_NOT_FOUND =
+		"The listener class {0} was not found on the Java Build Path";
 
 	public static final String MESSAGE_PORTLET_CLASS_NOT_FOUND =
 		"The portlet class {0} was not found on the Java Build Path";
@@ -71,6 +81,95 @@ public class PortletDescriptorValidator extends BaseValidator {
 		super();
 	}
 
+	protected void checkClassElements(
+		IDOMDocument document, IJavaProject javaProject, String classElement, String preferenceNodeQualifier,
+		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, List<Map<String, Object>> problems ) {
+
+		NodeList classes = document.getElementsByTagName( classElement );
+
+		for ( int i = 0; i < classes.getLength(); i++ ) {
+			Node item = classes.item( i );
+
+			Map<String, Object> problem =
+				checkClass( javaProject, item, preferenceNodeQualifier, preferenceScopes, preferenceKey, errorMessage );
+
+			if ( problem != null ) {
+				problems.add( problem );
+			}
+		}
+	}
+
+	protected void checkResourceBundleElements(
+		IDOMDocument document, IJavaProject javaProject, IScopeContext[] preferenceScopes,
+		List<Map<String, Object>> problems) {
+
+		NodeList resourceBundles = document.getElementsByTagName(RESOURCE_BUNDLE_ELEMENT);
+
+		for (int i = 0; i < resourceBundles.getLength(); i++) {
+			Node item = resourceBundles.item(i);
+
+			Map<String, Object> problem =
+				checkClassResource(
+					javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+					ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND, MESSAGE_RESOURCE_BUNDLE_NOT_FOUND,
+					true);
+
+			if (problem != null) {
+				problems.add(problem);
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Map<String, Object>[] detectProblems(
+		IJavaProject javaProject, IFile portletXml, IScopeContext[] preferenceScopes)
+		throws CoreException {
+
+		List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
+
+		IStructuredModel model = null;
+
+		try {
+			model = StructuredModelManager.getModelManager().getModelForRead(portletXml);
+
+			if (model instanceof IDOMModel) {
+				IDOMDocument document = ((IDOMModel) model).getDocument();
+
+				checkClassElements(
+					document, javaProject, PORTLET_CLASS_ELEMENT, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+					ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND, MESSAGE_PORTLET_CLASS_NOT_FOUND,
+					problems );
+
+				checkClassElements(
+					document, javaProject, LISTENER_CLASS_ELEMENT, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+					ValidationPreferences.PORTLET_XML_LISTENER_CLASS_NOT_FOUND, MESSAGE_LISTENER_CLASS_NOT_FOUND,
+					problems );
+
+				checkClassElements(
+					document, javaProject, FILTER_CLASS_ELEMENT, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
+					ValidationPreferences.PORTLET_XML_FILTER_CLASS_NOT_FOUND, MESSAGE_FILTER_CLASS_NOT_FOUND,
+					problems );
+
+				checkResourceBundleElements(document, javaProject, preferenceScopes, problems);
+			}
+
+
+		}
+		catch (IOException e) {
+
+		}
+		finally {
+			if (model != null) {
+				model.releaseFromRead();
+			}
+		}
+
+		Map<String, Object>[] retval = new Map[problems.size()];
+
+		return (Map<String, Object>[]) problems.toArray(retval);
+	}
+
+	@SuppressWarnings( "deprecation" )
 	@Override
 	public ValidationResult validate(IResource resource, int kind, ValidationState state, IProgressMonitor monitor) {
 		if (resource.getType() != IResource.FILE) {
@@ -119,84 +218,6 @@ public class PortletDescriptorValidator extends BaseValidator {
 		}
 
 		return result;
-	}
-
-	protected void checkPortletClassElements(
-		IDOMDocument document, IJavaProject javaProject, String preferenceNodeQualifier,
-		IScopeContext[] preferenceScopes,
-		List<Map<String, Object>> problems) {
-
-		NodeList classes = document.getElementsByTagName(PORTLET_CLASS_ELEMENT);
-
-		for (int i = 0; i < classes.getLength(); i++) {
-			Node item = classes.item(i);
-
-			Map<String, Object> problem =
-				checkClass(
-					javaProject, item, preferenceNodeQualifier, preferenceScopes,
-					ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND, MESSAGE_PORTLET_CLASS_NOT_FOUND);
-
-			if (problem != null) {
-				problems.add(problem);
-			}
-		}
-	}
-
-	protected void checkResourceBundleElements(
-		IDOMDocument document, IJavaProject javaProject, IScopeContext[] preferenceScopes,
-		List<Map<String, Object>> problems) {
-
-		NodeList resourceBundles = document.getElementsByTagName(RESOURCE_BUNDLE_ELEMENT);
-
-		for (int i = 0; i < resourceBundles.getLength(); i++) {
-			Node item = resourceBundles.item(i);
-
-			Map<String, Object> problem =
-				checkClassResource(
-					javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-					ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND, MESSAGE_RESOURCE_BUNDLE_NOT_FOUND,
-					true);
-
-			if (problem != null) {
-				problems.add(problem);
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	protected Map<String, Object>[] detectProblems(
-		IJavaProject javaProject, IFile portletXml, IScopeContext[] preferenceScopes)
-		throws CoreException {
-
-		List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
-
-		IStructuredModel model = null;
-
-		try {
-			model = StructuredModelManager.getModelManager().getModelForRead(portletXml);
-
-			if (model instanceof IDOMModel) {
-				IDOMDocument document = ((IDOMModel) model).getDocument();
-
-				checkPortletClassElements(document, javaProject, PREFERENCE_NODE_QUALIFIER, preferenceScopes, problems);
-
-				checkResourceBundleElements(document, javaProject, preferenceScopes, problems);
-			}
-
-
-		}
-		catch (IOException e) {
-
-		}
-		finally {
-			if (model != null) {
-				model.releaseFromRead();
-			}
-		}
-
-		Map<String, Object>[] retval = new Map[problems.size()];
-
-		return (Map<String, Object>[]) problems.toArray(retval);
 	}
 
 }

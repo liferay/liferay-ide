@@ -25,7 +25,6 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -48,7 +47,7 @@ public interface ICustomPortletMode extends IModelElement, IDescribeable, IIdent
 
 	@Required
 	@NoDuplicates
-	@DefaultValue( text = "VIEW" )
+	// @DefaultValue( text = "VIEW" )
 	@Label( standard = "Portlet Mode" )
 	@XmlBinding( path = "portlet-mode" )
 	@Service( impl = PortletModePossibleValueService.class )

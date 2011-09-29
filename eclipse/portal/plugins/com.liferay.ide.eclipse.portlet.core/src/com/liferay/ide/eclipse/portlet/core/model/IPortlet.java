@@ -50,7 +50,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  */
 @GenerateImpl
 @Image( path = "images/elcl16/portlet_16x16.png" )
-public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable {
+public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable, IDisplayable {
 
 	ModelElementType TYPE = new ModelElementType( IPortlet.class );
 
@@ -66,18 +66,6 @@ public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable 
 	Value<String> getPortletName();
 
 	void setPortletName( String portletName );
-
-	// *** Portlet Display Name ***
-
-	@Label( standard = "Display name" )
-	@NoDuplicates
-	@XmlBinding( path = "display-name" )
-	@Whitespace( trim = true )
-	ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" );
-
-	Value<String> getDisplayName();
-
-	void setDisplayName( String displayName );
 
 	// *** Portlet Class ***
 
