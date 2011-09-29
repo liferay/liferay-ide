@@ -89,10 +89,17 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
+                                            <property-editor>
+                                                <property>uuidAccessor</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
 		                                    <property-editor>persistenceClass</property-editor>
 		                                    <property-editor>dataSource</property-editor>
 		                                    <property-editor>sessionFactory</property-editor>
-		                                    <property-editor>txManager</property-editor>
+                                            <property-editor>txManager</property-editor>
                                             <property-editor>
                                                 <property>cacheEnabled</property>
                                                 <hint>
@@ -120,6 +127,8 @@ The [b]table[/b] value specifies the name of the table that this entity maps to 
 [br/][br/]
 If the [b]uuid[/b] value is true, then the service will generate a UUID column for the service. This column will automatically be populated with a UUID. [br/]
 Developers will also be able to find and remove based on that UUID. The default value is false.
+[br/][br/]
+If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID.
 [br/][br/]
 If the [b]local-service[/b] value is true, then the service will generate the local interfaces for the service. The default value is false.
 [br/][br/]
@@ -197,6 +206,13 @@ the json-enabled value is true.</content>
                                                             </hint>
                                                         </property-editor>
                                                         <property-editor>dbName</property-editor>
+                                                        <property-editor>
+                                                            <property>Accessor</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
                                                         <property-editor>
                                                             <property>filterPrimary</property>
                                                             <hint>
@@ -380,6 +396,10 @@ In this implementation, a create sequence SQL statement is created based on
 the id-param value (stored in /sql/sequences.sql). This sequence is then
 accessed to generate a unique identifier whenever an insert occurs. This
 implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
+[br/][br/]
+This [b]accessor[/b] value specifies whether or not to generate an accessor for this
+column. This accessor will provide a fast and type-safe way to access column 
+value.
 [br/][br/]
 The filter-primary value specifies the column to use as the primary key column
 when using filter finders. Only one column should ever have this value set to

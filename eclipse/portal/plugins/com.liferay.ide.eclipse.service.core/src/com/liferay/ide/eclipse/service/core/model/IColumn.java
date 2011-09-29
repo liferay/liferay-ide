@@ -22,6 +22,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Documentation;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
@@ -203,4 +204,19 @@ public interface IColumn extends IModelElement {
 	void setJsonEnabled( String value );
 
 	void setJsonEnabled( Boolean value );
+
+	// *** Accessor ***
+
+	@Type( base = Boolean.class )
+	@XmlBinding( path = "@accessor" )
+	@Label( standard = "&accessor" )
+	@DefaultValue( text = "false" )
+	@Documentation( content = "This [b]accessor[/b] value specifies whether or not to generate an accessor for this column. This accessor will provide a fast and type-safe way to access column value." )
+	ValueProperty PROP_ACCESSOR = new ValueProperty( TYPE, "Accessor" );
+
+	Value<Boolean> getAccessor();
+
+	void setAccessor( String value );
+
+	void setAccessor( Boolean value );
 }
