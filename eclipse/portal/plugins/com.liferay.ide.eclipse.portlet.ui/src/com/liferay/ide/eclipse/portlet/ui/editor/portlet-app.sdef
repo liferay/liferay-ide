@@ -127,25 +127,6 @@
                     <image>images/filters_mappings_16x16.png</image>
 				</node>
 				<node>
-					<label>Security Constraints</label>
-					<node-include>SecurityConstraintNodeList</node-include>
-					<section>
-						<label>Security Constraints Quick Edit</label>
-						<content>
-							<property-editor>
-								<property>SecurityConstraints</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
-                                <child-property>DisplayName</child-property>
-							</property-editor>
-
-						</content>
-					</section>
-                    <image>images/constraints_16x16.png</image>
-				</node>
-				<node>
 					<label>Events</label>
 					<node-include>EventDefinitionsList</node-include>
 					<section>
@@ -197,6 +178,25 @@
 					</section>
 					<image>icons/elcl16/listener_16x16.gif</image>
                     <node-include>ListenersNodeList</node-include>
+				</node>
+				<node>
+					<label>Security Constraints</label>
+					<node-include>SecurityConstraintNodeList</node-include>
+					<section>
+						<label>Security Constraints Quick Edit</label>
+						<content>
+							<property-editor>
+								<property>SecurityConstraints</property>
+								<hint>
+									<name>show.label</name>
+									<value>false</value>
+								</hint>
+                                <child-property>DisplayName</child-property>
+							</property-editor>
+
+						</content>
+					</section>
+                    <image>images/constraints_16x16.png</image>
 				</node>
 				<node>
 					<label>Customizations</label>
@@ -290,8 +290,7 @@
 			<impl>QuickActionsHandlerFactory</impl>
 			<param>
 				<name>MODEL_PROPERTIES</name>
-				<value>Portlets,EventDefinitions,Filters,PublicRenderParameters
-				</value>
+				<value>Portlets,Filters,EventDefinitions,PublicRenderParameters,Listeners,SecurityConstraints,ContainerRuntimeOptions</value>
 			</param>
 		</action-handler-factory>
 		<page-header-image>images/portlet.png</page-header-image>
@@ -737,7 +736,7 @@
 		<property>SecurityConstraints</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<label>${DisplayName != null ? DisplayName : 'Security Constraint'}</label>
+			<label>${DisplayName != null ? DisplayName : '&lt;security-constraint&gt;'}</label>
 			<section>
 				<label>Security Constraint Details</label>
 				<content>

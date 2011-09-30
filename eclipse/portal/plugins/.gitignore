@@ -2,6 +2,12 @@ com.liferay.ide.eclipse.layouttpl.core/bin/
 com.liferay.ide.eclipse.layouttpl.core/target/
 com.liferay.ide.eclipse.layouttpl.ui/bin/
 com.liferay.ide.eclipse.layouttpl.ui/target/
+com.liferay.ide.eclipse.pml.core/.apt_generated/
+com.liferay.ide.eclipse.pml.core/bin/
+com.liferay.ide.eclipse.pml.core/target/
+com.liferay.ide.eclipse.pml.ui/.resources/
+com.liferay.ide.eclipse.pml.ui/bin/
+com.liferay.ide.eclipse.pml.ui/target/
 com.liferay.ide.eclipse.portlet.core/.apt_generated/
 com.liferay.ide.eclipse.portlet.core/bin/
 com.liferay.ide.eclipse.portlet.core/target/
