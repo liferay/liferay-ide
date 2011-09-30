@@ -56,8 +56,8 @@
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
 <!--     <sapphire-site>http://download.eclipse.org/sapphire/0.3.0/repository</sapphire-site> -->
-    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
-    <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.0</graphiti-site>
+    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/537/artifact/build/repository</sapphire-site>
+    <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site>
     <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
 

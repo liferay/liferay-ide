@@ -39,7 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author kamesh.sampath
  */
 @GenerateImpl
-@Image( path = "images/elcl16/listener_16x16.gif" )
+@Image( path = "images/obj16/portlet_class_obj.gif" )
 public interface IListener extends IModelElement, IDescribeable, IDisplayable {
 
 	ModelElementType TYPE = new ModelElementType( IListener.class );
@@ -48,7 +48,7 @@ public interface IListener extends IModelElement, IDescribeable, IDisplayable {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.servlet.ServletContextListener" )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletURLGenerationListener" )
 	@Label( standard = "Implementation", full = "Listener implementation class" )
 	@Required
 	@XmlBinding( path = "listener-class" )

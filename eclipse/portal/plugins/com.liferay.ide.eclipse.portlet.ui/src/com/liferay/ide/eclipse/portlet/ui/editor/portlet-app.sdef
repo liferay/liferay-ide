@@ -189,13 +189,14 @@
 									<value>false</value>
 									<name>show.label</name>
 								</hint>
-								<child-property>Description</child-property>
 								<child-property>DisplayName</child-property>
+								<child-property>Description</child-property>
                                 <child-property>Implementation</child-property>
 							</property-editor>
 						</content>
 					</section>
 					<image>icons/elcl16/listener_16x16.gif</image>
+                    <node-include>ListenersNodeList</node-include>
 				</node>
 				<node>
 					<label>Customizations</label>
@@ -777,12 +778,13 @@
 		<property>Listeners</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<label>Listener</label>
+			<label>${(empty Description AND empty DisplayName) ? '&lt;listener&gt;' : ((empty DisplayName) ? Description : DisplayName)}</label>
 			<section>
-				<label>Details</label>
+				<label>Listener Details</label>
 				<content>
 					<property-editor>Description</property-editor>
-					<property-editor>
+					<property-editor>DisplayName</property-editor>
+                    <property-editor>
 						<property>Implementation</property>
 					</property-editor>
 				</content>

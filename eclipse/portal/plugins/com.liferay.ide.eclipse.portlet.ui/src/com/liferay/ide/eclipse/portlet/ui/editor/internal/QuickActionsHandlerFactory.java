@@ -75,6 +75,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
 			if ( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) && isPartInLiferayProject() ) {
 				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
+				handler.init( this.getAction(), null );
 				handler.addImage( ImageDescriptor.createFromImage( getPart().getImageCache().getImage(
 					IPortlet.TYPE.image() ) ) );
 				handler.setLabel( getActionLabel( "Portlets" ) );
