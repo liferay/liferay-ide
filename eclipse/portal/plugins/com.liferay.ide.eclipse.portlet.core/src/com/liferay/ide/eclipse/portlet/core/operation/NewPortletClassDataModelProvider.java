@@ -277,13 +277,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 	@Override
 	public DataModelPropertyDescriptor getPropertyDescriptor(String propertyName) {
 		if (VIEW_MODE.equals(propertyName)) {
-			return new DataModelPropertyDescriptor(getProperty(propertyName), "VIEW");
+			return new DataModelPropertyDescriptor( getProperty( propertyName ), "view" );
 		}
 		else if (EDIT_MODE.equals(propertyName)) {
-			return new DataModelPropertyDescriptor(getProperty(propertyName), "EDIT");
+			return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit" );
 		}
 		else if (HELP_MODE.equals(propertyName)) {
-			return new DataModelPropertyDescriptor(getProperty(propertyName), "HELP");
+			return new DataModelPropertyDescriptor( getProperty( propertyName ), "help" );
 		}
 		/**
 		 * Values for liferay modes taking from LiferayPortletMode.java

@@ -31,7 +31,8 @@ import org.eclipse.sapphire.modeling.PossibleValuesService;
 public class PortletModePossibleValueService extends PossibleValuesService {
 
 	// provided by Portlet Specification and Liferay
-	private static final String[] DEFAULT_MODES = { "view", "edit", "help", "config" };
+	private static final String[] DEFAULT_MODES = { "view", "edit", "help", "about", "config", "edit_defaults",
+		"edit_guest", "preview", "print" };
 
 	/*
 	 * (non-Javadoc)
