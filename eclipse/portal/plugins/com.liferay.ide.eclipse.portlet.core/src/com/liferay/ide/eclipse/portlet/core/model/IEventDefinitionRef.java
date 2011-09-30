@@ -25,7 +25,6 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
@@ -50,7 +49,7 @@ public interface IEventDefinitionRef extends IModelElement, IIdentifiable, IDesc
 	@Label( standard = "Qname" )
 	@XmlBinding( path = "qname" )
 	@Whitespace( trim = true )
-	@DefaultValue( text = "Q_NAME" )
+	// @DefaultValue( text = "Q_NAME" )
 	@NoDuplicates
 	@Service( impl = QNamesPossibleValuesService.class, params = { "Q_NAME" } )
 	@DependsOn( { "/EventDefinitions/NamespaceURI", "/EventDefinitions/LocalPart" } )
@@ -67,7 +66,7 @@ public interface IEventDefinitionRef extends IModelElement, IIdentifiable, IDesc
 	@XmlBinding( path = "name" )
 	@Whitespace( trim = true )
 	@NoDuplicates
-	@DefaultValue( text = "EVENT_NAME" )
+	// @DefaultValue( text = "EVENT_NAME" )
 	@Enablement( expr = "${Qname == 'Q_NAME'}" )
 	@PossibleValues( property = "/EventDefinitions/Name" )
 	@Service( impl = EventDefinitionReferenceService.class, params = { "name" } )

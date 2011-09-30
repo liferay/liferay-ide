@@ -31,7 +31,7 @@ import org.eclipse.sapphire.modeling.PossibleValuesService;
 public class WindowStatesPossibleValueService extends PossibleValuesService {
 
 	// provided by Portlet Specification
-	private static final String[] DEFAULT_STATES = { "MAXIMIZED", "MINIMIZED", "NORMAL" };
+	private static final String[] DEFAULT_STATES = { "maximized", "minimized", "normal" };
 
 	/*
 	 * (non-Javadoc)

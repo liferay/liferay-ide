@@ -56,8 +56,6 @@ public interface INameValue extends IModelElement {
 	 */
 
 	@Label( standard = "Value" )
-	@Required
-	@NoDuplicates
 	@XmlBinding( path = "value" )
 	@Whitespace( trim = true )
 	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
