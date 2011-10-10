@@ -35,7 +35,9 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  org.eclipse.sapphire.java.jdt;bundle-version="0.3.1"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.portlet.core,
+Export-Package: com.liferay.ide.eclipse.core.model.xml.internal,
+ com.liferay.ide.eclipse.display.model.internal,
+ com.liferay.ide.eclipse.portlet.core,
  com.liferay.ide.eclipse.portlet.core.dd,
  com.liferay.ide.eclipse.portlet.core.descriptor,
  com.liferay.ide.eclipse.portlet.core.job,
