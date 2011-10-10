@@ -34,7 +34,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Image( path = "images/elcl16/category_16x16.png" )
+@Image( path = "images/elcl16/category_16x16.gif" )
 public interface ICategory extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( ICategory.class );
