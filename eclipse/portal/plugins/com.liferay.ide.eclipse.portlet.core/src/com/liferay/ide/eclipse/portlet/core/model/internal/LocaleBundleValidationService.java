@@ -35,15 +35,16 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class LocaleBundleValidationService extends ModelPropertyValidationService<Value<Path>> {
+public class LocaleBundleValidationService extends ValidationService {
 
 	final Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
 	final Locale DEFAULT_LOCALE = Locale.getDefault();
@@ -53,14 +54,14 @@ public class LocaleBundleValidationService extends ModelPropertyValidationServic
 	 */
 	@Override
 	public Status validate() {
-		IModelElement modelElement = element();
+		IModelElement modelElement = context( IModelElement.class );
 		if ( modelElement instanceof ISupportedLocales ) {
 			final IProject project = modelElement.adapt( IProject.class );
 			final IPortlet portlet = modelElement.nearest( IPortlet.class );
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			final IWorkspaceRoot wroot = workspace.getRoot();
 			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
-			String locale = target().getText( false );
+			String locale = modelElement.read( context( ValueProperty.class ) ).getText( false );
 			Value<Path> resourceBundle = portlet.getResourceBundle();
 			if ( locale != null && resourceBundle != null ) {
 				String bundleName = resourceBundle.getText();

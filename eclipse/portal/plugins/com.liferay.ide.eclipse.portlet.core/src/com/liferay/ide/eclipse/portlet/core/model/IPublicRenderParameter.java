@@ -34,12 +34,12 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Service.Param;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
@@ -67,7 +67,7 @@ public interface IPublicRenderParameter extends IQName, IIdentifiable {
 	@Label( standard = "Namespace URI" )
 	// @DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
-	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
+	@Service( impl = NameOrQnameValidationService.class, params = { @Param( name = "qname", value = "" ) } )
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
@@ -80,7 +80,7 @@ public interface IPublicRenderParameter extends IQName, IIdentifiable {
 	@Label( standard = "Local Part" )
 	// @DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "qname" )
-	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
+	@Service( impl = NameOrQnameValidationService.class, params = { @Param( name = "qname", value = "" ) } )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 

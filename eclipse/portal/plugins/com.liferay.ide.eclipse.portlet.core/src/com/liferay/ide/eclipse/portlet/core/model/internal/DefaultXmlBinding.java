@@ -39,6 +39,7 @@ import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlResource;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
+import org.eclipse.sapphire.services.PossibleTypesService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -68,7 +69,9 @@ public class DefaultXmlBinding extends LayeredElementBindingImpl {
 			// System.out.println( "DefaultXmlBinding.init() - Xml Element Binding is null" );
 			final XmlBinding xmlBindingAnnotation = property.getAnnotation( XmlBinding.class );
 
-			if ( xmlBindingAnnotation != null && property.getAllPossibleTypes().size() == 1 ) {
+			if ( xmlBindingAnnotation != null &&
+				element.service( property, PossibleTypesService.class ).types().size() == 1 ) {
+
 				this.pathName = xmlBindingAnnotation.path();
 				initElementAndModel( property, xmlNamespaceResolver, pathName );
 			}

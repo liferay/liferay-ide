@@ -170,10 +170,8 @@ the json-enabled value is true.</content>
                                         <separator></separator>
                                         <property-editor>
                                             <property>columns</property>
-                                            <hint>
-                                                <name>show.label</name>
-                                                <value>false</value>
-                                            </hint>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
                                             <child-property>name</child-property>
                                             <child-property>type</child-property>
                                             <child-property>primary</child-property>
@@ -513,10 +511,8 @@ Set the by attribute to &quot;asc&quot; or &quot;desc&quot; to order by ascendin
                                         <separator></separator>
                                         <property-editor>
                                             <property>finders</property>
-                                            <hint>
-                                                <name>show.label</name>
-                                                <value>false</value>
-                                            </hint>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
                                             <child-property>name</child-property>
                                             <child-property>returnType</child-property>
                                         </property-editor>
@@ -588,10 +584,8 @@ SQL index for this finder. The default value is true.</content>
                                                     <property-editor>
                                                         <property>finderColumns</property>
                                                         <child-property>name</child-property>
-                                                        <hint>
-                                                            <name>show.label</name>
-                                                            <value>false</value>
-                                                        </hint>
+                                                        <show-label>false</show-label>
+                                                        <span>true</span>
                                                     </property-editor>
                                                 </content>
                                                 <documentation>
@@ -679,10 +673,8 @@ arrayable-operator of OR will act like an IN clause.</content>
 			                        <content>
 			                            <property-editor>
 			                                <property>references</property>
-			                                <hint>
-			                                    <name>show.label</name>
-			                                    <value>false</value>
-			                                </hint>
+			                                <show-label>false</show-label>
+			                                <span>true</span>
 			                            </property-editor>
 			                        </content>
                                     <documentation>
@@ -712,10 +704,8 @@ resourceLocalService and resourceService.</content>
                                     <content>
                                         <property-editor>
                                             <property>txRequireds</property>
-                                            <hint>
-                                                <name>show.label</name>
-                                                <value>false</value>
-                                            </hint>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
                                         </property-editor>
                                     </content>
                                 </section>
@@ -734,10 +724,8 @@ resourceLocalService and resourceService.</content>
                             <separator></separator>
                             <property-editor>
                                 <property>entities</property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
+                                <show-label>false</show-label>
+                                <span>true</span>
                                 <child-property>
                                     <property>name</property>
                                     <hint>
@@ -778,10 +766,8 @@ If an entity does have columns, then the value object, the POJO class that is ma
                         <content>
                             <property-editor>
                                 <property>exceptions</property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
+                                <show-label>false</show-label>
+                                <span>true</span>
                             </property-editor>
                         </content>
                         <documentation>
@@ -797,10 +783,8 @@ If an entity does have columns, then the value object, the POJO class that is ma
                                 <content>
                                     <property-editor>
                                         <property>exception</property>
-                                        <hint>
-                                            <name>show.label</name>
-                                            <value>false</value>
-                                        </hint>
+                                        <show-label>false</show-label>
+                                        <span>true</span>
                                     </property-editor>
                                 </content>
                             </section>
@@ -816,10 +800,8 @@ If an entity does have columns, then the value object, the POJO class that is ma
                         <content>
                             <property-editor>
                                 <property>serviceBuilderImports</property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>false</value>
-                                </hint>
+                                <show-label>false</show-label>
+                                <span>true</span>
                             </property-editor>
                         </content>
                         <documentation>

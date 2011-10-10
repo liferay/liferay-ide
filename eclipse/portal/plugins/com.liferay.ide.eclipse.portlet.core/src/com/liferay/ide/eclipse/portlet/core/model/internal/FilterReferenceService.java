@@ -19,10 +19,10 @@ package com.liferay.ide.eclipse.portlet.core.model.internal;
 
 import static org.eclipse.sapphire.modeling.util.MiscUtil.equal;
 
-import org.eclipse.sapphire.modeling.ReferenceService;
-
 import com.liferay.ide.eclipse.portlet.core.model.IFilter;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
+
+import org.eclipse.sapphire.services.ReferenceService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -32,7 +32,7 @@ public final class FilterReferenceService extends ReferenceService {
 
 	@Override
 	public Object resolve( final String reference ) {
-		final IPortletApp portletApp = nearest( IPortletApp.class );
+		final IPortletApp portletApp = context( IPortletApp.class );
 
 		if ( portletApp != null ) {
 			for ( IFilter iFilter : portletApp.getFilters() ) {

@@ -30,6 +30,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
@@ -55,6 +58,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 	public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
 		super.init( action, def );
 		final IModelElement element = getModelElement();
+
 		listener = new ModelPropertyListener() {
 
 			@Override
@@ -63,6 +67,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 				refreshEnablementState();
 			}
 		};
+
 		localePropListener = new ModelPropertyListener() {
 
 			@Override
@@ -72,6 +77,18 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		};
 		element.addListener( listener, getProperty().getName() );
 		element.addListener( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
+
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					getModelElement().removeListener( listener, getProperty().getName() );
+					getModelElement().removeListener( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
+				}
+			}
+
+		} );
 	}
 
 	/*
@@ -169,17 +186,6 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		rbFileBuffer.append( "#Other Properties" );
 		rbFileBuffer.append( "\n" );
 		return rbFileBuffer;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#dispose()
-	 */
-	@Override
-	public void dispose() {
-		getModelElement().removeListener( listener, getProperty().getName() );
-		getModelElement().removeListener( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
-		super.dispose();
 	}
 
 }

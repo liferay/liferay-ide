@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +29,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.RelativePathService;
-
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import org.eclipse.sapphire.services.RelativePathService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -46,7 +46,7 @@ public class ResourceBundleRelativePathService extends RelativePathService {
 	 */
 	@Override
 	public List<Path> roots() {
-		final IProject project = adapt( IProject.class );
+		final IProject project = context( IProject.class );
 		List<Path> roots = new ArrayList<Path>();
 		if ( project != null ) {
 			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );

@@ -16,11 +16,14 @@ package com.liferay.ide.eclipse.service.core.model.internal;
 
 import com.liferay.ide.eclipse.service.core.model.IColumn;
 
+import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImageData;
-import org.eclipse.sapphire.modeling.ImageService;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.services.ImageService;
 
 
 public class ColumnImageService extends ImageService {
@@ -33,35 +36,39 @@ public class ColumnImageService extends ImageService {
 	private ModelPropertyListener listener;
 
 	@Override
-	public void init(final IModelElement element, final String[] params) {
-		super.init(element, params);
+	protected void init() {
+		super.init();
 
 		this.listener = new ModelPropertyListener() {
 
 			@Override
 			public void handlePropertyChangedEvent(final ModelPropertyChangeEvent event) {
-				notifyListeners(new ImageChangedEvent(ColumnImageService.this));
+				broadcast();
 			}
 		};
 
-		element.addListener(this.listener, IColumn.PROP_PRIMARY.getName());
+		context( IModelElement.class ).addListener( this.listener, IColumn.PROP_PRIMARY.getName() );
+
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					context( IModelElement.class ).removeListener( listener, IColumn.PROP_PRIMARY.getName() );
+				}
+			}
+
+		} );
 	}
 
 	@Override
 	public ImageData provide() {
-		if (((IColumn) element()).isPrimary().getContent()) {
+		if ( ( context( IColumn.class ) ).isPrimary().getContent() ) {
 			return IMG_COLUMN_PRIMARY;
 		}
 		else {
 			return IMG_COLUMN;
 		}
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-
-		element().removeListener(this.listener, IColumn.PROP_PRIMARY.getName());
 	}
 
 }

@@ -23,7 +23,7 @@ import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 import java.util.List;
 import java.util.SortedSet;
 
-import org.eclipse.sapphire.modeling.PossibleValuesService;
+import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -39,7 +39,8 @@ public class WindowStatesPossibleValueService extends PossibleValuesService {
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
-		IPortletApp portletApp = nearest( IPortletApp.class );
+		IPortletApp portletApp = context( IPortletApp.class );
+
 		for ( int i = 0; i < DEFAULT_STATES.length; i++ ) {
 			values.add( DEFAULT_STATES[i] );
 		}

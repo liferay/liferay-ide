@@ -46,7 +46,7 @@ public interface IQName extends IModelElement {
 	@Whitespace( trim = true )
 	// @DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
-	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
+	@Service( impl = NameOrQnameValidationService.class )
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
 	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
@@ -60,7 +60,7 @@ public interface IQName extends IModelElement {
 	@Whitespace( trim = true )
 	// @DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "qname" )
-	@Service( impl = NameOrQnameValidationService.class, params = { "qname" } )
+	@Service( impl = NameOrQnameValidationService.class )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname", "localpart" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 

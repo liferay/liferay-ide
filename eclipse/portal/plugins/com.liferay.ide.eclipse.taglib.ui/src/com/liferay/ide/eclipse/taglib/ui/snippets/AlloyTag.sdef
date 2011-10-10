@@ -42,10 +42,8 @@
 		                            <child-property>Name</child-property>
 		                            <child-property>Type</child-property>
 		                            <child-property>DefaultValue</child-property>
-		                            <hint>
-		                                <name>show.label</name>
-		                                <value>false</value>
-		                            </hint>
+		                            <show-label>false</show-label>
+		                            <span>true</span>
 		                            <child-property>Value</child-property>
 		                        </property-editor>
 		                                <composite>
@@ -90,10 +88,8 @@
 		                            <property>Events</property>
 		                            <child-property>Name</child-property>
 		                            <child-property>Value</child-property>
-		                            <hint>
-		                                <name>show.label</name>
-		                                <value>false</value>
-		                            </hint>
+		                            <show-label>false</show-label>
+		                            <span>true</span>
 		                        </property-editor>
 		                        	<composite>
 		                            <content>

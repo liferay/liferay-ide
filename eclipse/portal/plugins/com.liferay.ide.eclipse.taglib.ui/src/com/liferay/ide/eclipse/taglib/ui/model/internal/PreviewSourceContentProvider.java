@@ -18,16 +18,18 @@ package com.liferay.ide.eclipse.taglib.ui.model.internal;
 import com.liferay.ide.eclipse.taglib.ui.model.IAttribute;
 import com.liferay.ide.eclipse.taglib.ui.model.ITag;
 
-import org.eclipse.sapphire.modeling.DerivedValueService;
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.services.DerivedValueService;
 
 
 public class PreviewSourceContentProvider extends DerivedValueService {
 
 	@Override
 	public String getDerivedValue() {
-		boolean preview = "Preview".equals(this.property().getName());
+		boolean preview = "Preview".equals( context( ModelProperty.class ).getName() );
 
-		ITag tag = (ITag) this.element();
+		ITag tag = (ITag) context( IModelElement.class );;
 
 		StringBuffer buffer = new StringBuffer();
 

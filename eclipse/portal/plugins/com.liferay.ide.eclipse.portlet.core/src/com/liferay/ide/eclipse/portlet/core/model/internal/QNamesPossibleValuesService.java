@@ -29,26 +29,13 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.PossibleValuesService;
+import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 public class QNamesPossibleValuesService extends PossibleValuesService {
 
-	String[] params;
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ModelPropertyService#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		super.init( element, property, params );
-		this.params = params;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -56,9 +43,9 @@ public class QNamesPossibleValuesService extends PossibleValuesService {
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
-		IModelElement imodelElement = element();
-		values.add( params[0] );
-		IPortletApp portletApp = element().nearest( IPortletApp.class );
+		IModelElement imodelElement = context( IModelElement.class );
+		values.add( param( "0" ) );
+		IPortletApp portletApp = context( IModelElement.class ).nearest( IPortletApp.class );
 		if ( imodelElement instanceof IEventDefinitionRef ) {
 			ModelElementList<IEventDefinition> eventDefs = portletApp.getEventDefinitions();
 			for ( IEventDefinition eventDefinition : eventDefs ) {

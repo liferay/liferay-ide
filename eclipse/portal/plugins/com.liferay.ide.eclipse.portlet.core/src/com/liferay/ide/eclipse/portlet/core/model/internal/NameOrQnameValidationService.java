@@ -24,23 +24,13 @@ import com.liferay.ide.eclipse.portlet.core.model.IQName;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyValidationService;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class NameOrQnameValidationService extends ModelPropertyValidationService<Value<String>> {
-
-	String[] params;
-
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		super.init( element, property, params );
-		this.params = params;
-	}
+public class NameOrQnameValidationService extends ValidationService {
 
 	/*
 	 * (non-Javadoc)
@@ -48,27 +38,29 @@ public class NameOrQnameValidationService extends ModelPropertyValidationService
 	 */
 	@Override
 	public Status validate() {
+		IModelElement element = context( IModelElement.class );
+
 		final String elementLabel =
-			element().getModelElementType().getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false );
+			element.getModelElementType().getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false );
 		IEventDefinition eventDefinition = null;
 		IPublicRenderParameter publicRenderParameter = null;
 		IQName iqName = null;
 		String name = null;
 		String nsURI = null;
 		String localPart = null;
-		if ( element() instanceof IQName ) {
-			iqName = (IQName) element();
+		if ( element instanceof IQName ) {
+			iqName = (IQName) element;
 			nsURI = iqName.getNamespaceURI().getText( false );
 			localPart = iqName.getLocalPart().getText( false );
 		}
 
-		if ( element() instanceof IEventDefinition ) {
-			eventDefinition = (IEventDefinition) element();
+		if ( element instanceof IEventDefinition ) {
+			eventDefinition = (IEventDefinition) element;
 			name = eventDefinition.getName().getContent( false );
 		}
 
-		if ( element() instanceof IPublicRenderParameter ) {
-			publicRenderParameter = (IPublicRenderParameter) element();
+		if ( element instanceof IPublicRenderParameter ) {
+			publicRenderParameter = (IPublicRenderParameter) element;
 			name = publicRenderParameter.getName().getContent( false );
 		}
 
