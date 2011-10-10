@@ -100,6 +100,17 @@
                contentTypeId="com.liferay.ide.eclipse.portlet.core.portletxml">
          </contentTypeBinding>
       </editor>
+      <editor
+            class="com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"
+            default="true"
+            icon="icons/elcl16/liferay_ui_16x16.png"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"
+            name="Liferay Display Editor"
+            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <contentTypeBinding
+               contentTypeId="com.liferay.ide.eclipse.portlet.core.liferaydisplayxml">
+         </contentTypeBinding>
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

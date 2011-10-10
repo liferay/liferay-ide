@@ -38,6 +38,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.portlet.core,
  com.liferay.ide.eclipse.portlet.core.dd,
  com.liferay.ide.eclipse.portlet.core.descriptor,
+ com.liferay.ide.eclipse.portlet.core.display.model,
  com.liferay.ide.eclipse.portlet.core.job,
  com.liferay.ide.eclipse.portlet.core.model,
  com.liferay.ide.eclipse.portlet.core.model.internal,
