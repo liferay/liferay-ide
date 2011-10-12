@@ -35,7 +35,7 @@
         <license>
             <name>GNU Lesser General Public License v2.1</name>
             <comments>
-      	Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+	      	Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  
 		This library is free software; you can redistribute it and/or modify it under
 		the terms of the GNU Lesser General Public License as published by the Free
@@ -55,8 +55,7 @@
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-<!--     <sapphire-site>http://download.eclipse.org/sapphire/0.3.0/repository</sapphire-site> -->
-    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/537/artifact/build/repository</sapphire-site>
+    <sapphire-site>http://download.eclipse.org/sapphire/0.3.1/repository</sapphire-site> 
     <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site>
     <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
