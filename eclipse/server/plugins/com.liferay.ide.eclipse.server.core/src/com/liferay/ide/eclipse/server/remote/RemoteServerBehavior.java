@@ -447,6 +447,10 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 			modulePublishState = publishModuleDelta( module, monitor );
 		}
 
+		if ( modulePublishState == -1 ) {
+			modulePublishState = IServer.PUBLISH_STATE_UNKNOWN;
+		}
+
 		// by default, assume the module has published successfully.
 		// this will update the publish state and delta correctly
 		setModulePublishState( module, modulePublishState );
