@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.display.model;

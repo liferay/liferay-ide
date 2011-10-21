@@ -58,3 +58,4 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 
 	}
 }
+

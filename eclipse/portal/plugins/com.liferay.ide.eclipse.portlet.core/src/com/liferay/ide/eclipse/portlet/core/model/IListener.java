@@ -62,3 +62,4 @@ public interface IListener extends IModelElement, IDescribeable, IDisplayable {
 	void setImplementation( JavaTypeName value );
 
 }
+

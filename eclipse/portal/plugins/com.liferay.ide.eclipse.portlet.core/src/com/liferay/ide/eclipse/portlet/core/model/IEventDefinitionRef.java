@@ -78,3 +78,4 @@ public interface IEventDefinitionRef extends IModelElement, IIdentifiable, IDesc
 	void setName( String value );
 
 }
+

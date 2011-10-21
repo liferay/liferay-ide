@@ -89,3 +89,4 @@ public class LiferayDisplayXmlEditor extends SapphireEditor {
 	}
 
 }
+

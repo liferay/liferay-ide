@@ -5,25 +5,25 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ *   
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ *    
  * Contributors:
- *    Kamesh Sampath - initial implementation
- ******************************************************************************/
+ *               Kamesh Sampath - initial implementation
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
+
+import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
-
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>

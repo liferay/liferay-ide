@@ -64,3 +64,4 @@ public interface INameValue extends IModelElement {
 
 	void setValue( String value );
 }
+
