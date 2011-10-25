@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+  -->
+<definition>
+    <import>
+        <bundle>com.liferay.ide.eclipse.portlet.ui</bundle>
+        <package>com.liferay.ide.eclipse.service.core.model</package>
+        <package>com.liferay.ide.eclipse.service.core.model.internal</package>
+        <package>com.liferay.ide.eclipse.hook.ui</package>
+        <package>org.eclipse.sapphire.workspace.ui</package>
+    </import>
+    <editor></editor>
+    <editor-page>
+        <root-node>
+            <node>
+                <label>Service Builder</label>
+                <section>
+                    <content>
+                        <property-editor>PackagePath</property-editor>
+                        <property-editor>
+                            <property>AutoNamespaceTables</property>
+                            <hint>
+                                <name>checkbox.layout</name>
+                                <value>leading.label</value>
+                            </hint>
+                        </property-editor>
+                        <property-editor>Author</property-editor>
+                        <property-editor>Namespace</property-editor>
+                    </content>
+                    <documentation>
+                        <content>[ul][li]The [b]package-path[/b] value specifies the package of the generated code.[/li][li]The [b]auto-namespace-tables[/b] value specifies whether or not to automatically namespace tables. The default value is false for core services and true for plugin services.[/li][li]The author element is the name of the user associated with the generated code.[/li][li]The namespace element must be a unique namespace for this component. Table names
+will be prepended with this namespace. Generated JSON JavaScript will be scoped
+to this namespace as well (i.e., Liferay.Service.Test.* if the namespace is
+Test).[/li][/ul]</content>
+                        <title>Service Builder Element Attributes</title>
+                    </documentation>
+                </section>
+                <documentation>
+                </documentation>
+                <image>icons/e16/service.png</image>
+                <node>
+                    <label>Entities</label>
+                    <node-factory>
+                        <property>entities</property>
+                        <case>
+                            <label>${name == null ? &quot;&lt;entity&gt;&quot; : name}</label>
+                            <section>
+                                <content>
+	                                <group>
+                                        <label>Required attributes</label>
+                                        <content>
+                                            <property-editor>name</property-editor>
+                                        </content>
+                                    </group>
+                                    <group>
+                                    	<label>Optional attributes</label>
+                                    	<content>
+                                            <property-editor>
+                                                <property>localService</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+                                            <property-editor>
+                                                <property>remoteService</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+		                                    <property-editor>humanName</property-editor>
+                                            <property-editor>table</property-editor>
+                                            <property-editor>
+                                                <property>uuid</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+                                            <property-editor>
+                                                <property>uuidAccessor</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+		                                    <property-editor>persistenceClass</property-editor>
+		                                    <property-editor>dataSource</property-editor>
+		                                    <property-editor>sessionFactory</property-editor>
+                                            <property-editor>txManager</property-editor>
+                                            <property-editor>
+                                                <property>cacheEnabled</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+                                            <property-editor>
+                                                <property>jsonEnabled</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+                                    	</content>
+                                    </group>
+                                </content>
+                                <label>Entity</label>
+                                <documentation>
+                                    <content>The [b]name[/b] value specifies the name of the entity.
+[br/][br/]
+The [b]human-name[/b] value specifies the readable name to use when generating documentation for this entity. If none is specified, one will be generated from the name.
+[br/][br/]
+The [b]table[/b] value specifies the name of the table that this entity maps to in the database. If this value is not set, then the name of the table is the same as the name of the entity.
+[br/][br/]
+If the [b]uuid[/b] value is true, then the service will generate a UUID column for the service. This column will automatically be populated with a UUID. [br/]
+Developers will also be able to find and remove based on that UUID. The default value is false.
+[br/][br/]
+If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID.
+[br/][br/]
+If the [b]local-service[/b] value is true, then the service will generate the local interfaces for the service. The default value is false.
+[br/][br/]
+If the [b]remote-service[/b] value is true, then the service will generate remote interfaces for the service. The default value is true.
+[br/][br/]
+The [b]persistence-class[/b] value specifies the name of your custom persistence class.[br/]
+This class must implement the generated persistence interface or extend the
+generated persistence class. This allows you to override default behavior
+without modifying the generated persistence class.
+[br/][br/]
+You can generate classes to use a custom data source and session factory.
+Point &quot;spring.configs&quot; in portal.properties to load your custom Spring XML with the definitions of your custom data source and session factory. Then set the data-source and session-factory values to your custom values.
+[br/][br/]
+The [b]data-source[/b] value specifies the data source target that is set to the persistence class. The default value is the Liferay data source. This is used in conjunction with session-factory. See data-source-spring.xml.
+[br/][br/]
+The [b]session-factory[/b] value specifies the session factory that is set to the
+persistence class. The default value is the Liferay session factory. This is
+used in conjunction with data-source. See data-source-spring.xml.
+[br/][br/]
+The [b]tx-manager[/b] value specifies the transaction manager that Spring uses. The default value is the Spring Hibernate transaction manager that wraps the Liferay data source and session factory. See data-source-spring.xml. Set this attribute to &quot;none&quot; to disable transaction management.
+[br/][br/]
+The [b]cache-enabled[/b] value specifies whether or not to cache this queries for this entity. Set this to false if data in the table will be updated by other programs. The default value is true.
+[br/][br/]
+The [b]json-enabled[/b] value specifies whether or not the entity should be annotated
+for JSON serialization. By default, if the remote-service value is true, then
+the json-enabled value is true.</content>
+                                    <title>Entity</title>
+                                </documentation>
+                            </section>
+                            <node>
+                                <label>Columns</label>
+                                <section>
+                                    <content>
+                                        <action-link>
+                                            <label>Add a Column</label>
+                                            <show-image></show-image>
+                                            <action-id>Sapphire.ADD</action-id>
+                                        </action-link>
+                                        <separator></separator>
+                                        <property-editor>
+                                            <property>columns</property>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
+                                            <child-property>name</child-property>
+                                            <child-property>type</child-property>
+                                            <child-property>primary</child-property>
+                                        </property-editor>
+                                    </content>
+                                    <label>Columns</label>
+                                </section>
+                                <node-factory>
+                                    <property>columns</property>
+                                    <case>
+                                        <label>${name == null ? &quot;&lt;column&gt;&quot; : name}</label>
+                                        <section>
+                                            <label>Column</label>
+                                            <content>
+                                                <group>
+                                                    <label>Required attributes</label>
+                                                    <content>
+                                                        <property-editor>name</property-editor>
+                                                        <property-editor>type</property-editor>
+                                                    </content>
+                                                </group>
+                                                <group>
+                                                    <label>Optional attributes</label>
+                                                    <content>
+                                                        <property-editor>
+                                                            <property>primary</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>dbName</property-editor>
+                                                        <property-editor>
+                                                            <property>Accessor</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>
+                                                            <property>filterPrimary</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>entity</property-editor>
+                                                        <property-editor>mappingKey</property-editor>
+                                                        <property-editor>mappingTable</property-editor>
+                                                        <property-editor>idType</property-editor>
+                                                        <property-editor>idParam</property-editor>
+                                                        <property-editor>
+                                                            <property>convertNull</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>
+                                                            <property>lazy</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>
+                                                            <property>localized</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                        <property-editor>
+		                                                <property>jsonEnabled</property>
+			                                                <hint>
+			                                                    <name>checkbox.layout</name>
+			                                                    <value>leading.label</value>
+			                                                </hint>
+			                                            </property-editor>
+                                                    </content>
+                                                </group>
+                                            </content>
+                                            <documentation>
+                                                <content>The name value specifies the getter and setter name in the entity.
+[br/][br/]
+The type value specifies whether the column is a String, Boolean, or int, etc.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column name=&quot;companyId&quot; db-name=&quot;companyId&quot; type=&quot;String&quot; /&gt;
+[br/][br/]
+The above column specifies that there will be a getter called
+pojo.getCompanyId() that will return a String.
+[br/][br/]
+Set db-name to map the field to a physical database column that is different
+from the column name.
+[br/][br/]
+If the primary value is set to true, then this column is part of the primary key
+of the entity. If multiple columns have the primary value set to true, then a
+compound key will be created.
+[br/][br/]
+See com.liferay.portal.service.persistence.LayoutPK for an example of a compound
+primary key.
+[br/][br/]
+If the entity and mapping-key attributes are specified and mapping-table is not,
+then the Service Builder will assume you are specifying a one to many
+relationship.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;shoppingItemPrices&quot;
+	type=&quot;Collection&quot;
+	entity=&quot;ShoppingItemPrice&quot;
+	mapping-key=&quot;itemId&quot;
+/&gt;
+[br/][br/]
+The above column specifies that there will be a getter called
+pojo.getShoppingItemPrices() that will return a collection. It will map to a
+column called itemId in the table that maps to the entity ShoppingItemPrice.
+[br/][br/]
+If the entity and mapping-table attributes are specified and mapping-key is not,
+then the Service Builder will assume you are specifying a many to many
+relationship.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;roles&quot;
+	type=&quot;Collection&quot;
+	entity=&quot;Role&quot;
+	mapping-table=&quot;Groups_Roles&quot;
+/&gt;
+[br/][br/]
+The above column specifies that there will be a getter called
+pojo.getRoles() that will return a collection. It will use a mapping table
+called Groups_Roles to give a many to many relationship between groups and
+roles.
+[br/][br/]
+If you are creating a mapping table for an entity defined in another
+service.xml, you need to specify the full package path.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;organizations&quot;
+	type=&quot;Collection&quot;
+	entity=&quot;com.liferay.portal.Organization&quot;
+	mapping-table=&quot;Foo_Organizations&quot;
+/&gt;
+[br/][br/]
+The id-type and id-param values are used in order to create an auto-generated,
+auto-incrementing primary key when inserting records into a table. This can be
+implemented in 4 different ways, depending on the type of database being used.
+In all cases, the primary key of the model object should be assigned a value of
+null, and Hibernate will know to replace the null value with an auto-generated,
+auto-incremented value. If no id-type value is used, it is assumed that the
+primary key will be assigned and not auto-generated.
+[br/][br/]
+The first implementation uses a class to generate a primary key.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;id&quot;
+	type=&quot;Integer&quot;
+	primary=&quot;true&quot;
+	id-type=&quot;class&quot;
+	id-param=&quot;com.liferay.counter.service.persistence.IDGenerator&quot;
+/&gt;
+[br/][br/]
+In this implementation, the class specified in the id-param value will be called
+to retrieve a unique identifier (in the example above, an Integer) that will be
+used as the primary key for the new record. This implementation works for all
+supported databases.
+[br/][br/]
+The second implementation generates identifiers that are unique only when no
+other process is inserting data into the same table. This implementation should
+NOT be used in a clustered environment, but it does work for all supported
+databases.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;id&quot;
+	type=&quot;Integer&quot;
+	primary=&quot;true&quot;
+	id-type=&quot;increment&quot;
+/&gt;
+[br/][br/]
+The third implementation uses an identity column to generate a primary key.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;id&quot;
+	type=&quot;Integer&quot;
+	primary=&quot;true&quot;
+	id-type=&quot;identity&quot;
+/&gt;
+[br/][br/]
+In this implementation, the create table SQL generated for this entity will
+create an identity column that natively auto-generates a primary key whenever
+an insert occurs. This implementation is only supported by DB2, MySQL, and
+MS SQL Server.
+[br/][br/]
+The fourth implementation uses a sequence to generate a primary key.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;column
+	name=&quot;id&quot;
+	type=&quot;Integer&quot;
+	primary=&quot;true&quot;
+	id-type=&quot;sequence&quot;
+	id-param=&quot;id_sequence&quot;
+/&gt;
+[br/][br/]
+In this implementation, a create sequence SQL statement is created based on
+the id-param value (stored in /sql/sequences.sql). This sequence is then
+accessed to generate a unique identifier whenever an insert occurs. This
+implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
+[br/][br/]
+This [b]accessor[/b] value specifies whether or not to generate an accessor for this
+column. This accessor will provide a fast and type-safe way to access column 
+value.
+[br/][br/]
+The filter-primary value specifies the column to use as the primary key column
+when using filter finders. Only one column should ever have this value set to
+true. If no column has this set to true, then the default primary column be
+used.
+[br/][br/]
+The convert-null value specifies whether or not the column value is
+automatically converted to a non null value if it is null. This only applies if
+the type value is String. This is particularly useful if your entity is
+referencing a read only table or a database view so that Hibernate does not try
+to issue unnecessary updates. The default value is true.
+[br/][br/]
+The lazy value is only valid when type is Blob. It specifies whether or not to
+do a lazy fetch for Blob. The default value is true.
+[br/][br/]
+The localized value specifies whether or not the value of the column can have
+different values for different locales. The default value is false.
+[br/][br/]
+The json-enabled value specifies whether or not the column should be annotated
+for JSON serialization. By default, if the json-enabled value in the entity
+element is true, then the json-enabled value in the column element is true.
+</content>
+                                            </documentation>
+                                        </section>
+                                        <use-model-element-image></use-model-element-image>
+                                    </case>
+                                </node-factory>
+                                <image>images/columns_16x16.png</image>
+                            </node>
+                            <node>
+                                <label>Order</label>
+                                <section>
+                                    <label>Order</label>
+                                    <content>
+                                        <with>
+                                            <path>Order</path>
+                                            <label>Specify ordering</label>
+                                            <panel>
+                                                <key>IOrder</key>
+                                                <content>
+                                                    <property-editor>by</property-editor>
+                                                    <property-editor>
+                                                        <property>orderColumns</property>
+                                                        <documentation>
+                                                            <content>The order-column element allows you to order the entities by specific columns.
+[br/][br/]
+The attributes of the order-column element allows you to fine tune the ordering of the entity.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;order by=&quot;asc&quot;&gt;
+	&lt;order-column name=&quot;parentLayoutId&quot; /&gt;
+	&lt;order-column name=&quot;priority&quot; /&gt;
+&lt;/order&gt;
+[br/][br/]
+The above settings will order by parentLayoutId and then by priority in an ascending manner.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;order by=&quot;asc&quot;&gt;
+	&lt;order-column name=&quot;name&quot; case-sensitive=&quot;false&quot; /&gt;
+&lt;/order&gt;
+[br/][br/]
+The above settings will order by name and will not be case sensitive.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;order&gt;
+	&lt;order-column name=&quot;articleId&quot; order-by=&quot;asc&quot; /&gt;
+	&lt;order-column name=&quot;version&quot; order-by=&quot;desc&quot; /&gt;
+&lt;/order&gt;
+[br/][br/]
+The above settings will order by articleId in an ascending manner and then by version in a descending manner.</content>
+                                                        </documentation>
+                                                        <child-property>name</child-property>
+                                                        <child-property>orderBy</child-property>
+                                                        <child-property>
+                                                            <property>caseSensitive</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </child-property>
+                                                    </property-editor>
+                                                </content>
+                                            </panel>
+                                            <hint>
+                                                <name>checkbox.layout</name>
+                                                <value>leading.label</value>
+                                            </hint>
+                                        </with>
+                                    </content>
+                                    <documentation>
+                                        <content>The order element specifies a default ordering and sorting of the entities when they are retrieved from the database.
+[br/][br/]
+Set the by attribute to &quot;asc&quot; or &quot;desc&quot; to order by ascending or descending.</content>
+                                    </documentation>
+                                </section>
+                                <image>images/alphab_sort_co.gif</image>
+                            </node>
+                            <node>
+                                <label>Finders</label>
+                                <section>
+                                    <label>Finders</label>
+                                    <content>
+                                        <action-link>
+                                            <label>Add a Finder</label>
+                                            <show-image></show-image>
+                                            <action-id>Sapphire.ADD</action-id>
+                                        </action-link>
+                                        <separator></separator>
+                                        <property-editor>
+                                            <property>finders</property>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
+                                            <child-property>name</child-property>
+                                            <child-property>returnType</child-property>
+                                        </property-editor>
+                                    </content>
+                                    <documentation>
+                                        <content>The finder element represents a generated finder method</content>
+                                    </documentation>
+                                </section>
+                                <node-factory>
+                                    <property>finders</property>
+                                    <case>
+                                        <label>${name == null ? &quot;&lt;finder&gt;&quot; : name}</label>
+                                        <section>
+                                            <label>Finder</label>
+                                            <content>
+                                                <group>
+                                                    <label>Required attributes</label>
+                                                    <content>
+		                                                <property-editor>name</property-editor>
+                                                        <property-editor>returnType</property-editor>
+                                                    </content>
+                                                </group>
+                                                <group>
+                                                    <label>Optional attributes</label>
+                                                    <content>
+                                                        <property-editor>
+                                                            <property>unique</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+		                                                <property-editor>where</property-editor>
+                                                        <property-editor>
+                                                            <property>dbIndex</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
+                                                    </content>
+                                                </group>
+                                            </content>
+                                            <documentation>
+                                                <content>The name value specifies the name of the finder method.
+[br/][br/]
+The return-type value specifies the return type of the finder. Valid values are
+&quot;Collection&quot; or the name of the entity. If the value is &quot;Collection&quot;, then this
+finder returns a list of entities. If the value is the name of the entity, then
+this finder returns at most one entity.
+[br/][br/]
+If the unique value is true, then the finder must return a unique entity.
+[br/][br/]
+If the db-index value is true, then the service will automatically generate a
+SQL index for this finder. The default value is true.</content>
+                                            </documentation>
+                                        </section>
+                                        <node>
+                                            <label>Finder Columns</label>
+                                            <section>
+                                                <label>Finder Columns</label>
+                                                <content>
+                                                    <action-link>
+                                                        <label>Add a Finder Column</label>
+                                                        <show-image></show-image>
+                                                        <action-id>Sapphire.ADD</action-id>
+                                                    </action-link>
+                                                    <separator></separator>
+                                                    <property-editor>
+                                                        <property>finderColumns</property>
+                                                        <child-property>name</child-property>
+                                                        <show-label>false</show-label>
+                                                        <span>true</span>
+                                                    </property-editor>
+                                                </content>
+                                                <documentation>
+                                                    <content>The finder-column element specifies the columns to find by.</content>
+                                                </documentation>
+                                            </section>
+                                            <node-factory>
+                                                <property>finderColumns</property>
+                                                <case>
+                                                    <label>${name == null ? &quot;&lt;finder-column&gt;&quot; : name}</label>
+                                                    <section>
+                                                        <label>Finder Column</label>
+                                                        <content>
+                                                            <group>
+                                                                <label>Required attributes</label>
+                                                                <content>
+                                                                    <property-editor>name</property-editor>
+                                                                </content>
+                                                            </group>
+                                                            <group>
+                                                                <label>Optional attributes</label>
+                                                                <content>
+                                                                    <property-editor>
+                                                                        <property>caseSensitive</property>
+                                                                        <hint>
+                                                                            <name>checkbox.layout</name>
+                                                                            <value>leading.label</value>
+                                                                        </hint>
+                                                                    </property-editor>
+                                                                    <property-editor>comparator</property-editor>
+                                                                    <property-editor>arrayableOperator</property-editor>
+                                                                </content>
+                                                            </group>
+                                                        </content>
+                                                        <documentation>
+                                                            <content>The name value specifies the name of the finder method.
+[br/][br/]
+For example:
+[br/][br/]
+&lt;finder name=&quot;CompanyId&quot; return-type=&quot;Collection&quot;&gt;
+	&lt;finder-column name=&quot;companyId&quot; /&gt;
+&lt;/finder&gt;
+[br/][br/]
+The above settings will create a finder with the name findByCompanyId that will
+return a Collection and require a given companyId. It will also generate
+several more findByCompanyId methods that take in pagination fields (int begin,
+int end) and more sorting options. The easiest way to understand this is to
+look at a generated PersistenceImpl class. The Service Builder will also
+generate removeByCompanyId and countByCompanyId.
+[br/][br/]
+See com.liferay.portal.service.persistence.LayoutPersistenceImpl for a good
+example.
+[br/][br/]
+The attribute case-sensitive is a boolean value and is only used if the column
+is a String value.
+[br/][br/]
+The attribute comparator takes in the values =, !=, &lt;, &lt;=, &gt;, &gt;=, or LIKE and is
+used to compare this column.
+[br/][br/]
+The attribute arrayable-operator takes in the values AND or OR and will
+generate an additional finder where this column's parameter takes an array
+instead of a single value. Every value in this array will be compared with the
+column using the comparator, and the conditions will be combined with either an
+AND or OR operator. For example, a finder column with the = comparator and an
+arrayable-operator of OR will act like an IN clause.</content>
+                                                        </documentation>
+                                                    </section>
+                                                    <use-model-element-image></use-model-element-image>
+                                                </case>
+                                            </node-factory>
+                                            <image>images/finder_columns_16x16.png</image>
+                                        </node>
+                                        <use-model-element-image></use-model-element-image>
+                                    </case>
+                                </node-factory>
+                                <image>images/finders_16x16.gif</image>
+                                <documentation>
+                                    <content>The finder element represents a generated finder method</content>
+                                </documentation>
+                            </node>
+                            <node>
+			                    <label>References</label>
+			                    <section>
+			                        <label>References</label>
+			                        <content>
+			                            <property-editor>
+			                                <property>references</property>
+			                                <show-label>false</show-label>
+			                                <span>true</span>
+			                            </property-editor>
+			                        </content>
+                                    <documentation>
+                                        <title>References</title>
+                                        <content>The reference element allows you to inject services from another service.xml
+within the same class loader. For example, if you inject the Resource entity,
+then you'll be able to reference the Resource services from your service
+implementation via the methods getResourceLocalService and getResourceService.
+You'll also be able to reference the Resource services via the variables
+resourceLocalService and resourceService.</content>
+                                    </documentation>
+			                    </section>
+                                <documentation>
+                                    <title>References</title>
+                                    <content>The reference element allows you to inject services from another service.xml
+within the same class loader. For example, if you inject the Resource entity,
+then you'll be able to reference the Resource services from your service
+implementation via the methods getResourceLocalService and getResourceService.
+You'll also be able to reference the Resource services via the variables
+resourceLocalService and resourceService.</content>
+                                </documentation>
+                                <image>images/references_16x16.png</image>
+			                </node>
+                            <node>
+                                <label>Tx Requireds</label>
+                                <section>
+                                    <content>
+                                        <property-editor>
+                                            <property>txRequireds</property>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
+                                        </property-editor>
+                                    </content>
+                                </section>
+                                <image>images/tx_requireds_16x16.gif</image>
+                            </node>
+                            <use-model-element-image></use-model-element-image>
+                        </case>
+                    </node-factory>
+                    <section>
+                        <content>
+                            <action-link>
+                                <label>Add an Entity</label>
+                                <show-image></show-image>
+                                <action-id>Sapphire.ADD</action-id>
+                            </action-link>
+                            <separator></separator>
+                            <property-editor>
+                                <property>entities</property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                                <child-property>
+                                    <property>name</property>
+                                    <hint>
+                                        <name>browse.only</name>
+                                        <value>true</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>localService</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>remoteService</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </child-property>
+                            </property-editor>
+                        </content>
+                        <documentation>
+                            <content>An entity usually represents a business facade and a table in the database. If an entity does not have any columns, then it only represents a business facade.[br/]
+The Service Builder will always generate an empty business facade POJO if it does not exist. Upon subsequent generations, the Service Builder will check to see if the business facade already exists. If it exists and has additional methods, then the Service Builder will also update the SOAP wrappers.
+[br/][br/]
+If an entity does have columns, then the value object, the POJO class that is mapped to the database, and other persistence utilities are also generated based on the order and finder elements.</content>
+                            <title>Entities</title>
+                        </documentation>
+                        <label>Entities</label>
+                    </section>
+                    <image>images/entities_16x16.gif</image>
+                </node>
+                <node>
+                    <label>Exceptions</label>
+                    <section>
+                        <content>
+                            <property-editor>
+                                <property>exceptions</property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                            </property-editor>
+                        </content>
+                        <documentation>
+                            <content>The exceptions element contain a list of generated exceptions. This doesn't save a lot of typing, but can still be helpful.</content>
+                        </documentation>
+                    </section>
+                    <image>images/jrtexception_obj_16x16.gif</image>
+                    <node-factory>
+                        <property>exceptions</property>
+                        <case>
+                            <section>
+                                <label>Exception</label>
+                                <content>
+                                    <property-editor>
+                                        <property>exception</property>
+                                        <show-label>false</show-label>
+                                        <span>true</span>
+                                    </property-editor>
+                                </content>
+                            </section>
+                            <use-model-element-image></use-model-element-image>
+                            <label>${exception == null ? &quot;&lt;exception&gt;&quot; : exception}</label>
+                        </case>
+                    </node-factory>
+                </node>
+                <node>
+                    <label>Imports</label>
+                    <image>images/import_16x16.gif</image>
+                    <section>
+                        <content>
+                            <property-editor>
+                                <property>serviceBuilderImports</property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                            </property-editor>
+                        </content>
+                        <documentation>
+                            <content>The service-builder-import allows you to split up a large Service Builder file
+into smaller files by aggregrating the smaller Service Builder into one file.
+Note that there can be at most one author element among all the files. There can
+also only be one and only one namespace element among all the files.
+[br/][br/]
+The [b]attribute file[/b] is interpreted as relative to the file that is importing it.</content>
+                        </documentation>
+                    </section>
+                    <node-factory>
+                        <property>serviceBuilderImports</property>
+                        <case>
+                            <label>${file == null ? &quot;&lt;import&gt;&quot; : file}</label>
+                            <use-model-element-image></use-model-element-image>
+                            <section>
+                                <label>Service Builder Import</label>
+                                <content>
+                                    <property-editor>file</property-editor>
+                                </content>
+                            </section>
+                        </case>
+                    </node-factory>
+                </node>
+            </node>
+        </root-node>
+        <id>serviceBuilderPage</id>
+        <page-header-text>Service Builder</page-header-text>
+        <page-header-image>icons/e16/service.png</page-header-image>
+        <documentation>
+            <content>
+The service-builder element is the root of the deployment descriptor for
+a Service Builder descriptor that is used to generate services available to
+portlets. The Service Builder saves the developer time by generating Spring
+utilities, SOAP utilities, and Hibernate persistence classes to ease the
+development of services.</content>
+            <title>Service Builder</title>
+        </documentation>
+        <action>
+            <id>Liferay.ServiceBuilder.BuildServices</id>
+            <label>Build Services</label>
+            <description>Build Services</description>
+            <image>images/builder_16x16.gif</image>
+            <hint>
+	            <name>style</name>
+	            <value>image+text</value>
+	        </hint>
+            <context>Sapphire.EditorPage</context>
+        </action>
+        <action>
+            <id>Liferay.ServiceBuilder.BuildWSDD</id>
+            <label>Build WSDD</label>
+            <description>Build WSDD</description>
+            <image>images/webservicedesc_16x16.gif</image>
+            <hint>
+	            <name>style</name>
+	            <value>image+text</value>
+	        </hint>
+            <context>Sapphire.EditorPage</context>
+        </action>
+        <action-handler>
+            <action>Liferay.ServiceBuilder.BuildServices</action>
+            <id>Liferay.ServiceBuilder.BuildServices</id>
+            <label>Build Services</label>
+            <impl>BuildServicesActionHandler</impl>
+        </action-handler>
+        <action-handler>
+            <action>Liferay.ServiceBuilder.BuildWSDD</action>
+            <id>Liferay.ServiceBuilder.BuildWSDD</id>
+            <label>Build WSDD</label>
+            <impl>BuildWSDDActionHandler</impl>
+        </action-handler>
+    </editor-page>
+    <diagram-page>
+    	<id>diagramPage</id>
+        <node>
+            <id>Entity</id>
+            <tool-palette-label>entity</tool-palette-label>
+            <instance-id>${Name}</instance-id>
+            <property>Entities</property>
+            <label>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</label>
+            <properties-view>
+                <page>
+                    <label>required</label>
+                    <content>
+                        <property-editor>name</property-editor>
+                    </content>
+                </page>
+                <page>
+                    <label>optional</label>
+                    <content>
+                    	<property-editor>
+	                              <property>localService</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+	                          <property-editor>
+	                              <property>remoteService</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+	                    <property-editor>humanName</property-editor>
+	                          <property-editor>table</property-editor>
+	                          <property-editor>
+	                              <property>uuid</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+	                    <property-editor>persistenceClass</property-editor>
+	                    <property-editor>dataSource</property-editor>
+	                    <property-editor>sessionFactory</property-editor>
+	                    <property-editor>txManager</property-editor>
+	                          <property-editor>
+	                              <property>cacheEnabled</property>
+	                              <hint>
+	                                  <name>checkbox.layout</name>
+	                                  <value>leading.label</value>
+	                              </hint>
+	                          </property-editor>
+                    </content>
+                </page>
+            </properties-view>
+            <connection-binding>
+                <connection-id>Relationship</connection-id>
+                <property>Relationships</property>
+                <instance-id>${Name}</instance-id>
+                <endpoint2>
+                    <property>Name</property>
+                    <value>${Name}</value>
+                </endpoint2>
+                <label>${Label}</label>
+            </connection-binding>
+            <tool-palette-image>
+                <id>entityImage</id>
+                <path>icons/Entity_16x16.gif</path>
+            </tool-palette-image>
+            <model-element-type>IEntity</model-element-type>
+        </node>
+        <connection>
+            <endpoint1>
+                <type>none</type>
+            </endpoint1>
+            <endpoint2>
+                <type>arrow</type>
+            </endpoint2>
+            <id>Relationship</id>
+            <tool-palette-label>relationship</tool-palette-label>
+            <tool-palette-image>
+                <id>relationshipImage</id>
+                <path>icons/references_16x16.png</path>
+            </tool-palette-image>
+            <line-style>dash</line-style>
+        </connection>
+        <properties-view>
+            <page>
+                <label>general</label>
+                <content>
+                    <property-editor>
+                                <property>entities</property>
+                                <child-property>
+                                    <property>name</property>
+                                    <hint>
+                                        <name>browse.only</name>
+                                        <value>true</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>localService</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>remoteService</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </child-property>
+                            </property-editor>
+                </content>
+            </page>
+        </properties-view>
+        <grid>
+            <visible>true</visible>
+        </grid>
+    </diagram-page>
+	
+</definition>

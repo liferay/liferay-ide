@@ -196,6 +196,9 @@
         <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.ui</module>
         <module>server/plugins/com.liferay.ide.eclipse.server.ui</module>
 
+		<module>portal/plugins/com.liferay.ide.eclipse.hook.core</module>
+		<module>portal/plugins/com.liferay.ide.eclipse.hook.ui</module>
+
         <module>common/features/com.liferay.ide.eclipse.tools</module>
         
 <!--     <module>common/features/com.liferay.ide.eclipse.source-feature</module> -->

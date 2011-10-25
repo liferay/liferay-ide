@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Export-Package: com.liferay.ide.eclipse.hook.ui
+Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,com.liferay.id
+ e.eclipse.service.core,org.eclipse.sapphire.ui.swt.graphiti;bundle-ve
+ rsion="0.3.0",org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="
+ 0.3.0",org.eclipse.sapphire.ui;bundle-version="0.3.0",org.eclipse.ui.
+ views,org.eclipse.help,org.eclipse.ui.forms,org.eclipse.ui.views.prop
+ erties.tabbed,com.liferay.ide.eclipse.portlet.core;bundle-version="1.
+ 5.0",org.eclipse.ui.editors,com.liferay.ide.eclipse.portlet.ui,org.ec
+ lipse.sapphire.osgi;bundle-version="0.3.0",org.eclipse.sapphire.works
+ pace.ui;bundle-version="0.3.0",org.eclipse.sapphire.platform;bundle-v
+ ersion="0.3.0"
+Bundle-Vendor: Liferay, Inc.
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 1.4.0.v201110221404
+Bundle-Name: Liferay Service Builder Core
+Bundle-Activator: com.liferay.ide.eclipse.hook.ui.HookUI
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.liferay.ide.eclipse.hook.ui;singleton:=tru
+ e
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='com.liferay.ide.eclipse.hook.ui' version='1.4.0.v201110221404'>
+    <properties size='6'>
+      <property name='artifact.size' value='42803'/>
+      <property name='download.size' value='42803'/>
+      <property name='download.md5' value='b540354ff6b247dcb3fa4db8791811cc'/>
+      <property name='maven-groupId' value='com.liferay.ide.eclipse'/>
+      <property name='maven-artifactId' value='com.liferay.ide.eclipse.hook.ui'/>
+      <property name='maven-version' value='1.4.0-SNAPSHOT'/>
+    </properties>
+  </artifact>
+</artifacts>

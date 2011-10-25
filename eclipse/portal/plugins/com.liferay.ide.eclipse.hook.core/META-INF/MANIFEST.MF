@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Hook Core
+Bundle-SymbolicName: com.liferay.ide.eclipse.hook.core;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.liferay.ide.eclipse.hook.core.HookCore
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.sapphire.java;bundle-version="0.4.0",
+ org.eclipse.sapphire.modeling;bundle-version="0.3.0";visibility:=reexport,
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.3.0";visibility:=reexport,
+ org.eclipse.sapphire.osgi;bundle-version="0.3.0",
+ org.eclipse.sapphire.platform;bundle-version="0.3.0",
+ org.eclipse.sapphire.workspace;bundle-version="0.3.0",
+ org.eclipse.core.resources
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.eclipse.hook.core,
+ com.liferay.ide.eclipse.hook.core.model,
+ com.liferay.ide.eclipse.hook.core.model.internal,
+ com.liferay.ide.eclipse.hook.core.model600,
+ com.liferay.ide.eclipse.hook.core.model600.internal,
+ com.liferay.ide.eclipse.hook.core.model610,
+ com.liferay.ide.eclipse.hook.core.model610.internal
