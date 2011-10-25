@@ -232,11 +232,16 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			String[] split = deps.split(",");
 
 			if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
+				for ( int i = 0; i < split.length; i++ ) {
+					split[i] = split[i].trim();
+				}
+
 				return split;
 			}
 		}
 		catch (Exception e) {
 		}
+
 		return jars;
 	}
 
