@@ -1,4 +1,3 @@
 .apt_generated/
-target
-/
+target/
 bin/
