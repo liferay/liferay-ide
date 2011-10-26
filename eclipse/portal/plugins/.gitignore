@@ -1,3 +1,9 @@
+com.liferay.ide.eclipse.hook.core/.apt_generated/
+com.liferay.ide.eclipse.hook.core/bin/
+com.liferay.ide.eclipse.hook.core/target/
+com.liferay.ide.eclipse.hook.ui/.apt_generated/
+com.liferay.ide.eclipse.hook.ui/bin/
+com.liferay.ide.eclipse.hook.ui/target/
 com.liferay.ide.eclipse.layouttpl.core/bin/
 com.liferay.ide.eclipse.layouttpl.core/target/
 com.liferay.ide.eclipse.layouttpl.ui/bin/
