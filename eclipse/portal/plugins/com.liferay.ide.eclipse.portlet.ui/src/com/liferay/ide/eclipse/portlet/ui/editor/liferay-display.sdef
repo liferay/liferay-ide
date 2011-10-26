@@ -36,7 +36,10 @@
                 <node-include>CategoryNodeFactory</node-include>
                 <section>
                     <content>
-                        <property-editor>Categories</property-editor>
+                        <property-editor>
+                            <property>Categories</property>
+                            <show-label>false</show-label>
+                        </property-editor>
                     </content>
                 </section>
                 <image>images/categories_16x16.gif</image>
@@ -59,13 +62,14 @@
 			<section>
 				<label>Portlets</label>
 				<content>
-					<property-editor>
-						<property>Portlets</property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
-					</property-editor>
+                    <property-editor>
+                        <property>Portlets</property>
+                        <show-label>false</show-label>
+                        <child-property>
+                            <property>Id</property>
+                            <label>Portlet Id</label>
+                        </child-property>
+                    </property-editor>
 				</content>
 			</section>
 			<label>${Name!=null?Name:'&lt;category&gt;'}</label>
@@ -74,11 +78,15 @@
 				<content>
 					<property-editor>
 						<property>Categories</property>
-						<child-property>Name</child-property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
+                        <child-property>
+                            <property>Name</property>
+                            <label>Category Name</label>
+                            <hint>
+                                <name>show.header</name>
+                                <value>true</value>
+                            </hint>
+                        </child-property>
+                        <show-label>false</show-label>
 					</property-editor>
 				</content>
 			</section>
