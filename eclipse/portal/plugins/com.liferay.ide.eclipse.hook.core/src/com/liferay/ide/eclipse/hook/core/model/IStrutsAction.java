@@ -27,7 +27,9 @@ import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -37,6 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Image( path = "images/elcl16/action_url_16x16.png" )
 public interface IStrutsAction extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IStrutsAction.class );
@@ -53,20 +56,21 @@ public interface IStrutsAction extends IModelElement {
 
 	void setStrutsActionPath( String value );
 
-	// *** Implementation Class ***
-
+	// ** StrutsActionImpl
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
-	@Label( standard = "Struts Action Implementation" )
+	@Label( standard = "Struts Action Impl" )
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = {
+		"com.liferay.portal.kernel.struts.BaseStrutsAction", "com.liferay.portal.kernel.struts.BaseStrutsPortletAction" } )
+	@MustExist
 	@Required
 	@XmlBinding( path = "struts-action-impl" )
-	ValueProperty PROP_IMPL_CLASS = new ValueProperty( TYPE, "Implementation" );
+	ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty( TYPE, "StrutsActionImpl" );
 
-	ReferenceValue<JavaTypeName, JavaType> getImplClass();
+	ReferenceValue<JavaTypeName, JavaType> getStrutsActionImpl();
 
-	void setImplClass( String portletClass );
+	void setStrutsActionImpl( String value );
 
-	void setImplClass( JavaTypeName portletClass );
+	void setStrutsActionImpl( JavaTypeName value );
 
 }

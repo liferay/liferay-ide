@@ -20,14 +20,13 @@ package com.liferay.ide.eclipse.hook.core.model600;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
-
-import com.liferay.ide.eclipse.hook.core.model.internal.InvertingBooleanXmlValueBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -43,7 +42,8 @@ public interface IHook extends com.liferay.ide.eclipse.hook.core.model.IHook, IH
 
 	@Type( base = Boolean.class )
 	@Label( standard = "Custom JSP Global" )
-	@CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class, params = "custom-jsp-global" )
+	@DefaultValue( text = "false" )
+	@XmlBinding( path = "custom-jsp-global" )
 	ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty( TYPE, "CustomJspGlobal" );
 
 	Value<Boolean> getCustomJspGlobal();

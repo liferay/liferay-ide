@@ -22,28 +22,34 @@ import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ListProperty;
+import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Image( path = "images/elcl16/filter_16x16.gif" )
 public interface IServletFilter extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IServletFilter.class );
 
 	// *** Servlet Filter Name ***
 
-	@Label( standard = "Servlet Filter Name" )
+	@Label( standard = "Filter Name" )
 	@XmlBinding( path = "servlet-filter-name" )
 	ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" );
 
@@ -51,20 +57,29 @@ public interface IServletFilter extends IModelElement {
 
 	void setServletFilterName( String value );
 
-	// *** Implementation Class ***
-
+	// ** ServletFilterImpl
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
 	@Label( standard = "Servlet Filter Implementation" )
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = { "javax.servlet.Filter" } )
+	@MustExist
 	@Required
 	@XmlBinding( path = "servlet-filter-impl" )
-	ValueProperty PROP_IMPL_CLASS = new ValueProperty( TYPE, "Implementation" );
+	ValueProperty PROP_SERVLET_FILTER_IMPL = new ValueProperty( TYPE, "ServletFilterImpl" );
 
-	ReferenceValue<JavaTypeName, JavaType> getImplClass();
+	ReferenceValue<JavaTypeName, JavaType> getServletFilterImpl();
 
-	void setImplClass( String portletClass );
+	void setServletFilterImpl( String value );
 
-	void setImplClass( JavaTypeName portletClass );
+	void setServletFilterImpl( JavaTypeName value );
+
+	// *** InitParams ***
+
+	@Type( base = IParam.class )
+	@Label( standard = "Init Parameters" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "init-param", type = IParam.class ) } )
+	ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" );
+
+	ModelElementList<IParam> getInitParams();
 
 }

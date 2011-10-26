@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
@@ -35,13 +36,14 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Image( path = "images/elcl16/filter_mapping_16x16.gif" )
 public interface IServletFilterMapping extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IServletFilterMapping.class );
 
 	// *** Servlet Filter Name ***
 
-	@Label( standard = "Servlet Filter Name" )
+	@Label( standard = "Filter Name" )
 	@XmlBinding( path = "servlet-filter-name" )
 	ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" );
 

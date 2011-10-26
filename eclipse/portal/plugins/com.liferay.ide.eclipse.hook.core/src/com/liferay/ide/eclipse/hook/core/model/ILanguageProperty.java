@@ -22,6 +22,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -29,6 +30,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Image( path = "images/elcl16/locale_16x16.gif" )
 public interface ILanguageProperty extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( ILanguageProperty.class );

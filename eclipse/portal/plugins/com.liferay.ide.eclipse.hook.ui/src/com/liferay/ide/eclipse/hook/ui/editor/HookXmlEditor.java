@@ -118,7 +118,7 @@ public class HookXmlEditor extends SapphireEditor {
 	 * @return - {@link HookVersion}
 	 */
 	HookVersion getDTDVersion( Document document ) {
-		HookVersion dtdVersion = HookVersion.v6_0_0;
+		HookVersion dtdVersion = null;
 		DocumentType docType = document.getDoctype();
 		if ( docType != null ) {
 			String publicId = docType.getPublicId();
@@ -127,12 +127,14 @@ public class HookXmlEditor extends SapphireEditor {
 				if ( publicId.contains( "5.2.0" ) || systemId.contains( "5.2.0" ) ) {
 					dtdVersion = HookVersion.v5_2_0;
 				}
-			}
-			else if ( publicId != null && systemId != null ) {
-				if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) {
+				else if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) ) {
+					dtdVersion = HookVersion.v6_0_0;
+				}
+				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) {
 					dtdVersion = HookVersion.v6_1_0;
 				}
 			}
+
 		}
 
 		return dtdVersion;

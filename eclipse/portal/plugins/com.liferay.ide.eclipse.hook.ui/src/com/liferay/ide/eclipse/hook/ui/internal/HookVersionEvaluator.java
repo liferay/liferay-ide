@@ -42,12 +42,12 @@ public class HookVersionEvaluator extends SapphireModelCondition {
 	 */
 	@Override
 	protected boolean evaluate() {
-		boolean canShow = true;
+		boolean canShow = false;
 		final IModelElement element = getPart().getModelElement();
 		if ( element instanceof IHook ) {
 			IHook hook = (IHook) element;
 			String dtdVersion = hook.getVersion().toString();
-			canShow = ( dtdVersion != null && !dtdVersion.equals( parameter ) );
+			canShow = !parameter.equalsIgnoreCase( dtdVersion );
 		}
 		return canShow;
 

@@ -27,7 +27,9 @@ import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -37,6 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Image( path = "images/elcl16/index_16x16.gif" )
 public interface IIndexerPostProcessor extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IIndexerPostProcessor.class );
@@ -51,20 +54,23 @@ public interface IIndexerPostProcessor extends IModelElement {
 
 	void setIndexerClassName( String value );
 
+	// TODO : fix the approporiate class
+
 	// *** Implementation Class ***
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
-	@Label( standard = "Indexer Post Porcessor Implementation" )
+	@Label( standard = "Indexer Post Processor Impl" )
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = "java.lang.Object" )
+	@MustExist
 	@Required
 	@XmlBinding( path = "indexer-post-processor-impl" )
-	ValueProperty PROP_IMPL_CLASS = new ValueProperty( TYPE, "Implementation" );
+	ValueProperty PROP_INDEXER_PP_IMPL = new ValueProperty( TYPE, "IndexerPPImpl" );
 
-	ReferenceValue<JavaTypeName, JavaType> getImplClass();
+	ReferenceValue<JavaTypeName, JavaType> getIndexerPPImpl();
 
-	void setImplClass( String portletClass );
+	void setIndexerPPImpl( String value );
 
-	void setImplClass( JavaTypeName portletClass );
+	void setIndexerPPImpl( JavaTypeName value );
 
 }

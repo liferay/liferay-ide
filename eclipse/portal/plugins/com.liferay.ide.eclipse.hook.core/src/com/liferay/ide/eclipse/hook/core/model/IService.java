@@ -28,6 +28,7 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -51,20 +52,20 @@ public interface IService extends IModelElement {
 
 	void setServiceType( String value );
 
-	// *** ImplementationClass ***
-
+	// *** ServiceImpl ***
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
 	@Label( standard = "Service Implementation" )
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = { "java.lang.Object" } )
+	@MustExist
 	@Required
 	@XmlBinding( path = "service-impl" )
-	ValueProperty PROP_IMPL_CLASS = new ValueProperty( TYPE, "Implementation" );
+	ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" );
 
-	ReferenceValue<JavaTypeName, JavaType> getImplClass();
+	ReferenceValue<JavaTypeName, JavaType> getServiceImpl();
 
-	void setImplClass( String portletClass );
+	void setServiceImpl( String value );
 
-	void setImplClass( JavaTypeName portletClass );
+	void setServiceImpl( JavaTypeName value );
 
 }
