@@ -1,2 +1,4 @@
-/.apt_generated
-/target
+.apt_generated/
+target
+/
+bin/
