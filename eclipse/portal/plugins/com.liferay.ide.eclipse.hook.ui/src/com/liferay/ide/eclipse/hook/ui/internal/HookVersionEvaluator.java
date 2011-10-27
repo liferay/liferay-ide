@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.hook.ui.internal;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.SapphireModelCondition;
@@ -28,12 +31,12 @@ import com.liferay.ide.eclipse.hook.core.model.IHook;
  */
 public class HookVersionEvaluator extends SapphireModelCondition {
 
-	private String parameter;
+	private List<String> versions;
 
 	@Override
 	protected void initCondition( ISapphirePart part, String parameter ) {
-		super.initCondition( part, parameter );
-		this.parameter = parameter;
+		String[] nonApplicableVersions = parameter.split( "," );
+		versions = Arrays.asList( nonApplicableVersions );
 	}
 
 	/*
@@ -47,7 +50,8 @@ public class HookVersionEvaluator extends SapphireModelCondition {
 		if ( element instanceof IHook ) {
 			IHook hook = (IHook) element;
 			String dtdVersion = hook.getVersion().toString();
-			canShow = !parameter.equalsIgnoreCase( dtdVersion );
+			canShow = !versions.contains( dtdVersion );
+
 		}
 		return canShow;
 

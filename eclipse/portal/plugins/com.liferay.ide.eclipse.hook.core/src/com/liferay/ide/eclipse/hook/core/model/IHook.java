@@ -20,16 +20,25 @@ package com.liferay.ide.eclipse.hook.core.model;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
+import org.eclipse.sapphire.modeling.annotations.FileExtensions;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
+import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
+
+import com.liferay.ide.eclipse.hook.core.model.internal.DocrootRelativePathService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -43,12 +52,19 @@ public interface IHook extends IHookCommonElement {
 
 	// *** PortalProperties ***
 
+	@Services( { @Service( impl = DocrootRelativePathService.class ) } )
+	@Type( base = Path.class )
 	@Label( standard = "Portal Properties" )
 	@XmlBinding( path = "portal-properties" )
 	@CountConstraint( min = 0, max = 1 )
+	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
+	@FileExtensions( expr = "properties" )
+	@MustExist
 	ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
 
-	Value<String> getPortalProperties();
+	Value<Path> getPortalProperties();
+
+	void setPortalProperties( Path value );
 
 	void setPortalProperties( String value );
 
@@ -63,13 +79,19 @@ public interface IHook extends IHookCommonElement {
 
 	// *** CustomJspDir ***
 
+	@Type( base = Path.class )
 	@Label( standard = "Custom JSP Dir" )
 	@XmlBinding( path = "custom-jsp-dir" )
 	@CountConstraint( min = 0, max = 1 )
+	@Services( { @Service( impl = DocrootRelativePathService.class ) } )
+	@ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+	@MustExist
 	ValueProperty PROP_CUSTOM_JSP_DIR = new ValueProperty( TYPE, "CustomJspDir" );
 
-	Value<String> getCustomJspDir();
+	Value<Path> getCustomJspDir();
 
 	void setCustomJspDir( String value );
+
+	void setCustomJspDir( Path value );
 
 }

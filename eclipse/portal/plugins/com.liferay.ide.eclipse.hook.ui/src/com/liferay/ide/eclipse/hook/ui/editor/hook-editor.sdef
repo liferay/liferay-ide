@@ -21,7 +21,32 @@
 				<image>icons/e16/hook.png</image>
 				<section>
 					<content>
-						<property-editor>PortalProperties</property-editor>
+						<property-editor>
+							<property>PortalProperties</property>
+							<action>
+								<id>LiferayIDE.CreateFile.Action</id>
+								<label>Create</label>
+								<image>icons/elcl16/create.png</image>
+								<description>Allows the creation of the File if the file does
+									not exist</description>
+								<hint>
+									<name>style</name>
+									<value>image</value>
+								</hint>
+								<context>Sapphire.ValuePropertyEditor</context>
+								<location>after:Sapphire.Browse</location>
+								<condition>FileResourceCondtion</condition>
+							</action>
+							<action-handler>
+								<action>LiferayIDE.CreateFile.Action</action>
+								<id>LiferayIDE.CreateFile.Action</id>
+								<impl>CreateFileActionHandler</impl>
+								<param>
+									<name>propertyName</name>
+									<value>PortalProperties</value>
+								</param>
+							</action-handler>
+						</property-editor>
 						<property-editor>
 							<property>CustomJspDir</property>
 							<related-content>
@@ -35,6 +60,29 @@
 									</then>
 								</if>
 							</related-content>
+							<action>
+								<id>LiferayIDE.CreateFolder.Action</id>
+								<label>Create</label>
+								<image>icons/elcl16/create.png</image>
+								<description>Allows the creation of the Folder if the folder does
+									not exist</description>
+								<hint>
+									<name>style</name>
+									<value>image</value>
+								</hint>
+								<context>Sapphire.ValuePropertyEditor</context>
+								<location>after:Sapphire.Browse</location>
+								<condition>FileResourceCondtion</condition>
+							</action>
+							<action-handler>
+								<action>LiferayIDE.CreateFolder.Action</action>
+								<id>LiferayIDE.CreateFolder.Action</id>
+								<impl>CreateFolderActionHandler</impl>
+								<param>
+									<name>propertyName</name>
+									<value>CustomJspDir</value>
+								</param>
+							</action-handler>
 						</property-editor>
 
 					</content>
@@ -156,35 +204,40 @@
 				</node>
 				<label>Hook</label>
 				<node>
-					<label>IndexerPostProcessors</label>
+					<label>Indexer Post Processors</label>
+					<visible-when>
+						<condition>
+							<class>HookVersionEvaluator</class>
+							<parameter>v5_2_0</parameter>
+						</condition>
+					</visible-when>
 					<section>
+						<label>Quick Edit</label>
 						<content>
-							<property-editor>
-								<property>IndexerPostProcessors</property>
-								<child-property>
-									<property>IndexerClassName</property>
-									<show-label>false</show-label>
-								</child-property>
-								<show-label>false</show-label>
-							</property-editor>
+							<property-editor>IndexerPostProcessors</property-editor>
 						</content>
-						<label>Indexer Post Processors Quick Edit</label>
-						<collapsible>false</collapsible>
-						<action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<context>Sapphire.Section</context>
-							<type>TOGGLE</type>
-							<label>More Details</label>
-							<image>icons/elcl16/toggle_info_16x16.png</image>
-							<location>before:Sapphire.Restore.Defaults</location>
-						</action>
-						<action-handler>
-							<action>LiferayIDE.PortletNode.Expand</action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<impl>ExpandSectionOutlineNodeHandler</impl>
-						</action-handler>
 					</section>
-					<node-include>IndexerPostProcessorsNodeList</node-include>
+					<node-factory>
+						<id>IndexerPostProcessorsNodeList</id>
+						<case>
+							<use-model-element-image></use-model-element-image>
+							<section>
+								<content>
+									<property-editor>IndexerClassName</property-editor>
+									<property-editor>IndexerPPImpl</property-editor>
+								</content>
+							</section>
+							<label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}
+							</label>
+						</case>
+						<property>IndexerPostProcessors</property>
+						<visible-when>
+							<condition>
+								<class>HookVersionEvaluator</class>
+								<parameter>v5_2_0</parameter>
+							</condition>
+						</visible-when>
+					</node-factory>
 				</node>
 
 			</node>
@@ -252,21 +305,6 @@
 			</label>
 			<use-model-element-image></use-model-element-image>
 		</case>
-	</node-factory>
-	<node-factory>
-		<id>IndexerPostProcessorsNodeList</id>
-		<case>
-			<use-model-element-image></use-model-element-image>
-			<section>
-				<content>
-					<property-editor>IndexerClassName</property-editor>
-					<property-editor>IndexerPPImpl</property-editor>
-				</content>
-			</section>
-			<label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}
-			</label>
-		</case>
-		<property>IndexerPostProcessors</property>
 	</node-factory>
 
 </definition>

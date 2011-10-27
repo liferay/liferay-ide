@@ -19,6 +19,7 @@ package com.liferay.ide.eclipse.hook.core.model;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
+import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -32,8 +33,12 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+
+import com.liferay.ide.eclipse.hook.core.model.internal.UrlPathValidationService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -44,12 +49,11 @@ public interface IStrutsAction extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IStrutsAction.class );
 
-	// TODO:Leading Slash validation
-
 	// *** StrutsActionPath ***
 
 	@Label( standard = "Struts Action Path" )
 	@XmlBinding( path = "struts-action-path" )
+	@Services( { @Service( impl = UrlPathValidationService.class ) } )
 	ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" );
 
 	Value<String> getStrutsActionPath();
@@ -60,7 +64,7 @@ public interface IStrutsAction extends IModelElement {
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
 	@Label( standard = "Struts Action Impl" )
-	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = {
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, type = {
 		"com.liferay.portal.kernel.struts.BaseStrutsAction", "com.liferay.portal.kernel.struts.BaseStrutsPortletAction" } )
 	@MustExist
 	@Required
