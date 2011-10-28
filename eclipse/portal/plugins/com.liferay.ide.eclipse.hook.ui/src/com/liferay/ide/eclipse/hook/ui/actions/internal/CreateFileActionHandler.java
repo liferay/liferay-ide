@@ -27,13 +27,18 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
+import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 
@@ -42,9 +47,10 @@ import com.liferay.ide.eclipse.core.util.FileUtil;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class CreateFileActionHandler extends SapphireActionHandler {
+public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler {
 
 	String propertyName;
+	ModelPropertyListener listener;
 
 	/*
 	 * (non-Javadoc)
@@ -55,6 +61,28 @@ public class CreateFileActionHandler extends SapphireActionHandler {
 	public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
 		super.init( action, def );
 		propertyName = def.getParam( "propertyName" );
+		final IModelElement element = getModelElement();
+		final ModelProperty property = getProperty();
+		this.listener = new ModelPropertyListener() {
+
+			@Override
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+				refreshEnablementState();
+			}
+		};
+
+		element.addListener( this.listener, property.getName() );
+
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					getModelElement().removeListener( listener, getProperty().getName() );
+				}
+			}
+
+		} );
 	}
 
 	/*
@@ -73,8 +101,10 @@ public class CreateFileActionHandler extends SapphireActionHandler {
 			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( filePath );
 			try {
 				InputStream defaultContentStream = getPortalPropsDefaultContent();
-				file.create( defaultContentStream, true, null );
-				modelElement.refresh( true, true );
+				if ( !file.exists() ) {
+					file.create( defaultContentStream, true, null );
+					modelElement.refresh( true, true );
+				}
 			}
 			catch ( Exception e ) {
 				// LOG it

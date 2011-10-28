@@ -23,22 +23,28 @@ import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
+import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class CreateFolderActionHandler extends SapphireActionHandler {
+public class CreateFolderActionHandler extends SapphirePropertyEditorActionHandler {
 
 	String propertyName;
+	ModelPropertyListener listener;
 
 	/*
 	 * (non-Javadoc)
@@ -49,6 +55,28 @@ public class CreateFolderActionHandler extends SapphireActionHandler {
 	public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
 		super.init( action, def );
 		propertyName = def.getParam( "propertyName" );
+		final IModelElement element = getModelElement();
+		final ModelProperty property = getProperty();
+		this.listener = new ModelPropertyListener() {
+
+			@Override
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+				refreshEnablementState();
+			}
+		};
+
+		element.addListener( this.listener, property.getName() );
+
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					getModelElement().removeListener( listener, getProperty().getName() );
+				}
+			}
+
+		} );
 	}
 
 	/*
@@ -57,8 +85,8 @@ public class CreateFolderActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-		IModelElement modelElement = context.getPart().getModelElement();
-		ModelProperty modelProperty = modelElement.getModelElementType().getProperty( propertyName );
+		final IModelElement modelElement = getModelElement();
+		final ModelProperty modelProperty = getProperty();
 		if ( modelProperty instanceof ValueProperty ) {
 			ValueProperty valueProperty = (ValueProperty) modelProperty;
 			final Value<Path> value = modelElement.read( valueProperty );
@@ -67,9 +95,12 @@ public class CreateFolderActionHandler extends SapphireActionHandler {
 				// TODO can we move it some util ? including folder and file creation ?
 				IPath docrootPath = project.getFolder( DEFAULT_WEBCONTENT_FOLDER ).getLocation();
 				String newFolderStr = docrootPath.append( value.getText() ).toPortableString();
-				boolean isCreated = new File( newFolderStr ).mkdir();
-				if ( isCreated ) {
-					modelElement.refresh( true, true );
+				if ( !new File( newFolderStr ).exists() ) {
+					boolean isCreated = new File( newFolderStr ).mkdir();
+					if ( isCreated ) {
+						modelElement.refresh( true, true );
+						refreshEnablementState();
+					}
 				}
 			}
 			catch ( Exception e ) {
