@@ -1,5 +1,5 @@
 
-package com.liferay.ide.eclipse.hook.ui.internal;
+package com.liferay.ide.eclipse.hook.ui.actions.internal;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.SapphireCondition;

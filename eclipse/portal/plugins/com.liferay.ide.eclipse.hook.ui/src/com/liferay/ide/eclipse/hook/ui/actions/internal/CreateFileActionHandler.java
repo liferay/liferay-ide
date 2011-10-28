@@ -15,14 +15,17 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.ui.internal;
+package com.liferay.ide.eclipse.hook.ui.actions.internal;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -33,6 +36,8 @@ import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
+
+import com.liferay.ide.eclipse.core.util.FileUtil;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -64,17 +69,33 @@ public class CreateFileActionHandler extends SapphireActionHandler {
 			ValueProperty valueProperty = (ValueProperty) modelProperty;
 			final Value<Path> value = modelElement.read( valueProperty );
 			final IProject project = modelElement.adapt( IProject.class );
-			final IPath filePath =
-				project.getLocation().append( new org.eclipse.core.runtime.Path( value.getContent().toPortableString() ) );
+			final IPath filePath = project.getLocation().append( "docroot" ).append( value.getText() );
 			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( filePath );
 			try {
-				file.create( new ByteArrayInputStream( "".getBytes() ), true, null );
+				InputStream defaultContentStream = getPortalPropsDefaultContent();
+				file.create( defaultContentStream, true, null );
+				modelElement.refresh( true, true );
 			}
-			catch ( CoreException e ) {
-				// log it
+			catch ( Exception e ) {
+				// LOG it
 			}
 
 		}
 		return null;
+	}
+
+	/**
+	 * @return
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	private InputStream getPortalPropsDefaultContent() throws URISyntaxException, IOException {
+		URL defaultContentUrl =
+			new URL(
+				"platform:/plugin/com.liferay.ide.eclipse.hook.ui/default-content-files/PortalPropertiesDefaultContent.properties" );
+		InputStream in = defaultContentUrl.openStream();
+		String buf = FileUtil.readContents( in );
+		in.close();
+		return new ByteArrayInputStream( buf.getBytes() );
 	}
 }

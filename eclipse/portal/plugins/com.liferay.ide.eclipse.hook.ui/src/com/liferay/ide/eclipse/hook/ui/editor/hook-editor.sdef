@@ -10,6 +10,7 @@
 		<package>com.liferay.ide.eclipse.hook.core.model610</package>
 		<package>com.liferay.ide.eclipse.hook.core.model610.internal</package>
 		<package>com.liferay.ide.eclipse.hook.ui.internal</package>
+        <package>com.liferay.ide.eclipse.hook.ui.actions.internal</package>
 	</import>
 	<editor></editor>
 	<editor-page>

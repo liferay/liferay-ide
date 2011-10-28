@@ -34,11 +34,13 @@ public class ModelRefreshActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-		IModelElement modelElement = getModelElement().nearest( IPortletApp.class );
+		IModelElement modelElement =
+			getModelElement().nearest( IPortletApp.class ) != null
+				? getModelElement().nearest( IPortletApp.class ) : getModelElement();
 		if ( modelElement != null ) {
 			modelElement.refresh( true, true );
 		}
+
 		return null;
 	}
-
 }
