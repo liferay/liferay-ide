@@ -6,6 +6,9 @@
    <feature url="features/com.liferay.ide.eclipse.tools_0.0.0.qualifier.jar" id="com.liferay.ide.eclipse.tools" version="0.0.0">
       <category name="lide"/>
    </feature>
+   <feature url="features/org.eclipse.sapphire_0.0.0.qualifier.jar" id="org.eclipse.sapphire" version="0.0.0">
+      <category name="deps"/>
+   </feature>
    <feature url="features/org.eclipse.sapphire.ui_0.0.0.qualifier.jar" id="org.eclipse.sapphire.ui" version="0.0.0">
       <category name="deps"/>
    </feature>
