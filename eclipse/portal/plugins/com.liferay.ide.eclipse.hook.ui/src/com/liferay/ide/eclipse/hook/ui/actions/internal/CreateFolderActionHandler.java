@@ -17,8 +17,6 @@
 
 package com.liferay.ide.eclipse.hook.ui.actions.internal;
 
-import static com.liferay.ide.eclipse.sdk.ISDKConstants.DEFAULT_WEBCONTENT_FOLDER;
-
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
@@ -38,46 +36,17 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
+
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 public class CreateFolderActionHandler extends SapphirePropertyEditorActionHandler {
 
-	String propertyName;
+	IModelElement modelElement;
+	ModelProperty modelProperty;
+	IPath docRootFolder;
 	ModelPropertyListener listener;
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
-	 */
-	@Override
-	public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
-		super.init( action, def );
-		propertyName = def.getParam( "propertyName" );
-		final IModelElement element = getModelElement();
-		final ModelProperty property = getProperty();
-		this.listener = new ModelPropertyListener() {
-
-			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
-				refreshEnablementState();
-			}
-		};
-
-		element.addListener( this.listener, property.getName() );
-
-		attach( new Listener() {
-
-			@Override
-			public void handle( Event event ) {
-				if ( event instanceof DisposeEvent ) {
-					getModelElement().removeListener( listener, getProperty().getName() );
-				}
-			}
-
-		} );
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -90,16 +59,12 @@ public class CreateFolderActionHandler extends SapphirePropertyEditorActionHandl
 		if ( modelProperty instanceof ValueProperty ) {
 			ValueProperty valueProperty = (ValueProperty) modelProperty;
 			final Value<Path> value = modelElement.read( valueProperty );
-			final IProject project = modelElement.adapt( IProject.class );
 			try {
-				// TODO can we move it some util ? including folder and file creation ?
-				IPath docrootPath = project.getFolder( DEFAULT_WEBCONTENT_FOLDER ).getLocation();
-				String newFolderStr = docrootPath.append( value.getText() ).toPortableString();
+				String newFolderStr = docRootFolder.append( value.getText() ).toPortableString();
 				if ( !new File( newFolderStr ).exists() ) {
 					boolean isCreated = new File( newFolderStr ).mkdir();
 					if ( isCreated ) {
 						modelElement.refresh( true, true );
-						refreshEnablementState();
 					}
 				}
 			}
@@ -110,4 +75,52 @@ public class CreateFolderActionHandler extends SapphirePropertyEditorActionHandl
 		}
 		return null;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
+	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
+	 */
+	@Override
+	public void init( final SapphireAction action, ISapphireActionHandlerDef def ) {
+		super.init( action, def );
+		modelElement = getModelElement();
+		modelProperty = getProperty();
+		this.listener = new ModelPropertyListener() {
+
+			@Override
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+				refreshEnablementState();
+			}
+
+		};
+
+		modelElement.addListener( this.listener, modelProperty.getName() );
+
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					getModelElement().removeListener( listener, modelProperty.getName() );
+				}
+			}
+
+		} );
+
+		IProject project = modelElement.adapt( IProject.class );
+		docRootFolder = project.getLocation().append( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
+
+	}
+
+	@Override
+	protected final boolean computeEnablementState() {
+		boolean isEnbled = super.computeEnablementState();
+		if ( modelElement != null ) {
+			boolean validationStatus = !modelElement.validate().ok();
+			isEnbled = isEnbled && validationStatus;
+		}
+		return isEnbled;
+	}
+
 }

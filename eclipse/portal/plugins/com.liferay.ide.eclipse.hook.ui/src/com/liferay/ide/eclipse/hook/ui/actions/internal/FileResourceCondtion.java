@@ -1,9 +1,9 @@
 
 package com.liferay.ide.eclipse.hook.ui.actions.internal;
 
-import java.io.File;
-
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -45,9 +45,13 @@ public class FileResourceCondtion extends SapphirePropertyEditorCondition {
 			final Value<Path> path = element.read( (ValueProperty) property );
 			if ( path != null && path != null && path.getText().length() > 0 ) {
 				IProject project = element.adapt( IProject.class );
-				File file =
-					project.getLocation().append( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER ).append( path.getText() ).toFile();
-				return !file.exists();
+				IResource docRootResource = project.findMember( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
+				if ( docRootResource != null ) {
+					IFolder docrootFolder = (IFolder) docRootResource;
+					String fileResourceStr = path.getContent().toPortableString();
+					IResource fileResource = docrootFolder.findMember( fileResourceStr );
+					return ( fileResource == null );
+				}
 			}
 		}
 		return false;

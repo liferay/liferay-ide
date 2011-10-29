@@ -43,61 +43,29 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 
 import com.liferay.ide.eclipse.core.util.FileUtil;
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler {
 
-	String propertyName;
+	IModelElement modelElement;
+	ModelProperty modelProperty;
+	IPath docRootFolder;
 	ModelPropertyListener listener;
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
-	 */
-	@Override
-	public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
-		super.init( action, def );
-		propertyName = def.getParam( "propertyName" );
-		final IModelElement element = getModelElement();
-		final ModelProperty property = getProperty();
-		this.listener = new ModelPropertyListener() {
-
-			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
-				refreshEnablementState();
-			}
-		};
-
-		element.addListener( this.listener, property.getName() );
-
-		attach( new Listener() {
-
-			@Override
-			public void handle( Event event ) {
-				if ( event instanceof DisposeEvent ) {
-					getModelElement().removeListener( listener, getProperty().getName() );
-				}
-			}
-
-		} );
-	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
 	 */
 	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		IModelElement modelElement = context.getPart().getModelElement();
-		ModelProperty modelProperty = modelElement.getModelElementType().getProperty( propertyName );
+	public Object run( SapphireRenderingContext context ) {
+
 		if ( modelProperty instanceof ValueProperty ) {
 			ValueProperty valueProperty = (ValueProperty) modelProperty;
 			final Value<Path> value = modelElement.read( valueProperty );
-			final IProject project = modelElement.adapt( IProject.class );
-			final IPath filePath = project.getLocation().append( "docroot" ).append( value.getText() );
+			final IPath filePath = docRootFolder.append( value.getText() );
 			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( filePath );
 			try {
 				InputStream defaultContentStream = getPortalPropsDefaultContent();
@@ -112,6 +80,56 @@ public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler
 
 		}
 		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
+	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
+	 */
+	@Override
+	public void init( final SapphireAction action, ISapphireActionHandlerDef def ) {
+		super.init( action, def );
+		modelElement = getModelElement();
+		modelProperty = getProperty();
+		this.listener = new ModelPropertyListener() {
+
+			@Override
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+				refreshEnablementState();
+			}
+
+		};
+
+		modelElement.addListener( this.listener, modelProperty.getName() );
+
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					getModelElement().removeListener( listener, modelProperty.getName() );
+				}
+			}
+
+		} );
+
+		IProject project = modelElement.adapt( IProject.class );
+		docRootFolder = project.getLocation().append( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#computeEnablementState()
+	 */
+	@Override
+	protected final boolean computeEnablementState() {
+		boolean isEnbled = super.computeEnablementState();
+		if ( modelElement != null ) {
+			boolean validationStatus = !modelElement.validate().ok();
+			isEnbled = isEnbled && validationStatus;
+		}
+		return isEnbled;
 	}
 
 	/**
