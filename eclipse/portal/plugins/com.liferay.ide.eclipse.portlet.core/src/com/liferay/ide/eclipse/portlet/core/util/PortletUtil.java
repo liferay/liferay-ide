@@ -1,21 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. and Accenture Services Pvt Ltd., All rights reserved.
- *
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ *   
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ *   
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *  Greg Amerson - Initial API and Implementation
- *  Kamesh Sampath - [IDE-301, IDE-405] Portlet xml editor implementation and reorgnization
- *
+ *    
+ * Contributors:
+ *              Greg Amerson - Initial API and Implementation
+ *              Kamesh Sampath
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.util;
+
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 import java.util.Locale;
 
@@ -33,8 +36,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
-
-import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 /**
  * @author Greg Amerson

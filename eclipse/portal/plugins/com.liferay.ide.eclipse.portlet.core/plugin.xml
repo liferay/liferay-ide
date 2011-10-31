@@ -38,6 +38,9 @@
             id="liferayportletxml"
             name="Liferay Portlet Descriptor"
             priority="high">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
+         </describer>
       </content-type>
       <content-type
             base-type="org.eclipse.core.runtime.xml"

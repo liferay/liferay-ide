@@ -1,30 +1,30 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ *   
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ *    
  * Contributors:
- *    Kamesh Sampath - initial implementation
- ******************************************************************************/
+ *               Kamesh Sampath - initial implementation
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ImageData;
-import org.eclipse.sapphire.modeling.ImageService;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
-
 import com.liferay.ide.eclipse.portlet.core.model.ICustomPortletMode;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletMode;
+
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ImageData;
+import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
+import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.services.ImageService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -51,19 +51,16 @@ public class PortletModeImageService extends ImageService {
 	 * java.lang.String[])
 	 */
 	@Override
-	public void init( IModelElement element, String[] params ) {
-
-		super.init( element, params );
-
+	protected void init() {
 		this.listener = new ModelPropertyListener() {
 
 			@Override
 			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
-				notifyListeners( new ImageChangedEvent( PortletModeImageService.this ) );
+				broadcast();
 			}
 		};
 
-		element.addListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
+		context( IModelElement.class ).addListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
 	}
 
 	/*
@@ -73,12 +70,14 @@ public class PortletModeImageService extends ImageService {
 	@Override
 	public ImageData provide() {
 		String portletMode = null;
-		if ( element() instanceof ICustomPortletMode ) {
-			ICustomPortletMode iCustomPortletMode = (ICustomPortletMode) element();
+		IModelElement element = context( IModelElement.class );
+
+		if ( element instanceof ICustomPortletMode ) {
+			ICustomPortletMode iCustomPortletMode = (ICustomPortletMode) element;
 			portletMode = String.valueOf( iCustomPortletMode.getPortletMode().getContent() );
 		}
-		else if ( element() instanceof IPortletMode ) {
-			IPortletMode iPortletMode = (IPortletMode) element();
+		else if ( element instanceof IPortletMode ) {
+			IPortletMode iPortletMode = (IPortletMode) element;
 			portletMode = iPortletMode.getPortletMode().getContent();
 		}
 
@@ -104,7 +103,7 @@ public class PortletModeImageService extends ImageService {
 	public void dispose() {
 		super.dispose();
 
-		element().removeListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
+		context( IModelElement.class ).removeListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
 	}
 
 }

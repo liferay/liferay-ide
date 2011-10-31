@@ -24,9 +24,9 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
-import org.eclipse.sapphire.modeling.annotations.DerivedValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.ReadOnly;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -82,14 +82,16 @@ public interface ITag extends IModelElement {
 
 	ModelElementList<IAttribute> getOtherAttributes();
 
-	@DerivedValue(service = PreviewSourceContentProvider.class)
+	@Service( impl = PreviewSourceContentProvider.class )
 	@DependsOn({ "RequiredAttributes/*", "Events/*", "OtherAttributes/*" })
+	@ReadOnly
 	ValueProperty PROP_PREVIEW = new ValueProperty(TYPE, "Preview");
 
 	Value<String> getPreview();
 
-	@DerivedValue(service = PreviewSourceContentProvider.class)
+	@Service( impl = PreviewSourceContentProvider.class )
 	@DependsOn({ "RequiredAttributes/*", "Events/*", "OtherAttributes/*" })
+	@ReadOnly
 	ValueProperty PROP_SOURCE = new ValueProperty(TYPE, "Source");
 
 	Value<String> getSource();

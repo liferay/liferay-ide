@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-	/*******************************************************************************
-	* Copyright (c) 2000-2011 Accenture Services Pvt. Ltd., All rights reserved.
-	* 
-	* This library is free software; you can redistribute it and/or modify it 
-	* the terms of the GNU Lesser General Public License as published by the 
-	* Free Software Foundation; either version 2.1 of the License, or (at your option)
-	* any later version
-	*
-	* This library is distributed in the hope that it will be useful, but WITHOUT
-	* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
-	* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for 
-	* more details.
-	*
-	* Contributors:
-	* 	Kamesh Sampath - initial implementation
-	* 	Greg Amerson - IDE-438
-	******************************************************************************/
+   Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+  
+   This library is free software; you can redistribute it and/or modify it under
+   the terms of the GNU Lesser General Public License as published by the Free
+   Software Foundation; either version 2.1 of the License, or (at your option)
+   any later version.
+  
+   This library is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+   details.
+   
+   Contributors:
+                Kamesh Sampath - initial implementation
 -->
-
 
 <definition>
 	<import>
@@ -52,25 +48,25 @@
 						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
-                        <property-editor>
-                            <property>ResourceBundle</property>
-                            <action>
-							<id>LiferayIDE.PortletApp.RB.Create</id>
-							<label>Create Bundle</label>
-							<image>icons/elcl16/new_doc_16x16.png</image>
-							<hint>
-								<name>style</name>
-								<value>image</value>
-							</hint>
-							<context>Sapphire.ValuePropertyEditor</context>
-							<location>after:Sapphire.Browse</location>
-						</action>
-						<action-handler>
-							<action>LiferayIDE.PortletApp.RB.Create</action>
-							<id>LiferayIDE.PortletApp.RB.Create</id>
-							<impl>CreatePortletAppResourceBundleActionHandler</impl>
-						</action-handler>
-                        </property-editor>
+						<property-editor>
+							<property>ResourceBundle</property>
+							<action>
+								<id>LiferayIDE.PortletApp.RB.Create</id>
+								<label>Create Bundle</label>
+								<image>icons/elcl16/new_doc_16x16.png</image>
+								<hint>
+									<name>style</name>
+									<value>image</value>
+								</hint>
+								<context>Sapphire.ValuePropertyEditor</context>
+								<location>after:Sapphire.Browse</location>
+							</action>
+							<action-handler>
+								<action>LiferayIDE.PortletApp.RB.Create</action>
+								<id>LiferayIDE.PortletApp.RB.Create</id>
+								<impl>CreatePortletAppResourceBundleActionHandler</impl>
+							</action-handler>
+						</property-editor>
 					</content>
 					<collapsible>false</collapsible>
 					<scroll-vertically>true</scroll-vertically>
@@ -93,14 +89,12 @@
 								<child-property>
 									<property>PortletClass</property>
 								</child-property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
+								<show-label>false</show-label>
+								<span>true</span>
 							</property-editor>
 						</content>
 					</section>
-                    <image>images/portlets_16x16.png</image>
+					<image>images/portlets_16x16.png</image>
 
 				</node>
 				<node>
@@ -124,7 +118,7 @@
 					</section>
 					<node-include>FiltersNodeList</node-include>
 					<node-include>FilterMappingsNodeList</node-include>
-                    <image>images/filters_mappings_16x16.png</image>
+					<image>images/filters_mappings_16x16.png</image>
 				</node>
 				<node>
 					<label>Events</label>
@@ -136,7 +130,7 @@
 							</include>
 						</content>
 					</section>
-                    <image>images/events_16x16.png</image>
+					<image>images/events_16x16.png</image>
 				</node>
 				<node>
 					<label>Public Render Parameters</label>
@@ -145,10 +139,8 @@
 						<content>
 							<property-editor>
 								<property>PublicRenderParameters</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
+								<show-label>false</show-label>
+								<span>true</span>
 								<child-property>Identifier</child-property>
 								<child-property>NamespaceURI</child-property>
 								<child-property>LocalPart</child-property>
@@ -157,7 +149,7 @@
 						</content>
 					</section>
 					<node-include>PublicRenderParametersList</node-include>
-                    <image>images/parameters_16x16.png</image>
+					<image>images/parameters_16x16.png</image>
 				</node>
 				<node>
 					<label>Listeners</label>
@@ -172,12 +164,12 @@
 								</hint>
 								<child-property>DisplayName</child-property>
 								<child-property>Description</child-property>
-                                <child-property>Implementation</child-property>
+								<child-property>Implementation</child-property>
 							</property-editor>
 						</content>
 					</section>
 					<image>icons/elcl16/listener_16x16.gif</image>
-                    <node-include>ListenersNodeList</node-include>
+					<node-include>ListenersNodeList</node-include>
 				</node>
 				<node>
 					<label>Security Constraints</label>
@@ -187,16 +179,13 @@
 						<content>
 							<property-editor>
 								<property>SecurityConstraints</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
+								<show-label>false</show-label>
+								<span>true</span>
                                 <child-property>DisplayName</child-property>
 							</property-editor>
-
 						</content>
 					</section>
-                    <image>images/constraints_16x16.png</image>
+					<image>images/constraints_16x16.png</image>
 				</node>
 				<node>
 					<label>Customizations</label>
@@ -224,7 +213,7 @@
 									<name>show.label</name>
 									<value>true</value>
 								</hint>
-                                <child-property>Description</child-property>
+								<child-property>Description</child-property>
 							</property-editor>
 							<spacer></spacer>
 							<property-editor>
@@ -244,7 +233,7 @@
 							</property-editor>
 						</content>
 					</section>
-                    <image>images/customizations_16x16.gif</image>
+					<image>images/customizations_16x16.gif</image>
 
 				</node>
 				<node>
@@ -254,10 +243,8 @@
 						<content>
 							<property-editor>
 								<property>ContainerRuntimeOptions</property>
-								<hint>
-									<name>show.label</name>
-									<value>false</value>
-								</hint>
+								<show-label>false</show-label>
+								<span>true</span>
 								<child-property>Name</child-property>
 							</property-editor>
 						</content>
@@ -290,7 +277,8 @@
 			<impl>QuickActionsHandlerFactory</impl>
 			<param>
 				<name>MODEL_PROPERTIES</name>
-				<value>Portlets,Filters,EventDefinitions,PublicRenderParameters,Listeners,SecurityConstraints,ContainerRuntimeOptions</value>
+				<value>Portlets,Filters,EventDefinitions,PublicRenderParameters,Listeners,SecurityConstraints,ContainerRuntimeOptions
+				</value>
 			</param>
 		</action-handler-factory>
 		<page-header-image>images/portlet.png</page-header-image>
@@ -308,12 +296,13 @@
 		<id>PortletsNodeList</id>
 		<property>Portlets</property>
 		<case>
-		<!-- 
-			<label>${ PortletName == null ? '&lt;portlet-name&gt;' : 
+			<!--
+				<label>${ PortletName == null ? '&lt;portlet-name&gt;' :
 				DisplayName == null ? 'foo' :
 				concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' )}</label>
-		-->
-			<label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
+			-->
+			<label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ), DisplayName ),
+				']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -403,10 +392,7 @@
 							<child-property>RoleName</child-property>
 							<child-property>RoleLink</child-property>
 							<child-property>Description</child-property>
-							<hint>
-								<name>show.label.above</name>
-								<value>true</value>
-							</hint>
+							<span>true</span>
 						</property-editor>
 					</content>
 					<collapsible>true</collapsible>
@@ -426,10 +412,8 @@
 										<child-property>Name</child-property>
 										<child-property>Value</child-property>
 										<child-property>ReadOnly</child-property>
-										<hint>
-											<name>show.label</name>
-											<value>false</value>
-										</hint>
+										<show-label>false</show-label>
+										<span>true</span>
 									</property-editor>
 								</content>
 							</default-panel>
@@ -457,10 +441,8 @@
 					<content>
 						<property-editor>
 							<property>ContainerRuntimeOptions</property>
-							<hint>
-								<name>show.label</name>
-								<value>false</value>
-							</hint>
+							<show-label>false</show-label>
+							<span>true</span>
 							<child-property>Name</child-property>
 						</property-editor>
 					</content>
@@ -477,10 +459,8 @@
 						<property-editor>
 							<property>SupportedPublicRenderParameters
 							</property>
-							<hint>
-								<name>show.label</name>
-								<value>false</value>
-							</hint>
+							<show-label>false</show-label>
+							<span>true</span>
 						</property-editor>
 					</content>
 					<collapsible>true</collapsible>
@@ -540,10 +520,8 @@
 					</property-editor>
 					<property-editor>
 						<property>SupportedLocales</property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
+						<show-label>false</show-label>
+						<span>true</span>
 					</property-editor>
 				</content>
 			</section>
@@ -556,10 +534,8 @@
                     <content>
                         <property-editor>
                             <property>ContainerRuntimeOptions</property>
-                            <hint>
-                                <name>show.label</name>
-                                <value>false</value>
-                            </hint>
+                            <show-label>false</show-label>
+                            <span>true</span>
                         </property-editor>
                     </content>
                 </section>
@@ -603,7 +579,8 @@
 			<label>${( (empty Name AND empty NamespaceURI AND empty LocalPart )
 				||
 				(Name=='EVENT_NAME' &amp;&amp;
-				NamespaceURI =='NAMESPACE_URI'
+				NamespaceURI
+				=='NAMESPACE_URI'
 				&amp;&amp;
 				LocalPart=='LOCAL_PART') ) ? '&lt;event-definition&gt;'
 				:
@@ -638,10 +615,8 @@
 				<property>InitParams</property>
 				<child-property>Name</child-property>
 				<child-property>Value</child-property>
-				<hint>
-					<name>show.label</name>
-					<value>false</value>
-				</hint>
+				<show-label>false</show-label>
+				<span>true</span>
 			</property-editor>
 		</content>
 	</composite>
@@ -670,10 +645,8 @@
 				<child-property>Qname</child-property>
 				<child-property>Name</child-property>
 				<child-property>Description</child-property>
-				<hint>
-					<name>show.label</name>
-					<value>false</value>
-				</hint>
+				<show-label>false</show-label>
+				<span>true</span>
 			</property-editor>
 		</content>
 	</composite>
@@ -688,10 +661,8 @@
 				<child-property>
 					<property>EventValueType</property>
 				</child-property>
-				<hint>
-					<name>show.label</name>
-					<value>false</value>
-				</hint>
+				<show-label>false</show-label>
+				<span>true</span>
 			</property-editor>
 		</content>
 	</composite>
@@ -748,26 +719,24 @@
 				<content>
 					<property-editor>
 						<property>PortletNames</property>
-						<hint>
-							<name>show.label</name>
-							<value>false</value>
-						</hint>
+						<show-label>false</show-label>
+						<span>true</span>
 					</property-editor>
 				</content>
 			</section>
 			<section>
 				<label>User Data Constraint</label>
 				<content>
-                    <with>
-                        <panel>
-                            <content>
-                                <property-editor>Description</property-editor>
-                                <property-editor>TransportGuarantee</property-editor>
-                            </content>
-                            <key>UserDataConstraint</key>
-                        </panel>
-                        <path>UserDataConstraint</path>
-                    </with>
+					<with>
+						<panel>
+							<content>
+								<property-editor>Description</property-editor>
+								<property-editor>TransportGuarantee</property-editor>
+							</content>
+							<key>UserDataConstraint</key>
+						</panel>
+						<path>UserDataConstraint</path>
+					</with>
 				</content>
 			</section>
 		</case>
@@ -777,13 +746,14 @@
 		<property>Listeners</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<label>${(empty Description AND empty DisplayName) ? '&lt;listener&gt;' : ((empty DisplayName) ? Description : DisplayName)}</label>
+			<label>${(empty Description AND empty DisplayName) ? '&lt;listener&gt;' : ((empty DisplayName) ? Description :
+				DisplayName)}</label>
 			<section>
 				<label>Listener Details</label>
 				<content>
 					<property-editor>Description</property-editor>
 					<property-editor>DisplayName</property-editor>
-                    <property-editor>
+					<property-editor>
 						<property>Implementation</property>
 					</property-editor>
 				</content>

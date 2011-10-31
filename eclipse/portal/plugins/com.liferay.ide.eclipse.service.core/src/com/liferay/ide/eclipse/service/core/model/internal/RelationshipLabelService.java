@@ -3,15 +3,16 @@ package com.liferay.ide.eclipse.service.core.model.internal;
 import com.liferay.ide.eclipse.service.core.model.IRelationship;
 import com.liferay.ide.eclipse.service.core.model.IServiceBuilder;
 
-import org.eclipse.sapphire.modeling.DerivedValueService;
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.IModelParticle;
+import org.eclipse.sapphire.services.DerivedValueService;
 
 
 public class RelationshipLabelService extends DerivedValueService {
 
 	@Override
 	public String getDerivedValue() {
-		IModelParticle parent = element().parent();
+		IModelParticle parent = context( IModelElement.class ).parent();
 
 		while ( parent != null && !( parent instanceof IServiceBuilder ) ) {
 			parent = parent.parent();
@@ -21,7 +22,7 @@ public class RelationshipLabelService extends DerivedValueService {
 			IServiceBuilder sb = (IServiceBuilder) parent;
 
 			if ( sb.getShowRelationshipLabels().getContent() ) {
-				return ( (IRelationship) element() ).getForeignKeyColumnName().getContent();
+				return ( context( IRelationship.class ) ).getForeignKeyColumnName().getContent();
 			}
 		}
 

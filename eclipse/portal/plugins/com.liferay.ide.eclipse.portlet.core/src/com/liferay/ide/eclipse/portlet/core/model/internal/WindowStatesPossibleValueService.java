@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Pvt Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,7 +23,7 @@ import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 import java.util.List;
 import java.util.SortedSet;
 
-import org.eclipse.sapphire.modeling.PossibleValuesService;
+import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -39,7 +39,8 @@ public class WindowStatesPossibleValueService extends PossibleValuesService {
 	 */
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
-		IPortletApp portletApp = nearest( IPortletApp.class );
+		IPortletApp portletApp = context( IPortletApp.class );
+
 		for ( int i = 0; i < DEFAULT_STATES.length; i++ ) {
 			values.add( DEFAULT_STATES[i] );
 		}
@@ -55,3 +56,4 @@ public class WindowStatesPossibleValueService extends PossibleValuesService {
 
 	}
 }
+

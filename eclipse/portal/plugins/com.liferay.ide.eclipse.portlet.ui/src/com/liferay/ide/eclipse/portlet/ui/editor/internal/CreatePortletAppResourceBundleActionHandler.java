@@ -1,19 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Accenture Services Pvt. Ltd., All rights reserved.
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *
+ *   
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
+ *    
  * Contributors:
- *    Kamesh Sampath - initial implementation
- ******************************************************************************/
+ *               Kamesh Sampath - initial implementation
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
@@ -28,6 +28,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
@@ -63,8 +66,18 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 		};
 
 		element.addListener( this.listener, property.getName() );
-	}
 
+		attach( new Listener() {
+
+			@Override
+			public void handle( Event event ) {
+				if ( event instanceof DisposeEvent ) {
+					getModelElement().removeListener( listener, getProperty().getName() );
+				}
+			}
+
+		} );
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
@@ -92,16 +105,6 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 			getModelElement().refresh( getProperty(), true );
 		}
 		return null;
-	}
-
-	/*
-	 * @Override(non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#dispose()
-	 */
-	@Override
-	public void dispose() {
-		getModelElement().removeListener( this.listener, getProperty().getName() );
-		super.dispose();
 	}
 
 }

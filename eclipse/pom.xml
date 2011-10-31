@@ -35,7 +35,7 @@
         <license>
             <name>GNU Lesser General Public License v2.1</name>
             <comments>
-	      	Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+		Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  
 		This library is free software; you can redistribute it and/or modify it under
 		the terms of the GNU Lesser General Public License as published by the Free
@@ -46,7 +46,7 @@
 		ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 		FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
 		details.
-      </comments>
+	   </comments>
         </license>
     </licenses>
 
@@ -55,7 +55,8 @@
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-    <sapphire-site>http://download.eclipse.org/sapphire/0.3.2/repository</sapphire-site> 
+<!--    <sapphire-site>http://download.eclipse.org/sapphire/0.3.2/repository</sapphire-site>-->
+    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.4.x/lastSuccessfulBuild/artifact/build/repository</sapphire-site>
     <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site>
     <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
@@ -176,6 +177,8 @@
         <module>common/plugins/com.liferay.ide.eclipse.ui</module>
         <module>common/plugins/com.liferay.ide.eclipse.ui.snippets</module>
 
+			<module>portal/plugins/com.liferay.ide.eclipse.hook.core</module>
+	<module>portal/plugins/com.liferay.ide.eclipse.hook.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.core</module>
@@ -194,6 +197,7 @@
         <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.core</module>
         <module>server/plugins/com.liferay.ide.eclipse.server.tomcat.ui</module>
         <module>server/plugins/com.liferay.ide.eclipse.server.ui</module>
+
 
         <module>common/features/com.liferay.ide.eclipse.tools</module>
         
