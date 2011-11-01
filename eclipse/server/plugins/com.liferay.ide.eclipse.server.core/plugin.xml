@@ -690,6 +690,15 @@
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-skin_2_0_0.dtd">
          </system>
          <public
+               publicId="-//Liferay//DTD Social 6.1.0//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-social_6_1_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-social_6_1_0.dtd">
+         </public>
+         <system
+               systemId="http://www.liferay.com/dtd/liferay-social_6_1_0.dtd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-social_6_1_0.dtd">
+         </system>
+         <public
                publicId="-//Liferay//DTD Theme Loader 4.3.0//EN"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/liferay-theme-loader_4_3_0.dtd"
                webURL="http://www.liferay.com/dtd/liferay-theme-loader_4_3_0.dtd">
@@ -788,8 +797,32 @@
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/j2ee_web_services_client_1_1.xsd">
          </uri>
          <uri
+               name="http://java.sun.com/xml/ns/javaee/javaee_5.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/javaee_5.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/javaee_6.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/javaee_6.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/javaee_web_services_client_1_2.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/javaee_web_services_client_1_2.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/javaee_web_services_client_1_3.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/javaee_web_services_client_1_3.xsd">
+         </uri>
+         <uri
                name="http://java.sun.com/xml/ns/j2ee/jsp_2_0.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/jsp_2_0.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/jsp_2_1.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/jsp_2_1.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/jsp_2_2.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/jsp_2_2.xsd">
          </uri>
          <uri
                name="http://www.liferay.com/dtd/liferay-workflow-definition_6_0_0.xsd"
@@ -811,19 +844,34 @@
                name="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/portlet-app_2_0.xsd">
          </uri>  
-         
-         <!--
          <uri
                name="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-app_2_4.xsd">
          </uri>
-         -->
-         
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-app_2_5.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-app_3_0.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/web-common_3_0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-common_3_0.xsd">
+         </uri>
          <uri
                name="http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-facesconfig_1_2.xsd">
          </uri>
-         
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-facesconfig_2_0.xsd">
+         </uri>
+         <uri
+               name="http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-facesconfig_2_1.xsd">
+         </uri>
          <uri
                name="http://www.w3.org/2001/03/xml.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/xml.xsd">
