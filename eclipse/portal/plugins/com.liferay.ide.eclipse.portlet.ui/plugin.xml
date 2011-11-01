@@ -111,6 +111,7 @@
                contentTypeId="com.liferay.ide.eclipse.portlet.core.liferaydisplayxml">
          </contentTypeBinding>
       </editor>
+<!--
       <editor
             class="com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor"
             default="true"
@@ -122,6 +123,7 @@
                contentTypeId="com.liferay.ide.eclipse.portlet.core.liferayportletxml">
          </contentTypeBinding>
       </editor>      
+-->
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
