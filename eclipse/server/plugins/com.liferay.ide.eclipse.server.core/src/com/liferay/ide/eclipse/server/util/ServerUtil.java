@@ -81,365 +81,6 @@ public class ServerUtil {
 
 	protected static final IStatus invalidInstallDirStatus = createErrorStatus("Invalid installation directory.");
 
-	public static IStatus createErrorStatus(String msg) {
-		return new Status(IStatus.ERROR, LiferayServerCorePlugin.PLUGIN_ID, msg);
-	}
-
-	public static IServerWorkingCopy createServerForRuntime(IRuntime runtime) {
-		for (IServerType serverType : ServerCore.getServerTypes()) {
-			if (serverType.getRuntimeType().equals(runtime.getRuntimeType())) {
-				try {
-					return serverType.createServer("server", null, runtime, null);
-				}
-				catch (CoreException e) {
-				}
-			}
-		}
-
-		return null;
-	}
-
-	public static IPath getAppServerDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime) {
-		ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter(serverRuntime, ILiferayRuntime.class);
-
-		return runtime != null ? runtime.getAppServerDir() : null;
-	}
-
-	public static IPath getPortalDir(IJavaProject project) {
-		return getPortalDir(project.getProject());
-	}
-
-	public static IPath getPortalDir(IProject project) {
-		try {
-			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
-
-			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = facetedProject.getPrimaryRuntime();
-
-			if (runtime != null) {
-				return ServerUtil.getPortalDir(runtime);
-			}
-		}
-		catch (CoreException e) {
-			LiferayServerCorePlugin.logError(e);
-		}
-
-		return null;
-	}
-
-	public static IPath getPortalDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime) {
-		ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter(facetRuntime, ILiferayRuntime.class);
-
-		return runtime != null ? runtime.getPortalDir() : null;
-	}
-
-	public static ILiferayRuntime getLiferayRuntime(IProject project)
-		throws CoreException {
-
-		return (ILiferayRuntime) getRuntimeAdapter(
-			ProjectFacetsManager.create(project).getPrimaryRuntime(), ILiferayRuntime.class);
-	}
-
-	public static ILiferayRuntime getLiferayRuntime(IRuntime runtime) {
-		if (runtime != null) {
-			return (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(ILiferayRuntime.class, null);
-		}
-
-		return null;
-	}
-
-	public static ILiferayRuntime getLiferayRuntime(IServer server) {
-		if (server != null) {
-			return getLiferayRuntime(server.getRuntime());
-		}
-
-		return null;
-	}
-
-	public static IRuntime getRuntime(IProject project)
-		throws CoreException {
-
-		return (IRuntime) getRuntimeAdapter(ProjectFacetsManager.create(project).getPrimaryRuntime(), IRuntime.class);
-	}
-
-	public static IRuntime getRuntime(org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime) {
-		return ServerCore.findRuntime(runtime.getProperty("id"));
-	}
-
-	public static IRuntimeWorkingCopy getRuntime(String runtimeTypeId, IPath location) {
-		IRuntimeType runtimeType = ServerCore.findRuntimeType(runtimeTypeId);
-
-		try {
-			IRuntime runtime = runtimeType.createRuntime("runtime", null);
-
-			IRuntimeWorkingCopy runtimeWC = runtime.createWorkingCopy();
-			runtimeWC.setName("Runtime");
-			runtimeWC.setLocation(location);
-
-			return runtimeWC;
-		}
-		catch (CoreException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	public static Object getRuntimeAdapter(
-		org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime, Class<?> adapterClass) {
-
-		String runtimeId = facetRuntime.getProperty("id");
-
-		for (org.eclipse.wst.server.core.IRuntime runtime : ServerCore.getRuntimes()) {
-			if (runtime.getId().equals(runtimeId)) {
-
-				if (IRuntime.class.equals(adapterClass)) {
-					return runtime;
-				}
-
-				IRuntimeWorkingCopy runtimeWC = null;
-
-				if (!runtime.isWorkingCopy()) {
-					runtimeWC = runtime.createWorkingCopy();
-				}
-				else {
-					runtimeWC = (IRuntimeWorkingCopy) runtime;
-				}
-
-				return (ILiferayRuntime) runtimeWC.loadAdapter(adapterClass, null);
-			}
-		}
-
-		return null;
-	}
-
-	public static IServer[] getServersForRuntime(IRuntime runtime) {
-		List<IServer> serverList = new ArrayList<IServer>();
-
-		if (runtime != null) {
-			IServer[] servers = ServerCore.getServers();
-
-			if (!CoreUtil.isNullOrEmpty(servers)) {
-				for (IServer server : servers) {
-					if (runtime.equals(server.getRuntime())) {
-						serverList.add(server);
-					}
-				}
-			}
-		}
-
-		return serverList.toArray(new IServer[0]);
-	}
-
-	public static boolean isExistingVMName(String name) {
-		for (IVMInstall vm : JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE).getVMInstalls()) {
-			if (vm.getName().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean isLiferayRuntime(BridgedRuntime bridgedRuntime) {
-		if ( bridgedRuntime != null ) {
-			String id = bridgedRuntime.getProperty( "id" );
-
-			if ( id != null ) {
-				IRuntime runtime = ServerCore.findRuntime( id );
-
-				return isLiferayRuntime( runtime );
-			}
-		}
-
-
-		return false;
-	}
-
-	public static boolean isLiferayRuntime(IRuntime runtime) {
-		return getLiferayRuntime(runtime) != null;
-	}
-
-	public static boolean isLiferayRuntime(IServer server) {
-		return getLiferayRuntime(server) != null;
-	}
-
-	public static boolean isValidPropertiesFile(File file) {
-		if (file == null || !file.exists()) {
-			return false;
-		}
-
-		try {
-			new PropertiesConfiguration(file);
-		}
-		catch (Exception e) {
-			return false;
-		}
-
-		return true;
-
-	}
-
-	public static boolean isLiferayProject( IProject project ) {
-		boolean retval = false;
-
-		if ( project == null ) {
-			return retval;
-		}
-
-		try {
-			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
-
-			if ( facetedProject != null ) {
-				for ( IProjectFacetVersion facet : facetedProject.getProjectFacets() ) {
-					IProjectFacet projectFacet = facet.getProjectFacet();
-
-					if ( projectFacet.getId().startsWith( "liferay" ) ) {
-						retval = true;
-						break;
-					}
-				}
-			}
-		}
-		catch ( Exception e ) {
-		}
-
-		return retval;
-	}
-
-	public static boolean isExtProject( IProject project ) {
-		return hasFacet( project, ProjectFacetsManager.getProjectFacet( "liferay.ext" ) );
-	}
-
-	public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet ) {
-		boolean retval = false;
-		if ( project == null || checkProjectFacet == null ) {
-			return retval;
-		}
-
-		try {
-			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
-			if ( facetedProject != null && checkProjectFacet != null ) {
-				for ( IProjectFacetVersion facet : facetedProject.getProjectFacets() ) {
-					IProjectFacet projectFacet = facet.getProjectFacet();
-					if ( checkProjectFacet.equals( projectFacet ) ) {
-						retval = true;
-						break;
-					}
-				}
-			}
-		}
-		catch ( CoreException e ) {
-		}
-		return retval;
-	}
-
-	public static void terminateLaunchesForConfig( ILaunchConfigurationWorkingCopy config ) throws DebugException {
-		ILaunch[] launches = DebugPlugin.getDefault().getLaunchManager().getLaunches();
-
-		for ( ILaunch launch : launches ) {
-			if ( launch.getLaunchConfiguration().equals( config ) ) {
-				launch.terminate();
-			}
-		}
-	}
-
-	public static IFacetedProject getFacetedProject( IProject project ) {
-		try {
-			return ProjectFacetsManager.create( project );
-		}
-		catch ( CoreException e ) {
-			return null;
-		}
-	}
-
-	public static IProjectFacet getLiferayFacet( IFacetedProject facetedProject ) {
-		for ( IProjectFacetVersion projectFacet : facetedProject.getProjectFacets() ) {
-			if ( isLiferayFacet( projectFacet.getProjectFacet() ) ) {
-				return projectFacet.getProjectFacet();
-			}
-		}
-		return null;
-	}
-
-	public static boolean isLiferayFacet( IProjectFacet projectFacet ) {
-		return projectFacet != null && projectFacet.getId().startsWith( "liferay" );
-	}
-
-	public static Map<String, String> configureAppServerProperties( ILiferayRuntime appServer ) {
-		Map<String, String> properties = new HashMap<String, String>();
-
-		String type = appServer.getAppServerType();
-
-		String dir = appServer.getAppServerDir().toOSString();
-
-		String deployDir = appServer.getDeployDir().toOSString();
-
-		String libGlobalDir = appServer.getLibGlobalDir().toOSString();
-
-		String portalDir = appServer.getPortalDir().toOSString();
-
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir );
-
-		return properties;
-	}
-
-	public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException {
-
-		ILiferayRuntime runtime = null;
-
-		try {
-			runtime = ServerUtil.getLiferayRuntime( project );
-		}
-		catch ( CoreException e1 ) {
-			throw new CoreException( LiferayServerCorePlugin.createErrorStatus( e1 ) );
-		}
-
-		return configureAppServerProperties( runtime );
-	}
-
-	private static void processResourceDeltasZip(
-		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
-		String deltaPrefix, boolean adjustGMTOffset )
-		throws IOException, CoreException {
-
-		for ( IModuleResourceDelta delta : deltas ) {
-			int deltaKind = delta.getKind();
-
-			IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
-
-			IProject deltaProject = deltaResource.getProject();
-
-			IFolder docroot = CoreUtil.getDocroot( deltaProject );
-
-			IPath deltaPath =
-				new Path( deltaPrefix + deltaResource.getFullPath().makeRelativeTo( docroot.getFullPath() ) );
-
-			if ( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED ) {
-				addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
-			}
-			else if ( deltaKind == IModuleResourceDelta.REMOVED ) {
-				addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
-			}
-			else if ( deltaKind == IModuleResourceDelta.NO_CHANGE ) {
-				IModuleResourceDelta[] children = delta.getAffectedChildren();
-				processResourceDeltasZip( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
-			}
-		}
-	}
-
-	private static String removeArchive( String archive ) {
-		int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) );
-
-		if ( index >= 0 ) {
-			return archive.substring( 0, index + 5 );
-		}
-
-		return "";
-	}
-
 	private static void addRemoveProps(
 		IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
 		String deletePrefix )
@@ -517,6 +158,46 @@ public class ServerUtil {
 				addToZip( path.append( res.getName() ), res, zip, adjustGMTOffset );
 			}
 		}
+	}
+
+	public static Map<String, String> configureAppServerProperties( ILiferayRuntime appServer ) {
+		Map<String, String> properties = new HashMap<String, String>();
+
+		String type = appServer.getAppServerType();
+
+		String dir = appServer.getAppServerDir().toOSString();
+
+		String deployDir = appServer.getDeployDir().toOSString();
+
+		String libGlobalDir = appServer.getLibGlobalDir().toOSString();
+
+		String portalDir = appServer.getPortalDir().toOSString();
+
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
+		properties.put( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir );
+
+		return properties;
+	}
+
+	public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException {
+
+		ILiferayRuntime runtime = null;
+
+		try {
+			runtime = ServerUtil.getLiferayRuntime( project );
+		}
+		catch ( CoreException e1 ) {
+			throw new CoreException( LiferayServerCorePlugin.createErrorStatus( e1 ) );
+		}
+
+		return configureAppServerProperties( runtime );
+	}
+
+	public static IStatus createErrorStatus(String msg) {
+		return new Status(IStatus.ERROR, LiferayServerCorePlugin.PLUGIN_ID, msg);
 	}
 
 	public static File createPartialEAR(
@@ -606,5 +287,340 @@ public class ServerUtil {
 		}
 
 		return file;
+	}
+
+	public static IServerWorkingCopy createServerForRuntime(IRuntime runtime) {
+		for (IServerType serverType : ServerCore.getServerTypes()) {
+			if (serverType.getRuntimeType().equals(runtime.getRuntimeType())) {
+				try {
+					return serverType.createServer("server", null, runtime, null);
+				}
+				catch (CoreException e) {
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public static IPath getAppServerDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime) {
+		ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter(serverRuntime, ILiferayRuntime.class);
+
+		return runtime != null ? runtime.getAppServerDir() : null;
+	}
+
+	public static IFacetedProject getFacetedProject( IProject project ) {
+		try {
+			return ProjectFacetsManager.create( project );
+		}
+		catch ( CoreException e ) {
+			return null;
+		}
+	}
+
+	public static IProjectFacet getLiferayFacet( IFacetedProject facetedProject ) {
+		for ( IProjectFacetVersion projectFacet : facetedProject.getProjectFacets() ) {
+			if ( isLiferayFacet( projectFacet.getProjectFacet() ) ) {
+				return projectFacet.getProjectFacet();
+			}
+		}
+		return null;
+	}
+
+	public static ILiferayRuntime getLiferayRuntime( BridgedRuntime bridgedRuntime ) {
+		if ( bridgedRuntime != null ) {
+			String id = bridgedRuntime.getProperty( "id" );
+
+			if ( id != null ) {
+				IRuntime runtime = ServerCore.findRuntime( id );
+
+				if ( isLiferayRuntime( runtime ) ) {
+					return getLiferayRuntime( runtime );
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public static ILiferayRuntime getLiferayRuntime(IProject project)
+		throws CoreException {
+
+		return (ILiferayRuntime) getRuntimeAdapter(
+			ProjectFacetsManager.create(project).getPrimaryRuntime(), ILiferayRuntime.class);
+	}
+
+	public static ILiferayRuntime getLiferayRuntime(IRuntime runtime) {
+		if (runtime != null) {
+			return (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(ILiferayRuntime.class, null);
+		}
+
+		return null;
+	}
+
+	public static ILiferayRuntime getLiferayRuntime(IServer server) {
+		if (server != null) {
+			return getLiferayRuntime(server.getRuntime());
+		}
+
+		return null;
+	}
+
+	public static IPath getPortalDir(IJavaProject project) {
+		return getPortalDir(project.getProject());
+	}
+
+	public static IPath getPortalDir(IProject project) {
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
+
+			org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = facetedProject.getPrimaryRuntime();
+
+			if (runtime != null) {
+				return ServerUtil.getPortalDir(runtime);
+			}
+		}
+		catch (CoreException e) {
+			LiferayServerCorePlugin.logError(e);
+		}
+
+		return null;
+	}
+
+	public static IPath getPortalDir(org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime) {
+		ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter(facetRuntime, ILiferayRuntime.class);
+
+		return runtime != null ? runtime.getPortalDir() : null;
+	}
+
+	public static IRuntime getRuntime(IProject project)
+		throws CoreException {
+
+		return (IRuntime) getRuntimeAdapter(ProjectFacetsManager.create(project).getPrimaryRuntime(), IRuntime.class);
+	}
+
+	public static IRuntime getRuntime(org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime) {
+		return ServerCore.findRuntime(runtime.getProperty("id"));
+	}
+
+	public static IRuntimeWorkingCopy getRuntime(String runtimeTypeId, IPath location) {
+		IRuntimeType runtimeType = ServerCore.findRuntimeType(runtimeTypeId);
+
+		try {
+			IRuntime runtime = runtimeType.createRuntime("runtime", null);
+
+			IRuntimeWorkingCopy runtimeWC = runtime.createWorkingCopy();
+			runtimeWC.setName("Runtime");
+			runtimeWC.setLocation(location);
+
+			return runtimeWC;
+		}
+		catch (CoreException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static Object getRuntimeAdapter(
+		org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime, Class<?> adapterClass) {
+
+		String runtimeId = facetRuntime.getProperty("id");
+
+		for (org.eclipse.wst.server.core.IRuntime runtime : ServerCore.getRuntimes()) {
+			if (runtime.getId().equals(runtimeId)) {
+
+				if (IRuntime.class.equals(adapterClass)) {
+					return runtime;
+				}
+
+				IRuntimeWorkingCopy runtimeWC = null;
+
+				if (!runtime.isWorkingCopy()) {
+					runtimeWC = runtime.createWorkingCopy();
+				}
+				else {
+					runtimeWC = (IRuntimeWorkingCopy) runtime;
+				}
+
+				return (ILiferayRuntime) runtimeWC.loadAdapter(adapterClass, null);
+			}
+		}
+
+		return null;
+	}
+
+	public static IServer[] getServersForRuntime(IRuntime runtime) {
+		List<IServer> serverList = new ArrayList<IServer>();
+
+		if (runtime != null) {
+			IServer[] servers = ServerCore.getServers();
+
+			if (!CoreUtil.isNullOrEmpty(servers)) {
+				for (IServer server : servers) {
+					if (runtime.equals(server.getRuntime())) {
+						serverList.add(server);
+					}
+				}
+			}
+		}
+
+		return serverList.toArray(new IServer[0]);
+	}
+
+	public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet ) {
+		boolean retval = false;
+		if ( project == null || checkProjectFacet == null ) {
+			return retval;
+		}
+
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+			if ( facetedProject != null && checkProjectFacet != null ) {
+				for ( IProjectFacetVersion facet : facetedProject.getProjectFacets() ) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
+					if ( checkProjectFacet.equals( projectFacet ) ) {
+						retval = true;
+						break;
+					}
+				}
+			}
+		}
+		catch ( CoreException e ) {
+		}
+		return retval;
+	}
+
+	public static boolean isExistingVMName(String name) {
+		for (IVMInstall vm : JavaRuntime.getVMInstallType(StandardVMType.ID_STANDARD_VM_TYPE).getVMInstalls()) {
+			if (vm.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isExtProject( IProject project ) {
+		return hasFacet( project, ProjectFacetsManager.getProjectFacet( "liferay.ext" ) );
+	}
+
+	public static boolean isLiferayFacet( IProjectFacet projectFacet ) {
+		return projectFacet != null && projectFacet.getId().startsWith( "liferay" );
+	}
+
+	public static boolean isLiferayProject( IProject project ) {
+		boolean retval = false;
+
+		if ( project == null ) {
+			return retval;
+		}
+
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+
+			if ( facetedProject != null ) {
+				for ( IProjectFacetVersion facet : facetedProject.getProjectFacets() ) {
+					IProjectFacet projectFacet = facet.getProjectFacet();
+
+					if ( projectFacet.getId().startsWith( "liferay" ) ) {
+						retval = true;
+						break;
+					}
+				}
+			}
+		}
+		catch ( Exception e ) {
+		}
+
+		return retval;
+	}
+
+	public static boolean isLiferayRuntime(BridgedRuntime bridgedRuntime) {
+		if ( bridgedRuntime != null ) {
+			String id = bridgedRuntime.getProperty( "id" );
+
+			if ( id != null ) {
+				IRuntime runtime = ServerCore.findRuntime( id );
+
+				return isLiferayRuntime( runtime );
+			}
+		}
+
+
+		return false;
+	}
+
+	public static boolean isLiferayRuntime(IRuntime runtime) {
+		return getLiferayRuntime(runtime) != null;
+	}
+
+	public static boolean isLiferayRuntime(IServer server) {
+		return getLiferayRuntime(server) != null;
+	}
+
+	public static boolean isValidPropertiesFile(File file) {
+		if (file == null || !file.exists()) {
+			return false;
+		}
+
+		try {
+			new PropertiesConfiguration(file);
+		}
+		catch (Exception e) {
+			return false;
+		}
+
+		return true;
+
+	}
+
+	private static void processResourceDeltasZip(
+		IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
+		String deltaPrefix, boolean adjustGMTOffset )
+		throws IOException, CoreException {
+
+		for ( IModuleResourceDelta delta : deltas ) {
+			int deltaKind = delta.getKind();
+
+			IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
+
+			IProject deltaProject = deltaResource.getProject();
+
+			IFolder docroot = CoreUtil.getDocroot( deltaProject );
+
+			IPath deltaPath =
+				new Path( deltaPrefix + deltaResource.getFullPath().makeRelativeTo( docroot.getFullPath() ) );
+
+			if ( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED ) {
+				addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
+			}
+			else if ( deltaKind == IModuleResourceDelta.REMOVED ) {
+				addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
+			}
+			else if ( deltaKind == IModuleResourceDelta.NO_CHANGE ) {
+				IModuleResourceDelta[] children = delta.getAffectedChildren();
+				processResourceDeltasZip( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
+			}
+		}
+	}
+
+	private static String removeArchive( String archive ) {
+		int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) );
+
+		if ( index >= 0 ) {
+			return archive.substring( 0, index + 5 );
+		}
+
+		return "";
+	}
+
+	public static void terminateLaunchesForConfig( ILaunchConfigurationWorkingCopy config ) throws DebugException {
+		ILaunch[] launches = DebugPlugin.getDefault().getLaunchManager().getLaunches();
+
+		for ( ILaunch launch : launches ) {
+			if ( launch.getLaunchConfiguration().equals( config ) ) {
+				launch.terminate();
+			}
+		}
 	}
 }

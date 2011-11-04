@@ -15,26 +15,16 @@
 
 package com.liferay.ide.eclipse.project.core;
 
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.sdk.SDK;
-import com.liferay.ide.eclipse.sdk.SDKManager;
-import com.liferay.ide.eclipse.sdk.util.SDKUtil;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.ide.eclipse.project.core.util.ProjectImportUtil;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
 /**
  * @author Greg Amerson
@@ -42,53 +32,36 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public class SDKProjectsImportOperation extends AbstractDataModelOperation
 	implements ISDKProjectsImportDataModelProperties {
 
-	List<IProject> createdProjects;
+	public SDKProjectsImportOperation( IDataModel model ) {
+		super( model );
 
-	public SDKProjectsImportOperation(IDataModel model) {
-		super(model);
-
-		createdProjects = new ArrayList<IProject>();
 	}
 
 	@Override
-	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
-		throws ExecutionException {
+	public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException {
 
-		Object[] selectedProjects = (Object[]) getDataModel().getProperty(SELECTED_PROJECTS);
+		WorkspaceJob workspaceJob = new WorkspaceJob( "Creating SDK Projects" ) {
 
-		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
-
-		if (selectedProjects != null && selectedProjects.length > 0) {
-			SDK sdk = SDKManager.getInstance().getSDK(new Path(sdkLocation));
-
-			// need to add the SDK to workspace if not already available.
-			if (sdk == null) {
-				sdk = SDKUtil.createSDKFromLocation(new Path(sdkLocation));
-			}
-
-			if (sdk != null && sdk.isValid() && !(SDKManager.getInstance().containsSDK(sdk))) {
-				SDKManager.getInstance().addSDK(sdk);
-			}
-		}
-
-		IRuntime runtime = (IRuntime) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
-
-		for (int i = 0; i < selectedProjects.length; i++) {
-			if (selectedProjects[i] instanceof ProjectRecord) {
-
+			/*
+			 * (non-Javadoc)
+			 * @see org.eclipse.core.resources.WorkspaceJob#runInWorkspace(org.eclipse.core.runtime.IProgressMonitor)
+			 */
+			@Override
+			public IStatus runInWorkspace( IProgressMonitor monitor ) {
 				try {
-					IProject project =
-						ProjectUtil.importProject((ProjectRecord) selectedProjects[i], runtime, sdkLocation, monitor);
+					ProjectImportUtil.createWorkspaceProjects( model, monitor );
+				}
+				catch ( Exception ex ) {
+					return ProjectCorePlugin.createErrorStatus( ex );
+				}
 
-					if (project != null) {
-						createdProjects.add(project);
-					}
-				}
-				catch (CoreException e) {
-					return ProjectCorePlugin.createErrorStatus(e);
-				}
+				return Status.OK_STATUS;
 			}
-		}
+
+		};
+
+		workspaceJob.setUser( true );
+		workspaceJob.schedule();
 
 		return Status.OK_STATUS;
 	}

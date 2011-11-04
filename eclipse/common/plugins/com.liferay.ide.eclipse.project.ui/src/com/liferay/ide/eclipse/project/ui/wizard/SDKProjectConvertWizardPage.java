@@ -260,7 +260,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
 			for (File content : contents) {
 				if (content.getName().equals("build.xml") ||
-					file.getName().endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+					file.getName().endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ) {
 					hasBuildXml = true;
 
 					continue;
@@ -597,7 +597,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
 		if (name.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX) ||
 			name.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX) ||
-			name.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+			name.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ) {
 			return true;
 		}
 
