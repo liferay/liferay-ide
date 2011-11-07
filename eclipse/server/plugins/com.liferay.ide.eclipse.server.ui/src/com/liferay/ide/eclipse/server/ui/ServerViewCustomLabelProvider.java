@@ -47,10 +47,17 @@ public class ServerViewCustomLabelProvider extends LabelProvider {
 				ModuleServer server = (ModuleServer) element;
 				IProject project = server.getModule()[0].getProject();
 				IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
-				IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet(facetedProject);
-				IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition(liferayFacet);
-				return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-					LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png").createImage();
+				if ( facetedProject != null ) {
+					IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
+					IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition( liferayFacet );
+					return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+						LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png" ).createImage();
+				}
+				else {
+					String type = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
+					return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+						LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage();
+				}
 			}
 			catch (Exception ex) {
 				// best effort no need to log error
