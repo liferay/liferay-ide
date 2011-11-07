@@ -301,8 +301,7 @@
 				DisplayName == null ? 'foo' :
 				concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' )}</label>
 			-->
-			<label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ), DisplayName ),
-				']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
+			<label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<content>
@@ -361,13 +360,8 @@
 						<path>PortletInfo</path>
 						<default-panel>
 							<content>
-								<property-editor>
-									<property>Title</property>
-									<related-content-width>50</related-content-width>
-									<related-content>
-										<property-editor>ShortTitle</property-editor>
-									</related-content>
-								</property-editor>
+								<property-editor>Title</property-editor>
+								<property-editor>ShortTitle</property-editor>
 								<property-editor>Keywords</property-editor>
 							</content>
 						</default-panel>
@@ -592,13 +586,8 @@
 	<composite>
 		<id>portlet.basic.composite</id>
 		<content>
-			<property-editor>
-				<property>PortletName</property>
-				<related-content-width>50</related-content-width>
-				<related-content>
-					<property-editor>DisplayName</property-editor>
-				</related-content>
-			</property-editor>
+			<property-editor>PortletName</property-editor>
+			<property-editor>DisplayName</property-editor>
 			<property-editor>PortletClass</property-editor>
 		</content>
 		<indent>true</indent>
@@ -671,7 +660,7 @@
 		<property>Filters</property>
 		<case>
 			<use-model-element-image></use-model-element-image>
-			<label>${ Name == null ? &quot;&lt;filter&gt;&quot; : Name }</label>
+			<label>${Name != null ? ( DisplayName != null ? concat ( concat ( concat ( Name, ' [' ), DisplayName ), ']' ) : Name ) : '&lt;filter&gt;'}</label>
 			<section>
 				<label>Filter</label>
 				<collapsible>false</collapsible>
@@ -691,7 +680,7 @@
 		<id>FilterMappingsNodeList</id>
 		<property>FilterMappings</property>
 		<case>
-			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(Filter,&quot;-Mapping&quot;)}</label>
+			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(concat(Filter,&quot; &lt;&gt; &quot;), Portlet)}</label>
 			<use-model-element-image></use-model-element-image>
 			<section>
 				<label>Mappings</label>
