@@ -419,13 +419,8 @@
 				<section>
 					<label>Caching</label>
 					<content>
-						<property-editor>
-							<property>ExpirationCache</property>
-							<related-content-width>50</related-content-width>
-							<related-content>
-								<property-editor>CacheScope</property-editor>
-							</related-content>
-						</property-editor>
+						<property-editor>ExpirationCache</property-editor>
+						<property-editor>CacheScope</property-editor>
 					</content>
 					<collapsible>true</collapsible>
 					<collapsed-initially>true</collapsed-initially>
@@ -549,14 +544,8 @@
 						<label>Qualified Name</label>
 						<indent>true</indent>
 						<content>
-							<property-editor>
-								<property>NamespaceURI
-								</property>
-								<related-content-width>50</related-content-width>
-								<related-content>
-									<property-editor>LocalPart</property-editor>
-								</related-content>
-							</property-editor>
+							<property-editor>NamespaceURI</property-editor>
+							<property-editor>LocalPart</property-editor>
 						</content>
 					</group>
 					<property-editor>
