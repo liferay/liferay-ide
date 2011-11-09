@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
+import com.liferay.ide.eclipse.hook.core.model.internal.UrlPathValidationService;
+
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
@@ -38,8 +40,6 @@ import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-import com.liferay.ide.eclipse.hook.core.model.internal.UrlPathValidationService;
-
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
@@ -53,6 +53,7 @@ public interface IStrutsAction extends IModelElement {
 
 	@Label( standard = "Struts Action Path" )
 	@XmlBinding( path = "struts-action-path" )
+	@Required
 	@Services( { @Service( impl = UrlPathValidationService.class ) } )
 	ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" );
 

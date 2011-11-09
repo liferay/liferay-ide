@@ -15,46 +15,42 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.ui.internal;
-
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.ui.ISapphirePart;
-import org.eclipse.sapphire.ui.SapphireModelCondition;
+package com.liferay.ide.eclipse.hook.core.model.internal;
 
 import com.liferay.ide.eclipse.hook.core.model.IHook;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.services.RelativePathService;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class HookVersionEvaluator extends SapphireModelCondition {
-
-	private List<String> versions;
-
-	@Override
-	protected void initCondition( ISapphirePart part, String parameter ) {
-		String[] nonApplicableVersions = parameter.split( "," );
-		versions = Arrays.asList( nonApplicableVersions );
-	}
+public class SrcFoldersRelativePathService extends RelativePathService
+{
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireCondition#evaluate()
+	 * @see org.eclipse.sapphire.services.RelativePathService#roots()
 	 */
 	@Override
-	protected boolean evaluate() {
-		boolean canShow = false;
-		final IModelElement element = getPart().getModelElement();
-		if ( element instanceof IHook ) {
-			IHook hook = (IHook) element;
-			String dtdVersion = hook.getVersion().toString();
-			canShow = !versions.contains( dtdVersion );
+	public List<Path> roots() {
+		List<Path> roots = new ArrayList<Path>();
+		IModelElement modelElement = context( IHook.class );
+		IProject project = modelElement.adapt( IProject.class );
+		IFolder[] folders = ProjectUtil.getSourceFolders( project );
 
+		for ( IFolder folder : folders )
+		{
+			roots.add( new Path( folder.getLocation().toPortableString() ) );
 		}
-		return canShow;
 
+		return roots;
 	}
-
 }

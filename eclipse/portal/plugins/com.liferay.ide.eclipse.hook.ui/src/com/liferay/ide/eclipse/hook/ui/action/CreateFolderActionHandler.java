@@ -15,7 +15,7 @@
  *    Kamesh Sampath - initial implementation
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.ui.actions.internal;
+package com.liferay.ide.eclipse.hook.ui.action;
 
 import java.io.File;
 

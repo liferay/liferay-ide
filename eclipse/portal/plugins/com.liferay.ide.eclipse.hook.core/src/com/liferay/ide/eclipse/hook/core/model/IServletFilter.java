@@ -49,8 +49,9 @@ public interface IServletFilter extends IModelElement {
 
 	// *** Servlet Filter Name ***
 
-	@Label( standard = "Filter Name" )
+	@Label( standard = "Servlet Filter Name" )
 	@XmlBinding( path = "servlet-filter-name" )
+	@Required
 	ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" );
 
 	Value<String> getServletFilterName();
@@ -61,7 +62,7 @@ public interface IServletFilter extends IModelElement {
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
 	@Label( standard = "Servlet Filter Implementation" )
-	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = { "javax.servlet.Filter" } )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.servlet.Filter" } )
 	@MustExist
 	@Required
 	@XmlBinding( path = "servlet-filter-impl" )
@@ -76,7 +77,7 @@ public interface IServletFilter extends IModelElement {
 	// *** InitParams ***
 
 	@Type( base = IParam.class )
-	@Label( standard = "Init Parameters" )
+	@Label( standard = "Init Params" )
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "init-param", type = IParam.class ) } )
 	ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" );
 

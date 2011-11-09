@@ -11,6 +11,9 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ *    Kamesh Sampath - initial implementation
+ *    Gregory Amerson - IDE-355
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model.internal;
@@ -21,10 +24,8 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public enum HookVersion {
-	@Label( standard = "5.2.0" )
-	@EnumSerialization( primary = "5.2.0" )
-	v5_2_0,
+public enum HookVersion
+{
 
 	@Label( standard = "6.0.0" )
 	@EnumSerialization( primary = "6.0.0" )
@@ -33,4 +34,5 @@ public enum HookVersion {
 	@Label( standard = "6.1.0" )
 	@EnumSerialization( primary = "6.1.0" )
 	v6_1_0
+
 }

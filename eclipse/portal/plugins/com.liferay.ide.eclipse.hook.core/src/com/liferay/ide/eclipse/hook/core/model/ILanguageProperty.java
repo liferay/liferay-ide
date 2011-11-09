@@ -35,13 +35,13 @@ public interface ILanguageProperty extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( ILanguageProperty.class );
 
-	// *** LanguageProperties ***
+	// *** Value ***
 
 	@Label( standard = "Language Properties" )
-	@XmlBinding( path = "language-properties" )
-	ValueProperty PROP_LANGUAGE_PROPERTIES = new ValueProperty( TYPE, "LanguageProperties" );
+	@XmlBinding( path = "" )
+	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
-	Value<String> getLanguageProperties();
+	Value<String> getValue();
 
-	void setLanguageProperties( String value );
+	void setValue( String value );
 }

@@ -1,5 +1,5 @@
 
-package com.liferay.ide.eclipse.hook.ui.actions.internal;
+package com.liferay.ide.eclipse.hook.ui.action;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;

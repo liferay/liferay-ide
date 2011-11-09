@@ -24,7 +24,6 @@ import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -44,22 +43,29 @@ public interface IService extends IModelElement {
 
 	// *** ServiceType ***
 
+	@Type( base = JavaTypeName.class )
+	@Reference( target = JavaType.class )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
+	@MustExist
 	@Label( standard = "Service Type" )
 	@XmlBinding( path = "service-type" )
+	@Required
 	ValueProperty PROP_SERVICE_TYPE = new ValueProperty( TYPE, "ServiceType" );
 
-	Value<String> getServiceType();
+	ReferenceValue<JavaTypeName, JavaType> getServiceType();
 
 	void setServiceType( String value );
+
+	void setServiceType( JavaTypeName value );
 
 	// *** ServiceImpl ***
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@Label( standard = "Service Implementation" )
-	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = { "java.lang.Object" } )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
+	@Label( standard = "Service Impl" )
+	@XmlBinding( path = "service-impl" )
 	@MustExist
 	@Required
-	@XmlBinding( path = "service-impl" )
 	ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" );
 
 	ReferenceValue<JavaTypeName, JavaType> getServiceImpl();

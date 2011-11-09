@@ -23,10 +23,11 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.NumericRange;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -57,7 +58,6 @@ public interface IServletFilterMapping extends IModelElement {
 
 	@Label( standard = "After Filter" )
 	@Whitespace( trim = true )
-	@DefaultValue( text = "AFTER_FILTER" )
 	@XmlBinding( path = "after-filter" )
 	ValueProperty PROP_AFTER_FILTER = new ValueProperty( TYPE, "AfterFilter" );
 
@@ -69,7 +69,6 @@ public interface IServletFilterMapping extends IModelElement {
 
 	@Label( standard = "Before Filter" )
 	@Whitespace( trim = true )
-	@DefaultValue( text = "BEFORE_FILTER" )
 	@XmlBinding( path = "before-filter" )
 	ValueProperty PROP_BEFORE_FILTER = new ValueProperty( TYPE, "BeforeFilter" );
 
@@ -79,13 +78,14 @@ public interface IServletFilterMapping extends IModelElement {
 
 	// *** URLPattern ***
 
+	@Type( base = IURLPattern.class )
 	@Label( standard = "URL Pattern" )
-	@XmlBinding( path = "url-pattern" )
-	ValueProperty PROP_URL_PATTERN = new ValueProperty( TYPE, "URLPattern" );
+	@Required
+	@NumericRange( min = "1" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = IURLPattern.class ) } )
+	ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" );
 
-	Value<String> getURLPattern();
-
-	void setURLPattern( String value );
+	ModelElementList<IURLPattern> getURLPatterns();
 
 	// *** Dispatchers ***
 

@@ -15,23 +15,24 @@
  *          Kamesh Sampath - initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.core.model610;
+package com.liferay.ide.eclipse.hook.core.model;
 
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
 
-import com.liferay.ide.eclipse.hook.core.model600.IHook6xCommonElement;
-
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-@XmlDocumentType( publicId = "-//Liferay//DTD Hook 6.1.0//EN", systemId = "http://www.liferay.com/dtd/liferay-hook_6_1_0.dtd" )
+@XmlDocumentType( publicId = "-//Liferay//DTD Hook 6.0.0//EN", systemId = "http://www.liferay.com/dtd/liferay-hook_6_0_0.dtd" )
 @XmlRootBinding( elementName = "hook" )
 @GenerateImpl
-public interface IHook extends com.liferay.ide.eclipse.hook.core.model600.IHook, IHook6xCommonElement {
+public interface IHook600 extends IHook
+{
 
-	ModelElementType TYPE = new ModelElementType( IHook.class );
+	ModelElementType TYPE = new ModelElementType( IHook600.class );
+
+
 
 }

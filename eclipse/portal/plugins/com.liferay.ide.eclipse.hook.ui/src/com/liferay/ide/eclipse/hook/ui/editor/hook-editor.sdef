@@ -3,20 +3,16 @@
 <definition>
 	<import>
 		<bundle>com.liferay.ide.eclipse.portlet.ui</bundle>
-		<package>com.liferay.ide.eclipse.hook.core.model</package>
-		<package>com.liferay.ide.eclipse.hook.core.model.internal</package>
-		<package>com.liferay.ide.eclipse.hook.core.model600</package>
-		<package>com.liferay.ide.eclipse.hook.core.model600.internal</package>
-		<package>com.liferay.ide.eclipse.hook.core.model610</package>
-		<package>com.liferay.ide.eclipse.hook.core.model610.internal</package>
-		<package>com.liferay.ide.eclipse.hook.ui.internal</package>
-        <package>com.liferay.ide.eclipse.hook.ui.actions.internal</package>
+        <package>com.liferay.ide.eclipse.hook.core.model</package>
+        <package>com.liferay.ide.eclipse.hook.core.model.internal</package>
+        <package>com.liferay.ide.eclipse.hook.ui.action</package>
+        <package>com.liferay.ide.eclipse.hook.ui.editor</package>
 	</import>
 	<editor></editor>
 	<editor-page>
-		<id>DetailsPage</id>
-		<page-name>Hook</page-name>
-		<page-header-text>Hook</page-header-text>
+		<id>HookConfigurationPage</id>
+		<page-name>Hook Configuration</page-name>
+		<page-header-text>Liferay Hook Configuration</page-header-text>
 		<root-node>
 			<node>
 				<image>icons/e16/hook.png</image>
@@ -50,17 +46,6 @@
 						</property-editor>
 						<property-editor>
 							<property>CustomJspDir</property>
-							<related-content>
-								<if>
-									<condition>
-										<class>HookVersionEvaluator</class>
-										<parameter>v5_2_0</parameter>
-									</condition>
-									<then>
-										<property-editor>CustomJspGlobal</property-editor>
-									</then>
-								</if>
-							</related-content>
 							<action>
 								<id>LiferayIDE.CreateFolder.Action</id>
 								<label>Create</label>
@@ -85,10 +70,25 @@
 								</param>
 							</action-handler>
 						</property-editor>
+                        <if>
+                            <condition>
+                                <class>HookVersionEvaluator</class>
+                                <parameter>v6_0_0</parameter>
+                            </condition>
+                            <then>
+                                <property-editor>
+                                    <property>CustomJspGlobal</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </property-editor>
+                            </then>
+                        </if>
 
 					</content>
 					<collapsible>false</collapsible>
-					<label>Details</label>
+					<label>Configuration Editor</label>
 				</section>
 				<section>
 					<label>Internationalization</label>
@@ -101,150 +101,64 @@
 						</property-editor>
 					</content>
 				</section>
-
-
-				<node>
-					<label>Services</label>
-					<section>
-						<label>Services</label>
-						<collapsible>false</collapsible>
-						<content>
-							<property-editor>
-								<property>Services</property>
-								<child-property>ServiceType</child-property>
-								<child-property>ServiceImpl</child-property>
-							</property-editor>
-						</content>
-					</section>
-
-				</node>
-				<node>
-					<label>Filters and Mappings</label>
-					<section>
-						<label>Filters</label>
-						<collapsible>false</collapsible>
-						<content>
-							<property-editor>
-								<property>ServletFilters</property>
-								<show-label>false</show-label>
-								<child-property>ServletFilterName</child-property>
-								<child-property>ServletFilterImpl</child-property>
-							</property-editor>
-						</content>
-
-						<action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<context>Sapphire.Section</context>
-							<type>TOGGLE</type>
-							<label>More Details</label>
-							<image>icons/elcl16/toggle_info_16x16.png</image>
-							<location>before:Sapphire.Restore.Defaults</location>
-						</action>
-						<action-handler>
-							<action>LiferayIDE.PortletNode.Expand</action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<impl>ExpandSectionOutlineNodeHandler</impl>
-						</action-handler>
-
-					</section>
-					<node-include>ServletFiltersNodeList</node-include>
-					<section>
-						<label>Mappings</label>
-						<content>
-							<property-editor>
-								<property>ServletFilterMappings</property>
-								<show-label>false</show-label>
-								<child-property>ServletFilterName</child-property>
-								<child-property>URLPattern</child-property>
-							</property-editor>
-						</content>
-						<collapsible>false</collapsible>
-						<action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<context>Sapphire.Section</context>
-							<type>TOGGLE</type>
-							<label>More Details</label>
-							<image>icons/elcl16/toggle_info_16x16.png</image>
-							<location>before:Sapphire.Restore.Defaults</location>
-						</action>
-						<action-handler>
-							<action>LiferayIDE.PortletNode.Expand</action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<impl>ExpandSectionOutlineNodeHandler</impl>
-						</action-handler>
-					</section>
-					<node-include>ServletFilterMappingsNodeList</node-include>
-
-				</node>
-				<node>
-					<label>Struts Actions</label>
-					<section>
-						<content>
-							<property-editor>
-								<property>StrutsActions</property>
-								<show-label>false</show-label>
-								<child-property>StrutsActionPath</child-property>
-							</property-editor>
-						</content>
-
-						<action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<context>Sapphire.Section</context>
-							<type>TOGGLE</type>
-							<label>More Details</label>
-							<image>icons/elcl16/toggle_info_16x16.png</image>
-							<location>before:Sapphire.Restore.Defaults</location>
-						</action>
-						<action-handler>
-							<action>LiferayIDE.PortletNode.Expand</action>
-							<id>LiferayIDE.PortletNode.Expand</id>
-							<impl>ExpandSectionOutlineNodeHandler</impl>
-						</action-handler>
-					</section>
-					<node-include>StrutsActionsNodeList</node-include>
-				</node>
-				<label>Hook</label>
-				<node>
-					<label>Indexer Post Processors</label>
-					<visible-when>
-						<condition>
-							<class>HookVersionEvaluator</class>
-							<parameter>v5_2_0</parameter>
-						</condition>
-					</visible-when>
-					<section>
-						<label>Quick Edit</label>
-						<content>
-							<property-editor>IndexerPostProcessors</property-editor>
-						</content>
-					</section>
-					<node-factory>
-						<id>IndexerPostProcessorsNodeList</id>
-						<case>
-							<use-model-element-image></use-model-element-image>
-							<section>
-								<content>
-									<property-editor>IndexerClassName</property-editor>
-									<property-editor>IndexerPPImpl</property-editor>
-								</content>
-							</section>
-							<label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}
-							</label>
-						</case>
-						<property>IndexerPostProcessors</property>
-						<visible-when>
-							<condition>
-								<class>HookVersionEvaluator</class>
-								<parameter>v5_2_0</parameter>
-							</condition>
-						</visible-when>
-					</node-factory>
-				</node>
+				<label>Hook Configuration</label>
+                <node-include>ServicesNode</node-include>
+                <node-include>FiltersAndMappingsNode</node-include>
+                <node-include>StrutsActionsNode</node-include>
+                <node-include>IndexersNode</node-include>
 
 			</node>
 		</root-node>
+        <page-header-image>images/hook.png</page-header-image>
 	</editor-page>
+	<node>
+        <id>ServicesNode</id>
+        <label>Services</label>
+        <section>
+            <content>
+                <property-editor>
+                    <property>Services</property>
+                    <child-property>ServiceType</child-property>
+                    <child-property>ServiceImpl</child-property>
+                </property-editor>
+            </content>
+        </section>
+        <node-include>ServicesNodeList</node-include>
+    </node>
 	<node-factory>
+        <id>ServicesNodeList</id>
+        <property>Services</property>
+        <case>
+            <use-model-element-image></use-model-element-image>
+            <label>${ServiceType != null ? ServiceType : &quot;&lt;service&gt;&quot;}</label>
+            <section>
+                <label>Service Editor</label>
+                <content>
+                    <property-editor>ServiceType</property-editor>
+                    <property-editor>ServiceImpl</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+	<node>
+        <id>FiltersAndMappingsNode</id>
+        <section>
+            <label>Filters</label>
+            <content>
+                <property-editor>ServletFilters</property-editor>
+            </content>
+        </section>
+        <section>
+            <label>Mappings</label>
+            <content>
+                <property-editor>ServletFilterMappings</property-editor>
+            </content>
+        </section>
+        <node-include>ServletFiltersNodeList</node-include>
+        <node-include>ServletFilterMappingsNodeList</node-include>
+        <label>Filters and Mappings</label>
+    </node>
+    <node-factory>
 		<id>ServletFiltersNodeList</id>
 		<property>ServletFilters</property>
 		<case>
@@ -256,11 +170,9 @@
 					<property-editor>InitParams</property-editor>
 				</content>
 			</section>
-			<label>${ServletFilterName!=null?concat(ServletFilterName,'
-				Details'):'&lt;servlet-filter-name&gt;'}</label>
-		</case>
+			<label>${ServletFilterName!=null?concat(ServletFilterName,'Details'):'&lt;servlet-filter-name&gt;'}</label></case>
 	</node-factory>
-	<node-factory>
+    <node-factory>
 		<id>ServletFilterMappingsNodeList</id>
 		<property>ServletFilterMappings</property>
 		<case>
@@ -270,7 +182,7 @@
 					<property-editor>ServletFilterName</property-editor>
 					<property-editor>AfterFilter</property-editor>
 					<property-editor>BeforeFilter</property-editor>
-					<property-editor>URLPattern</property-editor>
+					<property-editor>URLPatterns</property-editor>
 					<property-editor>
 						<property>Dispatchers</property>
 						<show-label>true</show-label>
@@ -280,14 +192,21 @@
 						</hint>
 					</property-editor>
 				</content>
-				<label>${ServletFilterName!=null?concat(ServletFilterName,'
-					Mapping'):'&lt;servlet-filter-name-mapping&gt;'}</label>
 			</section>
-			<label>${ServletFilterName!=null?concat(ServletFilterName,'
-				Mapping'):'&lt;servlet-filter-name-mapping&gt;'}</label>
+			<label>${ServletFilterName!=null?concat(ServletFilterName,' Mapping'):'&lt;servlet-filter-name-mapping&gt;'}</label>
 		</case>
 	</node-factory>
-	<node-factory>
+    <node>
+        <id>StrutsActionsNode</id>
+        <label>Struts Actions</label>
+        <node-include>StrutsActionsNodeList</node-include>
+        <section>
+            <content>
+                <property-editor>StrutsActions</property-editor>
+            </content>
+        </section>
+    </node>
+    <node-factory>
 		<id>StrutsActionsNodeList</id>
 		<property>StrutsActions</property>
 		<case>
@@ -307,5 +226,29 @@
 			<use-model-element-image></use-model-element-image>
 		</case>
 	</node-factory>
+    <node>
+        <id>IndexersNode</id>
+        <label>Indexer Post Processors</label>
+        <section>
+            <content>
+                <property-editor>IndexerPostProcessors</property-editor>
+            </content>
+        </section>
+        <node-include>IndexerPostProcessorsList</node-include>
+    </node>
+    <node-factory>
+        <id>IndexerPostProcessorsList</id>
+        <property>IndexerPostProcessors</property>
+        <case>
+            <use-model-element-image></use-model-element-image>
+            <label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}</label>
+            <section>
+                <content>
+                    <property-editor>IndexerClassName</property-editor>
+                    <property-editor>IndexerClassImpl</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
 
 </definition>
