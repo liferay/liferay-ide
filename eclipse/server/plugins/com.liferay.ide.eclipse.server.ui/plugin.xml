@@ -26,16 +26,9 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
-      <!--<navigatorContent
-            activeByDefault="true"
-            contentProvider="com.liferay.ide.eclipse.server.ui.ServerViewCustomContentProvider"
-            icon="icons/e16/server.png"
-            id="com.liferay.ide.eclipse.server.ui.serverview.override"
-            labelProvider="com.liferay.ide.eclipse.server.ui.ServerViewCustomLabelProvider"
-            name="Liferay IDE Server View"
-            priority="highest">-->
       <navigatorContent
             activeByDefault="true"
+            contentProvider="org.eclipse.wst.server.ui.internal.cnf.ServerContentProvider"
             icon="icons/e16/server.png"
             id="com.liferay.ide.eclipse.server.ui.serverview.override"
             labelProvider="com.liferay.ide.eclipse.server.ui.ServerViewCustomLabelProvider"
