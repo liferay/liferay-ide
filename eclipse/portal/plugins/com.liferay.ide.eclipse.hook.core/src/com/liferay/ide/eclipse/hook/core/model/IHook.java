@@ -13,14 +13,12 @@
  *  
  *   Contributors:
  *          Kamesh Sampath - initial implementation
- *          Gregory Amerson - IDE-355 create liferay-hook.xml editor
+ *          Gregory Amerson - IDE-355 
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
 
 import com.liferay.ide.eclipse.hook.core.model.internal.DocrootRelativePathService;
-import com.liferay.ide.eclipse.hook.core.model.internal.HookVersion;
-import com.liferay.ide.eclipse.hook.core.model.internal.SrcFoldersRelativePathService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -31,7 +29,6 @@ import org.eclipse.sapphire.modeling.Transient;
 import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -63,21 +60,20 @@ public interface IHook extends IModelElement
 
 	// *** PortalProperties ***
 
-	@Service( impl = SrcFoldersRelativePathService.class )
-	@Type( base = Path.class )
-	@Label( standard = "Portal Properties" )
-	@XmlBinding( path = "portal-properties" )
-	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
-	@FileExtensions( expr = "properties" )
-	@MustExist
-	ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
-
-	Value<Path> getPortalProperties();
-
-	void setPortalProperties( Path value );
-
-	void setPortalProperties( String value );
-
+	// @Service( impl = SrcFoldersRelativePathService.class )
+	// @Type( base = Path.class )
+	// @Label( standard = "Portal Properties" )
+	// @XmlBinding( path = "portal-properties" )
+	// @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+	// @FileExtensions( expr = "properties" )
+	// @MustExist
+	// ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
+	//
+	// Value<Path> getPortalProperties();
+	//
+	// void setPortalProperties( Path value );
+	//
+	// void setPortalProperties( String value );
 
 	// *** LanguageProperties ***
 

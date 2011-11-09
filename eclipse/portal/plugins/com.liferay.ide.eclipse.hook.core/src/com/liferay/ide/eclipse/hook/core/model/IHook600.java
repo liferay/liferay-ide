@@ -33,6 +33,4 @@ public interface IHook600 extends IHook
 
 	ModelElementType TYPE = new ModelElementType( IHook600.class );
 
-
-
 }

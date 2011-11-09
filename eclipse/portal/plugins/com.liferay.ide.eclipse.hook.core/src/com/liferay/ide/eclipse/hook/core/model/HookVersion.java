@@ -16,7 +16,7 @@
  *    Gregory Amerson - IDE-355
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.core.model.internal;
+package com.liferay.ide.eclipse.hook.core.model;
 
 import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
 import org.eclipse.sapphire.modeling.annotations.Label;

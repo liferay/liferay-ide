@@ -17,10 +17,10 @@
 
 package com.liferay.ide.eclipse.hook.ui.editor;
 
+import com.liferay.ide.eclipse.hook.core.model.HookVersion;
 import com.liferay.ide.eclipse.hook.core.model.IHook;
 import com.liferay.ide.eclipse.hook.core.model.IHook600;
 import com.liferay.ide.eclipse.hook.core.model.IHook610;
-import com.liferay.ide.eclipse.hook.core.model.internal.HookVersion;
 import com.liferay.ide.eclipse.hook.ui.HookUI;
 
 import org.eclipse.core.resources.IFile;

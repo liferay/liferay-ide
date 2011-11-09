@@ -13,6 +13,7 @@
  *  
  *   Contributors:
  *          Kamesh Sampath - initial implementation
+ *          Gregory Amerson - IDE-355
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
