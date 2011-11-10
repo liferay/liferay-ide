@@ -7,6 +7,7 @@
         <package>com.liferay.ide.eclipse.hook.core.model.internal</package>
         <package>com.liferay.ide.eclipse.hook.ui.action</package>
         <package>com.liferay.ide.eclipse.hook.ui.editor</package>
+        <package>org.eclipse.sapphire.java.jdt.ui.internal</package>
 	</import>
 	<editor></editor>
 	<editor-page>
@@ -134,8 +135,41 @@
             <section>
                 <label>Service Editor</label>
                 <content>
-                    <property-editor>ServiceType</property-editor>
-                    <property-editor>ServiceImpl</property-editor>
+                    <property-editor>
+                        <property>ServiceType</property>
+                        <action-handler-filter>
+                            <impl>ServiceTypeImplActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <action>Sapphire.Browse</action>
+                            <id>ServiceType.Browse.Java.Type</id>
+                            <description>Opens a browse dialog to list the possible service types that can be selected.</description>
+                            <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                            <impl>ServiceTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>kind</name>
+                                <value>type</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
+                    <property-editor>
+                        <property>ServiceImpl</property>
+                        <action-handler-filter>
+                            <impl>ServiceTypeImplActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>ServiceImpl.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>ServiceTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>kind</name>
+                                <value>impl</value>
+                            </param>
+                            <condition>ServiceImplBrowseActionHandlerCondition</condition>
+                        </action-handler>
+                    </property-editor>
                 </content>
             </section>
         </case>
@@ -149,7 +183,7 @@
             </content>
         </section>
         <section>
-            <label>Mappings</label>
+            <label>Filter Mappings</label>
             <content>
                 <property-editor>ServletFilterMappings</property-editor>
             </content>
@@ -180,8 +214,8 @@
 			<section>
 				<content>
 					<property-editor>ServletFilterName</property-editor>
-					<property-editor>AfterFilter</property-editor>
-					<property-editor>BeforeFilter</property-editor>
+					<property-editor>BeforeAfterFilterType</property-editor>
+					<property-editor>BeforeAfterFilterName</property-editor>
 					<property-editor>URLPatterns</property-editor>
 					<property-editor>
 						<property>Dispatchers</property>

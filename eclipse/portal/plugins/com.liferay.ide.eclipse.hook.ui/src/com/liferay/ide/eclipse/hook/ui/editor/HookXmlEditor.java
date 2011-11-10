@@ -17,7 +17,7 @@
 
 package com.liferay.ide.eclipse.hook.ui.editor;
 
-import com.liferay.ide.eclipse.hook.core.model.HookVersion;
+import com.liferay.ide.eclipse.hook.core.model.HookVersionType;
 import com.liferay.ide.eclipse.hook.core.model.IHook;
 import com.liferay.ide.eclipse.hook.core.model.IHook600;
 import com.liferay.ide.eclipse.hook.core.model.IHook610;
@@ -55,7 +55,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 	protected IModelElement createModel()
 	{
 		IFile editorFile = getFile();
-		HookVersion dtdVersion = null;
+		HookVersionType dtdVersion = null;
 		RootXmlResource resource = null;
 
 		try
@@ -112,10 +112,10 @@ public class HookXmlEditor extends SapphireEditorForXml
 	 * 
 	 * @param document
 	 *            - the document that is loaded by the editor
-	 * @return - {@link HookVersion}
+	 * @return - {@link HookVersionType}
 	 */
-	HookVersion getDTDVersion( Document document ) {
-		HookVersion dtdVersion = null;
+	HookVersionType getDTDVersion( Document document ) {
+		HookVersionType dtdVersion = null;
 		DocumentType docType = document.getDoctype();
 		if ( docType != null ) {
 			String publicId = docType.getPublicId();
@@ -123,10 +123,10 @@ public class HookXmlEditor extends SapphireEditorForXml
 			if ( publicId != null && systemId != null ) {
 				if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
 				{
-					dtdVersion = HookVersion.v6_0_0;
+					dtdVersion = HookVersionType.v6_0_0;
 				}
 				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) {
-					dtdVersion = HookVersion.v6_1_0;
+					dtdVersion = HookVersionType.v6_1_0;
 				}
 			}
 

@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
@@ -45,7 +46,7 @@ public interface IService extends IModelElement {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
+	@JavaTypeConstraint( kind = JavaTypeKind.INTERFACE )
 	@MustExist
 	@Label( standard = "Service Type" )
 	@XmlBinding( path = "service-type" )
@@ -66,6 +67,7 @@ public interface IService extends IModelElement {
 	@XmlBinding( path = "service-impl" )
 	@MustExist
 	@Required
+	@DependsOn( value = { "ServiceType" } )
 	ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" );
 
 	ReferenceValue<JavaTypeName, JavaType> getServiceImpl();

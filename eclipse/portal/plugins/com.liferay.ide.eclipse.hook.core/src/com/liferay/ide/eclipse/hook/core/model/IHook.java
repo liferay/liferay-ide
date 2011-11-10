@@ -29,6 +29,7 @@ import org.eclipse.sapphire.modeling.Transient;
 import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -50,30 +51,30 @@ public interface IHook extends IModelElement
 
 	// *** Version ***
 
-	@Type( base = HookVersion.class )
+	@Type( base = HookVersionType.class )
 	@Label( standard = "Version" )
 	TransientProperty PROP_VERSION = new TransientProperty( TYPE, "Version" );
 
-	Transient<HookVersion> getVersion();
+	Transient<HookVersionType> getVersion();
 
-	void setVersion( HookVersion value );
+	void setVersion( HookVersionType value );
 
 	// *** PortalProperties ***
 
+	@Type( base = Path.class )
+	@Label( standard = "Portal Properties" )
+	@XmlBinding( path = "portal-properties" )
 	// @Service( impl = SrcFoldersRelativePathService.class )
-	// @Type( base = Path.class )
-	// @Label( standard = "Portal Properties" )
-	// @XmlBinding( path = "portal-properties" )
-	// @ValidFileSystemResourceType( FileSystemResourceType.FILE )
-	// @FileExtensions( expr = "properties" )
-	// @MustExist
-	// ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
-	//
-	// Value<Path> getPortalProperties();
-	//
-	// void setPortalProperties( Path value );
-	//
-	// void setPortalProperties( String value );
+	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
+	@FileExtensions( expr = "properties" )
+	@MustExist
+	ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
+
+	Value<Path> getPortalProperties();
+
+	void setPortalProperties( Path value );
+
+	void setPortalProperties( String value );
 
 	// *** LanguageProperties ***
 

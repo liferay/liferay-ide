@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- *    Kamesh Sampath - initial implementation
+
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model.internal;
@@ -30,7 +30,7 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class SrcFoldersRelativePathService extends RelativePathService
 {
