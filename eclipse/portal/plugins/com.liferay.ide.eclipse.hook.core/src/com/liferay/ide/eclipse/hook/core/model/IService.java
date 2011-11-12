@@ -13,9 +13,12 @@
  *  
  *   Contributors:
  *          Kamesh Sampath - initial implementation
+ *          Gregory Amerson - IDE-355
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
+
+import com.liferay.ide.eclipse.hook.core.model.internal.ServiceImplJavaTypeConstraintService;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
@@ -24,13 +27,13 @@ import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -44,22 +47,30 @@ public interface IService extends IModelElement {
 
 	// *** ServiceType ***
 
+	@Type( base = JavaTypeName.class )
+	@Reference( target = JavaType.class )
+	@JavaTypeConstraint( kind = JavaTypeKind.INTERFACE )
+	@MustExist
 	@Label( standard = "Service Type" )
 	@XmlBinding( path = "service-type" )
+	@Required
 	ValueProperty PROP_SERVICE_TYPE = new ValueProperty( TYPE, "ServiceType" );
 
-	Value<String> getServiceType();
+	ReferenceValue<JavaTypeName, JavaType> getServiceType();
 
 	void setServiceType( String value );
+
+	void setServiceType( JavaTypeName value );
 
 	// *** ServiceImpl ***
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@Label( standard = "Service Implementation" )
-	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = { "java.lang.Object" } )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS )
+	@Label( standard = "Service Impl" )
+	@XmlBinding( path = "service-impl" )
 	@MustExist
 	@Required
-	@XmlBinding( path = "service-impl" )
+	@Service( impl = ServiceImplJavaTypeConstraintService.class )
 	ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" );
 
 	ReferenceValue<JavaTypeName, JavaType> getServiceImpl();

@@ -13,13 +13,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.osgi;bundle-version="0.4.0";visibility:=reexport,
  org.eclipse.sapphire.platform;bundle-version="0.4.0";visibility:=reexport,
  org.eclipse.sapphire.workspace;bundle-version="0.4.0";visibility:=reexport,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ com.liferay.ide.eclipse.project.core;bundle-version="1.5.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.hook.core,
  com.liferay.ide.eclipse.hook.core.model,
- com.liferay.ide.eclipse.hook.core.model.internal,
- com.liferay.ide.eclipse.hook.core.model600,
- com.liferay.ide.eclipse.hook.core.model600.internal,
- com.liferay.ide.eclipse.hook.core.model610,
- com.liferay.ide.eclipse.hook.core.model610.internal
+ com.liferay.ide.eclipse.hook.core.model.internal

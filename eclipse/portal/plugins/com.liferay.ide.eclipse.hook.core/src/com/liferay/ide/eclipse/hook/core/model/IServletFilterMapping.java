@@ -13,9 +13,13 @@
  *  
  *   Contributors:
  *          Kamesh Sampath - initial implementation
+ *          Gregory Amerson - IDE-355
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
+
+import com.liferay.ide.eclipse.hook.core.model.internal.BeforeAfterFilterNameBinding;
+import com.liferay.ide.eclipse.hook.core.model.internal.BeforeAfterFilterTypeBinding;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -27,8 +31,11 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.NumericRange;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -51,41 +58,38 @@ public interface IServletFilterMapping extends IModelElement {
 
 	void setServletFilterName( String value );
 
-	// TODO choice between after-filter and before-filter
+	@Type( base = BeforeAfterFilterType.class )
+	@DefaultValue( text = "before-filter" )
+	@CustomXmlValueBinding( impl = BeforeAfterFilterTypeBinding.class )
+	ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty( TYPE, "BeforeAfterFilterType" );
 
-	// *** AfterFilter ***
+	Value<BeforeAfterFilterType> getBeforeAfterFilterType();
 
-	@Label( standard = "After Filter" )
+	void setBeforeAfterFilterType( String value );
+
+	void setBeforeAfterFilterType( BeforeAfterFilterType value );
+
+	// *** BeforeAfterFilterName ***
+
+	@Label( standard = "Portal Filter Name" )
 	@Whitespace( trim = true )
-	@DefaultValue( text = "AFTER_FILTER" )
-	@XmlBinding( path = "after-filter" )
-	ValueProperty PROP_AFTER_FILTER = new ValueProperty( TYPE, "AfterFilter" );
+	@CustomXmlValueBinding( impl = BeforeAfterFilterNameBinding.class )
+	ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty( TYPE, "BeforeAfterFilterName" );
 
-	Value<String> getAfterFilter();
+	Value<String> getBeforeAfterFilterName();
 
-	void setAfterFilter( String value );
-
-	// *** BeforeFilter ***
-
-	@Label( standard = "Before Filter" )
-	@Whitespace( trim = true )
-	@DefaultValue( text = "BEFORE_FILTER" )
-	@XmlBinding( path = "before-filter" )
-	ValueProperty PROP_BEFORE_FILTER = new ValueProperty( TYPE, "BeforeFilter" );
-
-	Value<String> getBeforeFilter();
-
-	void setBeforeFilter( String value );
+	void setBeforeAfterFilterName( String value );
 
 	// *** URLPattern ***
 
+	@Type( base = IURLPattern.class )
 	@Label( standard = "URL Pattern" )
-	@XmlBinding( path = "url-pattern" )
-	ValueProperty PROP_URL_PATTERN = new ValueProperty( TYPE, "URLPattern" );
+	@Required
+	@NumericRange( min = "1" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = IURLPattern.class ) } )
+	ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" );
 
-	Value<String> getURLPattern();
-
-	void setURLPattern( String value );
+	ModelElementList<IURLPattern> getURLPatterns();
 
 	// *** Dispatchers ***
 

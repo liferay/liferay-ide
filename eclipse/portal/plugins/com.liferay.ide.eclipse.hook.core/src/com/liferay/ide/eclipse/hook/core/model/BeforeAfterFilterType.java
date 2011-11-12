@@ -11,26 +11,38 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ *    Gregory Amerson - initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.core.model.internal;
+package com.liferay.ide.eclipse.hook.core.model;
 
 import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
 import org.eclipse.sapphire.modeling.annotations.Label;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
-public enum HookVersion {
-	@Label( standard = "5.2.0" )
-	@EnumSerialization( primary = "5.2.0" )
-	v5_2_0,
+public enum BeforeAfterFilterType
+{
 
-	@Label( standard = "6.0.0" )
-	@EnumSerialization( primary = "6.0.0" )
-	v6_0_0,
+	@Label( standard = "Before Filter" )
+	@EnumSerialization( caseSensitive = true, primary = "before-filter" )
+	BEFORE_FILTER("before-filter"),
 
-	@Label( standard = "6.1.0" )
-	@EnumSerialization( primary = "6.1.0" )
-	v6_1_0
+	@Label( standard = "After Filter" )
+	@EnumSerialization( caseSensitive = true, primary = "after-filter" )
+	AFTER_FILTER("after-filter");
+
+	private String text;
+
+	private BeforeAfterFilterType( String primary )
+	{
+		text = primary;
+	}
+
+	public String getText()
+	{
+		return text;
+	}
 }

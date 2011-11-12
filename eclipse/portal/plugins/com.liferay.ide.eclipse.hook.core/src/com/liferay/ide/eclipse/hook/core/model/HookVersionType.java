@@ -14,38 +14,25 @@
  * Contributors:
  *    Kamesh Sampath - initial implementation
  *    Gregory Amerson - IDE-355
- ******************************************************************************/
+ *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-@GenerateImpl
-public interface IDispatcher extends IModelElement {
+public enum HookVersionType
+{
 
-	ModelElementType TYPE = new ModelElementType( IDispatcher.class );
+	@Label( standard = "6.0.0" )
+	@EnumSerialization( primary = "6.0.0" )
+	v6_0_0,
 
-	/*
-	 * Dispatcher Element
-	 */
-
-	@Label( standard = "Dispatcher" )
-	@NoDuplicates
-	@XmlBinding( path = "" )
-	ValueProperty PROP_DISPATCHER = new ValueProperty( TYPE, "Dispatcher" );
-
-	Value<String> getDispatcher();
-
-	void setDispatcher( String name );
+	@Label( standard = "6.1.0" )
+	@EnumSerialization( primary = "6.1.0" )
+	v6_1_0
 
 }

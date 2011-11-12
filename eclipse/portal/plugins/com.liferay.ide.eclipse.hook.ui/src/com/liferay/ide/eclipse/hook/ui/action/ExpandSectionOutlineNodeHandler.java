@@ -15,7 +15,7 @@
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.ui.internal;
+package com.liferay.ide.eclipse.hook.ui.action;
 
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;

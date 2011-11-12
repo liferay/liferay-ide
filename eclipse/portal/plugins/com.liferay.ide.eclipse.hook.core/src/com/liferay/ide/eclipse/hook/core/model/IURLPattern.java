@@ -13,35 +13,36 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Gregory Amerson - IDE-355
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.core.model600;
+package com.liferay.ide.eclipse.hook.core.model;
 
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Value;
+import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
-
-import com.liferay.ide.eclipse.hook.core.model.IHookCommonElement;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-public interface IHook6xCommonElement extends IHookCommonElement {
+@Image( path = "images/elcl16/locale_16x16.gif" )
+public interface IURLPattern extends IModelElement {
 
-	ModelElementType TYPE = new ModelElementType( IHook6xCommonElement.class );
+	ModelElementType TYPE = new ModelElementType( IURLPattern.class );
 
-	// *** IndexerPostProcessors ***
+	// *** Value ***
 
-	@Type( base = IIndexerPostProcessor.class )
-	@Label( standard = "Index Post Processors" )
-	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "indexer-post-processor", type = IIndexerPostProcessor.class ) } )
-	ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty( TYPE, "IndexerPostProcessors" );
+	@Label( standard = "URL Pattern" )
+	@XmlBinding( path = "" )
+	ValueProperty PROP_URL_PATTERN = new ValueProperty( TYPE, "URLPattern" );
 
-	ModelElementList<IIndexerPostProcessor> getIndexerPostProcessors();
+	Value<String> getURLPattern();
 
+	void setURLPattern( String value );
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 20002011 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,7 +12,7 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *               Kamesh Sampath  initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
@@ -34,24 +34,31 @@ import org.eclipse.sapphire.services.RelativePathService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class ResourceBundleRelativePathService extends RelativePathService {
+public class ResourceBundleRelativePathService extends RelativePathService
+{
 
 	public static final String RB_FILE_EXTENSION = "properties";
 	final IWorkspace WORKSPACE = ResourcesPlugin.getWorkspace();
 	final IWorkspaceRoot WORKSPACE_ROOT = WORKSPACE.getRoot();
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.RelativePathService#roots()
-	 */
-	@Override
-	public List<Path> roots() {
+	public List<Path> roots()
+	{
+		List<Path> roots = computeRoots();
+		return roots;
+
+	}
+
+	private List<Path> computeRoots()
+	{
 		final IProject project = context( IProject.class );
 		List<Path> roots = new ArrayList<Path>();
-		if ( project != null ) {
+		if ( project != null )
+		{
 			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
-			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
-				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
+			for ( IClasspathEntry iClasspathEntry : cpEntries )
+			{
+				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
+				{
 					IPath entryPath = WORKSPACE_ROOT.getFolder( iClasspathEntry.getPath() ).getLocation();
 					roots.add( new Path( entryPath.toPortableString() ) );
 				}
@@ -60,6 +67,13 @@ public class ResourceBundleRelativePathService extends RelativePathService {
 		}
 		return roots;
 
+	}
+
+	@Override
+	public Path convertToAbsolute( Path path )
+	{
+		Path absPath = path.addFileExtension( "properties" );
+		return absPath;
 	}
 
 }

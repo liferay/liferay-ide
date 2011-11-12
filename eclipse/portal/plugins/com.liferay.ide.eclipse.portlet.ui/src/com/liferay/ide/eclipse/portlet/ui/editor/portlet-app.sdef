@@ -291,6 +291,22 @@
 			</hint>
 			<context>Sapphire.EditorPage.Outline.Node</context>
 		</action>
+		<action>
+            <id>LiferayIDE.Refresh</id>
+            <label>Refresh Model</label>
+            <hint>
+                <name>style</name>
+                <value>image</value>
+            </hint>
+            <image>icons/elcl16/e_refresh.gif</image>
+            <context>Sapphire.EditorPage.Outline.Header</context>
+            <location>before:Sapphire.Outline.Collapse.All</location>
+        </action>
+        <action-handler>
+            <action>LiferayIDE.Refresh</action>
+            <id>LiferayIDE.Refresh</id>
+            <impl>ModelRefreshActionHandler</impl>
+        </action-handler>
 	</editor-page>
 	<node-factory>
 		<id>PortletsNodeList</id>

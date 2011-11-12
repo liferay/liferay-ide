@@ -17,10 +17,11 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
-
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
+
+import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -33,9 +34,13 @@ public class ModelRefreshActionHandler extends SapphireActionHandler {
 	 */
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
-		IPortletApp portletApp = getModelElement().nearest( IPortletApp.class );
-		portletApp.refresh( true, true );
+		IModelElement modelElement =
+			getModelElement().nearest( IPortletApp.class ) != null
+				? getModelElement().nearest( IPortletApp.class ) : getModelElement();
+		if ( modelElement != null ) {
+			modelElement.refresh( true, true );
+		}
+
 		return null;
 	}
-
 }

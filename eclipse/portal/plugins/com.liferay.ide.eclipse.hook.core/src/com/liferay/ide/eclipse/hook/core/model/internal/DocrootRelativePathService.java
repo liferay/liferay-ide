@@ -13,36 +13,37 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.core.model;
+package com.liferay.ide.eclipse.hook.core.model.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
-import org.eclipse.sapphire.modeling.annotations.Image;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.services.RelativePathService;
+
+import com.liferay.ide.eclipse.hook.core.model.IHook;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-@GenerateImpl
-@Image( path = "images/elcl16/locale_16x16.gif" )
-public interface ILanguageProperty extends IModelElement {
+public class DocrootRelativePathService extends RelativePathService {
 
-	ModelElementType TYPE = new ModelElementType( ILanguageProperty.class );
-
-	// *** Value ***
-
-	@Label( standard = "Language Properties" )
-	@XmlBinding( path = "" )
-	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
-
-	Value<String> getValue();
-
-	void setValue( String value );
+	/*
+	 * (non-Javadoc)
+	 * @see org.eclipse.sapphire.services.RelativePathService#roots()
+	 */
+	@Override
+	public List<Path> roots() {
+		List<Path> roots = new ArrayList<Path>();
+		IModelElement modelElement = context( IHook.class );
+		IProject project = modelElement.adapt( IProject.class );
+		IPath docRootPath = project.getLocation().append( "docroot" );
+		roots.add( new Path( docRootPath.toPortableString() ) );
+		return roots;
+	}
 }

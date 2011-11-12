@@ -30,11 +30,13 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
 
 
+/**
+ * @author Gregory Amerson
+ */
 @GenerateImpl
-@XmlRootBinding(elementName = "tag")
+@XmlBinding( path = "tag" )
 public interface ITag extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType(ITag.class);

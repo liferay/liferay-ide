@@ -13,42 +13,66 @@
  *  
  *   Contributors:
  *          Kamesh Sampath - initial implementation
+ *          Gregory Amerson - IDE-355 
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
 
+import com.liferay.ide.eclipse.hook.core.model.internal.DocrootRelativePathService;
+
+import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.Transient;
+import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
+import org.eclipse.sapphire.modeling.annotations.FileExtensions;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlRootBinding;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@XmlDocumentType( publicId = "-//Liferay//DTD Hook 5.2.0//EN", systemId = "http://www.liferay.com/dtd/liferay-hook_5_2_0.dtd" )
-@XmlRootBinding( elementName = "hook" )
-public interface IHook extends IHookCommonElement {
+public interface IHook extends IModelElement
+{
 
 	ModelElementType TYPE = new ModelElementType( IHook.class );
 
+	// *** Version ***
+
+	@Type( base = HookVersionType.class )
+	@Label( standard = "Version" )
+	TransientProperty PROP_VERSION = new TransientProperty( TYPE, "Version" );
+
+	Transient<HookVersionType> getVersion();
+
+	void setVersion( HookVersionType value );
+
 	// *** PortalProperties ***
 
+	@Type( base = Path.class )
 	@Label( standard = "Portal Properties" )
 	@XmlBinding( path = "portal-properties" )
-	@CountConstraint( min = 0, max = 1 )
+	// @Service( impl = SrcFoldersRelativePathService.class )
+	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
+	@FileExtensions( expr = "properties" )
+	@MustExist
 	ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
 
-	Value<String> getPortalProperties();
+	Value<Path> getPortalProperties();
+
+	void setPortalProperties( Path value );
 
 	void setPortalProperties( String value );
 
@@ -63,13 +87,76 @@ public interface IHook extends IHookCommonElement {
 
 	// *** CustomJspDir ***
 
+	@Type( base = Path.class )
 	@Label( standard = "Custom JSP Dir" )
 	@XmlBinding( path = "custom-jsp-dir" )
-	@CountConstraint( min = 0, max = 1 )
+	@Service( impl = DocrootRelativePathService.class )
+	@ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+	@MustExist
 	ValueProperty PROP_CUSTOM_JSP_DIR = new ValueProperty( TYPE, "CustomJspDir" );
 
-	Value<String> getCustomJspDir();
+	Value<Path> getCustomJspDir();
 
 	void setCustomJspDir( String value );
+
+	void setCustomJspDir( Path value );
+
+	// *** CustomJspGlobal ***
+
+	@Type( base = Boolean.class )
+	@Label( standard = "Custom JSP Global" )
+	@XmlBinding( path = "custom-jsp-global" )
+	ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty( TYPE, "CustomJspGlobal" );
+
+	Value<Boolean> getCustomJspGlobal();
+
+	void setCustomJspGlobal( String value );
+
+	void setCustomJspGlobal( Boolean value );
+
+	// *** IndexerPostProcessors ***
+
+	@Type( base = IIndexerPostProcessor.class )
+	@Label( standard = "Index Post Processors" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "indexer-post-processor", type = IIndexerPostProcessor.class ) } )
+	ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty( TYPE, "IndexerPostProcessors" );
+
+	ModelElementList<IIndexerPostProcessor> getIndexerPostProcessors();
+
+	// *** Services ***
+
+	@Type( base = IService.class )
+	@Label( standard = "Services" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "service", type = IService.class ) } )
+	ListProperty PROP_SERVICES = new ListProperty( TYPE, "Services" );
+
+	ModelElementList<IService> getServices();
+
+	// *** ServletFilters ***
+
+	@Type( base = IServletFilter.class )
+	@Label( standard = "Servlet filters" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "servlet-filter", type = IServletFilter.class ) } )
+	ListProperty PROP_SERVLET_FILTERS = new ListProperty( TYPE, "ServletFilters" );
+
+	ModelElementList<IServletFilter> getServletFilters();
+
+	// *** ServletFilterMappings ***
+
+	@Type( base = IServletFilterMapping.class )
+	@Label( standard = "Servlet Filter Mappings" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "servlet-filter-mapping", type = IServletFilterMapping.class ) } )
+	ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty( TYPE, "ServletFilterMappings" );
+
+	ModelElementList<IServletFilterMapping> getServletFilterMappings();
+
+	// *** StrutsActions ***
+
+	@Type( base = IStrutsAction.class )
+	@Label( standard = "Struts Actions" )
+	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "struts-action", type = IStrutsAction.class ) } )
+	ListProperty PROP_STRUTS_ACTIONS = new ListProperty( TYPE, "StrutsActions" );
+
+	ModelElementList<IStrutsAction> getStrutsActions();
 
 }

@@ -25,9 +25,9 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
+import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -48,7 +48,7 @@ public interface ISupports extends IModelElement {
 	// *** MimeType ***
 
 	@Label( standard = "Mime Type" )
-	@DefaultValue( text = "text/html" )
+	@InitialValue( text = "text/html" )
 	@Required
 	@XmlBinding( path = "mime-type" )
 	ValueProperty PROP_MIME_TYPE = new ValueProperty( TYPE, "MimeType" );

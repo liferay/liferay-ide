@@ -13,9 +13,10 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Gregory Amerson - IDE-355
  ******************************************************************************/
 
-package com.liferay.ide.eclipse.hook.core.model600;
+package com.liferay.ide.eclipse.hook.core.model;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
@@ -24,7 +25,6 @@ import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -46,31 +46,35 @@ public interface IIndexerPostProcessor extends IModelElement {
 
 	// *** IndexerClassName ***
 
+	@Type( base = JavaTypeName.class )
+	@Reference( target = JavaType.class )
+	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.model.ClassedModel" )
 	@Label( standard = "Indexer Class Name" )
 	@XmlBinding( path = "indexer-class-name" )
+	@Required
 	ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty( TYPE, "IndexerClassName" );
 
-	Value<String> getIndexerClassName();
+	ReferenceValue<JavaTypeName, JavaType> getIndexerClassName();
 
 	void setIndexerClassName( String value );
 
-	// TODO : fix the approporiate class
+	void setIndexerClassName( JavaTypeName value );
 
 	// *** Implementation Class ***
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
 	@Label( standard = "Indexer Post Processor Impl" )
-	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, type = "java.lang.Object" )
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS }, type = "com.liferay.portal.kernel.search.IndexerPostProcessor" )
 	@MustExist
 	@Required
 	@XmlBinding( path = "indexer-post-processor-impl" )
-	ValueProperty PROP_INDEXER_PP_IMPL = new ValueProperty( TYPE, "IndexerPPImpl" );
+	ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty( TYPE, "IndexerClassImpl" );
 
-	ReferenceValue<JavaTypeName, JavaType> getIndexerPPImpl();
+	ReferenceValue<JavaTypeName, JavaType> getIndexerClassImpl();
 
-	void setIndexerPPImpl( String value );
+	void setIndexerClassImpl( String value );
 
-	void setIndexerPPImpl( JavaTypeName value );
+	void setIndexerClassImpl( JavaTypeName value );
 
 }
