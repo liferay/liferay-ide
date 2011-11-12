@@ -143,10 +143,10 @@
                         </action-handler-filter>
                         <action-handler>
                             <action>Sapphire.Browse</action>
-                            <id>ServiceType.Browse.Java.Type</id>
+                            <id>ServiceTypeImpl.Browse.Java.Type</id>
                             <description>Opens a browse dialog to list the possible service types that can be selected.</description>
                             <condition>JavaTypeBrowseActionHandlerCondition</condition>
-                            <impl>ServiceTypeBrowseActionHandler</impl>
+                            <impl>ServiceTypeImplBrowseActionHandler</impl>
                             <param>
                                 <name>kind</name>
                                 <value>type</value>
@@ -160,14 +160,14 @@
                             <context>Sapphire.ValuePropertyEditor</context>
                         </action-handler-filter>
                         <action-handler>
-                            <id>ServiceImpl.Browse.Java.Type</id>
+                            <id>ServiceTypeImpl.Browse.Java.Type</id>
                             <action>Sapphire.Browse</action>
-                            <impl>ServiceTypeBrowseActionHandler</impl>
+                            <impl>ServiceTypeImplBrowseActionHandler</impl>
                             <param>
                                 <name>kind</name>
                                 <value>impl</value>
                             </param>
-                            <condition>ServiceImplBrowseActionHandlerCondition</condition>
+                            <condition>JavaTypeBrowseActionHandlerCondition</condition>
                         </action-handler>
                     </property-editor>
                 </content>

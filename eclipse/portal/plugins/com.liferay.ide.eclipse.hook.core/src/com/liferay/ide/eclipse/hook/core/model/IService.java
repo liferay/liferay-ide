@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
+import com.liferay.ide.eclipse.hook.core.model.internal.ServiceImplJavaTypeConstraintService;
+
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
@@ -25,12 +27,12 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -67,7 +69,7 @@ public interface IService extends IModelElement {
 	@XmlBinding( path = "service-impl" )
 	@MustExist
 	@Required
-	@DependsOn( value = { "ServiceType" } )
+	@Service( impl = ServiceImplJavaTypeConstraintService.class )
 	ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" );
 
 	ReferenceValue<JavaTypeName, JavaType> getServiceImpl();

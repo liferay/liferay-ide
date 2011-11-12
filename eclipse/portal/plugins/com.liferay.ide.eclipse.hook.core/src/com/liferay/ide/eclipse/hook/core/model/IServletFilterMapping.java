@@ -58,7 +58,7 @@ public interface IServletFilterMapping extends IModelElement {
 	void setServletFilterName( String value );
 
 	@Type( base = BeforeAfterFilterType.class )
-	@DefaultValue( text = "after-filter" )
+	@DefaultValue( text = "before-filter" )
 	@CustomXmlValueBinding( impl = BeforeAfterFilterTypeBinding.class )
 	ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty( TYPE, "BeforeAfterFilterType" );
 
@@ -70,7 +70,7 @@ public interface IServletFilterMapping extends IModelElement {
 
 	// *** BeforeAfterFilterName ***
 
-	@Label( standard = "Before or After Filter Name" )
+	@Label( standard = "Portal Filter Name" )
 	@Whitespace( trim = true )
 	@CustomXmlValueBinding( impl = BeforeAfterFilterNameBinding.class )
 	ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty( TYPE, "BeforeAfterFilterName" );
