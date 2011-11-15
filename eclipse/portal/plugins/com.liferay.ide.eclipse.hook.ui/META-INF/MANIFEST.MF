@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.ui;bundle-version="0.4.0",
  org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="0.4.0",
  com.liferay.ide.eclipse.hook.core;bundle-version="1.4.0",
- org.eclipse.core.resources;bundle-version="3.7.100",
+ org.eclipse.core.resources,
  com.liferay.ide.eclipse.sdk;bundle-version="1.4.0",
  org.eclipse.jdt.core,
  org.eclipse.jdt.ui

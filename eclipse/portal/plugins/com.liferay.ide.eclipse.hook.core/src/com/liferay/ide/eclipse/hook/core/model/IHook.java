@@ -18,10 +18,12 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
-import com.liferay.ide.eclipse.hook.core.model.internal.DocrootRelativePathService;
+import com.liferay.ide.eclipse.hook.core.model.internal.SrcFoldersRelativePathService;
 
+import org.eclipse.sapphire.modeling.ElementProperty;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
+import org.eclipse.sapphire.modeling.ModelElementHandle;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Path;
@@ -29,6 +31,7 @@ import org.eclipse.sapphire.modeling.Transient;
 import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
@@ -37,6 +40,7 @@ import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -64,7 +68,7 @@ public interface IHook extends IModelElement
 	@Type( base = Path.class )
 	@Label( standard = "Portal Properties" )
 	@XmlBinding( path = "portal-properties" )
-	// @Service( impl = SrcFoldersRelativePathService.class )
+	@Service( impl = SrcFoldersRelativePathService.class )
 	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
 	@FileExtensions( expr = "properties" )
 	@MustExist
@@ -85,27 +89,29 @@ public interface IHook extends IModelElement
 
 	ModelElementList<ILanguageProperty> getLanguageProperties();
 
+	@Type( base = ICustomJsp.class )
+	@Label( standard = "custom jsps" )
+	@CustomXmlListBinding( impl = CustomJspsBindingImpl.class )
+	ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" );
+
+	ModelElementList<ICustomJsp> getCustomJsps();
+
 	// *** CustomJspDir ***
 
-	@Type( base = Path.class )
+	@Type( base = ICustomJspDir.class )
 	@Label( standard = "Custom JSP Dir" )
 	@XmlBinding( path = "custom-jsp-dir" )
-	@Service( impl = DocrootRelativePathService.class )
-	@ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-	@MustExist
-	ValueProperty PROP_CUSTOM_JSP_DIR = new ValueProperty( TYPE, "CustomJspDir" );
+	ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty( TYPE, "CustomJspDir" );
 
-	Value<Path> getCustomJspDir();
+	ModelElementHandle<ICustomJspDir> getCustomJspDir();
 
-	void setCustomJspDir( String value );
-
-	void setCustomJspDir( Path value );
 
 	// *** CustomJspGlobal ***
 
 	@Type( base = Boolean.class )
 	@Label( standard = "Custom JSP Global" )
 	@XmlBinding( path = "custom-jsp-global" )
+	@DefaultValue( text = "true" )
 	ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty( TYPE, "CustomJspGlobal" );
 
 	Value<Boolean> getCustomJspGlobal();

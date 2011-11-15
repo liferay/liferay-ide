@@ -26,9 +26,12 @@ import com.liferay.ide.eclipse.hook.ui.HookUI;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
+import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.IEditorPart;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
@@ -104,9 +107,31 @@ public class HookXmlEditor extends SapphireEditorForXml
 			hookModel.setVersion( dtdVersion );
 		}
 
+		ModelPropertyListener listener = new ModelPropertyListener()
+		{
+
+			@Override
+			public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
+			{
+				handleCustomJspsPropertyChangedEvent( event );
+			}
+		};
+
+		modelElement.addListener( listener, "CustomJsps" );
 		return modelElement;
 	}
 
+	@Override
+	public boolean isDirty()
+	{
+		return super.isDirty();
+	}
+
+
+	protected void handleCustomJspsPropertyChangedEvent( ModelPropertyChangeEvent event )
+	{
+		this.firePropertyChange( IEditorPart.PROP_DIRTY );
+	}
 
 	/**
 	 * A small utility method used to compute the DTD version

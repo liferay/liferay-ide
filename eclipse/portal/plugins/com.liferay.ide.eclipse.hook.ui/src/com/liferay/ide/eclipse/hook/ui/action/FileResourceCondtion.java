@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.hook.ui.action;
 
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -28,8 +30,6 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditor;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
-
-import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
 public class FileResourceCondtion extends SapphirePropertyEditorCondition {
 
@@ -59,7 +59,8 @@ public class FileResourceCondtion extends SapphirePropertyEditorCondition {
 		final ModelProperty property = part.getProperty();
 		if ( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) ) {
 			final Value<Path> path = element.read( (ValueProperty) property );
-			if ( path != null && path != null && path.getText().length() > 0 ) {
+			if ( path != null && path != null && path.getText() != null && path.getText().length() > 0 )
+			{
 				IProject project = element.adapt( IProject.class );
 				IResource docRootResource = project.findMember( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
 				if ( docRootResource != null ) {

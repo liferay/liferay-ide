@@ -19,6 +19,7 @@ package com.liferay.ide.eclipse.hook.core.model.internal;
 
 import com.liferay.ide.eclipse.hook.core.model.IService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class ServiceImplJavaTypeConstraintService extends DefaultJavaTypeConstra
 			return Arrays.asList( new String[] { type.qualified() + "Wrapper" } );
 		}
 
-		return null;
+		return new ArrayList<String>();
 	}
 
 }
