@@ -18,6 +18,7 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
+import com.liferay.ide.eclipse.hook.core.model.internal.CustomJspsBindingImpl;
 import com.liferay.ide.eclipse.hook.core.model.internal.SrcFoldersRelativePathService;
 
 import org.eclipse.sapphire.modeling.ElementProperty;
@@ -32,6 +33,7 @@ import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
@@ -92,6 +94,7 @@ public interface IHook extends IModelElement
 	@Type( base = ICustomJsp.class )
 	@Label( standard = "custom jsps" )
 	@CustomXmlListBinding( impl = CustomJspsBindingImpl.class )
+	@DependsOn( value = { "CustomJspDir/Value" } )
 	ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" );
 
 	ModelElementList<ICustomJsp> getCustomJsps();
@@ -104,7 +107,6 @@ public interface IHook extends IModelElement
 	ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty( TYPE, "CustomJspDir" );
 
 	ModelElementHandle<ICustomJspDir> getCustomJspDir();
-
 
 	// *** CustomJspGlobal ***
 

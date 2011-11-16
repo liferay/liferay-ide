@@ -18,16 +18,29 @@
 
 package com.liferay.ide.eclipse.hook.ui.editor;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.hook.core.model.HookVersionType;
+import com.liferay.ide.eclipse.hook.core.model.ICustomJsp;
+import com.liferay.ide.eclipse.hook.core.model.ICustomJspDir;
 import com.liferay.ide.eclipse.hook.core.model.IHook;
 import com.liferay.ide.eclipse.hook.core.model.IHook600;
 import com.liferay.ide.eclipse.hook.core.model.IHook610;
 import com.liferay.ide.eclipse.hook.ui.HookUI;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
+
+import java.io.FileInputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
@@ -41,10 +54,12 @@ import org.w3c.dom.DocumentType;
 public class HookXmlEditor extends SapphireEditorForXml
 {
 
-	public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";
-
 	private static final String EDITOR_DEFINITION_PATH =
 		"com.liferay.ide.eclipse.hook.ui/com/liferay/ide/eclipse/hook/ui/editor/hook-editor.sdef/HookConfigurationPage";
+
+	public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";
+
+	protected boolean customModelDirty = false;
 
 	/**
 	 * 
@@ -53,6 +68,52 @@ public class HookXmlEditor extends SapphireEditorForXml
 		super( ID );
 
 		setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
+	}
+
+	private void copyCustomJspsToProject( ModelElementList<ICustomJsp> customJsps ) 
+	{
+		try
+		{
+			ICustomJspDir customJspDirElement = this.getModelElement().nearest( IHook.class ).getCustomJspDir().element();
+			
+			if ( customJspDirElement.validate().ok() )
+			{
+				Path customJspDir = customJspDirElement.getValue().getContent();
+				IFolder docroot = CoreUtil.getDocroot( getProject() );
+				IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+
+				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
+				IPath portalDir = liferayRuntime.getPortalDir();
+				
+				for ( ICustomJsp customJsp : customJsps )
+				{
+					if ( customJsp.validate().ok() )
+					{
+						String content = customJsp.getValue().getContent();
+
+						IFile customJspFile = customJspFolder.getFile( content );
+
+						IPath portalJsp = portalDir.append( content );
+
+						try
+						{
+							CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
+							customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
+						}
+						catch ( Exception e )
+						{
+							HookUI.logError( e );
+						}
+
+					}
+				}
+			}
+		}
+		catch ( CoreException e )
+		{
+			HookUI.logError( e);
+		}
+		
 	}
 
 	@Override
@@ -118,19 +179,29 @@ public class HookXmlEditor extends SapphireEditorForXml
 		};
 
 		modelElement.addListener( listener, "CustomJsps" );
+
 		return modelElement;
 	}
 
 	@Override
-	public boolean isDirty()
+	public void doSave( IProgressMonitor monitor )
 	{
-		return super.isDirty();
-	}
+		if ( this.customModelDirty )
+		{
+			ModelElementList<ICustomJsp> customJsps = getModelElement().nearest( IHook.class ).getCustomJsps();
 
+			copyCustomJspsToProject( customJsps );
 
-	protected void handleCustomJspsPropertyChangedEvent( ModelPropertyChangeEvent event )
-	{
-		this.firePropertyChange( IEditorPart.PROP_DIRTY );
+			this.customModelDirty = false;
+
+			super.doSave( monitor );
+
+			this.firePropertyChange( IEditorPart.PROP_DIRTY );
+		}
+		else
+		{
+			super.doSave( monitor );
+		}
 	}
 
 	/**
@@ -159,6 +230,23 @@ public class HookXmlEditor extends SapphireEditorForXml
 		}
 
 		return dtdVersion;
+	}
+
+	protected void handleCustomJspsPropertyChangedEvent( ModelPropertyChangeEvent event )
+	{
+		this.customModelDirty = true;
+		this.firePropertyChange( IEditorPart.PROP_DIRTY );
+	}
+
+	@Override
+	public boolean isDirty()
+	{
+		if ( this.customModelDirty )
+		{
+			return true;
+		}
+
+		return super.isDirty();
 	}
 
 }

@@ -138,6 +138,7 @@
                                             <property>Value</property>
                                             <show-label>true</show-label>
                                         </property-editor>
+                                        <!-- 
                                         <action-link>
                                             <action-id>Liferay.Hook.Copy.Jsp.Depdendencies</action-id>
                                             <label>Copy JSP Dependencies to Project</label>
@@ -151,6 +152,7 @@
                                                 <label>Copy JSP Dependencies to Project</label>
                                             </action>
                                         </action-link>
+                                         -->
                                     </content>
                                 </panel>
                             </switching-panel>

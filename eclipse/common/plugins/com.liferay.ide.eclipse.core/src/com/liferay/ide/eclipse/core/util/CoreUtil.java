@@ -56,24 +56,6 @@ import org.osgi.framework.Version;
  */
 public class CoreUtil {
 
-	public static IFolder getDocroot( String projectName ) {
-		IProject project = getProject( projectName );
-
-		return getDocroot( project );
-	}
-
-	public static boolean isResourceInDocroot( IModuleResource resource ) {
-		IFile file = (IFile) resource.getAdapter( IFile.class );
-
-		if ( file != null ) {
-			IFolder docroot = getDocroot( file.getProject() );
-
-			return docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf( file.getFullPath() );
-		}
-
-		return false;
-	}
-
 	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
 		if (delta == null) {
 			return false;
@@ -137,6 +119,30 @@ public class CoreUtil {
 		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
 	}
 
+	public static IFolder getDocroot( IProject project ) {
+		IContainer retval = null;
+
+		if ( project != null ) {
+			IVirtualComponent comp = ComponentCore.createComponent( project );
+
+			if ( comp != null ) {
+				IVirtualFolder rootFolder = comp.getRootFolder();
+
+				if ( rootFolder != null ) {
+					retval = rootFolder.getUnderlyingFolder();
+				}
+			}
+		}
+
+		return retval instanceof IFolder ? (IFolder) retval : null;
+	}
+
+	public static IFolder getDocroot( String projectName ) {
+		IProject project = getProject( projectName );
+
+		return getDocroot( project );
+	}
+
 	public static Object getNewObject(Object[] oldObjects, Object[] newObjects) {
 
 		if (oldObjects != null && newObjects != null && oldObjects.length < newObjects.length) {
@@ -197,6 +203,39 @@ public class CoreUtil {
 
 	public static boolean isNullOrEmpty(String val) {
 		return val == null || val.equals("") || val.trim().equals("");
+	}
+
+	public static boolean isResourceInDocroot( IModuleResource resource ) {
+		IFile file = (IFile) resource.getAdapter( IFile.class );
+
+		if ( file != null ) {
+			IFolder docroot = getDocroot( file.getProject() );
+
+			return docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf( file.getFullPath() );
+		}
+
+		return false;
+	}
+
+	public static void makeFolders( IFolder folder ) throws CoreException
+	{
+		if ( folder == null )
+		{
+			return;
+		}
+
+		IContainer parent = folder.getParent();
+
+		if ( parent instanceof IFolder )
+		{
+			makeFolders( (IFolder) parent );
+		}
+
+		if ( !folder.exists() )
+		{
+			folder.create( true, true, null );
+		}
+
 	}
 
 	public static IProgressMonitor newSubMonitor(final IProgressMonitor parent, final int ticks) {
@@ -267,23 +306,5 @@ public class CoreUtil {
 		}
 
 		return version;
-	}
-
-	public static IFolder getDocroot( IProject project ) {
-		IContainer retval = null;
-
-		if ( project != null ) {
-			IVirtualComponent comp = ComponentCore.createComponent( project );
-
-			if ( comp != null ) {
-				IVirtualFolder rootFolder = comp.getRootFolder();
-
-				if ( rootFolder != null ) {
-					retval = rootFolder.getUnderlyingFolder();
-				}
-			}
-		}
-
-		return retval instanceof IFolder ? (IFolder) retval : null;
 	}
 }
