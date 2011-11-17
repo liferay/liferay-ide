@@ -19,6 +19,7 @@ package com.liferay.ide.eclipse.hook.core.model.internal;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.hook.core.model.ICustomJsp;
+import com.liferay.ide.eclipse.hook.core.model.ICustomJspDir;
 import com.liferay.ide.eclipse.hook.core.model.IHook;
 
 import java.util.ArrayList;
@@ -102,10 +103,19 @@ public class CustomJspsBindingImpl extends ListBindingImpl
 
 	private IFolder getCustomJspFolder()
 	{
-		Path customJspDir = this.hook().getCustomJspDir().element().getValue().getContent();
-		IFolder docroot = CoreUtil.getDocroot( project() );
-		IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
-		return customJspFolder;
+		ICustomJspDir element = this.hook().getCustomJspDir().element();
+
+		if ( element != null )
+		{
+			Path customJspDir = element.getValue().getContent();
+			IFolder docroot = CoreUtil.getDocroot( project() );
+			IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+			return customJspFolder;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	private IHook hook()
@@ -121,7 +131,15 @@ public class CustomJspsBindingImpl extends ListBindingImpl
 	@Override
 	public List<Resource> read()
 	{
-		IPath customJspDirPath = getCustomJspFolder().getProjectRelativePath();
+		IFolder customJspFolder = getCustomJspFolder();
+
+		if ( customJspFolder == null )
+		{
+			this.lastCustomJspDirPath = null;
+			return new ArrayList<Resource>();
+		}
+
+		IPath customJspDirPath = customJspFolder.getProjectRelativePath();
 
 		if ( customJspDirPath != null && customJspDirPath.equals( lastCustomJspDirPath ) )
 		{
