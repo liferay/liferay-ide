@@ -28,6 +28,11 @@ com.liferay.ide.eclipse.portlet.vaadin.core/bin/
 com.liferay.ide.eclipse.portlet.vaadin.core/target/
 com.liferay.ide.eclipse.portlet.vaadin.ui/bin/
 com.liferay.ide.eclipse.portlet.vaadin.ui/target/
+com.liferay.ide.eclipse.properties.core/.apt_generated/
+com.liferay.ide.eclipse.properties.core/bin/
+com.liferay.ide.eclipse.properties.core/target/
+com.liferay.ide.eclipse.properties.ui/bin/
+com.liferay.ide.eclipse.properties.ui/target/
 com.liferay.ide.eclipse.service.core/.apt_generated/
 com.liferay.ide.eclipse.service.core/bin/
 com.liferay.ide.eclipse.service.core/target/
