@@ -23,6 +23,7 @@ import com.liferay.ide.eclipse.hook.core.model.ICustomJspDir;
 import com.liferay.ide.eclipse.hook.core.model.IHook;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -136,7 +137,7 @@ public class CustomJspsBindingImpl extends ListBindingImpl
 		if ( customJspFolder == null )
 		{
 			this.lastCustomJspDirPath = null;
-			return new ArrayList<Resource>();
+			return Collections.emptyList();
 		}
 
 		IPath customJspDirPath = customJspFolder.getProjectRelativePath();
