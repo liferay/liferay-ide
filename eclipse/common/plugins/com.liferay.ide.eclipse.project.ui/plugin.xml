@@ -626,4 +626,12 @@
          </enablement>
       </objectContribution>
   </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            class="com.liferay.ide.eclipse.project.ui.wizard.PluginClasspathContainerPage"
+            id="com.liferay.ide.eclipse.project.ui.pluginClasspathContainerPage"
+            name="Liferay Plugin API">
+      </classpathContainerPage>
+   </extension>
 </plugin>
