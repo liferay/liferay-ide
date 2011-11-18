@@ -173,6 +173,7 @@
                     <property>Services</property>
                     <child-property>ServiceType</child-property>
                     <child-property>ServiceImpl</child-property>
+                    <show-label>false</show-label>
                 </property-editor>
             </content>
         </section>
@@ -231,13 +232,19 @@
         <section>
             <label>Filters</label>
             <content>
-                <property-editor>ServletFilters</property-editor>
+                <property-editor>
+                    <property>ServletFilters</property>
+                    <show-label>false</show-label>
+                </property-editor>
             </content>
         </section>
         <section>
             <label>Filter Mappings</label>
             <content>
-                <property-editor>ServletFilterMappings</property-editor>
+                <property-editor>
+                    <property>ServletFilterMappings</property>
+                    <show-label>false</show-label>
+                </property-editor>
             </content>
         </section>
         <node-include>ServletFiltersNodeList</node-include>
@@ -255,8 +262,9 @@
 					<property-editor>ServletFilterImpl</property-editor>
 					<property-editor>InitParams</property-editor>
 				</content>
+                <label>Servlet Filter Editor</label>
 			</section>
-			<label>${ServletFilterName!=null?concat(ServletFilterName,'Details'):'&lt;servlet-filter-name&gt;'}</label></case>
+			<label>${ ServletFilterName != null ? ServletFilterName : '&lt;servlet-filter-name&gt;' }</label></case>
 	</node-factory>
     <node-factory>
 		<id>ServletFilterMappingsNodeList</id>
@@ -288,7 +296,12 @@
         <node-include>StrutsActionsNodeList</node-include>
         <section>
             <content>
-                <property-editor>StrutsActions</property-editor>
+                <property-editor>
+                    <property>StrutsActions</property>
+                    <show-label>false</show-label>
+                    <child-property>StrutsActionPath</child-property>
+                    <child-property>StrutsActionImpl</child-property>
+                </property-editor>
             </content>
         </section>
     </node>
@@ -317,7 +330,12 @@
         <label>Indexer Post Processors</label>
         <section>
             <content>
-                <property-editor>IndexerPostProcessors</property-editor>
+                <property-editor>
+                    <property>IndexerPostProcessors</property>
+                    <show-label>false</show-label>
+                    <child-property>IndexerClassName</child-property>
+                    <child-property>IndexerClassImpl</child-property>
+                </property-editor>
             </content>
         </section>
         <node-include>IndexerPostProcessorsList</node-include>
