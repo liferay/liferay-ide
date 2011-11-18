@@ -59,6 +59,8 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.common.project.facet.core.JavaFacet;
+import org.eclipse.jst.j2ee.jsp.JspFactory;
+import org.eclipse.jst.j2ee.jsp.TagLibRefType;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -91,6 +93,26 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public class ProjectUtil {
 
 	public static final String METADATA_FOLDER = ".metadata";
+	
+	public static void addLiferayPortletTldToWebXML( final IProject project )
+	{
+		WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
+	
+		TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
+	
+		tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
+		tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
+	
+		try {
+			webXmlHelper.addTagLib(tagLibRefType);
+		}
+		catch (Exception e) {
+			ProjectCorePlugin.logError("Failed to add taglib reference", e);
+		}
+	}
+
+	
+
 	
 	public static boolean collectProjectsFromDirectory(
 		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -183,9 +205,6 @@ public class ProjectUtil {
 		return true;
 	}
 
-	
-
-	
 	public static String convertToDisplayName( String name ) {
 		if ( CoreUtil.isNullOrEmpty( name ) ) {
 			return "";
@@ -882,6 +901,7 @@ public class ProjectUtil {
 
 		return string.replaceFirst( regex, "" );
 	}
+
 
 	public static void setGenerateDD( IDataModel model, boolean generateDD ) {
 		IDataModel ddModel = null;

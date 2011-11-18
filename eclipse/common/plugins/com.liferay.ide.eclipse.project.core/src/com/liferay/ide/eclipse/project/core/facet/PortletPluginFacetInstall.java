@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -116,7 +117,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 		// modify the web.xml and add <jsp-config><taglib> for liferay tlds
 		copyPortletTLD();
 
-		configWebXML();
+		ProjectUtil.addLiferayPortletTldToWebXML( this.project );
 
 		this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 

@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.project.core.facet;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
-import com.liferay.ide.eclipse.project.core.util.WebXMLDescriptorHelper;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
@@ -47,8 +46,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
-import org.eclipse.jst.j2ee.jsp.JspFactory;
-import org.eclipse.jst.j2ee.jsp.TagLibRefType;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEModuleFacetInstallDataModelProperties;
 import org.eclipse.ui.PlatformUI;
@@ -130,22 +127,6 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		// (masterModel.getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
 		// installLayoutTplTemplate();
 		// }
-	}
-
-	protected void configWebXML() {
-		WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper(this.project);
-
-		TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-
-		tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
-		tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
-
-		try {
-			webXmlHelper.addTagLib(tagLibRefType);
-		}
-		catch (Exception e) {
-			ProjectCorePlugin.logError("Failed to add taglib reference", e);
-		}
 	}
 
 	protected void copyToProject(IPath parent, File newFile, boolean prompt)

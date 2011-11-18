@@ -72,7 +72,8 @@ public class HookPluginFacetInstall extends PluginFacetInstall {
 			setupDefaultOutputLocation();
 		}
 
-		configWebXML();
+		// IDE-491 don't add this in the webxml by default
+		// ProjectUtil.addLiferayPortletTldToWebXML( this.project );
 	}
 
 }
