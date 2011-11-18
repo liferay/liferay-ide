@@ -57,5 +57,11 @@ public class PortletModePossibleValueService extends PossibleValuesService {
 		}
 
 	}
+
+	@Override
+	public boolean isCaseSensitive()
+	{
+		return false;
+	}
 }
 

@@ -55,5 +55,12 @@ public class WindowStatesPossibleValueService extends PossibleValuesService {
 		}
 
 	}
+
+	@Override
+	public boolean isCaseSensitive()
+	{
+		return false;
+	}
+
 }
 
