@@ -120,7 +120,7 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
 
 		final int index = this.typeCombo.getSelectionIndex();
 
-		if ( index != 1 )
+		if ( index != -1 )
 		{
 			final String type = this.typeCombo.getItem( index );
 			path = path.append( type );
