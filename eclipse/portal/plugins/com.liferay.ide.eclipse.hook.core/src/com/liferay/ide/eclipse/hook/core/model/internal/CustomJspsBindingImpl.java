@@ -68,6 +68,11 @@ public class CustomJspsBindingImpl extends ListBindingImpl
 
 	private void findJspFiles( IFolder folder, List<IFile> jspFiles ) throws CoreException
 	{
+		if ( folder == null || !folder.exists() )
+		{
+			return;
+		}
+
 		IResource[] members = folder.members( IResource.FOLDER | IResource.FILE );
 
 		for ( IResource member : members )
