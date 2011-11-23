@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.service.core.model.internal;
 
 import com.liferay.ide.eclipse.service.core.model.IColumn;
@@ -24,36 +25,46 @@ import org.eclipse.sapphire.modeling.ImageData;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.services.ImageService;
+import org.eclipse.sapphire.services.ImageServiceData;
 
-
-public class ColumnImageService extends ImageService {
+/**
+ * @author Gregory Amerson
+ */
+public class ColumnImageService extends ImageService
+{
 
 	private static final ImageData IMG_COLUMN = ImageData.readFromClassLoader(
-		ColumnImageService.class, "images/column_16x16.gif");
+		ColumnImageService.class, "images/column_16x16.gif" );
+
 	private static final ImageData IMG_COLUMN_PRIMARY = ImageData.readFromClassLoader(
-		ColumnImageService.class, "images/column_primary_16x16.png");
+		ColumnImageService.class, "images/column_primary_16x16.png" );
 
 	private ModelPropertyListener listener;
 
 	@Override
-	protected void init() {
-		super.init();
+	protected void initImageService()
+	{
 
-		this.listener = new ModelPropertyListener() {
+		this.listener = new ModelPropertyListener()
+		{
 
 			@Override
-			public void handlePropertyChangedEvent(final ModelPropertyChangeEvent event) {
-				broadcast();
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			{
+				refresh();
 			}
 		};
 
 		context( IModelElement.class ).addListener( this.listener, IColumn.PROP_PRIMARY.getName() );
 
-		attach( new Listener() {
+		attach( new Listener()
+		{
 
 			@Override
-			public void handle( Event event ) {
-				if ( event instanceof DisposeEvent ) {
+			public void handle( Event event )
+			{
+				if ( event instanceof DisposeEvent )
+				{
 					context( IModelElement.class ).removeListener( listener, IColumn.PROP_PRIMARY.getName() );
 				}
 			}
@@ -62,13 +73,20 @@ public class ColumnImageService extends ImageService {
 	}
 
 	@Override
-	public ImageData provide() {
-		if ( ( context( IColumn.class ) ).isPrimary().getContent() ) {
-			return IMG_COLUMN_PRIMARY;
+	public ImageServiceData compute()
+	{
+		ImageData imageData = null;
+
+		if ( ( context( IColumn.class ) ).isPrimary().getContent() )
+		{
+			imageData = IMG_COLUMN_PRIMARY;
 		}
-		else {
-			return IMG_COLUMN;
+		else
+		{
+			imageData = IMG_COLUMN;
 		}
+
+		return new ImageServiceData( imageData );
 	}
 
 }

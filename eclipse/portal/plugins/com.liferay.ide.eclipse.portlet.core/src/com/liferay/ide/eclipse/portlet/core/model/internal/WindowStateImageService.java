@@ -25,11 +25,13 @@ import org.eclipse.sapphire.modeling.ImageData;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.services.ImageService;
+import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class WindowStateImageService extends ImageService {
+public class WindowStateImageService extends ImageService
+{
 
 	private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
 		WindowStateImageService.class, "images/window_states.png" );
@@ -42,57 +44,61 @@ public class WindowStateImageService extends ImageService {
 
 	private ModelPropertyListener listener;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ModelElementService#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * java.lang.String[])
-	 */
 	@Override
-	protected void init() {
-		this.listener = new ModelPropertyListener() {
+	protected void initImageService()
+	{
+		this.listener = new ModelPropertyListener()
+		{
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
-				broadcast();
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			{
+				refresh();
 			}
 		};
 
 		context( IModelElement.class ).addListener( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ImageService#provide()
-	 */
 	@Override
-	public ImageData provide() {
+	protected ImageServiceData compute()
+	{
 		String strWindowState = null;
 		IModelElement element = context( IModelElement.class );
+		ImageData imageData = null;
 
-		if ( element instanceof ICustomWindowState ) {
+		if ( element instanceof ICustomWindowState )
+		{
 			ICustomWindowState customWindowState = (ICustomWindowState) element;
 			strWindowState = String.valueOf( customWindowState.getWindowState().getContent() );
 		}
-		else if ( element instanceof IWindowState ) {
+		else if ( element instanceof IWindowState )
+		{
 			IWindowState windowState = (IWindowState) element;
 			strWindowState = windowState.getWindowState().getContent();
 		}
 
-		if ( "MAXIMIZED".equalsIgnoreCase( strWindowState ) ) {
-			return IMG_MAXIMIZED;
+		if ( "MAXIMIZED".equalsIgnoreCase( strWindowState ) )
+		{
+			imageData = IMG_MAXIMIZED;
 		}
-		else if ( "MINIMIZED".equalsIgnoreCase( strWindowState ) ) {
-			return IMG_MINIMIZED;
+		else if ( "MINIMIZED".equalsIgnoreCase( strWindowState ) )
+		{
+			imageData = IMG_MINIMIZED;
 		}
 
-		return IMG_DEFAULT;
+		if ( imageData == null )
+		{
+			imageData = IMG_DEFAULT;
+
+		}
+
+		return new ImageServiceData( imageData );
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		super.dispose();
 
 		context( IModelElement.class ).removeListener( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );

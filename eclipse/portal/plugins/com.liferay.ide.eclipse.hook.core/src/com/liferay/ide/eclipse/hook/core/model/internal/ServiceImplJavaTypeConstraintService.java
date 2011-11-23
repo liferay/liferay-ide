@@ -26,6 +26,7 @@ import java.util.Set;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
+import org.eclipse.sapphire.java.JavaTypeConstraintServiceData;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -39,7 +40,7 @@ import org.eclipse.sapphire.modeling.ModelPropertyListener;
 public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintService
 {
 
-	private Set<JavaTypeKind> kind;
+	private Set<JavaTypeKind> kinds;
 
 	private JavaTypeConstraintBehavior behavior;
 
@@ -60,7 +61,7 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
 			kind.add( k );
 		}
 
-		this.kind = kind;
+		this.kinds = kind;
 
 		this.behavior = javaTypeConstraintAnnotation.behavior();
 
@@ -78,13 +79,7 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
 		this.service.addListener( listener, "ServiceType" );
 	}
 
-	@Override
-	protected State compute()
-	{
-		return new State( this.kind, getServiceType(), this.behavior );
-	}
-
-	private Set<String> getServiceType()
+	private Set<String> getServiceTypes()
 	{
 		JavaTypeName type = this.service.getServiceType().getContent( false );
 
@@ -96,6 +91,12 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
 		}
 
 		return types;
+	}
+
+	@Override
+	protected JavaTypeConstraintServiceData compute()
+	{
+		return new JavaTypeConstraintServiceData( this.kinds, getServiceTypes(), this.behavior );
 	}
 
 }

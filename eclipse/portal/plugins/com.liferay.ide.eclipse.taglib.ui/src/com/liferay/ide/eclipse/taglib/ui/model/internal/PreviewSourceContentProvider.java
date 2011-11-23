@@ -21,12 +21,14 @@ import com.liferay.ide.eclipse.taglib.ui.model.ITag;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.services.DerivedValueService;
+import org.eclipse.sapphire.services.DerivedValueServiceData;
 
 
 public class PreviewSourceContentProvider extends DerivedValueService {
 
 	@Override
-	public String getDerivedValue() {
+	protected DerivedValueServiceData compute()
+	{
 		boolean preview = "Preview".equals( context( ModelProperty.class ).getName() );
 
 		ITag tag = (ITag) context( IModelElement.class );;
@@ -78,7 +80,7 @@ public class PreviewSourceContentProvider extends DerivedValueService {
 			buffer.append(">");
 		}
 
-		return buffer.toString();
+		return new DerivedValueServiceData( buffer.toString() );
 	}
 
 	protected void appendAttr(IAttribute attr, StringBuffer buffer, boolean preview) {

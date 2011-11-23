@@ -13,6 +13,7 @@
  *    
  * Contributors:
  *               Kamesh Sampath - initial implementation
+ *               Gregory Amerson - ongoing maintenance 
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
@@ -25,11 +26,13 @@ import org.eclipse.sapphire.modeling.ImageData;
 import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
 import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.services.ImageService;
+import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class PortletModeImageService extends ImageService {
+public class PortletModeImageService extends ImageService
+{
 
 	private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
 		PortletModeImageService.class, "images/portlet.png" );
@@ -45,62 +48,68 @@ public class PortletModeImageService extends ImageService {
 
 	private ModelPropertyListener listener;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ModelElementService#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * java.lang.String[])
-	 */
 	@Override
-	protected void init() {
-		this.listener = new ModelPropertyListener() {
+	protected void initImageService()
+	{
+		this.listener = new ModelPropertyListener()
+		{
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
-				broadcast();
+			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			{
+				refresh();
 			}
 		};
 
 		context( IModelElement.class ).addListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ImageService#provide()
-	 */
 	@Override
-	public ImageData provide() {
+	protected ImageServiceData compute()
+	{
 		String portletMode = null;
 		IModelElement element = context( IModelElement.class );
+		ImageData imageData = null;
 
-		if ( element instanceof ICustomPortletMode ) {
+		if ( element instanceof ICustomPortletMode )
+		{
 			ICustomPortletMode iCustomPortletMode = (ICustomPortletMode) element;
 			portletMode = String.valueOf( iCustomPortletMode.getPortletMode().getContent() );
 		}
-		else if ( element instanceof IPortletMode ) {
+		else if ( element instanceof IPortletMode )
+		{
 			IPortletMode iPortletMode = (IPortletMode) element;
 			portletMode = iPortletMode.getPortletMode().getContent();
 		}
 
-		if ( portletMode != null ) {
-			if ( "VIEW".equalsIgnoreCase( portletMode ) ) {
-				return IMG_VIEW;
+		if ( portletMode != null )
+		{
+			if ( "VIEW".equalsIgnoreCase( portletMode ) )
+			{
+				imageData = IMG_VIEW;
 			}
-			else if ( "EDIT".equalsIgnoreCase( portletMode ) ) {
-				return IMG_EDIT;
+			else if ( "EDIT".equalsIgnoreCase( portletMode ) )
+			{
+				imageData = IMG_EDIT;
 			}
-			else if ( "HELP".equalsIgnoreCase( portletMode ) ) {
-				return IMG_HELP;
+			else if ( "HELP".equalsIgnoreCase( portletMode ) )
+			{
+				imageData = IMG_HELP;
 			}
 
 		}
-		return IMG_DEFAULT;
+
+		if ( imageData == null )
+		{
+			imageData = IMG_DEFAULT;
+		}
+
+		return new ImageServiceData( imageData );
 	}
 
-	/**
-	 * 
-	 */
 	@Override
-	public void dispose() {
+	public void dispose()
+	{
 		super.dispose();
 
 		context( IModelElement.class ).removeListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );

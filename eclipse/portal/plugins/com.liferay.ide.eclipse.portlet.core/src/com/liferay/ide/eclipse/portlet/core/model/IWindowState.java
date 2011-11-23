@@ -17,6 +17,7 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
+import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStateImageService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.WindowStatesPossibleValueService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -34,6 +35,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author kamesh
  */
 @GenerateImpl
+@Service( impl = WindowStateImageService.class )
 public interface IWindowState extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IWindowState.class );
