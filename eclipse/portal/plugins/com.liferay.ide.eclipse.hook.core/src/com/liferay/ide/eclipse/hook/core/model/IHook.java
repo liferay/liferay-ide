@@ -19,7 +19,7 @@
 package com.liferay.ide.eclipse.hook.core.model;
 
 import com.liferay.ide.eclipse.hook.core.model.internal.CustomJspsBindingImpl;
-import com.liferay.ide.eclipse.hook.core.model.internal.SrcFoldersRelativePathService;
+import com.liferay.ide.eclipse.hook.core.model.internal.PortalPropertiesBindingImpl;
 
 import org.eclipse.sapphire.modeling.ElementProperty;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -27,21 +27,15 @@ import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementHandle;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Transient;
 import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
-import org.eclipse.sapphire.modeling.annotations.FileExtensions;
-import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.MustExist;
-import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -65,22 +59,22 @@ public interface IHook extends IModelElement
 
 	void setVersion( HookVersionType value );
 
+	// *** PortalPropertiesFile ***
+
+	@Type( base = IPortalPropertiesFile.class )
+	@XmlBinding( path = "portal-properties" )
+	ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty( TYPE, "PortalPropertiesFile" );
+
+	ModelElementHandle<IPortalPropertiesFile> getPortalPropertiesFile();
+
 	// *** PortalProperties ***
 
-	@Type( base = Path.class )
+	@Type( base = IPortalProperty.class )
 	@Label( standard = "Portal Properties" )
-	@XmlBinding( path = "portal-properties" )
-	@Service( impl = SrcFoldersRelativePathService.class )
-	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
-	@FileExtensions( expr = "properties" )
-	@MustExist
-	ValueProperty PROP_PORTAL_PROPERTIES = new ValueProperty( TYPE, "PortalProperties" );
+	@CustomXmlListBinding( impl = PortalPropertiesBindingImpl.class )
+	ListProperty PROP_PORTAL_PROPERTIES = new ListProperty( TYPE, "PortalProperties" );
 
-	Value<Path> getPortalProperties();
-
-	void setPortalProperties( Path value );
-
-	void setPortalProperties( String value );
+	ModelElementList<IPortalProperty> getPortalProperties();
 
 	// *** LanguageProperties ***
 

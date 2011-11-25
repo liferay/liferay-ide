@@ -61,6 +61,8 @@ public class HookXmlEditor extends SapphireEditorForXml
 
 	protected boolean customModelDirty = false;
 
+	private boolean ignoreCustomModelChanges;
+
 	/**
 	 * 
 	 */
@@ -93,18 +95,20 @@ public class HookXmlEditor extends SapphireEditorForXml
 
 						IFile customJspFile = customJspFolder.getFile( content );
 
-						IPath portalJsp = portalDir.append( content );
-
-						try
+						if ( !customJspFile.exists() )
 						{
-							CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
-							customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
-						}
-						catch ( Exception e )
-						{
-							HookUI.logError( e );
-						}
+							IPath portalJsp = portalDir.append( content );
 
+							try
+							{
+								CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
+								customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
+							}
+							catch ( Exception e )
+							{
+								HookUI.logError( e );
+							}
+						}
 					}
 				}
 			}
@@ -232,8 +236,21 @@ public class HookXmlEditor extends SapphireEditorForXml
 		return dtdVersion;
 	}
 
+	@Override
+	protected void pageChange( int pageIndex )
+	{
+		this.ignoreCustomModelChanges = true;
+		super.pageChange( pageIndex );
+		this.ignoreCustomModelChanges = false;
+	}
+
 	protected void handleCustomJspsPropertyChangedEvent( ModelPropertyChangeEvent event )
 	{
+		if ( this.ignoreCustomModelChanges )
+		{
+			return;
+		}
+
 		this.customModelDirty = true;
 		this.firePropertyChange( IEditorPart.PROP_DIRTY );
 	}

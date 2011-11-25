@@ -36,39 +36,6 @@
 			<node>
 				<image>icons/e16/hook.png</image>
 				<section>
-					<content>
-						<property-editor>
-							<property>PortalProperties</property>
-							<action>
-								<id>LiferayIDE.CreateFile.Action</id>
-								<label>Create</label>
-								<image>icons/elcl16/create.png</image>
-								<description>Allows the creation of the File if the file does
-									not exist</description>
-								<hint>
-									<name>style</name>
-									<value>image</value>
-								</hint>
-								<context>Sapphire.ValuePropertyEditor</context>
-								<location>after:Sapphire.Browse</location>
-								<condition>FileResourceCondtion</condition>
-							</action>
-							<action-handler>
-								<action>LiferayIDE.CreateFile.Action</action>
-								<id>LiferayIDE.CreateFile.Action</id>
-								<impl>CreateFileActionHandler</impl>
-								<param>
-									<name>propertyName</name>
-									<value>PortalProperties</value>
-								</param>
-							</action-handler>
-						</property-editor>
-
-					</content>
-					<collapsible>false</collapsible>
-					<label>Configuration Editor</label>
-				</section>
-				<section>
 					<label>Internationalization</label>
 					<scale-vertically>true</scale-vertically>
 					<collapsible>true</collapsible>
@@ -80,6 +47,7 @@
 					</content>
 				</section>
 				<label>Hook Configuration</label>
+                <node-include>PortalPropertiesNode</node-include>
                 <node-include>CustomJSPsNode</node-include>
                 <node-include>ServicesNode</node-include>
                 <node-include>FiltersAndMappingsNode</node-include>
@@ -91,6 +59,61 @@
         <page-header-image>images/hook.png</page-header-image>
 	</editor-page>
     <node>
+        <id>PortalPropertiesNode</id>
+        <label>Portal Properties</label>
+        <section>
+            <content>
+                <with>
+                    <path>PortalPropertiesFile</path>
+                    <panel>
+                        <key>IPortalPropertiesFile</key>
+                        <content>
+                            <property-editor>
+                                <property>Value</property>
+                                <action-handler>
+                                    <action>Sapphire.Create</action>
+                                    <label>Create Properties File</label>
+                                    <id>Create.File.Sapphire.Action</id>
+                                    <impl>CreateSrcFileActionHandler</impl>
+                                    <condition>CreateSrcFileActionHandler$Condition</condition>
+                                </action-handler>
+                            </property-editor>
+                            <separator></separator>
+                            <property-editor>
+                                <property>../PortalProperties</property>
+                                <hint>
+                                    <value>DefaultListPropertyEditorRenderer$Factory</value>
+                                    <name>factory</name>
+                                </hint>
+                            </property-editor>
+                            <separator>
+                                <label>Details</label>
+                            </separator>
+                            <switching-panel>
+                                <list-selection-controller>
+                                    <property>../PortalProperties</property>
+                                </list-selection-controller>
+                                <panel>
+                                    <key>IPortalProperty</key>
+                                    <content>
+                                        <property-editor>Name</property-editor>
+                                        <property-editor>Value</property-editor>
+                                    </content>
+                                </panel>
+                                <default-panel>
+                                    <content>
+                                        <label>Select a portal property item above to view or edit additional parameters.</label>
+                                    </content>
+                                </default-panel>
+                            </switching-panel>
+                        </content>
+                    </panel>
+                    <label>Customize Liferay Portal Properties</label>
+                </with>
+            </content>
+        </section>
+    </node>
+	<node>
         <id>CustomJSPsNode</id>
         <section>
             <content>
@@ -128,7 +151,7 @@
                                 </list-selection-controller>
                                 <default-panel>
                                     <content>
-                                        <label>Select a list item above to view or edit additional parameters.</label>
+                                        <label>Select a custom jsp item above to view or edit additional parameters.</label>
                                     </content>
                                 </default-panel>
                                 <panel>
@@ -179,7 +202,7 @@
         </section>
         <node-include>ServicesNodeList</node-include>
     </node>
-	<node-factory>
+    <node-factory>
         <id>ServicesNodeList</id>
         <property>Services</property>
         <case>

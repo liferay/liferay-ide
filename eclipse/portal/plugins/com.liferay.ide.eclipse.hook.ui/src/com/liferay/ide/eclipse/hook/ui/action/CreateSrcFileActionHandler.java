@@ -13,17 +13,19 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Gregory Amerson - IDE-355
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.ui.action;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -37,38 +39,34 @@ import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.ui.SapphireAction;
+import org.eclipse.sapphire.ui.SapphirePropertyEditor;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
+import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
-
-import com.liferay.ide.eclipse.core.util.FileUtil;
-import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler {
+public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHandler {
 
 	IModelElement modelElement;
 	ModelProperty modelProperty;
-	IPath docRootFolder;
 	ModelPropertyListener listener;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
 	@Override
 	public Object run( SapphireRenderingContext context ) {
 
 		if ( modelProperty instanceof ValueProperty ) {
 			ValueProperty valueProperty = (ValueProperty) modelProperty;
 			final Value<Path> value = modelElement.read( valueProperty );
-			final IPath filePath = docRootFolder.append( value.getText() );
-			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( filePath );
+			final IPath filePath = getDefaultSrcFolderPath().append( value.getText() );
+			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
 			try {
-				InputStream defaultContentStream = getPortalPropsDefaultContent();
+				InputStream defaultContentStream = new ByteArrayInputStream( "".getBytes() );
 				if ( !file.exists() ) {
 					file.create( defaultContentStream, true, null );
 					modelElement.refresh( true, true );
@@ -82,11 +80,20 @@ public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
-	 */
+	private IPath getDefaultSrcFolderPath()
+	{
+		IProject project = this.modelElement.adapt( IProject.class );
+
+		IFolder[] folders = ProjectUtil.getSourceFolders( project );
+
+		if ( !CoreUtil.isNullOrEmpty( folders ) )
+		{
+			return folders[0].getFullPath();
+		}
+
+		return null;
+	}
+
 	@Override
 	public void init( final SapphireAction action, ISapphireActionHandlerDef def ) {
 		super.init( action, def );
@@ -114,8 +121,6 @@ public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler
 
 		} );
 
-		IProject project = modelElement.adapt( IProject.class );
-		docRootFolder = project.getLocation().append( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
 	}
 
 	/*
@@ -132,18 +137,29 @@ public class CreateFileActionHandler extends SapphirePropertyEditorActionHandler
 		return isEnbled;
 	}
 
-	/**
-	 * @return
-	 * @throws URISyntaxException
-	 * @throws IOException
-	 */
-	private InputStream getPortalPropsDefaultContent() throws URISyntaxException, IOException {
-		URL defaultContentUrl =
-			new URL(
-				"platform:/plugin/com.liferay.ide.eclipse.hook.ui/default-content-files/PortalPropertiesDefaultContent.properties" );
-		InputStream in = defaultContentUrl.openStream();
-		String buf = FileUtil.readContents( in );
-		in.close();
-		return new ByteArrayInputStream( buf.getBytes() );
+
+	public static class Condition extends SapphirePropertyEditorCondition
+	{
+
+		@Override
+		protected final boolean evaluate( final SapphirePropertyEditor part )
+		{
+			final ModelProperty property = part.getProperty();
+			final IModelElement element = part.getModelElement();
+
+			if ( property instanceof ValueProperty && element != null && property.isOfType( Path.class ) )
+			{
+				final ValidFileSystemResourceType typeAnnotation =
+					property.getAnnotation( ValidFileSystemResourceType.class );
+
+				if ( typeAnnotation != null && typeAnnotation.value() == FileSystemResourceType.FILE )
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	}
 }
