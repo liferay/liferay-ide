@@ -20,15 +20,12 @@ package com.liferay.ide.eclipse.hook.core.model.internal;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.SortedSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
@@ -39,38 +36,12 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 public class PortalPropertyNamePossibleValuesService extends PossibleValuesService
 {
 
-	final FileFilter jspfilter = new FileFilter()
-	{
-
-		public boolean accept( File pathname )
-		{
-			return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" );
-		}
-	};
-
-	private IPath portalDir;
+	private String[] hookProperties;
 
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values )
 	{
-		File[] files = portalDir.toFile().listFiles( jspfilter );
-		findJSPFiles( files, values );
-		
-	}
-
-	private void findJSPFiles( File[] files, SortedSet<String> values )
-	{
-		for ( File file : files )
-		{
-			if ( file.isDirectory() )
-			{
-				findJSPFiles( file.listFiles( jspfilter ), values );
-			}
-			else
-			{
-				values.add( new Path( file.getAbsolutePath() ).removeFirstSegments( 8 ).toPortableString() );
-			}
-		}
+		values.addAll( Arrays.asList( this.hookProperties ) );
 	}
 
 	@Override
@@ -82,7 +53,7 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
 		try
 		{
 			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-			this.portalDir = liferayRuntime.getPortalDir();
+			this.hookProperties = liferayRuntime.getSupportedHookProperties();
 		}
 		catch ( CoreException e )
 		{

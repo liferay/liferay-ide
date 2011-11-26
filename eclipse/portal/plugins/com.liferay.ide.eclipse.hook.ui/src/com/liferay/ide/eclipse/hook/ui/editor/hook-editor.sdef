@@ -26,6 +26,7 @@
         <package>com.liferay.ide.eclipse.hook.ui.editor</package>
         <package>org.eclipse.sapphire.java.jdt.ui.internal</package>
         <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>org.eclipse.sapphire.ui.swt.renderer.actions.internal</package>
 	</import>
 	<editor></editor>
 	<editor-page>
@@ -73,14 +74,20 @@
                                 <action-handler>
                                     <action>Sapphire.Create</action>
                                     <label>Create Properties File</label>
-                                    <id>Create.File.Sapphire.Action</id>
                                     <impl>CreateSrcFileActionHandler</impl>
                                     <condition>CreateSrcFileActionHandler$Condition</condition>
+                                    <id>Sapphire.Create.Properties.File</id>
+                                </action-handler>
+                                <action-handler>
+                                    <action>Sapphire.Jump</action>
+                                    <id>Sapphire.Jump.Path.Relative</id>
+                                    <impl>RelativePathJumpActionHandler</impl>
+                                    <label>Open Properties File</label>
                                 </action-handler>
                             </property-editor>
                             <separator></separator>
                             <property-editor>
-                                <property>../PortalProperties</property>
+                                <property>../PortalPropertiesOverrides</property>
                                 <hint>
                                     <value>DefaultListPropertyEditorRenderer$Factory</value>
                                     <name>factory</name>
@@ -91,13 +98,19 @@
                             </separator>
                             <switching-panel>
                                 <list-selection-controller>
-                                    <property>../PortalProperties</property>
+                                    <property>../PortalPropertiesOverrides</property>
                                 </list-selection-controller>
                                 <panel>
                                     <key>IPortalProperty</key>
                                     <content>
-                                        <property-editor>Name</property-editor>
-                                        <property-editor>Value</property-editor>
+                                        <property-editor>
+                                            <property>Name</property>
+                                            <label>Override Name</label>
+                                        </property-editor>
+                                        <property-editor>
+                                            <property>Value</property>
+                                            <label>Override Value</label>
+                                        </property-editor>
                                     </content>
                                 </panel>
                                 <default-panel>

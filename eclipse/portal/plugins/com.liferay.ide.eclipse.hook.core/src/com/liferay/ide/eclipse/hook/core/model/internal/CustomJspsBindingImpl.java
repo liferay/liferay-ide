@@ -20,7 +20,6 @@ package com.liferay.ide.eclipse.hook.core.model.internal;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.hook.core.model.ICustomJsp;
 import com.liferay.ide.eclipse.hook.core.model.ICustomJspDir;
-import com.liferay.ide.eclipse.hook.core.model.IHook;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,11 +27,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.modeling.ListBindingImpl;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Resource;
@@ -41,7 +38,7 @@ import org.eclipse.sapphire.modeling.Resource;
 /**
  * @author Gregory Amerson
  */
-public class CustomJspsBindingImpl extends ListBindingImpl
+public class CustomJspsBindingImpl extends HookListBindingImpl
 {
 
 	private List<Resource> customJspsResources;
@@ -122,16 +119,6 @@ public class CustomJspsBindingImpl extends ListBindingImpl
 		{
 			return null;
 		}
-	}
-
-	private IHook hook()
-	{
-		return this.element().nearest( IHook.class );
-	}
-
-	private IProject project()
-	{
-		return this.hook().adapt( IProject.class );
 	}
 
 	@Override

@@ -178,7 +178,7 @@
         <module>common/plugins/com.liferay.ide.eclipse.ui</module>
         <module>common/plugins/com.liferay.ide.eclipse.ui.snippets</module>
 
-			<module>portal/plugins/com.liferay.ide.eclipse.hook.core</module>
+	<module>portal/plugins/com.liferay.ide.eclipse.hook.core</module>
 	<module>portal/plugins/com.liferay.ide.eclipse.hook.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.ui</module>
@@ -188,6 +188,7 @@
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.vaadin.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.properties.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.service.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.service.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.taglib.ui</module>

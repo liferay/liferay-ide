@@ -17,14 +17,15 @@
 
 package com.liferay.ide.eclipse.hook.core.model.internal;
 
-import com.liferay.ide.eclipse.hook.core.HookCore;
-import com.liferay.ide.eclipse.hook.core.model.IHook;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -41,40 +42,11 @@ import org.eclipse.sapphire.services.ValidationService;
 public class PortalPropertyNameValidationService extends ValidationService
 {
 
-	private IPath portalDir;
+	private List<String> hookPropertiesNames;
 
-	private IPath getPortalDir()
+	private boolean isValidPortalPropertyName( Value<?> value )
 	{
-		if ( this.portalDir == null )
-		{
-			try
-			{
-				final IModelElement element = context().find( IModelElement.class );
-				final IProject project = element.nearest( IHook.class ).adapt( IFile.class ).getProject();
-				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-				this.portalDir = liferayRuntime.getPortalDir();
-			}
-			catch ( Exception e )
-			{
-				HookCore.logError( e );
-			}
-		}
-
-		return this.portalDir;
-	}
-
-	private boolean isValidPortalJsp( Value<?> value )
-	{
-		String customJsp = value.getContent().toString();
-
-		IPath customJspPath = getPortalDir().append( customJsp );
-
-		if ( customJspPath.toFile().exists() )
-		{
-			return true;
-		}
-
-		return false;
+		return hookPropertiesNames.contains( value.getContent() );
 	}
 
 	private boolean isValueEmpty( Value<?> value )
@@ -94,13 +66,29 @@ public class PortalPropertyNameValidationService extends ValidationService
 			final String msg = NLS.bind( "Non-empty value for {0} required. ", label );
 			return Status.createErrorStatus( msg );
 		}
-		else if ( !isValidPortalJsp( value ) )
+		else if ( !isValidPortalPropertyName( value ) )
 		{
-			final String msg = NLS.bind( "Invalid path {0} for custom jsp. Path does not exist in portal. ", label );
+			final String msg = NLS.bind( "Invalid portal property name {0}. ", label );
 			return Status.createErrorStatus( msg );
 		}
 
 		return Status.createOkStatus();
+	}
+
+	@Override
+	protected void init()
+	{
+		super.init();
+		IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+
+		try
+		{
+			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+			this.hookPropertiesNames = Arrays.asList( liferayRuntime.getSupportedHookProperties() );
+		}
+		catch ( CoreException e )
+		{
+		}
 	}
 
 }

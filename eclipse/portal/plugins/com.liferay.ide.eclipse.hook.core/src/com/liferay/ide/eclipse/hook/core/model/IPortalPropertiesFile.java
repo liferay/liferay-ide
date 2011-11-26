@@ -47,7 +47,7 @@ public interface IPortalPropertiesFile extends IModelElement
 	// *** Value ***
 
 	@Type( base = Path.class )
-	@Label( standard = "Portal Properties" )
+	@Label( standard = "Portal Properties File" )
 	@XmlBinding( path = "" )
 	@InitialValue( text = "portal.properties" )
 	@Service( impl = SrcFoldersRelativePathService.class )

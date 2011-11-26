@@ -70,11 +70,11 @@ public interface IHook extends IModelElement
 	// *** PortalProperties ***
 
 	@Type( base = IPortalProperty.class )
-	@Label( standard = "Portal Properties" )
+	@Label( standard = "Portal Properties Overrides" )
 	@CustomXmlListBinding( impl = PortalPropertiesBindingImpl.class )
-	ListProperty PROP_PORTAL_PROPERTIES = new ListProperty( TYPE, "PortalProperties" );
+	ListProperty PROP_PORTAL_PROPERTIES_OVERRIDES = new ListProperty( TYPE, "PortalPropertiesOverrides" );
 
-	ModelElementList<IPortalProperty> getPortalProperties();
+	ModelElementList<IPortalProperty> getPortalPropertiesOverrides();
 
 	// *** LanguageProperties ***
 
