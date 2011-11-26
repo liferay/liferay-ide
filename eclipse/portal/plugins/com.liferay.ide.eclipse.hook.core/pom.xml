@@ -32,6 +32,17 @@
 
 	<name>Liferay IDE Hook Core</name>
 
+<!--
+	<properties>
+		<orbit-site>file:../../../target-platform/orbit</orbit-site>
+    		<sapphire-site>file:../../../target-platform/sapphire</sapphire-site>
+    		<graphiti-site>file:../../../target-platform/graphiti-0.8.1</graphiti-site>
+		<eclipse-site>file:../../../target-platform/releases-helios</eclipse-site>
+		<eclipse-project-update-site>file:../../../target-platform/eclipse-updates-3.6</eclipse-project-update-site>
+		<wtp-site>file:../../../target-platform/webtools-repository-helios</wtp-site>
+	</properties>
+-->
+
 	<dependencies>
 		<dependency>
 			<groupId>ant-contrib</groupId>

@@ -55,8 +55,6 @@
     <platform-version-name>helios</platform-version-name>
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-<!--    <sapphire-site>http://download.eclipse.org/sapphire/0.3.2/repository</sapphire-site>
-    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.4.x/lastSuccessfulBuild/artifact/build/repository</sapphire-site>-->
     <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.4.x/197/artifact/build/repository/</sapphire-site>
     <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site>
     <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
@@ -64,6 +62,50 @@
 
     <profiles>
         <profile>
+            <id>local</id>
+            <properties>
+                <eclipse-site>file:target-platform/releases-helios</eclipse-site>
+		<eclipse-project-update-site>file:target-platform/eclipse-updates-3.6</eclipse-project-update-site>
+		<wtp-site>file:target-platform/webtools-repository-helios</wtp-site>
+		<orbit-site>file:target-platform/orbit</orbit-site>
+		<sapphire-site>file:target-platform/sapphire</sapphire-site>
+		<graphiti-site>file:target-platform/graphiti-0.8.1</graphiti-site>
+                <platform-version>[3.6,3.7)</platform-version>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>eclipse-site</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-site}</url>
+                </repository>
+                <repository>
+                    <id>eclipse-project</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-project-update-site}</url>
+                </repository>
+                <repository>
+                    <id>orbit</id>
+                    <layout>p2</layout>
+                    <url>${orbit-site}</url>
+                </repository>
+                <repository>
+                    <id>sapphire</id>
+                    <layout>p2</layout>
+                    <url>${sapphire-site}</url>
+                </repository>
+                <repository>
+                    <id>graphiti</id>
+                    <layout>p2</layout>
+                    <url>${graphiti-site}</url>
+                </repository>
+                <repository>
+                    <id>wtp</id>
+                    <layout>p2</layout>
+                    <url>${wtp-site}</url>
+                </repository>
+            </repositories>
+        </profile>
+	<profile>
             <id>helios</id>
             <activation>
             	<activeByDefault>true</activeByDefault>
@@ -78,7 +120,6 @@
                 <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/${eclipse.project.version}</eclipse-project-update-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
-
                 <platform-version>[3.6,3.7)</platform-version>
             </properties>
             <repositories>
