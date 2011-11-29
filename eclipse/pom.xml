@@ -56,7 +56,7 @@
     <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
     <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.4.x/197/artifact/build/repository/</sapphire-site>
-<!--     <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site> -->
+    <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site> 
     <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
 
@@ -69,7 +69,7 @@
 		<wtp-site>file:target-platform/webtools-repository-helios</wtp-site>
 		<orbit-site>file:target-platform/orbit</orbit-site>
 		<sapphire-site>file:target-platform/sapphire</sapphire-site>
-<!-- 		<graphiti-site>file:target-platform/graphiti-0.8.1</graphiti-site> -->
+ 		<graphiti-site>file:target-platform/graphiti-0.8.1</graphiti-site>
                 <platform-version>[3.6,3.7)</platform-version>
             </properties>
             <repositories>
@@ -93,13 +93,11 @@
                     <layout>p2</layout>
                     <url>${sapphire-site}</url>
                 </repository>
-                <!-- 
                 <repository>
                     <id>graphiti</id>
                     <layout>p2</layout>
                     <url>${graphiti-site}</url>
                 </repository>
-                 -->
                 <repository>
                     <id>wtp</id>
                     <layout>p2</layout>
@@ -145,13 +143,11 @@
                     <layout>p2</layout>
                     <url>${sapphire-site}</url>
                 </repository>
-                <!-- 
                 <repository>
                     <id>graphiti</id>
                     <layout>p2</layout>
                     <url>${graphiti-site}</url>
                 </repository>
-                 -->
                 <repository>
                     <id>wtp</id>
                     <layout>p2</layout>
@@ -192,13 +188,11 @@
                     <layout>p2</layout>
                     <url>${orbit-site}</url>
                 </repository>
-                <!--  
                 <repository>
                     <id>graphiti</id>
                     <layout>p2</layout>
                     <url>${graphiti-site}</url>
                 </repository>
-                -->
                 <repository>
                     <id>sapphire</id>
                     <layout>p2</layout>
