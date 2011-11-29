@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
+import org.eclipse.sapphire.modeling.annotations.PossibleValues;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -42,6 +43,7 @@ public interface IDispatcher extends IModelElement {
 	@Label( standard = "Dispatcher" )
 	@NoDuplicates
 	@XmlBinding( path = "" )
+	@PossibleValues( values = { "FORWARD", "REQUEST", "INCLUDE", "ERROR" }, caseSensitive = false )
 	ValueProperty PROP_DISPATCHER = new ValueProperty( TYPE, "Dispatcher" );
 
 	Value<String> getDispatcher();

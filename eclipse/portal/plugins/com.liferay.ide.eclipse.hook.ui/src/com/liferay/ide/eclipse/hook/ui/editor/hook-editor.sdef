@@ -202,9 +202,15 @@
     </node>
 	<node>
         <id>ServicesNode</id>
-        <label>Services</label>
+        <label>Service Wrappers</label>
         <section>
             <content>
+                <action-link>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image></show-image>
+                    <label>Add a Service Wrapper</label>
+                </action-link>
+                <separator></separator>
                 <property-editor>
                     <property>Services</property>
                     <child-property>ServiceType</child-property>
@@ -222,7 +228,7 @@
             <use-model-element-image></use-model-element-image>
             <label>${ServiceType != null ? ServiceType : &quot;&lt;service&gt;&quot;}</label>
             <section>
-                <label>Service Editor</label>
+                <label>Service Wrapper Detail</label>
                 <content>
                     <property-editor>
                         <property>ServiceType</property>

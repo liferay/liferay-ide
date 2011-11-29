@@ -48,4 +48,6 @@ public interface ILiferayRuntime extends IJavaRuntime {
 
 	IPath getPortalDir();
 
+	String[] getServletFilterNames();
+
 }

@@ -218,6 +218,18 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		}
 	}
 
+	public String[] getServletFilterNames()
+	{
+		try
+		{
+			return LiferayTomcatUtil.getServletFilterNames( getRuntimeLocation(), getPortalDir() );
+		}
+		catch ( Exception e )
+		{
+			return new String[0];
+		}
+	}
+
 	@Override
 	public ITomcatVersionHandler getVersionHandler() {
 		String id = getRuntime().getRuntimeType().getId();

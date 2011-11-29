@@ -43,6 +43,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -65,6 +67,9 @@ import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerEvent;
 import org.osgi.framework.Version;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Greg Amerson
@@ -645,5 +650,38 @@ public class LiferayTomcatUtil {
 		}
 
 		return file;
+	}
+
+	public static String[] getServletFilterNames( IPath runtimeLocation, IPath portalDir ) throws Exception
+	{
+		List<String> retval = new ArrayList<String>();
+
+		File filtersWebXmlFile = portalDir.append( "WEB-INF/liferay-web.xml" ).toFile();
+
+		if ( !filtersWebXmlFile.exists() )
+		{
+			filtersWebXmlFile = portalDir.append( "WEB-INF/web.xml" ).toFile();
+		}
+
+		if ( filtersWebXmlFile.exists() )
+		{
+			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( filtersWebXmlFile );
+
+			NodeList filterNameElements = document.getElementsByTagName( "filter-name" );
+
+			for ( int i = 0; i < filterNameElements.getLength(); i++ )
+			{
+				Node filterNameElement = filterNameElements.item( i );
+
+				String content = filterNameElement.getTextContent();
+
+				if ( !CoreUtil.isNullOrEmpty( content ) )
+				{
+					retval.add( content.trim() );
+				}
+			}
+		}
+
+		return retval.toArray( new String[0] );
 	}
 }

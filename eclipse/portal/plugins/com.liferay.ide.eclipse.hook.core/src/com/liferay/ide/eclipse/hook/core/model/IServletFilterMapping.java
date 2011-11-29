@@ -20,6 +20,7 @@ package com.liferay.ide.eclipse.hook.core.model;
 
 import com.liferay.ide.eclipse.hook.core.model.internal.BeforeAfterFilterNameBinding;
 import com.liferay.ide.eclipse.hook.core.model.internal.BeforeAfterFilterTypeBinding;
+import com.liferay.ide.eclipse.hook.core.model.internal.PortalFilterNamesPossibleValuesService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -31,8 +32,8 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NumericRange;
-import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.PossibleValues;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -50,8 +51,9 @@ public interface IServletFilterMapping extends IModelElement {
 
 	// *** Servlet Filter Name ***
 
-	@Label( standard = "Filter Name" )
+	@Label( standard = "Servlet Filter Name" )
 	@XmlBinding( path = "servlet-filter-name" )
+	@PossibleValues( property = "/ServletFilters/ServletFilterName" )
 	ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" );
 
 	Value<String> getServletFilterName();
@@ -74,6 +76,7 @@ public interface IServletFilterMapping extends IModelElement {
 	@Label( standard = "Portal Filter Name" )
 	@Whitespace( trim = true )
 	@CustomXmlValueBinding( impl = BeforeAfterFilterNameBinding.class )
+	@Service( impl = PortalFilterNamesPossibleValuesService.class )
 	ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty( TYPE, "BeforeAfterFilterName" );
 
 	Value<String> getBeforeAfterFilterName();
@@ -84,8 +87,6 @@ public interface IServletFilterMapping extends IModelElement {
 
 	@Type( base = IURLPattern.class )
 	@Label( standard = "URL Pattern" )
-	@Required
-	@NumericRange( min = "1" )
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = IURLPattern.class ) } )
 	ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" );
 

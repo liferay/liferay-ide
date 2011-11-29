@@ -128,7 +128,7 @@ public interface IHook extends IModelElement
 	// *** Services ***
 
 	@Type( base = IService.class )
-	@Label( standard = "Services" )
+	@Label( standard = "Service Wrappers" )
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "service", type = IService.class ) } )
 	ListProperty PROP_SERVICES = new ListProperty( TYPE, "Services" );
 

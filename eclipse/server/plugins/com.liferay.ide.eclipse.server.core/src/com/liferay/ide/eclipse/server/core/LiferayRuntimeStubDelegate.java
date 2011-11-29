@@ -96,6 +96,11 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 		return getLiferayRuntime().getSupportedHookProperties();
 	}
 
+	public String[] getServletFilterNames()
+	{
+		return getLiferayRuntime().getServletFilterNames();
+	}
+
 	public IPath getAppServerDir() {
 		return getLiferayRuntime().getAppServerDir();
 	}

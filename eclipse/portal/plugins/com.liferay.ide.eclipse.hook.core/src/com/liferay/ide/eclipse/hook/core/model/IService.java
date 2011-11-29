@@ -41,6 +41,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @GenerateImpl
+@Label( standard = "Service Wrapper" )
 public interface IService extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IService.class );
