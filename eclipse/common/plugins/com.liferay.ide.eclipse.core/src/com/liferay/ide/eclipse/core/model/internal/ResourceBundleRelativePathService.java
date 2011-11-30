@@ -15,9 +15,9 @@
  *               Kamesh Sampath  initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core.model.internal;
+package com.liferay.ide.eclipse.core.model.internal;
 
-import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class ResourceBundleRelativePathService extends RelativePathService
 		List<Path> roots = new ArrayList<Path>();
 		if ( project != null )
 		{
-			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 			for ( IClasspathEntry iClasspathEntry : cpEntries )
 			{
 				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )

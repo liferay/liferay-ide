@@ -17,8 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
 
-import static com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+import static com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
@@ -60,7 +61,7 @@ public class LocaleBundleValidationService extends ValidationService {
 			final IPortlet portlet = modelElement.nearest( IPortlet.class );
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			final IWorkspaceRoot wroot = workspace.getRoot();
-			IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 			if ( cpEntries != null ) {
 				String locale = modelElement.read( context( ValueProperty.class ) ).getText( false );
 				Value<Path> resourceBundle = portlet.getResourceBundle();

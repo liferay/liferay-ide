@@ -29,6 +29,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
@@ -42,6 +43,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 @GenerateImpl
 @Label( standard = "Service Wrapper" )
+@Image( path = "images/elcl16/service_16x16.gif" )
 public interface IService extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( IService.class );

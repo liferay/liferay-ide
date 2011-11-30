@@ -24,6 +24,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -33,6 +34,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author Gregory Amerson
  */
 @GenerateImpl
+@Image( path = "images/elcl16/jsp_type_16x16.gif" )
 public interface ICustomJsp extends IModelElement
 {
     ModelElementType TYPE = new ModelElementType( ICustomJsp.class );

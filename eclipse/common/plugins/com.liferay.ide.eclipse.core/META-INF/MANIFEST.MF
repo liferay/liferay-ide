@@ -22,6 +22,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.core,
  com.liferay.ide.eclipse.core.model,
+ com.liferay.ide.eclipse.core.model.internal,
  com.liferay.ide.eclipse.core.model.xml.internal,
  com.liferay.ide.eclipse.core.util,
  org.apache.commons.codec,

@@ -17,7 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
@@ -84,7 +85,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 	 */
 	protected final boolean getFileFromClasspath( IProject project, String ioFileName ) {
 
-		IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
 				IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
@@ -108,7 +109,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 	 */
 	protected final IFolder getResourceBundleFolderLocation( IProject project, String ioFileName ) {
 
-		IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
 				IFolder srcFolder = wroot.getFolder( iClasspathEntry.getPath() );

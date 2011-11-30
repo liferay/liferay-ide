@@ -19,10 +19,10 @@
 package com.liferay.ide.eclipse.hook.core.model;
 
 import com.liferay.ide.eclipse.hook.core.model.internal.StrutsActionPathPossibleValuesService;
-import com.liferay.ide.eclipse.hook.core.model.internal.UrlPathValidationService;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
+import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -37,7 +37,6 @@ import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -55,8 +54,8 @@ public interface IStrutsAction extends IModelElement {
 	@Label( standard = "Struts Action Path" )
 	@XmlBinding( path = "struts-action-path" )
 	@Required
-	@Services( { @Service( impl = UrlPathValidationService.class ),
-		@Service( impl = StrutsActionPathPossibleValuesService.class ) } )
+	// @Services( { @Service( impl = UrlPathValidationService.class ),
+	@Service( impl = StrutsActionPathPossibleValuesService.class )
 	ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" );
 
 	Value<String> getStrutsActionPath();
@@ -68,7 +67,7 @@ public interface IStrutsAction extends IModelElement {
 	@Reference( target = JavaType.class )
 	@Label( standard = "Struts Action Impl" )
 	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS }, type = { "com.liferay.portal.kernel.struts.StrutsAction",
-		"com.liferay.portal.kernel.struts.StrutsPortletAction" } )
+		"com.liferay.portal.kernel.struts.StrutsPortletAction" }, behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE )
 	@MustExist
 	@Required
 	@XmlBinding( path = "struts-action-impl" )

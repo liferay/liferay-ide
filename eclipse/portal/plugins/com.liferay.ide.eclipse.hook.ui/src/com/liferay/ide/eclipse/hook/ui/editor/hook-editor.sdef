@@ -39,11 +39,12 @@
 				<section>
 					<label>Internationalization</label>
 					<scale-vertically>true</scale-vertically>
-					<collapsible>true</collapsible>
+					<collapsible>false</collapsible>
 					<content>
 						<property-editor>
 							<property>LanguageProperties</property>
 							<show-label>false</show-label>
+                            <child-property>Value</child-property>
 						</property-editor>
 					</content>
 				</section>
@@ -125,6 +126,7 @@
                 </with>
             </content>
         </section>
+        <image>icons/e16/properties_16x16.gif</image>
     </node>
 	<node>
         <id>CustomJSPsNode</id>
@@ -198,6 +200,7 @@
             </content>
         </section>
         <label>Custom JSPs</label>
+        <image>icons/e16/folder_16x16.gif</image>
         
     </node>
 	<node>
@@ -215,6 +218,7 @@
             </content>
         </section>
         <node-include>ServicesNodeList</node-include>
+        <image>icons/e16/service_obj_16x16.gif</image>
     </node>
     <node-factory>
         <id>ServicesNodeList</id>
@@ -248,7 +252,7 @@
                     <property-editor>
                         <property>ServiceImpl</property>
                         <action-handler-filter>
-                            <impl>CustomTypeActionHandlerFilter</impl>
+                            <impl>NoBrowseActionHandlerFilter</impl>
                             <context>Sapphire.ValuePropertyEditor</context>
                         </action-handler-filter>
                         <action-handler>
@@ -298,7 +302,25 @@
 			<section>
 				<content>
 					<property-editor>ServletFilterName</property-editor>
-					<property-editor>ServletFilterImpl</property-editor>
+                    <property-editor>
+                        <property>ServletFilterImpl</property>
+                        <action-handler-filter>
+                            <impl>NoBrowseActionHandlerFilter</impl>
+                        </action-handler-filter>
+                        <action-handler>
+                            <action>Sapphire.Browse</action>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <impl>HierarchyJavaTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>type</name>
+                                <value>javax.servlet.Filter</value>
+                            </param>
+                            <param>
+                                <name>filter</name>
+                                <value>**</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
 					<property-editor>InitParams</property-editor>
 				</content>
                 <label>Servlet Filter Editor</label>
@@ -433,6 +455,7 @@
                         </action-handler>
                     </property-editor>
                 </content>
+                <label>IndexerPostProcessor Editor</label>
             </section>
         </case>
     </node-factory>

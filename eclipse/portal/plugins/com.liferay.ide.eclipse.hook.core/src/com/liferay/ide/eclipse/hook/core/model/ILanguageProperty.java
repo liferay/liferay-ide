@@ -18,13 +18,19 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
+import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.FileExtensions;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -35,11 +41,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 public interface ILanguageProperty extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType( ILanguageProperty.class );
-
 	// *** Value ***
 
 	@Label( standard = "Language Properties" )
 	@XmlBinding( path = "" )
+	@Service( impl = ResourceBundleRelativePathService.class )
+	@FileExtensions( expr = "properties" )
+	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
 	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
 	Value<String> getValue();

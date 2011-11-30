@@ -17,10 +17,10 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
+import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletInfo;
 import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
 import java.util.ArrayList;

@@ -17,8 +17,9 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import static com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+import static com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
@@ -63,7 +64,7 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 		if ( isEnabled && text != null ) {
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			final IWorkspaceRoot wroot = workspace.getRoot();
-			final IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+			final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 			String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
 			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
@@ -100,7 +101,7 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		final IWorkspaceRoot wroot = workspace.getRoot();
-		final IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+		final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 		String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
 
 		for ( IClasspathEntry iClasspathEntry : cpEntries ) {

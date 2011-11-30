@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 
@@ -82,24 +81,6 @@ public class PortletUtil {
 	}
 
 	/**
-	 * @param project
-	 * @return
-	 */
-	public static IClasspathEntry[] getClasspathEntries( IProject project ) {
-		if ( project != null ) {
-			IJavaProject javaProject = JavaCore.create( project );
-			try {
-				IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
-				return classPathEntries;
-			}
-			catch ( JavaModelException e ) {
-				// TODO log the exception
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * @param text
 	 * @return
 	 */
@@ -144,7 +125,7 @@ public class PortletUtil {
 		IFile resourceBundleFile = null;
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot wroot = workspace.getRoot();
-		IClasspathEntry[] cpEntries = PortletUtil.getClasspathEntries( project );
+		IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
 		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
 				IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();

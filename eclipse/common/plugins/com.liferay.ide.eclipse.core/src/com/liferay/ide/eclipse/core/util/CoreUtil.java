@@ -42,6 +42,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
@@ -306,5 +310,23 @@ public class CoreUtil {
 		}
 
 		return version;
+	}
+
+	/**
+	 * @param project
+	 * @return
+	 */
+	public static IClasspathEntry[] getClasspathEntries( IProject project ) {
+		if ( project != null ) {
+			IJavaProject javaProject = JavaCore.create( project );
+			try {
+				IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
+				return classPathEntries;
+			}
+			catch ( JavaModelException e ) {
+				// TODO log the exception
+			}
+		}
+		return null;
 	}
 }

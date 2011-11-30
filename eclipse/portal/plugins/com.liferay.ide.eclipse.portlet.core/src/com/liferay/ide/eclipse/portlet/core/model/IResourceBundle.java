@@ -17,7 +17,7 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
 
 import org.eclipse.sapphire.modeling.IModelElement;

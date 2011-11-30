@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
@@ -33,6 +34,7 @@ import org.eclipse.sapphire.modeling.annotations.Services;
  * @author Gregory Amerson
  */
 @GenerateImpl
+@Image( path = "images/elcl16/properties_16x16.gif" )
 public interface IPortalProperty extends IModelElement
 {
 	ModelElementType TYPE = new ModelElementType( IPortalProperty.class );

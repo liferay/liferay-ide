@@ -127,7 +127,11 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 		{
 			this.portalPropertiesConfiguration.save( output );
 			IFile propsFile = getPortalPropertiesFile();
-			propsFile.setContents( new ByteArrayInputStream( output.toString().getBytes() ), IResource.FORCE, null );
+
+			if ( propsFile != null && propsFile.exists() )
+			{
+				propsFile.setContents( new ByteArrayInputStream( output.toString().getBytes() ), IResource.FORCE, null );
+			}
 		}
 		catch ( Exception e )
 		{
