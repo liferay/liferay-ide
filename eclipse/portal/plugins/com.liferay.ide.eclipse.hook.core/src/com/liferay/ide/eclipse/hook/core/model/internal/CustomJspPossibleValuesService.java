@@ -17,6 +17,9 @@
 
 package com.liferay.ide.eclipse.hook.core.model.internal;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.hook.core.model.ICustomJspDir;
+import com.liferay.ide.eclipse.hook.core.model.IHook;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
@@ -25,11 +28,13 @@ import java.io.FileFilter;
 import java.util.SortedSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 
@@ -41,7 +46,6 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
 	final FileFilter jspfilter = new FileFilter()
 	{
-
 		public boolean accept( File pathname )
 		{
 			return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" );
@@ -55,7 +59,6 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 	{
 		File[] files = portalDir.toFile().listFiles( jspfilter );
 		findJSPFiles( files, values );
-		
 	}
 
 	private void findJSPFiles( File[] files, SortedSet<String> values )
@@ -73,11 +76,51 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 		}
 	}
 
+	private IFolder getCustomJspFolder()
+	{
+		ICustomJspDir element = this.hook().getCustomJspDir().element();
+		IFolder docroot = CoreUtil.getDocroot( project() );
+
+		if ( element != null && docroot != null )
+		{
+			Path customJspDir = element.getValue().getContent();
+			IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+			return customJspFolder;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public Severity getInvalidValueSeverity( String invalidValue )
+	{
+		IFolder customJspFolder = getCustomJspFolder();
+
+		if ( customJspFolder != null )
+		{
+			IFile invalidFile = customJspFolder.getFile( invalidValue );
+
+			if ( invalidFile.exists() )
+			{
+				return Severity.OK;
+			}
+		}
+
+		return Severity.ERROR;
+	}
+
+	private IHook hook()
+	{
+		return this.context().find( IHook.class );
+	}
+
 	@Override
 	protected void init()
 	{
 		super.init();
-		IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+		IProject project = project();
 
 		try
 		{
@@ -87,6 +130,11 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 		catch ( CoreException e )
 		{
 		}
+	}
+
+	protected IProject project()
+	{
+		return context( IModelElement.class ).root().adapt( IFile.class ).getProject();
 	}
 
 }

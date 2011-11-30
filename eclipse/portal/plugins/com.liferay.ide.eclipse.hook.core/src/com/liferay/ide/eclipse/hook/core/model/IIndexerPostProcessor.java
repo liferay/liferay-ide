@@ -48,7 +48,7 @@ public interface IIndexerPostProcessor extends IModelElement {
 
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
-	@JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.model.ClassedModel" )
+	@JavaTypeConstraint( kind = JavaTypeKind.INTERFACE, type = "com.liferay.portal.model.BaseModel" )
 	@Label( standard = "Indexer Class Name" )
 	@XmlBinding( path = "indexer-class-name" )
 	@Required

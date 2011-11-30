@@ -32,7 +32,6 @@
 
 	<name>Liferay IDE Hook Core</name>
 
-<!--
 	<properties>
 		<orbit-site>file:../../../target-platform/orbit</orbit-site>
     		<sapphire-site>file:../../../target-platform/sapphire</sapphire-site>
@@ -40,7 +39,6 @@
 		<eclipse-project-update-site>file:../../../target-platform/eclipse-updates-3.6</eclipse-project-update-site>
 		<wtp-site>file:../../../target-platform/webtools-repository-helios</wtp-site>
 	</properties>
--->
 
 	<dependencies>
 		<dependency>

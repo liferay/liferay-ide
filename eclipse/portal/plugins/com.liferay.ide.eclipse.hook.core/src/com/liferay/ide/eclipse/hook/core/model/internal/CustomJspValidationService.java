@@ -17,17 +17,21 @@
 
 package com.liferay.ide.eclipse.hook.core.model.internal;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.hook.core.HookCore;
+import com.liferay.ide.eclipse.hook.core.model.ICustomJspDir;
 import com.liferay.ide.eclipse.hook.core.model.IHook;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
@@ -77,6 +81,52 @@ public class CustomJspValidationService extends ValidationService
 		return false;
 	}
 
+	private boolean isValidProjectJsp( Value<?> value )
+	{
+		String customJsp = value.getContent().toString();
+
+		IFolder customFolder = getCustomJspFolder();
+
+		if ( customFolder != null && customFolder.exists() )
+		{
+			IFile customJspFile = customFolder.getFile( customJsp );
+
+			if ( customJspFile.exists() )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private IFolder getCustomJspFolder()
+	{
+		ICustomJspDir element = this.hook().getCustomJspDir().element();
+		IFolder docroot = CoreUtil.getDocroot( project() );
+
+		if ( element != null && docroot != null )
+		{
+			Path customJspDir = element.getValue().getContent();
+			IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+			return customJspFolder;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	protected IHook hook()
+	{
+		return this.context().find( IHook.class );
+	}
+
+	protected IProject project()
+	{
+		return this.hook().adapt( IProject.class );
+	}
+
 	private boolean isValueEmpty( Value<?> value )
 	{
 		return value.getContent( false ) == null;
@@ -94,7 +144,7 @@ public class CustomJspValidationService extends ValidationService
 			final String msg = NLS.bind( "Non-empty value for {0} required. ", label );
 			return Status.createErrorStatus( msg );
 		}
-		else if ( !isValidPortalJsp( value ) )
+		else if ( !isValidPortalJsp( value ) && !isValidProjectJsp( value ) )
 		{
 			final String msg = NLS.bind( "Invalid path {0} for custom jsp. Path does not exist in portal. ", label );
 			return Status.createErrorStatus( msg );

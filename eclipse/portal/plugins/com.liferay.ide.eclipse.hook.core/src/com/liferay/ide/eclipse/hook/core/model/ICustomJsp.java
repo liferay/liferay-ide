@@ -18,7 +18,6 @@
 package com.liferay.ide.eclipse.hook.core.model;
 
 import com.liferay.ide.eclipse.hook.core.model.internal.CustomJspPossibleValuesService;
-import com.liferay.ide.eclipse.hook.core.model.internal.CustomJspValidationService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -28,7 +27,6 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -44,8 +42,8 @@ public interface ICustomJsp extends IModelElement
 	@Label( standard = "Liferay Portal JSP" )
     @XmlBinding( path = "" )
 	@NoDuplicates
-	@Services( { @Service( impl = CustomJspPossibleValuesService.class ),
-		@Service( impl = CustomJspValidationService.class ) } )
+	@Service( impl = CustomJspPossibleValuesService.class )
+	// @Service( impl = CustomJspValidationService.class ) } )
 	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
     
 	Value<String> getValue();

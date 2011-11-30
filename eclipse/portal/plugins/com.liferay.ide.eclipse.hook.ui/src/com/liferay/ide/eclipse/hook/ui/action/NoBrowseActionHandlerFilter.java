@@ -24,13 +24,13 @@ import org.eclipse.sapphire.ui.SapphireActionHandlerFilter;
 /**
  * @author Gregory Amerson
  */
-public class ServiceTypeImplActionHandlerFilter extends SapphireActionHandlerFilter
+public class NoBrowseActionHandlerFilter extends SapphireActionHandlerFilter
 {
 
 	@Override
 	public boolean check( SapphireActionHandler handler )
 	{
-		return !( "Sapphire.Create.Java.Interface".equals( handler.getId() ) || "Sapphire.Browse.Java.Type".equals( handler.getId() ) );
+		return !( "Sapphire.Browse.Java.Type".equals( handler.getId() ) );
 	}
 
 }

@@ -18,11 +18,11 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
+import com.liferay.ide.eclipse.hook.core.model.internal.StrutsActionPathPossibleValuesService;
 import com.liferay.ide.eclipse.hook.core.model.internal.UrlPathValidationService;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
-import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -55,7 +55,8 @@ public interface IStrutsAction extends IModelElement {
 	@Label( standard = "Struts Action Path" )
 	@XmlBinding( path = "struts-action-path" )
 	@Required
-	@Services( { @Service( impl = UrlPathValidationService.class ) } )
+	@Services( { @Service( impl = UrlPathValidationService.class ),
+		@Service( impl = StrutsActionPathPossibleValuesService.class ) } )
 	ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" );
 
 	Value<String> getStrutsActionPath();
@@ -66,8 +67,8 @@ public interface IStrutsAction extends IModelElement {
 	@Type( base = JavaTypeName.class )
 	@Reference( target = JavaType.class )
 	@Label( standard = "Struts Action Impl" )
-	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.ABSTRACT_CLASS }, behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE, type = {
-		"com.liferay.portal.kernel.struts.BaseStrutsAction", "com.liferay.portal.kernel.struts.BaseStrutsPortletAction" } )
+	@JavaTypeConstraint( kind = { JavaTypeKind.CLASS }, type = { "com.liferay.portal.kernel.struts.StrutsAction",
+		"com.liferay.portal.kernel.struts.StrutsPortletAction" } )
 	@MustExist
 	@Required
 	@XmlBinding( path = "struts-action-impl" )

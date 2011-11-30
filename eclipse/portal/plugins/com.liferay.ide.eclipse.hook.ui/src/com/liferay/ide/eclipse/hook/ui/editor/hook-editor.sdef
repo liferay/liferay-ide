@@ -205,18 +205,13 @@
         <label>Service Wrappers</label>
         <section>
             <content>
+                <label>Define service wrapper implementation classes that will wrap existing Liferay Services.</label>
+                <spacer></spacer>
                 <action-link>
                     <action-id>Sapphire.Add</action-id>
                     <show-image></show-image>
                     <label>Add a Service Wrapper</label>
                 </action-link>
-                <separator></separator>
-                <property-editor>
-                    <property>Services</property>
-                    <child-property>ServiceType</child-property>
-                    <child-property>ServiceImpl</child-property>
-                    <show-label>false</show-label>
-                </property-editor>
             </content>
         </section>
         <node-include>ServicesNodeList</node-include>
@@ -230,10 +225,12 @@
             <section>
                 <label>Service Wrapper Detail</label>
                 <content>
+                    <label>Service Type is the existing Liferay service that the Service Impl will wrap. If there is no existing Service Impl class one can be created by typing in the desired class name value and click the &quot;Create&quot; action.</label>
+                    <spacer></spacer>
                     <property-editor>
                         <property>ServiceType</property>
                         <action-handler-filter>
-                            <impl>ServiceTypeImplActionHandlerFilter</impl>
+                            <impl>CustomTypeActionHandlerFilter</impl>
                             <context>Sapphire.ValuePropertyEditor</context>
                         </action-handler-filter>
                         <action-handler>
@@ -251,7 +248,7 @@
                     <property-editor>
                         <property>ServiceImpl</property>
                         <action-handler-filter>
-                            <impl>ServiceTypeImplActionHandlerFilter</impl>
+                            <impl>CustomTypeActionHandlerFilter</impl>
                             <context>Sapphire.ValuePropertyEditor</context>
                         </action-handler-filter>
                         <action-handler>
@@ -271,27 +268,27 @@
     </node-factory>
     <node>
         <id>FiltersAndMappingsNode</id>
-        <section>
-            <label>Filters</label>
-            <content>
-                <property-editor>
-                    <property>ServletFilters</property>
-                    <show-label>false</show-label>
-                </property-editor>
-            </content>
-        </section>
-        <section>
-            <label>Filter Mappings</label>
-            <content>
-                <property-editor>
-                    <property>ServletFilterMappings</property>
-                    <show-label>false</show-label>
-                </property-editor>
-            </content>
-        </section>
         <node-include>ServletFiltersNodeList</node-include>
         <node-include>ServletFilterMappingsNodeList</node-include>
         <label>Filters and Mappings</label>
+        <section>
+            <content>
+                <label>Define custom filters to be executed before or after existing Liferay filters.</label>
+                <spacer></spacer>
+                <action-link>
+                    <label>Add a Servlet Filter</label>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image></show-image>
+                    <action-handler-id>Sapphire.Add.IServletFilter</action-handler-id>
+                </action-link>
+                <action-link>
+                    <label>Add a Servlet Filter Mapping</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.Add</action-id>
+                    <action-handler-id>Sapphire.Add.IServletFilterMapping</action-handler-id>
+                </action-link>
+            </content>
+        </section>
     </node>
     <node-factory>
 		<id>ServletFiltersNodeList</id>
@@ -338,12 +335,13 @@
         <node-include>StrutsActionsNodeList</node-include>
         <section>
             <content>
-                <property-editor>
-                    <property>StrutsActions</property>
-                    <show-label>false</show-label>
-                    <child-property>StrutsActionPath</child-property>
-                    <child-property>StrutsActionImpl</child-property>
-                </property-editor>
+                <label>Add new struts actions to portal or override any existing action. There are two interfaces com.liferay.portal.kernel.struts.StrutsAction and com.liferay.portal.kernel.struts.StrutsPortletAction. The StrutsAction is used for regular struts actions like /c/portal/update_password and StrutsPortletAction is used for those that are used from portlets.</label>
+                <spacer></spacer>
+                <action-link>
+                    <label>Add a Struts Action</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.Add</action-id>
+                </action-link>
             </content>
         </section>
     </node>
@@ -353,16 +351,17 @@
 		<case>
 			<section>
 				<content>
-					<property-editor>StrutsActionPath</property-editor>
-					<property-editor>
+					<label>Select an existing struts path to override or specify a new one. Then select the struts action impl class. The impl class must implement either StrutsAction or StrutsPortletAction. StrutsAction is used for regular struts actions like /c/portal/update_password and StrutsPortletAction is used for those that are used from portlets.</label>
+					<spacer></spacer>
+                    <property-editor>StrutsActionPath</property-editor>
+                    <property-editor>
 						<property>StrutsActionImpl</property>
 						<show-label>true</show-label>
 					</property-editor>
 				</content>
-				<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action-path&gt;'}
-				</label>
+				<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action&gt;'}</label>
 			</section>
-			<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action-path&gt;'}
+			<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action&gt;'}
 			</label>
 			<use-model-element-image></use-model-element-image>
 		</case>
@@ -372,12 +371,13 @@
         <label>Indexer Post Processors</label>
         <section>
             <content>
-                <property-editor>
-                    <property>IndexerPostProcessors</property>
-                    <show-label>false</show-label>
-                    <child-property>IndexerClassName</child-property>
-                    <child-property>IndexerClassImpl</child-property>
-                </property-editor>
+                <label>Define Indexer Post Processors.</label>
+                <spacer></spacer>
+                <action-link>
+                    <label>Add an Indexer Post Processor</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.Add</action-id>
+                </action-link>
             </content>
         </section>
         <node-include>IndexerPostProcessorsList</node-include>
@@ -390,8 +390,48 @@
             <label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}</label>
             <section>
                 <content>
-                    <property-editor>IndexerClassName</property-editor>
-                    <property-editor>IndexerClassImpl</property-editor>
+                    <label>Select which Liferay portal model class that can be indexed. Then specify the implementation class that will implement the com.liferay.portal.kernel.searchIndexerPostProcessor interface.</label>
+                    <spacer></spacer>
+                    <property-editor>
+                        <property>IndexerClassName</property>
+                        <action-handler-filter>
+                            <impl>CustomTypeActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>HierarchyJavaTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>type</name>
+                                <value>com.liferay.portal.model.BaseModel</value>
+                            </param>
+                            <param>
+                                <name>filter</name>
+                                <value>**</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
+                    <property-editor>
+                        <property>IndexerClassImpl</property>
+                        <action-handler-filter>
+                            <impl>NoBrowseActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>HierarchyJavaTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>type</name>
+                                <value>com.liferay.portal.kernel.search.IndexerPostProcessor</value>
+                            </param>
+                            <param>
+                                <name>filter</name>
+                                <value>**</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
                 </content>
             </section>
         </case>

@@ -28,6 +28,7 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -86,7 +87,8 @@ public interface IServletFilterMapping extends IModelElement {
 	// *** URLPattern ***
 
 	@Type( base = IURLPattern.class )
-	@Label( standard = "URL Pattern" )
+	@Label( standard = "url patterns" )
+	@CountConstraint( min = 1 )
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = IURLPattern.class ) } )
 	ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" );
 
