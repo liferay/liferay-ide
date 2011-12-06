@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Tomcat Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.tomcat.core;singleton:=true
-Bundle-Version: 1.4.0.qualifier
+Bundle-Version: 1.5.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,

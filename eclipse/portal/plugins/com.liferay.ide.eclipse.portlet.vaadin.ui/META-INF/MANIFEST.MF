@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Vaadin UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.vaadin.ui;singleton:=true
-Bundle-Version: 1.4.0.qualifier
+Bundle-Version: 1.5.0.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.vaadin.ui.VaadinUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
