@@ -88,8 +88,6 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
         	
 			TypeSelectionExtension extension = null;
 
-			String filter = "";
-
 			if ( "type".equals( kind ) )
 			{
 				scope = SearchEngine.createJavaSearchScope( new IJavaProject[] { JavaCore.create( project ) } );
@@ -121,8 +119,6 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
 					String wrapperType = serviceType + "Wrapper";
 
 					scope = SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( wrapperType ) );
-
-					filter = "**";
 				}
 				else
 				{
@@ -136,7 +132,7 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
 
 			final SelectionDialog dlg =
 				JavaUI.createTypeDialog(
-					context.getShell(), null, scope, this.browseDialogStyle, false, filter, extension );
+					context.getShell(), null, scope, this.browseDialogStyle, false, "**", extension );
 
             final String title = property.getLabel( true, CapitalizationType.TITLE_STYLE, false );
 			dlg.setTitle( "Select " + title );
