@@ -18,6 +18,7 @@ import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.job.BuildServiceJob;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
@@ -32,6 +33,12 @@ public class BuildServicesActionHandler extends SapphireActionHandler {
 			BuildServiceJob job = PortletCore.createBuildServiceJob(file);
 
 			job.schedule();
+		}
+		else
+		{
+			MessageDialog.openWarning(
+				context.getShell(), "Build Services",
+				"This action is unavailable for files that are outside of an eclipse workspace. Import the project using Import Liferay Project from Existing Source wizard." );
 		}
 
 		return null;

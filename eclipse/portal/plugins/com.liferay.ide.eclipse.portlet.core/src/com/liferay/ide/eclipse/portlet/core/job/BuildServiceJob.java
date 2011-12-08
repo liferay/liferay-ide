@@ -16,9 +16,12 @@
 package com.liferay.ide.eclipse.portlet.core.job;
 
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
+
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -57,6 +60,18 @@ public class BuildServiceJob extends SDKJob {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		IStatus retval = null;
+
+		if ( getProject() == null )
+		{
+			return PortletCore.createErrorStatus( "This action can only be executed from a Liferay project.  Use Liferay project import wizard to import the project before continuing to build services." );
+		}
+
+		if ( !ProjectUtil.isLiferayProject( getProject() ) )
+		{
+			return PortletCore.createErrorStatus( MessageFormat.format(
+				"This action is unavailable because {0} is not a Liferay plugin project. Use \"Convert to Liferay project\" context-menu action and then run again.",
+				getProject().getName() ) );
+		}
 
 		monitor.beginTask("Building Liferay services...", 100);
 
