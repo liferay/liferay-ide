@@ -175,7 +175,7 @@
 			<xs:complexContent>
 				<xs:extension base="abstract-workflow-node-complex-type">
 					<xs:sequence>
-						<xs:element name="actions">
+						<xs:element name="actions" minOccurs="0">
 							<xs:complexType>
 								<xs:choice>
 									<xs:group ref="task-actions-group" maxOccurs="unbounded" />

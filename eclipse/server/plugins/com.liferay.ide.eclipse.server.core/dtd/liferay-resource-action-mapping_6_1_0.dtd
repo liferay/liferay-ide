@@ -1,6 +1,4 @@
 <!--
-This is the DTD for defining Actions supported on Resources for Liferay Portal.
-
 <!DOCTYPE resource-action-mapping PUBLIC
 	"-//Liferay//DTD Resource Action Mapping 6.1.0//EN"
 	"http://www.liferay.com/dtd/liferay-resource-action-mapping_6_1_0.dtd">
@@ -88,11 +86,9 @@ permissions on all supported actions.
 <!ELEMENT owner-defaults (action-key*) >
 
 <!--
-The model-resource element defines the permissions and social equity rules of
-the model.
+The model-resource element defines the permissions of the model.
 -->
-<!ELEMENT model-resource (model-name, portlet-ref, permissions?,
-social-equity?) >
+<!ELEMENT model-resource (model-name, portlet-ref, permissions?) >
 
 <!--
 The model-name element is the name of the model.
@@ -103,73 +99,6 @@ The model-name element is the name of the model.
 The portlet-ref element is the name of the portlet that the model belongs to.
 -->
 <!ELEMENT portlet-ref (portlet-name*) >
-
-<!--
-The social-equity element specifies the social equity mappings for different
-actions that can be performed on the the model.
--->
-<!ELEMENT social-equity (social-equity-mapping*) >
-
-<!--
-The social-equity-mapping element specifies the social equity values that
-can be applied to a particular action on the model.
--->
-<!ELEMENT social-equity-mapping (action-key, information-daily-limit?,
-information-value?, information-lifespan?, participation-daily-limit?,
-participation-value?, participation-lifespan?, social-activity-mapping?,
-unique?) >
-
-<!--
-The information-daily-limit entity specifies the amount of added information
-(information-value) that can be applied to a user's social score for the action
-on an asset and in turn to its owner's contribution score on a daily basis.
--->
-<!ELEMENT information-daily-limit (#PCDATA) >
-
-<!--
-The information-value specifies the value of contributing information added to
-the asset each time the action is perfomed. Information-daily-limit may affect
-this setting.
--->
-<!ELEMENT information-value (#PCDATA) >
-
-<!--
-The information-lifespan entity specifies the length of time in days over which
-the corresponding information-value is linearly decreased to zero.
--->
-<!ELEMENT information-lifespan (#PCDATA) >
-
-<!--
-The participation-daily-limit entity specifies the amount of participation
-(participation-value) that can be applied to a user's participation score for
-the action on an asset on a daily basis.
--->
-<!ELEMENT participation-daily-limit (#PCDATA) >
-
-<!--
-The participation-value entity specifies the value added to the user's
-participation score for performing the action.
--->
-<!ELEMENT participation-value (#PCDATA) >
-
-<!--
-The participation-lifespan entity specifies the length of time in days over
-which the corresponding participation-value is linearly decreased to zero.
--->
-<!ELEMENT participation-lifespan (#PCDATA) >
-
-<!--
--->
-<!ELEMENT social-activity-mapping (#PCDATA) >
-
-<!ATTLIST social-activity-mapping class CDATA #REQUIRED >
-
-<!--
-The unique element specifies whether the action will provide value to the
-user's or asset's score if it is performed more than once on the same asset
-by the user.
--->
-<!ELEMENT unique (#PCDATA) >
 
 <!--
 The resource element specifies an external file that contains

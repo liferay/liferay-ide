@@ -26,7 +26,11 @@ particiaption-limit-period?, counter*, achievement*)>
 <!ELEMENT contribution-limit (#PCDATA)>
 
 <!ATTLIST contribution-limit
-	period (day|lifetime|period) #REQUIRED
+	enabled (true|false) "true"
+>
+
+<!ATTLIST contribution-limit
+	period (day|lifetime|period) "period"
 >
 
 <!ELEMENT participation-value (#PCDATA)>
@@ -34,14 +38,20 @@ particiaption-limit-period?, counter*, achievement*)>
 <!ELEMENT participation-limit (#PCDATA)>
 
 <!ATTLIST participation-limit
-	period (day|lifetime|period) #REQUIRED
+	enabled (true|false) "true"
 >
 
-<!ELEMENT counter (name, owner-type, increment?)>
+<!ATTLIST participation-limit
+	period (day|lifetime|period) "period"
+>
+
+<!ELEMENT counter (name, owner-type, enabled?, increment?)>
 
 <!ELEMENT name (#PCDATA)>
 
 <!ELEMENT owner-type (#PCDATA)>
+
+<!ELEMENT enabled (#PCDATA)>
 
 <!ELEMENT increment (#PCDATA)>
 
