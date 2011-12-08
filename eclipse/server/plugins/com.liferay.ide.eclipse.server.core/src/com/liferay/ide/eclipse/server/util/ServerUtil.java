@@ -346,8 +346,21 @@ public class ServerUtil {
 	public static ILiferayRuntime getLiferayRuntime(IProject project)
 		throws CoreException {
 
-		return (ILiferayRuntime) getRuntimeAdapter(
-			ProjectFacetsManager.create(project).getPrimaryRuntime(), ILiferayRuntime.class);
+		if ( project == null )
+		{
+			return null;
+		}
+
+		IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+
+		if ( facetedProject != null )
+		{
+			return (ILiferayRuntime) getRuntimeAdapter( facetedProject.getPrimaryRuntime(), ILiferayRuntime.class );
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	public static ILiferayRuntime getLiferayRuntime(IRuntime runtime) {

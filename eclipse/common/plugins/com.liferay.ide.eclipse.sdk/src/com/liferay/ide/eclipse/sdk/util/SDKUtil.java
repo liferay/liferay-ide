@@ -98,15 +98,27 @@ public class SDKUtil {
 		SDK retval = null;
 
 		// try to determine SDK based on project location
-		IPath sdkLocation = project.getRawLocation().removeLastSegments( 2 );
+		IPath projectLocation = project.getRawLocation();
 
-		retval = SDKManager.getInstance().getSDK( sdkLocation );
+		if ( projectLocation == null )
+		{
+			projectLocation = project.getLocation();
+		}
 
-		if ( retval == null ) {
-			retval = SDKUtil.createSDKFromLocation( sdkLocation );
+		if ( projectLocation != null )
+		{
+			IPath sdkLocation = projectLocation.removeLastSegments( 2 );
 
-			if ( retval != null ) {
-				SDKManager.getInstance().addSDK( retval );
+			retval = SDKManager.getInstance().getSDK( sdkLocation );
+
+			if ( retval == null )
+			{
+				retval = SDKUtil.createSDKFromLocation( sdkLocation );
+
+				if ( retval != null )
+				{
+					SDKManager.getInstance().addSDK( retval );
+				}
 			}
 		}
 

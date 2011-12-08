@@ -22,7 +22,9 @@ import com.liferay.ide.eclipse.sdk.SDKPlugin;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.ui.util.SWTUtil;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +35,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -305,6 +308,16 @@ public class InstalledSDKsCompostite extends Composite {
 			sdk.setName(newName);
 			sdk.setLocation(new Path(newLocation));
 
+			if ( dialog.getAddProject() )
+			{
+				sdk.addProjectFile();
+
+				if ( dialog.getOpenInEclipse() )
+				{
+					openInEclipse( sdk );
+				}
+			}
+
 			this.tableViewer.refresh();
 
 			ensureDefaultSDK();
@@ -449,7 +462,37 @@ public class InstalledSDKsCompostite extends Composite {
 			sdks[i++] = sdk;
 		}
 
-		removeSDKs(sdks);
+		List<SDK> sdksList = Arrays.asList( sdks );
+		// IDE-6 check to make sure that no existing projects use this SDK
+
+		List<SDK> sdksToRemove = new ArrayList<SDK>();
+		List<SDK> sdksToKeep = new ArrayList<SDK>();
+
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+		for ( IProject project : projects )
+		{
+			SDK sdk = SDKUtil.getSDK( project );
+
+			if ( sdksList.contains( sdk ) && !sdksToRemove.contains( sdk ) && !sdksToKeep.contains( sdk ) )
+			{
+				boolean remove =
+					MessageDialog.openQuestion( this.getShell(), "Installed SDKs", MessageFormat.format(
+						"The SDK named \"{0}\" is currently being used by workspace projects.  Continue to remove it?",
+						sdk.getName() ) );
+
+				if ( remove )
+				{
+					sdksToRemove.add( sdk );
+				}
+				else
+				{
+					sdksToKeep.add( sdk );
+				}
+			}
+		}
+
+		removeSDKs( sdksToRemove.toArray( new SDK[0] ) );
 	}
 
 	protected void setCheckedSDK(SDK element) {
