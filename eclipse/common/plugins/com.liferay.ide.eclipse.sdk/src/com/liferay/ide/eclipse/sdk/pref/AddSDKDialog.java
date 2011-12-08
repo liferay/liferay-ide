@@ -168,15 +168,12 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 
 		} );
 
-		if ( sdkToEdit == null ) {
-			location.addModifyListener( this );
-		}
-		else {
+		if ( sdkToEdit != null )
+		{
 			location.setText( sdkToEdit.getLocation().toOSString() );
-			location.setEnabled( false );
-
-			browse.setEnabled( false );
 		}
+
+		location.addModifyListener( this );
 
 		SWTUtil.createLabel( container, "Name", 1 );
 
@@ -293,13 +290,13 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener {
 		}
 
 		// make sure new sdk name doesn't collide with existing one
-		if ( existingSDKs != null ) {
-			for ( SDK sdk : existingSDKs ) {
-				if ( lastName.equals( sdk.getName() ) ) {
-					return CoreUtil.createErrorStatus( "Name already exists." );
-				}
-			}
-		}
+		// if ( existingSDKs != null ) {
+		// for ( SDK sdk : existingSDKs ) {
+		// if ( lastName.equals( sdk.getName() ) ) {
+		// return CoreUtil.createErrorStatus( "Name already exists." );
+		// }
+		// }
+		// }
 
 		lastLocation = location.getText();
 
