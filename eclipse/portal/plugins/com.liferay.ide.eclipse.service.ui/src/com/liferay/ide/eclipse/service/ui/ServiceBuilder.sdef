@@ -89,13 +89,6 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
-                                            <property-editor>
-                                                <property>uuidAccessor</property>
-                                                <hint>
-                                                    <name>checkbox.layout</name>
-                                                    <value>leading.label</value>
-                                                </hint>
-                                            </property-editor>
 		                                    <property-editor>persistenceClass</property-editor>
 		                                    <property-editor>dataSource</property-editor>
 		                                    <property-editor>sessionFactory</property-editor>
@@ -204,13 +197,6 @@ the json-enabled value is true.</content>
                                                             </hint>
                                                         </property-editor>
                                                         <property-editor>dbName</property-editor>
-                                                        <property-editor>
-                                                            <property>Accessor</property>
-                                                            <hint>
-                                                                <name>checkbox.layout</name>
-                                                                <value>leading.label</value>
-                                                            </hint>
-                                                        </property-editor>
                                                         <property-editor>
                                                             <property>filterPrimary</property>
                                                             <hint>
