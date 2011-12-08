@@ -72,20 +72,6 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 		return getModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED);
 	}
 
-	public IPortletFramework getSelectedPortletFramework() {
-		IPortletFramework retval = null;
-
-		if (!CoreUtil.isNullOrEmpty(frameworkButtons)) {
-			for (Button templateButton : frameworkButtons) {
-				if (templateButton.getSelection()) {
-					retval = (IPortletFramework) templateButton.getData();
-				}
-			}
-		}
-
-		return retval;
-	}
-
 	protected void createFrameworkGroup(Composite parent) {
 		Group group = SWTUtil.createGroup(parent, "Select portlet framework", 2);
 		GridData layoutData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
@@ -99,8 +85,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 			List<Button> buttons = new ArrayList<Button>();
 
 			for (final IPortletFramework framework : portletFrameworks) {
-				final IPortletFrameworkDelegate delegate =
-					ProjectUIPlugin.getPortletFrameworkDelegate(framework.getId());
+				final IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( framework.getId() );
 
 				String iconUrl = null;
 				String bundleId = null;
@@ -177,7 +162,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 		for (Button templateButton : frameworkButtons) {
 			IPortletFramework template = (IPortletFramework) templateButton.getData();
-			IPortletFrameworkDelegate delegate = ProjectUIPlugin.getPortletFrameworkDelegate(template.getId());
+			IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( template.getId() );
 
 			final Composite[] optionsComposite = new Composite[1];
 
@@ -240,11 +225,31 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 		return IModuleConstants.JST_WEB_MODULE;
 	}
 
+	public IPortletFramework getSelectedPortletFramework() {
+		IPortletFramework retval = null;
+
+		if (!CoreUtil.isNullOrEmpty(frameworkButtons)) {
+			for (Button templateButton : frameworkButtons) {
+				if (templateButton.getSelection()) {
+					retval = (IPortletFramework) templateButton.getData();
+				}
+			}
+		}
+
+		return retval;
+	}
+
 	@Override
 	protected String[] getValidationPropertyNames() {
 		return new String[] {
 			PLUGIN_FRAGMENT_ENABLED, PORTLET_FRAMEWORK
 		};
+	}
+
+	@Override
+	public NewPluginProjectWizard getWizard()
+	{
+		return (NewPluginProjectWizard) super.getWizard();
 	}
 
 

@@ -15,10 +15,12 @@
 
 package com.liferay.ide.eclipse.project.ui.wizard;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.IPortletFramework;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
+import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -26,6 +28,8 @@ import com.liferay.ide.eclipse.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
@@ -34,7 +38,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -63,6 +69,8 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 	protected ImageDescriptor liferayWizardImageDescriptor;
 
+	protected IPortletFrameworkDelegate[] portletFrameworkDelegates;
+
 	protected NewPortletPluginProjectPage portletPluginPage;
 
 	protected String projectType;
@@ -86,47 +94,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		}
 
 		return super.canFinish();
-	}
-
-	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		if (this.portletPluginPage.equals(page)) {
-			if (isPluginWizardFragmentEnabled()) {
-				IPortletFramework selectedFramework = this.portletPluginPage.getSelectedPortletFramework();
-				IPortletFrameworkDelegate delegate =
-					ProjectUIPlugin.getPortletFrameworkDelegate(selectedFramework.getId());
-
-				IPluginWizardFragment pluginFragment = delegate.getWizardFragment();
-				IDataModel dm = DataModelFactory.createDataModel(pluginFragment.getDataModelProvider());
-
-				getDataModel().addNestedModel(PLUGIN_FRAGMENT_DM, dm);
-				pluginFragment.setDataModel(dm);
-				pluginFragment.initFragmentDataModel(getDataModel(), getProjectName());
-				pluginFragment.addPages();
-				pluginFragment.setHostPage(this.portletPluginPage);
-				return pluginFragment.getNextPage(page);
-			}
-			else {
-				return null;
-			}
-		}
-
-		return super.getNextPage(page);
-	}
-
-	public String getProjectType() {
-		return this.projectType;
-	}
-
-	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		super.init(workbench, selection);
-
-		getDataModel().setBooleanProperty(PLUGIN_TYPE_PORTLET, true);
-	}
-
-	public void setProjectType(String projectType) {
-		this.projectType = projectType;
 	}
 
 	@Override
@@ -174,6 +141,31 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		return getDataModel().getNestedModel(NESTED_PROJECT_DM);
 	}
 
+	@Override
+	public IWizardPage getNextPage(IWizardPage page) {
+		if (this.portletPluginPage.equals(page)) {
+			if (isPluginWizardFragmentEnabled()) {
+				IPortletFramework selectedFramework = this.portletPluginPage.getSelectedPortletFramework();
+				IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( selectedFramework.getId() );
+
+				IPluginWizardFragment pluginFragment = delegate.getWizardFragment();
+				IDataModel dm = DataModelFactory.createDataModel(pluginFragment.getDataModelProvider());
+
+				getDataModel().addNestedModel(PLUGIN_FRAGMENT_DM, dm);
+				pluginFragment.setDataModel(dm);
+				pluginFragment.initFragmentDataModel(getDataModel(), getProjectName());
+				pluginFragment.addPages();
+				pluginFragment.setHostPage(this.portletPluginPage);
+				return pluginFragment.getNextPage(page);
+			}
+			else {
+				return null;
+			}
+		}
+
+		return super.getNextPage(page);
+	}
+
 	protected String getPluginFacetId() {
 		IDataModel dm = getDataModel();
 
@@ -197,6 +189,66 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		}
 	}
 
+	public IPortletFrameworkDelegate getPortletFrameworkDelegate( String frameworkId )
+	{
+		IPortletFrameworkDelegate[] delegates = getPortletFrameworkDelegates();
+
+		if ( CoreUtil.isNullOrEmpty( frameworkId ) || CoreUtil.isNullOrEmpty( delegates ) )
+		{
+			return null;
+		}
+
+		for ( IPortletFrameworkDelegate delegate : delegates )
+		{
+			if ( frameworkId.equals( delegate.getFrameworkId() ) )
+			{
+				return delegate;
+			}
+		}
+
+		return null;
+	}
+
+	public IPortletFrameworkDelegate[] getPortletFrameworkDelegates()
+	{
+		if ( portletFrameworkDelegates == null )
+		{
+			IConfigurationElement[] elements =
+				Platform.getExtensionRegistry().getConfigurationElementsFor( IPortletFrameworkDelegate.EXTENSION_ID );
+
+			if ( !CoreUtil.isNullOrEmpty( elements ) )
+			{
+				List<IPortletFrameworkDelegate> delegates = new ArrayList<IPortletFrameworkDelegate>();
+
+				for ( IConfigurationElement element : elements )
+				{
+					String frameworkId = element.getAttribute( IPortletFrameworkDelegate.FRAMEWORK_ID );
+					String iconUrl = element.getAttribute( IPortletFrameworkDelegate.ICON );
+
+					try
+					{
+						AbstractPortletFrameworkDelegate delegate =
+							(AbstractPortletFrameworkDelegate) element.createExecutableExtension( "class" );
+						delegate.setFrameworkId( frameworkId );
+						delegate.setIconUrl( iconUrl );
+						delegate.setBundleId( element.getContributor().getName() );
+
+						delegates.add( delegate );
+					}
+					catch ( CoreException e )
+					{
+						ProjectUIPlugin.logError( "Could not create portlet plugin template delegate.", e );
+					}
+
+				}
+
+				portletFrameworkDelegates = delegates.toArray( new IPortletFrameworkDelegate[0] );
+			}
+		}
+
+		return portletFrameworkDelegates;
+	}
+
 	protected String getProjectSuffix() {
 		if (getDataModel().getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
 			return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
@@ -217,16 +269,27 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		return null;
 	}
 
+	public String getProjectType() {
+		return this.projectType;
+	}
+
 	@Override
 	protected IFacetedProjectTemplate getTemplate() {
 		return ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_DEFAULT_FACET_TEMPLATE); //$NON-NLS-1$
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		super.init(workbench, selection);
+
+		getDataModel().setBooleanProperty(PLUGIN_TYPE_PORTLET, true);
 	}
 
 	protected boolean isPluginWizardFragmentEnabled() {
 		IPortletFramework portletFramework = this.portletPluginPage.getSelectedPortletFramework();
 
 		if (portletFramework != null) {
-			IPortletFrameworkDelegate delegate = ProjectUIPlugin.getPortletFrameworkDelegate(portletFramework.getId());
+			IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( portletFramework.getId() );
 
 			if (delegate != null && delegate.getWizardFragment() != null && delegate.isFragmentEnabled()) {
 
@@ -304,11 +367,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 		Display.getDefault().asyncExec(new Runnable() {
 
-			public void run() {
-				refreshProjectExplorer();
-				addBuildInAntView();
-			}
-
 			private void addBuildInAntView() {
 				IProject project = getFacetedProject().getProject();
 
@@ -350,9 +408,18 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
 				viewer.refresh(true);
 			}
+
+			public void run() {
+				refreshProjectExplorer();
+				addBuildInAntView();
+			}
 		});;
 
 		super.postPerformFinish();
+	}
+
+	public void setProjectType(String projectType) {
+		this.projectType = projectType;
 	}
 
 	protected void setupWizard() {
