@@ -291,23 +291,40 @@ public class PluginFacetUtil {
 
 	public static IPreset getLiferayPresetForProject(IFacetedProjectWorkingCopy fpjwc) {
 		IPreset preset = null;
-
 		String projName = fpjwc.getProjectName();
+		String directoryName = "";
 
-		if (projName.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+		IPath location = fpjwc.getProject().getLocation();
+
+		if ( location != null )
+		{
+			directoryName = fpjwc.getProject().getLocation().lastSegment();
+		}
+
+		if ( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
 		}
-		else if (projName.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+		else if ( projName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_HOOK_PRESET);
 		}
-		else if (projName.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+		else if ( projName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_EXT_PRESET);
 		}
-		else if (projName.endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
-			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_THEME_PRESET);
+		else if ( projName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+		{
+			preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_LAYOUTTPL_PRESET );
 		}
-		else if (projName.endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
-			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_LAYOUTTPL_PRESET);
+		else if ( projName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+		{
+			preset = ProjectFacetsManager.getPreset(IPluginFacetConstants.LIFERAY_THEME_PRESET);
 		}
 
 		return preset;
@@ -316,22 +333,40 @@ public class PluginFacetUtil {
 	public static IFacetedProjectTemplate getLiferayTemplateForProject(IFacetedProjectWorkingCopy fpjwc) {
 		IFacetedProjectTemplate template = null;
 		String projName = fpjwc.getProjectName();
+		String directoryName = "";
 
-		if (projName.endsWith(ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX)) {
+		IPath location = fpjwc.getProject().getLocation();
+
+		if ( location != null )
+		{
+			directoryName = fpjwc.getProject().getLocation().lastSegment();
+		}
+
+		if ( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_PORTLET_FACET_TEMPLATE_ID);
 		}
-		else if (projName.endsWith(ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX)) {
+		else if ( projName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_HOOK_FACET_TEMPLATE_ID);
 		}
-		else if (projName.endsWith(ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX)) {
+		else if ( projName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_EXT_FACET_TEMPLATE_ID);
 		}
-		else if (projName.endsWith(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX)) {
-			template = ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_THEME_FACET_TEMPLATE_ID);
-		}
-		else if (projName.endsWith(ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX)) {
+		else if ( projName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+		{
 			template =
 				ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_TEMPLATE_ID);
+		}
+		else if ( projName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
+			directoryName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+		{
+			template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_THEME_FACET_TEMPLATE_ID );
 		}
 
 		return template;
