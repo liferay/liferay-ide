@@ -163,7 +163,7 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
 				return Status.OK_STATUS;
 			}
 			else {
-				return ProjectCorePlugin.createErrorStatus("Invalid Plugin SDK location.");
+				return ProjectCorePlugin.createErrorStatus( "Project is not located in a Liferay Plugins SDK. Please copy the project to valid SDK directory based on plugin type." );
 			}
 		}
 		else if (SDK_VERSION.equals(name)) {
