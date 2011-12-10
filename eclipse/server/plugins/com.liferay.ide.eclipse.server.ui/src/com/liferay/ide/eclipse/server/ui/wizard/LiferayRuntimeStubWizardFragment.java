@@ -37,8 +37,8 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment {
 
 	@Override
 	public Composite createComposite(Composite parent, IWizardHandle wizard) {
-		wizard.setTitle( "Liferay Runtime" );
-		wizard.setDescription( "Specify the location of the runtime directory." );
+		wizard.setTitle( "Liferay Runtime Stub" );
+		wizard.setDescription( "Specify the directory location of Liferay portal bundle that will be used as a runtime stub." );
 		wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
 			"/icons/wizban/server_wiz.png")));
 

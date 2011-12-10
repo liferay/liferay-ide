@@ -43,6 +43,9 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 @SuppressWarnings( "restriction" )
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy {
 
+	private static final String CONNECT_ERROR_MSG =
+		"Could not connect to the server manager. Make sure the server manager plugin is installed on remote Liferay instance.";
+
 	public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list";
 
 	public RemoteServer() {
@@ -319,16 +322,15 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
 			IRemoteConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );
 
-			status =
-				connection.isAlive()
-					? Status.OK_STATUS
-					: LiferayServerCorePlugin.createErrorStatus( "Could not connect to Liferay server manager." );
+			final IStatus createErrorStatus = LiferayServerCorePlugin.createErrorStatus( CONNECT_ERROR_MSG );
+
+			status = connection.isAlive() ? Status.OK_STATUS : createErrorStatus;
 
 			if ( status.isOK() ) {
 				URL url = getPortalHomeUrl();
 
 				if ( url == null ) {
-					status = LiferayServerCorePlugin.createErrorStatus( "Could not find Liferay server manager." );
+					status = createErrorStatus;
 				}
 			}
 

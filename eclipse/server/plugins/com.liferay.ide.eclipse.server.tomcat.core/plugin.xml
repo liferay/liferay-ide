@@ -243,7 +243,6 @@
  <extension
        point="com.liferay.ide.eclipse.server.core.runtimeStubs">
     <liferayRuntimeStub
-          class="com.liferay.ide.eclipse.server.tomcat.core.LiferayRuntimeStub"
           default="true"
           name="Liferay v6.0 (Tomcat 6) Bundle"
           runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">

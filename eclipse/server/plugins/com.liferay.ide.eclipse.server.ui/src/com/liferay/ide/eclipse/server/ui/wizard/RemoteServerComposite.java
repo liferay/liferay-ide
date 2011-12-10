@@ -23,6 +23,7 @@ import com.liferay.ide.eclipse.ui.util.SWTUtil;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -40,7 +41,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
@@ -193,6 +196,26 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 		textServerManagerContextPath = new Text( connectionGroup, SWT.BORDER );
 		textServerManagerContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 		textServerManagerContextPath.addModifyListener( this );
+
+		Link link =
+			SWTUtil.createLink(
+				this, SWT.NONE,
+				"Need to the install server-manager-web plugin? <a>Download latest version from here.</a>", 1 );
+		final String downloadUrl = "http://sourceforge.net/projects/lportal/files/Liferay%20Plugins/";
+		link.addSelectionListener( new SelectionAdapter()
+		{
+			public void widgetSelected( SelectionEvent e )
+			{
+				try
+				{
+					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( new URL( downloadUrl ) );
+				}
+				catch ( Exception e1 )
+				{
+					LiferayServerUIPlugin.logError( "Could not open external browser.", e1 );
+				}
+			}
+		} );
 
 		Composite validateComposite = new Composite(this, SWT.NONE);
 		validateComposite.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, true));

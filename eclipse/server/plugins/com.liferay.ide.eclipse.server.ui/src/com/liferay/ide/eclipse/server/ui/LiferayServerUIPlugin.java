@@ -78,8 +78,18 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin {
 		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
 	}
 
+	public static void logError( String msg, Exception ex )
+	{
+		getDefault().getLog().log( createErrorStatus( msg, ex ) );
+	}
+
 	public static IStatus createErrorStatus( String msg ) {
 		return new Status( IStatus.ERROR, PLUGIN_ID, msg, null );
+	}
+
+	public static IStatus createErrorStatus( String msg, Exception ex )
+	{
+		return new Status( IStatus.ERROR, PLUGIN_ID, msg, ex );
 	}
 
 	protected Map<String, ImageDescriptor> imageDescriptors = new HashMap<String, ImageDescriptor>();
