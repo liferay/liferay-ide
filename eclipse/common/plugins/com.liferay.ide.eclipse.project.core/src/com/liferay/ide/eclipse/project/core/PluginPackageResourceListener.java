@@ -385,7 +385,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 			contents = pluginPackagePropertiesFile.getContents();
 			props.load(contents);
 			
-			processPortalDependencyTlds(props, pluginPackagePropertiesFile.getProject());
+			// processPortalDependencyTlds(props, pluginPackagePropertiesFile.getProject());
 
 			processRequiredDeploymentContexts(props, pluginPackagePropertiesFile.getProject());
 		}
