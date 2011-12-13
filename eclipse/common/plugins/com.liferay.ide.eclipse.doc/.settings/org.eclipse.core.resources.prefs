@@ -1,5 +1,9 @@
-#Wed Apr 27 12:33:31 EDT 2011
+#Tue Dec 13 16:15:41 CST 2011
 eclipse.preferences.version=1
+encoding//help/concepts/liferay-servers-toc.xml=utf-8
+encoding//help/concepts/liferay-servers.html=utf-8
+encoding//help/concepts/remote-servers-toc.xml=utf-8
+encoding//help/concepts/remote-servers.html=utf-8
 encoding//help/gettingstarted/getting-started.html=utf-8
 encoding//help/tasks/creating-new-hooks-toc.xml=utf-8
 encoding//help/tasks/creating-new-hooks.html=utf-8
@@ -21,3 +25,5 @@ encoding//help/tasks/creating-portlets-toc.xml=utf-8
 encoding//help/tasks/creating-portlets.html=utf-8
 encoding//help/tasks/importing-existing-projects-toc.xml=utf-8
 encoding//help/tasks/importing-existing-projects.html=utf-8
+encoding//help/tasks/using-remote-servers-toc.xml=utf-8
+encoding//help/tasks/using-remote-servers.html=utf-8

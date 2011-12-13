@@ -24,6 +24,14 @@
             primary="false">
       </toc>
       <toc
+            file="help/concepts/liferay-servers-toc.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/concepts/remote-servers-toc.xml"
+            primary="false">
+      </toc>
+      <toc
             file="help/tasks/creating-new-liferay-plugin-projects-toc.xml"
             primary="false">
       </toc>
@@ -45,6 +53,10 @@
       </toc>
       <toc
             file="help/tasks/creating-new-jsf-portlets-toc.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/tasks/using-remote-servers-toc.xml"
             primary="false">
       </toc>
    </extension>
