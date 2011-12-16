@@ -652,7 +652,7 @@ public class LiferayTomcatUtil {
 		return file;
 	}
 
-	public static String[] getServletFilterNames( IPath runtimeLocation, IPath portalDir ) throws Exception
+	public static String[] getServletFilterNames( IPath portalDir ) throws Exception
 	{
 		List<String> retval = new ArrayList<String>();
 

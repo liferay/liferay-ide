@@ -466,7 +466,8 @@ public class InstalledSDKsCompostite extends Composite {
 		// IDE-6 check to make sure that no existing projects use this SDK
 
 		List<SDK> sdksToRemove = new ArrayList<SDK>();
-		List<SDK> sdksToKeep = new ArrayList<SDK>();
+		sdksToRemove.addAll( sdksList );
+		List<SDK> checkedSDks = new ArrayList<SDK>();
 
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 
@@ -474,21 +475,30 @@ public class InstalledSDKsCompostite extends Composite {
 		{
 			SDK sdk = SDKUtil.getSDK( project );
 
-			if ( sdksList.contains( sdk ) && !sdksToRemove.contains( sdk ) && !sdksToKeep.contains( sdk ) )
+			if ( sdksList.contains( sdk ) )
 			{
-				boolean remove =
-					MessageDialog.openQuestion( this.getShell(), "Installed SDKs", MessageFormat.format(
-						"The SDK named \"{0}\" is currently being used by workspace projects.  Continue to remove it?",
-						sdk.getName() ) );
-
-				if ( remove )
+				if ( checkedSDks.contains( sdk ) )
 				{
-					sdksToRemove.add( sdk );
+					continue;
 				}
 				else
 				{
-					sdksToKeep.add( sdk );
+					boolean remove =
+						MessageDialog.openQuestion(
+							this.getShell(),
+							"Installed SDKs",
+							MessageFormat.format(
+								"The SDK named \"{0}\" is currently being used by workspace projects.  Continue to remove it?",
+								sdk.getName() ) );
+
+					if ( !remove )
+					{
+						sdksToRemove.remove( sdk );
+					}
+
+					checkedSDks.add( sdk );
 				}
+
 			}
 		}
 

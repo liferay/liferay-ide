@@ -222,7 +222,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 	{
 		try
 		{
-			return LiferayTomcatUtil.getServletFilterNames( getRuntimeLocation(), getPortalDir() );
+			return LiferayTomcatUtil.getServletFilterNames( getPortalDir() );
 		}
 		catch ( Exception e )
 		{
