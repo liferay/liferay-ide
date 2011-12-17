@@ -568,7 +568,25 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			}
 		}
 		else if ((SUPERCLASS.equals(propertyName) || SOURCE_FOLDER.equals(propertyName)) && this.fragment) {
+			if ( SUPERCLASS.equals( propertyName ) )
+			{
+				String superclass = getStringProperty( propertyName );
+
+				if ( CoreUtil.isNullOrEmpty( superclass ) )
+				{
+					return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
+				}
+			}
+
 			return Status.OK_STATUS;
+		}
+		else if ( SUPERCLASS.equals( propertyName ) && !this.fragment )
+		{
+			String superclass = getStringProperty( propertyName );
+			if ( CoreUtil.isNullOrEmpty( superclass ) )
+			{
+				return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
+			}
 		}
 
 		return super.validate(propertyName);
