@@ -15,7 +15,6 @@ import com.liferay.ide.eclipse.core.model.IModelChangedEvent;
 import com.liferay.ide.eclipse.core.model.IModelChangedListener;
 import com.liferay.ide.eclipse.portlet.core.IPluginPackageModel;
 import com.liferay.ide.eclipse.portlet.core.PluginPackageModel;
-import com.liferay.ide.eclipse.portlet.ui.action.SortAction;
 import com.liferay.ide.eclipse.project.ui.dialog.LiferayProjectSelectionDialog;
 import com.liferay.ide.eclipse.ui.form.DefaultContentProvider;
 import com.liferay.ide.eclipse.ui.form.FormLayoutFactory;
@@ -30,7 +29,6 @@ import java.util.Vector;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -92,7 +90,7 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 	private static final int UP_INDEX = 2;
 	private Action fAddAction;
 	private Action fRemoveAction;
-	private Action fSortAction;
+	// private Action fSortAction;
 
 	private TableViewer fViewer;
 	
@@ -191,9 +189,9 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 	}
 
 	public void propertyChange(PropertyChangeEvent event) {
-		if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
-			updateUpDownButtons();
-		}
+		// if (fSortAction.equals(event.getSource()) && IAction.RESULT.equals(event.getProperty())) {
+		// updateUpDownButtons();
+		// }
 	}
 
 	public void refresh() {
@@ -241,8 +239,8 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 		});
 
 		// Add sort action to the tool bar
-		fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
-		toolBarManager.add(fSortAction);
+		// fSortAction = new SortAction(fViewer, "Sort alphabetically", null, null, this);
+		// toolBarManager.add(fSortAction);
 
 		toolBarManager.update(true);
 
@@ -350,11 +348,11 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 
 	private void updateUpDownButtons() {
 		TablePart tablePart = getTablePart();
-		if (fSortAction.isChecked()) {
-			tablePart.setButtonEnabled(UP_INDEX, false);
-			tablePart.setButtonEnabled(DOWN_INDEX, false);
-			return;
-		}
+		// if (fSortAction.isChecked()) {
+		// tablePart.setButtonEnabled(UP_INDEX, false);
+		// tablePart.setButtonEnabled(DOWN_INDEX, false);
+		// return;
+		// }
 		Table table = getTablePart().getTableViewer().getTable();
 		TableItem[] selection = table.getSelection();
 		boolean hasSelection = selection.length > 0;
