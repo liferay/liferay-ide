@@ -292,13 +292,13 @@ public class PluginFacetUtil {
 	public static IPreset getLiferayPresetForProject(IFacetedProjectWorkingCopy fpjwc) {
 		IPreset preset = null;
 		String projName = fpjwc.getProjectName();
-		String directoryName = "";
+		IPath location = fpjwc.getProjectLocation();
 
-		IPath location = fpjwc.getProject().getLocation();
+		String directoryName = "";
 
 		if ( location != null )
 		{
-			directoryName = fpjwc.getProject().getLocation().lastSegment();
+			directoryName = location.lastSegment();
 		}
 
 		if ( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
@@ -333,13 +333,12 @@ public class PluginFacetUtil {
 	public static IFacetedProjectTemplate getLiferayTemplateForProject(IFacetedProjectWorkingCopy fpjwc) {
 		IFacetedProjectTemplate template = null;
 		String projName = fpjwc.getProjectName();
+		IPath location = fpjwc.getProjectLocation();
 		String directoryName = "";
-
-		IPath location = fpjwc.getProject().getLocation();
 
 		if ( location != null )
 		{
-			directoryName = fpjwc.getProject().getLocation().lastSegment();
+			directoryName = location.lastSegment();
 		}
 
 		if ( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||

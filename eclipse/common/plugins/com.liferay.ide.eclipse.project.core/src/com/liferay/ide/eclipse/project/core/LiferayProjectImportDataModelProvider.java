@@ -156,7 +156,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 					return Status.OK_STATUS;
 				}
 				else {
-					return ProjectCorePlugin.createErrorStatus("Project is not located in Liferay Plugins SDK.");
+					return ProjectCorePlugin.createErrorStatus( "Project is not located inside Liferay Plugins SDK." );
 				}
 			}
 
