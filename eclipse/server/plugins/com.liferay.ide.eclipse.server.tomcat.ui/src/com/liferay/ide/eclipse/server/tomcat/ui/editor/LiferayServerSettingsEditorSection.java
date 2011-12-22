@@ -103,7 +103,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 	protected boolean allowRestrictedEditing;
 	protected IPath tempDirPath;
 	protected IPath installDirPath;
-	private Text autoDeployInterval;
+	protected Text autoDeployInterval;
 
 	// Avoid hardcoding this at some point
 	private final static String METADATADIR = ".metadata";
@@ -745,6 +745,29 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					};
 				}
 			}
+
+			String autoDeployInterval = tomcatServer.getAutoDeployInterval();
+
+			if ( CoreUtil.isNullOrEmpty( autoDeployInterval ) )
+			{
+				return new IStatus[] { new Status(
+					IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID,
+					"Must specify auto deploy interval in milliseconds." ) };
+			}
+			else
+			{
+				try
+				{
+					Integer.parseInt( autoDeployInterval );
+				}
+				catch ( NumberFormatException e )
+				{
+					return new IStatus[] { new Status(
+						IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, "Auto deploy interval is not an integer." ) };
+				}
+
+			}
+
 		}
 		// use default implementation to return success
 		return super.getSaveStatus();
@@ -804,7 +827,29 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					return;
 				}
 			}
+
+			String autoDeployInterval = tomcatServer.getAutoDeployInterval();
+
+			if ( CoreUtil.isNullOrEmpty( autoDeployInterval ) )
+			{
+				setErrorMessage( "Must specify auto deploy interval in milliseconds." );
+				return;
+			}
+			else
+			{
+				try
+				{
+					Integer.parseInt( autoDeployInterval );
+				}
+				catch ( NumberFormatException e )
+				{
+					setErrorMessage( "Auto deploy interval is not an integer." );
+					return;
+				}
+
+			}
 		}
+
 		// All is okay, clear any previous error
 		setErrorMessage(null);
 	}
