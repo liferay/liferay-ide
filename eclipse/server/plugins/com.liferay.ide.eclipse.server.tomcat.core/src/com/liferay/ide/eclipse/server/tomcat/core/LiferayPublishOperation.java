@@ -12,6 +12,7 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,9 +95,13 @@ public class LiferayPublishOperation extends PublishOperation {
 	 */
 	public void execute(IProgressMonitor monitor, IAdaptable info) throws CoreException {
 		List status = new ArrayList();
+		
 		// If parent web module
 		if (module.length == 1) {
-			publishDir(module[0], status, monitor);
+			if ( !ServerUtil.isExtProject( module[0].getProject() ) )
+			{
+				publishDir(module[0], status, monitor);
+			}
 		}
 		// Else a child module
 		else {
