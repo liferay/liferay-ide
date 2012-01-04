@@ -57,21 +57,31 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values )
 	{
-		File[] files = portalDir.toFile().listFiles( jspfilter );
-		findJSPFiles( files, values );
+		final File portalDirFile = portalDir.toFile();
+		final File htmlDirFile = new File( portalDirFile, "html" );
+
+		if ( htmlDirFile.exists() )
+		{
+			findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), new File[] { htmlDirFile }, values );
+		}
+		else
+		{
+			File[] files = portalDirFile.listFiles( jspfilter );
+			findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), files, values );
+		}
 	}
 
-	private void findJSPFiles( File[] files, SortedSet<String> values )
+	private void findJSPFiles( Path portalDir, final File[] files, final SortedSet<String> values )
 	{
 		for ( File file : files )
 		{
 			if ( file.isDirectory() )
 			{
-				findJSPFiles( file.listFiles( jspfilter ), values );
+				findJSPFiles( portalDir, file.listFiles( jspfilter ), values );
 			}
 			else
 			{
-				values.add( new Path( file.getAbsolutePath() ).removeFirstSegments( 8 ).toPortableString() );
+				values.add( new Path( file.getAbsolutePath() ).makeRelativeTo( portalDir ).toPortableString() );
 			}
 		}
 	}

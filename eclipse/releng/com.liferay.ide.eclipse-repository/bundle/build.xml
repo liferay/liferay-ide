@@ -234,6 +234,7 @@
 
 	<target name="install-feature">
 		<exec executable="${builder.exe}">
+			<arg value="-nosplash"/>
     		<arg value="-application"/>
 			<arg value="org.eclipse.equinox.p2.director"/>
 			<arg value="-repository"/>

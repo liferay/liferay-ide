@@ -78,7 +78,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 		{
 			ICustomJspDir customJspDirElement = this.getModelElement().nearest( IHook.class ).getCustomJspDir().element();
 			
-			if ( customJspDirElement.validate().ok() )
+			if ( customJspDirElement != null && customJspDirElement.validate().ok() )
 			{
 				Path customJspDir = customJspDirElement.getValue().getContent();
 				IFolder docroot = CoreUtil.getDocroot( getProject() );
