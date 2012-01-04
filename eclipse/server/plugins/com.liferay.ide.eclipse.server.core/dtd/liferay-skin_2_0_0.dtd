@@ -1,6 +1,4 @@
 <!--
-This is the XML DTD for the SKIN deployment descriptor.
-
 <!DOCTYPE portlets PUBLIC
 	"-//Liferay//DTD SKIN 2.0.0//EN"
 	"http://www.liferay.com/dtd/liferay-skin_2_0_0.dtd">

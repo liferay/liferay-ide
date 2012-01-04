@@ -1,6 +1,4 @@
 <!--
-This is the DTD for defining Actions supported on Resources for Liferay Portal.
-
 <!DOCTYPE resource-action-mapping PUBLIC
 	"-//Liferay//DTD Resource Action Mapping 6.0.0//EN"
 	"http://www.liferay.com/dtd/liferay-resource-action-mapping_6_0_0.dtd">

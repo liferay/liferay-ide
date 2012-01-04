@@ -1,6 +1,4 @@
 <!--
-This is the DTD for the Service Builder parameters for Liferay Portal.
-
 <!DOCTYPE service-builder PUBLIC
 	"-//Liferay//DTD Service Builder 5.1.0//EN"
 	"http://www.liferay.com/dtd/liferay-service-builder_5_1_0.dtd">

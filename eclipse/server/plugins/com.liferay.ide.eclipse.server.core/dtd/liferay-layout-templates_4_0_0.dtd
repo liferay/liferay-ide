@@ -1,6 +1,4 @@
 <!--
-This is the DTD for the Layout Templates parameters for Liferay Portal.
-
 <!DOCTYPE layout-templates PUBLIC
 	"-//Liferay//DTD Layout Templates 4.0.0//EN"
 	"http://www.liferay.com/dtd/liferay-layout-templates_4_0_0.dtd">

@@ -1,7 +1,4 @@
 <!--
-This is the DTD for the Portlet Application parameters that are specific to
-Liferay Portal.
-
 <!DOCTYPE liferay-portlet-app PUBLIC
 	"-//Liferay//DTD Portlet Application 6.1.0//EN"
 	"http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
@@ -698,13 +695,13 @@ output FBML automatically if a request is made by Facebook.
 <!ELEMENT facebook-integration (#PCDATA)>
 
 <!--
-If the add-default-resource value is set to false, and the portlet does not
-belong to the page but has been dynamically added, then the user will see that
-he does not have permissions to view the portlet. If the add-default-resource
-value is set to true, the default portlet resources and permissions are added to
-the page. The user can then view the portlet. Most portlets are harmless and can
-benefit from this flexibility. However, to prevent security loop holes, the
-default value is false.
+If the add-default-resource value is set to false and the portlet does not
+belong to the page but has been dynamically added, then the user will not have
+permissions to view the portlet. If the add-default-resource value is set to
+true, the default portlet resources and permissions are added to the page, and
+the user can then view the portlet. This is useful (and necessary) for portlets
+that need to be dynamically added to a page. However, to prevent security loop
+holes, the default value is false.
 
 The properties "portlet.add.default.resource.check.enabled" and
 "portlet.add.default.resource.check.whitelist" in portal.properties allow

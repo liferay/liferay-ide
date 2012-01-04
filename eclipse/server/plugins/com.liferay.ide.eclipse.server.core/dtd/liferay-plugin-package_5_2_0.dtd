@@ -1,7 +1,4 @@
 <!--
-This is the DTD for the Liferay Plugins XML file that lists the plugins
-available in a plugin repository
-
 <!DOCTYPE plugin-package PUBLIC
 	"-//Liferay//DTD Plugin Package 5.2.0//EN"
 	"http://www.liferay.com/dtd/liferay-plugin-package_5_2_0.dtd">

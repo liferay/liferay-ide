@@ -9,7 +9,7 @@
 <!ELEMENT activity (model-name, activity-type, language-key?, log-activity?,
 processor-class?, contribution-value?, contribution-limit?,
 contribution-limit-period?, participation-value?, participation-limit?,
-particiaption-limit-period?, counter*, achievement*)>
+participation-limit-period?, counter*, achievement*)>
 
 <!ELEMENT model-name (#PCDATA)>
 

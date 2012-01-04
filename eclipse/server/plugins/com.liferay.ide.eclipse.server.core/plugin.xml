@@ -876,6 +876,10 @@
                name="http://www.w3.org/2001/03/xml.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/xml.xsd">
          </uri>
+         <uri
+               name="http://www.w3.org/2001/xml.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/xml-2001.xsd">
+         </uri>
          
       </catalogContribution>
    </extension>
