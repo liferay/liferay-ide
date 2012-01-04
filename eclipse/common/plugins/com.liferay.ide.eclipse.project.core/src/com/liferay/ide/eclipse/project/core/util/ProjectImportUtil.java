@@ -157,6 +157,12 @@ public class ProjectImportUtil {
 				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER );
 				docrootFolder = IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER;
 			}
+			else if ( pluginBinaryRecord.isExt() )
+			{
+				projectPath = liferaySDK.createNewExtProject( displayName, displayName, appServerProperties );
+				sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER );
+				docrootFolder = IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER;
+			}
 
 			// Move the porject to Liferay SDK location
 			File tempProjectDir = projectPath.append( liferayPluginName ).toFile();

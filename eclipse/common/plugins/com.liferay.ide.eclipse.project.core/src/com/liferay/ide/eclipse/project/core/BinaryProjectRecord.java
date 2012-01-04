@@ -17,6 +17,7 @@
 
 package com.liferay.ide.eclipse.project.core;
 
+import static com.liferay.ide.eclipse.sdk.ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
 import static com.liferay.ide.eclipse.sdk.ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
 import static com.liferay.ide.eclipse.sdk.ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 import static com.liferay.ide.eclipse.sdk.ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
@@ -39,6 +40,7 @@ public class BinaryProjectRecord {
 	boolean isTheme;
 	boolean isPortlet;
 	boolean isLayoutTpl;
+	boolean isExt;
 
 	public BinaryProjectRecord( File binaryFile ) {
 		this.binaryFile = binaryFile;
@@ -72,6 +74,11 @@ public class BinaryProjectRecord {
 			else if ( binaryName.contains( LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ) {
 				index = binaryName.indexOf( LAYOUTTPL_PLUGIN_PROJECT_SUFFIX );
 				isLayoutTpl = index != -1 ? true : false;
+			}
+			else if ( binaryName.contains( EXT_PLUGIN_PROJECT_SUFFIX ) )
+			{
+				index = binaryName.indexOf( EXT_PLUGIN_PROJECT_SUFFIX );
+				isExt = index != -1 ? true : false;
 			}
 			if ( index != -1 ) {
 				displayName = binaryName.substring( 0, index );
@@ -207,7 +214,16 @@ public class BinaryProjectRecord {
 		else if ( isTheme ) {
 			return getDisplayName() + THEME_PLUGIN_PROJECT_SUFFIX;
 		}
+		else if ( isExt )
+		{
+			return getDisplayName() + EXT_PLUGIN_PROJECT_SUFFIX;
+		}
 		return null;
+	}
+
+	public boolean isExt()
+	{
+		return isExt;
 	}
 
 }
