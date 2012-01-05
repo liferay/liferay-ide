@@ -29,15 +29,12 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author Gregory Amerson
  */
 @GenerateImpl
-@XmlDocumentType( publicId = "-//Liferay//DTD Service Builder 6.0.0//EN", systemId = "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd" )
-@XmlBinding( path = "service-builder" )
 public interface IServiceBuilder extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType(IServiceBuilder.class);

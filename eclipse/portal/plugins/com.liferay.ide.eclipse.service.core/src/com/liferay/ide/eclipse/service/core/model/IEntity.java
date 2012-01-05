@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Documentation;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -85,6 +86,21 @@ public interface IEntity extends IModelElement {
 	void setUuid(String value);
 
 	void setUuid(Boolean value);
+
+	// *** UUID Accessor ***
+
+	@Type( base = Boolean.class )
+	@XmlBinding( path = "@uuid-accessor" )
+	@Label( standard = "&uuid accessor" )
+	@DefaultValue( text = "false" )
+	@Documentation( content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID." )
+	ValueProperty PROP_UUID_ACCESSOR = new ValueProperty( TYPE, "UuidAccessor" );
+
+	Value<Boolean> getUuidAccessor();
+
+	void setUuidAccessor( String value );
+
+	void setUuidAccessor( Boolean value );
 
 	// *** LocalService
 

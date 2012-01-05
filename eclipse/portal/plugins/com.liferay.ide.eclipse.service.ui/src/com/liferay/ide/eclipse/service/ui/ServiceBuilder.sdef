@@ -18,6 +18,7 @@
         <package>com.liferay.ide.eclipse.service.core.model</package>
         <package>com.liferay.ide.eclipse.service.core.model.internal</package>
         <package>com.liferay.ide.eclipse.service.ui</package>
+        <package>com.liferay.ide.eclipse.service.ui.internal</package>
         <package>org.eclipse.sapphire.workspace.ui</package>
     </import>
     <editor></editor>
@@ -89,9 +90,23 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
+                                            <if>
+                                                <then>
+                                                    <property-editor>
+                                                        <property>uuidAccessor</property>
+                                                        <hint>
+                                                            <name>checkbox.layout</name>
+                                                            <value>leading.label</value>
+                                                        </hint>
+                                                    </property-editor>
+                                                </then>
+                                                <condition>
+                                                    <class>EntityUuidAccessorCondition</class>
+                                                </condition>
+                                            </if>
 		                                    <property-editor>persistenceClass</property-editor>
 		                                    <property-editor>dataSource</property-editor>
-		                                    <property-editor>sessionFactory</property-editor>
+                                            <property-editor>sessionFactory</property-editor>
                                             <property-editor>txManager</property-editor>
                                             <property-editor>
                                                 <property>cacheEnabled</property>
@@ -208,6 +223,20 @@ the json-enabled value is true.</content>
                                                         <property-editor>mappingKey</property-editor>
                                                         <property-editor>mappingTable</property-editor>
                                                         <property-editor>idType</property-editor>
+                                                        <if>
+                                                            <then>
+                                                                <property-editor>
+                                                                    <property>Accessor</property>
+                                                                    <hint>
+                                                                        <name>checkbox.layout</name>
+                                                                        <value>leading.label</value>
+                                                                    </hint>
+                                                                </property-editor>
+                                                            </then>
+                                                            <condition>
+                                                                <class>ColumnAccessorCondition</class>
+                                                            </condition>
+                                                        </if>
                                                         <property-editor>idParam</property-editor>
                                                         <property-editor>
                                                             <property>convertNull</property>

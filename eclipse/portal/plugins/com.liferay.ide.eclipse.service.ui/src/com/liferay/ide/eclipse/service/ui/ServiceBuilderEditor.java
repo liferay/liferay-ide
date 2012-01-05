@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,17 +18,24 @@
 package com.liferay.ide.eclipse.service.ui;
 
 
-import com.liferay.ide.eclipse.service.core.model.IServiceBuilder;
+import com.liferay.ide.eclipse.service.core.model.IServiceBuilder600;
+import com.liferay.ide.eclipse.service.core.model.IServiceBuilder610;
+import com.liferay.ide.eclipse.service.core.model.ServiceBuilderVersionType;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.xml.RootXmlResource;
+import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.ui.swt.graphiti.editor.SapphireDiagramEditor;
 import org.eclipse.sapphire.ui.swt.graphiti.editor.SapphireDiagramEditorFactory;
 import org.eclipse.sapphire.ui.swt.graphiti.editor.SapphireDiagramEditorInput;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.PartInitException;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 
 
 /**
@@ -41,7 +48,6 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 	public ServiceBuilderEditor() {
 		super(ServiceUI.PLUGIN_ID);
 
-		setRootModelElementType(IServiceBuilder.TYPE);
 		setEditorDefinitionPath( ServiceUI.PLUGIN_ID +
 			"/com/liferay/ide/eclipse/service/ui/ServiceBuilder.sdef/serviceBuilderPage" );
 	}
@@ -52,6 +58,78 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 		super.doSave( monitor );
 
 		this.pageDiagram.doSave( monitor );
+	}
+
+	protected ServiceBuilderVersionType getDTDVersion( Document document )
+	{
+		ServiceBuilderVersionType dtdVersion = null;
+		DocumentType docType = document.getDoctype();
+
+		if ( docType != null )
+		{
+			String publicId = docType.getPublicId();
+			String systemId = docType.getSystemId();
+			if ( publicId != null && systemId != null )
+			{
+				if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
+				{
+					dtdVersion = ServiceBuilderVersionType.v6_0_0;
+				}
+				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
+				{
+					dtdVersion = ServiceBuilderVersionType.v6_1_0;
+				}
+			}
+
+		}
+
+		return dtdVersion;
+	}
+
+	@Override
+	protected IModelElement createModel()
+	{
+		IFile editorFile = getFile();
+		ServiceBuilderVersionType dtdVersion = null;
+		RootXmlResource resource = null;
+
+		try
+		{
+			resource = new RootXmlResource( new XmlResourceStore( editorFile.getContents() ) );
+			Document document = resource.getDomDocument();
+			dtdVersion = getDTDVersion( document );
+
+			if ( document != null )
+			{
+				switch ( dtdVersion )
+				{
+
+				case v6_0_0:
+					setRootModelElementType( IServiceBuilder600.TYPE );
+					break;
+
+				case v6_1_0:
+				default:
+					setRootModelElementType( IServiceBuilder610.TYPE );
+					break;
+
+				}
+			}
+		}
+		catch ( Exception e )
+		{
+			ServiceUI.logError( e );
+			setRootModelElementType( IServiceBuilder600.TYPE );
+		}
+		finally
+		{
+			if ( resource != null )
+			{
+				resource.dispose();
+			}
+		}
+
+		return super.createModel();
 	}
 
 	@Override
