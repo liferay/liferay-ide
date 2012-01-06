@@ -348,33 +348,28 @@ public class LiferayTomcatUtil {
 		File location = currentLocation.toFile();
 	
 		if (location.exists() && location.isDirectory()) {
-			// check to see if this location contains 3 dirs
-			// data, deploy, and tomcat-*
+			// check to see if this location contains tomcat dir tomcat-*
 			File[] files = location.listFiles();
 	
-			boolean[] matches = new boolean[3];
+			boolean matches = false;
 	
-			String[] patterns = new String[] {
-				"data", "deploy", "^tomcat-.*"
-			};
+			String pattern = "^tomcat-.*";
 	
 			File tomcatDir = null;
 	
-			for (File file : files) {
-				for (int i = 0; i < patterns.length; i++) {
-					if (file.isDirectory() && file.getName().matches(patterns[i])) {
-						matches[i] = true;
-	
-						if (i == 2) { // tomcat
-							tomcatDir = file;
-						}
-	
-						break;
-					}
+			for ( File file : files )
+			{
+				if ( file.isDirectory() && file.getName().matches( pattern ) )
+				{
+					matches = true;
+
+					tomcatDir = file;
+
+					break;
 				}
 			}
 	
-			if (matches[0] && matches[1] && matches[2] && tomcatDir != null) {
+			if (matches && tomcatDir != null) {
 				modifiedLocation = new Path(tomcatDir.getPath());
 			}
 		}
