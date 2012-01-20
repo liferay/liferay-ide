@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.wst.server.core.runtimeTypes">
+      <runtimeType
+            class="com.liferay.ide.eclipse.server.jboss.core.LocalLiferayJBossRuntime"
+            description="Liferay Portal 6.1 CE bundled with JBoss AS7"
+            id="com.liferay.ide.eclipse.server.jboss.runtime.70"
+            name="Liferay v6.1 CE (JBoss AS7)"
+            vendor="Liferay, Inc."
+            version="7.0">
+      </runtimeType>
+   </extension>
+   <extension
+         point="org.eclipse.jst.server.core.runtimeClasspathProviders">
+      <runtimeClasspathProvider
+            class="com.liferay.ide.eclipse.server.jboss.core.LiferayBossRuntimeClasspathProvider"
+            id="com.liferay.ide.eclipse.server.jboss.7x.runtimeClasspathProvider"
+            runtimeTypeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
+      </runtimeClasspathProvider>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.runtimes">
+      <runtime-component-type
+            id="com.liferay.ide.eclipse.server.jboss.runtime-component">
+      </runtime-component-type>
+      <runtime-component-version
+            type="com.liferay.ide.eclipse.server.jboss.runtime-component"
+            version="7.0">
+      </runtime-component-version>
+      <supported>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.jboss.runtime-component"
+               version="7.0"></runtime-component>
+         <facet
+               id="jst.web"
+               version="[2.3-3.0]">
+         </facet>
+         <facet
+               id="jst.utility"
+               version="1.0">
+         </facet>
+         <facet
+               id="liferay.portlet"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.hook"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.ext"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.layouttpl"
+               version="6.0">
+         </facet>
+         <facet
+               id="liferay.theme"
+               version="6.0">
+         </facet>      
+      </supported>
+      <adapter>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.jboss.runtime-component"
+               version="7.0"></runtime-component>
+         <factory
+               class="com.liferay.ide.eclipse.server.jboss.core.LiferayJBossRuntimeClasspathFactory">
+         </factory>
+         <type
+               class="org.eclipse.jst.common.project.facet.core.IClasspathProvider">
+         </type>
+      </adapter>
+   </extension>
+   <extension
+         point="org.eclipse.jst.server.core.runtimeFacetMappings">
+      <runtimeFacetMapping
+            runtime-component="com.liferay.ide.eclipse.server.jboss.runtime-component"
+            runtimeTypeId="com.liferay.ide.eclipse.server.jboss.runtime.70"
+            version="7.0">
+      </runtimeFacetMapping>
+   </extension>
+   <extension
+         point="com.liferay.ide.eclipse.server.core.runtimeStubs">
+      <liferayRuntimeStub
+            name="Liferay v6.1 CE (JBoss AS7) Stub"
+            runtimeTypeId="com.liferay.ide.eclipse.server.jboss.runtime.70">
+      </liferayRuntimeStub>
+   </extension>
+
+</plugin>

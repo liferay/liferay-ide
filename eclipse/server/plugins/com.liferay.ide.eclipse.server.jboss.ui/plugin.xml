@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         point="org.eclipse.wst.server.ui.serverImages">
+      <image
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.eclipse.server.jboss.ui.image"
+            typeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
+      </image>
+      <image
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.eclipse.server.jboss.runtime.ui.image"
+            typeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
+      </image>
+   </extension>
+   
+   <extension
+         point="org.eclipse.wst.server.ui.wizardFragments">
+      <fragment
+            class="com.liferay.ide.eclipse.server.jboss.ui.wizard.LiferayJBossRuntimeFragment"
+            id="com.liferay.ide.eclipse.server.jboss.runtime"
+            typeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
+      </fragment>
+   </extension>
+   
+    <extension
+         point="org.eclipse.wst.common.project.facet.core.runtimes">
+      <adapter>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.jboss.runtime-component">
+         </runtime-component>
+         <factory
+               class="com.liferay.ide.eclipse.server.jboss.ui.LiferayJBossRuntimeComponentLabelProvider">
+         </factory>
+         <type
+               class="org.eclipse.wst.common.project.facet.ui.IRuntimeComponentLabelProvider">
+         </type>
+      </adapter>
+      <adapter>
+         <runtime-component
+               id="com.liferay.ide.eclipse.server.jboss.runtime-component">
+         </runtime-component>
+         <factory
+               class="com.liferay.ide.eclipse.server.jboss.ui.LiferayJBossRuntimeDecorationsProvider">
+         </factory>
+         <type
+               class="org.eclipse.wst.common.project.facet.ui.IDecorationsProvider">
+         </type>
+      </adapter>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.ui.images">
+      <image
+            path="icons/e16/server.png"
+            runtime-component-type="com.liferay.ide.eclipse.server.tomcat.runtime.component">
+      </image>
+   </extension>
+
+
+</plugin>
