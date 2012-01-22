@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.tomcat.core;
+package com.liferay.ide.eclipse.server.core;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jst.common.project.facet.core.IClasspathProvider;

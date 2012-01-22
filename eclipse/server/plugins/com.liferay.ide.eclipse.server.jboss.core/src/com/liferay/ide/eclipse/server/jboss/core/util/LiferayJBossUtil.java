@@ -15,12 +15,21 @@
 
 package com.liferay.ide.eclipse.server.jboss.core.util;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 
+import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayLocalRuntime;
+import com.liferay.ide.eclipse.server.jboss.core.LiferayJBossPlugin;
 
 /**
  * @author kamesh
@@ -28,8 +37,32 @@ import com.liferay.ide.eclipse.server.core.ILiferayLocalRuntime;
 public class LiferayJBossUtil
 {
 
+	public static IPath[] getAllUserClasspathLibraries( IPath runtimeLocation, IPath portalDir )
+	{
+		List<IPath> libs = new ArrayList<IPath>();
+		IPath webinfLibFolder = portalDir.append( "WEB-INF/lib" );
+
+		try
+		{
+			List<File> libFiles = FileListing.getFileListing( new File( webinfLibFolder.toOSString() ) );
+
+			for ( File lib : libFiles )
+			{
+				if ( lib.exists() && lib.getName().endsWith( ".jar" ) )
+				{
+					libs.add( new Path( lib.getPath() ) );
+				}
+			}
+		}
+		catch ( FileNotFoundException e )
+		{
+			LiferayJBossPlugin.logError( e );
+		}
+
+		return libs.toArray( new IPath[0] );
+	}
+
 	/**
-	 * 
 	 * @param runtime
 	 * @return
 	 */

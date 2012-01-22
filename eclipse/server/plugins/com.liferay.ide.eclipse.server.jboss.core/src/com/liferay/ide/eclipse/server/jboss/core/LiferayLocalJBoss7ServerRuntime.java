@@ -26,7 +26,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.launching.IVMInstall;
+import org.jboss.ide.eclipse.as.core.server.internal.v7.IJBoss7Deployment;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.LocalJBoss7ServerRuntime;
+import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
 import org.osgi.framework.Version;
 
 import com.liferay.ide.eclipse.core.ILiferayConstants;
@@ -34,14 +36,23 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayLocalRuntime;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.eclipse.server.jboss.core.util.LiferayJBossUtil;
 import com.liferay.ide.eclipse.server.util.ReleaseHelper;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 /**
  * @author kamesh
  */
-public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implements ILiferayLocalRuntime
+public class LiferayLocalJBoss7ServerRuntime extends LocalJBoss7ServerRuntime implements ILiferayLocalRuntime
 {
+
+	private static final String PROP_JBOSS_MODULES_DIR = "modules";
+
+	private static final String PROP_JBOSS_STANDALONE_DEPLOYMENTS_DIR = "standalone/deployments";
+
+	private static final String PROP_JBOSS_PORTAL_DIR_PATH = PROP_JBOSS_STANDALONE_DEPLOYMENTS_DIR+"/ROOT.war";
+
+	private static final String PROP_JBOSS_APP_SERVER_TYPE = "jboss";
 
 	public static final String PROP_BUNDLE_SOURCE_LOCATION = "bundle-source-location";
 
@@ -50,30 +61,25 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 	private IStatus runtimeDelegateStatus;
 
 	protected final HashMap<IPath, ReleaseHelper> releaseHelpers = new HashMap<IPath, ReleaseHelper>();
-	
-	
+
 	/**
 	 * 
 	 */
-	public LocalLiferayJBossRuntime()
+	public LiferayLocalJBoss7ServerRuntime()
 	{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
 	public IPath[] getAllUserClasspathLibraries()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return LiferayJBossUtil.getAllUserClasspathLibraries( getRuntimeLocation(), getPortalDir() );
 	}
 
-	@Override
 	public Properties getPortletCategories()
 	{
-		return ServerUtil.getCategories(getRuntimeLocation(),getPortalDir());
+		return ServerUtil.getCategories( getRuntimeLocation(), getPortalDir() );
 	}
 
-	@Override
 	public String getPortalVersion()
 	{
 		String portalVersion = "";
@@ -89,13 +95,11 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 		return portalVersion;
 	}
 
-	@Override
 	public IPath getRuntimeLocation()
 	{
 		return getRuntime().getLocation();
 	}
 
-	@Override
 	public String[] getSupportedHookProperties()
 	{
 		String[] supportedHooks = new String[0];
@@ -110,37 +114,31 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 		return supportedHooks;
 	}
 
-	@Override
 	public IPath getAppServerDir()
 	{
 		return getRuntimeLocation();
 	}
 
-	@Override
 	public String getAppServerType()
 	{
-		return "jboss";
+		return PROP_JBOSS_APP_SERVER_TYPE;
 	}
 
-	@Override
 	public IPath getDeployDir()
 	{
-		return getAppServerDir().append( "standalone" ).append( "deployments" );
+		return getAppServerDir().append( PROP_JBOSS_STANDALONE_DEPLOYMENTS_DIR );
 	}
 
-	@Override
 	public IPath getLibGlobalDir()
 	{
-		return getAppServerDir().append( "modules" );
+		return getAppServerDir().append( PROP_JBOSS_MODULES_DIR );
 	}
 
-	@Override
 	public IPath getPortalDir()
 	{
-		return getAppServerDir().append( "standalone" ).append( "deployments" ).append( "ROOT.war" );
+		return getAppServerDir().append( PROP_JBOSS_PORTAL_DIR_PATH );
 	}
 
-	@Override
 	public String[] getServletFilterNames()
 	{
 		String[] servletFilters = new String[0];
@@ -155,13 +153,11 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 		return servletFilters;
 	}
 
-	@Override
 	public IVMInstall getVMInstall()
 	{
 		return getVM();
 	}
 
-	@Override
 	public IPath getBundleZipLocation()
 	{
 		String zipLocation = getAttribute( PROP_BUNDLE_ZIP_LOCATION, (String) null );
@@ -169,7 +165,6 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 		return zipLocation != null ? new Path( zipLocation ) : null;
 	}
 
-	@Override
 	public String getServerInfo()
 	{
 		String serverInfo = "";
@@ -186,7 +181,6 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 
 	}
 
-	@Override
 	public void setBundleZipLocation( IPath path )
 	{
 		// TODO Auto-generated method stub
@@ -328,6 +322,5 @@ public class LocalLiferayJBossRuntime extends LocalJBoss7ServerRuntime implement
 
 		return newHelper;
 	}
-	
 
 }

@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors;bundle-version="3.5.0",
  org.apache.commons.httpclient;bundle-version="3.1.0",
  com.liferay.ide.eclipse.sdk,
- org.jboss.ide.eclipse.as.classpath.core;bundle-version="2.3.0"
+ org.jboss.ide.eclipse.as.classpath.core;bundle-version="2.3.0",
+ org.jboss.ide.eclipse.archives.webtools;bundle-version="2.3.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.server.jboss.core,

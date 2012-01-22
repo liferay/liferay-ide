@@ -4,12 +4,20 @@
    <extension
          point="org.eclipse.wst.server.core.runtimeTypes">
       <runtimeType
-            class="com.liferay.ide.eclipse.server.jboss.core.LocalLiferayJBossRuntime"
+            class="com.liferay.ide.eclipse.server.jboss.core.LiferayLocalJBoss7ServerRuntime"
             description="Liferay Portal 6.1 CE bundled with JBoss AS7"
             id="com.liferay.ide.eclipse.server.jboss.runtime.70"
             name="Liferay v6.1 CE (JBoss AS7)"
             vendor="Liferay, Inc."
             version="7.0">
+         <moduleType
+               types="jst.web"
+               versions="2.3,2.4,2.5,3.0">
+         </moduleType>
+         <moduleType
+               types="jst.utility"
+               versions="1.0">
+         </moduleType>
       </runtimeType>
    </extension>
    <extension
@@ -19,6 +27,26 @@
             id="com.liferay.ide.eclipse.server.jboss.7x.runtimeClasspathProvider"
             runtimeTypeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
       </runtimeClasspathProvider>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.serverTypes">
+      <serverType
+            behaviourClass="com.liferay.ide.eclipse.server.jboss.core.LiferayJBossServerBehavior"
+            class="com.liferay.ide.eclipse.server.jboss.core.LocalJBoss7Server"
+            description="Liferay Portal 6.1 Community Edition Server bundled with JBoss AS7"
+            hasConfiguration="false"
+            id="com.liferay.ide.eclipse.server.jboss.70"
+            initialState="stopped"
+            launchConfigId="org.jboss.ide.eclipse.as.core.server.JBoss7StartupConfiguration"
+            launchModes="run,debug,profile"
+            name="Liferay v6.1 CE Server (JBoss AS7)"
+            runtime="true"
+            runtimeTypeId="com.liferay.ide.eclipse.server.jboss.runtime.70"
+            startBeforePublish="false"
+            startTimeout="900000"
+            stopTimeout="300000"
+            supportsRemoteHosts="false">
+      </serverType>
    </extension>
    <extension
          point="org.eclipse.wst.common.project.facet.core.runtimes">
@@ -67,7 +95,7 @@
                id="com.liferay.ide.eclipse.server.jboss.runtime-component"
                version="7.0"></runtime-component>
          <factory
-               class="com.liferay.ide.eclipse.server.jboss.core.LiferayJBossRuntimeClasspathFactory">
+               class="com.liferay.ide.eclipse.server.core.RuntimeClasspathFactory">
          </factory>
          <type
                class="org.eclipse.jst.common.project.facet.core.IClasspathProvider">
@@ -85,9 +113,17 @@
    <extension
          point="com.liferay.ide.eclipse.server.core.runtimeStubs">
       <liferayRuntimeStub
-            name="Liferay v6.1 CE (JBoss AS7) Stub"
+            name="Liferay v6.1 CE (JBoss AS7) Bundle"
             runtimeTypeId="com.liferay.ide.eclipse.server.jboss.runtime.70">
       </liferayRuntimeStub>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.launchableAdapters">
+      <launchableAdapter
+            class="org.jboss.ide.eclipse.as.core.server.internal.JBossLaunchAdapter"
+            id="com.liferay.ide.eclipse.server.jboss.web"
+            typeIds="com.liferay.ide.eclipse.server.jboss.70">
+      </launchableAdapter>
    </extension>
 
 </plugin>

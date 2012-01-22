@@ -138,7 +138,7 @@
                id="com.liferay.ide.eclipse.server.tomcat.runtime.component">
          </runtime-component>
          <factory
-               class="com.liferay.ide.eclipse.server.tomcat.core.RuntimeClasspathFactory">
+               class="com.liferay.ide.eclipse.server.core.RuntimeClasspathFactory">
          </factory>
          <type
                class="org.eclipse.jst.common.project.facet.core.IClasspathProvider">
