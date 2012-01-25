@@ -17,9 +17,6 @@ package com.liferay.ide.eclipse.server.jboss.core;
 
 import java.net.URL;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.jboss.ide.eclipse.as.core.server.internal.ServerAttributeHelper;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
 
 import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
@@ -29,48 +26,6 @@ import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
  */
 public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossServer, ILiferayServerConstants
 {
-
-	private ServerAttributeHelper helper;
-
-	/**
-	 * 
-	 */
-	public LiferayJBoss7Server()
-	{
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.core.server.internal.DeployableServer#initialize()
-	 */
-	@Override
-	protected void initialize()
-	{
-		super.initialize();
-		this.helper = ServerAttributeHelper.createHelper( getServer() );
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server#setDefaults(org.eclipse.core.runtime.IProgressMonitor)
-	 */
-	@Override
-	public void setDefaults( IProgressMonitor monitor )
-	{
-		super.setDefaults( monitor );
-		helper.setAttribute( PROPERTY_USER_TIMEZONE, getUserTimezone() );
-		helper.setAttribute( PROPERTY_AUTO_DEPLOY_DIR, getAutoDeployDirectory() );
-		helper.setAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, getAutoDeployInterval() );
-		helper.setAttribute( PROPERTY_EXTERNAL_PROPERTIES, getExternalProperties() );
-		try
-		{
-			helper.save( true, monitor );
-		}
-		catch ( CoreException e )
-		{
-			LiferayJBossPlugin.logError( e );
-		}
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -106,6 +106,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 			@Override
 			public void propertyChange( PropertyChangeEvent event )
 			{
+				if (updating)
+					return;
+
+				updating = true;
+				
 				if ( ILiferayJBossServer.PROPERTY_AUTO_DEPLOY_DIR.equals( event.getPropertyName() ) )
 				{
 					String s = (String) event.getNewValue();
@@ -136,7 +141,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 					LiferayServerSettingsEditorSection.this.externalProperties.setText( s );
 					validate();
 				}
-
+				updating = false;
 			}
 		};
 
@@ -480,7 +485,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 	{
 		if ( autoDeployInterval == null || liferayJBoss7Server == null )
 			return;
-
+		updating = true;
 		IRuntime runtime = server.getRuntime();
 
 		if ( runtime != null )
@@ -492,6 +497,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 		externalProperties.setText( liferayJBoss7Server.getExternalProperties() );
 		autoDeployDir.setText( liferayJBoss7Server.getAutoDeployDirectory() );
 		autoDeployInterval.setText( liferayJBoss7Server.getAutoDeployInterval() );
+		updating = false;
 		validate();
 
 		// TODO check to see if we need to cross check the aroguments with run.conf or stanalone.conf

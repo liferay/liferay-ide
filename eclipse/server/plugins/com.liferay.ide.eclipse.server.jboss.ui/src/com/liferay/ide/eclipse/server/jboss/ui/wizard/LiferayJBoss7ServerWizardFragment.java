@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.server.jboss.ui.wizard;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
-import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
 import org.jboss.ide.eclipse.as.ui.wizards.JBoss7ServerWizardFragment;
 
 import com.liferay.ide.eclipse.server.jboss.ui.LiferayJBossUIPlugin;
