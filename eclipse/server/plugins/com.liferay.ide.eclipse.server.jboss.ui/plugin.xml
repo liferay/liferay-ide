@@ -90,7 +90,7 @@
    <extension
          point="org.eclipse.wst.server.ui.editorPageSections">
       <section
-            class="com.liferay.ide.eclipse.server.jboss.ui.editor.LiferayServerSettingsSection"
+            class="com.liferay.ide.eclipse.server.jboss.ui.editor.LiferayServerSettingsEditorSection"
             id="com.liferay.ide.eclipse.server.jboss.ui.editor.liferaySection"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="9"

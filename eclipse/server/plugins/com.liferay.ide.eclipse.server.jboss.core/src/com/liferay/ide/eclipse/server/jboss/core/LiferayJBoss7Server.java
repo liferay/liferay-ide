@@ -17,25 +17,59 @@ package com.liferay.ide.eclipse.server.jboss.core;
 
 import java.net.URL;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.jboss.ide.eclipse.as.core.extensions.descriptors.XPathModel;
-import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.jboss.ide.eclipse.as.core.server.internal.ServerAttributeHelper;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
-import org.jboss.ide.eclipse.as.core.util.ServerUtil;
 
-import com.liferay.ide.eclipse.server.core.ILiferayServer;
+import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
 
 /**
  * @author kamesh
  */
-public class LiferayJBoss7Server extends JBoss7Server implements ILiferayServer
+public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossServer, ILiferayServerConstants
 {
+
+	private ServerAttributeHelper helper;
 
 	/**
 	 * 
 	 */
 	public LiferayJBoss7Server()
 	{
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.core.server.internal.DeployableServer#initialize()
+	 */
+	@Override
+	protected void initialize()
+	{
+		super.initialize();
+		this.helper = ServerAttributeHelper.createHelper( getServer() );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server#setDefaults(org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	public void setDefaults( IProgressMonitor monitor )
+	{
+		super.setDefaults( monitor );
+		helper.setAttribute( PROPERTY_USER_TIMEZONE, getUserTimezone() );
+		helper.setAttribute( PROPERTY_AUTO_DEPLOY_DIR, getAutoDeployDirectory() );
+		helper.setAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, getAutoDeployInterval() );
+		helper.setAttribute( PROPERTY_EXTERNAL_PROPERTIES, getExternalProperties() );
+		try
+		{
+			helper.save( true, monitor );
+		}
+		catch ( CoreException e )
+		{
+			LiferayJBossPlugin.logError( e );
+		}
 	}
 
 	/*
@@ -56,6 +90,76 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayServer
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getAutoDeployDirectory()
+	 */
+	public String getAutoDeployDirectory()
+	{
+		return getAttribute( PROPERTY_AUTO_DEPLOY_DIR, "../deploy" );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getAutoDeployInterval()
+	 */
+	public String getAutoDeployInterval()
+	{
+		return getAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, DEFAULT_AUTO_DEPLOY_INTERVAL );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getExternalProperties()
+	 */
+	public String getExternalProperties()
+	{
+		return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, "" );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getMemoryArgs()
+	 */
+	public String getMemoryArgs()
+	{
+		return getAttribute( PROPERTY_MEMORY_ARGS, DEFAULT_MEMORY_ARGS );
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getUserTimezone()
+	 */
+	public String getUserTimezone()
+	{
+		return getAttribute( PROPERTY_USER_TIMEZONE, DEFAULT_USER_TIMEZONE );
+	}
+
+	public void setAutoDeployDirectory( String dir )
+	{
+		setAttribute( PROPERTY_AUTO_DEPLOY_DIR, dir );
+	}
+
+	public void setAutoDeployInterval( String interval )
+	{
+		setAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, interval );
+	}
+
+	public void setExternalProperties( String externalProperties )
+	{
+		setAttribute( PROPERTY_EXTERNAL_PROPERTIES, externalProperties );
+	}
+
+	public void setMemoryArgs( String memoryArgs )
+	{
+		setAttribute( PROPERTY_MEMORY_ARGS, memoryArgs );
+	}
+
+	public void setUserTimezone( String userTimezone )
+	{
+		setAttribute( PROPERTY_USER_TIMEZONE, userTimezone );
 	}
 
 }
