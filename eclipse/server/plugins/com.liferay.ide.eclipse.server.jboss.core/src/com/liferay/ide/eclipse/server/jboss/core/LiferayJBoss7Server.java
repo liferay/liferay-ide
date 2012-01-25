@@ -18,22 +18,24 @@ package com.liferay.ide.eclipse.server.jboss.core;
 import java.net.URL;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.jboss.ide.eclipse.as.core.extensions.descriptors.XPathModel;
+import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
+import org.jboss.ide.eclipse.as.core.util.ServerUtil;
 
 import com.liferay.ide.eclipse.server.core.ILiferayServer;
 
 /**
  * @author kamesh
  */
-public class LocalJBoss7Server extends JBoss7Server implements ILiferayServer
+public class LiferayJBoss7Server extends JBoss7Server implements ILiferayServer
 {
 
 	/**
 	 * 
 	 */
-	public LocalJBoss7Server()
+	public LiferayJBoss7Server()
 	{
-		// TODO Auto-generated constructor stub
 	}
 
 	/*

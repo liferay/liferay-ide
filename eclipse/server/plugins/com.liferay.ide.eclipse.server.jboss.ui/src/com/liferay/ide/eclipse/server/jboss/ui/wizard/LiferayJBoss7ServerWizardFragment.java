@@ -16,40 +16,40 @@
 package com.liferay.ide.eclipse.server.jboss.ui.wizard;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.TaskModel;
-import org.jboss.ide.eclipse.as.ui.Messages;
-import org.jboss.ide.eclipse.as.ui.wizards.JBoss7RuntimeWizardFragment;
+import org.eclipse.wst.server.ui.wizard.IWizardHandle;
+import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
+import org.jboss.ide.eclipse.as.ui.wizards.JBoss7ServerWizardFragment;
 
 import com.liferay.ide.eclipse.server.jboss.ui.LiferayJBossUIPlugin;
 
 /**
- * @author Kamesh
+ * @author kamesh
  */
-
-public class LiferayJBossRuntimeFragment extends JBoss7RuntimeWizardFragment
+public class LiferayJBoss7ServerWizardFragment extends JBoss7ServerWizardFragment
 {
 
-	public LiferayJBossRuntimeFragment()
+	public LiferayJBoss7ServerWizardFragment()
 	{
-		super();
+
 	}
 
+	/* (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.ui.wizards.JBossServerWizardFragment#createComposite(org.eclipse.swt.widgets.Composite, org.eclipse.wst.server.ui.wizard.IWizardHandle)
+	 */
 	@Override
-	protected void updateWizardHandle( Composite parent )
+	public Composite createComposite( Composite parent, IWizardHandle handle )
 	{
-		super.updateWizardHandle( parent );
-		
-		handle.setTitle( "Liferay JBoss Runtime" );
-		IRuntime r = (IRuntime) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
-		String version = r.getRuntimeType().getVersion();
-		String description = NLS.bind( isEAP() ? Messages.JBEAP_version : Messages.JBAS_version, version );
-		nameText.setText( r.getRuntimeType().getName() );
-		handle.setDescription( "Liferay " + description );
+		Composite composite = super.createComposite( parent, handle );
+		handle.setTitle( "Liferay JBoss Server" );
+		handle.setDescription( "Liferay Portal Bundled JBoss Application Server 7.0" );
 		handle.setImageDescriptor( ImageDescriptor.createFromURL( LiferayJBossUIPlugin.getDefault().getBundle().getEntry(
-			"/icons/wizban/server_wiz.png" ) ) );
+						"/icons/wizban/server_wiz.png" ) ) );
+		return composite;
 	}
-
+	
+	
+	
+	
+	
 }

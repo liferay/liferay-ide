@@ -5,6 +5,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.jboss.ide.eclipse.as.core.extensions.descriptors.XPathModel;
+import org.jboss.ide.eclipse.as.core.server.UnitedServerListenerManager;
+import org.jboss.ide.eclipse.as.core.server.internal.ServerListener;
 import org.osgi.framework.BundleContext;
 
 import com.liferay.ide.eclipse.core.CorePlugin;
@@ -58,6 +61,7 @@ public class LiferayJBossPlugin extends CorePlugin
 	 */
 	public void stop( BundleContext context ) throws Exception
 	{
+
 		plugin = null;
 		super.stop( context );
 	}
