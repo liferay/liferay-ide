@@ -15,24 +15,22 @@
 
 package com.liferay.ide.eclipse.server.jboss.core;
 
+import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
+
 import java.net.URL;
 
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
 
-import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
-
 /**
  * @author kamesh
  */
-public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossServer, ILiferayServerConstants
-{
+public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossServer, ILiferayServerConstants {
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.core.ILiferayServer#getPortalHomeUrl()
 	 */
-	public URL getPortalHomeUrl()
-	{
+	public URL getPortalHomeUrl() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -41,8 +39,7 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.core.ILiferayServer#getWebServicesListURL()
 	 */
-	public URL getWebServicesListURL()
-	{
+	public URL getWebServicesListURL() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -51,8 +48,7 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getAutoDeployDirectory()
 	 */
-	public String getAutoDeployDirectory()
-	{
+	public String getAutoDeployDirectory() {
 		return getAttribute( PROPERTY_AUTO_DEPLOY_DIR, "../deploy" );
 	}
 
@@ -60,8 +56,7 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getAutoDeployInterval()
 	 */
-	public String getAutoDeployInterval()
-	{
+	public String getAutoDeployInterval() {
 		return getAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, DEFAULT_AUTO_DEPLOY_INTERVAL );
 	}
 
@@ -69,8 +64,7 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getExternalProperties()
 	 */
-	public String getExternalProperties()
-	{
+	public String getExternalProperties() {
 		return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, "" );
 	}
 
@@ -78,8 +72,7 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getMemoryArgs()
 	 */
-	public String getMemoryArgs()
-	{
+	public String getMemoryArgs() {
 		return getAttribute( PROPERTY_MEMORY_ARGS, DEFAULT_MEMORY_ARGS );
 	}
 
@@ -87,33 +80,27 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getUserTimezone()
 	 */
-	public String getUserTimezone()
-	{
+	public String getUserTimezone() {
 		return getAttribute( PROPERTY_USER_TIMEZONE, DEFAULT_USER_TIMEZONE );
 	}
 
-	public void setAutoDeployDirectory( String dir )
-	{
+	public void setAutoDeployDirectory( String dir ) {
 		setAttribute( PROPERTY_AUTO_DEPLOY_DIR, dir );
 	}
 
-	public void setAutoDeployInterval( String interval )
-	{
+	public void setAutoDeployInterval( String interval ) {
 		setAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, interval );
 	}
 
-	public void setExternalProperties( String externalProperties )
-	{
+	public void setExternalProperties( String externalProperties ) {
 		setAttribute( PROPERTY_EXTERNAL_PROPERTIES, externalProperties );
 	}
 
-	public void setMemoryArgs( String memoryArgs )
-	{
+	public void setMemoryArgs( String memoryArgs ) {
 		setAttribute( PROPERTY_MEMORY_ARGS, memoryArgs );
 	}
 
-	public void setUserTimezone( String userTimezone )
-	{
+	public void setUserTimezone( String userTimezone ) {
 		setAttribute( PROPERTY_USER_TIMEZONE, userTimezone );
 	}
 
