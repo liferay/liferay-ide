@@ -148,23 +148,12 @@
          point="org.jboss.ide.eclipse.as.core.behaviourExtension">
       <behaviour
             behaviourDelegate="org.jboss.ide.eclipse.as.core.server.internal.v7.LocalJBoss7BehaviorDelegate"
-            launchDelegate="org.jboss.ide.eclipse.as.core.server.internal.v7.LocalJBoss7StartLaunchDelegate"
+            launchDelegate="com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7StartLaunchDelegate"
             name="Local"
             publishMethod="org.jboss.ide.eclipse.as.core.publishers.LocalPublishMethod"
             serverTypes="com.liferay.ide.eclipse.server.jboss.70"
             typeId="local">
       </behaviour>
-   </extension>
-   <extension
-         point="org.jboss.ide.eclipse.as.core.pollers">
-      <serverPoller
-            class="org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7ManagerServicePoller"
-            id="com.liferay.ide.eclipse.server.jboss.core.server.JBoss7ManagerServicePoller"
-            name="Liferay JBoss7 Manager Service Poller"
-            serverTypes="com.liferay.ide.eclipse.server.jboss.70"
-            supportsShutdown="true"
-            supportsStartup="true">
-      </serverPoller>
    </extension>
    <extension
          point="org.jboss.ide.eclipse.as.core.serverTypesExtension">
@@ -179,6 +168,17 @@
             baseRuntimeTypeId="org.jboss.ide.eclipse.as.runtime.70"
             runtimeTypeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
       </runtimeTypeExtension>
+   </extension>
+   <extension
+         point="org.jboss.ide.eclipse.as.core.pollers">
+      <serverPoller
+            class="com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7ManagerServicePoller"
+            id="com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7ManagerServicePoller"
+            name="Liferay JBoss Manager Service Poller"
+            serverTypes="com.liferay.ide.eclipse.server.jboss.70"
+            supportsShutdown="true"
+            supportsStartup="true">
+      </serverPoller>
    </extension>
 
 </plugin>
