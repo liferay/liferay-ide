@@ -42,6 +42,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	/**
 	 * 
 	 */
+	@SuppressWarnings( "unused" )
 	private static final long serialVersionUID = 1L;
 
 	PropertiesConfiguration pluginPackageProperties;
@@ -118,11 +119,10 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 		return getStringProperty(PROPERTY_AUTHOR);
 	}
 
-	public Boolean getBooleanProperty(String propertyName) {
+	public Boolean getBooleanProperty( String propertyName, boolean defaultVal )
+	{
 		if (pluginPackageProperties != null) {
-			if (pluginPackageProperties.getProperty(propertyName) != null) {
-				return pluginPackageProperties.getBoolean(propertyName);
-			}
+			return pluginPackageProperties.getBoolean( propertyName, defaultVal );
 		}
 
 		return null;
@@ -208,7 +208,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	}
 
 	public Boolean isSpeedFiltersEnabled() {
-		return getBooleanProperty(PROPERTY_SPEED_FILTERS_ENABLED);
+		return getBooleanProperty( PROPERTY_SPEED_FILTERS_ENABLED, true );
 	}
 
 	public void load(InputStream source, boolean outOfSync)
@@ -323,12 +323,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 	public void setSpeedFiltersEnabled(boolean enabled) {
 		Boolean oldValue = isSpeedFiltersEnabled();
 
-		if (enabled) {
-			pluginPackageProperties.setProperty(PROPERTY_SPEED_FILTERS_ENABLED, enabled);
-		}
-		else {
-			pluginPackageProperties.clearProperty(PROPERTY_SPEED_FILTERS_ENABLED);
-		}
+		pluginPackageProperties.setProperty( PROPERTY_SPEED_FILTERS_ENABLED, enabled );
 
 		flushProperties();
 
