@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
@@ -359,7 +360,10 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 			String bundleDir = location.removeLastSegments(1).lastSegment();
 
 			if (!bundleDir.equals(rootEntryName)) {
-				return LiferayTomcatPlugin.createWarningStatus("Runtime location directory layout does not match zip file.");
+				return LiferayTomcatPlugin.createWarningStatus( MessageFormat.format(
+					"The runtime location directory \"{0}\" does not match the directory in zip file \"{1}\"",
+					bundleDir,
+					rootEntryName ) );
 			}
 		}
 
