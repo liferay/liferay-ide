@@ -232,7 +232,7 @@ public class LiferayLocalJBoss7ServerRuntime extends LocalJBoss7ServerRuntime im
 		if ( portalVersion != null && ( SDKUtil.compareVersions( portalVersion, getLeastSupportedVersion() ) < 0 ) )
 		{
 			status =
-				LiferayJBossPlugin.createErrorStatus( "Portal version not supported.  Need at least " +
+				LiferayJBossServerCorePlugin.createErrorStatus( "Portal version not supported.  Need at least " +
 					getLeastSupportedVersion() );
 		}
 
@@ -243,7 +243,7 @@ public class LiferayLocalJBoss7ServerRuntime extends LocalJBoss7ServerRuntime im
 			if ( CoreUtil.isNullOrEmpty( serverInfo ) || serverInfo.indexOf( getExpectedServerInfo() ) < 0 )
 			{
 				status =
-					LiferayJBossPlugin.createErrorStatus( "Portal server not supported.  Expecting " +
+					LiferayJBossServerCorePlugin.createErrorStatus( "Portal server not supported.  Expecting " +
 						getExpectedServerInfo() );
 			}
 		}
@@ -285,7 +285,7 @@ public class LiferayLocalJBoss7ServerRuntime extends LocalJBoss7ServerRuntime im
 			}
 			catch ( Exception e )
 			{
-				return LiferayJBossPlugin.createWarningStatus( "Bundle zip location does not specify a valid Liferay JBoss bundle." );
+				return LiferayJBossServerCorePlugin.createWarningStatus( "Bundle zip location does not specify a valid Liferay JBoss bundle." );
 			}
 
 			// if we get here then the user has specified a good zip installation so now we need to see if the
@@ -295,7 +295,7 @@ public class LiferayLocalJBoss7ServerRuntime extends LocalJBoss7ServerRuntime im
 
 			if ( !bundleDir.equals( rootEntryName ) )
 			{
-				return LiferayJBossPlugin.createWarningStatus( "Runtime location directory layout does not match zip file." );
+				return LiferayJBossServerCorePlugin.createWarningStatus( "Runtime location directory layout does not match zip file." );
 			}
 		}
 

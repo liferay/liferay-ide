@@ -155,20 +155,7 @@
             typeId="local">
       </behaviour>
    </extension>
-   <extension
-         point="org.jboss.ide.eclipse.as.core.serverTypesExtension">
-      <serverTypeExtension
-            baseServerTypeId="org.jboss.ide.eclipse.as.70"
-            serverTypeIds="com.liferay.ide.eclipse.server.jboss.70">
-      </serverTypeExtension>
-   </extension>
-   <extension
-         point="org.jboss.ide.eclipse.as.core.runtimeTypesExtension">
-      <runtimeTypeExtension
-            baseRuntimeTypeId="org.jboss.ide.eclipse.as.runtime.70"
-            runtimeTypeIds="com.liferay.ide.eclipse.server.jboss.runtime.70">
-      </runtimeTypeExtension>
-   </extension>
+ 
    <extension
          point="org.jboss.ide.eclipse.as.core.pollers">
       <serverPoller

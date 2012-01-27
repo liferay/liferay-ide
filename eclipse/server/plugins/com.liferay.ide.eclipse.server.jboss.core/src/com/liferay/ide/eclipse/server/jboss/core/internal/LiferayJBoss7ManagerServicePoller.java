@@ -29,8 +29,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServer;
 import org.jboss.ide.eclipse.as.core.JBossServerCorePlugin;
+import org.jboss.ide.eclipse.as.core.Messages;
 import org.jboss.ide.eclipse.as.core.server.IServerStatePoller;
 import org.jboss.ide.eclipse.as.core.server.IServerStatePoller2;
 import org.jboss.ide.eclipse.as.core.server.internal.ServerStatePollerType;
@@ -97,10 +99,16 @@ public class LiferayJBoss7ManagerServicePoller implements IServerStatePoller2 {
 	 * 
 	 */
 	public void beginPolling( IServer server, boolean expectedState ) throws PollingException {
-		this.server = server;
-		this.managementDetails = createManagementDetails();
-		this.expectedState = expectedState;
-		launchPollingThread();
+		try {
+			this.service = getService( server );
+			this.server = server;
+			this.managementDetails = createManagementDetails();
+			this.expectedState = expectedState;
+			launchPollingThread();
+		}
+		catch ( InvalidSyntaxException e ) {
+			throw new PollingException( NLS.bind( Messages.CouldNotBeginPolling, server.getName() ), e );
+		}
 
 	}
 
@@ -146,6 +154,7 @@ public class LiferayJBoss7ManagerServicePoller implements IServerStatePoller2 {
 			return serverState == JBoss7ServerState.RUNNING;
 		}
 		catch ( Exception e ) {
+			e.printStackTrace();
 			return false;
 		}
 	}

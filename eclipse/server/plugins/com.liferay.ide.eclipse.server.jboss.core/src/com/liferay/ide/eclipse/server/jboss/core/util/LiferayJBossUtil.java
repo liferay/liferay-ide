@@ -29,7 +29,7 @@ import org.eclipse.wst.server.core.IRuntime;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayLocalRuntime;
-import com.liferay.ide.eclipse.server.jboss.core.LiferayJBossPlugin;
+import com.liferay.ide.eclipse.server.jboss.core.LiferayJBossServerCorePlugin;
 
 /**
  * @author kamesh
@@ -56,7 +56,7 @@ public class LiferayJBossUtil
 		}
 		catch ( FileNotFoundException e )
 		{
-			LiferayJBossPlugin.logError( e );
+			LiferayJBossServerCorePlugin.logError( e );
 		}
 
 		return libs.toArray( new IPath[0] );

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay JBoss Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.jboss.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.liferay.ide.eclipse.server.jboss.core.LiferayJBossPlugin
+Bundle-Activator: com.liferay.ide.eclipse.server.jboss.core.LiferayJBossServerCorePlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)";visibility:=reexport,
