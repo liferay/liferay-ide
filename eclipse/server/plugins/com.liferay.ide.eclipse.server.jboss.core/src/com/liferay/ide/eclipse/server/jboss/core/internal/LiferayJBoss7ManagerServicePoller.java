@@ -23,11 +23,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServer;
@@ -36,6 +33,7 @@ import org.jboss.ide.eclipse.as.core.Messages;
 import org.jboss.ide.eclipse.as.core.server.IServerStatePoller;
 import org.jboss.ide.eclipse.as.core.server.IServerStatePoller2;
 import org.jboss.ide.eclipse.as.core.server.internal.ServerStatePollerType;
+import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7ManagerServicePoller;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
 import org.jboss.ide.eclipse.as.core.server.v7.management.AS7ManagementDetails;
 import org.jboss.ide.eclipse.as.management.core.AS7ManagementActivator;
@@ -48,19 +46,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a> This class is exact replica of
+ *         {@link JBoss7ManagerServicePoller} except in few places where we do a deiffernt object creation for custom
+ *         Liferay JBoss Server
  */
 public class LiferayJBoss7ManagerServicePoller implements IServerStatePoller2 {
-
-	public static final String POLLER_ID =
-		"com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7ManagerServicePoller"; //$NON-NLS-1$
-
-	static final IConfigurationElement[] RUNTIME_TYPES_CONFIG_ELEMENTS;
-	static {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		RUNTIME_TYPES_CONFIG_ELEMENTS =
-			registry.getConfigurationElementsFor( JBossServerCorePlugin.PLUGIN_ID, "runtimeTypesExtension" ); //$NON-NLS-1$
-	}
 
 	private IServer server;
 
@@ -166,25 +156,16 @@ public class LiferayJBoss7ManagerServicePoller implements IServerStatePoller2 {
 	 */
 	public static IJBoss7ManagerService getService( IServer server ) throws InvalidSyntaxException {
 		BundleContext context = AS7ManagementActivator.getContext();
-		JBoss7ManagerServiceProxy proxy = new JBoss7ManagerServiceProxy( context, getRequiredVersion( server ) );
+		JBoss7ManagerServiceProxy proxy =
+			new JBoss7ManagerServiceProxy( context, getRequiredVersion( server ) );
 		proxy.open();
 		return proxy;
 	}
 
 	private static String getRequiredVersion( IServer server ) {
-		String serverId = server.getRuntime().getRuntimeType().getId();
-		for ( IConfigurationElement iConfigurationElement : RUNTIME_TYPES_CONFIG_ELEMENTS ) {
-			String baseRuntimeTypeId = iConfigurationElement.getAttribute( "baseRuntimeTypeId" );//$NON-NLS-1$
-			String extnRuntimeTypeId = iConfigurationElement.getAttribute( "runtimeTypeIds" );//$NON-NLS-1$
-			String[] extnRuntimeTypeIds = extnRuntimeTypeId.split( "," );;//$NON-NLS-1$
-			for ( String rtTypeId : extnRuntimeTypeIds ) {
-				if ( serverId.equalsIgnoreCase( rtTypeId ) ) {
-					return baseRuntimeTypeId;
-				}
-			}
-
-		}
-		return null;
+		//String serverId = server.getRuntime().getRuntimeType().getId();
+		//TODO: This always return the most current version of JBoss Adapter not sure why ???
+		return IJBoss7ManagerService.AS_VERSION_710_Beta;
 	}
 
 	/*

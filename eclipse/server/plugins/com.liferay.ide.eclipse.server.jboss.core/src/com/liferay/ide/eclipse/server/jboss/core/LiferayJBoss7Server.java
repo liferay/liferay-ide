@@ -20,12 +20,24 @@ import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
 import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
+import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
 
 /**
  * @author kamesh
  */
 public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossServer, ILiferayServerConstants {
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.jboss.ide.eclipse.as.core.server.internal.DeployableServer#initialize()
+	 */
+	@Override
+	protected void initialize() {
+		super.initialize();
+		setDefaults( new NullProgressMonitor() );
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -36,7 +48,7 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	@Override
 	public void setDefaults( IProgressMonitor monitor ) {
 		super.setDefaults( monitor );
-		// setAttribute( IJBossToolingConstants.STARTUP_POLLER_KEY, ILiferayJBossToolingConstants.POLLER_ID );
+		setAttribute( IJBossToolingConstants.STARTUP_POLLER_KEY, ILiferayJBossToolingConstants.POLLER_ID );
 	}
 
 	/*

@@ -23,10 +23,10 @@ package com.liferay.ide.eclipse.server.jboss.core;
  */
 public interface ILiferayJBossToolingConstants {
 
-	String POLLER_ID = "com.liferay.ide.eclipse.server.jboss.core.server.JBoss7ManagerServicePoller";
+	String POLLER_ID = "com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7ManagerServicePoller";
 
 	String LIFERAY_JBOSS7_RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.jboss.runtime.70";
 
 	String LIFERAY_JBOSS7_SERVER_TYPE_ID = "com.liferay.ide.eclipse.server.jboss.70";
-
+	
 }
