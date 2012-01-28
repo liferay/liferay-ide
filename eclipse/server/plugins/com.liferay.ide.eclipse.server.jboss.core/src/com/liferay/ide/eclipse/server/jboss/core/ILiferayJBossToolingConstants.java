@@ -28,5 +28,8 @@ public interface ILiferayJBossToolingConstants {
 	String LIFERAY_JBOSS7_RUNTIME_TYPE_ID = "com.liferay.ide.eclipse.server.jboss.runtime.70";
 
 	String LIFERAY_JBOSS7_SERVER_TYPE_ID = "com.liferay.ide.eclipse.server.jboss.70";
-	
+
+	String JBOSS7_DEFAULT_VM_ARGS =
+		" -server -Djava.net.preferIPv4Stack=true -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 ";
+
 }

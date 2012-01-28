@@ -28,18 +28,20 @@ import org.jboss.ide.eclipse.as.core.server.internal.v7.LocalJBoss7StartConfigur
  */
 public class LiferayJBoss7StartConfigurator extends LocalJBoss7StartConfigurator {
 
+	protected IServer server;
+
 	public LiferayJBoss7StartConfigurator( IServer server ) throws CoreException {
 		super( server );
+		this.server = server;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see org.jboss.ide.eclipse.as.core.server.internal.v7.LocalJBoss7StartConfigurator#createProperties()
 	 */
 	@Override
 	protected JBoss7LaunchConfigProperties createProperties() {
-		return new LiferayJBoss7LaunchConfigProperties();
+		return new LiferayJBoss7LaunchConfigProperties( server );
 	}
-	
-	
 
 }

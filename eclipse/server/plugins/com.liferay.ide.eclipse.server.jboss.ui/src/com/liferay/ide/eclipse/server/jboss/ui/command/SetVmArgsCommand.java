@@ -20,14 +20,12 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 /**
  * @author kamesh
  */
-public class SetMemoryArgsCommand extends AbstractCommand
-{
+public class SetVmArgsCommand extends AbstractCommand {
 
 	protected String memoryArgs;
 	protected String oldMemoryArgs;
 
-	public SetMemoryArgsCommand( IServerWorkingCopy server, String memoryArgs )
-	{
+	public SetVmArgsCommand( IServerWorkingCopy server, String memoryArgs ) {
 		super( server, "LIFERAY_CMD_SET_MEM_ARGS_COMMAND" );
 		this.memoryArgs = memoryArgs;
 	}
@@ -37,11 +35,9 @@ public class SetMemoryArgsCommand extends AbstractCommand
 	 * @see com.liferay.ide.eclipse.server.jboss.ui.command.AbstractCommand#execute()
 	 */
 	@Override
-	public void execute()
-	{
+	public void execute() {
 		oldMemoryArgs = liferayJBoss7Server.getMemoryArgs();
 		liferayJBoss7Server.setMemoryArgs( memoryArgs );
-
 	}
 
 	/*
@@ -49,8 +45,7 @@ public class SetMemoryArgsCommand extends AbstractCommand
 	 * @see com.liferay.ide.eclipse.server.jboss.ui.command.AbstractCommand#undo()
 	 */
 	@Override
-	public void undo()
-	{
+	public void undo() {
 		liferayJBoss7Server.setMemoryArgs( oldMemoryArgs );
 
 	}

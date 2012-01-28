@@ -16,11 +16,14 @@
 package com.liferay.ide.eclipse.server.jboss.core;
 
 import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
+import com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7LaunchConfigProperties;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7Server;
 import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
 
@@ -29,6 +32,8 @@ import org.jboss.ide.eclipse.as.core.util.IJBossToolingConstants;
  */
 public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossServer, ILiferayServerConstants {
 
+	protected String liferayJBoss7VMArgs;
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.jboss.ide.eclipse.as.core.server.internal.DeployableServer#initialize()
@@ -36,7 +41,15 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	@Override
 	protected void initialize() {
 		super.initialize();
-		setDefaults( new NullProgressMonitor() );
+		IProgressMonitor monitor = new NullProgressMonitor();
+		setDefaults( monitor );
+		try {
+			ILaunchConfiguration iLaunchConfiguration = getServer().getLaunchConfiguration( true, monitor );
+			liferayJBoss7VMArgs = new LiferayJBoss7LaunchConfigProperties().getVMArguments( iLaunchConfiguration );
+		}
+		catch ( CoreException e ) {
+			LiferayJBossServerCorePlugin.logError( e );
+		}
 	}
 
 	/*
@@ -98,7 +111,8 @@ public class LiferayJBoss7Server extends JBoss7Server implements ILiferayJBossSe
 	 * @see com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer#getMemoryArgs()
 	 */
 	public String getMemoryArgs() {
-		return getAttribute( PROPERTY_MEMORY_ARGS, DEFAULT_MEMORY_ARGS );
+
+		return getAttribute( PROPERTY_MEMORY_ARGS, liferayJBoss7VMArgs );
 	}
 
 	/*

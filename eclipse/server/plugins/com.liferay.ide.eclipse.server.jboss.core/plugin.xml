@@ -43,14 +43,14 @@
             hasConfiguration="false"
             id="com.liferay.ide.eclipse.server.jboss.70"
             initialState="stopped"
-            launchConfigId="com.liferay.ide.eclipse.server.jboss.70.launchConfigurationType"
+            launchConfigId="org.jboss.ide.eclipse.as.core.server.JBoss7StartupConfiguration"
             launchModes="run,debug,profile"
             name="Liferay v6.1 CE Server (JBoss AS7)"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.jboss.runtime.70"
             startBeforePublish="false"
-            startTimeout="900000"
-            stopTimeout="300000"
+            startTimeout="450000"
+            stopTimeout="450000"
             supportsRemoteHosts="false">
       </serverType>
    </extension>
@@ -67,14 +67,15 @@
          <runtime-component
                id="com.liferay.ide.eclipse.server.jboss.runtime-component"
                version="7.0"></runtime-component>
-         <facet
-               id="jst.web"
-               version="[2.3-3.0]">
-         </facet>
-         <facet
-               id="jst.utility"
-               version="1.0">
-         </facet>
+           <facet id="wst.web"  version="1.0,1.2,1.3,1.4"/>
+       <facet id="jst.web"  version="2.2,2.3,2.4,2.5,3.0"/>
+       <facet id="jst.java" version="5.0,6.0,1.7"/>
+       <facet id="jst.utility" version="1.0"/>
+       <facet id="jst.connector" version="1.0,1.5,1.6"/>
+       <facet id="jst.ejb" version="2.0,2.1,3.0,3.1"/>
+       <facet id="jst.ear" version="1.2,1.3,1.4,5.0,6.0"/>
+       <facet id="jst.appclient" version="1.2,1.3,1.4,5.0,6.0"/>
+       <facet id="jst.webfragment" version="3.0"/>
          <facet
                id="liferay.portlet"
                version="6.0">
@@ -135,7 +136,7 @@
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             category="JBoss"
-            delegate="org.jboss.ide.eclipse.as.core.server.internal.launch.DelegatingStartLaunchConfiguration"
+            delegate="com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBossStartLaunchConfiguration"
             id="com.liferay.ide.eclipse.server.jboss.70.launchConfigurationType"
             modes="run,debug,profile"
             name="Liferay v6.1 CE (JBoss AS7)"
@@ -155,17 +156,17 @@
             typeId="local">
       </behaviour>
    </extension>
- 
    <extension
          point="org.jboss.ide.eclipse.as.core.pollers">
       <serverPoller
             class="com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7ManagerServicePoller"
             id="com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7ManagerServicePoller"
-            name="Liferay JBoss Manager Service Poller"
+            name="Liferay JBoss7 Manager Service"
             serverTypes="com.liferay.ide.eclipse.server.jboss.70"
             supportsShutdown="true"
             supportsStartup="true">
       </serverPoller>
    </extension>
+ 
 
 </plugin>

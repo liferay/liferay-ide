@@ -34,7 +34,7 @@ public interface ILiferayServerConstants
 
 	String DEFAULT_DEPLOYDIR = "webapps";
 
-	String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m -Dfile.encoding=UTF-8" );
+	String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m -Dfile.encoding=UTF-8 -Duser.timezone=GMT" );
 
 	String DEFAULT_USER_TIMEZONE = _defaultPrefs.get( "default.user.timezone", "GMT" );
 

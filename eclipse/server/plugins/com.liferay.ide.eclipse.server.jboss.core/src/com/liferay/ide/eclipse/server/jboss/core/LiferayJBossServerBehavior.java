@@ -16,7 +16,11 @@
 package com.liferay.ide.eclipse.server.jboss.core;
 
 import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
+import com.liferay.ide.eclipse.server.jboss.core.internal.LiferayJBoss7StartLaunchDelegate;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.wst.server.core.IModule;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.DelegatingJBoss7ServerBehavior;
 
@@ -40,6 +44,18 @@ public class LiferayJBossServerBehavior extends DelegatingJBoss7ServerBehavior i
 	public void redeployModule( IModule[] module ) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.jboss.ide.eclipse.as.core.server.internal.v7.DelegatingJBoss7ServerBehavior#setupLaunchConfiguration(org.
+	 * eclipse.debug.core.ILaunchConfigurationWorkingCopy, org.eclipse.core.runtime.IProgressMonitor)
+	 */
+	@Override
+	public void setupLaunchConfiguration( ILaunchConfigurationWorkingCopy launchConfig, IProgressMonitor monitor )
+		throws CoreException {
+		new LiferayJBoss7StartLaunchDelegate().setupLaunchConfiguration( launchConfig, getServer() );
 	}
 
 }

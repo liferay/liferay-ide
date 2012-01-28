@@ -18,12 +18,38 @@
 
 package com.liferay.ide.eclipse.server.jboss.core.internal;
 
+import com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.wst.server.core.IServer;
 import org.jboss.ide.eclipse.as.core.server.internal.v7.JBoss7LaunchConfigProperties;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 public class LiferayJBoss7LaunchConfigProperties extends JBoss7LaunchConfigProperties {
 
-	//TODO will be updated
+	protected IServer server;
+
+	public LiferayJBoss7LaunchConfigProperties() {
+
+	}
+
+	public LiferayJBoss7LaunchConfigProperties( IServer server ) {
+		this.server = server;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * org.jboss.ide.eclipse.as.core.server.internal.launch.configuration.JBossLaunchConfigProperties#getVMArguments
+	 * (org.eclipse.debug.core.ILaunchConfiguration)
+	 */
+	@Override
+	public String getVMArguments( ILaunchConfiguration launchConfig ) throws CoreException {
+		//TODO how to get server from here ?? and get its meory arguments
+		String vmArgs = server.getAttribute( ILiferayJBossServer.PROPERTY_MEMORY_ARGS, super.getVMArguments( launchConfig ) );
+		return vmArgs;
+	}
 }

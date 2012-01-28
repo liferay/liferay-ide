@@ -15,6 +15,17 @@
 
 package com.liferay.ide.eclipse.server.jboss.ui.editor;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
+import com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer;
+import com.liferay.ide.eclipse.server.jboss.core.LiferayJBoss7Server;
+import com.liferay.ide.eclipse.server.jboss.ui.command.SetAutoDeployDirectoryCommand;
+import com.liferay.ide.eclipse.server.jboss.ui.command.SetAutoDeployIntervalCommand;
+import com.liferay.ide.eclipse.server.jboss.ui.command.SetExternalPropertiesCommand;
+import com.liferay.ide.eclipse.server.jboss.ui.command.SetUserTimeZoneCommand;
+import com.liferay.ide.eclipse.server.jboss.ui.command.SetVmArgsCommand;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -51,17 +62,6 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.util.PublishAdapter;
 import org.eclipse.wst.server.ui.editor.ServerEditorSection;
 import org.jboss.ide.eclipse.as.ui.Messages;
-
-import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.server.core.ILiferayServerConstants;
-import com.liferay.ide.eclipse.server.jboss.core.ILiferayJBossServer;
-import com.liferay.ide.eclipse.server.jboss.core.LiferayJBoss7Server;
-import com.liferay.ide.eclipse.server.jboss.ui.command.SetAutoDeployDirectoryCommand;
-import com.liferay.ide.eclipse.server.jboss.ui.command.SetAutoDeployIntervalCommand;
-import com.liferay.ide.eclipse.server.jboss.ui.command.SetExternalPropertiesCommand;
-import com.liferay.ide.eclipse.server.jboss.ui.command.SetMemoryArgsCommand;
-import com.liferay.ide.eclipse.server.jboss.ui.command.SetUserTimeZoneCommand;
-import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 /**
  * @author kamesh
@@ -148,6 +148,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 		publishListener = new PublishAdapter()
 		{
 
+			@Override
 			public void publishFinished( IServer server2, IStatus status )
 			{
 				boolean flag = false;
@@ -202,8 +203,10 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 		data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
 		label.setLayoutData( data );
 
-		memoryArgs = toolkit.createText( composite, null );
-		data = new GridData( SWT.FILL, SWT.CENTER, true, false );
+		memoryArgs =
+			toolkit.createText( composite, null, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL|SWT.WRAP );
+		
+		data = new GridData( GridData.FILL_BOTH);
 		memoryArgs.setLayoutData( data );
 
 		memoryArgs.addModifyListener( new ModifyListener()
@@ -218,7 +221,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 					return;
 				}
 				updating = true;
-				execute( new SetMemoryArgsCommand(
+				execute( new SetVmArgsCommand(
 					liferayJBoss7Server.getServerWorkingCopy(), memoryArgs.getText().trim() ) );
 				updating = false;
 				validate();
@@ -291,6 +294,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 		externalPropertiesBrowse.addSelectionListener( new SelectionAdapter()
 		{
 
+			@Override
 			public void widgetSelected( SelectionEvent se )
 			{
 				FileDialog dialog = new FileDialog( externalProperties.getShell() );
@@ -340,6 +344,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 		autoDeployDirBrowse.addSelectionListener( new SelectionAdapter()
 		{
 
+			@Override
 			public void widgetSelected( SelectionEvent se )
 			{
 				FileDialog dialog = new FileDialog( autoDeployDir.getShell() );
@@ -393,12 +398,13 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 		setDefault.addHyperlinkListener( new HyperlinkAdapter()
 		{
 
+			@Override
 			public void linkActivated( HyperlinkEvent e )
 			{
 				updating = true;
 
 				memoryArgs.setText( ILiferayServerConstants.DEFAULT_MEMORY_ARGS );
-				execute( new SetMemoryArgsCommand(
+				execute( new SetVmArgsCommand(
 					liferayJBoss7Server.getServerWorkingCopy(), ILiferayServerConstants.DEFAULT_MEMORY_ARGS ) );
 
 				execute( new SetUserTimeZoneCommand(
@@ -547,8 +553,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection
 				{
 					Integer.parseInt( autoDeployInterval );
 				}
-				catch ( NumberFormatException e )
-				{
+				catch ( NumberFormatException e ) {
 					setErrorMessage( "Auto deploy interval is not an integer." );
 					return;
 				}
