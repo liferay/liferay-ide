@@ -19,6 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -38,11 +42,16 @@ import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.PublishOperation;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.eclipse.wst.server.core.util.ModuleFile;
 import org.eclipse.wst.server.core.util.PublishHelper;
 /**
  * Tomcat publish helper.
  */
 public class LiferayPublishOperation extends PublishOperation {
+
+	private static final String LIFERAY_WEB_XML_PATH = "WEB-INF/liferay-web.xml";
+
+	private static final String WEB_XML_PATH = "WEB-INF/web.xml";
 
 	protected LiferayTomcatServerBehavior server;
 	protected IModule[] module;
@@ -195,28 +204,78 @@ public class LiferayPublishOperation extends PublishOperation {
 			addArrayToList(status, stat);
 		}
 
-		if (ProjectUtil.isHookProject(module2.getProject())) {
-			// always redeploy hooks since they involve modifying portal
-			server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
-		}
-		else {
-			for (IModuleResourceDelta del : delta) {
-				if ( deltaNeedsAutoDeploy( del ) ) {
-					server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
-					break;
-				}
-			}
-		}
-	}
-
-	private boolean deltaNeedsAutoDeploy( IModuleResourceDelta del ) {
+		// check to see if we need to re-invoke the liferay plugin deployer
 		String[] paths =
-			new String[] { "WEB-INF/portlet.xml", "WEB-INF/web.xml", "WEB-INF/liferay-portlet.xml",
-				"WEB-INF/liferay-display.xml", "WEB-INF/liferay-look-and-feel.xml",
+			new String[] { WEB_XML_PATH, "WEB-INF/portlet.xml", "WEB-INF/liferay-portlet.xml",
+				"WEB-INF/liferay-display.xml", "WEB-INF/liferay-look-and-feel.xml", "WEB-INF/liferay-hook.xml",
 				"WEB-INF/liferay-layout-templates.xml", "WEB-INF/liferay-plugin-package.properties",
 				"WEB-INF/liferay-plugin-package.xml", "WEB-INF/server-config.wsdd", };
 
-		return CoreUtil.containsMember( del, paths );
+		for ( IModuleResourceDelta del : delta )
+		{
+			if ( CoreUtil.containsMember( del, paths ) || isHookProjectDelta( del ) )
+			{
+				// copy over web.xml so the liferay deployer doesn't copy web.xml filters incorrectly
+				IModuleResource webXmlRes = getWebXmlFile( del, path );
+
+				if ( webXmlRes != null )
+				{
+					helper.publishToPath(
+						new IModuleResource[] { webXmlRes }, path.append( WEB_XML_PATH ), monitor );
+				}
+				else
+				{
+					File webXmlFile = path.append( WEB_XML_PATH ).toFile();
+					File liferayWebXmlFile = path.append( LIFERAY_WEB_XML_PATH ).toFile();
+
+					if ( webXmlFile.exists() )
+					{
+						if ( !webXmlFile.delete() )
+						{
+							ProjectUtil.createDefaultWebXml( webXmlFile );
+						}
+					}
+
+					if ( liferayWebXmlFile.exists() )
+					{
+						if ( !liferayWebXmlFile.delete() )
+						{
+							ProjectUtil.createDefaultWebXml( liferayWebXmlFile );
+						}
+					}
+				}
+
+				server.moveContextToAutoDeployDir( module2, path, baseDir, autoDeployDir, true, serverStopped );
+				break;
+			}
+		}
+
+	}
+
+	private boolean isHookProjectDelta( IModuleResourceDelta del )
+	{
+		IProject project = ( (IResource) del.getModuleResource().getAdapter( IResource.class ) ).getProject();
+
+		return ProjectUtil.isHookProject( project );
+	}
+
+	private IModuleResource getWebXmlFile( IModuleResourceDelta del, IPath modelDeployDirectory )
+	{
+		Object obj = del.getModuleResource().getAdapter( IResource.class );
+
+		if ( obj instanceof IResource )
+		{
+			IFolder docroot = CoreUtil.getDocroot( ( (IResource) obj ).getProject() );
+
+			IFile webXml = docroot.getFile( WEB_XML_PATH );
+
+			if ( webXml.exists() )
+			{
+				return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
+			}
+		}
+
+		return null;
 	}
 
 	private void publishJar(String jarURI, Properties p, List status, IProgressMonitor monitor) throws CoreException {
