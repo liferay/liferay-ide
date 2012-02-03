@@ -69,7 +69,7 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 		super(dataModel, pageName, "Create Portal Properties", PortletUIPlugin.imageDescriptorFromPlugin(
 			PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
 
-		setDescription("Specify with portal properties to override.");
+		setDescription( "Specify which portal properties to override." );
 	}
 
 	protected void createEventActionsGroup(Composite topComposite) {
