@@ -37,6 +37,7 @@ public class LiferayTomcatRuntimeComponentLabelProvider extends FacetRuntimeComp
 		}
 	}
 
+	@SuppressWarnings( "rawtypes" )
 	public Object getAdapter(Object adaptable, Class adapterType) {
 		IRuntimeComponent rc = (IRuntimeComponent) adaptable;
 		

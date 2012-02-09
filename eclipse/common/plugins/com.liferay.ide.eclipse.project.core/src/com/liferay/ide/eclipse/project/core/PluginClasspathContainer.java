@@ -76,10 +76,14 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 	protected IPath portalDir;
 
-	public PluginClasspathContainer(IPath containerPath, IJavaProject project, IPath portalDir) {
+	protected String javadocURL;
+
+	public PluginClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL )
+	{
 		this.path = containerPath;
 		this.javaProject = project;
 		this.portalDir = portalDir;
+		this.javadocURL = javadocURL;
 	}
 
 	public IClasspathEntry[] getClasspathEntries() {
@@ -115,7 +119,18 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		return portalDir;
 	}
 
-	protected IClasspathEntry createClasspathEntry(IPath entryPath, IPath sourcePath) {
+	public String getJavadocURL()
+	{
+		return javadocURL;
+	}
+
+	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourcePath )
+	{
+		return createClasspathEntry( entryPath, sourcePath, null );
+	}
+
+	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourcePath, String javadocURL )
+	{
 		IPath sourceRootPath = null;
 		IAccessRule[] rules = new IAccessRule[] {};
 		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
@@ -130,7 +145,38 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			attrs = dec.getExtraAttributes();
 		}
 
-		return JavaCore.newLibraryEntry(entryPath, sourcePath, sourceRootPath, rules, attrs, false);
+		if ( javadocURL != null )
+		{
+			if ( CoreUtil.empty( attrs ) )
+			{
+				attrs = new IClasspathAttribute[] { newJavadocAttr( javadocURL ) };
+			}
+			else
+			{
+				List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
+
+				for ( IClasspathAttribute attr : attrs )
+				{
+					if ( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals( attr.getName() ) )
+					{
+						newAttrs.add( newJavadocAttr( javadocURL ) );
+					}
+					else
+					{
+						newAttrs.add( attr );
+					}
+				}
+
+				attrs = newAttrs.toArray( new IClasspathAttribute[0] );
+			}
+		}
+
+		return JavaCore.newLibraryEntry( entryPath, sourcePath, sourceRootPath, rules, attrs, false );
+	}
+
+	protected IClasspathAttribute newJavadocAttr( String javadocURL )
+	{
+		return JavaCore.newClasspathAttribute( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, javadocURL );
 	}
 
 	protected IClasspathEntry createContextClasspathEntry(String context) {
@@ -144,7 +190,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 			entry =
 				createClasspathEntry(serviceJar.getLocation(), serviceFolder.exists()
-					? serviceFolder.getLocation() : null);
+					? serviceFolder.getLocation() : null );
 		}
 
 		if (entry == null) {
@@ -164,7 +210,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 			if (serviceJarPath.toFile().exists()) {
 				IPath servicePath = serviceJarPath.removeLastSegments(2).append("service");
 
-				entry = createClasspathEntry(serviceJarPath, servicePath.toFile().exists() ? servicePath : null);
+				entry = createClasspathEntry( serviceJarPath, servicePath.toFile().exists() ? servicePath : null );
 			}
 		}
 
@@ -174,7 +220,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected IClasspathEntry createPortalJarClasspathEntry(String portalJar) {
 		IPath entryPath = this.portalDir.append("/WEB-INF/lib/" + portalJar);
 
-		return createClasspathEntry(entryPath, null);
+		return createClasspathEntry( entryPath, null, this.javadocURL );
 	}
 
 	protected IClasspathEntry findSuggestedEntry(IPath jarPath, IClasspathEntry[] suggestedEntries) {

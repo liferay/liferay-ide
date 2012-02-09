@@ -28,26 +28,28 @@ public interface ILiferayRuntime extends IJavaRuntime {
 
 	IPath[] getAllUserClasspathLibraries();
 
-	Properties getPortletCategories();
-
-	String getPortalVersion();
-
-	IRuntime getRuntime();
-
-	IPath getRuntimeLocation();
-
-	String[] getSupportedHookProperties();
-
 	IPath getAppServerDir();
 
 	String getAppServerType();
 
 	IPath getDeployDir();
 
+	String getJavadocURL();
+
 	IPath getLibGlobalDir();
 
 	IPath getPortalDir();
 
+	String getPortalVersion();
+
+	Properties getPortletCategories();
+
+	IRuntime getRuntime();
+
+	IPath getRuntimeLocation();
+
 	String[] getServletFilterNames();
+
+	String[] getSupportedHookProperties();
 
 }

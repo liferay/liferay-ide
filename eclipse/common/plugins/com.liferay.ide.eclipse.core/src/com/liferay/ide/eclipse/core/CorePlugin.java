@@ -26,11 +26,11 @@ import org.osgi.framework.BundleContext;
  */
 public class CorePlugin extends Plugin {
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.core";
-
 	// The shared instance
 	private static CorePlugin plugin;
+
+	// The plugin ID
+	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.core";
 
 	public static IStatus createErrorStatus(Exception e) {
 
@@ -58,6 +58,16 @@ public class CorePlugin extends Plugin {
 
 	public static IStatus createWarningStatus(String message) {
 		return new Status(IStatus.WARNING, PLUGIN_ID, message);
+	}
+
+	public static IStatus createWarningStatus( String message, String id )
+	{
+		return new Status( IStatus.WARNING, id, message );
+	}
+
+	public static IStatus createWarningStatus( String message, String id, Exception e )
+	{
+		return new Status( IStatus.WARNING, id, message, e );
 	}
 
 	/**

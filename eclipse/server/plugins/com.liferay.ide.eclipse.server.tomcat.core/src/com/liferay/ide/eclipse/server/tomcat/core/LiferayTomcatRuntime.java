@@ -12,6 +12,9 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import static com.liferay.ide.eclipse.core.util.CoreUtil.empty;
+import static com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin.warning;
+
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
@@ -40,6 +43,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMInstallType;
@@ -52,16 +56,36 @@ import org.osgi.framework.Version;
 @SuppressWarnings("restriction")
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime {
 
-	public static final String PROP_BUNDLE_SOURCE_LOCATION = "bundle-source-location";
-
 	public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location";
 
-	private IStatus runtimeDelegateStatus;
+	public static final String PROP_JAVADOC_URL = "javadoc-url";
 
 	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
 
+	private IStatus runtimeDelegateStatus;
+
 	public LiferayTomcatRuntime() {
 		releaseHelpers = new HashMap<IPath, ReleaseHelper>();
+	}
+
+	private IPath findBundledJREPath(IPath location) {
+		if (Platform.getOS().equals(Platform.OS_WIN32) && location != null && location.toFile().exists()) {
+			// look for jre dir
+			File tomcat = location.toFile();
+			String[] jre = tomcat.list(new FilenameFilter() {
+
+				public boolean accept(File dir, String name) {
+					return name.startsWith("jre");
+				}
+			});
+			for (String dir : jre) {
+				File javaw = new File(location.toFile(), dir + "/win/bin/javaw.exe");
+				if (javaw.exists()) {
+					return new Path(javaw.getPath()).removeLastSegments(2);
+				}
+			}
+		}
+		return null;
 	}
 
 	public IVMInstall findPortalBundledJRE(boolean addVM) {
@@ -123,12 +147,21 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return zipLocation != null ? new Path(zipLocation) : null;
 	}
 
-	public Properties getPortletCategories() {
-		return LiferayTomcatUtil.getCategories(getRuntimeLocation(), getPortalDir());
-	}
-
 	public IPath getDeployDir() {
 		return getAppServerDir().append("/webapps");
+	}
+
+	protected String getExpectedServerInfo() {
+		return "Liferay Portal";
+	}
+
+	public String getJavadocURL()
+	{
+		return getAttribute( PROP_JAVADOC_URL, (String) null );
+	}
+
+	protected Version getLeastSupportedVersion() {
+		return ILiferayConstants.LEAST_SUPPORTED_VERSION;
 	}
 
 	public IPath getLibGlobalDir() {
@@ -139,12 +172,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return LiferayTomcatUtil.getPortalDir(getAppServerDir());
 	}
 
-	public IPath getPortalSourceLocation() {
-		String sourceLocation = getAttribute(PROP_BUNDLE_SOURCE_LOCATION, (String) null);
-
-		return sourceLocation != null ? new Path(sourceLocation) : null;
-	}
-
 	public String getPortalVersion() {
 		// check for existing release info
 		try {
@@ -153,6 +180,28 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		catch (IOException e) {
 			return "";
 		}
+	}
+
+	public Properties getPortletCategories() {
+		return LiferayTomcatUtil.getCategories(getRuntimeLocation(), getPortalDir());
+	}
+
+	protected ReleaseHelper getReleaseHelper(IPath serviceJar) {
+		if (releaseHelpers == null) {
+			releaseHelpers = new HashMap<IPath, ReleaseHelper>();
+		}
+
+		ReleaseHelper cachedHelper = releaseHelpers.get(serviceJar);
+
+		if (cachedHelper != null) {
+			return cachedHelper;
+		}
+
+		ReleaseHelper newHelper = new ReleaseHelper(serviceJar);
+
+		releaseHelpers.put(serviceJar, newHelper);
+
+		return newHelper;
 	}
 
 	public IPath getRuntimeLocation() {
@@ -210,15 +259,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return serverInfoString;
 	}
 
-	public String[] getSupportedHookProperties() {
-		try {
-			return LiferayTomcatUtil.getSupportedHookProperties(getRuntimeLocation(), getPortalDir());
-		}
-		catch (IOException e) {
-			return new String[0];
-		}
-	}
-
 	public String[] getServletFilterNames()
 	{
 		try
@@ -227,6 +267,15 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		}
 		catch ( Exception e )
 		{
+			return new String[0];
+		}
+	}
+
+	public String[] getSupportedHookProperties() {
+		try {
+			return LiferayTomcatUtil.getSupportedHookProperties(getRuntimeLocation(), getPortalDir());
+		}
+		catch (IOException e) {
 			return new String[0];
 		}
 	}
@@ -271,15 +320,40 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return null;
 	}
 
+	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile) {
+		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
+
+		IPath[] libRoots = new IPath[] { location.append("lib"), location.append("lib/ext") };
+
+		IPath portalDir = getPortalDir();
+
+		try {
+			URL[] supportUrls =
+				new URL[] { FileLocator.toFileURL(LiferayServerCorePlugin.getDefault().getBundle().getEntry(
+					"portal-support/portal-support.jar")) };
+
+			PortalSupportHelper helper =
+				new PortalSupportHelper(
+					libRoots, portalDir, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
+
+			helper.launch(null);
+		}
+		catch (Exception e) {
+			LiferayTomcatPlugin.logError(e);
+		}
+	}
+
 	public void setBundleZipLocation(IPath path) {
 		if (path != null) {
 			setAttribute(PROP_BUNDLE_ZIP_LOCATION, path.toPortableString());
 		}
 	}
 
-	public void setPortalSourceLocation(IPath path) {
-		if (path != null) {
-			setAttribute(PROP_BUNDLE_SOURCE_LOCATION, path.toPortableString());
+	public void setJavadocURL( String url )
+	{
+		if ( url != null )
+		{
+			setAttribute( PROP_JAVADOC_URL, url );
 		}
 	}
 
@@ -317,6 +391,19 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 				status =
 					LiferayTomcatPlugin.createErrorStatus("Portal server not supported.  Expecting " +
 						getExpectedServerInfo());
+			}
+		}
+
+		// need to check if runtime is specifying a zip or location for javadoc, is so validate it
+		String javadocUrlValue = getJavadocURL();
+
+		if ( !empty( javadocUrlValue ) )
+		{
+			IStatus javadocUrlStatus = validateJavadocUrlValue( javadocUrlValue );
+
+			if ( !javadocUrlStatus.isOK() )
+			{
+				return javadocUrlStatus;
 			}
 		}
 
@@ -370,73 +457,15 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return status;
 	}
 
-	private IPath findBundledJREPath(IPath location) {
-		if (Platform.getOS().equals(Platform.OS_WIN32) && location != null && location.toFile().exists()) {
-			// look for jre dir
-			File tomcat = location.toFile();
-			String[] jre = tomcat.list(new FilenameFilter() {
-
-				public boolean accept(File dir, String name) {
-					return name.startsWith("jre");
-				}
-			});
-			for (String dir : jre) {
-				File javaw = new File(location.toFile(), dir + "/win/bin/javaw.exe");
-				if (javaw.exists()) {
-					return new Path(javaw.getPath()).removeLastSegments(2);
-				}
-			}
-		}
-		return null;
-	}
-
-	protected String getExpectedServerInfo() {
-		return "Liferay Portal";
-	}
-
-	protected Version getLeastSupportedVersion() {
-		return ILiferayConstants.LEAST_SUPPORTED_VERSION;
-	}
-
-	protected ReleaseHelper getReleaseHelper(IPath serviceJar) {
-		if (releaseHelpers == null) {
-			releaseHelpers = new HashMap<IPath, ReleaseHelper>();
+	private IStatus validateJavadocUrlValue( String javadocUrlValue )
+	{
+		if ( javadocUrlValue.startsWith( "http" ) || javadocUrlValue.startsWith( "jar:file:" ) ||
+			javadocUrlValue.startsWith( "file:" ) )
+		{
+			return Status.OK_STATUS;
 		}
 
-		ReleaseHelper cachedHelper = releaseHelpers.get(serviceJar);
-
-		if (cachedHelper != null) {
-			return cachedHelper;
-		}
-
-		ReleaseHelper newHelper = new ReleaseHelper(serviceJar);
-
-		releaseHelpers.put(serviceJar, newHelper);
-
-		return newHelper;
-	}
-
-	protected void loadServerInfoFile(IPath location, File versionInfoFile, File errorFile) {
-		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetServerInfo";
-
-		IPath[] libRoots = new IPath[] { location.append("lib"), location.append("lib/ext") };
-
-		IPath portalDir = getPortalDir();
-
-		try {
-			URL[] supportUrls =
-				new URL[] { FileLocator.toFileURL(LiferayServerCorePlugin.getDefault().getBundle().getEntry(
-					"portal-support/portal-support.jar")) };
-
-			PortalSupportHelper helper =
-				new PortalSupportHelper(
-					libRoots, portalDir, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {});
-
-			helper.launch(null);
-		}
-		catch (Exception e) {
-			LiferayTomcatPlugin.logError(e);
-		}
+		return warning( "Javadoc URL should start with jar:file:, file:, or http:" );
 	}
 
 }

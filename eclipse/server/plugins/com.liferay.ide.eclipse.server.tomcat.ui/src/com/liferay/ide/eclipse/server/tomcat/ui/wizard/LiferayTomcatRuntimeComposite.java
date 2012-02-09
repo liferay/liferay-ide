@@ -245,7 +245,9 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
 		});
 
-		createLink("For developing Ext plugins with this runtime, <a>additional configuration is available.</a>").addSelectionListener(
+		Link link =
+			createLink( "For extra settings including Javadoc and Ext plugin configuration see <a>additional configuration page.</a>" );
+		link.addSelectionListener(
 			new SelectionAdapter() {
 
 				@Override

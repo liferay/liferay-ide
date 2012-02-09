@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.project.core;
 
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
@@ -73,7 +74,23 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			return;
 		}
 
-		classpathContainer = getCorrectContainer(containerPath, finalSegment, project, portalDir);
+		String javadocURL = null;
+
+		try
+		{
+			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project.getProject() );
+
+			if ( liferayRuntime != null )
+			{
+				javadocURL = liferayRuntime.getJavadocURL();
+			}
+		}
+		catch ( Exception e )
+		{
+			ProjectCorePlugin.logError( e );
+		}
+
+		classpathContainer = getCorrectContainer( containerPath, finalSegment, project, portalDir, javadocURL );
 
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
 			project
@@ -116,16 +133,32 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		cpDecorations.save();
 
 		IPath portalDir = null;
+		String javadocURL = null;
 
 		if (containerSuggestion instanceof PluginClasspathContainer) {
 			portalDir = ((PluginClasspathContainer) containerSuggestion).getPortalDir();
+			javadocURL = ( (PluginClasspathContainer) containerSuggestion ).getJavadocURL();
 		}
 		else {
 			portalDir = ServerUtil.getPortalDir(project);
+
+			try
+			{
+				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project.getProject() );
+
+				if ( liferayRuntime != null )
+				{
+					javadocURL = liferayRuntime.getJavadocURL();
+				}
+			}
+			catch ( Exception e )
+			{
+				ProjectCorePlugin.logError( e );
+			}
 		}
 
 		IClasspathContainer newContainer =
-			getCorrectContainer(containerPath, containerPath.segment(1), project, portalDir);
+			getCorrectContainer( containerPath, containerPath.segment( 1 ), project, portalDir, javadocURL );
 
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
 			project
@@ -135,19 +168,19 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 	}
 
 	protected IClasspathContainer getCorrectContainer(
-		IPath containerPath, String finalSegment, IJavaProject project, IPath portalDir)
+		IPath containerPath, String finalSegment, IJavaProject project, IPath portalDir, String javadocURL )
 		throws CoreException {
 
 		IClasspathContainer classpathContainer = null;
 
 		if (PortletClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new PortletClasspathContainer(containerPath, project, portalDir);
+			classpathContainer = new PortletClasspathContainer( containerPath, project, portalDir, javadocURL );
 		}
 		else if (HookClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new HookClasspathContainer(containerPath, project, portalDir);
+			classpathContainer = new HookClasspathContainer( containerPath, project, portalDir, javadocURL );
 		}
 		else if (ExtClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new ExtClasspathContainer(containerPath, project, portalDir);
+			classpathContainer = new ExtClasspathContainer( containerPath, project, portalDir, javadocURL );
 		}
 		else {
 			throw new CoreException(LiferayServerCorePlugin.createErrorStatus("Invalid final segment of type: " +

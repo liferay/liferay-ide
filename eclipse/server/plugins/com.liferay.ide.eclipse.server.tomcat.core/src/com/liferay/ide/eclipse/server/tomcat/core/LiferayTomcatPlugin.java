@@ -30,7 +30,11 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class LiferayTomcatPlugin extends CorePlugin {
+public class LiferayTomcatPlugin extends CorePlugin
+{
+
+	// The shared instance
+	private static LiferayTomcatPlugin plugin;
 
 	// The plugin ID
 	public static final String PLUGIN_ID = "com.liferay.ide.eclipse.server.tomcat.core";
@@ -40,15 +44,13 @@ public class LiferayTomcatPlugin extends CorePlugin {
 	public static final String PREFERENCES_ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY =
 		"ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY";
 
-	public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY";
-
 	public static final String PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY = "EE_UPGRADE_MSG_TOGGLE_KEY";
 
-	// The shared instance
-	private static LiferayTomcatPlugin plugin;
+	public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY";
 
-	public static IStatus createErrorStatus(String msg) {
-		return createErrorStatus(PLUGIN_ID, msg);
+	public static IStatus createErrorStatus( String msg )
+	{
+		return createErrorStatus( PLUGIN_ID, msg );
 	}
 
 	/**
@@ -56,32 +58,70 @@ public class LiferayTomcatPlugin extends CorePlugin {
 	 * 
 	 * @return the shared instance
 	 */
-	public static LiferayTomcatPlugin getDefault() {
+	public static LiferayTomcatPlugin getDefault()
+	{
 		return plugin;
 	}
 
-	public static IPersistentPreferenceStore getPreferenceStore() {
-		return new ScopedPreferenceStore(new InstanceScope(), PLUGIN_ID);
+	public static IPersistentPreferenceStore getPreferenceStore()
+	{
+		return new ScopedPreferenceStore( new InstanceScope(), PLUGIN_ID );
 	}
 
-	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(createErrorStatus(PLUGIN_ID, msg, e));
+	public static void logError( String msg, Exception e )
+	{
+		getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, e ) );
+	}
+
+	public static IStatus warning( String msg )
+	{
+		return createWarningStatus( msg, PLUGIN_ID );
+	}
+
+	public static IStatus warning( String msg, Exception e )
+	{
+		return createWarningStatus( msg, PLUGIN_ID, e );
 	}
 
 	/**
 	 * The constructor
 	 */
-	public LiferayTomcatPlugin() {
+	public LiferayTomcatPlugin()
+	{
+	}
+
+	private void cleanupVersionFiles()
+	{
+		File versionProps = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" ).toFile();
+
+		if ( versionProps.exists() )
+		{
+			if ( !versionProps.delete() )
+			{
+				versionProps.deleteOnExit();
+			}
+		}
+
+		File serverInfos =
+			LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" ).toFile();
+
+		if ( serverInfos.exists() )
+		{
+			if ( !serverInfos.delete() )
+			{
+				serverInfos.deleteOnExit();
+			}
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
 	 */
-	public void start(BundleContext context)
-		throws Exception {
+	public void start( BundleContext context ) throws Exception
+	{
 
-		super.start(context);
+		super.start( context );
 
 		plugin = this;
 
@@ -124,31 +164,13 @@ public class LiferayTomcatPlugin extends CorePlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
 	 */
-	public void stop(BundleContext context)
-		throws Exception {
+	public void stop( BundleContext context ) throws Exception
+	{
 
 		cleanupVersionFiles();
 
 		plugin = null;
 
-		super.stop(context);
-	}
-
-	private void cleanupVersionFiles() {
-		File versionProps = LiferayTomcatPlugin.getDefault().getStateLocation().append("version.properties").toFile();
-
-		if (versionProps.exists()) {
-			if (!versionProps.delete()) {
-				versionProps.deleteOnExit();
-			}
-		}
-
-		File serverInfos = LiferayTomcatPlugin.getDefault().getStateLocation().append("serverInfos.properties").toFile();
-
-		if (serverInfos.exists()) {
-			if (!serverInfos.delete()) {
-				serverInfos.deleteOnExit();
-			}
-		}
+		super.stop( context );
 	}
 }

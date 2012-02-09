@@ -118,9 +118,37 @@ public class CoreUtil {
 		resource.delete(true, null);
 	}
 
+	public static boolean empty( Object[] array )
+	{
+		return isNullOrEmpty( array );
+	}
+
+	public static boolean empty( String val )
+	{
+		return isNullOrEmpty( val );
+	}
+
 	public static IProject[] getAllProjects() {
 
 		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
+	}
+
+	/**
+	 * @param project
+	 * @return
+	 */
+	public static IClasspathEntry[] getClasspathEntries( IProject project ) {
+		if ( project != null ) {
+			IJavaProject javaProject = JavaCore.create( project );
+			try {
+				IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
+				return classPathEntries;
+			}
+			catch ( JavaModelException e ) {
+				// TODO log the exception
+			}
+		}
+		return null;
 	}
 
 	public static IFolder getDocroot( IProject project ) {
@@ -310,23 +338,5 @@ public class CoreUtil {
 		}
 
 		return version;
-	}
-
-	/**
-	 * @param project
-	 * @return
-	 */
-	public static IClasspathEntry[] getClasspathEntries( IProject project ) {
-		if ( project != null ) {
-			IJavaProject javaProject = JavaCore.create( project );
-			try {
-				IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
-				return classPathEntries;
-			}
-			catch ( JavaModelException e ) {
-				// TODO log the exception
-			}
-		}
-		return null;
 	}
 }

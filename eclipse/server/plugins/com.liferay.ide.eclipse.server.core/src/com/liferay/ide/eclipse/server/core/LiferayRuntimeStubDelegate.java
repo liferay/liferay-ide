@@ -24,17 +24,16 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 		super();
 	}
 
-	public IVMInstall getVMInstall() {
-		return JavaRuntime.getDefaultVMInstall();
+	public IPath[] getAllUserClasspathLibraries() {
+		return getLiferayRuntime().getAllUserClasspathLibraries();
 	}
 
-	public String getRuntimeStubTypeId() {
-		return getAttribute( PROP_STUB_TYPE_ID, "" );
+	public IPath getAppServerDir() {
+		return getLiferayRuntime().getAppServerDir();
 	}
 
-	public void setRuntimeStubTypeId( String typeId ) {
-		setAttribute( PROP_STUB_TYPE_ID, typeId );
-		tempRuntime = null;
+	public String getAppServerType() {
+		return getLiferayRuntime().getAppServerType();
 	}
 
 	// public ILiferayRuntimeStub getRuntimeStub() {
@@ -45,12 +44,54 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 	// return runtimeStub;
 	// }
 
-	public String getName() {
-		return getRuntime().getName();
+	public IPath getDeployDir() {
+		return getLiferayRuntime().getDeployDir();
+	}
+
+	public String getJavadocURL()
+	{
+		return getLiferayRuntime().getJavadocURL();
+	}
+
+	public IPath getLibGlobalDir() {
+		return getLiferayRuntime().getLibGlobalDir();
 	}
 
 	public ILiferayRuntime getLiferayRuntime() {
 		return (ILiferayRuntime) getTempRuntime().loadAdapter( ILiferayRuntime.class, new NullProgressMonitor() );
+	}
+
+	public String getName() {
+		return getRuntime().getName();
+	}
+
+	public IPath getPortalDir() {
+		return getLiferayRuntime().getPortalDir();
+	}
+
+	public String getPortalVersion() {
+		return getLiferayRuntime().getPortalVersion();
+	}
+
+	public Properties getPortletCategories() {
+		return getLiferayRuntime().getPortletCategories();
+	}
+
+	public IPath getRuntimeLocation() {
+		return getRuntime().getLocation();
+	}
+
+	public String getRuntimeStubTypeId() {
+		return getAttribute( PROP_STUB_TYPE_ID, "" );
+	}
+
+	public String[] getServletFilterNames()
+	{
+		return getLiferayRuntime().getServletFilterNames();
+	}
+
+	public String[] getSupportedHookProperties() {
+		return getLiferayRuntime().getSupportedHookProperties();
 	}
 
 	protected IRuntimeWorkingCopy getTempRuntime() {
@@ -72,53 +113,17 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 		return tempRuntime;
 	}
 
+	public IVMInstall getVMInstall() {
+		return JavaRuntime.getDefaultVMInstall();
+	}
+
 	public boolean isUsingDefaultJRE() {
 		return true;
 	}
 
-	public IPath[] getAllUserClasspathLibraries() {
-		return getLiferayRuntime().getAllUserClasspathLibraries();
-	}
-
-	public Properties getPortletCategories() {
-		return getLiferayRuntime().getPortletCategories();
-	}
-
-	public String getPortalVersion() {
-		return getLiferayRuntime().getPortalVersion();
-	}
-
-	public IPath getRuntimeLocation() {
-		return getRuntime().getLocation();
-	}
-
-	public String[] getSupportedHookProperties() {
-		return getLiferayRuntime().getSupportedHookProperties();
-	}
-
-	public String[] getServletFilterNames()
-	{
-		return getLiferayRuntime().getServletFilterNames();
-	}
-
-	public IPath getAppServerDir() {
-		return getLiferayRuntime().getAppServerDir();
-	}
-
-	public String getAppServerType() {
-		return getLiferayRuntime().getAppServerType();
-	}
-
-	public IPath getDeployDir() {
-		return getLiferayRuntime().getDeployDir();
-	}
-
-	public IPath getLibGlobalDir() {
-		return getLiferayRuntime().getLibGlobalDir();
-	}
-
-	public IPath getPortalDir() {
-		return getLiferayRuntime().getPortalDir();
+	public void setRuntimeStubTypeId( String typeId ) {
+		setAttribute( PROP_STUB_TYPE_ID, typeId );
+		tempRuntime = null;
 	}
 
 	@Override
