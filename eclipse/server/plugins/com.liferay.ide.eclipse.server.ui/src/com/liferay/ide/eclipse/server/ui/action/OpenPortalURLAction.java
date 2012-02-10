@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,27 +36,21 @@ import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class OpenPortalAction extends AbstractServerRunningAction {
+public abstract class OpenPortalURLAction extends AbstractServerRunningAction
+{
 
-	public OpenPortalAction() {
+	public OpenPortalURLAction() {
 		super();
 	}
 
-	public void run(IAction action) {
-		if (selectedServer != null) {
-			final ILiferayServer portalServer = (ILiferayServer) selectedServer.loadAdapter(ILiferayServer.class, null);
-
-			new Job("Open portal home") {
-
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					openPortal(portalServer);
-					return Status.OK_STATUS;
-				}
-
-			}.schedule();
-		}
+	protected ILiferayServer getLiferayServer()
+	{
+		return (ILiferayServer) selectedServer.loadAdapter(ILiferayServer.class, null);
 	}
+
+	protected abstract URL getPortalURL();
+
+	protected abstract String getPortalURLTitle();
 
 	@Override
 	protected int getRequiredServerState() {
@@ -84,17 +78,36 @@ public class OpenPortalAction extends AbstractServerRunningAction {
 		});
 	}
 
-	protected void openPortal(ILiferayServer portalServer) {
-		URL portalHome = portalServer.getPortalHomeUrl();
+	protected void openPortalURL( ILiferayServer portalServer )
+	{
+		URL portalUrl = getPortalURL();
 			
-		if (portalHome == null) {
+		if ( portalUrl == null )
+		{
 			MessageDialog.openError(
-				getActiveShell(), "Open Portal Home",
-				"Could not determine portal home URL. Please make sure the server is properly configured.");
+				getActiveShell(), "Open Portal URL",
+				"Could not determine portal URL. Please make sure the server is properly configured." );
 			return;
 		}
 
-		openBrowser(portalHome, "Liferay Portal");
+		openBrowser( portalUrl, getPortalURLTitle() );
+	}
+
+	public void run(IAction action) {
+		if (selectedServer != null) {
+			final ILiferayServer portalServer = getLiferayServer();
+
+			new Job( "Open portal url" )
+			{
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					openPortalURL( portalServer );
+					return Status.OK_STATUS;
+				}
+
+			}.schedule();
+		}
 	}
 
 }

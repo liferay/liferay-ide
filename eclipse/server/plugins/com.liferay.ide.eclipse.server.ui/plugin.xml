@@ -88,11 +88,18 @@
                label="Test Liferay Web Services...">
          </action>
          <action
-               class="com.liferay.ide.eclipse.server.ui.action.OpenPortalAction"
+               class="com.liferay.ide.eclipse.server.ui.action.OpenJSONWSAPIAction"
+               enablesFor="1"
+               icon="icons/e16/test_web_services_16x16.png"
+               id="com.liferay.ide.eclipse.server.ui.action.openJSONWSAPIAction"
+               label="Test JSON Web Services">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.server.ui.action.OpenPortalHomeAction"
                enablesFor="1"
                icon="icons/e16/open_portal_16x16.png"
-               id="com.liferay.ide.eclipse.server.ui.action.openPortalAction"
-               label="Open Liferay Portal">
+               id="com.liferay.ide.eclipse.server.ui.action.openPortalHomeAction"
+               label="Open Liferay Portal Home">
          </action>
       </objectContribution>
       <objectContribution
