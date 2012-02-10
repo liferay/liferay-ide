@@ -103,6 +103,14 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
 
 			Path customJspDirValue = customJspDir.getValue().getContent( false );
 
+			if ( customJspDirValue == null )
+			{
+				customJspDirValue = customJspDir.getValue().getContent( true );
+				customJspDir.setValue( customJspDirValue );
+			}
+
+			customJspDir.setValue( customJspDirValue );
+
 			final Path absolutePath =
 				element.service( property, RelativePathService.class ).convertToAbsolute( customJspDirValue );
 
@@ -112,7 +120,8 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
 
 				IFolder customJspFolder =
 					docroot.getFolder( new org.eclipse.core.runtime.Path( customJspDirValue.toPortableString() ) );
-				customJspFolder.create( true, true, null );
+
+				CoreUtil.makeFolders( customJspFolder );
 
 				element.refresh();
 				refreshEnablementState();

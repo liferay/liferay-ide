@@ -24,9 +24,9 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
-import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -47,7 +47,7 @@ public interface ICustomJspDir extends IModelElement
 	@XmlBinding( path = "" )
 	@Service( impl = DocrootRelativePathService.class )
 	@ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-	@InitialValue( text = "/META-INF/custom_jsps" )
+	@DefaultValue( text = "/META-INF/custom_jsps" )
 	@MustExist
 	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
