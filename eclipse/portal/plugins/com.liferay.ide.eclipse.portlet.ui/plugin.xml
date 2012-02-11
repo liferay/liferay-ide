@@ -165,50 +165,10 @@
          
          <enablement>
          	<adapt type="org.eclipse.core.resources.IResource">
-	          <or>
-	          	<adapt type="org.eclipse.core.resources.IFile">
-		  			<test forcePluginActivation="true"
-						property="com.liferay.ide.eclipse.project.ui.isServiceFile"
-						value="true" />
-				</adapt>
-				<and>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.hook" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
-							value="true" />
-					</adapt>
-				</and>
-				<and>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.portlet" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
-							value="true" />
-					</adapt>
-				</and>
-				<and>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.ext" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
-							value="true" />
-					</adapt>
-				</and>
-			  </or>
-			</adapt>
+  			    <test forcePluginActivation="true"
+				    property="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
+				    value="true" />
+		    </adapt>
          </enablement>
       </objectContribution>
       
@@ -281,7 +241,7 @@
             id="com.liferay.ide.eclipse.portlet.ui.hasServiceFile"
             namespace="com.liferay.ide.eclipse.portlet.ui"
             properties="hasServiceFile"
-            type="org.eclipse.core.resources.IProject">
+            type="org.eclipse.core.resources.IResource">
       </propertyTester>
       <propertyTester
             class="com.liferay.ide.eclipse.portlet.ui.HasLangFilePropertyTester"

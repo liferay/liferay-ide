@@ -22,7 +22,7 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
  * @author Greg Amerson
@@ -30,14 +30,15 @@ import org.eclipse.core.resources.IProject;
 public class HasServiceFilePropertyTester extends PropertyTester {
 
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver instanceof IProject) {
-			IProject project = (IProject) receiver;
+		if ( receiver instanceof IResource )
+		{
+			IResource resource = (IResource) receiver;
 
-			boolean isLiferayProject = ProjectUtil.isLiferayProject(project);
+			boolean isLiferayProject = ProjectUtil.isLiferayProject( resource.getProject() );
 
 			if (isLiferayProject) {
 				try {
-					IFolder docroot = CoreUtil.getDocroot(project);
+					IFolder docroot = CoreUtil.getDocroot( resource.getProject() );
 
 					if (docroot != null && docroot.exists()) {
 						IFile serviceFile =
