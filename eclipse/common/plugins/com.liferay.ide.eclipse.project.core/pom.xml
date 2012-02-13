@@ -22,13 +22,12 @@
 	<parent>
 		<groupId>com.liferay.ide.eclipse</groupId>
 		<artifactId>ide-parent</artifactId>
-		<version>1.5.0-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 		<relativePath>../../..</relativePath>
 	</parent>
 
 	<artifactId>com.liferay.ide.eclipse.project.core</artifactId>
 	<packaging>eclipse-plugin</packaging>
-	<version>1.5.0-SNAPSHOT</version>
 
 	<name>Liferay Project Core</name>
 

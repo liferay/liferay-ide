@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Properties Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.properties.core;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.5.1.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.properties.core.PropertiesCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.platform;bundle-version="0.4.0";visibility:=reexport,
  org.eclipse.sapphire.workspace;bundle-version="0.4.0";visibility:=reexport,
  org.eclipse.core.resources,
- com.liferay.ide.eclipse.project.core;bundle-version="1.5.0"
+ com.liferay.ide.eclipse.project.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.properties.core,

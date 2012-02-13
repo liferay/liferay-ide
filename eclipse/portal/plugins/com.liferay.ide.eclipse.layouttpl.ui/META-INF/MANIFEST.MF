@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Layout Template UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.layouttpl.ui;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.5.1.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,

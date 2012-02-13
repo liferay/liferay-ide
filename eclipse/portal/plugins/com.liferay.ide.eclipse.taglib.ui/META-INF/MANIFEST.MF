@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Taglib UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.taglib.ui;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.5.1.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.taglib.ui.TaglibUI
 Bundle-Vendor: LIFERAY
 Require-Bundle: org.eclipse.ui,
@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.modeling;bundle-version="0.3.0",
  org.eclipse.sapphire.modeling.xml;bundle-version="0.3.0",
  org.eclipse.sapphire.ui;bundle-version="0.3.0",
- com.liferay.ide.eclipse.project.core;bundle-version="1.5.0",
+ com.liferay.ide.eclipse.project.core,
  org.eclipse.ui.ide,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core

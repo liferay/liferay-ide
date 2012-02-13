@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Service Builder Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.service.ui;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.5.1.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.service.ui.ServiceUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help,
  org.eclipse.ui.forms,
  org.eclipse.ui.views.properties.tabbed,
- com.liferay.ide.eclipse.portlet.core;bundle-version="1.5.0",
+ com.liferay.ide.eclipse.portlet.core,
  org.eclipse.ui.editors,
  com.liferay.ide.eclipse.portlet.ui,
  org.eclipse.sapphire.osgi;bundle-version="0.3.0",

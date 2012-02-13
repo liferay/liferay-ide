@@ -111,7 +111,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 	protected void createFields()
 	{
-		javadocField = createTextField( "java doc" );
+		javadocField = createTextField( "Liferay Javadoc URL (zip file, local directory, or online url" );
 		javadocField.addModifyListener( this );
 
 		SWTUtil.createButton( this, "Browse zip..." ).addSelectionListener( new SelectionAdapter()

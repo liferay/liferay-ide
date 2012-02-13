@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Vaadin UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.vaadin.ui;singleton:=true
-Bundle-Version: 1.5.0.qualifier
+Bundle-Version: 1.5.1.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.vaadin.ui.VaadinUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -12,10 +12,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.servlet.ui,
  org.eclipse.jst.j2ee.ui,
  org.eclipse.jst.j2ee.web,
- com.liferay.ide.eclipse.portlet.core;bundle-version="1.5.0",
- com.liferay.ide.eclipse.project.core;bundle-version="1.5.0",
+ com.liferay.ide.eclipse.portlet.core,
+ com.liferay.ide.eclipse.project.core,
  com.liferay.ide.eclipse.portlet.vaadin.core,
- com.liferay.ide.eclipse.portlet.ui;bundle-version="1.2.0"
+ com.liferay.ide.eclipse.portlet.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.portlet.vaadin.ui,
