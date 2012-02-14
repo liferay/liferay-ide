@@ -26,4 +26,7 @@ public interface ILiferayServer {
 
 	URL getWebServicesListURL();
 
+	URL getPluginContextURL( String context );
+
+	int getHttpPort();
 }

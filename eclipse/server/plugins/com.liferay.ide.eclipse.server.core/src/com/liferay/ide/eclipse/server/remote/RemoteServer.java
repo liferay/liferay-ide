@@ -169,6 +169,11 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return getServer().getHost();
 	}
 
+	public int getHttpPort()
+	{
+		return Integer.parseInt( getHTTPPort() );
+	}
+
 	public String getHTTPPort() {
 		return getAttribute( ATTR_HTTP_PORT, DEFAULT_HTTP_PORT );
 	}
@@ -187,6 +192,24 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
 	public String getPassword() {
 		return getAttribute( ATTR_PASSWORD, DEFAULT_PASSWORD );
+	}
+
+	public URL getPluginContextURL( String context )
+	{
+		String httpPort = getHTTPPort();
+
+		if ( httpPort != null )
+		{
+			try
+			{
+				return new URL( "http://" + getServer().getHost() + ":" + httpPort + context );
+			}
+			catch ( MalformedURLException e )
+			{
+			}
+		}
+
+		return null;
 	}
 
 	public URL getPortalHomeUrl() {

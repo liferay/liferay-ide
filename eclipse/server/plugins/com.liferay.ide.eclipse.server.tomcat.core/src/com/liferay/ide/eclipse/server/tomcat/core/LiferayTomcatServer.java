@@ -62,6 +62,30 @@ public class LiferayTomcatServer extends TomcatServer
 		return getAttribute(PROPERTY_MEMORY_ARGS, ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS);
 	}
 
+	public URL getPluginContextURL( String context )
+	{
+		try
+		{
+			return new URL( getPortalHomeUrl(), "/" + context );
+		}
+		catch ( Exception ex )
+		{
+			return null;
+		}
+	}
+
+	public int getHttpPort()
+	{
+		try
+		{
+			return getTomcatConfiguration().getMainPort().getPort();
+		}
+		catch ( Exception e )
+		{
+			return -1;
+		}
+	}
+
 	public URL getPortalHomeUrl() {
 		try {
 			TomcatConfiguration config = getTomcatConfiguration();

@@ -24,29 +24,20 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.INavigatorContentExtension;
-import org.eclipse.ui.navigator.IPipelinedTreeContentProvider;
-import org.eclipse.ui.navigator.PipelinedShapeModification;
 import org.eclipse.ui.navigator.PipelinedViewerUpdate;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
-import org.eclipse.wst.server.ui.internal.viewers.BaseContentProvider;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class ServerViewCustomContentProvider extends BaseContentProvider
-	implements ITreeContentProvider, IPipelinedTreeContentProvider {
+public class ServerViewCustomContentProvider extends ServerCustomContentProvider
+{
 
 	protected final static Object[] EMPTY = new Object[] {};
-	
-	private ICommonContentExtensionSite config;
 	
 	private PluginsContent pluginsContentNode = null;
 
@@ -79,10 +70,6 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 		return EMPTY;
 		// return new Object[] {new PluginsContent(liferayPlugins,
 		// parentElement)};
-	}
-
-	public Object[] getElements(Object inputElement) {
-		return null;
 	}
 
 	public Object getParent(Object element) {
@@ -119,8 +106,7 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 		}
 	}
 
-	public void getPipelinedElements(Object anInput, Set theCurrentElements) {
-	}
+
 
 	public Object getPipelinedParent(Object anObject, Object aSuggestedParent) {
 		if (anObject instanceof ModuleServer) {
@@ -140,8 +126,8 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 	public boolean hasChildren(Object element) {
 		if (element instanceof ModuleServer) {
 			INavigatorContentExtension serverContent =
-				config.getService().getContentExtensionById(
-					config.getExtension().getDescriptor().getSuppressedExtensionId());
+				getConfig().getService().getContentExtensionById(
+					getConfig().getExtension().getDescriptor().getSuppressedExtensionId() );
 			
 			return serverContent.getContentProvider().hasChildren(element);
 		}
@@ -150,17 +136,6 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 		}
 		
 		return false;
-	}
-
-	public void init(ICommonContentExtensionSite aConfig) {
-		this.config = aConfig;
-	}
-
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	}
-
-	public PipelinedShapeModification interceptAdd(PipelinedShapeModification anAddModification) {
-		return null;
 	}
 
 	public boolean interceptRefresh(PipelinedViewerUpdate aRefreshSynchronization) {
@@ -183,10 +158,6 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 		return false;
 	}
 
-	public PipelinedShapeModification interceptRemove(PipelinedShapeModification aRemoveModification) {
-		return null;
-	}
-
 	public boolean interceptUpdate(PipelinedViewerUpdate anUpdateSynchronization) {
 		// Set refreshTargets = anUpdateSynchronization.getRefreshTargets();
 		// for (Object refreshTarget : refreshTargets) {
@@ -196,12 +167,6 @@ public class ServerViewCustomContentProvider extends BaseContentProvider
 		// }
 
 		return false;
-	}
-
-	public void restoreState(IMemento aMemento) {
-	}
-
-	public void saveState(IMemento aMemento) {
 	}
 
 }
