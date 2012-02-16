@@ -30,36 +30,47 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Greg Amerson
  */
-public class BuildServicesAction extends AbstractObjectAction {
+public class BuildServicesAction extends AbstractObjectAction
+{
 
-	public BuildServicesAction() {
+	public BuildServicesAction()
+	{
 		super();
 	}
 
-	public void run(IAction action) {
-		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection) fSelection).toArray();
-
-			IFile servicesFile = null;
+	public void run( IAction action )
+	{
+		if ( fSelection instanceof IStructuredSelection )
+		{
+			Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
 			Object elem = elems[0];
 
-			if (elem instanceof IFile) {
-				servicesFile = (IFile) elem;
+			IProject project = null;
+
+			if ( elem instanceof IFile )
+			{
+				IFile projectFile = (IFile) elem;
+
+				project = projectFile.getProject();
+			}
+			else if ( elem instanceof IProject )
+			{
+				project = (IProject) elem;
 
 			}
-			else if (elem instanceof IProject) {
-				IProject project = (IProject) elem;
 
-				IFolder docroot = CoreUtil.getDocroot(project);
+			IFile servicesFile = null;
+			IFolder docroot = CoreUtil.getDocroot( project );
 
-				if (docroot != null && docroot.exists()) {
-					servicesFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
-				}
+			if ( docroot != null && docroot.exists() )
+			{
+				servicesFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
 			}
 
-			if (servicesFile != null && servicesFile.exists()) {
-				BuildServiceJob job = PortletCore.createBuildServiceJob(servicesFile);
+			if ( servicesFile != null && servicesFile.exists() )
+			{
+				BuildServiceJob job = PortletCore.createBuildServiceJob( servicesFile );
 
 				job.schedule();
 			}
