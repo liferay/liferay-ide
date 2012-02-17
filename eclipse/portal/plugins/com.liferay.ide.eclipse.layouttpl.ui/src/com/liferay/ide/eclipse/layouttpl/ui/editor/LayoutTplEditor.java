@@ -227,6 +227,14 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette {
 		return new TemplateTransferDropTargetListener(getGraphicalViewer()) {
 
 			protected CreationFactory getFactory(Object template) {
+				if ( template instanceof PortletLayoutTemplate )
+				{
+					PortletLayoutTemplate portletLayoutTemplate = (PortletLayoutTemplate) template;
+
+					return new PortletLayoutFactory(
+						portletLayoutTemplate.getNumCols(), portletLayoutTemplate.getWeights() );
+				}
+
 				return new SimpleFactory((Class<?>) template);
 			}
 

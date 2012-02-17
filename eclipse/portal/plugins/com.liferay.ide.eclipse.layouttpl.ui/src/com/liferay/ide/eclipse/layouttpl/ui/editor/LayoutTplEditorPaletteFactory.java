@@ -108,7 +108,8 @@ public class LayoutTplEditorPaletteFactory {
 
 		CombinedTemplateCreationEntry component3 =
 			new CombinedTemplateCreationEntry(
-				"2 Columns (50/50)", "Create a 2 column row both at 50% width.", PortletLayout.class,
+				"2 Columns (50/50)", "Create a 2 column row both at 50% width.",
+				new PortletLayoutTemplate( 2, 50, 50 ),
 				new PortletLayoutFactory(2, 50, 50), desc, large);
 
 		group2.add(component3);
@@ -122,7 +123,8 @@ public class LayoutTplEditorPaletteFactory {
 
 		CombinedTemplateCreationEntry component4 =
 			new CombinedTemplateCreationEntry(
-				"2 Columns (30/70)", "Create a 2 column row with 30% and 70% for column widths.", PortletLayout.class,
+				"2 Columns (30/70)", "Create a 2 column row with 30% and 70% for column widths.",
+				new PortletLayoutTemplate( 2, 30, 70 ),
 				new PortletLayoutFactory(2, 30, 70), desc, large);
 
 		group2.add(component4);
@@ -136,7 +138,8 @@ public class LayoutTplEditorPaletteFactory {
 
 		CombinedTemplateCreationEntry component5 =
 			new CombinedTemplateCreationEntry(
-				"2 Columns (70/30)", "Create a 2 column row with 70% and 30% for column widths.", PortletLayout.class,
+				"2 Columns (70/30)", "Create a 2 column row with 70% and 30% for column widths.",
+				new PortletLayoutTemplate( 2, 70, 30 ),
 				new PortletLayoutFactory(2, 70, 30), desc, large);
 
 		group2.add(component5);
@@ -150,7 +153,8 @@ public class LayoutTplEditorPaletteFactory {
 
 		CombinedTemplateCreationEntry component6 =
 			new CombinedTemplateCreationEntry(
-				"3 Columns", "Create a 3 column row with all widths at 33%.", PortletLayout.class,
+				"3 Columns", "Create a 3 column row with all widths at 33%.",
+				new PortletLayoutTemplate( 3, 33, 33, 33 ),
 				new PortletLayoutFactory(3, 33, 33, 33), desc, large);
 
 		group2.add(component6);
