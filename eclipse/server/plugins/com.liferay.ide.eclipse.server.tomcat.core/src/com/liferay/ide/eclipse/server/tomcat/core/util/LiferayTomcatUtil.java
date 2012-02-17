@@ -19,12 +19,14 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileListing;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.core.IPluginPublisher;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatConstants;
 import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin;
+import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatRuntime70;
 import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.eclipse.server.util.PortalSupportHelper;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -487,7 +489,21 @@ public class LiferayTomcatUtil {
 		runtimeVMArgs.add( "-Dfile.encoding=UTF8" );
 		runtimeVMArgs.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" );
 		runtimeVMArgs.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" );
-		runtimeVMArgs.add( "-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"" );
+
+		ILiferayRuntime liferayRuntime =
+			(ILiferayRuntime) currentServer.getRuntime().loadAdapter( ILiferayRuntime.class, null );
+
+		Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
+
+		if ( portalVersion.compareTo( LiferayTomcatRuntime70.leastSupportedVersion ) < 0 )
+		{
+			runtimeVMArgs.add( "-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"" );
+		}
+		else
+		{
+			runtimeVMArgs.add( "-Djava.net.preferIPv4Stack=true" );
+		}
+
 		runtimeVMArgs.add( "-Djava.util.logging.config.file=\"" + installPath.toOSString() +
 			"/conf/logging.properties\"" );
 		runtimeVMArgs.add( "-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"" );

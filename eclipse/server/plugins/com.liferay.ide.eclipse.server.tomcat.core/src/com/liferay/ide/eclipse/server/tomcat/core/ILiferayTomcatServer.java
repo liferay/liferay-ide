@@ -15,13 +15,16 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core;
 
+import com.liferay.ide.eclipse.server.core.ILiferayServer;
+
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public interface ILiferayTomcatServer extends ITomcatServer {
+public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
+{
 
 	/**
 	 * Property which specifies the directory where liferay scans for

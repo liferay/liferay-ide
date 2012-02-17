@@ -14,7 +14,6 @@ package com.liferay.ide.eclipse.server.tomcat.core;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
-import com.liferay.ide.eclipse.server.core.ILiferayServer;
 import com.liferay.ide.eclipse.server.tomcat.core.util.LiferayTomcatUtil;
 
 import java.net.MalformedURLException;
@@ -40,7 +39,8 @@ import org.eclipse.wst.server.core.ServerUtil;
 
 @SuppressWarnings("restriction")
 public class LiferayTomcatServer extends TomcatServer
-	implements ILiferayTomcatConstants, ILiferayTomcatServer, ILiferayTomcatServerWC, ILiferayServer {
+	implements ILiferayTomcatConstants, ILiferayTomcatServer, ILiferayTomcatServerWC
+{
 
 	public LiferayTomcatServer() {
 		super();
