@@ -297,8 +297,18 @@
     	<if>
     		<isset property="isUnix" />
     		<then>
-				<tar destfile="${output.dir}${output.gz.name}" basedir="${work.dir}" compression="gzip"/>
-    			<!--<gzip destfile="${output.dir}${output.gz.name}" src="${output.dir}${output.tar.name}" />-->
+    			<if>
+    				<available file="${work.dir}/eclipse/eclipse" />
+    				<then>
+    					<exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
+    						<arg value="cf" />
+    						<arg value="${output.dir}${output.tar.name}" />
+    						<arg value="eclipse" />
+    					</exec>
+    					<gzip destfile="${output.dir}${output.gz.name}" src="${output.dir}${output.tar.name}" />
+    					<delete file="${output.dir}${output.tar.name}" />
+    				</then>
+    			</if>    			
     		</then>
     		<else>
     			<zip destfile="${output.dir}/${output.zip.name}" basedir="${work.dir}" />
