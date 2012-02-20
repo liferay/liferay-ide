@@ -69,6 +69,8 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 	protected Text textServerManagerContextPath;
 	protected Text textUsername;
 	protected IWizardHandle wizard;
+	private String initialServerName;
+	private String initialHostName;
 
 	public RemoteServerComposite(Composite parent, RemoteServerWizardFragment fragment, IWizardHandle wizard) {
 		super(parent, SWT.NONE);
@@ -86,14 +88,12 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 		}
 
 		if (src.equals(textHostname)) {
-			// IDE-425 check server name and if it has current host name, update it to the new hostname
-			String previousName = this.serverWC.getName();
-			String previousHost = this.serverWC.getHost();
-
 			this.serverWC.setHost(textHostname.getText());
 
-			if ( previousName != null && previousName.contains( previousHost ) ) {
-				this.serverWC.setName( previousName.replaceAll( previousHost, textHostname.getText() ) );
+			// IDE-425
+			if ( this.initialServerName != null && this.initialHostName.contains( this.initialHostName ) )
+			{
+				this.serverWC.setName( this.initialServerName.replaceAll( this.initialHostName, textHostname.getText() ) );
 			}
 
 		}
@@ -256,6 +256,10 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 			// this.checkboxSecurity.setSelection( this.remoteServerWC.getSecurityEnabled() );
 			this.textUsername.setText( this.remoteServerWC.getUsername() );
 			this.textPassword.setText( this.remoteServerWC.getPassword() );
+
+			this.initialServerName = this.serverWC.getName();
+			this.initialHostName = this.serverWC.getHost();
+
 			ignoreModifyEvents = false;
 		}
 	}
