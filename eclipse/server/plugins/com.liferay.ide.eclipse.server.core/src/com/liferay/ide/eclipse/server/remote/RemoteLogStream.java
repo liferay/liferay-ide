@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -87,6 +88,8 @@ public class RemoteLogStream extends BufferedInputStream {
 
 		URLConnection conn = url.openConnection();
 		conn.setRequestProperty( "Authorization", "Basic " + authStringEnc );
+		Authenticator.setDefault( null );
+		conn.setAllowUserInteraction( false );
 
 		return conn.getInputStream();
 	}
