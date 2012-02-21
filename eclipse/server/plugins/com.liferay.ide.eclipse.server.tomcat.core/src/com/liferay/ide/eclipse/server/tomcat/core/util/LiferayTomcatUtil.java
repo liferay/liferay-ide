@@ -427,11 +427,10 @@ public class LiferayTomcatUtil {
 		server.removeServerListener(shutdownListener);
 	}
 
-	public static IStatus validateRuntimeStubLocation(IPath runtimeStubLocation) {
+	public static IStatus validateRuntimeStubLocation( String runtimeTypeId, IPath runtimeStubLocation )
+	{
 		try {
-			IRuntimeWorkingCopy runtimeStub =
-				ServerCore.findRuntimeType( "com.liferay.ide.eclipse.server.tomcat.runtime.60" ).createRuntime(
-					null, null );
+			IRuntimeWorkingCopy runtimeStub = ServerCore.findRuntimeType( runtimeTypeId ).createRuntime( null, null );
 			runtimeStub.setLocation(runtimeStubLocation);
 			runtimeStub.setStub(true);
 			return runtimeStub.validate(null);
