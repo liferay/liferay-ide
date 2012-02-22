@@ -25,9 +25,11 @@ import java.net.URL;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.CommonTab;
+import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jdt.internal.debug.ui.classpath.ClasspathModel;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaRuntime;
@@ -111,10 +113,10 @@ public class PortalSupportHelper extends LaunchHelper {
 		tab.setDefaults(config);
 		tab.dispose();
 
-		// if (outputFile != null && outputFile.getParentFile().exists()) {
-		// config.setAttribute(IDebugUIConstants.ATTR_CAPTURE_IN_FILE, outputFile.getAbsolutePath());
-		// }
-		
+		config.setAttribute( IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, false );
+		config.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT, false );
+		config.setAttribute( IDebugUIConstants.ATTR_PRIVATE, true );
+
 		return config;		
 	}
 
