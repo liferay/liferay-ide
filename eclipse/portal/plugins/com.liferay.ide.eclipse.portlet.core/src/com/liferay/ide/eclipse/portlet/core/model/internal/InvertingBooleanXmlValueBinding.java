@@ -26,11 +26,9 @@ import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
 /**
- * @author <a href="mailto:konstantin.komissarchik@oracle.com">Konstantin Komissarchik</a>
+ * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-
 public final class InvertingBooleanXmlValueBinding extends XmlValueBindingImpl
-
 {
 
 	private XmlPath path;
