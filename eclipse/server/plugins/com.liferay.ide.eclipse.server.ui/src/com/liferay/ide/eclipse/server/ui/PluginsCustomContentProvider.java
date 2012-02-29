@@ -34,7 +34,7 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class ServerViewCustomContentProvider extends ServerCustomContentProvider
+public class PluginsCustomContentProvider extends ServerCustomContentProvider
 {
 
 	protected final static Object[] EMPTY = new Object[] {};

@@ -119,6 +119,11 @@ public class BuildServiceJob extends SDKJob {
 		FlexibleProjectContainer container =
 			J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
 
+		if ( container == null )
+		{
+			return PortletCore.createWarningStatus( "Could not update classpath containers" );
+		}
+
 		container.refresh();
 		
 		container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);

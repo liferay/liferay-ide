@@ -30,9 +30,9 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class ServerViewCustomLabelProvider extends LabelProvider {
+public class PluginsCustomLabelProvider extends LabelProvider {
 
-	public ServerViewCustomLabelProvider() {
+	public PluginsCustomLabelProvider() {
 		super();
 	}
 

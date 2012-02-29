@@ -155,7 +155,9 @@
             <properties>
                 <platform-version-name>indigo</platform-version-name>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
-                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/93/artifact/build/repository</sapphire-site>
+                <!-- <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/93/artifact/build/repository</sapphire-site>-->
+                <sapphire-site>http://download.eclipse.org/sapphire/0.4.0/repository</sapphire-site>
+				<graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site> 
                 <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
                 <emf-site>http://download.eclipse.org/modeling/emf/updates/releases/</emf-site>
                 <gef-site>http://download.eclipse.org/tools/gef/updates/releases/</gef-site>
@@ -179,6 +181,11 @@
                     <id>sapphire</id>
                     <layout>p2</layout>
                     <url>${sapphire-site}</url>
+                </repository>
+                <repository>
+                    <id>graphiti</id>
+                    <layout>p2</layout>
+                    <url>${graphiti-site}</url>
                 </repository>
                 <repository>
                     <id>wtp</id>
