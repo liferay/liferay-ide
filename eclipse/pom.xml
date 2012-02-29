@@ -51,13 +51,8 @@
     </licenses>
 
   <properties>
-    <tycho-version>0.13.0</tycho-version>
-    <platform-version-name>helios</platform-version-name>
-    <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
+    <tycho-version>0.14.0</tycho-version>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20110523182458/repository</orbit-site>
-    <sapphire-site>http://download.eclipse.org/sapphire/0.4.0/repository</sapphire-site>
-    <graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site> 
-    <wtp-site>http://download.eclipse.org/webtools/repository/${platform-version-name}</wtp-site>
   </properties>
 
     <profiles>
@@ -65,11 +60,10 @@
             <id>local</id>
             <properties>
                 <eclipse-site>file:target-platform/releases-helios</eclipse-site>
-		<eclipse-project-update-site>file:target-platform/eclipse-updates-3.6</eclipse-project-update-site>
-		<wtp-site>file:target-platform/webtools-repository-helios</wtp-site>
-		<orbit-site>file:target-platform/orbit</orbit-site>
-		<sapphire-site>file:target-platform/sapphire</sapphire-site>
- 		<graphiti-site>file:target-platform/graphiti-0.8.1</graphiti-site>
+				<eclipse-project-update-site>file:target-platform/eclipse-updates-3.6</eclipse-project-update-site>
+				<wtp-site>file:target-platform/webtools-repository-helios</wtp-site>
+				<orbit-site>file:target-platform/orbit</orbit-site>
+				<sapphire-site>file:target-platform/sapphire</sapphire-site>
                 <platform-version>[3.6,3.7)</platform-version>
             </properties>
             <repositories>
@@ -94,18 +88,13 @@
                     <url>${sapphire-site}</url>
                 </repository>
                 <repository>
-                    <id>graphiti</id>
-                    <layout>p2</layout>
-                    <url>${graphiti-site}</url>
-                </repository>
-                <repository>
                     <id>wtp</id>
                     <layout>p2</layout>
                     <url>${wtp-site}</url>
                 </repository>
             </repositories>
         </profile>
-	<profile>
+		<profile>
             <id>helios</id>
             <activation>
             	<activeByDefault>true</activeByDefault>
@@ -115,11 +104,11 @@
                 </property>
             </activation>
             <properties>
-                <platform-version-name>helios</platform-version-name>
-                <eclipse.project.version>3.6</eclipse.project.version>
-                <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/${eclipse.project.version}</eclipse-project-update-site>
+                <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
+                <sapphire-site>http://download.eclipse.org/sapphire/0.4.0/repository</sapphire-site>
+				<graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site> 
                 <platform-version>[3.6,3.7)</platform-version>
             </properties>
             <repositories>
@@ -158,7 +147,6 @@
         <profile>
             <id>indigo</id>
             <activation>
-                
                 <property>
                     <name>platform-version-name</name>
                     <value>indigo</value>
@@ -166,10 +154,72 @@
             </activation>
             <properties>
                 <platform-version-name>indigo</platform-version-name>
-                <eclipse.project.version>3.7</eclipse.project.version>
-                <eclipse-site>http://download.eclipse.org/releases/${platform-version-name}</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/${eclipse.project.version}</eclipse-project-update-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
+                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/93/artifact/build/repository</sapphire-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+                <emf-site>http://download.eclipse.org/modeling/emf/updates/releases/</emf-site>
+                <gef-site>http://download.eclipse.org/tools/gef/updates/releases/</gef-site>
+                <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
+                <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
+                <xsd-site>file:../../liferay-ide/eclipse/target-platform/xsd</xsd-site>
+                <platform-version>[3.7,3.8)</platform-version>
+            </properties>
+            <repositories>
+	            <repository>
+                    <id>eclipse-project</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-project-update-site}</url>
+                </repository>
+                <repository>
+                    <id>orbit</id>
+                    <layout>p2</layout>
+                    <url>${orbit-site}</url>
+                </repository>
+                <repository>
+                    <id>sapphire</id>
+                    <layout>p2</layout>
+                    <url>${sapphire-site}</url>
+                </repository>
+                <repository>
+                    <id>wtp</id>
+                    <layout>p2</layout>
+                    <url>${wtp-site}</url>
+                </repository>
+                <repository>
+                    <id>emf</id>
+                    <layout>p2</layout>
+                    <url>${emf-site}</url>
+                </repository>
+                <repository>
+                    <id>gef</id>
+                    <layout>p2</layout>
+                    <url>${gef-site}</url>
+                </repository>
+                <repository>
+                    <id>mpc</id>
+                    <layout>p2</layout>
+                    <url>${mpc-site}</url>
+                </repository>
+                <repository>
+                    <id>datatools</id>
+                    <layout>p2</layout>
+                    <url>${datatools-site}</url>
+                </repository>
+                <repository>
+                    <id>xsd</id>
+                    <layout>p2</layout>
+                    <url>${xsd-site}</url>
+                </repository>
+             </repositories>
+        </profile>
+		<profile>
+            <id>localindigo</id>
+            <properties>
+                <eclipse-site>file:target-platform/releases-indigo</eclipse-site>
+                <eclipse-project-update-site>file:target-platform/eclipse-updates-3.7</eclipse-project-update-site>
+                <wtp-site>file:target-platform/webtools-repository-indigo</wtp-site>
+		<orbit-site>file:target-platform/orbit</orbit-site>
+		<sapphire-site>file:target-platform/sapphire-0.5</sapphire-site>
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>
@@ -187,11 +237,6 @@
                     <id>orbit</id>
                     <layout>p2</layout>
                     <url>${orbit-site}</url>
-                </repository>
-                <repository>
-                    <id>graphiti</id>
-                    <layout>p2</layout>
-                    <url>${graphiti-site}</url>
                 </repository>
                 <repository>
                     <id>sapphire</id>
