@@ -159,11 +159,14 @@
                 <sapphire-site>http://download.eclipse.org/sapphire/0.4.0/repository</sapphire-site>
 				<graphiti-site>http://download.eclipse.org/graphiti/updates/0.8.1</graphiti-site> 
                 <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+                <!-- 
                 <emf-site>http://download.eclipse.org/modeling/emf/updates/releases/</emf-site>
                 <gef-site>http://download.eclipse.org/tools/gef/updates/releases/</gef-site>
                 <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
                 <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
-                <xsd-site>file:../../liferay-ide/eclipse/target-platform/xsd</xsd-site>
+                 -->
+                <indigo-site>http://download.eclipse.org/releases/indigo</indigo-site>
+                <!--<xsd-site>file:../../liferay-ide/eclipse/target-platform/xsd</xsd-site>-->
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>
@@ -192,6 +195,7 @@
                     <layout>p2</layout>
                     <url>${wtp-site}</url>
                 </repository>
+                <!-- 
                 <repository>
                     <id>emf</id>
                     <layout>p2</layout>
@@ -216,6 +220,12 @@
                     <id>xsd</id>
                     <layout>p2</layout>
                     <url>${xsd-site}</url>
+                </repository>
+                 -->
+                 <repository>
+                    <id>indigo</id>
+                    <layout>p2</layout>
+                    <url>${indigo-site}</url>
                 </repository>
              </repositories>
         </profile>
