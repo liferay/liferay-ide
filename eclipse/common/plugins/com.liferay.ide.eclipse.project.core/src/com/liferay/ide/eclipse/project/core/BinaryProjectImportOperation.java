@@ -28,11 +28,14 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
+@SuppressWarnings( "restriction" )
 public class BinaryProjectImportOperation extends SDKProjectsImportOperation {
 
 	public BinaryProjectImportOperation( IDataModel model ) {
@@ -48,13 +51,14 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation {
 	@Override
 	public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException {
 		Object selectedProjects = getDataModel().getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
+		final BridgedRuntime bridgedRuntime =
+			(BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
 
 		if ( selectedProjects != null ) {
 
 			SDKManager sdkManager = SDKManager.getInstance();
-			String sdklocation =
-				(String) getDataModel().getProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
-			SDK liferaySDK = sdkManager.getSDK( new Path( sdklocation ) );
+			SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
 			Object[] seleBinaryRecords = (Object[]) selectedProjects;
 			ProjectRecord[] projectRecords = new ProjectRecord[1];
 
@@ -65,7 +69,7 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation {
 
 				try {
 					projectRecords[0] =
-						ProjectImportUtil.createPluginProject( getDataModel(), pluginBinaryRecord, liferaySDK );
+						ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
 				}
 				catch ( IOException e ) {
 					throw new ExecutionException(

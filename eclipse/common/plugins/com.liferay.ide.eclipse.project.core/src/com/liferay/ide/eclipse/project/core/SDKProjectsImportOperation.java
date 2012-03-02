@@ -23,8 +23,10 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
 /**
  * @author Greg Amerson
@@ -39,6 +41,10 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 
 	@Override
 	public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException {
+		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
+		final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+		final Object[] projects =
+			(Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
 
 		WorkspaceJob workspaceJob = new WorkspaceJob( "Creating SDK Projects" ) {
 
@@ -49,7 +55,7 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
 			@Override
 			public IStatus runInWorkspace( IProgressMonitor monitor ) {
 				try {
-					ProjectImportUtil.createWorkspaceProjects( model, monitor );
+					ProjectImportUtil.createWorkspaceProjects( projects, runtime, sdkLocation, monitor );
 				}
 				catch ( Exception ex ) {
 					return ProjectCorePlugin.createErrorStatus( ex );

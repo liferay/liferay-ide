@@ -31,8 +31,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
+import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -53,21 +56,22 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 	 */
 	@Override
 	public IStatus execute( IProgressMonitor monitor, final IAdaptable info ) throws ExecutionException {
+		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
+		final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+		final Object[] projects =
+			(Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
+		final BridgedRuntime bridgedRuntime =
+			(BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
 		WorkspaceJob job = new WorkspaceJob( "Importing Binary Project Plugins" ) {
 
 			@Override
 			public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException {
-				Object selectedProjects =
-					getDataModel().getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
-
-				if ( selectedProjects != null ) {
-
+				if ( projects != null )
+				{
 					SDKManager sdkManager = SDKManager.getInstance();
-					String sdklocation =
-						(String) getDataModel().getProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
-					SDK liferaySDK = sdkManager.getSDK( new Path( sdklocation ) );
-					Object[] seleBinaryRecords = (Object[]) selectedProjects;
+					SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
+					Object[] seleBinaryRecords = (Object[]) projects;
 					monitor.beginTask( "Creating SDK Projects", seleBinaryRecords.length );
 					ProjectRecord[] projectRecords = new ProjectRecord[seleBinaryRecords.length];
 
@@ -78,7 +82,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 						try {
 							monitor.setTaskName( "Creating Plugin  " + pluginBinaryRecord.getLiferayPluginName());
 							projectRecords[i++] =
-								ProjectImportUtil.createPluginProject( getDataModel(), pluginBinaryRecord, liferaySDK );
+								ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
 							monitor.worked( 1 );
 						}
 						catch ( IOException e ) {
@@ -89,9 +93,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 
 					monitor.done();
 
-					getDataModel().setProperty( SELECTED_PROJECTS, projectRecords );
-
-					ProjectImportUtil.createWorkspaceProjects( model, monitor );
+					ProjectImportUtil.createWorkspaceProjects( projectRecords, runtime, sdkLocation, monitor );
 
 				}
 

@@ -21,7 +21,6 @@ import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.ZipUtil;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
 import com.liferay.ide.eclipse.project.core.IPortletFramework;
-import com.liferay.ide.eclipse.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
@@ -52,8 +51,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
-import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
@@ -106,7 +103,8 @@ public class ProjectImportUtil {
 	 * @throws IOException
 	 */
 	public static ProjectRecord createPluginProject(
-		IDataModel dataModel, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException {
+		BridgedRuntime bridgedRuntime, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException
+	{
 		ProjectRecord projectRecord = null;
 
 		if ( !pluginBinaryRecord.isConflicts() ) {
@@ -115,8 +113,7 @@ public class ProjectImportUtil {
 			File binaryFile = pluginBinaryRecord.getBinaryFile();
 			IPath projectPath = null;
 			IPath sdkPluginProjectFolder = liferaySDK.getLocation();
-			BridgedRuntime bridgedRuntime =
-				(BridgedRuntime) dataModel.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+
 
 			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( bridgedRuntime );
 			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
@@ -190,18 +187,16 @@ public class ProjectImportUtil {
 	 * @param monitor
 	 * @throws CoreException
 	 */
-	public static void createWorkspaceProjects( IDataModel model, IProgressMonitor monitor ) throws CoreException {
+	public static void createWorkspaceProjects(
+		final Object[] projects, final IRuntime runtime, final String sdkLocation, IProgressMonitor monitor )
+		throws CoreException
+	{
 		final List<IProject> createdProjects = new ArrayList<IProject>();
 
-		final Object[] selectedProjects =
-			(Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
-		monitor.beginTask( "Creating SDK Workspace Projects", selectedProjects.length );
+		monitor.beginTask( "Creating SDK Workspace Projects", projects.length );
 
-		final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
-
-		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
-
-		if ( selectedProjects != null && selectedProjects.length > 0 ) {
+		if ( projects != null && projects.length > 0 )
+		{
 			SDK sdk = SDKManager.getInstance().getSDK( new Path( sdkLocation ) );
 
 			// need to add the SDK to workspace if not already available.
@@ -214,10 +209,12 @@ public class ProjectImportUtil {
 			}
 		}
 
-		for ( int i = 0; i < selectedProjects.length; i++ ) {
-			if ( selectedProjects[i] instanceof ProjectRecord ) {
+		for ( int i = 0; i < projects.length; i++ )
+		{
+			if ( projects[i] instanceof ProjectRecord )
+			{
 				IProject project =
-					ProjectUtil.importProject( (ProjectRecord) selectedProjects[i], runtime, sdkLocation, monitor );
+					ProjectUtil.importProject( (ProjectRecord) projects[i], runtime, sdkLocation, monitor );
 
 				if ( project != null ) {
 					createdProjects.add( project );
