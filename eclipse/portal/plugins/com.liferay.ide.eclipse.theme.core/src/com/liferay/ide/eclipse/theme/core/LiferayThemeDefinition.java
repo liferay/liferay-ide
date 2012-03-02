@@ -34,7 +34,9 @@ public class LiferayThemeDefinition extends AbstractProjectDefinition implements
 		IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
 
 		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER );
+			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER );
+		webFacetModel.setStringProperty(
+			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
 	}
 
 }

@@ -35,7 +35,9 @@ public class LiferayLayoutTplDefinition extends AbstractProjectDefinition implem
 		IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
 
 		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER );
+			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER );
+		webFacetModel.setStringProperty(
+			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
 	}
 
 }
