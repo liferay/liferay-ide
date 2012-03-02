@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Documentation
 Bundle-SymbolicName: com.liferay.ide.eclipse.doc;singleton:=true
-Bundle-Version: 1.5.1.qualifier
+Bundle-Version: 1.5.2.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.doc.LiferayDocPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
