@@ -76,4 +76,10 @@ public class HookPluginFacetInstall extends PluginFacetInstall {
 		// ProjectUtil.addLiferayPortletTldToWebXML( this.project );
 	}
 
+	@Override
+	protected String getDefaultOutputLocation()
+	{
+		return IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+	}
+
 }

@@ -30,6 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -66,7 +67,8 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties {
+public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties
+{
 
 	/**
 	 * copied from ProjectFacetPreferencesGroup
@@ -127,7 +129,17 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		// (masterModel.getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
 		// installLayoutTplTemplate();
 		// }
+
+		setupDefaultOutputLocation();
+
+		IJavaProject javaProject = JavaCore.create( project );
+
+		IPath outputLocation = project.getFolder( getDefaultOutputLocation() ).getFullPath();
+
+		javaProject.setOutputLocation( outputLocation, monitor );
 	}
+
+	protected abstract String getDefaultOutputLocation();
 
 	protected void copyToProject(IPath parent, File newFile, boolean prompt)
 		throws CoreException, IOException {
@@ -391,7 +403,7 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 		throws CoreException {
 
 		IJavaProject jProject = JavaCore.create(this.project);
-		IFolder folder = this.project.getFolder(IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
+		IFolder folder = this.project.getFolder( getDefaultOutputLocation() );
 
 		if (folder.getParent().exists()) {
 			CoreUtil.prepareFolder(folder);
@@ -400,8 +412,22 @@ public class PluginFacetInstall implements IDelegate, IPluginProjectDataModelPro
 			IFolder oldOutputFolder = CoreUtil.getWorkspaceRoot().getFolder(oldOutputLocation);
 			jProject.setOutputLocation(folder.getFullPath(), null);
 
-			if (oldOutputFolder.exists()) {
-				oldOutputFolder.delete(true, null);
+			try
+			{
+				if ( !folder.equals( oldOutputFolder ) && oldOutputFolder.exists() )
+				{
+					IContainer outputParent = oldOutputFolder.getParent();
+					oldOutputFolder.delete( true, null );
+
+					if ( outputParent.members().length == 0 && outputParent.getName().equals( "build" ) )
+					{
+						outputParent.delete( true, null );
+					}
+				}
+			}
+			catch ( Exception e )
+			{
+				// best effort
 			}
 		}
 	}

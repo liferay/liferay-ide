@@ -101,6 +101,12 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall {
 		this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 	}
 
+	@Override
+	protected String getDefaultOutputLocation()
+	{
+		return IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+	}
+
 	protected void removeUnneededClasspathEntries() {
 		IFacetedProjectWorkingCopy facetedProject = getFacetedProject();
 		IJavaProject javaProject = JavaCore.create( facetedProject.getProject() );

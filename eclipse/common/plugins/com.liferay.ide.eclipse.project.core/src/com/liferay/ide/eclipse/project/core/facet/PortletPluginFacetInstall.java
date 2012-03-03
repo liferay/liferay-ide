@@ -51,6 +51,30 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 @SuppressWarnings( "restriction" )
 public class PortletPluginFacetInstall extends PluginFacetInstall {
 
+	protected void copyPortletTLD() throws CoreException {
+
+		IPath portalDir = getPortalDir();
+
+		IPath portletTld = portalDir.append( "WEB-INF/tld/liferay-portlet.tld" );
+
+		if ( portletTld.toFile().exists() ) {
+			IFolder tldFolder = getWebRootFolder().getFolder( "WEB-INF/tld" );
+
+			CoreUtil.prepareFolder( tldFolder );
+
+			IFile tldFile = tldFolder.getFile( "liferay-portlet.tld" );
+
+			if ( !tldFile.exists() ) {
+				try {
+					tldFile.create( new FileInputStream( portletTld.toFile() ), true, null );
+				}
+				catch ( FileNotFoundException e ) {
+					throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+				}
+			}
+		}
+	}
+
 	@Override
 	public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
 		throws CoreException {
@@ -135,28 +159,10 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 
 	}
 
-	protected void copyPortletTLD() throws CoreException {
-
-		IPath portalDir = getPortalDir();
-
-		IPath portletTld = portalDir.append( "WEB-INF/tld/liferay-portlet.tld" );
-
-		if ( portletTld.toFile().exists() ) {
-			IFolder tldFolder = getWebRootFolder().getFolder( "WEB-INF/tld" );
-
-			CoreUtil.prepareFolder( tldFolder );
-
-			IFile tldFile = tldFolder.getFile( "liferay-portlet.tld" );
-
-			if ( !tldFile.exists() ) {
-				try {
-					tldFile.create( new FileInputStream( portletTld.toFile() ), true, null );
-				}
-				catch ( FileNotFoundException e ) {
-					throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
-				}
-			}
-		}
+	@Override
+	protected String getDefaultOutputLocation()
+	{
+		return IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
 	}
 
 	// protected void overwriteProjectFromTemplate(IPath newProjectPath, IPortletFramework portletTemplate) {

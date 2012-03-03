@@ -23,6 +23,8 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
  */
 public class IPluginFacetConstants {
 
+	public static final String EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes";
+
 	public static final String EXT_PLUGIN_SDK_CONFIG_FOLDER = "docroot/WEB-INF/ext-web/docroot";
 
 	public static final String[] EXT_PLUGIN_SDK_OUTPUT_FOLDERS =
@@ -45,6 +47,8 @@ public class IPluginFacetConstants {
 	public static final String HOOK_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src";
 
 	public static final String LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
+
+	public static final String LAYOUTTPL_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes";
 
 	public static final String LIFERAY_DEFAULT_FACET_TEMPLATE = "liferay.portlet.template";
 
@@ -104,4 +108,6 @@ public class IPluginFacetConstants {
 	public static final String PORTLET_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src";
 
 	public static final String THEME_PLUGIN_SDK_CONFIG_FOLDER = "docroot";
+
+	public static final String THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes";
 }

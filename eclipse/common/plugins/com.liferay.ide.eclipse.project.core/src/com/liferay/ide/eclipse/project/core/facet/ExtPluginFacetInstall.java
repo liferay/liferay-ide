@@ -175,4 +175,10 @@ public class ExtPluginFacetInstall extends PluginFacetInstall {
 		}
 	}
 
+	@Override
+	protected String getDefaultOutputLocation()
+	{
+		return IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER;
+	}
+
 }

@@ -103,6 +103,12 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 		this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 	}
 
+	@Override
+	protected String getDefaultOutputLocation()
+	{
+		return IPluginFacetConstants.THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+	}
+
 	protected void installThemeBuilder( IProject project ) throws CoreException {
 
 		if ( project == null ) {
