@@ -467,7 +467,7 @@ public class BinaryProjectsImportWizardPage extends DataModelFacetCreationWizard
 					}
 				}
 
-				getDataModel().setProperty( SELECTED_PROJECTS, new Object[] { binaryList.getCheckedElements() } );
+				getDataModel().setProperty( SELECTED_PROJECTS, binaryList.getCheckedElements() );
 
 				validatePage( true );
 				// setPageComplete(binaryList.getCheckedElements().length >
