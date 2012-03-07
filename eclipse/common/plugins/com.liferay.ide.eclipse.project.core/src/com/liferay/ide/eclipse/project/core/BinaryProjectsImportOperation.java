@@ -13,6 +13,7 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Gregory Amerson - IDE-568
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.project.core;
@@ -81,7 +82,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 						// TODO: Verify the version and alert the user
 						try {
 							monitor.setTaskName( "Creating Plugin  " + pluginBinaryRecord.getLiferayPluginName());
-							projectRecords[i++] =
+							projectRecords[i] =
 								ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
 							monitor.worked( 1 );
 						}
