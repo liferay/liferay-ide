@@ -29,9 +29,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
-import org.eclipse.sapphire.ui.swt.graphiti.editor.SapphireDiagramEditor;
-import org.eclipse.sapphire.ui.swt.graphiti.editor.SapphireDiagramEditorFactory;
-import org.eclipse.sapphire.ui.swt.graphiti.editor.SapphireDiagramEditorInput;
+import org.eclipse.sapphire.ui.gef.diagram.editor.SapphireDiagramEditor;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.PartInitException;
 import org.w3c.dom.Document;
@@ -138,24 +136,9 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 		IPath path =
 			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilder.sdef/diagramPage" );
 		this.pageDiagram = new SapphireDiagramEditor( this.getModelElement(), path );
-		SapphireDiagramEditorInput diagramEditorInput = null;
-
-		try
-		{
-			diagramEditorInput =
-				SapphireDiagramEditorFactory.createEditorInput( this.getModelElement().adapt( IFile.class ) );
-		}
-		catch ( Exception e )
-		{
-			ServiceUI.logError( e );
-		}
-
-		if ( diagramEditorInput != null )
-		{
-			addPage( 0, this.pageDiagram, diagramEditorInput );
-			setPageText( 0, "Diagram" );
-			setPageId( this.pages.get( 0 ), "Diagram", this.pageDiagram.getPart() );
-		}
+		addPage( 0, this.pageDiagram, getEditorInput() );
+		setPageText( 0, "Diagram" );
+		setPageId( this.pages.get( 0 ), "Diagram", this.pageDiagram.getPart() );
 	}
 
 	@Override

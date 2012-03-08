@@ -366,6 +366,7 @@
 					</with>
 				</content>
 				<collapsible>true</collapsible>
+                <collapsed-initially>true</collapsed-initially>
 			</section>
 			<section>
 				<label>Portlet Information</label>
@@ -383,6 +384,7 @@
 						</default-panel>
 					</with>
 				</content>
+                <collapsed-initially>true</collapsed-initially>
 			</section>
 			<section>
 				<content>

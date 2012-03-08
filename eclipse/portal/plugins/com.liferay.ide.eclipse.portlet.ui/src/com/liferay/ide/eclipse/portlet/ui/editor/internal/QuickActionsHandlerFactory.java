@@ -13,6 +13,7 @@
  *    
  * Contributors:
  *               Kamesh Sampath - initial implementation
+ *               Gregory Amerson - Sapphire 0.5 conversion
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
@@ -23,7 +24,6 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -39,7 +39,6 @@ import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
-import org.eclipse.swt.graphics.Image;
 
 
 /**
@@ -76,8 +75,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 			if ( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) && isPartInLiferayProject() ) {
 				SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
 				handler.init( this.getAction(), null );
-				handler.addImage( ImageDescriptor.createFromImage( getPart().getImageCache().getImage(
-					IPortlet.TYPE.image() ) ) );
+				handler.addImage( IPortlet.TYPE.image() );
 				handler.setLabel( getActionLabel( "Portlets" ) );
 
 				listOfHandlers.add( handler );
@@ -112,24 +110,14 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
 			super.init( action, def );
 			final IModelElement rootModel = action.getPart().getModelElement();
-			// System.out.println( "QuickActionsHandlerFactory.Handler.init()" + rootModel );
 			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );
 
 			String labelText = modelProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, true );
 			String actionLabel = getActionLabel( labelText );
 			setLabel( actionLabel );
 
-			addImage( ImageDescriptor.createFromImage( getModelElementImage( modelProperty ) ) );
-		}
-
-		/**
-		 * @param modelProperty
-		 * @return
-		 */
-		private Image getModelElementImage( ModelProperty modelProperty ) {
 			ModelElementType propModelElementType = modelProperty.getType();
-			Image image = getPart().getImageCache().getImage( propModelElementType );
-			return image;
+			addImage( propModelElementType.image() );
 		}
 
 		/*

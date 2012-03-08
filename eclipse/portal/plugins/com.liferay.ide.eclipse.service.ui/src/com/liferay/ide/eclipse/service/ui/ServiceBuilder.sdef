@@ -956,10 +956,7 @@ development of services.</content>
                 </endpoint2>
                 <label>${Label}</label>
             </connection-binding>
-            <tool-palette-image>
-                <id>entityImage</id>
-                <path>icons/Entity_16x16.gif</path>
-            </tool-palette-image>
+            <tool-palette-image>icons/Entity_16x16.gif</tool-palette-image>
             <model-element-type>IEntity</model-element-type>
         </node>
         <connection>
@@ -971,10 +968,7 @@ development of services.</content>
             </endpoint2>
             <id>Relationship</id>
             <tool-palette-label>relationship</tool-palette-label>
-            <tool-palette-image>
-                <id>relationshipImage</id>
-                <path>icons/references_16x16.png</path>
-            </tool-palette-image>
+            <tool-palette-image>icons/references_16x16.png</tool-palette-image>
             <line-style>dash</line-style>
         </connection>
         <properties-view>
