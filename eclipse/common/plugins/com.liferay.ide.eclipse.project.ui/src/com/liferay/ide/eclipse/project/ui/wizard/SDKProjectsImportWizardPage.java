@@ -444,6 +444,11 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 			public void widgetSelected(SelectionEvent e) {
 				projectsList.setCheckedElements(new Object[0]);
+
+				getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+
+				validatePage( true );
+
 				setPageComplete(false);
 			}
 		});
