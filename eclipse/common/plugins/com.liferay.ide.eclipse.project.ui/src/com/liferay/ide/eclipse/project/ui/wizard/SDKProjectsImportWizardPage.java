@@ -452,6 +452,10 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		// force a project refresh
 		lastModified = -1;
 		updateProjectsList( sdkLocation.getText().trim() );
+
+		projectsList.setCheckedElements( new Object[0] );
+
+		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
 	}
 
 	// @Override
