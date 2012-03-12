@@ -37,6 +37,7 @@ import org.eclipse.jface.layout.PixelConverter;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -93,6 +94,8 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		}
 	}
 
+	protected Label labelProjectsList;
+
 	protected long lastModified;
 
 	protected String lastPath;
@@ -103,7 +106,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 	protected Text sdkVersion;
 
-	protected ProjectRecord[] selectedProjects = new ProjectRecord[0];
+	protected Object[] selectedProjects = new ProjectRecord[0];
 
 	protected Combo serverTargetCombo;
 
@@ -114,160 +117,6 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 		setTitle("Import Liferay Projects");
 		setDescription("Select a Liferay Plugin SDK and import existing projects.");
-	}
-
-	public ProjectRecord[] getProjectRecords() {
-		List projectRecords = new ArrayList();
-
-		for (int i = 0; i < selectedProjects.length; i++) {
-			if (isProjectInWorkspace(selectedProjects[i].getProjectName())) {
-				selectedProjects[i].setHasConflicts(true);
-			}
-
-			projectRecords.add(selectedProjects[i]);
-		}
-		return (ProjectRecord[]) projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
-	}
-
-	public void updateProjectsList(final String path) {
-		// on an empty path empty selectedProjects
-		if (path == null || path.length() == 0) {
-			setMessage(DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription);
-
-			selectedProjects = new ProjectRecord[0];
-
-			projectsList.refresh(true);
-
-			projectsList.setCheckedElements(selectedProjects);
-
-			setPageComplete(projectsList.getCheckedElements().length > 0);
-
-			lastPath = path;
-
-			return;
-		}
-
-		final File directory = new File(path);
-
-		long modified = directory.lastModified();
-
-		if (path.equals(lastPath) && lastModified == modified) {
-			// since the file/folder was not modified and the path did not
-			// change, no refreshing is required
-			return;
-		}
-
-		lastPath = path;
-
-		lastModified = modified;
-
-		final boolean dirSelected = true;
-
-		try {
-			getContainer().run(true, true, new IRunnableWithProgress() {
-
-				/*
-				 * (non-Javadoc)
-				 * @see
-				 * org.eclipse.jface.operation.IRunnableWithProgress#run(org
-				 * .eclipse.core.runtime.IProgressMonitor)
-				 */
-				public void run(IProgressMonitor monitor) {
-
-					monitor.beginTask(DataTransferMessages.WizardProjectsImportPage_SearchingMessage, 100);
-
-					selectedProjects = new ProjectRecord[0];
-
-					Collection<File> eclipseProjectFiles = new ArrayList<File>();
-
-					Collection<File> liferayProjectDirs = new ArrayList<File>();
-
-					monitor.worked(10);
-
-					if (dirSelected && directory.isDirectory()) {
-						if (!ProjectUtil.collectProjectsFromDirectory(
-							eclipseProjectFiles, liferayProjectDirs, directory, null, true, monitor)) {
-							return;
-						}
-
-						selectedProjects = new ProjectRecord[eclipseProjectFiles.size() + liferayProjectDirs.size()];
-
-						int index = 0;
-
-						monitor.worked(50);
-
-						monitor.subTask(DataTransferMessages.WizardProjectsImportPage_ProcessingMessage);
-
-						for (File eclipseProjectFile : eclipseProjectFiles) {
-							selectedProjects[index++] = new ProjectRecord(eclipseProjectFile);
-						}
-
-						for (File liferayProjectDir : liferayProjectDirs) {
-							selectedProjects[index++] = new ProjectRecord(liferayProjectDir);
-						}
-					}
-					else {
-						monitor.worked(60);
-					}
-
-					monitor.done();
-				}
-
-			});
-		}
-		catch (InvocationTargetException e) {
-			ProjectUIPlugin.logError(e);
-		}
-		catch (InterruptedException e) {
-			// Nothing to do if the user interrupts.
-		}
-
-		projectsList.refresh(true);
-
-		ProjectRecord[] projects = getProjectRecords();
-
-		boolean displayWarning = false;
-
-		for (int i = 0; i < projects.length; i++) {
-			if (projects[i].hasConflicts()) {
-				displayWarning = true;
-
-				projectsList.setGrayed(projects[i], true);
-			}
-			// else {
-			// projectsList.setChecked(projects[i], true);
-			// }
-		}
-
-		if (displayWarning) {
-			setMessage(DataTransferMessages.WizardProjectsImportPage_projectsInWorkspace, WARNING);
-		}
-		else {
-			setMessage(DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription);
-		}
-
-		setPageComplete(projectsList.getCheckedElements().length > 0);
-
-		if (selectedProjects.length == 0) {
-			setMessage(DataTransferMessages.WizardProjectsImportPage_noProjectsToImport, WARNING);
-		}
-		// else {
-		// if (!sdkLocation.isDisposed()) {
-		// ProjectUIPlugin.getDefault().getPreferenceStore().setValue(
-		// ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF, sdkLocation.getText());
-		// }
-		// }
-
-		Object[] checkedProjects = projectsList.getCheckedElements();
-
-		if (checkedProjects != null && checkedProjects.length > 0) {
-			selectedProjects = new ProjectRecord[checkedProjects.length];
-
-			for (int i = 0; i < checkedProjects.length; i++) {
-				selectedProjects[i] = (ProjectRecord) checkedProjects[i];
-			}
-			getDataModel().setProperty(SELECTED_PROJECTS, selectedProjects);
-		}
 	}
 
 	protected void createPluginsSDKField(Composite parent) {
@@ -287,22 +136,9 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 	protected void createProjectsList(Composite workArea) {
 
-		Label title = new Label(workArea, SWT.NONE);
-		title.setText("Projects to import:");
-		title.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
-
-		// Composite listComposite = new Composite(workArea, SWT.NONE);
-		// GridLayout layout = new GridLayout();
-		// layout.numColumns = 2;
-		// layout.marginWidth = 0;
-		// layout.makeColumnsEqualWidth = false;
-		// listComposite.setLayout(layout);
-
-		// GridData gd = new GridData(GridData.GRAB_HORIZONTAL
-		// | GridData.GRAB_VERTICAL | GridData.FILL_BOTH);
-		// gd.grabExcessHorizontalSpace = true;
-		// gd.horizontalSpan = 3;
-		// listComposite.setLayoutData(gd);
+		labelProjectsList = new Label( workArea, SWT.NONE );
+		labelProjectsList.setText("Projects to import:");
+		labelProjectsList.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
 
 		projectsList = new CheckboxTreeViewer(workArea, SWT.BORDER);
 
@@ -337,26 +173,11 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 		});
 
-		projectsList.setLabelProvider(new ProjectLabelProvider());
+		projectsList.setLabelProvider( createProjectsListLabelProvider() );
 
 		projectsList.addCheckStateListener(new ICheckStateListener() {
-
-			/*
-			 * (non-Javadoc)
-			 * @see
-			 * org.eclipse.jface.viewers.ICheckStateListener#checkStateChanged
-			 * (org.eclipse.jface.viewers.CheckStateChangedEvent)
-			 */
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				ProjectRecord element = (ProjectRecord) event.getElement();
-
-				if (element.hasConflicts()) {
-					projectsList.setChecked(element, false);
-				}
-
-				getDataModel().setProperty(SELECTED_PROJECTS, projectsList.getCheckedElements());
-
-				setPageComplete(projectsList.getCheckedElements().length > 0);
+				handleCheckStateChangedEvent( event );
 			}
 		});
 
@@ -364,6 +185,11 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		projectsList.setComparator(new ViewerComparator());
 
 		createSelectionButtons(workArea);
+	}
+
+	protected IBaseLabelProvider createProjectsListLabelProvider()
+	{
+		return new ProjectLabelProvider();
 	}
 
 	protected void createSDKLocationField(Composite topComposite) {
@@ -417,20 +243,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		selectAll.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				for (int i = 0; i < selectedProjects.length; i++) {
-					if (selectedProjects[i].hasConflicts()) {
-						projectsList.setChecked(selectedProjects[i], false);
-					}
-					else {
-						projectsList.setChecked(selectedProjects[i], true);
-					}
-				}
-
-				getDataModel().setProperty(SELECTED_PROJECTS, projectsList.getCheckedElements());
-
-				validatePage(true);
-				// setPageComplete(projectsList.getCheckedElements().length >
-				// 0);
+				handleSelectAll( e );
 			}
 		});
 
@@ -443,13 +256,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		deselectAll.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				projectsList.setCheckedElements(new Object[0]);
-
-				getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
-
-				validatePage( true );
-
-				setPageComplete(false);
+				handleDeselectAll( e );
 			}
 		});
 
@@ -462,9 +269,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		refresh.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
-				// force a project refresh
-				lastModified = -1;
-				updateProjectsList(sdkLocation.getText().trim());
+				handleRefresh( e );
 			}
 		});
 
@@ -565,11 +370,88 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 		}
 	}
 
+	public Object[] getProjectRecords()
+	{
+		List projectRecords = new ArrayList();
+
+		for (int i = 0; i < selectedProjects.length; i++) {
+			ProjectRecord projectRecord = (ProjectRecord) selectedProjects[i];
+			if( isProjectInWorkspace( projectRecord.getProjectName() ) )
+			{
+				projectRecord.setHasConflicts( true );
+			}
+
+			projectRecords.add(selectedProjects[i]);
+		}
+		return (ProjectRecord[]) projectRecords.toArray(new ProjectRecord[projectRecords.size()]);
+	}
+
 	protected IProject[] getProjectsInWorkspace() {
 		if (wsProjects == null) {
 			wsProjects = IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
 		}
 		return wsProjects;
+	}
+
+	@Override
+	protected String[] getValidationPropertyNames() {
+		return new String[] {
+			SDK_LOCATION, SDK_VERSION, SELECTED_PROJECTS, FACET_RUNTIME
+		};
+	}
+
+	protected void handleCheckStateChangedEvent( CheckStateChangedEvent event )
+	{
+		ProjectRecord element = (ProjectRecord) event.getElement();
+
+		if( element.hasConflicts() )
+		{
+			projectsList.setChecked( element, false );
+		}
+
+		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+
+		setPageComplete( projectsList.getCheckedElements().length > 0 );
+	}
+
+	protected void handleDeselectAll( SelectionEvent e )
+	{
+		projectsList.setCheckedElements( new Object[0] );
+
+		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+
+		validatePage( true );
+
+		setPageComplete( false );
+	}
+
+	protected void handleFileBrowseButton(final Text text) {
+		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
+
+		dd.setText("Select Liferay Plugin SDK folder");
+
+		if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
+			dd.setFilterPath(sdkLocation.getText());
+		}
+
+		String dir = dd.open();
+
+		if (!CoreUtil.isNullOrEmpty(dir)) {
+			sdkLocation.setText(dir);
+
+			updateProjectsList(dir);
+
+			synchHelper.synchAllUIWithModel();
+
+			validatePage();
+		}
+	}
+
+	protected void handleRefresh( SelectionEvent e )
+	{
+		// force a project refresh
+		lastModified = -1;
+		updateProjectsList( sdkLocation.getText().trim() );
 	}
 
 	// @Override
@@ -596,33 +478,27 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	// }
 	// }
 
-	@Override
-	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			SDK_LOCATION, SDK_VERSION, SELECTED_PROJECTS, FACET_RUNTIME
-		};
-	}
+	protected void handleSelectAll( SelectionEvent e )
+	{
+		for( int i = 0; i < selectedProjects.length; i++ )
+		{
+			ProjectRecord projectRecord = (ProjectRecord) selectedProjects[i];
 
-	protected void handleFileBrowseButton(final Text text) {
-		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
-
-		dd.setText("Select Liferay Plugin SDK folder");
-
-		if (!CoreUtil.isNullOrEmpty(sdkLocation.getText())) {
-			dd.setFilterPath(sdkLocation.getText());
+			if( projectRecord.hasConflicts() )
+			{
+				projectsList.setChecked( projectRecord, false );
+			}
+			else
+			{
+				projectsList.setChecked( projectRecord, true );
+			}
 		}
 
-		String dir = dd.open();
+		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
 
-		if (!CoreUtil.isNullOrEmpty(dir)) {
-			sdkLocation.setText(dir);
-
-			updateProjectsList(dir);
-
-			synchHelper.synchAllUIWithModel();
-
-			validatePage();
-		}
+		validatePage( true );
+		// setPageComplete(projectsList.getCheckedElements().length >
+		// 0);
 	}
 
 	protected boolean isProjectInWorkspace(String projectName) {
@@ -644,6 +520,150 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 	@Override
 	protected boolean showValidationErrorsOnEnter() {
 		return true;
+	}
+
+	public void updateProjectsList(final String path) {
+		// on an empty path empty selectedProjects
+		if (path == null || path.length() == 0) {
+			setMessage(DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription);
+
+			selectedProjects = new ProjectRecord[0];
+
+			projectsList.refresh(true);
+
+			projectsList.setCheckedElements(selectedProjects);
+
+			setPageComplete(projectsList.getCheckedElements().length > 0);
+
+			lastPath = path;
+
+			return;
+		}
+
+		final File directory = new File(path);
+
+		long modified = directory.lastModified();
+
+		if (path.equals(lastPath) && lastModified == modified) {
+			// since the file/folder was not modified and the path did not
+			// change, no refreshing is required
+			return;
+		}
+
+		lastPath = path;
+
+		lastModified = modified;
+
+		final boolean dirSelected = true;
+
+		try {
+			getContainer().run(true, true, new IRunnableWithProgress() {
+
+				/*
+				 * (non-Javadoc)
+				 * @see
+				 * org.eclipse.jface.operation.IRunnableWithProgress#run(org
+				 * .eclipse.core.runtime.IProgressMonitor)
+				 */
+				public void run(IProgressMonitor monitor) {
+
+					monitor.beginTask(DataTransferMessages.WizardProjectsImportPage_SearchingMessage, 100);
+
+					selectedProjects = new ProjectRecord[0];
+
+					Collection<File> eclipseProjectFiles = new ArrayList<File>();
+
+					Collection<File> liferayProjectDirs = new ArrayList<File>();
+
+					monitor.worked(10);
+
+					if (dirSelected && directory.isDirectory()) {
+						if (!ProjectUtil.collectProjectsFromDirectory(
+							eclipseProjectFiles, liferayProjectDirs, directory, null, true, monitor)) {
+							return;
+						}
+
+						selectedProjects = new ProjectRecord[eclipseProjectFiles.size() + liferayProjectDirs.size()];
+
+						int index = 0;
+
+						monitor.worked(50);
+
+						monitor.subTask(DataTransferMessages.WizardProjectsImportPage_ProcessingMessage);
+
+						for (File eclipseProjectFile : eclipseProjectFiles) {
+							selectedProjects[index++] = new ProjectRecord(eclipseProjectFile);
+						}
+
+						for (File liferayProjectDir : liferayProjectDirs) {
+							selectedProjects[index++] = new ProjectRecord(liferayProjectDir);
+						}
+					}
+					else {
+						monitor.worked(60);
+					}
+
+					monitor.done();
+				}
+
+			});
+		}
+		catch (InvocationTargetException e) {
+			ProjectUIPlugin.logError(e);
+		}
+		catch (InterruptedException e) {
+			// Nothing to do if the user interrupts.
+		}
+
+		projectsList.refresh(true);
+
+		Object[] projects = getProjectRecords();
+
+		boolean displayWarning = false;
+
+		for (int i = 0; i < projects.length; i++) {
+			ProjectRecord projectRecord = (ProjectRecord) projects[i];
+
+			if( projectRecord.hasConflicts() )
+			{
+				displayWarning = true;
+
+				projectsList.setGrayed(projects[i], true);
+			}
+			// else {
+			// projectsList.setChecked(projects[i], true);
+			// }
+		}
+
+		if (displayWarning) {
+			setMessage(DataTransferMessages.WizardProjectsImportPage_projectsInWorkspace, WARNING);
+		}
+		else {
+			setMessage(DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription);
+		}
+
+		setPageComplete(projectsList.getCheckedElements().length > 0);
+
+		if (selectedProjects.length == 0) {
+			setMessage(DataTransferMessages.WizardProjectsImportPage_noProjectsToImport, WARNING);
+		}
+		// else {
+		// if (!sdkLocation.isDisposed()) {
+		// ProjectUIPlugin.getDefault().getPreferenceStore().setValue(
+		// ProjectUIPlugin.LAST_SDK_IMPORT_LOCATION_PREF, sdkLocation.getText());
+		// }
+		// }
+
+		Object[] checkedProjects = projectsList.getCheckedElements();
+
+		if (checkedProjects != null && checkedProjects.length > 0) {
+			selectedProjects = new ProjectRecord[checkedProjects.length];
+
+			for (int i = 0; i < checkedProjects.length; i++) {
+				selectedProjects[i] = (ProjectRecord) checkedProjects[i];
+			}
+			getDataModel().setProperty(SELECTED_PROJECTS, selectedProjects);
+		}
 	}
 
 }
