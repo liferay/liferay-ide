@@ -55,6 +55,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 	 * com.liferay.ide.eclipse.project.core.SDKProjectsImportOperation#execute(org.eclipse.core.runtime.IProgressMonitor
 	 * , org.eclipse.core.runtime.IAdaptable)
 	 */
+	@SuppressWarnings( "restriction" )
 	@Override
 	public IStatus execute( IProgressMonitor monitor, final IAdaptable info ) throws ExecutionException {
 		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );

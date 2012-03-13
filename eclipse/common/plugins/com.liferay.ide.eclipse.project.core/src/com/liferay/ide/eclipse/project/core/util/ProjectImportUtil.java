@@ -173,7 +173,17 @@ public class ProjectImportUtil {
 			File docRoot = new File( liferayPluginProjectDir, docrootFolder );
 			ZipUtil.unzip( binaryFile, docRoot );
 
-			projectRecord = new ProjectRecord( liferayPluginProjectDir );
+			// IDE-569 check to see if the project already has .project
+			File projectFile = new File( liferayPluginProjectDir, ".project" );
+
+			if( projectFile.exists() )
+			{
+				projectRecord = new ProjectRecord( projectFile );
+			}
+			else
+			{
+				projectRecord = new ProjectRecord( liferayPluginProjectDir );
+			}
 
 		}
 
