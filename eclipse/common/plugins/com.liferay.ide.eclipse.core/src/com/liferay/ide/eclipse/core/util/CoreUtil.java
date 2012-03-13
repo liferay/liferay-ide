@@ -52,7 +52,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.osgi.framework.Version;
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * Core Utility methods
@@ -341,13 +341,13 @@ public class CoreUtil {
 		return version;
 	}
 
-	public static void removeChildren( Element element )
+	public static void removeChildren( Node node )
 	{
-		if ( element != null )
+		if( node != null )
 		{
-			while ( element.hasChildNodes() )
+			while( node.hasChildNodes() )
 			{
-				element.removeChild( element.getFirstChild() );
+				node.removeChild( node.getFirstChild() );
 			}
 		}
 	}
