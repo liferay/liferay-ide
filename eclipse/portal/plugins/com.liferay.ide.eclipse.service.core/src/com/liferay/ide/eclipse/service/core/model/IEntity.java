@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.service.core.model;
 
-import com.liferay.ide.eclipse.service.core.model.internal.RelationshipsBinding;
+import com.liferay.ide.eclipse.service.core.model.internal.RelationshipsBinding2;
 
 import org.eclipse.sapphire.modeling.ElementProperty;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -243,7 +243,7 @@ public interface IEntity extends IModelElement {
 
 	@Type(base = IRelationship.class)
 	@Label(standard = "relationship")
-	@CustomXmlListBinding(impl = RelationshipsBinding.class)
+	@CustomXmlListBinding( impl = RelationshipsBinding2.class )
 	ListProperty PROP_RELATIONSHIPS = new ListProperty(TYPE, "Relationships");
 
 	ModelElementList<IRelationship> getRelationships();

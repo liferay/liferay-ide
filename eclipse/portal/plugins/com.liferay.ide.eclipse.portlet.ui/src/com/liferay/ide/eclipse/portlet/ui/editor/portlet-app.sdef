@@ -318,7 +318,7 @@
 				concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' )}</label>
 			-->
 			<label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<content>
 					<include>portlet.basic.composite</include>
@@ -553,7 +553,7 @@
 		<id>EventDefinitionsList</id>
 		<property>EventDefinitions</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<label>Details</label>
 				<content>
@@ -666,7 +666,7 @@
 		<id>FiltersNodeList</id>
 		<property>Filters</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<label>${Name != null ? ( DisplayName != null ? concat ( concat ( concat ( Name, ' [' ), DisplayName ), ']' ) : Name ) : '&lt;filter&gt;'}</label>
 			<section>
 				<label>Filter</label>
@@ -688,7 +688,7 @@
 		<property>FilterMappings</property>
 		<case>
 			<label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(concat(Filter,&quot; &lt;&gt; &quot;), Portlet)}</label>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<label>Mappings</label>
 				<content>
@@ -702,7 +702,7 @@
 		<id>SecurityConstraintNodeList</id>
 		<property>SecurityConstraints</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<label>${DisplayName != null ? DisplayName : '&lt;security-constraint&gt;'}</label>
 			<section>
 				<label>Security Constraint Details</label>
@@ -741,7 +741,7 @@
 		<id>ListenersNodeList</id>
 		<property>Listeners</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<label>${(empty Description AND empty DisplayName) ? '&lt;listener&gt;' : ((empty DisplayName) ? Description :
 				DisplayName)}</label>
 			<section>
@@ -761,7 +761,7 @@
 		<id>PublicRenderParametersList</id>
 		<property>PublicRenderParameters</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<label>Details</label>
 				<content>
@@ -786,7 +786,7 @@
 		<property>ContainerRuntimeOptions</property>
 		<case>
 			<label>${Name ==null ? '&lt;container-runtime-option&gt;' : Name }</label>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<label>Details</label>
 				<content>

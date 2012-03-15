@@ -52,7 +52,7 @@
 		<id>CategoryNodeFactory</id>
 		<property>Categories</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<label>${Name!=null?concat(Name,' Details'):'Details'}</label>
 				<content>

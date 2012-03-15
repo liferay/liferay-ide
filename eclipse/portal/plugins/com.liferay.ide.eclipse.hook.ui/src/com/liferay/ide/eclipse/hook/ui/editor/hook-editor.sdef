@@ -224,7 +224,7 @@
         <id>ServicesNodeList</id>
         <property>Services</property>
         <case>
-            <use-model-element-image></use-model-element-image>
+            <image>${ Image() }</image>
             <label>${ServiceType != null ? ServiceType : &quot;&lt;service&gt;&quot;}</label>
             <section>
                 <label>Service Wrapper Detail</label>
@@ -298,7 +298,7 @@
 		<id>ServletFiltersNodeList</id>
 		<property>ServletFilters</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<content>
 					<property-editor>ServletFilterName</property-editor>
@@ -331,7 +331,7 @@
 		<id>ServletFilterMappingsNodeList</id>
 		<property>ServletFilterMappings</property>
 		<case>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 			<section>
 				<content>
 					<property-editor>ServletFilterName</property-editor>
@@ -385,7 +385,7 @@
 			</section>
 			<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action&gt;'}
 			</label>
-			<use-model-element-image></use-model-element-image>
+			<image>${ Image() }</image>
 		</case>
 	</node-factory>
     <node>
@@ -408,7 +408,7 @@
         <id>IndexerPostProcessorsList</id>
         <property>IndexerPostProcessors</property>
         <case>
-            <use-model-element-image></use-model-element-image>
+            <image>${ Image() }</image>
             <label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}</label>
             <section>
                 <content>

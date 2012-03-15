@@ -437,7 +437,7 @@ element is true, then the json-enabled value in the column element is true.
 </content>
                                             </documentation>
                                         </section>
-                                        <use-model-element-image></use-model-element-image>
+                                        <image>${ Image() }</image>
                                     </case>
                                 </node-factory>
                                 <image>images/columns_16x16.png</image>
@@ -668,12 +668,12 @@ AND or OR operator. For example, a finder column with the = comparator and an
 arrayable-operator of OR will act like an IN clause.</content>
                                                         </documentation>
                                                     </section>
-                                                    <use-model-element-image></use-model-element-image>
+                                                    <image>${ Image() }</image>
                                                 </case>
                                             </node-factory>
                                             <image>images/finder_columns_16x16.png</image>
                                         </node>
-                                        <use-model-element-image></use-model-element-image>
+                                        <image>${ Image() }</image>
                                     </case>
                                 </node-factory>
                                 <image>images/finders_16x16.gif</image>
@@ -726,7 +726,7 @@ resourceLocalService and resourceService.</content>
                                 </section>
                                 <image>images/tx_requireds_16x16.gif</image>
                             </node>
-                            <use-model-element-image></use-model-element-image>
+                            <image>${ Image() }</image>
                         </case>
                     </node-factory>
                     <section>
@@ -803,7 +803,7 @@ If an entity does have columns, then the value object, the POJO class that is ma
                                     </property-editor>
                                 </content>
                             </section>
-                            <use-model-element-image></use-model-element-image>
+                            <image>${ Image() }</image>
                             <label>${exception == null ? &quot;&lt;exception&gt;&quot; : exception}</label>
                         </case>
                     </node-factory>
@@ -832,7 +832,7 @@ The [b]attribute file[/b] is interpreted as relative to the file that is importi
                         <property>serviceBuilderImports</property>
                         <case>
                             <label>${file == null ? &quot;&lt;import&gt;&quot; : file}</label>
-                            <use-model-element-image></use-model-element-image>
+                            <image>${ Image() }</image>
                             <section>
                                 <label>Service Builder Import</label>
                                 <content>
