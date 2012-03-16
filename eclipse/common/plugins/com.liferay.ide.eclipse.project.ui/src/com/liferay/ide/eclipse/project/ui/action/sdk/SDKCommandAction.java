@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -75,6 +76,8 @@ public abstract class SDKCommandAction extends AbstractObjectAction {
 							Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
 
 							sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties );
+
+							p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 						}
 						catch ( Exception e ) {
 							return ProjectUIPlugin.createErrorStatus( "Error running SDK command " + getSDKCommand(), e );

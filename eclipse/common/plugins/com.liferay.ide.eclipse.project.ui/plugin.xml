@@ -442,6 +442,9 @@
                   name="build-service">
             </groupMarker>
             <groupMarker
+                  name="build-wsdd">
+            </groupMarker>
+            <groupMarker
                   name="clean">
             </groupMarker>
             <groupMarker
@@ -510,9 +513,17 @@
                class="com.liferay.ide.eclipse.project.ui.action.sdk.BuildServiceAction"
                enablesFor="1"
                icon="icons/e16/target.gif"
-               id="com.liferay.ide.eclipse.sdk.popup.action.build-lang"
+               id="com.liferay.ide.eclipse.sdk.popup.action.build-service"
                label="build-service"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-service">
+         </action>
+         <action
+               class="com.liferay.ide.eclipse.project.ui.action.sdk.BuildWSDDAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.eclipse.sdk.popup.action.build-wsdd"
+               label="build-wsdd"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-wsdd">
          </action>
          <action
                class="com.liferay.ide.eclipse.project.ui.action.sdk.CleanAction"
