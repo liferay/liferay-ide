@@ -31,7 +31,7 @@ import org.eclipse.ui.views.IViewDescriptor;
 @SuppressWarnings("deprecation")
 public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
-	private static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView";
+	public static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView";
 
 	public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
 
@@ -72,12 +72,6 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 	public static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks";
 	
 	public static final String ID_WST_SNIPPETS_VIEW = "org.eclipse.wst.common.snippets.internal.ui.SnippetsView"; //$NON-NLS-1$	
-
-	public void createInitialLayout(IPageLayout layout) {
-		createLayout(layout);
-		setupActions(layout);
-		addShortcuts(layout);
-	}
 
 	private void addDBViewIfPresent(IPageLayout page, IFolderLayout bottomRight) {
 		IViewDescriptor dbView = PlatformUI.getWorkbench().getViewRegistry().find(ID_DATA_VIEW);
@@ -130,6 +124,12 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		if (desc != null) {
 			layout.addPerspectiveShortcut("org.eclipse.team.svn.ui.repository.RepositoryPerspective");
 		}
+	}
+
+	public void createInitialLayout(IPageLayout layout) {
+		createLayout(layout);
+		setupActions(layout);
+		addShortcuts(layout);
 	}
 
 	protected void createLayout(IPageLayout layout) {
