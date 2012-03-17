@@ -13,30 +13,30 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.server.tomcat.core;
+package com.liferay.ide.eclipse.server.jboss.ui.command;
 
-import org.eclipse.core.runtime.IAdapterFactory;
-import org.eclipse.jst.common.project.facet.core.IClasspathProvider;
-import org.eclipse.jst.server.core.internal.RuntimeClasspathProvider;
-import org.eclipse.wst.common.project.facet.core.runtime.IRuntimeComponent;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
+import org.eclipse.wst.server.ui.internal.command.ServerCommand;
+
+import com.liferay.ide.eclipse.server.jboss.core.LiferayJBoss7Server;
 
 /**
- * @author Greg Amerson
+ * @author kamesh
  */
-@SuppressWarnings("restriction")
-public class RuntimeClasspathFactory implements IAdapterFactory {
+@SuppressWarnings( "restriction" )
+public abstract class AbstractCommand extends ServerCommand
+{
 
-	private static final Class[] ADAPTER_TYPES = {
-		IClasspathProvider.class
-	};
+	protected IServer server;
+	protected LiferayJBoss7Server liferayJBoss7Server;
 
-	public Object getAdapter(Object adaptable, Class adapterType) {
-		IRuntimeComponent rc = (IRuntimeComponent) adaptable;
-		
-		return new RuntimeClasspathProvider(rc);
+	public AbstractCommand( IServerWorkingCopy server, String name )
+	{
+		super( server, name );
+		this.server = (IServer) server;
+		liferayJBoss7Server = ( (LiferayJBoss7Server) server.getAdapter( LiferayJBoss7Server.class ) );
+
 	}
 
-	public Class[] getAdapterList() {
-		return ADAPTER_TYPES;
-	}
 }

@@ -1,3 +1,4 @@
+**/*.class
 com.liferay.ide.eclipse.server.core/bin/
 com.liferay.ide.eclipse.server.core/target/
 com.liferay.ide.eclipse.server.tomcat.core/bin/
@@ -6,3 +7,7 @@ com.liferay.ide.eclipse.server.tomcat.ui/bin/
 com.liferay.ide.eclipse.server.tomcat.ui/target/
 com.liferay.ide.eclipse.server.ui/bin/
 com.liferay.ide.eclipse.server.ui/target/
+com.liferay.ide.eclipse.server.jboss.core/bin/
+com.liferay.ide.eclipse.server.jboss.core/target/
+com.liferay.ide.eclipse.server.jboss.ui/bin/
+com.liferay.ide.eclipse.server.jboss.ui/target/
