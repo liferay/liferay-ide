@@ -1,0 +1,6 @@
+.apt_generated/
+.DS_Store
+.resources/
+*.swp
+bin/
+target/

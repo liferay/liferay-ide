@@ -22,7 +22,7 @@ import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.services.RelativePathService;
-import org.eclipse.sapphire.ui.SapphirePropertyEditor;
+import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 
 /**
@@ -31,7 +31,7 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEditorCondition {
 
 	@Override
-	protected boolean evaluate( SapphirePropertyEditor part ) {
+	protected boolean evaluate( PropertyEditorPart part ) {
 
 		final IModelElement element = part.getModelElement();
 		final ModelProperty property = part.getProperty();

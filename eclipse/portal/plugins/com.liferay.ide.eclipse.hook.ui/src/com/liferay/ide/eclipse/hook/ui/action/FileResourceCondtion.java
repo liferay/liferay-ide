@@ -28,7 +28,7 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.ISapphirePart;
-import org.eclipse.sapphire.ui.SapphirePropertyEditor;
+import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 
 public class FileResourceCondtion extends SapphirePropertyEditorCondition {
@@ -54,7 +54,7 @@ public class FileResourceCondtion extends SapphirePropertyEditorCondition {
 	 * org.eclipse.sapphire.ui.SapphirePropertyEditorCondition#evaluate(org.eclipse.sapphire.ui.SapphirePropertyEditor)
 	 */
 	@Override
-	protected boolean evaluate( SapphirePropertyEditor part ) {
+	protected boolean evaluate( PropertyEditorPart part ) {
 		final IModelElement element = part.getModelElement();
 		final ModelProperty property = part.getProperty();
 		if ( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) ) {

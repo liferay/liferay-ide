@@ -42,7 +42,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.SapphirePropertyEditor;
+import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -142,7 +142,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
 	{
 
 		@Override
-		protected final boolean evaluate( final SapphirePropertyEditor part )
+		protected final boolean evaluate( final PropertyEditorPart part )
 		{
 			final ModelProperty property = part.getProperty();
 			final IModelElement element = part.getModelElement();

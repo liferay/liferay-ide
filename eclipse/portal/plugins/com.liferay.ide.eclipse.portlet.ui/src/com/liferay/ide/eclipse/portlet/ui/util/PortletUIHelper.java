@@ -19,7 +19,7 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.SapphireEditor;
-import org.eclipse.sapphire.ui.SapphirePropertyEditor;
+import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.swt.widgets.Text;
 
 /**
@@ -34,7 +34,7 @@ public class PortletUIHelper {
 	 */
 	public static void addTypeFieldAssistToText(
 
-	SapphirePropertyEditor propertyEditor, Text text, IProject project, int searchScope ) {
+	PropertyEditorPart propertyEditor, Text text, IProject project, int searchScope ) {
 
 	}
 
