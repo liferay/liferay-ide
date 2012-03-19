@@ -23,6 +23,7 @@ import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
+import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.FileInputStream;
@@ -142,6 +143,22 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 		copyPortletTLD();
 
 		ProjectUtil.addLiferayPortletTldToWebXML( this.project );
+
+		try
+		{
+			IFolder docroot = CoreUtil.getDocroot( project );
+
+			// IDE-575
+			if( !( docroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&
+				docroot.getFile( "WEB-INF/tld/aui.tld" ).exists() )
+			{
+				ProjectUtil.addTldToWebXml( project, "http://liferay.com/tld/aui", "/WEB-INF/tld/aui.tld" );
+			}
+		}
+		catch( Exception e1 )
+		{
+			LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 );
+		}
 
 		this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
