@@ -41,10 +41,12 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 
 	public static final String ID_J2EE_HIERARCHY_VIEW = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
 
-	public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView";
+	public static final String ID_JAVADOC_VIEW = "org.eclipse.jdt.ui.JavadocView";
 
-	public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
+	public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView";
 	
+	public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
+
 	public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet";
 
 	public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
@@ -68,9 +70,9 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 	public static final String ID_SEARCH_VIEW = "org.eclipse.search.ui.views.SearchView"; //$NON-NLS-1$
 
 	public static final String ID_SERVERS_VIEW = "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
-
-	public static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks";
 	
+	public static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks";
+
 	public static final String ID_WST_SNIPPETS_VIEW = "org.eclipse.wst.common.snippets.internal.ui.SnippetsView"; //$NON-NLS-1$	
 
 	private void addDBViewIfPresent(IPageLayout page, IFolderLayout bottomRight) {
@@ -170,6 +172,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory {
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.7f, editorArea);//$NON-NLS-1$
 		bottom.addView(ID_MARKERS_VIEW);
 		bottom.addView(ID_CONSOLE_VIEW);
+		bottom.addView( ID_JAVADOC_VIEW );
 		
 		addDBViewIfPresent(layout, bottom);
 		
