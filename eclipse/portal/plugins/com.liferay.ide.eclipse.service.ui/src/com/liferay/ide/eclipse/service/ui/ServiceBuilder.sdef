@@ -859,6 +859,7 @@ development of services.</content>
         <action>
             <id>Liferay.ServiceBuilder.BuildServices</id>
             <label>Build Services</label>
+            <tooltip>Build Services (Ctrl+Shift+B)</tooltip>
             <description>Build Services</description>
             <image>images/builder_16x16.gif</image>
             <hint>
@@ -866,6 +867,7 @@ development of services.</content>
 	            <value>image+text</value>
 	        </hint>
             <context>Sapphire.EditorPage</context>
+            <key-binding>SHIFT+CONTROL+b</key-binding>
         </action>
         <action>
             <id>Liferay.ServiceBuilder.BuildWSDD</id>
