@@ -61,6 +61,37 @@ import org.w3c.dom.Node;
  */
 public class CoreUtil {
 
+	public static int compareVersions( Version v1, Version v2 )
+	{
+		if( v2 == v1 )
+		{ // quicktest
+			return 0;
+		}
+
+		int result = v1.getMajor() - v2.getMajor();
+
+		if( result != 0 )
+		{
+			return result;
+		}
+
+		result = v1.getMinor() - v2.getMinor();
+
+		if( result != 0 )
+		{
+			return result;
+		}
+
+		result = v1.getMicro() - v2.getMicro();
+
+		if( result != 0 )
+		{
+			return result;
+		}
+
+		return v1.getQualifier().compareTo( v2.getQualifier() );
+	}
+
 	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
 		if (delta == null) {
 			return false;

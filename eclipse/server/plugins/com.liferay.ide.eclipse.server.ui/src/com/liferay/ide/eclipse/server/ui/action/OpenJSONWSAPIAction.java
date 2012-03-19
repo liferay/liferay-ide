@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.server.ui.action;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 
 import java.net.MalformedURLException;
@@ -75,7 +76,7 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
 					{
 						Version v = new Version( liferayRuntime.getPortalVersion() );
 
-						if ( v.compareTo( new Version( "6.1.0" ) ) < 0 )
+						if( CoreUtil.compareVersions( v, new Version( "6.1.0" ) ) < 0 )
 						{
 							action.setEnabled( false );
 						}

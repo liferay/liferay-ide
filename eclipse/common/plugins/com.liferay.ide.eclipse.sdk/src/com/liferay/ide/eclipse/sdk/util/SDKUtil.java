@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.sdk.util;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
@@ -54,29 +55,6 @@ public class SDKUtil {
 	// }
 	// return false;
 	// }
-
-	public static int compareVersions( Version sdk, Version otherSdk ) {
-		if ( otherSdk == sdk ) { // quicktest
-			return 0;
-		}
-
-		int result = sdk.getMajor() - otherSdk.getMajor();
-		if ( result != 0 ) {
-			return result;
-		}
-
-		result = sdk.getMinor() - otherSdk.getMinor();
-		if ( result != 0 ) {
-			return result;
-		}
-
-		result = sdk.getMicro() - otherSdk.getMicro();
-		if ( result != 0 ) {
-			return result;
-		}
-
-		return sdk.getQualifier().compareTo( otherSdk.getQualifier() );
-	}
 
 	public static SDK createSDKFromLocation(IPath path) {
 		try {
@@ -151,7 +129,7 @@ public class SDKUtil {
 		try {
 			String version = SDKUtil.readSDKVersion(location);
 
-			retval = compareVersions( new Version( version ), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION ) >= 0;
+			retval = CoreUtil.compareVersions( new Version( version ), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION ) >= 0;
 		}
 		catch (Exception e) {
 			// best effort we didn't find a valid location
@@ -196,7 +174,8 @@ public class SDKUtil {
 			// ignore means we don't have valid version
 		}
 
-		if ( sdkVersionValue != null && compareVersions( sdkVersionValue, lowestValidVersion ) >= 0 ) {
+		if( sdkVersionValue != null && CoreUtil.compareVersions( sdkVersionValue, lowestValidVersion ) >= 0 )
+		{
 			return true;
 		}
 

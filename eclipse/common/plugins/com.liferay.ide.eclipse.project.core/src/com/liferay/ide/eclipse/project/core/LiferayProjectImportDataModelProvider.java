@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.project.core;
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.SDK;
@@ -168,7 +169,8 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 			if (locationStatus.isOK()) {
 				Version version = new Version(getStringProperty(SDK_VERSION));
 
-				if ( SDKUtil.compareVersions( version, SDKManager.getLeastValidVersion() ) >= 0 ) {
+				if( CoreUtil.compareVersions( version, SDKManager.getLeastValidVersion() ) >= 0 )
+				{
 					return Status.OK_STATUS;
 				}
 				else {

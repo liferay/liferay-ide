@@ -23,7 +23,6 @@ import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.SDKManager;
-import com.liferay.ide.eclipse.sdk.util.SDKUtil;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.util.Collections;
@@ -359,7 +358,8 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			Version requiredSDKVersion = new Version(framework.getRequiredSDKVersion());
 
-			if ( SDKUtil.compareVersions( sdkVersion, requiredSDKVersion ) < 0 ) {
+			if( CoreUtil.compareVersions( sdkVersion, requiredSDKVersion ) < 0 )
+			{
 				return framework.getUnsupportedSDKErrorMsg();
 			}
 			else {
