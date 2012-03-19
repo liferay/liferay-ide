@@ -44,7 +44,7 @@ public class QNamesPossibleValuesService extends PossibleValuesService {
 	@Override
 	protected void fillPossibleValues( SortedSet<String> values ) {
 		IModelElement imodelElement = context( IModelElement.class );
-		values.add( param( "0" ) );
+		// values.add( param( "0" ) );
 		IPortletApp portletApp = context( IModelElement.class ).nearest( IPortletApp.class );
 		if ( imodelElement instanceof IEventDefinitionRef ) {
 			ModelElementList<IEventDefinition> eventDefs = portletApp.getEventDefinitions();
