@@ -17,7 +17,10 @@
 
 package com.liferay.ide.eclipse.hook.core.model.internal;
 
+import static com.liferay.ide.eclipse.core.util.CoreUtil.empty;
+
 import com.liferay.ide.eclipse.hook.core.model.IHook;
+import com.liferay.ide.eclipse.hook.core.model.IStrutsAction;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
@@ -84,6 +87,14 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 			}
 
 			values.addAll( this.possibleValues );
+
+			// add the value that is current set by the user
+			String actionPath = context( IStrutsAction.class ).getStrutsActionPath().getContent( false );
+
+			if( !empty( actionPath ) )
+			{
+				values.add( actionPath );
+			}
 		}
 	}
 
