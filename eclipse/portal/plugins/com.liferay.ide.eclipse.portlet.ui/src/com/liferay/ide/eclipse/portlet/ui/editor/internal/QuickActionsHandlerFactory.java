@@ -35,8 +35,8 @@ import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.SapphireEditor;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
-import org.eclipse.sapphire.ui.def.ISapphireActionHandlerFactoryDef;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
+import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 
@@ -49,7 +49,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 	private String[] modelProperties;
 
 	@Override
-	public void init( SapphireAction action, ISapphireActionHandlerFactoryDef def ) {
+	public void init( SapphireAction action, ActionHandlerFactoryDef def ) {
 		super.init( action, def );
 		String strModelElementNames = def.getParam( "MODEL_PROPERTIES" );
 		if ( strModelElementNames != null ) {
@@ -107,7 +107,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		}
 
 		@Override
-		public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
+		public void init( SapphireAction action, ActionHandlerDef def ) {
 			super.init( action, def );
 			final IModelElement rootModel = action.getPart().getModelElement();
 			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );

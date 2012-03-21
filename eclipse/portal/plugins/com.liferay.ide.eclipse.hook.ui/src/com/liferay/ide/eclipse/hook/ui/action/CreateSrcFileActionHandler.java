@@ -46,7 +46,7 @@ import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -95,7 +95,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
 	}
 
 	@Override
-	public void init( final SapphireAction action, ISapphireActionHandlerDef def ) {
+	public void init( final SapphireAction action, ActionHandlerDef def ) {
 		super.init( action, def );
 		modelElement = getModelElement();
 		modelProperty = getProperty();

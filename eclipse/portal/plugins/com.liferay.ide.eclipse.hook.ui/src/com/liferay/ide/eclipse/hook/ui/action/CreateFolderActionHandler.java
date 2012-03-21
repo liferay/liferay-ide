@@ -34,7 +34,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
@@ -79,10 +79,10 @@ public class CreateFolderActionHandler extends SapphirePropertyEditorActionHandl
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
+	 * org.eclipse.sapphire.ui.def.ActionHandlerDef)
 	 */
 	@Override
-	public void init( final SapphireAction action, ISapphireActionHandlerDef def ) {
+	public void init( final SapphireAction action, ActionHandlerDef def ) {
 		super.init( action, def );
 		modelElement = getModelElement();
 		modelProperty = getProperty();

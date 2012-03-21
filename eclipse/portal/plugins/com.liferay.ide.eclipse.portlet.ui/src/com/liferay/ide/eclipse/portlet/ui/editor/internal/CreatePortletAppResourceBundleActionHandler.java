@@ -40,7 +40,7 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -50,10 +50,10 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-	 * org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef)
+	 * org.eclipse.sapphire.ui.def.ActionHandlerDef)
 	 */
 	@Override
-	public void init( SapphireAction action, ISapphireActionHandlerDef def ) {
+	public void init( SapphireAction action, ActionHandlerDef def ) {
 		super.init( action, def );
 		final IModelElement element = getModelElement();
 		final ModelProperty property = getProperty();

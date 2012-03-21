@@ -19,12 +19,12 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.services.RelativePathService;
-import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.PropertyEditorPart;
+import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.def.ISapphireActionHandlerDef;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 
 public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHandler
@@ -36,7 +36,7 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
 	}
 
 	@Override
-	public void init( SapphireAction action, ISapphireActionHandlerDef def )
+	public void init( SapphireAction action, ActionHandlerDef def )
 	{
 		super.init( action, def );
 
