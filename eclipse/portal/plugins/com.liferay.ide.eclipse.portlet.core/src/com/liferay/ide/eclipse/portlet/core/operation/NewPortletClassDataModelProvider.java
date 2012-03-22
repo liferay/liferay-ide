@@ -515,12 +515,18 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			}
 		}
 		else if (CREATE_RESOURCE_BUNDLE_FILE_PATH.equals(propertyName)) {
+			if( !getBooleanProperty( CREATE_RESOURCE_BUNDLE_FILE ) )
+			{
+				return Status.OK_STATUS;
+			}
+
 			boolean validPath = false;
 			boolean validFileName = false;
 
 			String val = getStringProperty(propertyName);
 
-			if (getBooleanProperty(CREATE_RESOURCE_BUNDLE_FILE) && CoreUtil.isNullOrEmpty(val)) {
+			if( CoreUtil.isNullOrEmpty( val ) )
+			{
 				return PortletCore.createErrorStatus("Resource bundle file path must be a valid path.");
 			}
 

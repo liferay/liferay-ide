@@ -272,11 +272,11 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 	}
 
 	@Override
-	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			PORTLET_NAME, DISPLAY_NAME, VIEW_MODE, EDIT_MODE, HELP_MODE, ABOUT_MODE, CONFIG_MODE, EDITDEFAULTS_MODE,
-			EDITGUEST_MODE, PREVIEW_MODE, PRINT_MODE, CREATE_RESOURCE_BUNDLE_FILE_PATH, CREATE_JSPS_FOLDER
-		};
+	protected String[] getValidationPropertyNames()
+	{
+		return new String[] { PORTLET_NAME, DISPLAY_NAME, VIEW_MODE, EDIT_MODE, HELP_MODE, ABOUT_MODE, CONFIG_MODE,
+			EDITDEFAULTS_MODE, EDITGUEST_MODE, PREVIEW_MODE, PRINT_MODE, CREATE_RESOURCE_BUNDLE_FILE,
+			CREATE_RESOURCE_BUNDLE_FILE_PATH, CREATE_JSPS_FOLDER };
 	}
 
 	protected boolean isProjectValid(IProject project) {
