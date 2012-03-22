@@ -29,7 +29,6 @@
             </parameter>
          </describer>
       </content-type>
-<!--
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
@@ -43,7 +42,6 @@
                class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
          </describer>
       </content-type>
--->
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
