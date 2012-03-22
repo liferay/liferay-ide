@@ -554,7 +554,17 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			}
 		}
 		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
+			if( !getBooleanProperty( CREATE_JSPS ) )
+			{
+				return Status.OK_STATUS;
+			}
+
 			String folderValue = getStringProperty(propertyName);
+
+			if( CoreUtil.isNullOrEmpty( folderValue ) )
+			{
+				return PortletCore.createErrorStatus( "JSP folder cannot be empty." );
+			}
 
 			IProject targetProject = getTargetProject();
 
