@@ -130,9 +130,14 @@ Company Id:
   </extension>
   <extension id="taglib" point="org.eclipse.wst.common.snippets.SnippetContributions">
     <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Taglib imports" id="com.liferay.ide.eclipse.ui.snippets.category.taglib_imports" label="Taglib imports" smallicon="icons/snippets/jsptaglib.gif">
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Liferay AUI Taglib" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.aui" label="Liferay AUI Taglib Import" smallicon="icons/snippets/tag-generic.gif">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Liferay AUI Taglib v6.0" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.aui" label="Liferay AUI Taglib Import v6.0" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;%@ taglib uri=&quot;http://liferay.com/tld/aui&quot; prefix=&quot;aui&quot; %&gt;
+        </content>
+      </item>
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Liferay AUI Taglib v6.1" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.aui" label="Liferay AUI Taglib Import v6.1" smallicon="icons/snippets/tag-generic.gif">
+        <content>
+          &lt;%@ taglib uri=&quot;http://alloy.liferay.com/tld/aui&quot; prefix=&quot;aui&quot; %&gt;          
         </content>
       </item>
       <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" description="Liferay Portlet Ext Taglib" id="com.liferay.ide.eclipse.ui.snippets.item.taglib-import.liferay-portlet" label="Liferay Portlet Ext Taglib Import" smallicon="icons/snippets/tag-generic.gif">
