@@ -142,6 +142,7 @@
                 <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
                 <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
                 <xsd-site>file:../../liferay-ide/eclipse/target-platform/xsd</xsd-site>
+                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/165/artifact/build/repository</sapphire-site>
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>
