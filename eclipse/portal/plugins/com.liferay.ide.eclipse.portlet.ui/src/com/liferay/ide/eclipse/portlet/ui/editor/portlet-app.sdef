@@ -564,6 +564,8 @@
 					<property-editor>
 						<property>Aliases</property>
 						<related-content-width>30</related-content-width>
+                        <child-property>NamespaceURI</child-property>
+                        <child-property>LocalPart</child-property>
 					</property-editor>
 				</content>
 				<collapsible>false</collapsible>
