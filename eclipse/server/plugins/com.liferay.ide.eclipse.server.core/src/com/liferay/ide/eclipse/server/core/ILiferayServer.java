@@ -28,5 +28,9 @@ public interface ILiferayServer {
 
 	URL getPluginContextURL( String context );
 
-	int getHttpPort();
+	String getHttpPort();
+
+	String getId();
+
+	String getHost();
 }

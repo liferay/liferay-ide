@@ -845,6 +845,18 @@
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/portlet-app_2_0.xsd">
          </uri>  
          <uri
+               name="http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/spring-aop-3.0.xsd">
+         </uri>  
+         <uri
+               name="http://www.springframework.org/schema/aop/spring-beans-3.0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/spring-beans-3.0.xsd">
+         </uri>  
+         <uri
+               name="http://www.springframework.org/schema/aop/spring-util-3.0.xsd"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/spring-util-3.0.xsd">
+         </uri>  
+         <uri
                name="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/xsd/web-app_2_4.xsd">
          </uri>

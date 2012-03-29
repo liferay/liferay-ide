@@ -169,9 +169,9 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 		return getServer().getHost();
 	}
 
-	public int getHttpPort()
+	public String getHttpPort()
 	{
-		return Integer.parseInt( getHTTPPort() );
+		return getHTTPPort();
 	}
 
 	public String getHTTPPort() {

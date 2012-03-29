@@ -46,6 +46,16 @@ public class LiferayTomcatServer extends TomcatServer
 		super();
 	}
 
+	public String getId()
+	{
+		return getServer().getId();
+	}
+
+	public String getHost()
+	{
+		return getServer().getHost();
+	}
+
 	public String getAutoDeployDirectory() {
 		return getAttribute(PROPERTY_AUTO_DEPLOY_DIR, "../deploy");
 	}
@@ -74,15 +84,15 @@ public class LiferayTomcatServer extends TomcatServer
 		}
 	}
 
-	public int getHttpPort()
+	public String getHttpPort()
 	{
 		try
 		{
-			return getTomcatConfiguration().getMainPort().getPort();
+			return String.valueOf( getTomcatConfiguration().getMainPort().getPort() );
 		}
-		catch ( Exception e )
+		catch( CoreException e )
 		{
-			return -1;
+			return null;
 		}
 	}
 
