@@ -26,6 +26,7 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -40,8 +41,8 @@ public interface IAliasQName extends IModelElement {
 	// *** NamespaceURI ***
 
 	@Label( standard = "Namespace URI" )
-	// @DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "alias" )
+	@Required
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "alias" } )
 	ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
 
@@ -52,8 +53,8 @@ public interface IAliasQName extends IModelElement {
 	// *** LocalPart ***
 
 	@Label( standard = "Local Part" )
-	// @DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "alias" )
+	@Required
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "alias" } )
 	ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
 

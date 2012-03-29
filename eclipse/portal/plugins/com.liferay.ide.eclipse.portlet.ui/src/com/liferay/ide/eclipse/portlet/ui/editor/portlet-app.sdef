@@ -760,7 +760,11 @@
 					<property-editor>Identifier</property-editor>
 					<property-editor>NamespaceURI</property-editor>
 					<property-editor>LocalPart</property-editor>
-					<property-editor>Aliases</property-editor>
+                    <property-editor>
+                        <property>Aliases</property>
+                        <child-property>NamespaceURI</child-property>
+                        <child-property>LocalPart</child-property>
+                    </property-editor>
 				</content>
 			</section>
 			<label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;: Identifier} </label>
