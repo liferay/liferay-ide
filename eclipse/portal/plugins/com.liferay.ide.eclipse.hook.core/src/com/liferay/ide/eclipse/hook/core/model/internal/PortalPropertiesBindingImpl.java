@@ -28,8 +28,12 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IFile;
@@ -276,6 +280,56 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 		}
 
 		this.element().notifyPropertyChangeListeners( this.property() );
+	}
+
+	@Override
+	@SuppressWarnings( "rawtypes" )
+	public void swap( Resource a, Resource b )
+	{
+		final PortalPropertyResource propA = a.adapt( PortalPropertyResource.class );
+		final PortalPropertyResource propB = b.adapt( PortalPropertyResource.class );
+
+		List<Object> keysList = new ArrayList<Object>();
+
+		Iterator keys = this.portalPropertiesConfiguration.getKeys();
+
+		while( keys.hasNext() )
+		{
+			keysList.add( keys.next() );
+		}
+
+		Map<Object, Object> properties = new HashMap<Object, Object>();
+
+		for( Object key : keysList )
+		{
+			properties.put( key, this.portalPropertiesConfiguration.getProperty( key.toString() ) );
+		}
+
+		Collections.sort( keysList, new Comparator<Object>()
+		{
+			public int compare( Object o1, Object o2 )
+			{
+				if( propA.name != null && propA.name.equals( o1 ) && propB.name != null && propB.name.equals( o2 ) )
+				{
+					return 1;
+				}
+				else if( propA.name != null && propA.name.equals( o2 ) && propB.name != null && propB.name.equals( o1 ) )
+				{
+					return 1;
+				}
+
+				return 0;
+			}
+		} );
+
+		this.portalPropertiesConfiguration.clear();
+
+		for( Object key : keysList )
+		{
+			this.portalPropertiesConfiguration.addProperty( key.toString(), properties.get( key.toString() ) );
+		}
+
+		flushProperties();
 	}
 
 	@Override

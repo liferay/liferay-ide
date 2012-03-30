@@ -33,6 +33,7 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
+import org.eclipse.sapphire.modeling.annotations.FixedOrderList;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -87,6 +88,7 @@ public interface IHook extends IModelElement
 
 	@Type( base = ICustomJsp.class )
 	@Label( standard = "custom jsps" )
+	@FixedOrderList
 	@CustomXmlListBinding( impl = CustomJspsBindingImpl.class )
 	@DependsOn( value = { "CustomJspDir/Value" } )
 	ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" );
