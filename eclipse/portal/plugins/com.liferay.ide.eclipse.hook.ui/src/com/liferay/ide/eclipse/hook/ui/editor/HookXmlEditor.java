@@ -18,6 +18,8 @@
 
 package com.liferay.ide.eclipse.hook.ui.editor;
 
+import static com.liferay.ide.eclipse.core.util.CoreUtil.empty;
+
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.hook.core.model.HookVersionType;
 import com.liferay.ide.eclipse.hook.core.model.ICustomJsp;
@@ -89,13 +91,13 @@ public class HookXmlEditor extends SapphireEditorForXml
 				
 				for ( ICustomJsp customJsp : customJsps )
 				{
-					if ( customJsp.validate().ok() )
+					String content = customJsp.getValue().getContent();
+                        
+					if( !empty( content ) )
 					{
-						String content = customJsp.getValue().getContent();
-
 						IFile customJspFile = customJspFolder.getFile( content );
-
-						if ( !customJspFile.exists() )
+                            
+						if( !customJspFile.exists() )
 						{
 							IPath portalJsp = portalDir.append( content );
 
@@ -104,7 +106,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 								CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
 								customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
 							}
-							catch ( Exception e )
+							catch( Exception e )
 							{
 								HookUI.logError( e );
 							}
