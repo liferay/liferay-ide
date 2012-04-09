@@ -26,6 +26,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -38,11 +39,12 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 public interface IServiceBuilder extends IModelElement {
 
 	ModelElementType TYPE = new ModelElementType(IServiceBuilder.class);
-	
+
 	// *** Package-path ***
 
 	@XmlBinding(path = "@package-path")
 	@Label(standard = "&Package path")
+	@Required
 	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath");
 
 	Value<String> getPackagePath();
@@ -63,7 +65,7 @@ public interface IServiceBuilder extends IModelElement {
 	void setAutoNamespaceTables(Boolean value);
 
 	// *** Author ***
-    
+
 	@XmlBinding(path = "author")
 	@Label(standard = "&Author")
 	ValueProperty PROP_AUTHOR = new ValueProperty(TYPE, "Author");
@@ -76,6 +78,7 @@ public interface IServiceBuilder extends IModelElement {
 
 	@XmlBinding(path = "namespace")
 	@Label(standard = "&Namespace")
+	@Required
 	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace");
 
 	Value<String> getNamespace();
