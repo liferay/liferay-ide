@@ -37,6 +37,21 @@ import org.osgi.framework.Bundle;
  */
 public class UIUtil {
 
+	public static void sync( Runnable runnable )
+	{
+		if( runnable != null )
+		{
+			try
+			{
+				Display.getDefault().syncExec( runnable );
+			}
+			catch( Throwable t )
+			{
+				// ignore
+			}
+		}
+	}
+
 	public static void async(Runnable runnable) {
 		if (runnable != null) {
 			try {

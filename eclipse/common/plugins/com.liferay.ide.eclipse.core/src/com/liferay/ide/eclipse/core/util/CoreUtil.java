@@ -56,7 +56,7 @@ import org.w3c.dom.Node;
 
 /**
  * Core Utility methods
- * 
+ *
  * @author Greg Amerson
  */
 public class CoreUtil {
@@ -102,7 +102,7 @@ public class CoreUtil {
 
 		if (currentChildren == null) {
 			IFile file = (IFile) delta.getModuleResource().getAdapter(IFile.class);
-			
+
 			if ( file != null ) {
 				String filePath = file.getFullPath().toString();
 
@@ -249,7 +249,9 @@ public class CoreUtil {
 		throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
 		InvocationTargetException {
 
-		Method method = object.getClass().getMethod(methodName, argTypes);
+		Method method = object.getClass().getDeclaredMethod( methodName, argTypes );
+		method.setAccessible( true );
+
 		return method.invoke(object, args);
 	}
 

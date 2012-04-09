@@ -18,7 +18,6 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -197,6 +196,11 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 			if (!("xml".equals(serviceFile.getFileExtension()))) {
 				return PortletCore.createErrorStatus("Service file must be have xml file extension.");
 			}
+
+			if( serviceFile.exists() )
+			{
+				return PortletCore.createErrorStatus( "Project already contains service.xml file, please select another project." );
+			}
 		}
 		else if (PACKAGE_PATH.equals(propertyName)) {
 			String packagePath = getStringProperty(propertyName);
@@ -309,7 +313,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 	 * Subclasses may extend this method to perform their own retrieval
 	 * mechanism. This implementation simply returns the JDT package fragment
 	 * root for the selected source folder. This method may return null.
-	 * 
+	 *
 	 * @see IJavaProject#getPackageFragmentRoot(org.eclipse.core.resources.IResource)
 	 * @return IPackageFragmentRoot
 	 */
