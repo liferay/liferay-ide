@@ -15,6 +15,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.operation;
 
+import static com.liferay.ide.eclipse.core.util.CoreUtil.empty;
+
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
@@ -136,6 +138,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		return super.getDefaultProperty(propertyName);
 	}
 
+	@SuppressWarnings( "rawtypes" )
 	@Override
 	public Set getPropertyNames() {
 		Set propertyNames = super.getPropertyNames();
@@ -205,14 +208,21 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 		else if (PACKAGE_PATH.equals(propertyName)) {
 			String packagePath = getStringProperty(propertyName);
 
-			if (!CoreUtil.isNullOrEmpty(packagePath)) {
+			if( empty( packagePath ) )
+			{
+				return PortletCore.createErrorStatus( "Package path cannot be empty." );
+			}
+
+			if( !empty( packagePath ) )
+			{
 				return validateJavaPackage(packagePath);
 			}
 		}
 		else if (NAMESPACE.equals(propertyName)) {
 			String namespace = getStringProperty(propertyName);
 
-			if (CoreUtil.isNullOrEmpty(namespace)) {
+			if( empty( namespace ) )
+			{
 				return PortletCore.createErrorStatus("Namespace cannot be empty.");
 			}
 		}
