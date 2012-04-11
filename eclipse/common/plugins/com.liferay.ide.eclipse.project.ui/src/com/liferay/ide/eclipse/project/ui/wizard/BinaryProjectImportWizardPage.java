@@ -144,9 +144,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 				final DataModelPropertyDescriptor[] preAdditionDescriptors =
 					model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server" );
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
 
 				if ( isOK ) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =
@@ -207,7 +205,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	protected void doBrowse() {
 		FileDialog fd = new FileDialog( this.getShell(), SWT.OPEN );
@@ -231,7 +229,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 		if ( !CoreUtil.isNullOrEmpty( binaryfile ) ) {
 			binariesLocation.setText( binaryfile );
 			File binaryFile = new File( binaryfile );
-			
+
 			if ( ProjectImportUtil.isValidLiferayPlugin( binaryFile ) ) {
 				selectedBinary = new BinaryProjectRecord( new File( binaryfile ) );
 				getDataModel().setProperty( SELECTED_PROJECTS, new Object[] { selectedBinary } );

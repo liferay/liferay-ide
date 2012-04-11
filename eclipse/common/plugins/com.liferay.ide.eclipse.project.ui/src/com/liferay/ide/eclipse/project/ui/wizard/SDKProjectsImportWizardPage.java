@@ -224,7 +224,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
 	/**
 	 * Create the selection buttons in the listComposite.
-	 * 
+	 *
 	 * @param listComposite
 	 */
 	protected void createSelectionButtons(Composite listComposite) {
@@ -294,9 +294,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 				final DataModelPropertyDescriptor[] preAdditionDescriptors =
 					model.getValidPropertyDescriptors(FACET_RUNTIME);
 
-				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(
-						getShell(), getModuleTypeID(), null, "com.liferay.ide.eclipse.server");
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
 
 				if (isOK) {
 					DataModelPropertyDescriptor[] postAdditionDescriptors =
