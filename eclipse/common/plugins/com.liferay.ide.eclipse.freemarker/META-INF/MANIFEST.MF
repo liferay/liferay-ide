@@ -23,3 +23,15 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/freemarker-2.3.18.jar
+Export-Package: org.jboss.ide.eclipse.freemarker,
+ org.jboss.ide.eclipse.freemarker.configuration,
+ org.jboss.ide.eclipse.freemarker.dialogs,
+ org.jboss.ide.eclipse.freemarker.editor,
+ org.jboss.ide.eclipse.freemarker.editor.actions,
+ org.jboss.ide.eclipse.freemarker.editor.rules,
+ org.jboss.ide.eclipse.freemarker.linetracker,
+ org.jboss.ide.eclipse.freemarker.model,
+ org.jboss.ide.eclipse.freemarker.model.interpolation,
+ org.jboss.ide.eclipse.freemarker.outline,
+ org.jboss.ide.eclipse.freemarker.preferences,
+ org.jboss.ide.eclipse.freemarker.util

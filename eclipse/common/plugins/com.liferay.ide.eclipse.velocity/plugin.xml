@@ -6,7 +6,7 @@
          point="org.eclipse.ui.editors">
       <editor
             name="Liferay Velocity Editor"
-            extensions="vsl,vm,html,xml,jsp,jspx,jspf"
+            extensions="vm"
             icon="icons/full/obj16/vsl_file.gif"
             class="com.liferay.ide.eclipse.velocity.editor.VelocityEditor"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
