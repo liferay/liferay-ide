@@ -727,11 +727,26 @@ public class ProjectUtil
 					}
 				}
 			}
+
+			if (list.size() == 0)
+			{
+			    for (IPackageFragmentRoot root : roots)
+			    {
+			        if (root.getKind() == IPackageFragmentRoot.K_SOURCE)
+			        {
+                        if (!list.contains( root ))
+                        {
+                            list.add(root);
+                        }
+			        }
+			    }
+			}
 		}
 		catch( JavaModelException e )
 		{
 			ProjectCorePlugin.logError( e );
 		}
+
 		return list.toArray( new IPackageFragmentRoot[list.size()] );
 	}
 

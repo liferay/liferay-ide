@@ -1,14 +1,15 @@
 package com.liferay.ide.eclipse.velocity.editor.completion;
 
+import com.liferay.ide.eclipse.velocity.editor.VelocityEditor;
+import com.liferay.ide.eclipse.velocity.vaulttec.ui.editor.text.VelocityTextGuesser;
+
 import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.text.IDocument;
-
-import com.liferay.ide.eclipse.velocity.editor.VelocityEditor;
-import com.liferay.ide.eclipse.velocity.vaulttec.ui.editor.text.VelocityTextGuesser;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 
 
 /**
@@ -69,6 +70,11 @@ public class CompletionProviderProxy
         int offset) throws CoreException
     {
         return getCompletionProvider().getExtraProposals(editor, file, doc, prefix, offset);
+    }
+
+    public Collection<ICompletionProposal> getVariableProposals( String aPrefix, int anOffset ) throws CoreException
+    {
+        return getCompletionProvider().getVariableProposals( aPrefix, anOffset );
     }
 
 }

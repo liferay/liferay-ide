@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *               Gregory Amerson - Sapphire 0.5 conversion
@@ -110,7 +110,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		public void init( SapphireAction action, ActionHandlerDef def ) {
 			super.init( action, def );
 			final IModelElement rootModel = action.getPart().getModelElement();
-			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );
+			final ModelProperty modelProperty = rootModel.type().property( this.strModelProperty );
 
 			String labelText = modelProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, true );
 			String actionLabel = getActionLabel( labelText );
@@ -128,7 +128,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 		protected Object run( SapphireRenderingContext context ) {
 
 			final IModelElement rootModel = context.getPart().getModelElement();
-			final ModelProperty modelProperty = rootModel.getModelElementType().getProperty( this.strModelProperty );
+			final ModelProperty modelProperty = rootModel.type().property( this.strModelProperty );
 			Object obj = rootModel.read( modelProperty );
 			IModelElement mElement = null;
 

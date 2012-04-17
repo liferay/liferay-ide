@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -123,7 +123,7 @@ public class DefaultXmlBinding extends LayeredElementBindingImpl {
 		else {
 			XmlElement childElement = parent.getChildElement( this.pathName, true );
 			// System.out.println( "DefaultXmlBinding.readUnderlyingObject()-3" );
-			List<ModelProperty> modelProperties = this.modelElementType.getProperties();
+			List<ModelProperty> modelProperties = this.modelElementType.properties();
 
 			for ( ModelProperty modelProperty : modelProperties ) {
 				// System.out.println( "Model Prop " + modelProperty );

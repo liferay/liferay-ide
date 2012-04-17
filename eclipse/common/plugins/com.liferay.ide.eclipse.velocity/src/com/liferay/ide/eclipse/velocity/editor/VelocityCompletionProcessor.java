@@ -60,7 +60,7 @@ import org.eclipse.swt.graphics.Image;
 
 /**
  * DOCUMENT ME!
- * 
+ *
  * @version $Revision: 32 $
  * @author <a href="mailto:akmal.sarhan@gmail.com">Akmal Sarhan </a>
  * @author Peter Friese
@@ -105,7 +105,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
     public VelocityCompletionProcessor(VelocityEditor anEditor, boolean aCompleteDirectives) {
 	upperCaseEnabled = VelocityPlugin.getDefault().getPreferenceStore().getBoolean(GeneralPreferencePage.P_CASE);
 	fEditor = anEditor;
-	
+
 	isJsp = anEditor.getEditorInput().getName().matches(".*?\\.jsp.*");
 	fCompleteDirectives = aCompleteDirectives;
 	tagSet = new ArrayList<String>(Arrays.asList(tags));
@@ -204,7 +204,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 
     /**
      * Gives extenders the possibility to add their own completion proposals.
-     * 
+     *
      * @param doc
      * @param prefix
      * @param i
@@ -424,7 +424,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 	String closetag = ">";
 	String s = findMatchingOpenTagIdentifierBefore(anOffset - 2, doc);
 	int lasttagOffset = findMatchingOpenTagBefore(anOffset - 2, doc);
-	
+
 	int start = 0;
 	try {
 	    start = doc.getLineOffset(doc.getLineOfOffset(anOffset));
@@ -486,16 +486,16 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 	if (anOffset > 1) {
 	    String s = findMatchingOpenTagIdentifierBefore(anOffset - 1, doc);
 	    if (s != null) {
-		
+
 		DTDElement element = VelocityEditor.getHTMLElement(s.toLowerCase());
 		if (element != null) {
 		    DTDItem item = element.getContent();
 		    list = new HashSet();
 		    dumpDTDItem(item, list);
 		}
-		
+
 		if (isJsp)
-//		    
+//
 		    list.addAll(Arrays.asList(jspTags));
 	    }
 	}
@@ -567,10 +567,10 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 	    }
 	}
 	// Add Velocity library macros
-	for (VelocimacroProxy vp : VelocityEditorEnvironment.getParser().getLibraryMacros()) 
+	for (VelocimacroProxy vp : VelocityEditorEnvironment.getParser().getLibraryMacros())
 	{
 	  String name = vp.getName();
-	    if (name.startsWith(aPrefix)) 
+	    if (name.startsWith(aPrefix))
 	    {
 		String insert = name + "()";
 		int cursorPos;
@@ -619,7 +619,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
     {
 	ICompletionProposal[] result = null;
 	List variables = fEditor.getVariables(fEditor.getLine(anOffset));
-	if (!variables.isEmpty()) {
+//	if (!variables.isEmpty()) {
 	    List proposals = new ArrayList();
 	    Iterator iter = variables.iterator();
 	    while (iter.hasNext()) {
@@ -628,9 +628,24 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 		    proposals.add(new CompletionProposal(variable.substring(1), anOffset, aPrefix.length(), variable.length() - 1, null, variable, null, null));
 		}
 	    }
+
+	    ICompletionProvider[] completionProviders = ProviderManager.getInstance().getProviders();
+
+	    for(ICompletionProvider cp : completionProviders)
+	    {
+            try
+            {
+    	        proposals.addAll( cp.getVariableProposals(aPrefix, anOffset));
+            }
+            catch (Exception e)
+            {
+                //noerror
+            }
+	    }
+
 	    Collections.sort(proposals, proposalComparator);
 	    result = (ICompletionProposal[]) proposals.toArray(new ICompletionProposal[proposals.size()]);
-	}
+//	}
 	return result;
     }
 
@@ -689,7 +704,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 		 VelocityConfiguration.ESCAPED_PARTITIONS, doc))
 		 {
 		 end = doc.getPartition(end).getOffset()-1;
-		
+
 		 }
 		char c = doc.getChar(end);
 		if (c == '/' && prev == '>')
@@ -856,12 +871,12 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param str
      *                DOCUMENT ME!
      * @param tabwidth
      *                DOCUMENT ME!
-     * 
+     *
      * @return DOCUMENT ME!
      */
     public static int indentWidthOf(String str, int tabwidth)
@@ -871,14 +886,14 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param str
      *                DOCUMENT ME!
      * @param start
      *                DOCUMENT ME!
      * @param tabwidth
      *                DOCUMENT ME!
-     * 
+     *
      * @return DOCUMENT ME!
      */
     public static int indentWidthOf(String str, int start, int tabwidth)
@@ -946,7 +961,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param item
      *                DOCUMENT ME!
      * @param list
@@ -982,7 +997,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 
     /**
      * DOCUMENT ME!
-     * 
+     *
      * @param attr
      *                DOCUMENT ME!
      * @param list
@@ -1035,7 +1050,7 @@ public class VelocityCompletionProcessor extends TemplateCompletionProcessor imp
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.jface.text.templates.TemplateCompletionProcessor#getContextType(org.eclipse.jface.text.ITextViewer,
      *      org.eclipse.jface.text.IRegion)
      */

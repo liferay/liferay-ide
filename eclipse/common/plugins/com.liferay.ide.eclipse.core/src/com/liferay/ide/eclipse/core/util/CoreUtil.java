@@ -33,6 +33,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -91,6 +92,25 @@ public class CoreUtil {
 
 		return v1.getQualifier().compareTo( v2.getQualifier() );
 	}
+
+    public static void addNaturesToProject( IProject proj, String[] natureIds, IProgressMonitor monitor )
+        throws CoreException
+    {
+        IProjectDescription description = proj.getDescription();
+
+        String[] prevNatures = description.getNatureIds();
+        String[] newNatures = new String[prevNatures.length + natureIds.length];
+
+        System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
+
+        for( int i = prevNatures.length; i < newNatures.length; i++ )
+        {
+            newNatures[i] = natureIds[i - prevNatures.length];
+        }
+
+        description.setNatureIds( newNatures );
+        proj.setDescription( description, monitor );
+    }
 
 	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
 		if (delta == null) {
