@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="portletFrameworkDelegates" name="Portlet Framework Delegates" schema="schema/portletFrameworkDelegates.exsd"/>
+   
    <extension
          point="org.eclipse.ui.newWizards">
       <category
@@ -112,6 +113,8 @@
             type="org.eclipse.core.resources.IFile">
       </propertyTester>
    </extension>
+   
+   
    <extension
          point="org.eclipse.ui.keywords">
       <keyword
@@ -208,11 +211,6 @@
 								property="com.liferay.ide.eclipse.project.ui.hasNature"
 								value="org.eclipse.jdt.core.javanature" />
 						</adapt>
-						<!--
-						<objectState 
-							name="projectNature"
-							value="org.eclipse.jdt.core.javanature"/>
-						-->
          			</or>
          			
 					<not>
@@ -288,6 +286,8 @@
       </objectContribution>
       
    </extension>
+   
+   
    <extension
          point="org.eclipse.wst.common.project.facet.ui.images">
       <image

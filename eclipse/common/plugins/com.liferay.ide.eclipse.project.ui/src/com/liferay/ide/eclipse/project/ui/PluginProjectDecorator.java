@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DecorationContext;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -37,11 +36,11 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 
 	private static ImageDescriptor EXT;
 
-	private static final String EXT_FACET = "liferay.ext"; //$NON-NLS-1$ 
+	private static final String EXT_FACET = "liferay.ext"; //$NON-NLS-1$
 
 	private static ImageDescriptor HOOK;
 
-	private static final String HOOK_FACET = "liferay.hook"; //$NON-NLS-1$ 
+	private static final String HOOK_FACET = "liferay.hook"; //$NON-NLS-1$
 
 	private static final String ICON_DIR = "icons/ovr"; //$NON-NLS-1$
 
@@ -52,7 +51,7 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 	private static ImageDescriptor PORTLET;
 
 	/* The constants are duplicated here to avoid plugin loading. */
-	private static final String PORTLET_FACET = "liferay.portlet"; //$NON-NLS-1$ 
+	private static final String PORTLET_FACET = "liferay.portlet"; //$NON-NLS-1$
 
 	private static ImageDescriptor THEME;
 
@@ -118,37 +117,44 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 		return THEME;
 	}
 
-	public void decorate(Object element, IDecoration decoration) {
-		if (element instanceof IProject) {
-			DecorationContext ctx = (DecorationContext) decoration.getDecorationContext();
+    public void decorate( Object element, IDecoration decoration )
+    {
+        if( element instanceof IProject )
+        {
+            IProject project = (IProject) element;
 
-			ctx.putProperty(IDecoration.ENABLE_REPLACE, true);
+            ImageDescriptor overlay = null;
 
-			IProject project = (IProject) element;
+            if( hasFacet( project, PORTLET_FACET ) )
+            {
+                overlay = getPortlet();
+            }
+            else if( hasFacet( project, HOOK_FACET ) )
+            {
+                overlay = getHook();
+            }
+            else if( hasFacet( project, EXT_FACET ) )
+            {
+                overlay = getExt();
+            }
+            else if( hasFacet( project, LAYOUTTPL_FACET ) )
+            {
+                overlay = getLayoutTpl();
+            }
+            else if( hasFacet( project, THEME_FACET ) )
+            {
+                overlay = getTheme();
+            }
 
-			ImageDescriptor overlay = null;
+            if( overlay != null )
+            {
+//                DecorationContext ctx = (DecorationContext) decoration.getDecorationContext();
+//                ctx.putProperty( IDecoration.ENABLE_REPLACE, true );
 
-			if (hasFacet(project, PORTLET_FACET)) {
-				overlay = getPortlet();
-			}
-			else if (hasFacet(project, HOOK_FACET)) {
-				overlay = getHook();
-			}
-			else if (hasFacet(project, EXT_FACET)) {
-				overlay = getExt();
-			}
-			else if (hasFacet(project, LAYOUTTPL_FACET)) {
-				overlay = getLayoutTpl();
-			}
-			else if (hasFacet(project, THEME_FACET)) {
-				overlay = getTheme();
-			}
-
-			if (overlay != null) {
-				decoration.addOverlay(overlay);
-			}
-		}
-	}
+                decoration.addOverlay( overlay );
+            }
+        }
+    }
 
 	private boolean hasFacet(IProject project, String facet) {
 		try {
