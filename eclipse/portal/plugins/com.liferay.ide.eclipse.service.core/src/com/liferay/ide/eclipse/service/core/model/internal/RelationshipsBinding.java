@@ -121,11 +121,11 @@ public class RelationshipsBinding extends ListBindingImpl {
 	}
 
 	@Override
-	public Resource add(ModelElementType type) {
+	public Resource insert(ModelElementType type, int position) {
 		IRelationship rel = IRelationship.TYPE.instantiate();
 
 		RelationshipResource resource = new RelationshipResource(getEntity().resource(), rel);
-		localResources.add(resource);
+		localResources.add(position, resource);
 		// IModelElement e = resource.binding(IRelationship.PROP_NAME).element();
 		// resource.element().addListener(listener);
 
@@ -191,7 +191,7 @@ public class RelationshipsBinding extends ListBindingImpl {
 		// public void handleElementDisposedEvent( ModelElementDisposedEvent event ) {
 		// }
 		// } );
-		
+
 	}
 
 	protected void handleRelationshipsChangedEvent(ModelPropertyChangeEvent event) {
@@ -228,7 +228,7 @@ public class RelationshipsBinding extends ListBindingImpl {
 							entity.getRelationships().remove(rel);
 						}
 						else {
-							IColumn foreignColumn = entity.getColumns().addNewElement();
+							IColumn foreignColumn = entity.getColumns().insert();
 							foreignColumn.setName(col.getName().getContent());
 							foreignColumn.setType(col.getType().getContent());
 						}

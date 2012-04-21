@@ -16,23 +16,29 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.hook.core.model.internal;
 
-import com.liferay.ide.eclipse.hook.core.model.IHook;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.LayeredListBindingImpl;
-
 /**
  * @author Gregory Amerson
  */
-public abstract class HookListBindingImpl extends LayeredListBindingImpl
+public class ObjectValue<T>
 {
-	protected IHook hook()
-	{
-		return this.element().nearest( IHook.class );
-	}
+    private T value;
 
-	protected IProject project()
-	{
-		return this.hook().adapt( IProject.class );
-	}
+    public ObjectValue( T value )
+    {
+        this.value = value;
+    }
+
+    public ObjectValue()
+    {
+    }
+
+    public T getValue()
+    {
+        return this.value;
+    }
+
+    public void setValue(T v)
+    {
+        this.value = v;
+    }
 }

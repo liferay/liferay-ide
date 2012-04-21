@@ -140,7 +140,7 @@ public class RelationshipsBinding2 extends LayeredListBindingImpl
 							}
 							else
 							{
-								IColumn foreignColumn = entity.getColumns().addNewElement();
+								IColumn foreignColumn = entity.getColumns().insert();
 								foreignColumn.setName( col.getName().getContent() );
 								foreignColumn.setType( col.getType().getContent() );
 							}
@@ -182,7 +182,7 @@ public class RelationshipsBinding2 extends LayeredListBindingImpl
 	}
 
 	@Override
-	protected Resource createResource( Object obj )
+	protected Resource resource( Object obj )
 	{
 		Resource retval = null;
 
@@ -208,14 +208,14 @@ public class RelationshipsBinding2 extends LayeredListBindingImpl
 	}
 
 	@Override
-	protected Object addUnderlyingObject( ModelElementType type )
+	protected Object insertUnderlyingObject( ModelElementType type, int position )
 	{
 		RelationshipObject retval = null;
 
 		if( IRelationship.TYPE.equals( type ) )
 		{
 			retval = new RelationshipObject();
-			newRelationships.add( retval );
+			newRelationships.add(position, retval );
 		}
 
 		return retval;

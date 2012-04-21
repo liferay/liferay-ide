@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -43,7 +43,7 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 	@Override
 	protected Object run( SapphireRenderingContext context ) {
 		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
-		IPortlet portlet = rootModel.getPortlets().addNewElement();
+		IPortlet portlet = rootModel.getPortlets().insert();
 		// Open the dialog to capture the mandatory properties
 		final SapphireDialog dialog = new SapphireDialog( context.getShell(), portlet, NEW_PORTLET_WIZARD_DEF );
 		if ( dialog != null && Dialog.OK == dialog.open() ) {

@@ -28,12 +28,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IFile;
@@ -56,14 +52,23 @@ import org.eclipse.sapphire.modeling.ValueBindingImpl;
 public class PortalPropertiesBindingImpl extends HookListBindingImpl
 {
 
+    private List<NameValueObject> properties = new ArrayList<NameValueObject>();
+
 	private class PortalPropertyResource extends Resource
 	{
-		private String name;
+		private NameValueObject nameValue;
 
-		public PortalPropertyResource( Resource parent )
+        public PortalPropertyResource( Resource parent, NameValueObject nameValue )
 		{
 			super( parent );
+
+			this.nameValue = nameValue;
 		}
+
+        public NameValueObject getNameValue()
+        {
+            return this.nameValue;
+        }
 
 		@Override
 		protected BindingImpl createBinding( ModelProperty property )
@@ -110,7 +115,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 
 		public String getName()
 		{
-			return name;
+			return this.nameValue.getName();
 		}
 
 		public Object getValue()
@@ -132,12 +137,13 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 				PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.clearProperty( getName() );
 			}
 
-			this.name = name;
+			this.nameValue.setName( name );
 			setValue( oldValue );
 		}
 
 		public void setValue( Object value )
 		{
+            this.nameValue.setValue( value );
 			if ( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
 			{
 				PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.setProperty( getName(), value );
@@ -147,31 +153,27 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 
 	}
 
-	protected PropertiesConfiguration portalPropertiesConfiguration;
+	private PropertiesConfiguration portalPropertiesConfiguration;
 
 	@Override
-	public Resource add( ModelElementType type )
+	protected Object insertUnderlyingObject( ModelElementType type, int position )
 	{
+        Object retval = null;
+
 		if ( type.equals( IPortalProperty.TYPE ) )
 		{
-			PortalPropertyResource newResource = createResource();
-
-			newResource.setName( "" );
-			newResource.setValue( "" );
-
+            retval = new NameValueObject();
+            this.properties.add((NameValueObject)retval);
 			this.element().notifyPropertyChangeListeners( this.property() );
+		}
 
-			return newResource;
-		}
-		else
-		{
-			return null;
-		}
+		return retval;
 	}
 
-	protected PortalPropertyResource createResource()
+	@Override
+	protected Resource resource( Object obj )
 	{
-		return new PortalPropertyResource( this.element().resource() );
+	    return new PortalPropertyResource( this.element().resource(), (NameValueObject)obj );
 	}
 
 	protected void flushProperties()
@@ -242,30 +244,9 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 		updateConfigurationForFile();
 	}
 
-	@SuppressWarnings( "rawtypes" )
-	@Override
-	public List<Resource> read()
+    @Override
+	protected List<?> readUnderlyingList()
 	{
-		List<Resource> properties = new ArrayList<Resource>();
-
-		if ( this.portalPropertiesConfiguration != null && !this.portalPropertiesConfiguration.isEmpty() )
-		{
-			Iterator keys = this.portalPropertiesConfiguration.getKeys();
-
-			while ( keys.hasNext() )
-			{
-				String key = keys.next().toString();
-
-				Object val = this.portalPropertiesConfiguration.getString( key );
-				PortalPropertyResource resource = this.createResource();
-
-				resource.setName( key );
-				resource.setValue( val );
-
-				properties.add( resource );
-			}
-		}
-
 		return properties;
 	}
 
@@ -275,6 +256,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 		if ( resource instanceof PortalPropertyResource )
 		{
 			PortalPropertyResource ppResource = (PortalPropertyResource) resource;
+            this.properties.remove( ppResource.getNameValue() );
 			this.portalPropertiesConfiguration.clearProperty( ppResource.getName() );
 			flushProperties();
 		}
@@ -282,55 +264,55 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 		this.element().notifyPropertyChangeListeners( this.property() );
 	}
 
-	@Override
-	@SuppressWarnings( "rawtypes" )
-	public void swap( Resource a, Resource b )
-	{
-		final PortalPropertyResource propA = a.adapt( PortalPropertyResource.class );
-		final PortalPropertyResource propB = b.adapt( PortalPropertyResource.class );
-
-		List<Object> keysList = new ArrayList<Object>();
-
-		Iterator keys = this.portalPropertiesConfiguration.getKeys();
-
-		while( keys.hasNext() )
-		{
-			keysList.add( keys.next() );
-		}
-
-		Map<Object, Object> properties = new HashMap<Object, Object>();
-
-		for( Object key : keysList )
-		{
-			properties.put( key, this.portalPropertiesConfiguration.getProperty( key.toString() ) );
-		}
-
-		Collections.sort( keysList, new Comparator<Object>()
-		{
-			public int compare( Object o1, Object o2 )
-			{
-				if( propA.name != null && propA.name.equals( o1 ) && propB.name != null && propB.name.equals( o2 ) )
-				{
-					return 1;
-				}
-				else if( propA.name != null && propA.name.equals( o2 ) && propB.name != null && propB.name.equals( o1 ) )
-				{
-					return 1;
-				}
-
-				return 0;
-			}
-		} );
-
-		this.portalPropertiesConfiguration.clear();
-
-		for( Object key : keysList )
-		{
-			this.portalPropertiesConfiguration.addProperty( key.toString(), properties.get( key.toString() ) );
-		}
-
-		flushProperties();
-	}
+//	@Override
+//	@SuppressWarnings( "rawtypes" )
+//	public void swap( Resource a, Resource b )
+//	{
+//		final PortalPropertyResource propA = a.adapt( PortalPropertyResource.class );
+//		final PortalPropertyResource propB = b.adapt( PortalPropertyResource.class );
+//
+//		List<Object> keysList = new ArrayList<Object>();
+//
+//		Iterator keys = this.portalPropertiesConfiguration.getKeys();
+//
+//		while( keys.hasNext() )
+//		{
+//			keysList.add( keys.next() );
+//		}
+//
+//		Map<Object, Object> properties = new HashMap<Object, Object>();
+//
+//		for( Object key : keysList )
+//		{
+//			properties.put( key, this.portalPropertiesConfiguration.getProperty( key.toString() ) );
+//		}
+//
+//		Collections.sort( keysList, new Comparator<Object>()
+//		{
+//			public int compare( Object o1, Object o2 )
+//			{
+//				if( propA.name != null && propA.name.equals( o1 ) && propB.name != null && propB.name.equals( o2 ) )
+//				{
+//					return 1;
+//				}
+//				else if( propA.name != null && propA.name.equals( o2 ) && propB.name != null && propB.name.equals( o1 ) )
+//				{
+//					return 1;
+//				}
+//
+//				return 0;
+//			}
+//		} );
+//
+//		this.portalPropertiesConfiguration.clear();
+//
+//		for( Object key : keysList )
+//		{
+//			this.portalPropertiesConfiguration.addProperty( key.toString(), properties.get( key.toString() ) );
+//		}
+//
+//		flushProperties();
+//	}
 
 	@Override
 	public ModelElementType type( Resource resource )
@@ -354,6 +336,14 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 			catch ( Exception e )
 			{
 				HookCore.logError( e );
+			}
+
+			Iterator keys = this.portalPropertiesConfiguration.getKeys();
+
+			while (keys.hasNext())
+			{
+                String key = keys.next().toString();
+			    this.properties.add(new NameValueObject(key, this.portalPropertiesConfiguration.getProperty( key )));
 			}
 		}
 	}

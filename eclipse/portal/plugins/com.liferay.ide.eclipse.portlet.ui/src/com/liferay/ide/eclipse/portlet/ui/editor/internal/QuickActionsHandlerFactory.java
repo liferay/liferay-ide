@@ -135,7 +135,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 			if ( obj instanceof ModelElementList<?> ) {
 				// System.out.println( "QuickActionsHandlerFactory.Handler.run()" + obj.getClass() );
 				ModelElementList<?> list = (ModelElementList<?>) obj;
-				mElement = list.addNewElement();
+				mElement = list.insert();
 			}
 			else {
 				throw new UnsupportedOperationException( Resources.bind(

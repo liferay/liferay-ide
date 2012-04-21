@@ -45,28 +45,68 @@ import org.eclipse.sapphire.modeling.Resource;
 public class CustomJspsBindingImpl extends HookListBindingImpl
 {
 
-	private List<Resource> customJspsResources;
+	private List<ObjectValue<String>> customJsps;
 	private IPath lastCustomJspDirPath;
 	private IPath portalDir;
 
-	@Override
-	public Resource add( ModelElementType type )
-	{
-		if ( type.equals( ICustomJsp.TYPE ) )
-		{
-			CustomJspResource newCustomJspResource = new CustomJspResource( this.element().resource() );
+    @Override
+    protected List<?> readUnderlyingList()
+    {
+        IFolder customJspFolder = getCustomJspFolder();
 
-			this.customJspsResources.add( newCustomJspResource );
+        if ( customJspFolder == null || this.portalDir == null )
+        {
+            this.lastCustomJspDirPath = null;
+            return Collections.emptyList();
+        }
 
-			this.element().notifyPropertyChangeListeners( this.property() );
+        IPath customJspDirPath = customJspFolder.getProjectRelativePath();
 
-			return newCustomJspResource;
-		}
-		else
-		{
-			return null;
-		}
-	}
+        if ( customJspDirPath != null && customJspDirPath.equals( lastCustomJspDirPath ) )
+        {
+            return this.customJsps;
+        }
+
+        this.customJsps = new ArrayList<ObjectValue<String>>();
+
+        this.lastCustomJspDirPath = customJspDirPath;
+
+        IFile[] customJspFiles = getCustomJspFiles();
+
+        for ( IFile customJspFile : customJspFiles )
+        {
+            IPath customJspFilePath = customJspFile.getProjectRelativePath();
+
+            IPath customJspPath =
+                customJspFilePath.removeFirstSegments( customJspFilePath.matchingFirstSegments( customJspDirPath ) );
+
+            this.customJsps.add(new ObjectValue<String>(customJspPath.toPortableString()));
+        }
+
+        return this.customJsps;
+    }
+
+    @SuppressWarnings( "unchecked" )
+    @Override
+    protected Resource resource( Object obj )
+    {
+        return new CustomJspResource( this.element().resource(),  (ObjectValue<String>) obj );
+    }
+
+    @Override
+    protected Object insertUnderlyingObject( ModelElementType type, int position )
+    {
+        ObjectValue<String> retval = null;
+
+        if ( type.equals( ICustomJsp.TYPE ) )
+        {
+            retval = new ObjectValue<String>();
+            this.customJsps.add( retval );
+            this.element().notifyPropertyChangeListeners( this.property() );
+        }
+
+        return retval;
+    }
 
 	private void findJspFiles( IFolder folder, List<IFile> jspFiles ) throws CoreException
 	{
@@ -127,49 +167,6 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
 	}
 
 	@Override
-	public List<Resource> read()
-	{
-		IFolder customJspFolder = getCustomJspFolder();
-
-		if ( customJspFolder == null || this.portalDir == null )
-		{
-			this.lastCustomJspDirPath = null;
-			return Collections.emptyList();
-		}
-
-		IPath customJspDirPath = customJspFolder.getProjectRelativePath();
-
-		if ( customJspDirPath != null && customJspDirPath.equals( lastCustomJspDirPath ) )
-		{
-			return this.customJspsResources;
-		}
-
-		this.customJspsResources = new ArrayList<Resource>();
-
-		this.lastCustomJspDirPath = customJspDirPath;
-
-		IFile[] customJspFiles = getCustomJspFiles();
-
-		for ( IFile customJspFile : customJspFiles )
-		{
-			IPath customJspFilePath = customJspFile.getProjectRelativePath();
-
-			IPath customJspPath =
-				customJspFilePath.removeFirstSegments( customJspFilePath.matchingFirstSegments( customJspDirPath ) );
-
-			// if ( this.portalDir.append( customJspPath ).toFile().exists() )
-			// {
-				CustomJspResource resource =
-					new CustomJspResource( this.element().resource(), customJspPath.toPortableString() );
-
-				this.customJspsResources.add( resource );
-			// }
-		}
-
-		return this.customJspsResources;
-	}
-
-	@Override
 	public void init( IModelElement element, ModelProperty property, String[] params )
 	{
 		super.init( element, property, params );
@@ -191,7 +188,8 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
 	@Override
 	public void remove( Resource resource )
 	{
-		this.customJspsResources.remove( resource );
+        ObjectValue<String> customJsp = resource.adapt( CustomJspResource.class ).getCustomJsp();
+		this.customJsps.remove( customJsp );
 		this.element().notifyPropertyChangeListeners( this.property() );
 	}
 

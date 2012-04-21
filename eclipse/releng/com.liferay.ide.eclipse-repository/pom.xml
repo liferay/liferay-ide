@@ -24,7 +24,7 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<includeAllDependencies>false</includeAllDependencies>
-<!--                     <finalName>test</finalName> -->
+                    <finalName>${project.artifactId}-${unqualifiedVersion}.${buildQualifier}-updatesite.zip</finalName>
 				</configuration>
 			</plugin>
 			<plugin>

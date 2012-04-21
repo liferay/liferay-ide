@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -38,7 +38,7 @@ public class DefinePortletEventHandler extends SapphireActionHandler {
 	protected Object run( SapphireRenderingContext context ) {
 		// System.out.println( "DefinePortletEventHandler.run()" );
 		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
-		IEventDefinition eventDefintion = rootModel.getEventDefinitions().addNewElement();
+		IEventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
 
 		// Select the node
 

@@ -30,15 +30,14 @@ import org.eclipse.sapphire.modeling.ValueBindingImpl;
  */
 public class CustomJspResource extends Resource
 {
-
-	private String value;
+	private ObjectValue<String> value;
 
 	public CustomJspResource( Resource parent )
 	{
 		super( parent );
 	}
 
-	public CustomJspResource( Resource parent, String customJsp )
+	public CustomJspResource( Resource parent, ObjectValue<String> customJsp )
 	{
 		super( parent );
 		this.value = customJsp;
@@ -55,13 +54,13 @@ public class CustomJspResource extends Resource
 				@Override
 				public String read()
 				{
-					return CustomJspResource.this.value;
+					return CustomJspResource.this.value.getValue();
 				}
 
 				@Override
 				public void write( final String value )
 				{
-					CustomJspResource.this.value = value;
+					CustomJspResource.this.value.setValue( value );
 					CustomJspResource.this.parent().element().notifyPropertyChangeListeners( property );
 				}
 			};
@@ -73,5 +72,10 @@ public class CustomJspResource extends Resource
 
 		return null;
 	}
+
+    public ObjectValue<String> getCustomJsp()
+    {
+        return this.value;
+    }
 
 }
