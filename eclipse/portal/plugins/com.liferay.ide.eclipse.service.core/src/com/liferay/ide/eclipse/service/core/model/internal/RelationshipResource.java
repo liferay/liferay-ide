@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,10 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 package com.liferay.ide.eclipse.service.core.model.internal;
 
+import com.liferay.ide.eclipse.service.core.model.IColumn;
+import com.liferay.ide.eclipse.service.core.model.IEntity;
 import com.liferay.ide.eclipse.service.core.model.IRelationship;
+import com.liferay.ide.eclipse.service.core.model.IServiceBuilder;
 
 import org.eclipse.sapphire.modeling.BindingImpl;
 import org.eclipse.sapphire.modeling.ModelProperty;
@@ -22,85 +27,106 @@ import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
 
-public class RelationshipResource extends Resource {
+/**
+ * @author Gregory Amerson
+ */
+public class RelationshipResource extends Resource
+{
 
-	protected IRelationship base;
+    private RelationshipObject relationshipObject;
 
-	public RelationshipResource(final Resource parent, final IRelationship base) {
-		super(parent);
-		this.base = base;
-	}
+    public RelationshipResource( RelationshipObject obj, Resource parent )
+    {
+        super( parent );
+        this.relationshipObject = obj;
+    }
 
-	public RelationshipResource(final Resource parent) {
-		super(parent);
-	}
+    @Override
+    protected BindingImpl createBinding( ModelProperty property )
+    {
+        BindingImpl binding = null;
+        String[] params = null;
 
-	@Override
-	protected BindingImpl createBinding(ModelProperty property) {
-		if (property == IRelationship.PROP_NAME) {
-			ValueBindingImpl binding = new ValueBindingImpl() {
+        if( IRelationship.PROP_FROM_ENTITY.equals( property ) )
+        {
+            binding = new ValueBindingImpl()
+            {
+                @Override
+                public String read()
+                {
+                    return RelationshipResource.this.relationshipObject.getFromName();
+                }
 
-				@Override
-				public String read() {
-					return getBase().getName().getText(false);
-				}
+                @Override
+                public void write( String value )
+                {
+                    RelationshipResource.this.relationshipObject.setFromName( value );
+                    persistRelationship();
+                }
+            };
+        }
+        else if ( IRelationship.PROP_TO_ENTITY.equals( property ) )
+        {
+            binding = new ValueBindingImpl()
+            {
+                @Override
+                public String read()
+                {
+                    return RelationshipResource.this.relationshipObject.getToName();
+                }
 
-				@Override
-				public void write(final String value) {
-					getBase().setName(value);
-				}
-			};
+                @Override
+                public void write( String value )
+                {
+                    RelationshipResource.this.relationshipObject.setToName( value );
+                    persistRelationship();
+                }
+            };
+        }
 
-			binding.init(element(), IRelationship.PROP_NAME, null);
+        if( binding != null )
+        {
+            binding.init( element(), property, params );
+        }
 
-			return binding;
-		}
-		else if ( property == IRelationship.PROP_FOREIGN_KEY_COLUMN_NAME ) {
-			ValueBindingImpl binding = new ValueBindingImpl() {
+        return binding;
+    }
 
-				@Override
-				public String read() {
-					return getBase().getForeignKeyColumnName().getText( false );
-				}
+    public RelationshipObject getRelationshipObject()
+    {
+        return this.relationshipObject;
+    }
 
-				@Override
-				public void write( final String value ) {
-					getBase().setForeignKeyColumnName( value );
-				}
-			};
+    private void persistRelationship()
+    {
+        final IServiceBuilder serviceBuilder = parent().element().nearest( IServiceBuilder.class );
 
-			binding.init( element(), IRelationship.PROP_NAME, null );
+        final String fromName = this.relationshipObject.getFromName();
+        final String toName = this.relationshipObject.getToName();
 
-			return binding;
-		}
-		else if ( property == IRelationship.PROP_LABEL ) {
-			ValueBindingImpl binding = new ValueBindingImpl() {
+        final IEntity fromEntity = EntityRelationshipService.findEntity( fromName, serviceBuilder );
+        final IEntity toEntity = EntityRelationshipService.findEntity( toName, serviceBuilder );
 
-				@Override
-				public String read() {
-					return getBase().getLabel().getText( false );
-				}
+        if( fromEntity != null && toEntity != null )
+        {
+            IColumn primaryKeyColumn = null;
 
-				@Override
-				public void write( final String value ) {
-					// read only
-				}
-			};
+            for( IColumn column : toEntity.getColumns() )
+            {
+                if( column.isPrimary().getContent() )
+                {
+                    primaryKeyColumn = column;
+                    break;
+                }
+            }
 
-			binding.init( element(), IRelationship.PROP_LABEL, null );
-
-			return binding;
-		}
-
-		return null;
-	}
-
-	public void setBase(IRelationship b) {
-		this.base = b;
-	}
-
-	public IRelationship getBase() {
-		return this.base;
-	}
+            if( primaryKeyColumn != null )
+            {
+                final IColumn column = fromEntity.getColumns().insert();
+                column.setName( primaryKeyColumn.getName().getContent() );
+                column.setType( "long" );
+            }
+        }
+    }
 
 }

@@ -14,8 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.eclipse.service.core.model;
 
-import com.liferay.ide.eclipse.service.core.model.internal.RelationshipsBinding2;
-
 import org.eclipse.sapphire.modeling.ElementProperty;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -31,7 +29,6 @@ import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -41,9 +38,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 public interface IEntity extends IModelElement {
 
     ModelElementType TYPE = new ModelElementType( IEntity.class );
-    
+
 	// *** Name ***
-    
+
     @XmlBinding(path = "@name")
 	@Label(standard = "&name")
     @Required
@@ -194,7 +191,7 @@ public interface IEntity extends IModelElement {
 
 	void setJsonEnabled( String value );
 
-	void setJsonEnabled( Boolean value );    
+	void setJsonEnabled( Boolean value );
 	@Type(base = IColumn.class)
 	@Label(standard = "column")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "column", type = IColumn.class))
@@ -239,12 +236,4 @@ public interface IEntity extends IModelElement {
 
 	ModelElementList<ITxRequired> getTxRequireds();
 
-	// *** Relationships ***
-
-	@Type(base = IRelationship.class)
-	@Label(standard = "relationship")
-	@CustomXmlListBinding( impl = RelationshipsBinding2.class )
-	ListProperty PROP_RELATIONSHIPS = new ListProperty(TYPE, "Relationships");
-
-	ModelElementList<IRelationship> getRelationships();
 }

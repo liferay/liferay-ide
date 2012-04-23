@@ -868,6 +868,7 @@ development of services.</content>
 	        </hint>
             <context>Sapphire.EditorPage</context>
             <key-binding>SHIFT+CONTROL+b</key-binding>
+            <key-binding-behavior>propagated</key-binding-behavior>
         </action>
         <action>
             <id>Liferay.ServiceBuilder.BuildWSDD</id>
@@ -900,7 +901,10 @@ development of services.</content>
             <tool-palette-label>entity</tool-palette-label>
             <instance-id>${Name}</instance-id>
             <property>Entities</property>
-            <label>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</label>
+            <label>
+                <text>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</text>
+                <width>65</width>
+            </label>
             <properties-view>
                 <page>
                     <label>required</label>
@@ -948,31 +952,12 @@ development of services.</content>
                     </content>
                 </page>
             </properties-view>
-            <connection-binding>
-                <connection-id>Relationship</connection-id>
-                <property>Relationships</property>
-                <instance-id>${Name}</instance-id>
-                <endpoint2>
-                    <property>Name</property>
-                    <value>${Name}</value>
-                </endpoint2>
-                <label>${Label}</label>
-            </connection-binding>
             <tool-palette-image>icons/Entity_16x16.gif</tool-palette-image>
             <model-element-type>IEntity</model-element-type>
+            <image>
+                <path>icons/e16/entity_55x50.png</path>
+            </image>
         </node>
-        <connection>
-            <endpoint1>
-                <type>none</type>
-            </endpoint1>
-            <endpoint2>
-                <type>arrow</type>
-            </endpoint2>
-            <id>Relationship</id>
-            <tool-palette-label>relationship</tool-palette-label>
-            <tool-palette-image>icons/references_16x16.png</tool-palette-image>
-            <line-style>dash</line-style>
-        </connection>
         <properties-view>
             <page>
                 <label>general</label>
@@ -1005,8 +990,35 @@ development of services.</content>
             </page>
         </properties-view>
         <grid>
-            <visible>true</visible>
+            <visible>false</visible>
         </grid>
+        <connection-binding>
+            <connection-id>Relationship</connection-id>
+            <property>Relationships</property>
+            <instance-id>${concat(FromEntity,ToEntity)}</instance-id>
+            <label>${ concat( FromEntity, concat( '-&gt;', ToEntity) ) }</label>
+            <endpoint1>
+                <property>FromEntity</property>
+                <value>${Name}</value>
+            </endpoint1>
+            <endpoint2>
+                <property>ToEntity</property>
+                <value>${Name}</value>
+            </endpoint2>
+        </connection-binding>
+        <connection>
+            <id>Relationship</id>
+            <tool-palette-label>relationship</tool-palette-label>
+            <tool-palette-image>icons/references_16x16.png</tool-palette-image>
+            <endpoint2>
+                <type>circle</type>
+            </endpoint2>
+            <line-width>2</line-width>
+        </connection>
+        <guides>
+            <visible>true</visible>
+        </guides>
+        <layout-storage>workspace</layout-storage>
     </diagram-page>
 	
 </definition>

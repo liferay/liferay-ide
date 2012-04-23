@@ -15,22 +15,21 @@
 package com.liferay.ide.eclipse.service.core.model;
 
 import com.liferay.ide.eclipse.service.core.model.internal.EntityRelationshipService;
-import com.liferay.ide.eclipse.service.core.model.internal.RelationshipLabelService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
-import org.eclipse.sapphire.modeling.annotations.ReadOnly;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 
+/**
+ * @author Gregory Amerson
+ */
 @GenerateImpl
 @Image(path = "images/references_16x16.png")
 public interface IRelationship extends IModelElement {
@@ -40,23 +39,17 @@ public interface IRelationship extends IModelElement {
 	@Reference(target = IEntity.class)
 	@Service(impl = EntityRelationshipService.class)
 	@Required
-	@XmlBinding(path = "name")
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+	ValueProperty PROP_FROM_ENTITY = new ValueProperty(TYPE, "FromEntity");
 
-	ReferenceValue<String, IEntity> getName();
+	ReferenceValue<String, IEntity> getFromEntity();
+	void setFromEntity(String value);
 
-	void setName(String value);
+	@Reference(target = IEntity.class)
+    @Service(impl = EntityRelationshipService.class)
+    @Required
+    ValueProperty PROP_TO_ENTITY = new ValueProperty(TYPE, "ToEntity");
 
-	ValueProperty PROP_FOREIGN_KEY_COLUMN_NAME = new ValueProperty( TYPE, "ForeignKeyColumnName" );
-
-    Value<String> getForeignKeyColumnName();
-
-	void setForeignKeyColumnName( String value );
-
-	@ReadOnly
-	@Service( impl = RelationshipLabelService.class )
-	ValueProperty PROP_LABEL = new ValueProperty( TYPE, "Label" );
-
-	Value<String> getLabel();
+    ReferenceValue<String, IEntity> getToEntity();
+    void setToEntity(String value);
 
 }

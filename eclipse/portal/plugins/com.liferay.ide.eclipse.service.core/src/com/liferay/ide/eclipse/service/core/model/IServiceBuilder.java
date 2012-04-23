@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.service.core.model;
 
+import com.liferay.ide.eclipse.service.core.model.internal.RelationshipsBindingImpl;
 import com.liferay.ide.eclipse.service.core.model.internal.ShowRelationshipLabelsBinding;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -28,6 +29,7 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -120,5 +122,11 @@ public interface IServiceBuilder extends IModelElement {
 	void setShowRelationshipLabels( String value );
 
 	void setShowRelationshipLabels( Boolean value );
+
+	@Type(base = IRelationship.class)
+    @CustomXmlListBinding( impl = RelationshipsBindingImpl.class )
+    ListProperty PROP_RELATIONSHIPS = new ListProperty(TYPE, "Relationships");
+
+    ModelElementList<IRelationship> getRelationships();
 
 }
