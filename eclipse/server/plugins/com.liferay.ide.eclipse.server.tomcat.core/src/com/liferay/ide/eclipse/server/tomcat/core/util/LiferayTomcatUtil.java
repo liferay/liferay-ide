@@ -158,7 +158,7 @@ public class LiferayTomcatUtil {
 
 	public static String[] getSupportedHookProperties(IPath runtimeLocation, IPath portalDir)
 		throws IOException {
-		
+
 		IPath hookPropertiesPath =
 			LiferayTomcatPlugin.getDefault().getStateLocation().append("hook_properties").append(
 				runtimeLocation.toPortableString().replaceAll("\\/", "_") + "_hook_properties.txt");
@@ -186,7 +186,7 @@ public class LiferayTomcatUtil {
 
 	public static String getVersion(IPath location, IPath portalDir)
 		throws IOException {
-		
+
 		IPath versionsInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append("version.properties");
 
 		String locationKey = location.toPortableString().replaceAll("\\/", "_");
@@ -294,7 +294,7 @@ public class LiferayTomcatUtil {
 	public static void loadHookPropertiesFile(
 		IPath runtimeLocation, IPath portalDir, File hookPropertiesFile, File errorFile)
 		throws IOException {
-		
+
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.GetSupportedHookProperties";
 
 		IPath[] libRoots = new IPath[] { runtimeLocation.append("lib"), runtimeLocation.append("lib/ext") };
@@ -318,7 +318,7 @@ public class LiferayTomcatUtil {
 
 	public static void loadVersionInfoFile(IPath runtimeLocation, IPath portalDir, File versionInfoFile, File errorFile)
 		throws IOException {
-		
+
 		String portalSupportClass = "com.liferay.ide.eclipse.server.core.support.ReleaseInfoGetVersion";
 
 		IPath[] libRoots = new IPath[] { runtimeLocation.append("lib"), runtimeLocation.append("lib/ext") };
@@ -342,23 +342,23 @@ public class LiferayTomcatUtil {
 
 	public static IPath modifyLocationForBundle(IPath currentLocation) {
 		IPath modifiedLocation = null;
-	
+
 		if (currentLocation == null || CoreUtil.isNullOrEmpty(currentLocation.toOSString())) {
 			return null;
 		}
-	
+
 		File location = currentLocation.toFile();
-	
+
 		if (location.exists() && location.isDirectory()) {
 			// check to see if this location contains tomcat dir tomcat-*
 			File[] files = location.listFiles();
-	
+
 			boolean matches = false;
-	
+
 			String pattern = "^tomcat-.*";
-	
+
 			File tomcatDir = null;
-	
+
 			for ( File file : files )
 			{
 				if ( file.isDirectory() && file.getName().matches( pattern ) )
@@ -370,12 +370,12 @@ public class LiferayTomcatUtil {
 					break;
 				}
 			}
-	
+
 			if (matches && tomcatDir != null) {
 				modifiedLocation = new Path(tomcatDir.getPath());
 			}
 		}
-	
+
 		return modifiedLocation;
 	}
 
@@ -649,6 +649,9 @@ public class LiferayTomcatUtil {
 
 			props.put( "auto.deploy.interval", portalServer.getAutoDeployInterval() );
 		}
+
+//		props.put( "json.service.public.methods", "*" );
+		props.put( "jsonws.web.service.public.methods", "*" );
 
 		File file = idePropertiesPath.toFile();
 
