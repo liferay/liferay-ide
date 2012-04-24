@@ -42,10 +42,6 @@
 								<property name="test_classpath" refid="maven.test.classpath" />
 								<property name="plugin_classpath" refid="maven.plugin.classpath" />
 
-								<tstamp>
-									<format property="tstamp" pattern="yyyyMMddHHmm" locale="en,US" />
-								</tstamp>
-
 								<ant antfile="${basedir}/bundle/build.xml">
 									<target name="all" />
 								</ant>
