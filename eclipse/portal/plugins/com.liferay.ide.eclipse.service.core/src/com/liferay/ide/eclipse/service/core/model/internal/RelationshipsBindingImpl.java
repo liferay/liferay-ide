@@ -108,7 +108,11 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
         for( IEntity entity : serviceBuilder().getEntities() )
         {
             IColumn primaryKeyColumn = findPrimaryKey( entity );
-            primaryKeys.put( primaryKeyColumn.getName().getContent(), entity.getName().getContent() );
+
+            if( primaryKeyColumn != null && !empty( primaryKeyColumn.getName().getContent() ) )
+            {
+                primaryKeys.put( primaryKeyColumn.getName().getContent(), entity.getName().getContent() );
+            }
         }
 
         for( IEntity entity : serviceBuilder().getEntities() )

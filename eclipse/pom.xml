@@ -100,7 +100,7 @@
                 <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
-                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/203/artifact/build/repository</sapphire-site>
+                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/206/artifact/build/repository</sapphire-site>
                 <platform-version>[3.6,3.7)</platform-version>
             </properties>
             <repositories>
@@ -142,7 +142,7 @@
                 <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
                 <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
                 <xsd-site>file:../../liferay-ide/eclipse/target-platform/xsd</xsd-site>
-                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/203/artifact/build/repository</sapphire-site>
+                <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/206/artifact/build/repository</sapphire-site>
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>
@@ -223,7 +223,7 @@
 			<repository>
 				<id>sapphire</id>
 				<layout>p2</layout>
-				<url>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/203/artifact/build/repository</url>
+				<url>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/206/artifact/build/repository</url>
 			</repository>
 			<repository>
 				<id>wtp</id>

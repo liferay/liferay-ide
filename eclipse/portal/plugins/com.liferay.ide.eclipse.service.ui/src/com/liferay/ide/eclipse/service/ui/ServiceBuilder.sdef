@@ -1018,7 +1018,7 @@ development of services.</content>
         <guides>
             <visible>true</visible>
         </guides>
-        <layout-storage>workspace</layout-storage>
+        <layout-storage>project</layout-storage>
     </diagram-page>
 	
 </definition>
