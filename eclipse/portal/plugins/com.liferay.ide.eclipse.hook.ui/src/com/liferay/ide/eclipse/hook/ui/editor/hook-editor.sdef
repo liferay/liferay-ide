@@ -94,7 +94,7 @@
                                     <name>factory</name>
                                 </hint>
                             </property-editor>
-                            <!-- 
+                             
                             <separator>
                                 <label>Details</label>
                             </separator>
@@ -120,7 +120,7 @@
                                         <label>Select a portal property item above to view or edit additional parameters.</label>
                                     </content>
                                 </default-panel>
-                            </switching-panel> -->
+                            </switching-panel>
                         </content>
                     </panel>
                     <label>Customize Liferay Portal Properties</label>
@@ -158,7 +158,7 @@
                                 </hint>
                                 <show-label>true</show-label>
                             </property-editor>
-                            <!-- <separator>
+                            <separator>
                                 <label>Details</label>
                             </separator>
                             <switching-panel>
@@ -179,7 +179,7 @@
                                         </property-editor>
                                     </content>
                                 </panel>
-                            </switching-panel> -->
+                            </switching-panel> 
                         </content>
                     </panel>
                 </with>
