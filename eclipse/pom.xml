@@ -141,9 +141,9 @@
                 <gef-site>http://download.eclipse.org/tools/gef/updates/releases/</gef-site>
                 <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
                 <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
-                <xsd-site>file:../../liferay-ide/eclipse/target-platform/xsd</xsd-site>
                 <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/211/artifact/build/repository</sapphire-site>
                 <greclipse-site>http://dist.springsource.org/release/GRECLIPSE/e3.7/</greclipse-site>
+                <xsd-site>file:target-platform/xsd-2.7.2</xsd-site>
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>
@@ -188,15 +188,15 @@
                     <url>${datatools-site}</url>
                 </repository>
                 <repository>
+	                <id>greclipse-site</id>
+	                <layout>p2</layout>
+	                <url>${greclipse-site}</url>
+	            </repository>
+                <repository>
                     <id>xsd</id>
                     <layout>p2</layout>
                     <url>${xsd-site}</url>
                 </repository>
-                <repository>
-                <id>greclipse-site</id>
-                <layout>p2</layout>
-                <url>${greclipse-site}</url>
-            </repository>
              </repositories>
         </profile>
         
