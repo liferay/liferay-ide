@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *   
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  * 		Kamesh Sampath - initial implementation
  * 		Gregory Amerson - IDE-355
@@ -66,7 +66,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 	private boolean ignoreCustomModelChanges;
 
 	/**
-	 * 
+	 *
 	 */
 	public HookXmlEditor() {
 		super( ID );
@@ -74,13 +74,13 @@ public class HookXmlEditor extends SapphireEditorForXml
 		setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
 	}
 
-	private void copyCustomJspsToProject( ModelElementList<ICustomJsp> customJsps ) 
+	private void copyCustomJspsToProject( ModelElementList<ICustomJsp> customJsps )
 	{
 		try
 		{
 			ICustomJspDir customJspDirElement = this.getModelElement().nearest( IHook.class ).getCustomJspDir().element();
-			
-			if ( customJspDirElement != null && customJspDirElement.validate().ok() )
+
+			if ( customJspDirElement != null && customJspDirElement.validation().ok() )
 			{
 				Path customJspDir = customJspDirElement.getValue().getContent();
 				IFolder docroot = CoreUtil.getDocroot( getProject() );
@@ -88,15 +88,15 @@ public class HookXmlEditor extends SapphireEditorForXml
 
 				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
 				IPath portalDir = liferayRuntime.getPortalDir();
-				
+
 				for ( ICustomJsp customJsp : customJsps )
 				{
 					String content = customJsp.getValue().getContent();
-                        
+
 					if( !empty( content ) )
 					{
 						IFile customJspFile = customJspFolder.getFile( content );
-                            
+
 						if( !customJspFile.exists() )
 						{
 							IPath portalJsp = portalDir.append( content );
@@ -119,7 +119,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 		{
 			HookUI.logError( e);
 		}
-		
+
 	}
 
 	@Override
@@ -212,7 +212,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 
 	/**
 	 * A small utility method used to compute the DTD version
-	 * 
+	 *
 	 * @param document
 	 *            - the document that is loaded by the editor
 	 * @return - {@link HookVersionType}

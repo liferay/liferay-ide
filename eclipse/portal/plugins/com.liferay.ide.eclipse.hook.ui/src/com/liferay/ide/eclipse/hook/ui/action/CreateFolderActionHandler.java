@@ -17,6 +17,8 @@
 
 package com.liferay.ide.eclipse.hook.ui.action;
 
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
+
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
@@ -35,8 +37,6 @@ import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
-
-import com.liferay.ide.eclipse.sdk.ISDKConstants;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -117,7 +117,7 @@ public class CreateFolderActionHandler extends SapphirePropertyEditorActionHandl
 	protected final boolean computeEnablementState() {
 		boolean isEnbled = super.computeEnablementState();
 		if ( modelElement != null ) {
-			boolean validationStatus = !modelElement.validate().ok();
+			boolean validationStatus = !modelElement.validation().ok();
 			isEnbled = isEnbled && validationStatus;
 		}
 		return isEnbled;

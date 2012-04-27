@@ -41,8 +41,8 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
-import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.PropertyEditorPart;
+import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -131,7 +131,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
 	protected final boolean computeEnablementState() {
 		boolean isEnbled = super.computeEnablementState();
 		if ( modelElement != null ) {
-			boolean validationStatus = !modelElement.validate().ok();
+			boolean validationStatus = !modelElement.validation().ok();
 			isEnbled = isEnbled && validationStatus;
 		}
 		return isEnbled;

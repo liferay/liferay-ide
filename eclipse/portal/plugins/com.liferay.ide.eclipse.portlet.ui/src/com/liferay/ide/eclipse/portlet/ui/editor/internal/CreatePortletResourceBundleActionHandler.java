@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -102,7 +102,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		final IModelElement element = getModelElement();
 		IPortlet portlet = (IPortlet) element;
 		if ( portlet.getSupportedLocales() != null && !portlet.getSupportedLocales().isEmpty() ) {
-			isEnabled = !portlet.getSupportedLocales().validate().ok();
+			isEnabled = !portlet.getSupportedLocales().validation().ok();
 		}
 
 		return isEnabled;
