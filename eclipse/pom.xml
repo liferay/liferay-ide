@@ -53,7 +53,7 @@
   <properties>
     <tycho-version>0.14.0</tycho-version>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-<sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/216/artifact/build/repository</sapphire-site>
+    <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/221/artifact/build/repository</sapphire-site>
   </properties>
 
     <profiles>
@@ -226,11 +226,13 @@
                     <url>file:target-platform/eclipse-jdt-3.7.0</url>
                 </repository>
                 
+		<!--
                 <repository>
                     <id>sapphire</id>
                     <layout>p2</layout>
                     <url>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/211/artifact/build/repository</url>
                 </repository>
+		-->
                 
                 <repository>
                     <id>dtp-site</id>
@@ -273,7 +275,7 @@
                 <repository>
                     <id>sapphire</id>
                     <layout>p2</layout>
-                    <url>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/211/artifact/build/repository</url>
+                    <url>${sapphire-site}</url>
                 </repository>
                 <repository>
                     <id>wtp</id>
