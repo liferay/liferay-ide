@@ -184,7 +184,10 @@ public class HookXmlEditor extends SapphireEditorForXml
 			}
 		};
 
-		modelElement.addListener( listener, "CustomJsps" );
+
+		this.ignoreCustomModelChanges = true;
+		modelElement.addListener( listener, "CustomJsps/*" );
+		this.ignoreCustomModelChanges = false;
 
 		return modelElement;
 	}
