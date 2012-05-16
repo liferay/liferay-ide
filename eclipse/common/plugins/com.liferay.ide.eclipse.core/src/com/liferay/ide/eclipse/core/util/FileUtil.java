@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.CorePlugin;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,6 +43,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.ErrorHandler;
 
 /**
  * @author Greg Amerson
@@ -230,6 +232,35 @@ public class FileUtil {
 		}
 
 		return lines.toArray(new String[lines.size()]);
+	}
+
+	public static Document readXML(String content)
+	{
+	    return readXML(content, null, null);
+	}
+
+	public static Document readXML(String content, EntityResolver resolver, ErrorHandler error)
+	{
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db;
+
+        try {
+            db = dbf.newDocumentBuilder();
+
+            if (resolver != null) {
+                db.setEntityResolver(resolver);
+            }
+
+            if (error != null)
+            {
+                db.setErrorHandler( error );
+            }
+
+            return db.parse(new ByteArrayInputStream( content.getBytes() ));
+        }
+        catch (Throwable t) {
+            return null;
+        }
 	}
 
 	public static Document readXMLFile(File file) {
