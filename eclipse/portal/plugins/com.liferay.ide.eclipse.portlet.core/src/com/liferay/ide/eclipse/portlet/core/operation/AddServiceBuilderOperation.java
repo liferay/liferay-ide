@@ -18,6 +18,8 @@ package com.liferay.ide.eclipse.portlet.core.operation;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.project.core.util.LiferayDataModelOperation;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,6 +47,7 @@ import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -95,12 +98,38 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
 		Template template = null;
 
-		if (getDataModel().getBooleanProperty(USE_SAMPLE_TEMPLATE)) {
-			template = getTemplateStore().findTemplateById(SAMPLE_SERVICE_FILE_TEMPLATE);
-		}
-		else {
-			template = getTemplateStore().findTemplateById(SERVICE_FILE_TEMPLATE);
-		}
+        try
+        {
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getTargetProject() );
+            Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
+
+            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )
+            {
+                if( getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ) )
+                {
+                    template = getTemplateStore().findTemplateById( SAMPLE_SERVICE_61_FILE_TEMPLATE );
+                }
+                else
+                {
+                    template = getTemplateStore().findTemplateById( SERVICE_61_FILE_TEMPLATE );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        if( template == null )
+        {
+            if( getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ) )
+            {
+                template = getTemplateStore().findTemplateById( SAMPLE_SERVICE_FILE_TEMPLATE );
+            }
+            else
+            {
+                template = getTemplateStore().findTemplateById( SERVICE_FILE_TEMPLATE );
+            }
+        }
 
 		IDocument document = new Document();
 

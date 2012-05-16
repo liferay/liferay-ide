@@ -37,11 +37,16 @@ public interface INewServiceBuilderDataModelProperties extends IArtifactEditOper
 	public static final String PACKAGE_PATH = "INewServiceBuilderDataModelProperties.PACKAGE_PATH";
 
 	public static final String SAMPLE_SERVICE_FILE_TEMPLATE =
-		"com.liferay.ide.eclipse.templates.servicebuilder.sample.file";
+	                "com.liferay.ide.eclipse.templates.servicebuilder.sample.file";
+
+	public static final String SAMPLE_SERVICE_61_FILE_TEMPLATE =
+	                "com.liferay.ide.eclipse.templates.servicebuilder61.sample.file";
 
 	public static final String SERVICE_FILE = "INewServiceBuilderDataModelProperties.SERVICE_FILE";
 
 	public static final String SERVICE_FILE_TEMPLATE = "com.liferay.ide.eclipse.templates.servicebuilder.file";
+
+	public static final String SERVICE_61_FILE_TEMPLATE = "com.liferay.ide.eclipse.templates.servicebuilder61.file";
 
 	public static final String SOURCE_FOLDER = "INewServiceBuilderDataModelProperties.SOURCE_FOLDER";
 
