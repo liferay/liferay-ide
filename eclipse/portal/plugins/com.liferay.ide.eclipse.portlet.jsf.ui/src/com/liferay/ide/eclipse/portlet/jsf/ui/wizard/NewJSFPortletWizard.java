@@ -74,7 +74,7 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
 
 	@Override
 	protected ImageDescriptor getImage() {
-		return ImageDescriptor.createFromURL(JSFUIPlugin.getDefault().getBundle().getEntry("/icons/wizban/jsf_wiz.png"));
+		return ImageDescriptor.createFromURL(JSFUIPlugin.getDefault().getBundle().getEntry("/icons/wizban/liferay_faces_75x66.png"));
 	}
 
 	@Override
