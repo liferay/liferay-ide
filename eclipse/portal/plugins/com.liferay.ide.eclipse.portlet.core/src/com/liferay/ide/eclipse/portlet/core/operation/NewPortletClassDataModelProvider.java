@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -47,6 +48,7 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.server.core.IRuntime;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -115,26 +117,40 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		return defaultParams.toArray(new ParamValue[0]);
 	}
 
+	protected IRuntime getRuntime() throws CoreException
+	{
+	    IRuntime runtime = null;
+
+        if (this.fragment) {
+            org.eclipse.wst.common.project.facet.core.runtime.IRuntime bRuntime =
+                (org.eclipse.wst.common.project.facet.core.runtime.IRuntime) getDataModel().getProperty(
+                    FACET_RUNTIME);
+            runtime = ServerUtil.getRuntime(bRuntime);
+        }
+        else {
+            runtime = ServerUtil.getRuntime((IProject) getProperty(PROJECT));
+        }
+
+        return runtime;
+	}
+
+	protected ILiferayRuntime getLiferayRuntime() throws CoreException
+	{
+	    IRuntime runtime = getRuntime();
+
+	    ILiferayRuntime portalRuntime = (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(
+            ILiferayRuntime.class, null);
+
+	    return portalRuntime;
+	}
+
 	protected Properties getCategories() {
 		if (categories == null) {
 			IProject project = (IProject) getProperty(PROJECT);
 
 			if (project != null) {
 				try {
-					IRuntime runtime = null;
-
-					if (this.fragment) {
-						org.eclipse.wst.common.project.facet.core.runtime.IRuntime bRuntime =
-							(org.eclipse.wst.common.project.facet.core.runtime.IRuntime) getDataModel().getProperty(
-								FACET_RUNTIME);
-						runtime = ServerUtil.getRuntime(bRuntime);
-					} 
-					else {
-						runtime = ServerUtil.getRuntime(project);
-					}
-
-					ILiferayRuntime portalRuntime = (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter(
-							ILiferayRuntime.class, null);
+					ILiferayRuntime portalRuntime = getLiferayRuntime();
 
 					categories = portalRuntime.getPortletCategories();
 				}
@@ -255,18 +271,27 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		if (/* getStringProperty(SUPERCLASS).equals(QUALIFIED_MVC_PORTLET) && */getBooleanProperty(CREATE_JSPS)) {
 			String[] modes = ALL_PORTLET_MODES;
 
-			String[] names =
-				{
-					"view-jsp", "edit-jsp", "help-jsp", "about-jsp", "config-jsp", "edit-defaults-jsp",
-					"edit-guest-jsp", "preview-jsp", "print-jsp"
-				};
+	        ParamValue[] paramVals = null;
 
-			String[] values =
-				{
-					"/view.jsp", "/edit.jsp", "/help.jsp", "/about.jsp", "/config.jsp", "/edit-defaults.jsp",
-					"/edit-guest.jsp", "/preview.jsp", "/print.jsp"
-				};
-			ParamValue[] paramVals = createDefaultParamValuesForModes(modes, names, values);
+            try
+            {
+                ILiferayRuntime portalRuntime = getLiferayRuntime();
+                String version = portalRuntime.getPortalVersion();
+                Version portalVersion = Version.parseVersion( version );
+
+                if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )
+                {
+                    paramVals = createDefaultParamValuesForModes( modes, initNames61, initValues );
+                }
+            }
+            catch( Exception e )
+            {
+            }
+
+            if( paramVals == null )
+            {
+                paramVals = createDefaultParamValuesForModes( modes, initNames60, initValues );
+            }
 
 			Collections.addAll(initParams, paramVals);
 		}

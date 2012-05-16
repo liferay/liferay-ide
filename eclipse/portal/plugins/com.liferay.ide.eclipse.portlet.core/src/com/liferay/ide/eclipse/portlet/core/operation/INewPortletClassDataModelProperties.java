@@ -30,6 +30,46 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	// "INewPortletClassDataModelProperties.CREATE_CUSTOM_PORTLET_CLASS";
 
 	// liferay portlet view modes
+
+    final String[] initNames60 =
+    {
+        "view-jsp",
+        "edit-jsp",
+        "help-jsp",
+        "about-jsp",
+        "config-jsp",
+        "edit-defaults-jsp",
+        "edit-guest-jsp",
+        "preview-jsp",
+        "print-jsp"
+    };
+
+    final String[] initNames61 =
+    {
+        "view-template",
+        "edit-template",
+        "help-template",
+        "about-template",
+        "config-template",
+        "edit-defaults-template",
+        "edit-guest-template",
+        "preview-template",
+        "print-template"
+    };
+
+    final String[] initValues =
+    {
+        "/view.jsp",
+        "/edit.jsp",
+        "/help.jsp",
+        "/about.jsp",
+        "/config.jsp",
+        "/edit-defaults.jsp",
+        "/edit-guest.jsp",
+        "/preview.jsp",
+        "/print.jsp"
+    };
+
 	public static final String ABOUT_MODE = "INewPortletClassDataModelProperties.ABOUT_MODE";
 
 	public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.aboutjsp";

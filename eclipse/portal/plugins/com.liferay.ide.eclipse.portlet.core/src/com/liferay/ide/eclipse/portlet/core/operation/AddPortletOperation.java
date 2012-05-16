@@ -164,47 +164,60 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
 	}
 
-	protected IStatus createModeJSPFiles() {
+	@SuppressWarnings( "unchecked" )
+    protected IStatus createModeJSPFiles() {
 		IDataModel dm = getDataModel();
 
 		TemplateContext context = new DocumentTemplateContext(portletContextType, new Document(), 0, 0);
 		context.setVariable("portlet_display_name", getDataModel().getStringProperty(DISPLAY_NAME));
 
+        List<ParamValue> initParams = (List<ParamValue>) getDataModel().getProperty( INIT_PARAMS );
+
+        String initParamSuffix = null;
+
+        if( initNames61[0].equals( initParams.get( 0 ).getName() ) )
+        {
+            initParamSuffix = "template";
+        }
+        else
+        {
+            initParamSuffix = "jsp";
+        }
 
 		if (dm.getBooleanProperty(ABOUT_MODE)) {
-			createResourceForMode("about-jsp", ABOUT_MODE_TEMPLATE, context);
+			createResourceForMode("about-" + initParamSuffix, ABOUT_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(CONFIG_MODE)) {
-			createResourceForMode("config-jsp", CONFIG_MODE_TEMPLATE, context);
+			createResourceForMode("config-" + initParamSuffix, CONFIG_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(EDIT_MODE)) {
-			createResourceForMode("edit-jsp", EDIT_MODE_TEMPLATE, context);
+			createResourceForMode("edit-" + initParamSuffix, EDIT_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(EDITDEFAULTS_MODE)) {
-			createResourceForMode("edit-defaults-jsp", EDITDEFAULTS_MODE_TEMPLATE, context);
+			createResourceForMode("edit-defaults-" + initParamSuffix, EDITDEFAULTS_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(EDITGUEST_MODE)) {
-			createResourceForMode("edit-guest-jsp", EDITGUEST_MODE_TEMPLATE, context);
+			createResourceForMode("edit-guest-" + initParamSuffix, EDITGUEST_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(HELP_MODE)) {
-			createResourceForMode("help-jsp", HELP_MODE_TEMPLATE, context);
+			createResourceForMode("help-" + initParamSuffix, HELP_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(PREVIEW_MODE)) {
-			createResourceForMode("preview-jsp", PREVIEW_MODE_TEMPLATE, context);
+			createResourceForMode("preview-" + initParamSuffix, PREVIEW_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(PRINT_MODE)) {
-			createResourceForMode("print-jsp", PRINT_MODE_TEMPLATE, context);
+			createResourceForMode("print-" + initParamSuffix, PRINT_MODE_TEMPLATE, context);
 		}
 
 		if (dm.getBooleanProperty(VIEW_MODE)) {
-			createResourceForMode("view-jsp", VIEW_MODE_TEMPLATE, context);
+			createResourceForMode("view-" + initParamSuffix, VIEW_MODE_TEMPLATE, context);
 		}
 
 		return Status.OK_STATUS;
