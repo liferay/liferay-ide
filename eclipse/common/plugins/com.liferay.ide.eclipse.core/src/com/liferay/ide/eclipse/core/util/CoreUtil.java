@@ -62,7 +62,26 @@ import org.w3c.dom.Node;
  */
 public class CoreUtil {
 
-	public static int compareVersions( Version v1, Version v2 )
+	public static void addNaturesToProject( IProject proj, String[] natureIds, IProgressMonitor monitor )
+        throws CoreException
+    {
+        IProjectDescription description = proj.getDescription();
+
+        String[] prevNatures = description.getNatureIds();
+        String[] newNatures = new String[prevNatures.length + natureIds.length];
+
+        System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
+
+        for( int i = prevNatures.length; i < newNatures.length; i++ )
+        {
+            newNatures[i] = natureIds[i - prevNatures.length];
+        }
+
+        description.setNatureIds( newNatures );
+        proj.setDescription( description, monitor );
+    }
+
+    public static int compareVersions( Version v1, Version v2 )
 	{
 		if( v2 == v1 )
 		{ // quicktest
@@ -92,25 +111,6 @@ public class CoreUtil {
 
 		return v1.getQualifier().compareTo( v2.getQualifier() );
 	}
-
-    public static void addNaturesToProject( IProject proj, String[] natureIds, IProgressMonitor monitor )
-        throws CoreException
-    {
-        IProjectDescription description = proj.getDescription();
-
-        String[] prevNatures = description.getNatureIds();
-        String[] newNatures = new String[prevNatures.length + natureIds.length];
-
-        System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
-
-        for( int i = prevNatures.length; i < newNatures.length; i++ )
-        {
-            newNatures[i] = natureIds[i - prevNatures.length];
-        }
-
-        description.setNatureIds( newNatures );
-        proj.setDescription( description, monitor );
-    }
 
 	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
 		if (delta == null) {
@@ -260,6 +260,23 @@ public class CoreUtil {
 		return getWorkspaceRoot().getProject(projectName);
 	}
 
+	public static IPath getResourceLocation( IResource resource )
+    {
+        IPath retval = null;
+        
+        if (resource != null)
+        {
+            retval = resource.getLocation();
+            
+            if (retval == null)
+            {
+                retval = resource.getRawLocation();
+            }
+        }
+
+        return retval;
+    }
+
 	public static IWorkspaceRoot getWorkspaceRoot() {
 
 		return ResourcesPlugin.getWorkspace().getRoot();
@@ -394,7 +411,7 @@ public class CoreUtil {
 		return version;
 	}
 
-	public static void removeChildren( Node node )
+    public static void removeChildren( Node node )
 	{
 		if( node != null )
 		{

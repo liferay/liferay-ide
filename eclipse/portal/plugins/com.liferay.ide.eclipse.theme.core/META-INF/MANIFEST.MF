@@ -19,4 +19,5 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.theme.core,
  com.liferay.ide.eclipse.theme.core.facet,
- com.liferay.ide.eclipse.theme.core.operation
+ com.liferay.ide.eclipse.theme.core.operation,
+ com.liferay.ide.eclipse.theme.core.util

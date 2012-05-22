@@ -29,7 +29,9 @@ import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
@@ -37,6 +39,7 @@ import org.eclipse.ant.internal.ui.views.AntView;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -337,6 +340,22 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 			IPortletFramework portletFramework = (IPortletFramework) getDataModel().getProperty(PORTLET_FRAMEWORK);
 
 			portletFramework.postProjectCreated(getDataModel(), getFacetedProject());
+		}
+		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_THEME))
+		{
+            try
+            {
+                Map<String, String> args = new HashMap<String, String>();
+
+                args.put( "force", "true" );
+
+                getFacetedProject().getProject().build( IncrementalProjectBuilder.FULL_BUILD,
+                    "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
+            }
+            catch( CoreException e )
+            {
+                ProjectUIPlugin.logError( e );
+            }
 		}
 
 		// if we have a wizard fragment execute its operation after project is created

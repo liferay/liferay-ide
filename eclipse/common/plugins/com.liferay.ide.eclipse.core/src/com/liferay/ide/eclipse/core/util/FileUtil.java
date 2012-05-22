@@ -236,10 +236,10 @@ public class FileUtil {
 
 	public static Document readXML(String content)
 	{
-	    return readXML(content, null, null);
+	    return readXML(new ByteArrayInputStream( content.getBytes() ), null, null);
 	}
 
-	public static Document readXML(String content, EntityResolver resolver, ErrorHandler error)
+	public static Document readXML(InputStream inputStream, EntityResolver resolver, ErrorHandler error)
 	{
 	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
@@ -256,7 +256,7 @@ public class FileUtil {
                 db.setErrorHandler( error );
             }
 
-            return db.parse(new ByteArrayInputStream( content.getBytes() ));
+            return db.parse(inputStream);
         }
         catch (Throwable t) {
             return null;
