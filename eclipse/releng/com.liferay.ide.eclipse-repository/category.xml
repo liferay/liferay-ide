@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description url="http://www.liferay.com/pt/community/liferay-projects/liferay-ide/overview">
+   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
      Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
    </description>
    <feature url="features/com.liferay.ide.eclipse.tools_0.0.0.qualifier.jar" id="com.liferay.ide.eclipse.tools" version="0.0.0">

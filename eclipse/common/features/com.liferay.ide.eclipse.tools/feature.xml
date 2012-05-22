@@ -32,11 +32,20 @@
    </license>
 
    <url>
-      <update url="http://releases.liferay.com/tools/ide/eclipse/helios/stable"/>
+      <update url="http://releases.liferay.com/tools/ide/eclipse/indigo/stable"/>
    </url>
 
    <requires>
-      <import feature="org.eclipse.sapphire.ui" version="0.3.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.java" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.java.jdt" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.modeling" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.modeling.xml" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.osgi" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.platform" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui.swt.gef" version="0.5.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="0.5.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -214,13 +223,6 @@
 
    <plugin
          id="com.liferay.ide.eclipse.taglib.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.eclipse.scripting.core"
          download-size="0"
          install-size="0"
          version="0.0.0"

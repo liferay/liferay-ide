@@ -334,7 +334,6 @@
         <module>common/plugins/com.liferay.ide.eclipse.project.core</module>
         <module>common/plugins/com.liferay.ide.eclipse.project.ui</module>
         <module>common/plugins/com.liferay.ide.eclipse.sdk</module>
-        <module>common/plugins/com.liferay.ide.eclipse.scripting.core</module>
         <module>common/plugins/com.liferay.ide.eclipse.templates.core</module>
         <module>common/plugins/com.liferay.ide.eclipse.tools.branding</module>
         <module>common/plugins/com.liferay.ide.eclipse.ui</module>
