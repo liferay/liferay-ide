@@ -893,6 +893,7 @@ development of services.</content>
             <label>Build WSDD</label>
             <impl>BuildWSDDActionHandler</impl>
         </action-handler>
+        <page-name>Overview</page-name>
     </editor-page>
     <diagram-page>
     	<id>diagramPage</id>
@@ -1019,6 +1020,9 @@ development of services.</content>
             <visible>true</visible>
         </guides>
         <layout-storage>project</layout-storage>
+        <page-name>Diagram</page-name>
+        <page-header-text>Diagram</page-header-text>
+        <page-header-image>icons/e16/service.png</page-header-image>
     </diagram-page>
 	
 </definition>
