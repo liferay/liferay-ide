@@ -31,7 +31,7 @@
     <artifactId>com.liferay.ide.eclipse.portlet.core</artifactId>
     <packaging>eclipse-plugin</packaging>
 
-    <name>Liferay Portlet Core</name>
+    <name>Liferay IDE Portlet Core</name>
     
     <dependencies>
 		<dependency>

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay Hook Core
+Bundle-Name: Liferay IDE Hook Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.hook.core;singleton:=true
 Bundle-Version: 1.5.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.hook.core.HookCore

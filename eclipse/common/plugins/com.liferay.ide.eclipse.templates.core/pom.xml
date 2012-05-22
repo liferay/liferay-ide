@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.templates.core</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Template Core</name>
+  <name>Liferay IDE Template Core</name>
 
 </project>

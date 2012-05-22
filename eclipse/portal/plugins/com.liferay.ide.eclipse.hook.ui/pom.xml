@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.hook.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Hook UI</name>
+  <name>Liferay IDE Hook UI</name>
 
 </project>

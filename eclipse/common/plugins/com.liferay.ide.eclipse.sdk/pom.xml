@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.sdk</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay SDK</name>
+  <name>Liferay IDE Plugins SDK</name>
 
 </project>

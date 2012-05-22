@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.portlet.vaadin.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Vaadin Portlet UI</name>
+  <name>Liferay IDE Vaadin Portlet UI</name>
 
 </project>

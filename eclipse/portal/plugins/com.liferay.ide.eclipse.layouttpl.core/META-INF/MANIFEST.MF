@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay Layout Template Core
+Bundle-Name: Liferay IDE Layout Template Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.layouttpl.core;singleton:=true
 Bundle-Version: 1.5.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.layouttpl.core.LayoutTplCore

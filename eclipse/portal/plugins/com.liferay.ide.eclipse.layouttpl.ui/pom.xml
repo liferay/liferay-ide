@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.layouttpl.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Layout Template UI</name>
+  <name>Liferay IDE Layout Template UI</name>
 
 </project>

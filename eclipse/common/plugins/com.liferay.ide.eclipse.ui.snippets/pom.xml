@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.ui.snippets</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay UI Snippets</name>
+  <name>Liferay IDE UI Snippets</name>
 
 </project>

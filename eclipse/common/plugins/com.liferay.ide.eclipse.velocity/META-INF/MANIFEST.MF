@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay Velocity Template Editor
+Bundle-Name: Liferay IDE Velocity
 Bundle-SymbolicName: com.liferay.ide.eclipse.velocity;singleton:=true
 Bundle-Version: 1.5.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.velocity.vaulttec.ui.VelocityPlugin

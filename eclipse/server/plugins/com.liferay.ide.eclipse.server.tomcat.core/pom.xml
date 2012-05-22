@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.server.tomcat.core</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Server Tomcat Core</name>
+  <name>Liferay IDE Tomcat Core</name>
 
 </project>

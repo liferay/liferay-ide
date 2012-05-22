@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.tools</artifactId>
   <packaging>eclipse-feature</packaging>
 
-  <name>Liferay IDE</name>
+  <name>Liferay IDE Feature</name>
 
 </project>

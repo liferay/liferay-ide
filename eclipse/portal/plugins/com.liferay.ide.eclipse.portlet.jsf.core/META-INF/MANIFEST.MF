@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay JSF UI
+Bundle-Name: Liferay IDE JSF UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.jsf.core;singleton:=true
 Bundle-Version: 1.5.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.jsf.core.JSFCorePlugin

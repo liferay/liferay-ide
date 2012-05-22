@@ -30,6 +30,6 @@
   <artifactId>com.liferay.ide.eclipse.theme.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
   
-  <name>Liferay Theme UI</name>
+  <name>Liferay IDE Theme UI</name>
 
 </project>

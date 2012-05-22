@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay Server Core
+Bundle-Name: Liferay IDE Server Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.core;singleton:=true
 Bundle-Version: 1.5.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin

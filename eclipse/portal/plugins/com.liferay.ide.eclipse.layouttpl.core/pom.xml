@@ -31,6 +31,6 @@
   <artifactId>com.liferay.ide.eclipse.layouttpl.core</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Layout Template Core</name>
+  <name>Liferay IDE Layout Template Core</name>
 
 </project>

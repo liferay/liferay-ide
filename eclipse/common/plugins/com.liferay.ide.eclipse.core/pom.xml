@@ -31,6 +31,6 @@
   <artifactId>com.liferay.ide.eclipse.core</artifactId>
   <packaging>eclipse-plugin</packaging>
 
-  <name>Liferay Core</name>
+  <name>Liferay IDE Core</name>
   
 </project>

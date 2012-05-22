@@ -12,5 +12,6 @@
     
 	<artifactId>com.liferay.ide.eclipse.freemarker</artifactId>
 	<packaging>eclipse-plugin</packaging>
-    <name>Liferay Freemarker</name>
+    
+    <name>Liferay IDE Freemarker</name>
 </project>
