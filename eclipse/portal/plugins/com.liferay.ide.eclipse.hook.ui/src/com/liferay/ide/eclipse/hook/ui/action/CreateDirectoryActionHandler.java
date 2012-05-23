@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *******************************************************************************/
 package com.liferay.ide.eclipse.hook.ui.action;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
@@ -8,12 +24,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
@@ -26,7 +42,9 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
-
+/**
+ * @author Gregory Amerson
+ */
 public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHandler
 {
 
@@ -43,31 +61,27 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
 		final IModelElement element = getModelElement();
 		final ValueProperty property = (ValueProperty) getProperty();
 
-		final ModelPropertyListener listener = new ModelPropertyListener()
+		final Listener listener = new FilteredListener<PropertyEvent>()
 		{
-
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			public void handleTypedEvent( final PropertyEvent event )
 			{
 				refreshEnablementState();
 			}
-
 		};
 
-		element.addListener( listener, property.getName() );
+		element.attach( listener, property.getName() );
 
 		attach( new Listener()
 		{
-
 			@Override
 			public void handle( final Event event )
 			{
 				if ( event instanceof DisposeEvent )
 				{
-					element.removeListener( listener, property.getName() );
+					element.detach( listener, property.getName() );
 				}
 			}
-
 		} );
 	}
 

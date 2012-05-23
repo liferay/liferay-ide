@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,7 +31,7 @@
 	<editor></editor>
 	<editor-page>
 		<id>HookConfigurationPage</id>
-		<page-name>Hook Configuration</page-name>
+		<page-name>Configuration</page-name>
 		<page-header-text>Liferay Hook Configuration</page-header-text>
 		<root-node>
 			<node>

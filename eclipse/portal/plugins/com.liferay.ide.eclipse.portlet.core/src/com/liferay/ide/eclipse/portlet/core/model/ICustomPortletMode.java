@@ -18,7 +18,6 @@
 package com.liferay.ide.eclipse.portlet.core.model;
 
 import com.liferay.ide.eclipse.portlet.core.model.internal.InvertingBooleanXmlValueBinding;
-import com.liferay.ide.eclipse.portlet.core.model.internal.PortletModeImageService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.PortletModePossibleValueService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -38,7 +37,6 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @GenerateImpl
-@Service( impl = PortletModeImageService.class )
 public interface ICustomPortletMode extends IModelElement, IDescribeable, IIdentifiable {
 
 	ModelElementType TYPE = new ModelElementType( ICustomPortletMode.class );

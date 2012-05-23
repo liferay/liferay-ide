@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.LayeredListBindingImpl;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.modeling.Resource;
 
 
@@ -65,12 +65,12 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     {
         super.init( element, property, params );
 
-        serviceBuilder().addListener
+        serviceBuilder().attach
         (
-            new ModelPropertyListener()
+            new FilteredListener<PropertyEvent>()
             {
                 @Override
-                public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
+                public void handleTypedEvent( final PropertyEvent event )
                 {
                     if (event != null)
                     {
@@ -89,7 +89,15 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     protected Object insertUnderlyingObject( ModelElementType type, int position )
     {
         RelationshipObject newRelationship = new RelationshipObject();
-        this.relationships.add( position, newRelationship );
+        
+        if (position > this.relationships.size())
+        {
+            this.relationships.add( newRelationship );
+        }
+        else
+        {
+            this.relationships.add( position, newRelationship );
+        }
         return newRelationship;
     }
 
@@ -128,7 +136,6 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
                     if( entityName != null )
                     {
                         this.relationships.add( new RelationshipObject( entity.getName().getContent(), entityName ) );
-                        break;
                     }
                 }
             }

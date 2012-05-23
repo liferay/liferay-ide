@@ -12,7 +12,8 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
@@ -30,12 +31,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
@@ -44,6 +45,7 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
 
@@ -57,22 +59,22 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 		super.init( action, def );
 		final IModelElement element = getModelElement();
 		final ModelProperty property = getProperty();
-		this.listener = new ModelPropertyListener() {
+		this.listener = new FilteredListener<PropertyEvent>() {
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+			protected void handleTypedEvent( final PropertyEvent event ) {
 				refreshEnablementState();
 			}
 		};
 
-		element.addListener( this.listener, property.getName() );
+		element.attach( this.listener, property.getName() );
 
 		attach( new Listener() {
 
 			@Override
 			public void handle( Event event ) {
 				if ( event instanceof DisposeEvent ) {
-					getModelElement().removeListener( listener, getProperty().getName() );
+					getModelElement().detach( listener, getProperty().getName() );
 				}
 			}
 
@@ -88,10 +90,20 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 		final IProject project = element.adapt( IProject.class );
 		final ModelProperty property = getProperty();
 		final Value<Path> resourceBundle = element.read( (ValueProperty) property );
-		final String packageName = resourceBundle.getText().substring( 0, resourceBundle.getText().lastIndexOf( "." ) );
+		final String resourceBundleText = resourceBundle.getText();
+        
+		int index = resourceBundleText.lastIndexOf( "." );
+        
+		if (index == -1)
+		{
+		    index = resourceBundleText.length();
+		}
+		
+        final String packageName = resourceBundleText.substring( 0, index );
+        
 		final String defaultRBFileName =
 			PortletUtil.convertJavaToIoFileName(
-				resourceBundle.getText(), ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+				resourceBundleText, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
 
 		final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
 		final IPath entryPath = rbSourecFolder.getLocation();

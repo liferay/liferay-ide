@@ -19,11 +19,11 @@ import com.liferay.ide.eclipse.service.core.model.IColumn;
 
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImageData;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.services.ImageService;
 import org.eclipse.sapphire.services.ImageServiceData;
 
@@ -39,23 +39,23 @@ public class ColumnImageService extends ImageService
 	private static final ImageData IMG_COLUMN_PRIMARY = ImageData.readFromClassLoader(
 		ColumnImageService.class, "images/column_primary_16x16.png" );
 
-	private ModelPropertyListener listener;
+	private Listener listener;
 
 	@Override
 	protected void initImageService()
 	{
 
-		this.listener = new ModelPropertyListener()
+	    this.listener = new FilteredListener<PropertyEvent>()
 		{
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			protected void handleTypedEvent( final PropertyEvent event )
 			{
 				refresh();
 			}
 		};
 
-		context( IModelElement.class ).addListener( this.listener, IColumn.PROP_PRIMARY.getName() );
+		context( IModelElement.class ).attach( this.listener, IColumn.PROP_PRIMARY.getName() );
 
 		attach( new Listener()
 		{
@@ -65,7 +65,7 @@ public class ColumnImageService extends ImageService
 			{
 				if ( event instanceof DisposeEvent )
 				{
-					context( IModelElement.class ).removeListener( listener, IColumn.PROP_PRIMARY.getName() );
+					context( IModelElement.class ).detach( listener, IColumn.PROP_PRIMARY.getName() );
 				}
 			}
 

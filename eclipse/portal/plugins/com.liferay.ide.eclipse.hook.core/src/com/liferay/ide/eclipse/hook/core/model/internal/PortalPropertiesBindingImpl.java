@@ -35,13 +35,14 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.BindingImpl;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
@@ -164,7 +165,6 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 		{
             retval = new NameValueObject();
             this.properties.add((NameValueObject)retval);
-			this.element().notifyPropertyChangeListeners( this.property() );
 		}
 
 		return retval;
@@ -229,17 +229,16 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 	{
 		super.init( element, property, params );
 
-		ModelPropertyListener listener = new ModelPropertyListener()
-		{
-
+		Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
 			@Override
-			public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
+			protected void handleTypedEvent( PropertyContentEvent event )
 			{
 				updateConfigurationForFile();
 			}
 		};
 
-		hook().addListener( listener, IHook.PROP_PORTAL_PROPERTIES_FILE.getName() );
+		hook().attach( listener, IHook.PROP_PORTAL_PROPERTIES_FILE.getName() + "/*" );
 
 		updateConfigurationForFile();
 	}
@@ -261,7 +260,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 			flushProperties();
 		}
 
-		this.element().notifyPropertyChangeListeners( this.property() );
+//		this.element().notifyPropertyChangeListeners( this.property() );
 	}
 
 //	@Override
@@ -338,7 +337,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 				HookCore.logError( e );
 			}
 
-			Iterator keys = this.portalPropertiesConfiguration.getKeys();
+			Iterator<?> keys = this.portalPropertiesConfiguration.getKeys();
 
 			while (keys.hasNext())
 			{

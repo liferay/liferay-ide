@@ -43,9 +43,9 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -57,7 +57,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 
 	final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 	final IWorkspaceRoot wroot = workspace.getRoot();
-	protected ModelPropertyListener listener;
+	protected Listener listener;
 
 	/*
 	 * (non-Javadoc)

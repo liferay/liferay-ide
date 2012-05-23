@@ -952,6 +952,18 @@ development of services.</content>
 	                          </property-editor>
                     </content>
                 </page>
+                <page>
+                    <label>Columns</label>
+                    <content>
+                        <property-editor>
+                            <child-property>name</child-property>
+                            <child-property>type</child-property>
+                            <child-property>primary</child-property>
+                            <property>columns</property>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                </page>
             </properties-view>
             <tool-palette-image>icons/Entity_16x16.gif</tool-palette-image>
             <model-element-type>IEntity</model-element-type>
@@ -1021,7 +1033,7 @@ development of services.</content>
         </guides>
         <layout-storage>project</layout-storage>
         <page-name>Diagram</page-name>
-        <page-header-text>Diagram</page-header-text>
+        <page-header-text>Service Builder Diagram</page-header-text>
         <page-header-image>icons/e16/service.png</page-header-image>
     </diagram-page>
 	

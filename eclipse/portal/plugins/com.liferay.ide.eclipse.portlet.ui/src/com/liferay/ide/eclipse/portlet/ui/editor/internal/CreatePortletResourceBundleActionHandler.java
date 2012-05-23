@@ -12,7 +12,8 @@
  * details.
  *
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
@@ -32,11 +33,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -44,10 +45,11 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class CreatePortletResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
 
-	ModelPropertyListener localePropListener;
+	Listener localePropListener;
 
 	/*
 	 * (non-Javadoc)
@@ -59,32 +61,32 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		super.init( action, def );
 		final IModelElement element = getModelElement();
 
-		listener = new ModelPropertyListener() {
+		this.listener = new FilteredListener<PropertyEvent>() {
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+			protected void handleTypedEvent( final PropertyEvent event ) {
 
 				refreshEnablementState();
 			}
 		};
 
-		localePropListener = new ModelPropertyListener() {
+		localePropListener = new FilteredListener<PropertyEvent>() {
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+			protected void handleTypedEvent( final PropertyEvent event ) {
 				refreshEnablementState();
 			}
 		};
-		element.addListener( listener, getProperty().getName() );
-		element.addListener( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
+		element.attach( listener, getProperty().getName() );
+		element.attach( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
 
 		attach( new Listener() {
 
 			@Override
 			public void handle( Event event ) {
 				if ( event instanceof DisposeEvent ) {
-					getModelElement().removeListener( listener, getProperty().getName() );
-					getModelElement().removeListener( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
+					getModelElement().detach( listener, getProperty().getName() );
+					getModelElement().detach( localePropListener, IPortlet.PROP_SUPPORTED_LOCALES.getName() );
 				}
 			}
 
@@ -118,11 +120,20 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 		final IPortlet portlet = (IPortlet) getModelElement();
 		final IProject project = portlet.adapt( IProject.class );
 		Value<Path> resourceBundle = portlet.getResourceBundle();
-		String defaultRBFileName =
+		final String text = resourceBundle.getText();
+        
+        String defaultRBFileName =
 			PortletUtil.convertJavaToIoFileName(
-				resourceBundle.getText(), ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+				text, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
 
-		final String packageName = resourceBundle.getText().substring( 0, resourceBundle.getText().lastIndexOf( "." ) );
+		int index = text.lastIndexOf( "." );
+        
+		if (index == -1)
+		{
+		    index = text.length();
+		}
+		
+		final String packageName = text.substring( 0, index );
 
 		final IFolder rbSourceFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
 		final IPath entryPath = rbSourceFolder.getLocation();
@@ -145,7 +156,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 				String locale = PortletUtil.localeString( iSupportedLocale.getSupportedLocale().getText() );
 				final String localizedIOFileName =
 					PortletUtil.convertJavaToIoFileName(
-						resourceBundle.getText(), ResourceBundleRelativePathService.RB_FILE_EXTENSION, locale );
+						text, ResourceBundleRelativePathService.RB_FILE_EXTENSION, locale );
 
 				if ( !getFileFromClasspath( project, localizedIOFileName ) ) {
 					final IFile rbFile = wroot.getFileForLocation( entryPath.append( localizedIOFileName ) );

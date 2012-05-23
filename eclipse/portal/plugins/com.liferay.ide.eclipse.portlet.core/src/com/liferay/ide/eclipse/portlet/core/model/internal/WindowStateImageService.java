@@ -12,7 +12,8 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
@@ -20,10 +21,11 @@ package com.liferay.ide.eclipse.portlet.core.model.internal;
 import com.liferay.ide.eclipse.portlet.core.model.ICustomWindowState;
 import com.liferay.ide.eclipse.portlet.core.model.IWindowState;
 
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImageData;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.services.ImageService;
 import org.eclipse.sapphire.services.ImageServiceData;
 
@@ -42,22 +44,21 @@ public class WindowStateImageService extends ImageService
 	private static final ImageData IMG_MINIMIZED = ImageData.readFromClassLoader(
 		WindowStateImageService.class, "images/minimize.png" );
 
-	private ModelPropertyListener listener;
+	private Listener listener;
 
 	@Override
 	protected void initImageService()
 	{
-		this.listener = new ModelPropertyListener()
+		this.listener = new FilteredListener<PropertyEvent>()
 		{
-
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			public void handleTypedEvent( final PropertyEvent event )
 			{
 				refresh();
 			}
 		};
 
-		context( IModelElement.class ).addListener( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
+		context( IModelElement.class ).attach( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
 	}
 
 	@Override
@@ -101,7 +102,7 @@ public class WindowStateImageService extends ImageService
 	{
 		super.dispose();
 
-		context( IModelElement.class ).removeListener( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
+		context( IModelElement.class ).detach( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
 	}
 
 }

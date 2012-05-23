@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -13,7 +13,7 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
+ *    Gregory Amerson - initial implementation review and ongoing maintenance
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.ui.action;
@@ -31,12 +31,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
@@ -50,12 +50,13 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHandler {
 
 	IModelElement modelElement;
 	ModelProperty modelProperty;
-	ModelPropertyListener listener;
+	Listener listener;
 
 	@Override
 	public Object run( SapphireRenderingContext context ) {
@@ -99,23 +100,23 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
 		super.init( action, def );
 		modelElement = getModelElement();
 		modelProperty = getProperty();
-		this.listener = new ModelPropertyListener() {
+		this.listener = new FilteredListener<PropertyEvent>() {
 
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event ) {
+			public void handleTypedEvent( final PropertyEvent event ) {
 				refreshEnablementState();
 			}
 
 		};
 
-		modelElement.addListener( this.listener, modelProperty.getName() );
+		modelElement.attach( this.listener, modelProperty.getName() );
 
 		attach( new Listener() {
 
 			@Override
 			public void handle( Event event ) {
 				if ( event instanceof DisposeEvent ) {
-					getModelElement().removeListener( listener, modelProperty.getName() );
+					getModelElement().detach( listener, modelProperty.getName() );
 				}
 			}
 

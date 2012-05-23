@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -13,7 +13,7 @@
  *
  * Contributors:
  * 		Kamesh Sampath - initial implementation
- * 		Gregory Amerson - IDE-355
+ * 		Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.ui.editor;
@@ -38,11 +38,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
@@ -52,6 +53,7 @@ import org.w3c.dom.DocumentType;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class HookXmlEditor extends SapphireEditorForXml
 {
@@ -174,11 +176,10 @@ public class HookXmlEditor extends SapphireEditorForXml
 			hookModel.setVersion( dtdVersion );
 		}
 
-		ModelPropertyListener listener = new ModelPropertyListener()
+		Listener listener = new FilteredListener<PropertyContentEvent>()
 		{
-
 			@Override
-			public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
+			public void handleTypedEvent( final PropertyContentEvent event )
 			{
 				handleCustomJspsPropertyChangedEvent( event );
 			}
@@ -186,7 +187,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 
 
 		this.ignoreCustomModelChanges = true;
-		modelElement.addListener( listener, "CustomJsps/*" );
+		modelElement.attach( listener, "CustomJsps/*" );
 		this.ignoreCustomModelChanges = false;
 
 		return modelElement;
@@ -249,7 +250,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 		this.ignoreCustomModelChanges = false;
 	}
 
-	protected void handleCustomJspsPropertyChangedEvent( ModelPropertyChangeEvent event )
+	protected void handleCustomJspsPropertyChangedEvent( final PropertyContentEvent event )
 	{
 		if ( this.ignoreCustomModelChanges )
 		{

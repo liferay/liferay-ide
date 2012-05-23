@@ -23,6 +23,8 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
@@ -30,8 +32,7 @@ import org.eclipse.sapphire.java.JavaTypeConstraintServiceData;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.modeling.PropertyContentEvent;
 
 
 /**
@@ -67,16 +68,16 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
 
 		this.service = context( IService.class );
 
-		ModelPropertyListener listener = new ModelPropertyListener()
+		Listener listener = new FilteredListener<PropertyContentEvent>()
 		{
 			@Override
-			public void handlePropertyChangedEvent( ModelPropertyChangeEvent event )
+			public void handleTypedEvent( PropertyContentEvent event )
 			{
 				refresh();
 			}
 		};
 
-		this.service.addListener( listener, "ServiceType" );
+		this.service.attach( listener, "ServiceType" );
 	}
 
 	private Set<String> getServiceTypes()

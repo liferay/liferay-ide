@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,8 +12,8 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
- *               Gregory Amerson - ongoing maintenance 
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance 
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model.internal;
@@ -21,15 +21,17 @@ package com.liferay.ide.eclipse.portlet.core.model.internal;
 import com.liferay.ide.eclipse.portlet.core.model.ICustomPortletMode;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletMode;
 
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ImageData;
-import org.eclipse.sapphire.modeling.ModelPropertyChangeEvent;
-import org.eclipse.sapphire.modeling.ModelPropertyListener;
+import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.services.ImageService;
 import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class PortletModeImageService extends ImageService
 {
@@ -46,22 +48,21 @@ public class PortletModeImageService extends ImageService
 	private static final ImageData IMG_HELP = ImageData.readFromClassLoader(
 		PortletModeImageService.class, "images/help.png" );
 
-	private ModelPropertyListener listener;
+	private Listener listener;
 
 	@Override
 	protected void initImageService()
 	{
-		this.listener = new ModelPropertyListener()
+		this.listener = new FilteredListener<PropertyContentEvent>()
 		{
-
 			@Override
-			public void handlePropertyChangedEvent( final ModelPropertyChangeEvent event )
+			protected void handleTypedEvent( final PropertyContentEvent event )
 			{
 				refresh();
 			}
 		};
 
-		context( IModelElement.class ).addListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
+		context( IModelElement.class ).attach( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
 	}
 
 	@Override
@@ -112,7 +113,7 @@ public class PortletModeImageService extends ImageService
 	{
 		super.dispose();
 
-		context( IModelElement.class ).removeListener( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
+		context( IModelElement.class ).detach( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
 	}
 
 }
