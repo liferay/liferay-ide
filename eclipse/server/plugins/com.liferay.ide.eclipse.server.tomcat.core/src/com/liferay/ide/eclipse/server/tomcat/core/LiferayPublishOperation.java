@@ -47,6 +47,7 @@ import org.eclipse.wst.server.core.util.PublishHelper;
 /**
  * Tomcat publish helper.
  */
+@SuppressWarnings( "restriction" )
 public class LiferayPublishOperation extends PublishOperation {
 
 	private static final String LIFERAY_WEB_XML_PATH = "WEB-INF/liferay-web.xml";
@@ -186,18 +187,20 @@ public class LiferayPublishOperation extends PublishOperation {
 		IPath autoDeployDir = new Path(server.getLiferayTomcatServer().getAutoDeployDirectory());
 		boolean serverStopped = server.getServer().getServerState() == IServer.STATE_STOPPED;
 
+		IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
+		
 		if (kind == IServer.PUBLISH_CLEAN || kind == IServer.PUBLISH_FULL) {
 			IModuleResource[] mr = server.getResources(module);
 			IStatus[] stat = helper.publishFull(mr, path, monitor);
 			addArrayToList(status, stat);
-
+			
+			clearWebXmlDescriptors(module2.getProject(), path, monitor);
+			
 			server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
 
 			return;
 		}
-		
-		IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
-		
+				
 		int size = delta.length;
 		for (int i = 0; i < size; i++) {
 			IStatus[] stat = helper.publishDelta(delta[i], path, monitor);
@@ -215,35 +218,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		{
 			if ( CoreUtil.containsMember( del, paths ) || isHookProjectDelta( del ) )
 			{
-				// copy over web.xml so the liferay deployer doesn't copy web.xml filters incorrectly
-				IModuleResource webXmlRes = getWebXmlFile( del, path );
-
-				if ( webXmlRes != null )
-				{
-					helper.publishToPath(
-						new IModuleResource[] { webXmlRes }, path.append( WEB_XML_PATH ), monitor );
-				}
-				else
-				{
-					File webXmlFile = path.append( WEB_XML_PATH ).toFile();
-					File liferayWebXmlFile = path.append( LIFERAY_WEB_XML_PATH ).toFile();
-
-					if ( webXmlFile.exists() )
-					{
-						if ( !webXmlFile.delete() )
-						{
-							ProjectUtil.createDefaultWebXml( webXmlFile );
-						}
-					}
-
-					if ( liferayWebXmlFile.exists() )
-					{
-						if ( !liferayWebXmlFile.delete() )
-						{
-							ProjectUtil.createDefaultWebXml( liferayWebXmlFile );
-						}
-					}
-				}
+				clearWebXmlDescriptors(module2.getProject(), path, monitor);
 
 				server.moveContextToAutoDeployDir( module2, path, baseDir, autoDeployDir, true, serverStopped );
 				break;
@@ -252,21 +227,52 @@ public class LiferayPublishOperation extends PublishOperation {
 
 	}
 
-	private boolean isHookProjectDelta( IModuleResourceDelta del )
+	private void clearWebXmlDescriptors(IProject project, IPath path, IProgressMonitor monitor)
+    {
+	 // copy over web.xml so the liferay deployer doesn't copy web.xml filters incorrectly
+        IModuleResource webXmlRes = getWebXmlFile( project, path );
+
+        if ( webXmlRes != null )
+        {
+            helper.publishToPath(
+                new IModuleResource[] { webXmlRes }, path.append( WEB_XML_PATH ), monitor );
+        }
+        else
+        {
+            File webXmlFile = path.append( WEB_XML_PATH ).toFile();
+            File liferayWebXmlFile = path.append( LIFERAY_WEB_XML_PATH ).toFile();
+
+            if ( webXmlFile.exists() )
+            {
+                if ( !webXmlFile.delete() )
+                {
+                    ProjectUtil.createDefaultWebXml( webXmlFile );
+                }
+            }
+
+            if ( liferayWebXmlFile.exists() )
+            {
+                if ( !liferayWebXmlFile.delete() )
+                {
+                    ProjectUtil.createDefaultWebXml( liferayWebXmlFile );
+                }
+            }
+        }
+    }
+
+    private boolean isHookProjectDelta( IModuleResourceDelta del )
 	{
 		IProject project = ( (IResource) del.getModuleResource().getAdapter( IResource.class ) ).getProject();
 
 		return ProjectUtil.isHookProject( project );
 	}
 
-	private IModuleResource getWebXmlFile( IModuleResourceDelta del, IPath modelDeployDirectory )
+	private IModuleResource getWebXmlFile( IProject project, IPath modelDeployDirectory )
 	{
-		Object obj = del.getModuleResource().getAdapter( IResource.class );
+		IFolder docroot = CoreUtil.getDocroot( project );
 
-		if ( obj instanceof IResource )
+		if (docroot != null)
 		{
-			IFolder docroot = CoreUtil.getDocroot( ( (IResource) obj ).getProject() );
-
 			IFile webXml = docroot.getFile( WEB_XML_PATH );
 
 			if ( webXml.exists() )
