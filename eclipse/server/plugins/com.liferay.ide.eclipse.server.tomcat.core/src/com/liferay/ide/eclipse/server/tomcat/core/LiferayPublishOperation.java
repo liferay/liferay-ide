@@ -186,8 +186,6 @@ public class LiferayPublishOperation extends PublishOperation {
 		IPath baseDir = server.getTomcatServer().getRuntimeBaseDirectory();
 		IPath autoDeployDir = new Path(server.getLiferayTomcatServer().getAutoDeployDirectory());
 		boolean serverStopped = server.getServer().getServerState() == IServer.STATE_STOPPED;
-
-		IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
 		
 		if (kind == IServer.PUBLISH_CLEAN || kind == IServer.PUBLISH_FULL) {
 			IModuleResource[] mr = server.getResources(module);
@@ -200,6 +198,8 @@ public class LiferayPublishOperation extends PublishOperation {
 
 			return;
 		}
+        
+		IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
 				
 		int size = delta.length;
 		for (int i = 0; i < size; i++) {
