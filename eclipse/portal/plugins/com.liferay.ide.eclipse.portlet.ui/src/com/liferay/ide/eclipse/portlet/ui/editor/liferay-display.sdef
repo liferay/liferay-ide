@@ -47,6 +47,7 @@
 		</root-node>
         <page-header-text>Display</page-header-text>
         <page-header-image>icons/elcl16/liferay_ui_16x16.png</page-header-image>
+        <page-name>Display</page-name>
 	</editor-page>
 	<node-factory>
 		<id>CategoryNodeFactory</id>

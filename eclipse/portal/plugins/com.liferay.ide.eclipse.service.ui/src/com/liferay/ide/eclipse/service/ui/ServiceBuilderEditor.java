@@ -136,15 +136,6 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 		IPath path =
 			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilder.sdef/diagramPage" );
 		this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
-		addPage( 0, this.pageDiagram, getEditorInput() );
-		setPageText( 0, "Diagram" );
-		setPageId( this.pages.get( 0 ), "Diagram", this.pageDiagram.getPart() );
-	}
-
-	@Override
-	protected void createFormPages() throws PartInitException {
-		super.createFormPages();
-
-		setPageText( 0, "Overview" );
+		addEditorPage( 0, this.pageDiagram );
 	}
 }
