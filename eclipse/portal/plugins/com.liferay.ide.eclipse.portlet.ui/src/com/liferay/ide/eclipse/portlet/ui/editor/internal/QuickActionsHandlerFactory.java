@@ -12,8 +12,8 @@
  * details.
  *
  * Contributors:
- *               Kamesh Sampath - initial implementation
- *               Gregory Amerson - Sapphire 0.5 conversion
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
@@ -43,6 +43,7 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPag
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
@@ -144,7 +145,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory {
 
 			// Select the ndoe
 			final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-			final MasterDetailsContentNode root = page.getContentOutline().getRoot();
+			final MasterDetailsContentNode root = page.outline().getRoot();
 			final MasterDetailsContentNode node = root.findNodeByModelElement( mElement );
 			if ( node != null ) {
 				node.select();

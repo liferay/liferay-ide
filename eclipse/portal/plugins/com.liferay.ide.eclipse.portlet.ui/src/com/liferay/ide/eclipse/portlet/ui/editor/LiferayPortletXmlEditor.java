@@ -12,7 +12,8 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor;
@@ -83,9 +84,6 @@ public class LiferayPortletXmlEditor extends SapphireEditor {
 		IPath pageDefinitionLocation = new Path( EDITOR_DEFINITION_PATH );
 		formEditor = new MasterDetailsEditorPage( this, model, pageDefinitionLocation );
 		addPage( 0, formEditor );
-		setPageText( 0, "Liferay Portlet Application" );
-		setPageId( this.pages.get( 0 ), "lfr-portlet-app", this.formEditor.getPart() );
-
 	}
 
 }

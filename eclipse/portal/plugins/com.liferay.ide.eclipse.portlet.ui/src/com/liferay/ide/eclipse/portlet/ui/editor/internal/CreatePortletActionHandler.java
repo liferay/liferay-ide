@@ -12,7 +12,8 @@
  * details.
  *
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
@@ -30,6 +31,7 @@ import org.eclipse.sapphire.ui.swt.SapphireDialog;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
 public class CreatePortletActionHandler extends SapphireActionHandler {
 
@@ -49,7 +51,7 @@ public class CreatePortletActionHandler extends SapphireActionHandler {
 		if ( dialog != null && Dialog.OK == dialog.open() ) {
 			// Select the node
 			final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-			final MasterDetailsContentNode root = page.getContentOutline().getRoot();
+			final MasterDetailsContentNode root = page.outline().getRoot();
 			final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
 			if ( node != null ) {
 				node.select();

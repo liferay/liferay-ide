@@ -12,7 +12,8 @@
  * details.
  *
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
@@ -43,7 +44,7 @@ public class DefinePortletEventHandler extends SapphireActionHandler {
 		// Select the node
 
 		final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-		final MasterDetailsContentNode root = page.getContentOutline().getRoot();
+		final MasterDetailsContentNode root = page.outline().getRoot();
 		final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
 		if ( node != null ) {
 			node.select();

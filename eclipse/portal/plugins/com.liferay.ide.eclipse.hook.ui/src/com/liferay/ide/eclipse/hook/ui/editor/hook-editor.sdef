@@ -31,7 +31,7 @@
 	<editor></editor>
 	<editor-page>
 		<id>HookConfigurationPage</id>
-		<page-name>Configuration</page-name>
+		<page-name>Overview</page-name>
 		<page-header-text>Liferay Hook Configuration</page-header-text>
 		<root-node>
 			<node>
