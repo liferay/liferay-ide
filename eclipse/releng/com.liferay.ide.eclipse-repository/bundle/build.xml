@@ -20,7 +20,7 @@
 	
 	<property name="package.target" value="output-zip"/>
 
-	<target name="all" unless="skip.bundles">
+	<target name="all" if="create.bundles">
 		<condition property="isLinux" value="true">
 	            <os family="unix" />
 	    </condition>
