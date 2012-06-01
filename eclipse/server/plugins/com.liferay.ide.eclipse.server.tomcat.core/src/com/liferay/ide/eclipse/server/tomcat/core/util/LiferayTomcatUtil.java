@@ -624,6 +624,9 @@ public class LiferayTomcatUtil {
 		Properties props = new Properties();
 
 		props.put( "include-and-override", "portal-developer.properties" );
+        
+		props.put( "com.liferay.portal.servlet.filters.etag.ETagFilter", "false" );
+		props.put( "com.liferay.portal.servlet.filters.header.HeaderFilter", "false" );
 
 		props.put("auto.deploy.tomcat.conf.dir", configPath.append("conf/Catalina/" + hostName).toOSString());
 
