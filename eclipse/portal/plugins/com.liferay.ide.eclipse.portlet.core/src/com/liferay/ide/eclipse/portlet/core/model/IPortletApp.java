@@ -18,22 +18,19 @@
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import com.liferay.ide.eclipse.portlet.core.model.internal.RelaxedStandardRootElementController;
-
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
-import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlNamespace;
@@ -48,7 +45,6 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
  */
 @GenerateImpl
 @Image( path = "images/obj16/portlet_model_obj.gif" )
-@CustomXmlRootBinding( value = RelaxedStandardRootElementController.class )
 @XmlNamespace( prefix = "", uri = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" )
 @XmlSchema( namespace = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd", location = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" )
 @XmlBinding( path = "portlet-app" )
@@ -62,7 +58,7 @@ public interface IPortletApp extends IResourceBundle, IIdentifiable {
 
 	@Type( base = PortletAppVersion.class )
 	@Label( standard = "Version" )
-	@InitialValue( text = "2.0" )
+	@DefaultValue( text = "2.0" )
 	@Required
 	@XmlBinding( path = "@version" )
 	ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" );
