@@ -627,6 +627,8 @@ public class LiferayTomcatUtil {
         
 		props.put( "com.liferay.portal.servlet.filters.etag.ETagFilter", "false" );
 		props.put( "com.liferay.portal.servlet.filters.header.HeaderFilter", "false" );
+		props.put( "json.service.auth.token.enabled", "false" );
+
 
 		props.put("auto.deploy.tomcat.conf.dir", configPath.append("conf/Catalina/" + hostName).toOSString());
 
