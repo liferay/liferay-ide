@@ -60,16 +60,5 @@
         <context>Sapphire.EditorPage</context>
         <tooltip>Build WSDD (Ctrl+Shift+Alt+b)</tooltip>
     </action>
-    <action-handler>
-        <action>Liferay.ServiceBuilder.BuildServices</action>
-        <id>Liferay.ServiceBuilder.BuildServices</id>
-        <label>Build Services</label>
-        <impl>com.liferay.ide.eclipse.service.ui.BuildServicesActionHandler</impl>
-    </action-handler>
-    <action-handler>
-        <action>Liferay.ServiceBuilder.BuildWSDD</action>
-        <id>Liferay.ServiceBuilder.BuildWSDD</id>
-        <label>Build WSDD</label>
-        <impl>com.liferay.ide.eclipse.service.ui.BuildWSDDActionHandler</impl>
-    </action-handler>
+    
 </extension>

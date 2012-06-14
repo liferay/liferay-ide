@@ -857,6 +857,18 @@ development of services.</content>
             <title>Service Builder</title>
         </documentation>
         <page-name>Overview</page-name>
+        <action-handler>
+	        <action>Liferay.ServiceBuilder.BuildServices</action>
+	        <id>Liferay.ServiceBuilder.BuildServices</id>
+	        <label>Build Services</label>
+	        <impl>BuildServicesActionHandler</impl>
+	    </action-handler>
+	    <action-handler>
+	        <action>Liferay.ServiceBuilder.BuildWSDD</action>
+	        <id>Liferay.ServiceBuilder.BuildWSDD</id>
+	        <label>Build WSDD</label>
+	        <impl>BuildWSDDActionHandler</impl>
+	    </action-handler>
     </editor-page>
     <diagram-page>
     	<id>diagramPage</id>
@@ -998,6 +1010,18 @@ development of services.</content>
         <page-name>Diagram</page-name>
         <page-header-text>Service Builder Diagram</page-header-text>
         <page-header-image>icons/e16/service.png</page-header-image>
+        <action-handler>
+	        <action>Liferay.ServiceBuilder.BuildServices</action>
+	        <id>Liferay.ServiceBuilder.BuildServices</id>
+	        <label>Build Services</label>
+	        <impl>BuildServicesActionHandler</impl>
+	    </action-handler>
+	    <action-handler>
+	        <action>Liferay.ServiceBuilder.BuildWSDD</action>
+	        <id>Liferay.ServiceBuilder.BuildWSDD</id>
+	        <label>Build WSDD</label>
+	        <impl>BuildWSDDActionHandler</impl>
+	    </action-handler>
     </diagram-page>
 	
 </definition>
