@@ -856,43 +856,6 @@ utilities, SOAP utilities, and Hibernate persistence classes to ease the
 development of services.</content>
             <title>Service Builder</title>
         </documentation>
-        <action>
-            <id>Liferay.ServiceBuilder.BuildServices</id>
-            <label>Build Services</label>
-            <tooltip>Build Services (Ctrl+Shift+B)</tooltip>
-            <description>Build Services</description>
-            <image>images/builder_16x16.gif</image>
-            <hint>
-	            <name>style</name>
-	            <value>image+text</value>
-	        </hint>
-            <context>Sapphire.EditorPage</context>
-            <key-binding>SHIFT+CONTROL+b</key-binding>
-            <key-binding-behavior>propagated</key-binding-behavior>
-        </action>
-        <action>
-            <id>Liferay.ServiceBuilder.BuildWSDD</id>
-            <label>Build WSDD</label>
-            <description>Build WSDD</description>
-            <image>images/webservicedesc_16x16.gif</image>
-            <hint>
-	            <name>style</name>
-	            <value>image+text</value>
-	        </hint>
-            <context>Sapphire.EditorPage</context>
-        </action>
-        <action-handler>
-            <action>Liferay.ServiceBuilder.BuildServices</action>
-            <id>Liferay.ServiceBuilder.BuildServices</id>
-            <label>Build Services</label>
-            <impl>BuildServicesActionHandler</impl>
-        </action-handler>
-        <action-handler>
-            <action>Liferay.ServiceBuilder.BuildWSDD</action>
-            <id>Liferay.ServiceBuilder.BuildWSDD</id>
-            <label>Build WSDD</label>
-            <impl>BuildWSDDActionHandler</impl>
-        </action-handler>
         <page-name>Overview</page-name>
     </editor-page>
     <diagram-page>
