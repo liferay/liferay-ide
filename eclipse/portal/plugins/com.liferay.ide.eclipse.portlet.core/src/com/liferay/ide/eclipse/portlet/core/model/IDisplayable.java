@@ -23,7 +23,6 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -40,7 +39,6 @@ public interface IDisplayable extends IModelElement {
 
 	@Label( standard = "Display name" )
 	@XmlBinding( path = "display-name" )
-	@Whitespace( trim = true )
 	ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" );
 
 	Value<String> getDisplayName();

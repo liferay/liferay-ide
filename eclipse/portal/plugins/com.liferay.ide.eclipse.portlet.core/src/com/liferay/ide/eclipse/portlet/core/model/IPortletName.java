@@ -27,7 +27,6 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -41,7 +40,6 @@ public interface IPortletName extends IModelElement {
 	// *** Name ***
 
 	@Label( standard = "Name" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
 	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "portlet-name" } )
 	@PossibleValues( property = "/Portlets/PortletName" )

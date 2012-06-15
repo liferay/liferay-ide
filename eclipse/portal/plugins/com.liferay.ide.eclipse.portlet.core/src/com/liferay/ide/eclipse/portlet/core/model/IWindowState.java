@@ -28,7 +28,6 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -46,7 +45,6 @@ public interface IWindowState extends IModelElement {
 
 	@Label( standard = "state", full = "Window States" )
 	@NoDuplicates
-	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
 	@Service( impl = WindowStatesPossibleValueService.class )
 	ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" );

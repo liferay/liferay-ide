@@ -36,7 +36,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -75,7 +74,6 @@ public interface IServletFilterMapping extends IModelElement {
 	// *** BeforeAfterFilterName ***
 
 	@Label( standard = "Portal Filter Name" )
-	@Whitespace( trim = true )
 	@CustomXmlValueBinding( impl = BeforeAfterFilterNameBinding.class )
 	@Service( impl = PortalFilterNamesPossibleValuesService.class )
 	ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty( TYPE, "BeforeAfterFilterName" );

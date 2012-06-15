@@ -37,7 +37,6 @@ import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -54,7 +53,6 @@ public interface ICustomUserAttribute extends IModelElement {
 	@Required
 	@NoDuplicates
 	@XmlBinding( path = "name" )
-	@Whitespace( trim = true )
 	@CountConstraint( min = 1 )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 

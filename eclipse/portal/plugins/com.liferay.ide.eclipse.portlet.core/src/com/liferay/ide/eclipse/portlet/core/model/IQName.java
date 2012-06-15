@@ -28,7 +28,6 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -43,8 +42,6 @@ public interface IQName extends IModelElement {
 	// *** NamespaceURI ***
 
 	@Label( standard = "Namespace URI" )
-	@Whitespace( trim = true )
-	// @DefaultValue( text = "NAMESPACE_URI" )
 	@XmlBinding( path = "qname" )
 	@Service( impl = NameOrQnameValidationService.class )
 	@CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
@@ -57,8 +54,6 @@ public interface IQName extends IModelElement {
 	// *** LocalPart ***
 
 	@Label( standard = "Local Part" )
-	@Whitespace( trim = true )
-	// @DefaultValue( text = "LOCAL_PART" )
 	@XmlBinding( path = "qname" )
 	@Service( impl = NameOrQnameValidationService.class )
 	@CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname", "localpart" } )

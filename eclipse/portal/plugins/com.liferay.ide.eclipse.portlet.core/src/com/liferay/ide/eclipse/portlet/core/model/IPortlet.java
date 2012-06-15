@@ -39,7 +39,6 @@ import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -59,7 +58,6 @@ public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable,
 	@NoDuplicates
 	@MustExist
 	@XmlBinding( path = "portlet-name" )
-	@Whitespace( trim = true )
 	ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" );
 
 	Value<String> getPortletName();
@@ -101,7 +99,6 @@ public interface IPortlet extends IResourceBundle, IIdentifiable, IDescribeable,
 	@Label( standard = "Cache scope" )
 	@XmlBinding( path = "cache-scope" )
 	@CountConstraint( min = 0, max = 1 )
-	@Whitespace( trim = true )
 	ValueProperty PROP_CACHE_SCOPE = new ValueProperty( TYPE, "CacheScope" );
 
 	Value<String> getCacheScope();

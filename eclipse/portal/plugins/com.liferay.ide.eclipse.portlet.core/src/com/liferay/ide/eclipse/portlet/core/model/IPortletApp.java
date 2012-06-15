@@ -30,7 +30,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlNamespace;
@@ -135,7 +134,6 @@ public interface IPortletApp extends IResourceBundle, IIdentifiable {
 
 	@Label( standard = "Default Namespace" )
 	@NoDuplicates
-	@Whitespace( trim = true )
 	@XmlBinding( path = "default-namespace" )
 	ValueProperty PROP_DEFAULT_NAMESPACE = new ValueProperty( TYPE, "DefaultNameSpace" );
 

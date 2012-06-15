@@ -25,7 +25,6 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -39,7 +38,6 @@ public interface IWorkflowHandler extends IModelElement {
 	// *** WorkflowHandler ***
 
 	@Label( standard = "Worlflow Handler" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "workflow-handler" )
 	ValueProperty PROP_WORKFLOW_HANDLER = new ValueProperty( TYPE, "WorkflowHandler" );
 

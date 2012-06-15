@@ -20,6 +20,8 @@
 
 package com.liferay.ide.eclipse.portlet.core.model.lfrportlet.common;
 
+import com.liferay.ide.eclipse.core.model.xml.internal.ChoiceValueBinding;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
@@ -30,11 +32,8 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-
-import com.liferay.ide.eclipse.core.model.xml.internal.ChoiceValueBinding;
 
 /**
  * @author kamesh
@@ -47,7 +46,6 @@ public interface ISimple extends IModelElement {
 	// *** PropertyKey ***
 
 	@Label( standard = "Property Key" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "property-key" )
 	@Enablement( expr = "${SimpleTriggerValue=='0'}" )
 	@DefaultValue( text = "PROPERTY_KEY" )
@@ -63,7 +61,6 @@ public interface ISimple extends IModelElement {
 
 	@Label( standard = "Simple Trigger Value" )
 	@Type( base = Integer.class )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "simple-trigger-value" )
 	@DefaultValue( text = "0" )
 	@Enablement( expr = "${PropertyKey=='PROPERTY_KEY'}" )

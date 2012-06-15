@@ -32,7 +32,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -48,7 +47,6 @@ public interface ISupportedLocales extends IModelElement {
 	// *** SupportedLocale ***
 
 	@Label( standard = "Locale" )
-	@Whitespace( trim = true )
 	@NoDuplicates
 	@XmlBinding( path = "" )
 	@Services( value = { @Service( impl = LocalePossibleValueService.class ),

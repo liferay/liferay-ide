@@ -25,7 +25,6 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -44,7 +43,6 @@ public interface INameValue extends IModelElement {
 	@Required
 	@NoDuplicates
 	@XmlBinding( path = "param-name" )
-	@Whitespace( trim = true )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
 	Value<String> getName();
@@ -57,7 +55,6 @@ public interface INameValue extends IModelElement {
 
 	@Label( standard = "Value" )
 	@XmlBinding( path = "param-value" )
-	@Whitespace( trim = true )
 	ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
 	Value<String> getValue();

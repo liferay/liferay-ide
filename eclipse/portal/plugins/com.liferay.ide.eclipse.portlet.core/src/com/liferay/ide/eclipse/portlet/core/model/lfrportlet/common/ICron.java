@@ -30,7 +30,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -45,7 +44,6 @@ public interface ICron extends IModelElement {
 	// *** PropertyKey ***
 
 	@Label( standard = "Property Key" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "property-key" )
 	@Enablement( expr = "${CronTriggerValue=='CRON_EXPRESSION'}" )
 	@DefaultValue( text = "PROPERTY_KEY" )
@@ -60,7 +58,6 @@ public interface ICron extends IModelElement {
 	// *** CronTriggerValue ***
 
 	@Label( standard = "Cron Trigger Value" )
-	@Whitespace( trim = true )
 	@DefaultValue( text = "CRON_EXPRESSION" )
 	@Enablement( expr = "${PropertyKey=='PROPERTY_KEY'}" )
 	@XmlBinding( path = "cron-trigger-value" )

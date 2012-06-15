@@ -23,7 +23,6 @@ import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -37,7 +36,6 @@ public interface IOptionValue extends IModelElement {
 	// *** RuntimeOptionValue ***
 
 	@Label( standard = "Option Value" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "" )
 	// @CustomXmlValueBinding( impl = TextNodeValueBinding.class, params = { "value" } )
 	ValueProperty PROP_OPTION_VALUE = new ValueProperty( TYPE, "OptionValue" );

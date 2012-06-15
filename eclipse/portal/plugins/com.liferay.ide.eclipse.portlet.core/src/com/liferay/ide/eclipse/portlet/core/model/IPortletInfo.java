@@ -25,7 +25,6 @@ import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -42,7 +41,6 @@ public interface IPortletInfo extends IModelElement, IIdentifiable {
 	@Label( standard = "Title" )
 	@XmlBinding( path = "title" )
 	@CountConstraint( min = 0, max = 1 )
-	@Whitespace( trim = true )
 	ValueProperty PROP_TITLE = new ValueProperty( TYPE, "Title" );
 
 	Value<String> getTitle();
@@ -54,7 +52,6 @@ public interface IPortletInfo extends IModelElement, IIdentifiable {
 	@Label( standard = "Short Title" )
 	@XmlBinding( path = "short-title" )
 	@CountConstraint( min = 0, max = 1 )
-	@Whitespace( trim = true )
 	ValueProperty PROP_SHORT_TITLE = new ValueProperty( TYPE, "ShortTitle" );
 
 	Value<String> getShortTitle();
@@ -66,7 +63,6 @@ public interface IPortletInfo extends IModelElement, IIdentifiable {
 	@Label( standard = "Keywords" )
 	@XmlBinding( path = "keywords" )
 	@CountConstraint( min = 0, max = 1 )
-	@Whitespace( trim = true )
 	ValueProperty PROP_KEYWORDS = new ValueProperty( TYPE, "Keywords" );
 
 	Value<String> getKeywords();

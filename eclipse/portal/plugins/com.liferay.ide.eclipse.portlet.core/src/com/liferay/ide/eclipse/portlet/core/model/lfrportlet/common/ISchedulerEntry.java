@@ -37,7 +37,6 @@ import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -55,7 +54,6 @@ public interface ISchedulerEntry extends IModelElement {
 	@Label( standard = "Description" )
 	@NoDuplicates
 	@XmlBinding( path = "scheduler-description" )
-	@Whitespace( trim = true )
 	@CountConstraint( min = 0, max = 1 )
 	ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" );
 

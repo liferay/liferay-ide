@@ -51,7 +51,6 @@ import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
-import org.eclipse.sapphire.modeling.annotations.Whitespace;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 import org.eclipse.sapphire.workspace.WorkspaceRelativePath;
@@ -97,7 +96,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** VirtualPath ***
 
 	@Label( standard = "Virtual Path" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "virtual-path" )
 	ValueProperty PROP_VIRTUAL_PATH = new ValueProperty( TYPE, "VirtualPath" );
 
@@ -108,7 +106,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** StrutsPath ***
 
 	@Label( standard = "Struts path" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "struts-path" )
 	ValueProperty PROP_STRUTS_PATH = new ValueProperty( TYPE, "StrutsPath" );
 
@@ -119,7 +116,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** ParentStrutsPath ***
 
 	@Label( standard = "Parent Struts Path" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "parent-struts-path" )
 	ValueProperty PROP_PARENT_STRUTS_PATH = new ValueProperty( TYPE, "ParentStrutsPath" );
 
@@ -231,7 +227,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** FriendlyUrlMapping ***
 
 	@Label( standard = "Friendly URL Mapping" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "friendly-url-mapping" )
 	ValueProperty PROP_FRIENDLY_URL_MAPPING = new ValueProperty( TYPE, "FriendlyUrlMapping" );
 
@@ -242,7 +237,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** FriendlyUrlRoutes ***
 
 	@Label( standard = "Friendly Url Routes" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "friendly-url-routes" )
 	ValueProperty PROP_FRIENDLY_URL_ROUTES = new ValueProperty( TYPE, "FriendlyUrlRoutes" );
 
@@ -379,7 +373,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** WebDAVStorageToken ***
 
 	@Label( standard = "WebDAV Token" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "webdav-storage-token" )
 	ValueProperty PROP_WEBDAV_STORAGE_TOKEN = new ValueProperty( TYPE, "WebDAVStorageToken" );
 
@@ -747,7 +740,6 @@ public interface ILiferayPortlet extends IModelElement {
 
 	@Label( standard = "label" )
 	@XmlBinding( path = "autopropagated-parameters" )
-	@Whitespace( trim = true )
 	ValueProperty PROP_AUTO_PROPOGATED_PARAMETERS = new ValueProperty( TYPE, "AutoPropogatedParameters" );
 
 	Value<String> getAutoPropogatedParameters();
@@ -884,7 +876,6 @@ public interface ILiferayPortlet extends IModelElement {
 	// *** CssWrapperClass ***
 
 	@Label( standard = "Css Wrapper Class" )
-	@Whitespace( trim = true )
 	@XmlBinding( path = "css-wrapper-class" )
 	ValueProperty PROP_CSS_WRAPPER_CLASS = new ValueProperty( TYPE, "CssWrapperClass" );
 
