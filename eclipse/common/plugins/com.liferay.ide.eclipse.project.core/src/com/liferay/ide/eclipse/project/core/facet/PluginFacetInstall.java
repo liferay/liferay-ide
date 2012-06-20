@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -45,6 +45,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
@@ -56,6 +57,7 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModel
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
@@ -70,6 +72,8 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties
 {
 
+	protected static final String DEFAULT_DEPLOY_PATH = "/WEB-INF/classes";
+	
 	/**
 	 * copied from ProjectFacetPreferencesGroup
 	 */
@@ -82,6 +86,83 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 	protected IProgressMonitor monitor;
 
 	protected IProject project;
+
+	protected void configureDeploymentAssembly(final String srcPath, final String deployPath)
+	{
+	    IVirtualComponent vProject = ComponentCore.createComponent( this.project );
+	    
+	    IVirtualFolder vProjectFolder = vProject.getRootFolder();
+        
+	    IVirtualFolder deployFolder = vProjectFolder.getFolder( new Path( deployPath ) );
+        
+	    try
+        {
+	        deployFolder.createLink( new Path(srcPath), IResource.FORCE, null );
+        }
+        catch( CoreException e )
+        {
+            ProjectCorePlugin.logError("Unable to create link", e);
+        }
+        
+	    try
+        {
+            IPath outputLocation = JavaCore.create( this.project ).getOutputLocation();
+            vProject.setMetaProperty( IModuleConstants.PROJ_REL_JAVA_OUTPUT_PATH, outputLocation.toPortableString() );
+        }
+        catch( JavaModelException e )
+        {
+            ProjectCorePlugin.logError("Unable to set java-ouput-path", e);
+        }
+	}
+
+	protected void copyToProject(IPath parent, File newFile, boolean prompt)
+		throws CoreException, IOException {
+
+		if (newFile == null || !shouldCopyToProject(newFile)) {
+			return;
+		}
+
+		IResource projectEntry = null;
+		IPath newFilePath = new Path(newFile.getPath());
+		IPath newFileRelativePath = newFilePath.makeRelativeTo(parent);
+
+		if (newFile.isDirectory()) {
+			projectEntry = this.project.getFolder(newFileRelativePath);
+		}
+		else {
+			projectEntry = this.project.getFile(newFileRelativePath);
+		}
+
+		if (projectEntry.exists()) {
+			if (projectEntry instanceof IFolder) {
+				// folder already exists, we can return
+				return;
+			}
+			else if (projectEntry instanceof IFile) {
+				if (prompt && !promptForOverwrite(projectEntry)) {
+					return;
+				}
+
+				((IFile) projectEntry).setContents(new FileInputStream(newFile), IResource.FORCE, null);
+			}
+		}
+		else if (projectEntry instanceof IFolder) {
+			IFolder newProjectFolder = (IFolder) projectEntry;
+
+			newProjectFolder.create(true, true, null);
+		}
+		else if (projectEntry instanceof IFile) {
+			((IFile) projectEntry).create(new FileInputStream(newFile), IResource.FORCE, null);
+		}
+	}
+
+	protected boolean deletePath(IPath path) {
+		if (path != null && path.toFile().exists()) {
+			return path.toFile().delete();
+		}
+
+		return false;
+	}
 
 	@SuppressWarnings("deprecation")
 	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
@@ -139,68 +220,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 		javaProject.setOutputLocation( outputLocation, monitor );
 	}
 
-	protected abstract String getDefaultOutputLocation();
-
-	protected void copyToProject(IPath parent, File newFile, boolean prompt)
-		throws CoreException, IOException {
-
-		if (newFile == null || !shouldCopyToProject(newFile)) {
-			return;
-		}
-
-		IResource projectEntry = null;
-		IPath newFilePath = new Path(newFile.getPath());
-		IPath newFileRelativePath = newFilePath.makeRelativeTo(parent);
-
-		if (newFile.isDirectory()) {
-			projectEntry = this.project.getFolder(newFileRelativePath);
-		}
-		else {
-			projectEntry = this.project.getFile(newFileRelativePath);
-		}
-
-		if (projectEntry.exists()) {
-			if (projectEntry instanceof IFolder) {
-				// folder already exists, we can return
-				return;
-			}
-			else if (projectEntry instanceof IFile) {
-				if (prompt && !promptForOverwrite(projectEntry)) {
-					return;
-				}
-
-				((IFile) projectEntry).setContents(new FileInputStream(newFile), IResource.FORCE, null);
-			}
-		}
-		else if (projectEntry instanceof IFolder) {
-			IFolder newProjectFolder = (IFolder) projectEntry;
-
-			newProjectFolder.create(true, true, null);
-		}
-		else if (projectEntry instanceof IFile) {
-			((IFile) projectEntry).create(new FileInputStream(newFile), IResource.FORCE, null);
-		}
-	}
-
-	protected boolean deletePath(IPath path) {
-		if (path != null && path.toFile().exists()) {
-			return path.toFile().delete();
-		}
-
-		return false;
-	}
-
-	protected ILiferayRuntime getLiferayRuntime() {
-		try {
-			return ServerUtil.getLiferayRuntime(this.project);
-		}
-		catch (CoreException e) {
-			ProjectCorePlugin.logError(e);
-
-			return null;
-		}
-	}
-	
 	protected IPath getAppServerDir() {
 		IRuntime serverRuntime;
 
@@ -213,6 +232,8 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 		return ServerUtil.getAppServerDir(serverRuntime);
 	}
+	
+	protected abstract String getDefaultOutputLocation();
 
 	protected IDataModel getFacetDataModel(String facetId) {
 		IFacetedProjectWorkingCopy fp = getFacetedProject();
@@ -257,6 +278,17 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 	// }
 	// }
 	// }
+
+	protected ILiferayRuntime getLiferayRuntime() {
+		try {
+			return ServerUtil.getLiferayRuntime(this.project);
+		}
+		catch (CoreException e) {
+			ProjectCorePlugin.logError(e);
+
+			return null;
+		}
+	}
 
 	protected IPath getPortalDir() {
 		IRuntime serverRuntime;
@@ -445,7 +477,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
 		return true;
 	}
-
+    
 	protected boolean shouldInstallPluginLibraryDelegate() {
 		return true;
 	}
