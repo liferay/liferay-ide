@@ -6,7 +6,7 @@
       <portletFrameworkWizardProvider
             class="com.liferay.ide.eclipse.portlet.jsf.core.JSFPortletFrameworkWizardProvider"
             default="false"
-            description="Enables development of JSF 2.x applications using PortletFaces bridge that run seamlessly inside of Liferay Portal."
+            description="Enables development of JSF 2.x applications using Liferay Faces Bridge that run seamlessly inside of Liferay Portal."
             displayName="JSF 2.x"
             helpUrl="http://www.portletfaces.org/projects/portletfaces-bridge"
             id="com.liferay.ide.eclipse.project.core.template.jsf"

@@ -16,7 +16,6 @@ import org.osgi.framework.Version;
 
 public class LiferayTomcatRuntime70 extends LiferayTomcatRuntime
 {
-
 	public static final Version leastSupportedVersion = new Version( 6, 1, 0 );
 
 	protected Version getLeastSupportedVersion() {

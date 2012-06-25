@@ -65,7 +65,7 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
         (
             group, 
             "JSF standard", 
-            "Provides standard UI components provided by the JSF runtime. <a>Learn more...</a>", 
+            "Standard UI components provided by the JSF runtime. <a>Learn more...</a>", 
             "icons/e16/jsf-logo-16x16.png", 
             "http://javaserverfaces.java.net/",
             COMPONENT_SUITE_JSF_STANDARD
@@ -84,8 +84,8 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
         createComponentSuiteOption
         (
             group, 
-            "ICEFaces", 
-            "Components baed in part on YUI and jQuery with automatic Ajax and Ajax Push support. <a>Learn more...</a>", 
+            "ICEfaces", 
+            "Components based in part on YUI and jQuery with automatic Ajax and Ajax Push support. <a>Learn more...</a>", 
             "icons/e16/icefaces_16x16.png", 
             "http://www.icesoft.org/projects/ICEfaces",
             COMPONENT_SUITE_ICEFACES
@@ -106,7 +106,7 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             group, 
             "RichFaces", 
             "Next-generation JSF component framework by JBoss. <a>Learn more...</a>", 
-            "icons/e16/ricefaces_16x16.png", 
+            "icons/e16/portlet_16x16.png", 
             "http://www.jboss.org/richfaces",
             COMPONENT_SUITE_RICHFACES
         );
