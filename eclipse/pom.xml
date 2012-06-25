@@ -51,7 +51,7 @@
     </licenses>
 
   <properties>
-    <tycho-version>0.14.0</tycho-version>
+    <tycho-version>0.15.0</tycho-version>
     <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
     <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
   </properties>

@@ -28,8 +28,6 @@
 		<if>
 			<isset property="isLinux"/>
 			<then>
-				<antcall target="copy-site-zip" />
-				
 				<antcall target="win32" />
 				<antcall target="linux" />
 				<antcall target="macosx" />
@@ -38,10 +36,6 @@
 				<antcall target="macosx64" />
 			</then>
 		</if>
-	</target>
-	
-	<target name="copy-site-zip">
-		<copy file="${project.build.directory}/com.liferay.ide.eclipse-repository.zip" tofile="${project.build.directory}/Liferay_IDE_${ideVersion}-updatesite.zip"></copy>
 	</target>
 	
 	<target name="create-bundle">
