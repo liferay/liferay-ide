@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.core;
+package com.liferay.ide.eclipse.portlet.vaadin.core;
 
-import com.liferay.ide.eclipse.project.core.AbstractPortletFramework;
+import com.liferay.ide.eclipse.project.core.AbstractPortletFrameworkWizardProvider;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,16 +25,21 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class MVCPortletFramework extends AbstractPortletFramework {
+public class VaadinPortletFrameworkWizardProvider extends AbstractPortletFrameworkWizardProvider {
 
-	public MVCPortletFramework() {
+	public VaadinPortletFrameworkWizardProvider() {
 		super();
 	}
 
 	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		// nothing to do for MVCPortlet projects its already properly configured.
+		// nothing todo for vaadin projects
 
 		return Status.OK_STATUS;
+	}
+    
+	public void reinitialize()
+	{
+	    // do nothing
 	}
 
 }

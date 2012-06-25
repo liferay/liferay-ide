@@ -16,7 +16,7 @@
 package com.liferay.ide.eclipse.project.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.ui.IPortletFrameworkDelegate;
@@ -26,6 +26,7 @@ import com.liferay.ide.eclipse.ui.util.UIUtil;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jst.j2ee.internal.wizard.J2EEComponentFacetCreationWizardPage;
@@ -79,12 +80,12 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 		group.setLayoutData(layoutData);
 		((GridLayout) group.getLayout()).verticalSpacing = 10;
 
-		IPortletFramework[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+		IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
 
 		if (!CoreUtil.isNullOrEmpty(portletFrameworks)) {
 			List<Button> buttons = new ArrayList<Button>();
 
-			for (final IPortletFramework framework : portletFrameworks) {
+			for (final IPortletFrameworkWizardProvider framework : portletFrameworks) {
 				final IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( framework.getId() );
 
 				String iconUrl = null;
@@ -110,7 +111,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						getDataModel().setProperty(PORTLET_FRAMEWORK, framework);
+						getDataModel().setProperty(PORTLET_FRAMEWORK_ID, framework.getId());
 						getDataModel().setBooleanProperty(PLUGIN_FRAGMENT_ENABLED, delegate.isFragmentEnabled());
 					}
 
@@ -161,7 +162,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 		List<Composite> composites = new ArrayList<Composite>();
 
 		for (Button templateButton : frameworkButtons) {
-			IPortletFramework template = (IPortletFramework) templateButton.getData();
+			IPortletFrameworkWizardProvider template = (IPortletFrameworkWizardProvider) templateButton.getData();
 			IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( template.getId() );
 
 			final Composite[] optionsComposite = new Composite[1];
@@ -225,13 +226,13 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 		return IModuleConstants.JST_WEB_MODULE;
 	}
 
-	public IPortletFramework getSelectedPortletFramework() {
-		IPortletFramework retval = null;
+	public IPortletFrameworkWizardProvider getSelectedPortletFramework() {
+		IPortletFrameworkWizardProvider retval = null;
 
 		if (!CoreUtil.isNullOrEmpty(frameworkButtons)) {
 			for (Button templateButton : frameworkButtons) {
 				if (templateButton.getSelection()) {
-					retval = (IPortletFramework) templateButton.getData();
+					retval = (IPortletFrameworkWizardProvider) templateButton.getData();
 				}
 			}
 		}
@@ -241,9 +242,21 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
 	@Override
 	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			PLUGIN_FRAGMENT_ENABLED, PORTLET_FRAMEWORK
-		};
+	    final List<String> validationPropertyNames = new ArrayList<String>();
+        
+	    final String[] propNames = new String[] 
+	    {
+            PLUGIN_FRAGMENT_ENABLED, PORTLET_FRAMEWORK_ID
+        };
+        
+        Collections.addAll( validationPropertyNames, propNames );
+	    
+	    for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+        {
+            validationPropertyNames.addAll( portletFramework.getPropertyNames() );
+        }
+	    
+		return validationPropertyNames.toArray( new String[0] );
 	}
 
 	@Override

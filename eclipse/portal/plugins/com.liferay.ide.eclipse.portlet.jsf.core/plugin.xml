@@ -2,17 +2,17 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="com.liferay.ide.eclipse.project.core.portletFrameworks">
-      <portletFramework
-            class="com.liferay.ide.eclipse.portlet.jsf.core.JSFPortletFramework"
+         point="com.liferay.ide.eclipse.project.core.portletFrameworkWizardProviders">
+      <portletFrameworkWizardProvider
+            class="com.liferay.ide.eclipse.portlet.jsf.core.JSFPortletFrameworkWizardProvider"
             default="false"
-            description="Enables development of JSF 2.0 applications using PortletFaces bridge that run seamlessly inside of Liferay Portal."
-            displayName="JSF 2.0"
+            description="Enables development of JSF 2.x applications using PortletFaces bridge that run seamlessly inside of Liferay Portal."
+            displayName="JSF 2.x"
             helpUrl="http://www.portletfaces.org/projects/portletfaces-bridge"
             id="com.liferay.ide.eclipse.project.core.template.jsf"
             requiredSDKVersion="6.1.0"
             shortName="jsf">
-      </portletFramework>
+      </portletFrameworkWizardProvider>
    </extension>
 
 </plugin>

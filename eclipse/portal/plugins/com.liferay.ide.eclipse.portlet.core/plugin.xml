@@ -226,9 +226,9 @@
    
    
    <extension
-       point="com.liferay.ide.eclipse.project.core.portletFrameworks">
-    <portletFramework
-          class="com.liferay.ide.eclipse.portlet.core.MVCPortletFramework"
+       point="com.liferay.ide.eclipse.project.core.portletFrameworkWizardProviders">
+    <portletFrameworkWizardProvider
+          class="com.liferay.ide.eclipse.portlet.core.MVCPortletFrameworkWizardProvider"
           default="true"
           description="Simple and lightweight MVC framework using JSPs that is built-in to Liferay Portal."
           displayName="Liferay MVC"
@@ -236,7 +236,7 @@
           id="com.liferay.ide.eclipse.project.core.framework.mvc"
           requiredSDKVersion="6.0.1"
           shortName="mvc">
-    </portletFramework>
+    </portletFrameworkWizardProvider>
     </extension>
 
 </plugin>

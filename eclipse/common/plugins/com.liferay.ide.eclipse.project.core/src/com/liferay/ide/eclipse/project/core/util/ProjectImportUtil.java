@@ -20,7 +20,7 @@ package com.liferay.ide.eclipse.project.core.util;
 import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.ZipUtil;
 import com.liferay.ide.eclipse.project.core.BinaryProjectRecord;
-import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.ProjectRecord;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
@@ -127,11 +127,11 @@ public class ProjectImportUtil {
 				docrootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
 			}
 			else if ( pluginBinaryRecord.isPortlet() ) {
-				IPortletFramework[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+				IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
 				String portletFrameworkName = null;
 
 				for ( int i = 0; i < portletFrameworks.length; i++ ) {
-					IPortletFramework portletFramework = portletFrameworks[i];
+					IPortletFrameworkWizardProvider portletFramework = portletFrameworks[i];
 
 					if ( portletFramework.isDefault() ) {
 						portletFrameworkName = portletFramework.getShortName();

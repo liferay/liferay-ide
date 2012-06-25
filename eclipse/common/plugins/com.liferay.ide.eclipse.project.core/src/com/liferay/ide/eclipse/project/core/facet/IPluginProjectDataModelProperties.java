@@ -62,7 +62,7 @@ public interface IPluginProjectDataModelProperties
 	
 	public static final String PLUGIN_TYPE_THEME = "IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME";
 
-	public static final String PORTLET_FRAMEWORK = "IPluginProjectDataModelProperties.PORTLET_FRAMEWORK";
+	public static final String PORTLET_FRAMEWORK_ID = "IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID";
 
 	public static final String PORTLET_NAME = "IPluginProjectDataModelProperties.PORTLET_NAME";
 

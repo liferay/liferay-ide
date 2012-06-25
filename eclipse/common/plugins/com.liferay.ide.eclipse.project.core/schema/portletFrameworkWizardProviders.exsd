@@ -3,7 +3,7 @@
 <schema targetNamespace="com.liferay.ide.eclipse.project.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.eclipse.project.ui" id="portletFrameworks" name="Liferay Portlet Frameworks"/>
+         <meta.schema plugin="com.liferay.ide.eclipse.project.ui" id="portletFrameworkWizardProviders" name="Liferay Portlet Framework Wizard Providers"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="portletFramework"/>
+            <element ref="portletFrameworkWizardProvider"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="portletFramework">
+   <element name="portletFrameworkWizardProvider">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>

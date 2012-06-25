@@ -16,7 +16,7 @@
 package com.liferay.ide.eclipse.project.core.facet;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.project.core.IProjectDefinition;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
@@ -113,8 +113,16 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		else if (CREATE_PROJECT_OPERATION.equals(propertyName)) {
 			return true;
 		}
-		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
-			return ProjectCorePlugin.getPortletFrameworks()[0];
+		else if (PORTLET_FRAMEWORK_ID.equals(propertyName)) {
+			return ProjectCorePlugin.getPortletFrameworks()[0].getId();
+		}
+        
+		for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+		{
+		    if( portletFramework.hasPropertyName( propertyName ) )
+		    {
+		        return portletFramework.getDefaultProperty( propertyName );
+		    }
 		}
 
 		return super.getDefaultProperty(propertyName);
@@ -158,7 +166,12 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		propNames.add(CREATE_PROJECT_OPERATION);
 		propNames.add(PLUGIN_FRAGMENT_ENABLED);
 		propNames.add(PLUGIN_FRAGMENT_DM);
-		propNames.add(PORTLET_FRAMEWORK);
+		propNames.add(PORTLET_FRAMEWORK_ID);
+        
+		for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+		{
+		    propNames.addAll( portletFramework.getPropertyNames() );
+		}
 
 		return propNames;
 	}
@@ -210,37 +223,18 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 				break;
 			}
 		}
+        
+		ProjectCorePlugin.getPortletFrameworks( true );
 	}
 
 	@Override
-	public boolean propertySet(String propertyName, Object propertyValue) {
-		// if (LIFERAY_USE_CUSTOM_LOCATION.equals(propertyName) &&
-		// Boolean.TRUE.equals(propertyValue)) {
-		// getNestedModel().setProperty(USER_DEFINED_BASE_LOCATION, null);
-		// } else if (LIFERAY_USE_SDK_LOCATION.equals(propertyName) &&
-		// Boolean.TRUE.equals(propertyValue)) {
-		// getNestedModel().setProperty(USER_DEFINED_BASE_LOCATION,
-		// getSDKLocation());
-		// getNestedModel().setProperty(USE_DEFAULT_LOCATION, false);
-		// } else if (LIFERAY_SDK_NAME.equals(propertyName)) {
-		// if (getModel().getBooleanProperty(LIFERAY_USE_SDK_LOCATION)) {
-		// getNestedModel().setProperty(USER_DEFINED_BASE_LOCATION,
-		// getSDKLocation());
-		// }
-		// } else
+	public boolean propertySet(final String propertyName, final Object propertyValue) {
+	    String portletFrameworkId = getStringProperty(PORTLET_FRAMEWORK_ID);
+        
+        IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
+        
 		if (FACET_PROJECT_NAME.equals(propertyName) || LIFERAY_SDK_NAME.equals(propertyName)) {
-			// if (!(getProperty(LIFERAY_SDK_NAME).equals(IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE))) {
 			updateProjectLocation();
-			// }
-			// getNestedModel().setProperty(USER_DEFINED_LOCATION,
-			// getProjectLocation() + File.separator + propertyValue.toString()
-			// + getProjectSuffix());
-			// getNestedModel().setProperty(PROJECT_LOCATION,
-			// getProjectLocation() + File.separator + propertyValue.toString()
-			// + getProjectSuffix());
-			// getNestedModel().setProperty(PROJECT_NAME,
-			// getProperty(FACET_PROJECT_NAME) + getProjectSuffix());
-			// } else if (SETUP_PROJECT_FLAG.equals(propertyName)) {
 		}
 		else if (PLUGIN_TYPE_PORTLET.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
 			setupProject(IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID);
@@ -262,10 +256,13 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			return super.propertySet(DISPLAY_NAME, displayName);
 		}
-		else if (PORTLET_FRAMEWORK.equals(propertyName)) {
-			IPortletFramework portletFramework = (IPortletFramework) getProperty(PORTLET_FRAMEWORK);
-
-			setupPortletFramework(portletFramework);
+		else if (PORTLET_FRAMEWORK_ID.equals(propertyName) && portletFramework != null) {
+			setupPortletFramework( portletFramework );
+		}
+        
+		if( portletFramework != null )
+		{
+		    portletFramework.propertySet( propertyName, propertyValue );
 		}
 
 		return super.propertySet(propertyName, propertyValue);
@@ -273,6 +270,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 	@Override
 	public IStatus validate(String propertyName) {
+	    String frameworkId = getStringProperty(PORTLET_FRAMEWORK_ID);
+        
+        IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
+        
 		if (FACET_PROJECT_NAME.equals(propertyName)) {
 			String projectName = getNestedModel().getStringProperty(PROJECT_NAME);
 			
@@ -343,7 +344,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			return validate(FACET_PROJECT_NAME);
 		}
-		else if (PORTLET_FRAMEWORK.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
+		else if (PORTLET_FRAMEWORK_ID.equals(propertyName) && getBooleanProperty(PLUGIN_TYPE_PORTLET) && framework != null) {
 			// check to make sure that the current SDK has the propery version
 			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
 			SDK selectedSDK = SDKManager.getInstance().getSDK(sdkName);
@@ -354,8 +355,6 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 			Version sdkVersion = new Version(selectedSDK.getVersion());
 
-			IPortletFramework framework = (IPortletFramework) getProperty(PORTLET_FRAMEWORK);
-
 			Version requiredSDKVersion = new Version(framework.getRequiredSDKVersion());
 
 			if( CoreUtil.compareVersions( sdkVersion, requiredSDKVersion ) < 0 )
@@ -365,6 +364,11 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 			else {
 				return Status.OK_STATUS;
 			}
+		}
+        
+		if( framework != null && framework.hasPropertyName( propertyName ) )
+		{
+		    return framework.validate( getDataModel(), propertyName );
 		}
 
 		return super.validate(propertyName);
@@ -449,10 +453,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 		facetedProject.setProjectFacets(newFacetSet);
 	}
 
-	protected void setupPortletFramework(IPortletFramework portletFramework) {
-		IPortletFramework[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+	protected void setupPortletFramework(IPortletFrameworkWizardProvider portletFramework) {
+		IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
 
-		for (IPortletFramework framework : portletFrameworks) {
+		for (IPortletFrameworkWizardProvider framework : portletFrameworks) {
 			if (!framework.equals(portletFramework)) {
 				IProjectFacet[] facets = framework.getFacets();
 

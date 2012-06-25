@@ -18,7 +18,7 @@ package com.liferay.ide.eclipse.project.core.facet;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.FileUtil;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
@@ -99,7 +99,9 @@ public class PortletPluginFacetInstall extends PluginFacetInstall {
 			String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
 
 			// get the template delegate
-			IPortletFramework portletFramework = (IPortletFramework) this.masterModel.getProperty( PORTLET_FRAMEWORK );
+			String portletFrameworkId = this.masterModel.getStringProperty( PORTLET_FRAMEWORK_ID );
+			
+			IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
 
 			String frameworkName = portletFramework.getShortName();
 

@@ -48,7 +48,7 @@ public class ProjectCorePlugin extends CorePlugin {
 
 	private static PluginPackageResourceListener pluginPackageResourceListener;
 
-	private static IPortletFramework[] portletFrameworks;
+	private static IPortletFrameworkWizardProvider[] portletFrameworks;
 
 	private static IProjectDefinition[] projectDefinitions = null;
 
@@ -60,34 +60,52 @@ public class ProjectCorePlugin extends CorePlugin {
 	public static ProjectCorePlugin getDefault() {
 		return plugin;
 	}
+    
+	public static IPortletFrameworkWizardProvider getPortletFramework( String id )
+	{
+	    for( IPortletFrameworkWizardProvider framework : getPortletFrameworks() )
+	    {
+	        if( framework.getId().equals( id ) )
+	        {
+	            return framework;
+	        }
+	    }
+        
+	    return null;
+	}
+    
+	public static IPortletFrameworkWizardProvider[] getPortletFrameworks()
+	{
+        return getPortletFrameworks( false );
+	}
 
-	public static IPortletFramework[] getPortletFrameworks() {
+	public static IPortletFrameworkWizardProvider[] getPortletFrameworks( boolean reinitialize ) {
 		if (portletFrameworks == null) {
 			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor(IPortletFramework.EXTENSION_ID);
+				Platform.getExtensionRegistry().getConfigurationElementsFor(IPortletFrameworkWizardProvider.EXTENSION_ID);
 
 			if (!CoreUtil.isNullOrEmpty(elements)) {
-				List<IPortletFramework> frameworks = new ArrayList<IPortletFramework>();
+				List<IPortletFrameworkWizardProvider> frameworks = new ArrayList<IPortletFrameworkWizardProvider>();
 
 				for (IConfigurationElement element : elements) {
-					String id = element.getAttribute(IPortletFramework.ID);
-					String shortName = element.getAttribute(IPortletFramework.SHORT_NAME);
-					String displayName = element.getAttribute(IPortletFramework.DISPLAY_NAME);
-					String description = element.getAttribute(IPortletFramework.DESCRIPTION);
-					String requiredSDKVersion = element.getAttribute(IPortletFramework.REQUIRED_SDK_VERSION);
-					boolean isDefault = Boolean.parseBoolean(element.getAttribute(IPortletFramework.DEFAULT));
+					String id = element.getAttribute(IPortletFrameworkWizardProvider.ID);
+					String shortName = element.getAttribute(IPortletFrameworkWizardProvider.SHORT_NAME);
+					String displayName = element.getAttribute(IPortletFrameworkWizardProvider.DISPLAY_NAME);
+					String description = element.getAttribute(IPortletFrameworkWizardProvider.DESCRIPTION);
+					String requiredSDKVersion = element.getAttribute(IPortletFrameworkWizardProvider.REQUIRED_SDK_VERSION);
+					boolean isDefault = Boolean.parseBoolean(element.getAttribute(IPortletFrameworkWizardProvider.DEFAULT));
 
 					URL helpUrl = null;
 
 					try {
-						helpUrl = new URL(element.getAttribute(IPortletFramework.HELP_URL));
+						helpUrl = new URL(element.getAttribute(IPortletFrameworkWizardProvider.HELP_URL));
 					}
 					catch (Exception e1) {
 					}
 
 					try {
-						AbstractPortletFramework framework =
-							(AbstractPortletFramework) element.createExecutableExtension("class");
+						AbstractPortletFrameworkWizardProvider framework =
+							(AbstractPortletFrameworkWizardProvider) element.createExecutableExtension("class");
 						framework.setId(id);
 						framework.setShortName(shortName);
 						framework.setDisplayName(displayName);
@@ -104,12 +122,12 @@ public class ProjectCorePlugin extends CorePlugin {
 					}
 				}
 
-				portletFrameworks = frameworks.toArray(new IPortletFramework[0]);
+				portletFrameworks = frameworks.toArray(new IPortletFrameworkWizardProvider[0]);
 
 				// sort the array so that the default template is first
-				Arrays.sort(portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFramework>() {
+				Arrays.sort(portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFrameworkWizardProvider>() {
 
-					public int compare(IPortletFramework o1, IPortletFramework o2) {
+					public int compare(IPortletFrameworkWizardProvider o1, IPortletFrameworkWizardProvider o2) {
 						if (o1.isDefault() && (!o2.isDefault())) {
 							return -1;
 						}
@@ -122,6 +140,14 @@ public class ProjectCorePlugin extends CorePlugin {
 
 				});
 			}
+		}
+		
+		if( reinitialize )
+		{
+		    for( IPortletFrameworkWizardProvider portletFramework : portletFrameworks )
+		    {
+		        portletFramework.reinitialize();
+		    }
 		}
 
 		return portletFrameworks;

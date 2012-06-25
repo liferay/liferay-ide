@@ -76,7 +76,7 @@ public abstract class AbstractPortletFrameworkDelegate implements IPortletFramew
 
 	public void propertyChanged( DataModelEvent event ) {
 		if ( event.getPropertyName().equals( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME ) ||
-			event.getPropertyName().equals( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK ) ) {
+			event.getPropertyName().equals( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID ) ) {
 
 			updateFragmentEnabled( event.getDataModel() );
 		}

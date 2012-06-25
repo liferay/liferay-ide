@@ -15,8 +15,10 @@
 
 package com.liferay.ide.eclipse.portlet.ui;
 
-import com.liferay.ide.eclipse.portlet.core.MVCPortletFramework;
+import com.liferay.ide.eclipse.portlet.core.MVCPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.portlet.ui.wizard.NewPortletWizard;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
@@ -72,9 +74,11 @@ public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
 
 	@Override
 	protected void updateFragmentEnabled( IDataModel dataModel ) {
-		Object framework = dataModel.getProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK );
+		String frameworkId = dataModel.getStringProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID );
+        
+		IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
 
-		if ( framework instanceof MVCPortletFramework ) {
+		if ( framework instanceof MVCPortletFrameworkWizardProvider ) {
 			dataModel.setBooleanProperty(
 				IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, isFragmentEnabled() );
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@
 package com.liferay.ide.eclipse.project.core;
 
 import java.net.URL;
+import java.util.Collection;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -24,17 +25,17 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-public interface IPortletFramework {
-
+public interface IPortletFrameworkWizardProvider
+{
 	String DEFAULT = "default";
 
 	String DESCRIPTION = "description";
 
 	String DISPLAY_NAME = "displayName";
 
-	String EXTENSION_ID = "com.liferay.ide.eclipse.project.core.portletFrameworks";
+	String EXTENSION_ID = "com.liferay.ide.eclipse.project.core.portletFrameworkWizardProviders";
 
 	String HELP_URL = "helpUrl";
 
@@ -48,6 +49,8 @@ public interface IPortletFramework {
 
 	String getBundleId();
 
+	Object getDefaultProperty( String propertyName );
+
 	String getDescription();
 
 	String getDisplayName();
@@ -58,14 +61,23 @@ public interface IPortletFramework {
 
 	String getId();
 
+	Collection<String> getPropertyNames();
+
 	String getRequiredSDKVersion();
 
 	String getShortName();
 
 	IStatus getUnsupportedSDKErrorMsg();
 
-	boolean isDefault();
+    boolean hasPropertyName( String propertyName );
 
-	IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject);
+    boolean isDefault();
 
+    IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject);
+
+    void propertySet( String propertyName, Object propertyValue );
+
+    void reinitialize();
+
+    IStatus validate( final IDataModel model, final String propertyName );
 }

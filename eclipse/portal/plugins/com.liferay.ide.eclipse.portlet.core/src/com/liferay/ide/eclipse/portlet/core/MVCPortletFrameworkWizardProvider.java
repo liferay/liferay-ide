@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.portlet.vaadin.core;
+package com.liferay.ide.eclipse.portlet.core;
 
-import com.liferay.ide.eclipse.project.core.AbstractPortletFramework;
+import com.liferay.ide.eclipse.project.core.AbstractPortletFrameworkWizardProvider;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,16 +25,21 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class VaadinPortletFramework extends AbstractPortletFramework {
+public class MVCPortletFrameworkWizardProvider extends AbstractPortletFrameworkWizardProvider {
 
-	public VaadinPortletFramework() {
+	public MVCPortletFrameworkWizardProvider() {
 		super();
 	}
 
 	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		// nothing todo for vaadin projects
+		// nothing to do for MVCPortlet projects its already properly configured.
 
 		return Status.OK_STATUS;
+	}
+    
+	public void reinitialize()
+	{
+	    // do nothing
 	}
 
 }

@@ -1,8 +1,10 @@
 package com.liferay.ide.eclipse.portlet.vaadin.ui;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.portlet.vaadin.core.VaadinPortletFramework;
+import com.liferay.ide.eclipse.portlet.vaadin.core.VaadinPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.NewVaadinPortletWizard;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
@@ -39,9 +41,11 @@ public class VaadinPortletFrameworkDelegate extends AbstractPortletFrameworkDele
 	}
 
 	public void updateFragmentEnabled( IDataModel dataModel ) {
-		Object framework = dataModel.getProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK );
+		String frameworkId = dataModel.getStringProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID );
+        
+		IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
 
-		if ( framework instanceof VaadinPortletFramework ) {
+		if ( framework instanceof VaadinPortletFrameworkWizardProvider ) {
 			String sdkName = dataModel.getStringProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME );
 
 			SDK sdk = SDKManager.getInstance().getSDK( sdkName );

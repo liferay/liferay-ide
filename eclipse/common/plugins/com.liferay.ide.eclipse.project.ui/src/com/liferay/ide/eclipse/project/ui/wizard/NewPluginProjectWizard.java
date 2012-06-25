@@ -16,7 +16,8 @@
 package com.liferay.ide.eclipse.project.ui.wizard;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
-import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
@@ -148,7 +149,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	public IWizardPage getNextPage(IWizardPage page) {
 		if (this.portletPluginPage.equals(page)) {
 			if (isPluginWizardFragmentEnabled()) {
-				IPortletFramework selectedFramework = this.portletPluginPage.getSelectedPortletFramework();
+				IPortletFrameworkWizardProvider selectedFramework = this.portletPluginPage.getSelectedPortletFramework();
 				IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( selectedFramework.getId() );
 
 				IPluginWizardFragment pluginFragment = delegate.getWizardFragment();
@@ -289,7 +290,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 	}
 
 	protected boolean isPluginWizardFragmentEnabled() {
-		IPortletFramework portletFramework = this.portletPluginPage.getSelectedPortletFramework();
+		IPortletFrameworkWizardProvider portletFramework = this.portletPluginPage.getSelectedPortletFramework();
 
 		if (portletFramework != null) {
 			IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( portletFramework.getId() );
@@ -337,8 +338,10 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 		throws InvocationTargetException {
 
 		if (getDataModel().getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			IPortletFramework portletFramework = (IPortletFramework) getDataModel().getProperty(PORTLET_FRAMEWORK);
-
+			String portletFrameworkId = getDataModel().getStringProperty(PORTLET_FRAMEWORK_ID);
+			
+			IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
+			
 			portletFramework.postProjectCreated(getDataModel(), getFacetedProject());
 		}
 		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_THEME))

@@ -16,7 +16,8 @@
 package com.liferay.ide.eclipse.portlet.core;
 
 import com.liferay.ide.eclipse.project.core.AbstractProjectDefinition;
-import com.liferay.ide.eclipse.project.core.IPortletFramework;
+import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
+import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
@@ -63,7 +64,9 @@ public class LiferayPortletDefinition extends AbstractProjectDefinition implemen
 
 		// need to allow portlet framework to do any additional configuration
 
-		IPortletFramework portletFramework = (IPortletFramework) dataModel.getProperty(PORTLET_FRAMEWORK);
+		String portletFrameworkId = dataModel.getStringProperty(PORTLET_FRAMEWORK_ID);
+		
+		IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
 
 		portletFramework.configureNewProject(dataModel, facetedProject);
 	}
