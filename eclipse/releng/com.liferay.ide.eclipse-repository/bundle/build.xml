@@ -8,6 +8,14 @@
 		9. Zip up parent directory as zip file.
 	-->
 
+	<property environment="env" />
+	 
+    <property file="bundle.${user.name}.properties" />
+    <property file="bundle.${env.COMPUTERNAME}.properties" />
+    <property file="bundle.${env.HOST}.properties" />
+    <property file="bundle.${env.HOSTNAME}.properties" />
+    <property file="bundle.properties" />
+	
 	<path id="lib.classpath">
 		<fileset dir="${basedir}/bundle/lib" includes="*.jar" />
 	</path>
