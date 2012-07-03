@@ -25,6 +25,7 @@ import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,6 +52,14 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 @SuppressWarnings("restriction")
 public abstract class PluginClasspathContainer implements IClasspathContainer {
 
+    protected static final Collection<String> portalSourceJars = Arrays.asList
+    (     
+        "util-bridges.jar", 
+        "util-java.jar", 
+        "util-taglib.jar", 
+        "portal-impl.jar"
+    );
+    
 	protected static ClasspathDecorationsManager cpDecorations;
 
 	protected static final String SEPARATOR = "!";
@@ -81,8 +90,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
     
 	protected IPath sourceLocation;
 
-    private List<String> portalSourceJars;
-
 	public PluginClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
 	{
 		this.path = containerPath;
@@ -90,7 +97,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 		this.portalDir = portalDir;
 		this.javadocURL = javadocURL;
 		this.sourceLocation = sourceURL;
-		this.portalSourceJars = Arrays.asList( getPortalSourceJars() );
 	}
 
 	public IClasspathEntry[] getClasspathEntries() {
@@ -240,7 +246,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
         
 		IPath sourcePath = null;
 		
-		if( this.portalSourceJars.contains( portalJar ) )
+		if( portalSourceJars.contains( portalJar ) )
 		{
 		    sourcePath = getSourceLocation();
 		}
@@ -317,8 +323,6 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	protected abstract String[] getPortalJars();
-	
-	protected abstract String[] getPortalSourceJars();
 
 	protected String getPropertyValue(String key, IFile propertiesFile) {
 		String retval = null;

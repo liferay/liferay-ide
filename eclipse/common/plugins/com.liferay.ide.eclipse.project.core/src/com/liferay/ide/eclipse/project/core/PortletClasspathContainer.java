@@ -34,13 +34,6 @@ public class PortletClasspathContainer extends PluginClasspathContainer
         "util-taglib.jar", 
     };
 
-    protected static final String[] portalSourceJars = 
-    { 
-        "util-bridges.jar", 
-        "util-java.jar", 
-        "util-taglib.jar", 
-    };
-
     public PortletClasspathContainer(
         IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourcePath )
     {
@@ -56,12 +49,6 @@ public class PortletClasspathContainer extends PluginClasspathContainer
     protected String[] getPortalJars()
     {
         return portalJars;
-    }
-
-    @Override
-    protected String[] getPortalSourceJars()
-    {
-        return portalSourceJars;
     }
 
 }

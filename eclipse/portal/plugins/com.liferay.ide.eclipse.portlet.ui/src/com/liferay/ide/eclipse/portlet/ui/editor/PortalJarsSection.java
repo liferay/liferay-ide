@@ -32,6 +32,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -84,13 +85,17 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		String[] portalJars = model.getPortalDependencyJars();
 		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
 
-		for (String portalJar : portalJars) {
-			File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim());
+        if( portalDir != null )
+        {
+            for (String portalJar : portalJars) {
+                File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim());
 
-			if (jarFile.isFile() && jarFile.exists()) {
-				fJars.add(jarFile);
-			}
-		}
+                if (jarFile.isFile() && jarFile.exists()) {
+                    fJars.add(jarFile);
+                }
+            }
+        }
+		
 	}
 	
 	class PortalJarsLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -296,21 +301,33 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		String[] existingJars = model.getPortalDependencyJars();
 		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
 		IPath portalDir = editor.getPortalDir();
-		ExternalFileSelectionDialog dialog = new ExternalFileSelectionDialog(getPage().getShell(), new PortalJarViewerFilter(portalDir.toFile(), new String[]{"WEB-INF","WEB-INF/lib"}, existingJars), true, false);
-		dialog.setInput(portalDir.toFile());
-		dialog.create();
-		if (dialog.open() == Window.OK) {
-			Object[] selectedFiles = dialog.getResult();
-			try {
-				for (int i = 0; i < selectedFiles.length; i++) {
-					File jar = (File) selectedFiles[i];
-					if (jar.exists()) {
-						model.addPortalDependencyJar(jar.getName());
-					}
-				}
-			} catch (Exception e) {
-			}
+        
+		if( portalDir != null )
+		{
+            ExternalFileSelectionDialog dialog =
+                new ExternalFileSelectionDialog( getPage().getShell(), new PortalJarViewerFilter(
+                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/lib" }, existingJars ), true, false );
+            dialog.setInput(portalDir.toFile());
+	        dialog.create();
+	        if (dialog.open() == Window.OK) {
+	            Object[] selectedFiles = dialog.getResult();
+	            try {
+	                for (int i = 0; i < selectedFiles.length; i++) {
+	                    File jar = (File) selectedFiles[i];
+	                    if (jar.exists()) {
+	                        model.addPortalDependencyJar(jar.getName());
+	                    }
+	                }
+	            } catch (Exception e) {
+	            }
+	        }
 		}
+        else
+        {
+            MessageDialog.openInformation(
+                getPage().getShell(), "Liferay Plugin Package Editor",
+                "Can not determine portal directory. Make sure Liferay portal is set as the targeted runtime." );
+        }
 	}
 	
 	private void handleUp() {

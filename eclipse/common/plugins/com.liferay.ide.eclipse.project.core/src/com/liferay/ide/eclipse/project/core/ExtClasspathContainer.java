@@ -37,14 +37,6 @@ public class ExtClasspathContainer extends PluginClasspathContainer
 		"struts-el.jar"
 	};
     
-	protected static final String[] portalSourceJars =
-    {
-        "util-bridges.jar", 
-        "util-java.jar", 
-        "util-taglib.jar",
-        "portal-impl.jar", 
-    };
-
 	public ExtClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadoc, IPath sourceURL )
 	{
 		super( containerPath, project, portalDir, javadoc, sourceURL );
@@ -61,10 +53,4 @@ public class ExtClasspathContainer extends PluginClasspathContainer
         return portalJars;
     }
     
-    @Override
-    protected String[] getPortalSourceJars()
-    {
-        return portalSourceJars;
-    }
-
 }

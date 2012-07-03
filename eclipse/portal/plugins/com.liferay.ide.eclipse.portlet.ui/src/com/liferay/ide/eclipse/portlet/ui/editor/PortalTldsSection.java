@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -294,23 +295,33 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		String[] existingTlds = model.getPortalDependencyTlds();
 		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
 		IPath portalDir = editor.getPortalDir();
-		ExternalFileSelectionDialog dialog =
-			new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(
-				portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);
-		dialog.setInput(portalDir.toFile());
-		dialog.create();
-		if (dialog.open() == Window.OK) {
-			Object[] selectedFiles = dialog.getResult();
-			try {
-				for (int i = 0; i < selectedFiles.length; i++) {
-					File tld = (File) selectedFiles[i];
-					if (tld.exists()) {
-						model.addPortalDependencyTld(tld.getName());
-					}
-				}
-			} catch (Exception e) {
-			}
+        
+		if( portalDir != null )
+		{
+		    ExternalFileSelectionDialog dialog =
+                new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(
+                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);
+            dialog.setInput(portalDir.toFile());
+            dialog.create();
+            if (dialog.open() == Window.OK) {
+                Object[] selectedFiles = dialog.getResult();
+                try {
+                    for (int i = 0; i < selectedFiles.length; i++) {
+                        File tld = (File) selectedFiles[i];
+                        if (tld.exists()) {
+                            model.addPortalDependencyTld(tld.getName());
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
 		}
+        else
+        {
+            MessageDialog.openInformation(
+                getPage().getShell(), "Liferay Plugin Package Editor",
+                "Can not determine portal directory. Make sure Liferay portal is set as the targeted runtime." );
+        }
 	}
 	
 	private void handleUp() {

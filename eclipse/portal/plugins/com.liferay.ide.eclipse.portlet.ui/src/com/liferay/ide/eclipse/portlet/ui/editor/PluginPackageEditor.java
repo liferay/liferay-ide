@@ -90,8 +90,8 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 		try {
 			return ServerUtil.getLiferayRuntime(getEditorInput().getFile().getProject()).getPortalDir();
 		}
-		catch (CoreException e) {
-			PortletUIPlugin.logError(e);
+		catch (Exception e) {
+			//PortletUIPlugin.logError(e);
 
 			return null;
 		}

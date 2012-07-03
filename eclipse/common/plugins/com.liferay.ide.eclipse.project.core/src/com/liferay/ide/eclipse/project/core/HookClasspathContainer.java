@@ -37,14 +37,6 @@ public class HookClasspathContainer extends PluginClasspathContainer
         "struts-el.jar" 
     };
     
-    protected static final String[] portalSourceJars = 
-    { 
-        "util-bridges.jar",
-        "util-java.jar", 
-        "util-taglib.jar", 
-        "portal-impl.jar", 
-    };
-
     public HookClasspathContainer(
         IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
     {
@@ -62,10 +54,4 @@ public class HookClasspathContainer extends PluginClasspathContainer
         return portalJars;
     }
     
-    @Override
-    protected String[] getPortalSourceJars()
-    {
-        return portalSourceJars;
-    }
-
 }
