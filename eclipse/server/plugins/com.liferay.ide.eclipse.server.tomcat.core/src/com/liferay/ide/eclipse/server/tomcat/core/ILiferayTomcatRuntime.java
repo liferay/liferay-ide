@@ -33,5 +33,7 @@ public interface ILiferayTomcatRuntime extends ILiferayRuntime {
 	void setBundleZipLocation( IPath path );
 
 	void setJavadocURL( String url );
+    
+	void setSourceLocation( IPath path );
 
 }

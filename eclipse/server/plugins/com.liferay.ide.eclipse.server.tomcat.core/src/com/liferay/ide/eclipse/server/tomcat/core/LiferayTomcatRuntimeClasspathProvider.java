@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,7 +36,12 @@ import org.eclipse.wst.server.core.IRuntime;
 @SuppressWarnings("restriction")
 public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspathProvider {
 
-	private static final String[] JAVADOC_JARS = { "portal-service.jar", "portal-impl.jar" };
+	private static final String[] JARS = 
+    { 
+	    "portal-impl.jar",
+	    "portal-service.jar", 
+	    "support-tomcat.jar",
+    };
 
 	public LiferayTomcatRuntimeClasspathProvider() {
 		super();
@@ -57,7 +62,7 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 
 				IClasspathEntry newEntry = null;
 
-				for ( String javadocJar : JAVADOC_JARS )
+				for ( String javadocJar : JARS )
 				{
 					if ( path.lastSegment().equalsIgnoreCase( javadocJar ) )
 					{
@@ -106,12 +111,66 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 
 		return updatedEntries.toArray( new IClasspathEntry[0] );
 	}
+    
+	private IClasspathEntry[] getUpdatedSourceEntries(
+        IClasspathEntry[] entries, ILiferayTomcatRuntime liferayTomcatRuntime )
+    {
+        List<IClasspathEntry> updatedEntries = new ArrayList<IClasspathEntry>();
+
+        IPath sourceLocation = liferayTomcatRuntime.getSourceLocation();
+
+        if ( sourceLocation != null )
+        {
+            for ( IClasspathEntry existingEntry : entries )
+            {
+                IPath path = existingEntry.getPath();
+
+                IClasspathEntry newEntry = null;
+
+                for ( String sourceJar : JARS )
+                {
+                    if ( path.lastSegment().equalsIgnoreCase( sourceJar ) )
+                    {
+                        IPath sourcePath = existingEntry.getSourceAttachmentPath();
+                        
+                        if( sourcePath == null )
+                        {
+                            sourcePath = sourceLocation;
+                        }
+                        
+                        newEntry =
+                            JavaCore.newLibraryEntry(
+                                existingEntry.getPath(), sourcePath, existingEntry.getSourceAttachmentRootPath(),
+                                existingEntry.getAccessRules(), existingEntry.getExtraAttributes(),
+                                existingEntry.isExported() );
+
+                        break;
+                    }
+                }
+
+                if ( newEntry != null )
+                {
+                    updatedEntries.add( newEntry );
+                }
+                else
+                {
+                    updatedEntries.add( existingEntry );
+                }
+            }
+        }
+        else
+        {
+            Collections.addAll( updatedEntries, entries );
+        }
+
+        return updatedEntries.toArray( new IClasspathEntry[0] );
+    }
 
 	private IClasspathAttribute newJavadocAttr( String url )
 	{
 		return JavaCore.newClasspathAttribute( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, url );
 	}
-
+    
 	@Override
 	public IClasspathEntry[] resolveClasspathContainer(final IProject project, final IRuntime runtime) {
 		IPath installPath = runtime.getLocation();
@@ -127,10 +186,18 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
 		ILiferayTomcatRuntime liferayTomcatRuntime =
 			(ILiferayTomcatRuntime) runtime.loadAdapter( ILiferayTomcatRuntime.class, null );
 
-		if ( liferayTomcatRuntime != null && liferayTomcatRuntime.getJavadocURL() != null )
-		{
-			entries = getUpdatedJavadocEntries( entries, liferayTomcatRuntime );
-		}
+        if( liferayTomcatRuntime != null )
+        {
+            if( liferayTomcatRuntime.getJavadocURL() != null )
+            {
+                entries = getUpdatedJavadocEntries( entries, liferayTomcatRuntime );
+            }
+            
+            if( liferayTomcatRuntime.getSourceLocation() != null )
+            {
+                entries = getUpdatedSourceEntries( entries, liferayTomcatRuntime );
+            }
+        }
 
 		return entries;
 	}

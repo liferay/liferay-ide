@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,7 +35,7 @@ public interface ILiferayRuntime extends IJavaRuntime {
 	IPath getDeployDir();
 
 	String getJavadocURL();
-
+    
 	IPath getLibGlobalDir();
 
 	IPath getPortalDir();
@@ -50,6 +50,8 @@ public interface ILiferayRuntime extends IJavaRuntime {
 
 	String[] getServletFilterNames();
 
-	String[] getSupportedHookProperties();
+	IPath getSourceLocation();
+
+    String[] getSupportedHookProperties();
 
 }

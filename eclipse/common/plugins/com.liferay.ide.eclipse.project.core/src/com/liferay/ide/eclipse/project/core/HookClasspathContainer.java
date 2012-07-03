@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,28 +21,51 @@ import org.eclipse.jdt.core.IJavaProject;
 /**
  * @author Greg Amerson
  */
-public class HookClasspathContainer extends PluginClasspathContainer {
+public class HookClasspathContainer extends PluginClasspathContainer
+{
+    public static final String SEGMENT_PATH = "hook";
 
-	public static final String SEGMENT_PATH = "hook";
+    protected static final String[] portalJars = 
+    { 
+        "commons-logging.jar", 
+        "log4j.jar", 
+        "util-bridges.jar",
+        "util-java.jar", 
+        "util-taglib.jar", 
+        "portal-impl.jar", 
+        "struts.jar", 
+        "struts-el.jar" 
+    };
+    
+    protected static final String[] portalSourceJars = 
+    { 
+        "util-bridges.jar",
+        "util-java.jar", 
+        "util-taglib.jar", 
+        "portal-impl.jar", 
+    };
 
-	protected static final String[] portalJars =
-		{
-			"commons-logging.jar", "log4j.jar", "util-bridges.jar", "util-java.jar", "util-taglib.jar",
-			"portal-impl.jar", "struts.jar", "struts-el.jar"
-		};
+    public HookClasspathContainer(
+        IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
+    {
+        super( containerPath, project, portalDir, javadocURL, sourceURL );
+    }
 
-	public HookClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL )
-	{
-		super( containerPath, project, portalDir, javadocURL );
-	}
+    public String getDescription()
+    {
+        return "Liferay Hook Plugin API";
+    }
 
-	public String getDescription() {
-		return "Liferay Hook Plugin API";
-	}
-
-	@Override
-	protected String[] getPortalJars() {
-		return portalJars;
-	}
+    @Override
+    protected String[] getPortalJars()
+    {
+        return portalJars;
+    }
+    
+    @Override
+    protected String[] getPortalSourceJars()
+    {
+        return portalSourceJars;
+    }
 
 }

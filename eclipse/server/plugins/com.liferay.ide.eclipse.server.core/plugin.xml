@@ -787,6 +787,11 @@
                uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/XMLSchema.dtd"
                webURL="http://www.w3.org/2001/XMLSchema.dtd">
          </public>
+         <public
+               publicId="-//W3C//DTD XMLSCHEMA 200102//EN"
+               uri="platform:/plugin/com.liferay.ide.eclipse.server.core/dtd/XMLSchema.dtd"
+               webURL="XMLSchema.dtd">
+         </public>
          
          <uri
                name="http://java.sun.com/xml/ns/j2ee/j2ee_1_4.xsd"

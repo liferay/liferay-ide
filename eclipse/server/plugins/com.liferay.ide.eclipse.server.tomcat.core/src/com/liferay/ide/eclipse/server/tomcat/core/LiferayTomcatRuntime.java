@@ -58,6 +58,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 	public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location";
 
 	public static final String PROP_JAVADOC_URL = "javadoc-url";
+	
+	public static final String PROP_SOURCE_LOCATION = "source-location";
 
 	protected HashMap<IPath, ReleaseHelper> releaseHelpers;
 
@@ -158,7 +160,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 	{
 		return getAttribute( PROP_JAVADOC_URL, (String) null );
 	}
-
+    
 	protected Version getLeastSupportedVersion() {
 		return ILiferayConstants.LEAST_SUPPORTED_VERSION;
 	}
@@ -270,7 +272,14 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		}
 	}
 
-	public String[] getSupportedHookProperties() {
+	public IPath getSourceLocation()
+	{
+        String location = getAttribute(PROP_SOURCE_LOCATION, (String) null);
+
+        return location != null ? new Path(location) : null;
+    }
+
+    public String[] getSupportedHookProperties() {
 		try {
 			return LiferayTomcatUtil.getSupportedHookProperties(getRuntimeLocation(), getPortalDir());
 		}
@@ -355,7 +364,15 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 			setAttribute( PROP_JAVADOC_URL, url );
 		}
 	}
-
+    
+	public void setSourceLocation( IPath location )
+    {
+        if( location != null ) 
+        {
+            setAttribute( PROP_SOURCE_LOCATION, location.toPortableString() );
+        }
+    }
+    
 	@Override
 	public IStatus validate() {
 		// first validate that this runtime is
@@ -406,7 +423,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 				return javadocUrlStatus;
 			}
 		}
-
+        
 		// need to check if this runtime is specifying a zip file for a bundle package, if so validate it
 		IPath bundleZip = getBundleZipLocation();
 
@@ -467,5 +484,5 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 		return warning( "Javadoc URL should start with jar:file:, file:, or http:" );
 	}
-
+	
 }

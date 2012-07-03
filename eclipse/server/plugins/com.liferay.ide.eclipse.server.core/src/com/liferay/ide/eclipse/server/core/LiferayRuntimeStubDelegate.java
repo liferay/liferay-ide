@@ -52,7 +52,7 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 	{
 		return getLiferayRuntime().getJavadocURL();
 	}
-
+    
 	public IPath getLibGlobalDir() {
 		return getLiferayRuntime().getLibGlobalDir();
 	}
@@ -90,7 +90,12 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 		return getLiferayRuntime().getServletFilterNames();
 	}
 
-	public String[] getSupportedHookProperties() {
+	public IPath getSourceLocation()
+    {
+        return getLiferayRuntime().getSourceLocation();
+    }
+
+    public String[] getSupportedHookProperties() {
 		return getLiferayRuntime().getSupportedHookProperties();
 	}
 

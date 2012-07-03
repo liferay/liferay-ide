@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -75,6 +75,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		}
 
 		String javadocURL = null;
+		IPath sourceLocation = null;
 
 		try
 		{
@@ -83,6 +84,8 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			if ( liferayRuntime != null )
 			{
 				javadocURL = liferayRuntime.getJavadocURL();
+                
+				sourceLocation = liferayRuntime.getSourceLocation();
 			}
 		}
 		catch ( Exception e )
@@ -90,7 +93,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 			ProjectCorePlugin.logError( e );
 		}
 
-		classpathContainer = getCorrectContainer( containerPath, finalSegment, project, portalDir, javadocURL );
+		classpathContainer = getCorrectContainer( containerPath, finalSegment, project, portalDir, javadocURL, sourceLocation );
 
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
 			project
@@ -134,10 +137,12 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 
 		IPath portalDir = null;
 		String javadocURL = null;
+		IPath sourceLocation = null;
 
 		if (containerSuggestion instanceof PluginClasspathContainer) {
 			portalDir = ((PluginClasspathContainer) containerSuggestion).getPortalDir();
 			javadocURL = ( (PluginClasspathContainer) containerSuggestion ).getJavadocURL();
+			sourceLocation = ( (PluginClasspathContainer) containerSuggestion ).getSourceLocation();
 		}
 		else {
 			portalDir = ServerUtil.getPortalDir(project);
@@ -149,6 +154,8 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 				if ( liferayRuntime != null )
 				{
 					javadocURL = liferayRuntime.getJavadocURL();
+					
+					sourceLocation = liferayRuntime.getSourceLocation();
 				}
 			}
 			catch ( Exception e )
@@ -158,7 +165,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 		}
 
 		IClasspathContainer newContainer =
-			getCorrectContainer( containerPath, containerPath.segment( 1 ), project, portalDir, javadocURL );
+			getCorrectContainer( containerPath, containerPath.segment( 1 ), project, portalDir, javadocURL, sourceLocation );
 
 		JavaCore.setClasspathContainer(containerPath, new IJavaProject[] {
 			project
@@ -168,19 +175,19 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
 	}
 
 	protected IClasspathContainer getCorrectContainer(
-		IPath containerPath, String finalSegment, IJavaProject project, IPath portalDir, String javadocURL )
+		IPath containerPath, String finalSegment, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
 		throws CoreException {
 
 		IClasspathContainer classpathContainer = null;
 
 		if (PortletClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new PortletClasspathContainer( containerPath, project, portalDir, javadocURL );
+			classpathContainer = new PortletClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
 		}
 		else if (HookClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new HookClasspathContainer( containerPath, project, portalDir, javadocURL );
+			classpathContainer = new HookClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
 		}
 		else if (ExtClasspathContainer.SEGMENT_PATH.equals(finalSegment)) {
-			classpathContainer = new ExtClasspathContainer( containerPath, project, portalDir, javadocURL );
+			classpathContainer = new ExtClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
 		}
 		else {
 			throw new CoreException(LiferayServerCorePlugin.createErrorStatus("Invalid final segment of type: " +

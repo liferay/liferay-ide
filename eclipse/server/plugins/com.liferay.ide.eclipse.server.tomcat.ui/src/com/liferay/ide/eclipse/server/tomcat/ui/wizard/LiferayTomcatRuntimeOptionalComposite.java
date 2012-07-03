@@ -70,10 +70,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 	}
 
 	protected Text bundleZipField;
-
 	protected boolean ignoreModifyEvent;
-
 	private Text javadocField;
+	private Text sourceField;
 
 	public LiferayTomcatRuntimeOptionalComposite( Composite parent, IWizardHandle wizard )
 	{
@@ -102,6 +101,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 		this.javadocField = createJavadocField( this );
 		this.javadocField.addModifyListener( this );
+        
+		this.sourceField = createSourceField( this );
+        this.sourceField.addModifyListener( this );
 
 		this.bundleZipField = createBundleZipField( this );
 		this.bundleZipField.addModifyListener( this );
@@ -116,7 +118,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 	public static Text createJavadocField( final Composite parent )
 	{
 		final Text javadocField =
-			createTextField( parent, "Liferay Javadoc URL (zip file, local directory, or online url" );
+			createTextField( parent, "Liferay Javadoc URL (zip file, local directory, or online url)" );
 
 		SWTUtil.createButton( parent, "Browse zip..." ).addSelectionListener( new SelectionAdapter()
 		{
@@ -179,6 +181,51 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 		return javadocField;
 	}
+    
+	public static Text createSourceField( final Composite parent )
+    {
+        final Text sourceField =
+            createTextField( parent, "Liferay source location (zip file or local directory)" );
+
+        SWTUtil.createButton( parent, "Browse zip..." ).addSelectionListener( new SelectionAdapter()
+        {
+            public void widgetSelected( SelectionEvent e )
+            {
+                FileDialog fd = new FileDialog( parent.getShell() );
+
+                fd.setText( "Select Liferay source zip file." );
+
+                String selectedFile = fd.open();
+
+                if ( selectedFile != null && new File(selectedFile).exists() )
+                {
+                    sourceField.setText( selectedFile );
+                }
+            }
+        } );
+
+        SWTUtil.createLabel( parent, "", 1 );
+
+        SWTUtil.createButton( parent, "Browse directory..." ).addSelectionListener( new SelectionAdapter()
+        {
+            public void widgetSelected( SelectionEvent e )
+            {
+                DirectoryDialog dd = new DirectoryDialog( parent.getShell() );
+
+                dd.setText( "Select Liferay source directory." );
+                dd.setFilterPath( sourceField.getText() );
+
+                String selectedFile = dd.open();
+
+                if ( selectedFile != null && new File( selectedFile ).exists() )
+                {
+                    sourceField.setText( selectedFile );
+                }
+            }
+        } );
+
+        return sourceField;
+    }
 
 	public static Text createBundleZipField( final Composite parent )
 	{
@@ -371,6 +418,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
 		String javadocURL = getLiferayTomcatRuntime().getJavadocURL();
 		setFieldValue( javadocField, javadocURL != null ? javadocURL : "" );
+        
+		IPath sourceLocation = getLiferayTomcatRuntime().getSourceLocation();
+        setFieldValue( sourceField, sourceLocation != null ? sourceLocation.toOSString() : "" );
 	}
 
 	public void modifyText( ModifyEvent e )
@@ -426,6 +476,10 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 			
 			getLiferayTomcatRuntime().setJavadocURL( newJavadocURL );
 		}
+		else if ( e.getSource().equals( sourceField ) )
+        {
+		    getLiferayTomcatRuntime().setSourceLocation( new Path( sourceField.getText() ) );
+        }
 
 		validate();
 	}

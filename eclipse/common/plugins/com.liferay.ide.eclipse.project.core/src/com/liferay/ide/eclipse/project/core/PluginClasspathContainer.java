@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,6 +24,7 @@ import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -77,13 +78,19 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	protected IPath portalDir;
 
 	protected String javadocURL;
+    
+	protected IPath sourceLocation;
 
-	public PluginClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL )
+    private List<String> portalSourceJars;
+
+	public PluginClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
 	{
 		this.path = containerPath;
 		this.javaProject = project;
 		this.portalDir = portalDir;
 		this.javadocURL = javadocURL;
+		this.sourceLocation = sourceURL;
+		this.portalSourceJars = Arrays.asList( getPortalSourceJars() );
 	}
 
 	public IClasspathEntry[] getClasspathEntries() {
@@ -123,15 +130,21 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	{
 		return javadocURL;
 	}
+	
+	public IPath getSourceLocation()
+    {
+        return sourceLocation;
+    }
 
 	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourcePath )
 	{
 		return createClasspathEntry( entryPath, sourcePath, null );
 	}
 
-	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourcePath, String javadocURL )
+	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourceLocation, String javadocURL )
 	{
 		IPath sourceRootPath = null;
+		IPath sourcePath = null;
 		IAccessRule[] rules = new IAccessRule[] {};
 		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
 
@@ -169,6 +182,11 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 				attrs = newAttrs.toArray( new IClasspathAttribute[0] );
 			}
+		}
+        
+		if( sourcePath == null && sourceLocation != null )
+		{
+		    sourcePath = sourceLocation;
 		}
 
 		return JavaCore.newLibraryEntry( entryPath, sourcePath, sourceRootPath, rules, attrs, false );
@@ -219,8 +237,15 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 
 	protected IClasspathEntry createPortalJarClasspathEntry(String portalJar) {
 		IPath entryPath = this.portalDir.append("/WEB-INF/lib/" + portalJar);
+        
+		IPath sourcePath = null;
+		
+		if( this.portalSourceJars.contains( portalJar ) )
+		{
+		    sourcePath = getSourceLocation();
+		}
 
-		return createClasspathEntry( entryPath, null, this.javadocURL );
+		return createClasspathEntry( entryPath, sourcePath, this.javadocURL );
 	}
 
 	protected IClasspathEntry findSuggestedEntry(IPath jarPath, IClasspathEntry[] suggestedEntries) {
@@ -292,6 +317,8 @@ public abstract class PluginClasspathContainer implements IClasspathContainer {
 	}
 
 	protected abstract String[] getPortalJars();
+	
+	protected abstract String[] getPortalSourceJars();
 
 	protected String getPropertyValue(String key, IFile propertiesFile) {
 		String retval = null;
