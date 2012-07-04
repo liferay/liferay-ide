@@ -984,7 +984,6 @@ development of services.</content>
             <connection-id>Relationship</connection-id>
             <property>Relationships</property>
             <instance-id>${concat(FromEntity,ToEntity)}</instance-id>
-            <label>${ concat( FromEntity, concat( '-&gt;', ToEntity) ) }</label>
             <endpoint1>
                 <property>FromEntity</property>
                 <value>${Name}</value>
