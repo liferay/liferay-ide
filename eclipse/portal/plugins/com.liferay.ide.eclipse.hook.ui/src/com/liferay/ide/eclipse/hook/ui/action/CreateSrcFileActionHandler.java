@@ -27,6 +27,7 @@ import java.io.InputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DisposeEvent;
@@ -67,10 +68,15 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
 			final IPath filePath = getDefaultSrcFolderPath().append( value.getText() );
 			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
 			try {
-				InputStream defaultContentStream = new ByteArrayInputStream( "".getBytes() );
 				if ( !file.exists() ) {
+				    InputStream defaultContentStream = new ByteArrayInputStream( "".getBytes() );
+				    
 					file.create( defaultContentStream, true, null );
-					modelElement.refresh( true, true );
+                    file.refreshLocal( IResource.DEPTH_INFINITE, null );
+                    
+                    modelElement.refresh( true, true );
+                    // write the property again with the same value to force
+//					modelElement.write( valueProperty, value.getContent() );
 				}
 			}
 			catch ( Exception e ) {

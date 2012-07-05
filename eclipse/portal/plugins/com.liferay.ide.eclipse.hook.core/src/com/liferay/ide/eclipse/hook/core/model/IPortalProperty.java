@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -42,8 +42,13 @@ public interface IPortalProperty extends IModelElement
 	// *** Name ***
     
 	@NoDuplicates
-	@Services( { @Service( impl = PortalPropertyNamePossibleValuesService.class ),
-		@Service( impl = PortalPropertyNameValidationService.class ) } )
+	@Services
+	( 
+	    { 
+	        @Service( impl = PortalPropertyNamePossibleValuesService.class ),
+	        @Service( impl = PortalPropertyNameValidationService.class )
+	    }
+	)
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
     
 	Value<String> getName();

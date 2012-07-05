@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ *  Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  *   This library is free software; you can redistribute it and/or modify it under
  *   the terms of the GNU Lesser General Public License as published by the Free
@@ -13,13 +13,14 @@
  *
  *   Contributors:
  *          Kamesh Sampath - initial implementation
- *          Gregory Amerson - IDE-355
+ *          Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.hook.core.model;
 
 import com.liferay.ide.eclipse.hook.core.model.internal.CustomJspsBindingImpl;
 import com.liferay.ide.eclipse.hook.core.model.internal.PortalPropertiesBindingImpl;
+import com.liferay.ide.eclipse.hook.core.model.internal.PortalPropertiesOverridesEnablementService;
 
 import org.eclipse.sapphire.modeling.ElementProperty;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -36,6 +37,7 @@ import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FixedOrderList;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -73,6 +75,7 @@ public interface IHook extends IModelElement
 	@Type( base = IPortalProperty.class )
 	@Label( standard = "Portal Properties Overrides" )
     @FixedOrderList
+    @Service( impl = PortalPropertiesOverridesEnablementService.class )
 	@CustomXmlListBinding( impl = PortalPropertiesBindingImpl.class )
 	ListProperty PROP_PORTAL_PROPERTIES_OVERRIDES = new ListProperty( TYPE, "PortalPropertiesOverrides" );
 
