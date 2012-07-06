@@ -167,28 +167,35 @@ public class LiferayTomcatUtil {
      */
     protected static IPath checkAndReturnCustomPortalDir( IPath appServerDir )
     {
-
+        IPath retval = null;
+        
         if( appServerDir != null )
-
         {
-
-            File contextFile =
-                appServerDir.append( CONFIG_DIR ).append( SERVICE_NAME ).append( HOST_NAME ).append(
+            File contextFile = appServerDir.append( CONFIG_DIR ).append( SERVICE_NAME ).append( HOST_NAME ).append(
                     DEFAULT_PORTAL_CONTEXT_FILE ).toFile();
 
             if( contextFile.exists() )
             {
                 Context tcPortalContext = loadContextFile( contextFile );
-                String docBase = tcPortalContext.getDocBase();
-
-                if( docBase != null )
+                
+                if( tcPortalContext != null )
                 {
-                    // TODO: need to handle string substitutions
-                    return new Path( docBase );
+                    String docBase = tcPortalContext.getDocBase();
+                    
+                    if( docBase != null )
+                    {
+                        return new Path( docBase );
+                    }
                 }
             }
+            
+            if( retval == null )
+            {
+                retval = appServerDir.append( DEFAULT_PORTAL_DIR );
+            }
         }
-        return new Path( DEFAULT_PORTAL_DIR );
+        
+        return retval;
     }
 
 	public static String[] getSupportedHookProperties(IPath runtimeLocation, IPath portalDir)
