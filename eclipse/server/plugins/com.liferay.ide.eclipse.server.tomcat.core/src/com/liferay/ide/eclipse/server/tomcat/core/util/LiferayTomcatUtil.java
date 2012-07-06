@@ -79,6 +79,12 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings("restriction")
 public class LiferayTomcatUtil {
 
+    private static String CONFIG_DIR = "conf";
+    private static String SERVICE_NAME = "Catalina";
+    private static String HOST_NAME = "localhost";
+    private static String DEFAULT_PORTAL_DIR = "/webapps/ROOT";
+    private static String DEFAULT_PORTAL_CONTEXT_FILE = "ROOT.xml";
+
 	public static void displayToggleMessage(String msg, String key) {
 		UIUtil.postInfoWithToggle(
 			"Liferay Tomcat Server", msg, "Do not show this message again", false,
@@ -153,8 +159,37 @@ public class LiferayTomcatUtil {
 	}
 
 	public static IPath getPortalDir(IPath appServerDir) {
-		return appServerDir.append("/webapps/ROOT");
+        return checkAndReturnCustomPortalDir( appServerDir );
 	}
+
+    /*
+     * Added for IDE-646
+     */
+    protected static IPath checkAndReturnCustomPortalDir( IPath appServerDir )
+    {
+
+        if( appServerDir != null )
+
+        {
+
+            File contextFile =
+                appServerDir.append( CONFIG_DIR ).append( SERVICE_NAME ).append( HOST_NAME ).append(
+                    DEFAULT_PORTAL_CONTEXT_FILE ).toFile();
+
+            if( contextFile.exists() )
+            {
+                Context tcPortalContext = loadContextFile( contextFile );
+                String docBase = tcPortalContext.getDocBase();
+
+                if( docBase != null )
+                {
+                    // TODO: need to handle string substitutions
+                    return new Path( docBase );
+                }
+            }
+        }
+        return new Path( DEFAULT_PORTAL_DIR );
+    }
 
 	public static String[] getSupportedHookProperties(IPath runtimeLocation, IPath portalDir)
 		throws IOException {

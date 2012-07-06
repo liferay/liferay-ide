@@ -135,7 +135,8 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
 	protected void createFieldEditors() {
 		FieldEditor edit =
 			new RadioGroupFieldEditor(
-				SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, "Update build.<username>.properties before SDK is used.",
+ SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, "Update \"build." +
+                System.getProperty( "user.name" ) + ".properties\" before SDK is used?",
 				3,
 				new String[][] { { "Always", MessageDialogWithToggle.ALWAYS },
 					{ "Never", MessageDialogWithToggle.NEVER }, { "Prompt", MessageDialogWithToggle.PROMPT } }, parent,
