@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,33 +11,36 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.eclipse.layouttpl.core;
 
 import com.liferay.ide.eclipse.project.core.AbstractProjectDefinition;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 
-
+/**
+ * @author Gregory Amerson
+ */
 public class LiferayLayoutTplDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties
 {
 
-	public void setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		ProjectUtil.setGenerateDD(dataModel, false);
+    public void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    {
+        FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
+        IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
 
-		FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
-		IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
-
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER );
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
-	}
+        webFacetModel.setStringProperty(
+            IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER );
+        webFacetModel.setStringProperty(
+            IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core;
@@ -20,7 +22,6 @@ import com.liferay.ide.eclipse.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
-import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.jst.common.project.facet.IJavaFacetInstallDataModelProperties;
 import org.eclipse.jst.common.project.facet.core.JavaFacet;
@@ -32,42 +33,44 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class LiferayPortletDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties {
+public class LiferayPortletDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties
+{
+    protected IDataModel nestedModel;
 
-	protected IDataModel nestedModel;
+    public LiferayPortletDefinition()
+    {
+        super();
+    }
 
-	public LiferayPortletDefinition() {
-		super();
-	}
+    @Override
+    public void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    {
+        FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
+        IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
 
-	public void setupNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		ProjectUtil.setGenerateDD(dataModel, true);
+        webFacetModel.setStringProperty(
+            IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER );
+        webFacetModel.setStringProperty(
+            IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+        IDataModel javaFacetModel = map.getFacetDataModel( JavaFacet.FACET.getId() );
+        javaFacetModel.setStringProperty(
+            IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
+            IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+        javaFacetModel.setStringProperty(
+            IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
+            IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER );
 
-		FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty(FACET_DM_MAP);
-		IDataModel webFacetModel = map.getFacetDataModel(IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId());
+        if( dataModel.isNestedModel( PLUGIN_FRAGMENT_DM ) )
+        {
+            dataModel.removeNestedModel( PLUGIN_FRAGMENT_DM );
+        }
 
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER);
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
-		IDataModel javaFacetModel = map.getFacetDataModel(JavaFacet.FACET.getId());
-		javaFacetModel.setStringProperty(
-			IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
-			IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER);
-		javaFacetModel.setStringProperty(
-			IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
-			IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER);
+        // need to allow portlet framework to do any additional configuration
 
-		if (dataModel.isNestedModel(PLUGIN_FRAGMENT_DM)) {
-			dataModel.removeNestedModel(PLUGIN_FRAGMENT_DM);
-		}
+        String portletFrameworkId = dataModel.getStringProperty( PORTLET_FRAMEWORK_ID );
 
-		// need to allow portlet framework to do any additional configuration
+        IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
 
-		String portletFrameworkId = dataModel.getStringProperty(PORTLET_FRAMEWORK_ID);
-		
-		IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
-
-		portletFramework.configureNewProject(dataModel, facetedProject);
-	}
+        portletFramework.configureNewProject( dataModel, facetedProject );
+    }
 }

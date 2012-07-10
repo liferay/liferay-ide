@@ -1,77 +1,116 @@
+/*******************************************************************************
+ * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.eclipse.project.core;
 
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
+import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
-public abstract class AbstractProjectDefinition implements IProjectDefinition {
+/**
+ * @author Gregory Amerson
+ */
+public abstract class AbstractProjectDefinition implements IProjectDefinition
+{
+    protected String displayName;
+    protected IFacetedProjectTemplate facetedProjectTemplate;
+    protected String facetedProjectTemplateId;
+    protected String facetId;
+    protected int menuIndex;
+    protected IProjectFacet projectFacet;
+    protected String shortName;
 
-	protected String displayName;
+    public AbstractProjectDefinition()
+    {
+        super();
+    }
 
-	protected IFacetedProjectTemplate facetedProjectTemplate;
+    public String getDisplayName()
+    {
+        return displayName;
+    }
 
-	protected String facetedProjectTemplateId;
+    public IProjectFacet getFacet()
+    {
+        return this.projectFacet;
+    }
 
-	protected String facetId;
+    public IFacetedProjectTemplate getFacetedProjectTemplate()
+    {
+        return facetedProjectTemplate;
+    }
 
-	protected int menuIndex;
+    public String getFacetedProjectTemplateId()
+    {
+        return facetedProjectTemplateId;
+    }
 
-	protected IProjectFacet projectFacet;
+    public String getFacetId()
+    {
+        return facetId;
+    }
 
-	protected String shortName;
+    public int getMenuIndex()
+    {
+        return menuIndex;
+    }
 
-	public AbstractProjectDefinition() {
-		super();
-	}
+    public String getShortName()
+    {
+        return shortName;
+    }
 
-	public String getDisplayName() {
-		return displayName;
-	}
+    public void setDisplayName( String displayName )
+    {
+        this.displayName = displayName;
+    }
 
-	public IProjectFacet getFacet() {
-		return this.projectFacet;
-	}
+    public void setFacetedProjectTemplateId( String facetedProjectTemplateId )
+    {
+        this.facetedProjectTemplateId = facetedProjectTemplateId;
+        this.facetedProjectTemplate = ProjectFacetsManager.getTemplate( facetedProjectTemplateId );
+    }
 
-	public IFacetedProjectTemplate getFacetedProjectTemplate() {
-		return facetedProjectTemplate;
-	}
+    public void setFacetId( String facetId )
+    {
+        this.facetId = facetId;
+        this.projectFacet = ProjectFacetsManager.getProjectFacet( facetId );
+    }
 
-	public String getFacetedProjectTemplateId() {
-		return facetedProjectTemplateId;
-	}
+    public void setMenuIndex( int menuIndex )
+    {
+        this.menuIndex = menuIndex;
+    }
 
-	public String getFacetId() {
-		return facetId;
-	}
+    public void setShortName( String shortName )
+    {
+        this.shortName = shortName;
+    }
 
-	public int getMenuIndex() {
-		return menuIndex;
-	}
+    public final void setupNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    {
+        // dont' generate deployment descriptor
+        ProjectUtil.setGenerateDD( dataModel, false );
 
-	public String getShortName() {
-		return shortName;
-	}
+        setupNewProjectDefinition( dataModel, facetedProject );
+    }
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
-	public void setFacetedProjectTemplateId(String facetedProjectTemplateId) {
-		this.facetedProjectTemplateId = facetedProjectTemplateId;
-		this.facetedProjectTemplate = ProjectFacetsManager.getTemplate(facetedProjectTemplateId);
-	}
-
-	public void setFacetId(String facetId) {
-		this.facetId = facetId;
-		this.projectFacet = ProjectFacetsManager.getProjectFacet(facetId);
-	}
-
-	public void setMenuIndex(int menuIndex) {
-		this.menuIndex = menuIndex;
-	}
-
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
-	}
+    public abstract void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
 
 }

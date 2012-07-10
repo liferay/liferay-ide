@@ -479,5 +479,14 @@
       </classpathContainerInitializer>
    </extension>
    
+   <!--
+   <extension
+         point="org.eclipse.wst.common.project.facet.core.listeners">
+      <listener
+            class="com.liferay.ide.eclipse.project.core.facet.LiferayFacetedProjectListener"
+            eventTypes="POST_INSTALL">
+      </listener>
+   </extension>
+   -->
  
 </plugin>
