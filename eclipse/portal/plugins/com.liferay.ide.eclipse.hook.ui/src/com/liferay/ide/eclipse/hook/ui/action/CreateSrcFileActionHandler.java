@@ -53,120 +53,155 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHandler {
+public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHandler
+{
+    public static class Condition extends SapphirePropertyEditorCondition
+    {
+        @Override
+        protected final boolean evaluate( final PropertyEditorPart part )
+        {
+            final ModelProperty property = part.getProperty();
+            final IModelElement element = part.getModelElement();
 
-	IModelElement modelElement;
-	ModelProperty modelProperty;
-	Listener listener;
+            if( property instanceof ValueProperty && element != null && property.isOfType( Path.class ) )
+            {
+                final ValidFileSystemResourceType typeAnnotation =
+                    property.getAnnotation( ValidFileSystemResourceType.class );
 
-	@Override
-	public Object run( SapphireRenderingContext context ) {
+                if( typeAnnotation != null && typeAnnotation.value() == FileSystemResourceType.FILE )
+                {
+                    return true;
+                }
+            }
 
-		if ( modelProperty instanceof ValueProperty ) {
-			ValueProperty valueProperty = (ValueProperty) modelProperty;
-			final Value<Path> value = modelElement.read( valueProperty );
-			final IPath filePath = getDefaultSrcFolderPath().append( value.getText() );
-			final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
-			try {
-				if ( !file.exists() ) {
-				    InputStream defaultContentStream = new ByteArrayInputStream( "".getBytes() );
-				    
-					file.create( defaultContentStream, true, null );
+            return false;
+        }
+    }
+    private Listener listener;
+    private IModelElement modelElement;
+
+    private ModelProperty modelProperty;
+
+    @Override
+    protected final boolean computeEnablementState()
+    {
+        boolean isEnabled = super.computeEnablementState();
+        
+        if( modelElement != null && isEnabled )
+        {
+            // check for existence of the file
+            IFile srcFile = getSrcFile();
+                
+            if( srcFile != null && srcFile.exists() )
+            {
+                isEnabled = false;
+            }
+        }
+        
+        return isEnabled;
+    }
+
+    private IPath getDefaultSrcFolderPath()
+    {
+        IProject project = this.modelElement.adapt( IProject.class );
+
+        IFolder[] folders = ProjectUtil.getSourceFolders( project );
+
+        if( !CoreUtil.isNullOrEmpty( folders ) )
+        {
+            return folders[0].getFullPath();
+        }
+
+        return null;
+    }
+
+    private IFile getSrcFile()
+    {
+        IFile retval = null;
+
+        if( modelProperty instanceof ValueProperty )
+        {
+            ValueProperty valueProperty = (ValueProperty) modelProperty;
+            final Value<Path> value = modelElement.read( valueProperty );
+            
+            if( value != null && !CoreUtil.isNullOrEmpty( value.getText() ) )
+            {
+                final IPath defaultSrcFolderPath = getDefaultSrcFolderPath();
+                
+                if( defaultSrcFolderPath != null )
+                {
+                    final IPath filePath = defaultSrcFolderPath.append( value.getText() );
+                    retval = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
+                }
+            }
+        }
+
+        return retval;
+    }
+
+    @Override
+    public void init( final SapphireAction action, ActionHandlerDef def )
+    {
+        super.init( action, def );
+        modelElement = getModelElement();
+        modelProperty = getProperty();
+        
+        this.listener = new FilteredListener<PropertyEvent>()
+        {
+            @Override
+            public void handleTypedEvent( final PropertyEvent event )
+            {
+                refreshEnablementState();
+            }
+
+        };
+
+        modelElement.attach( this.listener, modelProperty.getName() );
+
+        attach
+        ( 
+            new Listener()
+            {
+                @Override
+                public void handle( Event event )
+                {
+                    if( event instanceof DisposeEvent )
+                    {
+                        getModelElement().detach( listener, modelProperty.getName() );
+                    }
+                }
+            }
+        );
+    }
+
+    @Override
+    public Object run( SapphireRenderingContext context )
+    {
+        if( modelProperty instanceof ValueProperty )
+        {
+            final IFile file = getSrcFile();
+
+            try
+            {
+                if( !file.exists() )
+                {
+                    InputStream defaultContentStream = new ByteArrayInputStream( "".getBytes() );
+
+                    file.create( defaultContentStream, true, null );
                     file.refreshLocal( IResource.DEPTH_INFINITE, null );
-                    
+
                     modelElement.refresh( true, true );
                     // write the property again with the same value to force
-//					modelElement.write( valueProperty, value.getContent() );
-				}
-			}
-			catch ( Exception e ) {
-				// LOG it
-			}
+                    // modelElement.write( valueProperty, value.getContent() );
+                    refreshEnablementState();
+                }
+            }
+            catch( Exception e )
+            {
+            }
 
-		}
-		return null;
-	}
-
-	private IPath getDefaultSrcFolderPath()
-	{
-		IProject project = this.modelElement.adapt( IProject.class );
-
-		IFolder[] folders = ProjectUtil.getSourceFolders( project );
-
-		if ( !CoreUtil.isNullOrEmpty( folders ) )
-		{
-			return folders[0].getFullPath();
-		}
-
-		return null;
-	}
-
-	@Override
-	public void init( final SapphireAction action, ActionHandlerDef def ) {
-		super.init( action, def );
-		modelElement = getModelElement();
-		modelProperty = getProperty();
-		this.listener = new FilteredListener<PropertyEvent>() {
-
-			@Override
-			public void handleTypedEvent( final PropertyEvent event ) {
-				refreshEnablementState();
-			}
-
-		};
-
-		modelElement.attach( this.listener, modelProperty.getName() );
-
-		attach( new Listener() {
-
-			@Override
-			public void handle( Event event ) {
-				if ( event instanceof DisposeEvent ) {
-					getModelElement().detach( listener, modelProperty.getName() );
-				}
-			}
-
-		} );
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#computeEnablementState()
-	 */
-	@Override
-	protected final boolean computeEnablementState() {
-		boolean isEnbled = super.computeEnablementState();
-		if ( modelElement != null ) {
-			boolean validationStatus = !modelElement.validation().ok();
-			isEnbled = isEnbled && validationStatus;
-		}
-		return isEnbled;
-	}
-
-
-	public static class Condition extends SapphirePropertyEditorCondition
-	{
-
-		@Override
-		protected final boolean evaluate( final PropertyEditorPart part )
-		{
-			final ModelProperty property = part.getProperty();
-			final IModelElement element = part.getModelElement();
-
-			if ( property instanceof ValueProperty && element != null && property.isOfType( Path.class ) )
-			{
-				final ValidFileSystemResourceType typeAnnotation =
-					property.getAnnotation( ValidFileSystemResourceType.class );
-
-				if ( typeAnnotation != null && typeAnnotation.value() == FileSystemResourceType.FILE )
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-	}
+        }
+        
+        return null;
+    }
 }
