@@ -22,7 +22,11 @@ import com.liferay.ide.eclipse.service.core.model.IServiceBuilder600;
 import com.liferay.ide.eclipse.service.core.model.IServiceBuilder610;
 import com.liferay.ide.eclipse.service.core.model.ServiceBuilderVersionType;
 
-import org.eclipse.core.resources.IFile;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -31,7 +35,11 @@ import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.ui.swt.gef.SapphireDiagramEditor;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
@@ -51,49 +59,25 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 	}
 
 	@Override
-	public void doSave( final IProgressMonitor monitor )
+	protected void createDiagramPages() throws PartInitException
 	{
-		super.doSave( monitor );
-
-		this.pageDiagram.doSave( monitor );
-	}
-
-	protected ServiceBuilderVersionType getDTDVersion( Document document )
-	{
-		ServiceBuilderVersionType dtdVersion = null;
-		DocumentType docType = document.getDoctype();
-
-		if ( docType != null )
-		{
-			String publicId = docType.getPublicId();
-			String systemId = docType.getSystemId();
-			if ( publicId != null && systemId != null )
-			{
-				if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
-				{
-					dtdVersion = ServiceBuilderVersionType.v6_0_0;
-				}
-				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
-				{
-					dtdVersion = ServiceBuilderVersionType.v6_1_0;
-				}
-			}
-
-		}
-
-		return dtdVersion;
+		IPath path =
+			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilderEditor.sdef/diagramPage" );
+		this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
+		addEditorPage( 0, this.pageDiagram );
 	}
 
 	@Override
 	protected IModelElement createModel()
 	{
-		IFile editorFile = getFile();
-		ServiceBuilderVersionType dtdVersion = null;
-		RootXmlResource resource = null;
-
+	    RootXmlResource resource = null;
+        
 		try
 		{
-			resource = new RootXmlResource( new XmlResourceStore( editorFile.getContents() ) );
+		    InputStream editorContents = getFileContents();
+	        ServiceBuilderVersionType dtdVersion = null;
+            
+			resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
 			Document document = resource.getDomDocument();
 			dtdVersion = getDTDVersion( document );
 
@@ -131,11 +115,58 @@ public class ServiceBuilderEditor extends SapphireEditorForXml {
 	}
 
 	@Override
-	protected void createDiagramPages() throws PartInitException
+	public void doSave( final IProgressMonitor monitor )
 	{
-		IPath path =
-			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilderEditor.sdef/diagramPage" );
-		this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
-		addEditorPage( 0, this.pageDiagram );
+		super.doSave( monitor );
+
+		this.pageDiagram.doSave( monitor );
 	}
+
+	protected ServiceBuilderVersionType getDTDVersion( Document document )
+	{
+		ServiceBuilderVersionType dtdVersion = null;
+		DocumentType docType = document.getDoctype();
+
+		if ( docType != null )
+		{
+			String publicId = docType.getPublicId();
+			String systemId = docType.getSystemId();
+			if ( publicId != null && systemId != null )
+			{
+				if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
+				{
+					dtdVersion = ServiceBuilderVersionType.v6_0_0;
+				}
+				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
+				{
+					dtdVersion = ServiceBuilderVersionType.v6_1_0;
+				}
+			}
+
+		}
+
+		return dtdVersion;
+	}
+    
+	public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
+    {
+        final IEditorInput editorInput = getEditorInput();
+        
+        if( editorInput instanceof FileEditorInput )
+        {
+            return ( (FileEditorInput) editorInput ).getFile().getContents();
+        }
+        else if( editorInput instanceof IStorageEditorInput )
+        {
+            return ( (IStorageEditorInput) editorInput ).getStorage().getContents();
+        }
+        else if( editorInput instanceof FileStoreEditorInput )
+        {
+            return ( (FileStoreEditorInput) editorInput ).getURI().toURL().openStream();
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

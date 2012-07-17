@@ -32,6 +32,9 @@ import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -47,7 +50,11 @@ import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
@@ -127,13 +134,14 @@ public class HookXmlEditor extends SapphireEditorForXml
 	@Override
 	protected IModelElement createModel()
 	{
-		IFile editorFile = getFile();
-		HookVersionType dtdVersion = null;
 		RootXmlResource resource = null;
+		HookVersionType dtdVersion = null;
 
 		try
 		{
-			resource = new RootXmlResource( new XmlResourceStore( editorFile.getContents() ) );
+		    InputStream editorContents = getFileContents();
+		    
+			resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
 			Document document = resource.getDomDocument();
 			dtdVersion = getDTDVersion( document );
 
@@ -241,14 +249,28 @@ public class HookXmlEditor extends SapphireEditorForXml
 
 		return dtdVersion;
 	}
-
-	@Override
-	protected void pageChange( int pageIndex )
-	{
-		this.ignoreCustomModelChanges = true;
-		super.pageChange( pageIndex );
-		this.ignoreCustomModelChanges = false;
-	}
+	
+	public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
+    {
+        final IEditorInput editorInput = getEditorInput();
+        
+        if( editorInput instanceof FileEditorInput )
+        {
+            return ( (FileEditorInput) editorInput ).getFile().getContents();
+        }
+        else if( editorInput instanceof IStorageEditorInput )
+        {
+            return ( (IStorageEditorInput) editorInput ).getStorage().getContents();
+        }
+        else if( editorInput instanceof FileStoreEditorInput )
+        {
+            return ( (FileStoreEditorInput) editorInput ).getURI().toURL().openStream();
+        }
+        else
+        {
+            return null;
+        }
+    }
 
 	protected void handleCustomJspsPropertyChangedEvent( final PropertyContentEvent event )
 	{
@@ -270,6 +292,14 @@ public class HookXmlEditor extends SapphireEditorForXml
 		}
 
 		return super.isDirty();
+	}
+
+	@Override
+	protected void pageChange( int pageIndex )
+	{
+		this.ignoreCustomModelChanges = true;
+		super.pageChange( pageIndex );
+		this.ignoreCustomModelChanges = false;
 	}
 
 }
