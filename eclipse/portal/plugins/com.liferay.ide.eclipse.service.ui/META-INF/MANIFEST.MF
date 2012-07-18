@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.platform;bundle-version="0.3.0",
  org.eclipse.sapphire.ui.swt.gef;bundle-version="0.5.0",
  org.eclipse.gef,
- org.eclipse.ui.ide;bundle-version="3.8.0"
+ org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.service.ui
