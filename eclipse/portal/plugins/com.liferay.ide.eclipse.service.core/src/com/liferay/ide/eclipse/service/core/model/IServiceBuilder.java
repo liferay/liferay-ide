@@ -27,7 +27,6 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -46,7 +45,6 @@ public interface IServiceBuilder extends IModelElement {
 
 	@XmlBinding(path = "@package-path")
 	@Label(standard = "&Package path")
-	@Required
 	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath");
 
 	Value<String> getPackagePath();
@@ -80,7 +78,6 @@ public interface IServiceBuilder extends IModelElement {
 
 	@XmlBinding(path = "namespace")
 	@Label(standard = "&Namespace")
-	@Required
 	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace");
 
 	Value<String> getNamespace();
