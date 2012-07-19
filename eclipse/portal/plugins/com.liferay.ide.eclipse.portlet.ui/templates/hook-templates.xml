@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates>
-
-<template name="%Templates.hook.descriptor.name" description="%Templates.hook.descriptor.desc" 
-            id="com.liferay.ide.eclipse.templates.hook.descriptor" context="hook_new" 
-            enabled="true">%Templates.hook.descriptor.content</template>
-
-</templates>

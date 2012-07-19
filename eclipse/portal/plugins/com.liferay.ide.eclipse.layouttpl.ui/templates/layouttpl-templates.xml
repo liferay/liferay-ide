@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates>
-
-<template name="%Templates.layouttpl.descriptor.name" description="%Templates.layouttpl.descriptor.desc" 
-            id="com.liferay.ide.eclipse.templates.layouttpl.descriptor" context="layouttpl_new" 
-            enabled="true">%Templates.layouttpl.descriptor.content</template>
-
-</templates>

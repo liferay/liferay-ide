@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.liferay.ide.common-feature"
+      label="Liferay IDE Common"
+      version="2.0.0.qualifier"
+      provider-name="Liferay, Inc.">
+
+   <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+      Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
+   </description>
+
+   <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
+      /**
+* Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 2.1 of the License, or (at your option) any later 
+* version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty
+* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+* the GNU Lesser General Public License for more details.
+*/
+   </copyright>
+
+   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+      Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
+   </license>
+
+   <plugin
+         id="com.liferay.ide.common.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.liferay.ide.common.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

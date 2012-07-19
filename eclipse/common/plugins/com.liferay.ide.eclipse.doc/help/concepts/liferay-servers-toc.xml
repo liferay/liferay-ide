@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<toc topic="help/concepts/liferay-servers.html" label="liferay-servers">
-	<topic href="help/concepts/liferay-servers.html" label="Liferay Servers">
-		<topic href="help/concepts/liferay-servers.html#NewLiferayServerWizard" label="New Liferay Server Wizard"></topic>
-		<topic href="help/concepts/liferay-servers.html#ServerConfigurationEditor" label="Server Configuration Editor"></topic>
-		<topic href="help/concepts/liferay-servers.html#ServerDeployment" label="Server Deployment"></topic>
-	</topic>
-</toc>

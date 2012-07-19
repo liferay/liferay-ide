@@ -1,8 +1,0 @@
-<%
-	if (model.getJavaPackageName() != null && model.getJavaPackageName().length() > 0) {
-%>
-package <%= model.getJavaPackageName() %>;
-<%
-	}
-%>
-

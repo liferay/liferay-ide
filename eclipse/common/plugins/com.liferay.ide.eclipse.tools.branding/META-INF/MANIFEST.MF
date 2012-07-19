@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE
-Bundle-SymbolicName: com.liferay.ide.eclipse.tools.branding
-Bundle-Version: 1.6.0.qualifier
-Bundle-Vendor: Liferay, Inc.
