@@ -34,7 +34,8 @@
          id="com.liferay.ide.common.core"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+		 unpack="false"/>
 
    <plugin
          id="com.liferay.ide.common.ui"
@@ -42,5 +43,12 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+	
+	<plugin
+         id="com.liferay.ide.freemarker"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+		 unpack="false"/>
 
 </feature>

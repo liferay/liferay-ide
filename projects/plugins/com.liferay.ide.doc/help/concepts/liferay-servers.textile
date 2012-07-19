@@ -1,0 +1,15 @@
+h1. Liferay Servers
+
+p. Liferay IDE provides several Liferay specific server adapters to use for the Server/Runtime configuration in Eclipse.  These Server/Runtimes are specfically for the Liferay Portal Tomcat bundles for community edition version of Liferay Portal.  Once you have configured a Liferay server you can use it for launching a local running copy of Liferay server and deploy Liferay projects (plugins) to it.
+
+h2. New Liferay Server Wizard
+
+!images/servers-1.png!
+
+h2. Server Configuration Editor
+
+!images/servers-2.png!
+
+h2. Server Deployment
+
+!images/servers-3.png!<br/><br/>!images/servers-4.png!

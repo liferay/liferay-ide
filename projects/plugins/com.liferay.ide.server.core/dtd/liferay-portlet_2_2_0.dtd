@@ -1,0 +1,32 @@
+<!--
+<!DOCTYPE portlets PUBLIC
+	"-//Liferay//DTD PORTLET 2.2.0//EN"
+	"http://www.liferay.com/dtd/liferay-portlet_2_2_0.dtd">
+-->
+
+<!ELEMENT portlets (portlet+, custom-user-attribute*)>
+
+<!ELEMENT portlet (#PCDATA)>
+
+<!ATTLIST portlet
+	id CDATA #REQUIRED
+	struts-path CDATA #IMPLIED
+	indexer-class CDATA #IMPLIED
+	scheduler-class CDATA #IMPLIED
+	preferences-sharing-type CDATA #IMPLIED
+	use-default-template CDATA #IMPLIED
+	show-portlet-access-denied CDATA #IMPLIED
+	show-portlet-inactive CDATA #IMPLIED
+	restore-current-view CDATA #IMPLIED
+	ns-4-compatible CDATA #IMPLIED
+	narrow CDATA #IMPLIED
+	active CDATA #IMPLIED
+	include CDATA #IMPLIED
+>
+
+<!ELEMENT custom-user-attribute (#PCDATA)>
+
+<!ATTLIST custom-user-attribute
+	name CDATA #REQUIRED
+	custom-class CDATA #IMPLIED
+>

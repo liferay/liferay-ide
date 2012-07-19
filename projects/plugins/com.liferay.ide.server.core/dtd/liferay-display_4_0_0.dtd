@@ -1,0 +1,43 @@
+<!--
+<!DOCTYPE display PUBLIC
+	"-//Liferay//DTD Display 4.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-display_4_0_0.dtd">
+-->
+
+<!--
+The display element is the root of the deployment descriptor that describes how
+portlets are categorized and displayed for users to choose when personalizing a
+page in Liferay Portal.
+-->
+<!ELEMENT display (category*)>
+
+<!--
+The category element organizes a set of portlets. A portlet can exist in more
+than one category.
+-->
+<!ELEMENT category (category*, portlet*)>
+
+<!--
+The name of a category is mapped to the portal's Language properties. If the
+category name is "test", then the key in the portal's resource bundle will be
+"category.test".
+
+See:
+
+http://www.liferay.com/page/guest/documentation/development/languages
+-->
+<!ATTLIST category
+	name CDATA #REQUIRED
+>
+
+<!--
+The portlet element represents a portlet.
+-->
+<!ELEMENT portlet (#PCDATA)>
+
+<!--
+The id must match the unique portlet-name specified in portlet.xml.
+-->
+<!ATTLIST portlet
+	id CDATA #REQUIRED
+>

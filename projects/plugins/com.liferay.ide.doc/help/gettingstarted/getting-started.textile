@@ -1,0 +1,69 @@
+h1. Getting Started with Liferay IDE
+
+{toc}
+
+h2. Introduction
+
+p. **NOTICE** If you are using Liferay Developer Studio, please note there is a more appropriate tutorial for getting started with that product located here:  "Getting Started with Liferay Developer Studio":PLUGINS_ROOT/com.liferay.studio.eclipse.doc/help/gettingstarted/getting-started.html
+
+p. Liferay IDE is an extension for the Eclipse platform that supports development of plug-in projects for the Liferay Portal platform. Its available as a set of Eclipse plug-ins installable from an update-site. The latest version supports developing 5 Liferay plug-in types: portlets, hooks, layout templates, themes, and EXT-style plug-ins. Liferay IDE requires the Eclipse Helios Java EE developer package.
+
+h2. Requirements
+
+Before getting started:
+
+# Liferay Portal 6.0 (6.0.5 or greater) downloaded and unzipped
+# Liferay Plug-ins SDK 6.0 (6.0.5 or greater) downloaded and unzipped
+# Eclipse Helios Java EE for developers + Liferay IDE - see the "Liferay IDE Installation Guide":installing-ide.html for more information.
+
+Note: earlier versions of Liferay, e.g. 5.x, are not supported yet by the Liferay IDE
+
+h2. Liferay Plugins SDK Setup in Eclipse
+
+Before you can begin creating new Liferay plug-in projects, a Liferay Plug-ins SDK and Liferay Portal must be installed and configured in the IDE.
+
+# Open Eclipse with Liferay IDE installed.
+# Open Preference page for Liferay > Installed SDKs (Go to Window > Preferences > Liferay > Installed SDKs) <br/><br/>!images/lide_getting_started_1.png!<br/><br/>
+# Add your SDK using the Add button which brings up the Add SDK Dialog. <br/><br/>!images/lide_getting_started_3.png!<br/><br/>
+# Browse to the location of your Plug-ins SDK installation.
+# The default name is the name of the directory but you can change it if you wish.
+# Select OK and you should see your SDK in the list of Installed SDKs. <br/><br/>!images/lide_getting_started_4.png!<br/><br/>
+
+Note: Multiple SDKs can be added to the preferences but you will need to select at least one SDK to be the default which is represented by the SDK that has the checkbox selected.
+
+h2. Liferay Tomcat Server Setup
+
+# In Eclipse open the Runtime environments preference page (Go to Window > Preferences > Server > Runtime environments) <br/><br/>!images/lide_getting_started_5.png!<br/><br/>
+# Click Add to add a new Liferay runtime and find Liferay v6 Tomcat under the Liferay, Inc. category and click Next. <br/><br/>!images/lide_getting_started_6.png!<br/><br/>
+# Click Browse and select the location of the liferay-portal-6.0.x directory. <br/><br/>!images/lide_getting_started_8.png!<br/><br/>
+# Once you have selected the Liferay portal directory if it has a bundled JRE then that bundled JRE will be automatically selected as the JRE to use for launching the server. However, if there is no bundled JRE (Mac and Linux users) then you will need to select the JRE to use for launch. <br/><br/>!images/lide_getting_started_8a.png!<br/><br/>
+# Click finish and you should see the Liferay portal runtime in the list of runtimes in the preference page. <br/><br/>!images/lide_getting_started_9.png!<br/><br/>
+# Click OK to save the runtime preferences.
+# If you didn't choose to create a server you will need to create one from the servers view before you can test the server. <br/><br/>!images/lide_getting_started_9a.png!<br/><br/>
+# Find the Liferay, Inc category and select the Liferay v6 Server and choose the Liferay v6 Runtime that you had previously created. <br/><br/>!images/lide_getting_started_9b.png!<br/><br/>
+
+h2. Testing/Launching Liferay Tomcat Server
+
+# Once your Liferay Portal Server setup is complete you can launch the server from the servers tab of Eclipse. Simply select the server and then click on the green "Start the Server button." Once the server is running a red "Terminate" button will appear which you can use to stop the server. <br/><br/> !images/lide_getting_started_10a.png!<br/><br/> !images/lide_getting_started_10b.png!
+
+# Alternatively, you can start/stop the server by selecting "Run" or "Terminate" from the Run menu of Eclipse.
+# Once the server is finish launching you can open the portal home from the context menu of the Liferay Tomcat server in the Servers view: <br/><br/>!images/lide_getting_started_10c.png!
+
+h2. Creating New Liferay Projects
+
+# Now that an SDK and portal server have been configured you can create a new Liferay plug-in project. Go to File > New Project... > Liferay > Liferay Plug-in Project. <br/><br/>!images/lide_getting_started_11a.png!<br/><br/>
+# In the Liferay project wizard page, the newly configured SDK and Liferay Runtime should be pre-selected.  Also the plugin type "portlet" is the default.  Simply time in a project name and corresponding display name and click Finish. <br/><br/>!images/lide_getting_started_12a.png!<br/><br/>
+# If it worked you should see a new plugin project in the package explorer. <br/><br/>!images/lide_getting_started_13a.png!<br/><br/>
+
+h2. Deploying New Liferay Projects to Liferay Server
+
+# Now with the newly created project, right-click the Liferay Server in the Servers view and select "Add and Remove..." <br/><br/>!images/lide_getting_started_14a.png!<br/><br/>
+# Select the new project and click "Add" to move it to be deployed to the server. <br/><br/>!images/lide_getting_started_14b.png!<br/><br/> and then click "Finish"
+# You should see the project get deployed to Liferay Tomcat server and in the console see a message about 1 new portlet being available:<br/><br/>!images/lide_getting_started_14c.png!<br/><br/>
+# Open Liferay Portal Home http://localhost:8080/ in most cases
+# Log in with test account: 
+## user is **test@liferay.com** 
+## password is **test**
+# Click Add > More... 
+# Expand the Sample category and click the "Add" click next to the "Demo" application
+# You should see the correctly deployed portlet on the page <br/><br/>!images/lide_getting_started_15a.png!

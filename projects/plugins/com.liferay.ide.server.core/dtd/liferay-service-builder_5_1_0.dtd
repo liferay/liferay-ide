@@ -1,0 +1,432 @@
+<!--
+<!DOCTYPE service-builder PUBLIC
+	"-//Liferay//DTD Service Builder 5.1.0//EN"
+	"http://www.liferay.com/dtd/liferay-service-builder_5_1_0.dtd">
+-->
+
+<!--
+The service-builder element is the root of the deployment descriptor for
+a Service Builder descriptor that is used to generate services available to
+portlets. The Service Builder saves the developer time by generating Spring
+utilities, SOAP utilities, and Hibernate persistence classes to ease the
+development of services.
+-->
+<!ELEMENT service-builder (author?, namespace, entity+, exceptions?)>
+
+<!--
+The package-path value specifies the package of the generated code.
+-->
+<!ATTLIST service-builder
+	package-path CDATA #REQUIRED
+>
+
+<!--
+The author element is the name of the user associated with the generated code.
+-->
+<!ELEMENT author (#PCDATA)>
+
+<!--
+The namespace element must be a unique namespace for this component. Table names
+will be prepended with this namespace. Generated JSON JavaScript will be scoped
+to this namespace as well (i.e., Liferay.Service.Test.* if the namespace is
+Test).
+-->
+<!ELEMENT namespace (#PCDATA)>
+
+<!--
+An entity usually represents a business facade and a table in the database. If
+an entity does not have any columns, then it only represents a business facade.
+The Service Builder will always generate an empty business facade POJO if it
+does not exist. Upon subsequent generations, the Service Builder will check to
+see if the business facade already exists. If it exists and has additional
+methods, then the Service Builder will also update the SOAP wrappers.
+
+If an entity does have columns, then the value object, the POJO class that
+is mapped to the database, and other persistence utilities are also generated
+based on the order and finder elements.
+-->
+<!ELEMENT entity (column*, order?, finder*, reference*, tx-required*)>
+
+<!--
+The name value specifies the name of the entity.
+
+The table value specifies the name of the table that this entity maps to in the
+database. If this value is not set, then the name of the table is the same as
+the name of the entity.
+
+If the uuid value is true, then the service will generate a UUID column for the
+service. This column will automatically be populated with a UUID. Developers
+will also be able to find and remove based on that UUID. The default value is
+false.
+
+If the local-service value is true, then the service will generate the local
+interfaces for the service. The default value is false.
+
+If the remote-service value is true, then the service will generate remote
+interfaces for the service. The default value is true.
+
+The persistence-class value specifies the name of your custom persistence class.
+This class must implement the generated persistence interface or extend the
+generated persistence class. This allows you to override default behavior
+without modifying the generated persistence class.
+
+You can generate classes to use a custom data source and session factory.
+Point "spring.configs" in portal.properties to load your custom Spring XML with
+the definitions of your custom data source and session factory. Then set the
+data-source and session-factory values to your custom values.
+
+The data-source value specifies the data source target that is set to the
+persistence class. The default value is the Liferay data source. This is used in
+conjunction with session-factory. See data-source-spring.xml.
+
+The session-factory value specifies the session factory that is set to the
+persistence class. The default value is the Liferay session factory. This is
+used in conjunction with data-source. See data-source-spring.xml.
+
+The tx-manager value specifies the transaction manager that Spring uses. The
+default value is the Spring Hibernate transaction manager that wraps the Liferay
+data source and session factory. See data-source-spring.xml. Set this attribute
+to "none" to disable transaction management.
+
+The cache-enabled value specifies whether or not to cache this queries for this
+entity. Set this to false if data in the table will be updated by other
+programs. The default value is true.
+-->
+<!ATTLIST entity
+	name CDATA #REQUIRED
+	table CDATA #IMPLIED
+	uuid CDATA #IMPLIED
+	local-service CDATA #IMPLIED
+	remote-service CDATA #IMPLIED
+	persistence-class CDATA #IMPLIED
+	data-source CDATA #IMPLIED
+	session-factory CDATA #IMPLIED
+	tx-manager CDATA #IMPLIED
+	cache-enabled CDATA #IMPLIED
+>
+
+<!--
+The column element represents a column in the database.
+-->
+<!ELEMENT column (#PCDATA)>
+
+<!--
+The name value specifies the getter and setter name in the entity.
+
+The type value specifies whether the column is a String, Boolean, or int, etc.
+
+For example:
+
+<column name="companyId" db-name="companyId" type="String" />
+
+The above column specifies that there will be a getter called
+pojo.getCompanyId() that will return a String.
+
+Set db-name to map the field to a physical database column that is different
+from the column name.
+
+If the primary value is set to true, then this column is part of the primary key
+of the entity. If multiple columns have the primary value set to true, then a
+compound key will be created.
+
+See com.liferay.portal.service.persistence.LayoutPK for an example of a compound
+primary key.
+
+If the entity and mapping-key attributes are specified and mapping-table is not,
+then the Service Builder will assume you are specifying a one to many
+relationship.
+
+For example:
+
+<column
+	name="shoppingItemPrices"
+	type="Collection"
+	entity="ShoppingItemPrice"
+	mapping-key="itemId"
+/>
+
+The above column specifies that there will be a getter called
+pojo.getShoppingItemPrices() that will return a collection. It will map to a
+column called itemId in the table that maps to the entity ShoppingItemPrice.
+
+If the entity and mapping-table attributes are specified and mapping-key is not,
+then the Service Builder will assume you are specifying a many to many
+relationship.
+
+For example:
+
+<column
+	name="roles"
+	type="Collection"
+	entity="Role"
+	mapping-table="Groups_Roles"
+/>
+
+The above column specifies that there will be a getter called
+pojo.getRoles() that will return a collection. It will use a mapping table
+called Groups_Roles to give a many to many relationship between groups and
+roles.
+
+If you are creating a mapping table for an entity defined in another
+service.xml, you need to specify the full package path.
+
+For example:
+
+<column
+	name="organizations"
+	type="Collection"
+	entity="com.liferay.portal.Organization"
+	mapping-table="Foo_Organizations"
+/>
+
+The id-type and id-param values are used in order to create an auto-generated,
+auto-incrementing primary key when inserting records into a table. This can be
+implemented in 4 different ways, depending on the type of database being used.
+In all cases, the primary key of the model object should be assigned a value of
+null, and Hibernate will know to replace the null value with an auto-generated,
+auto-incremented value. If no id-type value is used, it is assumed that the
+primary key will be assigned and not auto-generated.
+
+The first implementation uses a class to generate a primary key.
+
+For example:
+
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="class"
+	id-param="com.liferay.counter.service.persistence.IDGenerator"
+/>
+
+In this implementation, the class specified in the id-param value will be called
+to retrieve a unique identifier (in the example above, an Integer) that will be
+used as the primary key for the new record. This implementation works for all
+supported databases.
+
+The second implementation generates identifiers that are unique only when no
+other process is inserting data into the same table. This implementation should
+NOT be used in a clustered environment, but it does work for all supported
+databases.
+
+For example:
+
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="increment"
+/>
+
+The third implementation uses an identity column to generate a primary key.
+
+For example:
+
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="identity"
+/>
+
+In this implementation, the create table SQL generated for this entity will
+create an identity column that natively auto-generates a primary key whenever
+an insert occurs. This implementation is only supported by DB2, MySQL, and
+MS SQL Server.
+
+The fourth implementation uses a sequence to generate a primary key.
+
+For example:
+
+<column
+	name="id"
+	type="Integer"
+	primary="true"
+	id-type="sequence"
+	id-param="id_sequence"
+/>
+
+In this implementation, a create sequence SQL statement is created based on
+the id-param value (stored in /sql/sequences.sql). This sequence is then
+accessed to generate a unique identifier whenever an insert occurs. This
+implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
+
+The convert-null value specifies whether or not the column value is
+automatically converted to a non null value if it is null. This only applies if
+the type value is String. This is particularly useful if your entity is
+referencing a read only table or a database view so that Hibernate does not try
+to issue unnecessary updates. The default value is true.
+
+The localized value specifies whether or not the value of the column can have
+different values for different locales. The default value is false.
+-->
+<!ATTLIST column
+	name CDATA #REQUIRED
+	db-name CDATA #IMPLIED
+	type CDATA #REQUIRED
+	primary CDATA #IMPLIED
+	entity CDATA #IMPLIED
+	mapping-key CDATA #IMPLIED
+	mapping-table CDATA #IMPLIED
+	id-type CDATA #IMPLIED
+	id-param CDATA #IMPLIED
+	convert-null CDATA #IMPLIED
+	localized CDATA #IMPLIED
+>
+
+<!--
+The order element specifies a default ordering and sorting of the entities when
+they are retrieved from the database.
+-->
+<!ELEMENT order (order-column+)>
+
+<!--
+Set the by attribute to "asc" or "desc" to order by ascending or descending.
+-->
+<!ATTLIST order
+	by CDATA #IMPLIED
+>
+
+<!--
+The order-column element allows you to order the entities by specific columns.
+-->
+<!ELEMENT order-column (#PCDATA)>
+
+<!--
+The attributes of the order-column element allows you to fine tune the ordering
+of the entity.
+
+For example:
+
+<order by="asc">
+	<order-column name="parentLayoutId" />
+	<order-column name="priority" />
+</order>
+
+The above settings will order by parentLayoutId and then by priority in an
+ascending manner.
+
+For example:
+
+<order by="asc">
+	<order-column name="name" case-sensitive="false" />
+</order>
+
+The above settings will order by name and will not be case sensitive.
+
+For example:
+
+<order>
+	<order-column name="articleId" order-by="asc" />
+	<order-column name="version" order-by="desc" />
+</order>
+
+The above settings will order by articleId in an ascending manner and then by
+version in a descending manner.
+-->
+<!ATTLIST order-column
+	name CDATA #REQUIRED
+	case-sensitive CDATA #IMPLIED
+	order-by CDATA #IMPLIED
+>
+
+<!--
+The finder element represents a generated finder method.
+-->
+<!ELEMENT finder (finder-column+)>
+
+<!--
+The name value specifies the name of the finder method.
+
+The return-type value specifies the return type of the finder. Valid values are
+"Collection" or the name of the entity. If the value is "Collection", then this
+finder returns a list of entities. If the value is the name of the entity, then
+this finder returns at most one entity.
+
+If the unique value is true, then the finder must return a unique entity.
+
+If the db-index value is true, then the service will automatically generate a
+SQL index for this finder. The default value is true.
+-->
+<!ATTLIST finder
+	name CDATA #REQUIRED
+	return-type CDATA #REQUIRED
+	unique CDATA #IMPLIED
+	where CDATA #IMPLIED
+	db-index CDATA #IMPLIED
+>
+
+<!--
+The finder-column element specifies the columns to find by.
+-->
+<!ELEMENT finder-column (#PCDATA)>
+
+<!--
+The name value specifies the name of the finder method.
+
+For example:
+
+<finder name="CompanyId" return-type="Collection">
+	<finder-column name="companyId" />
+</finder>
+
+The above settings will create a finder with the name findByCompanyId that will
+return a Collection and require a given companyId. It will also generate
+several more findByCompanyId methods that take in pagination fields (int begin,
+int end) and more sorting options. The easiest way to understand this is to
+look at a generated PersistenceImpl class. The Service Builder will also
+generate removeByCompanyId and countByCompanyId.
+
+See com.liferay.portal.service.persistence.LayoutPersistenceImpl for a good
+example.
+
+The attribute comparator takes in the values =, !=, <, <=, >, >=, or LIKE and is
+used to compare this column.
+
+The attribute case-sensitive is a boolean value and is only used if the column
+is a String value.
+-->
+<!ATTLIST finder-column
+	name CDATA #REQUIRED
+	case-sensitive CDATA #IMPLIED
+	comparator CDATA #IMPLIED
+>
+
+<!--
+The reference element allows you to inject services from another service.xml
+within the same class loader. For example, if you inject the Resource entity,
+then you'll be able to reference the Resource services from your service
+implementation via the methods getResourceLocalService and getResourceService.
+You'll also be able to reference the Resource services via the variables
+resourceLocalService and resourceService.
+-->
+<!ELEMENT reference (#PCDATA)>
+
+<!--
+See the comments in reference element.
+-->
+<!ATTLIST reference
+	package-path CDATA #IMPLIED
+	entity CDATA #IMPLIED
+>
+
+<!--
+The tx-required element has a text value that will be used to match method names
+that require transactions. By default, the methods: add*, check*, clear*,
+delete*, set*, and update* require propagation of transactions. All other
+methods support transactions but are assumed to be read only. If you want
+additional methods to fall under transactions, add the method name to this
+element.
+-->
+<!ELEMENT tx-required (#PCDATA)>
+
+<!--
+The exceptions element contain a list of generated exceptions. This doesn't save
+a lot of typing, but can still be helpful.
+-->
+<!ELEMENT exceptions (exception*)>
+
+<!--
+See the comments in exceptions element.
+-->
+<!ELEMENT exception (#PCDATA)>

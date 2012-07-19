@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            describer="com.liferay.ide.portlet.core.servicebuilder.ServiceBuilderContentDescriber"
+            file-extensions="xml"
+            file-names="service.xml"
+            id="servicebuildercontent"
+            name="Service Builder"
+            priority="high">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            file-extensions="xml"
+            file-names="portlet.xml"
+            id="portletxml"
+            name="Portlet Descriptor"
+            priority="high">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
+            <parameter
+                  name="element"
+                  value="portlet-app">
+            </parameter>
+         </describer>
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            describer="com.liferay.ide.portlet.core.descriptor.LiferayPortletContentDescriber"
+            file-extensions="xml"
+            file-names="liferay-portlet.xml"
+            id="liferayportletxml"
+            name="Liferay Portlet Descriptor"
+            priority="high">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
+         </describer>
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            describer="com.liferay.ide.portlet.core.descriptor.LiferayDisplayContentDescriber"
+            file-extensions="xml"
+            file-names="liferay-display.xml"
+            id="liferaydisplayxml"
+            name="Liferay Display Descriptor"
+            priority="high">
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            describer="com.liferay.ide.portlet.core.descriptor.LiferayHookContentDescriber"
+            file-extensions="xml"
+            file-names="liferay-hook.xml"
+            id="liferayhookxml"
+            name="Liferay Hook Descriptor"
+            priority="high">
+      </content-type>
+   </extension>
+   <extension
+         id="portletdescriptorvalidator"
+         name="Portlet Descriptor Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="com.liferay.ide.portlet.core.descriptor.PortletDescriptorValidator"
+            manual="true"
+            markerId="com.liferay.ide.portlet.core.portletDescriptorMarker"
+            version="1">
+         <include>
+            <rules>
+               <contentType
+                     id="com.liferay.ide.portlet.core.portletxml">
+               </contentType>
+            </rules>
+         </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
+      </validator>
+   </extension>
+   <extension
+         id="liferayportletdescriptorvalidator"
+         name="Liferay Portlet Descriptor Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="com.liferay.ide.portlet.core.descriptor.LiferayPortletDescriptorValidator"
+            manual="true"
+            markerId="com.liferay.ide.portlet.core.liferayPortletDescriptorMarker"
+            version="1">
+         <include>
+            <rules>
+               <contentType
+                     id="com.liferay.ide.portlet.core.liferayportletxml">
+               </contentType>
+            </rules>
+         </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
+      </validator>
+   </extension>
+   <extension
+         id="liferaydisplaydescriptorvalidator"
+         name="Liferay Display Descriptor Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="com.liferay.ide.portlet.core.descriptor.LiferayDisplayDescriptorValidator"
+            manual="true"
+            markerId="com.liferay.ide.portlet.core.liferayDisplayDescriptorMarker"
+            version="1">
+         <include>
+            <rules>
+               <contentType
+                     id="com.liferay.ide.portlet.core.liferaydisplayxml">
+               </contentType>
+            </rules>
+         </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
+      </validator>
+   </extension>
+   <extension
+         id="liferayhookdescriptorvalidator"
+         name="Liferay Hook Descriptor Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="com.liferay.ide.portlet.core.descriptor.LiferayHookDescriptorValidator"
+            manual="true"
+            markerId="com.liferay.ide.portlet.core.liferayHookDescriptorMarker"
+            version="1">
+         <include>
+            <rules>
+               <contentType
+                     id="com.liferay.ide.portlet.core.liferayhookxml">
+               </contentType>
+            </rules>
+         </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
+      </validator>
+   </extension>
+   <extension
+         id="portletDescriptorMarker"
+         name="Portlet Descriptor Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker">
+      </super>
+   </extension>
+   <extension
+         id="liferayPortletDescriptorMarker"
+         name="Liferay Portlet Descriptor Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker">
+      </super>
+   </extension>
+   <extension
+         id="liferayDisplayDescriptorMarker"
+         name="Liferay Display Descriptor Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker">
+      </super>
+   </extension>
+   <extension
+         id="liferayHookDescriptorMarker"
+         name="Liferay Hook Descriptor Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker">
+      </super>
+   </extension>
+   
+   <extension
+         point="com.liferay.ide.project.core.liferayProjects">
+      <liferayProjectDefinition
+            class="com.liferay.ide.portlet.core.LiferayPortletDefinition"
+            displayName="Liferay Portlet"
+            facetId="liferay.portlet"
+            facetedProjectTemplateId="liferay.portlet.template"
+            menuIndex="10"
+            shortName="portlet">
+      </liferayProjectDefinition>
+      <liferayProjectDefinition
+            class="com.liferay.ide.portlet.core.LiferayHookDefinition"
+            displayName="Liferay Hook"
+            facetId="liferay.hook"
+            facetedProjectTemplateId="liferay.hook.template"
+            menuIndex="20"
+            shortName="hook">
+      </liferayProjectDefinition>
+      <liferayProjectDefinition
+            class="com.liferay.ide.portlet.core.LiferayExtDefinition"
+            displayName="Liferay Ext"
+            facetId="liferay.ext"
+            facetedProjectTemplateId="liferay.ext.template"
+            menuIndex="30"
+            shortName="ext">
+      </liferayProjectDefinition>
+   </extension>
+   
+   
+   <extension
+       point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
+    <portletFrameworkWizardProvider
+          class="com.liferay.ide.portlet.core.MVCPortletFrameworkWizardProvider"
+          default="true"
+          description="Simple and lightweight MVC framework using JSPs that is built-in to Liferay Portal."
+          displayName="Liferay MVC"
+          helpUrl="http://www.liferay.com/documentation/liferay-portal/6.0/development/-/ai/portlet-development"
+          id="com.liferay.ide.project.core.framework.mvc"
+          requiredSDKVersion="6.0.1"
+          shortName="mvc">
+    </portletFrameworkWizardProvider>
+    </extension>
+
+</plugin>

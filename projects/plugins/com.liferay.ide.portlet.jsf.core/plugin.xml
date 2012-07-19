@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
+      <portletFrameworkWizardProvider
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFrameworkWizardProvider"
+            default="false"
+            description="Enables development of JSF 2.x applications using Liferay Faces Bridge that run seamlessly inside of Liferay Portal."
+            displayName="JSF 2.x"
+            helpUrl="http://www.portletfaces.org/projects/portletfaces-bridge"
+            id="com.liferay.ide.project.core.template.jsf"
+            requiredSDKVersion="6.1.0"
+            shortName="jsf">
+      </portletFrameworkWizardProvider>
+   </extension>
+
+</plugin>

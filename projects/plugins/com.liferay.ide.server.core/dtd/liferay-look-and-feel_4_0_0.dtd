@@ -1,0 +1,254 @@
+<!--
+<!DOCTYPE look-and-feel PUBLIC
+	"-//Liferay//DTD Look and Feel 4.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-look-and-feel_4_0_0.dtd">
+-->
+
+<!--
+The look-and-feel element is the root of the deployment descriptor for
+a Liferay look and feel archive. The look and feel archive will hereafter
+be referred to as a LAF archive.
+-->
+<!ELEMENT look-and-feel (compatibility, company-limit?, theme*)>
+
+<!--
+The compatibility element specifies a list of Liferay Portal versions that will
+properly deploy the themes in this LAF archive.
+-->
+<!ELEMENT compatibility (version+)>
+
+<!--
+The version element specifies a specific Liferay Portal version number. For
+example, if its value is "3.5.0", that means the themes in this LAF archive will
+deploy correctly in Liferay Portal 3.5.0. The portal will not deploy themes from
+a LAF archive unless the version numbers match.
+-->
+<!ELEMENT version (#PCDATA)>
+
+<!--
+The company-limit element specifies a list of company ids that can access the
+themes in this LAF archive. If company-limit is not set, then every company in
+the portal has access to all of the themes in this LAF archive. If company-limit
+is set, then the company ids will be included or excluded based on the
+company-includes and company-excludes elements. If there is a disagreement
+between company-includes and company-excludes, company-excludes takes
+precedence.
+-->
+<!ELEMENT company-limit (company-includes?, company-excludes?)>
+
+<!--
+The company-includes element specifies a list of company ids that will have
+access to the themes in this LAF archive.
+-->
+<!ELEMENT company-includes (company-id*)>
+
+<!--
+The company-excludes element specifies a list of company ids that will not have
+access to the themes in this LAF archive.
+-->
+<!ELEMENT company-excludes (company-id*)>
+
+<!--
+The company-id element must have either the name or pattern attributes
+specified. If the name attribute is specified, then the exact company id is
+either included or excluded, depending on whether the company-id element is
+inside the company-includes element or company-excludes element. If the pattern
+attribute is specified, then a regular expression match is applied to the
+pattern which will determine whether a company id is included or excluded.
+-->
+<!ELEMENT company-id (#PCDATA)>
+
+<!--
+See the comments in the company-id element.
+-->
+<!ATTLIST company-id
+	name CDATA #IMPLIED
+	pattern CDATA #IMPLIED
+>
+
+<!--
+The theme element contains the declarative data of a theme.
+-->
+<!ELEMENT theme (root-path, templates-path, images-path, template-extension,
+enable-drag-and-drop?, settings?, color-scheme+, layout-templates?)>
+
+<!--
+The id attribute specifies the unique key for a theme. The name attribute
+specifies the friendly name of a theme that is displayed to the user.
+-->
+<!ATTLIST theme
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!--
+The root-path value sets the location of the root path for the theme. For
+example, the root path for the Classic theme is "/html/themes/classic". This
+means you can find the files for the Classic theme in
+/docroot/html/themes/classic.
+-->
+<!ELEMENT root-path (#PCDATA)>
+
+<!--
+The templates-path value sets the location of the templates path for the theme.
+For example, the templates path for the Classic theme is
+"/html/themes/classic/templates". This means you can find the JSP templates for
+the Classic theme in /docroot/html/themes/classic/templates.
+-->
+<!ELEMENT templates-path (#PCDATA)>
+
+<!--
+The images-path value sets the location of the images path for the theme. For
+example, the images path for the Classic theme is "/html/themes/classic/images".
+This means you can find the images for the Classic theme in
+/docroot/html/themes/classic/images.
+-->
+<!ELEMENT images-path (#PCDATA)>
+
+<!--
+The templates-extension value sets the file extension of the files located in
+the templates directory. If you specify the value "jsp", then the portal will
+look for files such as portal_nav.jsp in the templates directory. If you specify
+the value "vm", then the portal will look for files such as portal_nav.vm in the
+templates directory. Specifying "vm" means you can use Velocity to create your
+theme. New extensions will be supported in the future to allow for even more
+flexibility in the creation of themes.
+-->
+<!ELEMENT template-extension (#PCDATA)>
+
+<!--
+Set enable-drag-and-drop to false to false to disable drag and drop
+functionality. The default value is true.
+-->
+<!ELEMENT enable-drag-and-drop (#PCDATA)>
+
+<!--
+The settings element contain a list of settings or properties that are available
+to the theme object at runtime. They are described with a key value pair.
+
+For example, you can access it with the command: theme.getSetting("hello").
+-->
+<!ELEMENT settings (setting*)>
+
+<!--
+See the comments in the settings element.
+-->
+<!ELEMENT setting (#PCDATA)>
+
+<!--
+See the comments in the settings element.
+-->
+<!ATTLIST setting
+	key CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!--
+A theme can have many color schemes. It works very similar to Windows. The
+Windows XP theme has one set of color schemes, and the Windows Classic theme
+has another set of color schemes. Each color scheme contains a list of colors
+that helps decorate the theme.
+
+A sample list of available colors are:
+
+body-bg=#FFFFFF
+
+layout-bg=#FFFFFF
+layout-text=#000000
+
+layout-tab-bg=#E0E0E0
+layout-tab-text=#000000
+
+layout-tab-selected-bg=#6699CC
+layout-tab-selected-text=#4A517D
+
+portlet-title-bg=#6699CC
+portlet-title-text=#4A517D
+
+portlet-menu-bg=#B6CBEB
+portlet-menu-text=#000000
+
+portlet-bg=#FFFFFF
+
+portlet-font=#000000
+portlet-font-dim=#C4C4C4
+
+portlet-msg-status=#000000
+portlet-msg-info=#000000
+portlet-msg-error=#FF0000
+portlet-msg-alert=#FF0000
+portlet-msg-success=#007F00
+
+portlet-section-header=#596171
+portlet-section-header-bg=#AFBEDA
+
+portlet-section-subheader=#405278
+portlet-section-subheader-bg=#91AEE8
+
+portlet-section-body=#3F3F3F
+portlet-section-body-bg=#EAF2FF
+
+portlet-section-body-hover=#FFFFFF
+portlet-section-body-hover-bg=#5274AE
+
+portlet-section-alternate=#3F3F3F
+portlet-section-alternate-bg=#DBE1ED
+
+portlet-section-alternate-hover=#FFFFFF
+portlet-section-alternate-hover-bg=#5274AE
+
+portlet-section-selected=#7AA0EC
+portlet-section-selected-bg=#FAFCFE
+
+portlet-section-selected-hover=#00329A
+portlet-section-selected-hover-bg=#C0D2F7
+-->
+<!ELEMENT color-scheme (#PCDATA)>
+
+<!--
+The id attribute specifies the key for a color scheme that is unique for its
+parent theme. The name attribute specifies the friendly name of a color scheme
+that is displayed to the user.
+-->
+<!ATTLIST color-scheme
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ELEMENT layout-templates (standard?, custom?)>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ELEMENT standard (layout-template*)>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ELEMENT layout-template (template-path, thumbnail-path?)>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ATTLIST layout-template
+	id CDATA #REQUIRED
+	name CDATA #IMPLIED
+>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ELEMENT template-path (#PCDATA)>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ELEMENT thumbnail-path (#PCDATA)>
+
+<!--
+See liferay-layout-templates_4_0_0.dtd.
+-->
+<!ELEMENT custom (layout-template*)>

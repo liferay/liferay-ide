@@ -1,0 +1,20 @@
+<%@ jet package="com.liferay.ide.portlet.vaadin.core.operation" 
+	imports="java.util.* com.liferay.ide.portlet.vaadin.core.operation.* com.liferay.ide.portlet.core.operation.* org.eclipse.jst.j2ee.internal.common.operations.*" 
+	class="VaadinPortletTemplate" 
+	skeleton="vaadinportlet.generator.skeleton"
+%>
+<% CreateVaadinPortletTemplateModel model = (CreateVaadinPortletTemplateModel) argument; %>
+<%@ include file="_flags.template" %>
+<%@ include file="_package.template" %>
+<%@ include file="_imports.template" %>
+<%@ include file="_class.template" %>
+<%@ include file="_constructors.template" %>
+<%@ include file="_methods.template" %>
+
+    public void init() {
+        Window window = new Window("Vaadin Portlet Application");
+        setMainWindow(window);
+        window.addComponent(new Label("Hello Vaadin user!"));
+    }
+
+}

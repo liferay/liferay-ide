@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<toc label="getting-started" topic="help/gettingstarted/getting-started.html">
+	<topic href="help/gettingstarted/getting-started.html" label="Getting Started with Liferay IDE">
+		<topic href="help/gettingstarted/getting-started.html#Introduction" label="Introduction"></topic>
+		<topic href="help/gettingstarted/getting-started.html#Requirements" label="Requirements"></topic>
+		<topic href="help/gettingstarted/getting-started.html#LiferayPluginsSDKSetupinEclipse" label="Liferay Plugins SDK Setup in Eclipse"></topic>
+		<topic href="help/gettingstarted/getting-started.html#LiferayTomcatServerSetup" label="Liferay Tomcat Server Setup"></topic>
+		<topic href="help/gettingstarted/getting-started.html#TestingLaunchingLiferayTomcatServer" label="Testing/Launching Liferay Tomcat Server"></topic>
+		<topic href="help/gettingstarted/getting-started.html#CreatingNewLiferayProjects" label="Creating New Liferay Projects"></topic>
+		<topic href="help/gettingstarted/getting-started.html#DeployingNewLiferayProjectstoLiferayServer" label="Deploying New Liferay Projects to Liferay Server"></topic>
+	</topic>
+</toc>

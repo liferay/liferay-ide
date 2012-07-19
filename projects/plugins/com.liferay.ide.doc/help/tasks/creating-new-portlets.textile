@@ -1,0 +1,22 @@
+h1. Creating New Portlets
+
+# You can create a new portlet within an existing project by selecting Liferay Portlet from the Eclipse File menu (File > New > Liferay Portlet). <br/><br/>!images/lide_new_portlet.png!<br/><br/>
+## In this window, you will input the information required to create a portlet class.
+## Under Portlet plug-in project, choose a name for your portlet.
+## The Source folder determines the location of the file directory for your portlet project.
+## Portet class specifies the name of the Java class that your portlet extends: NewPortlet.
+## Java package specifies the location of the Java objects that NewPortlet needs to use.
+## Superclass specifies the location of the location of the MVCPortlet object which NewPortlet extends. Click next. <br/><br/>!images/lide_new_portlet2.png!<br/><br/>
+# You will specify portlet deployment descriptor details in this window.
+## Under Portlet Info, enter the name, display name, and title of your portlet.
+## Under Portlet Modes, you can choose whether or not you want your portlet to have view, edit, and display modes by checking or unchecking the appropriate boxes.
+## Under Liferay Portlet Modes, you can choose which of six modes available to Liferay portlets you want your portlet to use.
+## Under Resources, you can decide whether or not your portlet will create JSP files. If your portlet will do so, you have to specify a JSP folder. Additionally, you can decide whether or not your portlet will use a resource bundle file. If it will, then you have to specify the resource bundle file path. Click next. <br/><br/>!images/lide_new_portlet3.png!
+# You will continue specifying portlet deployment descriptor details in this window.
+## Under Liferay Portlet Info you can name your portlet and associate an icon to it. Check the Allow multiple instances button if you want your portlet to be instanceable. If your portlet will use CSS and Javascript you need to specify the locations of your portlet project's CSS and Javascript folder and give your portlet a CSS classname.
+## Under Liferay Display you can select a display category (default category: sample). There is a long list to choose from. Click next. <br/><br/>!images/lide_new_portlet4.png!<br/><br/>
+# In this last window you can specify modifiers, interfaces, and method stubs to generate within your portlet class.
+## For modifiers, you can choose public, abstract, or final.
+## You can add an interface by specifying its location. Click add, then browse to its location, then select.
+## If you would like to inherit constructors or abstract methods from your portlet's superclass, check the appropriate boxes. Then you can select the specific methods you would like to use for your portlet class.
+## When you are done, click Finish, and your project should automatically build for you.

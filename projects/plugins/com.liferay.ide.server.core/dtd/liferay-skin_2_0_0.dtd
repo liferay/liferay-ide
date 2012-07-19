@@ -1,0 +1,91 @@
+<!--
+<!DOCTYPE portlets PUBLIC
+	"-//Liferay//DTD SKIN 2.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-skin_2_0_0.dtd">
+-->
+
+<!--
+A list of skins
+-->
+<!ELEMENT skins (global*, skin+)>
+
+<!--
+Global settings
+-->
+<!ELEMENT global (#PCDATA)>
+
+<!ATTLIST global
+	font-family CDATA #REQUIRED
+>
+
+<!--
+Models a skin
+-->
+<!ELEMENT skin (image-id, alpha, beta, gamma, bg)
+>
+
+<!ATTLIST skin
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!--
+Set the image id of the skin
+-->
+<!ELEMENT image-id (#PCDATA)>
+
+<!--
+Set the colors for the alpha layer
+-->
+<!ELEMENT alpha (#PCDATA)>
+
+<!ATTLIST alpha
+	href CDATA #REQUIRED
+	href-hover CDATA #REQUIRED
+	background CDATA #REQUIRED
+	foreground CDATA #REQUIRED
+	neg-alert CDATA #REQUIRED
+	pos-alert CDATA #REQUIRED
+>
+
+<!--
+Set the colors for the beta layer
+-->
+<!ELEMENT beta (#PCDATA)>
+
+<!ATTLIST beta
+	href CDATA #REQUIRED
+	href-hover CDATA #REQUIRED
+	background CDATA #REQUIRED
+	foreground CDATA #REQUIRED
+	neg-alert CDATA #REQUIRED
+	pos-alert CDATA #REQUIRED
+>
+
+<!--
+Set the colors for the gamma layer
+-->
+<!ELEMENT gamma (#PCDATA)>
+
+<!ATTLIST gamma
+	href CDATA #REQUIRED
+	href-hover CDATA #REQUIRED
+	background CDATA #REQUIRED
+	foreground CDATA #REQUIRED
+	neg-alert CDATA #REQUIRED
+	pos-alert CDATA #REQUIRED
+>
+
+<!--
+Set the colors for the bg layer
+-->
+<!ELEMENT bg (#PCDATA)>
+
+<!ATTLIST bg
+	href CDATA #REQUIRED
+	href-hover CDATA #REQUIRED
+	background CDATA #REQUIRED
+	foreground CDATA #REQUIRED
+	neg-alert CDATA #REQUIRED
+	pos-alert CDATA #REQUIRED
+>

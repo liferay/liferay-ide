@@ -1,0 +1,347 @@
+<!--
+<!DOCTYPE look-and-feel PUBLIC
+	"-//Liferay//DTD Look and Feel 5.2.0//EN"
+	"http://www.liferay.com/dtd/liferay-look-and-feel_5_2_0.dtd">
+-->
+
+<!--
+The look-and-feel element is the root of the deployment descriptor for
+a Liferay look and feel archive. The look and feel archive will hereafter
+be referred to as a LAF archive.
+-->
+<!ELEMENT look-and-feel (compatibility, company-limit?, group-limit?, theme*)>
+
+<!--
+The compatibility element specifies a list of Liferay Portal versions that will
+properly deploy the themes in this LAF archive.
+-->
+<!ELEMENT compatibility (version+)>
+
+<!--
+The version element specifies a specific Liferay Portal version number. For
+example, if its value is "3.5.0", that means the themes in this LAF archive will
+deploy correctly in Liferay Portal 3.5.0. The portal will not deploy themes from
+a LAF archive unless the version numbers match.
+-->
+<!ELEMENT version (#PCDATA)>
+
+<!--
+The company-limit element specifies a list of company ids that can access the
+themes in this LAF archive. If company-limit is not set, then every company in
+the portal has access to all of the themes in this LAF archive. If company-limit
+is set, then the company ids will be included or excluded based on the
+company-includes and company-excludes elements. If there is a disagreement
+between company-includes and company-excludes, company-excludes takes
+precedence.
+-->
+<!ELEMENT company-limit (company-includes?, company-excludes?)>
+
+<!--
+The company-includes element specifies a list of company ids that will have
+access to the themes in this LAF archive.
+-->
+<!ELEMENT company-includes (company-id*)>
+
+<!--
+The company-excludes element specifies a list of company ids that will not have
+access to the themes in this LAF archive.
+-->
+<!ELEMENT company-excludes (company-id*)>
+
+<!--
+The company-id element must have either the name or pattern attributes
+specified. If the name attribute is specified, then the exact company id is
+either included or excluded, depending on whether the company-id element is
+inside the company-includes element or company-excludes element. If the pattern
+attribute is specified, then a regular expression match is applied to the
+pattern which will determine whether a company id is included or excluded.
+-->
+<!ELEMENT company-id (#PCDATA)>
+
+<!--
+See the comments in the company-id element.
+-->
+<!ATTLIST company-id
+	name CDATA #IMPLIED
+	pattern CDATA #IMPLIED
+>
+
+<!--
+The group-limit element specifies a list of group ids that can access the themes
+in this LAF archive. If group-limit is not set, then every group in the portal
+has access to all of the themes in this LAF archive. If group-limit is set, then
+the group ids will be included or excluded based on the group-includes and
+group-excludes elements. If there is a disagreement between group-includes and
+group-excludes, group-excludes takes precedence.
+-->
+<!ELEMENT group-limit (group-includes?, group-excludes?)>
+
+<!--
+The group-includes element specifies a list of group ids that will have access
+to the themes in this LAF archive.
+-->
+<!ELEMENT group-includes (group-id*)>
+
+<!--
+The group-excludes element specifies a list of group ids that will not have
+access to the themes in this LAF archive.
+-->
+<!ELEMENT group-excludes (group-id*)>
+
+<!--
+The group-id element must have either the name or pattern attributes specified.
+If the name attribute is specified, then the exact group id is either included
+or excluded, depending on whether the group-id element is inside the
+group-includes element or group-excludes element. If the pattern attribute is
+specified, then a regular expression match is applied to the pattern which will
+determine whether a group id is included or excluded.
+-->
+<!ELEMENT group-id (#PCDATA)>
+
+<!--
+See the comments in the group-id element.
+-->
+<!ATTLIST group-id
+	name CDATA #IMPLIED
+	pattern CDATA #IMPLIED
+>
+
+<!--
+The theme element contains the declarative data of a theme.
+-->
+<!ELEMENT theme (root-path?, templates-path?, css-path?, images-path?,
+javascript-path?, virtual-path?, template-extension?, settings?, wap-theme?,
+roles?, color-scheme*, layout-templates?)>
+
+<!--
+The id attribute specifies the unique key for a theme. For convenience, the id
+attribute can be referenced in the rest of the theme element as ${theme-id}.
+
+The name attribute specifies the friendly name of a theme that is displayed to
+the user.
+-->
+<!ATTLIST theme
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!--
+The root-path value sets the location of the root path for the theme. For
+example, the root path for the Classic theme is "/html/themes/classic". This
+means you can find the files for the Classic theme in
+/docroot/html/themes/classic.
+
+For convenience, the root-path attribute can be referenced in the rest of the
+theme element as ${root-path}.
+
+The default value is "/".
+-->
+<!ELEMENT root-path (#PCDATA)>
+
+<!--
+The templates-path value sets the location of the templates path for the theme.
+For example, the templates path for the Classic theme is
+"/html/themes/classic/templates". This means you can find the JSP or VM
+templates for the Classic theme in /docroot/html/themes/classic/templates.
+
+For convenience, the templates-path attribute can be referenced in the rest of
+the theme element as ${templates-path}.
+
+The default value is "${root-path}/templates".
+-->
+<!ELEMENT templates-path (#PCDATA)>
+
+<!--
+The css-path value sets the location of the css path for the theme. For example,
+the css path for the Classic theme is "/html/themes/classic/css". This means you
+can find css for the Classic theme in /docroot/html/themes/classic/css.
+
+For convenience, the css-path attribute can be referenced in the rest of the
+theme element as ${css-path}.
+
+The default value is "${root-path}/css".
+-->
+<!ELEMENT css-path (#PCDATA)>
+
+<!--
+The images-path value sets the location of the images path for the theme. For
+example, the images path for the Classic theme is "/html/themes/classic/images".
+This means you can find images for the Classic theme in
+/docroot/html/themes/classic/images.
+
+For convenience, the images-path attribute can be referenced in the rest of the
+theme element as ${images-path}.
+
+The default value is "${root-path}/images".
+-->
+<!ELEMENT images-path (#PCDATA)>
+
+<!--
+The javascript-path value sets the location of the JavaScript path for the
+theme. For example, the JavaScript path for the Classic theme is
+"/html/themes/classic/javascript". This means you can find JavaScript for the
+Classic theme in /docroot/html/themes/classic/javascript.
+
+For convenience, the javascript-path attribute can be referenced in the rest of
+the theme element as ${javascript-path}.
+
+The default value is "${root-path}/javascript".
+-->
+<!ELEMENT javascript-path (#PCDATA)>
+
+<!--
+The virtual-path value sets the virtual path used to fetch the CSS, images, and
+JavaScript files. By default, the portal returns the theme's servlet path. This
+setting allows you to override it.
+
+For example, suppose your theme is deployed to the servlet path "/test-theme"
+and your theme image-path is "/xyz/images". By default, the portal will return
+"/test-theme/xyz/images" for the path of the theme's images. You can override it
+by setting virtual-path to "/virtual" and have the portal return
+"/virtual/xyz/images". This is useful when you want all static files to be
+served by Apache for better performance.
+
+The default value is "" which means this is not used.
+-->
+<!ELEMENT virtual-path (#PCDATA)>
+
+<!--
+The templates-extension value sets the file extension of the files located in
+the templates directory. If you specify the value "jsp", then the portal will
+look for files such as portal_nav.jsp in the templates directory. If you specify
+the value "vm", then the portal will look for files such as portal_nav.vm in the
+templates directory. Specifying "vm" means you can use Velocity to create your
+theme. New extensions will be supported in the future to allow for even more
+flexibility in the creation of themes.
+
+The default value is "vm".
+-->
+<!ELEMENT template-extension (#PCDATA)>
+
+<!--
+The settings element contain a list of settings or properties that are available
+to the theme object at runtime. They are described with a key value pair.
+
+For example, you can access it with the command: theme.getSetting("hello").
+-->
+<!ELEMENT settings (setting*)>
+
+<!--
+See the comments in the settings element.
+-->
+<!ELEMENT setting (#PCDATA)>
+
+<!--
+See the comments in the settings element.
+-->
+<!ATTLIST setting
+	key CDATA #REQUIRED
+	value CDATA #REQUIRED
+>
+
+<!--
+Set the wap-theme value to true if the theme is designed for cellular phones or
+other mobile devices. The default value is false.
+-->
+<!ELEMENT wap-theme (#PCDATA)>
+
+<!--
+The roles element contains a list of role names. Users which have any of these
+roles will be able to use this theme for their layouts and layout sets. Anyone
+can use this theme if no role names are set.
+-->
+<!ELEMENT roles (role-name)>
+
+<!--
+The role-name designates the name of a security role.
+-->
+<!ELEMENT role-name (#PCDATA)>
+
+<!--
+A theme can have many color schemes. It works very similar to Windows. The
+Windows XP theme has one set of color schemes, and the Windows Classic theme
+has another set of color schemes. Each color scheme references a css class name
+and defines an image path for the location of the color scheme's images.
+-->
+<!ELEMENT color-scheme (default-cs?, css-class, color-scheme-images-path?)>
+
+<!--
+The id attribute specifies the key for a color scheme that is unique for its
+parent theme. For convenience, the id attribute can be referenced in the rest of
+the color-scheme element as ${color-scheme-id}.
+
+The name attribute specifies the friendly name of a color scheme
+that is displayed to the user.
+-->
+<!ATTLIST color-scheme
+	id CDATA #REQUIRED
+	name CDATA #REQUIRED
+>
+
+<!--
+Set the default-cs value to true if this is the default color scheme. The
+default value is false.
+-->
+<!ELEMENT default-cs (#PCDATA)>
+
+<!--
+The css-class value is a css class name that represents the color scheme.
+
+For convenience, the css-class attribute can be referenced in the rest of the
+color-scheme element as ${css-class}.
+-->
+<!ELEMENT css-class (#PCDATA)>
+
+<!--
+The color-scheme-images-path value sets the location of the images path for the
+color scheme.
+
+For convenience, the color-scheme-images-path attribute can be referenced in the
+rest of the theme element as ${color-scheme-images-path}.
+
+The default value is "${root-path}/images/color_schemes/${css-class}".
+-->
+<!ELEMENT color-scheme-images-path (#PCDATA)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT layout-templates (standard?, custom?)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT standard (layout-template*)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT layout-template (template-path, wap-template-path, thumbnail-path?)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ATTLIST layout-template
+	id CDATA #REQUIRED
+	name CDATA #IMPLIED
+>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT template-path (#PCDATA)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT wap-template-path (#PCDATA)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT thumbnail-path (#PCDATA)>
+
+<!--
+See liferay-layout-templates_5_2_0.dtd.
+-->
+<!ELEMENT custom (layout-template*)>

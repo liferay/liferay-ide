@@ -1,0 +1,99 @@
+<!--
+<!DOCTYPE hook PUBLIC
+	"-//Liferay//DTD Hook 5.1.0//EN"
+	"http://www.liferay.com/dtd/liferay-hook_5_1_0.dtd">
+-->
+
+<!ELEMENT hook (event*, model-listener*, portal-properties?, custom-jsp-dir?,
+service*)>
+
+<!ELEMENT event (event-class, event-type)>
+
+<!ELEMENT event-class (#PCDATA)>
+
+<!ELEMENT event-type (#PCDATA)>
+
+<!ELEMENT model-listener (model-listener-class, model-name)>
+
+<!ELEMENT model-listener-class (#PCDATA)>
+
+<!ELEMENT model-name (#PCDATA)>
+
+<!--
+Not all portal properties can be overridden via a hook. The supported properties
+are:
+
+admin.default.group.names
+admin.default.role.names
+admin.default.user.group.names
+auth.forward.by.last.path
+auto.deploy.listeners
+application.startup.events
+auth.failure
+auth.max.failures
+auth.pipeline.post
+auth.pipeline.pre
+auth.public.paths
+auth.token.impl
+auto.login.hooks
+captcha.check.portal.create_account
+captcha.engine.impl
+convert.processes
+default.landing.page.path
+dl.hook.impl
+field.enable.com.liferay.portal.model.Contact.birthday
+field.enable.com.liferay.portal.model.Contact.male
+field.enable.com.liferay.portal.model.Organization.status
+hot.deploy.listeners
+javascript.fast.load
+layout.static.portlets.all
+layout.template.cache.enabled
+layout.types
+layout.user.private.layouts.auto.create
+layout.user.private.layouts.enabled
+layout.user.private.layouts.modifiable
+layout.user.public.layouts.auto.create
+layout.user.public.layouts.enabled
+layout.user.public.layouts.modifiable
+ldap.attrs.transformer.impl
+login.create.account.allow.custom.password
+login.events.post
+login.events.pre
+logout.events.post
+logout.events.pre
+mail.hook.impl
+my.places.show.community.private.sites.with.no.layouts
+my.places.show.community.public.sites.with.no.layouts
+my.places.show.organization.private.sites.with.no.layouts
+my.places.show.organization.public.sites.with.no.layouts
+my.places.show.user.private.sites.with.no.layouts
+my.places.show.user.public.sites.with.no.layouts
+passwords.passwordpolicytoolkit.generator
+passwords.passwordpolicytoolkit.static
+portlet.add.default.resource.check.enabled
+sanitizer.impl
+servlet.service.events.post
+servlet.service.events.pre
+session.phishing.protected.attributes
+terms.of.use.required
+theme.css.fast.load
+theme.images.fast.load
+theme.loader.new.theme.id.on.import
+theme.portlet.decorate.default
+theme.portlet.sharing.default
+theme.shortcut.icon
+upgrade.processes
+users.full.name.validator
+users.screen.name.always.autogenerate
+users.screen.name.generator
+users.screen.name.validator
+-->
+<!ELEMENT portal-properties (#PCDATA)>
+
+<!ELEMENT custom-jsp-dir (#PCDATA)>
+
+<!ELEMENT service (service-type, service-impl)>
+
+<!ELEMENT service-type (#PCDATA)>
+
+<!ELEMENT service-impl (#PCDATA)>

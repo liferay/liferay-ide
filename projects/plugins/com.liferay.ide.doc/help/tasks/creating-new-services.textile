@@ -1,0 +1,6 @@
+h1. Creating New Services
+
+# You can create a new service plug-in project with Liferay IDE by selecting Liferay Service from the Eclipse File menu. (File > New > Liferay Service). <br/><br/>!images/lide_new_service.png!<br/><br/>
+# First, you have to specify a name for your new service project.
+# A new service.xml will be generated for you by default. However, you may choose to use files that you have already created. Just browse to their location under Package path.
+# Finally, enter a namespace and an author, click Finish and your services should build for you.

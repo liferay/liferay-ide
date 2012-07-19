@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.compare,
  org.eclipse.ui.views,
- com.liferay.ide.common.core;bundle-version="2.0.0"
+ com.liferay.ide.core;bundle-version="2.0.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,

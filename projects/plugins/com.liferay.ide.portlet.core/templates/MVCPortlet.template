@@ -1,0 +1,69 @@
+<%  if (model.shouldGenerateOverride(DOABOUT_OVERRIDE)) { %>
+
+    public void doAbout(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+        
+        super.doAbout(renderRequest, renderResponse);
+    }<%  } else if (model.shouldGenerateOverride(DOCONFIG_OVERRIDE)) { %>
+
+    public void doConfig(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doConfig(renderRequest, renderResponse);
+    }
+<%  } else if (model.shouldGenerateOverride(DOEDIT_OVERRIDE)) { %>
+    
+    public void doEdit(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doEdit(renderRequest, renderResponse);
+    }<%  } else if (model.shouldGenerateOverride(DOEDITDEFAULTS_OVERRIDE)) { %>
+    
+    public void doEditDefaults(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doEditDefaults(renderRequest, renderResponse);
+    }
+<%  } else if (model.shouldGenerateOverride(DOEDITGUEST_OVERRIDE)) { %>
+    
+    public void doEditGuest(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+        
+        super.doEditGuest(renderRequest, renderResponse);
+    }
+<%  } else if (model.shouldGenerateOverride(DOHELP_OVERRIDE)) { %>
+    
+    public void doHelp(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doHelp(renderRequest, renderResponse);
+    }<%  } else if (model.shouldGenerateOverride(DOPREVIEW_OVERRIDE)) { %>
+
+    public void doPreview(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doPreview(renderRequest, renderResponse);
+    }
+<%  } else if (model.shouldGenerateOverride(DOPRINT_OVERRIDE)) { %>
+
+    public void doPrint(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doPrint(renderRequest, renderResponse);
+    }
+<%  } else if (model.shouldGenerateOverride(DOVIEW_OVERRIDE)) { %>
+    
+    public void doView(
+            RenderRequest renderRequest, RenderResponse renderResponse)
+        throws IOException, PortletException {
+
+        super.doView(renderRequest, renderResponse);
+    }<%  } %>

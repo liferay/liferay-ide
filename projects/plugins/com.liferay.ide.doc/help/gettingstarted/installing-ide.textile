@@ -1,0 +1,38 @@
+h1. Installing Liferay IDE
+
+{toc}
+
+h2. Introduction
+
+p. Liferay IDE is an extension for the Eclipse platform that supports development of plug-in projects for the Liferay Portal platform. Its available as a set of Eclipse plug-ins installable from an update-site. The latest version supports developing 5 Liferay plug-in types: portlets, hooks, layout templates, themes, and EXT-style plug-ins. Liferay IDE requires the Eclipse Helios Java EE developer package.
+
+h2. Requirements
+
+p. Before getting started, the following are required:
+
+* Java 5.0 JRE
+* "Eclipse Helios Java EE for developers package":http://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/heliossr2 
+
+h2. Installation Steps
+
+# Install Eclipse Helios from link above 
+# Run eclipse executable (eclipse.exe)
+# When eclipse opens, go to Help > Install New Software...<br/><br/>!images/liferay_ide_install_1.png!<br/><br/>
+# In the "Work with" field, paste in one of the following update sites:
+## "http://releases.liferay.com/tools/ide/eclipse/helios/stable/":http://releases.liferay.com/tools/ide/eclipse/helios/stable/
+## "http://releases.liferay.com/tools/ide/eclipse/helios/nightly/":http://releases.liferay.com/tools/ide/eclipse/helios/nightly/ (Nightly builds are unstable but contain new features more quickly)
+# After pasting in URL press enter <br/><br/>!images/liferay_ide_install_1a.png!<br/><br/> 
+# The Liferay IDE features should be detected, select it before clicking Next <br/><br/>!images/liferay_ide_install_1b.png!<br/><br/>
+# After calculating dependencies, click Next to complete installation
+# After installation restart eclipse to verify install is complete
+# After restarting Eclipse go to Help > About and you should see a Icon badge for Liferay IDE that shows you have it properly installed.<br/><br/>!images/liferay_ide_install_1c.png!<br/><br/> 
+
+h2. Alternative installation
+
+# Instead of typing in URL you can download the archived update site from this link<br/><br/>"liferay-ide-eclipse-updatesite-1.2.2.zip":http://sourceforge.net/projects/lportal/files/Liferay%20IDE/1.2.2/liferay-ide-eclipse-updatesite-1.2.2.zip/download  <br/><br/>
+# In Add Site dialog, click the "Archive" button and browse to the location of the downloaded zip file.
+# Installation proceeds the same as previous section
+
+h2. Next Steps
+
+p. If installation was correct, you can go through the "Getting Started tutorial.":gettingstarted.html

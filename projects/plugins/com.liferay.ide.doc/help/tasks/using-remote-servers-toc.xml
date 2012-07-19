@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<toc topic="help/tasks/using-remote-servers.html" label="using-remote-servers">
+	<topic href="help/tasks/using-remote-servers.html" label="Using Remote Liferay Servers">
+		<topic href="help/tasks/using-remote-servers.html#Requirements" label="Requirements"></topic>
+		<topic href="help/tasks/using-remote-servers.html#Introduction" label="Introduction"></topic>
+		<topic href="help/tasks/using-remote-servers.html#ServerManagerPluginSetup" label="Server Manager Plugin Setup"></topic>
+		<topic href="help/tasks/using-remote-servers.html#RemoteLiferayServerAdapterSetup" label="Remote Liferay Server Adapter Setup"></topic>
+		<topic href="help/tasks/using-remote-servers.html#DeployprojecttoRemoteServer" label="Deploy project to Remote Server"></topic>
+		<topic href="help/tasks/using-remote-servers.html#ModifyRemoteServerSettings" label="Modify Remote Server Settings"></topic>
+	</topic>
+</toc>

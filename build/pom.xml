@@ -73,6 +73,7 @@
             </activation>
             <modules>
                 <module>../common</module>
+				<module>../projects</module>
                 <module>com.liferay.ide-repository</module>
             </modules>
         </profile>

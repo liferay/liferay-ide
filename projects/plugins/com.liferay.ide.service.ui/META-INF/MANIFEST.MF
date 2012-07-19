@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Service UI
+Bundle-SymbolicName: com.liferay.ide.service.ui;singleton:=true
+Bundle-Version: 2.0.0.qualifier
+Bundle-Activator: com.liferay.ide.service.ui.ServiceUI
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ com.liferay.ide.service.core,
+ org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="0.3.0",
+ org.eclipse.sapphire.ui;bundle-version="0.3.0",
+ org.eclipse.ui.views,
+ org.eclipse.help,
+ org.eclipse.ui.forms,
+ org.eclipse.ui.views.properties.tabbed,
+ com.liferay.ide.portlet.core,
+ org.eclipse.ui.editors,
+ com.liferay.ide.portlet.ui,
+ org.eclipse.sapphire.osgi;bundle-version="0.3.0",
+ org.eclipse.sapphire.workspace.ui;bundle-version="0.3.0",
+ org.eclipse.sapphire.platform;bundle-version="0.3.0",
+ org.eclipse.sapphire.ui.swt.gef;bundle-version="0.5.0",
+ org.eclipse.gef,
+ org.eclipse.ui.ide
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.service.ui

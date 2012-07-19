@@ -22,7 +22,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	
 	<groupId>com.liferay.ide.common</groupId>
 	<artifactId>plugins</artifactId>
-	<name>common.plugins</name>
+
+	<name>Liferay IDE Common Plugins</name>
 
 	<parent>	
 		<groupId>com.liferay.ide</groupId>
@@ -33,8 +34,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<packaging>pom</packaging>
 	
 	<modules>
-		<module>com.liferay.ide.common.core</module>
-		<module>com.liferay.ide.common.ui</module>
+		<module>com.liferay.ide.core</module>
+		<module>com.liferay.ide.freemarker</module>
+		<module>com.liferay.ide.ui</module>
 	</modules>
 </project>
 	

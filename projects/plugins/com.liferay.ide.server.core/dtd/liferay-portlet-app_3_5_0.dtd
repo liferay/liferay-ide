@@ -1,0 +1,250 @@
+<!--
+<!DOCTYPE liferay-portlet-app PUBLIC
+	"-//Liferay//DTD Portlet Application 3.5.0//EN"
+	"http://www.liferay.com/dtd/liferay-portlet-app_3_5_0.dtd">
+-->
+
+<!--
+The liferay-portlet-app element is the root of the deployment descriptor for
+a Liferay portlet application.
+-->
+<!ELEMENT liferay-portlet-app (portlet*, role-mapper*, custom-user-attribute*)>
+
+<!--
+The portlet element contains the declarative data of a portlet.
+-->
+<!ELEMENT portlet (portlet-name, struts-path?, indexer-class?, scheduler-class?,
+preferences-unique-per-layout?, preferences-owned-by-group?,
+use-default-template?, show-portlet-access-denied?, show-portlet-inactive?,
+restore-current-view?, ns-4-compatible?, instanceable?, narrow?, active?,
+include?)>
+
+<!--
+The portlet-name element contains the unique name of the portlet. This name must
+match the portlet-name specified in portlet.xml.
+-->
+<!ELEMENT portlet-name (#PCDATA)>
+
+<!--
+Supppose the struts-path value is "mail". This tells the portal that all
+requests with the path mail/* are considered part of this portlet's scope. Users
+who request paths that match mail/* will only be granted access if they also
+have access to this portlet. This is true for both portlet requests and regular
+servlet requests.
+-->
+<!ELEMENT struts-path (#PCDATA)>
+
+<!--
+The indexer-class value must be a class that implements
+com.liferay.util.lucene.Indexer and is called to create or update a search index
+for the portlet.
+
+See:
+
+http://www.liferay.com/documentation/api/util-java/com/liferay/util/lucene/Indexer.html
+http://www.liferay.com/documentation/api/portal-ejb/com/liferay/portlet/messageboards/util/Indexer.html
+http://lucene.apache.org
+-->
+<!ELEMENT indexer-class (#PCDATA)>
+
+<!--
+The scheduler-class value must be a class that implements
+com.liferay.portal.job.Scheduler and is called to schedule Quartz jobs for this
+portlet.
+
+See:
+
+http://www.liferay.com/documentation/api/portal-ejb/com/liferay/portal/job/Scheduler.html
+http://www.liferay.com/documentation/api/portal-ejb/com/liferay/portlet/calendar/job/Scheduler.html
+http://www.opensymphony.com/quartz
+-->
+<!ELEMENT scheduler-class (#PCDATA)>
+
+<!--
+Set the preferences-unique-per-layout value to true if the preferences for the
+portlet are unique across all pages. If set to false, the preferences for the
+portlet are shared across all pages. The default value is true.
+
+The preferences-unique-per-layout element is used in combination with the
+preferences-owned-by-group element. See the comments for the
+preferences-owned-by-group element for more information.
+-->
+<!ELEMENT preferences-unique-per-layout (#PCDATA)>
+
+<!--
+Set the preferences-owned-by-group value to true if the preferences for the
+portlet are owned by the group when the portlet is shown in a group page. If
+set to false, the preferences are owned by the user at all times. The default
+value is true.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to true and
+preferences-owned-by-group set to false. Users can set a different list of
+stocks for every personal page. Users can set a different list of stocks for
+every community page.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to false and
+preferences-owned-by-group set to false. Users can set one list of stocks to be
+shared across all personal pages. Users can set one list of stocks to be shared
+across a community's set of pages.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to true and
+preferences-owned-by-group set to true. Users can set a different list of stocks
+for every personal page. Administrators set the portlet preferences for users in
+a community page. Administrators can set a different list of stocks for every
+community page that are then shared by all users within a community.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to false and
+preferences-owned-by-group set to true. Users can set one list of stocks to be
+shared across all personal pages. Administrators set the portlet preferences for
+users in a community page. Administrators can set one list of stocks to be
+shared by all users across a community's set of pages.
+-->
+<!ELEMENT preferences-owned-by-group (#PCDATA)>
+
+<!--
+Set the use-default-template value to true if the portlet uses the default
+template to decorate and wrap content. Setting this to false allows the
+developer to own and maintain the portlet's entire outputted content. The
+default value is true.
+
+The most common use of this is if you want the portlet to look different from
+the other portlets or if you want the portlet to not have borders around the
+outputted content.
+-->
+<!ELEMENT use-default-template (#PCDATA)>
+
+<!--
+Set the show-portlet-access-denied value to true if users are shown the portlet
+with an access denied message if they do not have access to the portlet. If set
+to false, users are never shown the portlet if they do not have access to the
+portlet. The default value is set in portal.properties.
+
+See:
+
+http://www.liferay.com/page/guest/documentation/development/properties
+-->
+<!ELEMENT show-portlet-access-denied (#PCDATA)>
+
+<!--
+Set the show-portlet-inactive value to true if users are shown the portlet
+with an inactive message if the portlet is inactive. If set to false, users are
+never shown the portlet if the portlet is inactive. The default value is set in
+portal.properties.
+
+http://www.liferay.com/page/guest/documentation/development/properties
+-->
+<!ELEMENT show-portlet-inactive (#PCDATA)>
+
+<!--
+Set the restore-current-view value to true if the portlet restores to the
+current view when toggling between maximized and normal states. If set to false,
+the portlet will reset the current view when toggling between maximized and
+normal states. The default value is false.
+-->
+<!ELEMENT restore-current-view (#PCDATA)>
+
+<!--
+Set the ns-4-compatible value to true if the portlet is compatible with Netscape
+4. If set to false, the portlet will give a Netscape 4 not compatible error
+message to the user. The default value is true.
+-->
+<!ELEMENT ns-4-compatible (#PCDATA)>
+
+<!--
+Set the instanceable value to true if the portlet can appear multiple times on a
+page. If set to false, the portlet can only appear once on a page. The default
+value is false.
+-->
+<!ELEMENT instanceable (#PCDATA)>
+
+<!--
+Set the narrow value to true if the portlet is to show up in the narrow column.
+If set to false, the portlet will show up in the wide column. The default value
+is false.
+
+This value can be changed at runtime via the Admin portlet.
+-->
+<!ELEMENT narrow (#PCDATA)>
+
+<!--
+Set the active value to true if the portlet is active and available to users.
+If set to false, the portlet will not be active or available to users. The
+default value is true.
+
+This value can be changed at runtime via the Admin portlet.
+-->
+<!ELEMENT active (#PCDATA)>
+
+<!--
+Set the include value to true to if the portlet is available to the portal. If
+set to false, the portlet is not available to the portal. The default value is
+true.
+
+Portlets that are not included as part of the portal are never available to the
+user to be made active or inactive. As far the user knows, the portlets do not
+even exist in the system. This allows the Liferay developers to bundle a lot of
+portlets in one core package, and yet allow custom deployments to turn on or off
+individual portlets or sets of portlets. This follows the Siebel and Microsoft
+model of bundling everything in one core package, but using XML configuration or
+registry settings to turn on and off features or sets of features.
+
+We do not recommend that custom deployers modify the core source by removing
+specific portlets because this prevents an easy upgrade process in the future.
+The best way to turn on and off portlets is to set the include element. The
+advantage of this way of doing things is that it becomes very easy to deploy
+Liferay. All features are available in one package. The disadvantage is that by
+not utilizing all of the portlets, you are wasting disk space and may even take
+a small but static memory footprint. However, we feel that the extra disk space
+and memory usage is a cheap price to pay in order to provide an easy
+installation and upgrade path.
+-->
+<!ELEMENT include (#PCDATA)>
+
+<!--
+The role-mapper contains two names specified by role-name and role-link. The
+role-name value must be a role specified in portlet.xml. The role-link value
+must be the name of a Liferay role that exists in the database. The role-mapper
+element pairs up these two values to map roles from portlet.xml to roles in
+the Liferay database.
+
+This is needed because Liferay roles may contain spaces whereas roles in
+portlet.xml cannot contain spaces. This also adds extra flexibility where the
+portlet vendor does not need to have any knowledge about Liferay's roles.
+-->
+<!ELEMENT role-mapper (role-name, role-link)>
+
+<!--
+See the comments in role-mapper element.
+-->
+<!ELEMENT role-name (#PCDATA)>
+
+<!--
+See the comments in role-mapper element.
+-->
+<!ELEMENT role-link (#PCDATA)>
+
+<!--
+The custom-user-attribute contains a list of names that are retrieved using a
+custom class that extends com.liferay.portlet.CustomUserAttributes.
+
+Download the sample hot deployable portlet WAR named test.war. Look for the
+class com.liferay.portlet.teststruts.TestStrutsUserAttributes to see how it
+associates the custom user attribute "user.name.test" with the value
+"Test Name". This class could be modified to read custom user attributes from
+another datasource that may be a database, a LDAP server, or a web service.
+
+See:
+
+http://www.liferay.com/page/guest/documentation/development/hot_deploy
+-->
+<!ELEMENT custom-user-attribute (name+, custom-class)>
+
+<!--
+See the comments in custom-user-attribute element.
+-->
+<!ELEMENT name (#PCDATA)>
+
+<!--
+See the comments in custom-user-attribute element.
+-->
+<!ELEMENT custom-class (#PCDATA)>

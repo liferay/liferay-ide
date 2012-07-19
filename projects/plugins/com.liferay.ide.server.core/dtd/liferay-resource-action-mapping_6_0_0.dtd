@@ -1,0 +1,174 @@
+<!--
+<!DOCTYPE resource-action-mapping PUBLIC
+	"-//Liferay//DTD Resource Action Mapping 6.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-resource-action-mapping_6_0_0.dtd">
+-->
+
+<!--
+The resource-action-mapping is the root of the deployment descriptor for a
+resource action descriptor that is used to define actions that are supported
+on portal resources such as portlets and models.
+-->
+<!ELEMENT resource-action-mapping (portlet-resource*, model-resource*,
+resource*) >
+
+<!--
+The portlet-resource element defines the permissions of the portlet.
+-->
+<!ELEMENT portlet-resource (portlet-name, permissions?) >
+
+<!--
+The portlet-name element is the name of the portlet.
+-->
+<!ELEMENT portlet-name (#PCDATA) >
+
+<!--
+The permissions define the default permissions granted and unsupported to
+community members, guests users, and layout managers.
+-->
+<!ELEMENT permissions (supports, community-defaults?, guest-defaults?,
+guest-unsupported?, layout-manager?, owner-defaults?) >
+
+<!--
+The supports element defines the actions supported by this resource.
+-->
+<!ELEMENT supports (action-key*) >
+
+<!--
+The action-key element defines the name of the action. The name will be
+translated as specified in Language.properties. For example, if the action key
+is "VIEW", then the key in Language.properties will be "action.VIEW".
+-->
+
+<!ELEMENT action-key (#PCDATA) >
+
+<!--
+The community-defaults element specifies the actions that community members are
+permitted to perform by default.
+-->
+<!ELEMENT community-defaults (action-key*) >
+
+<!--
+The guest-defaults element specifies the actions that guest users are permitted
+to perform by default.
+-->
+<!ELEMENT guest-defaults (action-key*) >
+
+<!--
+The guest-unsupported element specifies the actions that guests are never
+permitted to perform. This disables the ability to assign permissions for these
+actions. Only define actions here if you wish to prevent anyone from granting
+permissions to perform these actions.
+-->
+<!ELEMENT guest-unsupported (action-key*) >
+
+<!--
+The layout-manager element specifies the actions that layout managers are
+permitted to perform. If omitted, then layout-managers are granted permissions
+on all supported actions. If included, then layout managers can only perform
+actions specified in this element.
+-->
+<!ELEMENT layout-manager (action-key*) >
+
+<!--
+The owner-defaults element specifies the actions that the creator of the
+resource is permitted to perform. If omitted, then owners are granted
+permissions on all supported actions.
+-->
+<!ELEMENT owner-defaults (action-key*) >
+
+<!--
+The model-resource element defines the permissions and social equity rules of
+the model.
+-->
+<!ELEMENT model-resource (model-name, portlet-ref, permissions?,
+social-equity?) >
+
+<!--
+The model-name element is the name of the model.
+-->
+<!ELEMENT model-name (#PCDATA) >
+
+<!--
+The portlet-ref element is the name of the portlet that the model belongs to.
+-->
+<!ELEMENT portlet-ref (portlet-name*) >
+
+<!--
+The social-equity element specifies the social equity mappings for different
+actions that can be performed on the the model.
+-->
+<!ELEMENT social-equity (social-equity-mapping*) >
+
+<!--
+The social-equity-mapping element specifies the social equity values that
+can be applied to a particular action on the model.
+-->
+<!ELEMENT social-equity-mapping (action-key, information-daily-limit?,
+information-value?, information-lifespan?, participation-daily-limit?,
+participation-value?, participation-lifespan?, social-activity-mapping?,
+unique?) >
+
+<!--
+The information-daily-limit entity specifies the amount of added information
+(information-value) that can be applied to a user's social score for the action
+on an asset and in turn to its owner's contribution score on a daily basis.
+-->
+<!ELEMENT information-daily-limit (#PCDATA) >
+
+<!--
+The information-value specifies the value of contributing information added to
+the asset each time the action is perfomed. Information-daily-limit may affect
+this setting.
+-->
+<!ELEMENT information-value (#PCDATA) >
+
+<!--
+The information-lifespan entity specifies the length of time in days over which
+the corresponding information-value is linearly decreased to zero.
+-->
+<!ELEMENT information-lifespan (#PCDATA) >
+
+<!--
+The participation-daily-limit entity specifies the amount of participation
+(participation-value) that can be applied to a user's participation score for
+the action on an asset on a daily basis.
+-->
+<!ELEMENT participation-daily-limit (#PCDATA) >
+
+<!--
+The participation-value entity specifies the value added to the user's
+participation score for performing the action.
+-->
+<!ELEMENT participation-value (#PCDATA) >
+
+<!--
+The participation-lifespan entity specifies the length of time in days over
+which the corresponding participation-value is linearly decreased to zero.
+-->
+<!ELEMENT participation-lifespan (#PCDATA) >
+
+<!--
+-->
+<!ELEMENT social-activity-mapping (#PCDATA) >
+
+<!ATTLIST social-activity-mapping class CDATA #REQUIRED >
+
+<!--
+The unique element specifies whether the action will provide value to the
+user's or asset's score if it is performed more than once on the same asset
+by the user.
+-->
+<!ELEMENT unique (#PCDATA) >
+
+<!--
+The resource element specifies an external file that contains
+resource-action-mappings.
+-->
+<!ELEMENT resource EMPTY >
+
+<!--
+The attribute file specifies the external file that should be loaded to define
+resource actions.
+-->
+<!ATTLIST resource file CDATA #REQUIRED >

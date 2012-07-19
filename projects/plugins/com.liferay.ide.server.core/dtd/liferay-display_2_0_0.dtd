@@ -1,0 +1,22 @@
+<!--
+This is the XML DTD for the DISPLAY deployment descriptor.
+
+<!DOCTYPE portlets PUBLIC
+	"-//Liferay//DTD DISPLAY 2.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-display_2_0_0.dtd">
+-->
+
+<!ELEMENT display (category+)>
+
+<!ELEMENT category (portlet+)>
+
+<!ATTLIST category
+	name CDATA #REQUIRED
+>
+
+<!ELEMENT portlet (#PCDATA)>
+
+<!ATTLIST portlet
+	id CDATA #REQUIRED
+	status CDATA #IMPLIED
+>

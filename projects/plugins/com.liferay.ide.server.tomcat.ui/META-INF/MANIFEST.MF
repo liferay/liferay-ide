@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Tomcat UI
+Bundle-SymbolicName: com.liferay.ide.server.tomcat.ui;singleton:=true
+Bundle-Version: 2.0.0.qualifier
+Bundle-Activator: com.liferay.ide.server.tomcat.ui.LiferayTomcatUIPlugin
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.debug.ui;visibility:=reexport,
+ org.eclipse.jdt.debug.ui;visibility:=reexport,
+ org.eclipse.jdt.launching;visibility:=reexport,
+ org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";visibility:=reexport,
+ com.liferay.ide.server.tomcat.core;visibility:=reexport,
+ org.eclipse.jst.server.tomcat.ui;bundle-version="[1.1.102,1.2.0)";visibility:=reexport,
+ org.eclipse.jst.server.tomcat.core;bundle-version="[1.1.106,1.2.0)";visibility:=reexport,
+ org.eclipse.core.expressions;visibility:=reexport,
+ com.liferay.ide.server.ui;visibility:=reexport,
+ com.liferay.ide.ui,
+ org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)";visibility:=reexport,
+ com.liferay.ide.server.core;visibility:=reexport,
+ com.liferay.ide.project.core;visibility:=reexport,
+ com.liferay.ide.project.ui;visibility:=reexport,
+ org.eclipse.ui.forms
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.server.tomcat.ui,
+ com.liferay.ide.server.tomcat.ui.command,
+ com.liferay.ide.server.tomcat.ui.editor,
+ com.liferay.ide.server.tomcat.ui.wizard
