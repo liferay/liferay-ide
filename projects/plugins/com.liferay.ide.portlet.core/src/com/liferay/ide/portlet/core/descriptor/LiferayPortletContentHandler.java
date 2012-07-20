@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,20 +20,22 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 /**
  * @author Greg Amerson
  */
-public class LiferayPortletContentHandler extends AbstractDefaultHandler {
+public class LiferayPortletContentHandler extends AbstractDefaultHandler
+{
 
-	public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Portlet Application ";
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Portlet Application ";
 
-	public static final String PUBLIC_ID_SUFFIX = "//EN";
+    public static final String PUBLIC_ID_SUFFIX = "//EN";
 
-	public static final String LIFERAY_PORTLET_APP = "liferay-portlet-app";
+    public static final String LIFERAY_PORTLET_APP = "liferay-portlet-app";
 
-	public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-portlet-app_";
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-portlet-app_";
 
-	public static final String SYSTEM_ID_SUFFIX = ".dtd";
+    public static final String SYSTEM_ID_SUFFIX = ".dtd";
 
-	public LiferayPortletContentHandler() {
-		super(PUBLIC_ID_PREFIX, PUBLIC_ID_SUFFIX, SYSTEM_ID_PREFIX, SYSTEM_ID_SUFFIX, LIFERAY_PORTLET_APP);
-	}
+    public LiferayPortletContentHandler()
+    {
+        super( PUBLIC_ID_PREFIX, PUBLIC_ID_SUFFIX, SYSTEM_ID_PREFIX, SYSTEM_ID_SUFFIX, LIFERAY_PORTLET_APP );
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,310 +41,355 @@ import org.eclipse.jdt.launching.JavaRuntime;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( {
-	"restriction", "rawtypes", "unchecked"
-})
-public abstract class LaunchHelper implements IDebugEventSetListener {
+@SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
+public abstract class LaunchHelper implements IDebugEventSetListener
+{
 
-	protected String[] launchArgs = new String[0];
+    protected String[] launchArgs = new String[0];
 
-	protected boolean launchCaptureInConsole = true;
-	
-	protected String launchConfigTypeId;
+    protected boolean launchCaptureInConsole = true;
 
-	protected boolean launchInBackground = true;
+    protected String launchConfigTypeId;
 
-	protected boolean launchIsPrivate = true;
+    protected boolean launchInBackground = true;
 
-	protected boolean launchSync = true;
-	
-	protected String mainClass;
+    protected boolean launchIsPrivate = true;
 
-	protected String mode = ILaunchManager.RUN_MODE;
+    protected boolean launchSync = true;
 
-	protected ILaunch runningLaunch;
+    protected String mainClass;
 
+    protected String mode = ILaunchManager.RUN_MODE;
 
-	public LaunchHelper(String launchConfigTypeId) {
-		this.launchConfigTypeId = launchConfigTypeId;
-	}
+    protected ILaunch runningLaunch;
 
-	public ILaunchConfigurationWorkingCopy createLaunchConfiguration()
-		throws CoreException {
+    public LaunchHelper( String launchConfigTypeId )
+    {
+        this.launchConfigTypeId = launchConfigTypeId;
+    }
 
-		ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+    public ILaunchConfigurationWorkingCopy createLaunchConfiguration() throws CoreException
+    {
+        ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 
-		ILaunchConfigurationType type = manager.getLaunchConfigurationType(this.launchConfigTypeId);
+        ILaunchConfigurationType type = manager.getLaunchConfigurationType( this.launchConfigTypeId );
 
-		String name =
-			DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(getNewLaunchConfigurationName());
+        String name =
+            DebugPlugin.getDefault().getLaunchManager().generateLaunchConfigurationName(
+                getNewLaunchConfigurationName() );
 
-		ILaunchConfigurationWorkingCopy launchConfig = type.newInstance(null, name);
+        ILaunchConfigurationWorkingCopy launchConfig = type.newInstance( null, name );
 
-		launchConfig.setAttribute(IDebugUIConstants.ATTR_LAUNCH_IN_BACKGROUND, isLaunchInBackground());
-		launchConfig.setAttribute(IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, isLaunchCaptureInConsole());
-		launchConfig.setAttribute(IDebugUIConstants.ATTR_PRIVATE, isLaunchIsPrivate());
+        launchConfig.setAttribute( IDebugUIConstants.ATTR_LAUNCH_IN_BACKGROUND, isLaunchInBackground() );
+        launchConfig.setAttribute( IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, isLaunchCaptureInConsole() );
+        launchConfig.setAttribute( IDebugUIConstants.ATTR_PRIVATE, isLaunchIsPrivate() );
 
-		IRuntimeClasspathEntry[] classpath = getClasspath(launchConfig);
-		
-		List mementos = new ArrayList(classpath.length);
+        IRuntimeClasspathEntry[] classpath = getClasspath( launchConfig );
 
-		for (int i = 0; i < classpath.length; i++) {
-			IRuntimeClasspathEntry entry = classpath[i];
+        List mementos = new ArrayList( classpath.length );
 
-			mementos.add(entry.getMemento());
-		}
+        for( int i = 0; i < classpath.length; i++ )
+        {
+            IRuntimeClasspathEntry entry = classpath[i];
 
-		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
-		launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, mementos);
+            mementos.add( entry.getMemento() );
+        }
 
-		if (mainClass != null) {
-			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainClass);
-		}
+        launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false );
+        launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, mementos );
 
-		if (launchArgs != null && launchArgs.length > 0) {
-			StringBuilder sb = new StringBuilder();
+        if( mainClass != null )
+        {
+            launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainClass );
+        }
 
-			for (int i = 0; i < launchArgs.length; i++) {
-				sb.append("\"" + launchArgs[i] + "\" ");
-			}
+        if( launchArgs != null && launchArgs.length > 0 )
+        {
+            StringBuilder sb = new StringBuilder();
 
-			launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, sb.toString());
-		}
+            for( int i = 0; i < launchArgs.length; i++ )
+            {
+                sb.append( "\"" + launchArgs[i] + "\" " );
+            }
+
+            launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, sb.toString() );
+        }
+
+        return launchConfig;
+    }
+
+    public String[] getLaunchArgs()
+    {
+        return launchArgs;
+    }
+
+    public String getMainClass()
+    {
+        return mainClass;
+    }
+
+    public String getMode()
+    {
+        return mode;
+    }
+
+    public void handleDebugEvents( DebugEvent[] events )
+    {
+        for( DebugEvent event : events )
+        {
+            if( event.getSource() instanceof IProcess )
+            {
+                if( ( (IProcess) event.getSource() ).getLaunch().equals( this.runningLaunch ) &&
+                    event.getKind() == DebugEvent.TERMINATE )
+                {
+
+                    synchronized( this )
+                    {
+                        DebugPlugin.getDefault().removeDebugEventListener( this );
+
+                        // launchRunning = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isLaunchCaptureInConsole()
+    {
+        return launchCaptureInConsole;
+    }
+
+    public boolean isLaunchInBackground()
+    {
+        return launchInBackground;
+    }
+
+    public boolean isLaunchIsPrivate()
+    {
+        return launchIsPrivate;
+    }
+
+    public boolean isLaunchRunning()
+    {
+        return this.runningLaunch != null && !this.runningLaunch.isTerminated() &&
+            !this.runningLaunch.getProcesses()[0].isTerminated();
+    }
+
+    public boolean isLaunchSync()
+    {
+        return this.launchSync;
+    }
+
+    public void launch( ILaunchConfiguration config, String mode, IProgressMonitor monitor ) throws CoreException
+    {
+
+        if( config == null )
+        {
+            throw new IllegalArgumentException( "Launch config cannot be null" );
+        }
+
+        if( isLaunchSync() )
+        {
+            DebugPlugin.getDefault().addDebugEventListener( this );
+        }
+
+        ILaunch launch = config.launch( mode, monitor );
+
+        if( isLaunchSync() )
+        {
+            runningLaunch = launch;
+
+            try
+            {
+                while( isLaunchRunning() )
+                {
+                    Thread.sleep( 100 );
+                }
+            }
+            catch( InterruptedException e )
+            {
+                runningLaunch.terminate();
+            }
+            finally
+            {
+                runningLaunch = null;
+            }
+        }
+    }
 
-		return launchConfig;
-	}
+    public void launch( IProgressMonitor monitor ) throws CoreException
+    {
+        ILaunchConfigurationWorkingCopy config = createLaunchConfiguration();
 
-	public String[] getLaunchArgs() {
-		return launchArgs;
-	}
-
-	public String getMainClass() {
-		return mainClass;
-	}
-
-	public String getMode() {
-		return mode;
-	}
-
-	public void handleDebugEvents(DebugEvent[] events) {
-		for (DebugEvent event : events) {
-			if (event.getSource() instanceof IProcess) {
-				if (((IProcess) event.getSource()).getLaunch().equals(this.runningLaunch) &&
-					event.getKind() == DebugEvent.TERMINATE) {
-
-					synchronized (this) {
-						DebugPlugin.getDefault().removeDebugEventListener(this);
-
-//						launchRunning = false;
-					}
-				}
-			}
-		}
-	}
-
-	public boolean isLaunchCaptureInConsole() {
-		return launchCaptureInConsole;
-	}
-
-	public boolean isLaunchInBackground() {
-		return launchInBackground;
-	}
-
-	public boolean isLaunchIsPrivate() {
-		return launchIsPrivate;
-	}
-
-	public boolean isLaunchRunning() {
-		return this.runningLaunch != null && !this.runningLaunch.isTerminated() && !this.runningLaunch.getProcesses()[0].isTerminated();
-	}
-
-	public boolean isLaunchSync() {
-		return this.launchSync;
-	}
-
-	public void launch(ILaunchConfiguration config, String mode, IProgressMonitor monitor)
-		throws CoreException {
-
-		if (config == null) {
-			throw new IllegalArgumentException("Launch config cannot be null");
-		}
-
-		if (isLaunchSync()) {
-			DebugPlugin.getDefault().addDebugEventListener(this);
-		}
-
-		ILaunch launch = config.launch(mode, monitor);
-
-		if (isLaunchSync()) {
-			runningLaunch = launch;
-						
-			try {
-				while (isLaunchRunning()) {
-					Thread.sleep(100);
-				}
-			}
-			catch (InterruptedException e) {
-				runningLaunch.terminate();
-			}
-			finally {
-				runningLaunch = null;
-			}
-		}
-	}
-
-	public void launch(IProgressMonitor monitor)
-		throws CoreException {
-
-		ILaunchConfigurationWorkingCopy config = createLaunchConfiguration();
-
-		launch(config, mode, monitor);
-	}
-
-	public void setLaunchArgs(String[] launchArgs) {
-		this.launchArgs = launchArgs;
-	}
-
-	public void setLaunchCaptureInConsole(boolean launchCaptureInConsole) {
-		this.launchCaptureInConsole = launchCaptureInConsole;
-	}
-
-	public void setLaunchInBackground(boolean launchInBackground) {
-		this.launchInBackground = launchInBackground;
-	}
-
-	public void setLaunchIsPrivate(boolean launchIsPrivate) {
-		this.launchIsPrivate = launchIsPrivate;
-	}
-
-	public void setLaunchSync(boolean sync) {
-		this.launchSync = sync;
-	}
-
-	public void setMainClass(String mainClass) {
-		this.mainClass = mainClass;
-	}
-
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-
-	protected abstract void addUserEntries(ClasspathModel model)
-		throws CoreException;
-
-	protected IRuntimeClasspathEntry[] getClasspath(ILaunchConfigurationWorkingCopy config)
-		throws CoreException {
-
-		ClasspathModel model = new ClasspathModel();
-
-		config.setAttribute(
-			IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER, getClasspathProviderAttributeValue());
-
-		config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true);
-
-		IRuntimeClasspathEntry[] defaultEntries = JavaRuntime.computeUnresolvedRuntimeClasspath(config);
-
-		IRuntimeClasspathEntry entry;
-
-		for (int i = 0; i < defaultEntries.length; i++) {
-			entry = defaultEntries[i];
-
-			switch (entry.getClasspathProperty()) {
-
-			case IRuntimeClasspathEntry.USER_CLASSES:
-				model.addEntry(ClasspathModel.USER, entry);
-
-				break;
-
-			default:
-				model.addEntry(ClasspathModel.BOOTSTRAP, entry);
-
-				break;
-
-			}
-		}
-
-		addUserEntries(model);
-
-		return getClasspathEntries(model);
-	}
-
-	protected IRuntimeClasspathEntry[] getClasspathEntries(ClasspathModel model) {
-		IClasspathEntry[] boot = model.getEntries(ClasspathModel.BOOTSTRAP);
-
-		IClasspathEntry[] user = model.getEntries(ClasspathModel.USER);
-
-		List entries = new ArrayList(boot.length + user.length);
-
-		IClasspathEntry bootEntry;
-
-		IRuntimeClasspathEntry entry;
-
-		for (int i = 0; i < boot.length; i++) {
-			bootEntry = boot[i];
-
-			entry = null;
-
-			if (bootEntry instanceof ClasspathEntry) {
-				entry = ((ClasspathEntry) bootEntry).getDelegate();
-			}
-			else if (bootEntry instanceof IRuntimeClasspathEntry) {
-				entry = (IRuntimeClasspathEntry) boot[i];
-			}
-
-			if (entry != null) {
-				if (entry.getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES) {
-					entry.setClasspathProperty(IRuntimeClasspathEntry.BOOTSTRAP_CLASSES);
-				}
-
-				entries.add(entry);
-			}
-		}
-
-		IClasspathEntry userEntry;
-
-		for (int i = 0; i < user.length; i++) {
-			userEntry = user[i];
-
-			entry = null;
-
-			if (userEntry instanceof ClasspathEntry) {
-				entry = ((ClasspathEntry) userEntry).getDelegate();
-			}
-			else if (userEntry instanceof IRuntimeClasspathEntry) {
-				entry = (IRuntimeClasspathEntry) user[i];
-			}
-
-			if (entry != null) {
-				entry.setClasspathProperty(IRuntimeClasspathEntry.USER_CLASSES);
-
-				entries.add(entry);
-			}
-		}
-
-		return (IRuntimeClasspathEntry[]) entries.toArray(new IRuntimeClasspathEntry[entries.size()]);
-	}
-
-	protected String getClasspathProviderAttributeValue() {
-		return null;
-	}
-
-	protected IVMInstall getDefaultVMInstall(ILaunchConfiguration config) {
-		IVMInstall defaultVMInstall;
-
-		try {
-			defaultVMInstall = JavaRuntime.computeVMInstall(config);
-		}
-		catch (CoreException e) {
-			// core exception thrown for non-Java project
-			defaultVMInstall = JavaRuntime.getDefaultVMInstall();
-		}
-
-		return defaultVMInstall;
-	}
-
-	protected String getNewLaunchConfigurationName() {
-		return this.getClass().getName();
-	}
+        launch( config, mode, monitor );
+    }
+
+    public void setLaunchArgs( String[] launchArgs )
+    {
+        this.launchArgs = launchArgs;
+    }
+
+    public void setLaunchCaptureInConsole( boolean launchCaptureInConsole )
+    {
+        this.launchCaptureInConsole = launchCaptureInConsole;
+    }
+
+    public void setLaunchInBackground( boolean launchInBackground )
+    {
+        this.launchInBackground = launchInBackground;
+    }
+
+    public void setLaunchIsPrivate( boolean launchIsPrivate )
+    {
+        this.launchIsPrivate = launchIsPrivate;
+    }
+
+    public void setLaunchSync( boolean sync )
+    {
+        this.launchSync = sync;
+    }
+
+    public void setMainClass( String mainClass )
+    {
+        this.mainClass = mainClass;
+    }
+
+    public void setMode( String mode )
+    {
+        this.mode = mode;
+    }
+
+    protected abstract void addUserEntries( ClasspathModel model ) throws CoreException;
+
+    protected IRuntimeClasspathEntry[] getClasspath( ILaunchConfigurationWorkingCopy config ) throws CoreException
+    {
+        ClasspathModel model = new ClasspathModel();
+
+        config.setAttribute(
+            IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER, getClasspathProviderAttributeValue() );
+
+        config.setAttribute( IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, true );
+
+        IRuntimeClasspathEntry[] defaultEntries = JavaRuntime.computeUnresolvedRuntimeClasspath( config );
+
+        IRuntimeClasspathEntry entry;
+
+        for( int i = 0; i < defaultEntries.length; i++ )
+        {
+            entry = defaultEntries[i];
+
+            switch( entry.getClasspathProperty() )
+            {
+
+                case IRuntimeClasspathEntry.USER_CLASSES:
+                    model.addEntry( ClasspathModel.USER, entry );
+
+                    break;
+
+                default:
+                    model.addEntry( ClasspathModel.BOOTSTRAP, entry );
+
+                    break;
+
+            }
+        }
+
+        addUserEntries( model );
+
+        return getClasspathEntries( model );
+    }
+
+    protected IRuntimeClasspathEntry[] getClasspathEntries( ClasspathModel model )
+    {
+        IClasspathEntry[] boot = model.getEntries( ClasspathModel.BOOTSTRAP );
+
+        IClasspathEntry[] user = model.getEntries( ClasspathModel.USER );
+
+        List entries = new ArrayList( boot.length + user.length );
+
+        IClasspathEntry bootEntry;
+
+        IRuntimeClasspathEntry entry;
+
+        for( int i = 0; i < boot.length; i++ )
+        {
+            bootEntry = boot[i];
+
+            entry = null;
+
+            if( bootEntry instanceof ClasspathEntry )
+            {
+                entry = ( (ClasspathEntry) bootEntry ).getDelegate();
+            }
+            else if( bootEntry instanceof IRuntimeClasspathEntry )
+            {
+                entry = (IRuntimeClasspathEntry) boot[i];
+            }
+
+            if( entry != null )
+            {
+                if( entry.getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES )
+                {
+                    entry.setClasspathProperty( IRuntimeClasspathEntry.BOOTSTRAP_CLASSES );
+                }
+
+                entries.add( entry );
+            }
+        }
+
+        IClasspathEntry userEntry;
+
+        for( int i = 0; i < user.length; i++ )
+        {
+            userEntry = user[i];
+
+            entry = null;
+
+            if( userEntry instanceof ClasspathEntry )
+            {
+                entry = ( (ClasspathEntry) userEntry ).getDelegate();
+            }
+            else if( userEntry instanceof IRuntimeClasspathEntry )
+            {
+                entry = (IRuntimeClasspathEntry) user[i];
+            }
+
+            if( entry != null )
+            {
+                entry.setClasspathProperty( IRuntimeClasspathEntry.USER_CLASSES );
+
+                entries.add( entry );
+            }
+        }
+
+        return (IRuntimeClasspathEntry[]) entries.toArray( new IRuntimeClasspathEntry[entries.size()] );
+    }
+
+    protected String getClasspathProviderAttributeValue()
+    {
+        return null;
+    }
+
+    protected IVMInstall getDefaultVMInstall( ILaunchConfiguration config )
+    {
+        IVMInstall defaultVMInstall;
+
+        try
+        {
+            defaultVMInstall = JavaRuntime.computeVMInstall( config );
+        }
+        catch( CoreException e )
+        {
+            // core exception thrown for non-Java project
+            defaultVMInstall = JavaRuntime.getDefaultVMInstall();
+        }
+
+        return defaultVMInstall;
+    }
+
+    protected String getNewLaunchConfigurationName()
+    {
+        return this.getClass().getName();
+    }
 
 }

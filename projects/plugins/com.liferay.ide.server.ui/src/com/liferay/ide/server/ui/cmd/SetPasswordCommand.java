@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -17,28 +17,32 @@ import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class SetPasswordCommand extends RemoteServerCommand {
+public class SetPasswordCommand extends RemoteServerCommand
+{
 
-	protected String oldPassword;
-	protected String password;
+    protected String oldPassword;
+    protected String password;
 
-	public SetPasswordCommand( IRemoteServerWorkingCopy server, String password ) {
-		super( server, "Set Password" );
-		this.password = password;
-	}
+    public SetPasswordCommand( IRemoteServerWorkingCopy server, String password )
+    {
+        super( server, "Set Password" );
+        this.password = password;
+    }
 
-	/**
-	 * Execute setting the memory args
-	 */
-	public void execute() {
-		oldPassword = server.getPassword();
-		server.setPassword( password );
-	}
+    /**
+     * Execute setting the memory args
+     */
+    public void execute()
+    {
+        oldPassword = server.getPassword();
+        server.setPassword( password );
+    }
 
-	/**
-	 * Restore prior memoryargs
-	 */
-	public void undo() {
-		server.setPassword( oldPassword );
-	}
+    /**
+     * Restore prior memoryargs
+     */
+    public void undo()
+    {
+        server.setPassword( oldPassword );
+    }
 }

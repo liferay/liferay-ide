@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,202 +28,234 @@ import java.io.File;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class BinaryProjectRecord {
+public class BinaryProjectRecord
+{
 
-	private String binaryName;
-	private File binaryFile;
-	private String displayName;
-	private String filePath;
-	private String liferayVersion;
-	boolean conflicts;
-	boolean isHook;
-	boolean isTheme;
-	boolean isPortlet;
-	boolean isLayoutTpl;
-	boolean isExt;
+    private String binaryName;
+    private File binaryFile;
+    private String displayName;
+    private String filePath;
+    private String liferayVersion;
+    boolean conflicts;
+    boolean isHook;
+    boolean isTheme;
+    boolean isPortlet;
+    boolean isLayoutTpl;
+    boolean isExt;
 
-	public BinaryProjectRecord( File binaryFile ) {
-		this.binaryFile = binaryFile;
-		setNames();
-	}
+    public BinaryProjectRecord( File binaryFile )
+    {
+        this.binaryFile = binaryFile;
+        setNames();
+    }
 
-	private void setNames() {
-		if ( binaryFile != null ) {
-			binaryName = binaryFile.getName();
-			filePath = binaryFile.getAbsolutePath();
-			setPluginProperties();
-		}
+    private void setNames()
+    {
+        if( binaryFile != null )
+        {
+            binaryName = binaryFile.getName();
+            filePath = binaryFile.getAbsolutePath();
+            setPluginProperties();
+        }
 
-	}
+    }
 
-	private void setPluginProperties() {
-		if ( binaryName != null ) {
-			int index = -1;
-			if ( binaryName.contains( HOOK_PLUGIN_PROJECT_SUFFIX ) ) {
-				index = binaryName.indexOf( HOOK_PLUGIN_PROJECT_SUFFIX );
-				isHook = index != -1 ? true : false;
-			}
-			else if ( binaryName.contains( THEME_PLUGIN_PROJECT_SUFFIX ) ) {
-				index = binaryName.indexOf( THEME_PLUGIN_PROJECT_SUFFIX );
-				isTheme = index != -1 ? true : false;
-			}
-			else if ( binaryName.contains( PORTLET_PLUGIN_PROJECT_SUFFIX ) ) {
-				index = binaryName.indexOf( PORTLET_PLUGIN_PROJECT_SUFFIX );
-				isPortlet = index != -1 ? true : false;
-			}
-			else if ( binaryName.contains( LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ) {
-				index = binaryName.indexOf( LAYOUTTPL_PLUGIN_PROJECT_SUFFIX );
-				isLayoutTpl = index != -1 ? true : false;
-			}
-			else if ( binaryName.contains( EXT_PLUGIN_PROJECT_SUFFIX ) )
-			{
-				index = binaryName.indexOf( EXT_PLUGIN_PROJECT_SUFFIX );
-				isExt = index != -1 ? true : false;
-			}
-			if ( index != -1 ) {
-				displayName = binaryName.substring( 0, index );
-			}
-			index = binaryName.lastIndexOf( "-" );
-			if ( index != -1 ) {
-				liferayVersion = binaryName.substring( index + 1, binaryName.lastIndexOf( "." ) );
-			}
-		}
+    private void setPluginProperties()
+    {
+        if( binaryName != null )
+        {
+            int index = -1;
+            if( binaryName.contains( HOOK_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                index = binaryName.indexOf( HOOK_PLUGIN_PROJECT_SUFFIX );
+                isHook = index != -1 ? true : false;
+            }
+            else if( binaryName.contains( THEME_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                index = binaryName.indexOf( THEME_PLUGIN_PROJECT_SUFFIX );
+                isTheme = index != -1 ? true : false;
+            }
+            else if( binaryName.contains( PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                index = binaryName.indexOf( PORTLET_PLUGIN_PROJECT_SUFFIX );
+                isPortlet = index != -1 ? true : false;
+            }
+            else if( binaryName.contains( LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                index = binaryName.indexOf( LAYOUTTPL_PLUGIN_PROJECT_SUFFIX );
+                isLayoutTpl = index != -1 ? true : false;
+            }
+            else if( binaryName.contains( EXT_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                index = binaryName.indexOf( EXT_PLUGIN_PROJECT_SUFFIX );
+                isExt = index != -1 ? true : false;
+            }
+            if( index != -1 )
+            {
+                displayName = binaryName.substring( 0, index );
+            }
+            index = binaryName.lastIndexOf( "-" );
+            if( index != -1 )
+            {
+                liferayVersion = binaryName.substring( index + 1, binaryName.lastIndexOf( "." ) );
+            }
+        }
 
-	}
+    }
 
-	/**
-	 * @return the filePath
-	 */
-	public String getFilePath() {
-		return filePath;
-	}
+    /**
+     * @return the filePath
+     */
+    public String getFilePath()
+    {
+        return filePath;
+    }
 
-	/**
-	 * @param filePath
-	 *            the filePath to set
-	 */
-	public void setFilePath( String label ) {
-		this.filePath = label;
-	}
+    /**
+     * @param filePath
+     *            the filePath to set
+     */
+    public void setFilePath( String label )
+    {
+        this.filePath = label;
+    }
 
-	/**
-	 * @return the binaryName
-	 */
-	public String getBinaryName() {
-		return binaryName;
-	}
+    /**
+     * @return the binaryName
+     */
+    public String getBinaryName()
+    {
+        return binaryName;
+    }
 
-	/**
-	 * @param binaryName
-	 *            the binaryName to set
-	 */
-	public void setBinaryName( String binaryName ) {
-		this.binaryName = binaryName;
-	}
+    /**
+     * @param binaryName
+     *            the binaryName to set
+     */
+    public void setBinaryName( String binaryName )
+    {
+        this.binaryName = binaryName;
+    }
 
-	/**
-	 * @return the binaryFile
-	 */
-	public File getBinaryFile() {
-		return binaryFile;
-	}
+    /**
+     * @return the binaryFile
+     */
+    public File getBinaryFile()
+    {
+        return binaryFile;
+    }
 
-	/**
-	 * @param binaryFile
-	 *            the binaryFile to set
-	 */
-	public void setBinaryFile( File binaryFile ) {
-		this.binaryFile = binaryFile;
-	}
+    /**
+     * @param binaryFile
+     *            the binaryFile to set
+     */
+    public void setBinaryFile( File binaryFile )
+    {
+        this.binaryFile = binaryFile;
+    }
 
-	/**
-	 * @return the displayName
-	 */
-	public String getDisplayName() {
-		return displayName;
-	}
+    /**
+     * @return the displayName
+     */
+    public String getDisplayName()
+    {
+        return displayName;
+    }
 
-	/**
-	 * @param displayName
-	 *            the displayName to set
-	 */
-	public void setDisplayName( String liferayPluginName ) {
-		this.displayName = liferayPluginName;
-	}
+    /**
+     * @param displayName
+     *            the displayName to set
+     */
+    public void setDisplayName( String liferayPluginName )
+    {
+        this.displayName = liferayPluginName;
+    }
 
-	/**
-	 * @return the conflicts
-	 */
-	public boolean isConflicts() {
-		return conflicts;
-	}
+    /**
+     * @return the conflicts
+     */
+    public boolean isConflicts()
+    {
+        return conflicts;
+    }
 
-	/**
-	 * @param conflicts
-	 *            the conflicts to set
-	 */
-	public void setConflicts( boolean hasConflicts ) {
-		this.conflicts = hasConflicts;
-	}
+    /**
+     * @param conflicts
+     *            the conflicts to set
+     */
+    public void setConflicts( boolean hasConflicts )
+    {
+        this.conflicts = hasConflicts;
+    }
 
-	/**
-	 * @return the liferayVersion
-	 */
-	public String getLiferayVersion() {
-		return liferayVersion;
-	}
+    /**
+     * @return the liferayVersion
+     */
+    public String getLiferayVersion()
+    {
+        return liferayVersion;
+    }
 
-	/**
-	 * @return the isHook
-	 */
-	public boolean isHook() {
-		return isHook;
-	}
+    /**
+     * @return the isHook
+     */
+    public boolean isHook()
+    {
+        return isHook;
+    }
 
-	/**
-	 * @return the isTheme
-	 */
-	public boolean isTheme() {
-		return isTheme;
-	}
+    /**
+     * @return the isTheme
+     */
+    public boolean isTheme()
+    {
+        return isTheme;
+    }
 
-	/**
-	 * @return the isPortlet
-	 */
-	public boolean isPortlet() {
-		return isPortlet;
-	}
+    /**
+     * @return the isPortlet
+     */
+    public boolean isPortlet()
+    {
+        return isPortlet;
+    }
 
-	/**
-	 * @return the isLayoutTpl
-	 */
-	public boolean isLayoutTpl() {
-		return isLayoutTpl;
-	}
+    /**
+     * @return the isLayoutTpl
+     */
+    public boolean isLayoutTpl()
+    {
+        return isLayoutTpl;
+    }
 
-	public String getLiferayPluginName() {
-		if ( isHook ) {
-			return getDisplayName() + HOOK_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if ( isLayoutTpl ) {
-			return getDisplayName() + LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if ( isPortlet ) {
-			return getDisplayName() + PORTLET_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if ( isTheme ) {
-			return getDisplayName() + THEME_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if ( isExt )
-		{
-			return getDisplayName() + EXT_PLUGIN_PROJECT_SUFFIX;
-		}
-		return null;
-	}
+    public String getLiferayPluginName()
+    {
+        if( isHook )
+        {
+            return getDisplayName() + HOOK_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( isLayoutTpl )
+        {
+            return getDisplayName() + LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( isPortlet )
+        {
+            return getDisplayName() + PORTLET_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( isTheme )
+        {
+            return getDisplayName() + THEME_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( isExt )
+        {
+            return getDisplayName() + EXT_PLUGIN_PROJECT_SUFFIX;
+        }
+        return null;
+    }
 
-	public boolean isExt()
-	{
-		return isExt;
-	}
+    public boolean isExt()
+    {
+        return isExt;
+    }
 
 }

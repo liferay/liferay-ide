@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,47 +29,52 @@ import org.eclipse.swt.widgets.Text;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog {
+@SuppressWarnings( "restriction" )
+public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog
+{
+    protected boolean ignoreEvent = false;
+    protected boolean listenerInstalled = false;
 
-	protected boolean ignoreEvent = false;
-	
-	protected boolean listenerInstalled = false;
+    public FilteredTypesSelectionDialogEx(
+        Shell shell, boolean multi, IRunnableContext context, IJavaSearchScope scope, int elementKinds )
+    {
+        super( shell, multi, context, scope, elementKinds );
 
-	public FilteredTypesSelectionDialogEx(
-		Shell shell, boolean multi, IRunnableContext context, IJavaSearchScope scope, int elementKinds) {
+        setInitialPattern( "**" );
+    }
 
-		super(shell, multi, context, scope, elementKinds);
+    @Override
+    public Control getPatternControl()
+    {
+        Control control = super.getPatternControl();
 
-		setInitialPattern("**");
-	}
+        if( control instanceof Text && !listenerInstalled )
+        {
+            final Text text = (Text) control;
+            text.addModifyListener( new ModifyListener()
+            {
 
-	@Override
-	public Control getPatternControl() {
-		Control control = super.getPatternControl();
+                public void modifyText( ModifyEvent e )
+                {
+                    if( ignoreEvent )
+                    {
+                        return;
+                    }
 
-		if (control instanceof Text && !listenerInstalled) {
-			final Text text = (Text) control;
-			text.addModifyListener(new ModifyListener() {
+                    if( CoreUtil.isNullOrEmpty( text.getText() ) )
+                    {
+                        ignoreEvent = true;
 
-				public void modifyText(ModifyEvent e) {
-					if (ignoreEvent) {
-						return;
-					}
+                        text.setText( "**" );
 
-					if (CoreUtil.isNullOrEmpty(text.getText())) {
-						ignoreEvent = true;
+                        ignoreEvent = false;
+                    }
+                }
+            } );
 
-						text.setText("**");
+            listenerInstalled = true;
+        }
 
-						ignoreEvent = false;
-					}
-				}
-			});
-
-			listenerInstalled = true;
-		}
-
-		return control;
-	}
+        return control;
+    }
 }

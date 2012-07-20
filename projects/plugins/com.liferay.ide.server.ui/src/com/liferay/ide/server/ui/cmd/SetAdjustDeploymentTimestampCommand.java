@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -15,25 +15,29 @@ import com.liferay.ide.server.remote.IRemoteServer;
 
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
-@SuppressWarnings("restriction")
-public class SetAdjustDeploymentTimestampCommand extends ServerCommand {
+@SuppressWarnings( "restriction" )
+public class SetAdjustDeploymentTimestampCommand extends ServerCommand
+{
 
-	protected boolean adjustDemploymentTimestamp;
-	protected boolean oldAdjustDemploymentTimestamp;
-	protected IRemoteServer remoteServer;
+    protected boolean adjustDemploymentTimestamp;
+    protected boolean oldAdjustDemploymentTimestamp;
+    protected IRemoteServer remoteServer;
 
-	public SetAdjustDeploymentTimestampCommand( IRemoteServer server, boolean adjustTimestamp ) {
-		super(null, "Set Deploy Custom Portlet XML");
-		this.remoteServer = server;
-		this.adjustDemploymentTimestamp = adjustTimestamp;
-	}
+    public SetAdjustDeploymentTimestampCommand( IRemoteServer server, boolean adjustTimestamp )
+    {
+        super( null, "Set Deploy Custom Portlet XML" );
+        this.remoteServer = server;
+        this.adjustDemploymentTimestamp = adjustTimestamp;
+    }
 
-	public void execute() {
-		oldAdjustDemploymentTimestamp = remoteServer.getAdjustDeploymentTimestamp();
-		remoteServer.setAdjustDeploymentTimestamp( adjustDemploymentTimestamp );
-	}
+    public void execute()
+    {
+        oldAdjustDemploymentTimestamp = remoteServer.getAdjustDeploymentTimestamp();
+        remoteServer.setAdjustDeploymentTimestamp( adjustDemploymentTimestamp );
+    }
 
-	public void undo() {
-		remoteServer.setAdjustDeploymentTimestamp( oldAdjustDemploymentTimestamp );
-	}
+    public void undo()
+    {
+        remoteServer.setAdjustDeploymentTimestamp( oldAdjustDemploymentTimestamp );
+    }
 }

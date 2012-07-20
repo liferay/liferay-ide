@@ -28,31 +28,36 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class UrlPathValidationService extends ValidationService {
+public class UrlPathValidationService extends ValidationService
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.services.ValidationService#validate()
-	 */
-	@Override
-	public Status validate() {
-		final ValueProperty valueProperty = context( ValueProperty.class );
-		final Value<?> value = context( IModelElement.class ).read( valueProperty );
-		final String urlPath = value.getText();
-		if ( urlPath != null && !urlPath.startsWith( "/" ) ) {
-			return Status.createErrorStatus( Resources.bind(
-				Resources.invalidUrlPath, valueProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false ) ) );
-		}
-		return Status.createOkStatus();
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.services.ValidationService#validate()
+     */
+    @Override
+    public Status validate()
+    {
+        final ValueProperty valueProperty = context( ValueProperty.class );
+        final Value<?> value = context( IModelElement.class ).read( valueProperty );
+        final String urlPath = value.getText();
+        if( urlPath != null && !urlPath.startsWith( "/" ) )
+        {
+            return Status.createErrorStatus( Resources.bind(
+                Resources.invalidUrlPath, valueProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false ) ) );
+        }
+        return Status.createOkStatus();
+    }
 
-	private static final class Resources extends NLS {
+    private static final class Resources extends NLS
+    {
 
-		public static String invalidUrlPath;
+        public static String invalidUrlPath;
 
-		static {
-			initializeMessages( UrlPathValidationService.class.getName(), Resources.class );
-		}
-	}
+        static
+        {
+            initializeMessages( UrlPathValidationService.class.getName(), Resources.class );
+        }
+    }
 
 }

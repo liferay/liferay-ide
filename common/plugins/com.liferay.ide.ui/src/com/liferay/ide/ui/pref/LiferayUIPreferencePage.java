@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,106 +44,124 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+@SuppressWarnings( "restriction" )
+public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
+{
 
-	public LiferayUIPreferencePage() {
-		setImageDescriptor(LiferayUIPlugin.getDefault().getImageDescriptor(LiferayUIPlugin.IMG_LIFERAY_ICON_SMALL));
-	}
+    public LiferayUIPreferencePage()
+    {
+        setImageDescriptor( LiferayUIPlugin.getDefault().getImageDescriptor( LiferayUIPlugin.IMG_LIFERAY_ICON_SMALL ) );
+    }
 
-	public LiferayUIPreferencePage(String title) {
-		super(title);
-	}
+    public LiferayUIPreferencePage( String title )
+    {
+        super( title );
+    }
 
-	public LiferayUIPreferencePage(String title, ImageDescriptor image) {
-		super(title, image);
-	}
+    public LiferayUIPreferencePage( String title, ImageDescriptor image )
+    {
+        super( title, image );
+    }
 
-	public void init(IWorkbench workbench) {
-		noDefaultAndApplyButton();
-	}
+    public void init( IWorkbench workbench )
+    {
+        noDefaultAndApplyButton();
+    }
 
-	@Override
-	protected Control createContents(final Composite parent) {
-		Composite pageParent = new Composite(parent, SWT.NONE);
-		pageParent.setLayout(GridLayoutFactory.swtDefaults().create());
+    @Override
+    protected Control createContents( final Composite parent )
+    {
+        Composite pageParent = new Composite( parent, SWT.NONE );
+        pageParent.setLayout( GridLayoutFactory.swtDefaults().create() );
 
-		Group group = new Group(pageParent, SWT.NONE);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		group.setText("Liferay shortcuts");
-		group.setLayout(new GridLayout(1, false));
+        Group group = new Group( pageParent, SWT.NONE );
+        group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+        group.setText( "Liferay shortcuts" );
+        group.setLayout( new GridLayout( 1, false ) );
 
-		Hyperlink link = new Hyperlink(group, SWT.NULL);
-		link.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
-		link.setUnderlined(true);
-		link.setText("Configure installed Liferay Plugin SDKs.");
-		link.addHyperlinkListener(new HyperlinkAdapter() {
+        Hyperlink link = new Hyperlink( group, SWT.NULL );
+        link.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
+        link.setUnderlined( true );
+        link.setText( "Configure installed Liferay Plugin SDKs." );
+        link.addHyperlinkListener( new HyperlinkAdapter()
+        {
 
-			public void linkActivated(HyperlinkEvent e) {
-				final IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
+            public void linkActivated( HyperlinkEvent e )
+            {
+                final IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
 
-				parent.getDisplay().asyncExec(new Runnable() {
+                parent.getDisplay().asyncExec( new Runnable()
+                {
 
-					public void run() {
-						container.openPage("com.liferay.ide.common.sdk.preferences.installedSDKs", null);
-					}
+                    public void run()
+                    {
+                        container.openPage( "com.liferay.ide.common.sdk.preferences.installedSDKs", null );
+                    }
 
-				});
-			}
+                } );
+            }
 
-		});
+        } );
 
-		Hyperlink link2 = new Hyperlink(group, SWT.NULL);
-		link2.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
-		link2.setUnderlined(true);
-		link2.setText("Create a new Liferay runtime environment.");
-		link2.addHyperlinkListener(new HyperlinkAdapter() {
+        Hyperlink link2 = new Hyperlink( group, SWT.NULL );
+        link2.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
+        link2.setUnderlined( true );
+        link2.setText( "Create a new Liferay runtime environment." );
+        link2.addHyperlinkListener( new HyperlinkAdapter()
+        {
 
-			public void linkActivated(HyperlinkEvent e) {
-				ServerUIUtil.showNewRuntimeWizard(
-					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay.");
-			}
+            public void linkActivated( HyperlinkEvent e )
+            {
+                ServerUIUtil.showNewRuntimeWizard(
+                    LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." );
+            }
 
-		});
+        } );
 
-		Hyperlink link3 = new Hyperlink(group, SWT.NULL);
-		link3.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_BLUE));
-		link3.setUnderlined(true);
-		link3.setText("Create a new Liferay server.");
-		link3.addHyperlinkListener(new HyperlinkAdapter() {
+        Hyperlink link3 = new Hyperlink( group, SWT.NULL );
+        link3.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
+        link3.setUnderlined( true );
+        link3.setText( "Create a new Liferay server." );
+        link3.addHyperlinkListener( new HyperlinkAdapter()
+        {
 
-			public void linkActivated(HyperlinkEvent e) {
-				ServerUIUtil.showNewServerWizard(
-					LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay.");
-			}
+            public void linkActivated( HyperlinkEvent e )
+            {
+                ServerUIUtil.showNewServerWizard(
+                    LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." );
+            }
 
-		});
+        } );
 
-		group = new Group(pageParent, SWT.NONE);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		group.setText("Message dialogs");
-		group.setLayout(new GridLayout(2, false));
+        group = new Group( pageParent, SWT.NONE );
+        group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+        group.setText( "Message dialogs" );
+        group.setLayout( new GridLayout( 2, false ) );
 
-		Label label = new Label(group, SWT.NONE);
-		label.setText("Clean all 'do not show again' settings and show all hidden dialogs again.");
+        Label label = new Label( group, SWT.NONE );
+        label.setText( "Clean all 'do not show again' settings and show all hidden dialogs again." );
 
-		final Button button = new Button(group, SWT.PUSH);
-		button.setText("Clear");
-		button.addSelectionListener(new SelectionAdapter() {
+        final Button button = new Button( group, SWT.PUSH );
+        button.setText( "Clear" );
+        button.addSelectionListener( new SelectionAdapter()
+        {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				try {
-					LiferayUIPlugin.clearAllPersistentSettings();
-				}
-				catch (BackingStoreException e1) {
-					MessageDialog.openError(button.getShell(), "Liferay Preferences", "Unable to reset settings.");
-				}
-			}
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                try
+                {
+                    LiferayUIPlugin.clearAllPersistentSettings();
+                }
+                catch( BackingStoreException e1 )
+                {
+                    MessageDialog.openError( button.getShell(), "Liferay Preferences", "Unable to reset settings." );
+                }
+            }
 
-		});
+        } );
 
-		return pageParent;
-	}
+        return pageParent;
+    }
 
 }

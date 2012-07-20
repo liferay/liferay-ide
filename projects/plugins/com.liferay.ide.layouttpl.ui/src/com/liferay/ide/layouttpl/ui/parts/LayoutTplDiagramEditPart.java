@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,174 +36,210 @@ import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
-@SuppressWarnings("unchecked")
-public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart {
+/**
+ * @author Gregory Amerson
+ */
+@SuppressWarnings( "rawtypes" )
+public class LayoutTplDiagramEditPart extends BaseGraphicalEditPart
+{
+    public static final int DIAGRAM_MARGIN = 10;
+    public static final int DEFAULT_COLUMN_HEIGHT = -1;
 
-	public static final int DIAGRAM_MARGIN = 10;
+    protected Panel diagramPanel;
 
-	public static final int DEFAULT_COLUMN_HEIGHT = -1;
+    public int getContainerWidth()
+    {
+        return diagramPanel.getSize().width - ( DIAGRAM_MARGIN * 2 );
+    }
 
-	protected Panel diagramPanel;
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        String prop = evt.getPropertyName();
 
-	public int getContainerWidth() {
-		return diagramPanel.getSize().width - (DIAGRAM_MARGIN * 2);
-	}
+        if( LayoutTplDiagram.ROW_ADDED_PROP.equals( prop ) || LayoutTplDiagram.ROW_REMOVED_PROP.equals( prop ) )
+        {
+            refreshChildren();
+            List rows = getChildren();
 
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
+            if( rows.size() > 0 )
+            {
+                for( Object row : rows )
+                {
+                    AbstractEditPart rowPart = (AbstractEditPart) row;
+                    List cols = rowPart.getChildren();
 
-		if (LayoutTplDiagram.ROW_ADDED_PROP.equals(prop) || LayoutTplDiagram.ROW_REMOVED_PROP.equals(prop)) {
-			refreshChildren();
-			List rows = getChildren();
+                    if( cols.size() > 0 )
+                    {
+                        for( Object col : cols )
+                        {
+                            ( (AbstractEditPart) col ).refresh();
+                        }
+                    }
 
-			if (rows.size() > 0) {
-				for (Object row : rows) {
-					AbstractEditPart rowPart = (AbstractEditPart) row;
-					List cols = rowPart.getChildren();
+                    ( (AbstractEditPart) row ).refresh();
+                }
+            }
+            refreshVisuals();
+        }
+    }
 
-					if (cols.size() > 0) {
-						for (Object col : cols) {
-							((AbstractEditPart) col).refresh();
-						}
-					}
+    protected void createEditPolicies()
+    {
+        // disallows the removal of this edit part from its parent
+        installEditPolicy( EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy() );
 
-					((AbstractEditPart) row).refresh();
-				}
-			}
-			refreshVisuals();
-		}
-	}
+        // handles constraint changes (e.g. moving and/or resizing) of model
+        // elements and creation of new model elements
+        installEditPolicy( EditPolicy.LAYOUT_ROLE, new LayoutTplDiagramLayoutEditPolicy() );
+    }
 
-	protected void createEditPolicies() {
-		// disallows the removal of this edit part from its parent
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
+    protected IFigure createFigure()
+    {
+        diagramPanel = new Panel();
+        configureDiagramPanel( diagramPanel );
 
-		// handles constraint changes (e.g. moving and/or resizing) of model
-		// elements and creation of new model elements
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new LayoutTplDiagramLayoutEditPolicy());
-	}
+        return diagramPanel;
+    }
 
-	protected IFigure createFigure() {
-		diagramPanel = new Panel();
-		configureDiagramPanel(diagramPanel);
+    protected void configureDiagramPanel( Panel panel )
+    {
+        GridLayout gridLayout = new GridLayout( 1, false );
+        gridLayout.marginHeight = 0;
+        gridLayout.marginWidth = 0;
+        gridLayout.verticalSpacing = 0;
 
-		return diagramPanel;
-	}
+        panel.setLayoutManager( gridLayout );
+        panel.setBackgroundColor( new Color( null, 10, 10, 10 ) );
+        panel.setBorder( new MarginBorder( DIAGRAM_MARGIN ) );
 
-	protected void configureDiagramPanel(Panel panel) {
-		GridLayout gridLayout = new GridLayout(1, false);
-		gridLayout.marginHeight = 0;
-		gridLayout.marginWidth = 0;
-		gridLayout.verticalSpacing = 0;
+        panel.addLayoutListener( new LayoutListener()
+        {
 
-		panel.setLayoutManager(gridLayout);
-		panel.setBackgroundColor(new Color(null, 10, 10, 10));
-		panel.setBorder(new MarginBorder(DIAGRAM_MARGIN));
+            public void invalidate( IFigure container )
+            {
+                shouldUpdateConstraints = true;
+            }
 
-		panel.addLayoutListener(new LayoutListener() {
+            public boolean layout( IFigure container )
+            {
+                return false;
+            }
 
-			public void invalidate(IFigure container) {
-				shouldUpdateConstraints = true;
-			}
+            public void postLayout( IFigure container )
+            {
+                if( shouldUpdateConstraints )
+                {
+                    updateColumnConstraints();
+                }
+            }
 
-			public boolean layout(IFigure container) {
-				return false;
-			}
+            public void remove( IFigure child )
+            {
+            }
 
-			public void postLayout(IFigure container) {
-				if (shouldUpdateConstraints) {
-					updateColumnConstraints();
-				}
-			}
+            public void setConstraint( IFigure child, Object constraint )
+            {
+            }
+        } );
+    }
 
-			public void remove(IFigure child) {
-			}
+    protected boolean shouldUpdateConstraints = false;
 
-			public void setConstraint(IFigure child, Object constraint) {
-			}
-		});
-	}
+    protected void updateColumnConstraints()
+    {
+        try
+        {
+            for( Object row : getChildren() )
+            {
+                PortletLayoutEditPart rowPart = (PortletLayoutEditPart) row;
 
-	protected boolean shouldUpdateConstraints = false;
+                for( Object col : ( (EditPart) row ).getChildren() )
+                {
+                    PortletColumnEditPart columnPart = (PortletColumnEditPart) col;
+                    Object constraint = rowPart.getLayoutConstraint( columnPart, columnPart.getFigure() );
 
-	protected void updateColumnConstraints() {
-		try {
-			for (Object row : getChildren()) {
-				PortletLayoutEditPart rowPart = (PortletLayoutEditPart) row;
+                    if( constraint instanceof GridData )
+                    {
+                        GridData gd = (GridData) constraint;
+                        int columnHeight = getPreferredColumnHeight();
 
-				for (Object col : ((EditPart) row).getChildren()) {
-					PortletColumnEditPart columnPart = (PortletColumnEditPart) col;
-					Object constraint = rowPart.getLayoutConstraint(columnPart, columnPart.getFigure());
+                        if( columnHeight > 0 )
+                        {
+                            gd.heightHint = columnHeight;
+                        }
+                        else
+                        {
+                            gd.heightHint = SWT.DEFAULT;
+                            gd.grabExcessVerticalSpace = true;
+                        }
 
-					if (constraint instanceof GridData) {
-						GridData gd = (GridData) constraint;
-						int columnHeight = getPreferredColumnHeight();
+                        rowPart.setLayoutConstraint( columnPart, columnPart.getFigure(), gd );
+                    }
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            // best effort don't log errors
+        }
+        finally
+        {
+            shouldUpdateConstraints = false;
+        }
+    }
 
-						if (columnHeight > 0) {
-							gd.heightHint = columnHeight;
-						}
-						else {
-							gd.heightHint = SWT.DEFAULT;
-							gd.grabExcessVerticalSpace = true;
-						}
+    protected LayoutTplDiagram getCastedModel()
+    {
+        return (LayoutTplDiagram) getModel();
+    }
 
-						rowPart.setLayoutConstraint(columnPart, columnPart.getFigure(), gd);
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-			// best effort don't log errors
-		}
-		finally {
-			shouldUpdateConstraints = false;
-		}
-	}
+    protected List<ModelElement> getModelChildren()
+    {
+        return getCastedModel().getRows(); // return a list of rows
+    }
 
-	protected LayoutTplDiagram getCastedModel() {
-		return (LayoutTplDiagram) getModel();
-	}
+    @Override
+    protected void refreshVisuals()
+    {
+        super.refreshVisuals();
+        List children = getChildren();
 
-	protected List<ModelElement> getModelChildren() {
-		return getCastedModel().getRows(); // return a list of rows
-	}
+        for( Object child : children )
+        {
+            if( child instanceof AbstractEditPart )
+            {
+                ( (AbstractEditPart) child ).refresh();
+            }
+        }
+    }
 
-	@Override
-	protected void refreshVisuals() {
-		super.refreshVisuals();
-		List children = getChildren();
+    public int getPreferredColumnHeight()
+    {
+        int retval = DEFAULT_COLUMN_HEIGHT;
 
-		for (Object child : children) {
-			if (child instanceof AbstractEditPart) {
-				((AbstractEditPart) child).refresh();
-			}
-		}
-	}
+        int numRows = getRowPartsCount();
 
-	public int getPreferredColumnHeight() {
-		int retval = DEFAULT_COLUMN_HEIGHT;
+        if( numRows > 1 )
+        {
+            Rectangle partBounds = getFigure().getBounds();
 
-		int numRows = getRowPartsCount();
+            if( partBounds.height > 0 )
+            {
+                int partHeight = partBounds.height;
+                int rowsHeight = partHeight - ( DIAGRAM_MARGIN * 2 );
+                int totalColumnsHeight = rowsHeight - ( getRowPartsCount() * PortletLayoutEditPart.COLUMN_SPACING * 2 );
+                int computedColumnHeight = totalColumnsHeight / numRows;
 
-		if (numRows > 1) {
-			Rectangle partBounds = getFigure().getBounds();
+                retval = computedColumnHeight;
+            }
+        }
 
-			if (partBounds.height > 0) {
-				int partHeight = partBounds.height;
-				int rowsHeight = partHeight - (DIAGRAM_MARGIN * 2);
-				int totalColumnsHeight = rowsHeight - (getRowPartsCount() * PortletLayoutEditPart.COLUMN_SPACING * 2);
-				int computedColumnHeight = totalColumnsHeight / numRows;
+        return retval;
+    }
 
-				retval = computedColumnHeight;
-			}
-		}
-
-		return retval;
-	}
-
-	protected int getRowPartsCount() {
-		return getChildren().size();
-	}
-
+    protected int getRowPartsCount()
+    {
+        return getChildren().size();
+    }
 
 }

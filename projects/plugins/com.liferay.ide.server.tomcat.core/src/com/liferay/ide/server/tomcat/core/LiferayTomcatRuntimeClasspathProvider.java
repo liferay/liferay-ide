@@ -33,122 +33,65 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspathProvider {
+@SuppressWarnings( "restriction" )
+public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspathProvider
+{
 
-	private static final String[] JARS = 
-    { 
-	    "portal-impl.jar",
-	    "portal-service.jar", 
-	    "support-tomcat.jar",
-    };
+    private static final String[] JARS = { "portal-impl.jar", "portal-service.jar", "support-tomcat.jar", };
 
-	public LiferayTomcatRuntimeClasspathProvider() {
-		super();
-	}
+    public LiferayTomcatRuntimeClasspathProvider()
+    {
+        super();
+    }
 
-	private IClasspathEntry[] getUpdatedJavadocEntries(
-		IClasspathEntry[] entries, ILiferayTomcatRuntime liferayTomcatRuntime )
-	{
-		List<IClasspathEntry> updatedEntries = new ArrayList<IClasspathEntry>();
-
-		String javadocURL = liferayTomcatRuntime.getJavadocURL();
-
-		if ( javadocURL != null )
-		{
-			for ( IClasspathEntry existingEntry : entries )
-			{
-				IPath path = existingEntry.getPath();
-
-				IClasspathEntry newEntry = null;
-
-				for ( String javadocJar : JARS )
-				{
-					if ( path.lastSegment().equalsIgnoreCase( javadocJar ) )
-					{
-						IClasspathAttribute[] extraAttrs = existingEntry.getExtraAttributes();
-
-						List<IClasspathAttribute> newExtraAttrs = new ArrayList<IClasspathAttribute>();
-                        
-						IClasspathAttribute javadocAttr = newJavadocAttr( javadocURL );
-                        
-						newExtraAttrs.add( javadocAttr );
-
-						if ( !CoreUtil.isNullOrEmpty( extraAttrs ) )
-						{
-							for ( IClasspathAttribute attr : extraAttrs )
-							{
-								if ( !attr.getName().equals( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME ) )
-								{
-									newExtraAttrs.add( attr );
-								}
-							}
-						}
-                        
-						newEntry =
-							JavaCore.newLibraryEntry(
-								existingEntry.getPath(), existingEntry.getSourceAttachmentPath(),
-								existingEntry.getSourceAttachmentRootPath(), existingEntry.getAccessRules(),
-								newExtraAttrs.toArray( new IClasspathAttribute[0] ), existingEntry.isExported() );
-						break;
-					}
-				}
-
-				if ( newEntry != null )
-				{
-					updatedEntries.add( newEntry );
-				}
-				else
-				{
-					updatedEntries.add( existingEntry );
-				}
-			}
-		}
-		else
-		{
-			Collections.addAll( updatedEntries, entries );
-		}
-
-		return updatedEntries.toArray( new IClasspathEntry[0] );
-	}
-    
-	private IClasspathEntry[] getUpdatedSourceEntries(
+    private IClasspathEntry[] getUpdatedJavadocEntries(
         IClasspathEntry[] entries, ILiferayTomcatRuntime liferayTomcatRuntime )
     {
         List<IClasspathEntry> updatedEntries = new ArrayList<IClasspathEntry>();
 
-        IPath sourceLocation = liferayTomcatRuntime.getSourceLocation();
+        String javadocURL = liferayTomcatRuntime.getJavadocURL();
 
-        if ( sourceLocation != null )
+        if( javadocURL != null )
         {
-            for ( IClasspathEntry existingEntry : entries )
+            for( IClasspathEntry existingEntry : entries )
             {
                 IPath path = existingEntry.getPath();
 
                 IClasspathEntry newEntry = null;
 
-                for ( String sourceJar : JARS )
+                for( String javadocJar : JARS )
                 {
-                    if ( path.lastSegment().equalsIgnoreCase( sourceJar ) )
+                    if( path.lastSegment().equalsIgnoreCase( javadocJar ) )
                     {
-                        IPath sourcePath = existingEntry.getSourceAttachmentPath();
-                        
-                        if( sourcePath == null )
+                        IClasspathAttribute[] extraAttrs = existingEntry.getExtraAttributes();
+
+                        List<IClasspathAttribute> newExtraAttrs = new ArrayList<IClasspathAttribute>();
+
+                        IClasspathAttribute javadocAttr = newJavadocAttr( javadocURL );
+
+                        newExtraAttrs.add( javadocAttr );
+
+                        if( !CoreUtil.isNullOrEmpty( extraAttrs ) )
                         {
-                            sourcePath = sourceLocation;
+                            for( IClasspathAttribute attr : extraAttrs )
+                            {
+                                if( !attr.getName().equals( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME ) )
+                                {
+                                    newExtraAttrs.add( attr );
+                                }
+                            }
                         }
-                        
+
                         newEntry =
                             JavaCore.newLibraryEntry(
-                                existingEntry.getPath(), sourcePath, existingEntry.getSourceAttachmentRootPath(),
-                                existingEntry.getAccessRules(), existingEntry.getExtraAttributes(),
-                                existingEntry.isExported() );
-
+                                existingEntry.getPath(), existingEntry.getSourceAttachmentPath(),
+                                existingEntry.getSourceAttachmentRootPath(), existingEntry.getAccessRules(),
+                                newExtraAttrs.toArray( new IClasspathAttribute[0] ), existingEntry.isExported() );
                         break;
                     }
                 }
 
-                if ( newEntry != null )
+                if( newEntry != null )
                 {
                     updatedEntries.add( newEntry );
                 }
@@ -166,25 +109,80 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
         return updatedEntries.toArray( new IClasspathEntry[0] );
     }
 
-	private IClasspathAttribute newJavadocAttr( String url )
-	{
-		return JavaCore.newClasspathAttribute( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, url );
-	}
-    
-	@Override
-	public IClasspathEntry[] resolveClasspathContainer(final IProject project, final IRuntime runtime) {
-		IPath installPath = runtime.getLocation();
+    private IClasspathEntry[] getUpdatedSourceEntries(
+        IClasspathEntry[] entries, ILiferayTomcatRuntime liferayTomcatRuntime )
+    {
+        List<IClasspathEntry> updatedEntries = new ArrayList<IClasspathEntry>();
 
-		if (installPath == null)
-			return new IClasspathEntry[0];
+        IPath sourceLocation = liferayTomcatRuntime.getSourceLocation();
 
-		String runtimeId = runtime.getRuntimeType().getId();
+        if( sourceLocation != null )
+        {
+            for( IClasspathEntry existingEntry : entries )
+            {
+                IPath path = existingEntry.getPath();
 
-		IClasspathEntry[] entries = resolveClasspathContainerForPath( installPath, runtimeId );
+                IClasspathEntry newEntry = null;
 
-		// IDE-483
-		ILiferayTomcatRuntime liferayTomcatRuntime =
-			(ILiferayTomcatRuntime) runtime.loadAdapter( ILiferayTomcatRuntime.class, null );
+                for( String sourceJar : JARS )
+                {
+                    if( path.lastSegment().equalsIgnoreCase( sourceJar ) )
+                    {
+                        IPath sourcePath = existingEntry.getSourceAttachmentPath();
+
+                        if( sourcePath == null )
+                        {
+                            sourcePath = sourceLocation;
+                        }
+
+                        newEntry =
+                            JavaCore.newLibraryEntry(
+                                existingEntry.getPath(), sourcePath, existingEntry.getSourceAttachmentRootPath(),
+                                existingEntry.getAccessRules(), existingEntry.getExtraAttributes(),
+                                existingEntry.isExported() );
+
+                        break;
+                    }
+                }
+
+                if( newEntry != null )
+                {
+                    updatedEntries.add( newEntry );
+                }
+                else
+                {
+                    updatedEntries.add( existingEntry );
+                }
+            }
+        }
+        else
+        {
+            Collections.addAll( updatedEntries, entries );
+        }
+
+        return updatedEntries.toArray( new IClasspathEntry[0] );
+    }
+
+    private IClasspathAttribute newJavadocAttr( String url )
+    {
+        return JavaCore.newClasspathAttribute( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, url );
+    }
+
+    @Override
+    public IClasspathEntry[] resolveClasspathContainer( final IProject project, final IRuntime runtime )
+    {
+        IPath installPath = runtime.getLocation();
+
+        if( installPath == null )
+            return new IClasspathEntry[0];
+
+        String runtimeId = runtime.getRuntimeType().getId();
+
+        IClasspathEntry[] entries = resolveClasspathContainerForPath( installPath, runtimeId );
+
+        // IDE-483
+        ILiferayTomcatRuntime liferayTomcatRuntime =
+            (ILiferayTomcatRuntime) runtime.loadAdapter( ILiferayTomcatRuntime.class, null );
 
         if( liferayTomcatRuntime != null )
         {
@@ -192,43 +190,47 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
             {
                 entries = getUpdatedJavadocEntries( entries, liferayTomcatRuntime );
             }
-            
+
             if( liferayTomcatRuntime.getSourceLocation() != null )
             {
                 entries = getUpdatedSourceEntries( entries, liferayTomcatRuntime );
             }
         }
 
-		return entries;
-	}
+        return entries;
+    }
 
-	protected IClasspathEntry[] resolveClasspathContainerForPath( IPath installPath, String runtimeTypeId )
-	{
-		List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
-		
-		if ( runtimeTypeId.indexOf( "60" ) > 0 || runtimeTypeId.indexOf( "70" ) > 0 ||
-			installPath.append( "lib" ).toFile().exists() ) {
-			IPath path = installPath.append("lib");
-			
-			addLibraryEntries(list, path.toFile(), true);
-		}
+    protected IClasspathEntry[] resolveClasspathContainerForPath( IPath installPath, String runtimeTypeId )
+    {
+        List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
 
-		// go through all classpath entries and remove some unneeded ones
-		List<IClasspathEntry> optimizedList = new ArrayList<IClasspathEntry>();
-		
-		List<String> excludes = Arrays.asList(ILiferayTomcatConstants.LIB_EXCLUDES);
-		
-		for (IClasspathEntry entry : list) {
-			if (!excludes.contains(entry.getPath().lastSegment())) {
-				optimizedList.add(entry);
-			}
-		}
+        if( runtimeTypeId.indexOf( "60" ) > 0 || runtimeTypeId.indexOf( "70" ) > 0 ||
+            installPath.append( "lib" ).toFile().exists() )
+        {
+            IPath path = installPath.append( "lib" );
 
-		return (IClasspathEntry[]) optimizedList.toArray(new IClasspathEntry[optimizedList.size()]);
-	}
+            addLibraryEntries( list, path.toFile(), true );
+        }
 
-	protected void updateClasspath(IProject project, IRuntime runtime) {
-		// IJavaProject javaProject = JavaCore.create(project);
-	}
+        // go through all classpath entries and remove some unneeded ones
+        List<IClasspathEntry> optimizedList = new ArrayList<IClasspathEntry>();
+
+        List<String> excludes = Arrays.asList( ILiferayTomcatConstants.LIB_EXCLUDES );
+
+        for( IClasspathEntry entry : list )
+        {
+            if( !excludes.contains( entry.getPath().lastSegment() ) )
+            {
+                optimizedList.add( entry );
+            }
+        }
+
+        return (IClasspathEntry[]) optimizedList.toArray( new IClasspathEntry[optimizedList.size()] );
+    }
+
+    protected void updateClasspath( IProject project, IRuntime runtime )
+    {
+        // IJavaProject javaProject = JavaCore.create(project);
+    }
 
 }

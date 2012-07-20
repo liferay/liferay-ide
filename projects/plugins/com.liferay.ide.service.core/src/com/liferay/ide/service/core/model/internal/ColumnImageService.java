@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,7 +15,7 @@
 
 package com.liferay.ide.service.core.model.internal;
 
-import com.liferay.ide.service.core.model.IColumn;
+import com.liferay.ide.service.core.model.Column;
 
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Event;
@@ -47,7 +47,6 @@ public class ColumnImageService extends ImageService
 
 	    this.listener = new FilteredListener<PropertyEvent>()
 		{
-
 			@Override
 			protected void handleTypedEvent( final PropertyEvent event )
 			{
@@ -55,20 +54,18 @@ public class ColumnImageService extends ImageService
 			}
 		};
 
-		context( IModelElement.class ).attach( this.listener, IColumn.PROP_PRIMARY.getName() );
+		context( IModelElement.class ).attach( this.listener, Column.PROP_PRIMARY.getName() );
 
 		attach( new Listener()
 		{
-
 			@Override
 			public void handle( Event event )
 			{
 				if ( event instanceof DisposeEvent )
 				{
-					context( IModelElement.class ).detach( listener, IColumn.PROP_PRIMARY.getName() );
+					context( IModelElement.class ).detach( listener, Column.PROP_PRIMARY.getName() );
 				}
 			}
-
 		} );
 	}
 
@@ -77,7 +74,7 @@ public class ColumnImageService extends ImageService
 	{
 		ImageData imageData = null;
 
-		if ( ( context( IColumn.class ) ).isPrimary().getContent() )
+		if ( ( context( Column.class ) ).isPrimary().getContent() )
 		{
 			imageData = IMG_COLUMN_PRIMARY;
 		}

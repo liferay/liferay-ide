@@ -14,6 +14,7 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.hook.core.model.internal;
 
 /**
@@ -21,10 +22,11 @@ package com.liferay.ide.hook.core.model.internal;
  */
 public class NameValueObject
 {
+
     private String name;
     private Object value;
 
-    public NameValueObject( String name, Object value)
+    public NameValueObject( String name, Object value )
     {
         this.name = name;
         this.value = value;
@@ -39,7 +41,7 @@ public class NameValueObject
         return this.name;
     }
 
-    public void setName(String n)
+    public void setName( String n )
     {
         this.name = n;
     }
@@ -49,7 +51,7 @@ public class NameValueObject
         return this.value;
     }
 
-    public void setValue(Object v)
+    public void setValue( Object v )
     {
         this.value = v;
     }

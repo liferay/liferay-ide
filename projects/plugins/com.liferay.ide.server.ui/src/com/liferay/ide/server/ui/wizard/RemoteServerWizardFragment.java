@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -11,9 +11,9 @@
 
 package com.liferay.ide.server.ui.wizard;
 
+import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -37,111 +37,126 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 /**
  * @author Greg Amerson
  */
-public class RemoteServerWizardFragment extends WizardFragment {
+public class RemoteServerWizardFragment extends WizardFragment
+{
+    protected RemoteServerComposite composite;
+    protected IStatus lastServerStatus = null;
+    protected IWizardHandle wizard;
 
-	protected RemoteServerComposite composite;
+    public RemoteServerWizardFragment()
+    {
+        super();
+    }
 
-	protected IStatus lastServerStatus = null;
+    @Override
+    public Composite createComposite( Composite parent, IWizardHandle wizard )
+    {
+        this.wizard = wizard;
 
-	protected IWizardHandle wizard;
+        composite = new RemoteServerComposite( parent, this, wizard );
 
-	public RemoteServerWizardFragment() {
-		super();
-	}
+        wizard.setTitle( "Remote Liferay Server" );
+        wizard.setDescription( "Configure remote Liferay server instance." );
+        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
+            "/icons/wizban/server_wiz.png" ) ) );
 
-	@Override
-	public Composite createComposite(Composite parent, IWizardHandle wizard) {
-		this.wizard = wizard;
+        return composite;
+    }
 
-		composite = new RemoteServerComposite(parent, this, wizard);
+    @Override
+    public void enter()
+    {
+        if( composite != null && !composite.isDisposed() )
+        {
+            IServerWorkingCopy serverWC = getServerWorkingCopy();
 
-		wizard.setTitle( "Remote Liferay Server" );
-		wizard.setDescription( "Configure remote Liferay server instance." );
-		wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
-			"/icons/wizban/server_wiz.png")));
+            // need to set defaults now that we have a connection
 
-		return composite;
-	}
+            composite.setServer( serverWC );
+        }
+    }
 
-	@Override
-	public void enter() {
-		if (composite != null && !composite.isDisposed()) {
-			IServerWorkingCopy serverWC = getServerWorkingCopy();
+    @Override
+    public boolean hasComposite()
+    {
+        return true;
+    }
 
-			// need to set defaults now that we have a connection
+    @Override
+    public boolean isComplete()
+    {
+        return lastServerStatus != null && lastServerStatus.getSeverity() != IStatus.ERROR;
+    }
 
-			composite.setServer(serverWC);
-		}
-	}
+    @Override
+    public void performFinish( IProgressMonitor monitor ) throws CoreException
+    {
+        try
+        {
+            this.wizard.run( false, false, new IRunnableWithProgress()
+            {
+                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                {
 
-	@Override
-	public boolean hasComposite() {
-		return true;
-	}
+                    if( lastServerStatus == null || ( !lastServerStatus.isOK() ) )
+                    {
+                        lastServerStatus = getRemoteServerWC().validate( monitor );
 
-	@Override
-	public boolean isComplete() {
-		return lastServerStatus != null && lastServerStatus.getSeverity() != IStatus.ERROR;
-	}
+                        if( !lastServerStatus.isOK() )
+                        {
+                            throw new InterruptedException( lastServerStatus.getMessage() );
+                        }
+                    }
+                }
+            } );
+        }
+        catch( Exception e )
+        {
+        }
 
-	@Override
-	public void performFinish(IProgressMonitor monitor)
-		throws CoreException {
+        ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
+        {
+            String id = getServerWorkingCopy().getId();
 
-		try {
-			this.wizard.run(false, false, new IRunnableWithProgress() {
+            public void serverAdded( final IServer server )
+            {
+                if( server.getId().equals( id ) )
+                {
+                    UIUtil.async( new Runnable()
+                    {
 
-				public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
+                        public void run()
+                        {
+                            IViewPart serversView = UIUtil.showView( "org.eclipse.wst.server.ui.ServersView" );
+                            CommonViewer viewer = (CommonViewer) serversView.getAdapter( CommonViewer.class );
+                            viewer.setSelection( new StructuredSelection( server ) );
+                        }
+                    } );
 
-					if (lastServerStatus == null || (!lastServerStatus.isOK())) {
-						lastServerStatus = getRemoteServerWC().validate( monitor );
+                    ServerCore.removeServerLifecycleListener( this );
+                }
+            }
 
-						if (!lastServerStatus.isOK()) {
-							throw new InterruptedException(lastServerStatus.getMessage());
-						}
-					}
-				}
-			});
-		}
-		catch (Exception e) {
+            public void serverChanged( IServer server )
+            {
+            }
 
-		}
+            public void serverRemoved( IServer server )
+            {
+            }
 
-		ServerCore.addServerLifecycleListener(new IServerLifecycleListener() {
-			String id = getServerWorkingCopy().getId();
+        } );
 
-			public void serverAdded(final IServer server) {
-				if (server.getId().equals(id)) {
-					UIUtil.async(new Runnable() {
+    }
 
-						public void run() {
-							IViewPart serversView = UIUtil.showView("org.eclipse.wst.server.ui.ServersView");
-							CommonViewer viewer = (CommonViewer) serversView.getAdapter(CommonViewer.class);
-							viewer.setSelection(new StructuredSelection(server));
-						}
-					});
+    protected IServerWorkingCopy getServerWorkingCopy()
+    {
+        return (IServerWorkingCopy) getTaskModel().getObject( TaskModel.TASK_SERVER );
+    }
 
-					ServerCore.removeServerLifecycleListener(this);
-				}
-			}
-
-			public void serverChanged(IServer server) {
-			}
-
-			public void serverRemoved(IServer server) {
-			}
-
-		});
-
-	}
-
-	protected IServerWorkingCopy getServerWorkingCopy() {
-		return (IServerWorkingCopy) getTaskModel().getObject(TaskModel.TASK_SERVER);
-	}
-
-	IRemoteServerWorkingCopy getRemoteServerWC() {
-		return (IRemoteServerWorkingCopy) getServerWorkingCopy().loadAdapter( IRemoteServerWorkingCopy.class, null );
-	}
+    IRemoteServerWorkingCopy getRemoteServerWC()
+    {
+        return (IRemoteServerWorkingCopy) getServerWorkingCopy().loadAdapter( IRemoteServerWorkingCopy.class, null );
+    }
 
 }

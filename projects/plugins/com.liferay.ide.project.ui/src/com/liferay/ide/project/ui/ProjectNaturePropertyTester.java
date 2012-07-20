@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,31 +22,39 @@ import org.eclipse.core.resources.IProjectDescription;
 /**
  * @author Greg Amerson
  */
-public class ProjectNaturePropertyTester extends PropertyTester {
+public class ProjectNaturePropertyTester extends PropertyTester
+{
 
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver instanceof IProject) {
-			IProject project = (IProject) receiver;
-			
-			try {
-				IProjectDescription desc = project.getDescription();
-				
-				if (desc != null) {
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    {
+        if( receiver instanceof IProject )
+        {
+            IProject project = (IProject) receiver;
 
-					for (String natureId : desc.getNatureIds()) {
-						if (natureId.equals(expectedValue)) {
-							return true;
-						}
-					}
-				}
-			}
-			catch (Throwable t) {
-				// ignore
-			}
+            try
+            {
+                IProjectDescription desc = project.getDescription();
 
-		}
-		
-		return false;
-	}
+                if( desc != null )
+                {
+
+                    for( String natureId : desc.getNatureIds() )
+                    {
+                        if( natureId.equals( expectedValue ) )
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch( Throwable t )
+            {
+                // ignore
+            }
+
+        }
+
+        return false;
+    }
 
 }

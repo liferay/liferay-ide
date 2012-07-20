@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.core.facet;
@@ -20,6 +22,7 @@ import com.liferay.ide.project.core.facet.PluginFacetUninstall;
 /**
  * @author Greg Amerson
  */
-public class LayoutTplPluginFacetUninstall extends PluginFacetUninstall {
+public class LayoutTplPluginFacetUninstall extends PluginFacetUninstall
+{
 
 }

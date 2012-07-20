@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,7 +11,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.layouttpl.ui.draw2d;
 
 import org.eclipse.draw2d.FigureUtilities;
@@ -22,94 +25,109 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 
+/**
+ * @author Gregory Amerson
+ */
+public class ColumnFigure extends RoundedRectangle
+{
+    protected Font correctedFont = null;
+    protected boolean drawText = true;
+    protected String text = null;
 
-public class ColumnFigure extends RoundedRectangle {
+    public ColumnFigure()
+    {
+        super();
+        setAntialias( SWT.ON );
+        // setText("50%");
+    }
 
-	protected Font correctedFont = null;
+    @Override
+    public void paintFigure( Graphics graphics )
+    {
+        super.paintFigure( graphics );
 
-	protected boolean drawText = true;
+        if( getText() == null )
+        {
+            return;
+        }
 
-	protected String text = null;
+        if( !shouldDrawText() )
+        {
+            return;
+        }
 
-	public ColumnFigure() {
-		super();
-		setAntialias(SWT.ON);
-		// setText("50%");
-	}
+        if( correctedFont == null )
+        {
+            correctFont();
+        }
 
-	@Override
-	public void paintFigure(Graphics graphics) {
-		super.paintFigure(graphics);
+        if( graphics.getFont() != null )
+        {
+            graphics.setTextAntialias( SWT.ON );
+            graphics.setFont( getFont() );
+            Dimension extent = FigureUtilities.getTextExtents( getText(), graphics.getFont() );
 
-		if (getText() == null) {
-			return;
-		}
+            graphics.drawString( getText(), bounds.x + ( bounds.width / 2 ) - ( extent.width / 2 ), bounds.y +
+                ( bounds.height / 2 ) - ( extent.height / 2 ) );
+        }
+    }
 
-		if (!shouldDrawText()) {
-			return;
-		}
+    protected void correctFont()
+    {
+        Font initialFont = this.getFont();
 
-		if (correctedFont == null) {
-			correctFont();
-		}
+        if( initialFont != null && ( !this.getFont().isDisposed() ) && ( !this.getFont().getDevice().isDisposed() ) )
+        {
+            FontData[] fontData = initialFont.getFontData();
 
-		if (graphics.getFont() != null) {
-			graphics.setTextAntialias(SWT.ON);
-			graphics.setFont(getFont());
-			Dimension extent = FigureUtilities.getTextExtents(getText(), graphics.getFont());
+            for( int i = 0; i < fontData.length; i++ )
+            {
+                fontData[i].setHeight( 24 );
+            }
 
-			graphics.drawString(getText(), bounds.x + (bounds.width / 2) - (extent.width / 2), bounds.y +
-				(bounds.height / 2) - (extent.height / 2));
-		}
-	}
+            Font oldFont = null;
+            if( correctedFont != null && !correctedFont.isDisposed() )
+            {
+                oldFont = correctedFont;
+            }
 
-	protected void correctFont() {
-		Font initialFont = this.getFont();
+            correctedFont = new Font( this.getFont().getDevice(), fontData );
+            setFont( correctedFont );
 
-		if (initialFont != null && (!this.getFont().isDisposed()) && (!this.getFont().getDevice().isDisposed())) {
-			FontData[] fontData = initialFont.getFontData();
+            if( oldFont != null )
+            {
+                oldFont.dispose();
+            }
+        }
+    }
 
-			for (int i = 0; i < fontData.length; i++) {
-				fontData[i].setHeight(24);
-			}
+    @Override
+    protected void finalize() throws Throwable
+    {
+        if( correctedFont != null && !( correctedFont.isDisposed() ) )
+        {
+            correctedFont.dispose();
+        }
+    }
 
-			Font oldFont = null;
-			if (correctedFont != null && !correctedFont.isDisposed()) {
-				oldFont = correctedFont;
-			}
+    public String getText()
+    {
+        return text;
+    }
 
-			correctedFont = new Font(this.getFont().getDevice(), fontData);
-			setFont(correctedFont);
+    public void setText( String text )
+    {
+        this.text = text;
+    }
 
-			if (oldFont != null) {
-				oldFont.dispose();
-			}
-		}
-	}
+    public boolean shouldDrawText()
+    {
+        return drawText;
+    }
 
-	@Override
-	protected void finalize()
-		throws Throwable {
-
-		if (correctedFont != null && !(correctedFont.isDisposed())) {
-			correctedFont.dispose();
-		}
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public boolean shouldDrawText() {
-		return drawText;
-	}
-
-	public void setDrawText(boolean drawText) {
-		this.drawText = drawText;
-	}
+    public void setDrawText( boolean drawText )
+    {
+        this.drawText = drawText;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,243 +36,276 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class ProjectCorePlugin extends CorePlugin {
+public class ProjectCorePlugin extends CorePlugin
+{
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.project.core";
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.project.core";
 
-	public static final String USE_PROJECT_SETTINGS = "use-project-settings";
+    public static final String USE_PROJECT_SETTINGS = "use-project-settings";
 
-	// The shared instance
-	private static ProjectCorePlugin plugin;
+    // The shared instance
+    private static ProjectCorePlugin plugin;
 
-	private static PluginPackageResourceListener pluginPackageResourceListener;
+    private static PluginPackageResourceListener pluginPackageResourceListener;
 
-	private static IPortletFrameworkWizardProvider[] portletFrameworks;
+    private static IPortletFrameworkWizardProvider[] portletFrameworks;
 
-	private static IProjectDefinition[] projectDefinitions = null;
+    private static IProjectDefinition[] projectDefinitions = null;
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
-	public static ProjectCorePlugin getDefault() {
-		return plugin;
-	}
-    
-	public static IPortletFrameworkWizardProvider getPortletFramework( String id )
-	{
-	    for( IPortletFrameworkWizardProvider framework : getPortletFrameworks() )
-	    {
-	        if( framework.getId().equals( id ) )
-	        {
-	            return framework;
-	        }
-	    }
-        
-	    return null;
-	}
-    
-	public static IPortletFrameworkWizardProvider[] getPortletFrameworks()
-	{
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static ProjectCorePlugin getDefault()
+    {
+        return plugin;
+    }
+
+    public static IPortletFrameworkWizardProvider getPortletFramework( String id )
+    {
+        for( IPortletFrameworkWizardProvider framework : getPortletFrameworks() )
+        {
+            if( framework.getId().equals( id ) )
+            {
+                return framework;
+            }
+        }
+
+        return null;
+    }
+
+    public static IPortletFrameworkWizardProvider[] getPortletFrameworks()
+    {
         return getPortletFrameworks( false );
-	}
+    }
 
-	public static IPortletFrameworkWizardProvider[] getPortletFrameworks( boolean reinitialize ) {
-		if (portletFrameworks == null) {
-			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor(IPortletFrameworkWizardProvider.EXTENSION_ID);
+    public static IPortletFrameworkWizardProvider[] getPortletFrameworks( boolean reinitialize )
+    {
+        if( portletFrameworks == null )
+        {
+            IConfigurationElement[] elements =
+                Platform.getExtensionRegistry().getConfigurationElementsFor(
+                    IPortletFrameworkWizardProvider.EXTENSION_ID );
 
-			if (!CoreUtil.isNullOrEmpty(elements)) {
-				List<IPortletFrameworkWizardProvider> frameworks = new ArrayList<IPortletFrameworkWizardProvider>();
+            if( !CoreUtil.isNullOrEmpty( elements ) )
+            {
+                List<IPortletFrameworkWizardProvider> frameworks = new ArrayList<IPortletFrameworkWizardProvider>();
 
-				for (IConfigurationElement element : elements) {
-					String id = element.getAttribute(IPortletFrameworkWizardProvider.ID);
-					String shortName = element.getAttribute(IPortletFrameworkWizardProvider.SHORT_NAME);
-					String displayName = element.getAttribute(IPortletFrameworkWizardProvider.DISPLAY_NAME);
-					String description = element.getAttribute(IPortletFrameworkWizardProvider.DESCRIPTION);
-					String requiredSDKVersion = element.getAttribute(IPortletFrameworkWizardProvider.REQUIRED_SDK_VERSION);
-					boolean isDefault = Boolean.parseBoolean(element.getAttribute(IPortletFrameworkWizardProvider.DEFAULT));
+                for( IConfigurationElement element : elements )
+                {
+                    String id = element.getAttribute( IPortletFrameworkWizardProvider.ID );
+                    String shortName = element.getAttribute( IPortletFrameworkWizardProvider.SHORT_NAME );
+                    String displayName = element.getAttribute( IPortletFrameworkWizardProvider.DISPLAY_NAME );
+                    String description = element.getAttribute( IPortletFrameworkWizardProvider.DESCRIPTION );
+                    String requiredSDKVersion =
+                        element.getAttribute( IPortletFrameworkWizardProvider.REQUIRED_SDK_VERSION );
+                    boolean isDefault =
+                        Boolean.parseBoolean( element.getAttribute( IPortletFrameworkWizardProvider.DEFAULT ) );
 
-					URL helpUrl = null;
+                    URL helpUrl = null;
 
-					try {
-						helpUrl = new URL(element.getAttribute(IPortletFrameworkWizardProvider.HELP_URL));
-					}
-					catch (Exception e1) {
-					}
+                    try
+                    {
+                        helpUrl = new URL( element.getAttribute( IPortletFrameworkWizardProvider.HELP_URL ) );
+                    }
+                    catch( Exception e1 )
+                    {
+                    }
 
-					try {
-						AbstractPortletFrameworkWizardProvider framework =
-							(AbstractPortletFrameworkWizardProvider) element.createExecutableExtension("class");
-						framework.setId(id);
-						framework.setShortName(shortName);
-						framework.setDisplayName(displayName);
-						framework.setDescription(description);
-						framework.setRequiredSDKVersion(requiredSDKVersion);
-						framework.setHelpUrl(helpUrl);
-						framework.setDefault(isDefault);
-						framework.setBundleId(element.getContributor().getName());
+                    try
+                    {
+                        AbstractPortletFrameworkWizardProvider framework =
+                            (AbstractPortletFrameworkWizardProvider) element.createExecutableExtension( "class" );
+                        framework.setId( id );
+                        framework.setShortName( shortName );
+                        framework.setDisplayName( displayName );
+                        framework.setDescription( description );
+                        framework.setRequiredSDKVersion( requiredSDKVersion );
+                        framework.setHelpUrl( helpUrl );
+                        framework.setDefault( isDefault );
+                        framework.setBundleId( element.getContributor().getName() );
 
-						frameworks.add(framework);
-					}
-					catch (Exception e) {
-						logError("Could not create portlet framework.", e);
-					}
-				}
+                        frameworks.add( framework );
+                    }
+                    catch( Exception e )
+                    {
+                        logError( "Could not create portlet framework.", e );
+                    }
+                }
 
-				portletFrameworks = frameworks.toArray(new IPortletFrameworkWizardProvider[0]);
+                portletFrameworks = frameworks.toArray( new IPortletFrameworkWizardProvider[0] );
 
-				// sort the array so that the default template is first
-				Arrays.sort(portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFrameworkWizardProvider>() {
+                // sort the array so that the default template is first
+                Arrays.sort(
+                    portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFrameworkWizardProvider>()
+                    {
 
-					public int compare(IPortletFrameworkWizardProvider o1, IPortletFrameworkWizardProvider o2) {
-						if (o1.isDefault() && (!o2.isDefault())) {
-							return -1;
-						}
-						else if ((!o1.isDefault()) && o2.isDefault()) {
-							return 1;
-						}
+                        public int compare( IPortletFrameworkWizardProvider o1, IPortletFrameworkWizardProvider o2 )
+                        {
+                            if( o1.isDefault() && ( !o2.isDefault() ) )
+                            {
+                                return -1;
+                            }
+                            else if( ( !o1.isDefault() ) && o2.isDefault() )
+                            {
+                                return 1;
+                            }
 
-						return o1.getShortName().compareTo(o2.getShortName());
-					}
+                            return o1.getShortName().compareTo( o2.getShortName() );
+                        }
 
-				});
-			}
-		}
-		
-		if( reinitialize )
-		{
-		    for( IPortletFrameworkWizardProvider portletFramework : portletFrameworks )
-		    {
-		        portletFramework.reinitialize();
-		    }
-		}
+                    } );
+            }
+        }
 
-		return portletFrameworks;
-	}
+        if( reinitialize )
+        {
+            for( IPortletFrameworkWizardProvider portletFramework : portletFrameworks )
+            {
+                portletFramework.reinitialize();
+            }
+        }
 
-	public static IProjectDefinition getProjectDefinition(IProjectFacet projectFacet) {
-		IProjectDefinition[] definitions = getProjectDefinitions();
+        return portletFrameworks;
+    }
 
-		if (definitions != null) {
-			for (IProjectDefinition def : definitions) {
-				if (def != null && def.getFacet() != null && def.getFacet().equals(projectFacet)) {
-					return def;
-				}
-			}
-		}
+    public static IProjectDefinition getProjectDefinition( IProjectFacet projectFacet )
+    {
+        IProjectDefinition[] definitions = getProjectDefinitions();
 
-		return null;
-	}
+        if( definitions != null )
+        {
+            for( IProjectDefinition def : definitions )
+            {
+                if( def != null && def.getFacet() != null && def.getFacet().equals( projectFacet ) )
+                {
+                    return def;
+                }
+            }
+        }
 
-	public static IProjectDefinition getProjectDefinition(String type) {
-		IProjectDefinition[] defs = getProjectDefinitions();
+        return null;
+    }
 
-		if (defs != null && defs.length > 0) {
-			for (IProjectDefinition def : defs) {
-				if (def != null && def.getFacetId().equals(type)) {
-					return def;
-				}
-			}
-		}
+    public static IProjectDefinition getProjectDefinition( String type )
+    {
+        IProjectDefinition[] defs = getProjectDefinitions();
 
-		return null;
-	}
+        if( defs != null && defs.length > 0 )
+        {
+            for( IProjectDefinition def : defs )
+            {
+                if( def != null && def.getFacetId().equals( type ) )
+                {
+                    return def;
+                }
+            }
+        }
 
-	public static IProjectDefinition[] getProjectDefinitions() {
-		if (projectDefinitions == null) {
-			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor(IProjectDefinition.ID);
+        return null;
+    }
 
-			try {
-				List<IProjectDefinition> definitions = new ArrayList<IProjectDefinition>();
+    public static IProjectDefinition[] getProjectDefinitions()
+    {
+        if( projectDefinitions == null )
+        {
+            IConfigurationElement[] elements =
+                Platform.getExtensionRegistry().getConfigurationElementsFor( IProjectDefinition.ID );
 
-				for (IConfigurationElement element : elements) {
-					final Object o = element.createExecutableExtension("class");
+            try
+            {
+                List<IProjectDefinition> definitions = new ArrayList<IProjectDefinition>();
 
-					if (o instanceof AbstractProjectDefinition) {
-						AbstractProjectDefinition projectDefinition = (AbstractProjectDefinition) o;
-						projectDefinition.setFacetId(element.getAttribute("facetId"));
-						projectDefinition.setShortName(element.getAttribute("shortName"));
-						projectDefinition.setDisplayName(element.getAttribute("displayName"));
-						projectDefinition.setFacetedProjectTemplateId(element.getAttribute("facetedProjectTemplateId"));
+                for( IConfigurationElement element : elements )
+                {
+                    final Object o = element.createExecutableExtension( "class" );
 
-						int menuIndex = Integer.MAX_VALUE;
+                    if( o instanceof AbstractProjectDefinition )
+                    {
+                        AbstractProjectDefinition projectDefinition = (AbstractProjectDefinition) o;
+                        projectDefinition.setFacetId( element.getAttribute( "facetId" ) );
+                        projectDefinition.setShortName( element.getAttribute( "shortName" ) );
+                        projectDefinition.setDisplayName( element.getAttribute( "displayName" ) );
+                        projectDefinition.setFacetedProjectTemplateId( element.getAttribute( "facetedProjectTemplateId" ) );
 
-						try {
-							String intVal = element.getAttribute("menuIndex");
+                        int menuIndex = Integer.MAX_VALUE;
 
-							if (intVal != null) {
-								menuIndex = Integer.parseInt(intVal);
-							}
-						}
-						catch (Exception e) {
-							ProjectCorePlugin.logError("Error reading project definition.", e);
-						}
+                        try
+                        {
+                            String intVal = element.getAttribute( "menuIndex" );
 
-						projectDefinition.setMenuIndex(menuIndex);
+                            if( intVal != null )
+                            {
+                                menuIndex = Integer.parseInt( intVal );
+                            }
+                        }
+                        catch( Exception e )
+                        {
+                            ProjectCorePlugin.logError( "Error reading project definition.", e );
+                        }
 
-						definitions.add(projectDefinition);
-					}
-				}
+                        projectDefinition.setMenuIndex( menuIndex );
 
-				projectDefinitions = definitions.toArray(new IProjectDefinition[0]);
-			}
-			catch (Exception e) {
-				logError(e);
-			}
-		}
+                        definitions.add( projectDefinition );
+                    }
+                }
 
-		return projectDefinitions;
-	}
+                projectDefinitions = definitions.toArray( new IProjectDefinition[0] );
+            }
+            catch( Exception e )
+            {
+                logError( e );
+            }
+        }
 
-	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(createErrorStatus(msg, e));
-	}
+        return projectDefinitions;
+    }
 
-	/**
-	 * The constructor
-	 */
-	public ProjectCorePlugin() {
-		pluginPackageResourceListener = new PluginPackageResourceListener();
-	}
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
-	public void start(BundleContext context)
-		throws Exception {
-		
-		super.start(context);
-		
-		plugin = this;
+    /**
+     * The constructor
+     */
+    public ProjectCorePlugin()
+    {
+        pluginPackageResourceListener = new PluginPackageResourceListener();
+    }
 
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(
-			pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
+     */
+    public void start( BundleContext context ) throws Exception
+    {
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
-	 */
-	public void stop(BundleContext context)
-		throws Exception {
-		
-		plugin = null;
-		
-		super.stop(context);
+        super.start( context );
 
-		if (pluginPackageResourceListener != null) {
-			ResourcesPlugin.getWorkspace().removeResourceChangeListener(pluginPackageResourceListener);
-		}
-	}
+        plugin = this;
 
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+            pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
+
+        plugin = null;
+
+        super.stop( context );
+
+        if( pluginPackageResourceListener != null )
+        {
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( pluginPackageResourceListener );
+        }
+    }
 
 }

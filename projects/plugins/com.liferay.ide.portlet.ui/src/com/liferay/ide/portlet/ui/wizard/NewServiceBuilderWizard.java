@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,56 +34,63 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class NewServiceBuilderWizard extends NewWebArtifactWizard
-	implements INewWizard, INewServiceBuilderDataModelProperties {
+    implements INewWizard, INewServiceBuilderDataModelProperties
+{
 
-	public NewServiceBuilderWizard() {
-		this(null);
-	}
+    public NewServiceBuilderWizard()
+    {
+        this( null );
+    }
 
-	public NewServiceBuilderWizard(IDataModel model) {
-		super(model);
+    public NewServiceBuilderWizard( IDataModel model )
+    {
+        super( model );
 
-		setDefaultPageImageDescriptor(getImage());
-	}
+        setDefaultPageImageDescriptor( getImage() );
+    }
 
-	@Override
-	protected void doAddPages() {
-		addPage(new NewServiceBuilderWizardPage(
-			getDataModel(), "pageOne", "New Liferay Service Builder",
-			"Create a new service builder xml file in a project."));
-	}
+    @Override
+    protected void doAddPages()
+    {
+        addPage( new NewServiceBuilderWizardPage(
+            getDataModel(), "pageOne", "New Liferay Service Builder",
+            "Create a new service builder xml file in a project." ) );
+    }
 
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
 
-		TemplateContextType contextType =
-			PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(
-				ServiceBuilderTemplateContextTypeIds.NEW);
+        TemplateContextType contextType =
+            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(
+                ServiceBuilderTemplateContextTypeIds.NEW );
 
-		return new NewServiceBuilderDataModelProvider(templateStore, contextType);
-	}
+        return new NewServiceBuilderDataModelProvider( templateStore, contextType );
+    }
 
-	protected ImageDescriptor getImage() {
-		return PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/wizban/service_wiz.png");
-	}
+    protected ImageDescriptor getImage()
+    {
+        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/service_wiz.png" );
+    }
 
-	@Override
-	protected String getTitle() {
-		return "New Service Builder";
-	}
+    @Override
+    protected String getTitle()
+    {
+        return "New Service Builder";
+    }
 
-	@Override
-	protected void postPerformFinish()
-		throws InvocationTargetException {
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
+        Object file = getDataModel().getProperty( CREATED_SERVICE_FILE );
 
-		Object file = getDataModel().getProperty(CREATED_SERVICE_FILE);
-
-		if (file instanceof IFile) {
-			openEditor((IFile) file);
-		}
-	}
+        if( file instanceof IFile )
+        {
+            openEditor( (IFile) file );
+        }
+    }
 
 }

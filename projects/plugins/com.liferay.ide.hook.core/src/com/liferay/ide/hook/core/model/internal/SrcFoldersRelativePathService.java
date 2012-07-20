@@ -18,7 +18,7 @@
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.hook.core.model.IHook;
+import com.liferay.ide.hook.core.model.Hook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,22 +35,23 @@ import org.eclipse.sapphire.services.RelativePathService;
 public class SrcFoldersRelativePathService extends RelativePathService
 {
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.services.RelativePathService#roots()
-	 */
-	@Override
-	public List<Path> roots() {
-		List<Path> roots = new ArrayList<Path>();
-		IModelElement modelElement = context( IHook.class );
-		IProject project = modelElement.adapt( IProject.class );
-		IFolder[] folders = ProjectUtil.getSourceFolders( project );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.services.RelativePathService#roots()
+     */
+    @Override
+    public List<Path> roots()
+    {
+        List<Path> roots = new ArrayList<Path>();
+        IModelElement modelElement = context( Hook.class );
+        IProject project = modelElement.adapt( IProject.class );
+        IFolder[] folders = ProjectUtil.getSourceFolders( project );
 
-		for ( IFolder folder : folders )
-		{
-			roots.add( new Path( folder.getLocation().toPortableString() ) );
-		}
+        for( IFolder folder : folders )
+        {
+            roots.add( new Path( folder.getLocation().toPortableString() ) );
+        }
 
-		return roots;
-	}
+        return roots;
+    }
 }

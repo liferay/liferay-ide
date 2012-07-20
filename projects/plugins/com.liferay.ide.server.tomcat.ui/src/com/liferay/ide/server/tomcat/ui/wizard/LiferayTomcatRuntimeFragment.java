@@ -32,28 +32,29 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntimeFragment extends TomcatRuntimeWizardFragment
 {
-	protected List<WizardFragment> childFragments;
 
-	public Composite createComposite( Composite parent, IWizardHandle wizard )
-	{
-		comp = new LiferayTomcatRuntimeComposite( parent, wizard );
+    protected List<WizardFragment> childFragments;
 
-		wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
-			"/icons/wizban/server_wiz.png" ) ) );
+    public Composite createComposite( Composite parent, IWizardHandle wizard )
+    {
+        comp = new LiferayTomcatRuntimeComposite( parent, wizard );
 
-		return comp;
-	}
+        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
+            "/icons/wizban/server_wiz.png" ) ) );
 
-	@Override
-	public List<WizardFragment> getChildFragments()
-	{
-		if ( childFragments == null )
-		{
-			childFragments = new ArrayList<WizardFragment>();
-			childFragments.add( new LiferayTomcatRuntimeOptionalFragment() );
-		}
+        return comp;
+    }
 
-		return childFragments;
-	}
+    @Override
+    public List<WizardFragment> getChildFragments()
+    {
+        if( childFragments == null )
+        {
+            childFragments = new ArrayList<WizardFragment>();
+            childFragments.add( new LiferayTomcatRuntimeOptionalFragment() );
+        }
+
+        return childFragments;
+    }
 
 }

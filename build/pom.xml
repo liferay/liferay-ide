@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*******************************************************************************
- * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,29 +15,27 @@
  *
  *******************************************************************************/
  -->
- 
- <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<groupId>com.liferay.ide</groupId>
-	<artifactId>build</artifactId>
-	<name>Liferay IDE Build</name>
-	<version>2.0.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	
-	<properties>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.liferay.ide</groupId>
+    <artifactId>build</artifactId>
+    <name>Liferay IDE Build</name>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
         <tycho-version>0.15.0</tycho-version>
         <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
         <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
         <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-        <!--<sapphire-site>http://download.eclipse.org/sapphire/0.5.1/repository/</sapphire-site>-->
+        <!--<sapphire-site>http://download.eclipse.org/sapphire/0.5.1/repository/</sapphire-site> -->
         <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
     </properties>
-	
-	<repositories>
+
+    <repositories>
         <repository>
             <id>eclipse-site</id>
             <layout>p2</layout>
@@ -73,11 +71,11 @@
             </activation>
             <modules>
                 <module>../common</module>
-				<module>../projects</module>
+                <module>../projects</module>
                 <module>com.liferay.ide-repository</module>
             </modules>
         </profile>
-		<profile>
+        <profile>
             <id>velocity</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
@@ -87,7 +85,6 @@
             </modules>
         </profile>
     </profiles>
-    
 
     <build>
         <sourceDirectory>src</sourceDirectory>
@@ -105,7 +102,7 @@
                 <configuration>
                     <resolver>p2</resolver>
                     <ignoreTychoRepositories>true</ignoreTychoRepositories>
-                      <allowConflictingDependencies>true</allowConflictingDependencies>
+                    <allowConflictingDependencies>true</allowConflictingDependencies>
                     <environments>
                         <environment>
                             <os>win32</os>
@@ -122,7 +119,6 @@
                             <ws>cocoa</ws>
                             <arch>x86</arch>
                         </environment>
-
                         <environment>
                             <os>macosx</os>
                             <ws>cocoa</ws>
@@ -133,7 +129,6 @@
                             <ws>gtk</ws>
                             <arch>x86</arch>
                         </environment>
-
                         <environment>
                             <os>linux</os>
                             <ws>gtk</ws>
@@ -155,36 +150,34 @@
                             <ws>win32</ws>
                             <arch>x86_64</arch>
                         </environment>
-                    <environment>
-                        <os>macosx</os>
-                        <ws>cocoa</ws>
-                        <arch>x86</arch>
-                    </environment>
-                    <environment>
-                        <os>macosx</os>
-                        <ws>cocoa</ws>
-                        <arch>x86_64</arch>
-                    </environment>
-                    <environment>
-                        <os>win32</os>
-                        <ws>win32</ws>
-                        <arch>x86</arch>
-                    </environment>
-                    
-                    <environment>
-                        <os>linux</os>
-                        <ws>gtk</ws>
-                        <arch>x86</arch>
-                    </environment>
-                    <environment>
-                        <os>linux</os>
-                        <ws>gtk</ws>
-                        <arch>x86_64</arch>
-                    </environment>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
                     </environments>
                 </configuration>
             </plugin>
         </plugins>
     </build>
- 
 </project>	

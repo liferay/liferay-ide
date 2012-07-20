@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,26 +24,31 @@ import org.eclipse.wst.server.core.internal.facets.FacetUtil;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayRuntimePropertyTester extends PropertyTester {
+@SuppressWarnings( "restriction" )
+public class LiferayRuntimePropertyTester extends PropertyTester
+{
 
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		boolean retval = false;
-		
-		try {
-			EnablementExpressionContext ctx = (EnablementExpressionContext) receiver;
-			IFacetedProjectBase projectBase = ctx.getFacetedProject();
-			IRuntime serverRuntime = FacetUtil.getRuntime(projectBase.getPrimaryRuntime());
-			
-			if (serverRuntime.getRuntimeType().getId().startsWith("com.liferay.")) {
-				retval = true;
-			}
-		}
-		catch (Throwable t) {
-			// don't log error just means test returns false;
-		}
-		
-		return retval;
-	}
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    {
+        boolean retval = false;
+
+        try
+        {
+            EnablementExpressionContext ctx = (EnablementExpressionContext) receiver;
+            IFacetedProjectBase projectBase = ctx.getFacetedProject();
+            IRuntime serverRuntime = FacetUtil.getRuntime( projectBase.getPrimaryRuntime() );
+
+            if( serverRuntime.getRuntimeType().getId().startsWith( "com.liferay." ) )
+            {
+                retval = true;
+            }
+        }
+        catch( Throwable t )
+        {
+            // don't log error just means test returns false;
+        }
+
+        return retval;
+    }
 
 }

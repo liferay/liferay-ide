@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,90 +32,98 @@ import org.xml.sax.SAXException;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractContentDescriber extends XMLContentDescriber implements IExecutableExtension {
+public abstract class AbstractContentDescriber extends XMLContentDescriber implements IExecutableExtension
+{
 
-	public AbstractContentDescriber() {
-		super();
-	}
+    public AbstractContentDescriber()
+    {
+        super();
+    }
 
-	/*
-	 * (Intentionally not included in javadoc)
-	 * @see IContentDescriber#describe(InputStream, IContentDescription)
-	 */
-	public int describe(InputStream contents, IContentDescription description)
-		throws IOException {
+    /*
+     * (Intentionally not included in javadoc)
+     * @see IContentDescriber#describe(InputStream, IContentDescription)
+     */
+    public int describe( InputStream contents, IContentDescription description ) throws IOException
+    {
+        // call the basic XML describer to do basic recognition
+        if( super.describe( contents, description ) == INVALID )
+        {
+            return INVALID;
+        }
 
-		// call the basic XML describer to do basic recognition
-		if (super.describe(contents, description) == INVALID) {
-			return INVALID;
-		}
+        // super.describe will have consumed some chars, need to rewind
+        contents.reset();
 
-		// super.describe will have consumed some chars, need to rewind
-		contents.reset();
+        // Check to see if we matched our criteria.
+        return checkCriteria( new InputSource( contents ) );
+    }
 
-		// Check to see if we matched our criteria.
-		return checkCriteria(new InputSource(contents));
-	}
+    /*
+     * (Intentionally not included in javadoc)
+     * @see IContentDescriber#describe(Reader, IContentDescription)
+     */
+    public int describe( Reader contents, IContentDescription description ) throws IOException
+    {
+        // call the basic XML describer to do basic recognition
+        if( super.describe( contents, description ) == INVALID )
+        {
+            return INVALID;
+        }
 
-	/*
-	 * (Intentionally not included in javadoc)
-	 * @see IContentDescriber#describe(Reader, IContentDescription)
-	 */
-	public int describe(Reader contents, IContentDescription description)
-		throws IOException {
+        // super.describe will have consumed some chars, need to rewind
+        contents.reset();
 
-		// call the basic XML describer to do basic recognition
-		if (super.describe(contents, description) == INVALID) {
-			return INVALID;
-		}
+        // Check to see if we matched our criteria.
+        return checkCriteria( new InputSource( contents ) );
+    }
 
-		// super.describe will have consumed some chars, need to rewind
-		contents.reset();
+    public void setInitializationData( IConfigurationElement config, String propertyName, Object data )
+        throws CoreException
+    {
+    }
 
-		// Check to see if we matched our criteria.
-		return checkCriteria(new InputSource(contents));
-	}
+    private int checkCriteria( InputSource contents ) throws IOException
+    {
+        AbstractDefaultHandler contentHandler = createDefaultHandler();
 
-	public void setInitializationData(IConfigurationElement config, String propertyName, Object data)
-		throws CoreException {
-	}
+        try
+        {
+            if( !contentHandler.parseContents( contents ) )
+            {
+                return INDETERMINATE;
+            }
+        }
+        catch( SAXException e )
+        {
+            // we may be handed any kind of contents... it is normal we fail to
+            // parse
+            return INDETERMINATE;
+        }
+        catch( ParserConfigurationException e )
+        {
+            // some bad thing happened - force this describer to be disabled
+            String message =
+                "Internal Error: XML parser configuration error during content description for Service Builder files"; //$NON-NLS-1$
 
-	private int checkCriteria(InputSource contents)
-		throws IOException {
+            throw new RuntimeException( message );
+        }
 
-		AbstractDefaultHandler contentHandler = createDefaultHandler();
+        // Check to see if we matched our criteria.
+        if( contentHandler.hasDTD() )
+        {
+            if( contentHandler.hasTopLevelElement() )
+            {
+                return VALID;
+            }
 
-		try {
-			if (!contentHandler.parseContents(contents)) {
-				return INDETERMINATE;
-			}
-		}
-		catch (SAXException e) {
-			// we may be handed any kind of contents... it is normal we fail to
-			// parse
-			return INDETERMINATE;
-		}
-		catch (ParserConfigurationException e) {
-			// some bad thing happened - force this describer to be disabled
-			String message =
-				"Internal Error: XML parser configuration error during content description for Service Builder files"; //$NON-NLS-1$
+            // only a top level project element...maybe an Ant buildfile
+            return INDETERMINATE;
+        }
 
-			throw new RuntimeException(message);
-		}
+        return INVALID;
+    }
 
-		// Check to see if we matched our criteria.
-		if (contentHandler.hasDTD()) {
-			if (contentHandler.hasTopLevelElement()) {
-				return VALID;
-			}
-
-			// only a top level project element...maybe an Ant buildfile
-			return INDETERMINATE;
-		}
-
-		return INVALID;
-	}
-
-	protected abstract AbstractDefaultHandler createDefaultHandler();
+    protected abstract AbstractDefaultHandler createDefaultHandler();
 
 }

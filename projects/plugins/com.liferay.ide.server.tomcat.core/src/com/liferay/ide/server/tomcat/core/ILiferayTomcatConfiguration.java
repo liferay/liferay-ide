@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,12 +22,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Greg Amerson
  */
-public interface ILiferayTomcatConfiguration {
+public interface ILiferayTomcatConfiguration
+{
+    public void load( IFolder folder, IProgressMonitor monitor ) throws CoreException;
 
-	public void load(IFolder folder, IProgressMonitor monitor)
-		throws CoreException;
-
-	// TODO uncomment this fix this one we have "serve" directly re-enabled
-	// public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);
-
+    // public IStatus updateContextsToServeDirectly(IPath baseDir, String sharedLoader, IProgressMonitor monitor);
 }

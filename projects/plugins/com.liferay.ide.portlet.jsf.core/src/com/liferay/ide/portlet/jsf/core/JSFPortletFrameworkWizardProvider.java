@@ -75,11 +75,12 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
     
     private Map<String, Object> propertyValues = new HashMap<String, Object>();
 
-	public JSFPortletFrameworkWizardProvider() {
-		super();
-	}
-    
-	private IStatus checkTemplateFolderExists( final IDataModel model, final String propertyName )
+    public JSFPortletFrameworkWizardProvider()
+    {
+        super();
+    }
+
+    private IStatus checkTemplateFolderExists( final IDataModel model, final String propertyName )
     {
         IStatus retval = null;
 
@@ -108,176 +109,189 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
         return retval;
     }
-    
-	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		IProjectFacetVersion jsfFacetVersion = getJSFProjectFacet(facetedProject);
-		IProjectFacet jsfFacet = JSFCorePlugin.JSF_FACET;
 
-		if (jsfFacetVersion == null) {
+    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    {
+        IProjectFacetVersion jsfFacetVersion = getJSFProjectFacet( facetedProject );
+        IProjectFacet jsfFacet = JSFCorePlugin.JSF_FACET;
 
-			jsfFacetVersion = jsfFacet.getVersion(JSF_FACET_SUPPORTED_VERSION);
-			facetedProject.addProjectFacet(jsfFacetVersion);
-		}
+        if( jsfFacetVersion == null )
+        {
 
-		Action action = facetedProject.getProjectFacetAction(jsfFacet);
-		IDataModel jsfFacetDataModel = (IDataModel) action.getConfig();
+            jsfFacetVersion = jsfFacet.getVersion( JSF_FACET_SUPPORTED_VERSION );
+            facetedProject.addProjectFacet( jsfFacetVersion );
+        }
 
-		jsfFacetDataModel.setProperty(SERVLET_URL_PATTERNS, null);
-		jsfFacetDataModel.setProperty(WEBCONTENT_DIR, "docroot");
+        Action action = facetedProject.getProjectFacetAction( jsfFacet );
+        IDataModel jsfFacetDataModel = (IDataModel) action.getConfig();
 
-		LibraryInstallDelegate libraryInstallDelegate =
-			(LibraryInstallDelegate) jsfFacetDataModel.getProperty(LIBRARY_PROVIDER_DELEGATE);
+        jsfFacetDataModel.setProperty( SERVLET_URL_PATTERNS, null );
+        jsfFacetDataModel.setProperty( WEBCONTENT_DIR, "docroot" );
 
-		List<ILibraryProvider> providers = libraryInstallDelegate.getLibraryProviders();
+        LibraryInstallDelegate libraryInstallDelegate =
+            (LibraryInstallDelegate) jsfFacetDataModel.getProperty( LIBRARY_PROVIDER_DELEGATE );
 
-		ILibraryProvider noOpProvider = null;
+        List<ILibraryProvider> providers = libraryInstallDelegate.getLibraryProviders();
 
-		for (ILibraryProvider provider : providers) {
-			if (provider.getId().equals("jsf-no-op-library-provider")) {
-				noOpProvider = provider;
-				break;
-			}
-		}
+        ILibraryProvider noOpProvider = null;
 
-		if (noOpProvider != null) {
-			libraryInstallDelegate.setLibraryProvider(noOpProvider);
-		}
+        for( ILibraryProvider provider : providers )
+        {
+            if( provider.getId().equals( "jsf-no-op-library-provider" ) )
+            {
+                noOpProvider = provider;
+                break;
+            }
+        }
 
-		return Status.OK_STATUS;
-	}
-    
-	@Override
-	public Object getDefaultProperty( String propertyName )
-	{
+        if( noOpProvider != null )
+        {
+            libraryInstallDelegate.setLibraryProvider( noOpProvider );
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    @Override
+    public Object getDefaultProperty( String propertyName )
+    {
         if( COMPONENT_SUITE_JSF_STANDARD.equals( propertyName ) )
         {
             return true;
         }
-	    
-	    return super.getDefaultProperty( propertyName );
-	}
 
-	@Override
-	public IProjectFacet[] getFacets() {
-		return new IProjectFacet[] { JSFCorePlugin.JSF_FACET };
-	}
+        return super.getDefaultProperty( propertyName );
+    }
 
-	protected IProjectFacetVersion getJSFProjectFacet(IFacetedProjectWorkingCopy project) {
-		Set<IProjectFacetVersion> facets = project.getProjectFacets();
+    @Override
+    public IProjectFacet[] getFacets()
+    {
+        return new IProjectFacet[] { JSFCorePlugin.JSF_FACET };
+    }
 
-		for (IProjectFacetVersion facet : facets) {
-			if (facet.getProjectFacet().getId().equals(IJSFCoreConstants.JSF_CORE_FACET_ID)) {
-				return facet;
-			}
-		}
+    protected IProjectFacetVersion getJSFProjectFacet( IFacetedProjectWorkingCopy project )
+    {
+        Set<IProjectFacetVersion> facets = project.getProjectFacets();
 
-		return null;
-	}
+        for( IProjectFacetVersion facet : facets )
+        {
+            if( facet.getProjectFacet().getId().equals( IJSFCoreConstants.JSF_CORE_FACET_ID ) )
+            {
+                return facet;
+            }
+        }
 
-	@Override
-	public Collection<String> getPropertyNames()
-	{
-	    return PROPERTY_NAMES_LIST;
-	}
+        return null;
+    }
 
-	@Override
-	public String getShortName()
-	{
+    @Override
+    public Collection<String> getPropertyNames()
+    {
+        return PROPERTY_NAMES_LIST;
+    }
+
+    @Override
+    public String getShortName()
+    {
         for( String key : propertyValues.keySet() )
         {
             if( propertyValues.get( key ) instanceof Boolean )
             {
                 Boolean selected = (Boolean) propertyValues.get( key );
-                
+
                 if( selected )
                 {
                     return SUITES.get( key );
                 }
             }
         }
-	    
-	    return super.getShortName();
-	}
-    
-	@Override
-	public IStatus getUnsupportedSDKErrorMsg() {
-		return JSFCorePlugin.createErrorStatus( "JSF framework requires SDK version " + requiredSDKVersion +
-			". Download a compatible SDK at www.portletfaces.org/projects/portletfaces-bridge/liferay-ide" );
-	}
-	
-	@Override
-	public boolean hasPropertyName( String propertyName )
-	{
-	    return PROPERTY_NAMES_LIST.contains( propertyName );
-	}
 
-	@Override
-	public IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject) {
-		/*
-		 * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
-		 * will overwrite our web.xml that comes with in the template
-		 */
-
-		SDK sdk = SDKUtil.getSDK( facetedProject.getProject() );
-
-		if (sdk == null) {
-			return JSFCorePlugin.createErrorStatus("Could not get SDK from newly created project.");
-		}
-
-		try {
-			File originalWebXmlFile =
-				sdk.getLocation().append("tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml").toFile();
-
-			IFolder docroot = CoreUtil.getDocroot( facetedProject.getProject() );
-
-			docroot.getFile("WEB-INF/web.xml").setContents(
-				new FileInputStream(originalWebXmlFile), IResource.FORCE, null);
-		}
-		catch (Exception e) {
-			return JSFCorePlugin.createErrorStatus("Could not copy original web.xml from JSF template in SDK.", e);
-		}
-
-		return Status.OK_STATUS;
-	}
-	
-	@Override
-	public void propertySet( String propertyName, Object propertyValue )
-	{
-	    if( PROPERTY_NAMES_LIST.contains( propertyName ) )
-	    {
-	        propertyValues.put( propertyName, propertyValue );
-	    }
-	    else
-	    {
-    	    super.propertySet( propertyName, propertyValue );
-	    }
-	}
-	
-	public void reinitialize()
-	{
-	    propertyValues.clear();
-	}
+        return super.getShortName();
+    }
 
     @Override
-	public IStatus validate( final IDataModel model, final String propertyName )
-	{
-	    IStatus retval = null;
-	    
+    public IStatus getUnsupportedSDKErrorMsg()
+    {
+        return JSFCorePlugin.createErrorStatus( "JSF framework requires SDK version " + requiredSDKVersion +
+            ". Download a compatible SDK at www.portletfaces.org/projects/portletfaces-bridge/liferay-ide" );
+    }
+
+    @Override
+    public boolean hasPropertyName( String propertyName )
+    {
+        return PROPERTY_NAMES_LIST.contains( propertyName );
+    }
+
+    @Override
+    public IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject )
+    {
+        /*
+         * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
+         * will overwrite our web.xml that comes with in the template
+         */
+
+        SDK sdk = SDKUtil.getSDK( facetedProject.getProject() );
+
+        if( sdk == null )
+        {
+            return JSFCorePlugin.createErrorStatus( "Could not get SDK from newly created project." );
+        }
+
+        try
+        {
+            File originalWebXmlFile =
+                sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile();
+
+            IFolder docroot = CoreUtil.getDocroot( facetedProject.getProject() );
+
+            docroot.getFile( "WEB-INF/web.xml" ).setContents(
+                new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+        }
+        catch( Exception e )
+        {
+            return JSFCorePlugin.createErrorStatus( "Could not copy original web.xml from JSF template in SDK.", e );
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    @Override
+    public void propertySet( String propertyName, Object propertyValue )
+    {
+        if( PROPERTY_NAMES_LIST.contains( propertyName ) )
+        {
+            propertyValues.put( propertyName, propertyValue );
+        }
+        else
+        {
+            super.propertySet( propertyName, propertyValue );
+        }
+    }
+
+    public void reinitialize()
+    {
+        propertyValues.clear();
+    }
+
+    @Override
+    public IStatus validate( final IDataModel model, final String propertyName )
+    {
+        IStatus retval = null;
+
         if( ( COMPONENT_SUITE_JSF_STANDARD.equals( propertyName ) ||
-                        COMPONENT_SUITE_LIFERAY_FACES_ALLOY.equals( propertyName ) ||
-                        COMPONENT_SUITE_ICEFACES.equals( propertyName ) ||
-                        COMPONENT_SUITE_PRIMEFACES.equals( propertyName ) ||
-                        COMPONENT_SUITE_RICHFACES.equals( propertyName ) ) && model.getBooleanProperty( propertyName ) )
+            COMPONENT_SUITE_LIFERAY_FACES_ALLOY.equals( propertyName ) ||
+            COMPONENT_SUITE_ICEFACES.equals( propertyName ) || COMPONENT_SUITE_PRIMEFACES.equals( propertyName ) || COMPONENT_SUITE_RICHFACES.equals( propertyName ) ) &&
+            model.getBooleanProperty( propertyName ) )
         {
             retval = checkTemplateFolderExists( model, propertyName );
         }
-        
+
         if( retval == null )
         {
             retval = super.validate( model, propertyName );
         }
-        
+
         return retval;
-	}
+    }
 
 }

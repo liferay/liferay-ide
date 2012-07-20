@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,91 +34,108 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Greg Amerson
  */
-public class PortletColumnEditPart extends BaseGraphicalEditPart {
+public class PortletColumnEditPart extends BaseGraphicalEditPart
+{
 
+    public PortletColumnEditPart()
+    {
+        super();
+    }
 
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        String prop = evt.getPropertyName();
 
-	public PortletColumnEditPart() {
-		super();
-	}
+        if( PortletColumn.WEIGHT_PROP.equals( prop ) )
+        {
+            refreshVisuals();
+        }
+    }
 
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
+    protected void createEditPolicies()
+    {
+        // allow removal of the associated model element
+        installEditPolicy( EditPolicy.COMPONENT_ROLE, new PortletColumnComponentEditPolicy() );
+        installEditPolicy( EditPolicy.LAYOUT_ROLE, new PortletColumnLayoutEditPolicy() );
+    }
 
-		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
-			refreshVisuals();
-		}
-	}
+    protected IFigure createFigure()
+    {
+        IFigure f = createFigureForModel();
+        f.setOpaque( true ); // non-transparent figure
+        f.setBackgroundColor( new Color( null, 232, 232, 232 ) );
 
-	protected void createEditPolicies() {
-		// allow removal of the associated model element
-		installEditPolicy(EditPolicy.COMPONENT_ROLE, new PortletColumnComponentEditPolicy());
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new PortletColumnLayoutEditPolicy());
-	}
+        return f;
+    }
 
-	protected IFigure createFigure() {
-		IFigure f = createFigureForModel();
-		f.setOpaque(true); // non-transparent figure
-		f.setBackgroundColor(new Color(null, 232, 232, 232));
+    protected IFigure createFigureForModel()
+    {
+        if( getModel() instanceof PortletColumn )
+        {
+            RoundedRectangle rect = new ColumnFigure();
+            rect.setCornerDimensions( new Dimension( 20, 20 ) );
 
-		return f;
-	}
+            return rect;
+        }
+        else
+        {
+            throw new IllegalArgumentException();
+        }
+    }
 
-	protected IFigure createFigureForModel() {
-		if (getModel() instanceof PortletColumn) {
-			RoundedRectangle rect = new ColumnFigure();
-			rect.setCornerDimensions(new Dimension(20, 20));
+    public PortletColumn getCastedModel()
+    {
+        return (PortletColumn) getModel();
+    }
 
-			return rect;
-		}
-		else {
-			throw new IllegalArgumentException();
-		}
-	}
+    public PortletLayoutEditPart getCastedParent()
+    {
+        return (PortletLayoutEditPart) getParent();
+    }
 
-	public PortletColumn getCastedModel() {
-		return (PortletColumn) getModel();
-	}
+    protected ColumnFigure getCastedFigure()
+    {
+        return (ColumnFigure) getFigure();
+    }
 
-	public PortletLayoutEditPart getCastedParent() {
-		return (PortletLayoutEditPart) getParent();
-	}
+    protected void refreshVisuals()
+    {
+        Object constraint =
+            ( (GraphicalEditPart) getParent() ).getFigure().getLayoutManager().getConstraint( getFigure() );
+        GridData gd = null;
 
-	protected ColumnFigure getCastedFigure() {
-		return (ColumnFigure) getFigure();
-	}
+        if( constraint instanceof GridData )
+        {
+            gd = (GridData) constraint;
 
-	protected void refreshVisuals() {
-		Object constraint = ((GraphicalEditPart) getParent()).getFigure().getLayoutManager().getConstraint(getFigure());
-		GridData gd = null;
+            if( gd.heightHint == SWT.DEFAULT )
+            {
+                gd.heightHint = getCastedParent().getDefaultColumnHeight();
+            }
 
-		if (constraint instanceof GridData) {
-			gd = (GridData) constraint;
+        }
+        else
+        {
+            gd = createGridData();
+        }
 
-			if (gd.heightHint == SWT.DEFAULT) {
-				gd.heightHint = getCastedParent().getDefaultColumnHeight();
-			}
+        ( (GraphicalEditPart) getParent() ).setLayoutConstraint( this, getFigure(), gd );
 
-		}
-		else {
-			gd = createGridData();
-		}
+        int columnWeight = getCastedModel().getWeight();
 
-		((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), gd);
+        if( columnWeight == PortletColumn.DEFAULT_WEIGHT )
+        {
+            columnWeight = 100;
+        }
 
-		int columnWeight = getCastedModel().getWeight();
+        getCastedFigure().setText( columnWeight + "%" );
+    }
 
-		if (columnWeight == PortletColumn.DEFAULT_WEIGHT) {
-			columnWeight = 100;
-		}
-
-		getCastedFigure().setText(columnWeight + "%");
-	}
-
-	public GridData createGridData() {
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd.heightHint = getCastedParent().getDefaultColumnHeight();
-		return gd;
-	}
+    public GridData createGridData()
+    {
+        GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 );
+        gd.heightHint = getCastedParent().getDefaultColumnHeight();
+        return gd;
+    }
 
 }

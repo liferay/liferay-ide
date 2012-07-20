@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -18,26 +18,30 @@ import org.eclipse.wst.server.ui.FacetRuntimeComponentLabelProvider;
 /**
  * @author Greg Amerson
  */
-public class LiferayRuntimeStubFacetComponentLabelProvider extends FacetRuntimeComponentLabelProvider {
+public class LiferayRuntimeStubFacetComponentLabelProvider extends FacetRuntimeComponentLabelProvider
+{
 
-	public final class RuntimeLabelProvider implements IRuntimeComponentLabelProvider {
+    public final class RuntimeLabelProvider implements IRuntimeComponentLabelProvider
+    {
+        private final IRuntimeComponent rc;
 
-		private final IRuntimeComponent rc;
+        public RuntimeLabelProvider( IRuntimeComponent rc )
+        {
+            this.rc = rc;
+        }
 
-		public RuntimeLabelProvider(IRuntimeComponent rc) {
-			this.rc = rc;
-		}
+        public String getLabel()
+        {
+            return rc.getProperty( "type" );
+        }
+    }
 
-		public String getLabel() {
-			return rc.getProperty("type");
-		}
-	}
+    @SuppressWarnings( "rawtypes" )
+    public Object getAdapter( Object adaptable, Class adapterType )
+    {
+        IRuntimeComponent rc = (IRuntimeComponent) adaptable;
 
-	@SuppressWarnings("rawtypes")
-	public Object getAdapter(Object adaptable, Class adapterType) {
-		IRuntimeComponent rc = (IRuntimeComponent) adaptable;
-
-		return new RuntimeLabelProvider(rc);
-	}
+        return new RuntimeLabelProvider( rc );
+    }
 
 }

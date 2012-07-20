@@ -21,12 +21,12 @@ package com.liferay.ide.hook.ui.editor;
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.model.CustomJsp;
+import com.liferay.ide.hook.core.model.CustomJspDir;
+import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.model.Hook600;
+import com.liferay.ide.hook.core.model.Hook610;
 import com.liferay.ide.hook.core.model.HookVersionType;
-import com.liferay.ide.hook.core.model.ICustomJsp;
-import com.liferay.ide.hook.core.model.ICustomJspDir;
-import com.liferay.ide.hook.core.model.IHook;
-import com.liferay.ide.hook.core.model.IHook600;
-import com.liferay.ide.hook.core.model.IHook610;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -65,195 +65,200 @@ import org.w3c.dom.DocumentType;
 public class HookXmlEditor extends SapphireEditorForXml
 {
 
-	private static final String EDITOR_DEFINITION_PATH =
-		"com.liferay.ide.hook.ui/com/liferay/ide/eclipse/hook/ui/editor/hook-editor.sdef/HookConfigurationPage";
+    private static final String EDITOR_DEFINITION_PATH =
+        "com.liferay.ide.hook.ui/com/liferay/ide/hook/ui/editor/hook-editor.sdef/HookConfigurationPage";
 
-	public static final String ID = "com.liferay.ide.hook.ui.editor.HookXmlEditor";
+    public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";
 
-	protected boolean customModelDirty = false;
+    protected boolean customModelDirty = false;
 
-	private boolean ignoreCustomModelChanges;
+    private boolean ignoreCustomModelChanges;
 
-	/**
+    /**
 	 *
 	 */
-	public HookXmlEditor() {
-		super( ID );
+    public HookXmlEditor()
+    {
+        super( ID );
 
-		setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
-	}
+        setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
+    }
 
-	private void copyCustomJspsToProject( ModelElementList<ICustomJsp> customJsps )
-	{
-		try
-		{
-			ICustomJspDir customJspDirElement = this.getModelElement().nearest( IHook.class ).getCustomJspDir().element();
+    private void copyCustomJspsToProject( ModelElementList<CustomJsp> customJsps )
+    {
+        try
+        {
+            CustomJspDir customJspDirElement = this.getModelElement().nearest( Hook.class ).getCustomJspDir().element();
 
-			if ( customJspDirElement != null && customJspDirElement.validation().ok() )
-			{
-				Path customJspDir = customJspDirElement.getValue().getContent();
-				IFolder docroot = CoreUtil.getDocroot( getProject() );
-				IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+            if( customJspDirElement != null && customJspDirElement.validation().ok() )
+            {
+                Path customJspDir = customJspDirElement.getValue().getContent();
+                IFolder docroot = CoreUtil.getDocroot( getProject() );
+                IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
 
-				ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
-				IPath portalDir = liferayRuntime.getPortalDir();
+                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
+                IPath portalDir = liferayRuntime.getPortalDir();
 
-				for ( ICustomJsp customJsp : customJsps )
-				{
-					String content = customJsp.getValue().getContent();
+                for( CustomJsp customJsp : customJsps )
+                {
+                    String content = customJsp.getValue().getContent();
 
-					if( !empty( content ) )
-					{
-						IFile customJspFile = customJspFolder.getFile( content );
+                    if( !empty( content ) )
+                    {
+                        IFile customJspFile = customJspFolder.getFile( content );
 
-						if( !customJspFile.exists() )
-						{
-							IPath portalJsp = portalDir.append( content );
+                        if( !customJspFile.exists() )
+                        {
+                            IPath portalJsp = portalDir.append( content );
 
-							try
-							{
-								CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
-								customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
-							}
-							catch( Exception e )
-							{
-								HookUI.logError( e );
-							}
-						}
-					}
-				}
-			}
-		}
-		catch ( CoreException e )
-		{
-			HookUI.logError( e);
-		}
+                            try
+                            {
+                                CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
+                                customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
+                            }
+                            catch( Exception e )
+                            {
+                                HookUI.logError( e );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            HookUI.logError( e );
+        }
 
-	}
+    }
 
-	@Override
-	protected IModelElement createModel()
-	{
-		RootXmlResource resource = null;
-		HookVersionType dtdVersion = null;
+    @Override
+    protected IModelElement createModel()
+    {
+        RootXmlResource resource = null;
+        HookVersionType dtdVersion = null;
 
-		try
-		{
-		    InputStream editorContents = getFileContents();
-		    
-			resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
-			Document document = resource.getDomDocument();
-			dtdVersion = getDTDVersion( document );
+        try
+        {
+            InputStream editorContents = getFileContents();
 
-			if ( document != null )
-			{
-				switch ( dtdVersion )
-				{
+            resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
+            Document document = resource.getDomDocument();
+            dtdVersion = getDTDVersion( document );
 
-				case v6_0_0:
-					setRootModelElementType( IHook600.TYPE );
-					break;
+            if( document != null )
+            {
+                switch( dtdVersion )
+                {
 
-				case v6_1_0:
-				default:
-					setRootModelElementType( IHook610.TYPE );
-					break;
+                    case v6_0_0:
+                        setRootModelElementType( Hook600.TYPE );
+                        break;
 
-				}
-			}
-		}
-		catch ( Exception e )
-		{
-			HookUI.logError( e );
-			setRootModelElementType( IHook610.TYPE );
-		}
-		finally
-		{
-			if ( resource != null )
-			{
-				resource.dispose();
-			}
-		}
+                    case v6_1_0:
+                    default:
+                        setRootModelElementType( Hook610.TYPE );
+                        break;
 
-		IModelElement modelElement = super.createModel();
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            HookUI.logError( e );
+            setRootModelElementType( Hook610.TYPE );
+        }
+        finally
+        {
+            if( resource != null )
+            {
+                resource.dispose();
+            }
+        }
 
-		if ( dtdVersion != null )
-		{
-			IHook hookModel = (IHook) modelElement;
+        IModelElement modelElement = super.createModel();
 
-			hookModel.setVersion( dtdVersion );
-		}
+        if( dtdVersion != null )
+        {
+            Hook hookModel = (Hook) modelElement;
 
-		Listener listener = new FilteredListener<PropertyContentEvent>()
-		{
-			@Override
-			public void handleTypedEvent( final PropertyContentEvent event )
-			{
-				handleCustomJspsPropertyChangedEvent( event );
-			}
-		};
+            hookModel.setVersion( dtdVersion );
+        }
 
+        Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
 
-		this.ignoreCustomModelChanges = true;
-		modelElement.attach( listener, "CustomJsps/*" );
-		this.ignoreCustomModelChanges = false;
+            @Override
+            public void handleTypedEvent( final PropertyContentEvent event )
+            {
+                handleCustomJspsPropertyChangedEvent( event );
+            }
+        };
 
-		return modelElement;
-	}
+        this.ignoreCustomModelChanges = true;
+        modelElement.attach( listener, "CustomJsps/*" );
+        this.ignoreCustomModelChanges = false;
 
-	@Override
-	public void doSave( IProgressMonitor monitor )
-	{
-		if ( this.customModelDirty )
-		{
-			ModelElementList<ICustomJsp> customJsps = getModelElement().nearest( IHook.class ).getCustomJsps();
+        return modelElement;
+    }
 
-			copyCustomJspsToProject( customJsps );
+    @Override
+    public void doSave( IProgressMonitor monitor )
+    {
+        if( this.customModelDirty )
+        {
+            ModelElementList<CustomJsp> customJsps = getModelElement().nearest( Hook.class ).getCustomJsps();
 
-			this.customModelDirty = false;
+            copyCustomJspsToProject( customJsps );
 
-			super.doSave( monitor );
+            this.customModelDirty = false;
 
-			this.firePropertyChange( IEditorPart.PROP_DIRTY );
-		}
-		else
-		{
-			super.doSave( monitor );
-		}
-	}
+            super.doSave( monitor );
 
-	/**
-	 * A small utility method used to compute the DTD version
-	 *
-	 * @param document
-	 *            - the document that is loaded by the editor
-	 * @return - {@link HookVersionType}
-	 */
-	HookVersionType getDTDVersion( Document document ) {
-		HookVersionType dtdVersion = null;
-		DocumentType docType = document.getDoctype();
-		if ( docType != null ) {
-			String publicId = docType.getPublicId();
-			String systemId = docType.getSystemId();
-			if ( publicId != null && systemId != null ) {
-				if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
-				{
-					dtdVersion = HookVersionType.v6_0_0;
-				}
-				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) {
-					dtdVersion = HookVersionType.v6_1_0;
-				}
-			}
+            this.firePropertyChange( IEditorPart.PROP_DIRTY );
+        }
+        else
+        {
+            super.doSave( monitor );
+        }
+    }
 
-		}
+    /**
+     * A small utility method used to compute the DTD version
+     * 
+     * @param document
+     *            - the document that is loaded by the editor
+     * @return - {@link HookVersionType}
+     */
+    private HookVersionType getDTDVersion( Document document )
+    {
+        HookVersionType dtdVersion = null;
+        DocumentType docType = document.getDoctype();
+        if( docType != null )
+        {
+            String publicId = docType.getPublicId();
+            String systemId = docType.getSystemId();
+            if( publicId != null && systemId != null )
+            {
+                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
+                {
+                    dtdVersion = HookVersionType.v6_0_0;
+                }
+                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
+                {
+                    dtdVersion = HookVersionType.v6_1_0;
+                }
+            }
 
-		return dtdVersion;
-	}
-	
-	public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
+        }
+
+        return dtdVersion;
+    }
+
+    public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
     {
         final IEditorInput editorInput = getEditorInput();
-        
+
         if( editorInput instanceof FileEditorInput )
         {
             return ( (FileEditorInput) editorInput ).getFile().getContents();
@@ -272,34 +277,34 @@ public class HookXmlEditor extends SapphireEditorForXml
         }
     }
 
-	protected void handleCustomJspsPropertyChangedEvent( final PropertyContentEvent event )
-	{
-		if ( this.ignoreCustomModelChanges )
-		{
-			return;
-		}
+    protected void handleCustomJspsPropertyChangedEvent( final PropertyContentEvent event )
+    {
+        if( this.ignoreCustomModelChanges )
+        {
+            return;
+        }
 
-		this.customModelDirty = true;
-		this.firePropertyChange( IEditorPart.PROP_DIRTY );
-	}
+        this.customModelDirty = true;
+        this.firePropertyChange( IEditorPart.PROP_DIRTY );
+    }
 
-	@Override
-	public boolean isDirty()
-	{
-		if ( this.customModelDirty )
-		{
-			return true;
-		}
+    @Override
+    public boolean isDirty()
+    {
+        if( this.customModelDirty )
+        {
+            return true;
+        }
 
-		return super.isDirty();
-	}
+        return super.isDirty();
+    }
 
-	@Override
-	protected void pageChange( int pageIndex )
-	{
-		this.ignoreCustomModelChanges = true;
-		super.pageChange( pageIndex );
-		this.ignoreCustomModelChanges = false;
-	}
+    @Override
+    protected void pageChange( int pageIndex )
+    {
+        this.ignoreCustomModelChanges = true;
+        super.pageChange( pageIndex );
+        this.ignoreCustomModelChanges = false;
+    }
 
 }

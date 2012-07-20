@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -19,23 +19,22 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntimeComponent;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "rawtypes"
-})
-public class LiferayRuntimeStubClasspathFactory implements IAdapterFactory {
+@SuppressWarnings( { "restriction", "rawtypes" } )
+public class LiferayRuntimeStubClasspathFactory implements IAdapterFactory
+{
 
-	private static final Class[] ADAPTER_TYPES = {
-		IClasspathProvider.class
-	};
+    private static final Class[] ADAPTER_TYPES = { IClasspathProvider.class };
 
-	public Object getAdapter(Object adaptable, Class adapterType) {
-		IRuntimeComponent rc = (IRuntimeComponent) adaptable;
+    public Object getAdapter( Object adaptable, Class adapterType )
+    {
+        IRuntimeComponent rc = (IRuntimeComponent) adaptable;
 
-		return new RuntimeClasspathProvider(rc);
-	}
+        return new RuntimeClasspathProvider( rc );
+    }
 
-	public Class[] getAdapterList() {
-		return ADAPTER_TYPES;
-	}
+    public Class[] getAdapterList()
+    {
+        return ADAPTER_TYPES;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.service.ui;
 
 import com.liferay.ide.portlet.core.PortletCore;
@@ -22,26 +23,32 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
+/**
+ * @author Gregory Amerson
+ */
+public class BuildServicesActionHandler extends SapphireActionHandler
+{
 
-public class BuildServicesActionHandler extends SapphireActionHandler {
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        IFile file = context.getPart().getModelElement().adapt( IFile.class );
 
-	@Override
-	protected Object run(SapphireRenderingContext context) {
-		IFile file = context.getPart().getModelElement().adapt(IFile.class);
+        if( file != null && file.exists() )
+        {
+            BuildServiceJob job = PortletCore.createBuildServiceJob( file );
 
-		if (file != null && file.exists()) {
-			BuildServiceJob job = PortletCore.createBuildServiceJob(file);
+            job.schedule();
+        }
+        else
+        {
+            MessageDialog.openWarning(
+                context.getShell(),
+                "Build Services",
+                "This action is unavailable for files that are outside of an eclipse workspace. Import the project using Import Liferay Project from Existing Source wizard." );
+        }
 
-			job.schedule();
-		}
-		else
-		{
-			MessageDialog.openWarning(
-				context.getShell(), "Build Services",
-				"This action is unavailable for files that are outside of an eclipse workspace. Import the project using Import Liferay Project from Existing Source wizard." );
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 }

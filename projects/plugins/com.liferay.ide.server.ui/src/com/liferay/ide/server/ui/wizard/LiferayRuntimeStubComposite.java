@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -48,290 +48,294 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
  */
 public class LiferayRuntimeStubComposite extends Composite
 {
-	protected Combo comboRuntimeStubType;
-	protected boolean ignoreModifyEvent = false;
-	protected ILiferayRuntime liferayRuntime;
-	protected IRuntimeWorkingCopy runtimeWC;
-	protected Text textInstallDir;
-	protected Text textName;
-	protected IWizardHandle wizard;
 
-	public LiferayRuntimeStubComposite( Composite parent, IWizardHandle wizard )
-	{
-		super( parent, SWT.NONE );
-		this.wizard = wizard;
+    protected Combo comboRuntimeStubType;
+    protected boolean ignoreModifyEvent = false;
+    protected ILiferayRuntime liferayRuntime;
+    protected IRuntimeWorkingCopy runtimeWC;
+    protected Text textInstallDir;
+    protected Text textName;
+    protected IWizardHandle wizard;
 
-		createControl();
-		initialize();
-		validate();
-	}
+    public LiferayRuntimeStubComposite( Composite parent, IWizardHandle wizard )
+    {
+        super( parent, SWT.NONE );
+        this.wizard = wizard;
 
-	public void setRuntime( IRuntimeWorkingCopy newRuntime )
-	{
-		if ( newRuntime == null )
-		{
-			runtimeWC = null;
-			liferayRuntime = null;
-		}
-		else
-		{
-			runtimeWC = newRuntime;
-			liferayRuntime = (ILiferayRuntime) newRuntime.loadAdapter( ILiferayRuntime.class, null );
-		}
+        createControl();
+        initialize();
+        validate();
+    }
 
-		initialize();
-		validate();
-	}
+    public void setRuntime( IRuntimeWorkingCopy newRuntime )
+    {
+        if( newRuntime == null )
+        {
+            runtimeWC = null;
+            liferayRuntime = null;
+        }
+        else
+        {
+            runtimeWC = newRuntime;
+            liferayRuntime = (ILiferayRuntime) newRuntime.loadAdapter( ILiferayRuntime.class, null );
+        }
 
-	protected void createControl()
-	{
-		setLayout( new GridLayout( 2, false ) );
-		setLayoutData( new GridData( GridData.FILL_BOTH ) );
+        initialize();
+        validate();
+    }
 
-		Label lblName = new Label( this, SWT.NONE );
-		lblName.setText( "Name" );
+    protected void createControl()
+    {
+        setLayout( new GridLayout( 2, false ) );
+        setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
-		new Label( this, SWT.NONE );
+        Label lblName = new Label( this, SWT.NONE );
+        lblName.setText( "Name" );
 
-		textName = new Text( this, SWT.BORDER );
-		textName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
-		textName.addModifyListener( new ModifyListener()
-		{
+        new Label( this, SWT.NONE );
 
-			public void modifyText( ModifyEvent e )
-			{
-				runtimeWC.setName( textName.getText() );
-				validate();
-			}
-		} );
+        textName = new Text( this, SWT.BORDER );
+        textName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        textName.addModifyListener( new ModifyListener()
+        {
 
-		createSpacer();
+            public void modifyText( ModifyEvent e )
+            {
+                runtimeWC.setName( textName.getText() );
+                validate();
+            }
+        } );
 
-		Label lblRuntimeStubType = new Label( this, SWT.NONE );
-		lblRuntimeStubType.setText( "Liferay bundle type" );
+        createSpacer();
 
-		createSpacer();
+        Label lblRuntimeStubType = new Label( this, SWT.NONE );
+        lblRuntimeStubType.setText( "Liferay bundle type" );
 
-		comboRuntimeStubType = new Combo( this, SWT.READ_ONLY );
-		comboRuntimeStubType.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        createSpacer();
 
-		createSpacer();
+        comboRuntimeStubType = new Combo( this, SWT.READ_ONLY );
+        comboRuntimeStubType.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 
-		final Label lblInstall = new Label( this, SWT.WRAP );
-		lblInstall.setText( "Liferay bundle directory" );
+        createSpacer();
 
-		new Label( this, SWT.NONE );
+        final Label lblInstall = new Label( this, SWT.WRAP );
+        lblInstall.setText( "Liferay bundle directory" );
 
-		textInstallDir = new Text( this, SWT.BORDER );
-		textInstallDir.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        new Label( this, SWT.NONE );
 
-		comboRuntimeStubType.addSelectionListener( new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected( SelectionEvent e )
-			{
-				int index = comboRuntimeStubType.getSelectionIndex();
-				ILiferayRuntimeStub selectedStub = LiferayServerCorePlugin.getRuntimeStubs()[index];
-				LiferayRuntimeStubDelegate delegate = getStubDelegate();
-				delegate.setRuntimeStubTypeId( selectedStub.getRuntimeStubTypeId() );
+        textInstallDir = new Text( this, SWT.BORDER );
+        textInstallDir.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 
-				String stubTypeId = selectedStub.getRuntimeStubTypeId();
-				IRuntimeType runtimeType = ServerCore.findRuntimeType( stubTypeId );
+        comboRuntimeStubType.addSelectionListener( new SelectionAdapter()
+        {
 
-				for ( IRuntime runtime : ServerCore.getRuntimes() )
-				{
-					if ( runtime.getRuntimeType().equals( runtimeType ) )
-					{
-						textInstallDir.setText( runtime.getLocation().toOSString() );
-					}
-				}
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                int index = comboRuntimeStubType.getSelectionIndex();
+                ILiferayRuntimeStub selectedStub = LiferayServerCorePlugin.getRuntimeStubs()[index];
+                LiferayRuntimeStubDelegate delegate = getStubDelegate();
+                delegate.setRuntimeStubTypeId( selectedStub.getRuntimeStubTypeId() );
 
-				validate();
-			}
-		} );
+                String stubTypeId = selectedStub.getRuntimeStubTypeId();
+                IRuntimeType runtimeType = ServerCore.findRuntimeType( stubTypeId );
 
-		textInstallDir.addModifyListener( new ModifyListener()
-		{
-			public void modifyText( ModifyEvent e )
-			{
-				textInstallDirChanged( textInstallDir.getText() );
-			}
-		} );
+                for( IRuntime runtime : ServerCore.getRuntimes() )
+                {
+                    if( runtime.getRuntimeType().equals( runtimeType ) )
+                    {
+                        textInstallDir.setText( runtime.getLocation().toOSString() );
+                    }
+                }
 
-		Button btnBrowse = new Button( this, SWT.NONE );
-		btnBrowse.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false, false, 1, 1 ) );
-		btnBrowse.setText( "Browse..." );
-		btnBrowse.addSelectionListener( new SelectionAdapter()
-		{
-			public void widgetSelected( SelectionEvent se )
-			{
-				DirectoryDialog dialog = new DirectoryDialog( LiferayRuntimeStubComposite.this.getShell() );
-				dialog.setMessage( "Select runtime stub directory." );
-				dialog.setFilterPath( textInstallDir.getText() );
-				String selectedDirectory = dialog.open();
+                validate();
+            }
+        } );
 
-				if ( selectedDirectory != null )
-				{
-					textInstallDir.setText( selectedDirectory );
-				}
-			}
-		} );
+        textInstallDir.addModifyListener( new ModifyListener()
+        {
 
-		new Label( this, SWT.NONE );
+            public void modifyText( ModifyEvent e )
+            {
+                textInstallDirChanged( textInstallDir.getText() );
+            }
+        } );
 
-		Dialog.applyDialogFont( this );
+        Button btnBrowse = new Button( this, SWT.NONE );
+        btnBrowse.setLayoutData( new GridData( SWT.FILL, SWT.FILL, false, false, 1, 1 ) );
+        btnBrowse.setText( "Browse..." );
+        btnBrowse.addSelectionListener( new SelectionAdapter()
+        {
 
-		textName.forceFocus();
-	}
+            public void widgetSelected( SelectionEvent se )
+            {
+                DirectoryDialog dialog = new DirectoryDialog( LiferayRuntimeStubComposite.this.getShell() );
+                dialog.setMessage( "Select runtime stub directory." );
+                dialog.setFilterPath( textInstallDir.getText() );
+                String selectedDirectory = dialog.open();
 
-	protected Label createLabel( String text )
-	{
-		Label label = new Label( this, SWT.NONE );
-		label.setText( text );
+                if( selectedDirectory != null )
+                {
+                    textInstallDir.setText( selectedDirectory );
+                }
+            }
+        } );
 
-		GridDataFactory.generate( label, 2, 1 );
+        new Label( this, SWT.NONE );
 
-		return label;
-	}
+        Dialog.applyDialogFont( this );
 
-	protected void createSpacer()
-	{
-		new Label( this, SWT.NONE );
-	}
+        textName.forceFocus();
+    }
 
-	protected Text createTextField( String labelText )
-	{
-		createLabel( labelText );
+    protected Label createLabel( String text )
+    {
+        Label label = new Label( this, SWT.NONE );
+        label.setText( text );
 
-		Text text = new Text( this, SWT.BORDER );
-		text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        GridDataFactory.generate( label, 2, 1 );
 
-		return text;
-	}
+        return label;
+    }
 
-	protected ILiferayRuntime getLiferayRuntime()
-	{
-		return this.liferayRuntime;
-	}
+    protected void createSpacer()
+    {
+        new Label( this, SWT.NONE );
+    }
 
-	protected IRuntimeWorkingCopy getRuntime()
-	{
-		return this.runtimeWC;
-	}
+    protected Text createTextField( String labelText )
+    {
+        createLabel( labelText );
 
-	protected LiferayRuntimeStubDelegate getStubDelegate()
-	{
-		return (LiferayRuntimeStubDelegate) runtimeWC.loadAdapter(
-			LiferayRuntimeStubDelegate.class, new NullProgressMonitor() );
-	}
+        Text text = new Text( this, SWT.BORDER );
+        text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
 
-	protected void initialize()
-	{
-		if ( textName == null || liferayRuntime == null )
-		{
-			return;
-		}
+        return text;
+    }
 
-		ignoreModifyEvent = true;
+    protected ILiferayRuntime getLiferayRuntime()
+    {
+        return this.liferayRuntime;
+    }
 
-		if ( runtimeWC.getName() != null )
-		{
-			textName.setText( runtimeWC.getName() );
-		}
-		else
-		{
-			textName.setText( "" );
-		}
+    protected IRuntimeWorkingCopy getRuntime()
+    {
+        return this.runtimeWC;
+    }
 
-		if ( runtimeWC.getLocation() != null )
-		{
-			textInstallDir.setText( runtimeWC.getLocation().toOSString() );
-		}
-		else
-		{
-			textInstallDir.setText( "" );
-		}
+    protected LiferayRuntimeStubDelegate getStubDelegate()
+    {
+        return (LiferayRuntimeStubDelegate) runtimeWC.loadAdapter(
+            LiferayRuntimeStubDelegate.class, new NullProgressMonitor() );
+    }
 
-		updateStubs();
+    protected void initialize()
+    {
+        if( textName == null || liferayRuntime == null )
+        {
+            return;
+        }
 
-		ignoreModifyEvent = false;
-	}
+        ignoreModifyEvent = true;
 
-	protected void textInstallDirChanged( String text )
-	{
-		if ( ignoreModifyEvent )
-		{
-			return;
-		}
+        if( runtimeWC.getName() != null )
+        {
+            textName.setText( runtimeWC.getName() );
+        }
+        else
+        {
+            textName.setText( "" );
+        }
 
-		runtimeWC.setLocation( new Path( text ) );
+        if( runtimeWC.getLocation() != null )
+        {
+            textInstallDir.setText( runtimeWC.getLocation().toOSString() );
+        }
+        else
+        {
+            textInstallDir.setText( "" );
+        }
 
-		validate();
+        updateStubs();
 
-		// IStatus status = getRuntime().validate(null);
+        ignoreModifyEvent = false;
+    }
 
-	}
+    protected void textInstallDirChanged( String text )
+    {
+        if( ignoreModifyEvent )
+        {
+            return;
+        }
 
-	protected void updateStubs()
-	{
-		ILiferayRuntimeStub[] stubs = LiferayServerCorePlugin.getRuntimeStubs();
+        runtimeWC.setLocation( new Path( text ) );
 
-		if ( CoreUtil.isNullOrEmpty( stubs ) )
-		{
-			return;
-		}
+        validate();
 
-		String[] names = new String[stubs.length];
+        // IStatus status = getRuntime().validate(null);
 
-		LiferayRuntimeStubDelegate delegate = getStubDelegate();
+    }
 
-		String stubId = delegate.getRuntimeStubTypeId();
+    protected void updateStubs()
+    {
+        ILiferayRuntimeStub[] stubs = LiferayServerCorePlugin.getRuntimeStubs();
 
-		int stubIndex = -1;
+        if( CoreUtil.isNullOrEmpty( stubs ) )
+        {
+            return;
+        }
 
-		for ( int i = 0; i < stubs.length; i++ )
-		{
-			names[i] = stubs[i].getName();
-			if ( stubs[i].getRuntimeStubTypeId().equals( stubId ) )
-			{
-				stubIndex = i;
-			}
-		}
+        String[] names = new String[stubs.length];
 
-		comboRuntimeStubType.setItems( names );
+        LiferayRuntimeStubDelegate delegate = getStubDelegate();
 
-		if ( stubIndex >= 0 )
-		{
-			comboRuntimeStubType.select( stubIndex );
-		}
-	}
+        String stubId = delegate.getRuntimeStubTypeId();
 
-	protected IStatus validate()
-	{
-		if ( liferayRuntime == null )
-		{
-			wizard.setMessage( "", IMessageProvider.ERROR );
-			return Status.OK_STATUS;
-		}
+        int stubIndex = -1;
 
-		IStatus status = runtimeWC.validate( null );
+        for( int i = 0; i < stubs.length; i++ )
+        {
+            names[i] = stubs[i].getName();
+            if( stubs[i].getRuntimeStubTypeId().equals( stubId ) )
+            {
+                stubIndex = i;
+            }
+        }
 
-		if ( status == null || status.isOK() )
-		{
-			wizard.setMessage( null, IMessageProvider.NONE );
-		}
-		else if ( status.getSeverity() == IStatus.WARNING )
-		{
-			wizard.setMessage( status.getMessage(), IMessageProvider.WARNING );
-		}
-		else
-		{
-			wizard.setMessage( status.getMessage(), IMessageProvider.ERROR );
-		}
+        comboRuntimeStubType.setItems( names );
 
-		wizard.update();
+        if( stubIndex >= 0 )
+        {
+            comboRuntimeStubType.select( stubIndex );
+        }
+    }
 
-		return status;
-	}
+    protected IStatus validate()
+    {
+        if( liferayRuntime == null )
+        {
+            wizard.setMessage( "", IMessageProvider.ERROR );
+            return Status.OK_STATUS;
+        }
+
+        IStatus status = runtimeWC.validate( null );
+
+        if( status == null || status.isOK() )
+        {
+            wizard.setMessage( null, IMessageProvider.NONE );
+        }
+        else if( status.getSeverity() == IStatus.WARNING )
+        {
+            wizard.setMessage( status.getMessage(), IMessageProvider.WARNING );
+        }
+        else
+        {
+            wizard.setMessage( status.getMessage(), IMessageProvider.ERROR );
+        }
+
+        wizard.update();
+
+        return status;
+    }
 
 }

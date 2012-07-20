@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,32 +22,31 @@ import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
 {
 
-	/**
-	 * Property which specifies the directory where liferay scans for
-	 * autodeployment
-	 */
-	String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
+    /**
+     * Property which specifies the directory where liferay scans for autodeployment
+     */
+    String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
 
-	String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
+    String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
 
-	String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
+    String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
 
-	String PROPERTY_MEMORY_ARGS = "memoryArgs";
+    String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
-	String PROPERTY_USER_TIMEZONE = "userTimezone";
+    String PROPERTY_USER_TIMEZONE = "userTimezone";
 
-	String getAutoDeployDirectory();
+    String getAutoDeployDirectory();
 
-	String getAutoDeployInterval();
+    String getAutoDeployInterval();
 
-	String getExternalProperties();
+    String getExternalProperties();
 
-	String getMemoryArgs();
+    String getMemoryArgs();
 
-	String getUserTimezone();
+    String getUserTimezone();
 
 }

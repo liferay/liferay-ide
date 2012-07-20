@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -19,39 +19,45 @@ import org.eclipse.wst.common.project.facet.ui.IDecorationsProvider;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("rawtypes")
-public class LiferayRuntimeStubDecorationsProvider implements IAdapterFactory {
+@SuppressWarnings( "rawtypes" )
+public class LiferayRuntimeStubDecorationsProvider implements IAdapterFactory
+{
 
-	public class LiferayDecorationsProvider implements IDecorationsProvider {
+    public class LiferayDecorationsProvider implements IDecorationsProvider
+    {
 
-		// private IRuntime runtime;
+        // private IRuntime runtime;
 
-		public LiferayDecorationsProvider(IRuntime adaptableObject) {
-			// runtime = adaptableObject;
-		}
+        public LiferayDecorationsProvider( IRuntime adaptableObject )
+        {
+            // runtime = adaptableObject;
+        }
 
-		public ImageDescriptor getIcon() {
-			return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-				LiferayServerUIPlugin.PLUGIN_ID, "icons/e16/server.png" );
-		}
+        public ImageDescriptor getIcon()
+        {
+            return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+                LiferayServerUIPlugin.PLUGIN_ID, "icons/e16/server.png" );
+        }
 
-	}
+    }
 
-	private static final Class<?>[] ADAPTER_TYPES = {
-		IDecorationsProvider.class
-	};
+    private static final Class<?>[] ADAPTER_TYPES = { IDecorationsProvider.class };
 
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
-		if (IDecorationsProvider.class.equals(adapterType)) {
-			return new LiferayDecorationsProvider((IRuntime) adaptableObject);
-		}
-		else {
-			return null;
-		}
-	}
+    public Object getAdapter( Object adaptableObject, Class adapterType )
+    {
+        if( IDecorationsProvider.class.equals( adapterType ) )
+        {
+            return new LiferayDecorationsProvider( (IRuntime) adaptableObject );
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-	public Class<?>[] getAdapterList() {
-		return ADAPTER_TYPES;
-	}
+    public Class<?>[] getAdapterList()
+    {
+        return ADAPTER_TYPES;
+    }
 
 }

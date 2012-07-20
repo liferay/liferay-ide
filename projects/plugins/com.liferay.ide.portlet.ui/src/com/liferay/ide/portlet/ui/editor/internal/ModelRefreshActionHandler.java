@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,30 +17,33 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
+import com.liferay.ide.portlet.core.model.PortletApp;
+
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
-import com.liferay.ide.portlet.core.model.IPortletApp;
-
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class ModelRefreshActionHandler extends SapphireActionHandler {
+public class ModelRefreshActionHandler extends SapphireActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		IModelElement modelElement =
-			getModelElement().nearest( IPortletApp.class ) != null
-				? getModelElement().nearest( IPortletApp.class ) : getModelElement();
-		if ( modelElement != null ) {
-			modelElement.refresh( true, true );
-		}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        IModelElement modelElement =
+            getModelElement().nearest( PortletApp.class ) != null
+                ? getModelElement().nearest( PortletApp.class ) : getModelElement();
+        if( modelElement != null )
+        {
+            modelElement.refresh( true, true );
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

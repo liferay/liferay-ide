@@ -9,6 +9,7 @@
  *     Larry Isaacs - Initial API and implementation
  *     Greg Amerson <gregory.amerson@liferay.com>
  *******************************************************************************/
+
 package com.liferay.ide.server.tomcat.ui.command;
 
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
@@ -19,34 +20,41 @@ import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 /**
  * Command to change the deploy directory
  */
-@SuppressWarnings("restriction")
-public class SetAutoDeployDirectoryCommand extends ServerCommand {
-	protected String autoDeployDir;
-	protected String oldAutoDeployDir;
+@SuppressWarnings( "restriction" )
+public class SetAutoDeployDirectoryCommand extends ServerCommand
+{
 
-	/**
-	 * Constructs command to set the deploy directory.
-	 * 
-	 * @param server a Tomcat server
-	 * @param deployDir deployment directory to set
-	 */
-	public SetAutoDeployDirectoryCommand(LiferayTomcatServer server, String autoDeployDir) {
-		super(server, Messages.serverEditorActionSetDeployDirectory);
-		this.autoDeployDir = autoDeployDir;
-	}
+    protected String autoDeployDir;
+    protected String oldAutoDeployDir;
 
-	/**
-	 * Execute setting the deploy directory
-	 */
-	public void execute() {
-		oldAutoDeployDir = ((LiferayTomcatServer)server).getAutoDeployDirectory();
-		((LiferayTomcatServer)server).setAutoDeployDirectory(autoDeployDir);
-	}
+    /**
+     * Constructs command to set the deploy directory.
+     * 
+     * @param server
+     *            a Tomcat server
+     * @param deployDir
+     *            deployment directory to set
+     */
+    public SetAutoDeployDirectoryCommand( LiferayTomcatServer server, String autoDeployDir )
+    {
+        super( server, Messages.serverEditorActionSetDeployDirectory );
+        this.autoDeployDir = autoDeployDir;
+    }
 
-	/**
-	 * Restore prior deploy directory
-	 */
-	public void undo() {
-		((LiferayTomcatServer)server).setAutoDeployDirectory(oldAutoDeployDir);
-	}
+    /**
+     * Execute setting the deploy directory
+     */
+    public void execute()
+    {
+        oldAutoDeployDir = ( (LiferayTomcatServer) server ).getAutoDeployDirectory();
+        ( (LiferayTomcatServer) server ).setAutoDeployDirectory( autoDeployDir );
+    }
+
+    /**
+     * Restore prior deploy directory
+     */
+    public void undo()
+    {
+        ( (LiferayTomcatServer) server ).setAutoDeployDirectory( oldAutoDeployDir );
+    }
 }

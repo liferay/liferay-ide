@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,11 +17,11 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.IEventDefinition;
-import com.liferay.ide.portlet.core.model.IEventDefinitionRef;
-import com.liferay.ide.portlet.core.model.IPortletApp;
-import com.liferay.ide.portlet.core.model.IPublicRenderParameter;
-import com.liferay.ide.portlet.core.model.ISupportedPublicRenderParameter;
+import com.liferay.ide.portlet.core.model.EventDefinition;
+import com.liferay.ide.portlet.core.model.EventDefinitionRef;
+import com.liferay.ide.portlet.core.model.PortletApp;
+import com.liferay.ide.portlet.core.model.PublicRenderParameter;
+import com.liferay.ide.portlet.core.model.SupportedPublicRenderParameter;
 
 import java.util.SortedSet;
 
@@ -34,52 +34,63 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class QNamesPossibleValuesService extends PossibleValuesService {
+public class QNamesPossibleValuesService extends PossibleValuesService
+{
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
+     */
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        IModelElement imodelElement = context( IModelElement.class );
+        // values.add( param( "0" ) );
+        PortletApp portletApp = context( IModelElement.class ).nearest( PortletApp.class );
+        
+        if( imodelElement instanceof EventDefinitionRef )
+        {
+            ModelElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();
+            
+            for( EventDefinition eventDefinition : eventDefs )
+            {
+                if( eventDefinition.getNamespaceURI().getContent() != null &&
+                    eventDefinition.getLocalPart().getContent() != null )
+                {
+                    values.add( getQName(
+                        eventDefinition.getNamespaceURI().getContent( false ),
+                        eventDefinition.getLocalPart().getContent() ) );
+                }
+            }
+        }
+        else if( imodelElement instanceof SupportedPublicRenderParameter )
+        {
+            ModelElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
+            
+            for( PublicRenderParameter publicRenderParam : publicRenderParameters )
+            {
+                if( publicRenderParam.getNamespaceURI().getContent() != null &&
+                    publicRenderParam.getLocalPart().getContent() != null )
+                {
+                    values.add( getQName(
+                        publicRenderParam.getNamespaceURI().getContent( false ),
+                        publicRenderParam.getLocalPart().getContent() ) );
+                }
+            }
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-	 */
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values ) {
-		IModelElement imodelElement = context( IModelElement.class );
-		// values.add( param( "0" ) );
-		IPortletApp portletApp = context( IModelElement.class ).nearest( IPortletApp.class );
-		if ( imodelElement instanceof IEventDefinitionRef ) {
-			ModelElementList<IEventDefinition> eventDefs = portletApp.getEventDefinitions();
-			for ( IEventDefinition eventDefinition : eventDefs ) {
-				if ( eventDefinition.getNamespaceURI().getContent() != null &&
-					eventDefinition.getLocalPart().getContent() != null ) {
-					values.add( getQName(
-						eventDefinition.getNamespaceURI().getContent( false ),
-						eventDefinition.getLocalPart().getContent() ) );
-				}
-			}
-		}
-		else if ( imodelElement instanceof ISupportedPublicRenderParameter ) {
-			ModelElementList<IPublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
-			for ( IPublicRenderParameter publicRenderParam : publicRenderParameters ) {
-				if ( publicRenderParam.getNamespaceURI().getContent() != null &&
-					publicRenderParam.getLocalPart().getContent() != null ) {
-					values.add( getQName(
-						publicRenderParam.getNamespaceURI().getContent( false ),
-						publicRenderParam.getLocalPart().getContent() ) );
-				}
-			}
-		}
+    }
 
-	}
+    /**
+     * @param nsURI
+     * @param localPart
+     * @return
+     */
+    private String getQName( String nsURI, String localPart )
+    {
+        QName qName = null;
 
-	/**
-	 * @param nsURI
-	 * @param localPart
-	 * @return
-	 */
-	private String getQName( String nsURI, String localPart ) {
-		QName qName = null;
-
-		qName = new QName( nsURI, localPart );
-		return qName.toString();
-	}
+        qName = new QName( nsURI, localPart );
+        return qName.toString();
+    }
 }

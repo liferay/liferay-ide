@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,50 +28,62 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Greg Amerson
  */
-public class SocketUtil {
+public class SocketUtil
+{
 
-	public static IStatus canConnect(String host, String port) {
-		return canConnect(new Socket(), host, port);
-	}
+    public static IStatus canConnect( String host, String port )
+    {
+        return canConnect( new Socket(), host, port );
+    }
 
-	public static IStatus canConnect(Socket socket, String host, String port) {
-		IStatus status = null;
+    public static IStatus canConnect( Socket socket, String host, String port )
+    {
+        IStatus status = null;
 
-		InputStream in = null;
+        InputStream in = null;
 
-		try {
-			InetSocketAddress address = new InetSocketAddress(host, Integer.valueOf(port));
-			InetSocketAddress local = new InetSocketAddress(0);
-			socket.bind(local);
-			socket.connect(address);
-			in = socket.getInputStream();
-			status = Status.OK_STATUS;
-		}
-		catch (Exception e) {
-			status = LiferayServerCorePlugin.createErrorStatus( "Could not connect." );
-			// e.printStackTrace();
-		}
-		finally {
-			if (socket != null) {
-				try {
-					socket.close();
-				}
-				catch (IOException e) {
-					// best effort
-				}
-			}
+        try
+        {
+            InetSocketAddress address = new InetSocketAddress( host, Integer.valueOf( port ) );
+            InetSocketAddress local = new InetSocketAddress( 0 );
+            socket.bind( local );
+            socket.connect( address );
+            in = socket.getInputStream();
+            status = Status.OK_STATUS;
+        }
+        catch( Exception e )
+        {
+            status = LiferayServerCorePlugin.createErrorStatus( "Could not connect." );
+            // e.printStackTrace();
+        }
+        finally
+        {
+            if( socket != null )
+            {
+                try
+                {
+                    socket.close();
+                }
+                catch( IOException e )
+                {
+                    // best effort
+                }
+            }
 
-			if (in != null) {
-				try {
-					in.close();
-				}
-				catch (Exception e) {
-					// best effort
-				}
-			}
-		}
+            if( in != null )
+            {
+                try
+                {
+                    in.close();
+                }
+                catch( Exception e )
+                {
+                    // best effort
+                }
+            }
+        }
 
-		return status;
-	}
+        return status;
+    }
 
 }

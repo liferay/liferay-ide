@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,22 +26,20 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class AddPortletActionHandler extends SapphireActionHandler {
+public class AddPortletActionHandler extends SapphireActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		/*
-		 * TODO Invoke a common dialog which is not dependent on Liferay New Project Wizard, to make this Editor
-		 * compatible for portlet.xml editing
-		 */
-		NewPortletWizard newPortletWizard = new NewPortletWizard();
-		WizardDialog wizardDialog = new WizardDialog( context.getShell(), newPortletWizard );
-		wizardDialog.create();
-		wizardDialog.open();
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        NewPortletWizard newPortletWizard = new NewPortletWizard();
+        WizardDialog wizardDialog = new WizardDialog( context.getShell(), newPortletWizard );
+        wizardDialog.create();
+        wizardDialog.open();
+        return null;
+    }
 }

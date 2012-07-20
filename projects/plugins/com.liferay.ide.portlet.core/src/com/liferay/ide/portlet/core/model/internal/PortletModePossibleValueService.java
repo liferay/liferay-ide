@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,8 +17,8 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.ICustomPortletMode;
-import com.liferay.ide.portlet.core.model.IPortletApp;
+import com.liferay.ide.portlet.core.model.CustomPortletMode;
+import com.liferay.ide.portlet.core.model.PortletApp;
 
 import java.util.List;
 import java.util.SortedSet;
@@ -28,40 +28,54 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class PortletModePossibleValueService extends PossibleValuesService {
+public class PortletModePossibleValueService extends PossibleValuesService
+{
 
-	// provided by Portlet Specification and Liferay
-	private static final String[] DEFAULT_MODES = { "view", "edit", "help", "about", "config", "edit_defaults",
-		"edit_guest", "preview", "print" };
+    // provided by Portlet Specification and Liferay
+    private static final String[] DEFAULT_MODES = 
+    { 
+        "view", 
+        "edit", 
+        "help", 
+        "about", 
+        "config", 
+        "edit_defaults",
+        "edit_guest", 
+        "preview", 
+        "print" 
+    };
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-	 */
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values ) {
-		IPortletApp portletApp = context( IPortletApp.class );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
+     */
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        PortletApp portletApp = context( PortletApp.class );
 
-		for ( int i = 0; i < DEFAULT_MODES.length; i++ ) {
-			values.add( DEFAULT_MODES[i] );
-		}
+        for( int i = 0; i < DEFAULT_MODES.length; i++ )
+        {
+            values.add( DEFAULT_MODES[i] );
+        }
 
-		// Add the ones defined in portlet.xml
-		List<ICustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
-		for ( ICustomPortletMode iCustomPortletMode : customPortletModes ) {
-			String customPortletMode = iCustomPortletMode.getPortletMode().getText( false );
-			if ( customPortletMode != null ) {
-				values.add( customPortletMode );
-			}
+        // Add the ones defined in portlet.xml
+        List<CustomPortletMode> customPortletModes = portletApp.getCustomPortletModes();
+        for( CustomPortletMode iCustomPortletMode : customPortletModes )
+        {
+            String customPortletMode = iCustomPortletMode.getPortletMode().getText( false );
+            if( customPortletMode != null )
+            {
+                values.add( customPortletMode );
+            }
 
-		}
+        }
 
-	}
+    }
 
-	@Override
-	public boolean isCaseSensitive()
-	{
-		return false;
-	}
+    @Override
+    public boolean isCaseSensitive()
+    {
+        return false;
+    }
 }
-

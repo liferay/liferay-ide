@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,8 +21,8 @@ import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelPro
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
-public interface INewPortletClassDataModelProperties extends INewJavaClassDataModelProperties {
-
+public interface INewPortletClassDataModelProperties extends INewJavaClassDataModelProperties 
+{
 	// public static final String PORTLET_CLASS =
 	// "INewPortletClassDataModelProperties.PORTLET_CLASS";
 
@@ -74,11 +74,17 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.aboutjsp";
 
-	public static final String[] ALL_PORTLET_MODES = {
-		"INewPortletClassDataModelProperties.VIEW_MODE", "INewPortletClassDataModelProperties.EDIT_MODE",
-		"INewPortletClassDataModelProperties.HELP_MODE", ABOUT_MODE, "INewPortletClassDataModelProperties.CONFIG_MODE",
-		"INewPortletClassDataModelProperties.EDITDEFAULTS_MODE", "INewPortletClassDataModelProperties.EDITGUEST_MODE",
-		"INewPortletClassDataModelProperties.PREVIEW_MODE", "INewPortletClassDataModelProperties.PRINT_MODE"
+	public static final String[] ALL_PORTLET_MODES = 
+    {
+		"INewPortletClassDataModelProperties.VIEW_MODE", 
+		"INewPortletClassDataModelProperties.EDIT_MODE",
+		"INewPortletClassDataModelProperties.HELP_MODE", 
+		ABOUT_MODE, 
+		"INewPortletClassDataModelProperties.CONFIG_MODE",
+		"INewPortletClassDataModelProperties.EDITDEFAULTS_MODE", 
+		"INewPortletClassDataModelProperties.EDITGUEST_MODE",
+		"INewPortletClassDataModelProperties.PREVIEW_MODE", 
+		"INewPortletClassDataModelProperties.PRINT_MODE"
 	};
 
 	public static final String ALLOW_MULTIPLE = "INewPortletClassDataModelProperties.ALLOW_MULTIPLE";
@@ -113,7 +119,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String CSS_FILE = "INewPortletClassDataModelProperties.CSS_FILE";
 
-	public static final String[] DEFAULT_SECURITY_ROLE_NAMES = {
+	public static final String[] DEFAULT_SECURITY_ROLE_NAMES = 
+    {
 		"administrator", "guest", "power-user", "user"
 	};
 

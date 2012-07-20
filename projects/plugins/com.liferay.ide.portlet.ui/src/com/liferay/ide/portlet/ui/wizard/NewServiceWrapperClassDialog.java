@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,74 +35,79 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class NewServiceWrapperClassDialog extends NewEventActionClassDialog {
+@SuppressWarnings( "restriction" )
+public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
+{
+    protected String serviceType;
+    protected Text superclassText;
+    protected String wrapperType;
 
-	protected String serviceType;
+    public NewServiceWrapperClassDialog( Shell shell, IDataModel model, String serviceType, String wrapperType )
+    {
+        super( shell, model );
 
-	protected Text superclassText;
+        this.serviceType = serviceType;
+        this.wrapperType = wrapperType;
+    }
 
-	protected String wrapperType;
+    @Override
+    protected Control createDialogArea( Composite parent )
+    {
+        Control control = super.createDialogArea( parent );
 
-	public NewServiceWrapperClassDialog(Shell shell, IDataModel model, String serviceType, String wrapperType) {
-		super(shell, model);
+        String defaultClassname =
+            "Ext" + this.serviceType.substring( this.serviceType.lastIndexOf( '.' ) + 1, this.serviceType.length() );
 
-		this.serviceType = serviceType;
+        classText.setText( defaultClassname );
 
-		this.wrapperType = wrapperType;
-	}
+        return control;
+    }
 
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		Control control = super.createDialogArea(parent);
+    protected void createSuperclassGroup( Composite parent )
+    {
+        // superclass
+        superLabel = new Label( parent, SWT.LEFT );
+        superLabel.setText( J2EEUIMessages.SUPERCLASS_LABEL );
+        superLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-		String defaultClassname =
-			"Ext" + this.serviceType.substring(this.serviceType.lastIndexOf('.') + 1, this.serviceType.length());
+        superclassText = new Text( parent, SWT.SINGLE | SWT.BORDER );
+        superclassText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        superclassText.setText( this.wrapperType );
+        superclassText.addModifyListener( new ModifyListener()
+        {
 
-		classText.setText(defaultClassname);
+            public void modifyText( ModifyEvent e )
+            {
+                qualifiedSuperclassname = classText.getText();
+            }
 
-		return control;
-	}
+        } );
 
-	protected void createSuperclassGroup(Composite parent) {
-		// superclass
-		superLabel = new Label(parent, SWT.LEFT);
-		superLabel.setText(J2EEUIMessages.SUPERCLASS_LABEL);
-		superLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        new Label( parent, SWT.NONE );
+    }
 
-		superclassText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		superclassText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		superclassText.setText(this.wrapperType);
-		superclassText.addModifyListener(new ModifyListener() {
+    @Override
+    protected void okPressed()
+    {
+        // Create the class
+        IDataModel dataModel =
+            DataModelFactory.createDataModel( new NewServiceWrapperClassDataModelProvider(
+                model, getQualifiedClassname(), superclassText.getText() ) );
 
-			public void modifyText(ModifyEvent e) {
-				qualifiedSuperclassname = classText.getText();
-			}
+        NewServiceWrapperClassOperation operation = new NewServiceWrapperClassOperation( dataModel );
 
-		});
+        try
+        {
+            operation.execute( null, null );
+        }
+        catch( ExecutionException e )
+        {
+            e.printStackTrace();
+        }
 
-		new Label(parent, SWT.NONE);
-	}
+        setReturnCode( OK );
 
-	@Override
-	protected void okPressed() {
-		// Create the class
-		IDataModel dataModel =
-			DataModelFactory.createDataModel(new NewServiceWrapperClassDataModelProvider(
-				model, getQualifiedClassname(), superclassText.getText()));
-
-		NewServiceWrapperClassOperation operation = new NewServiceWrapperClassOperation(dataModel);
-
-		try {
-			operation.execute(null, null);
-		}
-		catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-
-		setReturnCode(OK);
-
-		close();
-	}
+        close();
+    }
 
 }

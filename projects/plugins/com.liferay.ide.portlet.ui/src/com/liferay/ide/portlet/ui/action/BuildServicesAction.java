@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -33,49 +33,49 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 public class BuildServicesAction extends AbstractObjectAction
 {
 
-	public BuildServicesAction()
-	{
-		super();
-	}
+    public BuildServicesAction()
+    {
+        super();
+    }
 
-	public void run( IAction action )
-	{
-		if ( fSelection instanceof IStructuredSelection )
-		{
-			Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
+    public void run( IAction action )
+    {
+        if( fSelection instanceof IStructuredSelection )
+        {
+            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
-			Object elem = elems[0];
+            Object elem = elems[0];
 
-			IProject project = null;
+            IProject project = null;
 
-			if ( elem instanceof IFile )
-			{
-				IFile projectFile = (IFile) elem;
+            if( elem instanceof IFile )
+            {
+                IFile projectFile = (IFile) elem;
 
-				project = projectFile.getProject();
-			}
-			else if ( elem instanceof IProject )
-			{
-				project = (IProject) elem;
+                project = projectFile.getProject();
+            }
+            else if( elem instanceof IProject )
+            {
+                project = (IProject) elem;
 
-			}
+            }
 
-			IFile servicesFile = null;
-			IFolder docroot = CoreUtil.getDocroot( project );
+            IFile servicesFile = null;
+            IFolder docroot = CoreUtil.getDocroot( project );
 
-			if ( docroot != null && docroot.exists() )
-			{
-				servicesFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
-			}
+            if( docroot != null && docroot.exists() )
+            {
+                servicesFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+            }
 
-			if ( servicesFile != null && servicesFile.exists() )
-			{
-				BuildServiceJob job = PortletCore.createBuildServiceJob( servicesFile );
+            if( servicesFile != null && servicesFile.exists() )
+            {
+                BuildServiceJob job = PortletCore.createBuildServiceJob( servicesFile );
 
-				job.schedule();
-			}
-		}
+                job.schedule();
+            }
+        }
 
-	}
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,31 +24,34 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class NewVaadinApplicationClassOperation extends NewWebClassOperation
-	implements INewPortletClassDataModelProperties {
+    implements INewPortletClassDataModelProperties
+{
+    protected static final String TEMPLATE_DIR = "/templates/"; //$NON-NLS-1$
+    protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "application.javajet"; //$NON-NLS-1$
 
-	protected static final String TEMPLATE_DIR = "/templates/"; //$NON-NLS-1$
+    public NewVaadinApplicationClassOperation( IDataModel dataModel )
+    {
+        super( dataModel );
+    }
 
-	protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "application.javajet"; //$NON-NLS-1$
+    @Override
+    protected CreateWebClassTemplateModel createTemplateModel()
+    {
+        return new CreateVaadinPortletTemplateModel( getDataModel() );
+    }
 
-	public NewVaadinApplicationClassOperation(IDataModel dataModel) {
-		super(dataModel);
-	}
+    @Override
+    protected String getTemplateFile()
+    {
+        return TEMPLATE_FILE;
+    }
 
-	@Override
-	protected CreateWebClassTemplateModel createTemplateModel() {
-		return new CreateVaadinPortletTemplateModel(getDataModel());
-	}
-
-	@Override
-	protected String getTemplateFile() {
-		return TEMPLATE_FILE;
-	}
-
-	@Override
-	protected Object getTemplateImplementation() {
-		return VaadinPortletTemplate.create(null);
-	}
+    @Override
+    protected Object getTemplateImplementation()
+    {
+        return VaadinPortletTemplate.create( null );
+    }
 
 }

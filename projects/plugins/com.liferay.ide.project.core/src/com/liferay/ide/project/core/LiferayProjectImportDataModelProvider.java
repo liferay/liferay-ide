@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -42,173 +42,203 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"unchecked", "restriction", "rawtypes"
-})
+@SuppressWarnings( { "unchecked", "restriction", "rawtypes" } )
 public class LiferayProjectImportDataModelProvider extends FacetProjectCreationDataModelProvider
-	implements ILiferayProjectImportDataModelProperties {
+    implements ILiferayProjectImportDataModelProperties
+{
 
-	public LiferayProjectImportDataModelProvider() {
-		super();
-	}
+    public LiferayProjectImportDataModelProvider()
+    {
+        super();
+    }
 
-	@Override
-	public IDataModelOperation getDefaultOperation() {
-		return new LiferayProjectImportOperation(this.model);
-	}
+    @Override
+    public IDataModelOperation getDefaultOperation()
+    {
+        return new LiferayProjectImportOperation( this.model );
+    }
 
-	@Override
-	public Object getDefaultProperty(String propertyName) {
-		/*
-		 * if (SDK_LOCATION.equals(propertyName)) { return ProjectCorePlugin.getDefault
-		 * ().getPreferenceStore().getString(ProjectCorePlugin .LAST_SDK_IMPORT_LOCATION_PREF); } else
-		 */
-		if (SDK_VERSION.equals(propertyName)) {
-			// see if we have a sdk location and extract the version
-			String projectLoc = getStringProperty(PROJECT_LOCATION);
+    @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        /*
+         * if (SDK_LOCATION.equals(propertyName)) { return ProjectCorePlugin.getDefault
+         * ().getPreferenceStore().getString(ProjectCorePlugin .LAST_SDK_IMPORT_LOCATION_PREF); } else
+         */
+        if( SDK_VERSION.equals( propertyName ) )
+        {
+            // see if we have a sdk location and extract the version
+            String projectLoc = getStringProperty( PROJECT_LOCATION );
 
-			try {
-				SDK sdk = SDKUtil.getSDKFromProjectDir(new File(projectLoc));
-				if (sdk != null) {
-					return new Version(sdk.getVersion()).toString();
-				}
-			}
-			catch (Exception e) {
-			}
-		}
-		else if (PLUGIN_TYPE.equals(propertyName)) {
-			return ProjectUtil.getLiferayPluginType(getStringProperty(PROJECT_LOCATION));
-		}
+            try
+            {
+                SDK sdk = SDKUtil.getSDKFromProjectDir( new File( projectLoc ) );
+                if( sdk != null )
+                {
+                    return new Version( sdk.getVersion() ).toString();
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+        else if( PLUGIN_TYPE.equals( propertyName ) )
+        {
+            return ProjectUtil.getLiferayPluginType( getStringProperty( PROJECT_LOCATION ) );
+        }
 
-		return super.getDefaultProperty(propertyName);
-	}
+        return super.getDefaultProperty( propertyName );
+    }
 
-	@Override
-	public Set getPropertyNames() {
-		Set propertyNames = super.getPropertyNames();
+    @Override
+    public Set getPropertyNames()
+    {
+        Set propertyNames = super.getPropertyNames();
 
-		propertyNames.add(PROJECT_LOCATION);
-		propertyNames.add(PROJECT_RECORD);
-		propertyNames.add(SDK_VERSION);
-		propertyNames.add(PLUGIN_TYPE);
+        propertyNames.add( PROJECT_LOCATION );
+        propertyNames.add( PROJECT_RECORD );
+        propertyNames.add( SDK_VERSION );
+        propertyNames.add( PLUGIN_TYPE );
 
-		return propertyNames;
-	}
+        return propertyNames;
+    }
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init()
+    {
+        super.init();
 
-		// set the project facets to get the runtime target dropdown to only
-		// show liferay runtimes
-		IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
+        // set the project facets to get the runtime target dropdown to only
+        // show liferay runtimes
+        IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
 
-		facetedProject.setSelectedPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
-		Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
-		fixedFacets.add(ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_FACET_ID));
-		facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
-		// Set<IProjectFacetVersion> facets =
-		// ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
+        facetedProject.setSelectedPreset( IPluginFacetConstants.LIFERAY_PORTLET_PRESET );
+        Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
+        fixedFacets.add( ProjectFacetsManager.getProjectFacet( IPluginFacetConstants.LIFERAY_EXT_FACET_ID ) );
+        facetedProject.setFixedProjectFacets( Collections.unmodifiableSet( fixedFacets ) );
+        // Set<IProjectFacetVersion> facets =
+        // ProjectUtil.getFacetsForPreset(IPluginFacetConstants.LIFERAY_PORTLET_PRESET);
 
-		// Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
+        // Set<IProjectFacet> fixedFacets = new HashSet<IProjectFacet>();
 
-		// for (IProjectFacetVersion pfv : facets) {
-		// fixedFacets.add(pfv.getProjectFacet());
-		// }
+        // for (IProjectFacetVersion pfv : facets) {
+        // fixedFacets.add(pfv.getProjectFacet());
+        // }
 
-		// facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
-	}
+        // facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
+    }
 
-	@Override
-	public boolean isPropertyEnabled(String propertyName) {
-		if (SDK_VERSION.equals(propertyName) || PLUGIN_TYPE.equals(propertyName)) {
-			return false;
-		}
+    @Override
+    public boolean isPropertyEnabled( String propertyName )
+    {
+        if( SDK_VERSION.equals( propertyName ) || PLUGIN_TYPE.equals( propertyName ) )
+        {
+            return false;
+        }
 
-		return super.isPropertyEnabled(propertyName);
-	}
+        return super.isPropertyEnabled( propertyName );
+    }
 
-	@Override
-	public boolean propertySet(String propertyName, Object propertyValue) {
-		return super.propertySet(propertyName, propertyValue);
-	}
+    @Override
+    public boolean propertySet( String propertyName, Object propertyValue )
+    {
+        return super.propertySet( propertyName, propertyValue );
+    }
 
-	@Override
-	public IStatus validate(String name) {
-		if (PROJECT_LOCATION.equals(name)) {
-			String projectLocation = getStringProperty(PROJECT_LOCATION);
+    @Override
+    public IStatus validate( String name )
+    {
+        if( PROJECT_LOCATION.equals( name ) )
+        {
+            String projectLocation = getStringProperty( PROJECT_LOCATION );
 
-			ProjectRecord record = ProjectUtil.getProjectRecordForDir(projectLocation);
+            ProjectRecord record = ProjectUtil.getProjectRecordForDir( projectLocation );
 
-			if (record != null) {
-				String projectName = record.getProjectName();
-				IProject existingProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+            if( record != null )
+            {
+                String projectName = record.getProjectName();
+                IProject existingProject = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
-				if (existingProject != null && existingProject.exists()) {
-					return ProjectCorePlugin.createErrorStatus("Project name already exists.");
-				}
+                if( existingProject != null && existingProject.exists() )
+                {
+                    return ProjectCorePlugin.createErrorStatus( "Project name already exists." );
+                }
 
-				File projectDir = record.getProjectLocation().toFile();
+                File projectDir = record.getProjectLocation().toFile();
 
-				// go up to the SDK level
-				SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
+                // go up to the SDK level
+                SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
 
-				if (sdk != null) {
-					return Status.OK_STATUS;
-				}
-				else {
-					return ProjectCorePlugin.createErrorStatus( "Project is not located inside Liferay Plugins SDK." );
-				}
-			}
+                if( sdk != null )
+                {
+                    return Status.OK_STATUS;
+                }
+                else
+                {
+                    return ProjectCorePlugin.createErrorStatus( "Project is not located inside Liferay Plugins SDK." );
+                }
+            }
 
-			return ProjectCorePlugin.createErrorStatus("Invalid project location.");
-		}
-		else if (SDK_VERSION.equals(name)) {
-			IStatus locationStatus = validate(PROJECT_LOCATION);
+            return ProjectCorePlugin.createErrorStatus( "Invalid project location." );
+        }
+        else if( SDK_VERSION.equals( name ) )
+        {
+            IStatus locationStatus = validate( PROJECT_LOCATION );
 
-			if (locationStatus.isOK()) {
-				Version version = new Version(getStringProperty(SDK_VERSION));
+            if( locationStatus.isOK() )
+            {
+                Version version = new Version( getStringProperty( SDK_VERSION ) );
 
-				if( CoreUtil.compareVersions( version, SDKManager.getLeastValidVersion() ) >= 0 )
-				{
-					return Status.OK_STATUS;
-				}
-				else {
-					return ProjectCorePlugin.createErrorStatus("Invalid Plugin SDK version, must be greater than " +
-						SDKManager.getLeastValidVersion());
-				}
-			}
-			else {
-				return locationStatus;
-			}
-		}
-		else if (PLUGIN_TYPE.equals(name)) {
-			if (ProjectUtil.isLiferayPluginType(getStringProperty(PLUGIN_TYPE))) {
-				return Status.OK_STATUS;
-			}
-			else {
-				return ProjectCorePlugin.createErrorStatus("Invalid Liferay plugin type.");
-			}
-		}
-		else if (FACET_RUNTIME.equals(name)) {
-			Object runtime = getProperty(FACET_RUNTIME);
+                if( CoreUtil.compareVersions( version, SDKManager.getLeastValidVersion() ) >= 0 )
+                {
+                    return Status.OK_STATUS;
+                }
+                else
+                {
+                    return ProjectCorePlugin.createErrorStatus( "Invalid Plugin SDK version, must be greater than " +
+                        SDKManager.getLeastValidVersion() );
+                }
+            }
+            else
+            {
+                return locationStatus;
+            }
+        }
+        else if( PLUGIN_TYPE.equals( name ) )
+        {
+            if( ProjectUtil.isLiferayPluginType( getStringProperty( PLUGIN_TYPE ) ) )
+            {
+                return Status.OK_STATUS;
+            }
+            else
+            {
+                return ProjectCorePlugin.createErrorStatus( "Invalid Liferay plugin type." );
+            }
+        }
+        else if( FACET_RUNTIME.equals( name ) )
+        {
+            Object runtime = getProperty( FACET_RUNTIME );
 
-			if (!(runtime instanceof BridgedRuntime)) {
-				return ProjectCorePlugin.createErrorStatus("A valid Liferay runtime must be selected.");
-			}
-			else {
-				return Status.OK_STATUS;
-			}
-		}
-		else if (FACET_PROJECT_NAME.equals(name)) {// no need to check this one
-			return Status.OK_STATUS;
-		}
+            if( !( runtime instanceof BridgedRuntime ) )
+            {
+                return ProjectCorePlugin.createErrorStatus( "A valid Liferay runtime must be selected." );
+            }
+            else
+            {
+                return Status.OK_STATUS;
+            }
+        }
+        else if( FACET_PROJECT_NAME.equals( name ) )
+        {// no need to check this one
+            return Status.OK_STATUS;
+        }
 
-		return super.validate(name);
-	}
+        return super.validate( name );
+    }
 
-	protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy() {
-		return (IFacetedProjectWorkingCopy) this.model.getProperty(FACETED_PROJECT_WORKING_COPY);
-	}
+    protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy()
+    {
+        return (IFacetedProjectWorkingCopy) this.model.getProperty( FACETED_PROJECT_WORKING_COPY );
+    }
 
 }

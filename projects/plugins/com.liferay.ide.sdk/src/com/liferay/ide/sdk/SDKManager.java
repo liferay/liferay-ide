@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,180 +34,219 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  */
-public final class SDKManager {
+public final class SDKManager
+{
 
-	private static SDKManager instance;
+    private static SDKManager instance;
 
-	public SDK getDefaultSDK() {
-		for (SDK sdk : getSDKs()) {
-			if (sdk.isDefault()) {
-				return sdk;
-			}
-		}
+    public SDK getDefaultSDK()
+    {
+        for( SDK sdk : getSDKs() )
+        {
+            if( sdk.isDefault() )
+            {
+                return sdk;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static SDKManager getInstance() {
-		if (instance == null) {
-			instance = new SDKManager();
-		}
+    public static SDKManager getInstance()
+    {
+        if( instance == null )
+        {
+            instance = new SDKManager();
+        }
 
-		return instance;
-	}
+        return instance;
+    }
 
-	public static Version getLeastValidVersion() {
-		return ISDKConstants.LEAST_SUPPORTED_SDK_VERSION;
-	}
+    public static Version getLeastValidVersion()
+    {
+        return ISDKConstants.LEAST_SUPPORTED_SDK_VERSION;
+    }
 
-	public SDK getSDK(IPath sdkLocation) {
-		for (SDK sdk : getSDKs()) {
-			if (sdk.getLocation().equals(sdkLocation)) {
-				return sdk;
-			}
-		}
+    public SDK getSDK( IPath sdkLocation )
+    {
+        for( SDK sdk : getSDKs() )
+        {
+            if( sdk.getLocation().equals( sdkLocation ) )
+            {
+                return sdk;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public void saveSDKs(SDK[] sdks) {
-		setSDKs(sdks);
-	}
+    public void saveSDKs( SDK[] sdks )
+    {
+        setSDKs( sdks );
+    }
 
-	private boolean initialized = false;
+    private boolean initialized = false;
 
-	// current list of available sdks
-	private ArrayList<SDK> sdkList;
+    // current list of available sdks
+    private ArrayList<SDK> sdkList;
 
-	private SDKManager() {
-		instance = this;
-	}
+    private SDKManager()
+    {
+        instance = this;
+    }
 
-	public void addSDK(SDK sdk) {
-		if (!initialized) {
-			initialize();
-		}
+    public void addSDK( SDK sdk )
+    {
+        if( !initialized )
+        {
+            initialize();
+        }
 
-		sdkList.add(sdk);
+        sdkList.add( sdk );
 
-		if (sdkList.size() == 1) {
-			sdk.setDefault(true);
-		}
+        if( sdkList.size() == 1 )
+        {
+            sdk.setDefault( true );
+        }
 
-		saveSDKs();
-	}
+        saveSDKs();
+    }
 
-	public SDK getSDK(String sdkName) {
-		if (sdkName == null) {
-			return null;
-		}
+    public SDK getSDK( String sdkName )
+    {
+        if( sdkName == null )
+        {
+            return null;
+        }
 
-		for (SDK sdk : getSDKs()) {
-			if (sdkName.equals(sdk.getName())) {
-				return sdk;
-			}
-		}
+        for( SDK sdk : getSDKs() )
+        {
+            if( sdkName.equals( sdk.getName() ) )
+            {
+                return sdk;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public SDK[] getSDKs() {
-		if (!initialized) {
-			initialize();
-		}
+    public SDK[] getSDKs()
+    {
+        if( !initialized )
+        {
+            initialize();
+        }
 
-		return sdkList.toArray(new SDK[sdkList.size()]);
-	}
+        return sdkList.toArray( new SDK[sdkList.size()] );
+    }
 
-	public void setSDKs(SDK[] sdks) {
-		this.sdkList.clear();
+    public void setSDKs( SDK[] sdks )
+    {
+        this.sdkList.clear();
 
-		for (SDK sdk : sdks) {
-			sdkList.add(sdk);
-		}
+        for( SDK sdk : sdks )
+        {
+            sdkList.add( sdk );
+        }
 
-		saveSDKs();
-	}
+        saveSDKs();
+    }
 
-	private ScopedPreferenceStore getPrefStore() {
-		return (ScopedPreferenceStore) SDKPlugin.getDefault().getPreferenceStore();
-	}
+    private ScopedPreferenceStore getPrefStore()
+    {
+        return (ScopedPreferenceStore) SDKPlugin.getDefault().getPreferenceStore();
+    }
 
-	private void initialize() {
-		loadSDKs();
+    private void initialize()
+    {
+        loadSDKs();
 
-		initialized = true;
-	}
+        initialized = true;
+    }
 
-	private void loadSDKs() {
-		sdkList = new ArrayList<SDK>();
+    private void loadSDKs()
+    {
+        sdkList = new ArrayList<SDK>();
 
-		IPreferenceStore prefs = getPrefStore();
+        IPreferenceStore prefs = getPrefStore();
 
-		String sdksXmlString = prefs.getString("sdks");
+        String sdksXmlString = prefs.getString( "sdks" );
 
-		if (!CoreUtil.isNullOrEmpty(sdksXmlString)) {
-			try {
-				XMLMemento root =
-					XMLMemento.createReadRoot(new InputStreamReader(new ByteArrayInputStream(
-						sdksXmlString.getBytes("UTF-8"))));
+        if( !CoreUtil.isNullOrEmpty( sdksXmlString ) )
+        {
+            try
+            {
+                XMLMemento root =
+                    XMLMemento.createReadRoot( new InputStreamReader( new ByteArrayInputStream(
+                        sdksXmlString.getBytes( "UTF-8" ) ) ) );
 
-				String defaultSDKName = root.getString("default");
+                String defaultSDKName = root.getString( "default" );
 
-				IMemento[] children = root.getChildren("sdk");
+                IMemento[] children = root.getChildren( "sdk" );
 
-				for (IMemento sdkElement : children) {
-					SDK sdk = new SDK();
-					sdk.loadFromMemento(sdkElement);
+                for( IMemento sdkElement : children )
+                {
+                    SDK sdk = new SDK();
+                    sdk.loadFromMemento( sdkElement );
 
-					boolean defaultSDK = sdk.getName() != null && sdk.getName().equals(defaultSDKName);
+                    boolean defaultSDK = sdk.getName() != null && sdk.getName().equals( defaultSDKName );
 
-					sdk.setDefault(defaultSDK);
+                    sdk.setDefault( defaultSDK );
 
-					sdkList.add(sdk);
-				}
-			}
-			catch (Exception e) {
-				SDKPlugin.logError(e);
-			}
-		}
-	}
+                    sdkList.add( sdk );
+                }
+            }
+            catch( Exception e )
+            {
+                SDKPlugin.logError( e );
+            }
+        }
+    }
 
-	private void saveSDKs() {
-		XMLMemento root = XMLMemento.createWriteRoot("sdks");
+    private void saveSDKs()
+    {
+        XMLMemento root = XMLMemento.createWriteRoot( "sdks" );
 
-		for (SDK sdk : sdkList) {
-			IMemento child = root.createChild("sdk");
+        for( SDK sdk : sdkList )
+        {
+            IMemento child = root.createChild( "sdk" );
 
-			sdk.saveToMemento(child);
+            sdk.saveToMemento( child );
 
-			if (sdk.isDefault()) {
-				root.putString("default", sdk.getName());
-			}
-		}
+            if( sdk.isDefault() )
+            {
+                root.putString( "default", sdk.getName() );
+            }
+        }
 
-		StringWriter writer = new StringWriter();
-		try {
-			root.save(writer);
+        StringWriter writer = new StringWriter();
+        try
+        {
+            root.save( writer );
 
-			getPrefStore().setValue("sdks", writer.toString());
-			getPrefStore().save();
-		}
-		catch (IOException e) {
-			CorePlugin.logError(e);
-		}
-	}
+            getPrefStore().setValue( "sdks", writer.toString() );
+            getPrefStore().save();
+        }
+        catch( IOException e )
+        {
+            CorePlugin.logError( e );
+        }
+    }
 
-	public boolean containsSDK(SDK theSDK) {
-		if (theSDK != null && getSDKs().length > 0) {
-			for (SDK sdk : getSDKs()) {
-				if (theSDK.equals(sdk)) {
-					return true;
-				}
-			}
-		}
+    public boolean containsSDK( SDK theSDK )
+    {
+        if( theSDK != null && getSDKs().length > 0 )
+        {
+            for( SDK sdk : getSDKs() )
+            {
+                if( theSDK.equals( sdk ) )
+                {
+                    return true;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

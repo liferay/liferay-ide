@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,50 +27,51 @@ import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 
-public class FileResourceCondtion extends SapphirePropertyEditorCondition {
+/**
+ * @author Gregory Amerson
+ */
+public class FileResourceCondtion extends SapphirePropertyEditorCondition
+{
 
-	public FileResourceCondtion() {
-		super();
-	}
+    public FileResourceCondtion()
+    {
+        super();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireCondition#initCondition(org.eclipse.sapphire.ui.ISapphirePart,
-	 * java.lang.String)
-	 */
-	@Override
-	protected void initCondition( ISapphirePart part, String parameter ) {
-		// TODO Auto-generated method stub
-		super.initCondition( part, parameter );
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.sapphire.ui.SapphirePropertyEditorCondition#evaluate(org.eclipse.sapphire.ui.SapphirePropertyEditor)
-	 */
-	@Override
-	protected boolean evaluate( PropertyEditorPart part ) {
-		final IModelElement element = part.getModelElement();
-		final ModelProperty property = part.getProperty();
-		if ( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) ) {
-			final Value<Path> path = element.read( (ValueProperty) property );
-			if ( path != null && path != null && path.getText() != null && path.getText().length() > 0 )
-			{
-				IProject project = element.adapt( IProject.class );
-				IResource docRootResource = project.findMember( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
-				if ( docRootResource != null ) {
-					IFolder docrootFolder = (IFolder) docRootResource;
-					String fileResourceStr = path.getContent().toPortableString();
-					IResource fileResource = docrootFolder.findMember( fileResourceStr );
-					return ( fileResource == null );
-				}
-			}
-		}
-		return false;
-	}
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.eclipse.sapphire.ui.SapphirePropertyEditorCondition#evaluate(org.eclipse.sapphire.ui.SapphirePropertyEditor)
+     */
+    @Override
+    protected boolean evaluate( PropertyEditorPart part )
+    {
+        final IModelElement element = part.getModelElement();
+        final ModelProperty property = part.getProperty();
+        
+        if( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) )
+        {
+            final Value<Path> path = element.read( (ValueProperty) property );
+            
+            if( path != null && path != null && path.getText() != null && path.getText().length() > 0 )
+            {
+                IProject project = element.adapt( IProject.class );
+                IResource docRootResource = project.findMember( ISDKConstants.DEFAULT_WEBCONTENT_FOLDER );
+                
+                if( docRootResource != null )
+                {
+                    IFolder docrootFolder = (IFolder) docRootResource;
+                    String fileResourceStr = path.getContent().toPortableString();
+                    IResource fileResource = docrootFolder.findMember( fileResourceStr );
+                    
+                    return( fileResource == null );
+                }
+            }
+        }
+        
+        return false;
+    }
 }

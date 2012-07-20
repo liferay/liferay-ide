@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,53 +31,62 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings("restriction")
-public class NewVaadinPortletWizard extends NewPortletWizard {
+@SuppressWarnings( "restriction" )
+public class NewVaadinPortletWizard extends NewPortletWizard
+{
 
-	public NewVaadinPortletWizard() {
-		this(null);
-	}
+    public NewVaadinPortletWizard()
+    {
+        this( null );
+    }
 
-	public NewVaadinPortletWizard(IDataModel model) {
-		super(model);
-	}
+    public NewVaadinPortletWizard( IDataModel model )
+    {
+        super( model );
+    }
 
-	@Override
-	public String getTitle() {
-		return "New Liferay Vaadin Portlet";
-	}
+    @Override
+    public String getTitle()
+    {
+        return "New Liferay Vaadin Portlet";
+    }
 
-	@Override
-	protected void doAddPages() {
-		addPage(new NewVaadinApplicationClassWizardPage(
-			getDataModel(), "pageOne", "Create a Vaadin portlet application class.", getDefaultPageTitle(), fragment));
-		addPage(new NewVaadinPortletOptionsWizardPage(
-			getDataModel(), "pageTwo", "Specify Vaadin portlet deployment descriptor details.", getDefaultPageTitle(),
-			fragment));
-		addPage(new NewLiferayPortletWizardPage(
-			getDataModel(), "pageThree", "Specify Liferay portlet deployment descriptor details.",
-			getDefaultPageTitle(), fragment));
-	}
+    @Override
+    protected void doAddPages()
+    {
+        addPage( new NewVaadinApplicationClassWizardPage(
+            getDataModel(), "pageOne", "Create a Vaadin portlet application class.", getDefaultPageTitle(), fragment ) );
+        addPage( new NewVaadinPortletOptionsWizardPage(
+            getDataModel(), "pageTwo", "Specify Vaadin portlet deployment descriptor details.", getDefaultPageTitle(),
+            fragment ) );
+        addPage( new NewLiferayPortletWizardPage(
+            getDataModel(), "pageThree", "Specify Liferay portlet deployment descriptor details.",
+            getDefaultPageTitle(), fragment ) );
+    }
 
-	@Override
-	protected String getDefaultPageTitle() {
-		return "Create Liferay Vaadin Portlet";
-	}
+    @Override
+    protected String getDefaultPageTitle()
+    {
+        return "Create Liferay Vaadin Portlet";
+    }
 
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		// for now, no need for own template store and context type
-		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        // for now, no need for own template store and context type
+        TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
 
-		TemplateContextType contextType =
-			PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(PortletTemplateContextTypeIds.NEW);
+        TemplateContextType contextType =
+            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType( PortletTemplateContextTypeIds.NEW );
 
-		return new NewVaadinPortletClassDataModelProvider(templateStore, contextType, fragment);
-	}
+        return new NewVaadinPortletClassDataModelProvider( templateStore, contextType, fragment );
+    }
 
-	@Override
-	protected ImageDescriptor getImage() {
-		return ImageDescriptor.createFromURL(VaadinUI.getDefault().getBundle().getEntry("/icons/wizban/vaadin_wiz.png"));
-	}
+    @Override
+    protected ImageDescriptor getImage()
+    {
+        return ImageDescriptor.createFromURL( VaadinUI.getDefault().getBundle().getEntry(
+            "/icons/wizban/vaadin_wiz.png" ) );
+    }
 
 }

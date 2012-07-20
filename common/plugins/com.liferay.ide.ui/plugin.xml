@@ -11,7 +11,7 @@
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.liferay.ide.ui.pref.LiferayUIPreferencePage"
-            id="com.liferay.ide.common.ui.preferences.liferay"
+            id="com.liferay.ide.ui.preferences.liferay"
             name="Liferay">
       </page>
    </extension>

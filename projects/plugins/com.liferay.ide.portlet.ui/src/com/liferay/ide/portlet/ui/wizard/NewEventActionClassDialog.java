@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -51,206 +51,226 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public class NewEventActionClassDialog extends Dialog {
+@SuppressWarnings( "restriction" )
+public class NewEventActionClassDialog extends Dialog
+{
+    protected Label classLabel;
+    protected Text classText;
+    protected IDataModel model;
+    protected Button packageButton;
+    protected Label packageLabel;
+    protected Text packageText;
+    protected String qualifiedClassname;
+    protected String qualifiedSuperclassname;
+    protected Combo superCombo;
+    protected Label superLabel;
+    
+    protected NewEventActionClassDialog( Shell parentShell, IDataModel model )
+    {
+        super( parentShell );
+        this.model = model;
+    }
 
-	protected Label classLabel;
+    public String getQualifiedClassname()
+    {
+        return this.qualifiedClassname;
+    }
 
-	protected Text classText;
+    public String getQualifiedSuperclassname()
+    {
+        return this.qualifiedSuperclassname;
+    }
 
-	protected IDataModel model;
+    private void createPackageGroup( Composite parent )
+    {
+        // package
+        packageLabel = new Label( parent, SWT.LEFT );
+        packageLabel.setText( J2EEUIMessages.JAVA_PACKAGE_LABEL );
+        packageLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-	protected Button packageButton;
+        packageText = new Text( parent, SWT.SINGLE | SWT.BORDER );
+        packageText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        packageText.addModifyListener( new ModifyListener()
+        {
 
-	protected Label packageLabel;
+            public void modifyText( ModifyEvent e )
+            {
+                updateQualifiedClassname();
+            }
+        } );
 
-	protected Text packageText;
+        packageButton = new Button( parent, SWT.PUSH );
+        packageButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
+        packageButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+        packageButton.addSelectionListener( new SelectionListener()
+        {
 
-	protected String qualifiedClassname;
+            public void widgetDefaultSelected( SelectionEvent e )
+            {
+                // Do nothing
+            }
 
-	protected String qualifiedSuperclassname;
+            public void widgetSelected( SelectionEvent e )
+            {
+                handlePackageButtonPressed();
+            }
+        } );
+    }
 
-	protected Combo superCombo;
+    @Override
+    protected Button createButton( Composite parent, int id, String label, boolean defaultButton )
+    {
+        if( IDialogConstants.OK_ID == id )
+        {
+            return super.createButton( parent, id, "Create", defaultButton );
+        }
 
-	protected Label superLabel;
+        return super.createButton( parent, id, label, defaultButton );
+    }
 
-	protected NewEventActionClassDialog(Shell parentShell, IDataModel model) {
-		super(parentShell);
+    protected void createClassnameGroup( Composite parent )
+    {
+        // class name
+        classLabel = new Label( parent, SWT.LEFT );
+        classLabel.setText( "Classname:" );
+        classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-		this.model = model;
-	}
+        classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
+        classText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        classText.addModifyListener( new ModifyListener()
+        {
 
-	public String getQualifiedClassname() {
-		return this.qualifiedClassname;
-	}
+            public void modifyText( ModifyEvent e )
+            {
+                updateQualifiedClassname();
+            }
+        } );
 
-	public String getQualifiedSuperclassname() {
-		return this.qualifiedSuperclassname;
-	}
+        new Label( parent, SWT.LEFT );
+    }
 
-	private void createPackageGroup(Composite parent) {
-		// package
-		packageLabel = new Label(parent, SWT.LEFT);
-		packageLabel.setText(J2EEUIMessages.JAVA_PACKAGE_LABEL);
-		packageLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+    @Override
+    protected Control createDialogArea( Composite parent )
+    {
+        Composite areaParent = (Composite) super.createDialogArea( parent );
+        areaParent.setLayout( new GridLayout( 3, false ) );
 
-		packageText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		packageText.addModifyListener(new ModifyListener() {
+        createClassnameGroup( areaParent );
 
-			public void modifyText(ModifyEvent e) {
-				updateQualifiedClassname();
-			}
-		});
+        createPackageGroup( areaParent );
 
-		packageButton = new Button(parent, SWT.PUSH);
-		packageButton.setText(J2EEUIMessages.BROWSE_BUTTON_LABEL);
-		packageButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
-		packageButton.addSelectionListener(new SelectionListener() {
+        createSuperclassGroup( areaParent );
 
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// Do nothing
-			}
+        return areaParent;
+    }
 
-			public void widgetSelected(SelectionEvent e) {
-				handlePackageButtonPressed();
-			}
-		});
-	}
+    protected void createSuperclassGroup( Composite parent )
+    {
+        // superclass
+        superLabel = new Label( parent, SWT.LEFT );
+        superLabel.setText( J2EEUIMessages.SUPERCLASS_LABEL );
+        superLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-	@Override
-	protected Button createButton(Composite parent, int id, String label, boolean defaultButton) {
-		if (IDialogConstants.OK_ID == id) {
-			return super.createButton(parent, id, "Create", defaultButton);
-		}
+        superCombo = new Combo( parent, SWT.DROP_DOWN );
+        superCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        superCombo.setItems( new String[] { "com.liferay.portal.kernel.events.SimpleAction",
+            "com.liferay.portal.kernel.events.SessionAction", "com.liferay.portal.kernel.events.Action" } );
+        superCombo.addSelectionListener( new SelectionAdapter()
+        {
 
-		return super.createButton(parent, id, label, defaultButton);
-	}
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                qualifiedSuperclassname = superCombo.getItem( superCombo.getSelectionIndex() );
+            }
+        } );
+        superCombo.select( 0 );
 
-	protected void createClassnameGroup(Composite parent) {
-		// class name
-		classLabel = new Label(parent, SWT.LEFT);
-		classLabel.setText("Classname:");
-		classLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        new Label( parent, SWT.NONE );
+    }
 
-		classText = new Text(parent, SWT.SINGLE | SWT.BORDER);
-		classText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		classText.addModifyListener(new ModifyListener() {
+    protected void handlePackageButtonPressed()
+    {
+        IPackageFragmentRoot packRoot =
+            (IPackageFragmentRoot) model.getProperty( INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT );
 
-			public void modifyText(ModifyEvent e) {
-				updateQualifiedClassname();
-			}
-		});
+        if( packRoot == null )
+        {
+            return;
+        }
 
-		new Label(parent, SWT.LEFT);
-	}
+        IJavaElement[] packages = null;
 
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite areaParent = (Composite) super.createDialogArea(parent);
-		areaParent.setLayout(new GridLayout(3, false));
+        try
+        {
+            packages = packRoot.getChildren();
+        }
+        catch( JavaModelException e )
+        {
+            // Do nothing
+        }
 
-		createClassnameGroup(areaParent);
+        if( packages == null )
+        {
+            packages = new IJavaElement[0];
+        }
 
-		createPackageGroup(areaParent);
+        ElementListSelectionDialog dialog =
+            new ElementListSelectionDialog( getShell(), new JavaElementLabelProvider(
+                JavaElementLabelProvider.SHOW_DEFAULT ) );
+        dialog.setTitle( J2EEUIMessages.PACKAGE_SELECTION_DIALOG_TITLE );
+        dialog.setMessage( J2EEUIMessages.PACKAGE_SELECTION_DIALOG_DESC );
+        dialog.setEmptyListMessage( J2EEUIMessages.PACKAGE_SELECTION_DIALOG_MSG_NONE );
+        dialog.setElements( packages );
 
-		createSuperclassGroup(areaParent);
+        if( dialog.open() == Window.OK )
+        {
+            IPackageFragment fragment = (IPackageFragment) dialog.getFirstResult();
 
-		return areaParent;
-	}
+            if( fragment != null )
+            {
+                packageText.setText( fragment.getElementName() );
+            }
+            else
+            {
+                packageText.setText( J2EEUIMessages.EMPTY_STRING );
+            }
+        }
+    }
 
-	protected void createSuperclassGroup(Composite parent) {
-		// superclass
-		superLabel = new Label(parent, SWT.LEFT);
-		superLabel.setText(J2EEUIMessages.SUPERCLASS_LABEL);
-		superLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+    @Override
+    protected void initializeBounds()
+    {
+        super.initializeBounds();
 
-		superCombo = new Combo(parent, SWT.DROP_DOWN);
-		superCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		superCombo.setItems(new String[] {
-			"com.liferay.portal.kernel.events.SimpleAction", "com.liferay.portal.kernel.events.SessionAction",
-			"com.liferay.portal.kernel.events.Action"
-		});
-		superCombo.addSelectionListener(new SelectionAdapter() {
+        getShell().setSize( 450, 200 );
+    }
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				qualifiedSuperclassname = superCombo.getItem(superCombo.getSelectionIndex());
-			}
-		});
-		superCombo.select(0);
+    @Override
+    protected void okPressed()
+    {
+        // Create the class
+        IDataModel dataModel =
+            DataModelFactory.createDataModel( new NewEventActionClassDataModelProvider(
+                model, getQualifiedClassname(), superCombo.getText() ) );
 
-		new Label(parent, SWT.NONE);
-	}
+        NewEventActionClassOperation operation = new NewEventActionClassOperation( dataModel );
 
-	protected void handlePackageButtonPressed() {
-		IPackageFragmentRoot packRoot =
-			(IPackageFragmentRoot) model.getProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT);
+        try
+        {
+            operation.execute( null, null );
+        }
+        catch( ExecutionException e )
+        {
+            e.printStackTrace();
+        }
 
-		if (packRoot == null) {
-			return;
-		}
+        super.okPressed();
+    }
 
-		IJavaElement[] packages = null;
-
-		try {
-			packages = packRoot.getChildren();
-		}
-		catch (JavaModelException e) {
-			// Do nothing
-		}
-
-		if (packages == null) {
-			packages = new IJavaElement[0];
-		}
-
-		ElementListSelectionDialog dialog =
-			new ElementListSelectionDialog(getShell(), new JavaElementLabelProvider(
-				JavaElementLabelProvider.SHOW_DEFAULT));
-		dialog.setTitle(J2EEUIMessages.PACKAGE_SELECTION_DIALOG_TITLE);
-		dialog.setMessage(J2EEUIMessages.PACKAGE_SELECTION_DIALOG_DESC);
-		dialog.setEmptyListMessage(J2EEUIMessages.PACKAGE_SELECTION_DIALOG_MSG_NONE);
-		dialog.setElements(packages);
-
-		if (dialog.open() == Window.OK) {
-			IPackageFragment fragment = (IPackageFragment) dialog.getFirstResult();
-
-			if (fragment != null) {
-				packageText.setText(fragment.getElementName());
-			}
-			else {
-				packageText.setText(J2EEUIMessages.EMPTY_STRING);
-			}
-		}
-	}
-
-	@Override
-	protected void initializeBounds() {
-		super.initializeBounds();
-
-		getShell().setSize(450, 200);
-	}
-
-	@Override
-	protected void okPressed() {
-		// Create the class
-		IDataModel dataModel =
-			DataModelFactory.createDataModel(new NewEventActionClassDataModelProvider(
-				model, getQualifiedClassname(), superCombo.getText()));
-
-		NewEventActionClassOperation operation = new NewEventActionClassOperation(dataModel);
-
-		try {
-			operation.execute(null, null);
-		}
-		catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-
-		super.okPressed();
-	}
-
-	protected void updateQualifiedClassname() {
-		this.qualifiedClassname = packageText.getText() + "." + classText.getText();
-	}
+    protected void updateQualifiedClassname()
+    {
+        this.qualifiedClassname = packageText.getText() + "." + classText.getText();
+    }
 
 }

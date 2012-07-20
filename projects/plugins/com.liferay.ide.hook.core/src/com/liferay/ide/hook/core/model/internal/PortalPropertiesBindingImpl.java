@@ -19,8 +19,8 @@ package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.properties.core.PortalPropertiesConfiguration;
 import com.liferay.ide.hook.core.HookCore;
-import com.liferay.ide.hook.core.model.IHook;
-import com.liferay.ide.hook.core.model.IPortalProperty;
+import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.model.PortalProperty;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -42,7 +42,6 @@ import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
-
 /**
  * @author Gregory Amerson
  */
@@ -51,233 +50,234 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 
     private List<NameValueObject> properties = new ArrayList<NameValueObject>();
 
-	private class PortalPropertyResource extends Resource
-	{
-		private NameValueObject nameValue;
+    private class PortalPropertyResource extends Resource
+    {
+
+        private NameValueObject nameValue;
 
         public PortalPropertyResource( Resource parent, NameValueObject nameValue )
-		{
-			super( parent );
+        {
+            super( parent );
 
-			this.nameValue = nameValue;
-		}
+            this.nameValue = nameValue;
+        }
 
         public NameValueObject getNameValue()
         {
             return this.nameValue;
         }
 
-		@Override
-		protected BindingImpl createBinding( ModelProperty property )
-		{
-			if ( property == IPortalProperty.PROP_NAME )
-			{
-				return new ValueBindingImpl()
-				{
-
-					@Override
-					public String read()
-					{
-						return getName();
-					}
-
-					@Override
-					public void write( final String value )
-					{
-						setName( value );
-					}
-				};
-			}
-			else if ( property == IPortalProperty.PROP_VALUE )
-			{
-				return new ValueBindingImpl()
-				{
-
-					@Override
-					public String read()
-					{
-						return getValue() != null ? getValue().toString() : null;
-					}
-
-					@Override
-					public void write( final String value )
-					{
-						setValue( value );
-					}
-				};
-			}
-
-			return null;
-		}
-
-		public String getName()
-		{
-			return this.nameValue.getName();
-		}
-
-		public Object getValue()
-		{
-			if ( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
-			{
-				return PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.getProperty( getName() );
-			}
-
-			return null;
-		}
-
-		public void setName( String name )
-		{
-			Object oldValue = getValue();
-
-			if ( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
-			{
-				PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.clearProperty( getName() );
-			}
-
-			this.nameValue.setName( name );
-			setValue( oldValue );
-		}
-
-		public void setValue( Object value )
-		{
-            this.nameValue.setValue( value );
-            
-			if ( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
-			{
-				PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.setProperty( getName(), value );
-				flushProperties();
-			}
-		}
-
-	}
-
-	private PropertiesConfiguration portalPropertiesConfiguration;
-
-	@Override
-	protected Object insertUnderlyingObject( ModelElementType type, int position )
-	{
-        Object retval = null;
-
-		if ( type.equals( IPortalProperty.TYPE ) )
-		{
-            retval = new NameValueObject();
-            this.properties.add((NameValueObject)retval);
-		}
-
-		return retval;
-	}
-
-	@Override
-	protected Resource resource( Object obj )
-	{
-	    return new PortalPropertyResource( this.element().resource(), (NameValueObject)obj );
-	}
-
-	protected void flushProperties()
-	{
-		StringWriter output = new StringWriter();
-
-		try
-		{
-			this.portalPropertiesConfiguration.save( output );
-            
-			IFile propsFile = HookMethods.getPortalPropertiesFile( hook(), false);
-
-			if ( propsFile != null )
-			{
-			    ByteArrayInputStream contents = new ByteArrayInputStream( output.toString().getBytes() );
-                
-			    if( propsFile.exists() )
-			    {
-			        propsFile.setContents( contents, IResource.FORCE, null );
-			    }
-			    else
-			    {
-			        propsFile.create( contents, true, null );
-			    }
-                
-			    propsFile.refreshLocal( IResource.DEPTH_ONE, null );
-			}
-		}
-		catch ( Exception e )
-		{
-			HookCore.logError( e );
-		}
-
-	}
-
-
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params )
-	{
-		super.init( element, property, params );
-
-		Listener listener = new FilteredListener<PropertyContentEvent>()
+        @Override
+        protected BindingImpl createBinding( ModelProperty property )
         {
-			@Override
-			protected void handleTypedEvent( PropertyContentEvent event )
-			{
-				updateConfigurationForFile();
-			}
-		};
+            if( property == PortalProperty.PROP_NAME )
+            {
+                return new ValueBindingImpl()
+                {
 
-		hook().attach( listener, IHook.PROP_PORTAL_PROPERTIES_FILE.getName() + "/*" );
+                    @Override
+                    public String read()
+                    {
+                        return getName();
+                    }
 
-		updateConfigurationForFile();
-	}
+                    @Override
+                    public void write( final String value )
+                    {
+                        setName( value );
+                    }
+                };
+            }
+            else if( property == PortalProperty.PROP_VALUE )
+            {
+                return new ValueBindingImpl()
+                {
+
+                    @Override
+                    public String read()
+                    {
+                        return getValue() != null ? getValue().toString() : null;
+                    }
+
+                    @Override
+                    public void write( final String value )
+                    {
+                        setValue( value );
+                    }
+                };
+            }
+
+            return null;
+        }
+
+        public String getName()
+        {
+            return this.nameValue.getName();
+        }
+
+        public Object getValue()
+        {
+            if( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
+            {
+                return PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.getProperty( getName() );
+            }
+
+            return null;
+        }
+
+        public void setName( String name )
+        {
+            Object oldValue = getValue();
+
+            if( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
+            {
+                PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.clearProperty( getName() );
+            }
+
+            this.nameValue.setName( name );
+            setValue( oldValue );
+        }
+
+        public void setValue( Object value )
+        {
+            this.nameValue.setValue( value );
+
+            if( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
+            {
+                PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.setProperty( getName(), value );
+                flushProperties();
+            }
+        }
+
+    }
+
+    private PropertiesConfiguration portalPropertiesConfiguration;
 
     @Override
-	protected List<?> readUnderlyingList()
-	{
-		return properties;
-	}
+    protected Object insertUnderlyingObject( ModelElementType type, int position )
+    {
+        Object retval = null;
 
-	@Override
-	public void remove( Resource resource )
-	{
-		if ( resource instanceof PortalPropertyResource )
-		{
-			PortalPropertyResource ppResource = (PortalPropertyResource) resource;
+        if( type.equals( PortalProperty.TYPE ) )
+        {
+            retval = new NameValueObject();
+            this.properties.add( (NameValueObject) retval );
+        }
+
+        return retval;
+    }
+
+    @Override
+    protected Resource resource( Object obj )
+    {
+        return new PortalPropertyResource( this.element().resource(), (NameValueObject) obj );
+    }
+
+    protected void flushProperties()
+    {
+        StringWriter output = new StringWriter();
+
+        try
+        {
+            this.portalPropertiesConfiguration.save( output );
+
+            IFile propsFile = HookMethods.getPortalPropertiesFile( hook(), false );
+
+            if( propsFile != null )
+            {
+                ByteArrayInputStream contents = new ByteArrayInputStream( output.toString().getBytes() );
+
+                if( propsFile.exists() )
+                {
+                    propsFile.setContents( contents, IResource.FORCE, null );
+                }
+                else
+                {
+                    propsFile.create( contents, true, null );
+                }
+
+                propsFile.refreshLocal( IResource.DEPTH_ONE, null );
+            }
+        }
+        catch( Exception e )
+        {
+            HookCore.logError( e );
+        }
+
+    }
+
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
+
+        Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
+
+            @Override
+            protected void handleTypedEvent( PropertyContentEvent event )
+            {
+                updateConfigurationForFile();
+            }
+        };
+
+        hook().attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.getName() + "/*" );
+
+        updateConfigurationForFile();
+    }
+
+    @Override
+    protected List<?> readUnderlyingList()
+    {
+        return properties;
+    }
+
+    @Override
+    public void remove( Resource resource )
+    {
+        if( resource instanceof PortalPropertyResource )
+        {
+            PortalPropertyResource ppResource = (PortalPropertyResource) resource;
             this.properties.remove( ppResource.getNameValue() );
-			this.portalPropertiesConfiguration.clearProperty( ppResource.getName() );
-			flushProperties();
-		}
+            this.portalPropertiesConfiguration.clearProperty( ppResource.getName() );
+            flushProperties();
+        }
 
-//		this.element().notifyPropertyChangeListeners( this.property() );
-	}
+        // this.element().notifyPropertyChangeListeners( this.property() );
+    }
 
-	@Override
-	public ModelElementType type( Resource resource )
-	{
-		return IPortalProperty.TYPE;
-	}
+    @Override
+    public ModelElementType type( Resource resource )
+    {
+        return PortalProperty.TYPE;
+    }
 
-	protected void updateConfigurationForFile()
-	{
-		IFile portalPropertiesFile = HookMethods.getPortalPropertiesFile( hook() );
+    protected void updateConfigurationForFile()
+    {
+        IFile portalPropertiesFile = HookMethods.getPortalPropertiesFile( hook() );
 
-		if ( portalPropertiesFile != null && portalPropertiesFile.exists() )
-		{
-			try
-			{
-				this.portalPropertiesConfiguration = new PortalPropertiesConfiguration();
-				InputStream is = portalPropertiesFile.getContents();
-				this.portalPropertiesConfiguration.load( is );
-				is.close();
-			}
-			catch ( Exception e )
-			{
-				HookCore.logError( e );
-			}
+        if( portalPropertiesFile != null && portalPropertiesFile.exists() )
+        {
+            try
+            {
+                this.portalPropertiesConfiguration = new PortalPropertiesConfiguration();
+                InputStream is = portalPropertiesFile.getContents();
+                this.portalPropertiesConfiguration.load( is );
+                is.close();
+            }
+            catch( Exception e )
+            {
+                HookCore.logError( e );
+            }
 
-			Iterator<?> keys = this.portalPropertiesConfiguration.getKeys();
+            Iterator<?> keys = this.portalPropertiesConfiguration.getKeys();
 
-			while (keys.hasNext())
-			{
+            while( keys.hasNext() )
+            {
                 String key = keys.next().toString();
-			    this.properties.add(new NameValueObject(key, this.portalPropertiesConfiguration.getProperty( key )));
-			}
-		}
-	}
+                this.properties.add( new NameValueObject( key, this.portalPropertiesConfiguration.getProperty( key ) ) );
+            }
+        }
+    }
 
 }

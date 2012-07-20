@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,8 +19,8 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.job.CleanAppServerJob;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
-import com.liferay.ide.ui.action.AbstractObjectAction;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import java.util.List;
 
@@ -48,137 +48,161 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class CleanAppServerAction extends AbstractObjectAction {
+@SuppressWarnings( "restriction" )
+public class CleanAppServerAction extends AbstractObjectAction
+{
 
-	public CleanAppServerAction() {
-		super();
-	}
+    public CleanAppServerAction()
+    {
+        super();
+    }
 
-	public void run(IAction action) {
-		try {
-			if (!(fSelection instanceof IStructuredSelection)) {
-				return;
-			}
+    public void run( IAction action )
+    {
+        try
+        {
+            if( !( fSelection instanceof IStructuredSelection ) )
+            {
+                return;
+            }
 
-			Object elem = ((IStructuredSelection) fSelection).toArray()[0];
+            Object elem = ( (IStructuredSelection) fSelection ).toArray()[0];
 
-			if (!(elem instanceof IProject)) {
-				return;
-			}
+            if( !( elem instanceof IProject ) )
+            {
+                return;
+            }
 
-			IProject project = (IProject) elem;
+            IProject project = (IProject) elem;
 
-			IRuntime runtime = ServerUtil.getRuntime(project);
+            IRuntime runtime = ServerUtil.getRuntime( project );
 
-			ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime(runtime);
+            ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime( runtime );
 
-			if (portalTomcatRuntime == null) {
-				return;
-			}
+            if( portalTomcatRuntime == null )
+            {
+                return;
+            }
 
-			IStatus status = runtime.validate(new NullProgressMonitor());
+            IStatus status = runtime.validate( new NullProgressMonitor() );
 
-			IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
+            IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-			if (!status.isOK() || bundleZipLocation == null || (!bundleZipLocation.toFile().exists())) {
-				boolean retval =
-					MessageDialog.openQuestion(
-						getDisplay().getActiveShell(), getTitle(),
-						"A valid bundle zip location is required for performing this action.  The runtime \"" +
-							runtime.getName() +
-							"\" does not have a valid zip location.\n\nDo you want to specify the location of the bundle zip file now?");
+            if( !status.isOK() || bundleZipLocation == null || ( !bundleZipLocation.toFile().exists() ) )
+            {
+                boolean retval =
+                    MessageDialog.openQuestion(
+                        getDisplay().getActiveShell(),
+                        getTitle(),
+                        "A valid bundle zip location is required for performing this action.  The runtime \"" +
+                            runtime.getName() +
+                            "\" does not have a valid zip location.\n\nDo you want to specify the location of the bundle zip file now?" );
 
-				if (retval) {
-					editRuntime(runtime);
+                if( retval )
+                {
+                    editRuntime( runtime );
 
-					// refresh the portalTomcatRuntime
-					portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime(runtime);
+                    // refresh the portalTomcatRuntime
+                    portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime( runtime );
 
-					bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
+                    bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-					if (bundleZipLocation == null) {
-						return;
-					}
-					else {
-						run(action);
-						return;
-					}
-				}
-				else {
-					return;
-				}
-			}
+                    if( bundleZipLocation == null )
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        run( action );
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
 
-			cleanAppServer(project);
-		}
-		catch (Exception ex) {
-			ProjectUIPlugin.logError(ex);
-		}
-	}
+            cleanAppServer( project );
+        }
+        catch( Exception ex )
+        {
+            ProjectUIPlugin.logError( ex );
+        }
+    }
 
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		super.selectionChanged(action, selection);
-	}
+    @Override
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        super.selectionChanged( action, selection );
+    }
 
-	protected void cleanAppServer(IProject project)
-		throws CoreException {
+    protected void cleanAppServer( IProject project ) throws CoreException
+    {
 
-		String[] labels = new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL };
+        String[] labels = new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL };
 
-		MessageDialog dialog =
-			new MessageDialog(
-				getDisplay().getActiveShell(),
-				getTitle(),
-				null,
-				"Performing this action will delete the entire tomcat directory including all configuration, data, and deployed webapps.  If you have other plugins deployed they will have to be republished.\n\nDo you wish to continue?",
-				MessageDialog.WARNING, labels, 1);
+        MessageDialog dialog =
+            new MessageDialog(
+                getDisplay().getActiveShell(),
+                getTitle(),
+                null,
+                "Performing this action will delete the entire tomcat directory including all configuration, data, and deployed webapps.  If you have other plugins deployed they will have to be republished.\n\nDo you wish to continue?",
+                MessageDialog.WARNING, labels, 1 );
 
-		int retval = dialog.open();
+        int retval = dialog.open();
 
-		if (retval == MessageDialog.OK) {
-			new CleanAppServerJob(project).schedule();
-		}
-	}
+        if( retval == MessageDialog.OK )
+        {
+            new CleanAppServerJob( project ).schedule();
+        }
+    }
 
-	protected void editRuntime(IRuntime runtime) {
-		IRuntimeWorkingCopy runtimeWorkingCopy = runtime.createWorkingCopy();
-		if (showWizard(runtimeWorkingCopy) != Window.CANCEL) {
-			try {
-				runtimeWorkingCopy.save(false, null);
-			}
-			catch (Exception ex) {
-				// ignore
-			}
-		}
-	}
+    protected void editRuntime( IRuntime runtime )
+    {
+        IRuntimeWorkingCopy runtimeWorkingCopy = runtime.createWorkingCopy();
+        if( showWizard( runtimeWorkingCopy ) != Window.CANCEL )
+        {
+            try
+            {
+                runtimeWorkingCopy.save( false, null );
+            }
+            catch( Exception ex )
+            {
+                // ignore
+            }
+        }
+    }
 
-	protected String getTitle() {
-		return "Clean App Server";
-	}
+    protected String getTitle()
+    {
+        return "Clean App Server";
+    }
 
-	protected int showWizard(final IRuntimeWorkingCopy runtimeWorkingCopy) {
-		String title = Messages.wizEditRuntimeWizardTitle;
-		final WizardFragment fragment2 = ServerUIPlugin.getWizardFragment(runtimeWorkingCopy.getRuntimeType().getId());
-		if (fragment2 == null)
-			return Window.CANCEL;
+    protected int showWizard( final IRuntimeWorkingCopy runtimeWorkingCopy )
+    {
+        String title = Messages.wizEditRuntimeWizardTitle;
+        final WizardFragment fragment2 = ServerUIPlugin.getWizardFragment( runtimeWorkingCopy.getRuntimeType().getId() );
+        if( fragment2 == null )
+            return Window.CANCEL;
 
-		TaskModel taskModel = new TaskModel();
-		taskModel.putObject(TaskModel.TASK_RUNTIME, runtimeWorkingCopy);
+        TaskModel taskModel = new TaskModel();
+        taskModel.putObject( TaskModel.TASK_RUNTIME, runtimeWorkingCopy );
 
-		WizardFragment fragment = new WizardFragment() {
+        WizardFragment fragment = new WizardFragment()
+        {
 
-			protected void createChildFragments(List<WizardFragment> list) {
-				list.add((WizardFragment) fragment2.getChildFragments().get(0));
-				list.add(WizardTaskUtil.SaveRuntimeFragment);
-			}
-		};
+            protected void createChildFragments( List<WizardFragment> list )
+            {
+                list.add( (WizardFragment) fragment2.getChildFragments().get( 0 ) );
+                list.add( WizardTaskUtil.SaveRuntimeFragment );
+            }
+        };
 
-		TaskWizard wizard = new TaskWizard(title, fragment, taskModel);
-		wizard.setForcePreviousAndNextButtons(true);
-		WizardDialog dialog = new WizardDialog(getDisplay().getActiveShell(), wizard);
-		return dialog.open();
-	}
+        TaskWizard wizard = new TaskWizard( title, fragment, taskModel );
+        wizard.setForcePreviousAndNextButtons( true );
+        WizardDialog dialog = new WizardDialog( getDisplay().getActiveShell(), wizard );
+        return dialog.open();
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,9 +15,9 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.project.core.LiferayProjectImportDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.ui.wizard.INewProjectWizard;
-import com.liferay.ide.project.core.LiferayProjectImportDataModelProvider;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -30,71 +30,81 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayProjectImportWizard extends DataModelWizard implements IWorkbenchWizard, INewProjectWizard {
+@SuppressWarnings( "restriction" )
+public class LiferayProjectImportWizard extends DataModelWizard implements IWorkbenchWizard, INewProjectWizard
+{
 
-	protected LiferayProjectImportWizardPage liferayProjectImportWizardPage;
-	protected IFolder folder;
+    protected LiferayProjectImportWizardPage liferayProjectImportWizardPage;
+    protected IFolder folder;
 
-	public LiferayProjectImportWizard() {
-		this( (IDataModel) null );
-	}
+    public LiferayProjectImportWizard()
+    {
+        this( (IDataModel) null );
+    }
 
-	public LiferayProjectImportWizard(IDataModel dataModel) {
-		super(dataModel);
-		
-		setWindowTitle("Import Project");
-		setDefaultPageImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
-			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
-		setNeedsProgressMonitor(true);
-	}
+    public LiferayProjectImportWizard( IDataModel dataModel )
+    {
+        super( dataModel );
 
-	public LiferayProjectImportWizard( IFolder folder ) {
-		this( (IDataModel) null );
+        setWindowTitle( "Import Project" );
+        setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
+        setNeedsProgressMonitor( true );
+    }
 
-		this.folder = folder;
-	}
+    public LiferayProjectImportWizard( IFolder folder )
+    {
+        this( (IDataModel) null );
 
-	@Override
-	public boolean canFinish() {
-		return getDataModel().isValid();
-	}
+        this.folder = folder;
+    }
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-	}
+    @Override
+    public boolean canFinish()
+    {
+        return getDataModel().isValid();
+    }
 
-	@Override
-	protected void doAddPages() {
-		if (folder != null) {
-			IDataModel model = getDataModel();
-			model.setProperty(
-				LiferayProjectImportDataModelProvider.PROJECT_LOCATION, folder.getRawLocation().toOSString() );
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+    }
 
-		}
-		
-		liferayProjectImportWizardPage = new LiferayProjectImportWizardPage(getDataModel(), "pageOne", this);
+    @Override
+    protected void doAddPages()
+    {
+        if( folder != null )
+        {
+            IDataModel model = getDataModel();
+            model.setProperty(
+                LiferayProjectImportDataModelProvider.PROJECT_LOCATION, folder.getRawLocation().toOSString() );
 
-		if ( folder != null ) {
-			liferayProjectImportWizardPage.updateProjectRecord( folder.getRawLocation().toOSString() );
-		}
-		
-		addPage(liferayProjectImportWizardPage);
-	}
+        }
 
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		return new LiferayProjectImportDataModelProvider();
-	}
+        liferayProjectImportWizardPage = new LiferayProjectImportWizardPage( getDataModel(), "pageOne", this );
 
-	@Override
-	protected boolean runForked() {
-		return false;
-	}
+        if( folder != null )
+        {
+            liferayProjectImportWizardPage.updateProjectRecord( folder.getRawLocation().toOSString() );
+        }
 
+        addPage( liferayProjectImportWizardPage );
+    }
 
-	public void setProjectType(String projectType) {
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        return new LiferayProjectImportDataModelProvider();
+    }
 
-	}
+    @Override
+    protected boolean runForked()
+    {
+        return false;
+    }
 
+    public void setProjectType( String projectType )
+    {
+
+    }
 
 }

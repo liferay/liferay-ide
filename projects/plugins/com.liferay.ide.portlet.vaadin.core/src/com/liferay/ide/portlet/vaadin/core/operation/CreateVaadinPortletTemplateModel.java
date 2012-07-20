@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,28 +24,31 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings("restriction")
-public class CreateVaadinPortletTemplateModel extends CreateWebClassTemplateModel {
+@SuppressWarnings( "restriction" )
+public class CreateVaadinPortletTemplateModel extends CreateWebClassTemplateModel
+{
+    protected boolean generateGenericInclude = false;
 
-	protected boolean generateGenericInclude = false;
+    public CreateVaadinPortletTemplateModel( IDataModel dataModel )
+    {
+        super( dataModel );
+    }
 
-	public CreateVaadinPortletTemplateModel(IDataModel dataModel) {
-		super(dataModel);
-	}
+    public String getClassName()
+    {
+        return dataModel.getStringProperty( INewJavaClassDataModelProperties.CLASS_NAME );
+    }
 
-	public String getClassName() {
-		return dataModel.getStringProperty(INewJavaClassDataModelProperties.CLASS_NAME);
-	}
+    @Override
+    public Collection<String> getImports()
+    {
+        Collection<String> collection = super.getImports();
 
-	@Override
-	public Collection<String> getImports() {
-		Collection<String> collection = super.getImports();
+        collection.add( "com.vaadin.Application" );
+        collection.add( "com.vaadin.ui.Label" );
+        collection.add( "com.vaadin.ui.Window" );
 
-		collection.add("com.vaadin.Application");
-		collection.add("com.vaadin.ui.Label");
-		collection.add("com.vaadin.ui.Window");
-
-		return collection;
-	}
+        return collection;
+    }
 
 }

@@ -5,38 +5,38 @@
          point="org.eclipse.wst.server.ui.serverImages">
       <image
             icon="icons/e16/server.png"
-            id="com.liferay.ide.eclipse.server.tomcat.ui.image"
+            id="com.liferay.ide.server.tomcat.ui.image"
             typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70">
       </image>
       <image
             icon="icons/e16/server.png"
-            id="com.liferay.ide.eclipse.server.tomcat.runtime.ui.image"
+            id="com.liferay.ide.server.tomcat.runtime.ui.image"
             typeIds="com.liferay.ide.eclipse.server.tomcat.60,com.liferay.ide.eclipse.server.tomcat.70">
       </image>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            configTypeID="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
+            configTypeID="com.liferay.ide.server.tomcat.60.launchConfigurationType"
             icon="icons/e16/server.png"
-            id="com.liferay.ide.eclipse.server.tomcat.ui.launchConfigurationTypeImage.60">
+            id="com.liferay.ide.server.tomcat.ui.launchConfigurationTypeImage.60">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
-            configTypeID="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
+            configTypeID="com.liferay.ide.server.tomcat.70.launchConfigurationType"
             icon="icons/e16/server.png"
-            id="com.liferay.ide.eclipse.server.tomcat.ui.launchConfigurationTypeImage.70">
+            id="com.liferay.ide.server.tomcat.ui.launchConfigurationTypeImage.70">
       </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
             class="com.liferay.ide.server.tomcat.ui.LiferayTomcatLaunchConfigTabGroup"
-            id="com.liferay.ide.eclipse.server.tomcat60.ui.launchConfigurationTabGroup"
+            id="com.liferay.ide.server.tomcat60.ui.launchConfigurationTabGroup"
             type="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType">
       </launchConfigurationTabGroup>
       <launchConfigurationTabGroup
             class="com.liferay.ide.server.tomcat.ui.LiferayTomcatLaunchConfigTabGroup"
-            id="com.liferay.ide.eclipse.server.tomcat70.ui.launchConfigurationTabGroup"
+            id="com.liferay.ide.server.tomcat70.ui.launchConfigurationTabGroup"
             type="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType">
       </launchConfigurationTabGroup>
    </extension>
@@ -44,7 +44,7 @@
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
             class="com.liferay.ide.server.tomcat.ui.wizard.LiferayTomcatRuntimeFragment"
-            id="com.liferay.ide.eclipse.server.tomcat.runtime"
+            id="com.liferay.ide.server.tomcat.runtime"
             typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70">
       </fragment>
    </extension>
@@ -52,8 +52,8 @@
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
             class="org.eclipse.jst.server.tomcat.ui.internal.ConfigurationPropertyTester"
-            id="com.liferay.ide.eclipse.server.tomcat.ui.propertyTester"
-            namespace="com.liferay.ide.eclipse.server.tomcat.ui"
+            id="com.liferay.ide.server.tomcat.ui.propertyTester"
+            namespace="com.liferay.ide.server.tomcat.ui"
             properties="hasConfiguration"
             type="java.lang.Object">
       </propertyTester>
@@ -63,7 +63,7 @@
       <publisher
             class="org.eclipse.jst.server.tomcat.ui.internal.ContextPublisherDelegate"
             description="Prompt to update context paths when they are out of sync."
-            id="com.liferay.ide.eclipse.server.tomcat.ui.context"
+            id="com.liferay.ide.server.tomcat.ui.context"
             name="Update context path"
             order="0"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
@@ -73,14 +73,14 @@
          point="org.eclipse.wst.server.ui.editorPageSections">
       <section
             class="com.liferay.ide.server.tomcat.ui.editor.LiferayServerSettingsEditorSection"
-            id="com.liferay.ide.eclipse.server.tomcat.editor.instance"
+            id="com.liferay.ide.server.tomcat.editor.instance"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
       </section>
       <section
             class="org.eclipse.jst.server.tomcat.ui.internal.editor.ConfigurationMimeEditorSection"
-            id="com.liferay.ide.eclipse.server.tomcat.configuration.editor.mime"
+            id="com.liferay.ide.server.tomcat.configuration.editor.mime"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="20"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
@@ -93,13 +93,13 @@
       </section>
       <section
             class="org.eclipse.jst.server.tomcat.ui.internal.editor.ConfigurationPortEditorSection"
-            id="com.liferay.ide.eclipse.server.tomcat.configuration.editor.port"
+            id="com.liferay.ide.server.tomcat.configuration.editor.port"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="10"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
          <enablement>
             <test
-                  property="com.liferay.ide.eclipse.server.tomcat.ui.hasConfiguration"
+                  property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
                   value="true">
             </test>
          </enablement>
@@ -160,7 +160,7 @@
                class="com.liferay.ide.server.tomcat.ui.CleanAppServerAction"
                enablesFor="1"
                icon="icons/e16/clear_16x16.gif"
-               id="com.liferay.ide.eclipse.project.ui.cleanAppServer"
+               id="com.liferay.ide.project.ui.cleanAppServer"
                label="Clean App Server..."
                menubarPath="liferayPopupMenuCategory/slot1"
                tooltip="Clean App Server...">

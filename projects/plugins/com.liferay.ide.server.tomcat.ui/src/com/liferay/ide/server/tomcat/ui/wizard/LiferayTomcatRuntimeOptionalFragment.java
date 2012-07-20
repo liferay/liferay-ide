@@ -31,19 +31,19 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 public class LiferayTomcatRuntimeOptionalFragment extends TomcatRuntimeWizardFragment
 {
 
-	public LiferayTomcatRuntimeOptionalFragment()
-	{
-		super();
-	}
+    public LiferayTomcatRuntimeOptionalFragment()
+    {
+        super();
+    }
 
-	public Composite createComposite( Composite parent, IWizardHandle wizard )
-	{
-		comp = new LiferayTomcatRuntimeOptionalComposite( parent, wizard );
+    public Composite createComposite( Composite parent, IWizardHandle wizard )
+    {
+        comp = new LiferayTomcatRuntimeOptionalComposite( parent, wizard );
 
-		wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
-			"/icons/wizban/server_wiz.png" ) ) );
+        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
+            "/icons/wizban/server_wiz.png" ) ) );
 
-		return comp;
-	}
+        return comp;
+    }
 
 }

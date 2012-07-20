@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *   
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,64 +30,75 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
  */
 public final class InvertingBooleanXmlValueBinding extends XmlValueBindingImpl
 {
+    private XmlPath path;
 
-	private XmlPath path;
+    @Override
+    public void init( final IModelElement element, final ModelProperty property, final String[] params )
+    {
+        super.init( element, property, params );
 
-	@Override
-	public void init( final IModelElement element, final ModelProperty property, final String[] params ) {
-		super.init( element, property, params );
+        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
+        this.path = new XmlPath( params[0], xmlNamespaceResolver );
+    }
 
-		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-		this.path = new XmlPath( params[0], xmlNamespaceResolver );
-	}
+    @Override
+    public String read()
+    {
+        String value = null;
 
-	@Override
-	public String read() {
-		String value = null;
+        final XmlElement element = xml( false );
 
-		final XmlElement element = xml( false );
+        if( element != null )
+        {
+            value = element.getChildNodeText( this.path );
 
-		if ( element != null ) {
-			value = element.getChildNodeText( this.path );
+            if( value != null )
+            {
+                if( value.equalsIgnoreCase( "true" ) )
+                {
+                    value = "false";
+                }
+                else if( value.equalsIgnoreCase( "false" ) )
+                {
+                    value = "true";
+                }
+            }
+        }
 
-			if ( value != null ) {
-				if ( value.equalsIgnoreCase( "true" ) ) {
-					value = "false";
-				}
-				else if ( value.equalsIgnoreCase( "false" ) ) {
-					value = "true";
-				}
-			}
-		}
+        return value;
+    }
 
-		return value;
-	}
+    @Override
+    public void write( final String value )
+    {
+        String val = value;
 
-	@Override
-	public void write( final String value ) {
-		String val = value;
+        if( val != null )
+        {
+            if( val.equalsIgnoreCase( "true" ) )
+            {
+                val = "false";
+            }
+            else if( val.equalsIgnoreCase( "false" ) )
+            {
+                val = "true";
+            }
+        }
 
-		if ( val != null ) {
-			if ( val.equalsIgnoreCase( "true" ) ) {
-				val = "false";
-			}
-			else if ( val.equalsIgnoreCase( "false" ) ) {
-				val = "true";
-			}
-		}
+        xml( true ).setChildNodeText( this.path, val, true );
+    }
 
-		xml( true ).setChildNodeText( this.path, val, true );
-	}
+    @Override
+    public XmlNode getXmlNode()
+    {
+        final XmlElement element = xml( false );
 
-	@Override
-	public XmlNode getXmlNode() {
-		final XmlElement element = xml( false );
+        if( element != null )
+        {
+            return element.getChildNode( this.path, false );
+        }
 
-		if ( element != null ) {
-			return element.getChildNode( this.path, false );
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 }

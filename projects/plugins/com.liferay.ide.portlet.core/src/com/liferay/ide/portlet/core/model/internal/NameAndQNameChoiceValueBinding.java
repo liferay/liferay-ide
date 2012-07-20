@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,97 +29,108 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 
-public final class NameAndQNameChoiceValueBinding extends XmlValueBindingImpl {
+public final class NameAndQNameChoiceValueBinding extends XmlValueBindingImpl
+{
+    private static final String Q_NAME = "qname";
+    private static final String NAME = "name";
 
-	private static final String Q_NAME = "qname";
-	private static final String NAME = "name";
+    private String[] params;
+    private XmlPath path;
 
-	private String[] params;
-	private XmlPath path;
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
+     * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+     */
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
+        this.params = params;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		super.init( element, property, params );
-		this.params = params;
+        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
+        this.path = new XmlPath( params[0], xmlNamespaceResolver );
+    }
 
-		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-		this.path = new XmlPath( params[0], xmlNamespaceResolver );
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+     */
+    @Override
+    public String read()
+    {
+        final XmlElement parent = xml( false );
+        // System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + parent );
+        String value = null;
+        if( parent != null )
+        {
+            // System.out.println( "NameAndQNameChoiceValueBinding.read()" + params[0] );
+            final XmlElement eventNameElement = parent.getChildElement( NAME, false );
+            final XmlElement eventQNameElement = parent.getChildElement( Q_NAME, false );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
-	 */
-	@Override
-	public String read() {
-		final XmlElement parent = xml( false );
-		// System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + parent );
-		String value = null;
-		if ( parent != null ) {
-			// System.out.println( "NameAndQNameChoiceValueBinding.read()" + params[0] );
-			final XmlElement eventNameElement = parent.getChildElement( NAME, false );
-			final XmlElement eventQNameElement = parent.getChildElement( Q_NAME, false );
+            if( eventNameElement != null && NAME.equals( params[0] ) )
+            {
+                // System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + eventNameElement );
+                value = eventNameElement.getText();
+            }
+            else if( eventQNameElement != null && Q_NAME.equals( params[0] ) )
+            {
 
-			if ( eventNameElement != null && NAME.equals( params[0] ) ) {
-				// System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + eventNameElement );
-				value = eventNameElement.getText();
-			}
-			else if ( eventQNameElement != null && Q_NAME.equals( params[0] ) ) {
+                // System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + eventQNameElement );
+                value = eventQNameElement.getText();
+            }
+        }
 
-				// System.out.println( "NameAndQNameChoiceValueBinding.read() - \n" + eventQNameElement );
-				value = eventQNameElement.getText();
-			}
-		}
+        return value;
+    }
 
-		return value;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+     */
+    @Override
+    public void write( final String value )
+    {
+        final XmlElement parent = xml( true );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
-	 */
-	@Override
-	public void write( final String value ) {
-		final XmlElement parent = xml( true );
+        // System.out.println( "EventDefinitionValueBinding.write()" + parent );
 
-		// System.out.println( "EventDefinitionValueBinding.write()" + parent );
+        final XmlElement eventNameElement = parent.getChildElement( NAME, false );
+        final XmlElement eventQNameElement = parent.getChildElement( Q_NAME, false );
 
-		final XmlElement eventNameElement = parent.getChildElement( NAME, false );
-		final XmlElement eventQNameElement = parent.getChildElement( Q_NAME, false );
+        if( NAME.equals( params[0] ) && eventQNameElement != null )
+        {
+            parent.removeChildNode( Q_NAME );
+        }
+        else if( Q_NAME.equals( params[0] ) && eventNameElement != null )
+        {
+            parent.removeChildNode( NAME );
+        }
 
-		if ( NAME.equals( params[0] ) && eventQNameElement != null ) {
-			parent.removeChildNode( Q_NAME );
-		}
-		else if ( Q_NAME.equals( params[0] ) && eventNameElement != null ) {
-			parent.removeChildNode( NAME );
-		}
+        parent.setChildNodeText( this.path, value, true );
 
-		parent.setChildNodeText( this.path, value, true );
+    }
 
-	}
+    @Override
+    public XmlNode getXmlNode()
+    {
+        final XmlElement parent = xml();
 
-	@Override
-	public XmlNode getXmlNode() {
-		final XmlElement parent = xml();
+        XmlElement element = parent.getChildElement( Q_NAME, false );
 
-		XmlElement element = parent.getChildElement( Q_NAME, false );
+        if( element != null )
+        {
+            return element;
+        }
 
-		if ( element != null ) {
-			return element;
-		}
+        element = parent.getChildElement( NAME, false );
 
-		element = parent.getChildElement( NAME, false );
+        if( element != null )
+        {
+            return element;
+        }
 
-		if ( element != null ) {
-			return element;
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 }

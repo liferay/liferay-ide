@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *   
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,56 +34,60 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class LiferayPortletXmlEditor extends SapphireEditor {
+public class LiferayPortletXmlEditor extends SapphireEditor
+{
 
-	public static final String ID = "com.liferay.ide.portlet.ui.editor.LiferayPortletXmlEditor";
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor";
 
-	private static final String EDITOR_DEFINITION_PATH =
-		"com.liferay.ide.portlet.ui/com/liferay/ide/eclipse/portlet/ui/editor/liferay-portlet-app.sdef/portlet-app.editor";
+    private static final String EDITOR_DEFINITION_PATH =
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/liferay-portlet-app.sdef/portlet-app.editor";
 
-	private StructuredTextEditor sourceEditor;
-	private MasterDetailsEditorPage formEditor;
-	private IModelElement model;
+    private StructuredTextEditor sourceEditor;
+    private MasterDetailsEditorPage formEditor;
+    private IModelElement model;
 
-	/**
+    /**
 	 * 
 	 */
-	public LiferayPortletXmlEditor() {
-		super( ID );
-	}
+    public LiferayPortletXmlEditor()
+    {
+        super( ID );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireEditor#createModel()
-	 */
-	@Override
-	protected IModelElement createModel() {
-		// TODO Adapt the model based on the version of the DTD
-		RootXmlResource rootXmlResource = new RootXmlResource( new XmlEditorResourceStore( this, sourceEditor ) );
-		model = ILiferayPortletApp.TYPE.instantiate( rootXmlResource );
-		//model.write( ILiferayPortletAppBase.PROP_VERSION, LiferayPortletAppVersion.v_6_0_0 );
-		return model;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireEditor#createModel()
+     */
+    @Override
+    protected IModelElement createModel()
+    {
+        RootXmlResource rootXmlResource = new RootXmlResource( new XmlEditorResourceStore( this, sourceEditor ) );
+        model = ILiferayPortletApp.TYPE.instantiate( rootXmlResource );
+        // model.write( ILiferayPortletAppBase.PROP_VERSION, LiferayPortletAppVersion.v_6_0_0 );
+        return model;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireEditor#createSourcePages()
-	 */
-	@Override
-	protected void createSourcePages() throws PartInitException {
-		sourceEditor = new StructuredTextEditor();
-		sourceEditor.setEditorPart( this );
-		final IFileEditorInput fileEditorInput = (IFileEditorInput) getEditorInput();
-		int pgIndex = addPage( sourceEditor, fileEditorInput );
-		setPageText( pgIndex, "liferay-portlet.xml" );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireEditor#createSourcePages()
+     */
+    @Override
+    protected void createSourcePages() throws PartInitException
+    {
+        sourceEditor = new StructuredTextEditor();
+        sourceEditor.setEditorPart( this );
+        final IFileEditorInput fileEditorInput = (IFileEditorInput) getEditorInput();
+        int pgIndex = addPage( sourceEditor, fileEditorInput );
+        setPageText( pgIndex, "liferay-portlet.xml" );
 
-	}
+    }
 
-	@Override
-	protected void createFormPages() throws PartInitException {
-		IPath pageDefinitionLocation = new Path( EDITOR_DEFINITION_PATH );
-		formEditor = new MasterDetailsEditorPage( this, model, pageDefinitionLocation );
-		addPage( 0, formEditor );
-	}
+    @Override
+    protected void createFormPages() throws PartInitException
+    {
+        IPath pageDefinitionLocation = new Path( EDITOR_DEFINITION_PATH );
+        formEditor = new MasterDetailsEditorPage( this, model, pageDefinitionLocation );
+        addPage( 0, formEditor );
+    }
 
 }

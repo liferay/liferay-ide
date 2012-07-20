@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *   
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,7 +18,7 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import com.liferay.ide.portlet.core.display.model.IDisplay;
+import com.liferay.ide.portlet.core.display.model.Display;
 
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 
@@ -28,16 +28,17 @@ import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
  */
 public class LiferayDisplayXmlEditor extends SapphireEditorForXml
 {
-    public static final String ID = "com.liferay.ide.portlet.ui.editor.LiferayDisplayXmlEditor";
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor";
 
     private static final String EDITOR_DEFINITION_PATH =
-        "com.liferay.ide.portlet.ui/com/liferay/ide/eclipse/portlet/ui/editor/liferay-display.sdef/DetailsPage";
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/liferay-display.sdef/DetailsPage";
 
     public LiferayDisplayXmlEditor()
     {
         super( ID );
         setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
-        setRootModelElementType( IDisplay.TYPE );
+        setRootModelElementType( Display.TYPE );
     }
 
 }

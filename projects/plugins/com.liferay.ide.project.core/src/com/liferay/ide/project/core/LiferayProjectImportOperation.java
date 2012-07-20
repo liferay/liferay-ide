@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,42 +37,48 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
  * @author Greg Amerson
  */
 public class LiferayProjectImportOperation extends AbstractDataModelOperation
-	implements ILiferayProjectImportDataModelProperties {
+    implements ILiferayProjectImportDataModelProperties
+{
 
-	public LiferayProjectImportOperation(IDataModel model) {
-		super(model);
-	}
+    public LiferayProjectImportOperation( IDataModel model )
+    {
+        super( model );
+    }
 
-	@Override
-	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
-		throws ExecutionException {
+    @Override
+    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        ProjectRecord projectRecord = (ProjectRecord) getDataModel().getProperty( PROJECT_RECORD );
 
-		ProjectRecord projectRecord = (ProjectRecord) getDataModel().getProperty(PROJECT_RECORD);
+        if( projectRecord == null )
+        {
+            return ProjectCorePlugin.createErrorStatus( "Project record to import is null." );
+        }
 
-		if (projectRecord == null) {
-			return ProjectCorePlugin.createErrorStatus("Project record to import is null.");
-		}
+        File projectDir = projectRecord.getProjectLocation().toFile();
 
-		File projectDir = projectRecord.getProjectLocation().toFile();
+        SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
 
-		SDK sdk = SDKUtil.getSDKFromProjectDir(projectDir);
+        if( sdk != null )
+        {
+            if( !( SDKManager.getInstance().containsSDK( sdk ) ) )
+            {
+                SDKManager.getInstance().addSDK( sdk );
+            }
+        }
 
-		if (sdk != null) {
-			if (!(SDKManager.getInstance().containsSDK(sdk))) {
-				SDKManager.getInstance().addSDK(sdk);
-			}
-		}
+        IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-		IRuntime runtime = (IRuntime) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
+        try
+        {
+            ProjectUtil.importProject( projectRecord, runtime, sdk.getLocation().toOSString(), monitor );
+        }
+        catch( CoreException e )
+        {
+            return ProjectCorePlugin.createErrorStatus( e );
+        }
 
-		try {
-			ProjectUtil.importProject(projectRecord, runtime, sdk.getLocation().toOSString(), monitor);
-		}
-		catch (CoreException e) {
-			return ProjectCorePlugin.createErrorStatus(e);
-		}
-
-		return Status.OK_STATUS;
-	}
+        return Status.OK_STATUS;
+    }
 
 }

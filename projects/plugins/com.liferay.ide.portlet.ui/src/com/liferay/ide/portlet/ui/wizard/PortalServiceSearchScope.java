@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,70 +23,88 @@ import org.eclipse.jdt.core.search.IJavaSearchScope;
 /**
  * @author Greg Amerson
  */
-public class PortalServiceSearchScope implements IJavaSearchScope {
+public class PortalServiceSearchScope implements IJavaSearchScope
+{
 
-	protected IPath[] enclosingJars;
+    protected IPath[] enclosingJars;
 
-	protected String[] resourcePatterns;
+    protected String[] resourcePatterns;
 
-	public PortalServiceSearchScope() {
-	}
+    public PortalServiceSearchScope()
+    {
+    }
 
-	public boolean encloses(IJavaElement element) {
-		if (element != null) {
-			IPath elementPath = element.getPath();
+    public boolean encloses( IJavaElement element )
+    {
+        if( element != null )
+        {
+            IPath elementPath = element.getPath();
 
-			if (elementPath != null) {
-				for (IPath enclosingJar : enclosingJars) {
-					if (elementPath.lastSegment().equals(enclosingJar.lastSegment())) {
-						return true;
-					}
-				}
-			}
-		}
+            if( elementPath != null )
+            {
+                for( IPath enclosingJar : enclosingJars )
+                {
+                    if( elementPath.lastSegment().equals( enclosingJar.lastSegment() ) )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public boolean encloses(String resourcePath) {
-		IPath path = new Path(resourcePath);
+    public boolean encloses( String resourcePath )
+    {
+        IPath path = new Path( resourcePath );
 
-		if (path != null) {
-			for (String pattern : resourcePatterns) {
-				if (path.toPortableString().matches(pattern)) {
-					return true;
-				}
-			}
-		}
+        if( path != null )
+        {
+            for( String pattern : resourcePatterns )
+            {
+                if( path.toPortableString().matches( pattern ) )
+                {
+                    return true;
+                }
+            }
+        }
 
-		return false;// path != null &&
-		// path.lastSegment().endsWith("Service.class");
-	}
+        return false;// path != null &&
+        // path.lastSegment().endsWith("Service.class");
+    }
 
-	public IPath[] enclosingProjectsAndJars() {
-		return enclosingJars;
-	}
+    public IPath[] enclosingProjectsAndJars()
+    {
+        return enclosingJars;
+    }
 
-	public boolean includesBinaries() {
-		return true;
-	}
+    public boolean includesBinaries()
+    {
+        return true;
+    }
 
-	public boolean includesClasspaths() {
-		return true;
-	}
+    public boolean includesClasspaths()
+    {
+        return true;
+    }
 
-	public void setEnclosingJarPaths(IPath[] jarPaths) {
-		enclosingJars = jarPaths;
-	}
+    public void setEnclosingJarPaths( IPath[] jarPaths )
+    {
+        enclosingJars = jarPaths;
+    }
 
-	public void setIncludesBinaries(boolean includesBinaries) {
-	}
+    public void setIncludesBinaries( boolean includesBinaries )
+    {
+    }
 
-	public void setIncludesClasspaths(boolean includesClasspaths) {
-	}
+    public void setIncludesClasspaths( boolean includesClasspaths )
+    {
+    }
 
-	public void setResourcePattern(String[] patterns) {
-		this.resourcePatterns = patterns;
-	}
+    public void setResourcePattern( String[] patterns )
+    {
+        this.resourcePatterns = patterns;
+    }
 
 }

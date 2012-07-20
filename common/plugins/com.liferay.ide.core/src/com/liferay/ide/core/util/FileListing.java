@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
@@ -28,96 +30,104 @@ import org.eclipse.core.runtime.Path;
 /**
  * @author Greg Amerson
  */
-public class FileListing {
+public class FileListing
+{
 
-	public static IPath findFilePattern(File location, String pattern) {
+    public static IPath findFilePattern( File location, String pattern )
+    {
+        try
+        {
+            List<File> fileList = FileListing.getFileListing( location, false );
 
-		try {
-			List<File> fileList = FileListing.getFileListing(location, false);
+            for( File file : fileList )
+            {
 
-			for (File file : fileList) {
+                if( file.getPath().contains( pattern ) )
+                {
+                    // found jvm
+                    File jreRoot = file.getParentFile().getParentFile();
 
-				if (file.getPath().contains(pattern)) {
-					// found jvm
-					File jreRoot = file.getParentFile().getParentFile();
+                    return new Path( jreRoot.getAbsolutePath() );
+                }
+            }
+        }
+        catch( FileNotFoundException e )
+        {
+        }
 
-					return new Path(jreRoot.getAbsolutePath());
-				}
-			}
-		}
-		catch (FileNotFoundException e) {
-		}
+        return null;
+    }
 
-		return null;
-	}
+    static public List<File> getFileListing( File aStartingDir ) throws FileNotFoundException
+    {
+        List<File> result = new ArrayList<File>();
 
-	static public List<File> getFileListing(File aStartingDir)
-		throws FileNotFoundException {
+        File[] filesAndDirs = aStartingDir.listFiles();
 
-		List<File> result = new ArrayList<File>();
+        List<File> filesDirs = Arrays.asList( filesAndDirs );
 
-		File[] filesAndDirs = aStartingDir.listFiles();
+        for( File file : filesDirs )
+        {
+            result.add( file ); // always add, even if directory
 
-		List<File> filesDirs = Arrays.asList(filesAndDirs);
+            if( !file.isFile() )
+            {
+                // must be a directory
+                // recursive call!
+                List<File> deeperList = getFileListing( file );
 
-		for (File file : filesDirs) {
-			result.add(file); // always add, even if directory
+                result.addAll( deeperList );
+            }
+        }
 
-			if (!file.isFile()) {
-				// must be a directory
-				// recursive call!
-				List<File> deeperList = getFileListing(file);
+        return result;
+    }
 
-				result.addAll(deeperList);
-			}
-		}
+    /**
+     * Recursively walk a directory tree and return a List of all Files found; the List is sorted using
+     * File.compareTo().
+     * 
+     * @param aStartingDir
+     *            is a valid directory, which can be read.
+     */
+    static public List<File> getFileListing( File aStartingDir, boolean sort ) throws FileNotFoundException
+    {
+        validateDirectory( aStartingDir );
 
-		return result;
-	}
+        List<File> result = getFileListing( aStartingDir );
 
-	/**
-	 * Recursively walk a directory tree and return a List of all Files found;
-	 * the List is sorted using File.compareTo().
-	 * 
-	 * @param aStartingDir
-	 *            is a valid directory, which can be read.
-	 */
-	static public List<File> getFileListing(File aStartingDir, boolean sort)
-		throws FileNotFoundException {
+        if( sort )
+        {
+            Collections.sort( result );
+        }
 
-		validateDirectory(aStartingDir);
+        return result;
+    }
 
-		List<File> result = getFileListing(aStartingDir);
+    /**
+     * Directory is valid if it exists, does not represent a file, and can be read.
+     */
+    static private void validateDirectory( File aDirectory ) throws FileNotFoundException
+    {
+        if( aDirectory == null )
+        {
+            throw new IllegalArgumentException( "Directory should not be null." );
+        }
 
-		if (sort) {
-			Collections.sort(result);
-		}
+        if( !aDirectory.exists() )
+        {
+            throw new FileNotFoundException( "Directory does not exist: " + aDirectory );
+        }
 
-		return result;
-	}
+        if( !aDirectory.isDirectory() )
+        {
+            throw new IllegalArgumentException( "Is not a directory: " + aDirectory );
+        }
 
-	/**
-	 * Directory is valid if it exists, does not represent a file, and can be
-	 * read.
-	 */
-	static private void validateDirectory(File aDirectory)
-		throws FileNotFoundException {
-
-		if (aDirectory == null) {
-			throw new IllegalArgumentException("Directory should not be null.");
-		}
-
-		if (!aDirectory.exists()) {
-			throw new FileNotFoundException("Directory does not exist: " + aDirectory);
-		}
-
-		if (!aDirectory.isDirectory()) {
-			throw new IllegalArgumentException("Is not a directory: " + aDirectory);
-		}
-
-		if (!aDirectory.canRead()) {
-			throw new IllegalArgumentException("Directory cannot be read: " + aDirectory);
-		}
-	}
+        if( !aDirectory.canRead() )
+        {
+            throw new IllegalArgumentException( "Directory cannot be read: " + aDirectory );
+        }
+    }
 
 }

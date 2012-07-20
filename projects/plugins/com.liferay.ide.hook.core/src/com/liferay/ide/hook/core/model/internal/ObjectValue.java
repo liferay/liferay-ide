@@ -14,6 +14,7 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.hook.core.model.internal;
 
 /**
@@ -21,6 +22,7 @@ package com.liferay.ide.hook.core.model.internal;
  */
 public class ObjectValue<T>
 {
+
     private T value;
 
     public ObjectValue( T value )
@@ -37,7 +39,7 @@ public class ObjectValue<T>
         return this.value;
     }
 
-    public void setValue(T v)
+    public void setValue( T v )
     {
         this.value = v;
     }

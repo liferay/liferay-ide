@@ -29,35 +29,34 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
-
 /**
  * @author Gregory Amerson
  */
 public class PortalPropertyNamePossibleValuesService extends PossibleValuesService
 {
 
-	private String[] hookProperties;
+    private String[] hookProperties;
 
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values )
-	{
-		values.addAll( Arrays.asList( this.hookProperties ) );
-	}
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        values.addAll( Arrays.asList( this.hookProperties ) );
+    }
 
-	@Override
-	protected void init()
-	{
-		super.init();
-		IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+    @Override
+    protected void init()
+    {
+        super.init();
+        IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
 
-		try
-		{
-			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-			this.hookProperties = liferayRuntime.getSupportedHookProperties();
-		}
-		catch ( CoreException e )
-		{
-		}
-	}
+        try
+        {
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            this.hookProperties = liferayRuntime.getSupportedHookProperties();
+        }
+        catch( CoreException e )
+        {
+        }
+    }
 
 }

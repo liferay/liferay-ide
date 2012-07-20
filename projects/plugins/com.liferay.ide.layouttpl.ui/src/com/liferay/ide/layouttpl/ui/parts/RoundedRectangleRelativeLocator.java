@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,16 +20,22 @@ import org.eclipse.draw2d.RelativeLocator;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.handles.HandleBounds;
 
-public class RoundedRectangleRelativeLocator extends RelativeLocator {
+/**
+ * @author Gregory Amerson
+ */
+public class RoundedRectangleRelativeLocator extends RelativeLocator
+{
 
-	public RoundedRectangleRelativeLocator(IFigure figure, int direction) {
-		super(figure, .05, .05);
-	}
+    public RoundedRectangleRelativeLocator( IFigure figure, int direction )
+    {
+        super( figure, .05, .05 );
+    }
 
-	protected Rectangle getReferenceBox() {
-		IFigure f = getReferenceFigure();
-		if (f instanceof HandleBounds)
-			return ((HandleBounds) f).getHandleBounds();
-		return super.getReferenceBox();
-	}
+    protected Rectangle getReferenceBox()
+    {
+        IFigure f = getReferenceFigure();
+        if( f instanceof HandleBounds )
+            return ( (HandleBounds) f ).getHandleBounds();
+        return super.getReferenceBox();
+    }
 }

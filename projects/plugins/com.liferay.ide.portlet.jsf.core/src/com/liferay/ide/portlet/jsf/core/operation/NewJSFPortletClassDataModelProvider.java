@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,101 +34,113 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "rawtypes", "unchecked"
-})
+@SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
 public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataModelProvider
-	implements INewJSFPortletClassDataModelProperties {
+    implements INewJSFPortletClassDataModelProperties
+{
 
-	public NewJSFPortletClassDataModelProvider(
-		TemplateStore templateStore, TemplateContextType contextType, boolean fragment) {
-		super(templateStore, contextType, fragment);
-	}
+    public NewJSFPortletClassDataModelProvider(
+        TemplateStore templateStore, TemplateContextType contextType, boolean fragment )
+    {
+        super( templateStore, contextType, fragment );
+    }
 
-	@Override
-	protected Object getInitParams() {
-		List<ParamValue> initParams = new ArrayList<ParamValue>();
+    @Override
+    protected Object getInitParams()
+    {
+        List<ParamValue> initParams = new ArrayList<ParamValue>();
 
-		// if the user is using FacesPortlet and creating XHTMLs then we need to
-		// define init-params for each view mode that is checked
-		if (getBooleanProperty(CREATE_JSPS)) {
-			String[] modes = ALL_JSF_PORTLET_MODES;
+        // if the user is using FacesPortlet and creating XHTMLs then we need to
+        // define init-params for each view mode that is checked
+        if( getBooleanProperty( CREATE_JSPS ) )
+        {
+            String[] modes = ALL_JSF_PORTLET_MODES;
 
-			String[] names =
-				{
-					"javax.portlet.faces.defaultViewId.view", "javax.portlet.faces.defaultViewId.edit",
-					"javax.portlet.faces.defaultViewId.help"
-				};
+            String[] names =
+            { 
+                "javax.portlet.faces.defaultViewId.view", 
+                "javax.portlet.faces.defaultViewId.edit",
+                "javax.portlet.faces.defaultViewId.help" 
+            };
 
-			String[] values = {
-				"/portletViewMode.xhtml", "/portletEditMode.xhtml", "/portletHelpMode.xhtml"
-			};
+            String[] values = { "/portletViewMode.xhtml", "/portletEditMode.xhtml", "/portletHelpMode.xhtml" };
 
-			ParamValue[] paramVals = createDefaultParamValuesForModes(modes, names, values);
+            ParamValue[] paramVals = createDefaultParamValuesForModes( modes, names, values );
 
-			Collections.addAll(initParams, paramVals);
-		}
+            Collections.addAll( initParams, paramVals );
+        }
 
-		return initParams;
-	}
+        return initParams;
+    }
 
-	@Override
-	public IDataModelOperation getDefaultOperation() {
-		return new AddJSFPortletOperation(this.model);
-	}
+    @Override
+    public IDataModelOperation getDefaultOperation()
+    {
+        return new AddJSFPortletOperation( this.model );
+    }
 
-	@Override
-	public Object getDefaultProperty(String propertyName) {
-		if (CLASS_NAME.equals(propertyName)) {
-			return "NewJSFPortlet";
-		}
-		else if (JSF_PORTLET_CLASS.equals(propertyName)) {
-			return QUALIFIED_JSF_PORTLET;
-		}
-		else if (INewWebClassDataModelProperties.USE_EXISTING_CLASS.equals(propertyName)) {
-			return true; // to prevent a new class from being created
-		}
-		else if (CREATE_JSPS_FOLDER.equals(propertyName)) {
-			return "/xhtml/" + getProperty(PORTLET_NAME).toString().toLowerCase();
-		}
-		else if ( SHOW_NEW_CLASS_OPTION.equals( propertyName ) ) {
-			return false;
-		}
+    @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        if( CLASS_NAME.equals( propertyName ) )
+        {
+            return "NewJSFPortlet";
+        }
+        else if( JSF_PORTLET_CLASS.equals( propertyName ) )
+        {
+            return QUALIFIED_JSF_PORTLET;
+        }
+        else if( INewWebClassDataModelProperties.USE_EXISTING_CLASS.equals( propertyName ) )
+        {
+            return true; // to prevent a new class from being created
+        }
+        else if( CREATE_JSPS_FOLDER.equals( propertyName ) )
+        {
+            return "/xhtml/" + getProperty( PORTLET_NAME ).toString().toLowerCase();
+        }
+        else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
+        {
+            return false;
+        }
 
-		return super.getDefaultProperty(propertyName);
-	}
+        return super.getDefaultProperty( propertyName );
+    }
 
+    @Override
+    public Set getPropertyNames()
+    {
+        Set propertyNames = super.getPropertyNames();
 
-	@Override
-	public Set getPropertyNames() {
-		Set propertyNames = super.getPropertyNames();
+        propertyNames.add( JSF_PORTLET_CLASS );
 
-		propertyNames.add(JSF_PORTLET_CLASS);
+        return propertyNames;
+    }
 
-		return propertyNames;
-	}
+    @Override
+    public IStatus validate( String propertyName )
+    {
+        if( PORTLET_NAME.equals( propertyName ) )
+        {
+            IStatus status = super.validate( propertyName );
 
-	@Override
-	public IStatus validate(String propertyName) {
-		if (PORTLET_NAME.equals(propertyName)) {
-			IStatus status = super.validate(propertyName);
+            if( !status.isOK() )
+            {
+                return status;
+            }
 
-			if (!status.isOK()) {
-				return status;
-			}
+            String currentPortletName = getStringProperty( PORTLET_NAME );
+            PortletDescriptorHelper helper = new PortletDescriptorHelper( getTargetProject() );
 
-			String currentPortletName = getStringProperty(PORTLET_NAME);
-			PortletDescriptorHelper helper = new PortletDescriptorHelper(getTargetProject());
-			
-			for (String portletName : helper.getAllPortletNames()) {
-				if (currentPortletName.equals(portletName)) {
-					return JSFCorePlugin.createErrorStatus("Duplicate portlet name exists.");
-				}
-			}
+            for( String portletName : helper.getAllPortletNames() )
+            {
+                if( currentPortletName.equals( portletName ) )
+                {
+                    return JSFCorePlugin.createErrorStatus( "Duplicate portlet name exists." );
+                }
+            }
+        }
 
-		}
-
-		return super.validate(propertyName);
-	}
+        return super.validate( propertyName );
+    }
 
 }

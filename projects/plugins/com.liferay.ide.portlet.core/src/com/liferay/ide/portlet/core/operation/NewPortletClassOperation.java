@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,38 +22,43 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class NewPortletClassOperation extends NewWebClassOperation {
+@SuppressWarnings( "restriction" )
+public class NewPortletClassOperation extends NewWebClassOperation
+{
 
-	protected static final String TEMPLATE_DIR = "/templates/"; //$NON-NLS-1$
+    protected static final String TEMPLATE_DIR = "/templates/"; //$NON-NLS-1$
 
-	protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "portlet.javajet"; //$NON-NLS-1$
+    protected static final String TEMPLATE_FILE = TEMPLATE_DIR + "portlet.javajet"; //$NON-NLS-1$
 
-	public NewPortletClassOperation(IDataModel dataModel) {
-		super(dataModel);
-	}
+    public NewPortletClassOperation( IDataModel dataModel )
+    {
+        super( dataModel );
+    }
 
-	@Override
-	protected CreateWebClassTemplateModel createTemplateModel() {
-		return new CreatePortletTemplateModel(getDataModel());
-	}
+    @Override
+    protected CreateWebClassTemplateModel createTemplateModel()
+    {
+        return new CreatePortletTemplateModel( getDataModel() );
+    }
 
-	@Override
-	protected String getTemplateFile() {
-		return TEMPLATE_FILE;
-	}
+    @Override
+    protected String getTemplateFile()
+    {
+        return TEMPLATE_FILE;
+    }
 
-	@Override
-	protected Object getTemplateImplementation() {
-		return PortletTemplate.create(null);
-	}
+    @Override
+    protected Object getTemplateImplementation()
+    {
+        return PortletTemplate.create( null );
+    }
 
-	// protected String generateTemplateSource(WTPPlugin plugin,
-	// CreateJavaEEArtifactTemplateModel templateModel,
-	// String templateFile, Object templateImpl, IProgressMonitor monitor)
-	// throws JETException {
-	// always use the template file version
-	// return generateTemplateSource(plugin, templateModel, templateFile,
-	// monitor);
-	// }
+    // protected String generateTemplateSource(WTPPlugin plugin,
+    // CreateJavaEEArtifactTemplateModel templateModel,
+    // String templateFile, Object templateImpl, IProgressMonitor monitor)
+    // throws JETException {
+    // always use the template file version
+    // return generateTemplateSource(plugin, templateModel, templateFile,
+    // monitor);
+    // }
 }

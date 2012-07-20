@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,20 +23,20 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntimeComponent;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class RuntimeClasspathFactory implements IAdapterFactory {
+@SuppressWarnings( { "restriction", "rawtypes" } )
+public class RuntimeClasspathFactory implements IAdapterFactory
+{
+    private static final Class[] ADAPTER_TYPES = { IClasspathProvider.class };
 
-	private static final Class[] ADAPTER_TYPES = {
-		IClasspathProvider.class
-	};
+    public Object getAdapter( Object adaptable, Class adapterType )
+    {
+        IRuntimeComponent rc = (IRuntimeComponent) adaptable;
 
-	public Object getAdapter(Object adaptable, Class adapterType) {
-		IRuntimeComponent rc = (IRuntimeComponent) adaptable;
-		
-		return new RuntimeClasspathProvider(rc);
-	}
+        return new RuntimeClasspathProvider( rc );
+    }
 
-	public Class[] getAdapterList() {
-		return ADAPTER_TYPES;
-	}
+    public Class[] getAdapterList()
+    {
+        return ADAPTER_TYPES;
+    }
 }

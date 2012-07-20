@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,41 +30,49 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Greg Amerson
  */
-public class BuildWSDDAction extends AbstractObjectAction {
+public class BuildWSDDAction extends AbstractObjectAction
+{
 
-	public BuildWSDDAction() {
-		super();
-	}
+    public BuildWSDDAction()
+    {
+        super();
+    }
 
-	public void run(IAction action) {
-		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection) fSelection).toArray();
+    public void run( IAction action )
+    {
+        if( fSelection instanceof IStructuredSelection )
+        {
+            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
-			IFile servicesFile = null;
+            IFile servicesFile = null;
 
-			Object elem = elems[0];
+            Object elem = elems[0];
 
-			if (elem instanceof IFile) {
-				servicesFile = (IFile) elem;
+            if( elem instanceof IFile )
+            {
+                servicesFile = (IFile) elem;
 
-			}
-			else if (elem instanceof IProject) {
-				IProject project = (IProject) elem;
+            }
+            else if( elem instanceof IProject )
+            {
+                IProject project = (IProject) elem;
 
-				IFolder docroot = CoreUtil.getDocroot(project);
+                IFolder docroot = CoreUtil.getDocroot( project );
 
-				if (docroot != null && docroot.exists()) {
-					servicesFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
-				}
-			}
+                if( docroot != null && docroot.exists() )
+                {
+                    servicesFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                }
+            }
 
-			if (servicesFile != null && servicesFile.exists()) {
-				BuildWSDDJob job = PortletCore.createBuildWSDDJob(servicesFile);
+            if( servicesFile != null && servicesFile.exists() )
+            {
+                BuildWSDDJob job = PortletCore.createBuildWSDDJob( servicesFile );
 
-				job.schedule();
-			}
-		}
+                job.schedule();
+            }
+        }
 
-	}
+    }
 
 }

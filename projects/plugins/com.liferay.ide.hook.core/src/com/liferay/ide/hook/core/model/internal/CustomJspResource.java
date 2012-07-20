@@ -17,60 +17,60 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.hook.core.model.ICustomJsp;
+import com.liferay.ide.hook.core.model.CustomJsp;
 
 import org.eclipse.sapphire.modeling.BindingImpl;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
-
 /**
  * @author Gregory Amerson
  */
 public class CustomJspResource extends Resource
 {
-	private ObjectValue<String> value;
 
-	public CustomJspResource( Resource parent )
-	{
-		super( parent );
-	}
+    private ObjectValue<String> value;
 
-	public CustomJspResource( Resource parent, ObjectValue<String> customJsp )
-	{
-		super( parent );
-		this.value = customJsp;
-	}
+    public CustomJspResource( Resource parent )
+    {
+        super( parent );
+    }
 
-	@Override
-	protected BindingImpl createBinding( final ModelProperty property )
-	{
-		if ( property == ICustomJsp.PROP_VALUE )
-		{
-			ValueBindingImpl binding = new ValueBindingImpl()
-			{
+    public CustomJspResource( Resource parent, ObjectValue<String> customJsp )
+    {
+        super( parent );
+        this.value = customJsp;
+    }
 
-				@Override
-				public String read()
-				{
-					return CustomJspResource.this.value.getValue();
-				}
+    @Override
+    protected BindingImpl createBinding( final ModelProperty property )
+    {
+        if( property == CustomJsp.PROP_VALUE )
+        {
+            ValueBindingImpl binding = new ValueBindingImpl()
+            {
 
-				@Override
-				public void write( final String value )
-				{
-					CustomJspResource.this.value.setValue( value );
-				}
-			};
+                @Override
+                public String read()
+                {
+                    return CustomJspResource.this.value.getValue();
+                }
 
-			binding.init( element(), ICustomJsp.PROP_VALUE, null );
+                @Override
+                public void write( final String value )
+                {
+                    CustomJspResource.this.value.setValue( value );
+                }
+            };
 
-			return binding;
-		}
+            binding.init( element(), CustomJsp.PROP_VALUE, null );
 
-		return null;
-	}
+            return binding;
+        }
+
+        return null;
+    }
 
     public ObjectValue<String> getCustomJsp()
     {

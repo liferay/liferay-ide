@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,11 +20,13 @@ import com.liferay.ide.sdk.ISDKConstants;
 /**
  * @author Gregory Amerson
  */
-public class MergeAction extends SDKCommandAction {
+public class MergeAction extends SDKCommandAction
+{
 
-	@Override
-	protected String getSDKCommand() {
-		return ISDKConstants.TARGET_MERGE;
-	}
+    @Override
+    protected String getSDKCommand()
+    {
+        return ISDKConstants.TARGET_MERGE;
+    }
 
 }

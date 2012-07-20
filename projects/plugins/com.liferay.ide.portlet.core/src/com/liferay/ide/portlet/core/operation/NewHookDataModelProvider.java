@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,7 +24,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.HookDescriptorHelper;
 import com.liferay.ide.portlet.core.util.PortletUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -48,283 +47,339 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( {
-	"restriction", "unchecked", "rawtypes"
-})
+@SuppressWarnings( { "restriction", "unchecked", "rawtypes" } )
 public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProvider
-	implements INewHookDataModelProperties {
+    implements INewHookDataModelProperties
+{
 
-	protected TemplateContextType contextType;
+    protected TemplateContextType contextType;
 
-	protected TemplateStore templateStore;
+    protected TemplateStore templateStore;
 
-	public NewHookDataModelProvider(TemplateStore templateStore, TemplateContextType contextType) {
-		super();
+    public NewHookDataModelProvider( TemplateStore templateStore, TemplateContextType contextType )
+    {
+        super();
 
-		this.templateStore = templateStore;
-		this.contextType = contextType;
-	}
+        this.templateStore = templateStore;
+        this.contextType = contextType;
+    }
 
-	@Override
-	public IDataModelOperation getDefaultOperation() {
-		return new AddHookOperation(getDataModel(), this.templateStore, this.contextType);
-	}
+    @Override
+    public IDataModelOperation getDefaultOperation()
+    {
+        return new AddHookOperation( getDataModel(), this.templateStore, this.contextType );
+    }
 
-	@Override
-	public Object getDefaultProperty(String propertyName) {
-		if (CUSTOM_JSPS_FOLDER.equals(propertyName)) {
-			// check to see if there is an existing hook descriptor and read
-			// custom_jsps out of that
-			IProject targetProject = getTargetProject();
+    @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        if( CUSTOM_JSPS_FOLDER.equals( propertyName ) )
+        {
+            // check to see if there is an existing hook descriptor and read
+            // custom_jsps out of that
+            IProject targetProject = getTargetProject();
 
-			if (targetProject != null) {
-				HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper(targetProject);
-				String customJspFolder = hookDescriptorHelper.getCustomJSPFolder(getDataModel());
+            if( targetProject != null )
+            {
+                HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper( targetProject );
+                String customJspFolder = hookDescriptorHelper.getCustomJSPFolder( getDataModel() );
 
-				if (customJspFolder != null) {
-					// folder should be relative to docroot
-					return CoreUtil.getDocroot(targetProject).getFolder(customJspFolder).getFullPath().toPortableString();
-				}
+                if( customJspFolder != null )
+                {
+                    // folder should be relative to docroot
+                    return CoreUtil.getDocroot( targetProject ).getFolder( customJspFolder ).getFullPath().toPortableString();
+                }
 
-				return CoreUtil.getDocroot(targetProject).getFullPath().append("custom_jsps").toPortableString();
-			}
-		}
-		else if (PORTAL_PROPERTIES_FILE.equals(propertyName)) {
-			IProject targetProject = getTargetProject();
+                return CoreUtil.getDocroot( targetProject ).getFullPath().append( "custom_jsps" ).toPortableString();
+            }
+        }
+        else if( PORTAL_PROPERTIES_FILE.equals( propertyName ) )
+        {
+            IProject targetProject = getTargetProject();
 
-			if (targetProject != null) {
-				return PortletUtil.getFirstSrcFolder(targetProject).getFullPath().append("portal.properties").toPortableString();
-			}
-		}
-		else if (CONTENT_FOLDER.equals(propertyName)) {
-			IProject targetProject = getTargetProject();
+            if( targetProject != null )
+            {
+                return PortletUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "portal.properties" ).toPortableString();
+            }
+        }
+        else if( CONTENT_FOLDER.equals( propertyName ) )
+        {
+            IProject targetProject = getTargetProject();
 
-			if (targetProject != null) {
-				return PortletUtil.getFirstSrcFolder(targetProject).getFullPath().append("content").toPortableString();
-			}
-		}
-		else if (propertyName.equals(PROJECT)) {
-			return getTargetProject();
-		}
-		else if (propertyName.equals(SOURCE_FOLDER)) {
-			IFolder sourceFolder = getDefaultJavaSourceFolder();
+            if( targetProject != null )
+            {
+                return PortletUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "content" ).toPortableString();
+            }
+        }
+        else if( propertyName.equals( PROJECT ) )
+        {
+            return getTargetProject();
+        }
+        else if( propertyName.equals( SOURCE_FOLDER ) )
+        {
+            IFolder sourceFolder = getDefaultJavaSourceFolder();
 
-			if (sourceFolder != null && sourceFolder.exists()) {
-				return sourceFolder.getFullPath().toPortableString();
-			}
-		}
-		else if (propertyName.equals(JAVA_SOURCE_FOLDER)) {
-			return getJavaSourceFolder();
-		}
-		else if (propertyName.equals(JAVA_PACKAGE_FRAGMENT_ROOT)) {
-			return getJavaPackageFragmentRoot();
-		}
-		else if (CUSTOM_JSPS_FILES_CREATED.equals(propertyName)) {
-			return new HashSet<IFile>();
-		}
-		else if (LANGUAGE_PROPERTIES_FILES_CREATED.equals(propertyName)) {
-			return new HashSet<IFile>();
-		}
-		else if ( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION.equals( propertyName ) ) {
-			return true;
-		}
+            if( sourceFolder != null && sourceFolder.exists() )
+            {
+                return sourceFolder.getFullPath().toPortableString();
+            }
+        }
+        else if( propertyName.equals( JAVA_SOURCE_FOLDER ) )
+        {
+            return getJavaSourceFolder();
+        }
+        else if( propertyName.equals( JAVA_PACKAGE_FRAGMENT_ROOT ) )
+        {
+            return getJavaPackageFragmentRoot();
+        }
+        else if( CUSTOM_JSPS_FILES_CREATED.equals( propertyName ) )
+        {
+            return new HashSet<IFile>();
+        }
+        else if( LANGUAGE_PROPERTIES_FILES_CREATED.equals( propertyName ) )
+        {
+            return new HashSet<IFile>();
+        }
+        else if( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION.equals( propertyName ) )
+        {
+            return true;
+        }
 
-		return super.getDefaultProperty(propertyName);
-	}
+        return super.getDefaultProperty( propertyName );
+    }
 
-	@Override
-	public Set getPropertyNames() {
-		Set propertyNames = super.getPropertyNames();
+    @Override
+    public Set getPropertyNames()
+    {
+        Set propertyNames = super.getPropertyNames();
 
-		propertyNames.add(CREATE_CUSTOM_JSPS);
-		propertyNames.add(CREATE_PORTAL_PROPERTIES);
-		propertyNames.add(CREATE_SERVICES);
-		propertyNames.add(CREATE_LANGUAGE_PROPERTIES);
-		propertyNames.add(CUSTOM_JSPS_FOLDER);
-		propertyNames.add(CUSTOM_JSPS_ITEMS);
-		propertyNames.add(CUSTOM_JSPS_FILES_CREATED);
-		propertyNames.add(PORTAL_PROPERTIES_FILE);
-		propertyNames.add(PORTAL_PROPERTIES_ACTION_ITEMS);
-		propertyNames.add(PORTAL_PROPERTIES_OVERRIDE_ITEMS);
-		propertyNames.add(SERVICES_ITEMS);
-		propertyNames.add(CONTENT_FOLDER);
-		propertyNames.add(LANGUAGE_PROPERTIES_ITEMS);
-		propertyNames.add(LANGUAGE_PROPERTIES_FILES_CREATED);
-		propertyNames.add(SOURCE_FOLDER);
-		propertyNames.add(JAVA_SOURCE_FOLDER);
-		propertyNames.add(JAVA_PACKAGE_FRAGMENT_ROOT);
-		propertyNames.add( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION );
+        propertyNames.add( CREATE_CUSTOM_JSPS );
+        propertyNames.add( CREATE_PORTAL_PROPERTIES );
+        propertyNames.add( CREATE_SERVICES );
+        propertyNames.add( CREATE_LANGUAGE_PROPERTIES );
+        propertyNames.add( CUSTOM_JSPS_FOLDER );
+        propertyNames.add( CUSTOM_JSPS_ITEMS );
+        propertyNames.add( CUSTOM_JSPS_FILES_CREATED );
+        propertyNames.add( PORTAL_PROPERTIES_FILE );
+        propertyNames.add( PORTAL_PROPERTIES_ACTION_ITEMS );
+        propertyNames.add( PORTAL_PROPERTIES_OVERRIDE_ITEMS );
+        propertyNames.add( SERVICES_ITEMS );
+        propertyNames.add( CONTENT_FOLDER );
+        propertyNames.add( LANGUAGE_PROPERTIES_ITEMS );
+        propertyNames.add( LANGUAGE_PROPERTIES_FILES_CREATED );
+        propertyNames.add( SOURCE_FOLDER );
+        propertyNames.add( JAVA_SOURCE_FOLDER );
+        propertyNames.add( JAVA_PACKAGE_FRAGMENT_ROOT );
+        propertyNames.add( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION );
 
-		return propertyNames;
-	}
+        return propertyNames;
+    }
 
-	@Override
-	public void init() {
-		super.init();
-	}
+    @Override
+    public void init()
+    {
+        super.init();
+    }
 
-	@Override
-	public IStatus validate(String propertyName) {
-		if (CUSTOM_JSPS_FOLDER.equals(propertyName) && getBooleanProperty(CREATE_CUSTOM_JSPS)) {
-			String jspFolder = getStringProperty(CUSTOM_JSPS_FOLDER);
+    @Override
+    public IStatus validate( String propertyName )
+    {
+        if( CUSTOM_JSPS_FOLDER.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
+        {
+            String jspFolder = getStringProperty( CUSTOM_JSPS_FOLDER );
 
-			if (CoreUtil.isNullOrEmpty(jspFolder)) {
-				return PortletCore.createErrorStatus("Custom JSPs folder not configured.");
-			}
-		}
-		else if (CUSTOM_JSPS_ITEMS.equals(propertyName) && getBooleanProperty(CREATE_CUSTOM_JSPS)) {
-			Object jspItems = getProperty(CUSTOM_JSPS_ITEMS);
+            if( CoreUtil.isNullOrEmpty( jspFolder ) )
+            {
+                return PortletCore.createErrorStatus( "Custom JSPs folder not configured." );
+            }
+        }
+        else if( CUSTOM_JSPS_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
+        {
+            Object jspItems = getProperty( CUSTOM_JSPS_ITEMS );
 
-			if (jspItems instanceof List) {
-				List jsps = (List) jspItems;
+            if( jspItems instanceof List )
+            {
+                List jsps = (List) jspItems;
 
-				if (jsps.size() > 0) {
-					return Status.OK_STATUS;
-				}
-			}
+                if( jsps.size() > 0 )
+                {
+                    return Status.OK_STATUS;
+                }
+            }
 
-			return PortletCore.createErrorStatus("Need to specify at least one JSP to override.");
-		}
-		else if (PORTAL_PROPERTIES_FILE.equals(propertyName) && getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
-			String portalPropertiesFile = getStringProperty(PORTAL_PROPERTIES_FILE);
+            return PortletCore.createErrorStatus( "Need to specify at least one JSP to override." );
+        }
+        else if( PORTAL_PROPERTIES_FILE.equals( propertyName ) && getBooleanProperty( CREATE_PORTAL_PROPERTIES ) )
+        {
+            String portalPropertiesFile = getStringProperty( PORTAL_PROPERTIES_FILE );
 
-			if (CoreUtil.isNullOrEmpty(portalPropertiesFile)) {
-				return PortletCore.createErrorStatus("portal.properties file not configured.");
-			}
-		}
-		else if (PORTAL_PROPERTIES_ACTION_ITEMS.equals(propertyName) && getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
-			// if we have valid actions items or property overrides then we
-			// don't need an error
-			IStatus actionItemsStatus = validateListItems(PORTAL_PROPERTIES_ACTION_ITEMS);
+            if( CoreUtil.isNullOrEmpty( portalPropertiesFile ) )
+            {
+                return PortletCore.createErrorStatus( "portal.properties file not configured." );
+            }
+        }
+        else if( PORTAL_PROPERTIES_ACTION_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_PORTAL_PROPERTIES ) )
+        {
+            // if we have valid actions items or property overrides then we
+            // don't need an error
+            IStatus actionItemsStatus = validateListItems( PORTAL_PROPERTIES_ACTION_ITEMS );
 
-			IStatus propertyOverridesStatus = validateListItems(PORTAL_PROPERTIES_OVERRIDE_ITEMS);
+            IStatus propertyOverridesStatus = validateListItems( PORTAL_PROPERTIES_OVERRIDE_ITEMS );
 
-			if (actionItemsStatus.isOK() || propertyOverridesStatus.isOK()) {
-				return Status.OK_STATUS;
-			}
-			else {
-				return PortletCore.createErrorStatus("Need to specify at least one Event Action or Property to override.");
-			}
-		}
-		else if (SERVICES_ITEMS.equals(propertyName) && getBooleanProperty(CREATE_SERVICES)) {
-			IStatus itemsStatus = validateListItems(SERVICES_ITEMS);
+            if( actionItemsStatus.isOK() || propertyOverridesStatus.isOK() )
+            {
+                return Status.OK_STATUS;
+            }
+            else
+            {
+                return PortletCore.createErrorStatus( "Need to specify at least one Event Action or Property to override." );
+            }
+        }
+        else if( SERVICES_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_SERVICES ) )
+        {
+            IStatus itemsStatus = validateListItems( SERVICES_ITEMS );
 
-			if (itemsStatus.isOK()) {
-				return Status.OK_STATUS;
-			}
-			else {
-				return PortletCore.createErrorStatus("Need to specify at least one Service to override.");
-			}
-		}
-		else if (CONTENT_FOLDER.equals(propertyName) && getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
-			String contentFolder = getStringProperty(CONTENT_FOLDER);
+            if( itemsStatus.isOK() )
+            {
+                return Status.OK_STATUS;
+            }
+            else
+            {
+                return PortletCore.createErrorStatus( "Need to specify at least one Service to override." );
+            }
+        }
+        else if( CONTENT_FOLDER.equals( propertyName ) && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
+        {
+            String contentFolder = getStringProperty( CONTENT_FOLDER );
 
-			if (CoreUtil.isNullOrEmpty(contentFolder)) {
-				return PortletCore.createErrorStatus("Content folder not configured.");
-			}
-		}
-		else if (LANGUAGE_PROPERTIES_ITEMS.equals(propertyName) && getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
-			Object propertiesItems = getProperty(LANGUAGE_PROPERTIES_ITEMS);
+            if( CoreUtil.isNullOrEmpty( contentFolder ) )
+            {
+                return PortletCore.createErrorStatus( "Content folder not configured." );
+            }
+        }
+        else if( LANGUAGE_PROPERTIES_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
+        {
+            Object propertiesItems = getProperty( LANGUAGE_PROPERTIES_ITEMS );
 
-			if (propertiesItems instanceof List) {
-				List jsps = (List) propertiesItems;
+            if( propertiesItems instanceof List )
+            {
+                List jsps = (List) propertiesItems;
 
-				if (jsps.size() > 0) {
-					return Status.OK_STATUS;
-				}
-			}
-			return PortletCore.createErrorStatus("Need to specify at least one language property file.");
-		}
+                if( jsps.size() > 0 )
+                {
+                    return Status.OK_STATUS;
+                }
+            }
+            return PortletCore.createErrorStatus( "Need to specify at least one language property file." );
+        }
 
-		return super.validate(propertyName);
-	}
+        return super.validate( propertyName );
+    }
 
-	protected IFolder getDefaultJavaSourceFolder() {
-		IProject project = getTargetProject();
+    @SuppressWarnings( "deprecation" )
+    protected IFolder getDefaultJavaSourceFolder()
+    {
+        IProject project = getTargetProject();
 
-		if (project == null) {
-			return null;
-		}
+        if( project == null )
+        {
+            return null;
+        }
 
-		IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers(project);
+        IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers( project );
 
-		// Try and return the first source folder
-		if (sources.length > 0) {
-			try {
-				return (IFolder) sources[0].getCorrespondingResource();
-			}
-			catch (Exception e) {
-				return null;
-			}
-		}
+        // Try and return the first source folder
+        if( sources.length > 0 )
+        {
+            try
+            {
+                return (IFolder) sources[0].getCorrespondingResource();
+            }
+            catch( Exception e )
+            {
+                return null;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Subclasses may extend this method to perform their own retrieval
-	 * mechanism. This implementation simply returns the JDT package fragment
-	 * root for the selected source folder. This method may return null.
-	 * 
-	 * @see IJavaProject#getPackageFragmentRoot(org.eclipse.core.resources.IResource)
-	 * @return IPackageFragmentRoot
-	 */
-	protected IPackageFragmentRoot getJavaPackageFragmentRoot() {
-		IProject project = getTargetProject();
+    /**
+     * Subclasses may extend this method to perform their own retrieval mechanism. This implementation simply returns
+     * the JDT package fragment root for the selected source folder. This method may return null.
+     * 
+     * @see IJavaProject#getPackageFragmentRoot(org.eclipse.core.resources.IResource)
+     * @return IPackageFragmentRoot
+     */
+    protected IPackageFragmentRoot getJavaPackageFragmentRoot()
+    {
+        IProject project = getTargetProject();
 
-		if (project != null) {
-			IJavaProject aJavaProject = JemProjectUtilities.getJavaProject(project);
+        if( project != null )
+        {
+            IJavaProject aJavaProject = JemProjectUtilities.getJavaProject( project );
 
-			// Return the source folder for the java project of the selected
-			// project
-			if (aJavaProject != null) {
-				IFolder sourcefolder = (IFolder) getProperty(JAVA_SOURCE_FOLDER);
+            // Return the source folder for the java project of the selected
+            // project
+            if( aJavaProject != null )
+            {
+                IFolder sourcefolder = (IFolder) getProperty( JAVA_SOURCE_FOLDER );
 
-				if (sourcefolder != null)
-					return aJavaProject.getPackageFragmentRoot(sourcefolder);
-			}
-		}
+                if( sourcefolder != null )
+                    return aJavaProject.getPackageFragmentRoot( sourcefolder );
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	protected final IFolder getJavaSourceFolder() {
-		IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers(getTargetProject());
+    @SuppressWarnings( "deprecation" )
+    protected final IFolder getJavaSourceFolder()
+    {
+        IPackageFragmentRoot[] sources = J2EEProjectUtilities.getSourceContainers( getTargetProject() );
 
-		// Ensure there is valid source folder(s)
-		if (sources == null || sources.length == 0) {
-			return null;
-		}
+        // Ensure there is valid source folder(s)
+        if( sources == null || sources.length == 0 )
+        {
+            return null;
+        }
 
-		String folderFullPath = getStringProperty(SOURCE_FOLDER);
+        String folderFullPath = getStringProperty( SOURCE_FOLDER );
 
-		// Get the source folder whose path matches the source folder name value
-		// in the data model
-		for (int i = 0; i < sources.length; i++) {
-			if (sources[i].getPath().equals(new Path(folderFullPath))) {
-				try {
-					return (IFolder) sources[i].getCorrespondingResource();
-				}
-				catch (Exception e) {
-					break;
-				}
-			}
-		}
+        // Get the source folder whose path matches the source folder name value
+        // in the data model
+        for( int i = 0; i < sources.length; i++ )
+        {
+            if( sources[i].getPath().equals( new Path( folderFullPath ) ) )
+            {
+                try
+                {
+                    return (IFolder) sources[i].getCorrespondingResource();
+                }
+                catch( Exception e )
+                {
+                    break;
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	protected IStatus validateListItems(String propertyName) {
-		Object items = getProperty(propertyName);
+    protected IStatus validateListItems( String propertyName )
+    {
+        Object items = getProperty( propertyName );
 
-		if (items instanceof List) {
-			List itemsList = (List) items;
+        if( items instanceof List )
+        {
+            List itemsList = (List) items;
 
-			if (itemsList.size() > 0) {
-				return Status.OK_STATUS;
-			}
-		}
+            if( itemsList.size() > 0 )
+            {
+                return Status.OK_STATUS;
+            }
+        }
 
-		return PortletCore.createErrorStatus("Need to specify at least one item.");
-	}
+        return PortletCore.createErrorStatus( "Need to specify at least one item." );
+    }
 }

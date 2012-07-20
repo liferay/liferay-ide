@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.ui.cmd;
@@ -22,40 +24,47 @@ import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
 
-public class PortletLayoutCreateCommand extends Command {
+/**
+ * @author Gregory Amerson
+ */
+public class PortletLayoutCreateCommand extends Command
+{
+    protected LayoutTplDiagram diagram;
+    protected LayoutConstraint layoutConstraint;
+    protected PortletLayout newLayout;
 
-	protected LayoutTplDiagram diagram;
+    public PortletLayoutCreateCommand( PortletLayout newLayout, LayoutTplDiagram diagram, LayoutConstraint constraint )
+    {
+        this.newLayout = newLayout;
+        this.diagram = diagram;
+        this.layoutConstraint = constraint;
+        setLabel( "Portlet row added" );
+    }
 
-	protected LayoutConstraint layoutConstraint;
-	
-	protected PortletLayout newLayout;
+    public boolean canExecute()
+    {
+        return newLayout != null && diagram != null && layoutConstraint != null;
+    }
 
-	public PortletLayoutCreateCommand(PortletLayout newLayout, LayoutTplDiagram diagram, LayoutConstraint constraint) {
-		this.newLayout = newLayout;
-		this.diagram = diagram;
-		this.layoutConstraint = constraint;
-		setLabel("Portlet row added");
-	}
+    public void execute()
+    {
+        redo();
+    }
 
-	public boolean canExecute() {
-		return newLayout != null && diagram != null && layoutConstraint != null;
-	}
+    public void redo()
+    {
+        if( newLayout.getColumns().size() == 0 )
+        {
+            PortletColumn newColumn = new PortletColumn();
+            newLayout.addColumn( newColumn );
+        }
 
-	public void execute() {
-		redo();
-	}
+        diagram.addRow( newLayout, layoutConstraint.newRowIndex );
+    }
 
-	public void redo() {
-		if (newLayout.getColumns().size() == 0) {
-			PortletColumn newColumn = new PortletColumn();
-			newLayout.addColumn(newColumn);
-		}
-
-		diagram.addRow(newLayout, layoutConstraint.newRowIndex);
-	}
-
-	public void undo() {
-		System.out.println("UNDO not yet supported!");
-	}
+    public void undo()
+    {
+        System.out.println( "UNDO not yet supported!" );
+    }
 
 }

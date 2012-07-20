@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,55 +22,64 @@ import java.lang.reflect.Method;
 
 import org.eclipse.core.runtime.IPath;
 
+/**
+ * @author Gregory Amerson
+ */
+public class ReleaseHelper
+{
+    protected File serviceJarFile;
+    protected JarClassLoader loader;
 
-public class ReleaseHelper {
+    public ReleaseHelper( IPath serviceJarPath )
+    {
+        if( !serviceJarPath.toFile().exists() )
+        {
+            throw new IllegalArgumentException( "Service jar file must exist." );
+        }
 
-	protected File serviceJarFile;
+        serviceJarFile = serviceJarPath.toFile();
 
-	protected JarClassLoader loader;
+        loader = new JarClassLoader( serviceJarFile.getAbsolutePath() );
+    }
 
-	public ReleaseHelper(IPath serviceJarPath) {
-		if (!serviceJarPath.toFile().exists()) {
-			throw new IllegalArgumentException("Service jar file must exist.");
-		}
+    public String getVersion() throws ClassNotFoundException, InstantiationException, IllegalAccessException
+    {
 
-		serviceJarFile = serviceJarPath.toFile();
+        String retval = null;
 
-		loader = new JarClassLoader(serviceJarFile.getAbsolutePath());
-	}
+        try
+        {
+            Class infoClass = loader.loadClass( "com.liferay.portal.kernel.util.ReleaseInfo" );
 
-	public String getVersion()
-		throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+            Object o = infoClass.newInstance();
 
-		String retval = null;
+            Method m = infoClass.getMethod( "getVersion" );
 
-		try {
-			Class infoClass = loader.loadClass("com.liferay.portal.kernel.util.ReleaseInfo");
+            Object result = m.invoke( o );
 
-			Object o = infoClass.newInstance();
+            if( result != null )
+            {
+                retval = result.toString();
+            }
+        }
+        catch( ClassNotFoundException e )
+        {
+            throw e;
+        }
+        catch( InstantiationException e )
+        {
+            throw e;
+        }
+        catch( IllegalAccessException e )
+        {
+            throw e;
+        }
+        catch( Throwable e )
+        {
+            LiferayServerCorePlugin.logError( e );
+        }
 
-			Method m = infoClass.getMethod("getVersion");
-
-			Object result = m.invoke(o);
-
-			if (result != null) {
-				retval = result.toString();
-			}
-		}
-		catch (ClassNotFoundException e) {
-			throw e;
-		}
-		catch (InstantiationException e) {
-			throw e;
-		}
-		catch (IllegalAccessException e) {
-			throw e;
-		}
-		catch (Throwable e) {
-			LiferayServerCorePlugin.logError(e);
-		}
-
-		return retval;
-	}
+        return retval;
+    }
 
 }

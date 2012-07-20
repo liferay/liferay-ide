@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,11 +21,13 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 /**
  * @author Greg Amerson
  */
-public class ExtPluginFacetValidator extends PluginFacetValidator {
+public class ExtPluginFacetValidator extends PluginFacetValidator
+{
 
-	@Override
-	protected IProjectFacet getProjectFacet() {
-		return ProjectFacetsManager.getProjectFacet(IPluginFacetConstants.LIFERAY_EXT_FACET_ID);
-	}
+    @Override
+    protected IProjectFacet getProjectFacet()
+    {
+        return ProjectFacetsManager.getProjectFacet( IPluginFacetConstants.LIFERAY_EXT_FACET_ID );
+    }
 
 }

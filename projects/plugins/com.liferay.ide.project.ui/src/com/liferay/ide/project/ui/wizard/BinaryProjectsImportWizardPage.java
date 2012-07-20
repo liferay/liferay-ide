@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,11 +16,11 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
+import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -57,357 +57,389 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  */
 @SuppressWarnings( { "restriction" } )
 public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
-	implements ISDKProjectsImportDataModelProperties {
+    implements ISDKProjectsImportDataModelProperties
+{
 
-	protected final class BinaryLabelProvider extends StyledCellLabelProvider {
+    protected final class BinaryLabelProvider extends StyledCellLabelProvider
+    {
+        private static final String GREY_COLOR = "already_exist_element_color";
+        private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
+        private final Styler GREYED_STYLER;
 
-		private static final String GREY_COLOR = "already_exist_element_color";
-		private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
-		private final Styler GREYED_STYLER;
+        public BinaryLabelProvider()
+        {
+            COLOR_REGISTRY.put( GREY_COLOR, new RGB( 128, 128, 128 ) );
+            GREYED_STYLER = StyledString.createColorRegistryStyler( GREY_COLOR, null );
+        }
 
-		public BinaryLabelProvider() {
-			COLOR_REGISTRY.put( GREY_COLOR, new RGB( 128, 128, 128 ) );
-			GREYED_STYLER = StyledString.createColorRegistryStyler( GREY_COLOR, null );
-		}
+        public Image getImage()
+        {
+            Image image = ProjectUIPlugin.getDefault().getImageRegistry().get( ProjectUIPlugin.IMAGE_ID );
 
-		public Image getImage() {
-			Image image = ProjectUIPlugin.getDefault().getImageRegistry().get( ProjectUIPlugin.IMAGE_ID );
+            return image;
+        }
 
-			return image;
-		}
+        /*
+         * (non-Javadoc)
+         * @see org.eclipse.jface.viewers.StyledCellLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
+         */
+        @Override
+        public void update( ViewerCell cell )
+        {
+            Object obj = cell.getElement();
 
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.jface.viewers.StyledCellLabelProvider#update(org.eclipse.jface.viewers.ViewerCell)
-		 */
-		@Override
-		public void update( ViewerCell cell ) {
-			Object obj = cell.getElement();
+            BinaryProjectRecord binaryProjectRecord = null;
+            if( obj instanceof BinaryProjectRecord )
+            {
+                binaryProjectRecord = (BinaryProjectRecord) obj;
+            }
+            StyledString styledString = null;
+            if( binaryProjectRecord.isConflicts() )
+            {
+                // TODO:show warning that some project exists, similar to what we get when importing projects with
+                // standard import existing project into workspace
+                styledString = new StyledString( binaryProjectRecord.getBinaryName(), GREYED_STYLER );
+                styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
+            }
+            else
+            {
+                styledString =
+                    new StyledString( binaryProjectRecord.getBinaryName(), StyledString.createColorRegistryStyler(
+                        JFacePreferences.CONTENT_ASSIST_FOREGROUND_COLOR,
+                        JFacePreferences.CONTENT_ASSIST_BACKGROUND_COLOR ) );
+                styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
+            }
 
-			BinaryProjectRecord binaryProjectRecord = null;
-			if ( obj instanceof BinaryProjectRecord ) {
-				binaryProjectRecord = (BinaryProjectRecord) obj;
-			}
-			StyledString styledString = null;
-			if ( binaryProjectRecord.isConflicts() ) {
-				// TODO:show warning that some project exists, similar to what we get when importing projects with
-				// standard import existing project into workspace
-				styledString = new StyledString( binaryProjectRecord.getBinaryName(), GREYED_STYLER );
-				styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
-			}
-			else {
-				styledString =
-					new StyledString( binaryProjectRecord.getBinaryName(), StyledString.createColorRegistryStyler(
-						JFacePreferences.CONTENT_ASSIST_FOREGROUND_COLOR,
-						JFacePreferences.CONTENT_ASSIST_BACKGROUND_COLOR ) );
-				styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
-			}
+            cell.setImage( getImage() );
+            cell.setText( styledString.getString() );
+            cell.setStyleRanges( styledString.getStyleRanges() );
+            super.update( cell );
+        }
 
-			cell.setImage( getImage() );
-			cell.setText( styledString.getString() );
-			cell.setStyleRanges( styledString.getStyleRanges() );
-			super.update( cell );
-		}
+    }
 
-	}
+    protected Text binariesLocation;
 
-	protected Text binariesLocation;
+    public BinaryProjectsImportWizardPage( IDataModel model, String pageName )
+    {
+        super( model, pageName );
 
-	public BinaryProjectsImportWizardPage( IDataModel model, String pageName ) {
-		super( model, pageName );
+        setTitle( "Import Liferay Binary Plugins" );
+        setDescription( "Select binary plugins (wars) to import as new Liferay Plugin Projects" );
+    }
 
-		setTitle( "Import Liferay Binary Plugins" );
-		setDescription( "Select binary plugins (wars) to import as new Liferay Plugin Projects" );
-	}
+    protected void createBinaryLocationField( Composite parent )
+    {
+        Label label = new Label( parent, SWT.NONE );
+        label.setText( "Select plugins root directory:" );
+        label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
-	protected void createBinaryLocationField( Composite parent ) {
+        binariesLocation = SWTUtil.createSingleText( parent, 1 );
 
-		Label label = new Label( parent, SWT.NONE );
-		label.setText( "Select plugins root directory:" );
-		label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
+        Button browse = SWTUtil.createButton( parent, "Browse..." );
+        browse.addSelectionListener
+        ( 
+            new SelectionAdapter()
+            {
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    doBrowse();
+                }
+            }
+        );
+    }
 
-		binariesLocation = SWTUtil.createSingleText( parent, 1 );
+    @Override
+    protected void createPluginsSDKField( Composite parent )
+    {
+        createBinaryLocationField( parent );
 
-		Button browse = SWTUtil.createButton( parent, "Browse..." );
-		browse.addSelectionListener( new SelectionAdapter() {
+        SelectionAdapter selectionAdapter = new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                BinaryProjectsImportWizardPage.this.synchHelper.synchAllUIWithModel();
+                validatePage( true );
+                updateBinariesList();
+            }
+        };
 
-			@Override
-			public void widgetSelected( SelectionEvent e ) {
-				doBrowse();
-			}
+        new LiferaySDKField(
+            parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Select SDK to copy into:" );
+    }
 
-		} );
+    @Override
+    protected void createProjectsList( Composite workArea )
+    {
+        super.createProjectsList( workArea );
 
-	}
+        this.labelProjectsList.setText( "Binary plugins:" );
+    }
 
-	@Override
-	protected void createPluginsSDKField( Composite parent ) {
-		createBinaryLocationField( parent );
+    @Override
+    protected IBaseLabelProvider createProjectsListLabelProvider()
+    {
+        return new BinaryLabelProvider();
+    }
 
-		SelectionAdapter selectionAdapter = new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected( SelectionEvent e ) {
-				BinaryProjectsImportWizardPage.this.synchHelper.synchAllUIWithModel();
-				validatePage( true );
-				updateBinariesList();
-			}
-
-		};
-
-		new LiferaySDKField(
-			parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Select SDK to copy into:" );
-	}
-
-	@Override
-	protected void createProjectsList( Composite workArea ) {
-		super.createProjectsList( workArea );
-		
-		this.labelProjectsList.setText( "Binary plugins:" );
-	}
-	
-	@Override
-	protected IBaseLabelProvider createProjectsListLabelProvider()
-	{
-		return new BinaryLabelProvider();
-	}
-	
-	/**
+    /**
 	 * 
 	 */
-	protected void doBrowse() {
-		DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
+    protected void doBrowse()
+    {
+        DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
 
-		String filterPath = binariesLocation.getText();
-		if ( filterPath != null ) {
-			dd.setFilterPath( filterPath );
-			dd.setText( "Select root directory " + " - " + filterPath ); //$NON-NLS-1$
-		}
-		else {
-			dd.setText( "Select root directory" );
-		}
+        String filterPath = binariesLocation.getText();
+        if( filterPath != null )
+        {
+            dd.setFilterPath( filterPath );
+            dd.setText( "Select root directory " + " - " + filterPath ); //$NON-NLS-1$
+        }
+        else
+        {
+            dd.setText( "Select root directory" );
+        }
 
-		if ( CoreUtil.isNullOrEmpty( binariesLocation.getText() ) ) {
-			dd.setFilterPath( binariesLocation.getText() );
-		}
+        if( CoreUtil.isNullOrEmpty( binariesLocation.getText() ) )
+        {
+            dd.setFilterPath( binariesLocation.getText() );
+        }
 
-		String dir = dd.open();
+        String dir = dd.open();
 
-		if ( !CoreUtil.isNullOrEmpty( dir ) ) {
-			binariesLocation.setText( dir );
-			updateProjectsList( dir );
+        if( !CoreUtil.isNullOrEmpty( dir ) )
+        {
+            binariesLocation.setText( dir );
+            updateProjectsList( dir );
 
-		}
-	}
+        }
+    }
 
-	@Override
-	protected void enter()
-	{
-	}
+    @Override
+    protected void enter()
+    {
+    }
 
-	@Override
-	public Object[] getProjectRecords()
-	{
-		List<BinaryProjectRecord> binaryProjectRecords = new ArrayList<BinaryProjectRecord>();
+    @Override
+    public Object[] getProjectRecords()
+    {
+        List<BinaryProjectRecord> binaryProjectRecords = new ArrayList<BinaryProjectRecord>();
 
-		for( int i = 0; i < selectedProjects.length; i++ )
-		{
-			BinaryProjectRecord binaryProjectRecord = (BinaryProjectRecord) selectedProjects[i];
-			if( isProjectInWorkspace( binaryProjectRecord.getLiferayPluginName() ) )
-			{
-				binaryProjectRecord.setConflicts( true );
-			}
+        for( int i = 0; i < selectedProjects.length; i++ )
+        {
+            BinaryProjectRecord binaryProjectRecord = (BinaryProjectRecord) selectedProjects[i];
+            if( isProjectInWorkspace( binaryProjectRecord.getLiferayPluginName() ) )
+            {
+                binaryProjectRecord.setConflicts( true );
+            }
 
-			binaryProjectRecords.add( binaryProjectRecord );
-		}
-		return binaryProjectRecords.toArray( new BinaryProjectRecord[binaryProjectRecords.size()] );
-	}
+            binaryProjectRecords.add( binaryProjectRecord );
+        }
+        return binaryProjectRecords.toArray( new BinaryProjectRecord[binaryProjectRecords.size()] );
+    }
 
-	@Override
-	protected void handleCheckStateChangedEvent( CheckStateChangedEvent event )
-	{
-		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+    @Override
+    protected void handleCheckStateChangedEvent( CheckStateChangedEvent event )
+    {
+        getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
 
-		setPageComplete( projectsList.getCheckedElements().length > 0 );
-	}
+        setPageComplete( projectsList.getCheckedElements().length > 0 );
+    }
 
-	@Override
-	protected void handleDeselectAll( SelectionEvent e )
-	{
-		projectsList.setCheckedElements( new Object[0] );
+    @Override
+    protected void handleDeselectAll( SelectionEvent e )
+    {
+        projectsList.setCheckedElements( new Object[0] );
 
-		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+        getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
 
-		validatePage( true );
+        validatePage( true );
 
-		setPageComplete( false );
-	}
+        setPageComplete( false );
+    }
 
-	@Override
-	protected void handleRefresh( SelectionEvent e )
-	{
-		// force a project refresh
-		lastModified = -1;
+    @Override
+    protected void handleRefresh( SelectionEvent e )
+    {
+        // force a project refresh
+        lastModified = -1;
 
-		updateProjectsList( binariesLocation.getText() );
+        updateProjectsList( binariesLocation.getText() );
 
-		projectsList.setCheckedElements( new Object[0] );
+        projectsList.setCheckedElements( new Object[0] );
 
-		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+        getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
 
-		validatePage( true );
+        validatePage( true );
 
-		setPageComplete( false );
-	}
-	
-	@Override
-	protected void handleSelectAll( SelectionEvent e )
-	{
-		for( int i = 0; i < selectedProjects.length; i++ )
-		{
-			BinaryProjectRecord binaryProject = (BinaryProjectRecord) selectedProjects[i];
-			if( binaryProject.isConflicts() )
-			{
-				projectsList.setChecked( binaryProject, false );
-			}
-			else
-			{
-				projectsList.setChecked( binaryProject, true );
-			}
-		}
+        setPageComplete( false );
+    }
 
-		getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
+    @Override
+    protected void handleSelectAll( SelectionEvent e )
+    {
+        for( int i = 0; i < selectedProjects.length; i++ )
+        {
+            BinaryProjectRecord binaryProject = (BinaryProjectRecord) selectedProjects[i];
+            if( binaryProject.isConflicts() )
+            {
+                projectsList.setChecked( binaryProject, false );
+            }
+            else
+            {
+                projectsList.setChecked( binaryProject, true );
+            }
+        }
 
-		validatePage( true );
-		// setPageComplete(projectsList.getCheckedElements().length >
-		// 0);
-	}
+        getDataModel().setProperty( SELECTED_PROJECTS, projectsList.getCheckedElements() );
 
-	public void updateBinariesList() {
-		String path = binariesLocation.getText();
-		if ( path != null ) {
-			updateProjectsList( path );
-		}
-	}
+        validatePage( true );
+        // setPageComplete(projectsList.getCheckedElements().length >
+        // 0);
+    }
 
-	@Override
-	public void updateProjectsList( String path )
-	{
-		// on an empty path empty selectedProjects
-		if ( path == null || path.length() == 0 ) {
-			setMessage( "" ); //$NON-NLS-1$
+    public void updateBinariesList()
+    {
+        String path = binariesLocation.getText();
+        if( path != null )
+        {
+            updateProjectsList( path );
+        }
+    }
 
-			selectedProjects = new BinaryProjectRecord[0];
+    @Override
+    public void updateProjectsList( String path )
+    {
+        // on an empty path empty selectedProjects
+        if( path == null || path.length() == 0 )
+        {
+            setMessage( "" ); //$NON-NLS-1$
 
-			projectsList.refresh( true );
+            selectedProjects = new BinaryProjectRecord[0];
 
-			projectsList.setCheckedElements( selectedProjects );
+            projectsList.refresh( true );
 
-			setPageComplete( projectsList.getCheckedElements().length > 0 );
+            projectsList.setCheckedElements( selectedProjects );
 
-			lastPath = path;
+            setPageComplete( projectsList.getCheckedElements().length > 0 );
 
-			return;
-		}
+            lastPath = path;
 
-		// Check if the direcotry is the Plugins SDK folder
-		String sdkLocationPath = sdkLocation.getText();
-		if ( sdkLocationPath != null && sdkLocationPath.equals( path ) ) {
-			path = sdkLocationPath + "/dist";
-		}
+            return;
+        }
 
-		final File directory = new File( path );
+        // Check if the direcotry is the Plugins SDK folder
+        String sdkLocationPath = sdkLocation.getText();
+        if( sdkLocationPath != null && sdkLocationPath.equals( path ) )
+        {
+            path = sdkLocationPath + "/dist";
+        }
 
-		long modified = directory.lastModified();
+        final File directory = new File( path );
 
-		if ( path.equals( lastPath ) && lastModified == modified ) {
-			// since the file/folder was not modified and the path did not
-			// change, no refreshing is required
-			return;
-		}
+        long modified = directory.lastModified();
 
-		lastPath = path;
+        if( path.equals( lastPath ) && lastModified == modified )
+        {
+            // since the file/folder was not modified and the path did not
+            // change, no refreshing is required
+            return;
+        }
 
-		lastModified = modified;
+        lastPath = path;
 
-		final boolean dirSelected = true;
+        lastModified = modified;
 
-		try {
-			getContainer().run( true, true, new IRunnableWithProgress() {
+        final boolean dirSelected = true;
 
-				/*
-				 * (non-Javadoc)
-				 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org
-				 * .eclipse.core.runtime.IProgressMonitor)
-				 */
-				public void run( IProgressMonitor monitor ) {
+        try
+        {
+            getContainer().run( true, true, new IRunnableWithProgress()
+            {
 
-					monitor.beginTask( "", 100 ); //$NON-NLS-1$
+                /*
+                 * (non-Javadoc)
+                 * @see org.eclipse.jface.operation.IRunnableWithProgress#run(org
+                 * .eclipse.core.runtime.IProgressMonitor)
+                 */
+                public void run( IProgressMonitor monitor )
+                {
 
-					selectedProjects = new BinaryProjectRecord[0];
+                    monitor.beginTask( "", 100 ); //$NON-NLS-1$
 
-					Collection<File> projectBinaries = new ArrayList<File>();
+                    selectedProjects = new BinaryProjectRecord[0];
 
-					monitor.worked( 10 );
+                    Collection<File> projectBinaries = new ArrayList<File>();
 
-					if ( dirSelected && directory.isDirectory() ) {
+                    monitor.worked( 10 );
 
-						if ( !ProjectImportUtil.collectBinariesFromDirectory( projectBinaries, directory, true, monitor ) ) {
-							return;
-						}
+                    if( dirSelected && directory.isDirectory() )
+                    {
 
-						selectedProjects = new BinaryProjectRecord[projectBinaries.size()];
+                        if( !ProjectImportUtil.collectBinariesFromDirectory( projectBinaries, directory, true, monitor ) )
+                        {
+                            return;
+                        }
 
-						int index = 0;
+                        selectedProjects = new BinaryProjectRecord[projectBinaries.size()];
 
-						monitor.worked( 50 );
+                        int index = 0;
 
-						monitor.subTask( "" ); //$NON-NLS-1$
+                        monitor.worked( 50 );
 
-						for ( File binaryFile : projectBinaries ) {
-							selectedProjects[index++] = new BinaryProjectRecord( binaryFile );
-						}
+                        monitor.subTask( "" ); //$NON-NLS-1$
 
-						// for ( File liferayProjectDir : liferayProjectDirs ) {
-						// selectedProjects[index++] = new ProjectRecord( liferayProjectDir );
-						// }
-					}
-					else {
-						monitor.worked( 60 );
-					}
+                        for( File binaryFile : projectBinaries )
+                        {
+                            selectedProjects[index++] = new BinaryProjectRecord( binaryFile );
+                        }
 
-					monitor.done();
-				}
+                        // for ( File liferayProjectDir : liferayProjectDirs ) {
+                        // selectedProjects[index++] = new ProjectRecord( liferayProjectDir );
+                        // }
+                    }
+                    else
+                    {
+                        monitor.worked( 60 );
+                    }
 
-			} );
-		}
-		catch ( InvocationTargetException e ) {
-			ProjectUIPlugin.logError( e );
-		}
-		catch ( InterruptedException e ) {
-			// Nothing to do if the user interrupts.
-		}
+                    monitor.done();
+                }
 
-		projectsList.refresh( true );
+            } );
+        }
+        catch( InvocationTargetException e )
+        {
+            ProjectUIPlugin.logError( e );
+        }
+        catch( InterruptedException e )
+        {
+            // Nothing to do if the user interrupts.
+        }
 
-		setPageComplete( projectsList.getCheckedElements().length > 0 );
+        projectsList.refresh( true );
 
-		if( selectedProjects.length == 0 )
-		{
-			setMessage( "", WARNING ); //$NON-NLS-1$
-		}
+        setPageComplete( projectsList.getCheckedElements().length > 0 );
 
-		Object[] checkedBinaries = projectsList.getCheckedElements();
+        if( selectedProjects.length == 0 )
+        {
+            setMessage( "", WARNING ); //$NON-NLS-1$
+        }
 
-		if ( checkedBinaries != null && checkedBinaries.length > 0 ) {
-			selectedProjects = new BinaryProjectRecord[checkedBinaries.length];
+        Object[] checkedBinaries = projectsList.getCheckedElements();
 
-			for ( int i = 0; i < checkedBinaries.length; i++ ) {
-				selectedProjects[i] = (BinaryProjectRecord) checkedBinaries[i];
-			}
-			getDataModel().setProperty( SELECTED_PROJECTS, selectedProjects );
-		}
-	}
+        if( checkedBinaries != null && checkedBinaries.length > 0 )
+        {
+            selectedProjects = new BinaryProjectRecord[checkedBinaries.length];
 
+            for( int i = 0; i < checkedBinaries.length; i++ )
+            {
+                selectedProjects[i] = (BinaryProjectRecord) checkedBinaries[i];
+            }
+            getDataModel().setProperty( SELECTED_PROJECTS, selectedProjects );
+        }
+    }
 
 }

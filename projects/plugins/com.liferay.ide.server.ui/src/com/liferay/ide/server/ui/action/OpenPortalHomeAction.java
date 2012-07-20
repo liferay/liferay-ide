@@ -23,19 +23,20 @@ import java.net.URL;
 public class OpenPortalHomeAction extends OpenPortalURLAction
 {
 
-	public OpenPortalHomeAction() {
-		super();
-	}
+    public OpenPortalHomeAction()
+    {
+        super();
+    }
 
-	protected URL getPortalURL()
-	{
-		return getLiferayServer().getPortalHomeUrl();
-	}
+    protected URL getPortalURL()
+    {
+        return getLiferayServer().getPortalHomeUrl();
+    }
 
-	@Override
-	protected String getPortalURLTitle()
-	{
-		return "Liferay Portal";
-	}
+    @Override
+    protected String getPortalURLTitle()
+    {
+        return "Liferay Portal";
+    }
 
 }

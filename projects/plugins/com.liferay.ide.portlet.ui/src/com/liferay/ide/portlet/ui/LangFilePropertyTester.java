@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,18 +23,22 @@ import org.eclipse.core.resources.IFile;
 /**
  * @author Greg Amerson
  */
-public class LangFilePropertyTester extends PropertyTester {
+public class LangFilePropertyTester extends PropertyTester
+{
 
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver instanceof IFile) {
-			IFile file = (IFile) receiver;
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    {
+        if( receiver instanceof IFile )
+        {
+            IFile file = (IFile) receiver;
 
-			if ( file.exists() && file.getName().matches( "Language.*\\.properties" ) ) {
-				return ProjectUtil.isLiferayProject(file.getProject());
-			}
-		}
+            if( file.exists() && file.getName().matches( "Language.*\\.properties" ) )
+            {
+                return ProjectUtil.isLiferayProject( file.getProject() );
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

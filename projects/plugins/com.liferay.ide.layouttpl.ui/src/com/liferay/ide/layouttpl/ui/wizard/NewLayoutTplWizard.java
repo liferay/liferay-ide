@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,109 +40,127 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, INewLayoutTplDataModelProperties {
+@SuppressWarnings( "restriction" )
+public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, INewLayoutTplDataModelProperties
+{
 
-	public static final String LAYOUTTPL_LAYOUT_PAGE = "layoutTplLayoutPage";
+    public static final String LAYOUTTPL_LAYOUT_PAGE = "layoutTplLayoutPage";
 
-	public static final String LAYOUTTPL_PAGE = "layoutTplPage";
+    public static final String LAYOUTTPL_PAGE = "layoutTplPage";
 
-	public static final String[] WIZARD_PAGES = new String[] {
-		LAYOUTTPL_PAGE, LAYOUTTPL_LAYOUT_PAGE
-	};
+    public static final String[] WIZARD_PAGES = new String[] { LAYOUTTPL_PAGE, LAYOUTTPL_LAYOUT_PAGE };
 
-	protected NewLayoutTplWizardPage layoutTplPage;
+    protected NewLayoutTplWizardPage layoutTplPage;
 
-	protected NewLayoutTplLayoutWizardPage layoutTplStartPage;
+    protected NewLayoutTplLayoutWizardPage layoutTplStartPage;
 
-	public NewLayoutTplWizard() {
-		this(null);
-	}
+    public NewLayoutTplWizard()
+    {
+        this( null );
+    }
 
-	public NewLayoutTplWizard(IDataModel dataModel) {
-		super(dataModel);
+    public NewLayoutTplWizard( IDataModel dataModel )
+    {
+        super( dataModel );
 
-		this.setWindowTitle("New Layout Template");
-		this.setDefaultPageImageDescriptor(getDefaultImageDescriptor());
-	}
+        this.setWindowTitle( "New Layout Template" );
+        this.setDefaultPageImageDescriptor( getDefaultImageDescriptor() );
+    }
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		getDataModel();
-	}
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+        getDataModel();
+    }
 
-	@Override
-	protected void doAddPages() {
-		layoutTplPage = new NewLayoutTplWizardPage(getDataModel(), LAYOUTTPL_PAGE);
-		addPage(layoutTplPage);
+    @Override
+    protected void doAddPages()
+    {
+        layoutTplPage = new NewLayoutTplWizardPage( getDataModel(), LAYOUTTPL_PAGE );
+        addPage( layoutTplPage );
 
-		layoutTplStartPage = new NewLayoutTplLayoutWizardPage(getDataModel(), LAYOUTTPL_LAYOUT_PAGE);
-		addPage(layoutTplStartPage);
-	}
+        layoutTplStartPage = new NewLayoutTplLayoutWizardPage( getDataModel(), LAYOUTTPL_LAYOUT_PAGE );
+        addPage( layoutTplStartPage );
+    }
 
-	protected ImageDescriptor getDefaultImageDescriptor() {
-		return LayoutTplUI.imageDescriptorFromPlugin(LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png");
-	}
+    protected ImageDescriptor getDefaultImageDescriptor()
+    {
+        return LayoutTplUI.imageDescriptorFromPlugin( LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png" );
+    }
 
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		TemplateStore templateStore = LayoutTplUI.getDefault().getTemplateStore();
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        TemplateStore templateStore = LayoutTplUI.getDefault().getTemplateStore();
 
-		TemplateContextType contextType =
-			LayoutTplUI.getDefault().getTemplateContextRegistry().getContextType(LayoutTplTemplateContextTypeIds.NEW);
+        TemplateContextType contextType =
+            LayoutTplUI.getDefault().getTemplateContextRegistry().getContextType( LayoutTplTemplateContextTypeIds.NEW );
 
-		return new NewLayoutTplDataModelProvider(templateStore, contextType) {
+        return new NewLayoutTplDataModelProvider( templateStore, contextType )
+        {
 
-			@Override
-			public IDataModelOperation getDefaultOperation() {
-				return new AddLayoutTplOperation(getDataModel(), templateStore, contextType);
-			}
+            @Override
+            public IDataModelOperation getDefaultOperation()
+            {
+                return new AddLayoutTplOperation( getDataModel(), templateStore, contextType );
+            }
 
-		};
-	}
+        };
+    }
 
-	protected void openEditor(final IFile file) {
-		if (file != null) {
-			getShell().getDisplay().asyncExec(new Runnable() {
+    protected void openEditor( final IFile file )
+    {
+        if( file != null )
+        {
+            getShell().getDisplay().asyncExec( new Runnable()
+            {
 
-				public void run() {
-					try {
-						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                public void run()
+                {
+                    try
+                    {
+                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-						IDE.openEditor(page, file, true);
-					}
-					catch (PartInitException e) {
-						LayoutTplUI.logError(e);
-					}
-				}
-			});
-		}
-	}
+                        IDE.openEditor( page, file, true );
+                    }
+                    catch( PartInitException e )
+                    {
+                        LayoutTplUI.logError( e );
+                    }
+                }
+            } );
+        }
+    }
 
-	protected void openWebFile(IFile file) {
-		try {
-			openEditor(file);
-		}
-		catch (Exception cantOpen) {
-			LayoutTplUI.logError(cantOpen);
-		}
-	}
+    protected void openWebFile( IFile file )
+    {
+        try
+        {
+            openEditor( file );
+        }
+        catch( Exception cantOpen )
+        {
+            LayoutTplUI.logError( cantOpen );
+        }
+    }
 
-	@Override
-	protected void postPerformFinish()
-		throws InvocationTargetException {
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
 
-		super.postPerformFinish();
+        super.postPerformFinish();
 
-		IFile layoutTplFile = (IFile) getDataModel().getProperty(LAYOUT_TPL_FILE_CREATED);
+        IFile layoutTplFile = (IFile) getDataModel().getProperty( LAYOUT_TPL_FILE_CREATED );
 
-		if (layoutTplFile != null && layoutTplFile.exists()) {
-			openWebFile(layoutTplFile);
-		}
-	}
+        if( layoutTplFile != null && layoutTplFile.exists() )
+        {
+            openWebFile( layoutTplFile );
+        }
+    }
 
-	@Override
-	protected boolean runForked() {
-		return false;
-	}
+    @Override
+    protected boolean runForked()
+    {
+        return false;
+    }
 
 }

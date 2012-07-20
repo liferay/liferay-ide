@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,11 +18,13 @@ package com.liferay.ide.project.core.facet;
 /**
  * @author Greg Amerson
  */
-public class PortletPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider {
+public class PortletPluginFacetInstallDataModelProvider extends PluginFacetInstallDataModelProvider
+{
 
-	@Override
-	protected String getPluginFacetId() {
-		return IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
-	}
+    @Override
+    protected String getPluginFacetId()
+    {
+        return IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
+    }
 
 }

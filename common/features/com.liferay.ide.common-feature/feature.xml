@@ -31,18 +31,11 @@
    </license>
 
    <plugin
-         id="com.liferay.ide.common.core"
+         id="com.liferay.ide.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
 		 unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.common.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 	
 	<plugin
          id="com.liferay.ide.freemarker"
@@ -50,5 +43,12 @@
          install-size="0"
          version="0.0.0"
 		 unpack="false"/>
+		 
+    <plugin
+         id="com.liferay.ide.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>

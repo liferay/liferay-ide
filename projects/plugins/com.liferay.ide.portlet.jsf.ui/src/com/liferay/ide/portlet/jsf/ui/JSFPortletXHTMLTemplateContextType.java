@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,19 +21,21 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 /**
  * @author Greg Amerson
  */
-public class JSFPortletXHTMLTemplateContextType extends TemplateContextType {
+public class JSFPortletXHTMLTemplateContextType extends TemplateContextType
+{
 
-	public JSFPortletXHTMLTemplateContextType() {
-		super();
+    public JSFPortletXHTMLTemplateContextType()
+    {
+        super();
 
-		addResolver(new GlobalTemplateVariables.Cursor());
-		addResolver(new GlobalTemplateVariables.Date());
-		addResolver(new GlobalTemplateVariables.Dollar());
-		addResolver(new GlobalTemplateVariables.LineSelection());
-		addResolver(new GlobalTemplateVariables.Time());
-		addResolver(new GlobalTemplateVariables.User());
-		addResolver(new GlobalTemplateVariables.WordSelection());
-		addResolver(new GlobalTemplateVariables.Year());
-	}
+        addResolver( new GlobalTemplateVariables.Cursor() );
+        addResolver( new GlobalTemplateVariables.Date() );
+        addResolver( new GlobalTemplateVariables.Dollar() );
+        addResolver( new GlobalTemplateVariables.LineSelection() );
+        addResolver( new GlobalTemplateVariables.Time() );
+        addResolver( new GlobalTemplateVariables.User() );
+        addResolver( new GlobalTemplateVariables.WordSelection() );
+        addResolver( new GlobalTemplateVariables.Year() );
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.theme.core;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -22,79 +23,93 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
+ * 
+ * @author Gregory Amerson
  */
-public class ThemeCore extends AbstractUIPlugin {
+public class ThemeCore extends AbstractUIPlugin
+{
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.theme.core";
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.theme.core";
 
-	// The shared instance
-	private static ThemeCore plugin;
-	
-	private static ThemeDiffResourceListener themeDiffResourceListener;
+    // The shared instance
+    private static ThemeCore plugin;
 
-	public static IStatus createErrorStatus(Exception ex) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
-	}
+    private static ThemeDiffResourceListener themeDiffResourceListener;
 
-	public static IStatus createErrorStatus(String msg) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
-	}
+    public static IStatus createErrorStatus( Exception ex )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex );
+    }
 
-	public static IStatus createErrorStatus(String msg, Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
-	}
+    public static IStatus createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
+    }
 
-	public static IStatus createWarningStatus(String msg) {
-		return new Status(IStatus.WARNING, PLUGIN_ID, msg);
-	}
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static ThemeCore getDefault() {
-		return plugin;
-	}
+    public static IStatus createWarningStatus( String msg )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID, msg );
+    }
 
-	public static void logError(Exception ex) {
-		getDefault().getLog().log(createErrorStatus(ex));
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static ThemeCore getDefault()
+    {
+        return plugin;
+    }
 
-	/**
-	 * The constructor
-	 */
-	public ThemeCore() {
-		//themeDiffResourceListener = new ThemeDiffResourceListener();
-	}
+    public static void logError( Exception ex )
+    {
+        getDefault().getLog().log( createErrorStatus( ex ) );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
+    /**
+     * The constructor
+     */
+    public ThemeCore()
+    {
+        // themeDiffResourceListener = new ThemeDiffResourceListener();
+    }
 
-		//ResourcesPlugin.getWorkspace().addResourceChangeListener(
-		//	themeDiffResourceListener, IResourceChangeEvent.POST_CHANGE);
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+     */
+    public void start( BundleContext context ) throws Exception
+    {
+        super.start( context );
+        plugin = this;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
+        // ResourcesPlugin.getWorkspace().addResourceChangeListener(
+        // themeDiffResourceListener, IResourceChangeEvent.POST_CHANGE);
+    }
 
-		if (themeDiffResourceListener != null) {
-			ResourcesPlugin.getWorkspace().removeResourceChangeListener(themeDiffResourceListener);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
+        plugin = null;
+        super.stop( context );
 
-	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(createErrorStatus(msg, e));
-	}
+        if( themeDiffResourceListener != null )
+        {
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( themeDiffResourceListener );
+        }
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
+    }
 }

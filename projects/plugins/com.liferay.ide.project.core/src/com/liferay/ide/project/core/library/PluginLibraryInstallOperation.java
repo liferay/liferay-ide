@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,51 +32,54 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectBase;
 /**
  * @author Greg Amerson
  */
-public abstract class PluginLibraryInstallOperation extends LibraryProviderOperation {
+public abstract class PluginLibraryInstallOperation extends LibraryProviderOperation
+{
 
-	public PluginLibraryInstallOperation() {
-		super();
-	}
+    public PluginLibraryInstallOperation()
+    {
+        super();
+    }
 
-	@Override
-	public void execute(LibraryProviderOperationConfig config, IProgressMonitor monitor)
-		throws CoreException {
-		
-		IFacetedProjectBase facetedProject = config.getFacetedProject();
-		
-		IProject project = facetedProject.getProject();
-		
-		IJavaProject javaProject = JavaCore.create(project);
-		
-		IPath containerPath = getClasspathContainerPath();
+    @Override
+    public void execute( LibraryProviderOperationConfig config, IProgressMonitor monitor ) throws CoreException
+    {
+        IFacetedProjectBase facetedProject = config.getFacetedProject();
 
-		// IDE-413 check to make sure that the containerPath doesn't already existing.
+        IProject project = facetedProject.getProject();
 
-		IClasspathEntry[] entries = javaProject.getRawClasspath();
+        IJavaProject javaProject = JavaCore.create( project );
 
-		for ( IClasspathEntry entry : entries ) {
-			if ( entry.getPath().equals( containerPath ) ) {
-				return;
-			}
-		}
+        IPath containerPath = getClasspathContainerPath();
 
-		IAccessRule[] accessRules = new IAccessRule[] {};
+        // IDE-413 check to make sure that the containerPath doesn't already existing.
 
-		IClasspathAttribute[] attributes = new IClasspathAttribute[] {
-			JavaCore.newClasspathAttribute(IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, "")
-		};
+        IClasspathEntry[] entries = javaProject.getRawClasspath();
 
-		IClasspathEntry newEntry = JavaCore.newContainerEntry( containerPath, accessRules, attributes, false );
-		
-		IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
-		
-		System.arraycopy(entries, 0, newEntries, 0, entries.length);
-		
-		newEntries[entries.length] = newEntry;
-		
-		javaProject.setRawClasspath(newEntries, monitor);
-	}
+        for( IClasspathEntry entry : entries )
+        {
+            if( entry.getPath().equals( containerPath ) )
+            {
+                return;
+            }
+        }
 
-	protected abstract IPath getClasspathContainerPath();
+        IAccessRule[] accessRules = new IAccessRule[] {};
+
+        IClasspathAttribute[] attributes =
+            new IClasspathAttribute[] { JavaCore.newClasspathAttribute(
+                IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, "" ) };
+
+        IClasspathEntry newEntry = JavaCore.newContainerEntry( containerPath, accessRules, attributes, false );
+
+        IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
+
+        System.arraycopy( entries, 0, newEntries, 0, entries.length );
+
+        newEntries[entries.length] = newEntry;
+
+        javaProject.setRawClasspath( newEntries, monitor );
+    }
+
+    protected abstract IPath getClasspathContainerPath();
 
 }

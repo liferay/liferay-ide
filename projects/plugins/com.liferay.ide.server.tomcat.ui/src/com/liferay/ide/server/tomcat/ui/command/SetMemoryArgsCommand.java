@@ -9,6 +9,7 @@
  *     Larry Isaacs - Initial API and implementation
  *     Greg Amerson <gregory.amerson@liferay.com>
  *******************************************************************************/
+
 package com.liferay.ide.server.tomcat.ui.command;
 
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
@@ -19,36 +20,40 @@ import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 /**
  * Command to change the memory arguments
  */
-@SuppressWarnings("restriction")
-public class SetMemoryArgsCommand extends ServerCommand {
+@SuppressWarnings( "restriction" )
+public class SetMemoryArgsCommand extends ServerCommand
+{
 
-	protected String memoryArgs;
-	protected String oldMemoryArgs;
+    protected String memoryArgs;
+    protected String oldMemoryArgs;
 
-	/**
-	 * Constructs command to set the memory arguments
-	 * 
-	 * @param server
-	 *            a Tomcat server
-	 * @param memoryArgs
-	 */
-	public SetMemoryArgsCommand(LiferayTomcatServer server, String memoryArgs) {
-		super(server, Messages.serverEditorActionSetDeployDirectory);
-		this.memoryArgs = memoryArgs;
-	}
+    /**
+     * Constructs command to set the memory arguments
+     * 
+     * @param server
+     *            a Tomcat server
+     * @param memoryArgs
+     */
+    public SetMemoryArgsCommand( LiferayTomcatServer server, String memoryArgs )
+    {
+        super( server, Messages.serverEditorActionSetDeployDirectory );
+        this.memoryArgs = memoryArgs;
+    }
 
-	/**
-	 * Execute setting the memory args
-	 */
-	public void execute() {
-		oldMemoryArgs = ((LiferayTomcatServer) server).getMemoryArgs();
-		((LiferayTomcatServer) server).setMemoryArgs(memoryArgs);
-	}
+    /**
+     * Execute setting the memory args
+     */
+    public void execute()
+    {
+        oldMemoryArgs = ( (LiferayTomcatServer) server ).getMemoryArgs();
+        ( (LiferayTomcatServer) server ).setMemoryArgs( memoryArgs );
+    }
 
-	/**
-	 * Restore prior memoryargs
-	 */
-	public void undo() {
-		((LiferayTomcatServer) server).setMemoryArgs(oldMemoryArgs);
-	}
+    /**
+     * Restore prior memoryargs
+     */
+    public void undo()
+    {
+        ( (LiferayTomcatServer) server ).setMemoryArgs( oldMemoryArgs );
+    }
 }

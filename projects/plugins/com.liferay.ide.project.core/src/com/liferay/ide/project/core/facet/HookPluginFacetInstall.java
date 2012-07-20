@@ -32,57 +32,61 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  * @author Greg Amerson
  * @author kamesh.sampath [IDE-450]
  */
-public class HookPluginFacetInstall extends PluginFacetInstall {
+public class HookPluginFacetInstall extends PluginFacetInstall
+{
 
-	@Override
-	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
-		throws CoreException {
-		
-		super.execute(project, fv, config, monitor);
+    @Override
+    public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
+        throws CoreException
+    {
+        super.execute( project, fv, config, monitor );
 
-		IDataModel model = (IDataModel) config;
-		
-		IDataModel masterModel = (IDataModel) model.getProperty(FacetInstallDataModelProvider.MASTER_PROJECT_DM);
-		
-		if (masterModel != null && masterModel.getBooleanProperty(CREATE_PROJECT_OPERATION)) {
-			SDK sdk = getSDK();
+        IDataModel model = (IDataModel) config;
 
-			String hookName = this.masterModel.getStringProperty(HOOK_NAME);
-			
-			// FIX IDE-450
-			if ( hookName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ) {
-				hookName = hookName.substring( 0, hookName.indexOf( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) );
-			}
-			// END FIX IDE-450
-			
-			String displayName = this.masterModel.getStringProperty(DISPLAY_NAME);
+        IDataModel masterModel = (IDataModel) model.getProperty( FacetInstallDataModelProvider.MASTER_PROJECT_DM );
 
-			IPath installPath = sdk.createNewHookProject(hookName, displayName);
+        if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
+        {
+            SDK sdk = getSDK();
 
-			IPath tempInstallPath = installPath.append(hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX);
+            String hookName = this.masterModel.getStringProperty( HOOK_NAME );
 
-			processNewFiles(tempInstallPath, false);
-			
-			// cleanup hook files
-			FileUtil.deleteDir(tempInstallPath.toFile(), true);
+            // FIX IDE-450
+            if( hookName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                hookName = hookName.substring( 0, hookName.indexOf( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) );
+            }
+            // END FIX IDE-450
 
-			this.project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		else {
-			setupDefaultOutputLocation();
-		}
+            String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
 
-		// IDE-491 don't add this in the webxml by default
-		// ProjectUtil.addLiferayPortletTldToWebXML( this.project );
-		
-		//IDE-565
+            IPath installPath = sdk.createNewHookProject( hookName, displayName );
+
+            IPath tempInstallPath = installPath.append( hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX );
+
+            processNewFiles( tempInstallPath, false );
+
+            // cleanup hook files
+            FileUtil.deleteDir( tempInstallPath.toFile(), true );
+
+            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        else
+        {
+            setupDefaultOutputLocation();
+        }
+
+        // IDE-491 don't add this in the webxml by default
+        // ProjectUtil.addLiferayPortletTldToWebXML( this.project );
+
+        // IDE-565
         configureDeploymentAssembly( IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
-	}
+    }
 
-	@Override
-	protected String getDefaultOutputLocation()
-	{
-		return IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
-	}
+    @Override
+    protected String getDefaultOutputLocation()
+    {
+        return IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+    }
 
 }

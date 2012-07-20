@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,16 +28,18 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEditorCondition {
+public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEditorCondition
+{
 
-	@Override
-	protected boolean evaluate( PropertyEditorPart part ) {
+    @Override
+    protected boolean evaluate( PropertyEditorPart part )
+    {
 
-		final IModelElement element = part.getModelElement();
-		final ModelProperty property = part.getProperty();
+        final IModelElement element = part.getModelElement();
+        final ModelProperty property = part.getProperty();
 
-		return ( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) && element.service(
-			property, RelativePathService.class ) != null );
-	}
+        return( property instanceof ValueProperty && Path.class.isAssignableFrom( property.getTypeClass() ) && element.service(
+            property, RelativePathService.class ) != null );
+    }
 
 }

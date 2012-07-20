@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,13 +16,13 @@
 package com.liferay.ide.portlet.ui;
 
 import com.liferay.ide.portlet.core.MVCPortletFrameworkWizardProvider;
-import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
-import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
+import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
+import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -35,53 +35,63 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegate {
+public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegate
+{
 
-	protected IPluginWizardFragment wizardFragment;
+    protected IPluginWizardFragment wizardFragment;
 
-	public MVCPortletFrameworkDelegate() {
-		super();
-	}
+    public MVCPortletFrameworkDelegate()
+    {
+        super();
+    }
 
-	public Composite createNewProjectOptionsComposite( Composite parent ) {
-		Group group = SWTUtil.createGroup(parent, "Additional Options", 1);
+    public Composite createNewProjectOptionsComposite( Composite parent )
+    {
+        Group group = SWTUtil.createGroup( parent, "Additional Options", 1 );
 
-		final Button createCustomClassButton = new Button(group, SWT.CHECK);
-		createCustomClassButton.setText("Create custom portlet class");
-		createCustomClassButton.addSelectionListener(new SelectionAdapter() {
+        final Button createCustomClassButton = new Button( group, SWT.CHECK );
+        createCustomClassButton.setText( "Create custom portlet class" );
+        createCustomClassButton.addSelectionListener
+        ( 
+            new SelectionAdapter()
+            {
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    setFragmentEnabled( createCustomClassButton.getSelection() );
+                    MVCPortletFrameworkDelegate.this.getDataModel().setBooleanProperty(
+                        IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, createCustomClassButton.getSelection() );
+                }
+            }
+        );
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				setFragmentEnabled(createCustomClassButton.getSelection());
-				MVCPortletFrameworkDelegate.this.getDataModel().setBooleanProperty(
-					IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, createCustomClassButton.getSelection());
-			}
+        return group;
+    }
 
-		});
+    @Override
+    public IPluginWizardFragment getWizardFragment()
+    {
+        if( wizardFragment == null )
+        {
+            wizardFragment = new NewPortletWizard();
+            wizardFragment.setFragment( true );
+        }
 
-		return group;
-	}
+        return wizardFragment;
+    }
 
-	@Override
-	public IPluginWizardFragment getWizardFragment() {
-		if (wizardFragment == null) {
-			wizardFragment = new NewPortletWizard();
-			wizardFragment.setFragment(true);
-		}
+    @Override
+    protected void updateFragmentEnabled( IDataModel dataModel )
+    {
+        String frameworkId = dataModel.getStringProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID );
 
-		return wizardFragment;
-	}
+        IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
 
-	@Override
-	protected void updateFragmentEnabled( IDataModel dataModel ) {
-		String frameworkId = dataModel.getStringProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID );
-        
-		IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
-
-		if ( framework instanceof MVCPortletFrameworkWizardProvider ) {
-			dataModel.setBooleanProperty(
-				IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, isFragmentEnabled() );
-		}
-	}
+        if( framework instanceof MVCPortletFrameworkWizardProvider )
+        {
+            dataModel.setBooleanProperty(
+                IPluginProjectDataModelProperties.PLUGIN_FRAGMENT_ENABLED, isFragmentEnabled() );
+        }
+    }
 
 }

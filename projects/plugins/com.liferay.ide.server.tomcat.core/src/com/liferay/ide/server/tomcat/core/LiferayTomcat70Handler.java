@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,52 +30,58 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayTomcat70Handler extends Tomcat70Handler implements ILiferayTomcatHandler {
+@SuppressWarnings( "restriction" )
+public class LiferayTomcat70Handler extends Tomcat70Handler implements ILiferayTomcatHandler
+{
 
-	protected IServer currentServer;
+    protected IServer currentServer;
 
-	protected ILiferayTomcatServer portalServer;
+    protected ILiferayTomcatServer portalServer;
 
-	@Override
-	public IStatus canAddModule(IModule module) {
-		IStatus status = LiferayTomcatUtil.canAddModule( module, currentServer );
+    @Override
+    public IStatus canAddModule( IModule module )
+    {
+        IStatus status = LiferayTomcatUtil.canAddModule( module, currentServer );
 
-		if ( !status.isOK() ) {
-			return status;
-		}
+        if( !status.isOK() )
+        {
+            return status;
+        }
 
-		return super.canAddModule(module);
-	}
+        return super.canAddModule( module );
+    }
 
-	@Override
-	public String[] getRuntimeVMArguments(IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv) {
-		List<String> runtimeVMArgs = new ArrayList<String>();
+    @Override
+    public String[] getRuntimeVMArguments( IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv )
+    {
+        List<String> runtimeVMArgs = new ArrayList<String>();
 
-		LiferayTomcatUtil.addRuntimeVMArgments(
-			runtimeVMArgs, installPath, configPath, deployPath, isTestEnv, currentServer, getPortalServer() );
+        LiferayTomcatUtil.addRuntimeVMArgments(
+            runtimeVMArgs, installPath, configPath, deployPath, isTestEnv, currentServer, getPortalServer() );
 
-		Collections.addAll( runtimeVMArgs, super.getRuntimeVMArguments( installPath, configPath, deployPath, isTestEnv ) );
+        Collections.addAll( runtimeVMArgs, super.getRuntimeVMArguments( installPath, configPath, deployPath, isTestEnv ) );
 
-		return runtimeVMArgs.toArray( new String[runtimeVMArgs.size()] );
-	}
+        return runtimeVMArgs.toArray( new String[runtimeVMArgs.size()] );
+    }
 
-	public void setCurrentServer(IServer server) {
-		this.currentServer = server;
-	}
+    public void setCurrentServer( IServer server )
+    {
+        this.currentServer = server;
+    }
 
-	protected ILiferayTomcatServer getPortalServer() {
-		if (this.portalServer == null) {
-			this.portalServer = (ILiferayTomcatServer) getServer().loadAdapter(ILiferayTomcatServer.class, null);
-		}
+    protected ILiferayTomcatServer getPortalServer()
+    {
+        if( this.portalServer == null )
+        {
+            this.portalServer = (ILiferayTomcatServer) getServer().loadAdapter( ILiferayTomcatServer.class, null );
+        }
 
-		return this.portalServer;
-	}
+        return this.portalServer;
+    }
 
-	protected IServer getServer() {
-		return this.currentServer;
-	}
-
-
+    protected IServer getServer()
+    {
+        return this.currentServer;
+    }
 
 }

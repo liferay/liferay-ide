@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,60 +36,71 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Gregory Amerson
  */
-public abstract class SDKCommandAction extends AbstractObjectAction {
+public abstract class SDKCommandAction extends AbstractObjectAction
+{
 
-	public SDKCommandAction() {
-		super();
-	}
+    public SDKCommandAction()
+    {
+        super();
+    }
 
-	protected abstract String getSDKCommand();
+    protected abstract String getSDKCommand();
 
-	public void run(IAction action) {
-		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection) fSelection).toArray();
+    public void run( IAction action )
+    {
+        if( fSelection instanceof IStructuredSelection )
+        {
+            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
-			IFile buildXmlFile = null;
-			IProject project = null;
+            IFile buildXmlFile = null;
+            IProject project = null;
 
-			Object elem = elems[0];
+            Object elem = elems[0];
 
-			if (elem instanceof IFile) {
-				buildXmlFile = (IFile) elem;
-				project = buildXmlFile.getProject();
-			}
-			else if (elem instanceof IProject) {
-				project = (IProject) elem;
-				buildXmlFile = project.getFile( "build.xml" );
-			}
+            if( elem instanceof IFile )
+            {
+                buildXmlFile = (IFile) elem;
+                project = buildXmlFile.getProject();
+            }
+            else if( elem instanceof IProject )
+            {
+                project = (IProject) elem;
+                buildXmlFile = project.getFile( "build.xml" );
+            }
 
-			if ( buildXmlFile.exists() ) {
-				final IProject p = project;
-				final IFile buildFile = buildXmlFile;
+            if( buildXmlFile.exists() )
+            {
+                final IProject p = project;
+                final IFile buildFile = buildXmlFile;
 
-				new Job( p.getName() + " : " + getSDKCommand() ) {
+                new Job( p.getName() + " : " + getSDKCommand() )
+                {
 
-					@Override
-					protected IStatus run( IProgressMonitor monitor ) {
-						try {
-							SDK sdk = SDKUtil.getSDK( p );
+                    @Override
+                    protected IStatus run( IProgressMonitor monitor )
+                    {
+                        try
+                        {
+                            SDK sdk = SDKUtil.getSDK( p );
 
-							Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
+                            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
 
-							sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties );
+                            sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties );
 
-							p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-						}
-						catch ( Exception e ) {
-							return ProjectUIPlugin.createErrorStatus( "Error running SDK command " + getSDKCommand(), e );
-						}
+                            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                        }
+                        catch( Exception e )
+                        {
+                            return ProjectUIPlugin.createErrorStatus( "Error running SDK command " + getSDKCommand(), e );
+                        }
 
-						return Status.OK_STATUS;
-					}
-				}.schedule();
+                        return Status.OK_STATUS;
+                    }
+                }.schedule();
 
-			}
-		}
+            }
+        }
 
-	}
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,7 +11,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.layouttpl.ui.cmd;
 
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
@@ -20,50 +23,57 @@ import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
 
-public class PortletColumnDeleteCommand extends Command {
+/**
+ * @author Gregory Amerson
+ */
+public class PortletColumnDeleteCommand extends Command
+{
+    protected final PortletColumn child;
+    protected final PortletLayout parent;
+    protected LayoutTplDiagram diagram = null;
+    protected boolean wasRemoved;
 
-	protected final PortletColumn child;
+    public PortletColumnDeleteCommand( PortletLayout parent, PortletColumn child )
+    {
+        if( parent == null || child == null )
+        {
+            throw new IllegalArgumentException();
+        }
 
-	protected final PortletLayout parent;
+        setLabel( "Portlet Column deleted" );
 
-	protected LayoutTplDiagram diagram = null;
+        this.parent = parent;
+        this.child = child;
+    }
 
-	protected boolean wasRemoved;
+    public boolean canUndo()
+    {
+        return wasRemoved;
+    }
 
-	public PortletColumnDeleteCommand(PortletLayout parent, PortletColumn child) {
-		if (parent == null || child == null) {
-			throw new IllegalArgumentException();
-		}
+    public void execute()
+    {
+        redo();
+    }
 
-		setLabel("Portlet Column deleted");
+    public void redo()
+    {
+        wasRemoved = parent.removeColumn( child );
 
-		this.parent = parent;
-		this.child = child;
-	}
+        if( parent.getColumns().size() == 0 )
+        {
+            diagram = (LayoutTplDiagram) parent.getParent();
+            diagram.removeChild( parent );
+        }
+    }
 
+    public void undo()
+    {
+        parent.addColumn( child );
 
-	public boolean canUndo() {
-		return wasRemoved;
-	}
-
-	public void execute() {
-		redo();
-	}
-
-	public void redo() {
-		wasRemoved = parent.removeColumn(child);
-
-		if (parent.getColumns().size() == 0) {
-			diagram = (LayoutTplDiagram) parent.getParent();
-			diagram.removeChild(parent);
-		}
-	}
-
-	public void undo() {
-		parent.addColumn(child);
-
-		if (diagram != null) {
-			diagram.addRow(parent);
-		}
-	}
+        if( diagram != null )
+        {
+            diagram.addRow( parent );
+        }
+    }
 }

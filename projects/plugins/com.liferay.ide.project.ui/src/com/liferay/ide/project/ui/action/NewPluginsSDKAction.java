@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,22 +27,23 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 /**
  * @author Greg Amerson
  */
-public class NewPluginsSDKAction extends Action {
+public class NewPluginsSDKAction extends Action
+{
+    protected Shell shell;
 
-	protected Shell shell;
+    public NewPluginsSDKAction( Shell shell )
+    {
+        super( "New Liferay SDK", ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
+            "/icons/n16/sdk_new.png" ) ) );
+        this.shell = shell;
+    }
 
-	public NewPluginsSDKAction(Shell shell) {
-		super("New Liferay SDK", ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
-			"/icons/n16/sdk_new.png")));
+    @Override
+    public void run()
+    {
+        PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn( shell, SDKsPreferencePage.ID, null, "new" );
 
-		this.shell = shell;
-	}
-
-	@Override
-	public void run() {
-		PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(shell, SDKsPreferencePage.ID, null, "new");
-
-		dialog.open();
-	}
+        dialog.open();
+    }
 
 }

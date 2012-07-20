@@ -35,11 +35,11 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.sapphire.java.jdt;bundle-version="0.3.1"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.portlet.core.util,
- com.liferay.ide.portlet.core,
+Export-Package: com.liferay.ide.portlet.core,
  com.liferay.ide.portlet.core.dd,
  com.liferay.ide.portlet.core.descriptor,
  com.liferay.ide.portlet.core.display.model,
+ com.liferay.ide.portlet.core.display.model.internal,
  com.liferay.ide.portlet.core.job,
  com.liferay.ide.portlet.core.model,
  com.liferay.ide.portlet.core.model.internal,
@@ -47,4 +47,5 @@ Export-Package: com.liferay.ide.portlet.core.util,
  com.liferay.ide.portlet.core.model.lfrportlet600,
  com.liferay.ide.portlet.core.model.lfrportlet610,
  com.liferay.ide.portlet.core.operation,
- com.liferay.ide.portlet.core.servicebuilder
+ com.liferay.ide.portlet.core.servicebuilder,
+ com.liferay.ide.portlet.core.util

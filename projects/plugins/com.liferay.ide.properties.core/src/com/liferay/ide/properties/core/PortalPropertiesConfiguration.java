@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,19 +22,20 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 /**
  * @author Greg Amerson
  */
-public class PortalPropertiesConfiguration extends PropertiesConfiguration {
+public class PortalPropertiesConfiguration extends PropertiesConfiguration
+{
 
-	public PortalPropertiesConfiguration()
-		throws ConfigurationException {
+    public PortalPropertiesConfiguration() throws ConfigurationException
+    {
+        super();
 
-		super();
+        setDelimiterParsingDisabled( true );
+    }
 
-		setDelimiterParsingDisabled(true);
-	}
-
-	@Override
-	protected PropertiesConfigurationLayout createLayout() {
-		return new PortalPropertiesConfigurationLayout( this );
-	}
+    @Override
+    protected PropertiesConfigurationLayout createLayout()
+    {
+        return new PortalPropertiesConfigurationLayout( this );
+    }
 
 }

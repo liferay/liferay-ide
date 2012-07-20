@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
@@ -21,28 +23,31 @@ import java.io.OutputStream;
 /**
  * @author Greg Amerson
  */
-public class StringBufferOutputStream extends OutputStream {
+public class StringBufferOutputStream extends OutputStream
+{
+    protected StringBuffer buffer = new StringBuffer();
 
-	protected StringBuffer buffer = new StringBuffer();
+    public StringBufferOutputStream()
+    {
+        super();
+    }
 
-	public StringBufferOutputStream() {
-		super();
-	}
+    public void clear()
+    {
+        buffer.delete( 0, buffer.length() );
+    }
 
-	/*
-	 * @see java.io.OutputStream#write(int)
-	 */
-	public void write(int write)
-		throws IOException {
-		buffer.append((char) write);
-	}
+    public String toString()
+    {
+        return buffer.toString();
+    }
 
-	public String toString() {
-		return buffer.toString();
-	}
-
-	public void clear() {
-		buffer.delete(0, buffer.length());
-	}
+    /*
+     * @see java.io.OutputStream#write(int)
+     */
+    public void write( int write ) throws IOException
+    {
+        buffer.append( (char) write );
+    }
 
 }

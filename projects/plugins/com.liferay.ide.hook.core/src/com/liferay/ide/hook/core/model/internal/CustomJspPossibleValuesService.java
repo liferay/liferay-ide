@@ -20,8 +20,8 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.hook.core.model.ICustomJspDir;
-import com.liferay.ide.hook.core.model.IHook;
+import com.liferay.ide.hook.core.model.CustomJspDir;
+import com.liferay.ide.hook.core.model.Hook;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -37,114 +37,114 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
-
 /**
  * @author Gregory Amerson
  */
 public class CustomJspPossibleValuesService extends PossibleValuesService
 {
 
-	final FileFilter jspfilter = new FileFilter()
-	{
-		public boolean accept( File pathname )
-		{
-			return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" );
-		}
-	};
+    final FileFilter jspfilter = new FileFilter()
+    {
 
-	private IPath portalDir;
+        public boolean accept( File pathname )
+        {
+            return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" );
+        }
+    };
 
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values )
-	{
-		final File portalDirFile = portalDir.toFile();
-		final File htmlDirFile = new File( portalDirFile, "html" );
+    private IPath portalDir;
 
-		if ( htmlDirFile.exists() )
-		{
-			findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), new File[] { htmlDirFile }, values );
-		}
-		else
-		{
-			File[] files = portalDirFile.listFiles( jspfilter );
-			findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), files, values );
-		}
-	}
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        final File portalDirFile = portalDir.toFile();
+        final File htmlDirFile = new File( portalDirFile, "html" );
 
-	private void findJSPFiles( Path portalDir, final File[] files, final SortedSet<String> values )
-	{
-		for ( File file : files )
-		{
-			if ( file.isDirectory() )
-			{
-				findJSPFiles( portalDir, file.listFiles( jspfilter ), values );
-			}
-			else
-			{
-				values.add( new Path( file.getAbsolutePath() ).makeRelativeTo( portalDir ).toPortableString() );
-			}
-		}
-	}
+        if( htmlDirFile.exists() )
+        {
+            findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), new File[] { htmlDirFile }, values );
+        }
+        else
+        {
+            File[] files = portalDirFile.listFiles( jspfilter );
+            findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), files, values );
+        }
+    }
 
-	private IFolder getCustomJspFolder()
-	{
-		ICustomJspDir element = this.hook().getCustomJspDir().element();
-		IFolder docroot = CoreUtil.getDocroot( project() );
+    private void findJSPFiles( Path portalDir, final File[] files, final SortedSet<String> values )
+    {
+        for( File file : files )
+        {
+            if( file.isDirectory() )
+            {
+                findJSPFiles( portalDir, file.listFiles( jspfilter ), values );
+            }
+            else
+            {
+                values.add( new Path( file.getAbsolutePath() ).makeRelativeTo( portalDir ).toPortableString() );
+            }
+        }
+    }
 
-		if ( element != null && docroot != null )
-		{
-			Path customJspDir = element.getValue().getContent();
-			IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
-			return customJspFolder;
-		}
-		else
-		{
-			return null;
-		}
-	}
+    private IFolder getCustomJspFolder()
+    {
+        CustomJspDir element = this.hook().getCustomJspDir().element();
+        IFolder docroot = CoreUtil.getDocroot( project() );
 
-	@Override
-	public Severity getInvalidValueSeverity( String invalidValue )
-	{
-		IFolder customJspFolder = getCustomJspFolder();
+        if( element != null && docroot != null )
+        {
+            Path customJspDir = element.getValue().getContent();
+            IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+            return customJspFolder;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-		if ( customJspFolder != null )
-		{
-			IFile invalidFile = customJspFolder.getFile( invalidValue );
+    @Override
+    public Severity getInvalidValueSeverity( String invalidValue )
+    {
+        IFolder customJspFolder = getCustomJspFolder();
 
-			if ( invalidFile.exists() )
-			{
-				return Severity.OK;
-			}
-		}
+        if( customJspFolder != null )
+        {
+            IFile invalidFile = customJspFolder.getFile( invalidValue );
 
-		return Severity.ERROR;
-	}
+            if( invalidFile.exists() )
+            {
+                return Severity.OK;
+            }
+        }
 
-	private IHook hook()
-	{
-		return this.context().find( IHook.class );
-	}
+        return Severity.ERROR;
+    }
 
-	@Override
-	protected void init()
-	{
-		super.init();
-		IProject project = project();
+    private Hook hook()
+    {
+        return this.context().find( Hook.class );
+    }
 
-		try
-		{
-			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-			this.portalDir = liferayRuntime.getPortalDir();
-		}
-		catch ( CoreException e )
-		{
-		}
-	}
+    @Override
+    protected void init()
+    {
+        super.init();
+        IProject project = project();
 
-	protected IProject project()
-	{
-		return context( IModelElement.class ).root().adapt( IFile.class ).getProject();
-	}
+        try
+        {
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            this.portalDir = liferayRuntime.getPortalDir();
+        }
+        catch( CoreException e )
+        {
+        }
+    }
+
+    protected IProject project()
+    {
+        return context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+    }
 
 }

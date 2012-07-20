@@ -24,16 +24,17 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayTomcatRuntime extends ILiferayRuntime {
+public interface ILiferayTomcatRuntime extends ILiferayRuntime
+{
 
-	IPath getBundleZipLocation();
+    IPath getBundleZipLocation();
 
-	String getServerInfo();
+    String getServerInfo();
 
-	void setBundleZipLocation( IPath path );
+    void setBundleZipLocation( IPath path );
 
-	void setJavadocURL( String url );
-    
-	void setSourceLocation( IPath path );
+    void setJavadocURL( String url );
+
+    void setSourceLocation( IPath path );
 
 }

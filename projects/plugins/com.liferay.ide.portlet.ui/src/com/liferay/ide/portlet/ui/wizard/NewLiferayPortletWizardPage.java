@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,10 +17,10 @@ package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -56,254 +56,283 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
-	implements INewPortletClassDataModelProperties {
-
-	protected Button allowMultiInstanceButton;
-
-	protected Combo category;
-
-	protected Text cssClassWrapper;
-
-	protected Text cssFile;
-
-	protected boolean fragment;
-
-	protected Text iconFile;
-
-	protected Text id;
-
-	protected Text javascriptFile;
-
-	// protected Text name;
-
-	public NewLiferayPortletWizardPage(
-		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
-
-		super(dataModel, pageName, title, null);
-		this.fragment = fragment;
-		setDescription(desc);
-	}
-
-	protected void createLiferayDisplayGroup(Composite composite) {
-		Group group = SWTUtil.createGroup(composite, "Liferay Display", 2);
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-
-		group.setLayoutData(gd);
-
-		SWTUtil.createLabel(group, "Category:", 1);
-
-		this.category = new Combo(group, SWT.DROP_DOWN);
-		this.category.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		this.synchHelper.synchCombo(category, CATEGORY, null);
-
-	}
-
-	protected void createLiferayPortletInfoGroup(Composite composite) {
-		Group group = SWTUtil.createGroup(composite, "Liferay Portlet Info", 3);
-
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 3;
-
-		group.setLayoutData(gd);
-
-		// we don't need to create the name as it can never be anything different than the portlet name on 2nd page
-		// SWTUtil.createLabel(group, SWT.RIGHT, "Name:", 1);
-		//
-		// this.name = SWTUtil.createText(group, 1);
-		// this.synchHelper.synchText(name, LIFERAY_PORTLET_NAME, null);
-		// SWTUtil.createLabel(group, "", 1);
-
-		SWTUtil.createLabel(group, SWT.RIGHT, "Icon:", 1);
-
-		this.iconFile = SWTUtil.createText(group, 1);
-		this.synchHelper.synchText(iconFile, ICON_FILE, null);
-
-		if (this.fragment) {
-			SWTUtil.createLabel(group, "", 1);
-		}
-		else {
-			Button iconFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
-			iconFileBrowse.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					handleFileBrowseButton(
-						NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: ");
-				}
-
-			});
-		}
-
-		SWTUtil.createLabel(group, "", 1);
-
-		this.allowMultiInstanceButton = SWTUtil.createCheckButton(group, "Allow multiple instances", null, true, 2);
-		this.synchHelper.synchCheckbox(this.allowMultiInstanceButton, ALLOW_MULTIPLE, null);
-
-		SWTUtil.createLabel(group, SWT.RIGHT, "CSS:", 1);
-
-		this.cssFile = SWTUtil.createText(group, 1);
-		this.synchHelper.synchText(cssFile, CSS_FILE, null);
-
-		if (this.fragment) {
-			SWTUtil.createLabel(group, "", 1);
-		}
-		else {
-			Button cssFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
-			cssFileBrowse.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					handleFileBrowseButton(
-						NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: ");
-				}
-
-			});
-		}
-
-		SWTUtil.createLabel(group, SWT.RIGHT, "JavaScript:", 1);
-
-		this.javascriptFile = SWTUtil.createText(group, 1);
-		this.synchHelper.synchText(javascriptFile, JAVASCRIPT_FILE, null);
-
-		if (this.fragment) {
-			SWTUtil.createLabel(group, "", 1);
-		}
-		else {
-			Button javascriptFileBrowse = SWTUtil.createPushButton(group, "Browse...", null);
-			javascriptFileBrowse.addSelectionListener(new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					handleFileBrowseButton(
-						NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
-						"Choose a javascript file: ");
-				}
-
-			});
-		}
-
-		SWTUtil.createLabel(group, SWT.RIGHT, "CSS classname:", 1);
-
-		this.cssClassWrapper = SWTUtil.createText(group, 1);
-		this.synchHelper.synchText(cssClassWrapper, CSS_CLASS_WRAPPER, null);
-
-		SWTUtil.createLabel(group, "", 1);
-
-		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
-
-			public void propertyChanged(DataModelEvent event) {
-				if (INewJavaClassDataModelProperties.CLASS_NAME.equals(event.getPropertyName()) ||
-					PORTLET_NAME.equals(event.getPropertyName())) {
-
-					synchHelper.synchAllUIWithModel();
-				}
-			}
-		});
-	}
-
-	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite composite = SWTUtil.createTopComposite(parent, 3);
-
-		createLiferayPortletInfoGroup(composite);
-
-		createLiferayDisplayGroup(composite);
-
-		return composite;
-	}
-
-	protected ISelectionStatusValidator getContainerDialogSelectionValidator() {
-		return new ISelectionStatusValidator() {
-
-			public IStatus validate(Object[] selection) {
-				if (selection != null && selection.length > 0 && selection[0] != null &&
-					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFolder)) {
-					return Status.OK_STATUS;
-				}
-
-				return PortletUIPlugin.createErrorStatus("Choose a valid project file");
-			}
-		};
-	}
-
-	protected ViewerFilter getContainerDialogViewerFilter() {
-		return new ViewerFilter() {
-
-			public boolean select(Viewer viewer, Object parent, Object element) {
-				if (element instanceof IProject) {
-					IProject project = (IProject) element;
-
-					return project.getName().equals(
-						model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
-				}
-				else if (element instanceof IFolder) {
-					return true;
-				}
-				else if (element instanceof IFile) {
-					return true;
-				}
-
-				return false;
-			}
-		};
-	}
-
-	protected IFolder getDocroot() {
-		return CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
-	}
-
-	@Override
-	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			LIFERAY_PORTLET_NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE, CSS_CLASS_WRAPPER, CATEGORY
-		};
-	}
-
-	protected void handleFileBrowseButton(final Text text, String title, String message) {
-		ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
-
-		ViewerFilter filter = getContainerDialogViewerFilter();
-
-		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
-
-		ILabelProvider labelProvider =
-			new DecoratingLabelProvider(
-				new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator());
-
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, contentProvider);
-		dialog.setValidator(validator);
-		dialog.setTitle(title);
-		dialog.setMessage(message);
-		dialog.addFilter(filter);
-
-		IFolder docroot = CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
-
-		dialog.setInput(docroot);
-
-		if (dialog.open() == Window.OK) {
-			Object element = dialog.getFirstResult();
-
-			try {
-				if (element instanceof IFile) {
-					IFile file = (IFile) element;
-
-					text.setText("/" + file.getFullPath().makeRelativeTo(docroot.getFullPath()).toPortableString());
-					// dealWithSelectedContainerResource(container);
-				}
-			}
-			catch (Exception ex) {
-				// Do nothing
-			}
-
-		}
-	}
-
-	protected boolean isProjectValid(IProject project) {
-		return ProjectUtil.isPortletProject(project);
-	}
+    implements INewPortletClassDataModelProperties
+{
+    protected Button allowMultiInstanceButton;
+    protected Combo category;
+    protected Text cssClassWrapper;
+    protected Text cssFile;
+    protected boolean fragment;
+    protected Text iconFile;
+    protected Text id;
+    protected Text javascriptFile;
+
+    // protected Text name;
+
+    public NewLiferayPortletWizardPage(
+        IDataModel dataModel, String pageName, String desc, String title, boolean fragment )
+    {
+
+        super( dataModel, pageName, title, null );
+        this.fragment = fragment;
+        setDescription( desc );
+    }
+
+    protected void createLiferayDisplayGroup( Composite composite )
+    {
+        Group group = SWTUtil.createGroup( composite, "Liferay Display", 2 );
+
+        GridData gd = new GridData( GridData.FILL_HORIZONTAL );
+        gd.horizontalSpan = 3;
+
+        group.setLayoutData( gd );
+
+        SWTUtil.createLabel( group, "Category:", 1 );
+
+        this.category = new Combo( group, SWT.DROP_DOWN );
+        this.category.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        this.synchHelper.synchCombo( category, CATEGORY, null );
+
+    }
+
+    protected void createLiferayPortletInfoGroup( Composite composite )
+    {
+        Group group = SWTUtil.createGroup( composite, "Liferay Portlet Info", 3 );
+
+        GridData gd = new GridData( GridData.FILL_HORIZONTAL );
+        gd.horizontalSpan = 3;
+
+        group.setLayoutData( gd );
+
+        // we don't need to create the name as it can never be anything different than the portlet name on 2nd page
+        // SWTUtil.createLabel(group, SWT.RIGHT, "Name:", 1);
+        //
+        // this.name = SWTUtil.createText(group, 1);
+        // this.synchHelper.synchText(name, LIFERAY_PORTLET_NAME, null);
+        // SWTUtil.createLabel(group, "", 1);
+
+        SWTUtil.createLabel( group, SWT.RIGHT, "Icon:", 1 );
+
+        this.iconFile = SWTUtil.createText( group, 1 );
+        this.synchHelper.synchText( iconFile, ICON_FILE, null );
+
+        if( this.fragment )
+        {
+            SWTUtil.createLabel( group, "", 1 );
+        }
+        else
+        {
+            Button iconFileBrowse = SWTUtil.createPushButton( group, "Browse...", null );
+            iconFileBrowse.addSelectionListener( new SelectionAdapter()
+            {
+
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    handleFileBrowseButton(
+                        NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: " );
+                }
+
+            } );
+        }
+
+        SWTUtil.createLabel( group, "", 1 );
+
+        this.allowMultiInstanceButton = SWTUtil.createCheckButton( group, "Allow multiple instances", null, true, 2 );
+        this.synchHelper.synchCheckbox( this.allowMultiInstanceButton, ALLOW_MULTIPLE, null );
+
+        SWTUtil.createLabel( group, SWT.RIGHT, "CSS:", 1 );
+
+        this.cssFile = SWTUtil.createText( group, 1 );
+        this.synchHelper.synchText( cssFile, CSS_FILE, null );
+
+        if( this.fragment )
+        {
+            SWTUtil.createLabel( group, "", 1 );
+        }
+        else
+        {
+            Button cssFileBrowse = SWTUtil.createPushButton( group, "Browse...", null );
+            cssFileBrowse.addSelectionListener( new SelectionAdapter()
+            {
+
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    handleFileBrowseButton(
+                        NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: " );
+                }
+
+            } );
+        }
+
+        SWTUtil.createLabel( group, SWT.RIGHT, "JavaScript:", 1 );
+
+        this.javascriptFile = SWTUtil.createText( group, 1 );
+        this.synchHelper.synchText( javascriptFile, JAVASCRIPT_FILE, null );
+
+        if( this.fragment )
+        {
+            SWTUtil.createLabel( group, "", 1 );
+        }
+        else
+        {
+            Button javascriptFileBrowse = SWTUtil.createPushButton( group, "Browse...", null );
+            javascriptFileBrowse.addSelectionListener( new SelectionAdapter()
+            {
+
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    handleFileBrowseButton(
+                        NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
+                        "Choose a javascript file: " );
+                }
+
+            } );
+        }
+
+        SWTUtil.createLabel( group, SWT.RIGHT, "CSS classname:", 1 );
+
+        this.cssClassWrapper = SWTUtil.createText( group, 1 );
+        this.synchHelper.synchText( cssClassWrapper, CSS_CLASS_WRAPPER, null );
+
+        SWTUtil.createLabel( group, "", 1 );
+
+        this.synchHelper.getDataModel().addListener( new IDataModelListener()
+        {
+
+            public void propertyChanged( DataModelEvent event )
+            {
+                if( INewJavaClassDataModelProperties.CLASS_NAME.equals( event.getPropertyName() ) ||
+                    PORTLET_NAME.equals( event.getPropertyName() ) )
+                {
+
+                    synchHelper.synchAllUIWithModel();
+                }
+            }
+        } );
+    }
+
+    @Override
+    protected Composite createTopLevelComposite( Composite parent )
+    {
+        Composite composite = SWTUtil.createTopComposite( parent, 3 );
+
+        createLiferayPortletInfoGroup( composite );
+
+        createLiferayDisplayGroup( composite );
+
+        return composite;
+    }
+
+    protected ISelectionStatusValidator getContainerDialogSelectionValidator()
+    {
+        return new ISelectionStatusValidator()
+        {
+
+            public IStatus validate( Object[] selection )
+            {
+                if( selection != null && selection.length > 0 && selection[0] != null &&
+                    !( selection[0] instanceof IProject ) && !( selection[0] instanceof IFolder ) )
+                {
+                    return Status.OK_STATUS;
+                }
+
+                return PortletUIPlugin.createErrorStatus( "Choose a valid project file" );
+            }
+        };
+    }
+
+    protected ViewerFilter getContainerDialogViewerFilter()
+    {
+        return new ViewerFilter()
+        {
+
+            public boolean select( Viewer viewer, Object parent, Object element )
+            {
+                if( element instanceof IProject )
+                {
+                    IProject project = (IProject) element;
+
+                    return project.getName().equals(
+                        model.getProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
+                }
+                else if( element instanceof IFolder )
+                {
+                    return true;
+                }
+                else if( element instanceof IFile )
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        };
+    }
+
+    protected IFolder getDocroot()
+    {
+        return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
+    }
+
+    @Override
+    protected String[] getValidationPropertyNames()
+    {
+        return new String[] { LIFERAY_PORTLET_NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE,
+            CSS_CLASS_WRAPPER, CATEGORY };
+    }
+
+    protected void handleFileBrowseButton( final Text text, String title, String message )
+    {
+        ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
+
+        ViewerFilter filter = getContainerDialogViewerFilter();
+
+        ITreeContentProvider contentProvider = new WorkbenchContentProvider();
+
+        ILabelProvider labelProvider =
+            new DecoratingLabelProvider(
+                new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
+
+        ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
+        dialog.setValidator( validator );
+        dialog.setTitle( title );
+        dialog.setMessage( message );
+        dialog.addFilter( filter );
+
+        IFolder docroot = CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
+
+        dialog.setInput( docroot );
+
+        if( dialog.open() == Window.OK )
+        {
+            Object element = dialog.getFirstResult();
+
+            try
+            {
+                if( element instanceof IFile )
+                {
+                    IFile file = (IFile) element;
+
+                    text.setText( "/" + file.getFullPath().makeRelativeTo( docroot.getFullPath() ).toPortableString() );
+                    // dealWithSelectedContainerResource(container);
+                }
+            }
+            catch( Exception ex )
+            {
+                // Do nothing
+            }
+
+        }
+    }
+
+    protected boolean isProjectValid( IProject project )
+    {
+        return ProjectUtil.isPortletProject( project );
+    }
 
 }

@@ -28,54 +28,66 @@ import org.eclipse.wst.server.ui.IServerModule;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractServerRunningAction implements IObjectActionDelegate {
+public abstract class AbstractServerRunningAction implements IObjectActionDelegate
+{
 
-	protected IServer selectedServer;
-	protected IServerModule selectedModule;
-	protected IWorkbenchPart activePart;
-	
-	public AbstractServerRunningAction() {
-		super();
-	}
+    protected IServer selectedServer;
+    protected IServerModule selectedModule;
+    protected IWorkbenchPart activePart;
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		selectedServer = null;
-		
-		if (!selection.isEmpty()) {
-			if (selection instanceof IStructuredSelection) {
-				Object obj = ((IStructuredSelection) selection).getFirstElement();
-				
-				if (obj instanceof IServer) {
-					selectedServer = (IServer) obj;
-					
-					action.setEnabled((selectedServer.getServerState() & getRequiredServerState()) > 0);
-				}
-				else if (obj instanceof IServerModule) {
-					selectedModule = (IServerModule) obj;
+    public AbstractServerRunningAction()
+    {
+        super();
+    }
 
-					action.setEnabled((selectedModule.getServer().getServerState() & getRequiredServerState()) > 0);
-				}
-			}
-		}
-	}
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        selectedServer = null;
 
-	protected abstract int getRequiredServerState();
+        if( !selection.isEmpty() )
+        {
+            if( selection instanceof IStructuredSelection )
+            {
+                Object obj = ( (IStructuredSelection) selection ).getFirstElement();
 
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		this.activePart = targetPart;
-	}
-	
-	protected IWorkbenchPart getActivePart() {
-		return this.activePart;
-	}
-	
-	protected Shell getActiveShell() {
-		if (getActivePart() != null) {
-			return getActivePart().getSite().getShell();
-		}
-		else {
-			return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		}
-	}
+                if( obj instanceof IServer )
+                {
+                    selectedServer = (IServer) obj;
+
+                    action.setEnabled( ( selectedServer.getServerState() & getRequiredServerState() ) > 0 );
+                }
+                else if( obj instanceof IServerModule )
+                {
+                    selectedModule = (IServerModule) obj;
+
+                    action.setEnabled( ( selectedModule.getServer().getServerState() & getRequiredServerState() ) > 0 );
+                }
+            }
+        }
+    }
+
+    protected abstract int getRequiredServerState();
+
+    public void setActivePart( IAction action, IWorkbenchPart targetPart )
+    {
+        this.activePart = targetPart;
+    }
+
+    protected IWorkbenchPart getActivePart()
+    {
+        return this.activePart;
+    }
+
+    protected Shell getActiveShell()
+    {
+        if( getActivePart() != null )
+        {
+            return getActivePart().getSite().getShell();
+        }
+        else
+        {
+            return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+        }
+    }
 
 }

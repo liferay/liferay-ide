@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,7 +12,7 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.hook.ui.action;
@@ -24,26 +24,33 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNo
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class ExpandSectionOutlineNodeHandler extends SapphireActionHandler {
+public class ExpandSectionOutlineNodeHandler extends SapphireActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		final MasterDetailsContentNode mContentNode = getPart().nearest( MasterDetailsContentNode.class );
-		if ( mContentNode.isExpanded() ) {
-			mContentNode.setExpanded( false );
-		}
-		else {
-			mContentNode.setExpanded( true );
-		}
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        final MasterDetailsContentNode mContentNode = getPart().nearest( MasterDetailsContentNode.class );
+        
+        if( mContentNode.isExpanded() )
+        {
+            mContentNode.setExpanded( false );
+        }
+        else
+        {
+            mContentNode.setExpanded( true );
+        }
+        
+        return null;
+    }
 
-	protected boolean computeEnabledState() {
-		return true;
-	}
+    protected boolean computeEnabledState()
+    {
+        return true;
+    }
 
 }

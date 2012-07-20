@@ -25,21 +25,24 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class VaadinPortletFrameworkWizardProvider extends AbstractPortletFrameworkWizardProvider {
+public class VaadinPortletFrameworkWizardProvider extends AbstractPortletFrameworkWizardProvider
+{
 
-	public VaadinPortletFrameworkWizardProvider() {
-		super();
-	}
+    public VaadinPortletFrameworkWizardProvider()
+    {
+        super();
+    }
 
-	public IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject) {
-		// nothing todo for vaadin projects
+    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    {
+        // nothing todo for vaadin projects
 
-		return Status.OK_STATUS;
-	}
-    
-	public void reinitialize()
-	{
-	    // do nothing
-	}
+        return Status.OK_STATUS;
+    }
+
+    public void reinitialize()
+    {
+        // do nothing
+    }
 
 }

@@ -8,6 +8,7 @@
  * Contributors:
  *     IBM Corporation - Initial API and implementation
  *******************************************************************************/
+
 package com.liferay.ide.server.ui.cmd;
 
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
@@ -21,36 +22,43 @@ import org.eclipse.core.runtime.IStatus;
 /**
  * A command on a Remote server.
  */
-public abstract class RemoteServerCommand extends AbstractOperation {
+public abstract class RemoteServerCommand extends AbstractOperation
+{
 
-	protected IRemoteServerWorkingCopy server;
+    protected IRemoteServerWorkingCopy server;
 
-	/**
-	 * ServerCommand constructor comment.
-	 * 
-	 * @param server a Tomcat server
-	 * @param label a label
-	 */
-	public RemoteServerCommand( IRemoteServerWorkingCopy server, String label ) {
-		super(label);
-		this.server = server;
-	}
-	
-	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		return execute(monitor, info);
-	}
+    /**
+     * ServerCommand constructor comment.
+     * 
+     * @param server
+     *            a Tomcat server
+     * @param label
+     *            a label
+     */
+    public RemoteServerCommand( IRemoteServerWorkingCopy server, String label )
+    {
+        super( label );
+        this.server = server;
+    }
 
-	public abstract void execute();
+    public IStatus redo( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        return execute( monitor, info );
+    }
 
-	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		execute();
-		return null;
-	}
+    public abstract void execute();
 
-	public abstract void undo();
+    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        execute();
+        return null;
+    }
 
-	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		undo();
-		return null;
-	}
+    public abstract void undo();
+
+    public IStatus undo( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        undo();
+        return null;
+    }
 }

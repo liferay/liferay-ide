@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -52,51 +52,55 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( {
-	"restriction",
-})
+@SuppressWarnings( { "restriction" } )
 public class AddServiceBuilderOperation extends LiferayDataModelOperation
-	implements INewServiceBuilderDataModelProperties {
+    implements INewServiceBuilderDataModelProperties
+{
 
-	public AddServiceBuilderOperation(IDataModel model, TemplateStore templateStore, TemplateContextType contextType) {
-		super(model, templateStore, contextType);
-	}
+    public AddServiceBuilderOperation( IDataModel model, TemplateStore templateStore, TemplateContextType contextType )
+    {
+        super( model, templateStore, contextType );
+    }
 
-	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
-		throws ExecutionException {
+    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        IStatus retval = null;
 
-		IStatus retval = null;
+        IStatus status = createServiceBuilderFile( getTargetProject() );
 
-		IStatus status = createServiceBuilderFile(getTargetProject());
+        if( !status.isOK() )
+        {
+            return status;
+        }
 
-		if (!status.isOK()) {
-			return status;
-		}
+        return retval;
+    }
 
-		return retval;
-	}
+    private IStatus createServiceBuilderFile( IProject project )
+    {
+        IFolder docroot = CoreUtil.getDocroot( project );
 
-	private IStatus createServiceBuilderFile(IProject project) {
-		IFolder docroot = CoreUtil.getDocroot( project );
+        IFile serviceBuilderFile = docroot.getFile( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) );
 
-		IFile serviceBuilderFile = docroot.getFile("WEB-INF/" + getDataModel().getStringProperty(SERVICE_FILE));
+        if( !serviceBuilderFile.exists() )
+        {
+            try
+            {
+                createDefaultServiceBuilderFile( serviceBuilderFile );
+            }
+            catch( Exception ex )
+            {
+                return PortletCore.createErrorStatus( ex );
+            }
+        }
 
-		if (!serviceBuilderFile.exists()) {
-			try {
-				createDefaultServiceBuilderFile(serviceBuilderFile);
-			}
-			catch (Exception ex) {
-				return PortletCore.createErrorStatus(ex);
-			}
-		}
+        return Status.OK_STATUS;
+    }
 
-		return Status.OK_STATUS;
-	}
-
-	protected void createDefaultServiceBuilderFile(IFile serviceBuilderFile)
-		throws UnsupportedEncodingException, CoreException, BadLocationException, TemplateException {
-
-		Template template = null;
+    protected void createDefaultServiceBuilderFile( IFile serviceBuilderFile ) throws UnsupportedEncodingException,
+        CoreException, BadLocationException, TemplateException
+    {
+        Template template = null;
 
         try
         {
@@ -131,33 +135,36 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
             }
         }
 
-		IDocument document = new Document();
+        IDocument document = new Document();
 
-		TemplateContext context = new DocumentTemplateContext(getContextType(), document, 0, 0);
-		context.setVariable("package_path", getDataModel().getStringProperty(PACKAGE_PATH));
-		context.setVariable("namespace", getDataModel().getStringProperty(NAMESPACE));
-		context.setVariable("author", getDataModel().getStringProperty(AUTHOR));
+        TemplateContext context = new DocumentTemplateContext( getContextType(), document, 0, 0 );
+        context.setVariable( "package_path", getDataModel().getStringProperty( PACKAGE_PATH ) );
+        context.setVariable( "namespace", getDataModel().getStringProperty( NAMESPACE ) );
+        context.setVariable( "author", getDataModel().getStringProperty( AUTHOR ) );
 
-		String templateString = null;
+        String templateString = null;
 
-		TemplateBuffer buffer = context.evaluate(template);
+        TemplateBuffer buffer = context.evaluate( template );
 
-		templateString = buffer.getString();
+        templateString = buffer.getString();
 
-		CoreUtil.prepareFolder((IFolder) serviceBuilderFile.getParent());
+        CoreUtil.prepareFolder( (IFolder) serviceBuilderFile.getParent() );
 
-		serviceBuilderFile.create(new ByteArrayInputStream(templateString.getBytes("UTF-8")), IResource.FORCE, null);
+        serviceBuilderFile.create(
+            new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null );
 
-		FormatProcessorXML processor = new FormatProcessorXML();
+        FormatProcessorXML processor = new FormatProcessorXML();
 
-		try {
-			processor.formatFile(serviceBuilderFile);
-		}
-		catch (IOException e) {
-			PortletCore.logError(e);
-		}
+        try
+        {
+            processor.formatFile( serviceBuilderFile );
+        }
+        catch( IOException e )
+        {
+            PortletCore.logError( e );
+        }
 
-		getDataModel().setProperty(CREATED_SERVICE_FILE, serviceBuilderFile);
-	}
+        getDataModel().setProperty( CREATED_SERVICE_FILE, serviceBuilderFile );
+    }
 
 }

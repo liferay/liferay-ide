@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,17 +20,20 @@ import org.eclipse.jdt.launching.IVMInstallType;
 /**
  * @author Greg Amerson
  */
-public class JavaUtil {
+public class JavaUtil
+{
 
-	public static String createUniqueId(IVMInstallType vmType) {
-		String id = null;	
-		
-		do {
-			id = String.valueOf(System.currentTimeMillis());
-		}
-		while (vmType.findVMInstall(id) != null);
-		
-		return id;		
-	}
+    public static String createUniqueId( IVMInstallType vmType )
+    {
+        String id = null;
+
+        do
+        {
+            id = String.valueOf( System.currentTimeMillis() );
+        }
+        while( vmType.findVMInstall( id ) != null );
+
+        return id;
+    }
 
 }

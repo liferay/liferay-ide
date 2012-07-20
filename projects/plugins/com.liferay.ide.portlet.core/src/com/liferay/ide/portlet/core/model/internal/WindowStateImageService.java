@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,8 +18,8 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.ICustomWindowState;
-import com.liferay.ide.portlet.core.model.IWindowState;
+import com.liferay.ide.portlet.core.model.CustomWindowState;
+import com.liferay.ide.portlet.core.model.WindowState;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -35,74 +35,75 @@ import org.eclipse.sapphire.services.ImageServiceData;
 public class WindowStateImageService extends ImageService
 {
 
-	private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
-		WindowStateImageService.class, "images/window_states.png" );
+    private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
+        WindowStateImageService.class, "images/window_states.png" );
 
-	private static final ImageData IMG_MAXIMIZED = ImageData.readFromClassLoader(
-		WindowStateImageService.class, "images/maximize.png" );
+    private static final ImageData IMG_MAXIMIZED = ImageData.readFromClassLoader(
+        WindowStateImageService.class, "images/maximize.png" );
 
-	private static final ImageData IMG_MINIMIZED = ImageData.readFromClassLoader(
-		WindowStateImageService.class, "images/minimize.png" );
+    private static final ImageData IMG_MINIMIZED = ImageData.readFromClassLoader(
+        WindowStateImageService.class, "images/minimize.png" );
 
-	private Listener listener;
+    private Listener listener;
 
-	@Override
-	protected void initImageService()
-	{
-		this.listener = new FilteredListener<PropertyEvent>()
-		{
-			@Override
-			public void handleTypedEvent( final PropertyEvent event )
-			{
-				refresh();
-			}
-		};
+    @Override
+    protected void initImageService()
+    {
+        this.listener = new FilteredListener<PropertyEvent>()
+        {
 
-		context( IModelElement.class ).attach( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
-	}
+            @Override
+            public void handleTypedEvent( final PropertyEvent event )
+            {
+                refresh();
+            }
+        };
 
-	@Override
-	protected ImageServiceData compute()
-	{
-		String strWindowState = null;
-		IModelElement element = context( IModelElement.class );
-		ImageData imageData = null;
+        context( IModelElement.class ).attach( this.listener, WindowState.PROP_WINDOW_STATE.getName() );
+    }
 
-		if ( element instanceof ICustomWindowState )
-		{
-			ICustomWindowState customWindowState = (ICustomWindowState) element;
-			strWindowState = String.valueOf( customWindowState.getWindowState().getContent() );
-		}
-		else if ( element instanceof IWindowState )
-		{
-			IWindowState windowState = (IWindowState) element;
-			strWindowState = windowState.getWindowState().getContent();
-		}
+    @Override
+    protected ImageServiceData compute()
+    {
+        String strWindowState = null;
+        IModelElement element = context( IModelElement.class );
+        ImageData imageData = null;
 
-		if ( "MAXIMIZED".equalsIgnoreCase( strWindowState ) )
-		{
-			imageData = IMG_MAXIMIZED;
-		}
-		else if ( "MINIMIZED".equalsIgnoreCase( strWindowState ) )
-		{
-			imageData = IMG_MINIMIZED;
-		}
+        if( element instanceof CustomWindowState )
+        {
+            CustomWindowState customWindowState = (CustomWindowState) element;
+            strWindowState = String.valueOf( customWindowState.getWindowState().getContent() );
+        }
+        else if( element instanceof WindowState )
+        {
+            WindowState windowState = (WindowState) element;
+            strWindowState = windowState.getWindowState().getContent();
+        }
 
-		if ( imageData == null )
-		{
-			imageData = IMG_DEFAULT;
+        if( "MAXIMIZED".equalsIgnoreCase( strWindowState ) )
+        {
+            imageData = IMG_MAXIMIZED;
+        }
+        else if( "MINIMIZED".equalsIgnoreCase( strWindowState ) )
+        {
+            imageData = IMG_MINIMIZED;
+        }
 
-		}
+        if( imageData == null )
+        {
+            imageData = IMG_DEFAULT;
 
-		return new ImageServiceData( imageData );
-	}
+        }
 
-	@Override
-	public void dispose()
-	{
-		super.dispose();
+        return new ImageServiceData( imageData );
+    }
 
-		context( IModelElement.class ).detach( this.listener, IWindowState.PROP_WINDOW_STATE.getName() );
-	}
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        context( IModelElement.class ).detach( this.listener, WindowState.PROP_WINDOW_STATE.getName() );
+    }
 
 }

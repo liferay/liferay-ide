@@ -14,9 +14,10 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.hook.core.model.IHook;
+import com.liferay.ide.hook.core.model.Hook;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.LayeredListBindingImpl;
@@ -26,13 +27,14 @@ import org.eclipse.sapphire.modeling.LayeredListBindingImpl;
  */
 public abstract class HookListBindingImpl extends LayeredListBindingImpl
 {
-	protected IHook hook()
-	{
-		return this.element().nearest( IHook.class );
-	}
 
-	protected IProject project()
-	{
-		return this.hook().adapt( IProject.class );
-	}
+    protected Hook hook()
+    {
+        return this.element().nearest( Hook.class );
+    }
+
+    protected IProject project()
+    {
+        return this.hook().adapt( IProject.class );
+    }
 }

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.liferay.ide.eclipse.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="com.liferay.ide.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.eclipse.server.core" id="runtimeStubs" name="Liferay Runtime Stubs"/>
+         <meta.schema plugin="com.liferay.ide.server.core" id="runtimeStubs" name="Liferay Runtime Stubs"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]

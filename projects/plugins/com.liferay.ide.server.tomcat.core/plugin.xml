@@ -54,7 +54,7 @@
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.60"
             initialState="stopped"
-            launchConfigId="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
+            launchConfigId="com.liferay.ide.server.tomcat.60.launchConfigurationType"
             name="Liferay v6.0 CE Server (Tomcat 6)"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
@@ -69,7 +69,7 @@
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.tomcat.70"
             initialState="stopped"
-            launchConfigId="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
+            launchConfigId="com.liferay.ide.server.tomcat.70.launchConfigurationType"
             name="Liferay v6.1 CE Server (Tomcat 7)"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70"
@@ -82,26 +82,26 @@
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
-            id="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
+            id="com.liferay.ide.server.tomcat.60.launchConfigurationType"
             modes="run, debug, profile"
             name="Liferay v6.0 CE (Tomcat 6)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
-            id="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
+            id="com.liferay.ide.server.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
             name="Liferay v6.1 CE (Tomcat 7)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.core.sourcePathComputers">
       <sourcePathComputer
             class="org.eclipse.jst.server.tomcat.core.internal.TomcatSourcePathComputerDelegate"
-            id="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+            id="com.liferay.ide.server.tomcat.sourcePathComputer">
       </sourcePathComputer>
    </extension>
    
@@ -109,7 +109,7 @@
          point="org.eclipse.wst.server.core.publishTasks">
       <publishTask
             class="com.liferay.ide.server.tomcat.core.LiferayPublishTask"
-            id="com.liferay.ide.eclipse.server.tomcat.publishTask"
+            id="com.liferay.ide.server.tomcat.publishTask"
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
       </publishTask>
    </extension>
@@ -228,7 +228,7 @@
    </extension>
 
 	<extension
-         point="com.liferay.ide.eclipse.server.core.pluginPublishers">
+         point="com.liferay.ide.server.core.pluginPublishers">
       <liferayPluginPublisher
             class="com.liferay.ide.server.tomcat.core.TomcatExtPluginPublisher"
             facetId="liferay.ext"

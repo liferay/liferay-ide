@@ -20,8 +20,8 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.hook.core.model.ICustomJsp;
-import com.liferay.ide.hook.core.model.ICustomJspDir;
+import com.liferay.ide.hook.core.model.CustomJsp;
+import com.liferay.ide.hook.core.model.CustomJspDir;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,23 +38,22 @@ import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Resource;
 
-
 /**
  * @author Gregory Amerson
  */
 public class CustomJspsBindingImpl extends HookListBindingImpl
 {
 
-	private List<ObjectValue<String>> customJsps;
-	private IPath lastCustomJspDirPath;
-	private IPath portalDir;
+    private List<ObjectValue<String>> customJsps;
+    private IPath lastCustomJspDirPath;
+    private IPath portalDir;
 
     @Override
     protected List<?> readUnderlyingList()
     {
         IFolder customJspFolder = getCustomJspFolder();
 
-        if ( customJspFolder == null || this.portalDir == null )
+        if( customJspFolder == null || this.portalDir == null )
         {
             this.lastCustomJspDirPath = null;
             return Collections.emptyList();
@@ -62,7 +61,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
 
         IPath customJspDirPath = customJspFolder.getProjectRelativePath();
 
-        if ( customJspDirPath != null && customJspDirPath.equals( lastCustomJspDirPath ) )
+        if( customJspDirPath != null && customJspDirPath.equals( lastCustomJspDirPath ) )
         {
             return this.customJsps;
         }
@@ -73,14 +72,14 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
 
         IFile[] customJspFiles = getCustomJspFiles();
 
-        for ( IFile customJspFile : customJspFiles )
+        for( IFile customJspFile : customJspFiles )
         {
             IPath customJspFilePath = customJspFile.getProjectRelativePath();
 
             IPath customJspPath =
                 customJspFilePath.removeFirstSegments( customJspFilePath.matchingFirstSegments( customJspDirPath ) );
 
-            this.customJsps.add(new ObjectValue<String>(customJspPath.toPortableString()));
+            this.customJsps.add( new ObjectValue<String>( customJspPath.toPortableString() ) );
         }
 
         return this.customJsps;
@@ -90,7 +89,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     @Override
     protected Resource resource( Object obj )
     {
-        return new CustomJspResource( this.element().resource(),  (ObjectValue<String>) obj );
+        return new CustomJspResource( this.element().resource(), (ObjectValue<String>) obj );
     }
 
     @Override
@@ -98,7 +97,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     {
         ObjectValue<String> retval = null;
 
-        if ( type.equals( ICustomJsp.TYPE ) )
+        if( type.equals( CustomJsp.TYPE ) )
         {
             retval = new ObjectValue<String>();
             this.customJsps.add( retval );
@@ -107,99 +106,99 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
         return retval;
     }
 
-	private void findJspFiles( IFolder folder, List<IFile> jspFiles ) throws CoreException
-	{
-		if ( folder == null || !folder.exists() )
-		{
-			return;
-		}
+    private void findJspFiles( IFolder folder, List<IFile> jspFiles ) throws CoreException
+    {
+        if( folder == null || !folder.exists() )
+        {
+            return;
+        }
 
-		IResource[] members = folder.members( IResource.FOLDER | IResource.FILE );
+        IResource[] members = folder.members( IResource.FOLDER | IResource.FILE );
 
-		for ( IResource member : members )
-		{
-			if ( member instanceof IFile && "jsp".equals( member.getFileExtension() ) )
-			{
-				jspFiles.add( (IFile) member );
-			}
-			else if ( member instanceof IFolder )
-			{
-				findJspFiles( (IFolder) member, jspFiles );
-			}
-		}
+        for( IResource member : members )
+        {
+            if( member instanceof IFile && "jsp".equals( member.getFileExtension() ) )
+            {
+                jspFiles.add( (IFile) member );
+            }
+            else if( member instanceof IFolder )
+            {
+                findJspFiles( (IFolder) member, jspFiles );
+            }
+        }
 
-	}
+    }
 
-	private IFile[] getCustomJspFiles()
-	{
-		List<IFile> customJspFiles = new ArrayList<IFile>();
+    private IFile[] getCustomJspFiles()
+    {
+        List<IFile> customJspFiles = new ArrayList<IFile>();
 
-		IFolder customJspFolder = getCustomJspFolder();
+        IFolder customJspFolder = getCustomJspFolder();
 
-		try
-		{
-			findJspFiles( customJspFolder, customJspFiles );
-		}
-		catch ( CoreException e )
-		{
-			e.printStackTrace();
-		}
+        try
+        {
+            findJspFiles( customJspFolder, customJspFiles );
+        }
+        catch( CoreException e )
+        {
+            e.printStackTrace();
+        }
 
-		return customJspFiles.toArray( new IFile[0] );
-	}
+        return customJspFiles.toArray( new IFile[0] );
+    }
 
-	private IFolder getCustomJspFolder()
-	{
-		ICustomJspDir element = this.hook().getCustomJspDir().element();
-		IFolder docroot = CoreUtil.getDocroot( project() );
+    private IFolder getCustomJspFolder()
+    {
+        CustomJspDir element = this.hook().getCustomJspDir().element();
+        IFolder docroot = CoreUtil.getDocroot( project() );
 
-		if ( element != null && docroot != null )
-		{
-			Path customJspDir = element.getValue().getContent();
-			IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
-			return customJspFolder;
-		}
-		else
-		{
-			return null;
-		}
-	}
+        if( element != null && docroot != null )
+        {
+            Path customJspDir = element.getValue().getContent();
+            IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+            return customJspFolder;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params )
-	{
-		super.init( element, property, params );
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
 
-		try
-		{
-			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project() );
+        try
+        {
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project() );
 
-			if ( liferayRuntime != null )
-			{
-				this.portalDir = liferayRuntime.getPortalDir();
-			}
-		}
-		catch ( CoreException e )
-		{
-		}
-	}
+            if( liferayRuntime != null )
+            {
+                this.portalDir = liferayRuntime.getPortalDir();
+            }
+        }
+        catch( CoreException e )
+        {
+        }
+    }
 
-	@Override
-	public void remove( Resource resource )
-	{
+    @Override
+    public void remove( Resource resource )
+    {
         ObjectValue<String> customJsp = resource.adapt( CustomJspResource.class ).getCustomJsp();
-		this.customJsps.remove( customJsp );
-	}
+        this.customJsps.remove( customJsp );
+    }
 
-	@Override
-	public ModelElementType type( Resource resource )
-	{
-		if ( resource instanceof CustomJspResource )
-		{
-			return ICustomJsp.TYPE;
-		}
+    @Override
+    public ModelElementType type( Resource resource )
+    {
+        if( resource instanceof CustomJspResource )
+        {
+            return CustomJsp.TYPE;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

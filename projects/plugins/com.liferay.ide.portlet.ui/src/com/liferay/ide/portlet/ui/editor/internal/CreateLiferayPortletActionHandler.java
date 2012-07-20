@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,26 +28,29 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class CreateLiferayPortletActionHandler extends SapphireActionHandler {
+public class CreateLiferayPortletActionHandler extends SapphireActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		IProject currentProject = null;
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        IProject currentProject = null;
 
-		if ( context.getPart().getParentPart() instanceof PortletXmlEditor ) {
-			PortletXmlEditor portletXmlEditor = (PortletXmlEditor) context.getPart().getParentPart();
-			currentProject = portletXmlEditor.getProject();
-		}
+        if( context.getPart().getParentPart() instanceof PortletXmlEditor )
+        {
+            PortletXmlEditor portletXmlEditor = (PortletXmlEditor) context.getPart().getParentPart();
+            currentProject = portletXmlEditor.getProject();
+        }
 
-		NewPortletWizard newPortletWizard = new NewPortletWizard( currentProject );
-		WizardDialog wizardDialog = new WizardDialog( context.getShell(), newPortletWizard );
-		wizardDialog.create();
-		wizardDialog.open();
-		return null;
-	}
+        NewPortletWizard newPortletWizard = new NewPortletWizard( currentProject );
+        WizardDialog wizardDialog = new WizardDialog( context.getShell(), newPortletWizard );
+        wizardDialog.create();
+        wizardDialog.open();
+        return null;
+    }
 
 }

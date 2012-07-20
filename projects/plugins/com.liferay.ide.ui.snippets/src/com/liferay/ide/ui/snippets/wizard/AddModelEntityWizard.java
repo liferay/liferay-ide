@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,16 +20,19 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class AddModelEntityWizard extends AbstractModelWizard {
+public class AddModelEntityWizard extends AbstractModelWizard
+{
 
-	public AddModelEntityWizard(IEditorPart fEditorPart) {
-		super(fEditorPart);
-		setWindowTitle("Add Model Entity");
-	}
+    public AddModelEntityWizard( IEditorPart fEditorPart )
+    {
+        super( fEditorPart );
+        setWindowTitle( "Add Model Entity" );
+    }
 
-	@Override
-	protected AbstractModelWizardPage createModelWizardPage(IEditorPart editorPart) {
-		return new AddModelEntityWizardPage("addModelEntityWizardPage", editorPart);
-	}
+    @Override
+    protected AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart )
+    {
+        return new AddModelEntityWizardPage( "addModelEntityWizardPage", editorPart );
+    }
 
 }

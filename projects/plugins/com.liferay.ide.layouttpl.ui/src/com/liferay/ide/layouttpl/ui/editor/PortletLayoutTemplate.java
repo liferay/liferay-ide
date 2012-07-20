@@ -17,40 +17,39 @@
 
 package com.liferay.ide.layouttpl.ui.editor;
 
-
 /**
  * @author Gregory Amerson
  */
 public class PortletLayoutTemplate
 {
 
-	private int numColumns;
-	private int[] weights;
+    private int numColumns;
+    private int[] weights;
 
-	public PortletLayoutTemplate( int numCols, int... weights )
-	{
-		if ( numCols < 1 )
-		{
-			throw new IllegalArgumentException( "Number of columns must be greater than 0" );
-		}
+    public PortletLayoutTemplate( int numCols, int... weights )
+    {
+        if( numCols < 1 )
+        {
+            throw new IllegalArgumentException( "Number of columns must be greater than 0" );
+        }
 
-		if ( numCols != weights.length )
-		{
-			throw new IllegalArgumentException( "Number of weight args must match number of columns." );
-		}
+        if( numCols != weights.length )
+        {
+            throw new IllegalArgumentException( "Number of weight args must match number of columns." );
+        }
 
-		this.numColumns = numCols;
-		this.weights = weights;
-	}
+        this.numColumns = numCols;
+        this.weights = weights;
+    }
 
-	public int getNumCols()
-	{
-		return this.numColumns;
-	}
+    public int getNumCols()
+    {
+        return this.numColumns;
+    }
 
-	public int[] getWeights()
-	{
-		return this.weights;
-	}
+    public int[] getWeights()
+    {
+        return this.weights;
+    }
 
 }

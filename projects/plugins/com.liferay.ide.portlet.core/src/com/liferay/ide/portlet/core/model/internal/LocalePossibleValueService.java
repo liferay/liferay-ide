@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,23 +25,24 @@ import java.util.SortedSet;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> TODO: this need to filter from Liferay
- *         Portal Properties
+ * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> 
  */
-public class LocalePossibleValueService extends PossibleValuesService {
+public class LocalePossibleValueService extends PossibleValuesService
+{
+    static final Locale[] locales = Locale.getAvailableLocales();
 
-	static final Locale[] locales = Locale.getAvailableLocales();
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
+     */
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        // System.out.println( "LocalePossibleValueService.fillPossibleValues()-1" );
+        for( Locale locale : locales )
+        {
+            values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
+        }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-	 */
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values ) {
-		// System.out.println( "LocalePossibleValueService.fillPossibleValues()-1" );
-		for ( Locale locale : locales ) {
-			values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
-		}
-
-	}
+    }
 }

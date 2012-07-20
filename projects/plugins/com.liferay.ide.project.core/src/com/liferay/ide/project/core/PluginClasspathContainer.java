@@ -17,10 +17,10 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.util.SDKUtil;
+import com.liferay.ide.server.core.LiferayServerCorePlugin;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -49,363 +49,415 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public abstract class PluginClasspathContainer implements IClasspathContainer {
+@SuppressWarnings( "restriction" )
+public abstract class PluginClasspathContainer implements IClasspathContainer
+{
 
     protected static final Collection<String> portalSourceJars = Arrays.asList
-    (     
+    (
         "util-bridges.jar", 
         "util-java.jar", 
         "util-taglib.jar", 
-        "portal-impl.jar"
+        "portal-impl.jar" 
     );
-    
-	protected static ClasspathDecorationsManager cpDecorations;
 
-	protected static final String SEPARATOR = "!";
+    protected static ClasspathDecorationsManager cpDecorations;
 
-	static {
-		cpDecorations = new ClasspathDecorationsManager(LiferayServerCorePlugin.PLUGIN_ID);
-	}
+    protected static final String SEPARATOR = "!";
 
-	public static String getDecorationManagerKey(IProject project, String container) {
-		return project.getName() + SEPARATOR + container;
-	}
+    static
+    {
+        cpDecorations = new ClasspathDecorationsManager( LiferayServerCorePlugin.PLUGIN_ID );
+    }
 
-	static ClasspathDecorationsManager getDecorationsManager() {
-		return cpDecorations;
-	}
+    public static String getDecorationManagerKey( IProject project, String container )
+    {
+        return project.getName() + SEPARATOR + container;
+    }
 
-	protected IClasspathEntry[] classpathEntries;
+    static ClasspathDecorationsManager getDecorationsManager()
+    {
+        return cpDecorations;
+    }
 
-	protected IJavaProject javaProject;
+    protected IClasspathEntry[] classpathEntries;
 
-	protected IPath path;
+    protected IJavaProject javaProject;
 
-	protected IPath pluginPackageFilePath;
+    protected IPath path;
 
-	protected IPath portalDir;
+    protected IPath pluginPackageFilePath;
 
-	protected String javadocURL;
-    
-	protected IPath sourceLocation;
+    protected IPath portalDir;
 
-	public PluginClasspathContainer( IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
-	{
-		this.path = containerPath;
-		this.javaProject = project;
-		this.portalDir = portalDir;
-		this.javadocURL = javadocURL;
-		this.sourceLocation = sourceURL;
-	}
+    protected String javadocURL;
 
-	public IClasspathEntry[] getClasspathEntries() {
-		if (this.classpathEntries == null) {
-			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+    protected IPath sourceLocation;
 
-			if (this.portalDir != null) {
-				for (String pluginJar : getPortalJars()) {
-					entries.add(createPortalJarClasspathEntry(pluginJar));
-				}
+    public PluginClasspathContainer(
+        IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL )
+    {
+        this.path = containerPath;
+        this.javaProject = project;
+        this.portalDir = portalDir;
+        this.javadocURL = javadocURL;
+        this.sourceLocation = sourceURL;
+    }
 
-				for (String pluginPackageJar : getPortalDependencyJars()) {
-					entries.add(createPortalJarClasspathEntry(pluginPackageJar));
-				}			}
+    public IClasspathEntry[] getClasspathEntries()
+    {
+        if( this.classpathEntries == null )
+        {
+            List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 
-			this.classpathEntries = entries.toArray(new IClasspathEntry[entries.size()]);
-		}
+            if( this.portalDir != null )
+            {
+                for( String pluginJar : getPortalJars() )
+                {
+                    entries.add( createPortalJarClasspathEntry( pluginJar ) );
+                }
 
-		return this.classpathEntries;
-	}
+                for( String pluginPackageJar : getPortalDependencyJars() )
+                {
+                    entries.add( createPortalJarClasspathEntry( pluginPackageJar ) );
+                }
+            }
 
-	public abstract String getDescription();
+            this.classpathEntries = entries.toArray( new IClasspathEntry[entries.size()] );
+        }
 
-	public int getKind() {
-		return K_APPLICATION;
-	}
+        return this.classpathEntries;
+    }
 
-	public IPath getPath() {
-		return this.path;
-	}
+    public abstract String getDescription();
 
-	public IPath getPortalDir() {
-		return portalDir;
-	}
+    public int getKind()
+    {
+        return K_APPLICATION;
+    }
 
-	public String getJavadocURL()
-	{
-		return javadocURL;
-	}
-	
-	public IPath getSourceLocation()
+    public IPath getPath()
+    {
+        return this.path;
+    }
+
+    public IPath getPortalDir()
+    {
+        return portalDir;
+    }
+
+    public String getJavadocURL()
+    {
+        return javadocURL;
+    }
+
+    public IPath getSourceLocation()
     {
         return sourceLocation;
     }
 
-	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourcePath )
-	{
-		return createClasspathEntry( entryPath, sourcePath, null );
-	}
+    protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourcePath )
+    {
+        return createClasspathEntry( entryPath, sourcePath, null );
+    }
 
-	protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourceLocation, String javadocURL )
-	{
-		IPath sourceRootPath = null;
-		IPath sourcePath = null;
-		IAccessRule[] rules = new IAccessRule[] {};
-		IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
+    protected IClasspathEntry createClasspathEntry( IPath entryPath, IPath sourceLocation, String javadocURL )
+    {
+        IPath sourceRootPath = null;
+        IPath sourcePath = null;
+        IAccessRule[] rules = new IAccessRule[] {};
+        IClasspathAttribute[] attrs = new IClasspathAttribute[] {};
 
-		final ClasspathDecorations dec =
-			cpDecorations.getDecorations(
-				getDecorationManagerKey(javaProject.getProject(), getPath().toString()), entryPath.toString());
+        final ClasspathDecorations dec =
+            cpDecorations.getDecorations(
+                getDecorationManagerKey( javaProject.getProject(), getPath().toString() ), entryPath.toString() );
 
-		if (dec != null) {
-			sourcePath = dec.getSourceAttachmentPath();
-			sourceRootPath = dec.getSourceAttachmentRootPath();
-			attrs = dec.getExtraAttributes();
-		}
+        if( dec != null )
+        {
+            sourcePath = dec.getSourceAttachmentPath();
+            sourceRootPath = dec.getSourceAttachmentRootPath();
+            attrs = dec.getExtraAttributes();
+        }
 
-		if ( javadocURL != null )
-		{
-			if ( CoreUtil.empty( attrs ) )
-			{
-				attrs = new IClasspathAttribute[] { newJavadocAttr( javadocURL ) };
-			}
-			else
-			{
-				List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
+        if( javadocURL != null )
+        {
+            if( CoreUtil.empty( attrs ) )
+            {
+                attrs = new IClasspathAttribute[] { newJavadocAttr( javadocURL ) };
+            }
+            else
+            {
+                List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
 
-				for ( IClasspathAttribute attr : attrs )
-				{
-					if ( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals( attr.getName() ) )
-					{
-						newAttrs.add( newJavadocAttr( javadocURL ) );
-					}
-					else
-					{
-						newAttrs.add( attr );
-					}
-				}
+                for( IClasspathAttribute attr : attrs )
+                {
+                    if( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME.equals( attr.getName() ) )
+                    {
+                        newAttrs.add( newJavadocAttr( javadocURL ) );
+                    }
+                    else
+                    {
+                        newAttrs.add( attr );
+                    }
+                }
 
-				attrs = newAttrs.toArray( new IClasspathAttribute[0] );
-			}
-		}
-        
-		if( sourcePath == null && sourceLocation != null )
-		{
-		    sourcePath = sourceLocation;
-		}
+                attrs = newAttrs.toArray( new IClasspathAttribute[0] );
+            }
+        }
 
-		return JavaCore.newLibraryEntry( entryPath, sourcePath, sourceRootPath, rules, attrs, false );
-	}
+        if( sourcePath == null && sourceLocation != null )
+        {
+            sourcePath = sourceLocation;
+        }
 
-	protected IClasspathAttribute newJavadocAttr( String javadocURL )
-	{
-		return JavaCore.newClasspathAttribute( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, javadocURL );
-	}
+        return JavaCore.newLibraryEntry( entryPath, sourcePath, sourceRootPath, rules, attrs, false );
+    }
 
-	protected IClasspathEntry createContextClasspathEntry(String context) {
-		IClasspathEntry entry = null;
+    protected IClasspathAttribute newJavadocAttr( String javadocURL )
+    {
+        return JavaCore.newClasspathAttribute( IClasspathAttribute.JAVADOC_LOCATION_ATTRIBUTE_NAME, javadocURL );
+    }
 
-		IFile serviceJar = ProjectUtil.findServiceJarForContext(context);
+    protected IClasspathEntry createContextClasspathEntry( String context )
+    {
+        IClasspathEntry entry = null;
 
-		if (serviceJar.exists()) {
-			IFolder docroot = CoreUtil.getDocroot(serviceJar.getProject());
-			IFolder serviceFolder = docroot.getFolder("WEB-INF/service");
+        IFile serviceJar = ProjectUtil.findServiceJarForContext( context );
 
-			entry =
-				createClasspathEntry(serviceJar.getLocation(), serviceFolder.exists()
-					? serviceFolder.getLocation() : null );
-		}
+        if( serviceJar.exists() )
+        {
+            IFolder docroot = CoreUtil.getDocroot( serviceJar.getProject() );
+            IFolder serviceFolder = docroot.getFolder( "WEB-INF/service" );
 
-		if (entry == null) {
-			IProject project = this.javaProject.getProject();
+            entry =
+                createClasspathEntry( serviceJar.getLocation(), serviceFolder.exists()
+                    ? serviceFolder.getLocation() : null );
+        }
 
-			SDK sdk = SDKUtil.getSDK( project );
+        if( entry == null )
+        {
+            IProject project = this.javaProject.getProject();
 
-			IPath sdkLocation = sdk.getLocation();
+            SDK sdk = SDKUtil.getSDK( project );
 
-			String type =
-				ProjectUtil.isPortletProject(project) ? "portlets" : ProjectUtil.isHookProject(project)
-					? "hooks" : ProjectUtil.isExtProject(project) ? "ext" : "";
+            IPath sdkLocation = sdk.getLocation();
 
-			IPath serviceJarPath =
-				sdkLocation.append(type).append(context).append("docroot/WEB-INF/lib").append(context + "-service.jar");
+            String type =
+                ProjectUtil.isPortletProject( project ) ? "portlets" : ProjectUtil.isHookProject( project )
+                    ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : "";
 
-			if (serviceJarPath.toFile().exists()) {
-				IPath servicePath = serviceJarPath.removeLastSegments(2).append("service");
+            IPath serviceJarPath =
+                sdkLocation.append( type ).append( context ).append( "docroot/WEB-INF/lib" ).append(
+                    context + "-service.jar" );
 
-				entry = createClasspathEntry( serviceJarPath, servicePath.toFile().exists() ? servicePath : null );
-			}
-		}
+            if( serviceJarPath.toFile().exists() )
+            {
+                IPath servicePath = serviceJarPath.removeLastSegments( 2 ).append( "service" );
 
-		return entry;
-	}
+                entry = createClasspathEntry( serviceJarPath, servicePath.toFile().exists() ? servicePath : null );
+            }
+        }
 
-	protected IClasspathEntry createPortalJarClasspathEntry(String portalJar) {
-		IPath entryPath = this.portalDir.append("/WEB-INF/lib/" + portalJar);
-        
-		IPath sourcePath = null;
-		
-		if( portalSourceJars.contains( portalJar ) )
-		{
-		    sourcePath = getSourceLocation();
-		}
+        return entry;
+    }
 
-		return createClasspathEntry( entryPath, sourcePath, this.javadocURL );
-	}
+    protected IClasspathEntry createPortalJarClasspathEntry( String portalJar )
+    {
+        IPath entryPath = this.portalDir.append( "/WEB-INF/lib/" + portalJar );
 
-	protected IClasspathEntry findSuggestedEntry(IPath jarPath, IClasspathEntry[] suggestedEntries) {
-		// compare jarPath to an existing entry
-		if (jarPath != null && (!CoreUtil.isNullOrEmpty(jarPath.toString())) &&
-			(!CoreUtil.isNullOrEmpty(suggestedEntries))) {
-			int matchLength = jarPath.segmentCount();
+        IPath sourcePath = null;
 
-			for (IClasspathEntry suggestedEntry : suggestedEntries) {
-				IPath suggestedPath = suggestedEntry.getPath();
-				IPath pathToMatch =
-					suggestedPath.removeFirstSegments(suggestedPath.segmentCount() - matchLength).setDevice(null).makeAbsolute();
-				if (jarPath.equals(pathToMatch)) {
-					return suggestedEntry;
-				}
-			}
-		}
+        if( portalSourceJars.contains( portalJar ) )
+        {
+            sourcePath = getSourceLocation();
+        }
 
-		return null;
-	}
+        return createClasspathEntry( entryPath, sourcePath, this.javadocURL );
+    }
 
-	protected IFile getPluginPackageFile() {
-		IFile retval = null;
+    protected IClasspathEntry findSuggestedEntry( IPath jarPath, IClasspathEntry[] suggestedEntries )
+    {
+        // compare jarPath to an existing entry
+        if( jarPath != null && ( !CoreUtil.isNullOrEmpty( jarPath.toString() ) ) &&
+            ( !CoreUtil.isNullOrEmpty( suggestedEntries ) ) )
+        {
+            int matchLength = jarPath.segmentCount();
 
-		if (pluginPackageFilePath == null) {
-			retval = lookupPluginPackageFile();
+            for( IClasspathEntry suggestedEntry : suggestedEntries )
+            {
+                IPath suggestedPath = suggestedEntry.getPath();
+                IPath pathToMatch =
+                    suggestedPath.removeFirstSegments( suggestedPath.segmentCount() - matchLength ).setDevice( null ).makeAbsolute();
+                if( jarPath.equals( pathToMatch ) )
+                {
+                    return suggestedEntry;
+                }
+            }
+        }
 
-			if (retval != null && retval.exists()) {
-				pluginPackageFilePath = retval.getFullPath();
+        return null;
+    }
 
-				return retval;
-			}
-		}
-		else {
-			retval = ResourcesPlugin.getWorkspace().getRoot().getFile(pluginPackageFilePath);
+    protected IFile getPluginPackageFile()
+    {
+        IFile retval = null;
 
-			if (!retval.exists()) {
-				pluginPackageFilePath = null;
+        if( pluginPackageFilePath == null )
+        {
+            retval = lookupPluginPackageFile();
 
-				retval = lookupPluginPackageFile();
-			}
-		}
+            if( retval != null && retval.exists() )
+            {
+                pluginPackageFilePath = retval.getFullPath();
 
-		return retval;
-	}
+                return retval;
+            }
+        }
+        else
+        {
+            retval = ResourcesPlugin.getWorkspace().getRoot().getFile( pluginPackageFilePath );
 
-	protected String[] getPortalDependencyJars() {
-		String[] jars = new String[0];
+            if( !retval.exists() )
+            {
+                pluginPackageFilePath = null;
 
-		IFile pluginPackageFile = getPluginPackageFile();
+                retval = lookupPluginPackageFile();
+            }
+        }
 
-		try {
-			String deps = getPropertyValue("portal-dependency-jars", pluginPackageFile);
+        return retval;
+    }
 
-			String[] split = deps.split(",");
+    protected String[] getPortalDependencyJars()
+    {
+        String[] jars = new String[0];
 
-			if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
-				for ( int i = 0; i < split.length; i++ ) {
-					split[i] = split[i].trim();
-				}
+        IFile pluginPackageFile = getPluginPackageFile();
 
-				return split;
-			}
-		}
-		catch (Exception e) {
-		}
+        try
+        {
+            String deps = getPropertyValue( "portal-dependency-jars", pluginPackageFile );
 
-		return jars;
-	}
+            String[] split = deps.split( "," );
 
-	protected abstract String[] getPortalJars();
+            if( split.length > 0 && !( CoreUtil.isNullOrEmpty( split[0] ) ) )
+            {
+                for( int i = 0; i < split.length; i++ )
+                {
+                    split[i] = split[i].trim();
+                }
 
-	protected String getPropertyValue(String key, IFile propertiesFile) {
-		String retval = null;
+                return split;
+            }
+        }
+        catch( Exception e )
+        {
+        }
 
-		InputStream contents = null;
+        return jars;
+    }
 
-		try {
-			Properties props = new Properties();
-			contents = getPluginPackageFile().getContents();
-			props.load( contents );
+    protected abstract String[] getPortalJars();
 
-			retval = props.getProperty(key, "");
-		}
-		catch (Exception e) {
-		}
-		finally {
-			if ( contents != null ) {
-				try {
-					contents.close();
-				}
-				catch ( Exception e ) {
-					// best effort
-				}
-			}
-		}
+    protected String getPropertyValue( String key, IFile propertiesFile )
+    {
+        String retval = null;
 
-		return retval;
-	}
-	
-	protected String[] getRequiredDeploymentContexts() {
-		String[] jars = new String[0];
+        InputStream contents = null;
 
-		IFile pluginPackageFile = getPluginPackageFile();
+        try
+        {
+            Properties props = new Properties();
+            contents = getPluginPackageFile().getContents();
+            props.load( contents );
 
-		try {
-			String context = getPropertyValue("required-deployment-contexts", pluginPackageFile);
+            retval = props.getProperty( key, "" );
+        }
+        catch( Exception e )
+        {
+        }
+        finally
+        {
+            if( contents != null )
+            {
+                try
+                {
+                    contents.close();
+                }
+                catch( Exception e )
+                {
+                    // best effort
+                }
+            }
+        }
 
-			String[] split = context.split(",");
+        return retval;
+    }
 
-			if (split.length > 0 && !(CoreUtil.isNullOrEmpty(split[0]))) {
-				return split;
-			}
-		}
-		catch (Exception e) {
-		}
+    protected String[] getRequiredDeploymentContexts()
+    {
+        String[] jars = new String[0];
 
-		return jars;
-	}
+        IFile pluginPackageFile = getPluginPackageFile();
 
-	protected IFile lookupPluginPackageFile() {
-		IFile pluginPackageFile = null;
+        try
+        {
+            String context = getPropertyValue( "required-deployment-contexts", pluginPackageFile );
 
-		IVirtualComponent comp = ComponentCore.createComponent(this.javaProject.getProject());
+            String[] split = context.split( "," );
 
-		if (comp != null) {
-			IContainer resource = comp.getRootFolder().getUnderlyingFolder();
+            if( split.length > 0 && !( CoreUtil.isNullOrEmpty( split[0] ) ) )
+            {
+                return split;
+            }
+        }
+        catch( Exception e )
+        {
+        }
 
-			if (resource instanceof IFolder) {
-				IFolder webroot = (IFolder) resource;
+        return jars;
+    }
 
-				pluginPackageFile =
-					webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+    protected IFile lookupPluginPackageFile()
+    {
+        IFile pluginPackageFile = null;
 
-				if (!pluginPackageFile.exists()) {
-					// IDE-226 the file may be missing because we are in an ext plugin which has a different layout
-					// check for ext-web in the path to the docroot
+        IVirtualComponent comp = ComponentCore.createComponent( this.javaProject.getProject() );
 
-					if (webroot.getFullPath().toPortableString().endsWith("WEB-INF/ext-web/docroot")) {
-						// look for packages file in first docroot
-						IPath parentDocroot = webroot.getFullPath().removeFirstSegments(1).removeLastSegments(3);
-						IFolder parentWebroot = this.javaProject.getProject().getFolder(parentDocroot);
+        if( comp != null )
+        {
+            IContainer resource = comp.getRootFolder().getUnderlyingFolder();
 
-						if (parentWebroot.exists()) {
-							pluginPackageFile =
-								parentWebroot.getFile("WEB-INF/" +
-									ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
-						}
-					}
-				}
-			}
-		}
+            if( resource instanceof IFolder )
+            {
+                IFolder webroot = (IFolder) resource;
 
-		return pluginPackageFile;
-	}
+                pluginPackageFile =
+                    webroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
+
+                if( !pluginPackageFile.exists() )
+                {
+                    // IDE-226 the file may be missing because we are in an ext plugin which has a different layout
+                    // check for ext-web in the path to the docroot
+
+                    if( webroot.getFullPath().toPortableString().endsWith( "WEB-INF/ext-web/docroot" ) )
+                    {
+                        // look for packages file in first docroot
+                        IPath parentDocroot = webroot.getFullPath().removeFirstSegments( 1 ).removeLastSegments( 3 );
+                        IFolder parentWebroot = this.javaProject.getProject().getFolder( parentDocroot );
+
+                        if( parentWebroot.exists() )
+                        {
+                            pluginPackageFile =
+                                parentWebroot.getFile( "WEB-INF/" +
+                                    ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
+                        }
+                    }
+                }
+            }
+        }
+
+        return pluginPackageFile;
+    }
 
 }

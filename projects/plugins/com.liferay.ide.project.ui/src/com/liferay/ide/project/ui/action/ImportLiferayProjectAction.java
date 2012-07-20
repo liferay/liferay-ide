@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,56 +30,66 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * @author Greg Amerson
  */
-public class ImportLiferayProjectAction implements IObjectActionDelegate {
+public class ImportLiferayProjectAction implements IObjectActionDelegate
+{
+    private ISelection fSelection;
 
-	private ISelection fSelection;
+    public ImportLiferayProjectAction()
+    {
+    }
 
-	public ImportLiferayProjectAction() {
-	}
+    public Display getDisplay()
+    {
+        Display display = Display.getCurrent();
 
-	public Display getDisplay() {
-		Display display = Display.getCurrent();
-		
-		if (display == null)
-			display = Display.getDefault();
-		
-		return display;
-	}
+        if( display == null )
+            display = Display.getDefault();
 
-	public void run(IAction action) {
+        return display;
+    }
 
-		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection) fSelection).toArray();
-			
-			IFolder folder = null;
-			
-			Object elem = elems[0];
+    public void run( IAction action )
+    {
+        if( fSelection instanceof IStructuredSelection )
+        {
+            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
-			if ( elem instanceof IFolder ) {
-				folder = (IFolder) elem;
-			}
+            IFolder folder = null;
 
-			LiferayProjectImportWizard wizard = new LiferayProjectImportWizard( folder );
+            Object elem = elems[0];
 
-			final Display display = getDisplay();
-			
-			final WizardDialog dialog = new WizardDialog(display.getActiveShell(), wizard);
-			
-			BusyIndicator.showWhile(display, new Runnable() {
+            if( elem instanceof IFolder )
+            {
+                folder = (IFolder) elem;
+            }
 
-				public void run() {
-					dialog.open();
-				}
-			});
-		}
+            LiferayProjectImportWizard wizard = new LiferayProjectImportWizard( folder );
 
-	}
+            final Display display = getDisplay();
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		fSelection = selection;
-	}
+            final WizardDialog dialog = new WizardDialog( display.getActiveShell(), wizard );
 
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
+            BusyIndicator.showWhile
+            ( 
+                display, 
+                new Runnable()
+                {
+                    public void run()
+                    {
+                        dialog.open();
+                    }
+                }
+            );
+        }
+    }
+
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        fSelection = selection;
+    }
+
+    public void setActivePart( IAction action, IWorkbenchPart targetPart )
+    {
+    }
 
 }

@@ -14,9 +14,10 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.hook.core.model.IHook;
+import com.liferay.ide.hook.core.model.Hook;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.FilteredListener;
@@ -25,39 +26,39 @@ import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.services.EnablementService;
 import org.eclipse.sapphire.services.EnablementServiceData;
 
-
 /**
  * @author Gregory Amerson
  */
 public class PortalPropertiesOverridesEnablementService extends EnablementService
 {
-    
+
     @Override
     protected void initEnablementService()
     {
         Listener listener = new FilteredListener<PropertyEvent>()
         {
+
             protected void handleTypedEvent( PropertyEvent event )
             {
                 refresh();
             };
         };
-        
-        context( IHook.class ).attach( listener, IHook.PROP_PORTAL_PROPERTIES_FILE.getName() );
+
+        context( Hook.class ).attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.getName() );
     }
 
     @Override
     protected EnablementServiceData compute()
     {
         boolean retval = false;
-        
-        IFile file = HookMethods.getPortalPropertiesFile( context( IHook.class ) );
-        
-        if( file != null && file.exists())
+
+        IFile file = HookMethods.getPortalPropertiesFile( context( Hook.class ) );
+
+        if( file != null && file.exists() )
         {
             retval = true;
         }
-        
+
         return new EnablementServiceData( retval );
     }
 

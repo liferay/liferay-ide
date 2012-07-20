@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,12 +16,12 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.project.core.ILiferayProjectImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKManager;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.IWizard;
@@ -48,217 +48,236 @@ import org.eclipse.wst.web.ui.internal.wizards.DataModelFacetCreationWizardPage;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( {
-	"restriction"
-})
+@SuppressWarnings( { "restriction" } )
 public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizardPage
-	implements ILiferayProjectImportDataModelProperties {
+    implements ILiferayProjectImportDataModelProperties
+{
+    protected Text projectLocation;
+    protected Text pluginType;
+    protected Text sdkVersion;
+    protected ProjectRecord projectRecord = null;
+    protected Combo serverTargetCombo;
+    protected IProject[] wsProjects;
 
-	protected Text projectLocation;
+    public LiferayProjectImportWizardPage( IDataModel model, String pageName, IWizard parentWizard )
+    {
+        super( model, pageName );
 
-	protected Text pluginType;
+        if( parentWizard instanceof NewProjectFromSourceWizard )
+        {
+            setTitle( "New Liferay Project from Existing Source" );
+            setDescription( "Browse to an existing Liferay project to import." );
+        }
+        else
+        {
+            setTitle( "Import Liferay Project" );
+            setDescription( "Select an existing Liferay project to import." );
+        }
+    }
 
-	protected Text sdkVersion;
+    protected void createProjectLocationField( Composite topComposite )
+    {
+        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay project location:", 1 );
 
-	protected ProjectRecord projectRecord = null;
+        projectLocation = SWTUtil.createText( topComposite, 1 );
+        this.synchHelper.synchText( projectLocation, PROJECT_LOCATION, null );
+        this.synchHelper.getDataModel().addListener( new IDataModelListener()
+        {
+            public void propertyChanged( DataModelEvent event )
+            {
+                if( PROJECT_LOCATION.equals( event.getPropertyName() ) )
+                {
+                    updateProjectRecord( event.getDataModel().getStringProperty( PROJECT_LOCATION ) );
+                    synchHelper.synchAllUIWithModel();
+                    validatePage();
+                }
+            }
+        } );
 
-	protected Combo serverTargetCombo;
+        Button iconFileBrowse = SWTUtil.createPushButton( topComposite, "Browse...", null );
+        iconFileBrowse.setLayoutData( new GridData( GridData.VERTICAL_ALIGN_BEGINNING ) );
+        iconFileBrowse.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                handleFileBrowseButton( LiferayProjectImportWizardPage.this.projectLocation );
+            }
 
-	protected IProject[] wsProjects;
+        } );
+    }
 
-	public LiferayProjectImportWizardPage(IDataModel model, String pageName, IWizard parentWizard) {
-		super(model, pageName);
+    protected void createSDKVersionField( Composite topComposite )
+    {
+        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK version:", 1 );
 
-		if (parentWizard instanceof NewProjectFromSourceWizard) {
-			setTitle("New Liferay Project from Existing Source");
-			setDescription("Browse to an existing Liferay project to import.");
-		}
-		else {
-			setTitle("Import Liferay Project");
-			setDescription("Select an existing Liferay project to import.");
-		}
-	}
+        sdkVersion = SWTUtil.createText( topComposite, 1 );
+        this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-	protected void createProjectLocationField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay project location:", 1);
+        SWTUtil.createLabel( topComposite, "", 1 );
+    }
 
-		projectLocation = SWTUtil.createText(topComposite, 1);
-		this.synchHelper.synchText(projectLocation, PROJECT_LOCATION, null);		
-		this.synchHelper.getDataModel().addListener(new IDataModelListener() {
+    protected void createPluginTypeField( Composite topComposite )
+    {
+        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay plugin type:", 1 );
 
-			public void propertyChanged(DataModelEvent event) {
-				if (PROJECT_LOCATION.equals(event.getPropertyName())) {
-					updateProjectRecord(event.getDataModel().getStringProperty(PROJECT_LOCATION));
-					synchHelper.synchAllUIWithModel();
-					validatePage();
-				}
-			}
-		});
+        pluginType = SWTUtil.createText( topComposite, 1 );
+        this.synchHelper.synchText( pluginType, PLUGIN_TYPE, null );
 
-		Button iconFileBrowse = SWTUtil.createPushButton(topComposite, "Browse...", null);
-		iconFileBrowse.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
+        SWTUtil.createLabel( topComposite, "", 1 );
+    }
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(LiferayProjectImportWizardPage.this.projectLocation);
-			}
+    protected void createTargetRuntimeGroup( Composite parent )
+    {
+        Label label = new Label( parent, SWT.NONE );
+        label.setText( "Liferay target runtime:" );
+        label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
-		});
-	}
+        serverTargetCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
+        serverTargetCombo.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 
-	protected void createSDKVersionField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay Plugin SDK version:", 1);
+        Button newServerTargetButton = new Button( parent, SWT.NONE );
+        newServerTargetButton.setText( "New..." );
+        newServerTargetButton.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                final DataModelPropertyDescriptor[] preAdditionDescriptors =
+                    model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-		sdkVersion = SWTUtil.createText(topComposite, 1);
-		this.synchHelper.synchText(sdkVersion, SDK_VERSION, null);
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
 
-		SWTUtil.createLabel(topComposite, "", 1);
-	}
+                if( isOK )
+                {
+                    DataModelPropertyDescriptor[] postAdditionDescriptors =
+                        model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-	protected void createPluginTypeField(Composite topComposite) {
-		SWTUtil.createLabel(topComposite, SWT.LEAD, "Liferay plugin type:", 1);
+                    Object[] preAddition = new Object[preAdditionDescriptors.length];
 
-		pluginType = SWTUtil.createText(topComposite, 1);
-		this.synchHelper.synchText(pluginType, PLUGIN_TYPE, null);
+                    for( int i = 0; i < preAddition.length; i++ )
+                    {
+                        preAddition[i] = preAdditionDescriptors[i].getPropertyValue();
+                    }
 
-		SWTUtil.createLabel(topComposite, "", 1);
-	}
+                    Object[] postAddition = new Object[postAdditionDescriptors.length];
 
-	protected void createTargetRuntimeGroup(Composite parent) {
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Liferay target runtime:");
-		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+                    for( int i = 0; i < postAddition.length; i++ )
+                    {
+                        postAddition[i] = postAdditionDescriptors[i].getPropertyValue();
+                    }
 
-		serverTargetCombo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
-		serverTargetCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+                    Object newAddition = CoreUtil.getNewObject( preAddition, postAddition );
 
-		Button newServerTargetButton = new Button(parent, SWT.NONE);
-		newServerTargetButton.setText("New...");
-		newServerTargetButton.addSelectionListener(new SelectionAdapter() {
+                    if( newAddition != null ) // can this ever be null?
+                        model.setProperty( FACET_RUNTIME, newAddition );
+                }
+            }
+        } );
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				final DataModelPropertyDescriptor[] preAdditionDescriptors =
-					model.getValidPropertyDescriptors(FACET_RUNTIME);
+        Control[] deps = new Control[] { newServerTargetButton };
 
-				boolean isOK =
-					ServerUIUtil.showNewRuntimeWizard(getShell(), getModuleTypeID(), null, "com.liferay.");
+        synchHelper.synchCombo( serverTargetCombo, FACET_RUNTIME, deps );
 
-				if (isOK) {
-					DataModelPropertyDescriptor[] postAdditionDescriptors =
-						model.getValidPropertyDescriptors(FACET_RUNTIME);
+        if( serverTargetCombo.getSelectionIndex() == -1 && serverTargetCombo.getVisibleItemCount() != 0 )
+        {
+            serverTargetCombo.select( 0 );
+        }
+    }
 
-					Object[] preAddition = new Object[preAdditionDescriptors.length];
+    @Override
+    protected Composite createTopLevelComposite( Composite parent )
+    {
+        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
 
-					for (int i = 0; i < preAddition.length; i++) {
-						preAddition[i] = preAdditionDescriptors[i].getPropertyValue();
-					}
+        GridLayout gl = new GridLayout( 3, false );
+        // gl.marginLeft = 5;
+        topComposite.setLayout( gl );
+        topComposite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-					Object[] postAddition = new Object[postAdditionDescriptors.length];
+        createProjectLocationField( topComposite );
+        createPluginTypeField( topComposite );
+        createSDKVersionField( topComposite );
+        createTargetRuntimeGroup( topComposite );
 
-					for (int i = 0; i < postAddition.length; i++) {
-						postAddition[i] = postAdditionDescriptors[i].getPropertyValue();
-					}
+        return topComposite;
+    }
 
-					Object newAddition = CoreUtil.getNewObject(preAddition, postAddition);
+    @Override
+    protected String[] getValidationPropertyNames()
+    {
+        return new String[] { PROJECT_LOCATION, PROJECT_RECORD, SDK_VERSION, PLUGIN_TYPE, FACET_RUNTIME };
+    }
 
-					if (newAddition != null) // can this ever be null?
-						model.setProperty(FACET_RUNTIME, newAddition);
-				}
-			}
-		});
+    protected void handleFileBrowseButton( final Text text )
+    {
+        DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
 
-		Control[] deps = new Control[] {
-			newServerTargetButton
-		};
+        dd.setText( "Select Liferay project folder" );
 
-		synchHelper.synchCombo(serverTargetCombo, FACET_RUNTIME, deps);
+        if( !CoreUtil.isNullOrEmpty( projectLocation.getText() ) )
+        {
+            dd.setFilterPath( projectLocation.getText() );
+        }
+        else
+        {
+            // FIX:IDE-242
+            SDKManager sdkManager = SDKManager.getInstance();
+            SDK defaultSDK = sdkManager.getDefaultSDK();
+            if( defaultSDK != null )
+            {
+                String sdkLocation = defaultSDK.getLocation().toOSString();
+                dd.setFilterPath( sdkLocation );
+            }
+            // END FIX:IDE-242
+        }
 
-		if (serverTargetCombo.getSelectionIndex() == -1 && serverTargetCombo.getVisibleItemCount() != 0) {
-			serverTargetCombo.select(0);
-		}
-	}
+        String dir = dd.open();
 
-	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
+        if( !CoreUtil.isNullOrEmpty( dir ) )
+        {
+            projectLocation.setText( dir );
+        }
+    }
 
-		GridLayout gl = new GridLayout(3, false);
-		// gl.marginLeft = 5;
-		topComposite.setLayout(gl);
-		topComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+    protected void updateProjectRecord( String projectLocation )
+    {
+        if( CoreUtil.isNullOrEmpty( projectLocation ) )
+        {
+            return;
+        }
 
-		createProjectLocationField(topComposite);
-		createPluginTypeField(topComposite);
-		createSDKVersionField(topComposite);
-		createTargetRuntimeGroup(topComposite);
+        this.projectRecord = ProjectUtil.getProjectRecordForDir( projectLocation );
 
-		return topComposite;
-	}
+        getDataModel().setProperty( PROJECT_RECORD, this.projectRecord );
+    }
 
-	@Override
-	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			PROJECT_LOCATION, PROJECT_RECORD, SDK_VERSION, PLUGIN_TYPE, FACET_RUNTIME
-		};
-	}
+    protected IProject[] getProjectsInWorkspace()
+    {
+        if( wsProjects == null )
+        {
+            wsProjects = IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
+        }
+        return wsProjects;
+    }
 
-	protected void handleFileBrowseButton(final Text text) {
-		DirectoryDialog dd = new DirectoryDialog(this.getShell(), SWT.OPEN);
+    protected boolean isProjectInWorkspace( String projectName )
+    {
+        if( projectName == null )
+        {
+            return false;
+        }
 
-		dd.setText("Select Liferay project folder");
+        IProject[] workspaceProjects = getProjectsInWorkspace();
 
-		if (!CoreUtil.isNullOrEmpty(projectLocation.getText())) {
-			dd.setFilterPath(projectLocation.getText());
-		}else{
-			// FIX:IDE-242
-			SDKManager sdkManager = SDKManager.getInstance();
-			SDK defaultSDK = sdkManager.getDefaultSDK();
-			if ( defaultSDK != null ) {
-				String sdkLocation = defaultSDK.getLocation().toOSString();
-				dd.setFilterPath(sdkLocation );
-			}
-			// END FIX:IDE-242
-		}
+        for( int i = 0; i < workspaceProjects.length; i++ )
+        {
+            if( projectName.equals( workspaceProjects[i].getName() ) )
+            {
+                return true;
+            }
+        }
 
-		String dir = dd.open();
-
-		if (!CoreUtil.isNullOrEmpty(dir)) {
-			projectLocation.setText(dir);
-		}
-	}
-
-	protected void updateProjectRecord( String projectLocation ) {
-		if (CoreUtil.isNullOrEmpty(projectLocation)) {
-			return;
-		}
-
-		this.projectRecord = ProjectUtil.getProjectRecordForDir(projectLocation);
-
-		getDataModel().setProperty(PROJECT_RECORD, this.projectRecord);
-	}
-
-	protected IProject[] getProjectsInWorkspace() {
-		if (wsProjects == null) {
-			wsProjects = IDEWorkbenchPlugin.getPluginWorkspace().getRoot().getProjects();
-		}
-		return wsProjects;
-	}
-
-	protected boolean isProjectInWorkspace(String projectName) {
-		if (projectName == null) {
-			return false;
-		}
-
-		IProject[] workspaceProjects = getProjectsInWorkspace();
-
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			if (projectName.equals(workspaceProjects[i].getName())) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+        return false;
+    }
 }

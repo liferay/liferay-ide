@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.core.descriptor;
@@ -21,13 +23,16 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 /**
  * @author Greg Amerson
  */
-public class LiferayLayoutTplContentDescriber extends AbstractContentDescriber {
+public class LiferayLayoutTplContentDescriber extends AbstractContentDescriber
+{
 
-	public LiferayLayoutTplContentDescriber() {
-		super();
-	}
+    public LiferayLayoutTplContentDescriber()
+    {
+        super();
+    }
 
-	protected AbstractDefaultHandler createDefaultHandler() {
-		return new LiferayLayoutTplContentHandler();
-	}
+    protected AbstractDefaultHandler createDefaultHandler()
+    {
+        return new LiferayLayoutTplContentHandler();
+    }
 }

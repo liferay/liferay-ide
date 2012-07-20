@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,23 +26,27 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Henri Sara
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class AddVaadinApplicationOperation extends AddPortletOperation
-	implements INewVaadinPortletClassDataModelProperties {
+    implements INewVaadinPortletClassDataModelProperties
+{
 
-	public AddVaadinApplicationOperation(IDataModel dataModel) {
-		super(dataModel);
-	}
+    public AddVaadinApplicationOperation( IDataModel dataModel )
+    {
+        super( dataModel );
+    }
 
-	protected NewJavaEEArtifactClassOperation getNewClassOperation() {
-		return new NewVaadinApplicationClassOperation(getDataModel());
-	}
+    protected NewJavaEEArtifactClassOperation getNewClassOperation()
+    {
+        return new NewVaadinApplicationClassOperation( getDataModel() );
+    }
 
-	@Override
-	protected PortletDescriptorHelper createPortletDescriptorHelper(IProject targetProject) {
-		// also adds a dependency to vaadin.jar in
-		// liferay-plugin-package.properties
-		return new VaadinPortletDescriptorHelper(targetProject);
-	}
+    @Override
+    protected PortletDescriptorHelper createPortletDescriptorHelper( IProject targetProject )
+    {
+        // also adds a dependency to vaadin.jar in
+        // liferay-plugin-package.properties
+        return new VaadinPortletDescriptorHelper( targetProject );
+    }
 
 }

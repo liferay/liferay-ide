@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,24 +23,25 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public interface IPortletFrameworkDelegate {
+public interface IPortletFrameworkDelegate
+{
 
-	String EXTENSION_ID = "com.liferay.ide.eclipse.project.ui.portletFrameworkDelegates";
+    String EXTENSION_ID = "com.liferay.ide.project.ui.portletFrameworkDelegates";
 
-	String FRAMEWORK_ID = "frameworkId";
+    String FRAMEWORK_ID = "frameworkId";
 
-	String ICON = "icon";
+    String ICON = "icon";
 
-	Composite createNewProjectOptionsComposite(Composite parent, IDataModel iDataModel);
+    Composite createNewProjectOptionsComposite( Composite parent, IDataModel iDataModel );
 
-	String getBundleId();
+    String getBundleId();
 
-	String getFrameworkId();
+    String getFrameworkId();
 
-	String getIconUrl();
+    String getIconUrl();
 
-	IPluginWizardFragment getWizardFragment();
+    IPluginWizardFragment getWizardFragment();
 
-	boolean isFragmentEnabled();
+    boolean isFragmentEnabled();
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,40 +23,45 @@ import org.eclipse.gef.requests.CreationFactory;
 /**
  * @author Greg Amerson
  */
-public class PortletLayoutFactory implements CreationFactory {
+public class PortletLayoutFactory implements CreationFactory
+{
+    protected int numColumns;
+    protected int[] weights;
 
-	protected int numColumns;
+    public PortletLayoutFactory( int numCols, int... weights )
+    {
+        if( numCols < 1 )
+        {
+            throw new IllegalArgumentException( "Number of columns must be greater than 0" );
+        }
 
-	protected int[] weights;
+        if( numCols != weights.length )
+        {
+            throw new IllegalArgumentException( "Number of weight args must match number of columns." );
+        }
 
-	public PortletLayoutFactory(int numCols, int... weights) {
-		if (numCols < 1) {
-			throw new IllegalArgumentException("Number of columns must be greater than 0");
-		}
+        this.numColumns = numCols;
+        this.weights = weights;
+    }
 
-		if (numCols != weights.length) {
-			throw new IllegalArgumentException("Number of weight args must match number of columns.");
-		}
+    public Object getNewObject()
+    {
+        PortletLayout newRow = new PortletLayout();
 
-		this.numColumns = numCols;
-		this.weights = weights;
-	}
+        for( int i = 0; i < numColumns; i++ )
+        {
+            PortletColumn newColumn = new PortletColumn();
+            newColumn.setWeight( weights[i] );
 
-	public Object getNewObject() {
-		PortletLayout newRow = new PortletLayout();
+            newRow.addColumn( newColumn );
+        }
 
-		for (int i = 0; i < numColumns; i++) {
-			PortletColumn newColumn = new PortletColumn();
-			newColumn.setWeight(weights[i]);
+        return newRow;
+    }
 
-			newRow.addColumn(newColumn);
-		}
-
-		return newRow;
-	}
-
-	public Object getObjectType() {
-		return PortletLayout.class;
-	}
+    public Object getObjectType()
+    {
+        return PortletLayout.class;
+    }
 
 }

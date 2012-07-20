@@ -14,13 +14,16 @@ package com.liferay.ide.server.tomcat.core;
 
 import org.osgi.framework.Version;
 
+/**
+ * @author Gregory Amerson
+ */
 public class LiferayTomcatRuntime70 extends LiferayTomcatRuntime
 {
-	public static final Version leastSupportedVersion = new Version( 6, 1, 0 );
+    public static final Version leastSupportedVersion = new Version( 6, 1, 0 );
 
-	protected Version getLeastSupportedVersion() {
-		return leastSupportedVersion;
-	}
-
+    protected Version getLeastSupportedVersion()
+    {
+        return leastSupportedVersion;
+    }
 
 }

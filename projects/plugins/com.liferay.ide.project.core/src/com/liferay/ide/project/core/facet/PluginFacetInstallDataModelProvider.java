@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -33,84 +33,96 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"unchecked", "rawtypes"
-})
+@SuppressWarnings( { "unchecked", "rawtypes" } )
 public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDataModelProvider
-	implements IPluginProjectDataModelProperties {
+    implements IPluginProjectDataModelProperties
+{
+    protected LibraryInstallDelegate libraryDelegate = null;
 
-	protected LibraryInstallDelegate libraryDelegate = null;
+    public PluginFacetInstallDataModelProvider()
+    {
+        super();
+    }
 
-	public PluginFacetInstallDataModelProvider() {
-		super();
-	}
+    @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        if( propertyName.equals( FACET_ID ) )
+        {
+            return getPluginFacetId();
+        }
+        else if( propertyName.equals( LIFERAY_PLUGIN_LIBRARY_DELEGATE ) )
+        {
+            if( libraryDelegate == null )
+            {
+                libraryDelegate =
+                    new LibraryInstallDelegate(
+                        (IFacetedProjectWorkingCopy) getProperty( IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY ),
+                        (IProjectFacetVersion) getProperty( IFacetDataModelProperties.FACET_VERSION ) );
+            }
 
-	@Override
-	public Object getDefaultProperty(String propertyName) {
-		if (propertyName.equals(FACET_ID)) {
-			return getPluginFacetId();
-		}
-		else if (propertyName.equals(LIFERAY_PLUGIN_LIBRARY_DELEGATE)) {
-			if (libraryDelegate == null) {
-				libraryDelegate =
-					new LibraryInstallDelegate(
-						(IFacetedProjectWorkingCopy) getProperty(IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY),
-						(IProjectFacetVersion) getProperty(IFacetDataModelProperties.FACET_VERSION));
-			}
-			
-			return libraryDelegate;
-		}
-		
-		return super.getDefaultProperty(propertyName);
-	}
+            return libraryDelegate;
+        }
 
-	@Override
-	public Set getPropertyNames() {
-		Set propNames = super.getPropertyNames();
-		
-		propNames.add(LIFERAY_PLUGIN_LIBRARY_DELEGATE);
-		propNames.add(LIFERAY_SDK_NAME);
-		
-		return propNames;
-	}
+        return super.getDefaultProperty( propertyName );
+    }
 
-	@Override
-	public void init() {
-		super.init();
-	}
+    @Override
+    public Set getPropertyNames()
+    {
+        Set propNames = super.getPropertyNames();
 
-	@Override
-	public boolean propertySet(String propertyName, Object propertyValue) {
-		if (propertyName.equals(IFacetDataModelProperties.FACET_VERSION)) {
-			if (this.libraryDelegate != null) {
-				libraryDelegate.setProjectFacetVersion((IProjectFacetVersion) propertyValue);
-			}
-		}
-		
-		return super.propertySet(propertyName, propertyValue);
-	}
+        propNames.add( LIFERAY_PLUGIN_LIBRARY_DELEGATE );
+        propNames.add( LIFERAY_SDK_NAME );
 
-	@Override
-	public IStatus validate(String name) {
-		if (LIFERAY_SDK_NAME.equals(name)) {
-			String sdkName = getStringProperty(LIFERAY_SDK_NAME);
-			
-			if (CoreUtil.isNullOrEmpty(sdkName)) {
-				return ProjectCorePlugin.createErrorStatus("No Plugin SDK configured.");
-			}
-			
-			SDK sdk = SDKManager.getInstance().getSDK(sdkName);
-			
-			if (sdk == null) {
-				return ProjectCorePlugin.createErrorStatus("Plugin SDK (" + sdkName + ") is not defined.");
-			}
-			
-			return Status.OK_STATUS;
-		}
-		
-		return super.validate(name);
-	}
+        return propNames;
+    }
 
-	protected abstract String getPluginFacetId();
+    @Override
+    public void init()
+    {
+        super.init();
+    }
+
+    @Override
+    public boolean propertySet( String propertyName, Object propertyValue )
+    {
+        if( propertyName.equals( IFacetDataModelProperties.FACET_VERSION ) )
+        {
+            if( this.libraryDelegate != null )
+            {
+                libraryDelegate.setProjectFacetVersion( (IProjectFacetVersion) propertyValue );
+            }
+        }
+
+        return super.propertySet( propertyName, propertyValue );
+    }
+
+    @Override
+    public IStatus validate( String name )
+    {
+        if( LIFERAY_SDK_NAME.equals( name ) )
+        {
+            String sdkName = getStringProperty( LIFERAY_SDK_NAME );
+
+            if( CoreUtil.isNullOrEmpty( sdkName ) )
+            {
+                return ProjectCorePlugin.createErrorStatus( "No Plugin SDK configured." );
+            }
+
+            SDK sdk = SDKManager.getInstance().getSDK( sdkName );
+
+            if( sdk == null )
+            {
+                return ProjectCorePlugin.createErrorStatus( "Plugin SDK (" + sdkName + ") is not defined." );
+            }
+
+            return Status.OK_STATUS;
+        }
+
+        return super.validate( name );
+    }
+
+    protected abstract String getPluginFacetId();
 
 }

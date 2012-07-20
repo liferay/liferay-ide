@@ -61,61 +61,61 @@
    </requires>
 
    <plugin
-         id="com.liferay.ide.eclipse.portlet.core"
+         id="com.liferay.ide.portlet.core"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.portlet.ui"
+         id="com.liferay.ide.portlet.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.project.core"
+         id="com.liferay.ide.project.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.project.ui"
+         id="com.liferay.ide.project.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.sdk"
+         id="com.liferay.ide.sdk"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.server.core"
+         id="com.liferay.ide.server.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.server.tomcat.core"
+         id="com.liferay.ide.server.tomcat.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.server.tomcat.ui"
+         id="com.liferay.ide.server.tomcat.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.server.ui"
+         id="com.liferay.ide.server.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -129,119 +129,119 @@
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.templates.core"
+         id="com.liferay.ide.templates.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.layouttpl.core"
+         id="com.liferay.ide.layouttpl.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.layouttpl.ui"
+         id="com.liferay.ide.layouttpl.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.theme.core"
+         id="com.liferay.ide.theme.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.theme.ui"
+         id="com.liferay.ide.theme.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.ui.snippets"
+         id="com.liferay.ide.ui.snippets"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.portlet.vaadin.core"
+         id="com.liferay.ide.portlet.vaadin.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.portlet.vaadin.ui"
+         id="com.liferay.ide.portlet.vaadin.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.portlet.jsf.core"
+         id="com.liferay.ide.portlet.jsf.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.portlet.jsf.ui"
+         id="com.liferay.ide.portlet.jsf.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.doc"
+         id="com.liferay.ide.doc"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.service.core"
+         id="com.liferay.ide.service.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.service.ui"
+         id="com.liferay.ide.service.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.taglib.ui"
+         id="com.liferay.ide.taglib.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.hook.core"
+         id="com.liferay.ide.hook.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.hook.ui"
+         id="com.liferay.ide.hook.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.eclipse.properties.core"
+         id="com.liferay.ide.properties.core"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,41 +21,46 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractModelWizard extends Wizard {
+public abstract class AbstractModelWizard extends Wizard
+{
+    protected IEditorPart editorPart;
+    protected AbstractModelWizardPage wizardPage;
 
-	protected IEditorPart editorPart;
+    public AbstractModelWizard( IEditorPart fEditorPart )
+    {
+        super();
+        setWindowTitle( "Model" );
+        editorPart = fEditorPart;
+    }
 
-	protected AbstractModelWizardPage wizardPage;
+    @Override
+    public void addPages()
+    {
+        wizardPage = createModelWizardPage( editorPart );
+        addPage( wizardPage );
+    }
 
-	public AbstractModelWizard(IEditorPart fEditorPart) {
-		super();
-		setWindowTitle("Model");
-		editorPart = fEditorPart;
-	}
+    public String getModel()
+    {
+        return wizardPage.getModel();
+    }
 
-	@Override
-	public void addPages() {
-		wizardPage = createModelWizardPage(editorPart);
-		addPage(wizardPage);
-	}
+    public String[] getPropertyColumns()
+    {
+        return wizardPage.getPropertyColumns();
+    }
 
-	public String getModel() {
-		return wizardPage.getModel();
-	}
+    public String getVarName()
+    {
+        return wizardPage.getVarName();
+    }
 
-	public String[] getPropertyColumns() {
-		return wizardPage.getPropertyColumns();
-	}
+    @Override
+    public boolean performFinish()
+    {
+        return true;
+    }
 
-	public String getVarName() {
-		return wizardPage.getVarName();
-	}
-
-	@Override
-	public boolean performFinish() {
-		return true;
-	}
-
-	protected abstract AbstractModelWizardPage createModelWizardPage(IEditorPart editorPart);
+    protected abstract AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart );
 
 }

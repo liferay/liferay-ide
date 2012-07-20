@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,46 +12,49 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.layouttpl.ui.model;
 
+/**
+ * @author Gregory Amerson
+ */
+public class LayoutConstraint
+{
+    public static final LayoutConstraint EMPTY = new LayoutConstraint();
 
-public class LayoutConstraint {
+    public int rowIndex = -1;
+    public int newRowIndex = -1;
+    public int newColumnIndex = -1;
+    public int weight = PortletColumn.DEFAULT_WEIGHT;
+    public PortletColumn refColumn = null;
 
-	public static final LayoutConstraint EMPTY = new LayoutConstraint();
+    @Override
+    public boolean equals( Object obj )
+    {
+        if( !( obj instanceof LayoutConstraint ) )
+        {
+            return false;
+        }
 
-	public int rowIndex = -1;
+        LayoutConstraint constraint = (LayoutConstraint) obj;
 
-	public int newRowIndex = -1;
+        return this.rowIndex == constraint.rowIndex && this.newRowIndex == constraint.newRowIndex &&
+            this.newColumnIndex == constraint.newColumnIndex && this.weight == constraint.weight &&
+            this.refColumn == constraint.refColumn;
+    }
 
-	public int newColumnIndex = -1;
-
-	public int weight = PortletColumn.DEFAULT_WEIGHT;
-
-	public PortletColumn refColumn = null;
-
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof LayoutConstraint)) {
-			return false;
-		}
-
-		LayoutConstraint constraint = (LayoutConstraint) obj;
-
-		return this.rowIndex == constraint.rowIndex && this.newRowIndex == constraint.newRowIndex &&
-			this.newColumnIndex == constraint.newColumnIndex && this.weight == constraint.weight &&
-			this.refColumn == constraint.refColumn;
-	}
-
-	@Override
-	public String toString() {
-		if (this.equals(EMPTY)) {
-			return "LayoutConstraint { EMPTY }";
-		}
-		else {
-			return "LayoutConstraint { rowIndex = " + rowIndex + ", newRowIndex = " + newRowIndex +
-				", newColumnIndex = " + newColumnIndex + ", weight = " + weight + "}";
-		}
-	}
-
+    @Override
+    public String toString()
+    {
+        if( this.equals( EMPTY ) )
+        {
+            return "LayoutConstraint { EMPTY }";
+        }
+        else
+        {
+            return "LayoutConstraint { rowIndex = " + rowIndex + ", newRowIndex = " + newRowIndex +
+                ", newColumnIndex = " + newColumnIndex + ", weight = " + weight + "}";
+        }
+    }
 
 }

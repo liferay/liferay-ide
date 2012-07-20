@@ -1,22 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *   
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ * 		Kamesh Sampath - initial implementation
  *******************************************************************************/
-/*
- * 
- */
 
 package com.liferay.ide.core.model.xml.internal;
 
@@ -29,100 +26,108 @@ import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
 /**
- * TODO:Update comments
- * 
  * @author kamesh.sampath
  */
+public final class ChoiceValueBinding extends XmlValueBindingImpl
+{
+    private String[] params;
+    private XmlPath path;
 
-public final class ChoiceValueBinding extends XmlValueBindingImpl {
+    @Override
+    public XmlNode getXmlNode()
+    {
+        final XmlElement parent = xml();
 
-	private String[] params;
-	private XmlPath path;
+        XmlElement element = parent.getChildElement( params[1], false );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		super.init( element, property, params );
-		this.params = params;
+        if( element != null )
+        {
+            return element;
+        }
 
-		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-		this.path = new XmlPath( params[0], xmlNamespaceResolver );
-	}
+        element = parent.getChildElement( params[1], false );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
-	 */
-	@Override
-	public String read() {
-		final XmlElement parent = xml( false );
-		// System.out.println( "ChoiceValueBinding.read() - \n" + parent );
-		String value = null;
-		if ( parent != null ) {
-			// System.out.println( "ChoiceValueBinding.read()" + params[0] );
-			final XmlElement param1Element = parent.getChildElement( params[1], false );
-			final XmlElement param2Element = parent.getChildElement( params[2], false );
+        if( element != null )
+        {
+            return element;
+        }
 
-			if ( param1Element != null && params[0].equals( params[1] ) ) {
-				// System.out.println( "ChoiceValueBinding.read() - \n" + eventNameElement );
-				value = param1Element.getText();
-			}
-			else if ( param2Element != null && params[0].equals( params[2] ) ) {
+        return null;
+    }
 
-				// System.out.println( "ChoiceValueBinding.read() - \n" + eventQNameElement );
-				value = param2Element.getText();
-			}
-		}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
+     * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+     */
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
+        this.params = params;
 
-		return value;
-	}
+        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
+        this.path = new XmlPath( params[0], xmlNamespaceResolver );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
-	 */
-	@Override
-	public void write( final String value ) {
-		final XmlElement parent = xml( true );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+     */
+    @Override
+    public String read()
+    {
+        final XmlElement parent = xml( false );
+        // System.out.println( "ChoiceValueBinding.read() - \n" + parent );
+        String value = null;
+        if( parent != null )
+        {
+            // System.out.println( "ChoiceValueBinding.read()" + params[0] );
+            final XmlElement param1Element = parent.getChildElement( params[1], false );
+            final XmlElement param2Element = parent.getChildElement( params[2], false );
 
-		// System.out.println( "EventDefinitionValueBinding.write()" + parent );
+            if( param1Element != null && params[0].equals( params[1] ) )
+            {
+                // System.out.println( "ChoiceValueBinding.read() - \n" + eventNameElement );
+                value = param1Element.getText();
+            }
+            else if( param2Element != null && params[0].equals( params[2] ) )
+            {
 
-		final XmlElement param1Element = parent.getChildElement( params[1], false );
-		final XmlElement param2Element = parent.getChildElement( params[2], false );
+                // System.out.println( "ChoiceValueBinding.read() - \n" + eventQNameElement );
+                value = param2Element.getText();
+            }
+        }
 
-		if ( param1Element != null && params[0].equals( params[1] ) ) {
-			parent.removeChildNode( params[2] );
-		}
-		else if ( param2Element != null && params[0].equals( params[2] ) ) {
+        return value;
+    }
 
-			parent.removeChildNode( params[1] );
-		}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+     */
+    @Override
+    public void write( final String value )
+    {
+        final XmlElement parent = xml( true );
 
-		parent.setChildNodeText( this.path, value, true );
+        // System.out.println( "EventDefinitionValueBinding.write()" + parent );
 
-	}
+        final XmlElement param1Element = parent.getChildElement( params[1], false );
+        final XmlElement param2Element = parent.getChildElement( params[2], false );
 
-	@Override
-	public XmlNode getXmlNode() {
-		final XmlElement parent = xml();
+        if( param1Element != null && params[0].equals( params[1] ) )
+        {
+            parent.removeChildNode( params[2] );
+        }
+        else if( param2Element != null && params[0].equals( params[2] ) )
+        {
 
-		XmlElement element = parent.getChildElement( params[1], false );
+            parent.removeChildNode( params[1] );
+        }
 
-		if ( element != null ) {
-			return element;
-		}
+        parent.setChildNodeText( this.path, value, true );
 
-		element = parent.getChildElement( params[1], false );
-
-		if ( element != null ) {
-			return element;
-		}
-
-		return null;
-	}
+    }
 
 }

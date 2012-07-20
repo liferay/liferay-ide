@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,43 +28,51 @@ import org.eclipse.core.runtime.jobs.Job;
 /**
  * @author Greg Amerson
  */
-public abstract class SDKJob extends Job {
+public abstract class SDKJob extends Job
+{
 
-	protected IProject project;
+    protected IProject project;
 
-	public SDKJob(String name) {
-		super(name);
-	}
+    public SDKJob( String name )
+    {
+        super( name );
+    }
 
-	protected IProject getProject() {
-		return this.project;
-	}
+    protected IProject getProject()
+    {
+        return this.project;
+    }
 
-	protected SDK getSDK() {
-		if (project == null) {
-			return null;
-		}
-		
-		SDK retval = null;
+    protected SDK getSDK()
+    {
+        if( project == null )
+        {
+            return null;
+        }
 
-		// try to determine SDK based on project location
-		IPath sdkLocation = this.project.getRawLocation().removeLastSegments( 2 );
+        SDK retval = null;
 
-		retval = SDKManager.getInstance().getSDK( sdkLocation );
+        // try to determine SDK based on project location
+        IPath sdkLocation = this.project.getRawLocation().removeLastSegments( 2 );
 
-		if ( retval == null ) {
-			retval = SDKUtil.createSDKFromLocation( sdkLocation );
-			SDKManager.getInstance().addSDK( retval );
-		}
+        retval = SDKManager.getInstance().getSDK( sdkLocation );
 
-		return retval;
-	}
+        if( retval == null )
+        {
+            retval = SDKUtil.createSDKFromLocation( sdkLocation );
+            SDKManager.getInstance().addSDK( retval );
+        }
 
-	protected IWorkspace getWorkspace() {
-		return ResourcesPlugin.getWorkspace();
-	}
+        return retval;
+    }
 
-	protected void setProject(IProject project) {
-		this.project = project;
-	}
+    protected IWorkspace getWorkspace()
+    {
+        return ResourcesPlugin.getWorkspace();
+    }
+
+    protected void setProject( IProject project )
+    {
+        this.project = project;
+    }
 }

@@ -15,8 +15,8 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 import com.liferay.ide.server.core.ILiferayServer;
+import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 
 import java.net.URL;
 
@@ -35,79 +35,87 @@ import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public abstract class OpenPortalURLAction extends AbstractServerRunningAction
 {
 
-	public OpenPortalURLAction() {
-		super();
-	}
+    public OpenPortalURLAction()
+    {
+        super();
+    }
 
-	protected ILiferayServer getLiferayServer()
-	{
-		return (ILiferayServer) selectedServer.loadAdapter(ILiferayServer.class, null);
-	}
+    protected ILiferayServer getLiferayServer()
+    {
+        return (ILiferayServer) selectedServer.loadAdapter( ILiferayServer.class, null );
+    }
 
-	protected abstract URL getPortalURL();
+    protected abstract URL getPortalURL();
 
-	protected abstract String getPortalURLTitle();
+    protected abstract String getPortalURLTitle();
 
-	@Override
-	protected int getRequiredServerState() {
-		return IServer.STATE_STARTED;
-	}
+    @Override
+    protected int getRequiredServerState()
+    {
+        return IServer.STATE_STARTED;
+    }
 
-	protected void openBrowser(final URL url, final String browserTitle) {
-		Display.getDefault().asyncExec(new Runnable() {
+    protected void openBrowser( final URL url, final String browserTitle )
+    {
+        Display.getDefault().asyncExec( new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    IWorkbenchBrowserSupport browserSupport =
+                        ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
 
-			public void run() {
-				try {
-					IWorkbenchBrowserSupport browserSupport =
-						ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
+                    IWebBrowser browser =
+                        browserSupport.createBrowser( IWorkbenchBrowserSupport.LOCATION_BAR |
+                            IWorkbenchBrowserSupport.NAVIGATION_BAR, null, browserTitle, null );
 
-					IWebBrowser browser =
-						browserSupport.createBrowser(IWorkbenchBrowserSupport.LOCATION_BAR |
-							IWorkbenchBrowserSupport.NAVIGATION_BAR, null, browserTitle, null);
+                    browser.openURL( url );
+                }
+                catch( Exception e )
+                {
+                    LiferayServerUIPlugin.logError( e );
+                }
+            }
+        } );
+    }
 
-					browser.openURL(url);
-				}
-				catch (Exception e) {
-					LiferayServerUIPlugin.logError(e);
-				}
-			}
-		});
-	}
+    protected void openPortalURL( ILiferayServer portalServer )
+    {
+        URL portalUrl = getPortalURL();
 
-	protected void openPortalURL( ILiferayServer portalServer )
-	{
-		URL portalUrl = getPortalURL();
-			
-		if ( portalUrl == null )
-		{
-			MessageDialog.openError(
-				getActiveShell(), "Open Portal URL",
-				"Could not determine portal URL. Please make sure the server is properly configured." );
-			return;
-		}
+        if( portalUrl == null )
+        {
+            MessageDialog.openError(
+                getActiveShell(), "Open Portal URL",
+                "Could not determine portal URL. Please make sure the server is properly configured." );
+            return;
+        }
 
-		openBrowser( portalUrl, getPortalURLTitle() );
-	}
+        openBrowser( portalUrl, getPortalURLTitle() );
+    }
 
-	public void run(IAction action) {
-		if (selectedServer != null) {
-			final ILiferayServer portalServer = getLiferayServer();
+    public void run( IAction action )
+    {
+        if( selectedServer != null )
+        {
+            final ILiferayServer portalServer = getLiferayServer();
 
-			new Job( "Open portal url" )
-			{
+            new Job( "Open portal url" )
+            {
+                @Override
+                protected IStatus run( IProgressMonitor monitor )
+                {
+                    openPortalURL( portalServer );
+                    return Status.OK_STATUS;
+                }
 
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					openPortalURL( portalServer );
-					return Status.OK_STATUS;
-				}
-
-			}.schedule();
-		}
-	}
+            }.schedule();
+        }
+    }
 
 }

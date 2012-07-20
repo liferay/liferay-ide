@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,19 +30,20 @@ import java.lang.annotation.Target;
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( { ElementType.FIELD, ElementType.TYPE } )
-public @interface PropertyBinding {
+public @interface PropertyBinding
+{
 
-	/**
-	 * The category or group under which the property falls
-	 * 
-	 * @return the category of the property
-	 */
-	String category() default "";
+    /**
+     * The category or group under which the property falls
+     * 
+     * @return the category of the property
+     */
+    String category() default "";
 
-	/**
-	 * the property key
-	 * 
-	 * @return the property key
-	 */
-	String key();
+    /**
+     * the property key
+     * 
+     * @return the property key
+     */
+    String key();
 }

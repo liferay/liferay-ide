@@ -17,9 +17,8 @@
 
 package com.liferay.ide.service.ui;
 
-
-import com.liferay.ide.service.core.model.IServiceBuilder600;
-import com.liferay.ide.service.core.model.IServiceBuilder610;
+import com.liferay.ide.service.core.model.ServiceBuilder600;
+import com.liferay.ide.service.core.model.ServiceBuilder610;
 import com.liferay.ide.service.core.model.ServiceBuilderVersionType;
 
 import java.io.IOException;
@@ -43,115 +42,113 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 
-
 /**
  * @author Gregory Amerson
  */
-public class ServiceBuilderEditor extends SapphireEditorForXml {
+public class ServiceBuilderEditor extends SapphireEditorForXml
+{
+    private SapphireDiagramEditor pageDiagram;
 
-	private SapphireDiagramEditor pageDiagram;
+    public ServiceBuilderEditor()
+    {
+        super( ServiceUI.PLUGIN_ID );
 
-	public ServiceBuilderEditor() {
-		super(ServiceUI.PLUGIN_ID);
+        setEditorDefinitionPath( ServiceUI.PLUGIN_ID +
+            "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/serviceBuilderPage" );
+    }
 
-		setEditorDefinitionPath( ServiceUI.PLUGIN_ID +
-			"/com/liferay/ide/eclipse/service/ui/ServiceBuilderEditor.sdef/serviceBuilderPage" );
-	}
+    @Override
+    protected void createDiagramPages() throws PartInitException
+    {
+        IPath path =
+            new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/diagramPage" );
+        this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
+        addEditorPage( 0, this.pageDiagram );
+    }
 
-	@Override
-	protected void createDiagramPages() throws PartInitException
-	{
-		IPath path =
-			new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/eclipse/service/ui/ServiceBuilderEditor.sdef/diagramPage" );
-		this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
-		addEditorPage( 0, this.pageDiagram );
-	}
+    @Override
+    protected IModelElement createModel()
+    {
+        RootXmlResource resource = null;
 
-	@Override
-	protected IModelElement createModel()
-	{
-	    RootXmlResource resource = null;
-        
-		try
-		{
-		    InputStream editorContents = getFileContents();
-	        ServiceBuilderVersionType dtdVersion = null;
-            
-			resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
-			Document document = resource.getDomDocument();
-			dtdVersion = getDTDVersion( document );
+        try
+        {
+            InputStream editorContents = getFileContents();
+            ServiceBuilderVersionType dtdVersion = null;
 
-			if ( document != null )
-			{
-				switch ( dtdVersion )
-				{
+            resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
+            Document document = resource.getDomDocument();
+            dtdVersion = getDTDVersion( document );
 
-				case v6_0_0:
-					setRootModelElementType( IServiceBuilder600.TYPE );
-					break;
+            if( document != null )
+            {
+                switch( dtdVersion )
+                {
+                    case v6_0_0:
+                        setRootModelElementType( ServiceBuilder600.TYPE );
+                        break;
 
-				case v6_1_0:
-				default:
-					setRootModelElementType( IServiceBuilder610.TYPE );
-					break;
+                    case v6_1_0:
+                    default:
+                        setRootModelElementType( ServiceBuilder610.TYPE );
+                        break;
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            ServiceUI.logError( e );
+            setRootModelElementType( ServiceBuilder600.TYPE );
+        }
+        finally
+        {
+            if( resource != null )
+            {
+                resource.dispose();
+            }
+        }
 
-				}
-			}
-		}
-		catch ( Exception e )
-		{
-			ServiceUI.logError( e );
-			setRootModelElementType( IServiceBuilder600.TYPE );
-		}
-		finally
-		{
-			if ( resource != null )
-			{
-				resource.dispose();
-			}
-		}
+        return super.createModel();
+    }
 
-		return super.createModel();
-	}
+    @Override
+    public void doSave( final IProgressMonitor monitor )
+    {
+        super.doSave( monitor );
 
-	@Override
-	public void doSave( final IProgressMonitor monitor )
-	{
-		super.doSave( monitor );
+        this.pageDiagram.doSave( monitor );
+    }
 
-		this.pageDiagram.doSave( monitor );
-	}
+    protected ServiceBuilderVersionType getDTDVersion( Document document )
+    {
+        ServiceBuilderVersionType dtdVersion = null;
+        DocumentType docType = document.getDoctype();
 
-	protected ServiceBuilderVersionType getDTDVersion( Document document )
-	{
-		ServiceBuilderVersionType dtdVersion = null;
-		DocumentType docType = document.getDoctype();
+        if( docType != null )
+        {
+            String publicId = docType.getPublicId();
+            String systemId = docType.getSystemId();
+            if( publicId != null && systemId != null )
+            {
+                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
+                {
+                    dtdVersion = ServiceBuilderVersionType.v6_0_0;
+                }
+                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
+                {
+                    dtdVersion = ServiceBuilderVersionType.v6_1_0;
+                }
+            }
 
-		if ( docType != null )
-		{
-			String publicId = docType.getPublicId();
-			String systemId = docType.getSystemId();
-			if ( publicId != null && systemId != null )
-			{
-				if ( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
-				{
-					dtdVersion = ServiceBuilderVersionType.v6_0_0;
-				}
-				else if ( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
-				{
-					dtdVersion = ServiceBuilderVersionType.v6_1_0;
-				}
-			}
+        }
 
-		}
+        return dtdVersion;
+    }
 
-		return dtdVersion;
-	}
-    
-	public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
+    public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
     {
         final IEditorInput editorInput = getEditorInput();
-        
+
         if( editorInput instanceof FileEditorInput )
         {
             return ( (FileEditorInput) editorInput ).getFile().getContents();

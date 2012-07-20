@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -20,7 +21,6 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
 /**
@@ -28,6 +28,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
  */
 public abstract class AbstractProjectDefinition implements IProjectDefinition
 {
+
     protected String displayName;
     protected IFacetedProjectTemplate facetedProjectTemplate;
     protected String facetedProjectTemplateId;

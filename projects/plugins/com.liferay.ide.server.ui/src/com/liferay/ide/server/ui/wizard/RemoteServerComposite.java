@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -12,13 +12,13 @@
 package com.liferay.ide.server.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 import com.liferay.ide.server.remote.RemoteServer;
 import com.liferay.ide.server.remote.RemoteUtil;
+import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -50,316 +50,359 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 /**
  * @author Greg Amerson
  */
-public class RemoteServerComposite extends Composite implements ModifyListener, PropertyChangeListener {
+public class RemoteServerComposite extends Composite implements ModifyListener, PropertyChangeListener
+{
 
-	protected boolean disableValidation;
-	protected RemoteServerWizardFragment fragment;
-	protected boolean ignoreModifyEvents;
-	protected Label labelHttpPort;
-	protected Label labelLiferayPortalContextPath;
-	protected Label labelPassword;
-	protected Label labelServerManagerContextPath;
-	protected Label labelUsername;
-	protected IRemoteServerWorkingCopy remoteServerWC;
-	protected IServerWorkingCopy serverWC;
-	protected Text textHostname;
-	protected Text textHTTP;
-	protected Text textLiferayPortalContextPath;
-	protected Text textPassword;
-	protected Text textServerManagerContextPath;
-	protected Text textUsername;
-	protected IWizardHandle wizard;
-	private String initialServerName;
-	private String initialHostName;
+    protected boolean disableValidation;
+    protected RemoteServerWizardFragment fragment;
+    protected boolean ignoreModifyEvents;
+    protected Label labelHttpPort;
+    protected Label labelLiferayPortalContextPath;
+    protected Label labelPassword;
+    protected Label labelServerManagerContextPath;
+    protected Label labelUsername;
+    protected IRemoteServerWorkingCopy remoteServerWC;
+    protected IServerWorkingCopy serverWC;
+    protected Text textHostname;
+    protected Text textHTTP;
+    protected Text textLiferayPortalContextPath;
+    protected Text textPassword;
+    protected Text textServerManagerContextPath;
+    protected Text textUsername;
+    protected IWizardHandle wizard;
+    private String initialServerName;
+    private String initialHostName;
 
-	public RemoteServerComposite(Composite parent, RemoteServerWizardFragment fragment, IWizardHandle wizard) {
-		super(parent, SWT.NONE);
-		this.fragment = fragment;
-		this.wizard = wizard;
+    public RemoteServerComposite( Composite parent, RemoteServerWizardFragment fragment, IWizardHandle wizard )
+    {
+        super( parent, SWT.NONE );
+        this.fragment = fragment;
+        this.wizard = wizard;
 
-		createControl();
-	}
+        createControl();
+    }
 
-	public void modifyText(ModifyEvent e) {
-		Object src = e.getSource();
+    public void modifyText( ModifyEvent e )
+    {
+        Object src = e.getSource();
 
-		if (src == null || ignoreModifyEvents) {
-			return;
-		}
+        if( src == null || ignoreModifyEvents )
+        {
+            return;
+        }
 
-		if (src.equals(textHostname)) {
-			this.serverWC.setHost(textHostname.getText());
+        if( src.equals( textHostname ) )
+        {
+            this.serverWC.setHost( textHostname.getText() );
 
-			// IDE-425
-			if ( this.initialServerName != null && this.initialHostName.contains( this.initialHostName ) )
-			{
-				this.serverWC.setName( this.initialServerName.replaceAll( this.initialHostName, textHostname.getText() ) );
-			}
+            // IDE-425
+            if( this.initialServerName != null && this.initialHostName.contains( this.initialHostName ) )
+            {
+                this.serverWC.setName( this.initialServerName.replaceAll( this.initialHostName, textHostname.getText() ) );
+            }
 
-		}
-		else if (src.equals(textHTTP)) {
-			this.remoteServerWC.setHTTPPort( textHTTP.getText() );
-		}
-		else if ( src.equals( textServerManagerContextPath ) ) {
-			this.remoteServerWC.setServerManagerContextPath( textServerManagerContextPath.getText() );
-		}
-		else if ( src.equals( textLiferayPortalContextPath ) ) {
-			this.remoteServerWC.setLiferayPortalContextPath( textLiferayPortalContextPath.getText() );
-		}
-		else if ( src.equals( textUsername ) ) {
-			this.remoteServerWC.setUsername( textUsername.getText() );
-		}
-		else if ( src.equals( textPassword ) ) {
-			this.remoteServerWC.setPassword( textPassword.getText() );
-		}
+        }
+        else if( src.equals( textHTTP ) )
+        {
+            this.remoteServerWC.setHTTPPort( textHTTP.getText() );
+        }
+        else if( src.equals( textServerManagerContextPath ) )
+        {
+            this.remoteServerWC.setServerManagerContextPath( textServerManagerContextPath.getText() );
+        }
+        else if( src.equals( textLiferayPortalContextPath ) )
+        {
+            this.remoteServerWC.setLiferayPortalContextPath( textLiferayPortalContextPath.getText() );
+        }
+        else if( src.equals( textUsername ) )
+        {
+            this.remoteServerWC.setUsername( textUsername.getText() );
+        }
+        else if( src.equals( textPassword ) )
+        {
+            this.remoteServerWC.setPassword( textPassword.getText() );
+        }
 
-	}
+    }
 
-	public void propertyChange(PropertyChangeEvent evt) {
-		if ( IRemoteServer.ATTR_HOSTNAME.equals( evt.getPropertyName() ) ||
-			IRemoteServer.ATTR_HTTP_PORT.equals( evt.getPropertyName() ) ||
-			IRemoteServer.ATTR_USERNAME.equals( evt.getPropertyName() ) ||
-			IRemoteServer.ATTR_PASSWORD.equals( evt.getPropertyName() ) ||
-			IRemoteServer.ATTR_LIFERAY_PORTAL_CONTEXT_PATH.equals( evt.getPropertyName() ) ||
-			IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( evt.getPropertyName() ) ) {
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        if( IRemoteServer.ATTR_HOSTNAME.equals( evt.getPropertyName() ) ||
+            IRemoteServer.ATTR_HTTP_PORT.equals( evt.getPropertyName() ) ||
+            IRemoteServer.ATTR_USERNAME.equals( evt.getPropertyName() ) ||
+            IRemoteServer.ATTR_PASSWORD.equals( evt.getPropertyName() ) ||
+            IRemoteServer.ATTR_LIFERAY_PORTAL_CONTEXT_PATH.equals( evt.getPropertyName() ) ||
+            IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( evt.getPropertyName() ) )
+        {
 
-			LiferayServerCorePlugin.updateConnectionSettings( (IRemoteServer) serverWC.loadAdapter(
-				IRemoteServer.class, null ) );
-		}
-	}
+            LiferayServerCorePlugin.updateConnectionSettings( (IRemoteServer) serverWC.loadAdapter(
+                IRemoteServer.class, null ) );
+        }
+    }
 
-	public void setServer(IServerWorkingCopy newServer) {
-		if (newServer == null) {
-			serverWC = null;
-			remoteServerWC = null;
-		}
-		else {
-			serverWC = newServer;
-			remoteServerWC = (IRemoteServerWorkingCopy) serverWC.loadAdapter( IRemoteServerWorkingCopy.class, null );
+    public void setServer( IServerWorkingCopy newServer )
+    {
+        if( newServer == null )
+        {
+            serverWC = null;
+            remoteServerWC = null;
+        }
+        else
+        {
+            serverWC = newServer;
+            remoteServerWC = (IRemoteServerWorkingCopy) serverWC.loadAdapter( IRemoteServerWorkingCopy.class, null );
 
-			serverWC.addPropertyChangeListener(this);
-		}
+            serverWC.addPropertyChangeListener( this );
+        }
 
-		disableValidation = true;
-		initialize();
-		disableValidation = false;
-		validate();
-	}
+        disableValidation = true;
+        initialize();
+        disableValidation = false;
+        validate();
+    }
 
-	protected void createControl() {
-		setLayout(new GridLayout(1, false));
+    protected void createControl()
+    {
+        setLayout( new GridLayout( 1, false ) );
 
-		disableValidation = true;
-		Group connectionGroup = SWTUtil.createGroup( this, "Connection Settings", 2 );
-		connectionGroup.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
+        disableValidation = true;
+        Group connectionGroup = SWTUtil.createGroup( this, "Connection Settings", 2 );
+        connectionGroup.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
 
-		Label labelHostname = new Label( connectionGroup, SWT.NONE );
-		labelHostname.setText("Hostname:");
+        Label labelHostname = new Label( connectionGroup, SWT.NONE );
+        labelHostname.setText( "Hostname:" );
 
-		textHostname = new Text( connectionGroup, SWT.BORDER );
-		textHostname.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		textHostname.addModifyListener(this);
+        textHostname = new Text( connectionGroup, SWT.BORDER );
+        textHostname.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        textHostname.addModifyListener( this );
 
-		labelHttpPort = new Label( connectionGroup, SWT.NONE );
-		labelHttpPort.setText( "HTTP port:" );
+        labelHttpPort = new Label( connectionGroup, SWT.NONE );
+        labelHttpPort.setText( "HTTP port:" );
 
-		textHTTP = new Text( connectionGroup, SWT.BORDER );
-		textHTTP.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-		textHTTP.addModifyListener( this );
+        textHTTP = new Text( connectionGroup, SWT.BORDER );
+        textHTTP.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+        textHTTP.addModifyListener( this );
 
-		labelUsername = new Label( connectionGroup, SWT.NONE );
-		labelUsername.setText( "Username:" );
+        labelUsername = new Label( connectionGroup, SWT.NONE );
+        labelUsername.setText( "Username:" );
 
-		textUsername = new Text( connectionGroup, SWT.BORDER );
-		textUsername.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-		textUsername.addModifyListener( this );
+        textUsername = new Text( connectionGroup, SWT.BORDER );
+        textUsername.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+        textUsername.addModifyListener( this );
 
-		labelPassword = new Label( connectionGroup, SWT.NONE );
-		labelPassword.setText( "Password:" );
+        labelPassword = new Label( connectionGroup, SWT.NONE );
+        labelPassword.setText( "Password:" );
 
-		textPassword = new Text( connectionGroup, SWT.BORDER | SWT.PASSWORD );
-		textPassword.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
-		textPassword.addModifyListener( this );
-	
-		labelLiferayPortalContextPath = new Label( connectionGroup, SWT.NONE );
-		labelLiferayPortalContextPath.setText( "Liferay Portal Context Path:" );
-		labelLiferayPortalContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
+        textPassword = new Text( connectionGroup, SWT.BORDER | SWT.PASSWORD );
+        textPassword.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        textPassword.addModifyListener( this );
 
-		textLiferayPortalContextPath = new Text( connectionGroup, SWT.BORDER );
-		textLiferayPortalContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
-		textLiferayPortalContextPath.addModifyListener( this );
+        labelLiferayPortalContextPath = new Label( connectionGroup, SWT.NONE );
+        labelLiferayPortalContextPath.setText( "Liferay Portal Context Path:" );
+        labelLiferayPortalContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
 
-		labelServerManagerContextPath = new Label( connectionGroup, SWT.NONE );
-		labelServerManagerContextPath.setText( "Server Manager Context Path:" );
-		labelServerManagerContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
+        textLiferayPortalContextPath = new Text( connectionGroup, SWT.BORDER );
+        textLiferayPortalContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        textLiferayPortalContextPath.addModifyListener( this );
 
-		textServerManagerContextPath = new Text( connectionGroup, SWT.BORDER );
-		textServerManagerContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
-		textServerManagerContextPath.addModifyListener( this );
+        labelServerManagerContextPath = new Label( connectionGroup, SWT.NONE );
+        labelServerManagerContextPath.setText( "Server Manager Context Path:" );
+        labelServerManagerContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
 
-		Link link =
-			SWTUtil.createLink(
-				this, SWT.NONE,
-				"Need to the install server-manager-web plugin? <a>Download latest version from here.</a>", 1 );
-		final String downloadUrl = "http://sourceforge.net/projects/lportal/files/Liferay%20Plugins/";
-		link.addSelectionListener( new SelectionAdapter()
-		{
-			public void widgetSelected( SelectionEvent e )
-			{
-				try
-				{
-					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( new URL( downloadUrl ) );
-				}
-				catch ( Exception e1 )
-				{
-					LiferayServerUIPlugin.logError( "Could not open external browser.", e1 );
-				}
-			}
-		} );
+        textServerManagerContextPath = new Text( connectionGroup, SWT.BORDER );
+        textServerManagerContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
+        textServerManagerContextPath.addModifyListener( this );
 
-		Composite validateComposite = new Composite(this, SWT.NONE);
-		validateComposite.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, true));
-		validateComposite.setLayout(new GridLayout(1, false));
+        Link link =
+            SWTUtil.createLink(
+                this, SWT.NONE,
+                "Need to the install server-manager-web plugin? <a>Download latest version from here.</a>", 1 );
+        final String downloadUrl = "http://sourceforge.net/projects/lportal/files/Liferay%20Plugins/";
+        link.addSelectionListener( new SelectionAdapter()
+        {
 
-		Button validateButton = new Button(validateComposite, SWT.PUSH);
-		validateButton.setText("Validate connection");
-		validateButton.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, false));
-		validateButton.addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected( SelectionEvent e )
+            {
+                try
+                {
+                    PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( new URL( downloadUrl ) );
+                }
+                catch( Exception e1 )
+                {
+                    LiferayServerUIPlugin.logError( "Could not open external browser.", e1 );
+                }
+            }
+        } );
 
-			public void widgetSelected(SelectionEvent e) {
-				validate();
-			}
-		});
+        Composite validateComposite = new Composite( this, SWT.NONE );
+        validateComposite.setLayoutData( new GridData( SWT.LEFT, SWT.BOTTOM, false, true ) );
+        validateComposite.setLayout( new GridLayout( 1, false ) );
 
-		// initDataBindings();
-		disableValidation = false;
+        Button validateButton = new Button( validateComposite, SWT.PUSH );
+        validateButton.setText( "Validate connection" );
+        validateButton.setLayoutData( new GridData( SWT.LEFT, SWT.BOTTOM, false, false ) );
+        validateButton.addSelectionListener( new SelectionAdapter()
+        {
 
-		validate();
-	}
+            public void widgetSelected( SelectionEvent e )
+            {
+                validate();
+            }
+        } );
 
-	protected RemoteServer getRemoteServer() {
-		if (serverWC != null) {
-			return (RemoteServer) serverWC.loadAdapter( RemoteServer.class, null );
-		}
-		else {
-			return null;
-		}
-	}
+        // initDataBindings();
+        disableValidation = false;
 
-	protected void initialize() {
-		if ( this.serverWC != null && this.remoteServerWC != null ) {
-			ignoreModifyEvents = true;
-			this.textHostname.setText(this.serverWC.getHost());
-			this.textHTTP.setText( this.remoteServerWC.getHTTPPort() );
-			this.textLiferayPortalContextPath.setText( this.remoteServerWC.getLiferayPortalContextPath() );
-			this.textServerManagerContextPath.setText( this.remoteServerWC.getServerManagerContextPath() );
-			// this.checkboxSecurity.setSelection( this.remoteServerWC.getSecurityEnabled() );
-			this.textUsername.setText( this.remoteServerWC.getUsername() );
-			this.textPassword.setText( this.remoteServerWC.getPassword() );
+        validate();
+    }
 
-			this.initialServerName = this.serverWC.getName();
-			this.initialHostName = this.serverWC.getHost();
+    protected RemoteServer getRemoteServer()
+    {
+        if( serverWC != null )
+        {
+            return (RemoteServer) serverWC.loadAdapter( RemoteServer.class, null );
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-			ignoreModifyEvents = false;
-		}
-	}
+    protected void initialize()
+    {
+        if( this.serverWC != null && this.remoteServerWC != null )
+        {
+            ignoreModifyEvents = true;
+            this.textHostname.setText( this.serverWC.getHost() );
+            this.textHTTP.setText( this.remoteServerWC.getHTTPPort() );
+            this.textLiferayPortalContextPath.setText( this.remoteServerWC.getLiferayPortalContextPath() );
+            this.textServerManagerContextPath.setText( this.remoteServerWC.getServerManagerContextPath() );
+            // this.checkboxSecurity.setSelection( this.remoteServerWC.getSecurityEnabled() );
+            this.textUsername.setText( this.remoteServerWC.getUsername() );
+            this.textPassword.setText( this.remoteServerWC.getPassword() );
 
-	protected void validate() {
-		if (disableValidation) {
-			return;
-		}
+            this.initialServerName = this.serverWC.getName();
+            this.initialHostName = this.serverWC.getHost();
 
-		if (serverWC == null) {
-			wizard.setMessage("", IMessageProvider.ERROR);
-			return;
-		}
+            ignoreModifyEvents = false;
+        }
+    }
 
-		try {
-			IRunnableWithProgress validateRunnable = new IRunnableWithProgress() {
+    protected void validate()
+    {
+        if( disableValidation )
+        {
+            return;
+        }
 
-				public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
+        if( serverWC == null )
+        {
+            wizard.setMessage( "", IMessageProvider.ERROR );
+            return;
+        }
 
-					final IStatus updateStatus = validateServer(monitor);
+        try
+        {
+            IRunnableWithProgress validateRunnable = new IRunnableWithProgress()
+            {
 
-					if (updateStatus.isOK()) {
-						String contextPath = RemoteUtil.detectServerManagerContextPath( getRemoteServer(), monitor );
+                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                {
 
-						remoteServerWC.setServerManagerContextPath( contextPath );
-					}
+                    final IStatus updateStatus = validateServer( monitor );
 
+                    if( updateStatus.isOK() )
+                    {
+                        String contextPath = RemoteUtil.detectServerManagerContextPath( getRemoteServer(), monitor );
 
-					RemoteServerComposite.this.getDisplay().syncExec(new Runnable() {
+                        remoteServerWC.setServerManagerContextPath( contextPath );
+                    }
 
-						public void run() {
-							if (updateStatus == null || updateStatus.isOK()) {
-								wizard.setMessage(null, IMessageProvider.NONE);
-							}
-							else if (updateStatus.getSeverity() == IStatus.WARNING ||
-								updateStatus.getSeverity() == IStatus.ERROR) {
-								wizard.setMessage(updateStatus.getMessage(), IMessageProvider.WARNING);
-							}
+                    RemoteServerComposite.this.getDisplay().syncExec( new Runnable()
+                    {
 
-							wizard.update();
+                        public void run()
+                        {
+                            if( updateStatus == null || updateStatus.isOK() )
+                            {
+                                wizard.setMessage( null, IMessageProvider.NONE );
+                            }
+                            else if( updateStatus.getSeverity() == IStatus.WARNING ||
+                                updateStatus.getSeverity() == IStatus.ERROR )
+                            {
+                                wizard.setMessage( updateStatus.getMessage(), IMessageProvider.WARNING );
+                            }
 
-						}
-					});
-				}
-			};
+                            wizard.update();
 
-			wizard.run(true, true, validateRunnable);
-			wizard.update();
+                        }
+                    } );
+                }
+            };
 
-			if (fragment.lastServerStatus != null && fragment.lastServerStatus.isOK()) {
-				ignoreModifyEvents = true;
+            wizard.run( true, true, validateRunnable );
+            wizard.update();
 
-				textServerManagerContextPath.setText( this.remoteServerWC.getServerManagerContextPath() );
-				textLiferayPortalContextPath.setText( this.remoteServerWC.getLiferayPortalContextPath() );
+            if( fragment.lastServerStatus != null && fragment.lastServerStatus.isOK() )
+            {
+                ignoreModifyEvents = true;
 
-				ignoreModifyEvents = false;
-			}
-		}
-		catch (final Exception e) {
-			RemoteServerComposite.this.getDisplay().syncExec(new Runnable() {
+                textServerManagerContextPath.setText( this.remoteServerWC.getServerManagerContextPath() );
+                textLiferayPortalContextPath.setText( this.remoteServerWC.getLiferayPortalContextPath() );
 
-				public void run() {
-					wizard.setMessage(e.getMessage(), IMessageProvider.WARNING);
-					wizard.update();
-				}
-			});
-		}
-	}
+                ignoreModifyEvents = false;
+            }
+        }
+        catch( final Exception e )
+        {
+            RemoteServerComposite.this.getDisplay().syncExec( new Runnable()
+            {
 
-	protected IStatus validateServer(IProgressMonitor monitor) {
-		String host = serverWC.getHost();
+                public void run()
+                {
+                    wizard.setMessage( e.getMessage(), IMessageProvider.WARNING );
+                    wizard.update();
+                }
+            } );
+        }
+    }
 
-		if (CoreUtil.isNullOrEmpty(host)) {
-			return LiferayServerUIPlugin.createErrorStatus( "Must specify hostname" );
-		}
+    protected IStatus validateServer( IProgressMonitor monitor )
+    {
+        String host = serverWC.getHost();
 
-		String username = remoteServerWC.getUsername();
+        if( CoreUtil.isNullOrEmpty( host ) )
+        {
+            return LiferayServerUIPlugin.createErrorStatus( "Must specify hostname" );
+        }
 
-		if ( CoreUtil.isNullOrEmpty( username ) ) {
-			return LiferayServerUIPlugin.createErrorStatus( "Must specify username and password" );
-		}
+        String username = remoteServerWC.getUsername();
 
-		String port = remoteServerWC.getHTTPPort();
+        if( CoreUtil.isNullOrEmpty( username ) )
+        {
+            return LiferayServerUIPlugin.createErrorStatus( "Must specify username and password" );
+        }
 
-		if (CoreUtil.isNullOrEmpty(port)) {
-			return LiferayServerUIPlugin.createErrorStatus( "Must specify HTTP port" );
-		}
+        String port = remoteServerWC.getHTTPPort();
 
-		IStatus status = remoteServerWC.validate( monitor );
+        if( CoreUtil.isNullOrEmpty( port ) )
+        {
+            return LiferayServerUIPlugin.createErrorStatus( "Must specify HTTP port" );
+        }
 
-		if ( status != null && status.getSeverity() == IStatus.ERROR ) {
-			fragment.lastServerStatus =
-				new Status(IStatus.WARNING, status.getPlugin(), status.getMessage(), status.getException());
-		}
-		else {
-			fragment.lastServerStatus = status;
-		}
+        IStatus status = remoteServerWC.validate( monitor );
 
-		return status;
-	}
+        if( status != null && status.getSeverity() == IStatus.ERROR )
+        {
+            fragment.lastServerStatus =
+                new Status( IStatus.WARNING, status.getPlugin(), status.getMessage(), status.getException() );
+        }
+        else
+        {
+            fragment.lastServerStatus = status;
+        }
+
+        return status;
+    }
 
 }

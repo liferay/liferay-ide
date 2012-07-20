@@ -44,6 +44,9 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.internal.Messages;
 import org.eclipse.wst.server.core.internal.ProgressUtil;
 
+/**
+ * @author Gregory Amerson
+ */
 @SuppressWarnings( "restriction" )
 public class BuildHelper
 {

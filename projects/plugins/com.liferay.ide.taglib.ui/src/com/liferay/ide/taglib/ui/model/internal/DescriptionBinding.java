@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,31 +18,38 @@ package com.liferay.ide.taglib.ui.model.internal;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
+/**
+ * @author Gregory Amerson
+ */
+public class DescriptionBinding extends XmlValueBindingImpl
+{
 
-public class DescriptionBinding extends XmlValueBindingImpl {
+    @Override
+    public String read()
+    {
+        String value = null;
 
-	@Override
-	public String read() {
-		String value = null;
+        final XmlElement element = xml( false );
 
-		final XmlElement element = xml(false);
+        XmlElement desc = element.getChildElement( "description", false );
 
-		XmlElement desc = element.getChildElement("description", false);
+        if( desc != null )
+        {
+            value = desc.getText();
 
-		if (desc != null) {
-			value = desc.getText();
+            // remove everything that is in a comment
+            if( value != null )
+            {
+                value = value.replaceAll( "<!--.*-->", "" );
+            }
+        }
 
-			// remove everything that is in a comment
-			if (value != null) {
-				value = value.replaceAll("<!--.*-->", "");
-			}
-		}
+        return value;
+    }
 
-		return value;
-	}
-
-	@Override
-	public void write(String value) {
-	}
+    @Override
+    public void write( String value )
+    {
+    }
 
 }

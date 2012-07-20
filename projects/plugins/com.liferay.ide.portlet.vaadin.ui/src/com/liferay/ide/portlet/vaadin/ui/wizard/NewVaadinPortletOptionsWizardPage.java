@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,26 +23,31 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-public class NewVaadinPortletOptionsWizardPage extends NewPortletOptionsWizardPage {
+public class NewVaadinPortletOptionsWizardPage extends NewPortletOptionsWizardPage
+{
 
-	public NewVaadinPortletOptionsWizardPage(
-		IDataModel dataModel, String pageName, String desc, String title, boolean fragment) {
-		super(dataModel, pageName, desc, title, fragment);
-	}
+    public NewVaadinPortletOptionsWizardPage(
+        IDataModel dataModel, String pageName, String desc, String title, boolean fragment )
+    {
+        super( dataModel, pageName, desc, title, fragment );
+    }
 
-	@Override
-	protected void createJSPsField(Composite parent) {
-		// do nothing, Vaadin portlets dont yet use these fields
-	}
+    @Override
+    protected void createJSPsField( Composite parent )
+    {
+        // do nothing, Vaadin portlets dont yet use these fields
+    }
 
-	@Override
-	protected void createLiferayPortletModesGroup(Composite composite) {
-		// do nothing, Vaadin portlets dont yet use these fields
-	}
+    @Override
+    protected void createLiferayPortletModesGroup( Composite composite )
+    {
+        // do nothing, Vaadin portlets dont yet use these fields
+    }
 
-	@Override
-	protected void createPortletModesGroup(Composite composite) {
-		// do nothing, Vaadin portlets dont yet use these fields
-	}
+    @Override
+    protected void createPortletModesGroup( Composite composite )
+    {
+        // do nothing, Vaadin portlets dont yet use these fields
+    }
 
 }

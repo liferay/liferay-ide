@@ -904,8 +904,8 @@
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
             class="com.liferay.ide.server.core.LiferayServerPropertyTester"
-            id="com.liferay.ide.eclipse.server.core.isLiferayServer"
-            namespace="com.liferay.ide.eclipse.server.core"
+            id="com.liferay.ide.server.core.isLiferayServer"
+            namespace="com.liferay.ide.server.core"
             properties="isLiferayServer"
             type="java.lang.Object">
       </propertyTester>
@@ -936,7 +936,7 @@
             description="Liferay Portal Server running at a remote IP address"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.remote"
-            launchConfigId="com.liferay.ide.eclipse.server.remote.launchConfigurationType"
+            launchConfigId="com.liferay.ide.server.remote.launchConfigurationType"
             name="Remote Liferay Server (Liferay 6.1)"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.runtime.stub"
@@ -947,12 +947,12 @@
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
             delegate="com.liferay.ide.server.remote.RemoteLaunchConfigDelegate"
-            id="com.liferay.ide.eclipse.server.remote.launchConfigurationType"
+            id="com.liferay.ide.server.remote.launchConfigurationType"
             modes="run, debug"
             name="Liferay Server (Remote)"
             public="true"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.eclipse.server.remote.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.server.remote.sourcePathComputer">
       </launchConfigurationType>
    </extension>
    <extension
@@ -1030,7 +1030,7 @@
          point="org.eclipse.debug.core.sourcePathComputers">
       <sourcePathComputer
             class="com.liferay.ide.server.remote.RemoteSourcePathComputerDelegate"
-            id="com.liferay.ide.eclipse.server.remote.sourcePathComputer">
+            id="com.liferay.ide.server.remote.sourcePathComputer">
       </sourcePathComputer>
    </extension>
 

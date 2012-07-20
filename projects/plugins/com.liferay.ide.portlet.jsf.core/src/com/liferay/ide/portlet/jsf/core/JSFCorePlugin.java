@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.portlet.jsf.core;
 
 import org.eclipse.core.runtime.IStatus;
@@ -27,61 +28,68 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class JSFCorePlugin extends Plugin {
+public class JSFCorePlugin extends Plugin
+{
 
-	public static final IProjectFacet JSF_FACET =
-		ProjectFacetsManager.getProjectFacet(IJSFCoreConstants.JSF_CORE_FACET_ID);
+    public static final IProjectFacet JSF_FACET =
+        ProjectFacetsManager.getProjectFacet( IJSFCoreConstants.JSF_CORE_FACET_ID );
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.portlet.jsf.core"; //$NON-NLS-1$
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.portlet.jsf.core"; //$NON-NLS-1$
 
-	// The shared instance
-	private static JSFCorePlugin plugin;
-	
-	public static IStatus createErrorStatus(String msg) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg);
-	}
+    // The shared instance
+    private static JSFCorePlugin plugin;
 
-	public static IStatus createErrorStatus(String msg, Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
-	}
+    public static IStatus createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
+    }
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static JSFCorePlugin getDefault() {
-		return plugin;
-	}
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
 
-	public static void logError(String msg, Exception e) {
-		getDefault().getLog().log(createErrorStatus(msg, e));
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static JSFCorePlugin getDefault()
+    {
+        return plugin;
+    }
 
-	/**
-	 * The constructor
-	 */
-	public JSFCorePlugin() {
-	}
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+    /**
+     * The constructor
+     */
+    public JSFCorePlugin()
+    {
+    }
 
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+     */
+    public void start( BundleContext context ) throws Exception
+    {
+        super.start( context );
+        plugin = this;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
+        plugin = null;
+        super.stop( context );
+    }
 
 }

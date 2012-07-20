@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,54 +25,55 @@ import org.eclipse.wst.server.core.model.IURLProvider;
 /**
  * @author Greg Amerson
  */
-public interface IRemoteServer extends ILiferayServer, IURLProvider {
+public interface IRemoteServer extends ILiferayServer, IURLProvider
+{
 
-	@SuppressWarnings( "deprecation" )
-	public static final IEclipsePreferences defaultPrefs =
-		new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
+    @SuppressWarnings( "deprecation" )
+    public static final IEclipsePreferences defaultPrefs =
+        new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
 
-	String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp";
+    String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp";
 
-	String ATTR_HOSTNAME = "hostname";
+    String ATTR_HOSTNAME = "hostname";
 
-	String ATTR_HTTP_PORT = "http-port";
+    String ATTR_HTTP_PORT = "http-port";
 
-	String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path";
+    String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path";
 
-	String ATTR_PASSWORD = "password";
+    String ATTR_PASSWORD = "password";
 
-	String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path";
+    String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path";
 
-	String ATTR_USERNAME = "username";
+    String ATTR_USERNAME = "username";
 
-	boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true );
+    boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true );
 
-	String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", "" );
+    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", "" );
 
-	String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
+    String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
 
-	String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", "" );
+    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", "" );
 
-	String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
+    String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
 
-	String DEFAULT_USERNAME = defaultPrefs.get( "default.username", "" );
+    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", "" );
 
-	boolean getAdjustDeploymentTimestamp();
+    boolean getAdjustDeploymentTimestamp();
 
-	String getHost();
+    String getHost();
 
-	String getHTTPPort();
+    String getHTTPPort();
 
-	String getId();
+    String getId();
 
-	String getLiferayPortalContextPath();
+    String getLiferayPortalContextPath();
 
-	String getPassword();
+    String getPassword();
 
-	String getServerManagerContextPath();
+    String getServerManagerContextPath();
 
-	String getUsername();
+    String getUsername();
 
-	void setAdjustDeploymentTimestamp( boolean adjustDemploymentTimestamp );
+    void setAdjustDeploymentTimestamp( boolean adjustDemploymentTimestamp );
 
 }

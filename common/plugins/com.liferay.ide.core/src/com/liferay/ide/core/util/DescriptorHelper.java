@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -10,6 +10,9 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
+ *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
@@ -39,227 +42,266 @@ import org.w3c.dom.NodeList;
  * 
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class DescriptorHelper {
+@SuppressWarnings( "restriction" )
+public class DescriptorHelper
+{
+
+    public abstract class DOMModelEditOperation extends DOMModelOperation
+    {
+        public DOMModelEditOperation( IFile descriptorFile )
+        {
+            super( descriptorFile );
+        }
+
+        public IStatus execute()
+        {
+            IStatus retval = null;
+
+            if( !this.file.exists() )
+            {
+                return CorePlugin.createErrorStatus( this.file.getName() + " doesn't exist" );
+            }
+
+            IDOMModel domModel = null;
+
+            try
+            {
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( this.file );
+
+                domModel.aboutToChangeModel();
+
+                IDOMDocument document = domModel.getDocument();
+
+                retval = doExecute( document );
+
+                domModel.changedModel();
+
+                domModel.save();
+            }
+            catch( Exception e )
+            {
+                retval = CorePlugin.createErrorStatus( e );
+            }
+            finally
+            {
+                if( domModel != null )
+                {
+                    domModel.releaseFromEdit();
+                }
+            }
+
+            return retval;
+        }
+    }
+
+    protected static abstract class DOMModelOperation
+    {
+        protected IFile file;
+
+        public DOMModelOperation( IFile descriptorFile )
+        {
+            this.file = descriptorFile;
+        }
+
+        protected abstract IStatus doExecute( IDOMDocument document );
+
+        public abstract IStatus execute();
+    }
+
+    protected abstract class DOMModelReadOperation extends DOMModelOperation
+    {
+        public DOMModelReadOperation( IFile descriptorFile )
+        {
+            super( descriptorFile );
+        }
+
+        public IStatus execute()
+        {
+            IStatus retval = null;
+
+            if( !this.file.exists() )
+            {
+                return CorePlugin.createErrorStatus( this.file.getName() + " doesn't exist" );
+            }
+
+            IDOMModel domModel = null;
+            try
+            {
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( this.file );
+
+                IDOMDocument document = domModel.getDocument();
+
+                retval = doExecute( document );
+            }
+            catch( Exception e )
+            {
+                retval = CorePlugin.createErrorStatus( e );
+            }
+            finally
+            {
+                if( domModel != null )
+                {
+                    domModel.releaseFromRead();
+                }
+            }
 
-	public abstract class DOMModelEditOperation extends DOMModelOperation {
+            return retval;
+        }
+    }
 
-		public DOMModelEditOperation(IFile descriptorFile) {
-			super(descriptorFile);
-		}
+    public static Element appendChildElement( Element parentElement, String newElementName )
+    {
+        return appendChildElement( parentElement, newElementName, null );
+    }
 
-		public IStatus execute() {
-			IStatus retval = null;
+    public static Element appendChildElement( Element parentElement, String newElementName, String initialTextContent )
+    {
+        Element newChildElement = null;
 
-			if (!this.file.exists()) {
-				return CorePlugin.createErrorStatus(this.file.getName() + " doesn't exist");
-			}
+        if( parentElement != null && newElementName != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
 
-			IDOMModel domModel = null;
+            newChildElement = ownerDocument.createElement( newElementName );
 
-			try {
-				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(this.file);
+            if( initialTextContent != null )
+            {
+                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
+            }
 
-				domModel.aboutToChangeModel();
+            parentElement.appendChild( newChildElement );
+        }
 
-				IDOMDocument document = domModel.getDocument();
+        return newChildElement;
+    }
 
-				retval = doExecute(document);
+    public static Element findChildElement( Element parentElement, String elementName )
+    {
+        Element retval = null;
 
-				domModel.changedModel();
+        if( parentElement == null )
+        {
+            return retval;
+        }
 
-				domModel.save();
-			}
-			catch (Exception e) {
-				retval = CorePlugin.createErrorStatus(e);
-			}
-			finally {
-				if (domModel != null) {
-					domModel.releaseFromEdit();
-				}
-			}
+        NodeList children = parentElement.getChildNodes();
 
-			return retval;
-		}
+        for( int i = 0; i < children.getLength(); i++ )
+        {
+            Node child = children.item( i );
 
-	}
+            if( child instanceof Element && child.getNodeName().equals( elementName ) )
+            {
+                retval = (Element) child;
+                break;
+            }
+        }
 
-	protected static abstract class DOMModelOperation {
+        return retval;
+    }
 
-		protected IFile file;
+    public static IFile getDescriptorFile( IProject project, String fileName )
+    {
+        IVirtualComponent comp = ComponentCore.createComponent( project );
 
-		public DOMModelOperation(IFile descriptorFile) {
-			this.file = descriptorFile;
-		}
+        if( comp == null )
+        {
+            return null;
+        }
 
-		public abstract IStatus execute();
+        IVirtualFolder webRoot = comp.getRootFolder();
 
-		protected abstract IStatus doExecute(IDOMDocument document);
+        IFolder webInfFolder = (IFolder) webRoot.getFolder( "WEB-INF" ).getUnderlyingFolder();
 
-	}
+        return webInfFolder.getFile( fileName );
+    }
 
-	protected abstract class DOMModelReadOperation extends DOMModelOperation {
+    public static Element insertChildElement(
+        Element parentElement, Node refNode, String newElementName, String initialTextContent )
+    {
 
-		public DOMModelReadOperation(IFile descriptorFile) {
-			super(descriptorFile);
-		}
+        Element newChildElement = null;
 
-		public IStatus execute() {
-			IStatus retval = null;
+        if( parentElement != null && newElementName != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
 
-			if (!this.file.exists()) {
-				return CorePlugin.createErrorStatus(this.file.getName() + " doesn't exist");
-			}
+            newChildElement = ownerDocument.createElement( newElementName );
 
-			IDOMModel domModel = null;
-			try {
-				domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead(this.file);
+            if( initialTextContent != null )
+            {
+                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
+            }
 
-				IDOMDocument document = domModel.getDocument();
+            parentElement.insertBefore( newChildElement, refNode );
+        }
 
-				retval = doExecute(document);
-			}
-			catch (Exception e) {
-				retval = CorePlugin.createErrorStatus(e);
-			}
-			finally {
-				if (domModel != null) {
-					domModel.releaseFromRead();
-				}
-			}
+        return newChildElement;
+    }
 
-			return retval;
-		}
-	}
+    public static void removeChildren( Node node )
+    {
+        if( node == null || node.getChildNodes() == null || node.getChildNodes().getLength() <= 0 )
+        {
+            return;
+        }
 
-	public static Element appendChildElement(Element parentElement, String newElementName) {
-		return appendChildElement(parentElement, newElementName, null);
-	}
+        NodeList children = node.getChildNodes();
 
-	public static Element appendChildElement(Element parentElement, String newElementName, String initialTextContent) {
-		Element newChildElement = null;
+        for( int i = 0; i < children.getLength(); i++ )
+        {
+            node.removeChild( children.item( i ) );
+        }
+    }
 
-		if (parentElement != null && newElementName != null) {
-			Document ownerDocument = parentElement.getOwnerDocument();
+    protected String descriptorPath;
 
-			newChildElement = ownerDocument.createElement(newElementName);
+    protected IProject project;
 
-			if (initialTextContent != null) {
-				newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));
-			}
+    public DescriptorHelper( IProject project )
+    {
+        this.project = project;
+    }
 
-			parentElement.appendChild(newChildElement);
-		}
+    public List<Element> getChildElements( Element parent )
+    {
+        List<Element> retval = new ArrayList<Element>();
 
-		return newChildElement;
-	}
+        if( parent != null )
+        {
+            NodeList children = parent.getChildNodes();
 
-	public static Element findChildElement(Element parentElement, String elementName) {
-		Element retval = null;
+            for( int i = 0; i < children.getLength(); i++ )
+            {
+                Node child = children.item( i );
 
-		if (parentElement == null) {
-			return retval;
-		}
+                if( child instanceof Element )
+                {
+                    retval.add( (Element) child );
+                }
+            }
+        }
 
-		NodeList children = parentElement.getChildNodes();
+        return retval;
+    }
 
-		for (int i = 0; i < children.getLength(); i++) {
-			Node child = children.item(i);
+    protected IFile getDescriptorFile( String fileName )
+    {
+        return getDescriptorFile( project, fileName );
+    }
 
-			if (child instanceof Element && child.getNodeName().equals(elementName)) {
-				retval = (Element) child;
-				break;
-			}
-		}
+    public String getDescriptorPath()
+    {
+        return this.descriptorPath;
+    }
 
-		return retval;
-	}
+    protected IProject getProject()
+    {
+        return project;
+    }
 
-	public static IFile getDescriptorFile(IProject project, String fileName) {
-		IVirtualComponent comp = ComponentCore.createComponent(project);
-
-		if (comp == null) {
-			return null;
-		}
-
-		IVirtualFolder webRoot = comp.getRootFolder();
-
-		IFolder webInfFolder = (IFolder) webRoot.getFolder("WEB-INF").getUnderlyingFolder();
-
-		return webInfFolder.getFile(fileName);
-	}
-
-	public static Element insertChildElement(
-		Element parentElement, Node refNode, String newElementName, String initialTextContent) {
-
-		Element newChildElement = null;
-
-		if (parentElement != null && newElementName != null) {
-			Document ownerDocument = parentElement.getOwnerDocument();
-
-			newChildElement = ownerDocument.createElement(newElementName);
-
-			if (initialTextContent != null) {
-				newChildElement.appendChild(ownerDocument.createTextNode(initialTextContent));
-			}
-
-			parentElement.insertBefore(newChildElement, refNode);
-		}
-
-		return newChildElement;
-	}
-
-	public static void removeChildren(Node node) {
-		if (node == null || node.getChildNodes() == null || node.getChildNodes().getLength() <= 0) {
-			return;
-		}
-
-		NodeList children = node.getChildNodes();
-
-		for (int i = 0; i < children.getLength(); i++) {
-			node.removeChild(children.item(i));
-		}
-	}
-
-	protected String descriptorPath;
-
-	protected IProject project;
-
-	public DescriptorHelper(IProject project) {
-		this.project = project;
-	}
-
-	public List<Element> getChildElements(Element parent) {
-		List<Element> retval = new ArrayList<Element>();
-
-		if (parent != null) {
-			NodeList children = parent.getChildNodes();
-
-			for (int i = 0; i < children.getLength(); i++) {
-				Node child = children.item(i);
-
-				if (child instanceof Element) {
-					retval.add((Element) child);
-				}
-			}
-		}
-
-		return retval;
-	}
-
-	public String getDescriptorPath() {
-		return this.descriptorPath;
-	}
-
-	public void setDescriptorPath(String path) {
-		this.descriptorPath = path;
-	}
-
-	protected IFile getDescriptorFile(String fileName) {
-		return getDescriptorFile(project, fileName);
-	}
-
-	protected IProject getProject() {
-		return project;
-	}
+    public void setDescriptorPath( String path )
+    {
+        this.descriptorPath = path;
+    }
 }

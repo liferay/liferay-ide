@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.service.ui;
 
 import com.liferay.ide.portlet.core.PortletCore;
@@ -21,20 +22,25 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
+/**
+ * @author Gregory Amerson
+ */
+public class BuildWSDDActionHandler extends SapphireActionHandler
+{
 
-public class BuildWSDDActionHandler extends SapphireActionHandler {
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        IFile file = context.getPart().getModelElement().adapt( IFile.class );
 
-	@Override
-	protected Object run(SapphireRenderingContext context) {
-		IFile file = context.getPart().getModelElement().adapt(IFile.class);
+        if( file != null && file.exists() )
+        {
+            BuildWSDDJob job = PortletCore.createBuildWSDDJob( file );
 
-		if (file != null && file.exists()) {
-			BuildWSDDJob job = PortletCore.createBuildWSDDJob(file);
+            job.schedule();
+        }
 
-			job.schedule();
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 }

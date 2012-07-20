@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,8 +15,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.sdk.pref.SDKsPreferencePage;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -35,71 +35,72 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelSynchHel
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferaySDKField {
+public class LiferaySDKField
+{
+    protected IDataModel model;
+    protected String propertyName;
+    protected SelectionAdapter selectionAdapter;
+    protected DataModelSynchHelper synchHelper;
 
-	protected IDataModel model;
+    public LiferaySDKField(
+        Composite parent, IDataModel model, SelectionAdapter selectionAdapter, String fieldPropertyName,
+        DataModelSynchHelper synchHelper )
+    {
+        this( parent, model, selectionAdapter, fieldPropertyName, synchHelper, "Liferay Plugins SDK" );
+    }
 
-	protected String propertyName;
+    public LiferaySDKField(
+        Composite parent, IDataModel model, SelectionAdapter selectionAdapter, String fieldPropertyName,
+        DataModelSynchHelper synchHelper, String labelName )
+    {
+        this.model = model;
+        this.propertyName = fieldPropertyName;
+        this.selectionAdapter = selectionAdapter;
+        this.synchHelper = synchHelper;
 
-	protected SelectionAdapter selectionAdapter;
+        SWTUtil.createLabel( parent, labelName, 1 );
 
-	protected DataModelSynchHelper synchHelper;
+        Combo sdkCombo = new Combo( parent, SWT.DROP_DOWN | SWT.READ_ONLY );
+        sdkCombo.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 ) );
+        sdkCombo.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                LiferaySDKField.this.selectionAdapter.widgetSelected( e );
+                LiferaySDKField.this.synchHelper.synchAllUIWithModel();
+            }
+        } );
 
-	public LiferaySDKField(
-		Composite parent, IDataModel model, SelectionAdapter selectionAdapter, String fieldPropertyName,
-		DataModelSynchHelper synchHelper ) {
-		this( parent, model, selectionAdapter, fieldPropertyName, synchHelper, "Liferay Plugins SDK" );
-	}
+        Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
+        // Button configureSDKsLink = new Button(group, SWT.PUSH);
+        configureSDKsLink.setText( "<a href=\"#\">Configure</a>" );
+        // configureSDKsLink.setText("Configure ...");
+        configureSDKsLink.setLayoutData( new GridData( SWT.LEFT, SWT.TOP, false, false ) );
+        configureSDKsLink.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                configureSDKsLinkSelected( e );
+                LiferaySDKField.this.selectionAdapter.widgetSelected( e );
+            }
+        } );
+        synchHelper.synchCombo( sdkCombo, fieldPropertyName, new Control[] { configureSDKsLink } );
+    }
 
-	public LiferaySDKField(
-		Composite parent, IDataModel model, SelectionAdapter selectionAdapter, String fieldPropertyName,
-		DataModelSynchHelper synchHelper, String labelName ) {
-		this.model = model;
-		this.propertyName = fieldPropertyName;
-		this.selectionAdapter = selectionAdapter;
-		this.synchHelper = synchHelper;
+    protected void configureSDKsLinkSelected( SelectionEvent e )
+    {
+        int retval =
+            PreferencesUtil.createPreferenceDialogOn(
+                e.display.getActiveShell(), SDKsPreferencePage.ID, new String[] { SDKsPreferencePage.ID }, null ).open();
 
-		SWTUtil.createLabel( parent, labelName, 1 );
+        if( retval == Window.OK )
+        {
+            model.notifyPropertyChange( propertyName, IDataModel.VALID_VALUES_CHG );
 
-		Combo sdkCombo = new Combo( parent, SWT.DROP_DOWN | SWT.READ_ONLY );
-		sdkCombo.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 ) );
-		sdkCombo.addSelectionListener( new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected( SelectionEvent e ) {
-				LiferaySDKField.this.selectionAdapter.widgetSelected( e );
-				LiferaySDKField.this.synchHelper.synchAllUIWithModel();
-			}
-
-		} );
-
-		Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
-		// Button configureSDKsLink = new Button(group, SWT.PUSH);
-		configureSDKsLink.setText( "<a href=\"#\">Configure</a>" );
-		// configureSDKsLink.setText("Configure ...");
-		configureSDKsLink.setLayoutData( new GridData( SWT.LEFT, SWT.TOP, false, false ) );
-		configureSDKsLink.addSelectionListener( new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected( SelectionEvent e ) {
-				configureSDKsLinkSelected( e );
-				LiferaySDKField.this.selectionAdapter.widgetSelected( e );
-			}
-
-		} );
-		synchHelper.synchCombo( sdkCombo, fieldPropertyName, new Control[] { configureSDKsLink } );
-	}
-
-	protected void configureSDKsLinkSelected( SelectionEvent e ) {
-		int retval =
-			PreferencesUtil.createPreferenceDialogOn(
-				e.display.getActiveShell(), SDKsPreferencePage.ID, new String[] { SDKsPreferencePage.ID }, null ).open();
-
-		if ( retval == Window.OK ) {
-			model.notifyPropertyChange( propertyName, IDataModel.VALID_VALUES_CHG );
-
-			selectionAdapter.widgetSelected( e );
-		}
-	}
+            selectionAdapter.widgetSelected( e );
+        }
+    }
 
 }

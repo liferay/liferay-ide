@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,51 +22,55 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class NewServiceWrapperClassDataModelProvider extends NewJavaClassDataModelProvider
-	implements INewJavaClassDataModelProperties {
+    implements INewJavaClassDataModelProperties
+{
 
-	protected IDataModel hookModel;
+    protected IDataModel hookModel;
+    protected String qualifiedClassname;
+    protected String qualifiedSuperclassname;
 
-	protected String qualifiedClassname;
+    public NewServiceWrapperClassDataModelProvider(
+        IDataModel model, String qualifiedClassname, String qualifiedSuperclassname )
+    {
+        this.hookModel = model;
+        this.qualifiedClassname = qualifiedClassname;
+        this.qualifiedSuperclassname = qualifiedSuperclassname;
+    }
 
-	protected String qualifiedSuperclassname;
+    @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        if( SOURCE_FOLDER.equals( propertyName ) )
+        {
+            return this.hookModel.getProperty( SOURCE_FOLDER );
+        }
+        else if( JAVA_PACKAGE.equals( propertyName ) )
+        {
+            int lastDot = this.qualifiedClassname.lastIndexOf( '.' );
 
-	public NewServiceWrapperClassDataModelProvider(
-		IDataModel model, String qualifiedClassname, String qualifiedSuperclassname) {
+            return this.qualifiedClassname.substring( 0, lastDot );
+        }
+        else if( JAVA_PACKAGE_FRAGMENT_ROOT.equals( propertyName ) )
+        {
+            return this.hookModel.getProperty( JAVA_PACKAGE_FRAGMENT_ROOT );
+        }
+        else if( CLASS_NAME.equals( propertyName ) )
+        {
+            return this.qualifiedClassname.substring(
+                this.qualifiedClassname.lastIndexOf( '.' ) + 1, this.qualifiedClassname.length() );
+        }
+        else if( SUPERCLASS.equals( propertyName ) )
+        {
+            return this.qualifiedSuperclassname;
+        }
+        else if( PROJECT_NAME.equals( propertyName ) )
+        {
+            return this.hookModel.getProperty( PROJECT_NAME );
+        }
 
-		this.hookModel = model;
-
-		this.qualifiedClassname = qualifiedClassname;
-
-		this.qualifiedSuperclassname = qualifiedSuperclassname;
-	}
-
-	@Override
-	public Object getDefaultProperty(String propertyName) {
-		if (SOURCE_FOLDER.equals(propertyName)) {
-			return this.hookModel.getProperty(SOURCE_FOLDER);
-		}
-		else if (JAVA_PACKAGE.equals(propertyName)) {
-			int lastDot = this.qualifiedClassname.lastIndexOf('.');
-
-			return this.qualifiedClassname.substring(0, lastDot);
-		}
-		else if (JAVA_PACKAGE_FRAGMENT_ROOT.equals(propertyName)) {
-			return this.hookModel.getProperty(JAVA_PACKAGE_FRAGMENT_ROOT);
-		}
-		else if (CLASS_NAME.equals(propertyName)) {
-			return this.qualifiedClassname.substring(
-				this.qualifiedClassname.lastIndexOf('.') + 1, this.qualifiedClassname.length());
-		}
-		else if (SUPERCLASS.equals(propertyName)) {
-			return this.qualifiedSuperclassname;
-		}
-		else if (PROJECT_NAME.equals(propertyName)) {
-			return this.hookModel.getProperty(PROJECT_NAME);
-		}
-
-		return super.getDefaultProperty(propertyName);
-	}
+        return super.getDefaultProperty( propertyName );
+    }
 
 }

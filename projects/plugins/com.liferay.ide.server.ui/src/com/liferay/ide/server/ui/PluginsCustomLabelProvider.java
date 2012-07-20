@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,52 +29,64 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class PluginsCustomLabelProvider extends LabelProvider {
+@SuppressWarnings( "restriction" )
+public class PluginsCustomLabelProvider extends LabelProvider
+{
 
-	public PluginsCustomLabelProvider() {
-		super();
-	}
+    public PluginsCustomLabelProvider()
+    {
+        super();
+    }
 
-	@Override
-	public Image getImage(Object element) {
-		if (element instanceof PluginsContent) {
-			return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-				LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage();
-		}
-		else if (element instanceof ModuleServer) {			
-			try {
-				ModuleServer server = (ModuleServer) element;
-				IProject project = server.getModule()[0].getProject();
-				IFacetedProject facetedProject = ProjectUtil.getFacetedProject(project);
-				if ( facetedProject != null ) {
-					IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
-					IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition( liferayFacet );
-					return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-						LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png" ).createImage();
-				}
-				else {
-					String type = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
-					return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-						LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage();
-				}
-			}
-			catch (Exception ex) {
-				// best effort no need to log error
-			}
-		}
-		
-		return null;
-	}
+    @Override
+    public Image getImage( Object element )
+    {
+        if( element instanceof PluginsContent )
+        {
+            return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+                LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage();
+        }
+        else if( element instanceof ModuleServer )
+        {
+            try
+            {
+                ModuleServer server = (ModuleServer) element;
+                IProject project = server.getModule()[0].getProject();
+                IFacetedProject facetedProject = ProjectUtil.getFacetedProject( project );
+                if( facetedProject != null )
+                {
+                    IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
+                    IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition( liferayFacet );
+                    return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png" ).createImage();
+                }
+                else
+                {
+                    String type = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
+                    return LiferayServerUIPlugin.imageDescriptorFromPlugin(
+                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage();
+                }
+            }
+            catch( Exception ex )
+            {
+                // best effort no need to log error
+            }
+        }
 
-	@Override
-	public String getText(Object element) {
-		if (element instanceof PluginsContent) {
-			return "Liferay Plugins";
-		}
-		else {
-			return null;
-		}
-	}
+        return null;
+    }
+
+    @Override
+    public String getText( Object element )
+    {
+        if( element instanceof PluginsContent )
+        {
+            return "Liferay Plugins";
+        }
+        else
+        {
+            return null;
+        }
+    }
 
 }

@@ -21,8 +21,8 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.hook.core.model.IHook;
-import com.liferay.ide.hook.core.model.IStrutsAction;
+import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.model.StrutsAction;
 
 import java.io.File;
 import java.util.SortedSet;
@@ -38,97 +38,97 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 /**
  * @author Gregory Amerson
  */
 public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 {
-	private IPath portalDir;
-	private TreeSet<String> possibleValues;
 
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values )
-	{
-		if ( this.portalDir != null && this.portalDir.toFile().exists() )
-		{
-			if ( this.possibleValues == null )
-			{
-				this.possibleValues = new TreeSet<String>();
-				File strutsConfigFile = this.portalDir.append( "WEB-INF/struts-config.xml" ).toFile();
+    private IPath portalDir;
+    private TreeSet<String> possibleValues;
 
-				if ( strutsConfigFile.exists() )
-				{
-					try
-					{
-						Document doc =
-							DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( strutsConfigFile );
-						NodeList actions = doc.getElementsByTagName( "action" );
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        if( this.portalDir != null && this.portalDir.toFile().exists() )
+        {
+            if( this.possibleValues == null )
+            {
+                this.possibleValues = new TreeSet<String>();
+                File strutsConfigFile = this.portalDir.append( "WEB-INF/struts-config.xml" ).toFile();
 
-						if ( actions != null )
-						{
-							for ( int i = 0; i < actions.getLength(); i++ )
-							{
-								Node action = actions.item( i );
+                if( strutsConfigFile.exists() )
+                {
+                    try
+                    {
+                        Document doc =
+                            DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( strutsConfigFile );
+                        NodeList actions = doc.getElementsByTagName( "action" );
 
-								Node path = action.getAttributes().getNamedItem( "path" );
+                        if( actions != null )
+                        {
+                            for( int i = 0; i < actions.getLength(); i++ )
+                            {
+                                Node action = actions.item( i );
 
-								if ( path != null )
-								{
-									possibleValues.add( path.getNodeValue() );
-								}
-							}
-						}
-					}
-					catch ( Exception e )
-					{
-					}
-				}
-			}
+                                Node path = action.getAttributes().getNamedItem( "path" );
 
-			values.addAll( this.possibleValues );
+                                if( path != null )
+                                {
+                                    possibleValues.add( path.getNodeValue() );
+                                }
+                            }
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                    }
+                }
+            }
 
-			// add the value that is current set by the user
-			String actionPath = context( IStrutsAction.class ).getStrutsActionPath().getContent( false );
+            values.addAll( this.possibleValues );
 
-			if( !empty( actionPath ) )
-			{
-				values.add( actionPath );
-			}
-		}
-	}
+            // add the value that is current set by the user
+            String actionPath = context( StrutsAction.class ).getStrutsActionPath().getContent( false );
 
-	@Override
-	protected void init()
-	{
-		super.init();
+            if( !empty( actionPath ) )
+            {
+                values.add( actionPath );
+            }
+        }
+    }
 
-		final IProject project = project();
+    @Override
+    protected void init()
+    {
+        super.init();
 
-		if ( project != null )
-		{
-			try
-			{
-				ILiferayRuntime lr = ServerUtil.getLiferayRuntime( project );
+        final IProject project = project();
 
-				if ( lr != null )
-				{
-					this.portalDir = lr.getPortalDir();
-				}
-			}
-			catch ( CoreException e )
-			{
-			}
-		}
-	}
+        if( project != null )
+        {
+            try
+            {
+                ILiferayRuntime lr = ServerUtil.getLiferayRuntime( project );
 
-	protected IHook hook()
-	{
-		return this.context().find( IHook.class );
-	}
+                if( lr != null )
+                {
+                    this.portalDir = lr.getPortalDir();
+                }
+            }
+            catch( CoreException e )
+            {
+            }
+        }
+    }
 
-	protected IProject project()
-	{
-		return this.hook().adapt( IProject.class );
-	}
+    protected Hook hook()
+    {
+        return this.context().find( Hook.class );
+    }
+
+    protected IProject project()
+    {
+        return this.hook().adapt( IProject.class );
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,10 +17,10 @@ package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,185 +46,199 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements INewHookDataModelProperties {
+@SuppressWarnings( "restriction" )
+public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements INewHookDataModelProperties
+{
+    protected Button customJSPButton;
+    protected Button folderButton;
+    protected Text folderText;
+    protected Button languagePropertiesButton;
+    protected Button portalPropertiesButton;
+    protected String projectName;
+    protected Combo projectNameCombo;
+    protected Label projectNameLabel;
+    protected Button servicesButton;
 
-	protected Button customJSPButton;
+    public NewHookTypeWizardPage( IDataModel model, String pageName )
+    {
+        super( model, pageName, "Create Liferay Hook", PortletUIPlugin.imageDescriptorFromPlugin(
+            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
 
-	protected Button folderButton;
+        setDescription( "Define a new hook plugin." );
+    }
 
-	protected Text folderText;
+    protected void createHookTypesGroup( Composite parent )
+    {
+        Group group = SWTUtil.createGroup( parent, "Select hook type(s) to create", 1 );
+        group.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 2, 1 ) );
 
-	protected Button languagePropertiesButton;
+        customJSPButton = SWTUtil.createCheckButton( group, "Custom JSPs", null, false, 1 );
+        this.synchHelper.synchCheckbox( customJSPButton, CREATE_CUSTOM_JSPS, null );
 
-	protected Button portalPropertiesButton;
+        portalPropertiesButton = SWTUtil.createCheckButton( group, "Portal properties", null, false, 1 );
+        this.synchHelper.synchCheckbox( portalPropertiesButton, CREATE_PORTAL_PROPERTIES, null );
 
-	protected String projectName;
+        servicesButton = SWTUtil.createCheckButton( group, "Services", null, false, 1 );
+        this.synchHelper.synchCheckbox( servicesButton, CREATE_SERVICES, null );
 
-	protected Combo projectNameCombo;
+        languagePropertiesButton = SWTUtil.createCheckButton( group, "Language properties", null, false, 1 );
+        this.synchHelper.synchCheckbox( languagePropertiesButton, CREATE_LANGUAGE_PROPERTIES, null );
+    }
 
-	protected Label projectNameLabel;
+    /**
+     * Add project group
+     */
+    protected void createProjectNameGroup( Composite parent )
+    {
+        // set up project name label
+        projectNameLabel = new Label( parent, SWT.NONE );
+        projectNameLabel.setText( "Hook plugin project:" ); //$NON-NLS-1$
 
-	protected Button servicesButton;
+        projectNameLabel.setLayoutData( new GridData() );
 
-	public NewHookTypeWizardPage(IDataModel model, String pageName) {
-		super(model, pageName, "Create Liferay Hook", PortletUIPlugin.imageDescriptorFromPlugin(
-			PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
+        GridData data = new GridData( GridData.FILL_HORIZONTAL );
+        data.widthHint = 300;
+        data.horizontalSpan = 1;
+        data.grabExcessHorizontalSpace = true;
 
-		setDescription("Define a new hook plugin.");
-	}
+        // set up project name entry field
+        projectNameCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
+        projectNameCombo.setLayoutData( data );
+        synchHelper.synchCombo( projectNameCombo, PROJECT_NAME, null );
 
-	protected void createHookTypesGroup(Composite parent) {
-		Group group = SWTUtil.createGroup(parent, "Select hook type(s) to create", 1);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        initializeProjectList();
+    }
 
-		customJSPButton = SWTUtil.createCheckButton(group, "Custom JSPs", null, false, 1);
-		this.synchHelper.synchCheckbox(customJSPButton, CREATE_CUSTOM_JSPS, null);
+    @Override
+    protected Composite createTopLevelComposite( Composite parent )
+    {
+        Composite topComposite = SWTUtil.createTopComposite( parent, 2 );
 
-		portalPropertiesButton = SWTUtil.createCheckButton(group, "Portal properties", null, false, 1);
-		this.synchHelper.synchCheckbox(portalPropertiesButton, CREATE_PORTAL_PROPERTIES, null);
+        createProjectNameGroup( topComposite );
 
-		servicesButton = SWTUtil.createCheckButton(group, "Services", null, false, 1);
-		this.synchHelper.synchCheckbox(servicesButton, CREATE_SERVICES, null);
+        // SWTUtil.createSeparator(composite, 2);
 
-		languagePropertiesButton = SWTUtil.createCheckButton(group, "Language properties", null, false, 1);
-		this.synchHelper.synchCheckbox(languagePropertiesButton, CREATE_LANGUAGE_PROPERTIES, null);
-	}
+        SWTUtil.createVerticalSpacer( topComposite, 2, 2 );
 
-	/**
-	 * Add project group
-	 */
-	protected void createProjectNameGroup(Composite parent) {
-		// set up project name label
-		projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Hook plugin project:"); //$NON-NLS-1$
+        createHookTypesGroup( topComposite );
 
-		projectNameLabel.setLayoutData(new GridData());
+        setShellImage();
 
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
-		data.widthHint = 300;
-		data.horizontalSpan = 1;
-		data.grabExcessHorizontalSpace = true;
+        return topComposite;
+    }
 
-		// set up project name entry field
-		projectNameCombo = new Combo(parent, SWT.BORDER | SWT.READ_ONLY);
-		projectNameCombo.setLayoutData(data);
-		synchHelper.synchCombo(projectNameCombo, PROJECT_NAME, null);
+    protected IFolder getDocroot()
+    {
+        return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
+    }
 
-		initializeProjectList();
-	}
+    @Override
+    protected String[] getValidationPropertyNames()
+    {
+        return new String[] { PROJECT_NAME, CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES,
+            CREATE_LANGUAGE_PROPERTIES };
+    }
 
-	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite topComposite = SWTUtil.createTopComposite(parent, 2);
+    protected void initializeProjectList()
+    {
+        IProject[] workspaceProjects = CoreUtil.getAllProjects();
 
-		createProjectNameGroup(topComposite);
+        List<String> items = new ArrayList<String>();
 
-		// SWTUtil.createSeparator(composite, 2);
+        for( int i = 0; i < workspaceProjects.length; i++ )
+        {
+            IProject project = workspaceProjects[i];
 
-		SWTUtil.createVerticalSpacer(topComposite, 2, 2);
+            if( isProjectValid( project ) )
+            {
+                items.add( project.getName() );
+            }
+        }
 
-		createHookTypesGroup(topComposite);
+        if( items.isEmpty() )
+        {
+            return;
+        }
 
-		setShellImage();
+        String[] names = new String[items.size()];
 
-		return topComposite;
-	}
+        for( int i = 0; i < items.size(); i++ )
+        {
+            names[i] = (String) items.get( i );
+        }
 
-	protected IFolder getDocroot() {
-		return CoreUtil.getDocroot(getDataModel().getStringProperty(PROJECT_NAME));
-	}
+        projectNameCombo.setItems( names );
 
-	@Override
-	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			PROJECT_NAME, CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES
-		};
-	}
+        IProject selectedProject = null;
 
-	protected void initializeProjectList() {
-		IProject[] workspaceProjects = CoreUtil.getAllProjects();
+        try
+        {
+            if( model != null )
+            {
+                String projectNameFromModel =
+                    model.getStringProperty( IArtifactEditOperationDataModelProperties.COMPONENT_NAME );
 
-		List<String> items = new ArrayList<String>();
+                if( projectNameFromModel != null && projectNameFromModel.length() > 0 )
+                {
+                    selectedProject = CoreUtil.getProject( projectNameFromModel );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        };
 
-		for (int i = 0; i < workspaceProjects.length; i++) {
-			IProject project = workspaceProjects[i];
+        try
+        {
+            if( selectedProject == null )
+            {
+                selectedProject = getSelectedProject();
+            }
 
-			if (isProjectValid(project)) {
-				items.add(project.getName());
-			}
-		}
+            if( selectedProject != null && selectedProject.isAccessible() &&
+                selectedProject.hasNature( IModuleConstants.MODULE_NATURE_ID ) )
+            {
 
-		if (items.isEmpty()) {
-			return;
-		}
+                projectNameCombo.setText( selectedProject.getName() );
 
-		String[] names = new String[items.size()];
+                validateProjectRequirements( selectedProject );
 
-		for (int i = 0; i < items.size(); i++) {
-			names[i] = (String) items.get(i);
-		}
+                model.setProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, selectedProject.getName() );
+            }
+        }
+        catch( CoreException ce )
+        {
+            // Ignore
+        }
 
-		projectNameCombo.setItems(names);
+        if( projectName == null && names.length > 0 )
+        {
+            projectName = names[0];
+        }
 
-		IProject selectedProject = null;
+        if( ( projectNameCombo.getText() == null || projectNameCombo.getText().length() == 0 ) && projectName != null )
+        {
+            projectNameCombo.setText( projectName );
 
-		try {
-			if (model != null) {
-				String projectNameFromModel =
-					model.getStringProperty(IArtifactEditOperationDataModelProperties.COMPONENT_NAME);
+            validateProjectRequirements( CoreUtil.getProject( projectName ) );
 
-				if (projectNameFromModel != null && projectNameFromModel.length() > 0) {
-					selectedProject = CoreUtil.getProject(projectNameFromModel);
-				}
-			}
-		}
-		catch (Exception e) {
-		};
+            model.setProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName );
+        }
 
-		try {
-			if (selectedProject == null) {
-				selectedProject = getSelectedProject();
-			}
+    }
 
-			if (selectedProject != null && selectedProject.isAccessible() &&
-				selectedProject.hasNature(IModuleConstants.MODULE_NATURE_ID)) {
+    protected boolean isProjectValid( IProject project )
+    {
+        return ProjectUtil.isHookProject( project ) || ProjectUtil.isPortletProject( project );
+    }
 
-				projectNameCombo.setText(selectedProject.getName());
+    protected void setShellImage()
+    {
+        URL url = PortletUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/hook.png" );
 
-				validateProjectRequirements(selectedProject);
+        Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 
-				model.setProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, selectedProject.getName());
-			}
-		}
-		catch (CoreException ce) {
-			// Ignore
-		}
-
-		if (projectName == null && names.length > 0) {
-			projectName = names[0];
-		}
-
-		if ((projectNameCombo.getText() == null || projectNameCombo.getText().length() == 0) && projectName != null) {
-			projectNameCombo.setText(projectName);
-
-			validateProjectRequirements(CoreUtil.getProject(projectName));
-
-			model.setProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, projectName);
-		}
-
-	}
-
-	protected boolean isProjectValid(IProject project) {
-		return ProjectUtil.isHookProject(project) || ProjectUtil.isPortletProject(project);
-	}
-
-	protected void setShellImage() {
-		URL url = PortletUIPlugin.getDefault().getBundle().getEntry("/icons/e16/hook.png");
-
-		Image shellImage = ImageDescriptor.createFromURL(url).createImage();
-
-		getShell().setImage(shellImage);
-	}
+        getShell().setImage( shellImage );
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,160 +34,175 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  */
-public class SDKUtil {
+public class SDKUtil
+{
 
-	// public static String creaetUniqueSDKId() {
-	// String id = null;
-	// SDK[] currentSDKs = SDKManager.getInstance().getSDKs();
-	// do {
-	// id = String.valueOf(System.currentTimeMillis());
-	// } while (sdksContainId(currentSDKs, id));
-	// return id;
-	// }
+    // public static String creaetUniqueSDKId() {
+    // String id = null;
+    // SDK[] currentSDKs = SDKManager.getInstance().getSDKs();
+    // do {
+    // id = String.valueOf(System.currentTimeMillis());
+    // } while (sdksContainId(currentSDKs, id));
+    // return id;
+    // }
 
-	// private static boolean sdksContainName(SDK[] sdks, String name) {
-	// if (name != null) {
-	// for (SDK sdk : sdks) {
-	// if (name.equals(sdk.getName())) {
-	// return true;
-	// }
-	// }
-	// }
-	// return false;
-	// }
+    // private static boolean sdksContainName(SDK[] sdks, String name) {
+    // if (name != null) {
+    // for (SDK sdk : sdks) {
+    // if (name.equals(sdk.getName())) {
+    // return true;
+    // }
+    // }
+    // }
+    // return false;
+    // }
 
-	public static SDK createSDKFromLocation(IPath path) {
-		try {
-			SDK sdk = new SDK(path);
-	
-			sdk.setVersion(readSDKVersion(path.toString()));
-			sdk.setName(path.lastSegment());
-	
-			return sdk;
-		}
-		catch (Exception e) {
-			// ignore errors
-		}
-	
-		return null;
-	}
+    public static SDK createSDKFromLocation( IPath path )
+    {
+        try
+        {
+            SDK sdk = new SDK( path );
 
-	public static SDK getSDK( IProject project ) {
-		SDK retval = null;
+            sdk.setVersion( readSDKVersion( path.toString() ) );
+            sdk.setName( path.lastSegment() );
 
-		// try to determine SDK based on project location
-		IPath projectLocation = project.getRawLocation();
+            return sdk;
+        }
+        catch( Exception e )
+        {
+            // ignore errors
+        }
 
-		if ( projectLocation == null )
-		{
-			projectLocation = project.getLocation();
-		}
+        return null;
+    }
 
-		if ( projectLocation != null )
-		{
-			IPath sdkLocation = projectLocation.removeLastSegments( 2 );
+    public static SDK getSDK( IProject project )
+    {
+        SDK retval = null;
 
-			retval = SDKManager.getInstance().getSDK( sdkLocation );
+        // try to determine SDK based on project location
+        IPath projectLocation = project.getRawLocation();
 
-			if ( retval == null )
-			{
-				retval = SDKUtil.createSDKFromLocation( sdkLocation );
+        if( projectLocation == null )
+        {
+            projectLocation = project.getLocation();
+        }
 
-				if ( retval != null )
-				{
-					SDKManager.getInstance().addSDK( retval );
-				}
-			}
-		}
+        if( projectLocation != null )
+        {
+            IPath sdkLocation = projectLocation.removeLastSegments( 2 );
 
-		return retval;
-	}
+            retval = SDKManager.getInstance().getSDK( sdkLocation );
 
-	public static SDK getSDKFromProjectDir(File projectDir) {
-		File sdkDir = projectDir.getParentFile().getParentFile();
-		
-		if (sdkDir.exists() && SDKUtil.isValidSDKLocation(sdkDir.getPath())) {
-			Path sdkLocation = new Path(sdkDir.getPath());
+            if( retval == null )
+            {
+                retval = SDKUtil.createSDKFromLocation( sdkLocation );
 
-			SDK existingSDK = SDKManager.getInstance().getSDK(sdkLocation);
+                if( retval != null )
+                {
+                    SDKManager.getInstance().addSDK( retval );
+                }
+            }
+        }
 
-			if (existingSDK != null) {
-				return existingSDK;
-			}
-			else {
-				return createSDKFromLocation(sdkLocation);
-			}
-		}
-			
-		return null;
-	}
+        return retval;
+    }
 
+    public static SDK getSDKFromProjectDir( File projectDir )
+    {
+        File sdkDir = projectDir.getParentFile().getParentFile();
 
-	public static boolean isSDKSupported(String location) {
-		boolean retval = false;
+        if( sdkDir.exists() && SDKUtil.isValidSDKLocation( sdkDir.getPath() ) )
+        {
+            Path sdkLocation = new Path( sdkDir.getPath() );
 
-		try {
-			String version = SDKUtil.readSDKVersion(location);
+            SDK existingSDK = SDKManager.getInstance().getSDK( sdkLocation );
 
-			retval = CoreUtil.compareVersions( new Version( version ), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION ) >= 0;
-		}
-		catch (Exception e) {
-			// best effort we didn't find a valid location
-		}
+            if( existingSDK != null )
+            {
+                return existingSDK;
+            }
+            else
+            {
+                return createSDKFromLocation( sdkLocation );
+            }
+        }
 
-		return retval;
+        return null;
+    }
 
-	}
+    public static boolean isSDKSupported( String location )
+    {
+        boolean retval = false;
 
-	public static boolean isValidSDKLocation(String loc) {
-		boolean retval = false;
+        try
+        {
+            String version = SDKUtil.readSDKVersion( location );
 
-		// try to look for build.properties file with property lp.version
+            retval = CoreUtil.compareVersions( new Version( version ), ISDKConstants.LEAST_SUPPORTED_SDK_VERSION ) >= 0;
+        }
+        catch( Exception e )
+        {
+            // best effort we didn't find a valid location
+        }
 
-		try {
-			String version = SDKUtil.readSDKVersion(loc);
+        return retval;
+    }
 
-			new Version(version);
+    public static boolean isValidSDKLocation( String loc )
+    {
+        boolean retval = false;
 
-			File sdkDir = new File(loc);
+        // try to look for build.properties file with property lp.version
 
-			File portletsBuildXml = new File(sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD);
-			File hooksBuildXml = new File(sdkDir, ISDKConstants.HOOK_PLUGIN_ANT_BUILD);
-			File extBuildXml = new File(sdkDir, ISDKConstants.EXT_PLUGIN_ANT_BUILD);
+        try
+        {
+            String version = SDKUtil.readSDKVersion( loc );
 
-			retval = portletsBuildXml.exists() && hooksBuildXml.exists() && extBuildXml.exists();
-		}
-		catch (Exception e) {
-			// best effort we didn't find a valid location
-		}
+            new Version( version );
 
-		return retval;
-	}
+            File sdkDir = new File( loc );
 
-	public static boolean isValidSDKVersion(String sdkVersion, Version lowestValidVersion) {
-		Version sdkVersionValue = null;
+            File portletsBuildXml = new File( sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD );
+            File hooksBuildXml = new File( sdkDir, ISDKConstants.HOOK_PLUGIN_ANT_BUILD );
+            File extBuildXml = new File( sdkDir, ISDKConstants.EXT_PLUGIN_ANT_BUILD );
 
-		try {
-			sdkVersionValue = new Version(sdkVersion);
-		}
-		catch (Exception ex) {
-			// ignore means we don't have valid version
-		}
+            retval = portletsBuildXml.exists() && hooksBuildXml.exists() && extBuildXml.exists();
+        }
+        catch( Exception e )
+        {
+            // best effort we didn't find a valid location
+        }
 
-		if( sdkVersionValue != null && CoreUtil.compareVersions( sdkVersionValue, lowestValidVersion ) >= 0 )
-		{
-			return true;
-		}
+        return retval;
+    }
 
-		return false;
-	}
+    public static boolean isValidSDKVersion( String sdkVersion, Version lowestValidVersion )
+    {
+        Version sdkVersionValue = null;
 
-	public static String readSDKVersion(String path)
-		throws FileNotFoundException, IOException {
+        try
+        {
+            sdkVersionValue = new Version( sdkVersion );
+        }
+        catch( Exception ex )
+        {
+            // ignore means we don't have valid version
+        }
 
-		Properties properties = new Properties();
-		properties.load(new FileInputStream(new Path(path).append("build.properties").toFile()));
+        if( sdkVersionValue != null && CoreUtil.compareVersions( sdkVersionValue, lowestValidVersion ) >= 0 )
+        {
+            return true;
+        }
 
-		return properties.getProperty("lp.version");
-	}
+        return false;
+    }
+
+    public static String readSDKVersion( String path ) throws FileNotFoundException, IOException
+    {
+        Properties properties = new Properties();
+        properties.load( new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ) );
+
+        return properties.getProperty( "lp.version" );
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,34 +25,40 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion {
+public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion
+{
 
-	public AddModelEntitySnippetInsertion() {
-		super();
-	}
+    public AddModelEntitySnippetInsertion()
+    {
+        super();
+    }
 
-	@Override
-	protected AbstractModelWizard createModelWizard(IEditorPart fEditorPart) {
-		return new AddModelEntityWizard(fEditorPart);
-	}
+    @Override
+    protected AbstractModelWizard createModelWizard( IEditorPart fEditorPart )
+    {
+        return new AddModelEntityWizard( fEditorPart );
+    }
 
-	protected String getPreparedText(AbstractModelWizard wizard) {
-		String text = super.getPreparedText(wizard);
+    protected String getPreparedText( AbstractModelWizard wizard )
+    {
+        String text = super.getPreparedText( wizard );
 
-		StringBuffer fields = new StringBuffer();
-		String[] propColumns = wizard.getPropertyColumns();
-		String var = wizard.getVarName();
+        StringBuffer fields = new StringBuffer();
+        String[] propColumns = wizard.getPropertyColumns();
+        String var = wizard.getVarName();
 
-		if (!CoreUtil.isNullOrEmpty(propColumns)) {
-			for (String prop : propColumns) {
-				fields.append(var + ".set" + StringUtils.capitalize(prop) + "(" + prop + ");\n");
-			}
-		}
+        if( !CoreUtil.isNullOrEmpty( propColumns ) )
+        {
+            for( String prop : propColumns )
+            {
+                fields.append( var + ".set" + StringUtils.capitalize( prop ) + "(" + prop + ");\n" );
+            }
+        }
 
-		String fieldsVal = fields.toString();
-		text = StringUtils.replace(text, "${fields}", CoreUtil.isNullOrEmpty(fieldsVal) ? "" : fieldsVal);
+        String fieldsVal = fields.toString();
+        text = StringUtils.replace( text, "${fields}", CoreUtil.isNullOrEmpty( fieldsVal ) ? "" : fieldsVal );
 
-		return text;
-	}
+        return text;
+    }
 
 }

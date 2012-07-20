@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,10 +18,11 @@ package com.liferay.ide.project.core;
 /**
  * @author Greg Amerson
  */
-public interface IPluginWizardFragmentProperties {
+public interface IPluginWizardFragmentProperties
+{
 
-	public static final String FACET_RUNTIME = "IPluginWizardFragmentProperties.FACET_RUNTIME";
+    public static final String FACET_RUNTIME = "IPluginWizardFragmentProperties.FACET_RUNTIME";
 
-	public static final String REMOVE_EXISTING_ARTIFACTS = "IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS";
+    public static final String REMOVE_EXISTING_ARTIFACTS = "IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS";
 
 }

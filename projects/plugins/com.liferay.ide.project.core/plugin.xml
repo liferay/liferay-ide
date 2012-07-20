@@ -47,10 +47,6 @@
                      version="[2.3">
                </requires>
             </and>
-            <!--
-            <conflicts facet="liferay.hook"/>
-            <conflicts facet="liferay.ext"/>
-            -->
          </constraint>
       </project-facet-version>
       <action
@@ -90,10 +86,6 @@
          </fixed>
       </template>
       
-      
-      
-      
-      
       <project-facet
             id="liferay.hook">
          <label>
@@ -123,10 +115,6 @@
                      version="[2.3">
                </requires>
             </and>
-            <!--
-            <conflicts facet="liferay.portlet"/>
-            <conflicts facet="liferay.ext"/>
-            -->
          </constraint>
       </project-facet-version>
       <action
@@ -166,9 +154,6 @@
          </fixed>
       </template>
       
-     
-     
-     
      <project-facet
             id="liferay.ext">
          <label>
@@ -198,12 +183,6 @@
                      version="[2.3">
                </requires>
             </and>
-            <!--
-            <and>
-            	<conflicts facet="liferay.portlet"/>
-            	<conflicts facet="liferay.hook"/>
-            </and>
-            -->
          </constraint>
       </project-facet-version>
       <action
@@ -242,8 +221,6 @@
                facet="liferay.ext">
          </fixed>
       </template>
-     
-    
    </extension>
    
    <extension
@@ -269,7 +246,6 @@
                version="6.0">
          </facet>
       </static-preset>
-      
       
       <static-preset
             id="liferay.hook.preset">
@@ -314,11 +290,7 @@
                version="6.0">
          </facet>
       </static-preset>
-     
-      
    </extension>
-   
-   
    
    <extension
          point="org.eclipse.jst.common.project.facet.core.libraryProviders">
@@ -340,7 +312,7 @@
                   variable="context">
                <test
                      forcePluginActivation="true"
-                     property="com.liferay.ide.eclipse.project.core.isLiferayRuntime"
+                     property="com.liferay.ide.project.core.isLiferayRuntime"
                      value="true">
                </test>
             </with>
@@ -355,7 +327,6 @@
             </config>
          </action>
       </provider>
-      
       
       <provider
             id="com.liferay.ide.eclipse.plugin.hook.libraryProvider">
@@ -375,7 +346,7 @@
                   variable="context">
                <test
                      forcePluginActivation="true"
-                     property="com.liferay.ide.eclipse.project.core.isLiferayRuntime"
+                     property="com.liferay.ide.project.core.isLiferayRuntime"
                      value="true">
                </test>
             </with>
@@ -390,10 +361,6 @@
             </config>
          </action>
       </provider>
-      
-      
-      
-      
       
       <provider
             id="com.liferay.ide.eclipse.plugin.ext.libraryProvider">
@@ -413,7 +380,7 @@
                   variable="context">
                <test
                      forcePluginActivation="true"
-                     property="com.liferay.ide.eclipse.project.core.isLiferayRuntime"
+                     property="com.liferay.ide.project.core.isLiferayRuntime"
                      value="true">
                </test>
             </with>
@@ -434,8 +401,8 @@
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
             class="com.liferay.ide.project.core.library.LiferayRuntimePropertyTester"
-            id="com.liferay.ide.eclipse.project.core.isLiferayRuntime"
-            namespace="com.liferay.ide.eclipse.project.core"
+            id="com.liferay.ide.project.core.isLiferayRuntime"
+            namespace="com.liferay.ide.project.core"
             properties="isLiferayRuntime"
             type="org.eclipse.jst.common.project.facet.core.libprov.EnablementExpressionContext">
       </propertyTester>
@@ -483,7 +450,7 @@
    <extension
          point="org.eclipse.wst.common.project.facet.core.listeners">
       <listener
-            class="com.liferay.ide.eclipse.project.core.facet.LiferayFacetedProjectListener"
+            class="com.liferay.ide.project.core.facet.LiferayFacetedProjectListener"
             eventTypes="POST_INSTALL">
       </listener>
    </extension>

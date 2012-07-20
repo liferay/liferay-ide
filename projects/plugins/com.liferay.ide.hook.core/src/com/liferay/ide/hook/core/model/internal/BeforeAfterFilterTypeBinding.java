@@ -25,86 +25,85 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
-
 /**
  * @author Gregory Amerson
  */
 public class BeforeAfterFilterTypeBinding extends XmlValueBindingImpl
 {
 
-	private String defaultValueText;
-	private String localValue;
+    private String defaultValueText;
+    private String localValue;
 
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params )
-	{
-		super.init( element, property, params );
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
 
-		DefaultValue defaultValue = property.getAnnotation( DefaultValue.class );
+        DefaultValue defaultValue = property.getAnnotation( DefaultValue.class );
 
-		this.defaultValueText = defaultValue.text();
-	}
+        this.defaultValueText = defaultValue.text();
+    }
 
-	@Override
-	public String read()
-	{
-		// check for existence of before-filter or after-filter elements, if neither exist, then return default value
+    @Override
+    public String read()
+    {
+        // check for existence of before-filter or after-filter elements, if neither exist, then return default value
 
-		XmlElement xmlElement = xml();
+        XmlElement xmlElement = xml();
 
-		XmlElement beforeFilterElement =
-			xmlElement.getChildElement( BeforeAfterFilterType.BEFORE_FILTER.getText(), false );
+        XmlElement beforeFilterElement =
+            xmlElement.getChildElement( BeforeAfterFilterType.BEFORE_FILTER.getText(), false );
 
-		if ( beforeFilterElement != null )
-		{
-			return BeforeAfterFilterType.BEFORE_FILTER.getText();
-		}
+        if( beforeFilterElement != null )
+        {
+            return BeforeAfterFilterType.BEFORE_FILTER.getText();
+        }
 
-		XmlElement afterFilterElement =
-			xmlElement.getChildElement( BeforeAfterFilterType.AFTER_FILTER.getText(), false );
+        XmlElement afterFilterElement =
+            xmlElement.getChildElement( BeforeAfterFilterType.AFTER_FILTER.getText(), false );
 
-		if ( afterFilterElement != null )
-		{
-			return BeforeAfterFilterType.AFTER_FILTER.getText();
-		}
+        if( afterFilterElement != null )
+        {
+            return BeforeAfterFilterType.AFTER_FILTER.getText();
+        }
 
-		if ( this.localValue != null )
-		{
-			return this.localValue;
-		}
+        if( this.localValue != null )
+        {
+            return this.localValue;
+        }
 
-		return this.defaultValueText;
-	}
+        return this.defaultValueText;
+    }
 
-	@Override
-	public void write( String value )
-	{
-		XmlElement xmlElement = xml();
+    @Override
+    public void write( String value )
+    {
+        XmlElement xmlElement = xml();
 
-		XmlElement filterElement = xmlElement.getChildElement( BeforeAfterFilterType.BEFORE_FILTER.getText(), false );
+        XmlElement filterElement = xmlElement.getChildElement( BeforeAfterFilterType.BEFORE_FILTER.getText(), false );
 
-		if ( filterElement == null )
-		{
-			filterElement = xmlElement.getChildElement( BeforeAfterFilterType.AFTER_FILTER.getText(), false );
-		}
+        if( filterElement == null )
+        {
+            filterElement = xmlElement.getChildElement( BeforeAfterFilterType.AFTER_FILTER.getText(), false );
+        }
 
-		String existingFilterValue = null;
+        String existingFilterValue = null;
 
-		if ( filterElement != null )
-		{
-			existingFilterValue = filterElement.getText();
+        if( filterElement != null )
+        {
+            existingFilterValue = filterElement.getText();
 
-			filterElement.remove();
+            filterElement.remove();
 
-			XmlElement newElement = xmlElement.getChildElement( value, true );
+            XmlElement newElement = xmlElement.getChildElement( value, true );
 
-			newElement.setText( existingFilterValue );
-		}
-		else
-		{
-			this.localValue = value;
-		}
+            newElement.setText( existingFilterValue );
+        }
+        else
+        {
+            this.localValue = value;
+        }
 
-	}
+    }
 
 }

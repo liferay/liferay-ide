@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,42 +15,43 @@
 
 package com.liferay.ide.server.ui;
 
+import com.liferay.ide.ui.util.SWTUtil;
+
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.ui.wizards.IClasspathContainerPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.liferay.ide.ui.util.SWTUtil;
-
 /**
  * @author Greg Amerson
  */
-public class PortletPluginClasspathConatinerPage extends WizardPage implements IClasspathContainerPage {
+public class PortletPluginClasspathConatinerPage extends WizardPage implements IClasspathContainerPage
+{
 
-	public PortletPluginClasspathConatinerPage() {
-		super("portlet.container");
-	}
+    public PortletPluginClasspathConatinerPage()
+    {
+        super( "portlet.container" );
+    }
 
-	public void createControl(Composite parent) {
-		Composite topComposite = SWTUtil.createTopComposite(parent, 1);
-		
-		SWTUtil.createLabel(topComposite, "This is a test", 1);
-	}
+    public void createControl( Composite parent )
+    {
+        Composite topComposite = SWTUtil.createTopComposite( parent, 1 );
 
-	public boolean finish() {
-		
-		return false;
-		
-	}
+        SWTUtil.createLabel( topComposite, "This is a test", 1 );
+    }
 
-	public IClasspathEntry getSelection() {
-		
-		return null;
-		
-	}
+    public boolean finish()
+    {
+        return false;
+    }
 
-	public void setSelection(IClasspathEntry containerEntry) {
-		
-	}
+    public IClasspathEntry getSelection()
+    {
+        return null;
+    }
+
+    public void setSelection( IClasspathEntry containerEntry )
+    {
+    }
 
 }

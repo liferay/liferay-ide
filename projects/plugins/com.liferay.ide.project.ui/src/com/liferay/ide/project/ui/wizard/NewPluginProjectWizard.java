@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,17 +16,17 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
-import com.liferay.ide.project.ui.IPortletFrameworkDelegate;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
-import com.liferay.ide.ui.LiferayPerspectiveFactory;
-import com.liferay.ide.ui.wizard.INewProjectWizard;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
+import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
+import com.liferay.ide.project.ui.IPortletFrameworkDelegate;
+import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.ISDKConstants;
+import com.liferay.ide.ui.LiferayPerspectiveFactory;
+import com.liferay.ide.ui.wizard.INewProjectWizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -65,388 +65,440 @@ import org.eclipse.wst.web.ui.internal.wizards.NewProjectDataModelFacetWizard;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
-	implements INewProjectWizard, IPluginProjectDataModelProperties {
+    implements INewProjectWizard, IPluginProjectDataModelProperties
+{
+    protected NewPluginProjectFirstPage firstPage;
+    protected ImageDescriptor liferayWizardImageDescriptor;
+    protected IPortletFrameworkDelegate[] portletFrameworkDelegates;
+    protected NewPortletPluginProjectPage portletPluginPage;
+    protected String projectType;
 
-	protected NewPluginProjectFirstPage firstPage;
+    public NewPluginProjectWizard()
+    {
+        super();
 
-	protected ImageDescriptor liferayWizardImageDescriptor;
+        setupWizard();
+    }
 
-	protected IPortletFrameworkDelegate[] portletFrameworkDelegates;
+    public NewPluginProjectWizard( IDataModel model )
+    {
+        super( model );
 
-	protected NewPortletPluginProjectPage portletPluginPage;
+        setupWizard();
+    }
 
-	protected String projectType;
+    @Override
+    public boolean canFinish()
+    {
+        if( getContainer().getCurrentPage().equals( portletPluginPage ) && isPluginWizardFragmentEnabled() )
+        {
+            return false;
+        }
 
-	public NewPluginProjectWizard() {
-		super();
+        return super.canFinish();
+    }
 
-		setupWizard();
-	}
+    @Override
+    protected IWizardPage[] createBeginingPages()
+    {
+        this.firstPage = createFirstPage();
+        this.portletPluginPage = new NewPortletPluginProjectPage( this, model );
 
-	public NewPluginProjectWizard(IDataModel model) {
-		super(model);
+        return new IWizardPage[] { firstPage, portletPluginPage };
+    }
 
-		setupWizard();
-	}
+    protected IDataModel createDataModel()
+    {
+        try
+        {
+            return DataModelFactory.createDataModel( new PluginFacetProjectCreationDataModelProvider() );
+        }
+        catch( Exception e )
+        {
+            ProjectUIPlugin.logError( e );
 
-	@Override
-	public boolean canFinish() {
-		if (getContainer().getCurrentPage().equals(portletPluginPage) && isPluginWizardFragmentEnabled()) {
-			return false;
-		}
+            return null;
+        }
+    }
 
-		return super.canFinish();
-	}
+    @Override
+    protected NewPluginProjectFirstPage createFirstPage()
+    {
+        return new NewPluginProjectFirstPage( this, model, "first.page" ); //$NON-NLS-1$
+    }
 
-	@Override
-	protected IWizardPage[] createBeginingPages() {
-		this.firstPage = createFirstPage();
-		this.portletPluginPage = new NewPortletPluginProjectPage(this, model);
+    @Override
+    protected ImageDescriptor getDefaultPageImageDescriptor()
+    {
+        if( liferayWizardImageDescriptor == null )
+        {
+            liferayWizardImageDescriptor =
+                ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
+                    "/icons/wizban/plugin_project.png" ) );
+        }
 
-		return new IWizardPage[] {
-			firstPage, portletPluginPage
-		};
-	}
+        return liferayWizardImageDescriptor;
+    }
 
-	protected IDataModel createDataModel() {
-		try {
-			return DataModelFactory.createDataModel(new PluginFacetProjectCreationDataModelProvider());
-		}
-		catch (Exception e) {
-			ProjectUIPlugin.logError(e);
+    protected String getFinalPerspectiveID()
+    {
+        return LiferayPerspectiveFactory.ID;
+    }
 
-			return null;
-		}
-	}
+    protected IDataModel getNestedModel()
+    {
+        return getDataModel().getNestedModel( NESTED_PROJECT_DM );
+    }
 
-	@Override
-	protected NewPluginProjectFirstPage createFirstPage() {
-		return new NewPluginProjectFirstPage(this, model, "first.page"); //$NON-NLS-1$
-	}
+    @Override
+    public IWizardPage getNextPage( IWizardPage page )
+    {
+        if( this.portletPluginPage.equals( page ) )
+        {
+            if( isPluginWizardFragmentEnabled() )
+            {
+                IPortletFrameworkWizardProvider selectedFramework =
+                    this.portletPluginPage.getSelectedPortletFramework();
+                IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( selectedFramework.getId() );
 
-	@Override
-	protected ImageDescriptor getDefaultPageImageDescriptor() {
-		if (liferayWizardImageDescriptor == null) {
-			liferayWizardImageDescriptor =
-				ImageDescriptor.createFromURL(ProjectUIPlugin.getDefault().getBundle().getEntry(
-					"/icons/wizban/plugin_project.png"));
-		}
+                IPluginWizardFragment pluginFragment = delegate.getWizardFragment();
+                IDataModel dm = DataModelFactory.createDataModel( pluginFragment.getDataModelProvider() );
 
-		return liferayWizardImageDescriptor;
-	}
+                getDataModel().addNestedModel( PLUGIN_FRAGMENT_DM, dm );
+                pluginFragment.setDataModel( dm );
+                pluginFragment.initFragmentDataModel( getDataModel(), getProjectName() );
+                pluginFragment.addPages();
+                pluginFragment.setHostPage( this.portletPluginPage );
+                return pluginFragment.getNextPage( page );
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-	protected String getFinalPerspectiveID() {
-		return LiferayPerspectiveFactory.ID;
-	}
+        return super.getNextPage( page );
+    }
 
-	protected IDataModel getNestedModel() {
-		return getDataModel().getNestedModel(NESTED_PROJECT_DM);
-	}
+    protected String getPluginFacetId()
+    {
+        IDataModel dm = getDataModel();
 
-	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		if (this.portletPluginPage.equals(page)) {
-			if (isPluginWizardFragmentEnabled()) {
-				IPortletFrameworkWizardProvider selectedFramework = this.portletPluginPage.getSelectedPortletFramework();
-				IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( selectedFramework.getId() );
+        if( dm.getBooleanProperty( PLUGIN_TYPE_PORTLET ) )
+        {
+            return IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
+        }
+        else if( dm.getBooleanProperty( PLUGIN_TYPE_HOOK ) )
+        {
+            return IPluginFacetConstants.LIFERAY_HOOK_FACET_ID;
+        }
+        else if( dm.getBooleanProperty( PLUGIN_TYPE_EXT ) )
+        {
+            return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
+        }
+        else if( dm.getBooleanProperty( PLUGIN_TYPE_LAYOUTTPL ) )
+        {
+            return IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID;
+        }
+        else if( dm.getBooleanProperty( PLUGIN_TYPE_THEME ) )
+        {
+            return IPluginFacetConstants.LIFERAY_THEME_FACET_ID;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-				IPluginWizardFragment pluginFragment = delegate.getWizardFragment();
-				IDataModel dm = DataModelFactory.createDataModel(pluginFragment.getDataModelProvider());
+    public IPortletFrameworkDelegate getPortletFrameworkDelegate( String frameworkId )
+    {
+        IPortletFrameworkDelegate[] delegates = getPortletFrameworkDelegates();
 
-				getDataModel().addNestedModel(PLUGIN_FRAGMENT_DM, dm);
-				pluginFragment.setDataModel(dm);
-				pluginFragment.initFragmentDataModel(getDataModel(), getProjectName());
-				pluginFragment.addPages();
-				pluginFragment.setHostPage(this.portletPluginPage);
-				return pluginFragment.getNextPage(page);
-			}
-			else {
-				return null;
-			}
-		}
+        if( CoreUtil.isNullOrEmpty( frameworkId ) || CoreUtil.isNullOrEmpty( delegates ) )
+        {
+            return null;
+        }
 
-		return super.getNextPage(page);
-	}
+        for( IPortletFrameworkDelegate delegate : delegates )
+        {
+            if( frameworkId.equals( delegate.getFrameworkId() ) )
+            {
+                return delegate;
+            }
+        }
 
-	protected String getPluginFacetId() {
-		IDataModel dm = getDataModel();
+        return null;
+    }
 
-		if (dm.getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
-		}
-		else if (dm.getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return IPluginFacetConstants.LIFERAY_HOOK_FACET_ID;
-		}
-		else if (dm.getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
-		}
-		else if (dm.getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
-			return IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID;
-		}
-		else if (dm.getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return IPluginFacetConstants.LIFERAY_THEME_FACET_ID;
-		}
-		else {
-			return null;
-		}
-	}
+    public IPortletFrameworkDelegate[] getPortletFrameworkDelegates()
+    {
+        if( portletFrameworkDelegates == null )
+        {
+            IConfigurationElement[] elements =
+                Platform.getExtensionRegistry().getConfigurationElementsFor( IPortletFrameworkDelegate.EXTENSION_ID );
 
-	public IPortletFrameworkDelegate getPortletFrameworkDelegate( String frameworkId )
-	{
-		IPortletFrameworkDelegate[] delegates = getPortletFrameworkDelegates();
+            if( !CoreUtil.isNullOrEmpty( elements ) )
+            {
+                List<IPortletFrameworkDelegate> delegates = new ArrayList<IPortletFrameworkDelegate>();
 
-		if ( CoreUtil.isNullOrEmpty( frameworkId ) || CoreUtil.isNullOrEmpty( delegates ) )
-		{
-			return null;
-		}
+                for( IConfigurationElement element : elements )
+                {
+                    String frameworkId = element.getAttribute( IPortletFrameworkDelegate.FRAMEWORK_ID );
+                    String iconUrl = element.getAttribute( IPortletFrameworkDelegate.ICON );
 
-		for ( IPortletFrameworkDelegate delegate : delegates )
-		{
-			if ( frameworkId.equals( delegate.getFrameworkId() ) )
-			{
-				return delegate;
-			}
-		}
+                    try
+                    {
+                        AbstractPortletFrameworkDelegate delegate =
+                            (AbstractPortletFrameworkDelegate) element.createExecutableExtension( "class" );
+                        delegate.setFrameworkId( frameworkId );
+                        delegate.setIconUrl( iconUrl );
+                        delegate.setBundleId( element.getContributor().getName() );
 
-		return null;
-	}
+                        delegates.add( delegate );
+                    }
+                    catch( CoreException e )
+                    {
+                        ProjectUIPlugin.logError( "Could not create portlet plugin template delegate.", e );
+                    }
 
-	public IPortletFrameworkDelegate[] getPortletFrameworkDelegates()
-	{
-		if ( portletFrameworkDelegates == null )
-		{
-			IConfigurationElement[] elements =
-				Platform.getExtensionRegistry().getConfigurationElementsFor( IPortletFrameworkDelegate.EXTENSION_ID );
+                }
 
-			if ( !CoreUtil.isNullOrEmpty( elements ) )
-			{
-				List<IPortletFrameworkDelegate> delegates = new ArrayList<IPortletFrameworkDelegate>();
+                portletFrameworkDelegates = delegates.toArray( new IPortletFrameworkDelegate[0] );
+            }
+        }
 
-				for ( IConfigurationElement element : elements )
-				{
-					String frameworkId = element.getAttribute( IPortletFrameworkDelegate.FRAMEWORK_ID );
-					String iconUrl = element.getAttribute( IPortletFrameworkDelegate.ICON );
+        return portletFrameworkDelegates;
+    }
 
-					try
-					{
-						AbstractPortletFrameworkDelegate delegate =
-							(AbstractPortletFrameworkDelegate) element.createExecutableExtension( "class" );
-						delegate.setFrameworkId( frameworkId );
-						delegate.setIconUrl( iconUrl );
-						delegate.setBundleId( element.getContributor().getName() );
+    protected String getProjectSuffix()
+    {
+        if( getDataModel().getBooleanProperty( PLUGIN_TYPE_PORTLET ) )
+        {
+            return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( getDataModel().getBooleanProperty( PLUGIN_TYPE_HOOK ) )
+        {
+            return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( getDataModel().getBooleanProperty( PLUGIN_TYPE_EXT ) )
+        {
+            return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( getDataModel().getBooleanProperty( PLUGIN_TYPE_THEME ) )
+        {
+            return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( getDataModel().getBooleanProperty( PLUGIN_TYPE_LAYOUTTPL ) )
+        {
+            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+        }
 
-						delegates.add( delegate );
-					}
-					catch ( CoreException e )
-					{
-						ProjectUIPlugin.logError( "Could not create portlet plugin template delegate.", e );
-					}
+        return null;
+    }
 
-				}
+    public String getProjectType()
+    {
+        return this.projectType;
+    }
 
-				portletFrameworkDelegates = delegates.toArray( new IPortletFrameworkDelegate[0] );
-			}
-		}
+    @Override
+    protected IFacetedProjectTemplate getTemplate()
+    {
+        return ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_DEFAULT_FACET_TEMPLATE ); //$NON-NLS-1$
+    }
 
-		return portletFrameworkDelegates;
-	}
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+        super.init( workbench, selection );
 
-	protected String getProjectSuffix() {
-		if (getDataModel().getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_HOOK)) {
-			return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_EXT)) {
-			return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_THEME)) {
-			return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
-		}
-		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_LAYOUTTPL)) {
-			return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
-		}
+        getDataModel().setBooleanProperty( PLUGIN_TYPE_PORTLET, true );
+    }
 
-		return null;
-	}
+    protected boolean isPluginWizardFragmentEnabled()
+    {
+        IPortletFrameworkWizardProvider portletFramework = this.portletPluginPage.getSelectedPortletFramework();
 
-	public String getProjectType() {
-		return this.projectType;
-	}
+        if( portletFramework != null )
+        {
+            IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( portletFramework.getId() );
 
-	@Override
-	protected IFacetedProjectTemplate getTemplate() {
-		return ProjectFacetsManager.getTemplate(IPluginFacetConstants.LIFERAY_DEFAULT_FACET_TEMPLATE); //$NON-NLS-1$
-	}
+            if( delegate != null && delegate.getWizardFragment() != null && delegate.isFragmentEnabled() )
+            {
 
-	@Override
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		super.init(workbench, selection);
+                return true;
+            }
+        }
 
-		getDataModel().setBooleanProperty(PLUGIN_TYPE_PORTLET, true);
-	}
+        return false;
+    }
 
-	protected boolean isPluginWizardFragmentEnabled() {
-		IPortletFrameworkWizardProvider portletFramework = this.portletPluginPage.getSelectedPortletFramework();
+    @Override
+    protected void performFinish( IProgressMonitor monitor ) throws CoreException
+    {
 
-		if (portletFramework != null) {
-			IPortletFrameworkDelegate delegate = getPortletFrameworkDelegate( portletFramework.getId() );
+        // String projectName = getFacetedProjectWorkingCopy().getProjectName();
+        // getFacetedProjectWorkingCopy().setProjectName(projectName +
+        // getProjectSuffix());
+        // String projectName =
+        // getDataModel().getStringProperty(FACET_PROJECT_NAME);
+        // getDataModel().setStringProperty(FACET_PROJECT_NAME, projectName +
+        // getProjectSuffix());
 
-			if (delegate != null && delegate.getWizardFragment() != null && delegate.isFragmentEnabled()) {
+        firstPage.setShouldValidatePage( false );
 
-				return true;
-			}
-		}
+        // model.setProperty(SETUP_PROJECT_FLAG, "");
 
-		return false;
-	}
+        String projectName = getNestedModel().getStringProperty( PROJECT_NAME );
 
-	@Override
-	protected void performFinish(IProgressMonitor monitor)
-		throws CoreException {
+        if( !projectName.endsWith( getProjectSuffix() ) )
+        {
+            getNestedModel().setStringProperty( PROJECT_NAME, projectName + getProjectSuffix() );
+        }
 
-		// String projectName = getFacetedProjectWorkingCopy().getProjectName();
-		// getFacetedProjectWorkingCopy().setProjectName(projectName +
-		// getProjectSuffix());
-		// String projectName =
-		// getDataModel().getStringProperty(FACET_PROJECT_NAME);
-		// getDataModel().setStringProperty(FACET_PROJECT_NAME, projectName +
-		// getProjectSuffix());
+        model.setProperty( PORTLET_NAME, projectName );
+        model.setProperty( THEME_NAME, projectName );
+        model.setProperty( LAYOUTTPL_NAME, projectName );
 
-		firstPage.setShouldValidatePage(false);
+        super.performFinish( monitor );
+    }
 
-		// model.setProperty(SETUP_PROJECT_FLAG, "");
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
 
-		String projectName = getNestedModel().getStringProperty(PROJECT_NAME);
+        if( getDataModel().getBooleanProperty( PLUGIN_TYPE_PORTLET ) )
+        {
+            String portletFrameworkId = getDataModel().getStringProperty( PORTLET_FRAMEWORK_ID );
 
-		if (!projectName.endsWith(getProjectSuffix())) {
-			getNestedModel().setStringProperty(PROJECT_NAME, projectName + getProjectSuffix());
-		}
+            IPortletFrameworkWizardProvider portletFramework =
+                ProjectCorePlugin.getPortletFramework( portletFrameworkId );
 
-		model.setProperty(PORTLET_NAME, projectName);
-		model.setProperty(THEME_NAME, projectName);
-		model.setProperty(LAYOUTTPL_NAME, projectName);
-
-		super.performFinish(monitor);
-	}
-
-	@Override
-	protected void postPerformFinish()
-		throws InvocationTargetException {
-
-		if (getDataModel().getBooleanProperty(PLUGIN_TYPE_PORTLET)) {
-			String portletFrameworkId = getDataModel().getStringProperty(PORTLET_FRAMEWORK_ID);
-			
-			IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
-			
-			portletFramework.postProjectCreated(getDataModel(), getFacetedProject());
-		}
-		else if (getDataModel().getBooleanProperty(PLUGIN_TYPE_THEME))
-		{
+            portletFramework.postProjectCreated( getDataModel(), getFacetedProject() );
+        }
+        else if( getDataModel().getBooleanProperty( PLUGIN_TYPE_THEME ) )
+        {
             try
             {
                 Map<String, String> args = new HashMap<String, String>();
 
                 args.put( "force", "true" );
 
-                getFacetedProject().getProject().build( IncrementalProjectBuilder.FULL_BUILD,
-                    "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
+                getFacetedProject().getProject().build(
+                    IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
             }
             catch( CoreException e )
             {
                 ProjectUIPlugin.logError( e );
             }
-		}
+        }
 
-		// if we have a wizard fragment execute its operation after project is created
-		if (isPluginWizardFragmentEnabled()) {
-			final IDataModel fragmentModel = getDataModel().getNestedModel(PLUGIN_FRAGMENT_DM);
-			fragmentModel.setStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME, getProjectName());
+        // if we have a wizard fragment execute its operation after project is created
+        if( isPluginWizardFragmentEnabled() )
+        {
+            final IDataModel fragmentModel = getDataModel().getNestedModel( PLUGIN_FRAGMENT_DM );
+            fragmentModel.setStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME, getProjectName() );
 
-			try {
-				getContainer().run(false, false, new IRunnableWithProgress() {
+            try
+            {
+                getContainer().run( false, false, new IRunnableWithProgress()
+                {
 
-					public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+                    public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                    {
 
-						try {
-							fragmentModel.getDefaultOperation().execute(monitor, null);
-						}
-						catch (ExecutionException e) {
-							ProjectUIPlugin.logError("Error executing wizard fragment", e);
-						}
+                        try
+                        {
+                            fragmentModel.getDefaultOperation().execute( monitor, null );
+                        }
+                        catch( ExecutionException e )
+                        {
+                            ProjectUIPlugin.logError( "Error executing wizard fragment", e );
+                        }
 
-					}
-				});
-			}
-			catch (InterruptedException e) {
-				ProjectUIPlugin.logError("Error executing wizard fragment", e);
-			}
-		}
+                    }
+                } );
+            }
+            catch( InterruptedException e )
+            {
+                ProjectUIPlugin.logError( "Error executing wizard fragment", e );
+            }
+        }
 
-		Display.getDefault().asyncExec(new Runnable() {
+        Display.getDefault().asyncExec( new Runnable()
+        {
 
-			private void addBuildInAntView() {
-				IProject project = getFacetedProject().getProject();
+            private void addBuildInAntView()
+            {
+                IProject project = getFacetedProject().getProject();
 
-				if (project != null) {
-					IFile buildXmlFile = project.getFile("build.xml");
+                if( project != null )
+                {
+                    IFile buildXmlFile = project.getFile( "build.xml" );
 
-					if (buildXmlFile.exists()) {
-						String buildFileName = buildXmlFile.getFullPath().toString();
-						final AntProjectNode antProject = new AntProjectNodeProxy(buildFileName);
-						project.getName();
+                    if( buildXmlFile.exists() )
+                    {
+                        String buildFileName = buildXmlFile.getFullPath().toString();
+                        final AntProjectNode antProject = new AntProjectNodeProxy( buildFileName );
+                        project.getName();
 
-						IViewPart antView =
-							PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-								"org.eclipse.ant.ui.views.AntView");
+                        IViewPart antView =
+                            PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                                "org.eclipse.ant.ui.views.AntView" );
 
-						if (antView instanceof AntView) {
-							((AntView) antView).addProject(antProject);
-						}
-					}
-				}
-			}
+                        if( antView instanceof AntView )
+                        {
+                            ( (AntView) antView ).addProject( antProject );
+                        }
+                    }
+                }
+            }
 
-			private void refreshProjectExplorer() {
-				IViewPart view = null;
+            private void refreshProjectExplorer()
+            {
+                IViewPart view = null;
 
-				try {
-					view =
-						PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-							IPageLayout.ID_PROJECT_EXPLORER);
-				}
-				catch (Exception e) {
-					// Just bail and return if there is no view
-				}
-				if (view == null) {
-					return;
-				}
+                try
+                {
+                    view =
+                        PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                            IPageLayout.ID_PROJECT_EXPLORER );
+                }
+                catch( Exception e )
+                {
+                    // Just bail and return if there is no view
+                }
+                if( view == null )
+                {
+                    return;
+                }
 
-				CommonViewer viewer = (CommonViewer) view.getAdapter(CommonViewer.class);
+                CommonViewer viewer = (CommonViewer) view.getAdapter( CommonViewer.class );
 
-				viewer.refresh(true);
-			}
+                viewer.refresh( true );
+            }
 
-			public void run() {
-				refreshProjectExplorer();
-				addBuildInAntView();
-			}
-		});;
+            public void run()
+            {
+                refreshProjectExplorer();
+                addBuildInAntView();
+            }
+        } );;
 
-		super.postPerformFinish();
-	}
+        super.postPerformFinish();
+    }
 
-	public void setProjectType(String projectType) {
-		this.projectType = projectType;
-	}
+    public void setProjectType( String projectType )
+    {
+        this.projectType = projectType;
+    }
 
-	protected void setupWizard() {
-		setWindowTitle("New Liferay Project");
-		setShowFacetsSelectionPage(false);
-	}
+    protected void setupWizard()
+    {
+        setWindowTitle( "New Liferay Project" );
+        setShowFacetsSelectionPage( false );
+    }
 
 }

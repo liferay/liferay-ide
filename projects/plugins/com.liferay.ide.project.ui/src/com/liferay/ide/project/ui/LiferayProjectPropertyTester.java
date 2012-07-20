@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,17 +24,21 @@ import org.eclipse.core.resources.IProject;
 /**
  * @author Greg Amerson
  */
-public class LiferayProjectPropertyTester extends PropertyTester {
+public class LiferayProjectPropertyTester extends PropertyTester
+{
 
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (receiver instanceof IProject) {
-			return ProjectUtil.isLiferayProject((IProject) receiver);
-		}
-		else if ( receiver instanceof IFolder ) {
-			return ProjectUtil.isLiferayProject( (IFolder) receiver );
-		}
-		
-		return false;
-	}
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    {
+        if( receiver instanceof IProject )
+        {
+            return ProjectUtil.isLiferayProject( (IProject) receiver );
+        }
+        else if( receiver instanceof IFolder )
+        {
+            return ProjectUtil.isLiferayProject( (IFolder) receiver );
+        }
+
+        return false;
+    }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -11,8 +11,8 @@
 
 package com.liferay.ide.server.ui.wizard;
 
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -25,56 +25,64 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 /**
  * @author Greg Amerson
  */
-public class LiferayRuntimeStubWizardFragment extends WizardFragment {
+public class LiferayRuntimeStubWizardFragment extends WizardFragment
+{
+    public static final String LIFERAY_RUNTIME_STUB = "liferay-runtime-stub";
 
-	public static final String LIFERAY_RUNTIME_STUB = "liferay-runtime-stub";
+    protected LiferayRuntimeStubComposite composite;
 
-	protected LiferayRuntimeStubComposite composite;
+    public LiferayRuntimeStubWizardFragment()
+    {
+        super();
+    }
 
-	public LiferayRuntimeStubWizardFragment() {
-		super();
-	}
+    @Override
+    public Composite createComposite( Composite parent, IWizardHandle wizard )
+    {
+        wizard.setTitle( "Liferay Runtime Stub" );
+        wizard.setDescription( "Specify the directory location of Liferay portal bundle that will be used as a runtime stub." );
+        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
+            "/icons/wizban/server_wiz.png" ) ) );
 
-	@Override
-	public Composite createComposite(Composite parent, IWizardHandle wizard) {
-		wizard.setTitle( "Liferay Runtime Stub" );
-		wizard.setDescription( "Specify the directory location of Liferay portal bundle that will be used as a runtime stub." );
-		wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
-			"/icons/wizban/server_wiz.png")));
+        composite = new LiferayRuntimeStubComposite( parent, wizard );
 
-		composite = new LiferayRuntimeStubComposite(parent, wizard);
+        return composite;
+    }
 
-		return composite;
-	}
+    public void enter()
+    {
+        if( composite != null )
+        {
+            IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
-	public void enter() {
-		if (composite != null) {
-			IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+            composite.setRuntime( runtime );
+        }
+    }
 
-			composite.setRuntime(runtime);
-		}
-	}
+    public boolean hasComposite()
+    {
+        return true;
+    }
 
-	public boolean hasComposite() {
-		return true;
-	}
+    public boolean isComplete()
+    {
+        IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
-	public boolean isComplete() {
-		IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
+        if( runtime == null )
+        {
+            return false;
+        }
 
-		if (runtime == null) {
-			return false;
-		}
+        IStatus status = runtime.validate( null );
 
-		IStatus status = runtime.validate(null);
+        return status != null && status.getSeverity() != IStatus.ERROR;
+    }
 
-		return status != null && status.getSeverity() != IStatus.ERROR;
-	}
-
-	protected ILiferayRuntime getLiferayRuntime() {
-		IRuntimeWorkingCopy runtimeWC = (IRuntimeWorkingCopy) getTaskModel().getObject(TaskModel.TASK_RUNTIME);
-		ILiferayRuntime liferayRuntime = (ILiferayRuntime) runtimeWC.loadAdapter( ILiferayRuntime.class, null );
-		return liferayRuntime;
-	}
+    protected ILiferayRuntime getLiferayRuntime()
+    {
+        IRuntimeWorkingCopy runtimeWC = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
+        ILiferayRuntime liferayRuntime = (ILiferayRuntime) runtimeWC.loadAdapter( ILiferayRuntime.class, null );
+        return liferayRuntime;
+    }
 
 }

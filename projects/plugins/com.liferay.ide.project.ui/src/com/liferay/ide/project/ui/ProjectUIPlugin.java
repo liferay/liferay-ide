@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,118 +34,123 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class ProjectUIPlugin extends AbstractUIPlugin {
+public class ProjectUIPlugin extends AbstractUIPlugin
+{
 
-	public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location";
+    public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location";
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.project.ui";
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.project.ui";
 
-	// The shared instance
-	private static ProjectUIPlugin plugin;
+    // The shared instance
+    private static ProjectUIPlugin plugin;
 
-	// Shared images
-	public static final String IMAGE_ID = "war.image";
+    // Shared images
+    public static final String IMAGE_ID = "war.image";
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
-	public static ProjectUIPlugin getDefault() {
-		return plugin;
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static ProjectUIPlugin getDefault()
+    {
+        return plugin;
+    }
 
+    public static void logError( Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( e.getMessage(), e ) );
+    }
 
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
+    }
 
-	
+    /**
+     * The constructor
+     */
+    public ProjectUIPlugin()
+    {
+    }
 
-	public static void logError( Exception e ) {
-		getDefault().getLog().log( createErrorStatus( e.getMessage(), e ) );
-	}
+    // private static IConfigurationElement[] pluginWizardFragmentElements;
 
-	public static void logError( String msg, Exception e ) {
-		getDefault().getLog().log( createErrorStatus( msg, e ) );
-	}
+    // public static IPluginWizardFragment getPluginWizardFragment(String pluginFacetId) {
+    // if (CoreUtil.isNullOrEmpty(pluginFacetId)) {
+    // return null;
+    // }
+    //
+    // IConfigurationElement[] fragmentElements = getPluginWizardFragmentsElements();
+    //
+    // for (IConfigurationElement fragmentElement : fragmentElements) {
+    // if (pluginFacetId.equals(fragmentElement.getAttribute("facetId"))) {
+    // try {
+    // Object o = fragmentElement.createExecutableExtension("class");
+    //
+    // if (o instanceof IPluginWizardFragment) {
+    // IPluginWizardFragment fragment = (IPluginWizardFragment) o;
+    // fragment.setFragment(true);
+    // return fragment;
+    // }
+    // }
+    // catch (CoreException e) {
+    // ProjectUIPlugin.logError("Could not load plugin wizard fragment for " + pluginFacetId, e);
+    // }
+    // }
+    // }
+    //
+    // return null;
+    // }
 
-	/**
-	 * The constructor
-	 */
-	public ProjectUIPlugin() {
-	}
+    // public static IConfigurationElement[] getPluginWizardFragmentsElements() {
+    // if (pluginWizardFragmentElements == null) {
+    // pluginWizardFragmentElements =
+    // Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginWizardFragment.ID);
+    // }
+    //
+    // return pluginWizardFragmentElements;
+    // }
 
-	// private static IConfigurationElement[] pluginWizardFragmentElements;
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
+     */
+    @Override
+    public void start( BundleContext context ) throws Exception
+    {
 
-	// public static IPluginWizardFragment getPluginWizardFragment(String pluginFacetId) {
-	// if (CoreUtil.isNullOrEmpty(pluginFacetId)) {
-	// return null;
-	// }
-	//
-	// IConfigurationElement[] fragmentElements = getPluginWizardFragmentsElements();
-	//
-	// for (IConfigurationElement fragmentElement : fragmentElements) {
-	// if (pluginFacetId.equals(fragmentElement.getAttribute("facetId"))) {
-	// try {
-	// Object o = fragmentElement.createExecutableExtension("class");
-	//
-	// if (o instanceof IPluginWizardFragment) {
-	// IPluginWizardFragment fragment = (IPluginWizardFragment) o;
-	// fragment.setFragment(true);
-	// return fragment;
-	// }
-	// }
-	// catch (CoreException e) {
-	// ProjectUIPlugin.logError("Could not load plugin wizard fragment for " + pluginFacetId, e);
-	// }
-	// }
-	// }
-	//
-	// return null;
-	// }
+        super.start( context );
 
-	// public static IConfigurationElement[] getPluginWizardFragmentsElements() {
-	// if (pluginWizardFragmentElements == null) {
-	// pluginWizardFragmentElements =
-	// Platform.getExtensionRegistry().getConfigurationElementsFor(IPluginWizardFragment.ID);
-	// }
-	//
-	// return pluginWizardFragmentElements;
-	// }
+        plugin = this;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-	 */
-	@Override
-	public void start( BundleContext context ) throws Exception {
+    @Override
+    protected void initializeImageRegistry( ImageRegistry registry )
+    {
+        Bundle bundle = Platform.getBundle( PLUGIN_ID );
+        IPath path = new Path( "icons/e16/war.gif" );
+        URL url = FileLocator.find( bundle, path, null );
+        ImageDescriptor desc = ImageDescriptor.createFromURL( url );
+        registry.put( IMAGE_ID, desc );
+    }
 
-		super.start( context );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
+     */
+    @Override
+    public void stop( BundleContext context ) throws Exception
+    {
 
-		plugin = this;
-	}
+        plugin = null;
 
-	@Override
-	protected void initializeImageRegistry( ImageRegistry registry ) {
-		Bundle bundle = Platform.getBundle( PLUGIN_ID );
-		IPath path = new Path( "icons/e16/war.gif" );
-		URL url = FileLocator.find( bundle, path, null );
-		ImageDescriptor desc = ImageDescriptor.createFromURL( url );
-		registry.put( IMAGE_ID, desc );
-	}
+        super.stop( context );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-	 */
-	@Override
-	public void stop( BundleContext context ) throws Exception {
-
-		plugin = null;
-
-		super.stop( context );
-	}
-
-	public static IStatus createErrorStatus( String msg, Exception e ) {
-		return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-	}
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
 }

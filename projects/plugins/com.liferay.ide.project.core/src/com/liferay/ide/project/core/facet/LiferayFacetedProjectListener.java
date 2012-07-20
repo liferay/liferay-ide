@@ -14,6 +14,7 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.project.core.ProjectCorePlugin;
@@ -37,24 +38,25 @@ import org.eclipse.wst.common.project.facet.core.events.IFacetedProjectEvent;
 import org.eclipse.wst.common.project.facet.core.events.IFacetedProjectListener;
 import org.eclipse.wst.common.project.facet.core.events.IProjectFacetActionEvent;
 
-
 /**
  * @author Gregory Amerson
  */
 public class LiferayFacetedProjectListener implements IFacetedProjectListener
 {
+
     final static String JSDT_FACET = "wst.jsdt.web";
-    
+
     public void handleEvent( IFacetedProjectEvent event )
     {
         if( event.getType() == IFacetedProjectEvent.Type.POST_INSTALL )
         {
             final IProjectFacetActionEvent actionEvent = (IProjectFacetActionEvent) event;
-            
+
             if( JSDT_FACET.equals( actionEvent.getProjectFacet().getId() ) )
             {
                 Job uninstall = new WorkspaceJob( "uninstall jsdt facet" )
                 {
+
                     @Override
                     public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                     {
@@ -62,11 +64,11 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                         try
                         {
                             IFacetedProject fProject = actionEvent.getProject();
-                            
+
                             Set<IProjectFacet> fixedFacets = fProject.getFixedProjectFacets();
-                            
+
                             Set<IProjectFacet> updatedFacets = new HashSet<IProjectFacet>();
-                            
+
                             for( IProjectFacet f : fixedFacets )
                             {
                                 if( !JSDT_FACET.equals( f.getId() ) )
@@ -74,47 +76,47 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                                     updatedFacets.add( f );
                                 }
                             }
-                            
+
                             fProject.setFixedProjectFacets( updatedFacets );
                         }
                         catch( Exception e )
                         {
                             ProjectCorePlugin.logError( "Unable to removed fixed jsdt facet", e );
                         }
-                        
+
                         // next uninstall the jsdt facet
                         try
                         {
                             Set<Action> actions = new HashSet<Action>();
-                        
+
                             Type type = Type.valueOf( "uninstall" );
-                            
+
                             Action uninstallJsdt = new Action( type, actionEvent.getProjectFacetVersion(), null );
-                        
+
                             actions.add( uninstallJsdt );
-                        
+
                             actionEvent.getProject().modify( actions, monitor );
-                            
+
                             // try to remove unneeded jsdt files
-                            
+
                             final IProject project = actionEvent.getProject().getProject();
-                            
+
                             IFile jsdtscope = project.getFile( ".settings/.jsdtscope" );
-                            
+
                             if( jsdtscope.exists() )
                             {
                                 jsdtscope.delete( true, monitor );
                             }
-                            
+
                             IFile container = project.getFile( ".settings/org.eclipse.wst.jsdt.ui.superType.container" );
-                            
+
                             if( container.exists() )
                             {
                                 container.delete( true, monitor );
                             }
-                            
+
                             IFile name = project.getFile( ".settings/org.eclipse.wst.jsdt.ui.superType.name" );
-                            
+
                             if( name.exists() )
                             {
                                 name.delete( true, monitor );
@@ -124,11 +126,11 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                         {
                             ProjectCorePlugin.logError( "Unable to uninstall jsdt facet", e );
                         }
-                        
+
                         return Status.OK_STATUS;
                     }
                 };
-                
+
                 uninstall.schedule();
             }
         }

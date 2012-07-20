@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
@@ -48,300 +50,386 @@ import org.xml.sax.ErrorHandler;
 /**
  * @author Greg Amerson
  */
-public class FileUtil {
+public class FileUtil
+{
 
-	public static void clearContents(File versionFile) {
-		if (versionFile != null && versionFile.exists()) {
-			try {
-				RandomAccessFile file = new RandomAccessFile(versionFile, "rw");
-				file.setLength(0);
-				file.close();
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-			}
+    public static void clearContents( File versionFile )
+    {
+        if( versionFile != null && versionFile.exists() )
+        {
+            try
+            {
+                RandomAccessFile file = new RandomAccessFile( versionFile, "rw" );
+                file.setLength( 0 );
+                file.close();
+            }
+            catch( Exception ex )
+            {
+                ex.printStackTrace();
+            }
+        }
+    }
 
-		}
-	}
+    public static void copyFileToDir( File file, File dir )
+    {
+        if( file == null || ( !file.exists() ) || dir == null || ( !dir.exists() ) || ( !dir.isDirectory() ) )
+        {
+            return;
+        }
 
-	public static void copyFileToDir(File file, File dir) {
-		if (file == null || (!file.exists()) || dir == null || (!dir.exists()) || (!dir.isDirectory())) {
-			return;
-		}
+        byte[] buf = new byte[4096];
 
-		byte[] buf = new byte[4096];
+        OutputStream out = null;
+        FileInputStream in = null;
 
-		OutputStream out = null;
-		FileInputStream in = null;
+        try
+        {
+            out = new FileOutputStream( new File( dir, file.getName() ) );
+            in = new FileInputStream( file );
 
-		try {
-			out = new FileOutputStream(new File(dir, file.getName()));
-			in = new FileInputStream(file);
+            int avail = in.read( buf );
+            while( avail > 0 )
+            {
+                out.write( buf, 0, avail );
+                avail = in.read( buf );
+            }
+        }
+        catch( Exception e )
+        {
+            CorePlugin.logError( "Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath() );
+        }
+        finally
+        {
+            try
+            {
+                if( in != null )
+                    in.close();
+            }
+            catch( Exception ex )
+            {
+                // ignore
+            }
+            try
+            {
+                if( out != null )
+                    out.close();
+            }
+            catch( Exception ex )
+            {
+                // ignore
+            }
+        }
+    }
 
-			int avail = in.read(buf);
-			while (avail > 0) {
-				out.write(buf, 0, avail);
-				avail = in.read(buf);
-			}
-		}
-		catch (Exception e) {
-			CorePlugin.logError("Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath());
-		}
-		finally {
-			try {
-				if (in != null)
-					in.close();
-			}
-			catch (Exception ex) {
-				// ignore
-			}
-			try {
-				if (out != null)
-					out.close();
-			}
-			catch (Exception ex) {
-				// ignore
-			}
-		}
-	}
+    public static void deleteDir( File directory, boolean removeAll )
+    {
+        if( directory == null || !directory.isDirectory() )
+        {
+            return;
+        }
 
-	public static void deleteDir(File directory, boolean removeAll) {
+        for( File file : directory.listFiles() )
+        {
+            if( file.isDirectory() && removeAll )
+            {
+                deleteDir( file, removeAll );
+            }
+            else
+            {
+                file.delete();
+            }
+        }
 
-		if (directory == null || !directory.isDirectory()) {
-			return;
-		}
+        directory.delete();
+    }
 
-		for (File file : directory.listFiles()) {
-			if (file.isDirectory() && removeAll) {
-				deleteDir(file, removeAll);
-			}
-			else {
-				file.delete();
-			}
-		}
+    public static void deleteDirContents( final File directory )
+    {
+        if( directory == null || !directory.isDirectory() )
+        {
+            return;
+        }
 
-		directory.delete();
-	}
+        for( File file : directory.listFiles() )
+        {
+            if( file.isDirectory() )
+            {
+                deleteDir( file, true );
+            }
+            else
+            {
+                file.delete();
+            }
+        }
 
-	public static void deleteDirContents(final File directory) {
-		if (directory == null || !directory.isDirectory()) {
-			return;
-		}
+    }
 
-		for (File file : directory.listFiles()) {
-			if (file.isDirectory()) {
-				deleteDir(file, true);
-			}
-			else {
-				file.delete();
-			}
-		}
+    public static String readContents( File file )
+    {
+        return readContents( file, false );
+    }
 
-	}
+    public static String readContents( File file, boolean includeNewlines )
+    {
+        if( file == null )
+        {
+            return null;
+        }
 
-	public static String readContents(File file) {
-		return readContents(file, false);
-	}
+        if( !file.exists() )
+        {
+            return null;
+        }
 
-	public static String readContents(File file, boolean includeNewlines) {
-		if (file == null) {
-			return null;
-		}
+        StringBuffer contents = new StringBuffer();
+        BufferedReader bufferedReader = null;
+        
+        try
+        {
+            FileReader fileReader = new FileReader( file );
 
-		if (!file.exists()) {
-			return null;
-		}
+            bufferedReader = new BufferedReader( fileReader );
 
-		StringBuffer contents = new StringBuffer();
+            String line;
 
-		try {
-			FileReader fileReader = new FileReader(file);
+            while( ( line = bufferedReader.readLine() ) != null )
+            {
+                contents.append( line );
 
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
+                if( includeNewlines )
+                {
+                    contents.append( "\n" );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            CorePlugin.logError( "Could not read file: " + file.getPath() );
+        }
+        finally
+        {
+            if( bufferedReader != null )
+            {
+                try
+                {
+                    bufferedReader.close();
+                }
+                catch( IOException e )
+                {
+                    // best effort no need to log
+                }
+            }
+        }
 
-			String line;
+        return contents.toString();
+    }
 
-			while ((line = bufferedReader.readLine()) != null) {
-				contents.append(line);
+    public static String readContents( InputStream contents ) throws IOException
+    {
+        byte[] buffer = new byte[4096];
 
-				if (includeNewlines) {
-					contents.append("\n");
-				}
-			}
-		}
-		catch (Exception e) {
-			CorePlugin.logError("Could not read file: " + file.getPath());
-		}
+        BufferedInputStream bin = new BufferedInputStream( contents );
+        StringBufferOutputStream out = new StringBufferOutputStream();
 
-		return contents.toString();
-	}
+        int bytesRead = 0;
+//        int bytesTotal = 0;
 
-	public static String readContents(InputStream contents)
-		throws IOException {
-		byte[] buffer = new byte[4096];
+        // Keep reading from the file while there is any content
+        // when the end of the stream has been reached, -1 is returned
+        while( ( bytesRead = bin.read( buffer ) ) != -1 )
+        {
+            out.write( buffer, 0, bytesRead );
+//            bytesTotal += bytesRead;
+        }
 
-		BufferedInputStream bin = new BufferedInputStream(contents);
-		StringBufferOutputStream out = new StringBufferOutputStream();
+        if( bin != null )
+        {
+            bin.close();
+        }
 
-		int bytesRead = 0;
-		int bytesTotal = 0;
+        if( out != null )
+        {
+            out.flush();
+            out.close();
+        }
 
-		// Keep reading from the file while there is any content
-		// when the end of the stream has been reached, -1 is returned
-		while ((bytesRead = bin.read(buffer)) != -1) {
-			out.write(buffer, 0, bytesRead);
-			bytesTotal += bytesRead;
-		}
+        return out.toString();
+    }
 
-		if (bin != null) {
-			bin.close();
-		}
+    public static String[] readLinesFromFile( File file )
+    {
+        if( file == null )
+        {
+            return null;
+        }
 
-		if (out != null) {
-			out.flush();
-			out.close();
-		}
+        if( !file.exists() )
+        {
+            return null;
+        }
 
-		return out.toString();
-	}
+        List<String> lines = new ArrayList<String>();
+        BufferedReader bufferedReader = null;
+        
+        try
+        {
+            FileReader fileReader = new FileReader( file );
 
-	public static String[] readLinesFromFile(File file) {
-		if (file == null) {
-			return null;
-		}
+            bufferedReader = new BufferedReader( fileReader );
 
-		if (!file.exists()) {
-			return null;
-		}
+            String line;
 
-		List<String> lines = new ArrayList<String>();
+            while( ( line = bufferedReader.readLine() ) != null )
+            {
+                lines.add( line );
+            }
+        }
+        catch( Exception e )
+        {
+            CorePlugin.logError( "Could not read file: " + file.getPath() );
+        }
+        finally
+        {
+            if( bufferedReader != null )
+            {
+                try
+                {
+                    bufferedReader.close();
+                }
+                catch( Exception e )
+                {
+                    // no need to log, best effort
+                }
+            }
+        }
 
-		try {
-			FileReader fileReader = new FileReader(file);
+        return lines.toArray( new String[lines.size()] );
+    }
 
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-			String line;
-
-			while ((line = bufferedReader.readLine()) != null) {
-				lines.add(line);
-			}
-		}
-		catch (Exception e) {
-			CorePlugin.logError("Could not read file: " + file.getPath());
-		}
-
-		return lines.toArray(new String[lines.size()]);
-	}
-
-	public static Document readXML(String content)
-	{
-	    return readXML(new ByteArrayInputStream( content.getBytes() ), null, null);
-	}
-
-	public static Document readXML(InputStream inputStream, EntityResolver resolver, ErrorHandler error)
-	{
-	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    public static Document readXML( InputStream inputStream, EntityResolver resolver, ErrorHandler error )
+    {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db;
 
-        try {
+        try
+        {
             db = dbf.newDocumentBuilder();
 
-            if (resolver != null) {
-                db.setEntityResolver(resolver);
+            if( resolver != null )
+            {
+                db.setEntityResolver( resolver );
             }
 
-            if (error != null)
+            if( error != null )
             {
                 db.setErrorHandler( error );
             }
 
-            return db.parse(inputStream);
+            return db.parse( inputStream );
         }
-        catch (Throwable t) {
+        catch( Throwable t )
+        {
             return null;
         }
-	}
+    }
 
-	public static Document readXMLFile(File file) {
-		return readXMLFile(file, null);
-	}
+    public static Document readXML( String content )
+    {
+        return readXML( new ByteArrayInputStream( content.getBytes() ), null, null );
+    }
 
-	public static Document readXMLFile(File file, EntityResolver resolver) {
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db;
+    public static Document readXMLFile( File file )
+    {
+        return readXMLFile( file, null );
+    }
 
-		try {
-			db = dbf.newDocumentBuilder();
+    public static Document readXMLFile( File file, EntityResolver resolver )
+    {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db;
 
-			if (resolver != null) {
-				db.setEntityResolver(resolver);
-			}
+        try
+        {
+            db = dbf.newDocumentBuilder();
 
-			return db.parse(file);
-		}
-		catch (Throwable t) {
-			return null;
-		}
-	}
+            if( resolver != null )
+            {
+                db.setEntityResolver( resolver );
+            }
 
-	public static String validateNewFolder(IFolder docroot, String folderValue) {
-		if (docroot == null || folderValue == null) {
-			return null;
-		}
+            return db.parse( file );
+        }
+        catch( Throwable t )
+        {
+            return null;
+        }
+    }
 
-		if (CoreUtil.isNullOrEmpty(folderValue)) {
-			return "Folder value cannot be empty.";
-		}
+    public static String validateNewFolder( IFolder docroot, String folderValue )
+    {
+        if( docroot == null || folderValue == null )
+        {
+            return null;
+        }
 
-		if (!Path.ROOT.isValidPath(folderValue)) {
-			return "Folder value is invalid.";
-		}
+        if( CoreUtil.isNullOrEmpty( folderValue ) )
+        {
+            return "Folder value cannot be empty.";
+        }
 
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        if( !Path.ROOT.isValidPath( folderValue ) )
+        {
+            return "Folder value is invalid.";
+        }
 
-		IStatus result =
-			workspace.validatePath(docroot.getFolder(folderValue).getFullPath().toString(), IResource.FOLDER);
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-		if (!result.isOK()) {
-			return result.getMessage();
-		}
+        IStatus result =
+            workspace.validatePath( docroot.getFolder( folderValue ).getFullPath().toString(), IResource.FOLDER );
 
-		if (docroot.getFolder(new Path(folderValue)).exists()) {
-			return "Folder already exists.";
-		}
+        if( !result.isOK() )
+        {
+            return result.getMessage();
+        }
 
-		return null;
-	}
+        if( docroot.getFolder( new Path( folderValue ) ).exists() )
+        {
+            return "Folder already exists.";
+        }
 
+        return null;
+    }
 
-	public static int writeFileFromStream(File tempFile, InputStream in)
-		throws IOException {
-		byte[] buffer = new byte[1024];
+    public static int writeFileFromStream( File tempFile, InputStream in ) throws IOException
+    {
+        byte[] buffer = new byte[1024];
 
-		BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
-		BufferedInputStream bin = new BufferedInputStream(in);
+        BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( tempFile ) );
+        BufferedInputStream bin = new BufferedInputStream( in );
 
-		int bytesRead = 0;
-		int bytesTotal = 0;
+        int bytesRead = 0;
+        int bytesTotal = 0;
 
-		// Keep reading from the file while there is any content
-		// when the end of the stream has been reached, -1 is returned
-		while ((bytesRead = bin.read(buffer)) != -1) {
-			out.write(buffer, 0, bytesRead);
-			bytesTotal += bytesRead;
-		}
+        // Keep reading from the file while there is any content
+        // when the end of the stream has been reached, -1 is returned
+        while( ( bytesRead = bin.read( buffer ) ) != -1 )
+        {
+            out.write( buffer, 0, bytesRead );
+            bytesTotal += bytesRead;
+        }
 
-		if (bin != null) {
-			bin.close();
-		}
+        if( bin != null )
+        {
+            bin.close();
+        }
 
-		if (out != null) {
-			out.flush();
-			out.close();
-		}
+        if( out != null )
+        {
+            out.flush();
+            out.close();
+        }
 
-		return bytesTotal;
-	}
+        return bytesTotal;
+    }
 
 }

@@ -19,35 +19,41 @@ import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 /**
  * Command to change the external properties
  */
-@SuppressWarnings("restriction")
-public class SetExternalPropertiesCommand extends ServerCommand {
+@SuppressWarnings( "restriction" )
+public class SetExternalPropertiesCommand extends ServerCommand
+{
 
-	protected String externalProperties;
-	protected String oldExternalProperties;
+    protected String externalProperties;
+    protected String oldExternalProperties;
 
-	/**
-	 * Constructs command to set the deploy directory.
-	 * 
-	 * @param server a Tomcat server
-	 * @param deployDir deployment directory to set
-	 */
-	public SetExternalPropertiesCommand(LiferayTomcatServer server, String externalProperties) {
-		super(server, "Set External properties");
-		this.externalProperties = externalProperties;
-	}
+    /**
+     * Constructs command to set the deploy directory.
+     * 
+     * @param server
+     *            a Tomcat server
+     * @param deployDir
+     *            deployment directory to set
+     */
+    public SetExternalPropertiesCommand( LiferayTomcatServer server, String externalProperties )
+    {
+        super( server, "Set External properties" );
+        this.externalProperties = externalProperties;
+    }
 
-	/**
-	 * Execute setting the external properties
-	 */
-	public void execute() {
-		oldExternalProperties = ((LiferayTomcatServer) server).getExternalProperties();
-		((LiferayTomcatServer) server).setExternalProperties(externalProperties);
-	}
+    /**
+     * Execute setting the external properties
+     */
+    public void execute()
+    {
+        oldExternalProperties = ( (LiferayTomcatServer) server ).getExternalProperties();
+        ( (LiferayTomcatServer) server ).setExternalProperties( externalProperties );
+    }
 
-	/**
-	 * Restore prior external properties
-	 */
-	public void undo() {
-		((LiferayTomcatServer) server).setExternalProperties(oldExternalProperties);
-	}
+    /**
+     * Restore prior external properties
+     */
+    public void undo()
+    {
+        ( (LiferayTomcatServer) server ).setExternalProperties( oldExternalProperties );
+    }
 }

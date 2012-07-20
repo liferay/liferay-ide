@@ -17,7 +17,7 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.hook.core.model.IService;
+import com.liferay.ide.hook.core.model.ServiceWrapper;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -34,70 +34,70 @@ import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.PropertyContentEvent;
 
-
 /**
  * @author Gregory Amerson
  */
 public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintService
 {
 
-	private Set<JavaTypeKind> kinds;
+    private Set<JavaTypeKind> kinds;
 
-	private JavaTypeConstraintBehavior behavior;
+    private JavaTypeConstraintBehavior behavior;
 
-	private IService service;
+    private ServiceWrapper service;
 
-	@Override
-	protected void initJavaTypeConstraintService()
-	{
-		super.initJavaTypeConstraintService();
+    @Override
+    protected void initJavaTypeConstraintService()
+    {
+        super.initJavaTypeConstraintService();
 
-		final ModelProperty property = context().find( ModelProperty.class );
-		final JavaTypeConstraint javaTypeConstraintAnnotation = property.getAnnotation( JavaTypeConstraint.class );
+        final ModelProperty property = context().find( ModelProperty.class );
+        final JavaTypeConstraint javaTypeConstraintAnnotation = property.getAnnotation( JavaTypeConstraint.class );
 
-		final Set<JavaTypeKind> kind = EnumSet.noneOf( JavaTypeKind.class );
+        final Set<JavaTypeKind> kind = EnumSet.noneOf( JavaTypeKind.class );
 
-		for ( JavaTypeKind k : javaTypeConstraintAnnotation.kind() )
-		{
-			kind.add( k );
-		}
+        for( JavaTypeKind k : javaTypeConstraintAnnotation.kind() )
+        {
+            kind.add( k );
+        }
 
-		this.kinds = kind;
+        this.kinds = kind;
 
-		this.behavior = javaTypeConstraintAnnotation.behavior();
+        this.behavior = javaTypeConstraintAnnotation.behavior();
 
-		this.service = context( IService.class );
+        this.service = context( ServiceWrapper.class );
 
-		Listener listener = new FilteredListener<PropertyContentEvent>()
-		{
-			@Override
-			public void handleTypedEvent( PropertyContentEvent event )
-			{
-				refresh();
-			}
-		};
+        Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
 
-		this.service.attach( listener, "ServiceType" );
-	}
+            @Override
+            public void handleTypedEvent( PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
 
-	private Set<String> getServiceTypes()
-	{
-		JavaTypeName type = this.service.getServiceType().getContent( false );
+        this.service.attach( listener, "ServiceType" );
+    }
 
-		Set<String> types = new HashSet<String>();
+    private Set<String> getServiceTypes()
+    {
+        JavaTypeName type = this.service.getServiceType().getContent( false );
 
-		if ( type != null )
-		{
-			types.add( type.qualified() + "Wrapper" );
-		}
+        Set<String> types = new HashSet<String>();
 
-		return types;
-	}
+        if( type != null )
+        {
+            types.add( type.qualified() + "Wrapper" );
+        }
 
-	@Override
-	protected JavaTypeConstraintServiceData compute()
-	{
-		return new JavaTypeConstraintServiceData( this.kinds, getServiceTypes(), this.behavior );
-	}
+        return types;
+    }
+
+    @Override
+    protected JavaTypeConstraintServiceData compute()
+    {
+        return new JavaTypeConstraintServiceData( this.kinds, getServiceTypes(), this.behavior );
+    }
 
 }

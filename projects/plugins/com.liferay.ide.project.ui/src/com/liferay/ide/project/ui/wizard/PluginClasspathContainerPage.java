@@ -32,130 +32,129 @@ import org.eclipse.swt.widgets.Label;
  * @author Gregory Amerson
  */
 public class PluginClasspathContainerPage extends NewElementWizardPage
-	implements IClasspathContainerPage, IClasspathContainerPageExtension
+    implements IClasspathContainerPage, IClasspathContainerPageExtension
 {
 
+    private IProject ownerProject;
+    private String type;
 
-	private IProject ownerProject;
-	private String type;
+    private Combo typeCombo;
 
-	private Combo typeCombo;
+    public PluginClasspathContainerPage()
+    {
+        super( "PluginClasspathContainerPage" );
+        setTitle( "Liferay Plugin API Library" );
+        setDescription( "This container dynamically manages the classpath entries for Liferay plugin projects." );
+    }
 
-	public PluginClasspathContainerPage()
-	{
-		super( "PluginClasspathContainerPage" );
-		setTitle( "Liferay Plugin API Library" );
-		setDescription( "This container dynamically manages the classpath entries for Liferay plugin projects." );
-	}
+    public void createControl( Composite parent )
+    {
+        final Composite composite = new Composite( parent, SWT.NONE );
+        composite.setLayout( new GridLayout( 2, false ) );
 
-	public void createControl( Composite parent )
-	{
-		final Composite composite = new Composite( parent, SWT.NONE );
-		composite.setLayout( new GridLayout( 2, false ) );
+        final Label label = new Label( composite, SWT.NONE );
+        label.setText( "Liferay Plugin Type:" );
 
-		final Label label = new Label( composite, SWT.NONE );
-		label.setText( "Liferay Plugin Type:" );
+        final String[] types = new String[] { "portlet", "hook", "ext" };
 
-		final String[] types = new String[] { "portlet", "hook", "ext" };
+        this.typeCombo = new Combo( composite, SWT.READ_ONLY );
+        this.typeCombo.setItems( types );
 
-		this.typeCombo = new Combo( composite, SWT.READ_ONLY );
-		this.typeCombo.setItems( types );
+        final int index;
 
-		final int index;
+        if( this.type != null )
+        {
+            index = indexOf( types, this.type );
+        }
+        else
+        {
+            if( ProjectUtil.isPortletProject( this.ownerProject ) )
+            {
+                index = 0;
+            }
+            else if( ProjectUtil.isHookProject( this.ownerProject ) )
+            {
+                index = 1;
+            }
+            else if( ProjectUtil.isExtProject( this.ownerProject ) )
+            {
+                index = 2;
+            }
+            else
+            {
+                index = -1;
+            }
+        }
 
-		if ( this.type != null )
-		{
-			index = indexOf( types, this.type );
-		}
-		else
-		{
-			if ( ProjectUtil.isPortletProject( this.ownerProject ) )
-			{
-				index = 0;
-			}
-			else if ( ProjectUtil.isHookProject( this.ownerProject ) )
-			{
-				index = 1;
-			}
-			else if ( ProjectUtil.isExtProject( this.ownerProject ) )
-			{
-				index = 2;
-			}
-			else
-			{
-				index = -1;
-			}
-		}
+        if( index != -1 )
+        {
+            this.typeCombo.select( index );
+        }
 
-		if ( index != -1 )
-		{
-			this.typeCombo.select( index );
-		}
+        final GridData gd = new GridData();
+        gd.grabExcessHorizontalSpace = true;
+        gd.minimumWidth = 100;
 
-		final GridData gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		gd.minimumWidth = 100;
+        this.typeCombo.setLayoutData( gd );
 
-		this.typeCombo.setLayoutData( gd );
+        setControl( composite );
+    }
 
-		setControl( composite );
-	}
+    public boolean finish()
+    {
+        if( this.ownerProject != null && ProjectUtil.isLiferayProject( this.ownerProject ) )
+        {
+            return true;
+        }
+        else
+        {
+            setErrorMessage( "Selected project is not a Liferay project. Please convert it to Liferay project first." );
+            return false;
+        }
+    }
 
-	public boolean finish()
-	{
-		if ( this.ownerProject != null && ProjectUtil.isLiferayProject( this.ownerProject ) )
-		{
-			return true;
-		}
-		else
-		{
-			setErrorMessage( "Selected project is not a Liferay project. Please convert it to Liferay project first." );
-			return false;
-		}
-	}
+    public IClasspathEntry getSelection()
+    {
+        IPath path = new Path( PluginClasspathContainerInitializer.ID + "/" );
 
-	public IClasspathEntry getSelection()
-	{
-		IPath path = new Path( PluginClasspathContainerInitializer.ID + "/" );
+        final int index = this.typeCombo.getSelectionIndex();
 
-		final int index = this.typeCombo.getSelectionIndex();
+        if( index != -1 )
+        {
+            final String type = this.typeCombo.getItem( index );
+            path = path.append( type );
+        }
 
-		if ( index != -1 )
-		{
-			final String type = this.typeCombo.getItem( index );
-			path = path.append( type );
-		}
+        return JavaCore.newContainerEntry( path );
+    }
 
-		return JavaCore.newContainerEntry( path );
-	}
+    public void initialize( IJavaProject project, IClasspathEntry[] currentEntries )
+    {
+        this.ownerProject = ( project == null ? null : project.getProject() );
+    }
 
-	public void initialize( IJavaProject project, IClasspathEntry[] currentEntries )
-	{
-		this.ownerProject = ( project == null ? null : project.getProject() );
-	}
+    public void setSelection( IClasspathEntry entry )
+    {
+        final IPath path = entry == null ? null : entry.getPath();
 
-	public void setSelection( IClasspathEntry entry )
-	{
-		final IPath path = entry == null ? null : entry.getPath();
+        if( path != null && path.segmentCount() == 2 )
+        {
+            this.type = path.segment( 1 );
+        }
 
-		if ( path != null && path.segmentCount() == 2 )
-		{
-			this.type = path.segment( 1 );
-		}
+    }
 
-	}
+    private static int indexOf( final String[] array, final String str )
+    {
+        for( int i = 0; i < array.length; i++ )
+        {
+            if( array[i].equals( str ) )
+            {
+                return i;
+            }
+        }
 
-	private static int indexOf( final String[] array, final String str )
-	{
-		for ( int i = 0; i < array.length; i++ )
-		{
-			if ( array[i].equals( str ) )
-			{
-				return i;
-			}
-		}
-
-		return -1;
-	}
+        return -1;
+    }
 
 }

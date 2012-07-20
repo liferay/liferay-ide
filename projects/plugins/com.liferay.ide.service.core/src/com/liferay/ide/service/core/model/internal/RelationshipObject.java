@@ -14,8 +14,8 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
-package com.liferay.ide.service.core.model.internal;
 
+package com.liferay.ide.service.core.model.internal;
 
 /**
  * @author Gregory Amerson

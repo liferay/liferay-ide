@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -50,150 +50,176 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Greg Amerson
  */
-public class ThemeDiffResourceListener implements IResourceChangeListener {
+public class ThemeDiffResourceListener implements IResourceChangeListener
+{
 
-	public void resourceChanged(IResourceChangeEvent event) {
-		if (event == null) {			
-			return;			
-		}
+    public void resourceChanged( IResourceChangeEvent event )
+    {
+        if( event == null )
+        {
+            return;
+        }
 
-		if (shouldProcessResourceChangedEvent(event)) {
-			IResourceDelta delta = event.getDelta();
+        if( shouldProcessResourceChangedEvent( event ) )
+        {
+            IResourceDelta delta = event.getDelta();
 
-			try {
-				delta.accept(new IResourceDeltaVisitor() {
+            try
+            {
+                delta.accept( new IResourceDeltaVisitor()
+                {
 
-					public boolean visit(IResourceDelta delta)
-						throws CoreException {
+                    public boolean visit( IResourceDelta delta ) throws CoreException
+                    {
 
-						if (shouldProcessResourceDelta(delta)) {
-							processResourceChanged(delta);
+                        if( shouldProcessResourceDelta( delta ) )
+                        {
+                            processResourceChanged( delta );
 
-							return false;
-						}
-						
-						return true;
-					}
-				});
-			}
-			catch (CoreException e) {
+                            return false;
+                        }
 
-			}
-		}
-	}
+                        return true;
+                    }
+                } );
+            }
+            catch( CoreException e )
+            {
 
-	private IFile getWorkspaceFile(IPath path) {
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		
-		return root.getFile(path);		
-	}
+            }
+        }
+    }
 
-	protected boolean isLiferayPluginProject(IPath deltaPath) {
-		IFile pluginPackagePropertiesFile = getWorkspaceFile(deltaPath);
-		
-		if (pluginPackagePropertiesFile != null && pluginPackagePropertiesFile.exists()) {
-			return ProjectUtil.isThemeProject(pluginPackagePropertiesFile.getProject());
-		}		
-		
-		return false;		
-	}
+    private IFile getWorkspaceFile( IPath path )
+    {
+        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-	protected void processResourceChanged(final IResourceDelta delta)
-		throws CoreException {
-		
-		new WorkspaceJob("Compiling theme") {
+        return root.getFile( path );
+    }
 
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor)
-				throws CoreException {
+    protected boolean isLiferayPluginProject( IPath deltaPath )
+    {
+        IFile pluginPackagePropertiesFile = getWorkspaceFile( deltaPath );
 
-				IProject project = delta.getResource().getProject();
+        if( pluginPackagePropertiesFile != null && pluginPackagePropertiesFile.exists() )
+        {
+            return ProjectUtil.isThemeProject( pluginPackagePropertiesFile.getProject() );
+        }
 
-				SDK sdk = SDKUtil.getSDK( project );
+        return false;
+    }
 
-				if (sdk == null) {
-					throw new CoreException(
-						ThemeCore.createErrorStatus("No SDK for project configured. Could not deploy theme module"));
-				}
+    protected void processResourceChanged( final IResourceDelta delta ) throws CoreException
+    {
 
-				Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+        new WorkspaceJob( "Compiling theme" )
+        {
 
-				IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            {
 
-				if (!status.isOK()) {
-					throw new CoreException(status);
-				}
+                IProject project = delta.getResource().getProject();
 
-				IFolder docroot = CoreUtil.getDocroot(project);
+                SDK sdk = SDKUtil.getSDK( project );
 
-				IFile lookAndFeelFile = docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE);
+                if( sdk == null )
+                {
+                    throw new CoreException(
+                        ThemeCore.createErrorStatus( "No SDK for project configured. Could not deploy theme module" ) );
+                }
 
-				if (!lookAndFeelFile.exists()) {
-					String id = project.getName().replaceAll(ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "");
-					IFile propsFile =
-						docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
-					String name = id;
-					if (propsFile.exists()) {
-						Properties props = new Properties();
-						try {
-							props.load(propsFile.getContents());
-							String nameValue = props.getProperty("name");
-							if (!CoreUtil.isNullOrEmpty(nameValue)) {
-								name = nameValue;
-							}
-						}
-						catch (IOException e) {
-							ThemeCore.logError("Unable to load plugin package properties.", e);
-						}
-					}
+                Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
 
-					IRuntime runtime = ServerUtil.getRuntime(project);
+                IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
 
-					ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtime);
+                if( !status.isOK() )
+                {
+                    throw new CoreException( status );
+                }
 
-					if (liferayRuntime != null) {
-						ThemeDescriptorHelper.createDefaultFile(lookAndFeelFile, liferayRuntime.getPortalVersion() +
-							"+", id, name);
-					}
-				}
+                IFolder docroot = CoreUtil.getDocroot( project );
 
-				if (docroot != null && docroot.exists()) {
-					docroot.refreshLocal(IResource.DEPTH_INFINITE, null);
-				}
+                IFile lookAndFeelFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
 
-				return Status.OK_STATUS;
-			}
-		}.schedule();
-	}
+                if( !lookAndFeelFile.exists() )
+                {
+                    String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "" );
+                    IFile propsFile =
+                        docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
+                    String name = id;
+                    if( propsFile.exists() )
+                    {
+                        Properties props = new Properties();
+                        try
+                        {
+                            props.load( propsFile.getContents() );
+                            String nameValue = props.getProperty( "name" );
+                            if( !CoreUtil.isNullOrEmpty( nameValue ) )
+                            {
+                                name = nameValue;
+                            }
+                        }
+                        catch( IOException e )
+                        {
+                            ThemeCore.logError( "Unable to load plugin package properties.", e );
+                        }
+                    }
 
-	protected boolean shouldProcessResourceChangedEvent(IResourceChangeEvent event) {
-		if (event == null) {
-			return false;
-		}
+                    IRuntime runtime = ServerUtil.getRuntime( project );
 
-		IResourceDelta delta = event.getDelta();
-		
-		int deltaKind = delta.getKind();
-		
-		if (deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM) {
-			return false;
-		}
+                    ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
 
-		return true;
-	}
+                    if( liferayRuntime != null )
+                    {
+                        ThemeDescriptorHelper.createDefaultFile( lookAndFeelFile, liferayRuntime.getPortalVersion() +
+                            "+", id, name );
+                    }
+                }
 
-	protected boolean shouldProcessResourceDelta(IResourceDelta delta) {
-		IPath fullPath = delta.getFullPath();
-		
-		IFolder docroot = CoreUtil.getDocroot(delta.getResource().getProject());
+                if( docroot != null && docroot.exists() )
+                {
+                    docroot.refreshLocal( IResource.DEPTH_INFINITE, null );
+                }
 
-		if (docroot == null) {
-			return false;
-		}
+                return Status.OK_STATUS;
+            }
+        }.schedule();
+    }
 
-		IPath diffPath = docroot.getFolder("_diffs").getFullPath();
+    protected boolean shouldProcessResourceChangedEvent( IResourceChangeEvent event )
+    {
+        if( event == null )
+        {
+            return false;
+        }
 
-		return diffPath.isPrefixOf(fullPath);
-	}
+        IResourceDelta delta = event.getDelta();
+
+        int deltaKind = delta.getKind();
+
+        if( deltaKind == IResourceDelta.REMOVED || deltaKind == IResourceDelta.REMOVED_PHANTOM )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected boolean shouldProcessResourceDelta( IResourceDelta delta )
+    {
+        IPath fullPath = delta.getFullPath();
+
+        IFolder docroot = CoreUtil.getDocroot( delta.getResource().getProject() );
+
+        if( docroot == null )
+        {
+            return false;
+        }
+
+        IPath diffPath = docroot.getFolder( "_diffs" ).getFullPath();
+
+        return diffPath.isPrefixOf( fullPath );
+    }
 
 }

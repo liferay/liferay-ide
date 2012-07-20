@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,58 +26,69 @@ import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.graphics.Image;
 
-public class LayoutTplDiagramTreeEditPart extends BaseTreeEditPart {
+/**
+ * @author Gregory Amerson
+ */
+public class LayoutTplDiagramTreeEditPart extends BaseTreeEditPart
+{
 
-	public LayoutTplDiagramTreeEditPart(LayoutTplDiagram model) {
-		super(model);
-	}
+    public LayoutTplDiagramTreeEditPart( LayoutTplDiagram model )
+    {
+        super( model );
+    }
 
+    protected void createEditPolicies()
+    {
+        // If this editpart is the root content of the viewer, then disallow
+        // removal
+        if( getParent() instanceof RootEditPart )
+        {
+            installEditPolicy( EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy() );
+        }
+    }
 
-	protected void createEditPolicies() {
-		// If this editpart is the root content of the viewer, then disallow
-		// removal
-		if (getParent() instanceof RootEditPart) {
-			installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		}
-	}
+    private LayoutTplDiagram getCastedModel()
+    {
+        return (LayoutTplDiagram) getModel();
+    }
 
+    protected List<ModelElement> getModelChildren()
+    {
+        return getCastedModel().getRows();
+    }
 
-	private LayoutTplDiagram getCastedModel() {
-		return (LayoutTplDiagram) getModel();
-	}
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        String prop = evt.getPropertyName();
+        if( LayoutTplDiagram.ROW_ADDED_PROP.equals( prop ) )
+        {
+            // add a child to this edit part
+            // causes an additional entry to appear in the tree of the outline
+            // view
+            addChild( createChild( evt.getNewValue() ), -1 );
+        }
+        else if( LayoutTplDiagram.ROW_REMOVED_PROP.equals( prop ) )
+        {
+            // remove a child from this edit part
+            // causes the corresponding edit part to disappear from the tree in
+            // the outline view
+            removeChild( getEditPartForChild( evt.getNewValue() ) );
+        }
+        else
+        {
+            refreshVisuals();
+        }
+    }
 
+    @Override
+    protected Image getImage()
+    {
+        return super.getImage();
+    }
 
-	protected List<ModelElement> getModelChildren() {
-		return getCastedModel().getRows();
-	}
-
-
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
-		if (LayoutTplDiagram.ROW_ADDED_PROP.equals(prop)) {
-			// add a child to this edit part
-			// causes an additional entry to appear in the tree of the outline
-			// view
-			addChild(createChild(evt.getNewValue()), -1);
-		}
-		else if (LayoutTplDiagram.ROW_REMOVED_PROP.equals(prop)) {
-			// remove a child from this edit part
-			// causes the corresponding edit part to disappear from the tree in
-			// the outline view
-			removeChild(getEditPartForChild(evt.getNewValue()));
-		}
-		else {
-			refreshVisuals();
-		}
-	}
-
-	@Override
-	protected Image getImage() {
-		return super.getImage();
-	}
-
-	@Override
-	protected String getText() {
-		return super.getText();
-	}
+    @Override
+    protected String getText()
+    {
+        return super.getText();
+    }
 }

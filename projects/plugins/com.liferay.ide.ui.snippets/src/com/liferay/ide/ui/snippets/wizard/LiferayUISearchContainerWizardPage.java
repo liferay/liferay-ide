@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,12 +20,14 @@ import org.eclipse.ui.IEditorPart;
 /**
  * @author Greg Amerson
  */
-public class LiferayUISearchContainerWizardPage extends AbstractModelWizardPage {
+public class LiferayUISearchContainerWizardPage extends AbstractModelWizardPage
+{
 
-	public LiferayUISearchContainerWizardPage(String pageName, IEditorPart editor) {
-		super(pageName, editor);
-		setTitle("Liferay UI Search Container");
-		setDescription("Insert a Liferay UI Search Container JSP tag.");
-	}
+    public LiferayUISearchContainerWizardPage( String pageName, IEditorPart editor )
+    {
+        super( pageName, editor );
+        setTitle( "Liferay UI Search Container" );
+        setDescription( "Insert a Liferay UI Search Container JSP tag." );
+    }
 
 }

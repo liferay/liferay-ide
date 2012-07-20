@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,35 +31,40 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  */
-public class ThemePluginFacetUninstall extends PluginFacetUninstall {
+public class ThemePluginFacetUninstall extends PluginFacetUninstall
+{
 
-	@Override
-	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
-		throws CoreException {
+    @Override
+    public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
+        throws CoreException
+    {
 
-		super.execute(project, fv, config, monitor);
+        super.execute( project, fv, config, monitor );
 
-		removeThemeCSSBuilder(project);
-	}
+        removeThemeCSSBuilder( project );
+    }
 
-	protected void removeThemeCSSBuilder(IProject project)
-		throws CoreException {
+    protected void removeThemeCSSBuilder( IProject project ) throws CoreException
+    {
 
-		if (project == null) {
-			return;
-		}
+        if( project == null )
+        {
+            return;
+        }
 
-		IProjectDescription desc = project.getDescription();
-		ICommand[] commands = desc.getBuildSpec();
-		List<ICommand> newCommands = new ArrayList<ICommand>();
+        IProjectDescription desc = project.getDescription();
+        ICommand[] commands = desc.getBuildSpec();
+        List<ICommand> newCommands = new ArrayList<ICommand>();
 
-		for (ICommand command : commands) {
-			if (!(ThemeCSSBuilder.ID.equals(command.getBuilderName()))) {
-				newCommands.add(command);
-			}
-		}
+        for( ICommand command : commands )
+        {
+            if( !( ThemeCSSBuilder.ID.equals( command.getBuilderName() ) ) )
+            {
+                newCommands.add( command );
+            }
+        }
 
-		desc.setBuildSpec(newCommands.toArray(new ICommand[0]));
-	}
+        desc.setBuildSpec( newCommands.toArray( new ICommand[0] ) );
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
@@ -23,104 +25,125 @@ import org.w3c.dom.Text;
 /**
  * @author Greg Amerson
  */
-public class NodeUtil {
+public class NodeUtil
+{
 
-	public static Node getFirstNamedChildNode(Element element, String string) {
-		NodeList children = element.getChildNodes();
+    public static Node findFirstChild( Element element, String elementName )
+    {
+        if( element != null && !( CoreUtil.isNullOrEmpty( elementName ) ) )
+        {
+            NodeList children = element.getChildNodes();
 
-		if (children != null && children.getLength() > 0) {
-			for (int i = 0; i < children.getLength(); i++) {
-				Node item = children.item(i);
+            if( children != null && children.getLength() > 0 )
+            {
+                for( int i = 0; i < children.getLength(); i++ )
+                {
+                    Node child = children.item( i );
 
-				if (item.getNodeName().equals(string)) {
-					return item;
-				}
-			}
-		}
+                    if( elementName.equals( child.getNodeName() ) )
+                    {
+                        return child;
+                    }
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public static Text setTextContent(Node namespaceNode, String textContent) {
-		Text retval = null;
+    public static String getChildElementContent( Node parent, String childElement )
+    {
+        String retval = null;
 
-		if (namespaceNode instanceof Text) {
-			namespaceNode.setNodeValue(textContent);
+        NodeList children = parent.getChildNodes();
 
-			retval = (Text) namespaceNode;
-		}
-		else if (namespaceNode instanceof Element) {
-			Element namespaceElement = (Element) namespaceNode;
+        if( children != null && children.getLength() > 0 )
+        {
+            for( int i = 0; i < children.getLength(); i++ )
+            {
+                Node child = children.item( i );
 
-			removeChildren(namespaceElement);
+                if( child instanceof Element && child.getNodeName().equals( childElement ) )
+                {
+                    return getTextContent( (Element) child );
+                }
+            }
+        }
+        return retval;
+    }
 
-			retval = namespaceElement.getOwnerDocument().createTextNode(textContent);
+    public static Node getFirstNamedChildNode( Element element, String string )
+    {
+        NodeList children = element.getChildNodes();
 
-			namespaceElement.appendChild(retval);
-		}
-		return retval;
-	}
+        if( children != null && children.getLength() > 0 )
+        {
+            for( int i = 0; i < children.getLength(); i++ )
+            {
+                Node item = children.item( i );
 
-	public static void removeChildren(Element element) {
-		while (element != null && element.hasChildNodes()) {
-			element.removeChild(element.getFirstChild());
-		}
-	}
+                if( item.getNodeName().equals( string ) )
+                {
+                    return item;
+                }
+            }
+        }
 
-	public static String getChildElementContent(Node parent, String childElement) {
+        return null;
+    }
 
-		String retval = null;
+    public static String getTextContent( Node node )
+    {
+        NodeList children = node.getChildNodes();
 
-		NodeList children = parent.getChildNodes();
+        if( children.getLength() == 1 )
+        {
+            return children.item( 0 ).getNodeValue().trim();
+        }
 
-		if (children != null && children.getLength() > 0) {
-			for (int i = 0; i < children.getLength(); i++) {
-				Node child = children.item(i);
+        StringBuffer s = new StringBuffer();
 
-				if (child instanceof Element && child.getNodeName().equals(childElement)) {
-					return getTextContent((Element) child);
-				}
-			}
-		}
-		return retval;
-	}
+        Node child = node.getFirstChild();
 
-	public static String getTextContent(Node node) {
-		NodeList children = node.getChildNodes();
+        while( child != null )
+        {
+            s.append( child.getNodeValue().trim() );
 
-		if (children.getLength() == 1) {
-			return children.item(0).getNodeValue().trim();
-		}
+            child = child.getNextSibling();
+        }
 
-		StringBuffer s = new StringBuffer();
+        return s.toString().trim();
+    }
 
-		Node child = node.getFirstChild();
+    public static void removeChildren( Element element )
+    {
+        while( element != null && element.hasChildNodes() )
+        {
+            element.removeChild( element.getFirstChild() );
+        }
+    }
 
-		while (child != null) {
-			s.append(child.getNodeValue().trim());
+    public static Text setTextContent( Node namespaceNode, String textContent )
+    {
+        Text retval = null;
 
-			child = child.getNextSibling();
-		}
+        if( namespaceNode instanceof Text )
+        {
+            namespaceNode.setNodeValue( textContent );
 
-		return s.toString().trim();
-	}
+            retval = (Text) namespaceNode;
+        }
+        else if( namespaceNode instanceof Element )
+        {
+            Element namespaceElement = (Element) namespaceNode;
 
-	public static Node findFirstChild(Element element, String elementName) {
-		if (element != null && !(CoreUtil.isNullOrEmpty(elementName))) {
-			NodeList children = element.getChildNodes();
-	
-			if (children != null && children.getLength() > 0) {
-				for (int i = 0; i < children.getLength(); i++) {
-					Node child = children.item(i);
-	
-					if (elementName.equals(child.getNodeName())) {
-						return child;
-					}
-				}
-			}
-		}
-	
-		return null;
-	}
+            removeChildren( namespaceElement );
+
+            retval = namespaceElement.getOwnerDocument().createTextNode( textContent );
+
+            namespaceElement.appendChild( retval );
+        }
+        return retval;
+    }
 
 }

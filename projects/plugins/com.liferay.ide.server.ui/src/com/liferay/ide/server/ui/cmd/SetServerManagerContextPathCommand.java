@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,22 +20,26 @@ import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class SetServerManagerContextPathCommand extends RemoteServerCommand {
+public class SetServerManagerContextPathCommand extends RemoteServerCommand
+{
 
-	protected String oldServerManagerContextPath;
-	protected String serverManagerContextPath;
+    protected String oldServerManagerContextPath;
+    protected String serverManagerContextPath;
 
-	public SetServerManagerContextPathCommand( IRemoteServerWorkingCopy server, String serverManagerContextPath ) {
-		super( server, "Set Server Manager Context Path" );
-		this.serverManagerContextPath = serverManagerContextPath;
-	}
+    public SetServerManagerContextPathCommand( IRemoteServerWorkingCopy server, String serverManagerContextPath )
+    {
+        super( server, "Set Server Manager Context Path" );
+        this.serverManagerContextPath = serverManagerContextPath;
+    }
 
-	public void execute() {
-		oldServerManagerContextPath = server.getServerManagerContextPath();
-		server.setServerManagerContextPath( serverManagerContextPath );
-	}
+    public void execute()
+    {
+        oldServerManagerContextPath = server.getServerManagerContextPath();
+        server.setServerManagerContextPath( serverManagerContextPath );
+    }
 
-	public void undo() {
-		server.setServerManagerContextPath( oldServerManagerContextPath );
-	}
+    public void undo()
+    {
+        server.setServerManagerContextPath( oldServerManagerContextPath );
+    }
 }

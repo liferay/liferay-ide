@@ -18,38 +18,38 @@
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.hook.core.model.IHook;
-import com.liferay.ide.hook.core.model.IPortalPropertiesFile;
+import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.model.PortalPropertiesFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.Path;
 
-
 /**
  * @author Gregory Amerson
  */
 public class HookMethods
 {
-    public static IFile getPortalPropertiesFile( IHook hook )
+
+    public static IFile getPortalPropertiesFile( Hook hook )
     {
         return getPortalPropertiesFile( hook, true );
     }
-    
-    public static IFile getPortalPropertiesFile( IHook hook, boolean onlyIfExists)
+
+    public static IFile getPortalPropertiesFile( Hook hook, boolean onlyIfExists )
     {
         IFile retval = null;
-        
+
         if( hook != null )
         {
-            IPortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().element( false );
+            PortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().element( false );
 
-            if ( portalPropertiesFileElement != null )
+            if( portalPropertiesFileElement != null )
             {
                 Path filePath = portalPropertiesFileElement.getValue().getContent();
 
-                for ( IFolder folder : ProjectUtil.getSourceFolders( hook.adapt( IProject.class ) ) )
+                for( IFolder folder : ProjectUtil.getSourceFolders( hook.adapt( IProject.class ) ) )
                 {
                     IFile file = folder.getFile( filePath.toPortableString() );
 
@@ -67,7 +67,7 @@ public class HookMethods
                 }
             }
         }
-        
+
         return retval;
     }
 }

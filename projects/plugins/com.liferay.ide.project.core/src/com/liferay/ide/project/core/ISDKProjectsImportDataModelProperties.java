@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,14 +20,15 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCr
 /**
  * @author Greg Amerson
  */
-public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties {
+public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties
+{
 
-	public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME";
+    public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME";
 
-	public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION";
+    public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION";
 
-	public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION";
+    public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION";
 
-	public static final String SELECTED_PROJECTS = "ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS";
+    public static final String SELECTED_PROJECTS = "ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS";
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,9 +15,9 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.project.core.BinaryProjectsImportDataModelProvider;
 import com.liferay.ide.project.core.SDKProjectsImportDataModelProvider;
+import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.SDK;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,68 +31,73 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @SuppressWarnings( "restriction" )
-public class BinaryProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard {
+public class BinaryProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard
+{
+    protected BinaryProjectsImportDataModelProvider dataModelProvider;
+    protected BinaryProjectsImportWizardPage pluginBinaryProjectsImportWizardPage;
+    protected SDK sdk;
 
-	protected BinaryProjectsImportDataModelProvider dataModelProvider;
+    public BinaryProjectsImportWizard()
+    {
+        this( (IDataModel) null );
+        dataModelProvider = new BinaryProjectsImportDataModelProvider();
+    }
 
-	protected BinaryProjectsImportWizardPage pluginBinaryProjectsImportWizardPage;
+    public BinaryProjectsImportWizard( IDataModel dataModel )
+    {
+        super( dataModel );
 
-	protected SDK sdk;
+        setWindowTitle( "Import Projects" );
 
-	public BinaryProjectsImportWizard() {
-		this( (IDataModel) null );
-		dataModelProvider = new BinaryProjectsImportDataModelProvider();
-	}
+        setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
+    }
 
-	public BinaryProjectsImportWizard( IDataModel dataModel ) {
-		super( dataModel );
+    public BinaryProjectsImportWizard( SDK sdk )
+    {
+        this( (IDataModel) null );
 
-		setWindowTitle( "Import Projects" );
+        this.sdk = sdk;
+    }
 
-		setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
-	}
+    @Override
+    public boolean canFinish()
+    {
+        return getDataModel().isValid();
+    }
 
-	public BinaryProjectsImportWizard( SDK sdk ) {
-		this( (IDataModel) null );
+    @Override
+    protected void doAddPages()
+    {
+        if( sdk != null )
+        {
+            IDataModel model = getDataModel();
+            model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
+        }
 
-		this.sdk = sdk;
-	}
+        pluginBinaryProjectsImportWizardPage = new BinaryProjectsImportWizardPage( getDataModel(), "pageOne" );
 
-	@Override
-	public boolean canFinish() {
-		return getDataModel().isValid();
-	}
+        addPage( pluginBinaryProjectsImportWizardPage );
+    }
 
-	@Override
-	protected void doAddPages() {
-		if ( sdk != null ) {
-			IDataModel model = getDataModel();
-			model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
-		}
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        return dataModelProvider;
+    }
 
-		pluginBinaryProjectsImportWizardPage = new BinaryProjectsImportWizardPage( getDataModel(), "pageOne" );
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+    }
 
-		addPage( pluginBinaryProjectsImportWizardPage );
-	}
-
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		return dataModelProvider;
-	}
-	
-	
-
-	public void init( IWorkbench workbench, IStructuredSelection selection ) {
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard#runForked()
-	 */
-	@Override
-	protected boolean runForked() {
-		return false;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard#runForked()
+     */
+    @Override
+    protected boolean runForked()
+    {
+        return false;
+    }
 
 }

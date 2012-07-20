@@ -1,17 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2008 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  *
  * Contributors:
- *     IBM Corporation - initial API and implementation
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.dialog;
 
-import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,130 +54,161 @@ import org.eclipse.ui.dialogs.SelectionStatusDialog;
  * 
  * @since 1.0.0
  */
-public class LiferayProjectSelectionDialog extends SelectionStatusDialog {
+public class LiferayProjectSelectionDialog extends SelectionStatusDialog
+{
 
-	class LiferayJavaElementContentProvider extends StandardJavaElementContentProvider {
-		public Object[] getChildren(Object element) {
-			if (element instanceof IJavaModel) {
-				IJavaModel model = (IJavaModel) element;
-				Set<IJavaProject> set = new HashSet<IJavaProject>();
-				try {
-					IJavaProject[] projects = model.getJavaProjects();
-					for (int i = 0; i < projects.length; i++) {
-						if (ProjectUtil.isLiferayProject(projects[i].getProject())) {
-							set.add(projects[i]);
-						}
-					}
-				} catch (JavaModelException jme) {
-					//ignore
-				}
-				return set.toArray();
-			}
-			return super.getChildren(element);
-		}
-	}
+    class LiferayJavaElementContentProvider extends StandardJavaElementContentProvider
+    {
+        public Object[] getChildren( Object element )
+        {
+            if( element instanceof IJavaModel )
+            {
+                IJavaModel model = (IJavaModel) element;
+                Set<IJavaProject> set = new HashSet<IJavaProject>();
+                try
+                {
+                    IJavaProject[] projects = model.getJavaProjects();
+                    for( int i = 0; i < projects.length; i++ )
+                    {
+                        if( ProjectUtil.isLiferayProject( projects[i].getProject() ) )
+                        {
+                            set.add( projects[i] );
+                        }
+                    }
+                }
+                catch( JavaModelException jme )
+                {
+                    // ignore
+                }
+                return set.toArray();
+            }
+            return super.getChildren( element );
+        }
+    }
 
-	// the visual selection widget group
-	private TableViewer fTableViewer;
+    // the visual selection widget group
+    private TableViewer fTableViewer;
 
-	// sizing constants
-	private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
-	private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
+    // sizing constants
+    private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
+    private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
 
-	/**
-	 * The filter for the viewer
-	 */
-	private ViewerFilter fFilter;
+    /**
+     * The filter for the viewer
+     */
+    private ViewerFilter fFilter;
 
-	/**
-	 * Constructor
-	 * @param parentShell
-	 * @param projectsWithSpecifics
-	 */
-	public LiferayProjectSelectionDialog(Shell parentShell, ViewerFilter filter) {
-		super(parentShell);
-		setTitle("Project Selection");
-		setMessage("Select project");
+    /**
+     * Constructor
+     * 
+     * @param parentShell
+     * @param projectsWithSpecifics
+     */
+    public LiferayProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
+    {
+        super( parentShell );
+        setTitle( "Project Selection" );
+        setMessage( "Select project" );
 
-		fFilter = filter;
-	}
+        fFilter = filter;
+    }
 
-	/* (non-Javadoc)
-	 * Method declared on Dialog.
-	 */
-	protected Control createDialogArea(Composite parent) {
-		// page group
-		Composite composite = (Composite) super.createDialogArea(parent);
+    /*
+     * (non-Javadoc) Method declared on Dialog.
+     */
+    protected Control createDialogArea( Composite parent )
+    {
+        // page group
+        Composite composite = (Composite) super.createDialogArea( parent );
 
-		Font font = parent.getFont();
-		composite.setFont(font);
+        Font font = parent.getFont();
+        composite.setFont( font );
 
-		createMessageArea(composite);
+        createMessageArea( composite );
 
-		fTableViewer = new TableViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		fTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent event) {
-				doSelectionChanged(((IStructuredSelection) event.getSelection()).toArray());
-			}
-		});
-		fTableViewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				okPressed();
-			}
-		});
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
-		data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
-		data.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
-		fTableViewer.getTable().setLayoutData(data);
+        fTableViewer = new TableViewer( composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
+        fTableViewer.addSelectionChangedListener( new ISelectionChangedListener()
+        {
 
-		fTableViewer.setLabelProvider(new JavaElementLabelProvider());
-		fTableViewer.setContentProvider(new LiferayJavaElementContentProvider());
-		fTableViewer.setComparator(new JavaElementComparator());
-		fTableViewer.getControl().setFont(font);
+            public void selectionChanged( SelectionChangedEvent event )
+            {
+                doSelectionChanged( ( (IStructuredSelection) event.getSelection() ).toArray() );
+            }
+        } );
+        fTableViewer.addDoubleClickListener( new IDoubleClickListener()
+        {
 
-		updateFilter(true);
+            public void doubleClick( DoubleClickEvent event )
+            {
+                okPressed();
+            }
+        } );
+        GridData data = new GridData( SWT.FILL, SWT.FILL, true, true );
+        data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
+        data.widthHint = SIZING_SELECTION_WIDGET_WIDTH;
+        fTableViewer.getTable().setLayoutData( data );
 
-		IJavaModel input = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot());
-		fTableViewer.setInput(input);
+        fTableViewer.setLabelProvider( new JavaElementLabelProvider() );
+        fTableViewer.setContentProvider( new LiferayJavaElementContentProvider() );
+        fTableViewer.setComparator( new JavaElementComparator() );
+        fTableViewer.getControl().setFont( font );
 
-		doSelectionChanged(new Object[0]);
-		Dialog.applyDialogFont(composite);
-		return composite;
-	}
+        updateFilter( true );
 
-	/**
-	 * Handles the change in selection of the viewer and updates the status of the dialog at the same time
-	 * @param objects
-	 */
-	private void doSelectionChanged(Object[] objects) {
-		if (objects.length != 1) {
-			updateStatus(new Status(IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "")); //$NON-NLS-1$
-			setSelectionResult(null);
-		} else {
-			updateStatus(new Status(IStatus.OK, LiferayUIPlugin.PLUGIN_ID, "")); //$NON-NLS-1$
-			setSelectionResult(objects);
-		}
-	}
+        IJavaModel input = JavaCore.create( ResourcesPlugin.getWorkspace().getRoot() );
+        fTableViewer.setInput( input );
 
-	/**
-	 * Updates the viewer filter based on the selection of the 'show project with...' button
-	 * @param selected
-	 */
-	protected void updateFilter(boolean selected) {
-		if (fFilter == null) {
-			return;
-		}
+        doSelectionChanged( new Object[0] );
+        Dialog.applyDialogFont( composite );
+        return composite;
+    }
 
-		if (selected) {
-			fTableViewer.addFilter(fFilter);
-		} else {
-			fTableViewer.removeFilter(fFilter);
-		}
-	}
+    /**
+     * Handles the change in selection of the viewer and updates the status of the dialog at the same time
+     * 
+     * @param objects
+     */
+    private void doSelectionChanged( Object[] objects )
+    {
+        if( objects.length != 1 )
+        {
+            updateStatus( new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "" ) ); //$NON-NLS-1$
+            setSelectionResult( null );
+        }
+        else
+        {
+            updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, "" ) ); //$NON-NLS-1$
+            setSelectionResult( objects );
+        }
+    }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.dialogs.SelectionStatusDialog#computeResult()
-	 */
-	protected void computeResult() {
-	}
+    /**
+     * Updates the viewer filter based on the selection of the 'show project with...' button
+     * 
+     * @param selected
+     */
+    protected void updateFilter( boolean selected )
+    {
+        if( fFilter == null )
+        {
+            return;
+        }
+
+        if( selected )
+        {
+            fTableViewer.addFilter( fFilter );
+        }
+        else
+        {
+            fTableViewer.removeFilter( fFilter );
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.dialogs.SelectionStatusDialog#computeResult()
+     */
+    protected void computeResult()
+    {
+    }
 }

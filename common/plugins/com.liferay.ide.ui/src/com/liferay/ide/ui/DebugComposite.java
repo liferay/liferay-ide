@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,17 +21,19 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * @author Greg Amerson
  */
-public class DebugComposite extends Composite {
+public class DebugComposite extends Composite
+{
 
-	public DebugComposite(Composite parent, int style) {
-		super(parent, style);
-	}
+    public DebugComposite( Composite parent, int style )
+    {
+        super( parent, style );
+    }
 
-	@Override
-	public Point computeSize(int wHint, int hHint, boolean changed) {
-		Point p = super.computeSize(wHint, hHint, changed);
-		System.out.println(p);
-		return p;
-	}
+    @Override
+    public Point computeSize( int wHint, int hHint, boolean changed )
+    {
+        Point p = super.computeSize( wHint, hHint, changed );
+        return p;
+    }
 
 }

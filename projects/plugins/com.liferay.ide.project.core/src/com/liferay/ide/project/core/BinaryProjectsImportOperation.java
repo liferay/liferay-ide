@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,72 +41,76 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
+@SuppressWarnings( "restriction" )
 public class BinaryProjectsImportOperation extends AbstractDataModelOperation
-	implements ISDKProjectsImportDataModelProperties {
+    implements ISDKProjectsImportDataModelProperties
+{
 
-	public BinaryProjectsImportOperation( IDataModel model ) {
-		super( model );
+    public BinaryProjectsImportOperation( IDataModel model )
+    {
+        super( model );
+    }
 
-	}
+    /*
+     * (non-Javadoc)
+     * @see com.liferay.ide.project.core.SDKProjectsImportOperation#execute(org.eclipse.core.runtime.IProgressMonitor ,
+     * org.eclipse.core.runtime.IAdaptable)
+     */
+    @Override
+    public IStatus execute( IProgressMonitor monitor, final IAdaptable info ) throws ExecutionException
+    {
+        final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
+        final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+        final Object[] projects =
+            (Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
+        final BridgedRuntime bridgedRuntime =
+            (BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * com.liferay.ide.project.core.SDKProjectsImportOperation#execute(org.eclipse.core.runtime.IProgressMonitor
-	 * , org.eclipse.core.runtime.IAdaptable)
-	 */
-	@SuppressWarnings( "restriction" )
-	@Override
-	public IStatus execute( IProgressMonitor monitor, final IAdaptable info ) throws ExecutionException {
-		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
-		final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
-		final Object[] projects =
-			(Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
-		final BridgedRuntime bridgedRuntime =
-			(BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+        WorkspaceJob job = new WorkspaceJob( "Importing Binary Project Plugins" )
+        {
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            {
+                if( projects != null )
+                {
+                    SDKManager sdkManager = SDKManager.getInstance();
+                    SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
+                    Object[] seleBinaryRecords = (Object[]) projects;
+                    monitor.beginTask( "Creating SDK Projects", seleBinaryRecords.length );
+                    ProjectRecord[] projectRecords = new ProjectRecord[seleBinaryRecords.length];
 
-		WorkspaceJob job = new WorkspaceJob( "Importing Binary Project Plugins" ) {
+                    for( int i = 0; i < seleBinaryRecords.length; i++ )
+                    {
+                        BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord) seleBinaryRecords[i];
 
-			@Override
-			public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException {
-				if ( projects != null )
-				{
-					SDKManager sdkManager = SDKManager.getInstance();
-					SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
-					Object[] seleBinaryRecords = (Object[]) projects;
-					monitor.beginTask( "Creating SDK Projects", seleBinaryRecords.length );
-					ProjectRecord[] projectRecords = new ProjectRecord[seleBinaryRecords.length];
+                        try
+                        {
+                            monitor.setTaskName( "Creating Plugin  " + pluginBinaryRecord.getLiferayPluginName() );
+                            projectRecords[i] =
+                                ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
+                            monitor.worked( 1 );
+                        }
+                        catch( IOException e )
+                        {
+                            throw new CoreException( ProjectCorePlugin.createErrorStatus( "Error creating project.", e ) );
+                        }
 
-					for ( int i = 0; i < seleBinaryRecords.length; i++ ) {
-						BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord) seleBinaryRecords[i];
+                    }
 
-						// TODO: Verify the version and alert the user
-						try {
-							monitor.setTaskName( "Creating Plugin  " + pluginBinaryRecord.getLiferayPluginName());
-							projectRecords[i] =
-								ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
-							monitor.worked( 1 );
-						}
-						catch ( IOException e ) {
-							throw new CoreException( ProjectCorePlugin.createErrorStatus( "Error creating project.", e ) );
-						}
+                    monitor.done();
 
-					}
+                    ProjectImportUtil.createWorkspaceProjects( projectRecords, runtime, sdkLocation, monitor );
 
-					monitor.done();
+                }
 
-					ProjectImportUtil.createWorkspaceProjects( projectRecords, runtime, sdkLocation, monitor );
+                return Status.OK_STATUS;
+            }
+        };
 
-				}
+        job.setUser( true );
+        job.schedule();
 
-				return Status.OK_STATUS;
-			}
-		};
-
-		job.setUser( true );
-		job.schedule();
-
-		return Status.OK_STATUS;
-	}
+        return Status.OK_STATUS;
+    }
 
 }

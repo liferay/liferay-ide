@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,169 +41,182 @@ import org.eclipse.ui.externaltools.internal.model.IExternalToolConstants;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "deprecation"
-})
-public class SDKHelper extends LaunchHelper {
+@SuppressWarnings( { "restriction", "deprecation" } )
+public class SDKHelper extends LaunchHelper
+{
 
-	public static final String ANT_CLASSPATH_PROVIDER = "org.eclipse.ant.ui.AntClasspathProvider";
+    public static final String ANT_CLASSPATH_PROVIDER = "org.eclipse.ant.ui.AntClasspathProvider";
 
-	public static final String ANT_LAUNCH_CONFIG_TYPE_ID = IAntLaunchConstants.ID_ANT_LAUNCH_CONFIGURATION_TYPE;
+    public static final String ANT_LAUNCH_CONFIG_TYPE_ID = IAntLaunchConstants.ID_ANT_LAUNCH_CONFIGURATION_TYPE;
 
-	protected IPath currentBuildFile;
+    protected IPath currentBuildFile;
 
-	protected String currentTargets;
+    protected String currentTargets;
 
-	protected SDK sdk;
+    protected SDK sdk;
 
-	private String[] additionalVMArgs;
+    private String[] additionalVMArgs;
 
-	public SDKHelper(SDK sdk) {
-		super(ANT_LAUNCH_CONFIG_TYPE_ID);
+    public SDKHelper( SDK sdk )
+    {
+        super( ANT_LAUNCH_CONFIG_TYPE_ID );
 
-		this.sdk = sdk;
+        this.sdk = sdk;
 
-		setLaunchSync(true);
-		setLaunchInBackground(true);
-		setLaunchCaptureInConsole(true);
-		setLaunchIsPrivate(true);
-//		this.launchTimeout = 10000;
-	}
+        setLaunchSync( true );
+        setLaunchInBackground( true );
+        setLaunchCaptureInConsole( true );
+        setLaunchIsPrivate( true );
+        // this.launchTimeout = 10000;
+    }
 
-	public ILaunchConfiguration createLaunchConfiguration(
-		IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE)
-		throws CoreException {
+    public ILaunchConfiguration createLaunchConfiguration(
+        IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE ) throws CoreException
+    {
 
-		ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
+        ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
 
-		launchConfig.setAttribute(IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString());
+        launchConfig.setAttribute( IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString() );
 
-		launchConfig.setAttribute(
-			IExternalToolConstants.ATTR_WORKING_DIRECTORY, buildFile.removeLastSegments(1).toOSString());
+        launchConfig.setAttribute(
+            IExternalToolConstants.ATTR_WORKING_DIRECTORY, buildFile.removeLastSegments( 1 ).toOSString() );
 
-		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_TARGETS, targets);
+        launchConfig.setAttribute( IAntLaunchConstants.ATTR_ANT_TARGETS, targets );
 
-		// set default for common settings
-		CommonTab tab = new CommonTab();
-		tab.setDefaults(launchConfig);
-		tab.dispose();
+        // set default for common settings
+        CommonTab tab = new CommonTab();
+        tab.setDefaults( launchConfig );
+        tab.dispose();
 
-		launchConfig.setAttribute(
-			IDebugUIConstants.ATTR_CAPTURE_IN_FILE,
-			SDKPlugin.getDefault().getStateLocation().append("sdk.log").toOSString());
+        launchConfig.setAttribute(
+            IDebugUIConstants.ATTR_CAPTURE_IN_FILE,
+            SDKPlugin.getDefault().getStateLocation().append( "sdk.log" ).toOSString() );
 
-		launchConfig.setAttribute(
-			IJavaLaunchConfigurationConstants.ATTR_SOURCE_PATH_PROVIDER, "org.eclipse.ant.ui.AntClasspathProvider");
+        launchConfig.setAttribute(
+            IJavaLaunchConfigurationConstants.ATTR_SOURCE_PATH_PROVIDER, "org.eclipse.ant.ui.AntClasspathProvider" );
 
-		// launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
-		// "org.eclipse.ant.internal.ui.antsupport.InternalAntRunner");
+        // launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
+        // "org.eclipse.ant.internal.ui.antsupport.InternalAntRunner");
 
-		launchConfig.setAttribute(DebugPlugin.ATTR_PROCESS_FACTORY_ID, IAntUIConstants.REMOTE_ANT_PROCESS_FACTORY_ID);
+        launchConfig.setAttribute( DebugPlugin.ATTR_PROCESS_FACTORY_ID, IAntUIConstants.REMOTE_ANT_PROCESS_FACTORY_ID );
 
-		// IVMInstall vmInstall = getDefaultVMInstall(launchConfig);
-		// launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH,
-		// vmInstall.getName());
-		// launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH,
-		// vmInstall.getVMInstallType().getId());
+        // IVMInstall vmInstall = getDefaultVMInstall(launchConfig);
+        // launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH,
+        // vmInstall.getName());
+        // launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_JRE_CONTAINER_PATH,
+        // vmInstall.getVMInstallType().getId());
 
-		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_PROPERTIES, properties);
-		launchConfig.setAttribute(IAntLaunchConstants.ATTR_ANT_PROPERTY_FILES, (String) null);
+        launchConfig.setAttribute( IAntLaunchConstants.ATTR_ANT_PROPERTIES, properties );
+        launchConfig.setAttribute( IAntLaunchConstants.ATTR_ANT_PROPERTY_FILES, (String) null );
 
-		if (separateJRE) {
-			launchConfig.setAttribute(
-				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME);
-			launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, getVMArgumentsAttr() );
-		}
+        if( separateJRE )
+        {
+            launchConfig.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME );
+            launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, getVMArgumentsAttr() );
+        }
 
-		return launchConfig;
-	}
+        return launchConfig;
+    }
 
-	private String getVMArgumentsAttr() {
-		StringBuffer args = new StringBuffer( "-Xmx768m" );
+    private String getVMArgumentsAttr()
+    {
+        StringBuffer args = new StringBuffer( "-Xmx768m" );
 
-		if ( !CoreUtil.isNullOrEmpty( additionalVMArgs ) ) {
-			for ( String vmArg : additionalVMArgs ) {
-				args.append( " " + vmArg );
-			}
-		}
+        if( !CoreUtil.isNullOrEmpty( additionalVMArgs ) )
+        {
+            for( String vmArg : additionalVMArgs )
+            {
+                args.append( " " + vmArg );
+            }
+        }
 
-		return args.toString();
-	}
+        return args.toString();
+    }
 
-	public String getClasspathProviderAttributeValue() {
-		// return ANT_CLASSPATH_PROVIDER;
-		return SDKClasspathProvider.ID;
-	}
+    public String getClasspathProviderAttributeValue()
+    {
+        // return ANT_CLASSPATH_PROVIDER;
+        return SDKClasspathProvider.ID;
+    }
 
-	/**
-	 * Returns a unique name for a copy of the given launch configuration with
-	 * the given targets. The name seed is the same as the name for a new launch
-	 * configuration with " [targetList]" appended to the end.
-	 * 
-	 * @param config
-	 * @param targetAttribute
-	 * @return
-	 */
-	public String getNewLaunchConfigurationName() {
-		StringBuffer buffer = new StringBuffer();
+    /**
+     * Returns a unique name for a copy of the given launch configuration with the given targets. The name seed is the
+     * same as the name for a new launch configuration with " [targetList]" appended to the end.
+     * 
+     * @param config
+     * @param targetAttribute
+     * @return
+     */
+    public String getNewLaunchConfigurationName()
+    {
+        StringBuffer buffer = new StringBuffer();
 
-		if (this.sdk.getName() != null) {
-			buffer.append(this.sdk.getName());
-			buffer.append(' ');
-		}
+        if( this.sdk.getName() != null )
+        {
+            buffer.append( this.sdk.getName() );
+            buffer.append( ' ' );
+        }
 
-		if (this.currentBuildFile != null) {
-			buffer.append(this.currentBuildFile.lastSegment());
-		}
+        if( this.currentBuildFile != null )
+        {
+            buffer.append( this.currentBuildFile.lastSegment() );
+        }
 
-		if (this.currentTargets != null) {
-			buffer.append(" [");
-			buffer.append(this.currentTargets);
-			buffer.append("]");
-		}
+        if( this.currentTargets != null )
+        {
+            buffer.append( " [" );
+            buffer.append( this.currentTargets );
+            buffer.append( "]" );
+        }
 
-		return buffer.toString();
-	}
+        return buffer.toString();
+    }
 
-	public void runTarget(IPath buildFile, String targets, Map<String, String> properties)
-		throws CoreException {
+    public void runTarget( IPath buildFile, String targets, Map<String, String> properties ) throws CoreException
+    {
 
-		runTarget(buildFile, targets, properties, false);
-	}
+        runTarget( buildFile, targets, properties, false );
+    }
 
-	public void runTarget(IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE)
-		throws CoreException {
+    public void runTarget( IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE )
+        throws CoreException
+    {
 
-		if (isLaunchRunning()) {
-			throw new IllegalStateException("Existing launch in progress");
-		}
+        if( isLaunchRunning() )
+        {
+            throw new IllegalStateException( "Existing launch in progress" );
+        }
 
-		this.currentBuildFile = buildFile;
+        this.currentBuildFile = buildFile;
 
-		this.currentTargets = targets;
+        this.currentTargets = targets;
 
-		ILaunchConfiguration launchConfig = createLaunchConfiguration(buildFile, targets, properties, separateJRE);
+        ILaunchConfiguration launchConfig = createLaunchConfiguration( buildFile, targets, properties, separateJRE );
 
-		launch(launchConfig, ILaunchManager.RUN_MODE, null);
+        launch( launchConfig, ILaunchManager.RUN_MODE, null );
 
-		this.currentBuildFile = null;
+        this.currentBuildFile = null;
 
-		this.currentTargets = null;
-	}
+        this.currentTargets = null;
+    }
 
-	protected void addUserEntries(ClasspathModel model)
-		throws CoreException {
+    protected void addUserEntries( ClasspathModel model ) throws CoreException
+    {
 
-		IPath[] antLibs = sdk.getAntLibraries();
+        IPath[] antLibs = sdk.getAntLibraries();
 
-		for (IPath antLib : antLibs) {
-			if (antLib.toFile().exists()) {
-				model.addEntry(ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry(antLib));
-			}
-		}
-	}
+        for( IPath antLib : antLibs )
+        {
+            if( antLib.toFile().exists() )
+            {
+                model.addEntry( ClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry( antLib ) );
+            }
+        }
+    }
 
-	public void setVMArgs( String[] vmargs ) {
-		this.additionalVMArgs = vmargs;
-	}
+    public void setVMArgs( String[] vmargs )
+    {
+        this.additionalVMArgs = vmargs;
+    }
 }

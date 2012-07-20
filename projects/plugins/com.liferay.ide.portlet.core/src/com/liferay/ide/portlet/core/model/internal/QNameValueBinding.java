@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,76 +35,86 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public final class QNameValueBinding extends XmlValueBindingImpl {
+public final class QNameValueBinding extends XmlValueBindingImpl
+{
 
-	private String[] params;
-	private XmlPath path;
+    private String[] params;
+    private XmlPath path;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		super.init( element, property, params );
-		this.params = params;
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
+     * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+     */
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
+        this.params = params;
 
-		final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-		this.path = new XmlPath( params[0], xmlNamespaceResolver );
-	}
+        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
+        this.path = new XmlPath( params[0], xmlNamespaceResolver );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
-	 */
-	@Override
-	public String read() {
-		final XmlElement parent = xml( false );
-		String value = null;
-		if ( parent != null ) {
-			final XmlElement qNameElement = parent.getChildElement( params[0], false );
-			value = qNameElement.getText();
-		}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+     */
+    @Override
+    public String read()
+    {
+        final XmlElement parent = xml( false );
+        String value = null;
+        if( parent != null )
+        {
+            final XmlElement qNameElement = parent.getChildElement( params[0], false );
+            value = qNameElement.getText();
+        }
 
-		return value;
-	}
+        return value;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
-	 */
-	@Override
-	public void write( final String value ) {
-		final XmlElement parent = xml( true );
-		// System.out.println( "EventDefinitionValueBinding.write()" + parent );
-		final XmlElement qNameElement = parent.getChildElement( params[0], true );
-		qNameElement.setChildNodeText( this.path, value, true );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+     */
+    @Override
+    public void write( final String value )
+    {
+        final XmlElement parent = xml( true );
+        // System.out.println( "EventDefinitionValueBinding.write()" + parent );
+        final XmlElement qNameElement = parent.getChildElement( params[0], true );
+        qNameElement.setChildNodeText( this.path, value, true );
 
-		// Only for debugging purposes
-		try {
-			PortletModelUtil.printDocument( parent.getDomNode().getOwnerDocument(), System.out );
-		}
-		catch ( IOException e ) {
-			PortletCore.logError( e );
-		}
-		catch ( TransformerException e ) {
-			PortletCore.logError( e );
-		}
+        // Only for debugging purposes
+        try
+        {
+            PortletModelUtil.printDocument( parent.getDomNode().getOwnerDocument(), System.out );
+        }
+        catch( IOException e )
+        {
+            PortletCore.logError( e );
+        }
+        catch( TransformerException e )
+        {
+            PortletCore.logError( e );
+        }
 
-	}
+    }
 
-	@Override
-	public XmlNode getXmlNode() {
-		final XmlElement parent = xml();
+    @Override
+    public XmlNode getXmlNode()
+    {
+        final XmlElement parent = xml();
 
-		XmlElement element = parent.getChildElement( params[0], false );
+        XmlElement element = parent.getChildElement( params[0], false );
 
-		if ( element != null ) {
-			return element;
-		}
+        if( element != null )
+        {
+            return element;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
 }

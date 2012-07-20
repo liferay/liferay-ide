@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.liferay.ide.eclipse.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="com.liferay.ide.server.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.eclipse.server.core" id="runtimeDelegateValidators" name="Liferay Runtim Delegate Validators"/>
+         <meta.schema plugin="com.liferay.ide.server.core" id="runtimeDelegateValidators" name="Liferay Runtim Delegate Validators"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -62,7 +62,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="com.liferay.ide.eclipse.server.core.AbstractRuntimeDelegateValidator:"/>
+                  <meta.attribute kind="java" basedOn="com.liferay.ide.server.core.AbstractRuntimeDelegateValidator:"/>
                </appinfo>
             </annotation>
          </attribute>

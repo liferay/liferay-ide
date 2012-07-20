@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -47,298 +47,347 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "rawtypes"
-})
-public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISelectionListener {
+@SuppressWarnings( { "restriction", "rawtypes" } )
+public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISelectionListener
+{
 
-	class PropertyListener implements IPropertyListener {
+    class PropertyListener implements IPropertyListener
+    {
+        public void propertyChanged( Object source, int propId )
+        {
+        }
+    }
 
-		public void propertyChanged(Object source, int propId) {
-		}
+    class TextInputListener implements ITextInputListener
+    {
 
-	}
+        public void inputDocumentAboutToBeChanged( IDocument oldInput, IDocument newInput )
+        {
+            // do nothing
+        }
 
-	class TextInputListener implements ITextInputListener {
+        public void inputDocumentChanged( IDocument oldInput, IDocument newInput )
+        {
+            // if ((fDesignViewer != null) && (newInput != null)) {
+            // fDesignViewer.setDocument(newInput);
+            // }
+        }
+    }
 
-		public void inputDocumentAboutToBeChanged(IDocument oldInput, IDocument newInput) {
-			// do nothing
-		}
+    protected static final int SOURCE_PAGE_INDEX = 1;
 
-		public void inputDocumentChanged(IDocument oldInput, IDocument newInput) {
-			// if ((fDesignViewer != null) && (newInput != null)) {
-			// fDesignViewer.setDocument(newInput);
-			// }
-		}
-	}
+    protected static final int VISUAL_PAGE_INDEX = 0;
 
-	protected static final int SOURCE_PAGE_INDEX = 1;
+    protected int lastPageIndex = -1;
 
-	protected static final int VISUAL_PAGE_INDEX = 0;
+    protected LayoutTplMultiOutlinePage multiOutlinePage;
 
-	protected int lastPageIndex = -1;
+    protected PropertyListener propertyListener;
 
-	protected LayoutTplMultiOutlinePage multiOutlinePage;
+    protected StructuredTextEditor sourceEditor;
 
-	protected PropertyListener propertyListener;
+    protected LayoutTplEditor visualEditor;
 
-	protected StructuredTextEditor sourceEditor;
+    public LayoutTplMultiPageEditor()
+    {
+        super();
+    }
 
-	protected LayoutTplEditor visualEditor;
+    @Override
+    public void dispose()
+    {
+        super.dispose();
 
-	public LayoutTplMultiPageEditor() {
-		super();
-	}
+        getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( this );
+    }
 
-	@Override
-	public void dispose() {
-		super.dispose();
+    @Override
+    public void doSave( IProgressMonitor monitor )
+    {
+        int activePage = getActivePage();
 
-		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
-	}
+        if( activePage == VISUAL_PAGE_INDEX )
+        {
+            this.visualEditor.doSave( monitor );
+        }
 
-	@Override
-	public void doSave(IProgressMonitor monitor) {
-		int activePage = getActivePage();
+        sourceEditor.doSave( monitor );
+    }
 
-		if (activePage == VISUAL_PAGE_INDEX) {
-			this.visualEditor.doSave(monitor);
-		}
+    @Override
+    public void doSaveAs()
+    {
+        sourceEditor.doSaveAs();
+    }
 
-		sourceEditor.doSave(monitor);
-	}
+    @Override
+    public Object getAdapter( Class adapter )
+    {
+        Object result = null;
 
-	@Override
-	public void doSaveAs() {
-		sourceEditor.doSaveAs();
-	}
+        if( IContentOutlinePage.class.equals( adapter ) )
+        {
+            if( this.multiOutlinePage == null )
+            {
+                // get outline pages for both source and visual editors
+                IContentOutlinePage sourceOutlinePage = null;
 
-	@Override
-	public Object getAdapter(Class adapter) {
-		Object result = null;
+                if( sourceEditor != null )
+                {
+                    sourceOutlinePage = (IContentOutlinePage) sourceEditor.getAdapter( adapter );
+                }
 
-		if (IContentOutlinePage.class.equals(adapter)) {
-			if (this.multiOutlinePage == null) {
-				// get outline pages for both source and visual editors
-				IContentOutlinePage sourceOutlinePage = null;
+                IContentOutlinePage visualOutlinePage = null;
 
-				if (sourceEditor != null) {
-					sourceOutlinePage = (IContentOutlinePage) sourceEditor.getAdapter(adapter);
-				}
+                if( visualEditor != null )
+                {
+                    visualOutlinePage = (IContentOutlinePage) visualEditor.getAdapter( adapter );
+                }
 
-				IContentOutlinePage visualOutlinePage = null;
+                LayoutTplMultiOutlinePage outlinePage =
+                    new LayoutTplMultiOutlinePage( this, sourceOutlinePage, visualOutlinePage );
+                this.multiOutlinePage = outlinePage;
+            }
 
-				if (visualEditor != null) {
-					visualOutlinePage = (IContentOutlinePage) visualEditor.getAdapter(adapter);
-				}
+            return multiOutlinePage;
+        }
 
-				LayoutTplMultiOutlinePage outlinePage =
-					new LayoutTplMultiOutlinePage(this, sourceOutlinePage, visualOutlinePage);
-				this.multiOutlinePage = outlinePage;
-			}
+        // we extend superclass, not override it, so allow it first
+        // chance to satisfy request.
+        result = super.getAdapter( adapter );
 
-			return multiOutlinePage;
-		}
+        if( result == null )
+        {
+            if( adapter.equals( IGotoMarker.class ) )
+            {
+                result = new IGotoMarker()
+                {
 
-		// we extend superclass, not override it, so allow it first
-		// chance to satisfy request.
-		result = super.getAdapter(adapter);
+                    public void gotoMarker( IMarker marker )
+                    {
+                        LayoutTplMultiPageEditor.this.gotoMarker( marker );
+                    }
+                };
+            }
+            else
+            {
+                /*
+                 * DMW: I'm bullet-proofing this because its been reported (on very early versions) a null pointer
+                 * sometimes happens here on startup, when an editor has been left open when workbench shutdown.
+                 */
+                if( sourceEditor != null )
+                {
+                    result = sourceEditor.getAdapter( adapter );
+                }
 
-		if (result == null) {
-			if (adapter.equals(IGotoMarker.class)) {
-				result = new IGotoMarker() {
+                if( result == null && visualEditor != null )
+                {
+                    result = visualEditor.getAdapter( adapter );
+                }
+            }
+        }
+        return result;
+    }
 
-					public void gotoMarker(IMarker marker) {
-						LayoutTplMultiPageEditor.this.gotoMarker(marker);
-					}
-				};
-			}
-			else {
-				/*
-				 * DMW: I'm bullet-proofing this because its been reported (on very early versions) a null pointer
-				 * sometimes happens here on startup, when an editor has been left open when workbench shutdown.
-				 */
-				if (sourceEditor != null) {
-					result = sourceEditor.getAdapter(adapter);
-				}
+    @Override
+    public void init( IEditorSite site, IEditorInput input ) throws PartInitException
+    {
+        super.init( site, input );
 
-				if (result == null && visualEditor != null) {
-					result = visualEditor.getAdapter(adapter);
-				}
-			}
-		}
-		return result;
-	}
+        getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( this );
+    }
 
-	@Override
-	public void init(IEditorSite site, IEditorInput input)
-		throws PartInitException {
-		super.init(site, input);
+    @Override
+    public boolean isSaveAsAllowed()
+    {
+        return ( sourceEditor != null ) && sourceEditor.isSaveAsAllowed();
+    }
 
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
-	}
+    @Override
+    public boolean isSaveOnCloseNeeded()
+    {
+        if( isDirty() )
+        {
+            return true;
+        }
 
-	@Override
-	public boolean isSaveAsAllowed() {
-		return (sourceEditor != null) && sourceEditor.isSaveAsAllowed();
-	}
+        // overriding super class since it does a lowly isDirty!
+        if( sourceEditor != null )
+        {
+            return sourceEditor.isSaveOnCloseNeeded();
+        }
 
-	@Override
-	public boolean isSaveOnCloseNeeded() {
-		if (isDirty()) {
-			return true;
-		}
+        return isDirty();
+    }
 
-		// overriding super class since it does a lowly isDirty!
-		if (sourceEditor != null) {
-			return sourceEditor.isSaveOnCloseNeeded();
-		}
+    public void selectionChanged( IWorkbenchPart part, ISelection selection )
+    {
+        if( this.equals( getSite().getPage().getActiveEditor() ) )
+        {
+            visualEditor.updateActions();
+        }
+    }
 
-		return isDirty();
-	}
+    protected void addSourcePage() throws PartInitException
+    {
+        int index = addPage( sourceEditor, getEditorInput() );
+        setPageText( index, "Source" );
 
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (this.equals(getSite().getPage().getActiveEditor())) {
-			visualEditor.updateActions();
-		}
-	}
+        firePropertyChange( PROP_TITLE );
 
-	protected void addSourcePage()
-		throws PartInitException {
-		int index = addPage(sourceEditor, getEditorInput());
-		setPageText(index, "Source");
+        // Changes to the Text Viewer's document instance should also
+        // force an
+        // input refresh
+        sourceEditor.getTextViewer().addTextInputListener( new TextInputListener() );
+    }
 
-		firePropertyChange(PROP_TITLE);
+    protected void connectVisualPage()
+    {
+        this.visualEditor.setInput( getEditorInput() );
+    }
 
-		// Changes to the Text Viewer's document instance should also
-		// force an
-		// input refresh
-		sourceEditor.getTextViewer().addTextInputListener(new TextInputListener());
-	}
+    protected void createAndAddVisualPage() throws PartInitException
+    {
+        IEditorPart editor = createVisualEditor();
+        int index = addPage( editor, getEditorInput() );
+        setPageText( index, "Visual (Experimental)" );
+    }
 
-	protected void connectVisualPage() {
-		this.visualEditor.setInput(getEditorInput());
-	}
+    @Override
+    protected void createPages()
+    {
+        try
+        {
+            createSourcePage(); // must create source page first
+            createAndAddVisualPage();
+            addSourcePage();
+            connectVisualPage();
 
-	protected void createAndAddVisualPage()
-		throws PartInitException {
-		IEditorPart editor = createVisualEditor();
-		int index = addPage(editor, getEditorInput());
-		setPageText(index, "Visual (Experimental)");
-	}
+            IEditorActionBarContributor contributor = getEditorSite().getActionBarContributor();
 
-	@Override
-	protected void createPages() {
-		try {
-			createSourcePage(); // must create source page first
-			createAndAddVisualPage();
-			addSourcePage();
-			connectVisualPage();
+            if( contributor instanceof MultiPageEditorActionBarContributor )
+            {
+                ( (MultiPageEditorActionBarContributor) contributor ).setActiveEditor( this );
+            }
 
-			IEditorActionBarContributor contributor = getEditorSite().getActionBarContributor();
+            int activePageIndex = getPreferenceStore().getInt( ILayoutTplUIPreferenceNames.LAST_ACTIVE_PAGE );
+            if( ( activePageIndex >= 0 ) && ( activePageIndex < getPageCount() ) )
+            {
+                setActivePage( activePageIndex );
+            }
+            else
+            {
+                setActivePage( 0 );
+            }
+        }
+        catch( PartInitException ex )
+        {
+            LayoutTplCore.logError( ex );
+            throw new RuntimeException( ex );
+        }
+    }
 
-			if (contributor instanceof MultiPageEditorActionBarContributor) {
-				((MultiPageEditorActionBarContributor) contributor).setActiveEditor(this);
-			}
+    protected IEditorSite createSite( IEditorPart editor )
+    {
+        IEditorSite site = null;
+        if( editor == sourceEditor )
+        {
+            site = new MultiPageEditorSite( this, editor )
+            {
 
-			int activePageIndex = getPreferenceStore().getInt(ILayoutTplUIPreferenceNames.LAST_ACTIVE_PAGE);
-			if ((activePageIndex >= 0) && (activePageIndex < getPageCount())) {
-				setActivePage(activePageIndex);
-			}
-			else {
-				setActivePage(0);
-			}
-		}
-		catch (PartInitException ex) {
-			LayoutTplCore.logError(ex);
-			throw new RuntimeException(ex);
-		}
-	}
+                /**
+                 * @see org.eclipse.ui.part.MultiPageEditorSite#getActionBarContributor()
+                 */
+                public IEditorActionBarContributor getActionBarContributor()
+                {
+                    IEditorActionBarContributor contributor = super.getActionBarContributor();
+                    IEditorActionBarContributor multiContributor =
+                        LayoutTplMultiPageEditor.this.getEditorSite().getActionBarContributor();
+                    if( multiContributor instanceof LayoutTplMultiPageEditorActionBarContributor )
+                    {
+                        contributor =
+                            ( (LayoutTplMultiPageEditorActionBarContributor) multiContributor ).sourceEditorContributor;
+                    }
+                    return contributor;
+                }
 
-	protected IEditorSite createSite(IEditorPart editor) {
-		IEditorSite site = null;
-		if (editor == sourceEditor) {
-			site = new MultiPageEditorSite(this, editor) {
+                public String getId()
+                {
+                    // sets this id so nested editor is considered xml source
+                    // page
+                    return ContentTypeIdForHTML.ContentTypeID_HTML + ".source"; //$NON-NLS-1$;
+                }
+            };
+        }
+        else
+        {
+            site = super.createSite( editor );
+        }
+        return site;
+    }
 
-				/**
-				 * @see org.eclipse.ui.part.MultiPageEditorSite#getActionBarContributor()
-				 */
-				public IEditorActionBarContributor getActionBarContributor() {
-					IEditorActionBarContributor contributor = super.getActionBarContributor();
-					IEditorActionBarContributor multiContributor =
-						LayoutTplMultiPageEditor.this.getEditorSite().getActionBarContributor();
-					if (multiContributor instanceof LayoutTplMultiPageEditorActionBarContributor) {
-						contributor =
-							((LayoutTplMultiPageEditorActionBarContributor) multiContributor).sourceEditorContributor;
-					}
-					return contributor;
-				}
+    protected void createSourcePage() throws PartInitException
+    {
+        sourceEditor = new StructuredTextEditor();
+        sourceEditor.setEditorPart( this );
 
-				public String getId() {
-					// sets this id so nested editor is considered xml source
-					// page
-					return ContentTypeIdForHTML.ContentTypeID_HTML + ".source"; //$NON-NLS-1$;
-				}
-			};
-		}
-		else {
-			site = super.createSite(editor);
-		}
-		return site;
-	}
+        if( this.propertyListener == null )
+        {
+            this.propertyListener = new PropertyListener();
+        }
 
-	protected void createSourcePage()
-		throws PartInitException {
-		sourceEditor = new StructuredTextEditor();
-		sourceEditor.setEditorPart(this);
+        sourceEditor.addPropertyListener( this.propertyListener );
+    }
 
-		if (this.propertyListener == null) {
-			this.propertyListener = new PropertyListener();
-		}
+    protected LayoutTplEditor createVisualEditor()
+    {
+        this.visualEditor = new LayoutTplEditor( this.sourceEditor );
 
-		sourceEditor.addPropertyListener(this.propertyListener);
-	}
+        return this.visualEditor;
+    }
 
-	protected LayoutTplEditor createVisualEditor() {
-		this.visualEditor = new LayoutTplEditor(this.sourceEditor);
+    protected IPreferenceStore getPreferenceStore()
+    {
+        return LayoutTplUI.getDefault().getPreferenceStore();
+    }
 
-		return this.visualEditor;
-	}
+    @Override
+    protected void pageChange( int newPageIndex )
+    {
+        if( lastPageIndex == VISUAL_PAGE_INDEX && newPageIndex == SOURCE_PAGE_INDEX )
+        {
+            if( this.visualEditor.isDirty() )
+            {
+                this.visualEditor.refreshSourceModel();
+            }
+        }
+        else if( lastPageIndex == SOURCE_PAGE_INDEX && newPageIndex == VISUAL_PAGE_INDEX )
+        {
+            this.visualEditor.refreshVisualModel();
+        }
 
-	protected IPreferenceStore getPreferenceStore() {
-		return LayoutTplUI.getDefault().getPreferenceStore();
-	}
+        super.pageChange( newPageIndex );
 
-	@Override
-	protected void pageChange(int newPageIndex) {
-		if (lastPageIndex == VISUAL_PAGE_INDEX && newPageIndex == SOURCE_PAGE_INDEX) {
-			if (this.visualEditor.isDirty()) {
-				this.visualEditor.refreshSourceModel();
-			}
-		}
-		else if (lastPageIndex == SOURCE_PAGE_INDEX && newPageIndex == VISUAL_PAGE_INDEX) {
-			this.visualEditor.refreshVisualModel();
-		}
+        if( multiOutlinePage != null )
+        {
+            multiOutlinePage.refreshOutline();
+        }
 
-		super.pageChange(newPageIndex);
+        lastPageIndex = newPageIndex;
+    }
 
-		if (multiOutlinePage != null) {
-			multiOutlinePage.refreshOutline();
-		}
+    @Override
+    protected void setInput( IEditorInput input )
+    {
+        super.setInput( input );
 
-		lastPageIndex = newPageIndex;
-	}
+        IFile file = ( (IFileEditorInput) input ).getFile();
+        setPartName( file.getName() );
+    }
 
-	@Override
-	protected void setInput(IEditorInput input) {
-		super.setInput(input);
-
-		IFile file = ((IFileEditorInput) input).getFile();
-		setPartName(file.getName());
-	}
-
-	void gotoMarker(IMarker marker) {
-		setActivePage(1);
-		IDE.gotoMarker(sourceEditor, marker);
-	}
+    void gotoMarker( IMarker marker )
+    {
+        setActivePage( 1 );
+        IDE.gotoMarker( sourceEditor, marker );
+    }
 }

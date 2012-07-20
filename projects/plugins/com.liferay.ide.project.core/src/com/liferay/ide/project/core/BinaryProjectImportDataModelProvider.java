@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,26 +23,29 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataModelProvider {
+public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataModelProvider
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.liferay.ide.project.core.LiferayProjectImportDataModelProvider#getDefaultOperation()
-	 */
-	@Override
-	public IDataModelOperation getDefaultOperation() {
-		return new BinaryProjectImportOperation( this.model );
-	}
+    /*
+     * (non-Javadoc)
+     * @see com.liferay.ide.project.core.LiferayProjectImportDataModelProvider#getDefaultOperation()
+     */
+    @Override
+    public IDataModelOperation getDefaultOperation()
+    {
+        return new BinaryProjectImportOperation( this.model );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.liferay.ide.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
-	 */
-	@Override
-	public IStatus createSelectedProjectsErrorStatus() {
+    /*
+     * (non-Javadoc)
+     * @see com.liferay.ide.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
+     */
+    @Override
+    public IStatus createSelectedProjectsErrorStatus()
+    {
 
-		return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
+        return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
 
-	}
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,101 +44,118 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Henri Sara
  */
 public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
-	implements INewVaadinPortletClassDataModelProperties {
+    implements INewVaadinPortletClassDataModelProperties
+{
 
-	public VaadinPortletDescriptorHelper(IProject project) {
-		super(project);
-	}
+    public VaadinPortletDescriptorHelper( IProject project )
+    {
+        super( project );
+    }
 
-	@Override
-	public IStatus addNewPortlet(IDataModel model) {
-		IStatus status = super.addNewPortlet(model);
-		if (!status.isOK()) {
-			return status;
-		}
+    @Override
+    public IStatus addNewPortlet( IDataModel model )
+    {
+        IStatus status = super.addNewPortlet( model );
+        if( !status.isOK() )
+        {
+            return status;
+        }
 
-		return addPortalDependency(IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar");
-	}
+        return addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" );
+    }
 
-	public IStatus addPortalDependency(String propertyName, String value) {
-		if (CoreUtil.isNullOrEmpty(value)) {
-			return Status.OK_STATUS;
-		}
+    public IStatus addPortalDependency( String propertyName, String value )
+    {
+        if( CoreUtil.isNullOrEmpty( value ) )
+        {
+            return Status.OK_STATUS;
+        }
 
-		PluginPropertiesConfiguration pluginPackageProperties;
+        PluginPropertiesConfiguration pluginPackageProperties;
 
-		try {
-			IVirtualComponent comp = ComponentCore.createComponent(this.project.getProject());
+        try
+        {
+            IVirtualComponent comp = ComponentCore.createComponent( this.project.getProject() );
 
-			if (comp == null) {
-				IStatus warning = VaadinCore.createWarningStatus("Could not add Vaadin dependency to the project.");
-				VaadinCore.getDefault().getLog().log(warning);
-				return Status.OK_STATUS;
-			}
+            if( comp == null )
+            {
+                IStatus warning = VaadinCore.createWarningStatus( "Could not add Vaadin dependency to the project." );
+                VaadinCore.getDefault().getLog().log( warning );
+                return Status.OK_STATUS;
+            }
 
-			IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
-			IFile pluginPackageFile =
-				webroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE);
+            IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
+            IFile pluginPackageFile =
+                webroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
 
-			if (!pluginPackageFile.exists()) {
-				IStatus warning =
-					VaadinCore.createWarningStatus("No " + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE +
-						" file in the project, not adding Vaadin dependency.");
+            if( !pluginPackageFile.exists() )
+            {
+                IStatus warning =
+                    VaadinCore.createWarningStatus( "No " + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE +
+                        " file in the project, not adding Vaadin dependency." );
 
-				VaadinCore.getDefault().getLog().log(warning);
+                VaadinCore.getDefault().getLog().log( warning );
 
-				return Status.OK_STATUS;
-			}
+                return Status.OK_STATUS;
+            }
 
-			File osfile = new File(pluginPackageFile.getLocation().toOSString());
+            File osfile = new File( pluginPackageFile.getLocation().toOSString() );
 
-			pluginPackageProperties = new PluginPropertiesConfiguration();
-			pluginPackageProperties.load(osfile);
+            pluginPackageProperties = new PluginPropertiesConfiguration();
+            pluginPackageProperties.load( osfile );
 
-			String existingDeps = pluginPackageProperties.getString(propertyName, "");
+            String existingDeps = pluginPackageProperties.getString( propertyName, "" );
 
-			String[] existingValues = existingDeps.split(",");
+            String[] existingValues = existingDeps.split( "," );
 
-			for (String existingValue : existingValues) {
-				if (value.equals(existingValue)) {
-					return Status.OK_STATUS;
-				}
-			}
+            for( String existingValue : existingValues )
+            {
+                if( value.equals( existingValue ) )
+                {
+                    return Status.OK_STATUS;
+                }
+            }
 
-			String newPortalDeps = null;
+            String newPortalDeps = null;
 
-			if (CoreUtil.isNullOrEmpty(existingDeps)) {
-				newPortalDeps = value;
-			}
-			else {
-				newPortalDeps = existingDeps + "," + value;
-			}
+            if( CoreUtil.isNullOrEmpty( existingDeps ) )
+            {
+                newPortalDeps = value;
+            }
+            else
+            {
+                newPortalDeps = existingDeps + "," + value;
+            }
 
-			pluginPackageProperties.setProperty(propertyName, newPortalDeps);
+            pluginPackageProperties.setProperty( propertyName, newPortalDeps );
 
-			FileWriter output = new FileWriter(osfile);
-			try {
-				pluginPackageProperties.save(output);
-			}
-			finally {
-				output.close();
-			}
+            FileWriter output = new FileWriter( osfile );
+            try
+            {
+                pluginPackageProperties.save( output );
+            }
+            finally
+            {
+                output.close();
+            }
 
-			// refresh file
-			pluginPackageFile.refreshLocal(IResource.DEPTH_ZERO, new NullProgressMonitor());
+            // refresh file
+            pluginPackageFile.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
 
-		}
-		catch (Exception e) {
-			VaadinCore.logError(e);
-			return VaadinCore.createErrorStatus("Could not add dependency to vaadin.jar in liferay-plugin-package.properties .");
-		}
+        }
+        catch( Exception e )
+        {
+            VaadinCore.logError( e );
+            return VaadinCore.createErrorStatus( "Could not add dependency to vaadin.jar in liferay-plugin-package.properties ." );
+        }
 
-		return Status.OK_STATUS;
-	}
+        return Status.OK_STATUS;
+    }
 
-	@Override
-	protected String getPortletClassText(IDataModel model) {
-		return model.getStringProperty(VAADIN_PORTLET_CLASS);
-	}
+    @Override
+    protected String getPortletClassText( IDataModel model )
+    {
+        return model.getStringProperty( VAADIN_PORTLET_CLASS );
+    }
 
 }

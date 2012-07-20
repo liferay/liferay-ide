@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,103 +36,120 @@ import org.eclipse.swt.graphics.FontData;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("unchecked")
-public class RoundedRectangleEditPolicy extends ResizableEditPolicy {
+@SuppressWarnings( "rawtypes" )
+public class RoundedRectangleEditPolicy extends ResizableEditPolicy
+{
 
-	private Label feedbackLabel;
+    private Label feedbackLabel;
 
-	protected List createSelectionHandles() {
-		List handles = super.createSelectionHandles();
+    protected List createSelectionHandles()
+    {
+        List handles = super.createSelectionHandles();
 
-		MoveHandle moveHandle = null;
-		ResizeHandle resizeHandle = null;
+        MoveHandle moveHandle = null;
+        ResizeHandle resizeHandle = null;
 
-		for (Iterator i = handles.iterator(); i.hasNext();) {
-			Object handle = i.next();
+        for( Iterator i = handles.iterator(); i.hasNext(); )
+        {
+            Object handle = i.next();
 
-			if (handle instanceof MoveHandle) {
-				moveHandle = (MoveHandle) handle;
-			}
-			else if (handle instanceof ResizeHandle) {
-				ResizeHandle tempResizeHandle = (ResizeHandle) handle;
+            if( handle instanceof MoveHandle )
+            {
+                moveHandle = (MoveHandle) handle;
+            }
+            else if( handle instanceof ResizeHandle )
+            {
+                ResizeHandle tempResizeHandle = (ResizeHandle) handle;
 
-				try {
-					Field f = ResizeHandle.class.getDeclaredField("cursorDirection");
-					f.setAccessible(true);
-					int cursorDirection = f.getInt(tempResizeHandle);
+                try
+                {
+                    Field f = ResizeHandle.class.getDeclaredField( "cursorDirection" );
+                    f.setAccessible( true );
+                    int cursorDirection = f.getInt( tempResizeHandle );
 
-					if (cursorDirection == PositionConstants.NORTH_WEST) {
-						resizeHandle = tempResizeHandle;
+                    if( cursorDirection == PositionConstants.NORTH_WEST )
+                    {
+                        resizeHandle = tempResizeHandle;
 
-					}
+                    }
 
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-		if (moveHandle != null) {
-			handles.remove(moveHandle);
-		}
+        if( moveHandle != null )
+        {
+            handles.remove( moveHandle );
+        }
 
-		if (resizeHandle != null) {
-			handles.remove(resizeHandle);
-			handles.add(new RoundedRectangleResizeHandle((GraphicalEditPart) getHost(), PositionConstants.NORTH_WEST));
-		}
+        if( resizeHandle != null )
+        {
+            handles.remove( resizeHandle );
+            handles.add( new RoundedRectangleResizeHandle( (GraphicalEditPart) getHost(), PositionConstants.NORTH_WEST ) );
+        }
 
-		return handles;
-	}
+        return handles;
+    }
 
-	@Override
-	protected void showChangeBoundsFeedback(ChangeBoundsRequest request) {
-		super.showChangeBoundsFeedback(request);
-		IFigure feedbackFigure = getDragSourceFeedbackFigure();
+    @Override
+    protected void showChangeBoundsFeedback( ChangeBoundsRequest request )
+    {
+        super.showChangeBoundsFeedback( request );
+        IFigure feedbackFigure = getDragSourceFeedbackFigure();
 
-		if (feedbackLabel == null) {
-			feedbackLabel = new Label() {
+        if( feedbackLabel == null )
+        {
+            feedbackLabel = new Label()
+            {
 
-				@Override
-				protected void finalize()
-					throws Throwable {
+                @Override
+                protected void finalize() throws Throwable
+                {
 
-					super.finalize();
-					Font font = this.getFont();
-					if (font != null && !font.isDisposed()) {
-						font.dispose();
-					}
-				}
+                    super.finalize();
+                    Font font = this.getFont();
+                    if( font != null && !font.isDisposed() )
+                    {
+                        font.dispose();
+                    }
+                }
 
-			};
-			feedbackLabel.setText("50%");
-			Font font = feedbackFigure.getFont();
-			FontData[] fontData = font.getFontData();
-			for (int i = 0; i < fontData.length; i++) {
-				fontData[i].setHeight(24);
-			}
-			Font correctedFont = new Font(font.getDevice(), fontData);
-			feedbackLabel.setFont(correctedFont);
-		}
+            };
+            feedbackLabel.setText( "50%" );
+            Font font = feedbackFigure.getFont();
+            FontData[] fontData = font.getFontData();
+            for( int i = 0; i < fontData.length; i++ )
+            {
+                fontData[i].setHeight( 24 );
+            }
+            Font correctedFont = new Font( font.getDevice(), fontData );
+            feedbackLabel.setFont( correctedFont );
+        }
 
-		feedbackLabel.setLocation(feedbackFigure.getBounds().getCenter());
-		feedbackLabel.setSize(feedbackLabel.getPreferredSize());
-		addFeedback(feedbackLabel);
+        feedbackLabel.setLocation( feedbackFigure.getBounds().getCenter() );
+        feedbackLabel.setSize( feedbackLabel.getPreferredSize() );
+        addFeedback( feedbackLabel );
 
-		((ColumnFigure) getHostFigure()).setDrawText(false);
+        ( (ColumnFigure) getHostFigure() ).setDrawText( false );
 
-	}
+    }
 
-	@Override
-	protected void eraseChangeBoundsFeedback(ChangeBoundsRequest request) {
-		super.eraseChangeBoundsFeedback(request);
+    @Override
+    protected void eraseChangeBoundsFeedback( ChangeBoundsRequest request )
+    {
+        super.eraseChangeBoundsFeedback( request );
 
-		if (feedbackLabel != null) {
-			removeFeedback(feedbackLabel);
-			feedbackLabel = null;
-		}
+        if( feedbackLabel != null )
+        {
+            removeFeedback( feedbackLabel );
+            feedbackLabel = null;
+        }
 
-		((ColumnFigure) getHostFigure()).setDrawText(true);
-	}
+        ( (ColumnFigure) getHostFigure() ).setDrawText( true );
+    }
 
 }

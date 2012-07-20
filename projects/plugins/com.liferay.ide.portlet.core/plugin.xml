@@ -232,7 +232,7 @@
           default="true"
           description="Simple and lightweight MVC framework using JSPs that is built-in to Liferay Portal."
           displayName="Liferay MVC"
-          helpUrl="http://www.liferay.com/documentation/liferay-portal/6.0/development/-/ai/portlet-development"
+          helpUrl="http://www.liferay.com/documentation/liferay-portal/6.1/development/-/ai/portlet-development"
           id="com.liferay.ide.project.core.framework.mvc"
           requiredSDKVersion="6.0.1"
           shortName="mvc">

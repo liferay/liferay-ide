@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,11 +18,11 @@ package com.liferay.ide.portlet.ui.wizard;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.portlet.core.util.PortletUtil;
+import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -59,173 +59,195 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties {
+@SuppressWarnings( "restriction" )
+public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
+{
 
-	protected Text contentFolder;
+    protected Text contentFolder;
 
-	protected StringArrayTableWizardSection languagePropertiesSection;
+    protected StringArrayTableWizardSection languagePropertiesSection;
 
-	public NewLanguagePropertiesHookWizardPage(IDataModel dataModel, String pageName) {
-		super(dataModel, pageName, "Create Language Properties", PortletUIPlugin.imageDescriptorFromPlugin(
-			PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png"));
+    public NewLanguagePropertiesHookWizardPage( IDataModel dataModel, String pageName )
+    {
+        super( dataModel, pageName, "Create Language Properties", PortletUIPlugin.imageDescriptorFromPlugin(
+            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
 
-		setDescription("Create new Language properties files.");
-	}
+        setDescription( "Create new Language properties files." );
+    }
 
-	protected void createContentFolderGroup(Composite topComposite) {
-		Composite composite = SWTUtil.createTopComposite(topComposite, 3);
+    protected void createContentFolderGroup( Composite topComposite )
+    {
+        Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
 
-		GridLayout gl = new GridLayout(3, false);
-		gl.marginLeft = 5;
+        GridLayout gl = new GridLayout( 3, false );
+        gl.marginLeft = 5;
 
-		composite.setLayout(gl);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+        composite.setLayout( gl );
+        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-		SWTUtil.createLabel(composite, SWT.LEAD, "Content folder:", 1);
+        SWTUtil.createLabel( composite, SWT.LEAD, "Content folder:", 1 );
 
-		contentFolder = SWTUtil.createText(composite, 1);
-		this.synchHelper.synchText(contentFolder, CONTENT_FOLDER, null);
+        contentFolder = SWTUtil.createText( composite, 1 );
+        this.synchHelper.synchText( contentFolder, CONTENT_FOLDER, null );
 
-		Button iconFileBrowse = SWTUtil.createPushButton(composite, "Browse...", null);
-		iconFileBrowse.addSelectionListener(new SelectionAdapter() {
+        Button iconFileBrowse = SWTUtil.createPushButton( composite, "Browse...", null );
+        iconFileBrowse.addSelectionListener( new SelectionAdapter()
+        {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleFileBrowseButton(NewLanguagePropertiesHookWizardPage.this.contentFolder);
-			}
-		});
-	}
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                handleFileBrowseButton( NewLanguagePropertiesHookWizardPage.this.contentFolder );
+            }
+        } );
+    }
 
-	protected void createLanguagePropertiesGroup(Composite parent) {
-		Composite composite = SWTUtil.createTopComposite(parent, 2);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+    protected void createLanguagePropertiesGroup( Composite parent )
+    {
+        Composite composite = SWTUtil.createTopComposite( parent, 2 );
+        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-		languagePropertiesSection =
-			new StringArrayTableWizardSection(
-				composite, "Language property files:", "Language property file", "Add...", "Edit...", "Remove...",
-				new String[] {
-					"Add"
-				}, new String[] {
-					"Language property file:"
-				}, null, getDataModel(), LANGUAGE_PROPERTIES_ITEMS);
+        languagePropertiesSection =
+            new StringArrayTableWizardSection(
+                composite, "Language property files:", "Language property file", "Add...", "Edit...", "Remove...",
+                new String[] { "Add" }, new String[] { "Language property file:" }, null, getDataModel(),
+                LANGUAGE_PROPERTIES_ITEMS );
 
-		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, true, 1, 1);
-		gd.heightHint = 175;
+        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
+        gd.heightHint = 175;
 
-		languagePropertiesSection.setLayoutData(gd);
-		languagePropertiesSection.setCallback(new StringArrayTableWizardSectionCallback());
-	}
+        languagePropertiesSection.setLayoutData( gd );
+        languagePropertiesSection.setCallback( new StringArrayTableWizardSectionCallback() );
+    }
 
-	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
+    @Override
+    protected Composite createTopLevelComposite( Composite parent )
+    {
+        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
 
-		createContentFolderGroup(topComposite);
+        createContentFolderGroup( topComposite );
 
-		createLanguagePropertiesGroup(topComposite);
+        createLanguagePropertiesGroup( topComposite );
 
-		return topComposite;
-	}
+        return topComposite;
+    }
 
-	@Override
-	protected void enter() {
-		super.enter();
+    @Override
+    protected void enter()
+    {
+        super.enter();
 
-		this.synchHelper.synchAllUIWithModel();
-	}
+        this.synchHelper.synchAllUIWithModel();
+    }
 
-	protected ISelectionStatusValidator getContainerDialogSelectionValidator() {
-		return new ISelectionStatusValidator() {
+    protected ISelectionStatusValidator getContainerDialogSelectionValidator()
+    {
+        return new ISelectionStatusValidator()
+        {
 
-			public IStatus validate(Object[] selection) {
-				if (selection != null && selection.length > 0 && selection[0] != null &&
-					!(selection[0] instanceof IProject) && !(selection[0] instanceof IFile)) {
-					return Status.OK_STATUS;
-				}
+            public IStatus validate( Object[] selection )
+            {
+                if( selection != null && selection.length > 0 && selection[0] != null &&
+                    !( selection[0] instanceof IProject ) && !( selection[0] instanceof IFile ) )
+                {
+                    return Status.OK_STATUS;
+                }
 
-				return PortletUIPlugin.createErrorStatus("Choose a valid folder for language properties files.");
-			}
-		};
-	}
+                return PortletUIPlugin.createErrorStatus( "Choose a valid folder for language properties files." );
+            }
+        };
+    }
 
-	protected ViewerFilter getContainerDialogViewerFilter() {
-		return new ViewerFilter() {
+    protected ViewerFilter getContainerDialogViewerFilter()
+    {
+        return new ViewerFilter()
+        {
+            @SuppressWarnings( "deprecation" )
+            public boolean select( Viewer viewer, Object parent, Object element )
+            {
+                if( element instanceof IProject )
+                {
+                    IProject project = (IProject) element;
 
-			public boolean select(Viewer viewer, Object parent, Object element) {
-				if (element instanceof IProject) {
-					IProject project = (IProject) element;
+                    return project.getName().equals(
+                        model.getProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
+                }
+                else if( element instanceof IFolder )
+                {
+                    IFolder folder = (IFolder) element;
 
-					return project.getName().equals(
-						model.getProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
-				}
-				else if (element instanceof IFolder) {
-					IFolder folder = (IFolder) element;
+                    // only show source folders
+                    IProject project =
+                        ProjectUtilities.getProject( model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
 
-					// only show source folders
-					IProject project =
-						ProjectUtilities.getProject(model.getStringProperty(IArtifactEditOperationDataModelProperties.PROJECT_NAME));
+                    IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
 
-					IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers(project);
+                    for( int i = 0; i < sourceFolders.length; i++ )
+                    {
+                        if( sourceFolders[i].getResource() != null && sourceFolders[i].getResource().equals( folder ) )
+                        {
+                            return true;
+                        }
+                        else if( ProjectUtil.isParent( folder, sourceFolders[i].getResource() ) )
+                        {
+                            return true;
+                        }
+                    }
+                }
 
-					for (int i = 0; i < sourceFolders.length; i++) {
-						if (sourceFolders[i].getResource() != null && sourceFolders[i].getResource().equals(folder)) {
-							return true;
-						}
-						else if (ProjectUtil.isParent(folder, sourceFolders[i].getResource())) {
-							return true;
-						}
-					}
-				}
+                return false;
+            }
+        };
+    }
 
-				return false;
-			}
-		};
-	}
+    @Override
+    protected String[] getValidationPropertyNames()
+    {
+        return new String[] { CONTENT_FOLDER, LANGUAGE_PROPERTIES_ITEMS };
+    }
 
-	@Override
-	protected String[] getValidationPropertyNames() {
-		return new String[] {
-			CONTENT_FOLDER, LANGUAGE_PROPERTIES_ITEMS
-		};
-	}
+    protected void handleFileBrowseButton( final Text text )
+    {
+        ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
 
-	protected void handleFileBrowseButton(final Text text) {
-		ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
+        ViewerFilter filter = getContainerDialogViewerFilter();
 
-		ViewerFilter filter = getContainerDialogViewerFilter();
+        ITreeContentProvider contentProvider = new WorkbenchContentProvider();
 
-		ITreeContentProvider contentProvider = new WorkbenchContentProvider();
+        ILabelProvider labelProvider =
+            new DecoratingLabelProvider(
+                new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
 
-		ILabelProvider labelProvider =
-			new DecoratingLabelProvider(
-				new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator());
+        ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
+        dialog.setValidator( validator );
+        dialog.setTitle( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE );
+        dialog.setMessage( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC );
+        dialog.addFilter( filter );
+        dialog.setInput( CoreUtil.getWorkspaceRoot() );
 
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), labelProvider, contentProvider);
-		dialog.setValidator(validator);
-		dialog.setTitle(J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE);
-		dialog.setMessage(J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC);
-		dialog.addFilter(filter);
-		dialog.setInput(CoreUtil.getWorkspaceRoot());
+        if( dialog.open() == Window.OK )
+        {
+            Object element = dialog.getFirstResult();
 
-		if (dialog.open() == Window.OK) {
-			Object element = dialog.getFirstResult();
+            try
+            {
+                if( element instanceof IFolder )
+                {
+                    IFolder folder = (IFolder) element;
 
-			try {
-				if (element instanceof IFolder) {
-					IFolder folder = (IFolder) element;
+                    if( folder.equals( PortletUtil.getFirstSrcFolder( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
+                    {
+                        folder = folder.getFolder( "content" );
+                    }
 
-					if (folder.equals(PortletUtil.getFirstSrcFolder(getDataModel().getStringProperty(PROJECT_NAME)))) {
-						folder = folder.getFolder("content");
-					}
+                    text.setText( folder.getFullPath().toPortableString() );
+                }
+            }
+            catch( Exception ex )
+            {
+                // Do nothing
+            }
 
-					text.setText(folder.getFullPath().toPortableString());
-				}
-			}
-			catch (Exception ex) {
-				// Do nothing
-			}
-
-		}
-	}
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,22 +20,26 @@ import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class SetHttpPortCommand extends RemoteServerCommand {
+public class SetHttpPortCommand extends RemoteServerCommand
+{
 
-	protected String oldHttpPort;
-	protected String httpPort;
+    protected String oldHttpPort;
+    protected String httpPort;
 
-	public SetHttpPortCommand( IRemoteServerWorkingCopy server, String httpPort ) {
-		super( server, "Set Http Port" );
-		this.httpPort = httpPort;
-	}
+    public SetHttpPortCommand( IRemoteServerWorkingCopy server, String httpPort )
+    {
+        super( server, "Set Http Port" );
+        this.httpPort = httpPort;
+    }
 
-	public void execute() {
-		oldHttpPort = server.getHTTPPort();
-		server.setHTTPPort( httpPort );
-	}
+    public void execute()
+    {
+        oldHttpPort = server.getHTTPPort();
+        server.setHTTPPort( httpPort );
+    }
 
-	public void undo() {
-		server.setHTTPPort( oldHttpPort );
-	}
+    public void undo()
+    {
+        server.setHTTPPort( oldHttpPort );
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,202 +44,229 @@ import org.eclipse.sapphire.services.PossibleTypesService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class DefaultXmlBinding extends LayeredElementBindingImpl {
+public class DefaultXmlBinding extends LayeredElementBindingImpl
+{
+    private ModelElementType modelElementType;
+    private XmlPath path;
+    private String pathName;
+    private QName xmlElementName;
 
-	private QName xmlElementName;
-	private ModelElementType modelElementType;
-	private XmlPath path;
-	private String pathName;
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.LayeredElementBindingImpl#createResource(java.lang.Object)
+     */
+    @Override
+    protected Resource createResource( Object obj )
+    {
+        final XmlElement xmlElement = (XmlElement) obj;
+        final XmlResource parentXmlResource = (XmlResource) element().resource();
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( IModelElement element, ModelProperty property, String[] params ) {
-		super.init( element, property, params );
+        return new ChildXmlResource( parentXmlResource, xmlElement );
+    }
 
-		final XmlElementBinding xmlElementBindingAnnotation = property.getAnnotation( XmlElementBinding.class );
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.eclipse.sapphire.modeling.LayeredElementBindingImpl#createUnderlyingObject(org.eclipse.sapphire.modeling.
+     * ModelElementType)
+     */
+    @Override
+    protected Object createUnderlyingObject( ModelElementType type )
+    {
+        final DefaultValue defaultValueAnnotation = type.getAnnotation( DefaultValue.class );
 
-		final XmlNamespaceResolver xmlNamespaceResolver =
-			( (XmlResource) element.resource() ).getXmlNamespaceResolver();
+        XmlElement parent = ( (XmlResource) element().resource() ).getXmlElement( true );
 
-		if ( xmlElementBindingAnnotation == null ) {
-			// System.out.println( "DefaultXmlBinding.init() - Xml Element Binding is null" );
-			final XmlBinding xmlBindingAnnotation = property.getAnnotation( XmlBinding.class );
+        if( this.path != null )
+        {
+            parent = (XmlElement) parent.getChildNode( this.path, true );
+        }
 
-			if ( xmlBindingAnnotation != null &&
-				element.service( property, PossibleTypesService.class ).types().size() == 1 ) {
+        QName xmlElementName = this.xmlElementName;
 
-				this.pathName = xmlBindingAnnotation.path();
-				initElementAndModel( property, xmlNamespaceResolver, pathName );
-			}
-			else if ( params != null && params[0] != null ) {
-				this.pathName = params[0];
-				initElementAndModel( property, xmlNamespaceResolver, pathName );
-			}
-			else {
-				throw new IllegalStateException();
-			}
-		}
-		else {
-			// NO-OP for now TODO
-			// System.out.println( "DefaultXmlBinding.init() - Xml Element Binding is available" );
-			throw new IllegalStateException( "This Annotation combination currently not supported" );
-		}
+        if( xmlElementName.getNamespaceURI().equals( "" ) )
+        {
+            xmlElementName = new QName( parent.getNamespace(), xmlElementName.getLocalPart() );
+        }
+        XmlElement xmlElement = null;
+        if( defaultValueAnnotation != null && xmlElementName != null )
+        {
+            xmlElement = parent.getChildElement( xmlElementName, true );
+            xmlElement.setText( defaultValueAnnotation.text() );
+        }
 
-	}
+        return xmlElement;
+    }
 
-	/**
-	 * @param property
-	 * @param xmlNamespaceResolver
-	 * @param path
-	 */
-	private void initElementAndModel(
-		ModelProperty property, final XmlNamespaceResolver xmlNamespaceResolver, final String path ) {
-		final int slashIndex = path.lastIndexOf( '/' );
-		if ( slashIndex == -1 ) {
-			this.xmlElementName = createQualifiedName( pathName, xmlNamespaceResolver );
-			this.modelElementType = property.getType();
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
+     * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+     */
+    @Override
+    public void init( IModelElement element, ModelProperty property, String[] params )
+    {
+        super.init( element, property, params );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.LayeredElementBindingImpl#readUnderlyingObject()
-	 */
-	@Override
-	protected Object readUnderlyingObject() {
+        final XmlElementBinding xmlElementBindingAnnotation = property.getAnnotation( XmlElementBinding.class );
 
-		// System.out.println( "DefaultXmlBinding.readUnderlyingObject()" );
+        final XmlNamespaceResolver xmlNamespaceResolver =
+            ( (XmlResource) element.resource() ).getXmlNamespaceResolver();
 
-		XmlElement parent = ( (XmlResource) element().resource() ).getXmlElement( false );
+        if( xmlElementBindingAnnotation == null )
+        {
+            // System.out.println( "DefaultXmlBinding.init() - Xml Element Binding is null" );
+            final XmlBinding xmlBindingAnnotation = property.getAnnotation( XmlBinding.class );
 
-		if ( this.path != null ) {
-			// System.out.println( "DefaultXmlBinding.readUnderlyingObject()-2" );
-			parent = (XmlElement) parent.getChildNode( this.path, false );
-		}
-		else {
-			XmlElement childElement = parent.getChildElement( this.pathName, true );
-			// System.out.println( "DefaultXmlBinding.readUnderlyingObject()-3" );
-			List<ModelProperty> modelProperties = this.modelElementType.properties();
+            if( xmlBindingAnnotation != null &&
+                element.service( property, PossibleTypesService.class ).types().size() == 1 )
+            {
 
-			for ( ModelProperty modelProperty : modelProperties ) {
-				// System.out.println( "Model Prop " + modelProperty );
-				final Required reqAnnotation = modelProperty.getAnnotation( Required.class );
-				if ( reqAnnotation != null ) {
-					final XmlBinding xmlBindingAnnotation = modelProperty.getAnnotation( XmlBinding.class );
-					final DefaultValue defaultValueAnnotation = modelProperty.getAnnotation( DefaultValue.class );
-					String modPropName = xmlBindingAnnotation.path();
-					if ( isAttribute( modPropName ) ) {
-						XmlAttribute modPropAttribute = childElement.getAttribute( modPropName, true );
-						String attribCurrValue = modPropAttribute.getText();
-						if ( defaultValueAnnotation != null &&
-							( attribCurrValue == null || attribCurrValue.trim().length() == 0 ) ) {
-							modPropAttribute.setText( defaultValueAnnotation.text() );
-						}
-					}
-					else {
-						XmlElement modPropElement = childElement.getChildElement( modPropName, true );
-						String elementCurrValue = modPropElement.getText();
-						// System.out.println( "Prop Curr Value Element:" + elementCurrValue );
-						if ( defaultValueAnnotation != null &&
-							( elementCurrValue == null || elementCurrValue.trim().length() == 0 ) ) {
-							modPropElement.setText( defaultValueAnnotation.text() );
-						}
-					}
-				}
-			}
-			return childElement;
-		}
+                this.pathName = xmlBindingAnnotation.path();
+                initElementAndModel( property, xmlNamespaceResolver, pathName );
+            }
+            else if( params != null && params[0] != null )
+            {
+                this.pathName = params[0];
+                initElementAndModel( property, xmlNamespaceResolver, pathName );
+            }
+            else
+            {
+                throw new IllegalStateException();
+            }
+        }
+        else
+        {
+            throw new IllegalStateException( "This Annotation combination currently not supported" );
+        }
 
-		if ( parent != null ) {
-			for ( XmlElement element : parent.getChildElements() ) {
-				final QName xmlElementName = createQualifiedName( element.getDomNode() );
+    }
 
-				if ( equal( this.xmlElementName, xmlElementName, xmlElementName.getNamespaceURI() ) ) {
-					return element;
-				}
-			}
-		}
-		return null;
-	}
+    /**
+     * @param property
+     * @param xmlNamespaceResolver
+     * @param path
+     */
+    private void initElementAndModel(
+        ModelProperty property, final XmlNamespaceResolver xmlNamespaceResolver, final String path )
+    {
+        final int slashIndex = path.lastIndexOf( '/' );
+        if( slashIndex == -1 )
+        {
+            this.xmlElementName = createQualifiedName( pathName, xmlNamespaceResolver );
+            this.modelElementType = property.getType();
+        }
+    }
 
-	/**
-	 * @param path
-	 * @return
-	 */
-	private boolean isAttribute( String path ) {
-		return ( path != null ? ( path.indexOf( '@' ) > -1 ) : false );
-	}
+    /**
+     * @param path
+     * @return
+     */
+    private boolean isAttribute( String path )
+    {
+        return( path != null ? ( path.indexOf( '@' ) > -1 ) : false );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.sapphire.modeling.LayeredElementBindingImpl#createUnderlyingObject(org.eclipse.sapphire.modeling.
-	 * ModelElementType)
-	 */
-	@Override
-	protected Object createUnderlyingObject( ModelElementType type ) {
-		final DefaultValue defaultValueAnnotation = type.getAnnotation( DefaultValue.class );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.LayeredElementBindingImpl#readUnderlyingObject()
+     */
+    @Override
+    protected Object readUnderlyingObject()
+    {
 
-		XmlElement parent = ( (XmlResource) element().resource() ).getXmlElement( true );
+        // System.out.println( "DefaultXmlBinding.readUnderlyingObject()" );
 
-		if ( this.path != null ) {
-			parent = (XmlElement) parent.getChildNode( this.path, true );
-		}
+        XmlElement parent = ( (XmlResource) element().resource() ).getXmlElement( false );
 
-		QName xmlElementName = this.xmlElementName;
+        if( this.path != null )
+        {
+            // System.out.println( "DefaultXmlBinding.readUnderlyingObject()-2" );
+            parent = (XmlElement) parent.getChildNode( this.path, false );
+        }
+        else
+        {
+            XmlElement childElement = parent.getChildElement( this.pathName, true );
+            // System.out.println( "DefaultXmlBinding.readUnderlyingObject()-3" );
+            List<ModelProperty> modelProperties = this.modelElementType.properties();
 
-		if ( xmlElementName.getNamespaceURI().equals( "" ) ) {
-			xmlElementName = new QName( parent.getNamespace(), xmlElementName.getLocalPart() );
-		}
-		XmlElement xmlElement = null;
-		if ( defaultValueAnnotation != null && xmlElementName != null ) {
-			xmlElement = parent.getChildElement( xmlElementName, true );
-			xmlElement.setText( defaultValueAnnotation.text() );
-		}
+            for( ModelProperty modelProperty : modelProperties )
+            {
+                // System.out.println( "Model Prop " + modelProperty );
+                final Required reqAnnotation = modelProperty.getAnnotation( Required.class );
+                if( reqAnnotation != null )
+                {
+                    final XmlBinding xmlBindingAnnotation = modelProperty.getAnnotation( XmlBinding.class );
+                    final DefaultValue defaultValueAnnotation = modelProperty.getAnnotation( DefaultValue.class );
+                    String modPropName = xmlBindingAnnotation.path();
+                    if( isAttribute( modPropName ) )
+                    {
+                        XmlAttribute modPropAttribute = childElement.getAttribute( modPropName, true );
+                        String attribCurrValue = modPropAttribute.getText();
+                        if( defaultValueAnnotation != null &&
+                            ( attribCurrValue == null || attribCurrValue.trim().length() == 0 ) )
+                        {
+                            modPropAttribute.setText( defaultValueAnnotation.text() );
+                        }
+                    }
+                    else
+                    {
+                        XmlElement modPropElement = childElement.getChildElement( modPropName, true );
+                        String elementCurrValue = modPropElement.getText();
+                        // System.out.println( "Prop Curr Value Element:" + elementCurrValue );
+                        if( defaultValueAnnotation != null &&
+                            ( elementCurrValue == null || elementCurrValue.trim().length() == 0 ) )
+                        {
+                            modPropElement.setText( defaultValueAnnotation.text() );
+                        }
+                    }
+                }
+            }
+            return childElement;
+        }
 
-		return xmlElement;
-	}
+        if( parent != null )
+        {
+            for( XmlElement element : parent.getChildElements() )
+            {
+                final QName xmlElementName = createQualifiedName( element.getDomNode() );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.LayeredElementBindingImpl#createResource(java.lang.Object)
-	 */
-	@Override
-	protected Resource createResource( Object obj ) {
-		final XmlElement xmlElement = (XmlElement) obj;
-		final XmlResource parentXmlResource = (XmlResource) element().resource();
+                if( equal( this.xmlElementName, xmlElementName, xmlElementName.getNamespaceURI() ) )
+                {
+                    return element;
+                }
+            }
+        }
+        return null;
+    }
 
-		return new ChildXmlResource( parentXmlResource, xmlElement );
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ElementBindingImpl#removable()
+     */
+    @Override
+    public boolean removable()
+    {
+        return true;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ElementBindingImpl#type(org.eclipse.sapphire.modeling.Resource)
-	 */
-	@Override
-	public ModelElementType type( Resource resource ) {
-		final XmlElement xmlElement = ( (XmlResource) resource ).getXmlElement();
-		final QName xmlElementName = createQualifiedName( xmlElement.getDomNode() );
-		final String xmlElementNamespace = xmlElementName.getNamespaceURI();
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ElementBindingImpl#type(org.eclipse.sapphire.modeling.Resource)
+     */
+    @Override
+    public ModelElementType type( Resource resource )
+    {
+        final XmlElement xmlElement = ( (XmlResource) resource ).getXmlElement();
+        final QName xmlElementName = createQualifiedName( xmlElement.getDomNode() );
+        final String xmlElementNamespace = xmlElementName.getNamespaceURI();
 
-		if ( equal( this.xmlElementName, xmlElementName, xmlElementNamespace ) ) {
-			return this.modelElementType;
-		}
+        if( equal( this.xmlElementName, xmlElementName, xmlElementNamespace ) )
+        {
+            return this.modelElementType;
+        }
 
-		throw new IllegalStateException();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ElementBindingImpl#removable()
-	 */
-	@Override
-	public boolean removable() {
-		return true;
-	}
+        throw new IllegalStateException();
+    }
 
 }

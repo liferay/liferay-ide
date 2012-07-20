@@ -24,33 +24,34 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Greg Amerson
  */
-public interface ILiferayRuntime extends IJavaRuntime {
+public interface ILiferayRuntime extends IJavaRuntime
+{
 
-	IPath[] getAllUserClasspathLibraries();
+    IPath[] getAllUserClasspathLibraries();
 
-	IPath getAppServerDir();
+    IPath getAppServerDir();
 
-	String getAppServerType();
+    String getAppServerType();
 
-	IPath getDeployDir();
+    IPath getDeployDir();
 
-	String getJavadocURL();
-    
-	IPath getLibGlobalDir();
+    String getJavadocURL();
 
-	IPath getPortalDir();
+    IPath getLibGlobalDir();
 
-	String getPortalVersion();
+    IPath getPortalDir();
 
-	Properties getPortletCategories();
+    String getPortalVersion();
 
-	IRuntime getRuntime();
+    Properties getPortletCategories();
 
-	IPath getRuntimeLocation();
+    IRuntime getRuntime();
 
-	String[] getServletFilterNames();
+    IPath getRuntimeLocation();
 
-	IPath getSourceLocation();
+    String[] getServletFilterNames();
+
+    IPath getSourceLocation();
 
     String[] getSupportedHookProperties();
 

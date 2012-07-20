@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.tomcat.core;
 
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServerWorkingCopy;
@@ -19,11 +20,12 @@ import org.eclipse.jst.server.tomcat.core.internal.ITomcatServerWorkingCopy;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public interface ILiferayTomcatServerWC extends ITomcatServerWorkingCopy {
+@SuppressWarnings( "restriction" )
+public interface ILiferayTomcatServerWC extends ITomcatServerWorkingCopy
+{
 
-	void setMemoryArgs(String memoryArgs);
+    void setMemoryArgs( String memoryArgs );
 
-	void setUserTimezone(String userTimezone);
+    void setUserTimezone( String userTimezone );
 
 }

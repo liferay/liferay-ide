@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,7 +19,7 @@
 package com.liferay.ide.portlet.ui.editor.internal;
 
 import com.liferay.ide.core.model.internal.ResourceBundleRelativePathService;
-import com.liferay.ide.portlet.core.model.IPortletApp;
+import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 
 import java.util.ArrayList;
@@ -47,76 +47,86 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
+public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
-	 * org.eclipse.sapphire.ui.def.ActionHandlerDef)
-	 */
-	@Override
-	public void init( SapphireAction action, ActionHandlerDef def ) {
-		super.init( action, def );
-		final IModelElement element = getModelElement();
-		final ModelProperty property = getProperty();
-		this.listener = new FilteredListener<PropertyEvent>() {
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#init(org.eclipse.sapphire.ui.SapphireAction,
+     * org.eclipse.sapphire.ui.def.ActionHandlerDef)
+     */
+    @Override
+    public void init( SapphireAction action, ActionHandlerDef def )
+    {
+        super.init( action, def );
+        final IModelElement element = getModelElement();
+        final ModelProperty property = getProperty();
+        this.listener = new FilteredListener<PropertyEvent>()
+        {
+            @Override
+            protected void handleTypedEvent( final PropertyEvent event )
+            {
+                refreshEnablementState();
+            }
+        };
 
-			@Override
-			protected void handleTypedEvent( final PropertyEvent event ) {
-				refreshEnablementState();
-			}
-		};
+        element.attach( this.listener, property.getName() );
 
-		element.attach( this.listener, property.getName() );
+        attach
+        ( 
+            new Listener()
+            {
+                @Override
+                public void handle( Event event )
+                {
+                    if( event instanceof DisposeEvent )
+                    {
+                        getModelElement().detach( listener, getProperty().getName() );
+                    }
+                }
+            } 
+        );
+    }
 
-		attach( new Listener() {
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        final IModelElement element = getModelElement();
+        final IProject project = element.adapt( IProject.class );
+        final ModelProperty property = getProperty();
+        final Value<Path> resourceBundle = element.read( (ValueProperty) property );
+        final String resourceBundleText = resourceBundle.getText();
 
-			@Override
-			public void handle( Event event ) {
-				if ( event instanceof DisposeEvent ) {
-					getModelElement().detach( listener, getProperty().getName() );
-				}
-			}
+        int index = resourceBundleText.lastIndexOf( "." );
 
-		} );
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		final IModelElement element = getModelElement();
-		final IProject project = element.adapt( IProject.class );
-		final ModelProperty property = getProperty();
-		final Value<Path> resourceBundle = element.read( (ValueProperty) property );
-		final String resourceBundleText = resourceBundle.getText();
-        
-		int index = resourceBundleText.lastIndexOf( "." );
-        
-		if (index == -1)
-		{
-		    index = resourceBundleText.length();
-		}
-		
+        if( index == -1 )
+        {
+            index = resourceBundleText.length();
+        }
+
         final String packageName = resourceBundleText.substring( 0, index );
-        
-		final String defaultRBFileName =
-			PortletUtil.convertJavaToIoFileName(
-				resourceBundleText, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
 
-		final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
-		final IPath entryPath = rbSourecFolder.getLocation();
-		if ( getModelElement() instanceof IPortletApp ) {
-			List<IFile> missingRBFiles = new ArrayList<IFile>();
-			final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" );
-			final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
-			missingRBFiles.add( rbFile );
-			createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
-			setEnabled( false );
-			getModelElement().refresh( getProperty(), true );
-		}
-		return null;
-	}
+        final String defaultRBFileName =
+            PortletUtil.convertJavaToIoFileName(
+                resourceBundleText, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+
+        final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
+        final IPath entryPath = rbSourecFolder.getLocation();
+        if( getModelElement() instanceof PortletApp )
+        {
+            List<IFile> missingRBFiles = new ArrayList<IFile>();
+            final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" );
+            final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
+            missingRBFiles.add( rbFile );
+            createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
+            setEnabled( false );
+            getModelElement().refresh( getProperty(), true );
+        }
+        return null;
+    }
 
 }

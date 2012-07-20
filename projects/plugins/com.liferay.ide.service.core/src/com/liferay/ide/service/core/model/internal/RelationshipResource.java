@@ -14,25 +14,24 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.service.core.model.internal;
 
-import com.liferay.ide.service.core.model.IColumn;
-import com.liferay.ide.service.core.model.IEntity;
-import com.liferay.ide.service.core.model.IRelationship;
-import com.liferay.ide.service.core.model.IServiceBuilder;
+import com.liferay.ide.service.core.model.Column;
+import com.liferay.ide.service.core.model.Entity;
+import com.liferay.ide.service.core.model.Relationship;
+import com.liferay.ide.service.core.model.ServiceBuilder;
 
 import org.eclipse.sapphire.modeling.BindingImpl;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.Resource;
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
-
 /**
  * @author Gregory Amerson
  */
 public class RelationshipResource extends Resource
 {
-
     private RelationshipObject relationshipObject;
 
     public RelationshipResource( RelationshipObject obj, Resource parent )
@@ -47,10 +46,11 @@ public class RelationshipResource extends Resource
         BindingImpl binding = null;
         String[] params = null;
 
-        if( IRelationship.PROP_FROM_ENTITY.equals( property ) )
+        if( Relationship.PROP_FROM_ENTITY.equals( property ) )
         {
             binding = new ValueBindingImpl()
             {
+
                 @Override
                 public String read()
                 {
@@ -65,10 +65,11 @@ public class RelationshipResource extends Resource
                 }
             };
         }
-        else if ( IRelationship.PROP_TO_ENTITY.equals( property ) )
+        else if( Relationship.PROP_TO_ENTITY.equals( property ) )
         {
             binding = new ValueBindingImpl()
             {
+
                 @Override
                 public String read()
                 {
@@ -99,19 +100,19 @@ public class RelationshipResource extends Resource
 
     private void persistRelationship()
     {
-        final IServiceBuilder serviceBuilder = parent().element().nearest( IServiceBuilder.class );
+        final ServiceBuilder serviceBuilder = parent().element().nearest( ServiceBuilder.class );
 
         final String fromName = this.relationshipObject.getFromName();
         final String toName = this.relationshipObject.getToName();
 
-        final IEntity fromEntity = EntityRelationshipService.findEntity( fromName, serviceBuilder );
-        final IEntity toEntity = EntityRelationshipService.findEntity( toName, serviceBuilder );
+        final Entity fromEntity = EntityRelationshipService.findEntity( fromName, serviceBuilder );
+        final Entity toEntity = EntityRelationshipService.findEntity( toName, serviceBuilder );
 
         if( fromEntity != null && toEntity != null )
         {
-            IColumn primaryKeyColumn = null;
+            Column primaryKeyColumn = null;
 
-            for( IColumn column : toEntity.getColumns() )
+            for( Column column : toEntity.getColumns() )
             {
                 if( column.isPrimary().getContent() )
                 {
@@ -122,7 +123,7 @@ public class RelationshipResource extends Resource
 
             if( primaryKeyColumn != null )
             {
-                final IColumn column = fromEntity.getColumns().insert();
+                final Column column = fromEntity.getColumns().insert();
                 column.setName( primaryKeyColumn.getName().getContent() );
                 column.setType( "long" );
             }

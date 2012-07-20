@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,17 +21,21 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-public class RemoteUtil {
+public class RemoteUtil
+{
 
-	public static String detectServerManagerContextPath( RemoteServer remoteServer, IProgressMonitor monitor ) {
-		return IRemoteServer.DEFAULT_SERVER_MANAGER_CONTEXT_PATH;
-	}
+    public static String detectServerManagerContextPath( RemoteServer remoteServer, IProgressMonitor monitor )
+    {
+        return IRemoteServer.DEFAULT_SERVER_MANAGER_CONTEXT_PATH;
+    }
 
-	public static IRemoteServer getRemoteServer( IServer server ) {
-		if ( server != null ) {
-			return (IRemoteServer) server.loadAdapter( IRemoteServer.class, null );
-		}
+    public static IRemoteServer getRemoteServer( IServer server )
+    {
+        if( server != null )
+        {
+            return (IRemoteServer) server.loadAdapter( IRemoteServer.class, null );
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

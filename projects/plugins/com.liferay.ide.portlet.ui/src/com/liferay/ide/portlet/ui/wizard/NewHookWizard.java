@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,213 +41,255 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class NewHookWizard extends DataModelWizard implements INewWizard, INewHookDataModelProperties {
+@SuppressWarnings( "restriction" )
+public class NewHookWizard extends DataModelWizard implements INewWizard, INewHookDataModelProperties
+{
 
-	public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
+    public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
 
-	public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
+    public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
 
-	public static final String[] PAGE_PROPERTIES = new String[] {
-		CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES, CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES
-	};
+    public static final String[] PAGE_PROPERTIES = new String[] { CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES,
+        CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES };
 
-	public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage";
+    public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage";
 
-	public static final String SERVICES_PAGE = "servicesPage";
+    public static final String SERVICES_PAGE = "servicesPage";
 
-	public static final String TYPE_PAGE = "typePage";
+    public static final String TYPE_PAGE = "typePage";
 
-	public static final String[] WIZARD_PAGES = new String[] {
-		CUSTOM_JSPS_PAGE, PORTAL_PROPERTIES_PAGE, SERVICES_PAGE, LANGUAGE_PROPERTIES_PAGE
-	};
+    public static final String[] WIZARD_PAGES = new String[] 
+    { 
+        CUSTOM_JSPS_PAGE, 
+        PORTAL_PROPERTIES_PAGE, 
+        SERVICES_PAGE,
+        LANGUAGE_PROPERTIES_PAGE 
+    };
 
-	protected NewCustomJSPsHookWizardPage customJSPsHookPage;
+    protected NewCustomJSPsHookWizardPage customJSPsHookPage;
 
-	protected NewHookTypeWizardPage hookTypePage;
+    protected NewHookTypeWizardPage hookTypePage;
 
-	protected NewLanguagePropertiesHookWizardPage languagePropertiesPage;
+    protected NewLanguagePropertiesHookWizardPage languagePropertiesPage;
 
-	protected NewPortalPropertiesHookWizardPage portalPropertiesPage;
+    protected NewPortalPropertiesHookWizardPage portalPropertiesPage;
 
-	protected NewServicesHookWizardPage servicesPage;
+    protected NewServicesHookWizardPage servicesPage;
 
-	public NewHookWizard() {
-		this(null);
-	}
+    public NewHookWizard()
+    {
+        this( null );
+    }
 
-	public NewHookWizard(IDataModel dataModel) {
-		super(dataModel);
+    public NewHookWizard( IDataModel dataModel )
+    {
+        super( dataModel );
 
-		setWindowTitle("New Liferay Hook");
+        setWindowTitle( "New Liferay Hook" );
 
-		setDefaultPageImageDescriptor(getDefaultImageDescriptor());
-	}
+        setDefaultPageImageDescriptor( getDefaultImageDescriptor() );
+    }
 
-	@Override
-	public boolean canFinish() {
-		boolean valid = getDataModel().isValid();
+    @Override
+    public boolean canFinish()
+    {
+        boolean valid = getDataModel().isValid();
 
-		if (!valid) {
-			return false;
-		}
+        if( !valid )
+        {
+            return false;
+        }
 
-		for (String type : PAGE_PROPERTIES) {
-			boolean pageTypeChecked = getDataModel().getBooleanProperty(type);
+        for( String type : PAGE_PROPERTIES )
+        {
+            boolean pageTypeChecked = getDataModel().getBooleanProperty( type );
 
-			if (pageTypeChecked) {
-				return true;
-			}
-		}
+            if( pageTypeChecked )
+            {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public String getNextPage(String currentPageName, String expectedNextPageName) {
-		if (TYPE_PAGE.equals(expectedNextPageName)) {
-			return TYPE_PAGE;
-		}
+    @Override
+    public String getNextPage( String currentPageName, String expectedNextPageName )
+    {
+        if( TYPE_PAGE.equals( expectedNextPageName ) )
+        {
+            return TYPE_PAGE;
+        }
 
-		if (TYPE_PAGE.equals(currentPageName)) {
-			for (int i = 0; i < PAGE_PROPERTIES.length; i++) {
-				boolean nextPageType = getDataModel().getBooleanProperty(PAGE_PROPERTIES[i]);
+        if( TYPE_PAGE.equals( currentPageName ) )
+        {
+            for( int i = 0; i < PAGE_PROPERTIES.length; i++ )
+            {
+                boolean nextPageType = getDataModel().getBooleanProperty( PAGE_PROPERTIES[i] );
 
-				if (nextPageType) {
-					return WIZARD_PAGES[i];
-				}
-			}
-		}
+                if( nextPageType )
+                {
+                    return WIZARD_PAGES[i];
+                }
+            }
+        }
 
-		for (int i = 0; i < WIZARD_PAGES.length; i++) {
-			if (WIZARD_PAGES[i].equals(currentPageName)) {
-				for (int j = i + 1; j < WIZARD_PAGES.length; j++) {
-					boolean nextPageType = getDataModel().getBooleanProperty(PAGE_PROPERTIES[j]);
+        for( int i = 0; i < WIZARD_PAGES.length; i++ )
+        {
+            if( WIZARD_PAGES[i].equals( currentPageName ) )
+            {
+                for( int j = i + 1; j < WIZARD_PAGES.length; j++ )
+                {
+                    boolean nextPageType = getDataModel().getBooleanProperty( PAGE_PROPERTIES[j] );
 
-					if (nextPageType) {
-						return WIZARD_PAGES[j];
-					}
-				}
-			}
-		}
+                    if( nextPageType )
+                    {
+                        return WIZARD_PAGES[j];
+                    }
+                }
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public String getPreviousPage(String currentPageName, String expectedPreviousPageName) {
-		if (TYPE_PAGE.equals(expectedPreviousPageName)) {
-			return TYPE_PAGE;
-		}
+    @Override
+    public String getPreviousPage( String currentPageName, String expectedPreviousPageName )
+    {
+        if( TYPE_PAGE.equals( expectedPreviousPageName ) )
+        {
+            return TYPE_PAGE;
+        }
 
-		for (int i = 0; i < WIZARD_PAGES.length; i++) {
-			if (WIZARD_PAGES[i].equals(currentPageName)) {
-				for (int j = i - 1; j >= 0; j--) {
-					boolean previousPageType = getDataModel().getBooleanProperty(PAGE_PROPERTIES[j]);
+        for( int i = 0; i < WIZARD_PAGES.length; i++ )
+        {
+            if( WIZARD_PAGES[i].equals( currentPageName ) )
+            {
+                for( int j = i - 1; j >= 0; j-- )
+                {
+                    boolean previousPageType = getDataModel().getBooleanProperty( PAGE_PROPERTIES[j] );
 
-					if (previousPageType) {
-						return WIZARD_PAGES[j];
-					}
-				}
-			}
-		}
+                    if( previousPageType )
+                    {
+                        return WIZARD_PAGES[j];
+                    }
+                }
+            }
+        }
 
-		return super.getPreviousPage(currentPageName, expectedPreviousPageName);
-	}
+        return super.getPreviousPage( currentPageName, expectedPreviousPageName );
+    }
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		getDataModel();
-	}
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+        getDataModel();
+    }
 
-	@Override
-	protected void doAddPages() {
-		hookTypePage = new NewHookTypeWizardPage(getDataModel(), TYPE_PAGE);
+    @Override
+    protected void doAddPages()
+    {
+        hookTypePage = new NewHookTypeWizardPage( getDataModel(), TYPE_PAGE );
 
-		addPage(hookTypePage);
+        addPage( hookTypePage );
 
-		customJSPsHookPage = new NewCustomJSPsHookWizardPage(getDataModel(), CUSTOM_JSPS_PAGE);
+        customJSPsHookPage = new NewCustomJSPsHookWizardPage( getDataModel(), CUSTOM_JSPS_PAGE );
 
-		addPage(customJSPsHookPage);
+        addPage( customJSPsHookPage );
 
-		portalPropertiesPage = new NewPortalPropertiesHookWizardPage(getDataModel(), PORTAL_PROPERTIES_PAGE);
+        portalPropertiesPage = new NewPortalPropertiesHookWizardPage( getDataModel(), PORTAL_PROPERTIES_PAGE );
 
-		addPage(portalPropertiesPage);
+        addPage( portalPropertiesPage );
 
-		servicesPage = new NewServicesHookWizardPage(getDataModel(), SERVICES_PAGE);
+        servicesPage = new NewServicesHookWizardPage( getDataModel(), SERVICES_PAGE );
 
-		addPage(servicesPage);
+        addPage( servicesPage );
 
-		languagePropertiesPage = new NewLanguagePropertiesHookWizardPage(getDataModel(), LANGUAGE_PROPERTIES_PAGE);
+        languagePropertiesPage = new NewLanguagePropertiesHookWizardPage( getDataModel(), LANGUAGE_PROPERTIES_PAGE );
 
-		addPage(languagePropertiesPage);
-	}
+        addPage( languagePropertiesPage );
+    }
 
-	protected ImageDescriptor getDefaultImageDescriptor() {
-		return PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png");
-	}
+    protected ImageDescriptor getDefaultImageDescriptor()
+    {
+        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" );
+    }
 
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
 
-		TemplateContextType contextType =
-			PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(HookTemplateContextTypeIds.NEW);
+        TemplateContextType contextType =
+            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType( HookTemplateContextTypeIds.NEW );
 
-		return new NewHookDataModelProvider(templateStore, contextType);
-	}
+        return new NewHookDataModelProvider( templateStore, contextType );
+    }
 
-	protected void openEditor(final IFile file) {
-		if (file != null) {
-			getShell().getDisplay().asyncExec(new Runnable() {
+    protected void openEditor( final IFile file )
+    {
+        if( file != null )
+        {
+            getShell().getDisplay().asyncExec( new Runnable()
+            {
 
-				public void run() {
-					try {
-						IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                public void run()
+                {
+                    try
+                    {
+                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-						IDE.openEditor(page, file, true);
-					}
-					catch (PartInitException e) {
-						PortletUIPlugin.logError(e);
-					}
-				}
-			});
-		}
-	}
+                        IDE.openEditor( page, file, true );
+                    }
+                    catch( PartInitException e )
+                    {
+                        PortletUIPlugin.logError( e );
+                    }
+                }
+            } );
+        }
+    }
 
-	protected void openWebFile(IFile file) {
-		try {
-			openEditor(file);
-		}
-		catch (Exception cantOpen) {
-			PortletUIPlugin.logError(cantOpen);
-		}
-	}
+    protected void openWebFile( IFile file )
+    {
+        try
+        {
+            openEditor( file );
+        }
+        catch( Exception cantOpen )
+        {
+            PortletUIPlugin.logError( cantOpen );
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void postPerformFinish()
-		throws InvocationTargetException {
+    @SuppressWarnings( "unchecked" )
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
 
-		super.postPerformFinish();
+        super.postPerformFinish();
 
-		Set<IFile> jspFiles = (Set<IFile>) getDataModel().getProperty(CUSTOM_JSPS_FILES_CREATED);
+        Set<IFile> jspFiles = (Set<IFile>) getDataModel().getProperty( CUSTOM_JSPS_FILES_CREATED );
 
-		if (jspFiles != null && jspFiles.size() > 0) {
-			openWebFile(jspFiles.iterator().next()); // just open the first one
-		}
+        if( jspFiles != null && jspFiles.size() > 0 )
+        {
+            openWebFile( jspFiles.iterator().next() ); // just open the first one
+        }
 
-		Set<IFile> languagePropertiesFiles = (Set<IFile>) getDataModel().getProperty(LANGUAGE_PROPERTIES_FILES_CREATED);
+        Set<IFile> languagePropertiesFiles =
+            (Set<IFile>) getDataModel().getProperty( LANGUAGE_PROPERTIES_FILES_CREATED );
 
-		if (languagePropertiesFiles != null && languagePropertiesFiles.size() > 0) {
-			openWebFile(languagePropertiesFiles.iterator().next()); // just
-			// openthe
-			// first one
-		}
-	}
+        if( languagePropertiesFiles != null && languagePropertiesFiles.size() > 0 )
+        {
+            openWebFile( languagePropertiesFiles.iterator().next() ); // just
+            // openthe
+            // first one
+        }
+    }
 
-	@Override
-	protected boolean runForked() {
-		return false;
-	}
+    @Override
+    protected boolean runForked()
+    {
+        return false;
+    }
 
 }

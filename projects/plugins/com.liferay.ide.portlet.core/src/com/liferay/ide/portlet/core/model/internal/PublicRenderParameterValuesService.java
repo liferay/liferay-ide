@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,8 +17,8 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.IPortletApp;
-import com.liferay.ide.portlet.core.model.IPublicRenderParameter;
+import com.liferay.ide.portlet.core.model.PortletApp;
+import com.liferay.ide.portlet.core.model.PublicRenderParameter;
 
 import java.util.SortedSet;
 
@@ -28,21 +28,24 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class PublicRenderParameterValuesService extends PossibleValuesService {
+public class PublicRenderParameterValuesService extends PossibleValuesService
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-	 */
-	@Override
-	protected void fillPossibleValues( SortedSet<String> values ) {
-		final IPortletApp portletApp = context( IPortletApp.class );
-		ModelElementList<IPublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
+     */
+    @Override
+    protected void fillPossibleValues( SortedSet<String> values )
+    {
+        final PortletApp portletApp = context( PortletApp.class );
+        ModelElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
-		for ( IPublicRenderParameter renderParameter : publicRenderParameters ) {
-			final String indentifer = renderParameter.getIdentifier().getContent();
-			values.add( indentifer );
-		}
-	}
+        for( PublicRenderParameter renderParameter : publicRenderParameters )
+        {
+            final String indentifer = renderParameter.getIdentifier().getContent();
+            values.add( indentifer );
+        }
+    }
 
 }

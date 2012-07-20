@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,10 +24,12 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  */
-public class PluginFacetUninstall implements IDelegate {
+public class PluginFacetUninstall implements IDelegate
+{
 
-	public void execute(IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor)
-		throws CoreException {
-	}
+    public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
+        throws CoreException
+    {
+    }
 
 }

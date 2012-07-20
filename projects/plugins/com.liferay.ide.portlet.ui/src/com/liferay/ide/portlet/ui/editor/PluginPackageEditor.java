@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,12 +18,12 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
 import com.liferay.ide.portlet.core.PluginPackageModel;
+import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.editor.InputContext;
 import com.liferay.ide.ui.editor.InputContextManager;
 import com.liferay.ide.ui.editor.PluginPackageInputContextManager;
 import com.liferay.ide.ui.form.IDEFormEditor;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 
@@ -43,201 +43,233 @@ import org.eclipse.ui.part.FileEditorInput;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings({
-	"restriction", "rawtypes"
-})
-public class PluginPackageEditor extends IDEFormEditor implements IModelChangedListener {
+@SuppressWarnings( { "restriction", "rawtypes" } )
+public class PluginPackageEditor extends IDEFormEditor implements IModelChangedListener
+{
 
-	public static final String EDITOR_ID = "com.liferay.ide.portlet.ui.editor.pluginpackage";
+    public static final String EDITOR_ID = "com.liferay.ide.eclipse.portlet.ui.editor.pluginpackage";
 
-	protected BusyIndicator busyLabel;
+    protected BusyIndicator busyLabel;
 
-	/**
-	 * The properties text editor.
-	 */
-	protected PropertiesFileEditor editor;
+    /**
+     * The properties text editor.
+     */
+    protected PropertiesFileEditor editor;
 
-	protected boolean ignoreModelChanges = false;
+    protected boolean ignoreModelChanges = false;
 
-	protected int lastPageIndex = -1;
+    protected int lastPageIndex = -1;
 
-	protected PluginPackageModel model;;
+    protected PluginPackageModel model;;
 
-	public void contextRemoved(InputContext context) {
-	}
+    public void contextRemoved( InputContext context )
+    {
+    }
 
-	@Override
-	public void editorContextAdded(InputContext context) {
-	}
+    @Override
+    public void editorContextAdded( InputContext context )
+    {
+    }
 
-	@Override
-	public Object getAdapter(Class adapterClass) {
-		Object adapter = super.getAdapter(adapterClass);
+    @Override
+    public Object getAdapter( Class adapterClass )
+    {
+        Object adapter = super.getAdapter( adapterClass );
 
-		if (adapter == null) {
-			adapter = editor.getAdapter(adapterClass);
-		}
+        if( adapter == null )
+        {
+            adapter = editor.getAdapter( adapterClass );
+        }
 
-		return adapter;
-	}
+        return adapter;
+    }
 
-	@Override
-	public IFileEditorInput getEditorInput() {
-		return (IFileEditorInput) super.getEditorInput();
-	}
+    @Override
+    public IFileEditorInput getEditorInput()
+    {
+        return (IFileEditorInput) super.getEditorInput();
+    }
 
-	public IPath getPortalDir() {
-		try {
-			return ServerUtil.getLiferayRuntime(getEditorInput().getFile().getProject()).getPortalDir();
-		}
-		catch (Exception e) {
-			//PortletUIPlugin.logError(e);
+    public IPath getPortalDir()
+    {
+        try
+        {
+            return ServerUtil.getLiferayRuntime( getEditorInput().getFile().getProject() ).getPortalDir();
+        }
+        catch( Exception e )
+        {
+            // PortletUIPlugin.logError(e);
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	@Override
-	public void init(IEditorSite site, IEditorInput editorInput)
-		throws PartInitException {
+    @Override
+    public void init( IEditorSite site, IEditorInput editorInput ) throws PartInitException
+    {
 
-		Assert.isLegal(editorInput instanceof IFileEditorInput, "Invalid Input: Must be IFileEditorInput");
+        Assert.isLegal( editorInput instanceof IFileEditorInput, "Invalid Input: Must be IFileEditorInput" );
 
-		super.init(site, editorInput);
+        super.init( site, editorInput );
 
-		setPartName(editorInput.getName());
-	}
+        setPartName( editorInput.getName() );
+    }
 
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
+    @Override
+    public boolean isSaveAsAllowed()
+    {
+        return false;
+    }
 
-	public void modelChanged(IModelChangedEvent event) {
-		if (ignoreModelChanges) {
-			return;
-		}
+    public void modelChanged( IModelChangedEvent event )
+    {
+        if( ignoreModelChanges )
+        {
+            return;
+        }
 
-		PluginPackageModel model = (PluginPackageModel) getModel();
+        PluginPackageModel model = (PluginPackageModel) getModel();
 
-		IDocument doc = model.getDocument();
+        IDocument doc = model.getDocument();
 
-		editor.getDocumentProvider().getDocument(getEditorInput()).set(doc.get());
-	}
+        editor.getDocumentProvider().getDocument( getEditorInput() ).set( doc.get() );
+    }
 
-	public void monitoredFileAdded(IFile monitoredFile) {
-	}
+    public void monitoredFileAdded( IFile monitoredFile )
+    {
+    }
 
-	public boolean monitoredFileRemoved(IFile monitoredFile) {
-		return false;
-	}
+    public boolean monitoredFileRemoved( IFile monitoredFile )
+    {
+        return false;
+    }
 
-	private void addPropertiesEditorPage() {
-		editor = new PropertiesFileEditor();
+    private void addPropertiesEditorPage()
+    {
+        editor = new PropertiesFileEditor();
 
-		((PluginPackageModel) getModel()).addModelChangedListener(this);
+        ( (PluginPackageModel) getModel() ).addModelChangedListener( this );
 
-		// editor.setEditorPart(this);
+        // editor.setEditorPart(this);
 
-		int index;
+        int index;
 
-		try {
-			index = addPage(editor, getEditorInput());
+        try
+        {
+            index = addPage( editor, getEditorInput() );
 
-			setPageText(index, "Source");
-		}
-		catch (PartInitException e) {
-			PortletUIPlugin.logError(e);
-		}
+            setPageText( index, "Source" );
+        }
+        catch( PartInitException e )
+        {
+            PortletUIPlugin.logError( e );
+        }
 
-	}
+    }
 
-	protected void addDependenciesFormPage() {
-		try {
-			int index = addPage(new DependenciesFormPage(this));
-			setPageText(index, "Dependencies");
-		}
-		catch (PartInitException e) {
-			PortletUIPlugin.logError(e);
-		}
-	}
+    protected void addDependenciesFormPage()
+    {
+        try
+        {
+            int index = addPage( new DependenciesFormPage( this ) );
+            setPageText( index, "Dependencies" );
+        }
+        catch( PartInitException e )
+        {
+            PortletUIPlugin.logError( e );
+        }
+    }
 
-	@Override
-	protected void addPages() {
-		addPluginPackageFormPage();
-		// addDependenciesFormPage();
-		addPropertiesEditorPage();
-	}
+    @Override
+    protected void addPages()
+    {
+        addPluginPackageFormPage();
+        // addDependenciesFormPage();
+        addPropertiesEditorPage();
+    }
 
-	protected void addPluginPackageFormPage() {
-		try {
-			int index = addPage(new PluginPackageFormPage(this));
+    protected void addPluginPackageFormPage()
+    {
+        try
+        {
+            int index = addPage( new PluginPackageFormPage( this ) );
 
-			setPageText(index, "Properties");
-		}
-		catch (PartInitException e) {
-			PortletUIPlugin.logError(e);
-		}
-	}
+            setPageText( index, "Properties" );
+        }
+        catch( PartInitException e )
+        {
+            PortletUIPlugin.logError( e );
+        }
+    }
 
-	@Override
-	protected InputContextManager createInputContextManager() {
-		PluginPackageInputContextManager manager = new PluginPackageInputContextManager(this);
+    @Override
+    protected InputContextManager createInputContextManager()
+    {
+        PluginPackageInputContextManager manager = new PluginPackageInputContextManager( this );
 
-		// manager.setUndoManager(new PluginUndoManager(this));
+        // manager.setUndoManager(new PluginUndoManager(this));
 
-		return manager;
-	}
+        return manager;
+    }
 
-	@Override
-	protected void createResourceContexts(InputContextManager manager, IFileEditorInput input) {
-		IFile file = input.getFile();
+    @Override
+    protected void createResourceContexts( InputContextManager manager, IFileEditorInput input )
+    {
+        IFile file = input.getFile();
 
-		if (file.exists()) {
-			IEditorInput in = new FileEditorInput(file);
+        if( file.exists() )
+        {
+            IEditorInput in = new FileEditorInput( file );
 
-			manager.putContext(in, new PluginPackageInputContext(this, in, true));
-		}
+            manager.putContext( in, new PluginPackageInputContext( this, in, true ) );
+        }
 
-		manager.monitorFile(file);
-	}
+        manager.monitorFile( file );
+    }
 
-	@Override
-	protected String getEditorID() {
-		return EDITOR_ID;
-	}
+    @Override
+    protected String getEditorID()
+    {
+        return EDITOR_ID;
+    }
 
-	@Override
-	protected InputContext getInputContext(Object object) {
-		InputContext context = null;
+    @Override
+    protected InputContext getInputContext( Object object )
+    {
+        InputContext context = null;
 
-		if (object instanceof IFile) {
-			context = fInputContextManager.findContext((IFile) object);
-		}
+        if( object instanceof IFile )
+        {
+            context = fInputContextManager.findContext( (IFile) object );
+        }
 
-		return context;
-	}
+        return context;
+    }
 
-	@Override
-	protected void pageChange(int newPageIndex) {
-		super.pageChange(newPageIndex);
+    @Override
+    protected void pageChange( int newPageIndex )
+    {
+        super.pageChange( newPageIndex );
 
-		if (this.lastPageIndex == 1 && newPageIndex != 1) {
-			String props = editor.getDocumentProvider().getDocument(getEditorInput()).get();
+        if( this.lastPageIndex == 1 && newPageIndex != 1 )
+        {
+            String props = editor.getDocumentProvider().getDocument( getEditorInput() ).get();
 
-			try {
-				ignoreModelChanges = true;
+            try
+            {
+                ignoreModelChanges = true;
 
-				((PluginPackageModel) getModel()).load(new ByteArrayInputStream(props.getBytes()), false);
+                ( (PluginPackageModel) getModel() ).load( new ByteArrayInputStream( props.getBytes() ), false );
 
-				ignoreModelChanges = false;
-			}
-			catch (CoreException e) {
-				PortletUIPlugin.logError(e);
-			}
-		}
+                ignoreModelChanges = false;
+            }
+            catch( CoreException e )
+            {
+                PortletUIPlugin.logError( e );
+            }
+        }
 
-		this.lastPageIndex = newPageIndex;
-	}
+        this.lastPageIndex = newPageIndex;
+    }
 
 }

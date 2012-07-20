@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *******************************************************************************/
+
 package com.liferay.ide.ui.action;
 
 import org.eclipse.jface.action.IAction;
@@ -6,25 +23,31 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+/**
+ * @author Gregory Amerson
+ */
+public abstract class AbstractObjectAction implements IObjectActionDelegate
+{
 
-public abstract class AbstractObjectAction implements IObjectActionDelegate {
+    protected ISelection fSelection;
 
-	protected ISelection fSelection;
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        fSelection = selection;
+    }
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		fSelection = selection;
-	}
+    public Display getDisplay()
+    {
+        Display display = Display.getCurrent();
 
-	public Display getDisplay() {
-		Display display = Display.getCurrent();
+        if( display == null )
+            display = Display.getDefault();
 
-		if (display == null)
-			display = Display.getDefault();
+        return display;
+    }
 
-		return display;
-	}
-
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
+    public void setActivePart( IAction action, IWorkbenchPart targetPart )
+    {
+    }
 
 }

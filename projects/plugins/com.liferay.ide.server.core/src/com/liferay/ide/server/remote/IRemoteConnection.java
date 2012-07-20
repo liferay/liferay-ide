@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,40 +22,41 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Greg Amerson
  */
-public interface IRemoteConnection {
+public interface IRemoteConnection
+{
 
-	int getDebugPort();
+    int getDebugPort();
 
-	List<String> getLiferayPlugins();
+    List<String> getLiferayPlugins();
 
-	String getManagerURI();
+    String getManagerURI();
 
-	String getPassword();
+    String getPassword();
 
-	String getServerState();
+    String getServerState();
 
-	String getUsername();
+    String getUsername();
 
-	Object installApplication( String absolutePath, String appName, IProgressMonitor monitor );
+    Object installApplication( String absolutePath, String appName, IProgressMonitor monitor );
 
-	boolean isAlive();
+    boolean isAlive();
 
-	boolean isAppInstalled( String appName );
+    boolean isAppInstalled( String appName );
 
-	boolean isLiferayPluginStarted( String name );
+    boolean isLiferayPluginStarted( String name );
 
-	void setHost( String host );
+    void setHost( String host );
 
-	void setHttpPort( String port );
+    void setHttpPort( String port );
 
-	void setManagerContextPath( String path );
+    void setManagerContextPath( String path );
 
-	void setPassword( String password );
+    void setPassword( String password );
 
-	void setUsername( String username );
+    void setUsername( String username );
 
-	Object uninstallApplication( String appName, IProgressMonitor monitor );
+    Object uninstallApplication( String appName, IProgressMonitor monitor );
 
-	Object updateApplication( String appName, String absolutePath, IProgressMonitor monitor );
+    Object updateApplication( String appName, String absolutePath, IProgressMonitor monitor );
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.ui.cmd;
@@ -26,68 +28,79 @@ import org.eclipse.gef.commands.Command;
 /**
  * @author Greg Amerson
  */
-public class PortletColumnCreateCommand extends Command {
+public class PortletColumnCreateCommand extends Command
+{
+    protected LayoutTplDiagram diagram;
+    protected LayoutConstraint layoutConstraint;
+    protected PortletColumn newColumn;
 
-	protected LayoutTplDiagram diagram;
+    public PortletColumnCreateCommand( PortletColumn newColumn, LayoutTplDiagram diagram, LayoutConstraint constraint )
+    {
+        this.newColumn = newColumn;
+        this.diagram = diagram;
+        this.layoutConstraint = constraint;
+        setLabel( "Portlet column added" );
+    }
 
-	protected LayoutConstraint layoutConstraint;
-	
-	protected PortletColumn newColumn;
+    public boolean canExecute()
+    {
+        return newColumn != null && diagram != null && layoutConstraint != null;
+    }
 
-	public PortletColumnCreateCommand(PortletColumn newColumn, LayoutTplDiagram diagram, LayoutConstraint constraint) {
-		this.newColumn = newColumn;
-		this.diagram = diagram;
-		this.layoutConstraint = constraint;
-		setLabel("Portlet column added");
-	}
+    public void execute()
+    {
+        redo();
+    }
 
-	public boolean canExecute() {
-		return newColumn != null && diagram != null && layoutConstraint != null;
-	}
+    public void redo()
+    {
+        if( layoutConstraint.equals( LayoutConstraint.EMPTY ) || layoutConstraint.newColumnIndex == -1 )
+        {
+            PortletLayout portletLayout = new PortletLayout();
+            portletLayout.addColumn( newColumn );
 
-	public void execute() {
-		redo();
-	}
+            diagram.addRow( portletLayout, layoutConstraint.newRowIndex );
+        }
+        else if( layoutConstraint.rowIndex > -1 && layoutConstraint.newColumnIndex > -1 )
+        {
+            /* layoutConstraint.newRowIndex > -1 */
 
-	public void redo() {
-		if (layoutConstraint.equals(LayoutConstraint.EMPTY) || layoutConstraint.newColumnIndex == -1) {
-			PortletLayout portletLayout = new PortletLayout();
-			portletLayout.addColumn(newColumn);
+            if( layoutConstraint.refColumn != null )
+            {
+                layoutConstraint.refColumn.setWeight( layoutConstraint.weight );
+            }
 
-			diagram.addRow(portletLayout, layoutConstraint.newRowIndex);
-		}
-		else if (layoutConstraint.rowIndex > -1 && layoutConstraint.newColumnIndex > -1) {
-			/* layoutConstraint.newRowIndex > -1 */
+            newColumn.setWeight( layoutConstraint.weight );
 
-			if (layoutConstraint.refColumn != null) {
-				layoutConstraint.refColumn.setWeight(layoutConstraint.weight);
-			}
+            // get the row that the column will be inserted into
+            ModelElement row = diagram.getRows().get( layoutConstraint.rowIndex );
+            PortletLayout portletLayout = (PortletLayout) row;
 
-			newColumn.setWeight(layoutConstraint.weight);
+            if( row != null )
+            {
+                portletLayout.addColumn( newColumn, layoutConstraint.newColumnIndex );
+            }
+        }
+    }
 
-			// get the row that the column will be inserted into
-			ModelElement row = diagram.getRows().get(layoutConstraint.rowIndex);
-			PortletLayout portletLayout = (PortletLayout) row;
+    public void undo()
+    {
+        if( layoutConstraint.equals( LayoutConstraint.EMPTY ) )
+        {
+            for( ModelElement row : diagram.getRows() )
+            {
+                PortletLayout portletLayout = (PortletLayout) row;
 
-			if (row != null) {
-				portletLayout.addColumn(newColumn, layoutConstraint.newColumnIndex);
-			}
-		}
-	}
-
-	public void undo() {
-		if (layoutConstraint.equals(LayoutConstraint.EMPTY)) {
-			for (ModelElement row : diagram.getRows()) {
-				PortletLayout portletLayout = (PortletLayout) row;
-
-				if (portletLayout.getColumns().size() == 1 && portletLayout.getColumns().get(0).equals(newColumn)) {
-					diagram.removeRow(portletLayout);
-				}
-			}
-		}
-		else {
-			System.out.println("UNDO not supported!");
-		}
-	}
+                if( portletLayout.getColumns().size() == 1 && portletLayout.getColumns().get( 0 ).equals( newColumn ) )
+                {
+                    diagram.removeRow( portletLayout );
+                }
+            }
+        }
+        else
+        {
+            System.out.println( "UNDO not supported!" );
+        }
+    }
 
 }

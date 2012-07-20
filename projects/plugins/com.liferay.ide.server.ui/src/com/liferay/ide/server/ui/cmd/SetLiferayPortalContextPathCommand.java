@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,22 +20,26 @@ import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class SetLiferayPortalContextPathCommand extends RemoteServerCommand {
+public class SetLiferayPortalContextPathCommand extends RemoteServerCommand
+{
 
-	protected String oldLiferayPortalContextPath;
-	protected String liferayPortalContextPath;
+    protected String oldLiferayPortalContextPath;
+    protected String liferayPortalContextPath;
 
-	public SetLiferayPortalContextPathCommand( IRemoteServerWorkingCopy server, String liferayPortalContextPath ) {
-		super( server, "Set Liferay Portal Context Path" );
-		this.liferayPortalContextPath = liferayPortalContextPath;
-	}
+    public SetLiferayPortalContextPathCommand( IRemoteServerWorkingCopy server, String liferayPortalContextPath )
+    {
+        super( server, "Set Liferay Portal Context Path" );
+        this.liferayPortalContextPath = liferayPortalContextPath;
+    }
 
-	public void execute() {
-		oldLiferayPortalContextPath = server.getLiferayPortalContextPath();
-		server.setLiferayPortalContextPath( liferayPortalContextPath );
-	}
+    public void execute()
+    {
+        oldLiferayPortalContextPath = server.getLiferayPortalContextPath();
+        server.setLiferayPortalContextPath( liferayPortalContextPath );
+    }
 
-	public void undo() {
-		server.setLiferayPortalContextPath( oldLiferayPortalContextPath );
-	}
+    public void undo()
+    {
+        server.setLiferayPortalContextPath( oldLiferayPortalContextPath );
+    }
 }

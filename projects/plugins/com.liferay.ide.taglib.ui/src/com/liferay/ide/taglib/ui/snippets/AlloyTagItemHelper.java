@@ -12,7 +12,7 @@ package com.liferay.ide.taglib.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.taglib.ui.TaglibUI;
-import com.liferay.ide.taglib.ui.model.ITag;
+import com.liferay.ide.taglib.ui.model.Tag;
 import com.liferay.ide.ui.snippets.SnippetsUIPlugin;
 
 import java.io.File;
@@ -64,11 +64,11 @@ public class AlloyTagItemHelper {
 			return ""; //$NON-NLS-1$
 		String insertString = null;
 
-		ITag model = getTagModel(editorInput, item);
+		Tag model = getTagModel(editorInput, item);
 
 		AlloyTagInsertDialog dialog =
 			new AlloyTagInsertDialog( host, model, TaglibUI.PLUGIN_ID +
-				"/com/liferay/ide/eclipse/taglib/ui/snippets/AlloyTag.sdef!tagInsertDialog", clearModality );
+				"/com/liferay/ide/taglib/ui/snippets/AlloyTag.sdef!tagInsertDialog", clearModality );
 
 		// VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, clearModality);
 		// dialog.setItem(item);
@@ -114,7 +114,7 @@ public class AlloyTagItemHelper {
 		return insertString;
 	}
 
-	private static ITag getTagModel(IEditorInput editorInput, ISnippetsEntry item) {
+	private static Tag getTagModel(IEditorInput editorInput, ISnippetsEntry item) {
 		if (!(editorInput instanceof IFileEditorInput) || item == null) {
 			return null;
 		}
@@ -244,7 +244,7 @@ public class AlloyTagItemHelper {
 			TaglibUI.logError( e );
 		}
 
-		return ITag.TYPE.instantiate(new RootXmlResource(store));
+		return Tag.TYPE.instantiate(new RootXmlResource(store));
 	}
 
 }

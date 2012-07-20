@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,31 +23,38 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-public class RedeployAction extends AbstractServerRunningAction {
+public class RedeployAction extends AbstractServerRunningAction
+{
 
-	public RedeployAction() {
-		super();
-	}
+    public RedeployAction()
+    {
+        super();
+    }
 
-	public void run(IAction action) {
-		if (selectedModule == null) {
-			return; // can't do anything if server has not been selected
-		}
+    public void run( IAction action )
+    {
+        if( selectedModule == null )
+        {
+            return; // can't do anything if server has not been selected
+        }
 
-		if (selectedModule != null) {
-			selectedModule.getModule()[0].getProject();
-			ILiferayServerBehavior liferayServerBehavior =
-				(ILiferayServerBehavior) selectedModule.getServer().loadAdapter(ILiferayServerBehavior.class, null);
+        if( selectedModule != null )
+        {
+            selectedModule.getModule()[0].getProject();
+            ILiferayServerBehavior liferayServerBehavior =
+                (ILiferayServerBehavior) selectedModule.getServer().loadAdapter( ILiferayServerBehavior.class, null );
 
-			if (liferayServerBehavior != null) {
-				liferayServerBehavior.redeployModule(selectedModule.getModule());
-			}
-		}
-		
-	}
-	
-	@Override
-	protected int getRequiredServerState() {
-		return IServer.STATE_STARTED | IServer.STATE_STOPPED;
-	}
+            if( liferayServerBehavior != null )
+            {
+                liferayServerBehavior.redeployModule( selectedModule.getModule() );
+            }
+        }
+
+    }
+
+    @Override
+    protected int getRequiredServerState()
+    {
+        return IServer.STATE_STARTED | IServer.STATE_STOPPED;
+    }
 }

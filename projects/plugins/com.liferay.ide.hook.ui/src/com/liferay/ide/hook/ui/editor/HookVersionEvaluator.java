@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,6 +17,8 @@
 
 package com.liferay.ide.hook.ui.editor;
 
+import com.liferay.ide.hook.core.model.Hook;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,37 +26,39 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.ISapphirePart;
 import org.eclipse.sapphire.ui.SapphireModelCondition;
 
-import com.liferay.ide.hook.core.model.IHook;
-
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class HookVersionEvaluator extends SapphireModelCondition {
+public class HookVersionEvaluator extends SapphireModelCondition
+{
+    private List<String> versions;
 
-	private List<String> versions;
+    @Override
+    protected void initCondition( ISapphirePart part, String parameter )
+    {
+        String[] nonApplicableVersions = parameter.split( "," );
+        versions = Arrays.asList( nonApplicableVersions );
+    }
 
-	@Override
-	protected void initCondition( ISapphirePart part, String parameter ) {
-		String[] nonApplicableVersions = parameter.split( "," );
-		versions = Arrays.asList( nonApplicableVersions );
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireCondition#evaluate()
+     */
+    @Override
+    protected boolean evaluate()
+    {
+        boolean canShow = false;
+        final IModelElement element = getPart().getModelElement();
+        
+        if( element instanceof Hook )
+        {
+            Hook hook = (Hook) element;
+            String dtdVersion = hook.getVersion().toString();
+            canShow = !versions.contains( dtdVersion );
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireCondition#evaluate()
-	 */
-	@Override
-	protected boolean evaluate() {
-		boolean canShow = false;
-		final IModelElement element = getPart().getModelElement();
-		if ( element instanceof IHook ) {
-			IHook hook = (IHook) element;
-			String dtdVersion = hook.getVersion().toString();
-			canShow = !versions.contains( dtdVersion );
+        }
+        return canShow;
 
-		}
-		return canShow;
-
-	}
+    }
 
 }

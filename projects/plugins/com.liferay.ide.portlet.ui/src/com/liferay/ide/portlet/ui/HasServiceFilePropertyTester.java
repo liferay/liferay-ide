@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,35 +27,42 @@ import org.eclipse.core.resources.IResource;
 /**
  * @author Greg Amerson
  */
-public class HasServiceFilePropertyTester extends PropertyTester {
+public class HasServiceFilePropertyTester extends PropertyTester
+{
 
-	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if ( receiver instanceof IResource )
-		{
-			IResource resource = (IResource) receiver;
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    {
+        if( receiver instanceof IResource )
+        {
+            IResource resource = (IResource) receiver;
 
-			boolean isLiferayProject = ProjectUtil.isLiferayProject( resource.getProject() );
+            boolean isLiferayProject = ProjectUtil.isLiferayProject( resource.getProject() );
 
-			if (isLiferayProject) {
-				try {
-					IFolder docroot = CoreUtil.getDocroot( resource.getProject() );
+            if( isLiferayProject )
+            {
+                try
+                {
+                    IFolder docroot = CoreUtil.getDocroot( resource.getProject() );
 
-					if (docroot != null && docroot.exists()) {
-						IFile serviceFile =
-							docroot.getFile("WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE);
+                    if( docroot != null && docroot.exists() )
+                    {
+                        IFile serviceFile =
+                            docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
 
-						if (serviceFile.exists()) {
-							return true;
-						}
-					}
-				}
-				catch (Throwable t) {
-					// ignore
-				}
-			}
-		}
+                        if( serviceFile.exists() )
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch( Throwable t )
+                {
+                    // ignore
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,104 +44,104 @@ import org.eclipse.ui.dialogs.SelectionDialog;
  */
 public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseActionHandler
 {
-
-	public static final String ID = "Hierarchy.Browse.Java.Type";
+    public static final String ID = "Hierarchy.Browse.Java.Type";
     
-	private String typeName;
-
-	private String filter;
+    private String typeName;
+    private String filter;
 
     @Override
-    public void init( final SapphireAction action,
-                      final ActionHandlerDef def )
+    public void init( final SapphireAction action, final ActionHandlerDef def )
     {
         super.init( action, def );
-
         setId( ID );
-        
-		this.typeName = def.getParam( "type" );
 
-		this.filter = def.getParam( "filter" );
+        this.typeName = def.getParam( "type" );
+        this.filter = def.getParam( "filter" );
     }
-    
+
     @Override
     public String browse( final SapphireRenderingContext context )
     {
         final IModelElement element = getModelElement();
         final ModelProperty property = getProperty();
         final IProject project = element.adapt( IProject.class );
-        
-        try 
+
+        try
         {
-			JavaTypeConstraintService typeService = element.service( property, JavaTypeConstraintService.class );
+            JavaTypeConstraintService typeService = element.service( property, JavaTypeConstraintService.class );
 
-			final EnumSet<JavaTypeKind> kinds = EnumSet.noneOf( JavaTypeKind.class );
-			kinds.addAll( typeService.kinds() );
+            final EnumSet<JavaTypeKind> kinds = EnumSet.noneOf( JavaTypeKind.class );
+            kinds.addAll( typeService.kinds() );
 
-			int browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ALL_TYPES;
-			int count = kinds.size();
+            int browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ALL_TYPES;
+            int count = kinds.size();
 
-			if ( count == 1 )
-			{
-				final JavaTypeKind kind = kinds.iterator().next();
+            if( count == 1 )
+            {
+                final JavaTypeKind kind = kinds.iterator().next();
 
-				switch ( kind )
-				{
-				case CLASS:
-					browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
-					break;
-				case ABSTRACT_CLASS:
-					browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
-					break;
-				case INTERFACE:
-					browseDialogStyle = IJavaElementSearchConstants.CONSIDER_INTERFACES;
-					break;
-				case ANNOTATION:
-					browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ANNOTATION_TYPES;
-					break;
-				case ENUM:
-					browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ENUMS;
-					break;
-				default:
-					throw new IllegalStateException();
-				}
-			}
-			else if ( count == 2 )
-			{
-				if ( kinds.contains( JavaTypeKind.CLASS ) || kinds.contains( JavaTypeKind.ABSTRACT_CLASS ) )
-				{
-					if ( kinds.contains( JavaTypeKind.INTERFACE ) )
-					{
-						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES;
-					}
-					else if ( kinds.contains( JavaTypeKind.ENUM ) )
-					{
-						browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES_AND_ENUMS;
-					}
-				}
-			}
+                switch( kind )
+                {
+                    case CLASS:
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
+                        break;
+                    case ABSTRACT_CLASS:
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
+                        break;
+                    case INTERFACE:
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_INTERFACES;
+                        break;
+                    case ANNOTATION:
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ANNOTATION_TYPES;
+                        break;
+                    case ENUM:
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_ENUMS;
+                        break;
+                    default:
+                        throw new IllegalStateException();
+                }
+            }
+            else if( count == 2 )
+            {
+                if( kinds.contains( JavaTypeKind.CLASS ) || kinds.contains( JavaTypeKind.ABSTRACT_CLASS ) )
+                {
+                    if( kinds.contains( JavaTypeKind.INTERFACE ) )
+                    {
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES;
+                    }
+                    else if( kinds.contains( JavaTypeKind.ENUM ) )
+                    {
+                        browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES_AND_ENUMS;
+                    }
+                }
+            }
 
-			IJavaSearchScope scope =
-				SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( this.typeName ) );
+            final IJavaSearchScope scope =
+                SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( this.typeName ) );
 
-			final SelectionDialog dlg =
-				JavaUI.createTypeDialog( context.getShell(), null, scope, browseDialogStyle, false, this.filter, null );
+            final SelectionDialog dlg =
+                JavaUI.createTypeDialog( context.getShell(), null, scope, browseDialogStyle, false, this.filter, null );
 
             final String title = property.getLabel( true, CapitalizationType.TITLE_STYLE, false );
 
-			dlg.setTitle( "Select " + title );
-            
-            if (dlg.open() == SelectionDialog.OK) {
+            dlg.setTitle( "Select " + title );
+
+            if( dlg.open() == SelectionDialog.OK )
+            {
                 Object results[] = dlg.getResult();
                 assert results != null && results.length == 1;
-                if (results[0] instanceof IType) {
-                    return ((IType) results[0]).getFullyQualifiedName();
+                
+                if( results[0] instanceof IType )
+                {
+                    return ( (IType) results[0] ).getFullyQualifiedName();
                 }
             }
-        } catch (JavaModelException e) {
+        }
+        catch( JavaModelException e )
+        {
             SapphireUiFrameworkPlugin.log( e );
         }
-        
+
         return null;
     }
 

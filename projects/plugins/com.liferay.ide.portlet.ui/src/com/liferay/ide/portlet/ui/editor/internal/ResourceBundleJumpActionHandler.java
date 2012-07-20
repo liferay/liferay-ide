@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -46,93 +46,109 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
+public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#computeEnablementState()
-	 */
-	@Override
-	protected boolean computeEnablementState() {
-		final IModelElement element = getModelElement();
-		IProject project = element.adapt( IProject.class );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler#computeEnablementState()
+     */
+    @Override
+    protected boolean computeEnablementState()
+    {
+        final IModelElement element = getModelElement();
+        IProject project = element.adapt( IProject.class );
 
-		final ValueProperty property = getProperty();
+        final ValueProperty property = getProperty();
 
-		final String text = element.read( property ).getText( true );
-		boolean isEnabled = super.computeEnablementState();
-		if ( isEnabled && text != null ) {
-			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-			final IWorkspaceRoot wroot = workspace.getRoot();
-			final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-			String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
-			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
-				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
-					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
-					entryPath = entryPath.append( ioFileName );
-					IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
-					if ( resourceBundleFile != null && resourceBundleFile.exists() ) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
+        final String text = element.read( property ).getText( true );
+        boolean isEnabled = super.computeEnablementState();
+        if( isEnabled && text != null )
+        {
+            final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+            final IWorkspaceRoot wroot = workspace.getRoot();
+            final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
+            String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+            for( IClasspathEntry iClasspathEntry : cpEntries )
+            {
+                if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
+                {
+                    IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+                    entryPath = entryPath.append( ioFileName );
+                    IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
+                    if( resourceBundleFile != null && resourceBundleFile.exists() )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
 
-		final IModelElement element = getModelElement();
+        final IModelElement element = getModelElement();
 
-		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-		final ValueProperty property = getProperty();
+        final ValueProperty property = getProperty();
 
-		final IProject project = element.adapt( IProject.class );
+        final IProject project = element.adapt( IProject.class );
 
-		final Value<Path> value = element.read( property );
+        final Value<Path> value = element.read( property );
 
-		final String text = value.getText( false );
+        final String text = value.getText( false );
 
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		final IWorkspaceRoot wroot = workspace.getRoot();
-		final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-		String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        final IWorkspaceRoot wroot = workspace.getRoot();
+        final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
+        String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
 
-		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
-			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
-				IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
-				entryPath = entryPath.append( ioFileName );
-				IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
-				if ( resourceBundleFile != null && resourceBundleFile.exists() ) {
-					if ( window != null ) {
-						final IWorkbenchPage page = window.getActivePage();
-						IEditorDescriptor editorDescriptor = null;
+        for( IClasspathEntry iClasspathEntry : cpEntries )
+        {
+            if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
+            {
+                IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
+                entryPath = entryPath.append( ioFileName );
+                IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
+                if( resourceBundleFile != null && resourceBundleFile.exists() )
+                {
+                    if( window != null )
+                    {
+                        final IWorkbenchPage page = window.getActivePage();
+                        IEditorDescriptor editorDescriptor = null;
 
-						try {
-							editorDescriptor = IDE.getEditorDescriptor( resourceBundleFile.getName() );
-						}
-						catch ( PartInitException e ) {
-							// No editor was found for this file type.
-						}
+                        try
+                        {
+                            editorDescriptor = IDE.getEditorDescriptor( resourceBundleFile.getName() );
+                        }
+                        catch( PartInitException e )
+                        {
+                            // No editor was found for this file type.
+                        }
 
-						if ( editorDescriptor != null ) {
-							try {
-								IDE.openEditor( page, resourceBundleFile, editorDescriptor.getId(), true );
-							}
-							catch ( PartInitException e ) {
-								PortletUIPlugin.logError( e );
-							}
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
+                        if( editorDescriptor != null )
+                        {
+                            try
+                            {
+                                IDE.openEditor( page, resourceBundleFile, editorDescriptor.getId(), true );
+                            }
+                            catch( PartInitException e )
+                            {
+                                PortletUIPlugin.logError( e );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

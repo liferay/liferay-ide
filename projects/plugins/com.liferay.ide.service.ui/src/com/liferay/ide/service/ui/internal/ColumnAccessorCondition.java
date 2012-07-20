@@ -17,8 +17,8 @@
 
 package com.liferay.ide.service.ui.internal;
 
-import com.liferay.ide.service.core.model.IServiceBuilder;
-import com.liferay.ide.service.core.model.IServiceBuilder610;
+import com.liferay.ide.service.core.model.ServiceBuilder;
+import com.liferay.ide.service.core.model.ServiceBuilder610;
 
 import org.eclipse.sapphire.ui.SapphireModelCondition;
 
@@ -28,12 +28,12 @@ import org.eclipse.sapphire.ui.SapphireModelCondition;
 public class ColumnAccessorCondition extends SapphireModelCondition
 {
 
-	@Override
-	protected boolean evaluate( )
-	{
-		IServiceBuilder serviceBuilderElement = this.getPart().getLocalModelElement().nearest( IServiceBuilder.class );
-		// accessor attribute for Column entity is only available in 6.1.0
-		return serviceBuilderElement instanceof IServiceBuilder610;
-	}
+    @Override
+    protected boolean evaluate()
+    {
+        ServiceBuilder serviceBuilderElement = this.getPart().getLocalModelElement().nearest( ServiceBuilder.class );
+        // accessor attribute for Column entity is only available in 6.1.0
+        return serviceBuilderElement instanceof ServiceBuilder610;
+    }
 
 }

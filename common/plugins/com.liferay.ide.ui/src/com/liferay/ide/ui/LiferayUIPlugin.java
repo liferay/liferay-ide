@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -53,201 +53,225 @@ import org.osgi.service.prefs.BackingStoreException;
  * 
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
+@SuppressWarnings( { "restriction", "deprecation" } )
+public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
+{
 
-	public static final String FIRST_STARTUP_COMPLETE = "FIRST_STARTUP_COMPLETE";
+    public static final String FIRST_STARTUP_COMPLETE = "FIRST_STARTUP_COMPLETE";
 
-	public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL";
+    public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL";
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.common.ui";
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.common.ui";
 
-	// The shared instance
-	private static LiferayUIPlugin plugin;
+    // The shared instance
+    private static LiferayUIPlugin plugin;
 
-	public static void clearAllPersistentSettings()
-		throws BackingStoreException {
+    public static void clearAllPersistentSettings() throws BackingStoreException
+    {
 
-		IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode("com.liferay.ide.common.server.tomcat.core");
+        IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode( "com.liferay.ide.common.server.tomcat.core" );
 
-		tomcatCorePrefs.remove("ADDED_EXT_PLUGIN_TOGGLE_KEY");
-		tomcatCorePrefs.remove("ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY");
-		tomcatCorePrefs.remove("REMOVE_EXT_PLUGIN_TOGGLE_KEY");
+        tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_TOGGLE_KEY" );
+        tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY" );
+        tomcatCorePrefs.remove( "REMOVE_EXT_PLUGIN_TOGGLE_KEY" );
 
-		tomcatCorePrefs.flush();
-	}
+        tomcatCorePrefs.flush();
+    }
 
-	public static IStatus createErrorStatus(String string) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, string);
-	}
+    public static IStatus createErrorStatus( String string )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, string );
+    }
 
-	public static IWorkbenchPage getActivePage() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-	}
+    public static IWorkbenchPage getActivePage()
+    {
+        return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+    }
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
-	public static LiferayUIPlugin getDefault() {
-		return plugin;
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static LiferayUIPlugin getDefault()
+    {
+        return plugin;
+    }
 
-	@SuppressWarnings("rawtypes")
-	public static Map getLiferaySettings() {
-		final Map options = new DefaultCodeFormatterOptions(LiferayDefaultCodeFormatterSettings.settings).getMap();
-		ProfileVersioner.setLatestCompliance(options);
-		return options;
-	}
+    @SuppressWarnings( "rawtypes" )
+    public static Map getLiferaySettings()
+    {
+        final Map options = new DefaultCodeFormatterOptions( LiferayDefaultCodeFormatterSettings.settings ).getMap();
+        ProfileVersioner.setLatestCompliance( options );
+        return options;
+    }
 
-	public static IWorkspace getWorkspace() {
-		return ResourcesPlugin.getWorkspace();
-	}
+    public static IWorkspace getWorkspace()
+    {
+        return ResourcesPlugin.getWorkspace();
+    }
 
-	public static void logError(Exception e) {
-		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
-	}
+    public static void logError( Exception e )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+    }
 
-	protected TextFileDocumentProvider fTextFileDocumentProvider;
+    protected TextFileDocumentProvider fTextFileDocumentProvider;
 
-	protected Map<String, ImageDescriptor> imageDescriptors = new HashMap<String, ImageDescriptor>();
+    protected Map<String, ImageDescriptor> imageDescriptors = new HashMap<String, ImageDescriptor>();
 
-	/**
-	 * The constructor
-	 */
-	public LiferayUIPlugin() {
-	}
+    /**
+     * The constructor
+     */
+    public LiferayUIPlugin()
+    {
+    }
 
-	public void earlyStartup() {
-		if (isFirstStartup()) {
-			installLiferayFormatterProfile();
+    public void earlyStartup()
+    {
+        if( isFirstStartup() )
+        {
+            installLiferayFormatterProfile();
 
-			firstStartupComplete();
-		}
-	}
+            firstStartupComplete();
+        }
+    }
 
-	public Image getImage(String key) {
-		return getImageRegistry().get(key);
-	}
+    public Image getImage( String key )
+    {
+        return getImageRegistry().get( key );
+    }
 
-	public ImageDescriptor getImageDescriptor(String key) {
-		getImageRegistry();
+    public ImageDescriptor getImageDescriptor( String key )
+    {
+        getImageRegistry();
 
-		return imageDescriptors.get(key);
-	}
+        return imageDescriptors.get( key );
+    }
 
-	public synchronized IDocumentProvider getTextFileDocumentProvider() {
-		if (fTextFileDocumentProvider == null) {
-			fTextFileDocumentProvider = new TextFileDocumentProvider();
-		}
+    public synchronized IDocumentProvider getTextFileDocumentProvider()
+    {
+        if( fTextFileDocumentProvider == null )
+        {
+            fTextFileDocumentProvider = new TextFileDocumentProvider();
+        }
 
-		return fTextFileDocumentProvider;
-	}
+        return fTextFileDocumentProvider;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-	 */
-	public void start(BundleContext context)
-		throws Exception {
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
+     */
+    public void start( BundleContext context ) throws Exception
+    {
 
-		super.start(context);
+        super.start( context );
 
-		plugin = this;
-	}
+        plugin = this;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
-	 */
-	public void stop(BundleContext context)
-		throws Exception {
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
 
-		plugin = null;
+        plugin = null;
 
-		super.stop(context);
-	}
+        super.stop( context );
+    }
 
-	private void firstStartupComplete() {
-		getPreferences().putBoolean(FIRST_STARTUP_COMPLETE, true);
-	}
+    private void firstStartupComplete()
+    {
+        getPreferences().putBoolean( FIRST_STARTUP_COMPLETE, true );
+    }
 
-	private IEclipsePreferences getPreferences() {
-		return new InstanceScope().getNode(PLUGIN_ID);
-	}
+    private IEclipsePreferences getPreferences()
+    {
+        return new InstanceScope().getNode( PLUGIN_ID );
+    }
 
-	@SuppressWarnings({
-		"rawtypes", "unchecked"
-	})
-	private void installLiferayFormatterProfile() {
-		PreferencesAccess access = PreferencesAccess.getOriginalPreferences();
-		ProfileVersioner profileVersioner = new ProfileVersioner();
-		IScopeContext instanceScope = access.getInstanceScope();
-		try {
-			FormatterProfileStore store = new FormatterProfileStore(profileVersioner);
-			List profiles = store.readProfiles(instanceScope);
-			if (profiles == null) {
-				profiles = new ArrayList();
-			}
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
+    private void installLiferayFormatterProfile()
+    {
+        PreferencesAccess access = PreferencesAccess.getOriginalPreferences();
+        ProfileVersioner profileVersioner = new ProfileVersioner();
+        IScopeContext instanceScope = access.getInstanceScope();
+        try
+        {
+            FormatterProfileStore store = new FormatterProfileStore( profileVersioner );
+            List profiles = store.readProfiles( instanceScope );
+            if( profiles == null )
+            {
+                profiles = new ArrayList();
+            }
 
-			// add liferay profile
-			final Profile eclipseProfile =
-				new CustomProfile(
-					"Liferay [plug-in]", getLiferaySettings(), profileVersioner.getCurrentVersion(),
-					profileVersioner.getProfileKind());
-			profiles.add(eclipseProfile);
+            // add liferay profile
+            final Profile eclipseProfile =
+                new CustomProfile(
+                    "Liferay [plug-in]", getLiferaySettings(), profileVersioner.getCurrentVersion(),
+                    profileVersioner.getProfileKind() );
+            profiles.add( eclipseProfile );
 
-			store.writeProfiles(profiles, instanceScope);
-			// ProfileManager manager = new FormatterProfileManager(profiles, instanceScope, access, profileVersioner);
-			// manager.setSelected(eclipseProfile);
-			// manager.commitChanges(instanceScope);
-			instanceScope.getNode(JavaUI.ID_PLUGIN).flush();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		finally {
-			try {
-				instanceScope.getNode(JavaCore.PLUGIN_ID).flush();
-			}
-			catch (BackingStoreException e) {
-			}
-		}
-	}
+            store.writeProfiles( profiles, instanceScope );
+            // ProfileManager manager = new FormatterProfileManager(profiles, instanceScope, access, profileVersioner);
+            // manager.setSelected(eclipseProfile);
+            // manager.commitChanges(instanceScope);
+            instanceScope.getNode( JavaUI.ID_PLUGIN ).flush();
+        }
+        catch( Exception ex )
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                instanceScope.getNode( JavaCore.PLUGIN_ID ).flush();
+            }
+            catch( BackingStoreException e )
+            {
+            }
+        }
+    }
 
-	private boolean isFirstStartup() {
-		IScopeContext[] scopes = new IScopeContext[] {
-			new InstanceScope()
-		};
+    private boolean isFirstStartup()
+    {
+        IScopeContext[] scopes = new IScopeContext[] { new InstanceScope() };
 
-		return !(Platform.getPreferencesService().getBoolean(PLUGIN_ID, FIRST_STARTUP_COMPLETE, false, scopes));
-	}
+        return !( Platform.getPreferencesService().getBoolean( PLUGIN_ID, FIRST_STARTUP_COMPLETE, false, scopes ) );
+    }
 
-	@Override
-	protected void initializeImageRegistry(ImageRegistry reg) {
-		registerImage(reg, IMG_LIFERAY_ICON_SMALL, "/icons/e16/liferay.png");
-	}
+    @Override
+    protected void initializeImageRegistry( ImageRegistry reg )
+    {
+        registerImage( reg, IMG_LIFERAY_ICON_SMALL, "/icons/e16/liferay.png" );
+    }
 
-	protected void registerImage(ImageRegistry registry, String key, String path) {
-		try {
-			ImageDescriptor id = ImageDescriptor.createFromURL(getBundle().getEntry(path));
+    protected void registerImage( ImageRegistry registry, String key, String path )
+    {
+        try
+        {
+            ImageDescriptor id = ImageDescriptor.createFromURL( getBundle().getEntry( path ) );
 
-			imageDescriptors.put(key, id);
+            imageDescriptors.put( key, id );
 
-			registry.put(key, id);
-		}
-		catch (Exception e) {
-		}
-	}
+            registry.put( key, id );
+        }
+        catch( Exception e )
+        {
+        }
+    }
 
-	// public synchronized IDocumentProvider
-	// getPluginPropertiesFileDocumentProvider() {
-	// if (fPluginPropertiesFileDocumentProvider == null) {
-	// fPluginPropertiesFileDocumentProvider = new
-	// PluginPropertiesFileDocumentProvider();
-	// }
-	// return fPluginPropertiesFileDocumentProvider;
-	// }
+    // public synchronized IDocumentProvider
+    // getPluginPropertiesFileDocumentProvider() {
+    // if (fPluginPropertiesFileDocumentProvider == null) {
+    // fPluginPropertiesFileDocumentProvider = new
+    // PluginPropertiesFileDocumentProvider();
+    // }
+    // return fPluginPropertiesFileDocumentProvider;
+    // }
 }

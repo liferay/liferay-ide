@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,63 +29,73 @@ import org.eclipse.ui.IWorkbenchWindowPulldownDelegate2;
 /**
  * @author Greg Amerson
  */
-public class NewServerDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2 {
+public class NewServerDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
+{
+    protected Menu fMenu;
+    protected Shell fWizardShell;
 
-	protected Menu fMenu;
+    public NewServerDropDownAction()
+    {
+        fMenu = null;
+        setMenuCreator( this );
+    }
 
-	protected Shell fWizardShell;
+    public void dispose()
+    {
+    }
 
-	public NewServerDropDownAction() {
-		fMenu = null;
-		setMenuCreator(this);
-	}
+    public Action getDefaultAction( Shell shell )
+    {
+        Action[] actions = getActions( shell );
 
-	public void dispose() {
-	}
+        if( actions.length > 1 )
+        {
+            return actions[1];
+        }
 
-	public Action getDefaultAction(Shell shell) {
-		Action[] actions = getActions(shell);
+        return null;
+    }
 
-		if (actions.length > 1) {
-			return actions[1];
-		}
+    protected Action[] getActions( Shell shell )
+    {
+        return new Action[] { new NewPluginsSDKAction( shell ), new NewServerAction( shell ) };
+    }
 
-		return null;
-	}
+    public Menu getMenu( Control parent )
+    {
+        if( fMenu == null )
+        {
+            fMenu = new Menu( parent );
 
-	protected Action[] getActions(Shell shell) {
-		return new Action[] { new NewPluginsSDKAction(shell), new NewServerAction(shell) };
-	}
+            Action[] actions = getActions( parent.getShell() );
 
-	public Menu getMenu(Control parent) {
-		if (fMenu == null) {
-			fMenu = new Menu(parent);
+            for( Action action : actions )
+            {
+                ActionContributionItem item = new ActionContributionItem( action );
+                item.fill( fMenu, -1 );
+            }
+        }
 
-			Action[] actions = getActions(parent.getShell());
+        return fMenu;
+    }
 
-			for (Action action : actions) {
-				ActionContributionItem item = new ActionContributionItem(action);
-				item.fill(fMenu, -1);
-			}
-		}
+    public Menu getMenu( Menu parent )
+    {
+        return null;
+    }
 
-		return fMenu;
-	}
+    public void init( IWorkbenchWindow window )
+    {
+        fWizardShell = window.getShell();
+    }
 
-	public Menu getMenu(Menu parent) {
-		return null;
-	}
+    public void run( IAction action )
+    {
+        getDefaultAction( fWizardShell ).run();
+    }
 
-	public void init(IWorkbenchWindow window) {
-		fWizardShell = window.getShell();
-	}
-
-	public void run(IAction action) {
-		getDefaultAction(fWizardShell).run();
-	}
-
-	public void selectionChanged(IAction action, ISelection selection) {
-	}
-
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+    }
 
 }

@@ -18,8 +18,8 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.ICustomPortletMode;
-import com.liferay.ide.portlet.core.model.IPortletMode;
+import com.liferay.ide.portlet.core.model.CustomPortletMode;
+import com.liferay.ide.portlet.core.model.PortletMode;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -36,84 +36,84 @@ import org.eclipse.sapphire.services.ImageServiceData;
 public class PortletModeImageService extends ImageService
 {
 
-	private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/portlet.png" );
+    private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
+        PortletModeImageService.class, "images/portlet.png" );
 
-	private static final ImageData IMG_VIEW = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/view.png" );
+    private static final ImageData IMG_VIEW = ImageData.readFromClassLoader(
+        PortletModeImageService.class, "images/view.png" );
 
-	private static final ImageData IMG_EDIT = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/edit.png" );
+    private static final ImageData IMG_EDIT = ImageData.readFromClassLoader(
+        PortletModeImageService.class, "images/edit.png" );
 
-	private static final ImageData IMG_HELP = ImageData.readFromClassLoader(
-		PortletModeImageService.class, "images/help.png" );
+    private static final ImageData IMG_HELP = ImageData.readFromClassLoader(
+        PortletModeImageService.class, "images/help.png" );
 
-	private Listener listener;
+    private Listener listener;
 
-	@Override
-	protected void initImageService()
-	{
-		this.listener = new FilteredListener<PropertyContentEvent>()
-		{
-			@Override
-			protected void handleTypedEvent( final PropertyContentEvent event )
-			{
-				refresh();
-			}
-		};
+    @Override
+    protected void initImageService()
+    {
+        this.listener = new FilteredListener<PropertyContentEvent>()
+        {
+            @Override
+            protected void handleTypedEvent( final PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
 
-		context( IModelElement.class ).attach( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
-	}
+        context( IModelElement.class ).attach( this.listener, PortletMode.PROP_PORTLET_MODE.getName() );
+    }
 
-	@Override
-	protected ImageServiceData compute()
-	{
-		String portletMode = null;
-		IModelElement element = context( IModelElement.class );
-		ImageData imageData = null;
+    @Override
+    protected ImageServiceData compute()
+    {
+        String portletMode = null;
+        IModelElement element = context( IModelElement.class );
+        ImageData imageData = null;
 
-		if ( element instanceof ICustomPortletMode )
-		{
-			ICustomPortletMode iCustomPortletMode = (ICustomPortletMode) element;
-			portletMode = String.valueOf( iCustomPortletMode.getPortletMode().getContent() );
-		}
-		else if ( element instanceof IPortletMode )
-		{
-			IPortletMode iPortletMode = (IPortletMode) element;
-			portletMode = iPortletMode.getPortletMode().getContent();
-		}
+        if( element instanceof CustomPortletMode )
+        {
+            CustomPortletMode iCustomPortletMode = (CustomPortletMode) element;
+            portletMode = String.valueOf( iCustomPortletMode.getPortletMode().getContent() );
+        }
+        else if( element instanceof PortletMode )
+        {
+            PortletMode iPortletMode = (PortletMode) element;
+            portletMode = iPortletMode.getPortletMode().getContent();
+        }
 
-		if ( portletMode != null )
-		{
-			if ( "VIEW".equalsIgnoreCase( portletMode ) )
-			{
-				imageData = IMG_VIEW;
-			}
-			else if ( "EDIT".equalsIgnoreCase( portletMode ) )
-			{
-				imageData = IMG_EDIT;
-			}
-			else if ( "HELP".equalsIgnoreCase( portletMode ) )
-			{
-				imageData = IMG_HELP;
-			}
+        if( portletMode != null )
+        {
+            if( "VIEW".equalsIgnoreCase( portletMode ) )
+            {
+                imageData = IMG_VIEW;
+            }
+            else if( "EDIT".equalsIgnoreCase( portletMode ) )
+            {
+                imageData = IMG_EDIT;
+            }
+            else if( "HELP".equalsIgnoreCase( portletMode ) )
+            {
+                imageData = IMG_HELP;
+            }
 
-		}
+        }
 
-		if ( imageData == null )
-		{
-			imageData = IMG_DEFAULT;
-		}
+        if( imageData == null )
+        {
+            imageData = IMG_DEFAULT;
+        }
 
-		return new ImageServiceData( imageData );
-	}
+        return new ImageServiceData( imageData );
+    }
 
-	@Override
-	public void dispose()
-	{
-		super.dispose();
+    @Override
+    public void dispose()
+    {
+        super.dispose();
 
-		context( IModelElement.class ).detach( this.listener, IPortletMode.PROP_PORTLET_MODE.getName() );
-	}
+        context( IModelElement.class ).detach( this.listener, PortletMode.PROP_PORTLET_MODE.getName() );
+    }
 
 }

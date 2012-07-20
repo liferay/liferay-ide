@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,16 +17,21 @@ package com.liferay.ide.taglib.ui.model.internal;
 
 import org.eclipse.sapphire.modeling.ValueBindingImpl;
 
+/**
+ * @author Gregory Amerson
+ */
+public class PreviewBinding extends ValueBindingImpl
+{
 
-public class PreviewBinding extends ValueBindingImpl {
+    @Override
+    public String read()
+    {
+        return "preview string " + System.currentTimeMillis();
+    }
 
-	@Override
-	public String read() {
-		return "preview string " + System.currentTimeMillis();
-	}
-
-	@Override
-	public void write(String value) {
-	}
+    @Override
+    public void write( String value )
+    {
+    }
 
 }

@@ -27,12 +27,12 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 public enum HookVersionType
 {
 
-	@Label( standard = "6.0.0" )
-	@EnumSerialization( primary = "6.0.0" )
-	v6_0_0,
+    @Label( standard = "6.0.0" )
+    @EnumSerialization( primary = "6.0.0" )
+    v6_0_0,
 
-	@Label( standard = "6.1.0" )
-	@EnumSerialization( primary = "6.1.0" )
-	v6_1_0
+    @Label( standard = "6.1.0" )
+    @EnumSerialization( primary = "6.1.0" )
+    v6_1_0
 
 }

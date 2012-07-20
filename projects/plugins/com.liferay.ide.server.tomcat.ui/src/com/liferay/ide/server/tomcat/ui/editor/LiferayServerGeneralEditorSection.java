@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,28 +17,34 @@ package com.liferay.ide.server.tomcat.ui.editor;
 
 import org.eclipse.jst.server.tomcat.ui.internal.editor.ServerGeneralEditorSection;
 
-@SuppressWarnings("restriction")
-public class LiferayServerGeneralEditorSection extends ServerGeneralEditorSection {
+@SuppressWarnings( "restriction" )
+public class LiferayServerGeneralEditorSection extends ServerGeneralEditorSection
+{
 
-	public LiferayServerGeneralEditorSection() {
-		super();
-	}
+    public LiferayServerGeneralEditorSection()
+    {
+        super();
+    }
 
-	@Override
-	protected void initialize() {
-		super.initialize();
+    @Override
+    protected void initialize()
+    {
+        super.initialize();
 
-		if (this.noPublish != null) {
-			this.noPublish.setEnabled(false);
-		}
+        if( this.noPublish != null )
+        {
+            this.noPublish.setEnabled( false );
+        }
 
-		if (this.separateContextFiles != null) {
-			this.separateContextFiles.setEnabled(false);
-		}
+        if( this.separateContextFiles != null )
+        {
+            this.separateContextFiles.setEnabled( false );
+        }
 
-		if (this.secure != null) {
-			this.secure.setEnabled(false);
-		}
-	}
+        if( this.secure != null )
+        {
+            this.secure.setEnabled( false );
+        }
+    }
 
 }

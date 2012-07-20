@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,8 +18,8 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import com.liferay.ide.portlet.core.model.IEventDefinition;
-import com.liferay.ide.portlet.core.model.IPortletApp;
+import com.liferay.ide.portlet.core.model.EventDefinition;
+import com.liferay.ide.portlet.core.model.PortletApp;
 
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -29,27 +29,30 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPag
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class DefinePortletEventHandler extends SapphireActionHandler {
+public class DefinePortletEventHandler extends SapphireActionHandler
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		// System.out.println( "DefinePortletEventHandler.run()" );
-		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
-		IEventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        // System.out.println( "DefinePortletEventHandler.run()" );
+        PortletApp rootModel = (PortletApp) context.getPart().getModelElement();
+        EventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
 
-		// Select the node
+        // Select the node
 
-		final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-		final MasterDetailsContentNode root = page.outline().getRoot();
-		final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
-		if ( node != null ) {
-			node.select();
-		}
+        final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
+        final MasterDetailsContentNode root = page.outline().getRoot();
+        final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
+        if( node != null )
+        {
+            node.select();
+        }
 
-		return eventDefintion;
-	}
+        return eventDefintion;
+    }
 }

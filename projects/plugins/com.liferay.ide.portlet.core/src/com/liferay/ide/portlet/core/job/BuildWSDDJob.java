@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,59 +35,64 @@ import org.eclipse.core.runtime.Status;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class BuildWSDDJob extends SDKJob {
+public class BuildWSDDJob extends SDKJob
+{
 
-	protected IFile serviceXmlFile;
+    protected IFile serviceXmlFile;
 
-	public BuildWSDDJob(IFile serviceXmlFile) {
-		super("Build web services descriptor");
+    public BuildWSDDJob( IFile serviceXmlFile )
+    {
+        super( "Build web services descriptor" );
 
-		this.serviceXmlFile = serviceXmlFile;
+        this.serviceXmlFile = serviceXmlFile;
 
-		setUser(true);
+        setUser( true );
 
-		setProject(serviceXmlFile.getProject());
-	}
+        setProject( serviceXmlFile.getProject() );
+    }
 
-	@Override
-	protected IStatus run(IProgressMonitor monitor) {
-		IStatus retval = null;
+    @Override
+    protected IStatus run( IProgressMonitor monitor )
+    {
+        IStatus retval = null;
 
-		monitor.beginTask("Building Liferay web services deployment descriptor...", 100);
+        monitor.beginTask( "Building Liferay web services deployment descriptor...", 100 );
 
-		try {
-			getWorkspace().run(new IWorkspaceRunnable() {
+        try
+        {
+            getWorkspace().run( new IWorkspaceRunnable()
+            {
 
-				public void run(IProgressMonitor monitor)
-					throws CoreException {
+                public void run( IProgressMonitor monitor ) throws CoreException
+                {
 
-					SDK sdk = getSDK();
+                    SDK sdk = getSDK();
 
-					monitor.worked(10);
+                    monitor.worked( 10 );
 
-					Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+                    Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
 
-					sdk.buildWSDD( getProject(), serviceXmlFile, null, appServerProperties );
+                    sdk.buildWSDD( getProject(), serviceXmlFile, null, appServerProperties );
 
-					monitor.worked(90);
+                    monitor.worked( 90 );
 
-					final IProject project = getProject();
+                    final IProject project = getProject();
 
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+                    project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                    project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
 
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-				}
-			}, monitor);
+                    project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                }
+            }, monitor );
 
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException e1) {
-			retval = PortletCore.createErrorStatus(e1);
-		}
+            getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( CoreException e1 )
+        {
+            retval = PortletCore.createErrorStatus( e1 );
+        }
 
-		return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
-	}
+        return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
+    }
 
 }

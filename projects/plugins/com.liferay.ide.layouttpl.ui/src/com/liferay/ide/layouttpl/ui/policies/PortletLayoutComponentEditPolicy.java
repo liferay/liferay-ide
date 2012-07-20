@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,17 +26,20 @@ import org.eclipse.gef.requests.GroupRequest;
 /**
  * @author Greg Amerson
  */
-public class PortletLayoutComponentEditPolicy extends ComponentEditPolicy {
+public class PortletLayoutComponentEditPolicy extends ComponentEditPolicy
+{
 
-	protected Command createDeleteCommand(GroupRequest deleteRequest) {
-		Object parent = getHost().getParent().getModel();
-		Object child = getHost().getModel();
+    protected Command createDeleteCommand( GroupRequest deleteRequest )
+    {
+        Object parent = getHost().getParent().getModel();
+        Object child = getHost().getModel();
 
-		if (parent instanceof LayoutTplDiagram && child instanceof PortletLayout) {
-			return new PortletLayoutDeleteCommand((LayoutTplDiagram) parent, (PortletLayout) child);
-		}
+        if( parent instanceof LayoutTplDiagram && child instanceof PortletLayout )
+        {
+            return new PortletLayoutDeleteCommand( (LayoutTplDiagram) parent, (PortletLayout) child );
+        }
 
-		return super.createDeleteCommand(deleteRequest);
-	}
+        return super.createDeleteCommand( deleteRequest );
+    }
 
 }

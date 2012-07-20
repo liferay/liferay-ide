@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,13 +16,13 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
+import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
-import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,222 +49,247 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizardPage
-	implements IPluginProjectDataModelProperties {
+    implements IPluginProjectDataModelProperties
+{
+    protected Button[] frameworkButtons;
+    protected Composite[] optionsComposites;
+    protected Button pluginFragmentButton;
 
-	protected Button[] frameworkButtons;
+    public NewPortletPluginProjectPage( NewPluginProjectWizard wizard, IDataModel model )
+    {
+        super( model, "advanced.page" );
 
-	protected Composite[] optionsComposites;
+        setWizard( wizard );
+        setImageDescriptor( wizard.getDefaultPageImageDescriptor() );
+        setTitle( "Liferay Portlet Plugin Project" );
+        setDescription( "Choose from available portlet frameworks depending on which technology is most appropriate for this project." );
+    }
 
-	protected Button pluginFragmentButton;
+    @Override
+    public boolean canFlipToNextPage()
+    {
+        return getModel().getBooleanProperty( PLUGIN_FRAGMENT_ENABLED );
+    }
 
-	public NewPortletPluginProjectPage(NewPluginProjectWizard wizard, IDataModel model) {
-		super(model, "advanced.page");
+    protected void createFrameworkGroup( Composite parent )
+    {
+        Group group = SWTUtil.createGroup( parent, "Select portlet framework", 2 );
+        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 );
+        layoutData.widthHint = 500;// make sure the width doesn't grow the dialog
+        group.setLayoutData( layoutData );
+        ( (GridLayout) group.getLayout() ).verticalSpacing = 10;
 
-		setWizard(wizard);
-		setImageDescriptor(wizard.getDefaultPageImageDescriptor());
-		setTitle("Liferay Portlet Plugin Project");
-		setDescription("Choose from available portlet frameworks depending on which technology is most appropriate for this project.");
-	}
+        IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
 
-	@Override
-	public boolean canFlipToNextPage() {
-		return getModel().getBooleanProperty(PLUGIN_FRAGMENT_ENABLED);
-	}
+        if( !CoreUtil.isNullOrEmpty( portletFrameworks ) )
+        {
+            List<Button> buttons = new ArrayList<Button>();
 
-	protected void createFrameworkGroup(Composite parent) {
-		Group group = SWTUtil.createGroup(parent, "Select portlet framework", 2);
-		GridData layoutData = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
-		layoutData.widthHint = 500;// make sure the width doesn't grow the dialog
-		group.setLayoutData(layoutData);
-		((GridLayout) group.getLayout()).verticalSpacing = 10;
+            for( final IPortletFrameworkWizardProvider framework : portletFrameworks )
+            {
+                final IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( framework.getId() );
 
-		IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+                String iconUrl = null;
+                String bundleId = null;
 
-		if (!CoreUtil.isNullOrEmpty(portletFrameworks)) {
-			List<Button> buttons = new ArrayList<Button>();
+                if( delegate != null )
+                {
+                    iconUrl = delegate.getIconUrl();
+                    bundleId = delegate.getBundleId();
+                }
+                else
+                {
+                    iconUrl = "icons/e16/jsp-template.png";
+                    bundleId = ProjectUIPlugin.PLUGIN_ID;
+                }
 
-			for (final IPortletFrameworkWizardProvider framework : portletFrameworks) {
-				final IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( framework.getId() );
+                Button templateButton =
+                    SWTUtil.createRadioButton(
+                        group, framework.getDisplayName(),
+                        UIUtil.getPluginImageDescriptor( bundleId, iconUrl ).createImage(), false, 1 );
+                templateButton.setData( framework );
+                ( (GridData) templateButton.getLayoutData() ).verticalAlignment = SWT.TOP;
 
-				String iconUrl = null;
-				String bundleId = null;
+                templateButton.addSelectionListener( new SelectionAdapter()
+                {
 
-				if (delegate != null) {
-					iconUrl = delegate.getIconUrl();
-					bundleId = delegate.getBundleId();
-				}
-				else {
-					iconUrl = "icons/e16/jsp-template.png";
-					bundleId = ProjectUIPlugin.PLUGIN_ID;
-				}
+                    @Override
+                    public void widgetSelected( SelectionEvent e )
+                    {
+                        getDataModel().setProperty( PORTLET_FRAMEWORK_ID, framework.getId() );
+                        getDataModel().setBooleanProperty( PLUGIN_FRAGMENT_ENABLED, delegate.isFragmentEnabled() );
+                    }
 
-				Button templateButton =
-					SWTUtil.createRadioButton(
-						group, framework.getDisplayName(),
-						UIUtil.getPluginImageDescriptor(bundleId, iconUrl).createImage(), false, 1);
-				templateButton.setData(framework);
-				((GridData) templateButton.getLayoutData()).verticalAlignment = SWT.TOP;
+                } );
 
-				templateButton.addSelectionListener(new SelectionAdapter() {
+                buttons.add( templateButton );
 
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						getDataModel().setProperty(PORTLET_FRAMEWORK_ID, framework.getId());
-						getDataModel().setBooleanProperty(PLUGIN_FRAGMENT_ENABLED, delegate.isFragmentEnabled());
-					}
+                final URL helpUrl = framework.getHelpUrl();
+                Link descriptionWithLink =
+                    SWTUtil.createLink( group, SWT.WRAP, framework.getDescription() +
+                        ( helpUrl != null ? " <a>Learn more....</a>" : "" ), 1 );
+                descriptionWithLink.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
-				});
+                if( helpUrl != null )
+                {
+                    descriptionWithLink.addSelectionListener( new SelectionAdapter()
+                    {
 
-				buttons.add(templateButton);
+                        @Override
+                        public void widgetSelected( SelectionEvent e )
+                        {
+                            try
+                            {
+                                PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( helpUrl );
+                            }
+                            catch( Exception e1 )
+                            {
+                                ProjectUIPlugin.logError( "Could not open external browser", e1 );
+                            }
+                        }
 
-				final URL helpUrl = framework.getHelpUrl();
-				Link descriptionWithLink =
-					SWTUtil.createLink(group, SWT.WRAP, framework.getDescription() +
-						(helpUrl != null ? " <a>Learn more....</a>" : ""), 1);
-				descriptionWithLink.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+                    } );
+                }
 
-				if (helpUrl != null) {
-					descriptionWithLink.addSelectionListener(new SelectionAdapter() {
+            }
 
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							try {
-								PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(helpUrl);
-							}
-							catch (Exception e1) {
-								ProjectUIPlugin.logError("Could not open external browser", e1);
-							}
-						}
+            frameworkButtons = buttons.toArray( new Button[0] );
+            frameworkButtons[0].setSelection( true );
+        }
+    }
 
-					});
-				}
+    protected void createTemplateOptionsGroup( Composite parent )
+    {
+        if( CoreUtil.isNullOrEmpty( frameworkButtons ) )
+        {
+            return;
+        }
 
-			}
+        final Composite stackComposite = new Composite( parent, SWT.NONE );
+        stackComposite.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
 
-			frameworkButtons = buttons.toArray(new Button[0]);
-			frameworkButtons[0].setSelection(true);
-		}
-	}
+        final StackLayout optionsLayout = new StackLayout();
+        stackComposite.setLayout( optionsLayout );
 
-	protected void createTemplateOptionsGroup(Composite parent) {
-		if (CoreUtil.isNullOrEmpty(frameworkButtons)) {
-			return;
-		}
+        List<Composite> composites = new ArrayList<Composite>();
 
-		final Composite stackComposite = new Composite(parent, SWT.NONE);
-		stackComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1));
+        for( Button templateButton : frameworkButtons )
+        {
+            IPortletFrameworkWizardProvider template = (IPortletFrameworkWizardProvider) templateButton.getData();
+            IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( template.getId() );
 
-		final StackLayout optionsLayout = new StackLayout();
-		stackComposite.setLayout(optionsLayout);
+            final Composite[] optionsComposite = new Composite[1];
 
-		List<Composite> composites = new ArrayList<Composite>();
+            if( delegate != null )
+            {
+                optionsComposite[0] = delegate.createNewProjectOptionsComposite( stackComposite, getDataModel() );
+            }
 
-		for (Button templateButton : frameworkButtons) {
-			IPortletFrameworkWizardProvider template = (IPortletFrameworkWizardProvider) templateButton.getData();
-			IPortletFrameworkDelegate delegate = getWizard().getPortletFrameworkDelegate( template.getId() );
+            templateButton.addSelectionListener( new SelectionAdapter()
+            {
 
-			final Composite[] optionsComposite = new Composite[1];
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    optionsLayout.topControl = optionsComposite[0];
+                    stackComposite.layout();
+                }
 
-			if (delegate != null) {
-				optionsComposite[0] = delegate.createNewProjectOptionsComposite(stackComposite, getDataModel());
-			}
+            } );
 
-			templateButton.addSelectionListener(new SelectionAdapter() {
+            if( optionsComposite[0] == null )
+            {
+                optionsComposite[0] = SWTUtil.createComposite( stackComposite, 1, 1, SWT.FILL );
+                ( (GridData) optionsComposite[0].getLayoutData() ).verticalAlignment = SWT.TOP;
+            }
 
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					optionsLayout.topControl = optionsComposite[0];
-					stackComposite.layout();
-				}
+            composites.add( optionsComposite[0] );
+        }
 
-			});
+        optionsComposites = composites.toArray( new Composite[0] );
 
-			if (optionsComposite[0] == null) {
-				optionsComposite[0] = SWTUtil.createComposite(stackComposite, 1, 1, SWT.FILL);
-				((GridData) optionsComposite[0].getLayoutData()).verticalAlignment = SWT.TOP;
-			}
+        optionsLayout.topControl = optionsComposites[0];
+        stackComposite.layout();
+    }
 
-			composites.add(optionsComposite[0]);
-		}
+    @Override
+    protected Composite createTopLevelComposite( Composite parent )
+    {
+        Composite top = SWTUtil.createTopComposite( parent, 1 );
 
-		optionsComposites = composites.toArray(new Composite[0]);
+        createFrameworkGroup( top );
+        // createPluginFragmentButton(top);
+        createTemplateOptionsGroup( top );
 
-		optionsLayout.topControl = optionsComposites[0];
-		stackComposite.layout();
-	}
+        getModel().addListener( new IDataModelListener()
+        {
 
-	@Override
-	protected Composite createTopLevelComposite(Composite parent) {
-		Composite top = SWTUtil.createTopComposite(parent, 1);
+            public void propertyChanged( DataModelEvent event )
+            {
+                // if the user has switched back to first page and changed either to or from a portlet type need to
+                // validate again in case we need to clear out any errors from selecting a portlet framework
+                if( PLUGIN_TYPE_PORTLET.equals( event.getPropertyName() ) )
+                {
+                    validatePage( false );
+                }
+            }
+        } );
 
-		createFrameworkGroup(top);
-		// createPluginFragmentButton(top);
-		createTemplateOptionsGroup(top);
+        return top;
+    }
 
-		getModel().addListener(new IDataModelListener() {
+    protected IDataModel getModel()
+    {
+        return model;
+    }
 
-			public void propertyChanged(DataModelEvent event) {
-				// if the user has switched back to first page and changed either to or from a portlet type need to
-				// validate again in case we need to clear out any errors from selecting a portlet framework
-				if (PLUGIN_TYPE_PORTLET.equals(event.getPropertyName())) {
-					validatePage(false);
-				}
-			}
-		});
+    @Override
+    protected String getModuleFacetID()
+    {
+        return IModuleConstants.JST_WEB_MODULE;
+    }
 
-		return top;
-	}
+    public IPortletFrameworkWizardProvider getSelectedPortletFramework()
+    {
+        IPortletFrameworkWizardProvider retval = null;
 
-	protected IDataModel getModel() {
-		return model;
-	}
+        if( !CoreUtil.isNullOrEmpty( frameworkButtons ) )
+        {
+            for( Button templateButton : frameworkButtons )
+            {
+                if( templateButton.getSelection() )
+                {
+                    retval = (IPortletFrameworkWizardProvider) templateButton.getData();
+                }
+            }
+        }
 
-	@Override
-	protected String getModuleFacetID() {
-		return IModuleConstants.JST_WEB_MODULE;
-	}
+        return retval;
+    }
 
-	public IPortletFrameworkWizardProvider getSelectedPortletFramework() {
-		IPortletFrameworkWizardProvider retval = null;
+    @Override
+    protected String[] getValidationPropertyNames()
+    {
+        final List<String> validationPropertyNames = new ArrayList<String>();
 
-		if (!CoreUtil.isNullOrEmpty(frameworkButtons)) {
-			for (Button templateButton : frameworkButtons) {
-				if (templateButton.getSelection()) {
-					retval = (IPortletFrameworkWizardProvider) templateButton.getData();
-				}
-			}
-		}
+        final String[] propNames = new String[] { PLUGIN_FRAGMENT_ENABLED, PORTLET_FRAMEWORK_ID };
 
-		return retval;
-	}
-
-	@Override
-	protected String[] getValidationPropertyNames() {
-	    final List<String> validationPropertyNames = new ArrayList<String>();
-        
-	    final String[] propNames = new String[] 
-	    {
-            PLUGIN_FRAGMENT_ENABLED, PORTLET_FRAMEWORK_ID
-        };
-        
         Collections.addAll( validationPropertyNames, propNames );
-	    
-	    for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+
+        for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
         {
             validationPropertyNames.addAll( portletFramework.getPropertyNames() );
         }
-	    
-		return validationPropertyNames.toArray( new String[0] );
-	}
 
-	@Override
-	public NewPluginProjectWizard getWizard()
-	{
-		return (NewPluginProjectWizard) super.getWizard();
-	}
+        return validationPropertyNames.toArray( new String[0] );
+    }
 
-
+    @Override
+    public NewPluginProjectWizard getWizard()
+    {
+        return (NewPluginProjectWizard) super.getWizard();
+    }
 
 }

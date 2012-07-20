@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.core.operation;
@@ -20,6 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -33,102 +36,115 @@ import org.w3c.dom.NodeList;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewLayoutTplDataModelProperties {
+@SuppressWarnings( "restriction" )
+public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewLayoutTplDataModelProperties
+{
 
-	public LayoutTplDescriptorHelper(IProject project) {
-		super(project);
-	}
+    public LayoutTplDescriptorHelper( IProject project )
+    {
+        super( project );
+    }
 
-	public IStatus addNewLayoutTemplate(final IDataModel dm) {
-		DOMModelOperation operation =
-			new DOMModelEditOperation(getDescriptorFile(ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
+    public IStatus addNewLayoutTemplate( final IDataModel dm )
+    {
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
+        
+        final DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
+        {
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return doAddLayoutTemplate( document, dm );
+            }
+        };
 
-				protected IStatus doExecute(IDOMDocument document) {
-					return doAddLayoutTemplate(document, dm);
-				}
+        IStatus status = operation.execute();
 
-			};
+        if( !status.isOK() )
+        {
+            return status;
+        }
 
-		IStatus status = operation.execute();
+        return status;
+    }
 
-		if (!status.isOK()) {
-			return status;
-		}
+    public IStatus doAddLayoutTemplate( IDOMDocument document, IDataModel model )
+    {
+        // <layout-templates> element
+        Element docRoot = document.getDocumentElement();
 
-		return status;
-	}
+        Element layoutTemplateElement = document.createElement( "layout-template" );
+        layoutTemplateElement.setAttribute( "id", model.getStringProperty( LAYOUT_TEMPLATE_ID ) );
+        layoutTemplateElement.setAttribute( "name", model.getStringProperty( LAYOUT_TEMPLATE_NAME ) );
 
-	public IStatus doAddLayoutTemplate(IDOMDocument document, IDataModel model) {
-		// <layout-templates> element
-		Element docRoot = document.getDocumentElement();
+        // find the <custom> element and if it doesn't exist create it
+        Node customElement = NodeUtil.getFirstNamedChildNode( docRoot, "custom" );
 
-		Element layoutTemplateElement = document.createElement("layout-template");
-		layoutTemplateElement.setAttribute("id", model.getStringProperty(LAYOUT_TEMPLATE_ID));
-		layoutTemplateElement.setAttribute("name", model.getStringProperty(LAYOUT_TEMPLATE_NAME));
+        if( customElement == null )
+        {
+            // if we are going to create a new <custom> it must be after the <standard>
+            Node standardElement = NodeUtil.getFirstNamedChildNode( docRoot, "standard" );
 
-		// find the <custom> element and if it doesn't exist create it
-		Node customElement = NodeUtil.getFirstNamedChildNode(docRoot, "custom");
+            customElement = document.createElement( "custom" );
+            docRoot.insertBefore( customElement, standardElement );
+        }
 
-		if (customElement == null) {
-			// if we are going to create a new <custom> it must be after the <standard>
-			Node standardElement = NodeUtil.getFirstNamedChildNode(docRoot, "standard");
+        customElement.appendChild( layoutTemplateElement );
 
-			customElement = document.createElement("custom");
-			docRoot.insertBefore(customElement, standardElement);
-		}
+        // now that we have the new <layout-template> element added to custom element, add the child nodes to layout
+        String templatePath = model.getStringProperty( LAYOUT_TEMPLATE_FILE );
+        String wapTemplatePath = model.getStringProperty( LAYOUT_WAP_TEMPLATE_FILE );
+        String thumbnailPath = model.getStringProperty( LAYOUT_THUMBNAIL_FILE );
 
-		customElement.appendChild(layoutTemplateElement);
+        appendChildElement( layoutTemplateElement, "template-path", templatePath );
+        appendChildElement( layoutTemplateElement, "wap-template-path", wapTemplatePath );
+        appendChildElement( layoutTemplateElement, "thumbnail-path", thumbnailPath );
 
-		// now that we have the new <layout-template> element added to custom element, add the child nodes to layout
-		String templatePath = model.getStringProperty(LAYOUT_TEMPLATE_FILE);
-		String wapTemplatePath = model.getStringProperty(LAYOUT_WAP_TEMPLATE_FILE);
-		String thumbnailPath = model.getStringProperty(LAYOUT_THUMBNAIL_FILE);
+        // format the new node added to the model;
+        FormatProcessorXML processor = new FormatProcessorXML();
 
-		appendChildElement(layoutTemplateElement, "template-path", templatePath);
-		appendChildElement(layoutTemplateElement, "wap-template-path", wapTemplatePath);
-		appendChildElement(layoutTemplateElement, "thumbnail-path", thumbnailPath);
+        processor.formatNode( customElement );
 
-		// format the new node added to the model;
-		FormatProcessorXML processor = new FormatProcessorXML();
+        return Status.OK_STATUS;
+    }
 
-		processor.formatNode(customElement);
+    public boolean hasTemplateId( final String templateId )
+    {
+        if( CoreUtil.isNullOrEmpty( templateId ) )
+        {
+            return false;
+        }
 
-		return Status.OK_STATUS;
-	}
+        final boolean[] retval = new boolean[1];
 
-	public boolean hasTemplateId(final String templateId) {
-		if (CoreUtil.isNullOrEmpty(templateId)) {
-			return false;
-		}
+        DOMModelOperation operation =
+            new DOMModelReadOperation( getDescriptorFile( ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE ) )
+            {
+                @Override
+                protected IStatus doExecute( IDOMDocument document )
+                {
+                    NodeList layoutTemplates = document.getElementsByTagName( "layout-template" );
 
-		final boolean[] retval = new boolean[1];
+                    if( layoutTemplates != null && layoutTemplates.getLength() > 0 )
+                    {
+                        for( int i = 0; i < layoutTemplates.getLength(); i++ )
+                        {
+                            Element layoutTemplate = (Element) layoutTemplates.item( i );
 
-		DOMModelOperation operation =
-			new DOMModelReadOperation(getDescriptorFile(ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE)) {
+                            if( templateId.equals( layoutTemplate.getAttribute( "id" ) ) )
+                            {
+                                retval[0] = true;
+                                break;
+                            }
+                        }
+                    }
 
-				@Override
-				protected IStatus doExecute(IDOMDocument document) {
-					NodeList layoutTemplates = document.getElementsByTagName("layout-template");
+                    return Status.OK_STATUS;
+                }
+            };
 
-					if (layoutTemplates != null && layoutTemplates.getLength() > 0) {
-						for (int i = 0; i < layoutTemplates.getLength(); i++) {
-							Element layoutTemplate = (Element) layoutTemplates.item(i);
+        operation.execute();
 
-							if (templateId.equals(layoutTemplate.getAttribute("id"))) {
-								retval[0] = true;
-								break;
-							}
-						}
-					}
-
-					return Status.OK_STATUS;
-				}
-			};
-
-		operation.execute();
-
-		return retval[0];
-	}
+        return retval[0];
+    }
 
 }

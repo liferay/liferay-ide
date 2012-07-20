@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,9 +15,9 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
+import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.form.FormLayoutFactory;
 import com.liferay.ide.ui.form.IDEFormPage;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -29,66 +29,72 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 /**
  * @author Greg Amerson
  */
-public class PluginPackageFormPage extends IDEFormPage {
+public class PluginPackageFormPage extends IDEFormPage
+{
 
-	protected ScrolledForm form;
+    protected ScrolledForm form;
 
-	protected FormToolkit toolkit;
+    protected FormToolkit toolkit;
 
-	public PluginPackageFormPage(PluginPackageEditor editor) {
-		super(editor, "pluginPackage", "Properties");
-	}
+    public PluginPackageFormPage( PluginPackageEditor editor )
+    {
+        super( editor, "pluginPackage", "Properties" );
+    }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+    }
 
-	@Override
-	protected void createFormContent(IManagedForm managedForm) {
-		super.createFormContent(managedForm);
+    @Override
+    protected void createFormContent( IManagedForm managedForm )
+    {
+        super.createFormContent( managedForm );
 
-		form = managedForm.getForm();
+        form = managedForm.getForm();
 
-		FormToolkit toolkit = managedForm.getToolkit();
-		toolkit.decorateFormHeading(form.getForm());
+        FormToolkit toolkit = managedForm.getToolkit();
+        toolkit.decorateFormHeading( form.getForm() );
 
-		form.setText("Liferay Plugin Package Properties");
-		form.setImage(PortletUIPlugin.imageDescriptorFromPlugin(PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png").createImage());
+        form.setText( "Liferay Plugin Package Properties" );
+        form.setImage( PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage() );
 
-		toolkit = managedForm.getToolkit();
+        toolkit = managedForm.getToolkit();
 
-		Composite body = form.getBody();
-		body.setLayout(FormLayoutFactory.createFormGridLayout(true, 2));
+        Composite body = form.getBody();
+        body.setLayout( FormLayoutFactory.createFormGridLayout( true, 2 ) );
 
-		Composite left, right;
-		toolkit = managedForm.getToolkit();
-		left = toolkit.createComposite(body, SWT.NONE);
-		left.setLayout(FormLayoutFactory.createFormPaneGridLayout(false, 1));
-		left.setLayoutData(new GridData(GridData.FILL_BOTH));
-		right = toolkit.createComposite(body, SWT.NONE);
-		right.setLayout(FormLayoutFactory.createFormPaneGridLayout(false, 1));
-		right.setLayoutData(new GridData(GridData.FILL_BOTH));
+        Composite left, right;
+        toolkit = managedForm.getToolkit();
+        left = toolkit.createComposite( body, SWT.NONE );
+        left.setLayout( FormLayoutFactory.createFormPaneGridLayout( false, 1 ) );
+        left.setLayoutData( new GridData( GridData.FILL_BOTH ) );
+        right = toolkit.createComposite( body, SWT.NONE );
+        right.setLayout( FormLayoutFactory.createFormPaneGridLayout( false, 1 ) );
+        right.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
-		PluginPackageGeneralSection generalSection = new PluginPackageGeneralSection(this, left);
-		managedForm.addPart(generalSection);
+        PluginPackageGeneralSection generalSection = new PluginPackageGeneralSection( this, left );
+        managedForm.addPart( generalSection );
 
-		PortalJarsSection jarsSection = new PortalJarsSection(this, right, getPortalSectionLabels());
-		managedForm.addPart(jarsSection);
+        PortalJarsSection jarsSection = new PortalJarsSection( this, right, getPortalSectionLabels() );
+        managedForm.addPart( jarsSection );
 
-		PortalTldsSection tldsSection = new PortalTldsSection(this, right, getPortalSectionLabels());
-		managedForm.addPart(tldsSection);
+        PortalTldsSection tldsSection = new PortalTldsSection( this, right, getPortalSectionLabels() );
+        managedForm.addPart( tldsSection );
 
-		RequiredDeploymentContextsSection contextsSection =
-			new RequiredDeploymentContextsSection(this, right, getContextsSectionLabels());
-		managedForm.addPart(contextsSection);
-	}
+        RequiredDeploymentContextsSection contextsSection =
+            new RequiredDeploymentContextsSection( this, right, getContextsSectionLabels() );
+        managedForm.addPart( contextsSection );
+    }
 
-	private String[] getContextsSectionLabels() {
-		return new String[] { "Add...", "Remove", "Up", "Down" };
-	}
+    private String[] getContextsSectionLabels()
+    {
+        return new String[] { "Add...", "Remove", "Up", "Down" };
+    }
 
-	private String[] getPortalSectionLabels() {
-		return new String[] { "Add...", "Remove" };
-	}
+    private String[] getPortalSectionLabels()
+    {
+        return new String[] { "Add...", "Remove" };
+    }
 }

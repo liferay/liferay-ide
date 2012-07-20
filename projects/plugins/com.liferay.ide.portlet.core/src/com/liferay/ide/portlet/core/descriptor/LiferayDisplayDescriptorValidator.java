@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -54,182 +54,201 @@ import org.w3c.dom.NodeList;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LiferayDisplayDescriptorValidator extends BaseValidator {
+@SuppressWarnings( "restriction" )
+public class LiferayDisplayDescriptorValidator extends BaseValidator
+{
 
-	public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayDisplayDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayDisplayDescriptorMarker";
 
-	public static final String MESSAGE_PORTLET_NAME_NOT_FOUND =
-		"The portlet id {0} did not match a portlet name found in portlet.xml.";
+    public static final String MESSAGE_PORTLET_NAME_NOT_FOUND =
+        "The portlet id {0} did not match a portlet name found in portlet.xml.";
 
-	public static final String PORTLET_ELEMENT = "portlet";
+    public static final String PORTLET_ELEMENT = "portlet";
 
-	public static final String PORTLET_NAME_ELEMENT = "portlet-name";
+    public static final String PORTLET_NAME_ELEMENT = "portlet-name";
 
-	public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+    public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
-	public LiferayDisplayDescriptorValidator() {
-		super();
-	}
+    public LiferayDisplayDescriptorValidator()
+    {
+        super();
+    }
 
-	@Override
-	public ValidationResult validate(IResource resource, int kind, ValidationState state, IProgressMonitor monitor) {
-		if (resource.getType() != IResource.FILE) {
-			return null;
-		}
+    @SuppressWarnings( "deprecation" )
+    @Override
+    public ValidationResult validate( IResource resource, int kind, ValidationState state, IProgressMonitor monitor )
+    {
+        if( resource.getType() != IResource.FILE )
+        {
+            return null;
+        }
 
-		ValidationResult result = new ValidationResult();
+        ValidationResult result = new ValidationResult();
 
-		IFile liferayDisplayXml = (IFile) resource;
+        IFile liferayDisplayXml = (IFile) resource;
 
-		IFile portletXml =
-			DescriptorHelper.getDescriptorFile(liferayDisplayXml.getProject(), ILiferayConstants.PORTLET_XML_FILE);
+        IFile portletXml =
+            DescriptorHelper.getDescriptorFile( liferayDisplayXml.getProject(), ILiferayConstants.PORTLET_XML_FILE );
 
-		if (liferayDisplayXml.isAccessible() && portletXml != null && portletXml.isAccessible() &&
-			ProjectUtil.isPortletProject(resource.getProject())) {
+        if( liferayDisplayXml.isAccessible() && portletXml != null && portletXml.isAccessible() &&
+            ProjectUtil.isPortletProject( resource.getProject() ) )
+        {
 
-			IScopeContext[] scopes = new IScopeContext[] {
-				new InstanceScope(), new DefaultScope()
-			};
+            IScopeContext[] scopes = new IScopeContext[] { new InstanceScope(), new DefaultScope() };
 
-			ProjectScope projectScope = new ProjectScope(liferayDisplayXml.getProject());
+            ProjectScope projectScope = new ProjectScope( liferayDisplayXml.getProject() );
 
-			boolean useProjectSettings =
-				projectScope.getNode(PREFERENCE_NODE_QUALIFIER).getBoolean(
-					ProjectCorePlugin.USE_PROJECT_SETTINGS, false);
+            boolean useProjectSettings =
+                projectScope.getNode( PREFERENCE_NODE_QUALIFIER ).getBoolean(
+                    ProjectCorePlugin.USE_PROJECT_SETTINGS, false );
 
-			if (useProjectSettings) {
-				scopes = new IScopeContext[] {
-					projectScope, new InstanceScope(), new DefaultScope()
-				};
-			}
+            if( useProjectSettings )
+            {
+                scopes = new IScopeContext[] { projectScope, new InstanceScope(), new DefaultScope() };
+            }
 
-			try {
-				Map<String, Object>[] problems = detectProblems(liferayDisplayXml, portletXml, scopes);
+            try
+            {
+                Map<String, Object>[] problems = detectProblems( liferayDisplayXml, portletXml, scopes );
 
-				for (int i = 0; i < problems.length; i++) {
-					ValidatorMessage message =
-						ValidatorMessage.create(problems[i].get(IMarker.MESSAGE).toString(), resource);
-					message.setType(MARKER_TYPE);
-					message.setAttributes(problems[i]);
-					result.add(message);
-				}
+                for( int i = 0; i < problems.length; i++ )
+                {
+                    ValidatorMessage message =
+                        ValidatorMessage.create( problems[i].get( IMarker.MESSAGE ).toString(), resource );
+                    message.setType( MARKER_TYPE );
+                    message.setAttributes( problems[i] );
+                    result.add( message );
+                }
 
-				if (problems.length > 0) {
-					if (portletXml != null && portletXml.exists()) {
-						result.setDependsOn(new IResource[] {
-							portletXml
-						});
-					}
-				}
-			}
-			catch (Exception e) {
-				PortletCore.logError(e);
-			}
-		}
+                if( problems.length > 0 )
+                {
+                    if( portletXml != null && portletXml.exists() )
+                    {
+                        result.setDependsOn( new IResource[] { portletXml } );
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+                PortletCore.logError( e );
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	protected void checkPortletId(
-		IDOMDocument portletXmlDocument, Node portletIdNode, IScopeContext[] preferenceScopes, String validationKey,
-		String errorMessage, List<Map<String, Object>> problems) {
+    protected void checkPortletId(
+        IDOMDocument portletXmlDocument, Node portletIdNode, IScopeContext[] preferenceScopes, String validationKey,
+        String errorMessage, List<Map<String, Object>> problems )
+    {
 
-		NodeList elements = portletXmlDocument.getElementsByTagName(PORTLET_NAME_ELEMENT);
+        NodeList elements = portletXmlDocument.getElementsByTagName( PORTLET_NAME_ELEMENT );
 
-		Node portletId = portletIdNode.getAttributes().getNamedItem("id");
+        Node portletId = portletIdNode.getAttributes().getNamedItem( "id" );
 
-		if (portletId != null) {
-			String portletIdValue = portletId.getNodeValue();
+        if( portletId != null )
+        {
+            String portletIdValue = portletId.getNodeValue();
 
-			boolean portletNameFound = false;
+            boolean portletNameFound = false;
 
-			for (int i = 0; i < elements.getLength(); i++) {
-				Node item = elements.item(i);
-				String portletName = NodeUtil.getTextContent(item);
+            for( int i = 0; i < elements.getLength(); i++ )
+            {
+                Node item = elements.item( i );
+                String portletName = NodeUtil.getTextContent( item );
 
-				if (CoreUtil.isEqual(portletName, portletIdValue)) {
-					portletNameFound = true;
+                if( CoreUtil.isEqual( portletName, portletIdValue ) )
+                {
+                    portletNameFound = true;
 
-					break;
-				}
-			}
+                    break;
+                }
+            }
 
-			if (!portletNameFound) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					portletIdValue
-				});
+            if( !portletNameFound )
+            {
+                String msg = MessageFormat.format( errorMessage, new Object[] { portletIdValue } );
 
-				Map<String, Object> problem =
-					createMarkerValues(
-						PREFERENCE_NODE_QUALIFIER, preferenceScopes, validationKey, (IDOMNode) portletIdNode, msg);
+                Map<String, Object> problem =
+                    createMarkerValues(
+                        PREFERENCE_NODE_QUALIFIER, preferenceScopes, validationKey, (IDOMNode) portletIdNode, msg );
 
-				problems.add(problem);
-			}
-		}
+                problems.add( problem );
+            }
+        }
 
-	}
+    }
 
-	protected void checkPortletIds(
-		IDOMDocument liferayDisplayDocument, IDOMDocument portletXmlDocument, IScopeContext[] preferenceScopes,
-		List<Map<String, Object>> problems) {
+    protected void checkPortletIds(
+        IDOMDocument liferayDisplayDocument, IDOMDocument portletXmlDocument, IScopeContext[] preferenceScopes,
+        List<Map<String, Object>> problems )
+    {
 
-		NodeList elements = liferayDisplayDocument.getElementsByTagName(PORTLET_ELEMENT);
+        NodeList elements = liferayDisplayDocument.getElementsByTagName( PORTLET_ELEMENT );
 
-		for (int i = 0; i < elements.getLength(); i++) {
-			Node portletElement = elements.item(i);
+        for( int i = 0; i < elements.getLength(); i++ )
+        {
+            Node portletElement = elements.item( i );
 
-			checkPortletId(
-				portletXmlDocument, portletElement, preferenceScopes,
-				ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
-				problems);
-		}
-	}
+            checkPortletId(
+                portletXmlDocument, portletElement, preferenceScopes,
+                ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
+                problems );
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	protected Map<String, Object>[] detectProblems(
-		IFile liferayDisplayXml, IFile portletXml, IScopeContext[] preferenceScopes)
-		throws CoreException {
+    @SuppressWarnings( "unchecked" )
+    protected Map<String, Object>[] detectProblems(
+        IFile liferayDisplayXml, IFile portletXml, IScopeContext[] preferenceScopes ) throws CoreException
+    {
 
-		List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
 
-		IStructuredModel liferayDisplayModel = null;
-		IStructuredModel portletXmlModel = null;
-		IDOMDocument liferayDisplayDocument = null;
+        IStructuredModel liferayDisplayModel = null;
+        IStructuredModel portletXmlModel = null;
+        IDOMDocument liferayDisplayDocument = null;
 
-		try {
-			liferayDisplayModel = StructuredModelManager.getModelManager().getModelForRead(liferayDisplayXml);
+        try
+        {
+            liferayDisplayModel = StructuredModelManager.getModelManager().getModelForRead( liferayDisplayXml );
 
-			if (liferayDisplayModel != null && liferayDisplayModel instanceof IDOMModel) {
-				liferayDisplayDocument = ((IDOMModel) liferayDisplayModel).getDocument();
+            if( liferayDisplayModel != null && liferayDisplayModel instanceof IDOMModel )
+            {
+                liferayDisplayDocument = ( (IDOMModel) liferayDisplayModel ).getDocument();
 
-				if (portletXml != null && portletXml.exists()) {
-					portletXmlModel = StructuredModelManager.getModelManager().getModelForRead(portletXml);
+                if( portletXml != null && portletXml.exists() )
+                {
+                    portletXmlModel = StructuredModelManager.getModelManager().getModelForRead( portletXml );
 
-					if (portletXmlModel instanceof IDOMModel) {
-						IDOMDocument portletXmlDocument = ((IDOMModel) portletXmlModel).getDocument();
+                    if( portletXmlModel instanceof IDOMModel )
+                    {
+                        IDOMDocument portletXmlDocument = ( (IDOMModel) portletXmlModel ).getDocument();
 
-						checkPortletIds(liferayDisplayDocument, portletXmlDocument, preferenceScopes, problems);
-					}
-				}
-			}
-		}
-		catch (IOException e) {
+                        checkPortletIds( liferayDisplayDocument, portletXmlDocument, preferenceScopes, problems );
+                    }
+                }
+            }
+        }
+        catch( IOException e )
+        {
 
-		}
-		finally {
-			if (liferayDisplayModel != null) {
-				liferayDisplayModel.releaseFromRead();
-			}
+        }
+        finally
+        {
+            if( liferayDisplayModel != null )
+            {
+                liferayDisplayModel.releaseFromRead();
+            }
 
-			if (portletXmlModel != null) {
-				portletXmlModel.releaseFromRead();
-			}
-		}
+            if( portletXmlModel != null )
+            {
+                portletXmlModel.releaseFromRead();
+            }
+        }
 
-		Map<String, Object>[] retval = new Map[problems.size()];
+        Map<String, Object>[] retval = new Map[problems.size()];
 
-		return (Map<String, Object>[]) problems.toArray(retval);
-	}
+        return (Map<String, Object>[]) problems.toArray( retval );
+    }
 
 }

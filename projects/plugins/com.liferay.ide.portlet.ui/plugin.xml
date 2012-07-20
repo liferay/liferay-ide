@@ -85,7 +85,7 @@
             default="true"
             filenames="liferay-plugin-package.properties"
             icon="icons/e16/plugin.png"
-            id="com.liferay.ide.portlet.ui.editor.pluginpackage"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.pluginpackage"
             name="Plugin Package Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
       </editor>
@@ -93,7 +93,7 @@
             class="com.liferay.ide.portlet.ui.editor.PortletXmlEditor"
             default="true"
             icon="icons/e16/portlet.png"
-            id="com.liferay.ide.portlet.ui.editor.PortletXmlEditor"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
             name="Portlet Application Configuration Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
@@ -105,7 +105,7 @@
             default="true"
             icon="icons/elcl16/liferay_ui_16x16.png"
             name="Liferay Display Configuration Editor"
-            id="com.liferay.ide.portlet.ui.editor.LiferayDisplayXmlEditor"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
                contentTypeId="com.liferay.ide.portlet.core.liferaydisplayxml">

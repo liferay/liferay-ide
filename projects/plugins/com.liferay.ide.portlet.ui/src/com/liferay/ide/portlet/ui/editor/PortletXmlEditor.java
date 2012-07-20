@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *   
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,35 +17,38 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import com.liferay.ide.portlet.core.model.PortletApp;
 
-import com.liferay.ide.portlet.core.model.IPortletApp;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class PortletXmlEditor extends SapphireEditorForXml {
+public class PortletXmlEditor extends SapphireEditorForXml
+{
 
-	public static final String ID = "com.liferay.ide.portlet.ui.editor.PortletXmlEditor";
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor";
 
-	private static final String EDITOR_DEFINITION_PATH =
-		"com.liferay.ide.portlet.ui/com/liferay/ide/eclipse/portlet/ui/editor/portlet-app.sdef/portlet-app.editor";
+    private static final String EDITOR_DEFINITION_PATH =
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/portlet-app.sdef/portlet-app.editor";
 
-	/**
+    /**
 	 * 
 	 */
-	public PortletXmlEditor() {
-		super( ID );
-		initEditorSettings();
-	}
+    public PortletXmlEditor()
+    {
+        super( ID );
+        initEditorSettings();
+    }
 
-	/**
-	 * this method will initialize the editor with its settings like model element, UI definition etc.,
-	 */
-	private void initEditorSettings() {
+    /**
+     * this method will initialize the editor with its settings like model element, UI definition etc.,
+     */
+    private void initEditorSettings()
+    {
 
-		setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
-		setRootModelElementType( IPortletApp.TYPE );
+        setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
+        setRootModelElementType( PortletApp.TYPE );
 
-	}
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,25 +22,30 @@ import org.eclipse.wst.server.ui.FacetRuntimeComponentLabelProvider;
 /**
  * @author Greg Amerson
  */
-public class LiferayTomcatRuntimeComponentLabelProvider extends FacetRuntimeComponentLabelProvider {
+public class LiferayTomcatRuntimeComponentLabelProvider extends FacetRuntimeComponentLabelProvider
+{
 
-	public final class RuntimeLabelProvider implements IRuntimeComponentLabelProvider {
+    public final class RuntimeLabelProvider implements IRuntimeComponentLabelProvider
+    {
 
-		private final IRuntimeComponent rc;
+        private final IRuntimeComponent rc;
 
-		public RuntimeLabelProvider(IRuntimeComponent rc) {
-			this.rc = rc;
-		}
+        public RuntimeLabelProvider( IRuntimeComponent rc )
+        {
+            this.rc = rc;
+        }
 
-		public String getLabel() {
-			return rc.getProperty("type");
-		}
-	}
+        public String getLabel()
+        {
+            return rc.getProperty( "type" );
+        }
+    }
 
-	@SuppressWarnings( "rawtypes" )
-	public Object getAdapter(Object adaptable, Class adapterType) {
-		IRuntimeComponent rc = (IRuntimeComponent) adaptable;
-		
-		return new RuntimeLabelProvider(rc);
-	}
+    @SuppressWarnings( "rawtypes" )
+    public Object getAdapter( Object adaptable, Class adapterType )
+    {
+        IRuntimeComponent rc = (IRuntimeComponent) adaptable;
+
+        return new RuntimeLabelProvider( rc );
+    }
 }

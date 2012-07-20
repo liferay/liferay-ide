@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
@@ -57,12 +59,13 @@ import org.w3c.dom.Node;
 
 /**
  * Core Utility methods
- *
+ * 
  * @author Greg Amerson
  */
-public class CoreUtil {
+public class CoreUtil
+{
 
-	public static void addNaturesToProject( IProject proj, String[] natureIds, IProgressMonitor monitor )
+    public static void addNaturesToProject( IProject proj, String[] natureIds, IProgressMonitor monitor )
         throws CoreException
     {
         IProjectDescription description = proj.getDescription();
@@ -82,193 +85,218 @@ public class CoreUtil {
     }
 
     public static int compareVersions( Version v1, Version v2 )
-	{
-		if( v2 == v1 )
-		{ // quicktest
-			return 0;
-		}
+    {
+        if( v2 == v1 )
+        { // quicktest
+            return 0;
+        }
 
-		int result = v1.getMajor() - v2.getMajor();
+        int result = v1.getMajor() - v2.getMajor();
 
-		if( result != 0 )
-		{
-			return result;
-		}
+        if( result != 0 )
+        {
+            return result;
+        }
 
-		result = v1.getMinor() - v2.getMinor();
+        result = v1.getMinor() - v2.getMinor();
 
-		if( result != 0 )
-		{
-			return result;
-		}
+        if( result != 0 )
+        {
+            return result;
+        }
 
-		result = v1.getMicro() - v2.getMicro();
+        result = v1.getMicro() - v2.getMicro();
 
-		if( result != 0 )
-		{
-			return result;
-		}
+        if( result != 0 )
+        {
+            return result;
+        }
 
-		return v1.getQualifier().compareTo( v2.getQualifier() );
-	}
+        return v1.getQualifier().compareTo( v2.getQualifier() );
+    }
 
-	public static boolean containsMember( IModuleResourceDelta delta, String[] paths ) {
-		if (delta == null) {
-			return false;
-		}
+    public static boolean containsMember( IModuleResourceDelta delta, String[] paths )
+    {
+        if( delta == null )
+        {
+            return false;
+        }
 
-		// iterate over the path and find matching child delta
-		IModuleResourceDelta[] currentChildren = delta.getAffectedChildren();
+        // iterate over the path and find matching child delta
+        IModuleResourceDelta[] currentChildren = delta.getAffectedChildren();
 
-		if (currentChildren == null) {
-			IFile file = (IFile) delta.getModuleResource().getAdapter(IFile.class);
+        if( currentChildren == null )
+        {
+            IFile file = (IFile) delta.getModuleResource().getAdapter( IFile.class );
 
-			if ( file != null ) {
-				String filePath = file.getFullPath().toString();
+            if( file != null )
+            {
+                String filePath = file.getFullPath().toString();
 
-				for (String path : paths) {
-					if ( filePath.contains( path ) ) {
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+                for( String path : paths )
+                {
+                    if( filePath.contains( path ) )
+                    {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+        }
 
-		for (int j = 0, jmax = currentChildren.length; j < jmax; j++) {
-			IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
-			String moduleRelativePathValue = moduleRelativePath.toString();
-			String moduleRelativeLastSegment = moduleRelativePath.lastSegment();
+        for( int j = 0, jmax = currentChildren.length; j < jmax; j++ )
+        {
+            IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
+            String moduleRelativePathValue = moduleRelativePath.toString();
+            String moduleRelativeLastSegment = moduleRelativePath.lastSegment();
 
-			for (String path : paths) {
-				if ( moduleRelativePathValue.equals( path ) || moduleRelativeLastSegment.equals( path ) ) {
-					return true;
-				}
-			}
+            for( String path : paths )
+            {
+                if( moduleRelativePathValue.equals( path ) || moduleRelativeLastSegment.equals( path ) )
+                {
+                    return true;
+                }
+            }
 
-			boolean childContains = containsMember( currentChildren[j], paths );
+            boolean childContains = containsMember( currentChildren[j], paths );
 
-			if ( childContains ) {
-				return true;
-			}
-		}
+            if( childContains )
+            {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public static IStatus createErrorStatus(String msg) {
+    public static IStatus createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, CorePlugin.PLUGIN_ID, msg );
+    }
 
-		return new Status(IStatus.ERROR, CorePlugin.PLUGIN_ID, msg);
-	}
+    public static void deleteResource( IResource resource ) throws CoreException
+    {
+        if( resource == null || !resource.exists() )
+        {
+            return;
+        }
 
-	public static void deleteResource(IResource resource)
-		throws CoreException {
-		if (resource == null || !resource.exists()) {
-			return;
-		}
+        resource.delete( true, null );
+    }
 
-		resource.delete(true, null);
-	}
+    public static boolean empty( Object[] array )
+    {
+        return isNullOrEmpty( array );
+    }
 
-	public static boolean empty( Object[] array )
-	{
-		return isNullOrEmpty( array );
-	}
+    public static boolean empty( String val )
+    {
+        return isNullOrEmpty( val );
+    }
 
-	public static boolean empty( String val )
-	{
-		return isNullOrEmpty( val );
-	}
+    public static IProject[] getAllProjects()
+    {
+        return ResourcesPlugin.getWorkspace().getRoot().getProjects();
+    }
 
-	public static IProject[] getAllProjects() {
+    /**
+     * @param project
+     * @return
+     */
+    public static IClasspathEntry[] getClasspathEntries( IProject project )
+    {
+        if( project != null )
+        {
+            IJavaProject javaProject = JavaCore.create( project );
+            try
+            {
+                IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
+                return classPathEntries;
+            }
+            catch( JavaModelException e )
+            {
+            }
+        }
+        return null;
+    }
 
-		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
-	}
+    public static IFolder getDocroot( IProject project )
+    {
+        IContainer retval = null;
 
-	/**
-	 * @param project
-	 * @return
-	 */
-	public static IClasspathEntry[] getClasspathEntries( IProject project ) {
-		if ( project != null ) {
-			IJavaProject javaProject = JavaCore.create( project );
-			try {
-				IClasspathEntry[] classPathEntries = javaProject.getRawClasspath();
-				return classPathEntries;
-			}
-			catch ( JavaModelException e ) {
-				// TODO log the exception
-			}
-		}
-		return null;
-	}
+        if( project != null )
+        {
+            IVirtualComponent comp = ComponentCore.createComponent( project );
 
-	public static IFolder getDocroot( IProject project ) {
-		IContainer retval = null;
+            if( comp != null )
+            {
+                IVirtualFolder rootFolder = comp.getRootFolder();
 
-		if ( project != null ) {
-			IVirtualComponent comp = ComponentCore.createComponent( project );
+                if( rootFolder != null )
+                {
+                    retval = rootFolder.getUnderlyingFolder();
+                }
+            }
+        }
 
-			if ( comp != null ) {
-				IVirtualFolder rootFolder = comp.getRootFolder();
+        return retval instanceof IFolder ? (IFolder) retval : null;
+    }
 
-				if ( rootFolder != null ) {
-					retval = rootFolder.getUnderlyingFolder();
-				}
-			}
-		}
+    public static IFolder getDocroot( String projectName )
+    {
+        IProject project = getProject( projectName );
 
-		return retval instanceof IFolder ? (IFolder) retval : null;
-	}
+        return getDocroot( project );
+    }
 
-	public static IFolder getDocroot( String projectName ) {
-		IProject project = getProject( projectName );
+    public static Object getNewObject( Object[] oldObjects, Object[] newObjects )
+    {
+        if( oldObjects != null && newObjects != null && oldObjects.length < newObjects.length )
+        {
+            for( int i = 0; i < newObjects.length; i++ )
+            {
+                boolean found = false;
+                Object object = newObjects[i];
 
-		return getDocroot( project );
-	}
+                for( int j = 0; j < oldObjects.length; j++ )
+                {
+                    if( oldObjects[j] == object )
+                    {
+                        found = true;
+                        break;
+                    }
+                }
 
-	public static Object getNewObject(Object[] oldObjects, Object[] newObjects) {
+                if( !found )
+                {
+                    return object;
+                }
+            }
+        }
 
-		if (oldObjects != null && newObjects != null && oldObjects.length < newObjects.length) {
+        if( oldObjects == null && newObjects != null && newObjects.length == 1 )
+        {
+            return newObjects[0];
+        }
 
-			for (int i = 0; i < newObjects.length; i++) {
-				boolean found = false;
-				Object object = newObjects[i];
+        return null;
+    }
 
-				for (int j = 0; j < oldObjects.length; j++) {
-					if (oldObjects[j] == object) {
-						found = true;
-						break;
-					}
-				}
+    public static IProject getProject( String projectName )
+    {
+        return getWorkspaceRoot().getProject( projectName );
+    }
 
-				if (!found) {
-					return object;
-				}
-			}
-		}
-
-		if (oldObjects == null && newObjects != null && newObjects.length == 1) {
-			return newObjects[0];
-		}
-
-		return null;
-	}
-
-	public static IProject getProject(String projectName) {
-
-		return getWorkspaceRoot().getProject(projectName);
-	}
-
-	public static IPath getResourceLocation( IResource resource )
+    public static IPath getResourceLocation( IResource resource )
     {
         IPath retval = null;
-        
-        if (resource != null)
+
+        if( resource != null )
         {
             retval = resource.getLocation();
-            
-            if (retval == null)
+
+            if( retval == null )
             {
                 retval = resource.getRawLocation();
             }
@@ -277,148 +305,163 @@ public class CoreUtil {
         return retval;
     }
 
-	public static IWorkspaceRoot getWorkspaceRoot() {
+    public static IWorkspaceRoot getWorkspaceRoot()
+    {
+        return ResourcesPlugin.getWorkspace().getRoot();
+    }
 
-		return ResourcesPlugin.getWorkspace().getRoot();
-	}
+    public static Object invoke( String methodName, Object object, Class<?>[] argTypes, Object[] args )
+        throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+        InvocationTargetException
+    {
 
-	public static Object invoke(String methodName, Object object, Class<?>[] argTypes, Object[] args)
-		throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
-		InvocationTargetException {
+        Method method = object.getClass().getDeclaredMethod( methodName, argTypes );
+        method.setAccessible( true );
 
-		Method method = object.getClass().getDeclaredMethod( methodName, argTypes );
-		method.setAccessible( true );
+        return method.invoke( object, args );
+    }
 
-		return method.invoke(object, args);
-	}
+    public static boolean isEqual( Object object1, Object object2 )
+    {
+        return object1 != null && object2 != null && object1.equals( object2 );
+    }
 
-	public static boolean isEqual(Object object1, Object object2) {
-		return object1 != null && object2 != null && object1.equals(object2);
-	}
+    public static boolean isNullOrEmpty( List<?> list )
+    {
+        return list == null || list.size() == 0;
+    }
 
-	public static boolean isNullOrEmpty(List<?> list) {
-		return list == null || list.size() == 0;
-	}
+    public static boolean isNullOrEmpty( Object[] array )
+    {
+        return array == null || array.length == 0;
+    }
 
-	public static boolean isNullOrEmpty(Object[] array) {
-		return array == null || array.length == 0;
-	}
+    public static boolean isNullOrEmpty( String val )
+    {
+        return val == null || val.equals( "" ) || val.trim().equals( "" );
+    }
 
-	public static boolean isNullOrEmpty(String val) {
-		return val == null || val.equals("") || val.trim().equals("");
-	}
+    public static boolean isResourceInDocroot( IModuleResource resource )
+    {
+        IFile file = (IFile) resource.getAdapter( IFile.class );
 
-	public static boolean isResourceInDocroot( IModuleResource resource ) {
-		IFile file = (IFile) resource.getAdapter( IFile.class );
+        if( file != null )
+        {
+            IFolder docroot = getDocroot( file.getProject() );
 
-		if ( file != null ) {
-			IFolder docroot = getDocroot( file.getProject() );
+            return docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf( file.getFullPath() );
+        }
 
-			return docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf( file.getFullPath() );
-		}
+        return false;
+    }
 
-		return false;
-	}
+    public static void makeFolders( IFolder folder ) throws CoreException
+    {
+        if( folder == null )
+        {
+            return;
+        }
 
-	public static void makeFolders( IFolder folder ) throws CoreException
-	{
-		if ( folder == null )
-		{
-			return;
-		}
+        IContainer parent = folder.getParent();
 
-		IContainer parent = folder.getParent();
+        if( parent instanceof IFolder )
+        {
+            makeFolders( (IFolder) parent );
+        }
 
-		if ( parent instanceof IFolder )
-		{
-			makeFolders( (IFolder) parent );
-		}
+        if( !folder.exists() )
+        {
+            folder.create( true, true, null );
+        }
 
-		if ( !folder.exists() )
-		{
-			folder.create( true, true, null );
-		}
+    }
 
-	}
+    public static IProgressMonitor newSubMonitor( final IProgressMonitor parent, final int ticks )
+    {
+        return( parent == null ? null : new SubProgressMonitor( parent, ticks ) );
+    }
 
-	public static IProgressMonitor newSubMonitor(final IProgressMonitor parent, final int ticks) {
-		return (parent == null ? null : new SubProgressMonitor(parent, ticks));
-	}
+    public static void prepareFolder( IFolder folder ) throws CoreException
+    {
+        IContainer parent = folder.getParent();
 
-	public static void prepareFolder(IFolder folder)
-		throws CoreException {
+        if( parent instanceof IFolder )
+        {
+            prepareFolder( (IFolder) parent );
+        }
 
-		IContainer parent = folder.getParent();
+        if( !folder.exists() )
+        {
+            folder.create( IResource.FORCE, true, null );
+        }
+    }
 
-		if (parent instanceof IFolder) {
-			prepareFolder((IFolder) parent);
-		}
+    public static String readPropertyFileValue( File propertiesFile, String key ) throws FileNotFoundException,
+        IOException
+    {
+        Properties props = new Properties();
+        props.load( new FileInputStream( propertiesFile ) );
+        return props.getProperty( key );
+    }
 
-		if (!folder.exists()) {
-			folder.create(IResource.FORCE, true, null);
-		}
-	}
+    public static String readStreamToString( InputStream contents ) throws IOException
+    {
+        if( contents == null )
+        {
+            return null;
+        }
 
-	public static String readPropertyFileValue(File propertiesFile, String key)
-		throws FileNotFoundException, IOException {
+        final char[] buffer = new char[0x10000];
 
-		Properties props = new Properties();
-		props.load(new FileInputStream(propertiesFile));
-		return props.getProperty(key);
-	}
+        StringBuilder out = new StringBuilder();
 
-	public static String readStreamToString(InputStream contents)
-		throws IOException {
+        Reader in = new InputStreamReader( contents, "UTF-8" );
 
-		if (contents == null) {
-			return null;
-		}
+        int read;
+        do
+        {
+            read = in.read( buffer, 0, buffer.length );
+            if( read > 0 )
+            {
+                out.append( buffer, 0, read );
+            }
+        }
+        while( read >= 0 );
 
-		final char[] buffer = new char[0x10000];
+        return out.toString();
+    }
 
-		StringBuilder out = new StringBuilder();
+    public static Version readVersionFile( File versionInfoFile )
+    {
+        String versionContents = FileUtil.readContents( versionInfoFile );
 
-		Reader in = new InputStreamReader(contents, "UTF-8");
+        if( CoreUtil.isNullOrEmpty( versionContents ) )
+        {
+            return Version.emptyVersion;
+        }
 
-		int read;
-		do {
-			read = in.read(buffer, 0, buffer.length);
-			if (read > 0) {
-				out.append(buffer, 0, read);
-			}
-		}
-		while (read >= 0);
+        Version version = null;;
 
-		return out.toString();
-	}
+        try
+        {
+            version = Version.parseVersion( versionContents.trim() );
+        }
+        catch( NumberFormatException e )
+        {
+            version = Version.emptyVersion;
+        }
 
-	public static Version readVersionFile(File versionInfoFile) {
-		String versionContents = FileUtil.readContents(versionInfoFile);
-
-		if (CoreUtil.isNullOrEmpty(versionContents)) {
-			return Version.emptyVersion;
-		}
-
-		Version version = null;;
-
-		try {
-			version = Version.parseVersion(versionContents.trim());
-		}
-		catch (NumberFormatException e) {
-			version = Version.emptyVersion;
-		}
-
-		return version;
-	}
+        return version;
+    }
 
     public static void removeChildren( Node node )
-	{
-		if( node != null )
-		{
-			while( node.hasChildNodes() )
-			{
-				node.removeChild( node.getFirstChild() );
-			}
-		}
-	}
+    {
+        if( node != null )
+        {
+            while( node.hasChildNodes() )
+            {
+                node.removeChild( node.getFirstChild() );
+            }
+        }
+    }
 }

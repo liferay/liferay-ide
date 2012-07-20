@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.ui.editor;
@@ -28,50 +30,53 @@ import org.eclipse.ui.actions.ActionFactory;
  * 
  * @author Gregory Amerson
  */
-public class LayoutTplContextMenuProvider extends ContextMenuProvider {
+public class LayoutTplContextMenuProvider extends ContextMenuProvider
+{
 
-	/** The editor's action registry. */
-	protected ActionRegistry actionRegistry;
+    /** The editor's action registry. */
+    protected ActionRegistry actionRegistry;
 
-	/**
-	 * Instantiate a new menu context provider for the specified EditPartViewer
-	 * and ActionRegistry.
-	 * 
-	 * @param viewer
-	 *            the editor's graphical viewer
-	 * @param registry
-	 *            the editor's action registry
-	 * @throws IllegalArgumentException
-	 *             if registry is <tt>null</tt>.
-	 */
-	public LayoutTplContextMenuProvider(EditPartViewer viewer, ActionRegistry registry) {
-		super(viewer);
+    /**
+     * Instantiate a new menu context provider for the specified EditPartViewer and ActionRegistry.
+     * 
+     * @param viewer
+     *            the editor's graphical viewer
+     * @param registry
+     *            the editor's action registry
+     * @throws IllegalArgumentException
+     *             if registry is <tt>null</tt>.
+     */
+    public LayoutTplContextMenuProvider( EditPartViewer viewer, ActionRegistry registry )
+    {
+        super( viewer );
 
-		if (registry == null) {
-			throw new IllegalArgumentException();
-		}
+        if( registry == null )
+        {
+            throw new IllegalArgumentException();
+        }
 
-		actionRegistry = registry;
-	}
+        actionRegistry = registry;
+    }
 
-	/**
-	 * Called when the context menu is about to show. Actions, whose state is
-	 * enabled, will appear in the context menu.
-	 * 
-	 * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.action.IMenuManager)
-	 */
-	public void buildContextMenu(IMenuManager menu) {
-		// Add standard action groups to the menu
-		GEFActionConstants.addStandardActionGroups(menu);
+    /**
+     * Called when the context menu is about to show. Actions, whose state is enabled, will appear in the context menu.
+     * 
+     * @see org.eclipse.gef.ContextMenuProvider#buildContextMenu(org.eclipse.jface.action.IMenuManager)
+     */
+    public void buildContextMenu( IMenuManager menu )
+    {
+        // Add standard action groups to the menu
+        GEFActionConstants.addStandardActionGroups( menu );
 
-		// Add actions to the menu
-		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, getAction(ActionFactory.UNDO.getId()));
-		menu.appendToGroup(GEFActionConstants.GROUP_UNDO, getAction(ActionFactory.REDO.getId()));
-		menu.appendToGroup(GEFActionConstants.GROUP_EDIT, getAction(ActionFactory.DELETE.getId()));
-	}
+        // Add actions to the menu
+        menu.appendToGroup( GEFActionConstants.GROUP_UNDO, getAction( ActionFactory.UNDO.getId() ) );
+        menu.appendToGroup( GEFActionConstants.GROUP_UNDO, getAction( ActionFactory.REDO.getId() ) );
+        menu.appendToGroup( GEFActionConstants.GROUP_EDIT, getAction( ActionFactory.DELETE.getId() ) );
+    }
 
-	protected IAction getAction(String actionId) {
-		return actionRegistry.getAction(actionId);
-	}
+    protected IAction getAction( String actionId )
+    {
+        return actionRegistry.getAction( actionId );
+    }
 
 }

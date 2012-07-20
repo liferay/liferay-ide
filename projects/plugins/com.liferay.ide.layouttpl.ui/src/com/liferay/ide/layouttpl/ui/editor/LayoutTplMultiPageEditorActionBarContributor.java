@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,116 +23,143 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML;
 import org.eclipse.wst.sse.ui.internal.ISourceViewerActionBarContributor;
 
-
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings("restriction")
-public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEditorActionBarContributor {
+@SuppressWarnings( "restriction" )
+public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEditorActionBarContributor
+{
+    protected IEditorActionBarContributor sourceEditorContributor;
+    protected IEditorActionBarContributor visualEditorContributor;
+    protected MultiPageEditorPart multiPageEditor;
+    protected boolean needsMultiInit;
 
-	protected IEditorActionBarContributor sourceEditorContributor;
-	protected IEditorActionBarContributor visualEditorContributor;
-	protected MultiPageEditorPart multiPageEditor;
-	protected boolean needsMultiInit;
+    public LayoutTplMultiPageEditorActionBarContributor()
+    {
+        super();
 
-	public LayoutTplMultiPageEditorActionBarContributor() {
-		super();
-				this.sourceEditorContributor = new ActionContributorHTML();
-	}
+        this.sourceEditorContributor = new ActionContributorHTML();
+    }
 
-	public void init(IActionBars actionBars) {
-		super.init(actionBars);
+    public void init( IActionBars actionBars )
+    {
+        super.init( actionBars );
 
-		if (actionBars != null) {
-			initDesignViewerActionBarContributor(actionBars);
-			initSourceViewerActionContributor(actionBars);
-		}
+        if( actionBars != null )
+        {
+            initDesignViewerActionBarContributor( actionBars );
+            initSourceViewerActionContributor( actionBars );
+        }
 
-		needsMultiInit = true;
-	}
+        needsMultiInit = true;
+    }
 
-	protected void initDesignViewerActionBarContributor(IActionBars actionBars) {
-		if (visualEditorContributor != null) {
-			visualEditorContributor.init(actionBars, getPage());
-		}
-	}
+    protected void initDesignViewerActionBarContributor( IActionBars actionBars )
+    {
+        if( visualEditorContributor != null )
+        {
+            visualEditorContributor.init( actionBars, getPage() );
+        }
+    }
 
-	protected void initSourceViewerActionContributor(IActionBars actionBars) {
-		if (sourceEditorContributor != null) {
-			sourceEditorContributor.init(actionBars, getPage());
-		}
-	}
+    protected void initSourceViewerActionContributor( IActionBars actionBars )
+    {
+        if( sourceEditorContributor != null )
+        {
+            sourceEditorContributor.init( actionBars, getPage() );
+        }
+    }
 
-	public void dispose() {
-		super.dispose();
+    public void dispose()
+    {
+        super.dispose();
 
-		if (visualEditorContributor != null) {
-			visualEditorContributor.dispose();
-		}
+        if( visualEditorContributor != null )
+        {
+            visualEditorContributor.dispose();
+        }
 
-		if (sourceEditorContributor != null) {
-			sourceEditorContributor.dispose();
-		}
+        if( sourceEditorContributor != null )
+        {
+            sourceEditorContributor.dispose();
+        }
 
-		multiPageEditor = null;
-	}
+        multiPageEditor = null;
+    }
 
-	@Override
-	public void setActivePage(IEditorPart activeEditor) {
-		if (multiPageEditor != null) {
-			if ((activeEditor != null) && (activeEditor instanceof ITextEditor)) {
-				activateSourcePage(activeEditor);
-			}
-			else {
-				activateVisualPage(activeEditor);
-			}
-		}
+    @Override
+    public void setActivePage( IEditorPart activeEditor )
+    {
+        if( multiPageEditor != null )
+        {
+            if( ( activeEditor != null ) && ( activeEditor instanceof ITextEditor ) )
+            {
+                activateSourcePage( activeEditor );
+            }
+            else
+            {
+                activateVisualPage( activeEditor );
+            }
+        }
 
-		IActionBars actionBars = getActionBars();
-		if (actionBars != null) {
-			// update menu bar and tool bar
-			actionBars.updateActionBars();
-		}
-	}
+        IActionBars actionBars = getActionBars();
+        if( actionBars != null )
+        {
+            // update menu bar and tool bar
+            actionBars.updateActionBars();
+        }
+    }
 
-	@Override
-	public void setActiveEditor(IEditorPart part) {
-		if (part instanceof MultiPageEditorPart) {
-			this.multiPageEditor = (MultiPageEditorPart) part;
-		}
+    @Override
+    public void setActiveEditor( IEditorPart part )
+    {
+        if( part instanceof MultiPageEditorPart )
+        {
+            this.multiPageEditor = (MultiPageEditorPart) part;
+        }
 
-		if (needsMultiInit) {
-			visualEditorContributor = new LayoutTplEditorActionBarContributor();
-			initDesignViewerActionBarContributor(getActionBars());
-			needsMultiInit = false;
-		}
+        if( needsMultiInit )
+        {
+            visualEditorContributor = new LayoutTplEditorActionBarContributor();
+            initDesignViewerActionBarContributor( getActionBars() );
+            needsMultiInit = false;
+        }
 
-		super.setActiveEditor(part);
-	}
+        super.setActiveEditor( part );
+    }
 
-	protected void activateVisualPage(IEditorPart activeEditor) {
-		if ((sourceEditorContributor != null) && (sourceEditorContributor instanceof ISourceViewerActionBarContributor)) {
-			// if design page is not really an IEditorPart, activeEditor ==
-			// null, so pass in multiPageEditor instead (d282414)
-			if (activeEditor == null) {
-				sourceEditorContributor.setActiveEditor(multiPageEditor);
-			}
-			else {
-				sourceEditorContributor.setActiveEditor(activeEditor);
-			}
-			((ISourceViewerActionBarContributor) sourceEditorContributor).setViewerSpecificContributionsEnabled(false);
-		}
-	}
+    protected void activateVisualPage( IEditorPart activeEditor )
+    {
+        if( ( sourceEditorContributor != null ) &&
+            ( sourceEditorContributor instanceof ISourceViewerActionBarContributor ) )
+        {
+            // if design page is not really an IEditorPart, activeEditor ==
+            // null, so pass in multiPageEditor instead (d282414)
+            if( activeEditor == null )
+            {
+                sourceEditorContributor.setActiveEditor( multiPageEditor );
+            }
+            else
+            {
+                sourceEditorContributor.setActiveEditor( activeEditor );
+            }
+            ( (ISourceViewerActionBarContributor) sourceEditorContributor ).setViewerSpecificContributionsEnabled( false );
+        }
+    }
 
-	protected void activateSourcePage(IEditorPart activeEditor) {
-		if (visualEditorContributor != null) {
-			visualEditorContributor.setActiveEditor(multiPageEditor);
-		}
+    protected void activateSourcePage( IEditorPart activeEditor )
+    {
+        if( visualEditorContributor != null )
+        {
+            visualEditorContributor.setActiveEditor( multiPageEditor );
+        }
 
-		if ((sourceEditorContributor != null) && (sourceEditorContributor instanceof ISourceViewerActionBarContributor)) {
-			sourceEditorContributor.setActiveEditor(activeEditor);
-			((ISourceViewerActionBarContributor) sourceEditorContributor).setViewerSpecificContributionsEnabled(true);
-		}
-	}
+        if( ( sourceEditorContributor != null ) &&
+            ( sourceEditorContributor instanceof ISourceViewerActionBarContributor ) )
+        {
+            sourceEditorContributor.setActiveEditor( activeEditor );
+            ( (ISourceViewerActionBarContributor) sourceEditorContributor ).setViewerSpecificContributionsEnabled( true );
+        }
+    }
 
 }

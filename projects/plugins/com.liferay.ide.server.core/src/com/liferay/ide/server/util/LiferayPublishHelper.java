@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,49 +30,57 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 /**
  * @author Greg Amerson
  */
-public class LiferayPublishHelper {
+public class LiferayPublishHelper
+{
 
-	public static boolean prePublishModule(
-		ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree,
-		IModuleResourceDelta[] resourceDelta, IProgressMonitor monitor) {
+    public static boolean prePublishModule(
+        ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree,
+        IModuleResourceDelta[] resourceDelta, IProgressMonitor monitor )
+    {
+        boolean retval = true;
 
-		boolean retval = true;
+        if( moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null )
+        {
+            IProject project = moduleTree[0].getProject();
 
-		if (moduleTree != null && moduleTree.length > 0 && moduleTree[0].getProject() != null) {
-			IProject project = moduleTree[0].getProject();
+            IFacetedProject facetedProject = ServerUtil.getFacetedProject( project );
 
-			IFacetedProject facetedProject = ServerUtil.getFacetedProject( project );
+            if( facetedProject != null )
+            {
+                IProjectFacet liferayFacet = ServerUtil.getLiferayFacet( facetedProject );
 
-			if (facetedProject != null) {
-				IProjectFacet liferayFacet = ServerUtil.getLiferayFacet( facetedProject );
+                if( liferayFacet != null )
+                {
+                    String facetId = liferayFacet.getId();
 
-				if (liferayFacet != null) {
-					String facetId = liferayFacet.getId();
+                    IRuntime runtime = null;
 
-					IRuntime runtime = null;
+                    try
+                    {
+                        runtime = ServerUtil.getRuntime( project );
 
-					try {
-						runtime = ServerUtil.getRuntime(project);
+                        if( runtime != null )
+                        {
+                            IPluginPublisher pluginPublisher =
+                                LiferayServerCorePlugin.getPluginPublisher( facetId, runtime.getRuntimeType().getId() );
 
-						if ( runtime != null ) {
-							IPluginPublisher pluginPublisher =
-								LiferayServerCorePlugin.getPluginPublisher( facetId, runtime.getRuntimeType().getId() );
+                            if( pluginPublisher != null )
+                            {
+                                retval =
+                                    pluginPublisher.prePublishModule(
+                                        delegate, kind, deltaKind, moduleTree, resourceDelta, monitor );
+                            }
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        LiferayServerCorePlugin.logError( "Plugin publisher failed", e );
+                    }
+                }
+            }
+        }
 
-							if ( pluginPublisher != null ) {
-								retval =
-									pluginPublisher.prePublishModule(
-										delegate, kind, deltaKind, moduleTree, resourceDelta, monitor );
-							}
-						}
-					}
-					catch ( Exception e ) {
-						LiferayServerCorePlugin.logError( "Plugin publisher failed", e );
-					}
-				}
-			}
-		}
-
-		return retval;
-	}
+        return retval;
+    }
 
 }

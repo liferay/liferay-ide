@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.service.ui;
 
 import org.eclipse.core.runtime.IStatus;
@@ -22,49 +23,55 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class ServiceUI extends AbstractUIPlugin {
+public class ServiceUI extends AbstractUIPlugin
+{
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "com.liferay.ide.service.ui"; //$NON-NLS-1$
+    // The plug-in ID
+    public static final String PLUGIN_ID = "com.liferay.ide.service.ui"; //$NON-NLS-1$
 
-	// The shared instance
-	private static ServiceUI plugin;
-	
-	/**
-	 * The constructor
-	 */
-	public ServiceUI() {
-	}
+    // The shared instance
+    private static ServiceUI plugin;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+    /**
+     * The constructor
+     */
+    public ServiceUI()
+    {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+     */
+    public void start( BundleContext context ) throws Exception
+    {
+        super.start( context );
+        plugin = this;
+    }
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static ServiceUI getDefault() {
-		return plugin;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
+        plugin = null;
+        super.stop( context );
+    }
 
-	public static void logError(Exception e) {
-		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static ServiceUI getDefault()
+    {
+        return plugin;
+    }
+
+    public static void logError( Exception e )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,109 +44,120 @@ import org.eclipse.jst.j2ee.internal.common.classpath.J2EEComponentClasspathCont
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class BuildServiceJob extends SDKJob {
+@SuppressWarnings( "restriction" )
+public class BuildServiceJob extends SDKJob
+{
 
-	protected IFile serviceXmlFile;
+    protected IFile serviceXmlFile;
 
-	public BuildServiceJob(IFile serviceXmlFile) {
-		super("Build services");
+    public BuildServiceJob( IFile serviceXmlFile )
+    {
+        super( "Build services" );
 
-		this.serviceXmlFile = serviceXmlFile;
-		setUser(true);
-		setProject(serviceXmlFile.getProject());
-	}
+        this.serviceXmlFile = serviceXmlFile;
+        setUser( true );
+        setProject( serviceXmlFile.getProject() );
+    }
 
-	@Override
-	protected IStatus run(IProgressMonitor monitor) {
-		IStatus retval = null;
+    @Override
+    protected IStatus run( IProgressMonitor monitor )
+    {
+        IStatus retval = null;
 
-		if ( getProject() == null )
-		{
-			return PortletCore.createErrorStatus( "This action can only be executed from a Liferay project.  Use Liferay project import wizard to import the project before continuing to build services." );
-		}
+        if( getProject() == null )
+        {
+            return PortletCore.createErrorStatus( "This action can only be executed from a Liferay project.  Use Liferay project import wizard to import the project before continuing to build services." );
+        }
 
-		if ( !ProjectUtil.isLiferayProject( getProject() ) )
-		{
-			return PortletCore.createErrorStatus( MessageFormat.format(
-				"This action is unavailable because {0} is not a Liferay plugin project. Use \"Convert to Liferay project\" context-menu action and then run again.",
-				getProject().getName() ) );
-		}
+        if( !ProjectUtil.isLiferayProject( getProject() ) )
+        {
+            return PortletCore.createErrorStatus( MessageFormat.format(
+                "This action is unavailable because {0} is not a Liferay plugin project. Use \"Convert to Liferay project\" context-menu action and then run again.",
+                getProject().getName() ) );
+        }
 
-		monitor.beginTask("Building Liferay services...", 100);
+        monitor.beginTask( "Building Liferay services...", 100 );
 
-		try {
-			getWorkspace().run(new IWorkspaceRunnable() {
+        try
+        {
+            getWorkspace().run( new IWorkspaceRunnable()
+            {
 
-				public void run(IProgressMonitor monitor)
-					throws CoreException {
+                public void run( IProgressMonitor monitor ) throws CoreException
+                {
 
-					runBuildService(monitor);
+                    runBuildService( monitor );
 
-					getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+                    getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
-					ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+                    ResourcesPlugin.getWorkspace().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
 
-					updateClasspath(project);
-				}
-			}, monitor);
+                    updateClasspath( project );
+                }
+            }, monitor );
 
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-		catch (CoreException e1) {
-			retval = PortletCore.createErrorStatus(e1);
-		}
+            getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( CoreException e1 )
+        {
+            retval = PortletCore.createErrorStatus( e1 );
+        }
 
-		return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
-	}
+        return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
+    }
 
-	protected void runBuildService(IProgressMonitor monitor) throws CoreException {
-		SDK sdk = getSDK();
+    protected void runBuildService( IProgressMonitor monitor ) throws CoreException
+    {
+        SDK sdk = getSDK();
 
-		if (sdk == null) {
-			throw new CoreException(
-				PortletCore.createErrorStatus("Could not determine the SDK name for project. Specify correct SDK in Liferay Project Properties page"));
-		}
+        if( sdk == null )
+        {
+            throw new CoreException(
+                PortletCore.createErrorStatus( "Could not determine the SDK name for project. Specify correct SDK in Liferay Project Properties page" ) );
+        }
 
-		monitor.worked(50);
+        monitor.worked( 50 );
 
-		sdk.buildService( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( project ) );
+        sdk.buildService( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( project ) );
 
-		monitor.worked(90);
-	}
+        monitor.worked( 90 );
+    }
 
-	protected IStatus updateClasspath(IProject project) throws CoreException {
-		FlexibleProjectContainer container =
-			J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
+    protected IStatus updateClasspath( IProject project ) throws CoreException
+    {
+        FlexibleProjectContainer container =
+            J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer( project );
 
-		if ( container == null )
-		{
-			return PortletCore.createWarningStatus( "Could not update classpath containers" );
-		}
+        if( container == null )
+        {
+            return PortletCore.createWarningStatus( "Could not update classpath containers" );
+        }
 
-		container.refresh();
-		
-		container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer(project);
+        container.refresh();
 
-		IClasspathEntry[] webappEntries = container.getClasspathEntries();
+        container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer( project );
 
-		for (IClasspathEntry entry2 : webappEntries) {
-			if (entry2.getPath().lastSegment().equals(getProject().getName() + "-service.jar")) {
-				((ClasspathEntry) entry2).sourceAttachmentPath =
-					getProject().getFolder("docroot/WEB-INF/service").getFullPath();
+        IClasspathEntry[] webappEntries = container.getClasspathEntries();
 
-				break;
-			}
-		}
+        for( IClasspathEntry entry2 : webappEntries )
+        {
+            if( entry2.getPath().lastSegment().equals( getProject().getName() + "-service.jar" ) )
+            {
+                ( (ClasspathEntry) entry2 ).sourceAttachmentPath =
+                    getProject().getFolder( "docroot/WEB-INF/service" ).getFullPath();
 
-		ClasspathContainerInitializer initializer =
-			JavaCore.getClasspathContainerInitializer("org.eclipse.jst.j2ee.internal.web.container");
+                break;
+            }
+        }
 
-		IJavaProject javaProject = JavaCore.create(project);
+        ClasspathContainerInitializer initializer =
+            JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" );
 
-		initializer.requestClasspathContainerUpdate(container.getPath(), javaProject, container);
+        IJavaProject javaProject = JavaCore.create( project );
 
-		return Status.OK_STATUS;
-	}
+        initializer.requestClasspathContainerUpdate( container.getPath(), javaProject, container );
+
+        return Status.OK_STATUS;
+    }
 
 }

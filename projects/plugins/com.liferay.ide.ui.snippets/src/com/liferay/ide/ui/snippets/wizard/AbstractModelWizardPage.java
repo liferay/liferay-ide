@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -62,249 +62,284 @@ import org.eclipse.ui.IFileEditorInput;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class AbstractModelWizardPage extends NewTypeWizardPage {
+@SuppressWarnings( { "restriction", "rawtypes" } )
+public class AbstractModelWizardPage extends NewTypeWizardPage
+{
 
-	protected class TypeFieldAdapter implements IStringButtonAdapter, IDialogFieldListener, IListAdapter {
+    protected class TypeFieldAdapter implements IStringButtonAdapter, IDialogFieldListener, IListAdapter
+    {
 
-		// -------- IStringButtonAdapter
-		public void changeControlPressed(DialogField field) {
-			typeChangeControlPressed(field);
-		}
+        // -------- IStringButtonAdapter
+        public void changeControlPressed( DialogField field )
+        {
+            typeChangeControlPressed( field );
+        }
 
-		public void customButtonPressed(ListDialogField field, int index) {
-			// doButtonPressed(index);
-		}
+        public void customButtonPressed( ListDialogField field, int index )
+        {
+            // doButtonPressed(index);
+        }
 
-		public void dialogFieldChanged(DialogField field) {
+        public void dialogFieldChanged( DialogField field )
+        {
 
-		}
+        }
 
-		public void doubleClicked(ListDialogField field) {
+        public void doubleClicked( ListDialogField field )
+        {
 
-		}
+        }
 
-		public void selectionChanged(ListDialogField field) {
+        public void selectionChanged( ListDialogField field )
+        {
 
-		}
+        }
 
-	}
+    }
 
-	protected static final int IDX_DESELECT = 1;
+    protected static final int IDX_DESELECT = 1;
 
-	protected static final int IDX_SELECT = 0;
+    protected static final int IDX_SELECT = 0;
 
-	public static Object[] getTypeProperties(IType type) {
-		if (type == null) {
-			return null;
-		}
+    public static Object[] getTypeProperties( IType type )
+    {
+        if( type == null )
+        {
+            return null;
+        }
 
-		JDTBeanIntrospector beanIntrospector = new JDTBeanIntrospector(type);
-		Map<String, JDTBeanProperty> properties = beanIntrospector.getProperties();
-		return properties.keySet().toArray();
-	}
+        JDTBeanIntrospector beanIntrospector = new JDTBeanIntrospector( type );
+        Map<String, JDTBeanProperty> properties = beanIntrospector.getProperties();
+        return properties.keySet().toArray();
+    }
 
-	protected IEditorPart editorPart;
+    protected IEditorPart editorPart;
 
-	protected String lastVarName = "";
+    protected String lastVarName = "";
 
-	protected StringButtonDialogField modelClassDialogField;
+    protected StringButtonDialogField modelClassDialogField;
 
-	protected CheckedListDialogField propertyListField;
+    protected CheckedListDialogField propertyListField;
 
-	protected Label varNameLabel;
+    protected Label varNameLabel;
 
-	protected Text varNameText;
+    protected Text varNameText;
 
-	public AbstractModelWizardPage(String pageName, IEditorPart editor) {
-		super(true, pageName);
+    public AbstractModelWizardPage( String pageName, IEditorPart editor )
+    {
+        super( true, pageName );
 
-		editorPart = editor;
+        editorPart = editor;
 
-		TypeFieldAdapter adapter = new TypeFieldAdapter();
+        TypeFieldAdapter adapter = new TypeFieldAdapter();
 
-		modelClassDialogField = new StringButtonDialogField(adapter);
-		modelClassDialogField.setLabelText("Model class:");
-		modelClassDialogField.setButtonLabel(NewWizardMessages.NewTypeWizardPage_superclass_button);
+        modelClassDialogField = new StringButtonDialogField( adapter );
+        modelClassDialogField.setLabelText( "Model class:" );
+        modelClassDialogField.setButtonLabel( NewWizardMessages.NewTypeWizardPage_superclass_button );
 
-		String[] buttonLabels = new String[] {
-			"Select All", "Deselect All"
-		};
+        String[] buttonLabels = new String[] { "Select All", "Deselect All" };
 
-		propertyListField = new CheckedListDialogField(adapter, buttonLabels, new LabelProvider());
-		propertyListField.setDialogFieldListener(adapter);
-		propertyListField.setLabelText("Property columns:");
-		propertyListField.setCheckAllButtonIndex(IDX_SELECT);
-		propertyListField.setUncheckAllButtonIndex(IDX_DESELECT);
-	}
+        propertyListField = new CheckedListDialogField( adapter, buttonLabels, new LabelProvider() );
+        propertyListField.setDialogFieldListener( adapter );
+        propertyListField.setLabelText( "Property columns:" );
+        propertyListField.setCheckAllButtonIndex( IDX_SELECT );
+        propertyListField.setUncheckAllButtonIndex( IDX_DESELECT );
+    }
 
-	public void createControl(Composite parent) {
-		Composite topComposite = SWTUtil.createTopComposite(parent, 3);
+    public void createControl( Composite parent )
+    {
+        Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
 
-		modelClassDialogField.doFillIntoGrid(topComposite, 3);
-		// Text modelClassText = modelClassDialogField.getTextControl(null);
-		//
-		// JavaTypeCompletionProcessor classCompletionProcessor = new JavaTypeCompletionProcessor(false, false, true);
-		// classCompletionProcessor.setCompletionContextRequestor(new CompletionContextRequestor() {
-		//
-		// @Override
-		// public StubTypeContext getStubTypeContext() {
-		// return getClassStubTypeContext();
-		// }
-		// });
-		//
-		// ControlContentAssistHelper.createTextContentAssistant(modelClassText, classCompletionProcessor);
-		// TextFieldNavigationHandler.install(modelClassText);
+        modelClassDialogField.doFillIntoGrid( topComposite, 3 );
+        // Text modelClassText = modelClassDialogField.getTextControl(null);
+        //
+        // JavaTypeCompletionProcessor classCompletionProcessor = new JavaTypeCompletionProcessor(false, false, true);
+        // classCompletionProcessor.setCompletionContextRequestor(new CompletionContextRequestor() {
+        //
+        // @Override
+        // public StubTypeContext getStubTypeContext() {
+        // return getClassStubTypeContext();
+        // }
+        // });
+        //
+        // ControlContentAssistHelper.createTextContentAssistant(modelClassText, classCompletionProcessor);
+        // TextFieldNavigationHandler.install(modelClassText);
 
-		propertyListField.doFillIntoGrid(topComposite, 3);
-		LayoutUtil.setHorizontalSpan(propertyListField.getLabelControl(null), 1);
-		LayoutUtil.setWidthHint(propertyListField.getLabelControl(null), convertWidthInCharsToPixels(40));
-		LayoutUtil.setHorizontalGrabbing(propertyListField.getListControl(null));
+        propertyListField.doFillIntoGrid( topComposite, 3 );
+        LayoutUtil.setHorizontalSpan( propertyListField.getLabelControl( null ), 1 );
+        LayoutUtil.setWidthHint( propertyListField.getLabelControl( null ), convertWidthInCharsToPixels( 40 ) );
+        LayoutUtil.setHorizontalGrabbing( propertyListField.getListControl( null ) );
 
-		propertyListField.getTableViewer().setComparator(new ViewerComparator());
+        propertyListField.getTableViewer().setComparator( new ViewerComparator() );
 
-		varNameLabel = new Label(topComposite, SWT.LEFT);
-		varNameLabel.setText("Variable name:");
-		varNameLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        varNameLabel = new Label( topComposite, SWT.LEFT );
+        varNameLabel.setText( "Variable name:" );
+        varNameLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
-		varNameText = new Text(topComposite, SWT.SINGLE | SWT.BORDER);
-		varNameText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		varNameText.addModifyListener(new ModifyListener() {
+        varNameText = new Text( topComposite, SWT.SINGLE | SWT.BORDER );
+        varNameText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        varNameText.addModifyListener( new ModifyListener()
+        {
 
-			public void modifyText(ModifyEvent e) {
-				lastVarName = varNameText.getText();
-			}
-		});
+            public void modifyText( ModifyEvent e )
+            {
+                lastVarName = varNameText.getText();
+            }
+        } );
 
-		setControl(topComposite);
-	}
+        setControl( topComposite );
+    }
 
-	public IJavaProject getJavaProject() {
-		IJavaProject javaProject = null;
+    public IJavaProject getJavaProject()
+    {
+        IJavaProject javaProject = null;
 
-		if (editorPart != null) {
-			IEditorInput editorInput = editorPart.getEditorInput();
-			if (editorInput instanceof IFileEditorInput) {
-				IProject project = ((IFileEditorInput) editorInput).getFile().getProject();
-				return JavaCore.create(project);
-			}
-		}
+        if( editorPart != null )
+        {
+            IEditorInput editorInput = editorPart.getEditorInput();
+            if( editorInput instanceof IFileEditorInput )
+            {
+                IProject project = ( (IFileEditorInput) editorInput ).getFile().getProject();
+                return JavaCore.create( project );
+            }
+        }
 
-		return javaProject;
-	}
+        return javaProject;
+    }
 
-	public String getModel() {
-		try {
-			IType type = getJavaProject().findType(getModelClass());
-			return type.getElementName();
-		}
-		catch (Exception e) {
+    public String getModel()
+    {
+        try
+        {
+            IType type = getJavaProject().findType( getModelClass() );
+            return type.getElementName();
+        }
+        catch( Exception e )
+        {
 
-		}
-		return "";
-	}
+        }
+        return "";
+    }
 
-	public String getModelClass() {
-		return modelClassDialogField.getText();
-	}
+    public String getModelClass()
+    {
+        return modelClassDialogField.getText();
+    }
 
-	// protected StubTypeContext getClassStubTypeContext() {
-	// if (fClassStubTypeContext == null) {
-	// fClassStubTypeContext = TypeContextChecker.createSuperClassStubTypeContext(getTypeName(), null, null);
-	// }
-	// return fClassStubTypeContext;
-	// }
+    // protected StubTypeContext getClassStubTypeContext() {
+    // if (fClassStubTypeContext == null) {
+    // fClassStubTypeContext = TypeContextChecker.createSuperClassStubTypeContext(getTypeName(), null, null);
+    // }
+    // return fClassStubTypeContext;
+    // }
 
-	public String[] getPropertyColumns() {
-		return (String[]) propertyListField.getCheckedElements().toArray(new String[0]);
-	}
+    public String[] getPropertyColumns()
+    {
+        return (String[]) propertyListField.getCheckedElements().toArray( new String[0] );
+    }
 
-	public String getTypeName() {
-		return modelClassDialogField.getText();
-	}
+    public String getTypeName()
+    {
+        return modelClassDialogField.getText();
+    }
 
-	public String getVarName() {
-		return lastVarName;
-	}
+    public String getVarName()
+    {
+        return lastVarName;
+    }
 
-	protected IType chooseClass() {
-		IJavaProject project = getJavaProject();
-		if (project == null) {
-			return null;
-		}
+    protected IType chooseClass()
+    {
+        IJavaProject project = getJavaProject();
+        if( project == null )
+        {
+            return null;
+        }
 
-		IJavaElement[] elements = new IJavaElement[] {
-			project
-		};
-		IJavaSearchScope scope = SearchEngine.createJavaSearchScope(elements);
+        IJavaElement[] elements = new IJavaElement[] { project };
+        IJavaSearchScope scope = SearchEngine.createJavaSearchScope( elements );
 
-		FilteredTypesSelectionDialog dialog =
-			new FilteredTypesSelectionDialog(
-				getShell(), false, getWizard().getContainer(), scope, IJavaSearchConstants.CLASS_AND_INTERFACE);
-		dialog.setTitle("Model class selection");
-		dialog.setMessage(NewWizardMessages.NewTypeWizardPage_SuperClassDialog_message);
-		dialog.setInitialPattern(getSuperClass());
+        FilteredTypesSelectionDialog dialog =
+            new FilteredTypesSelectionDialog(
+                getShell(), false, getWizard().getContainer(), scope, IJavaSearchConstants.CLASS_AND_INTERFACE );
+        dialog.setTitle( "Model class selection" );
+        dialog.setMessage( NewWizardMessages.NewTypeWizardPage_SuperClassDialog_message );
+        dialog.setInitialPattern( getSuperClass() );
 
-		if (dialog.open() == Window.OK) {
-			return (IType) dialog.getFirstResult();
-		}
-		return null;
-	}
+        if( dialog.open() == Window.OK )
+        {
+            return (IType) dialog.getFirstResult();
+        }
+        return null;
+    }
 
-	protected void handleBrowseButtonPressed() {
+    protected void handleBrowseButtonPressed()
+    {
 
-	}
+    }
 
-	protected void typeChangeControlPressed(DialogField field) {
-		IType type = chooseClass();
-		if (type != null) {
-			modelClassDialogField.setText(SuperInterfaceSelectionDialog.getNameWithTypeParameters(type));
+    protected void typeChangeControlPressed( DialogField field )
+    {
+        IType type = chooseClass();
+        if( type != null )
+        {
+            modelClassDialogField.setText( SuperInterfaceSelectionDialog.getNameWithTypeParameters( type ) );
 
-			updatePropertyList(type);
-		}
-	}
+            updatePropertyList( type );
+        }
+    }
 
-	protected void updatePropertyList(IType type) {
-		List<Object> propNames = new ArrayList<Object>();
+    protected void updatePropertyList( IType type )
+    {
+        List<Object> propNames = new ArrayList<Object>();
 
-		Object[] props = getTypeProperties(type);
+        Object[] props = getTypeProperties( type );
 
-		if (!CoreUtil.isNullOrEmpty(props)) {
-			propNames.addAll(Arrays.asList(props));
-		}
+        if( !CoreUtil.isNullOrEmpty( props ) )
+        {
+            propNames.addAll( Arrays.asList( props ) );
+        }
 
-		try {
-			if (type.isInterface()) {
-				String[] superInterfaces = type.getSuperInterfaceNames();
+        try
+        {
+            if( type.isInterface() )
+            {
+                String[] superInterfaces = type.getSuperInterfaceNames();
 
-				if (!CoreUtil.isNullOrEmpty(superInterfaces)) {
-					for (String superInterface : superInterfaces) {
-						IType superInterfaceType = type.getJavaProject().findType(superInterface);
-						Object[] superInterfaceProps = getTypeProperties(superInterfaceType);
+                if( !CoreUtil.isNullOrEmpty( superInterfaces ) )
+                {
+                    for( String superInterface : superInterfaces )
+                    {
+                        IType superInterfaceType = type.getJavaProject().findType( superInterface );
+                        Object[] superInterfaceProps = getTypeProperties( superInterfaceType );
 
-						if (!CoreUtil.isNullOrEmpty(superInterfaceProps)) {
-							propNames.addAll(Arrays.asList(superInterfaceProps));
-						}
-					}
-				}
-			}
-			else {
-				IType superType = type.getJavaProject().findType(type.getSuperclassName());
-				Object[] superTypeProps = getTypeProperties(superType);
+                        if( !CoreUtil.isNullOrEmpty( superInterfaceProps ) )
+                        {
+                            propNames.addAll( Arrays.asList( superInterfaceProps ) );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                IType superType = type.getJavaProject().findType( type.getSuperclassName() );
+                Object[] superTypeProps = getTypeProperties( superType );
 
-				if (!CoreUtil.isNullOrEmpty(superTypeProps)) {
-					propNames.addAll(Arrays.asList(superTypeProps));
-				}
-			}
+                if( !CoreUtil.isNullOrEmpty( superTypeProps ) )
+                {
+                    propNames.addAll( Arrays.asList( superTypeProps ) );
+                }
+            }
 
-		}
-		catch (Exception e) {
-			// no error this is best effort
-		}
+        }
+        catch( Exception e )
+        {
+            // no error this is best effort
+        }
 
-		propertyListField.setElements(propNames);
+        propertyListField.setElements( propNames );
 
-		varNameText.setText("a" + getModel());
-	}
+        varNameText.setText( "a" + getModel() );
+    }
 
 }

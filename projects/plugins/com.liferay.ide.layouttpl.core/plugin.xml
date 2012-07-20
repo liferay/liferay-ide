@@ -33,10 +33,6 @@
                      version="[1.5">
                </requires>
             </and>
-            <!--
-            <conflicts facet="liferay.hook"/>
-            <conflicts facet="liferay.ext"/>
-            -->
          </constraint>
       </project-facet-version>
       <action
@@ -79,8 +75,6 @@
    
    <extension
          point="org.eclipse.wst.common.project.facet.core.presets">
-     
-      
       <static-preset
             id="liferay.layouttpl.preset">
          <label>

@@ -33,57 +33,58 @@ import org.osgi.framework.Version;
 public class OpenJSONWSAPIAction extends OpenPortalURLAction
 {
 
-	public OpenJSONWSAPIAction() {
-		super();
-	}
+    public OpenJSONWSAPIAction()
+    {
+        super();
+    }
 
-	protected URL getPortalURL()
-	{
-		try
-		{
-			return new URL( getLiferayServer().getPortalHomeUrl(), "/api/jsonws" );
-		}
-		catch ( MalformedURLException e )
-		{
-		}
+    protected URL getPortalURL()
+    {
+        try
+        {
+            return new URL( getLiferayServer().getPortalHomeUrl(), "/api/jsonws" );
+        }
+        catch( MalformedURLException e )
+        {
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	protected String getPortalURLTitle()
-	{
-		return "JSON WS API";
-	}
+    @Override
+    protected String getPortalURLTitle()
+    {
+        return "JSON WS API";
+    }
 
-	@Override
-	public void selectionChanged( IAction action, ISelection selection )
-	{
-		super.selectionChanged( action, selection );
+    @Override
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        super.selectionChanged( action, selection );
 
-		if ( action.isEnabled() )
-		{
-			if ( getLiferayServer() instanceof ServerDelegate )
-			{
-				IRuntime runtime = ( (ServerDelegate) getLiferayServer() ).getServer().getRuntime();
+        if( action.isEnabled() )
+        {
+            if( getLiferayServer() instanceof ServerDelegate )
+            {
+                IRuntime runtime = ( (ServerDelegate) getLiferayServer() ).getServer().getRuntime();
 
-				if ( runtime != null )
-				{
-					ILiferayRuntime liferayRuntime =
-						(ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, null );
+                if( runtime != null )
+                {
+                    ILiferayRuntime liferayRuntime =
+                        (ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, null );
 
-					if ( liferayRuntime != null )
-					{
-						Version v = new Version( liferayRuntime.getPortalVersion() );
+                    if( liferayRuntime != null )
+                    {
+                        Version v = new Version( liferayRuntime.getPortalVersion() );
 
-						if( CoreUtil.compareVersions( v, new Version( "6.1.0" ) ) < 0 )
-						{
-							action.setEnabled( false );
-						}
-					}
-				}
-			}
-		}
-	}
+                        if( CoreUtil.compareVersions( v, new Version( "6.1.0" ) ) < 0 )
+                        {
+                            action.setEnabled( false );
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

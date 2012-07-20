@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.layouttpl.ui.parts;
 
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
@@ -21,34 +22,42 @@ import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
+/**
+ * @author Gregory Amerson
+ */
+public class LayoutTplEditPartFactory implements EditPartFactory
+{
 
-public class LayoutTplEditPartFactory implements EditPartFactory {
+    public EditPart createEditPart( EditPart context, Object modelElement )
+    {
+        // get EditPart for model element
+        EditPart part = getPartForElement( modelElement );
 
-	public EditPart createEditPart(EditPart context, Object modelElement) {
-		// get EditPart for model element
-		EditPart part = getPartForElement(modelElement);
+        // store model element in EditPart
+        part.setModel( modelElement );
 
-		// store model element in EditPart
-		part.setModel(modelElement);
+        return part;
+    }
 
-		return part;
-	}
+    protected EditPart getPartForElement( Object modelElement )
+    {
+        if( modelElement instanceof LayoutTplDiagram )
+        {
+            return new LayoutTplDiagramEditPart();
+        }
 
-	protected EditPart getPartForElement(Object modelElement) {
-		if (modelElement instanceof LayoutTplDiagram) {
-			return new LayoutTplDiagramEditPart();
-		}
+        if( modelElement instanceof PortletLayout )
+        {
+            return new PortletLayoutEditPart();
+        }
 
-		if (modelElement instanceof PortletLayout) {
-			return new PortletLayoutEditPart();
-		}
+        if( modelElement instanceof PortletColumn )
+        {
+            return new PortletColumnEditPart();
+        }
 
-		if (modelElement instanceof PortletColumn) {
-			return new PortletColumnEditPart();
-		}
-
-		throw new RuntimeException("Can't create part for model element: " +
-			((modelElement != null) ? modelElement.getClass().getName() : "null"));
-	}
+        throw new RuntimeException( "Can't create part for model element: " +
+            ( ( modelElement != null ) ? modelElement.getClass().getName() : "null" ) );
+    }
 
 }

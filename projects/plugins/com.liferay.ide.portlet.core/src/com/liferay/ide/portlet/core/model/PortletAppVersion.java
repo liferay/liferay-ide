@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,10 +24,11 @@ import org.eclipse.sapphire.modeling.annotations.Label;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 @Label( standard = "Portlet Version" )
-public enum PortletAppVersion {
+public enum PortletAppVersion
+{
 
-	@Label( standard = "2.0" )
-	@EnumSerialization( primary = "2.0" )
-	V_2_0,
+    @Label( standard = "2.0" )
+    @EnumSerialization( primary = "2.0" )
+    V_2_0,
 
 }

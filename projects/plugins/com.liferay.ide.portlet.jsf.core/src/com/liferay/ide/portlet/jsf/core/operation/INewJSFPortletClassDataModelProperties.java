@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,20 +20,22 @@ import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelPropertie
 /**
  * @author Greg Amerson
  */
-public interface INewJSFPortletClassDataModelProperties extends INewPortletClassDataModelProperties {
+public interface INewJSFPortletClassDataModelProperties extends INewPortletClassDataModelProperties
+{
+    String[] ALL_JSF_PORTLET_MODES = 
+    { 
+        "INewPortletClassDataModelProperties.VIEW_MODE",
+        "INewPortletClassDataModelProperties.EDIT_MODE", 
+        "INewPortletClassDataModelProperties.HELP_MODE", 
+    };
 
-	String[] ALL_JSF_PORTLET_MODES = {
-		"INewPortletClassDataModelProperties.VIEW_MODE", "INewPortletClassDataModelProperties.EDIT_MODE",
-		"INewPortletClassDataModelProperties.HELP_MODE",
-	};
+    String JSF_EDIT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.edit";
 
-	String JSF_EDIT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.edit";
-	
-	String JSF_HELP_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.help";
+    String JSF_HELP_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.help";
 
-	String JSF_PORTLET_CLASS = "INewJSFPortletClassDataModelProperties.JSF_PORTLET_CLASS";
+    String JSF_PORTLET_CLASS = "INewJSFPortletClassDataModelProperties.JSF_PORTLET_CLASS";
 
-	String JSF_VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.view";
+    String JSF_VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.view";
 
-	String QUALIFIED_JSF_PORTLET = "org.portletfaces.bridge.GenericFacesPortlet";
+    String QUALIFIED_JSF_PORTLET = "org.portletfaces.bridge.GenericFacesPortlet";
 }

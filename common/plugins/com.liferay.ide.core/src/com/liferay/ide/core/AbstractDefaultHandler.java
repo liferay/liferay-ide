@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,158 +32,154 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractDefaultHandler extends DefaultHandler {
+public abstract class AbstractDefaultHandler extends DefaultHandler
+{
+    /**
+     * An exception indicating that the parsing should stop.
+     * 
+     * @since 3.1
+     */
+    protected class StopParsingException extends SAXException
+    {
+        /**
+         * All serializable objects should have a stable serialVersionUID
+         */
+        private static final long serialVersionUID = 1L;
 
-	/**
-	 * An exception indicating that the parsing should stop.
-	 * 
-	 * @since 3.1
-	 */
-	protected class StopParsingException extends SAXException {
+        /**
+         * Constructs an instance of <code>StopParsingException</code> with a <code>null</code> detail message.
+         */
+        public StopParsingException()
+        {
+            super( (String) null );
+        }
+    }
 
-		/**
-		 * All serializable objects should have a stable serialVersionUID
-		 */
-		private static final long serialVersionUID = 1L;
+    protected boolean dtd = false;
+    protected SAXParserFactory fFactory;
+    protected int fLevel = -1;
+    protected String fTopElementFound;
+    protected String publicIdPrefix;
+    protected String publicIdSuffix;
+    protected String rootElement;
+    protected String systemIdPrefix;
+    protected String systemIdSuffix;
+    protected boolean topLevelElement = false;
 
-		/**
-		 * Constructs an instance of <code>StopParsingException</code> with a
-		 * <code>null</code> detail message.
-		 */
-		public StopParsingException() {
-			super((String) null);
-		}
-	}
+    public AbstractDefaultHandler(
+        String publicIdPrefix, String publicIdSuffix, String systemIdPrefix, String systemIdSuffix, String rootElement )
+    {
+        this.publicIdPrefix = publicIdPrefix;
+        this.publicIdSuffix = publicIdSuffix;
+        this.systemIdPrefix = systemIdPrefix;
+        this.systemIdSuffix = systemIdSuffix;
+        this.rootElement = rootElement;
+    }
 
-	protected boolean dtd = false;
+    public boolean hasDTD()
+    {
+        return this.dtd;
+    }
 
-	protected SAXParserFactory fFactory;
+    public boolean hasTopLevelElement()
+    {
+        return this.topLevelElement;
+    }
 
-	protected int fLevel = -1;
+    @Override
+    public InputSource resolveEntity( String publicId, String systemId ) throws IOException, SAXException
+    {
+        if( systemId != null && systemId.startsWith( systemIdPrefix ) && systemId.endsWith( systemIdSuffix ) &&
+            publicId != null && publicId.startsWith( publicIdPrefix ) && publicId.endsWith( publicIdSuffix ) )
+        {
 
-	protected String fTopElementFound;
+            this.dtd = true;
+        }
 
-	protected String publicIdPrefix;
+        return new InputSource( new StringReader( "" ) );
+    }
 
-	protected String publicIdSuffix;
+    @Override
+    public void startElement( String uri, String localName, String qName, Attributes attributes ) throws SAXException
+    {
+        fLevel++;
 
-	protected String rootElement;
+        if( fTopElementFound == null )
+        {
+            fTopElementFound = localName;
 
-	protected String systemIdPrefix;
+            this.topLevelElement = hasRootProjectElement();
 
-	protected String systemIdSuffix;
+            throw new StopParsingException();
+        }
 
-	protected boolean topLevelElement = false;
+    }
 
-	public AbstractDefaultHandler(
-		String publicIdPrefix, String publicIdSuffix, String systemIdPrefix, String systemIdSuffix, String rootElement) {
+    protected final SAXParser createParser( SAXParserFactory parserFactory ) throws ParserConfigurationException,
+        SAXException, SAXNotRecognizedException, SAXNotSupportedException
+    {
+        // Initialize the parser.
+        final SAXParser parser = parserFactory.newSAXParser();
 
-		this.publicIdPrefix = publicIdPrefix;
+        // final XMLReader reader = parser.getXMLReader();
+        // disable DTD validation (bug 63625)
+        // try {
+        // be sure validation is "off" or the feature to ignore DTD's will not
+        // apply
+        //            reader.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
+        //            reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); //$NON-NLS-1$
+        // } catch (SAXNotRecognizedException e) {
+        // not a big deal if the parser does not recognize the features
+        // } catch (SAXNotSupportedException e) {
+        // not a big deal if the parser does not support the features
+        // }
 
-		this.publicIdSuffix = publicIdSuffix;
+        return parser;
+    }
 
-		this.systemIdPrefix = systemIdPrefix;
+    protected SAXParserFactory getFactory()
+    {
+        synchronized( this )
+        {
+            if( fFactory != null )
+            {
+                return fFactory;
+            }
 
-		this.systemIdSuffix = systemIdSuffix;
+            fFactory = SAXParserFactory.newInstance();
 
-		this.rootElement = rootElement;
-	}
+            fFactory.setNamespaceAware( true );
+        }
 
-	public boolean hasDTD() {
-		return this.dtd;
-	}
+        return fFactory;
+    }
 
-	public boolean hasTopLevelElement() {
-		return this.topLevelElement;
-	}
+    protected boolean hasRootProjectElement()
+    {
+        return rootElement != null && rootElement.equals( fTopElementFound );
+    }
 
-	@Override
-	public InputSource resolveEntity(String publicId, String systemId)
-		throws IOException, SAXException {
+    protected boolean parseContents( InputSource contents ) throws IOException, ParserConfigurationException,
+        SAXException
+    {
+        // Parse the file into we have what we need (or an error occurs).
+        try
+        {
+            fFactory = getFactory();
 
-		if (systemId != null && systemId.startsWith(systemIdPrefix) && systemId.endsWith(systemIdSuffix) &&
-			publicId != null && publicId.startsWith(publicIdPrefix) && publicId.endsWith(publicIdSuffix)) {
+            if( fFactory == null )
+            {
+                return false;
+            }
 
-			this.dtd = true;
-		}
+            final SAXParser parser = createParser( fFactory );
+            parser.parse( contents, this );
+        }
+        catch( StopParsingException e )
+        {
+            // Abort the parsing normally. Fall through...
+        }
 
-		return new InputSource(new StringReader(""));
-	}
-
-	@Override
-	public void startElement(String uri, String localName, String qName, Attributes attributes)
-		throws SAXException {
-
-		fLevel++;
-
-		if (fTopElementFound == null) {
-			fTopElementFound = localName;
-
-			this.topLevelElement = hasRootProjectElement();
-
-			throw new StopParsingException();
-		}
-
-	}
-
-	protected final SAXParser createParser(SAXParserFactory parserFactory)
-		throws ParserConfigurationException, SAXException, SAXNotRecognizedException, SAXNotSupportedException {
-
-		// Initialize the parser.
-		final SAXParser parser = parserFactory.newSAXParser();
-
-		// final XMLReader reader = parser.getXMLReader();
-		// disable DTD validation (bug 63625)
-		// try {
-		// be sure validation is "off" or the feature to ignore DTD's will not
-		// apply
-		//            reader.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
-		//            reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); //$NON-NLS-1$
-		// } catch (SAXNotRecognizedException e) {
-		// not a big deal if the parser does not recognize the features
-		// } catch (SAXNotSupportedException e) {
-		// not a big deal if the parser does not support the features
-		// }
-
-		return parser;
-	}
-
-	protected SAXParserFactory getFactory() {
-		synchronized (this) {
-			if (fFactory != null) {
-				return fFactory;
-			}
-
-			fFactory = SAXParserFactory.newInstance();
-
-			fFactory.setNamespaceAware(true);
-		}
-
-		return fFactory;
-	}
-
-	protected boolean hasRootProjectElement() {
-		return rootElement != null && rootElement.equals(fTopElementFound);
-	}
-
-	protected boolean parseContents(InputSource contents)
-		throws IOException, ParserConfigurationException, SAXException {
-
-		// Parse the file into we have what we need (or an error occurs).
-		try {
-			fFactory = getFactory();
-
-			if (fFactory == null) {
-				return false;
-			}
-
-			final SAXParser parser = createParser(fFactory);
-			parser.parse(contents, this);
-		}
-		catch (StopParsingException e) {
-			// Abort the parsing normally. Fall through...
-		}
-
-		return true;
-	}
+        return true;
+    }
 }

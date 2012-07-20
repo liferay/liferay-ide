@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,38 +25,44 @@ import org.eclipse.wst.common.snippets.internal.util.StringUtils;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class SearchContainerSnippetInsertion extends ModelSnippetInsertion {
+@SuppressWarnings( "restriction" )
+public class SearchContainerSnippetInsertion extends ModelSnippetInsertion
+{
 
-	public SearchContainerSnippetInsertion() {
-		super();
-	}
+    public SearchContainerSnippetInsertion()
+    {
+        super();
+    }
 
-	protected String getPreparedText(AbstractModelWizard wizard) {
-		String text = super.getPreparedText(wizard);
+    protected String getPreparedText( AbstractModelWizard wizard )
+    {
+        String text = super.getPreparedText( wizard );
 
-		text = StringUtils.replace(text, "${modelClass}", ((LiferayUISearchContainerWizard) wizard).getModelClass());
+        text = StringUtils.replace( text, "${modelClass}", ( (LiferayUISearchContainerWizard) wizard ).getModelClass() );
 
-		StringBuffer columns = new StringBuffer();
-		String[] propColumns = wizard.getPropertyColumns();
+        StringBuffer columns = new StringBuffer();
+        String[] propColumns = wizard.getPropertyColumns();
 
-		if (!CoreUtil.isNullOrEmpty(propColumns)) {
-			for (String prop : propColumns) {
-				columns.append("<liferay-ui:search-container-column-text property=\"");
-				columns.append(prop);
-				columns.append("\" />\n\n\t\t");
-			}
-		}
+        if( !CoreUtil.isNullOrEmpty( propColumns ) )
+        {
+            for( String prop : propColumns )
+            {
+                columns.append( "<liferay-ui:search-container-column-text property=\"" );
+                columns.append( prop );
+                columns.append( "\" />\n\n\t\t" );
+            }
+        }
 
-		String columnsVal = columns.toString();
-		text = StringUtils.replace(text, "${columns}", CoreUtil.isNullOrEmpty(columnsVal) ? "" : columnsVal);
+        String columnsVal = columns.toString();
+        text = StringUtils.replace( text, "${columns}", CoreUtil.isNullOrEmpty( columnsVal ) ? "" : columnsVal );
 
-		return text;
-	}
+        return text;
+    }
 
-	@Override
-	protected AbstractModelWizard createModelWizard(IEditorPart fEditorPart) {
-		return new LiferayUISearchContainerWizard(this.fEditorPart);
-	}
+    @Override
+    protected AbstractModelWizard createModelWizard( IEditorPart fEditorPart )
+    {
+        return new LiferayUISearchContainerWizard( this.fEditorPart );
+    }
 
 }

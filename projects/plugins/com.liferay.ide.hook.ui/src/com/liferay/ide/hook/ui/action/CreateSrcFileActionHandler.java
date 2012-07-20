@@ -77,6 +77,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
             return false;
         }
     }
+    
     private Listener listener;
     private IModelElement modelElement;
 

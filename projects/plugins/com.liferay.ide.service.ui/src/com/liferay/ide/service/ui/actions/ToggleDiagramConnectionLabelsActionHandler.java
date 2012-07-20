@@ -17,62 +17,64 @@
 
 package com.liferay.ide.service.ui.actions;
 
-import com.liferay.ide.service.core.model.IServiceBuilder;
+import com.liferay.ide.service.core.model.ServiceBuilder;
 
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.diagram.editor.SapphireDiagramEditorPagePart;
 
-public class ToggleDiagramConnectionLabelsActionHandler extends SapphireActionHandler {
+public class ToggleDiagramConnectionLabelsActionHandler extends SapphireActionHandler
+{
 
-	protected boolean checked = true;
+    protected boolean checked = true;
 
-	@Override
-	public boolean isChecked() {
-		return checked;
-	}
+    @Override
+    public boolean isChecked()
+    {
+        return checked;
+    }
 
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		checked = !checked;
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        checked = !checked;
 
-		IServiceBuilder serviceBuilder = (IServiceBuilder) context.getPart().getModelElement();
-		serviceBuilder.setShowRelationshipLabels( checked );
-		serviceBuilder.refresh( false, true );
+        ServiceBuilder serviceBuilder = (ServiceBuilder) context.getPart().getModelElement();
+        serviceBuilder.setShowRelationshipLabels( checked );
+        serviceBuilder.refresh( false, true );
 
-		SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart) context.getPart();
+//        SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart) context.getPart();
 
-		//
-		// DiagramRenderingContext dContext = (DiagramRenderingContext) context;
-		// List<IDiagramConnectionDef> defs = dContext.getDiagramEditor().getPart().getDiagramConnectionDefs();
-		// dContext.getDiagramEditor().refreshContent();
-		// HashSet<PictogramElement> set1 = dContext.getDiagramEditor().getRefreshedFigure4PE();
-		// for ( PictogramElement pe : set1 ) {
-		// System.out.println( pe );
-		// if ( pe instanceof FreeFormConnection ) {
-		// FreeFormConnection ffc = (FreeFormConnection) pe;
-		// for ( ConnectionDecorator cd : ffc.getConnectionDecorators() ) {
-		// GraphicsAlgorithm ga = cd.getGraphicsAlgorithm();
-		// if ( ga instanceof Text ) {
-		// Text text = (Text) ga;
-		// text.setValue( "zzz" );
-		// }
-		// System.out.println( ga );
-		// }
-		// }
-		// }
-		// dContext.getDiagramEditor().refresh();
-		// // dContext.layout();
-		// dContext.getDiagramEditor().getGraphicalViewer().flush();
-		// dContext.getDiagramEditor().getGraphicalViewer().getContents().refresh();
-		// dContext.getDiagramEditor().getFigureCanvas().layout( true );
-		// dContext.getDiagramEditor().getFigureCanvas().redraw();
-		// dContext.getDiagramEditor().syncDiagramWithModel();
-		// ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)
-		// dContext.getDiagramEditor().getGraphicalViewer();
-		// RootEditPart root = viewer.getRootEditPart();
-		// root.refresh();
-		return null;
-	}
+        //
+        // DiagramRenderingContext dContext = (DiagramRenderingContext) context;
+        // List<IDiagramConnectionDef> defs = dContext.getDiagramEditor().getPart().getDiagramConnectionDefs();
+        // dContext.getDiagramEditor().refreshContent();
+        // HashSet<PictogramElement> set1 = dContext.getDiagramEditor().getRefreshedFigure4PE();
+        // for ( PictogramElement pe : set1 ) {
+        // System.out.println( pe );
+        // if ( pe instanceof FreeFormConnection ) {
+        // FreeFormConnection ffc = (FreeFormConnection) pe;
+        // for ( ConnectionDecorator cd : ffc.getConnectionDecorators() ) {
+        // GraphicsAlgorithm ga = cd.getGraphicsAlgorithm();
+        // if ( ga instanceof Text ) {
+        // Text text = (Text) ga;
+        // text.setValue( "zzz" );
+        // }
+        // System.out.println( ga );
+        // }
+        // }
+        // }
+        // dContext.getDiagramEditor().refresh();
+        // // dContext.layout();
+        // dContext.getDiagramEditor().getGraphicalViewer().flush();
+        // dContext.getDiagramEditor().getGraphicalViewer().getContents().refresh();
+        // dContext.getDiagramEditor().getFigureCanvas().layout( true );
+        // dContext.getDiagramEditor().getFigureCanvas().redraw();
+        // dContext.getDiagramEditor().syncDiagramWithModel();
+        // ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)
+        // dContext.getDiagramEditor().getGraphicalViewer();
+        // RootEditPart root = viewer.getRootEditPart();
+        // root.refresh();
+        return null;
+    }
 
 }

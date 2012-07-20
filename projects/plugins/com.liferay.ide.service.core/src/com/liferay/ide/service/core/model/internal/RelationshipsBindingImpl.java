@@ -14,14 +14,15 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.service.core.model.internal;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
-import com.liferay.ide.service.core.model.IColumn;
-import com.liferay.ide.service.core.model.IEntity;
-import com.liferay.ide.service.core.model.IRelationship;
-import com.liferay.ide.service.core.model.IServiceBuilder;
+import com.liferay.ide.service.core.model.Column;
+import com.liferay.ide.service.core.model.Entity;
+import com.liferay.ide.service.core.model.Relationship;
+import com.liferay.ide.service.core.model.ServiceBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,19 +37,19 @@ import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.modeling.PropertyEvent;
 import org.eclipse.sapphire.modeling.Resource;
 
-
 /**
  * @author Gregory Amerson
  */
 public class RelationshipsBindingImpl extends LayeredListBindingImpl
 {
+
     private List<RelationshipObject> relationships = new ArrayList<RelationshipObject>();
 
-    private IColumn findPrimaryKey( final IEntity entity )
+    private Column findPrimaryKey( final Entity entity )
     {
         if( entity != null )
         {
-            for( IColumn column : entity.getColumns() )
+            for( Column column : entity.getColumns() )
             {
                 if( column.isPrimary().getContent() )
                 {
@@ -65,22 +66,19 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     {
         super.init( element, property, params );
 
-        serviceBuilder().attach
-        (
-            new FilteredListener<PropertyEvent>()
+        serviceBuilder().attach( new FilteredListener<PropertyEvent>()
+        {
+            @Override
+            public void handleTypedEvent( final PropertyEvent event )
             {
-                @Override
-                public void handleTypedEvent( final PropertyEvent event )
+                if( event != null )
                 {
-                    if (event != null)
-                    {
-                        refreshRelationships();
-                    }
+                    refreshRelationships();
                 }
-            },
+            }
+        },
 
-            "Entities/*"
-        );
+        "Entities/*" );
 
         refreshRelationships();
     }
@@ -89,8 +87,8 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     protected Object insertUnderlyingObject( ModelElementType type, int position )
     {
         RelationshipObject newRelationship = new RelationshipObject();
-        
-        if (position > this.relationships.size())
+
+        if( position > this.relationships.size() )
         {
             this.relationships.add( newRelationship );
         }
@@ -113,9 +111,9 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
 
         Map<String, String> primaryKeys = new HashMap<String, String>();
 
-        for( IEntity entity : serviceBuilder().getEntities() )
+        for( Entity entity : serviceBuilder().getEntities() )
         {
-            IColumn primaryKeyColumn = findPrimaryKey( entity );
+            Column primaryKeyColumn = findPrimaryKey( entity );
 
             if( primaryKeyColumn != null && !empty( primaryKeyColumn.getName().getContent() ) )
             {
@@ -123,9 +121,9 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
             }
         }
 
-        for( IEntity entity : serviceBuilder().getEntities() )
+        for( Entity entity : serviceBuilder().getEntities() )
         {
-            for( IColumn column : entity.getColumns() )
+            for( Column column : entity.getColumns() )
             {
                 if( !column.isPrimary().getContent() )
                 {
@@ -155,10 +153,10 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
         String fromName = relObject.getFromName();
         String toName = relObject.getToName();
 
-        IEntity fromEntity = EntityRelationshipService.findEntity( fromName, serviceBuilder() );
-        IEntity toEntity = EntityRelationshipService.findEntity( toName, serviceBuilder() );
+        Entity fromEntity = EntityRelationshipService.findEntity( fromName, serviceBuilder() );
+        Entity toEntity = EntityRelationshipService.findEntity( toName, serviceBuilder() );
 
-        IColumn primaryKeyColumn = findPrimaryKey( toEntity );
+        Column primaryKeyColumn = findPrimaryKey( toEntity );
 
         if( primaryKeyColumn != null )
         {
@@ -166,9 +164,9 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
 
             if( !empty( primaryKeyName ) )
             {
-                IColumn columnToRemove = null;
+                Column columnToRemove = null;
 
-                for( IColumn column : fromEntity.getColumns() )
+                for( Column column : fromEntity.getColumns() )
                 {
                     if( primaryKeyName.equals( column.getName().getContent() ) )
                     {
@@ -191,15 +189,15 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
         return new RelationshipResource( (RelationshipObject) obj, this.element().resource() );
     }
 
-    private IServiceBuilder serviceBuilder()
+    private ServiceBuilder serviceBuilder()
     {
-        return this.element().nearest( IServiceBuilder.class );
+        return this.element().nearest( ServiceBuilder.class );
     }
 
     @Override
     public ModelElementType type( Resource resource )
     {
-        return IRelationship.TYPE;
+        return Relationship.TYPE;
     }
 
 }

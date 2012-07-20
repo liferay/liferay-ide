@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -33,157 +33,176 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Greg Amerson
  */
-public class RemoteLogStream extends BufferedInputStream {
+public class RemoteLogStream extends BufferedInputStream
+{
 
-	@SuppressWarnings( "deprecation" )
-	public static final IEclipsePreferences _defaultPrefs =
-		new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
+    @SuppressWarnings( "deprecation" )
+    public static final IEclipsePreferences _defaultPrefs =
+        new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
 
-	public static final long LOG_QUERY_RANGE = _defaultPrefs.getLong("log.query.range", 51200);
+    public static final long LOG_QUERY_RANGE = _defaultPrefs.getLong( "log.query.range", 51200 );
 
-	public final static long OUTPUT_MONITOR_DELAY = _defaultPrefs.getLong("output.monitor.delay", 1000);
+    public final static long OUTPUT_MONITOR_DELAY = _defaultPrefs.getLong( "output.monitor.delay", 1000 );
 
-	protected static URL createBaseUrl(
-		IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
+    protected static URL createBaseUrl(
+        IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log )
+    {
+        try
+        {
+            return new URL( getLogURI( connection, log ) + getFormatQuery() );
+        }
+        catch( MalformedURLException e )
+        {
+        }
 
-		try {
-			return new URL( getLogURI( connection, log ) + getFormatQuery() );
-		}
-		catch (MalformedURLException e) {
-		}
+        return null;
+    }
 
-		return null;
-	}
+    protected static InputStream createInputStream(
+        IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log )
+    {
+        try
+        {
+            URL url = createBaseUrl( server, remoteServer, connection, log );
 
-	protected static InputStream createInputStream(
-		IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
+            return openInputStream( connection, url );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
 
-		try {
-			URL url = createBaseUrl( server, remoteServer, connection, log );
+        return null;
+    }
 
-			return openInputStream( connection, url );
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+    protected static String getFormatQuery()
+    {
+        return "?format=raw";
+    }
 
-		return null;
-	}
+    protected static String getLogURI( IRemoteConnection connection, String log )
+    {
+        return connection.getManagerURI() + "/server/log/" + log;
+    }
 
-	protected static String getFormatQuery() {
-		return "?format=raw";
-	}
+    protected static InputStream openInputStream( IRemoteConnection remote, URL url ) throws IOException
+    {
+        String username = remote.getUsername();
+        String password = remote.getPassword();
 
-	protected static String getLogURI( IRemoteConnection connection, String log ) {
-		return connection.getManagerURI() + "/server/log/" + log;
-	}
+        String authString = username + ":" + password;
+        byte[] authEncBytes = Base64.encodeBase64( authString.getBytes() );
+        String authStringEnc = new String( authEncBytes );
 
-	protected static InputStream openInputStream( IRemoteConnection remote, URL url ) throws IOException {
-		String username = remote.getUsername();
-		String password = remote.getPassword();
+        URLConnection conn = url.openConnection();
+        conn.setRequestProperty( "Authorization", "Basic " + authStringEnc );
+        Authenticator.setDefault( null );
+        conn.setAllowUserInteraction( false );
 
-		String authString = username + ":" + password;
-		byte[] authEncBytes = Base64.encodeBase64( authString.getBytes() );
-		String authStringEnc = new String( authEncBytes );
+        return conn.getInputStream();
+    }
 
-		URLConnection conn = url.openConnection();
-		conn.setRequestProperty( "Authorization", "Basic " + authStringEnc );
-		Authenticator.setDefault( null );
-		conn.setAllowUserInteraction( false );
+    protected URL baseUrl = null;
 
-		return conn.getInputStream();
-	}
+    protected IRemoteConnection connection;
 
-	protected URL baseUrl = null;
+    protected String log;
 
-	protected IRemoteConnection connection;
+    protected long range = 0;
 
-	protected String log;
+    public RemoteLogStream( IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log )
+    {
+        super( createInputStream( server, remoteServer, connection, log ), 8192 );
+        this.baseUrl = createBaseUrl( server, remoteServer, connection, log );
+        this.log = log;
+        this.connection = connection;
+    }
 
-	protected long range = 0;
+    @Override
+    public int read( byte[] b ) throws IOException
+    {
+        int read = super.read( b );
 
-	public RemoteLogStream( IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log ) {
-		super( createInputStream( server, remoteServer, connection, log ), 8192 );
-		this.baseUrl = createBaseUrl( server, remoteServer, connection, log );
-		this.log = log;
-		this.connection = connection;
-	}
+        if( read < 1 )
+        {
+            waitOnNewInput();
 
-	@Override
-	public int read(byte[] b)
-		throws IOException {
+            read = super.read( b );
 
-		int read = super.read(b);
+            range += read;
+        }
 
-		if (read < 1) {
-			waitOnNewInput();
+        return read;
+    }
 
-			read = super.read(b);
+    @Override
+    public synchronized int read( byte[] b, int off, int len ) throws IOException
+    {
+        int read = super.read( b, off, len );
 
-			range += read;
-		}
+        if( read < 1 )
+        {
+            waitOnNewInput();
+            read = super.read( b, off, len );
+            range += read;
+        }
 
-		return read;
-	}
+        return read;
+    }
 
-	@Override
-	public synchronized int read(byte[] b, int off, int len)
-		throws IOException {
-		int read = super.read(b, off, len);
+    protected void waitOnNewInput() throws IOException
+    {
+        // previous input stream was empty, so we need to move the range
+        this.in.close();
 
-		if (read < 1) {
-			waitOnNewInput();
-			read = super.read(b, off, len);
-			range += read;
-		}
+        // peek at the new stream
+        boolean goodUrl = false;
 
-		return read;
-	}
+        while( !goodUrl )
+        {
+            URL newUrl = new URL( getLogURI( connection, log ) + "/" + range + getFormatQuery() );
 
-	protected void waitOnNewInput()
-		throws IOException {
-		// previous input stream was empty, so we need to move the range
-		this.in.close();
+            try
+            {
+                goodUrl = urlPeek( newUrl );
+            }
+            catch( Exception e )
+            {
+                // failed to get a new good url, try again next time
+            }
 
-		// peek at the new stream
-		boolean goodUrl = false;
+            if( goodUrl )
+            {
+                this.in = openInputStream( connection, newUrl );
+                return;
+            }
 
-		while (!goodUrl) {
-			URL newUrl = new URL( getLogURI( connection, log ) + "/" + range + getFormatQuery() );
+            try
+            {
+                Thread.sleep( OUTPUT_MONITOR_DELAY );
+            }
+            catch( InterruptedException e )
+            {
+            }
+        }
+    }
 
-			try {
-				goodUrl = urlPeek(newUrl);
-			}
-			catch (Exception e) {
-				// failed to get a new good url, try again next time
-			}
+    boolean urlPeek( URL url ) throws IOException
+    {
+        byte[] buf = new byte[256];
 
-			if (goodUrl) {
-				this.in = openInputStream( connection, newUrl );
-				return;
-			}
+        int bufRead = new BufferedInputStream( openInputStream( connection, url ), 256 ).read( buf );
 
-			try {
-				Thread.sleep(OUTPUT_MONITOR_DELAY);
-			}
-			catch (InterruptedException e) {
-			}
-		}
-	}
+        if( bufRead != -1 )
+        {
+            String peek = new String( buf );
 
-	boolean urlPeek( URL url ) throws IOException {
-		byte[] buf = new byte[256];
+            if( peek != null && ( !peek.contains( "Error 416: Invalid Range values." ) ) )
+            {
+                return true;
+            }
+        }
 
-		int bufRead = new BufferedInputStream( openInputStream( connection, url ), 256 ).read( buf );
-
-		if (bufRead != -1) {
-			String peek = new String(buf);
-
-			if (peek != null && (!peek.contains("Error 416: Invalid Range values."))) {
-				return true;
-			}
-		}
-
-		return false;
-	}
+        return false;
+    }
 }

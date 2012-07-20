@@ -14,6 +14,7 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.theme.core;
 
 import com.liferay.ide.project.core.AbstractProjectDefinition;
@@ -25,22 +26,22 @@ import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelPropertie
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 
-
 /**
  * @author Gregory Amerson
  */
-public class LiferayThemeDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties {
+public class LiferayThemeDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties
+{
 
     @Override
-	public void setupNewProjectDefinition(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject)
+    public void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
     {
-		FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
-		IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
+        FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
+        IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
 
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER );
-		webFacetModel.setStringProperty(
-			IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
-	}
+        webFacetModel.setStringProperty(
+            IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER );
+        webFacetModel.setStringProperty(
+            IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+    }
 
 }

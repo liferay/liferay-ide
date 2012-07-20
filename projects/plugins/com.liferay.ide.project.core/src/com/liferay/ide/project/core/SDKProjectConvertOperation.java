@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -45,121 +45,135 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public class SDKProjectConvertOperation extends AbstractDataModelOperation
-	implements ISDKProjectsImportDataModelProperties {
+    implements ISDKProjectsImportDataModelProperties
+{
+    IProject convertedProject;
 
-	IProject convertedProject;
+    public SDKProjectConvertOperation( IDataModel model )
+    {
+        super( model );
+    }
 
-	public SDKProjectConvertOperation(IDataModel model) {
-		super(model);
-	}
+    @Override
+    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        Object[] selectedProjects = (Object[]) getDataModel().getProperty( SELECTED_PROJECTS );
 
-	@Override
-	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
-		throws ExecutionException {
+        for( int i = 0; i < selectedProjects.length; i++ )
+        {
+            if( selectedProjects[i] instanceof ProjectRecord )
+            {
+                IStatus status = convertProject( (ProjectRecord) selectedProjects[i], monitor );
 
-		Object[] selectedProjects = (Object[]) getDataModel().getProperty(SELECTED_PROJECTS);
+                if( !status.isOK() )
+                {
+                    return status;
+                }
+            }
+        }
 
-		for (int i = 0; i < selectedProjects.length; i++) {
-			if (selectedProjects[i] instanceof ProjectRecord) {
-				IStatus status = convertProject((ProjectRecord) selectedProjects[i], monitor);
+        return Status.OK_STATUS;
+    }
 
-				if (!status.isOK()) {
-					return status;
-				}
-			}
-		}
+    protected IProject convertExistingProject( final ProjectRecord record, IProgressMonitor monitor )
+        throws CoreException
+    {
+        String projectName = record.getProjectName();
 
-		return Status.OK_STATUS;
-	}
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-	protected IProject convertExistingProject(final ProjectRecord record, IProgressMonitor monitor)
-		throws CoreException {
+        IProject project = workspace.getRoot().getProject( projectName );
 
-		String projectName = record.getProjectName();
+        if( record.description == null )
+        {
+            // error case
+            record.description = workspace.newProjectDescription( projectName );
 
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+            IPath locationPath = new Path( record.projectSystemFile.getAbsolutePath() );
 
-		IProject project = workspace.getRoot().getProject(projectName);
+            // If it is under the root use the default location
+            if( Platform.getLocation().isPrefixOf( locationPath ) )
+            {
+                record.description.setLocation( null );
+            }
+            else
+            {
+                record.description.setLocation( locationPath );
+            }
+        }
+        else
+        {
+            record.description.setName( projectName );
+        }
 
-		if (record.description == null) {
-			// error case
-			record.description = workspace.newProjectDescription(projectName);
+        monitor.beginTask( "Importing project", 100 );
 
-			IPath locationPath = new Path(record.projectSystemFile.getAbsolutePath());
+        project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
 
-			// If it is under the root use the default location
-			if (Platform.getLocation().isPrefixOf(locationPath)) {
-				record.description.setLocation(null);
-			}
-			else {
-				record.description.setLocation(locationPath);
-			}
-		}
-		else {
-			record.description.setName(projectName);
-		}
+        // IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
 
-		monitor.beginTask("Importing project", 100);
+        IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
 
-		project.open(IResource.FORCE, new SubProgressMonitor(monitor, 70));
+        FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
 
-		// IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
+        String sdkLocation = getDataModel().getStringProperty( SDK_LOCATION );
 
-		IFacetedProject fProject = ProjectFacetsManager.create(project, true, monitor);
+        final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-		FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy(fProject);
+        PluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
 
-		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
+        fpwc.commitChanges( monitor );
 
-		final IRuntime runtime = (IRuntime) model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
+        monitor.done();
 
-		PluginFacetUtil.configureProjectAsPlugin(fpwc, runtime, sdkLocation);
+        return project;
+    }
 
-		fpwc.commitChanges(monitor);
+    protected IStatus convertProject( ProjectRecord projectRecord, IProgressMonitor monitor )
+    {
+        IProject project = null;
 
-		monitor.done();
+        if( projectRecord.project != null )
+        {
+            try
+            {
+                project = convertExistingProject( projectRecord, monitor );
+            }
+            catch( CoreException e )
+            {
+                return ProjectCorePlugin.createErrorStatus( e );
+            }
+        }
+        convertedProject = project;
 
-		return project;
-	}
+        return Status.OK_STATUS;
+    }
 
-	protected IStatus convertProject(ProjectRecord projectRecord, IProgressMonitor monitor) {
-		IProject project = null;
+    protected String getSDKName()
+    {
+        String sdkLocation = getDataModel().getStringProperty( SDK_LOCATION );
 
-		if (projectRecord.project != null) {
-			try {
-				project = convertExistingProject(projectRecord, monitor);
-			}
-			catch (CoreException e) {
-				return ProjectCorePlugin.createErrorStatus(e);
-			}
-		}
-		convertedProject = project;
+        IPath sdkLocationPath = new Path( sdkLocation );
 
-		return Status.OK_STATUS;
-	}
+        SDK sdk = SDKManager.getInstance().getSDK( sdkLocationPath );
 
-	protected String getSDKName() {
-		String sdkLocation = getDataModel().getStringProperty(SDK_LOCATION);
+        String sdkName = null;
 
-		IPath sdkLocationPath = new Path(sdkLocation);
+        if( sdk != null )
+        {
+            sdkName = sdk.getName();
+        }
+        else
+        {
+            sdk = SDKUtil.createSDKFromLocation( sdkLocationPath );
 
-		SDK sdk = SDKManager.getInstance().getSDK(sdkLocationPath);
+            SDKManager.getInstance().addSDK( sdk );
 
-		String sdkName = null;
+            sdkName = sdk.getName();
+        }
 
-		if (sdk != null) {
-			sdkName = sdk.getName();
-		}
-		else {
-			sdk = SDKUtil.createSDKFromLocation(sdkLocationPath);
-
-			SDKManager.getInstance().addSDK(sdk);
-
-			sdkName = sdk.getName();
-		}
-
-		return sdkName;
-	}
+        return sdkName;
+    }
 }

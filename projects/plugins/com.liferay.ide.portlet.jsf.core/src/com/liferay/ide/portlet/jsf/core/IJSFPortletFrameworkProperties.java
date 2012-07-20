@@ -14,25 +14,19 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.portlet.jsf.core;
 
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
-
 
 /**
  * @author Gregory Amerson
  */
 public interface IJSFPortletFrameworkProperties extends IPluginProjectDataModelProperties
 {
-
     String COMPONENT_SUITE_JSF_STANDARD = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_JSF_STANDARD";
-    
     String COMPONENT_SUITE_LIFERAY_FACES_ALLOY = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_LIFERAY_FACES_ALLOY";
-    
     String COMPONENT_SUITE_ICEFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_ICEFACES";
-    
     String COMPONENT_SUITE_PRIMEFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_PRIMEFACES";
-    
     String COMPONENT_SUITE_RICHFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_RICHFACES";
-    
 }

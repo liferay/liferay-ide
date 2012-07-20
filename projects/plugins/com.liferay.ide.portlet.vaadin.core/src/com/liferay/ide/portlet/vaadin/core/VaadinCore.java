@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,61 +25,70 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class VaadinCore extends Plugin {
+public class VaadinCore extends Plugin
+{
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.portlet.vaadin.core"; //$NON-NLS-1$
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.portlet.vaadin.core"; //$NON-NLS-1$
 
-	// The shared instance
-	private static VaadinCore plugin;
-	
-	public static IStatus createErrorStatus(Exception e) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e);
-	}
+    // The shared instance
+    private static VaadinCore plugin;
 
-	public static IStatus createErrorStatus(String message) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, message);
-	}
+    public static IStatus createErrorStatus( Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
+    }
 
-	public static IStatus createWarningStatus(String message) {
-		return new Status(IStatus.WARNING, PLUGIN_ID, message);
-	}
+    public static IStatus createErrorStatus( String message )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, message );
+    }
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static VaadinCore getDefault() {
-		return plugin;
-	}
+    public static IStatus createWarningStatus( String message )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID, message );
+    }
 
-	public static void logError(Exception e) {
-		getDefault().getLog().log(createErrorStatus(e));
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static VaadinCore getDefault()
+    {
+        return plugin;
+    }
 
-	/**
-	 * The constructor
-	 */
-	public VaadinCore() {
-	}
+    public static void logError( Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( e ) );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
-	public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+    /**
+     * The constructor
+     */
+    public VaadinCore()
+    {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
-	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+     */
+    public void start( BundleContext context ) throws Exception
+    {
+        super.start( context );
+        plugin = this;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
+        plugin = null;
+        super.stop( context );
+    }
 
 }

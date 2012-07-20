@@ -16,12 +16,15 @@ import com.liferay.ide.core.ILiferayConstants;
 
 import org.osgi.framework.Version;
 
+/**
+ * @author Gregory Amerson
+ */
 public class LiferayTomcatRuntime60 extends LiferayTomcatRuntime
 {
 
-	protected Version getLeastSupportedVersion() {
-		return ILiferayConstants.LEAST_SUPPORTED_VERSION;
-	}
-
+    protected Version getLeastSupportedVersion()
+    {
+        return ILiferayConstants.LEAST_SUPPORTED_VERSION;
+    }
 
 }

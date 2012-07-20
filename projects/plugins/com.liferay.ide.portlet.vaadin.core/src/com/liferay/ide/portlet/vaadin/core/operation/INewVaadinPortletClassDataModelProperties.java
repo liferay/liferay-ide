@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,12 +15,12 @@
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
-public interface INewVaadinPortletClassDataModelProperties {
-
-	public static final String QUALIFIED_VAADIN_APPLICATION = "com.vaadin.Application";
-
-	public static final String QUALIFIED_VAADIN_PORTLET = "com.vaadin.terminal.gwt.server.ApplicationPortlet2";
-	
-	public static final String VAADIN_PORTLET_CLASS = "INewVaadinPortletClassDataModelProperties.VAADIN_PORTLET_CLASS";
-
+/**
+ * @author Gregory Amerson
+ */
+public interface INewVaadinPortletClassDataModelProperties
+{
+    public static final String QUALIFIED_VAADIN_APPLICATION = "com.vaadin.Application";
+    public static final String QUALIFIED_VAADIN_PORTLET = "com.vaadin.terminal.gwt.server.ApplicationPortlet2";
+    public static final String VAADIN_PORTLET_CLASS = "INewVaadinPortletClassDataModelProperties.VAADIN_PORTLET_CLASS";
 }

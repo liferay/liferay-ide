@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,6 +11,8 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.ui.cmd;
@@ -25,56 +27,60 @@ import org.eclipse.gef.commands.Command;
 /**
  * @author Greg Amerson
  */
-public class PortletColumnChangeConstraintCommand extends Command {
+public class PortletColumnChangeConstraintCommand extends Command
+{
 
-	protected PortletColumn column;
+    protected PortletColumn column;
+    protected PortletLayout currentParent;
+    protected PortletLayout newParent;
+    protected LayoutConstraint layoutConstraint;
 
-	protected PortletLayout currentParent;
+    public PortletColumnChangeConstraintCommand(
+        PortletColumn column, PortletLayout currentParent, PortletLayout newParent, LayoutConstraint constraint )
+    {
+        this.column = column;
+        this.currentParent = currentParent;
+        this.newParent = newParent;
+        this.layoutConstraint = constraint;
+        setLabel( "Portlet column changed" );
+    }
 
-	protected PortletLayout newParent;
+    public boolean canExecute()
+    {
+        return column != null && currentParent != null && newParent != null && layoutConstraint != null;
+    }
 
-	protected LayoutConstraint layoutConstraint;
+    public void execute()
+    {
+        redo();
+    }
 
-	public PortletColumnChangeConstraintCommand(
-		PortletColumn column, PortletLayout currentParent, PortletLayout newParent, LayoutConstraint constraint) {
-		this.column = column;
-		this.currentParent = currentParent;
-		this.newParent = newParent;
-		this.layoutConstraint = constraint;
-		setLabel("Portlet column changed");
-	}
+    public void redo()
+    {
+        if( currentParent.equals( newParent ) )
+        {
+            int currentColumnIndex = LayoutTplUtil.getColumnIndex( currentParent, column );
 
-	public boolean canExecute() {
-		return column != null && currentParent != null && newParent != null && layoutConstraint != null;
-	}
+            if( currentColumnIndex != layoutConstraint.newColumnIndex )
+            {
+            }
 
-	public void execute() {
-		redo();
-	}
+            int existingWeight = column.getWeight();
+            column.setWeight( layoutConstraint.weight );
+            int diffWeight = existingWeight - layoutConstraint.weight;
 
-	public void redo() {
-		if (currentParent.equals(newParent)) {
-			int currentColumnIndex = LayoutTplUtil.getColumnIndex(currentParent, column);
+            PortletColumn refColumn = layoutConstraint.refColumn;
+            int newWeight = refColumn.getWeight() + diffWeight;
 
-			if (currentColumnIndex != layoutConstraint.newColumnIndex) {
+            newWeight = LayoutTplUtil.adjustWeight( newWeight );
 
-			}
+            refColumn.setWeight( newWeight );
+        }
+    }
 
-			int existingWeight = column.getWeight();
-			column.setWeight(layoutConstraint.weight);
-			int diffWeight = existingWeight - layoutConstraint.weight;
-
-			PortletColumn refColumn = layoutConstraint.refColumn;
-			int newWeight = refColumn.getWeight() + diffWeight;
-
-			newWeight = LayoutTplUtil.adjustWeight(newWeight);
-
-			refColumn.setWeight(newWeight);
-		}
-	}
-
-	public void undo() {
-		System.out.println("UNDO");
-	}
+    public void undo()
+    {
+        System.out.println( "UNDO" );
+    }
 
 }

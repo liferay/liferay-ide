@@ -35,60 +35,59 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.util.NLS;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Gregory Amerson
  */
 public class PortalPropertyNameValidationService extends ValidationService
 {
 
-	private List<String> hookPropertiesNames;
+    private List<String> hookPropertiesNames;
 
-	private boolean isValidPortalPropertyName( Value<?> value )
-	{
-		return hookPropertiesNames.contains( value.getContent() );
-	}
+    private boolean isValidPortalPropertyName( Value<?> value )
+    {
+        return hookPropertiesNames.contains( value.getContent() );
+    }
 
-	private boolean isValueEmpty( Value<?> value )
-	{
-		return value.getContent( false ) == null;
-	}
+    private boolean isValueEmpty( Value<?> value )
+    {
+        return value.getContent( false ) == null;
+    }
 
-	@Override
-	public Status validate()
-	{
-		final Value<?> value = (Value<?>) context( IModelElement.class ).read( context( ModelProperty.class ) );
-		final ValueProperty property = value.getProperty();
-		final String label = property.getLabel( true, CapitalizationType.NO_CAPS, false );
+    @Override
+    public Status validate()
+    {
+        final Value<?> value = (Value<?>) context( IModelElement.class ).read( context( ModelProperty.class ) );
+        final ValueProperty property = value.getProperty();
+        final String label = property.getLabel( true, CapitalizationType.NO_CAPS, false );
 
-		if ( isValueEmpty( value ) )
-		{
-			final String msg = NLS.bind( "Non-empty value for {0} required. ", label );
-			return Status.createErrorStatus( msg );
-		}
-		else if ( !isValidPortalPropertyName( value ) )
-		{
-			final String msg = NLS.bind( "Invalid portal property name {0}. ", label );
-			return Status.createErrorStatus( msg );
-		}
+        if( isValueEmpty( value ) )
+        {
+            final String msg = NLS.bind( "Non-empty value for {0} required. ", label );
+            return Status.createErrorStatus( msg );
+        }
+        else if( !isValidPortalPropertyName( value ) )
+        {
+            final String msg = NLS.bind( "Invalid portal property name {0}. ", label );
+            return Status.createErrorStatus( msg );
+        }
 
-		return Status.createOkStatus();
-	}
+        return Status.createOkStatus();
+    }
 
-	@Override
-	protected void init()
-	{
-		super.init();
-		IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+    @Override
+    protected void init()
+    {
+        super.init();
+        IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
 
-		try
-		{
-			ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-			this.hookPropertiesNames = Arrays.asList( liferayRuntime.getSupportedHookProperties() );
-		}
-		catch ( CoreException e )
-		{
-		}
-	}
+        try
+        {
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            this.hookPropertiesNames = Arrays.asList( liferayRuntime.getSupportedHookProperties() );
+        }
+        catch( CoreException e )
+        {
+        }
+    }
 
 }

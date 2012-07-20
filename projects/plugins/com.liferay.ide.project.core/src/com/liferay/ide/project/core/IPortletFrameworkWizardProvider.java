@@ -29,51 +29,52 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
  */
 public interface IPortletFrameworkWizardProvider
 {
-	String DEFAULT = "default";
 
-	String DESCRIPTION = "description";
+    String DEFAULT = "default";
 
-	String DISPLAY_NAME = "displayName";
+    String DESCRIPTION = "description";
 
-	String EXTENSION_ID = "com.liferay.ide.project.core.portletFrameworkWizardProviders";
+    String DISPLAY_NAME = "displayName";
 
-	String HELP_URL = "helpUrl";
+    String EXTENSION_ID = "com.liferay.ide.project.core.portletFrameworkWizardProviders";
 
-	String ID = "id";
+    String HELP_URL = "helpUrl";
 
-	String REQUIRED_SDK_VERSION = "requiredSDKVersion";
+    String ID = "id";
 
-	String SHORT_NAME = "shortName";
+    String REQUIRED_SDK_VERSION = "requiredSDKVersion";
 
-	IStatus configureNewProject(IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject);
+    String SHORT_NAME = "shortName";
 
-	String getBundleId();
+    IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
 
-	Object getDefaultProperty( String propertyName );
+    String getBundleId();
 
-	String getDescription();
+    Object getDefaultProperty( String propertyName );
 
-	String getDisplayName();
+    String getDescription();
 
-	IProjectFacet[] getFacets();
+    String getDisplayName();
 
-	URL getHelpUrl();
+    IProjectFacet[] getFacets();
 
-	String getId();
+    URL getHelpUrl();
 
-	Collection<String> getPropertyNames();
+    String getId();
 
-	String getRequiredSDKVersion();
+    Collection<String> getPropertyNames();
 
-	String getShortName();
+    String getRequiredSDKVersion();
 
-	IStatus getUnsupportedSDKErrorMsg();
+    String getShortName();
+
+    IStatus getUnsupportedSDKErrorMsg();
 
     boolean hasPropertyName( String propertyName );
 
     boolean isDefault();
 
-    IStatus postProjectCreated(IDataModel dataModel, IFacetedProject facetedProject);
+    IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject );
 
     void propertySet( String propertyName, Object propertyValue );
 

@@ -9,11 +9,12 @@
  *    IBM Corporation - Initial API and implementation
  *    Greg Amerson <gregory.amerson@liferay.com>
  *******************************************************************************/
+
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.LiferayPublishHelper;
 
 import java.io.File;
@@ -50,155 +51,184 @@ import org.w3c.dom.Document;
 /**
  * @author gregory.amerson@liferay.com
  */
-@SuppressWarnings("restriction")
-public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implements ILiferayServerBehavior {
+@SuppressWarnings( "restriction" )
+public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implements ILiferayServerBehavior
+{
 
-	public LiferayTomcatServerBehavior() {
-		super();
-	}
-	
-	@Override
-	protected void publishModule(int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor)
-			throws CoreException {
-		
-		boolean shouldPublishModule =
-			LiferayPublishHelper.prePublishModule(
-				this, kind, deltaKind, moduleTree, getPublishedResourceDelta(moduleTree), monitor);
+    public LiferayTomcatServerBehavior()
+    {
+        super();
+    }
 
-		if (shouldPublishModule) {
-			if (getServer().getServerState() != IServer.STATE_STOPPED) {
-				if (deltaKind == ServerBehaviourDelegate.ADDED || deltaKind == ServerBehaviourDelegate.REMOVED)
-					setServerRestartState(true);
-				}
+    @Override
+    protected void publishModule( int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor )
+        throws CoreException
+    {
 
-			setModulePublishState(moduleTree, IServer.PUBLISH_STATE_NONE);
-		}
-		else {
-			// wasn't able to publish module, should set to needs full publish
-			setModulePublishState(moduleTree, IServer.PUBLISH_STATE_FULL);
-		}
-	}
-	
-	public LiferayTomcatServer getLiferayTomcatServer() {
-		return (LiferayTomcatServer) getServer().loadAdapter(LiferayTomcatServer.class, null);
-	}
-	
-	public IModuleResourceDelta[] getPublishedResourceDelta(IModule[] module) {
-		return super.getPublishedResourceDelta(module);
-	}
+        boolean shouldPublishModule =
+            LiferayPublishHelper.prePublishModule(
+                this, kind, deltaKind, moduleTree, getPublishedResourceDelta( moduleTree ), monitor );
 
-	public IModuleResource[] getResources(IModule[] module) {
-		return super.getResources(module);
-	}
+        if( shouldPublishModule )
+        {
+            if( getServer().getServerState() != IServer.STATE_STOPPED )
+            {
+                if( deltaKind == ServerBehaviourDelegate.ADDED || deltaKind == ServerBehaviourDelegate.REMOVED )
+                    setServerRestartState( true );
+            }
 
-	public IStatus moveContextToAutoDeployDir(
-		IModule module, IPath deployDir, IPath baseDir, IPath autoDeployDir, boolean noPath, boolean serverStopped) {
-		IPath confDir = baseDir.append("conf");
-		IPath serverXml = confDir.append("server.xml");
+            setModulePublishState( moduleTree, IServer.PUBLISH_STATE_NONE );
+        }
+        else
+        {
+            // wasn't able to publish module, should set to needs full publish
+            setModulePublishState( moduleTree, IServer.PUBLISH_STATE_FULL );
+        }
+    }
 
-		try {
-			Factory factory = new Factory();
-			factory.setPackageName("org.eclipse.jst.server.tomcat.core.internal.xml.server40");
-			Server publishedServer = (Server) factory.loadDocument(new FileInputStream(serverXml.toFile()));
-			ServerInstance publishedInstance = new ServerInstance(publishedServer, null, null);
-			
-			IPath contextPath = null;
+    public LiferayTomcatServer getLiferayTomcatServer()
+    {
+        return (LiferayTomcatServer) getServer().loadAdapter( LiferayTomcatServer.class, null );
+    }
 
-			if (autoDeployDir.isAbsolute()) {
-				contextPath = autoDeployDir;
-			}
-			else {
-				contextPath = baseDir.append(autoDeployDir);
-			}
+    public IModuleResourceDelta[] getPublishedResourceDelta( IModule[] module )
+    {
+        return super.getPublishedResourceDelta( module );
+    }
 
-			File contextDir = contextPath.toFile();
+    public IModuleResource[] getResources( IModule[] module )
+    {
+        return super.getResources( module );
+    }
 
-			if (!contextDir.exists()) {
-				contextDir.mkdirs();
-			}
+    public IStatus moveContextToAutoDeployDir(
+        IModule module, IPath deployDir, IPath baseDir, IPath autoDeployDir, boolean noPath, boolean serverStopped )
+    {
+        IPath confDir = baseDir.append( "conf" );
+        IPath serverXml = confDir.append( "server.xml" );
 
-			Context context = publishedInstance.createContext(-1);
-			context.setReloadable("true");
-			context.setSource("org.eclipse.jst.jee.server:" + module.getName());
+        try
+        {
+            Factory factory = new Factory();
+            factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" );
+            Server publishedServer = (Server) factory.loadDocument( new FileInputStream( serverXml.toFile() ) );
+            ServerInstance publishedInstance = new ServerInstance( publishedServer, null, null );
 
-			if (Boolean.valueOf(context.getAttributeValue("antiResourceLocking")).booleanValue()) {
-				context.setAttributeValue("antiResourceLocking", "false");
-			}
+            IPath contextPath = null;
 
-			File contextFile = new File(contextDir, module.getName() + ".xml");
-			if (!LiferayTomcatUtil.isExtProjectContext(context)) {
-				// If requested, remove path attribute
-				if (noPath) {
-					context.removeAttribute("path");
-				}
+            if( autoDeployDir.isAbsolute() )
+            {
+                contextPath = autoDeployDir;
+            }
+            else
+            {
+                contextPath = baseDir.append( autoDeployDir );
+            }
 
-				// need to fix the doc base to contain entire path to help autoDeployer for Liferay
-				context.setDocBase(deployDir.toOSString());
-				// context.setAttributeValue("antiJARLocking", "true");
+            File contextDir = contextPath.toFile();
 
-				// check to see if we need to move from conf folder
-				// IPath existingContextPath = confDir.append("Catalina/localhost").append(contextFile.getName());
-				// if (existingContextPath.toFile().exists()) {
-				// existingContextPath.toFile().delete();
-				// }
+            if( !contextDir.exists() )
+            {
+                contextDir.mkdirs();
+            }
 
-				DocumentBuilder builder = XMLUtil.getDocumentBuilder();
-				Document contextDoc = builder.newDocument();
-				contextDoc.appendChild(contextDoc.importNode(context.getElementNode(), true));
-				XMLUtil.save(contextFile.getAbsolutePath(), contextDoc);
-			}
-		}
-		catch (Exception e) {
-//			Trace.trace(Trace.SEVERE, "Could not modify context configurations to serve directly for Tomcat configuration " + confDir.toOSString() + ": " + e.getMessage());
-			return new Status(IStatus.ERROR, TomcatPlugin.PLUGIN_ID, 0, NLS.bind(Messages.errorPublishConfiguration, new String[] {e.getLocalizedMessage()}), e);
-		}
-		finally {
-//			monitor.done();
-		}
+            Context context = publishedInstance.createContext( -1 );
+            context.setReloadable( "true" );
+            context.setSource( "org.eclipse.jst.jee.server:" + module.getName() );
 
-		return Status.OK_STATUS;
-	}
-	
-	public ILiferayTomcatConfiguration getLiferayTomcatConfiguration() throws CoreException {
-		return getLiferayTomcatServer().getLiferayTomcatConfiguration();
-	}
+            if( Boolean.valueOf( context.getAttributeValue( "antiResourceLocking" ) ).booleanValue() )
+            {
+                context.setAttributeValue( "antiResourceLocking", "false" );
+            }
 
-	@Override
-	public void setupLaunchConfiguration(ILaunchConfigurationWorkingCopy workingCopy, IProgressMonitor monitor)
-		throws CoreException {
+            File contextFile = new File( contextDir, module.getName() + ".xml" );
+            if( !LiferayTomcatUtil.isExtProjectContext( context ) )
+            {
+                // If requested, remove path attribute
+                if( noPath )
+                {
+                    context.removeAttribute( "path" );
+                }
 
-		super.setupLaunchConfiguration(workingCopy, monitor);
+                // need to fix the doc base to contain entire path to help autoDeployer for Liferay
+                context.setDocBase( deployDir.toOSString() );
+                // context.setAttributeValue("antiJARLocking", "true");
 
-		workingCopy.setAttribute(DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8");
+                // check to see if we need to move from conf folder
+                // IPath existingContextPath = confDir.append("Catalina/localhost").append(contextFile.getName());
+                // if (existingContextPath.toFile().exists()) {
+                // existingContextPath.toFile().delete();
+                // }
 
-		String existingVMArgs =
-			workingCopy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null);
+                DocumentBuilder builder = XMLUtil.getDocumentBuilder();
+                Document contextDoc = builder.newDocument();
+                contextDoc.appendChild( contextDoc.importNode( context.getElementNode(), true ) );
+                XMLUtil.save( contextFile.getAbsolutePath(), contextDoc );
+            }
+        }
+        catch( Exception e )
+        {
+            // Trace.trace(Trace.SEVERE,
+            // "Could not modify context configurations to serve directly for Tomcat configuration " +
+            // confDir.toOSString() + ": " + e.getMessage());
+            return new Status( IStatus.ERROR, TomcatPlugin.PLUGIN_ID, 0, NLS.bind(
+                Messages.errorPublishConfiguration, new String[] { e.getLocalizedMessage() } ), e );
+        }
+        finally
+        {
+            // monitor.done();
+        }
 
-		if (null != existingVMArgs) {
-			String[] parsedVMArgs = DebugPlugin.parseArguments(existingVMArgs);
+        return Status.OK_STATUS;
+    }
 
-			List<String> memoryArgs = new ArrayList<String>();
+    public ILiferayTomcatConfiguration getLiferayTomcatConfiguration() throws CoreException
+    {
+        return getLiferayTomcatServer().getLiferayTomcatConfiguration();
+    }
 
-			if (!CoreUtil.isNullOrEmpty(parsedVMArgs)) {
-				for (String pArg : parsedVMArgs) {
-					if (pArg.startsWith("-Xm") || pArg.startsWith("-XX:")) {
-						memoryArgs.add(pArg);
-					}
-				}
-			}
+    @Override
+    public void setupLaunchConfiguration( ILaunchConfigurationWorkingCopy workingCopy, IProgressMonitor monitor )
+        throws CoreException
+    {
 
-			String argsWithoutMem =
-				mergeArguments(existingVMArgs, getRuntimeVMArguments(), memoryArgs.toArray(new String[0]), false);
-			String fixedArgs = mergeArguments(argsWithoutMem, getRuntimeVMArguments(), null, false);
+        super.setupLaunchConfiguration( workingCopy, monitor );
 
-			workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, fixedArgs);
-		}
-	}
+        workingCopy.setAttribute( DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8" );
 
-	public void redeployModule(IModule[] module) {
+        String existingVMArgs =
+            workingCopy.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null );
 
-		getServer().publish(IServer.PUBLISH_FULL, null);
-	
-	}
+        if( null != existingVMArgs )
+        {
+            String[] parsedVMArgs = DebugPlugin.parseArguments( existingVMArgs );
+
+            List<String> memoryArgs = new ArrayList<String>();
+
+            if( !CoreUtil.isNullOrEmpty( parsedVMArgs ) )
+            {
+                for( String pArg : parsedVMArgs )
+                {
+                    if( pArg.startsWith( "-Xm" ) || pArg.startsWith( "-XX:" ) )
+                    {
+                        memoryArgs.add( pArg );
+                    }
+                }
+            }
+
+            String argsWithoutMem =
+                mergeArguments( existingVMArgs, getRuntimeVMArguments(), memoryArgs.toArray( new String[0] ), false );
+            String fixedArgs = mergeArguments( argsWithoutMem, getRuntimeVMArguments(), null, false );
+
+            workingCopy.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, fixedArgs );
+        }
+    }
+
+    public void redeployModule( IModule[] module )
+    {
+
+        getServer().publish( IServer.PUBLISH_FULL, null );
+
+    }
 
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,10 +16,10 @@
 package com.liferay.ide.layouttpl.ui.model;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.templates.core.ITemplateOperation;
-import com.liferay.ide.templates.core.TemplatesCore;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.templates.core.ITemplateOperation;
+import com.liferay.ide.templates.core.TemplatesCore;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -38,202 +38,238 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class LayoutTplDiagram extends ModelElement implements PropertyChangeListener {
+@SuppressWarnings( "restriction" )
+public class LayoutTplDiagram extends ModelElement implements PropertyChangeListener
+{
+    public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
+    public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved";
 
-	public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
+    public static LayoutTplDiagram createDefaultDiagram()
+    {
+        return new LayoutTplDiagram();
+    }
 
-	public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved";
+    public static LayoutTplDiagram createFromFile( IFile file )
+    {
+        if( file == null || !( file.exists() ) )
+        {
+            return null;
+        }
 
-	public static LayoutTplDiagram createDefaultDiagram() {
-		return new LayoutTplDiagram();
-	}
+        LayoutTplDiagram model = null;
 
-	public static LayoutTplDiagram createFromFile(IFile file) {
-		if (file == null || !(file.exists())) {
-			return null;
-		}
+        try
+        {
+            IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( file );
+            model = createFromModel( domModel );
+        }
+        catch( Exception e )
+        {
+            LayoutTplUI.logError( "Unable to read layout template file " + file.getName(), e );
+            model = new LayoutTplDiagram();
+        }
 
-		LayoutTplDiagram model = null;
+        return model;
+    }
 
-		try {
-			IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit(file);
-			model = createFromModel(domModel);
-		}
-		catch (Exception e) {
-			LayoutTplUI.logError("Unable to read layout template file " + file.getName(), e);
-			model = new LayoutTplDiagram();
-		}
+    public static LayoutTplDiagram createFromModel( IDOMModel model )
+    {
+        if( model == null )
+        {
+            return null;
+        }
 
-		return model;
-	}
+        // look for element that is a div with id of "main-content"
+        LayoutTplDiagram newDiagram = null;
+        IDOMDocument rootDocument = model.getDocument();
+        IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement( rootDocument );
 
-	public static LayoutTplDiagram createFromModel(IDOMModel model) {
-		if (model == null) {
-			return null;
-		}
+        newDiagram = new LayoutTplDiagram();
+        newDiagram.setId( "main-content" );
 
-		// look for element that is a div with id of "main-content"
-		LayoutTplDiagram newDiagram = null;
-		IDOMDocument rootDocument = model.getDocument();
-		IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement(rootDocument);
+        if( mainContentElement != null )
+        {
+            newDiagram.setRole( LayoutTplUtil.getRoleValue( mainContentElement, "main" ) );
 
-		newDiagram = new LayoutTplDiagram();
-		newDiagram.setId("main-content");
+            IDOMElement[] portletLayoutElements =
+                LayoutTplUtil.findChildElementsByClassName( mainContentElement, "div", "portlet-layout" );
 
-		if (mainContentElement != null) {
-			newDiagram.setRole(LayoutTplUtil.getRoleValue(mainContentElement, "main"));
+            if( !CoreUtil.isNullOrEmpty( portletLayoutElements ) )
+            {
+                for( IDOMElement portletLayoutElement : portletLayoutElements )
+                {
+                    PortletLayout newPortletLayout = PortletLayout.createFromElement( portletLayoutElement );
+                    newDiagram.addRow( newPortletLayout );
+                }
+            }
+        }
+        else
+        {
+            newDiagram.setRole( "main" );
+        }
 
-			IDOMElement[] portletLayoutElements =
-				LayoutTplUtil.findChildElementsByClassName(mainContentElement, "div", "portlet-layout");
+        return newDiagram;
+    }
 
-			if (!CoreUtil.isNullOrEmpty(portletLayoutElements)) {
-				for (IDOMElement portletLayoutElement : portletLayoutElements) {
-					PortletLayout newPortletLayout = PortletLayout.createFromElement(portletLayoutElement);
-					newDiagram.addRow(newPortletLayout);
-				}
-			}
-		}
-		else {
-			newDiagram.setRole("main");
-		}
+    protected String id;
+    protected String role;
+    protected List<ModelElement> rows = new ArrayList<ModelElement>();
 
-		return newDiagram;
-	}
+    public LayoutTplDiagram()
+    {
+        super();
 
-	protected String id;
+        this.id = "main-content";
+        this.role = "main";
+    }
 
-	protected String role;
+    public void addRow( PortletLayout newRow )
+    {
+        addRow( newRow, -1 );
+    }
 
-	protected List<ModelElement> rows = new ArrayList<ModelElement>();
+    public boolean addRow( PortletLayout newRow, int index )
+    {
+        if( newRow != null )
+        {
+            if( index < 0 )
+            {
+                rows.add( newRow );
+            }
+            else
+            {
+                rows.add( index, newRow );
+            }
 
-	public LayoutTplDiagram() {
-		super();
+            newRow.setParent( this );
+            newRow.addPropertyChangeListener( this );
 
-		this.id = "main-content";
-		this.role = "main";
-	}
+            this.updateColumns();
+            this.firePropertyChange( ROW_ADDED_PROP, null, newRow );
 
-	public void addRow(PortletLayout newRow) {
-		addRow(newRow, -1);
-	}
+            return true;
+        }
 
-	public boolean addRow(PortletLayout newRow, int index) {
-		if (newRow != null) {
-			if (index < 0) {
-				rows.add(newRow);
-			}
-			else {
-				rows.add(index, newRow);
-			}
+        return false;
+    }
 
-			newRow.setParent(this);
-			newRow.addPropertyChangeListener(this);
+    public String getId()
+    {
+        return id;
+    }
 
-			this.updateColumns();
-			this.firePropertyChange(ROW_ADDED_PROP, null, newRow);
+    public String getRole()
+    {
+        return role;
+    }
 
-			return true;
-		}
+    public List<ModelElement> getRows()
+    {
+        return rows;
+    }
 
-		return false;
-	}
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        String prop = evt.getPropertyName();
 
-	public String getId() {
-		return id;
-	}
+        if( PortletLayout.COLUMN_ADDED_PROP.equals( prop ) || PortletLayout.COLUMN_REMOVED_PROP.equals( prop ) )
+        {
+            updateColumns();
+        }
+    }
 
-	public String getRole() {
-		return role;
-	}
+    @Override
+    public void removeChild( ModelElement child )
+    {
+        if( rows.contains( child ) )
+        {
+            removeRow( (PortletLayout) child );
+        }
+    }
 
-	public List<ModelElement> getRows() {
-		return rows;
-	}
+    public boolean removeRow( PortletLayout existingRow )
+    {
+        if( existingRow != null && rows.remove( existingRow ) )
+        {
+            firePropertyChange( ROW_REMOVED_PROP, null, existingRow );
 
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
+            return true;
+        }
 
-		if (PortletLayout.COLUMN_ADDED_PROP.equals(prop) || PortletLayout.COLUMN_REMOVED_PROP.equals(prop)) {
-			updateColumns();
-		}
-	}
+        return false;
+    }
 
-	@Override
-	public void removeChild(ModelElement child) {
-		if (rows.contains(child)) {
-			removeRow((PortletLayout) child);
-		}
-	}
+    public void saveToFile( IFile file, IProgressMonitor monitor )
+    {
+        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" );
+        templateOperation.setOutputFile( file );
 
-	public boolean removeRow(PortletLayout existingRow) {
-		if (existingRow != null && rows.remove(existingRow)) {
-			firePropertyChange(ROW_REMOVED_PROP, null, existingRow);
+        try
+        {
+            VelocityContext ctx = templateOperation.getContext();
+            ctx.put( "root", this );
+            String name = file.getFullPath().removeFileExtension().lastSegment();
+            ctx.put( "templateName", name );
+            templateOperation.execute( monitor );
+        }
+        catch( Exception e )
+        {
+            LayoutTplUI.logError( e );
+        }
+    }
 
-			return true;
-		}
+    public void setId( String id )
+    {
+        this.id = id;
+    }
 
-		return false;
-	}
+    public void setRole( String role )
+    {
+        this.role = role;
+    }
 
-	public void saveToFile(IFile file, IProgressMonitor monitor) {
-		ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation("layouttpl.tpl");
-		templateOperation.setOutputFile(file);
+    protected void updateColumns()
+    {
+        int numIdCount = 1;
 
-		try {
-			VelocityContext ctx = templateOperation.getContext();
-			ctx.put("root", this);
-			String name = file.getFullPath().removeFileExtension().lastSegment();
-			ctx.put("templateName", name);
-			templateOperation.execute(monitor);
-		}
-		catch (Exception e) {
-			LayoutTplUI.logError(e);
-		}
-	}
+        for( ModelElement row : rows )
+        {
+            List<ModelElement> cols = ( (PortletLayout) row ).getColumns();
 
-	public void setId(String id) {
-		this.id = id;
-	}
+            for( int i = 0; i < cols.size(); i++ )
+            {
+                PortletColumn col = ( (PortletColumn) cols.get( i ) );
+                col.setNumId( numIdCount++ );
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+                if( i == 0 && cols.size() > 1 )
+                {
+                    col.setFirst( true );
+                }
+                else if( cols.size() > 1 && i == ( cols.size() - 1 ) )
+                {
+                    col.setLast( true );
+                }
+            }
+        }
+    }
 
-	protected void updateColumns() {
-		int numIdCount = 1;
+    public String getTemplateSource( String templateName )
+    {
+        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" );
+        StringBuffer buffer = new StringBuffer();
+        templateOperation.setOutputBuffer( buffer );
+        templateOperation.getContext().put( "root", this );
+        templateOperation.getContext().put( "templateName", templateName );
 
-		for (ModelElement row : rows) {
-			List<ModelElement> cols = ((PortletLayout) row).getColumns();
+        try
+        {
+            templateOperation.execute( new NullProgressMonitor() );
+        }
+        catch( Exception ex )
+        {
+            LayoutTplUI.logError( "Error getting template source.", ex );
+        }
 
-			for (int i = 0; i < cols.size(); i++) {
-				PortletColumn col = ((PortletColumn) cols.get(i));
-				col.setNumId(numIdCount++);
-
-				if (i == 0 && cols.size() > 1) {
-					col.setFirst(true);
-				}
-				else if (cols.size() > 1 && i == (cols.size() - 1)) {
-					col.setLast(true);
-				}
-			}
-		}
-	}
-
-	public String getTemplateSource(String templateName) {
-		ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation("layouttpl.tpl");
-		StringBuffer buffer = new StringBuffer();
-		templateOperation.setOutputBuffer(buffer);
-		templateOperation.getContext().put("root", this);
-		templateOperation.getContext().put("templateName", templateName);
-
-		try {
-			templateOperation.execute(new NullProgressMonitor());
-		}
-		catch (Exception ex) {
-			LayoutTplUI.logError("Error getting template source.", ex);
-		}
-
-		return buffer.toString();
-	}
+        return buffer.toString();
+    }
 }

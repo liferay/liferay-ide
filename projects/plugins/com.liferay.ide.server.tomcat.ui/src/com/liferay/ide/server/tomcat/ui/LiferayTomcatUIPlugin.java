@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,63 +25,60 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class LiferayTomcatUIPlugin extends AbstractUIPlugin {
+public class LiferayTomcatUIPlugin extends AbstractUIPlugin
+{
 
-	// The plugin ID
-	public static final String PLUGIN_ID = "com.liferay.ide.server.tomcat.ui";
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.server.tomcat.ui";
 
-	// The shared instance
-	private static LiferayTomcatUIPlugin plugin;
+    // The shared instance
+    private static LiferayTomcatUIPlugin plugin;
 
-	public static IStatus createErrorStatus(Exception ex) {
-		return new Status(IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex);
-	}
+    public static IStatus createErrorStatus( Exception ex )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex );
+    }
 
-	/**
-	 * Returns the shared instance
-	 * 
-	 * @return the shared instance
-	 */
-	public static LiferayTomcatUIPlugin getDefault() {
-		return plugin;
-	}
+    /**
+     * Returns the shared instance
+     * 
+     * @return the shared instance
+     */
+    public static LiferayTomcatUIPlugin getDefault()
+    {
+        return plugin;
+    }
 
-	public static void logError(Exception ex) {
-		getDefault().getLog().log(createErrorStatus(ex));
-	}
+    public static void logError( Exception ex )
+    {
+        getDefault().getLog().log( createErrorStatus( ex ) );
+    }
 
-	/**
-	 * The constructor
-	 */
-	public LiferayTomcatUIPlugin() {
-	}
+    /**
+     * The constructor
+     */
+    public LiferayTomcatUIPlugin()
+    {
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-	 * )
-	 */
-	public void start(BundleContext context)
-		throws Exception {
-		
-		super.start(context);
-		
-		plugin = this;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
+     */
+    public void start( BundleContext context ) throws Exception
+    {
+        super.start( context );
+        plugin = this;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-	 * )
-	 */
-	public void stop(BundleContext context)
-		throws Exception {
-		
-		plugin = null;
-		
-		super.stop(context);
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
+     */
+    public void stop( BundleContext context ) throws Exception
+    {
+        plugin = null;
+        super.stop( context );
+    }
 
 }

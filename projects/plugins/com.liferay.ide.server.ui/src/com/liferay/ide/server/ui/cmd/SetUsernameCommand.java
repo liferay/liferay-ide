@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
@@ -13,28 +13,32 @@ package com.liferay.ide.server.ui.cmd;
 
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 
-public class SetUsernameCommand extends RemoteServerCommand {
+public class SetUsernameCommand extends RemoteServerCommand
+{
 
-	protected String oldUsername;
-	protected String username;
+    protected String oldUsername;
+    protected String username;
 
-	public SetUsernameCommand( IRemoteServerWorkingCopy server, String username ) {
-		super( server, "Set Username" );
-		this.username = username;
-	}
+    public SetUsernameCommand( IRemoteServerWorkingCopy server, String username )
+    {
+        super( server, "Set Username" );
+        this.username = username;
+    }
 
-	/**
-	 * Execute setting the memory args
-	 */
-	public void execute() {
-		oldUsername = server.getUsername();
-		server.setUsername( username );
-	}
+    /**
+     * Execute setting the memory args
+     */
+    public void execute()
+    {
+        oldUsername = server.getUsername();
+        server.setUsername( username );
+    }
 
-	/**
-	 * Restore prior memoryargs
-	 */
-	public void undo() {
-		server.setUsername( oldUsername );
-	}
+    /**
+     * Restore prior memoryargs
+     */
+    public void undo()
+    {
+        server.setUsername( oldUsername );
+    }
 }

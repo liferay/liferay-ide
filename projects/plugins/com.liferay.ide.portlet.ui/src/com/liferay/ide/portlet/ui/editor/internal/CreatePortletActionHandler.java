@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,8 +18,8 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import com.liferay.ide.portlet.core.model.IPortlet;
-import com.liferay.ide.portlet.core.model.IPortletApp;
+import com.liferay.ide.portlet.core.model.Portlet;
+import com.liferay.ide.portlet.core.model.PortletApp;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
@@ -33,48 +33,57 @@ import org.eclipse.sapphire.ui.swt.SapphireDialog;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class CreatePortletActionHandler extends SapphireActionHandler {
+public class CreatePortletActionHandler extends SapphireActionHandler
+{
 
-	private static final String NEW_PORTLET_WIZARD_DEF =
-		"com.liferay.ide.portlet.ui/com/liferay/ide/eclipse/portlet/ui/editor/portlet-app.sdef!new.portlet.wizard";
+    private static final String NEW_PORTLET_WIZARD_DEF =
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/portlet-app.sdef!new.portlet.wizard";
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
-	 */
-	@Override
-	protected Object run( SapphireRenderingContext context ) {
-		IPortletApp rootModel = (IPortletApp) context.getPart().getModelElement();
-		IPortlet portlet = rootModel.getPortlets().insert();
-		// Open the dialog to capture the mandatory properties
-		final SapphireDialog dialog = new SapphireDialog( context.getShell(), portlet, NEW_PORTLET_WIZARD_DEF );
-		if ( dialog != null && Dialog.OK == dialog.open() ) {
-			// Select the node
-			final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-			final MasterDetailsContentNode root = page.outline().getRoot();
-			final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
-			if ( node != null ) {
-				node.select();
-			}
-			try {
-				rootModel.resource().save();
-			}
-			catch ( ResourceStoreException e ) {
-				// Log it in PorletUI Plugin
-			}
-			return portlet;
-		}
-		else {
-			rootModel.getPortlets().remove( portlet );
-			portlet = null;
-			try {
-				rootModel.resource().save();
-			}
-			catch ( ResourceStoreException e ) {
-				// Log it in PorletUI Plugin
-			}
-			return null;
-		}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
+     */
+    @Override
+    protected Object run( SapphireRenderingContext context )
+    {
+        PortletApp rootModel = (PortletApp) context.getPart().getModelElement();
+        Portlet portlet = rootModel.getPortlets().insert();
+        // Open the dialog to capture the mandatory properties
+        final SapphireDialog dialog = new SapphireDialog( context.getShell(), portlet, NEW_PORTLET_WIZARD_DEF );
+        if( dialog != null && Dialog.OK == dialog.open() )
+        {
+            // Select the node
+            final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
+            final MasterDetailsContentNode root = page.outline().getRoot();
+            final MasterDetailsContentNode node = root.findNodeByModelElement( portlet );
+            if( node != null )
+            {
+                node.select();
+            }
+            try
+            {
+                rootModel.resource().save();
+            }
+            catch( ResourceStoreException e )
+            {
+                // Log it in PorletUI Plugin
+            }
+            return portlet;
+        }
+        else
+        {
+            rootModel.getPortlets().remove( portlet );
+            portlet = null;
+            try
+            {
+                rootModel.resource().save();
+            }
+            catch( ResourceStoreException e )
+            {
+                // Log it in PorletUI Plugin
+            }
+            return null;
+        }
 
-	}
+    }
 }

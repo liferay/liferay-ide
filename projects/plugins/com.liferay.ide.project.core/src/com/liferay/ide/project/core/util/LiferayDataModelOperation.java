@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,8 +15,6 @@
 
 package com.liferay.ide.project.core.util;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
@@ -27,33 +25,38 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings( "restriction" )
 public abstract class LiferayDataModelOperation extends AbstractDataModelOperation
-	implements IArtifactEditOperationDataModelProperties {
+    implements IArtifactEditOperationDataModelProperties
+{
 
-	protected TemplateContextType contextType;
+    protected TemplateContextType contextType;
 
-	protected TemplateStore templateStore;
+    protected TemplateStore templateStore;
 
-	public LiferayDataModelOperation(IDataModel model, TemplateStore templateStore, TemplateContextType contextType) {
-		super(model);
+    public LiferayDataModelOperation( IDataModel model, TemplateStore templateStore, TemplateContextType contextType )
+    {
+        super( model );
 
-		this.templateStore = templateStore;
+        this.templateStore = templateStore;
 
-		this.contextType = contextType;
-	}
+        this.contextType = contextType;
+    }
 
-	protected TemplateContextType getContextType() {
-		return contextType;
-	}
+    protected TemplateContextType getContextType()
+    {
+        return contextType;
+    }
 
-	protected IProject getTargetProject() {
-		String projectName = model.getStringProperty(PROJECT_NAME);
+    protected IProject getTargetProject()
+    {
+        String projectName = model.getStringProperty( PROJECT_NAME );
 
-		return ProjectUtil.getProject(projectName);
-	}
+        return ProjectUtil.getProject( projectName );
+    }
 
-	protected TemplateStore getTemplateStore() {
-		return templateStore;
-	}
+    protected TemplateStore getTemplateStore()
+    {
+        return templateStore;
+    }
 }

@@ -3,7 +3,7 @@ package formatter;
 
 File workspaceDir = new File("..")
 File formatterSettingsXml = new File("bin/formatter/liferay_code_formatter_settings.xml")
-File formatterSettingsJava = new File(workspaceDir, "com.liferay.ide.eclipse.ui/src/com/liferay/ide/eclipse/ui/LiferayDefaultCodeFormatterSettings.java")
+File formatterSettingsJava = new File(workspaceDir, "com.liferay.ide.ui/src/com/liferay/ide/ui/LiferayDefaultCodeFormatterSettings.java")
 
 XmlParser xmlParser = new XmlParser()
 
@@ -43,7 +43,7 @@ def template = '''
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.ui;
+package com.liferay.ide.ui;
 
 import java.util.Map;
 

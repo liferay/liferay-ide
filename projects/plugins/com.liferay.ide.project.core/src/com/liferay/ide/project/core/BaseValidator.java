@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -48,246 +48,273 @@ import org.w3c.dom.NodeList;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public abstract class BaseValidator extends AbstractValidator {
+@SuppressWarnings( "restriction" )
+public abstract class BaseValidator extends AbstractValidator
+{
+
+    protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
+
+    public BaseValidator()
+    {
+        super();
+    }
+
+    @Override
+    public boolean shouldClearMarkers( ValidationEvent event )
+    {
+        return true;
+    }
+
+    protected Map<String, Object> checkClass(
+        IJavaProject javaProject, Node classSpecifier, String preferenceNodeQualifier,
+        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
+    {
+
+        String className = NodeUtil.getTextContent( classSpecifier );
+
+        if( className != null && className.length() > 0 )
+        {
+            IType type = null;
+
+            try
+            {
+                type = javaProject.findType( className );
+            }
+            catch( JavaModelException e )
+            {
+                return null;
+            }
+
+            if( type == null || !type.exists() )
+            {
+                String msg = MessageFormat.format( errorMessage, new Object[] { className } );
+
+                return createMarkerValues(
+                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg );
+
+            }
+        }
+
+        return null;
+    }
+
+    protected Map<String, Object> checkClassResource(
+        IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
+        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
+    {
+
+        return checkClassResource(
+            javaProject, classResourceSpecifier, preferenceNodeQualifier, preferenceScopes, preferenceKey,
+            errorMessage, false );
+    }
+
+    protected Map<String, Object> checkClassResource(
+        IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
+        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, boolean warnPropertiesSuffix )
+    {
+
+        String classResource = NodeUtil.getTextContent( classResourceSpecifier );
+
+        if( classResource != null && classResource.length() > 0 )
+        {
+            if( classResource.endsWith( ".properties" ) && warnPropertiesSuffix )
+            {
+                String msg =
+                    MessageFormat.format(
+                        "The class resource {0} should not end with .properties", new Object[] { classResource } );
+                return createMarkerValues(
+                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
+            }
+
+            try
+            {
+                IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath( true );
+
+                IResource classResourceValue = null;
+                for( IClasspathEntry entry : classpathEntries )
+                {
+                    if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
+                    {
+                        IPath entryPath = entry.getPath();
+                        IPath classResourcePath = entryPath.append( classResource );
+
+                        classResourceValue =
+                            javaProject.getJavaModel().getWorkspace().getRoot().findMember( classResourcePath );
+
+                        if( classResourceValue != null )
+                        {
+                            break;
+                        }
+
+                        IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) );
+
+                        classResourceValue =
+                            javaProject.getJavaModel().getWorkspace().getRoot().findMember( qualifiedResourcePath );
+
+                        if( classResourceValue != null )
+                        {
+                            break;
+                        }
+
+                        String resourceName = classResourcePath.lastSegment();
+
+                        if( classResourceValue == null && classResourcePath.segmentCount() > 0 )
+                        {
+                            // check for a .properties of the same resource path in case of a resource bundle element
+                            // that doesn't append the .properties
+                            IPath parent = classResourcePath.removeLastSegments( 1 );
+
+                            IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" );
+
+                            classResourceValue =
+                                javaProject.getJavaModel().getWorkspace().getRoot().findMember(
+                                    propertiesClassResourcePath );
+
+                            if( classResourceValue != null )
+                            {
+                                break;
+                            }
 
-	protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
+                            propertiesClassResourcePath =
+                                parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" );
 
-	public BaseValidator() {
-		super();
-	}
+                            classResourceValue =
+                                javaProject.getJavaModel().getWorkspace().getRoot().findMember(
+                                    propertiesClassResourcePath );
 
-	@Override
-	public boolean shouldClearMarkers(ValidationEvent event) {
-		return true;
-	}
+                            if( classResourceValue != null )
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
 
-	protected Map<String, Object> checkClass(
-		IJavaProject javaProject, Node classSpecifier, String preferenceNodeQualifier,
-		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage) {
+                if( classResourceValue == null )
+                {
+                    String msg = MessageFormat.format( errorMessage, new Object[] { classResource } );
 
-		String className = NodeUtil.getTextContent(classSpecifier);
+                    return createMarkerValues(
+                        preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier,
+                        msg );
+                }
+            }
+            catch( JavaModelException e1 )
+            {
 
-		if (className != null && className.length() > 0) {
-			IType type = null;
+            }
+        }
 
-			try {
-				type = javaProject.findType(className);
-			}
-			catch (JavaModelException e) {
-				return null;
-			}
-
-			if (type == null || !type.exists()) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					className
-				});
-
-				return createMarkerValues(
-					preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg);
-
-			}
-		}
+        return null;
+    }
 
-		return null;
-	}
+    protected void checkDocrootElement(
+        IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
+        IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems )
+    {
 
-	protected Map<String, Object> checkClassResource(
-		IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
-		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage) {
+        NodeList elements = document.getElementsByTagName( element );
 
-		return checkClassResource(
-			javaProject, classResourceSpecifier, preferenceNodeQualifier, preferenceScopes, preferenceKey,
-			errorMessage, false);
-	}
+        for( int i = 0; i < elements.getLength(); i++ )
+        {
+            Node item = elements.item( i );
 
-	protected Map<String, Object> checkClassResource(
-		IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
-		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, boolean warnPropertiesSuffix) {
+            Map<String, Object> problem =
+                checkDocrootResource(
+                    item, project, preferenceNodeQualifier, preferenceScopes, validationKey, messageKey );
 
-		String classResource = NodeUtil.getTextContent(classResourceSpecifier);
+            if( problem != null )
+            {
+                problems.add( problem );
+            }
+        }
+    }
 
-		if (classResource != null && classResource.length() > 0) {
-			if (classResource.endsWith(".properties") && warnPropertiesSuffix) {
-				String msg =
-					MessageFormat.format("The class resource {0} should not end with .properties", new Object[] {
-						classResource
-					});
-				return createMarkerValues(
-					preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg);
-			}
+    protected Map<String, Object> checkDocrootResource(
+        Node docrootResourceSpecifier, IProject project, String preferenceNodeQualifier,
+        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
+    {
 
-			try {
-				IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath(true);
+        String docrootResource = NodeUtil.getTextContent( docrootResourceSpecifier );
 
-				IResource classResourceValue = null;
-				for (IClasspathEntry entry : classpathEntries) {
-					if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-						IPath entryPath = entry.getPath();
-						IPath classResourcePath = entryPath.append(classResource);
+        if( docrootResource != null && docrootResource.length() > 0 )
+        {
+            IFolder docroot = CoreUtil.getDocroot( project );
 
-						classResourceValue =
-							javaProject.getJavaModel().getWorkspace().getRoot().findMember(classResourcePath);
+            IResource docrootResourceValue = docroot.findMember( new Path( docrootResource ) );
 
-						if ( classResourceValue != null ) {
-							break;
-						}
+            if( docrootResourceValue == null )
+            {
+                String msg = MessageFormat.format( errorMessage, new Object[] { docrootResource } );
 
-						IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) );
+                return createMarkerValues(
+                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier, msg );
+            }
+        }
 
-						classResourceValue =
-							javaProject.getJavaModel().getWorkspace().getRoot().findMember( qualifiedResourcePath );
+        return null;
+    }
 
-						if ( classResourceValue != null ) {
-							break;
-						}
+    protected Map<String, Object> createMarkerValues(
+        String qualifier, IScopeContext[] preferenceScopes, String preferenceKey, IDOMNode domNode, String message )
+    {
+        Object severity = getMessageSeverity( qualifier, preferenceScopes, preferenceKey );
 
-						String resourceName = classResourcePath.lastSegment();
+        if( severity == null )
+        {
+            return null;
+        }
 
-						if (classResourceValue == null && classResourcePath.segmentCount() > 0) {
-							// check for a .properties of the same resource path in case of a resource bundle element
-							// that doesn't append the .properties
-							IPath parent = classResourcePath.removeLastSegments( 1 );
+        Map<String, Object> markerValues = new HashMap<String, Object>();
 
-							IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" );
+        markerValues.put( IMarker.SEVERITY, severity );
 
-							classResourceValue =
-								javaProject.getJavaModel().getWorkspace().getRoot().findMember(
-									propertiesClassResourcePath );
+        int start = domNode.getStartOffset();
 
-							if ( classResourceValue != null ) {
-								break;
-							}
+        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
+        {
 
-							propertiesClassResourcePath =
-								parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" );
+            start = domNode.getStartStructuredDocumentRegion().getEndOffset();
+        }
 
-							classResourceValue =
-								javaProject.getJavaModel().getWorkspace().getRoot().findMember(
-									propertiesClassResourcePath );
+        int end = domNode.getEndOffset();
 
-							if ( classResourceValue != null ) {
-								break;
-							}
-						}
-					}
-				}
+        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
+        {
 
-				if (classResourceValue == null) {
-					String msg = MessageFormat.format(errorMessage, new Object[] {
-						classResource
-					});
+            end = domNode.getEndStructuredDocumentRegion().getStartOffset();
+        }
 
-					return createMarkerValues(
-						preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier,
-						msg);
-				}
-			}
-			catch (JavaModelException e1) {
+        int line = domNode.getStructuredDocument().getLineOfOffset( start );
 
-			}
-		}
+        markerValues.put( IMarker.CHAR_START, new Integer( start ) );
+        markerValues.put( IMarker.CHAR_END, new Integer( end ) );
+        markerValues.put( IMarker.LINE_NUMBER, new Integer( line + 1 ) );
+        markerValues.put( IMarker.MESSAGE, message );
 
-		return null;
-	}
+        return markerValues;
+    }
 
-	protected void checkDocrootElement(
-		IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
-		IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems) {
+    protected Integer getMessageSeverity( String qualifier, IScopeContext[] preferenceScopes, String key )
+    {
+        int sev = fPreferencesService.getInt( qualifier, key, IMessage.NORMAL_SEVERITY, preferenceScopes );
 
-		NodeList elements = document.getElementsByTagName(element);
+        switch( sev )
+        {
+            case ValidationMessage.ERROR:
+                return new Integer( IMarker.SEVERITY_ERROR );
 
-		for (int i = 0; i < elements.getLength(); i++) {
-			Node item = elements.item(i);
+            case ValidationMessage.WARNING:
+                return new Integer( IMarker.SEVERITY_WARNING );
 
-			Map<String, Object> problem =
-				checkDocrootResource(
-					item, project, preferenceNodeQualifier, preferenceScopes, validationKey, messageKey);
+            case ValidationMessage.INFORMATION:
+                return new Integer( IMarker.SEVERITY_INFO );
 
-			if (problem != null) {
-				problems.add(problem);
-			}
-		}
-	}
+            case ValidationMessage.IGNORE:
+                return null;
+        }
 
-	protected Map<String, Object> checkDocrootResource(
-		Node docrootResourceSpecifier, IProject project, String preferenceNodeQualifier,
-		IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage) {
-
-		String docrootResource = NodeUtil.getTextContent(docrootResourceSpecifier);
-
-		if (docrootResource != null && docrootResource.length() > 0) {
-			IFolder docroot = CoreUtil.getDocroot(project);
-
-			IResource docrootResourceValue = docroot.findMember(new Path(docrootResource));
-
-			if (docrootResourceValue == null) {
-				String msg = MessageFormat.format(errorMessage, new Object[] {
-					docrootResource
-				});
-
-				return createMarkerValues(
-					preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier, msg);
-			}
-		}
-
-		return null;
-	}
-
-	protected Map<String, Object> createMarkerValues(
-		String qualifier, IScopeContext[] preferenceScopes, String preferenceKey, IDOMNode domNode, String message) {
-		Object severity = getMessageSeverity(qualifier, preferenceScopes, preferenceKey);
-
-		if (severity == null) {
-			return null;
-		}
-
-		Map<String, Object> markerValues = new HashMap<String, Object>();
-
-		markerValues.put(IMarker.SEVERITY, severity);
-
-		int start = domNode.getStartOffset();
-
-		if (domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null) {
-
-			start = domNode.getStartStructuredDocumentRegion().getEndOffset();
-		}
-
-		int end = domNode.getEndOffset();
-
-		if (domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null) {
-
-			end = domNode.getEndStructuredDocumentRegion().getStartOffset();
-		}
-
-		int line = domNode.getStructuredDocument().getLineOfOffset(start);
-
-		markerValues.put(IMarker.CHAR_START, new Integer(start));
-		markerValues.put(IMarker.CHAR_END, new Integer(end));
-		markerValues.put(IMarker.LINE_NUMBER, new Integer(line + 1));
-		markerValues.put(IMarker.MESSAGE, message);
-
-		return markerValues;
-	}
-
-	protected Integer getMessageSeverity(String qualifier, IScopeContext[] preferenceScopes, String key) {
-		int sev = fPreferencesService.getInt(qualifier, key, IMessage.NORMAL_SEVERITY, preferenceScopes);
-
-		switch (sev) {
-		case ValidationMessage.ERROR:
-			return new Integer(IMarker.SEVERITY_ERROR);
-
-		case ValidationMessage.WARNING:
-			return new Integer(IMarker.SEVERITY_WARNING);
-
-		case ValidationMessage.INFORMATION:
-			return new Integer(IMarker.SEVERITY_INFO);
-
-		case ValidationMessage.IGNORE:
-			return null;
-		}
-
-		return new Integer(IMarker.SEVERITY_WARNING);
-	}
+        return new Integer( IMarker.SEVERITY_WARNING );
+    }
 
 }

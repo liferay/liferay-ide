@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,98 +31,111 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog {
+@SuppressWarnings( "restriction" )
+public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
+{
 
-	public static class PropertiesContentProvider implements ITreeContentProvider {
+    public static class PropertiesContentProvider implements ITreeContentProvider
+    {
+        protected String[] properties;
 
-		protected String[] properties;
+        public void dispose()
+        {
+        }
 
-		public void dispose() {
-		}
+        public Object[] getChildren( Object parentElement )
+        {
+            return null;
+        }
 
-		public Object[] getChildren(Object parentElement) {
-			return null;
-		}
+        public Object[] getElements( Object inputElement )
+        {
+            if( properties == null && inputElement instanceof String[] )
+            {
+                properties = (String[]) inputElement;
+            }
 
-		public Object[] getElements(Object inputElement) {
-			if (properties == null && inputElement instanceof String[]) {
-				properties = (String[]) inputElement;
-			}
+            return properties;
+        }
 
-			return properties;
-		}
+        public Object getParent( Object element )
+        {
+            return null;
+        }
 
-		public Object getParent(Object element) {
-			return null;
-		}
+        public boolean hasChildren( Object element )
+        {
+            return false;
+        }
 
-		public boolean hasChildren(Object element) {
-			return false;
-		}
+        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+        {
+            this.properties = null;
+        }
 
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			this.properties = null;
-		}
+    }
 
-	}
+    public static class PropertiesLabelProvider extends LabelProvider
+    {
+    }
 
-	public static class PropertiesLabelProvider extends LabelProvider {
+    public class PropertyFilter extends ViewerFilter
+    {
+        protected String fixedPattern;
 
-	}
+        public PropertyFilter( String fixedPattern )
+        {
+            this.fixedPattern = fixedPattern;
+        }
 
+        @Override
+        public boolean select( Viewer viewer, Object parentElement, Object element )
+        {
+            return fixedPattern == null ? true : element != null && element.toString().matches( fixedPattern );
+        }
 
-	public class PropertyFilter extends ViewerFilter {
+    }
 
-		protected String fixedPattern;
+    public class PropertySelectionValidator implements ISelectionStatusValidator
+    {
 
-		public PropertyFilter(String fixedPattern) {
-			this.fixedPattern = fixedPattern;
-		}
+        public PropertySelectionValidator( boolean multiSelect )
+        {
+        }
 
-		@Override
-		public boolean select(Viewer viewer, Object parentElement, Object element) {
-			return fixedPattern == null ? true : element != null && element.toString().matches(fixedPattern);
-		}
+        public IStatus validate( Object[] selection )
+        {
+            return Status.OK_STATUS;
+        }
 
-	}
+    }
 
-	public class PropertySelectionValidator implements ISelectionStatusValidator {
+    public class PropertyViewerComparator extends ViewerComparator
+    {
+    }
 
-		public PropertySelectionValidator(boolean multiSelect) {
-		}
+    protected static final String DIALOG_SETTINGS = "com.liferay.ide.portlet.ui.wizard.PropertiesFilteredDialog";
 
-		public IStatus validate(Object[] selection) {
-			return Status.OK_STATUS;
-		}
+    protected File portalDir;
 
-	}
+    public PropertiesFilteredDialog( Shell shell )
+    {
+        this( shell, null );
+    }
 
-	public class PropertyViewerComparator extends ViewerComparator {
+    public PropertiesFilteredDialog( Shell shell, String fixedPattern )
+    {
+        super( shell, new PropertiesLabelProvider(), new PropertiesContentProvider() );
 
-	}
+        setAllowMultiple( false );
 
-	protected static final String DIALOG_SETTINGS =
-		"com.liferay.ide.portlet.ui.wizard.PropertiesFilteredDialog";
+        setComparator( new PropertyViewerComparator() );
 
-	protected File portalDir;
+        addFilter( new PropertyFilter( fixedPattern ) );
 
-	public PropertiesFilteredDialog(Shell shell) {
-		this(shell, null);
-	}
+        setValidator( new PropertySelectionValidator( false ) );
 
-	public PropertiesFilteredDialog(Shell shell, String fixedPattern) {
-		super(shell, new PropertiesLabelProvider(), new PropertiesContentProvider());
-
-		setAllowMultiple(false);
-
-		setComparator(new PropertyViewerComparator());
-
-		addFilter(new PropertyFilter(fixedPattern));
-
-		setValidator(new PropertySelectionValidator(false));
-
-		setHelpAvailable(false);
-	}
+        setHelpAvailable( false );
+    }
 
 }

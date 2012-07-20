@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,102 +30,123 @@ import org.eclipse.jface.viewers.ViewerFilter;
 /**
  * @author Greg Amerson
  */
-public class PortalTldViewerFilter extends ViewerFilter {
+public class PortalTldViewerFilter extends ViewerFilter
+{
 
-	protected File base;
+    protected File base;
 
-	protected List<File> cachedDirs = new ArrayList<File>();
+    protected List<File> cachedDirs = new ArrayList<File>();
 
-	protected String[] existingTlds = null;
+    protected String[] existingTlds = null;
 
-	protected String[] roots = null;
+    protected String[] roots = null;
 
-	protected IPath[] validRoots;
+    protected IPath[] validRoots;
 
-	public PortalTldViewerFilter(File base, String[] roots, String[] existingTlds) {
-		this.base = base;
+    public PortalTldViewerFilter( File base, String[] roots, String[] existingTlds )
+    {
+        this.base = base;
 
-		this.roots = roots;
+        this.roots = roots;
 
-		this.existingTlds = existingTlds;
+        this.existingTlds = existingTlds;
 
-		this.validRoots = new IPath[roots.length];
+        this.validRoots = new IPath[roots.length];
 
-		for (int i = 0; i < roots.length; i++) {
-			File fileRoot = new File(base, roots[i]);
+        for( int i = 0; i < roots.length; i++ )
+        {
+            File fileRoot = new File( base, roots[i] );
 
-			if (fileRoot.exists()) {
-				validRoots[i] = new Path(fileRoot.getPath());
-			}
-		}
-	}
+            if( fileRoot.exists() )
+            {
+                validRoots[i] = new Path( fileRoot.getPath() );
+            }
+        }
+    }
 
-	@Override
-	public boolean select(Viewer viewer, Object parent, Object element) {
-		if (element instanceof File) {
-			File file = (File) element;
+    @Override
+    public boolean select( Viewer viewer, Object parent, Object element )
+    {
+        if( element instanceof File )
+        {
+            File file = (File) element;
 
-			IPath filePath = new Path(file.getPath());
+            IPath filePath = new Path( file.getPath() );
 
-			boolean validRootFound = false;
+            boolean validRootFound = false;
 
-			for (IPath validRoot : validRoots) {
-				if (validRoot.isPrefixOf(filePath)) {
-					validRootFound = true;
+            for( IPath validRoot : validRoots )
+            {
+                if( validRoot.isPrefixOf( filePath ) )
+                {
+                    validRootFound = true;
 
-					break;
-				}
-			}
+                    break;
+                }
+            }
 
-			if (!validRootFound) {
-				return false;
-			}
+            if( !validRootFound )
+            {
+                return false;
+            }
 
-			if (cachedDirs.contains(file)) {
-				return true;
-			}
-			else if (file.isDirectory()) {
-				// we only want to show the directory if it had children that
-				// have jsps
-				if (directoryContainsFiles(file, "tld", viewer)) {
-					cachedDirs.add(file);
+            if( cachedDirs.contains( file ) )
+            {
+                return true;
+            }
+            else if( file.isDirectory() )
+            {
+                // we only want to show the directory if it had children that
+                // have jsps
+                if( directoryContainsFiles( file, "tld", viewer ) )
+                {
+                    cachedDirs.add( file );
 
-					return true;
-				}
-			}
-			else {
-				for (String existingJar : existingTlds) {
-					if (filePath.lastSegment().equals(existingJar.trim())) {
-						return false;
-					}
-				}
+                    return true;
+                }
+            }
+            else
+            {
+                for( String existingJar : existingTlds )
+                {
+                    if( filePath.lastSegment().equals( existingJar.trim() ) )
+                    {
+                        return false;
+                    }
+                }
 
-				if (filePath.getFileExtension().contains("tld")) {
-					return true;
-				}
-			}
-		}
+                if( filePath.getFileExtension().contains( "tld" ) )
+                {
+                    return true;
+                }
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	protected boolean directoryContainsFiles(File dir, String ext, Viewer viewer) {
-		try {
-			List<File> files = FileListing.getFileListing(dir);
+    protected boolean directoryContainsFiles( File dir, String ext, Viewer viewer )
+    {
+        try
+        {
+            List<File> files = FileListing.getFileListing( dir );
 
-			for (File file : files) {
-				IPath filePath = new Path(file.getPath());
+            for( File file : files )
+            {
+                IPath filePath = new Path( file.getPath() );
 
-				if (filePath.getFileExtension() != null && filePath.getFileExtension().contains(ext)) {
-					return true;
-				}
-			}
-		}
-		catch (FileNotFoundException e) {
-			// do nothing
-		}
+                if( filePath.getFileExtension() != null && filePath.getFileExtension().contains( ext ) )
+                {
+                    return true;
+                }
+            }
+        }
+        catch( FileNotFoundException e )
+        {
+            // do nothing
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

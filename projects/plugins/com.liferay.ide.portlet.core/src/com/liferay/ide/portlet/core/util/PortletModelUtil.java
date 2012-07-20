@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,75 +37,85 @@ import org.w3c.dom.Element;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class PortletModelUtil {
+public class PortletModelUtil
+{
 
-	/**
-	 * @param doc
-	 * @param out
-	 * @throws IOException
-	 * @throws TransformerException
-	 */
-	public static void printDocument( Document doc, OutputStream out ) throws IOException, TransformerException {
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
-		transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "no" );
-		transformer.setOutputProperty( OutputKeys.METHOD, "xml" );
-		transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
-		transformer.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
-		transformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" );
+    /**
+     * @param doc
+     * @param out
+     * @throws IOException
+     * @throws TransformerException
+     */
+    public static void printDocument( Document doc, OutputStream out ) throws IOException, TransformerException
+    {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "no" );
+        transformer.setOutputProperty( OutputKeys.METHOD, "xml" );
+        transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
+        transformer.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
+        transformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" );
 
-		transformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( out, "UTF-8" ) ) );
-	}
+        transformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( out, "UTF-8" ) ) );
+    }
 
-	/**
-	 * @param domNode
-	 * @param namespaceURI
-	 * @param currValue
-	 * @return
-	 */
-	public static String defineNS( XmlElement element, QName currValueAsQName ) {
-		String qualifiedNodeValue = null;
-		String namespaceURI = currValueAsQName.getNamespaceURI();
-		String defaultPrefix = PortletAppModelConstants.DEFAULT_QNAME_PREFIX;
-		Element domNode = element.getDomNode();
-		boolean nsDefined = false;
-		String currNodeValue = element.getText();
-		Attr attrib = null;
-		if ( currNodeValue != null && currNodeValue.indexOf( ":" ) != -1 ) {
-			String name = PortletUtil.stripSuffix( currNodeValue );
-			// Check if the NS is already declared
-			attrib = domNode.getAttributeNode( String.format( PortletAppModelConstants.NS_DECL, name ) );
-			if ( attrib != null ) {
-				String nsURI = attrib.getValue();
-				if ( namespaceURI.equals( nsURI ) ) {
-					nsDefined = true;
-					defaultPrefix = name;
-				}
-				else { // only NS changed, update it and send the existing value
-					attrib.setNodeValue( namespaceURI );
-					return element.getText();
-				}
+    /**
+     * @param domNode
+     * @param namespaceURI
+     * @param currValue
+     * @return
+     */
+    public static String defineNS( XmlElement element, QName currValueAsQName )
+    {
+        String qualifiedNodeValue = null;
+        String namespaceURI = currValueAsQName.getNamespaceURI();
+        String defaultPrefix = PortletAppModelConstants.DEFAULT_QNAME_PREFIX;
+        Element domNode = element.getDomNode();
+        boolean nsDefined = false;
+        String currNodeValue = element.getText();
+        Attr attrib = null;
+        if( currNodeValue != null && currNodeValue.indexOf( ":" ) != -1 )
+        {
+            String name = PortletUtil.stripSuffix( currNodeValue );
+            // Check if the NS is already declared
+            attrib = domNode.getAttributeNode( String.format( PortletAppModelConstants.NS_DECL, name ) );
+            if( attrib != null )
+            {
+                String nsURI = attrib.getValue();
+                if( namespaceURI.equals( nsURI ) )
+                {
+                    nsDefined = true;
+                    defaultPrefix = name;
+                }
+                else
+                { // only NS changed, update it and send the existing value
+                    attrib.setNodeValue( namespaceURI );
+                    return element.getText();
+                }
 
-			}
+            }
 
-		}
+        }
 
-		// remove the exisiting attribute
-		if ( nsDefined ) {
-			if ( attrib != null ) {
-				domNode.removeAttributeNode( attrib );
-			}
-		}
-		// update the element
-		String qualifiedName = String.format( PortletAppModelConstants.NS_DECL, defaultPrefix );
-		Attr attr = domNode.getAttributeNodeNS( namespaceURI, defaultPrefix );
-		if ( attr == null ) {
-			domNode.setAttributeNS( namespaceURI, qualifiedName, namespaceURI );
-		}
+        // remove the exisiting attribute
+        if( nsDefined )
+        {
+            if( attrib != null )
+            {
+                domNode.removeAttributeNode( attrib );
+            }
+        }
+        // update the element
+        String qualifiedName = String.format( PortletAppModelConstants.NS_DECL, defaultPrefix );
+        Attr attr = domNode.getAttributeNodeNS( namespaceURI, defaultPrefix );
+        if( attr == null )
+        {
+            domNode.setAttributeNS( namespaceURI, qualifiedName, namespaceURI );
+        }
 
-		qualifiedNodeValue = defaultPrefix + ":" + currValueAsQName.getLocalPart();
+        qualifiedNodeValue = defaultPrefix + ":" + currValueAsQName.getLocalPart();
 
-		return qualifiedNodeValue;
+        return qualifiedNodeValue;
 
-	}
+    }
 }

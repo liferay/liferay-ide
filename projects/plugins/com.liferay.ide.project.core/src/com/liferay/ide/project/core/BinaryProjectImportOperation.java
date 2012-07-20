@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,50 +36,54 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 @SuppressWarnings( "restriction" )
-public class BinaryProjectImportOperation extends SDKProjectsImportOperation {
+public class BinaryProjectImportOperation extends SDKProjectsImportOperation
+{
 
-	public BinaryProjectImportOperation( IDataModel model ) {
-		super( model );
-	}
+    public BinaryProjectImportOperation( IDataModel model )
+    {
+        super( model );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * com.liferay.ide.project.core.LiferayProjectImportOperation#execute(org.eclipse.core.runtime.IProgressMonitor
-	 * , org.eclipse.core.runtime.IAdaptable)
-	 */
-	@Override
-	public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException {
-		Object selectedProjects = getDataModel().getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
-		final BridgedRuntime bridgedRuntime =
-			(BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
-		final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
+    /*
+     * (non-Javadoc)
+     * @see com.liferay.ide.project.core.LiferayProjectImportOperation#execute(org.eclipse.core.runtime.IProgressMonitor
+     * , org.eclipse.core.runtime.IAdaptable)
+     */
+    @Override
+    public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
+    {
+        Object selectedProjects = getDataModel().getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
+        final BridgedRuntime bridgedRuntime =
+            (BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+        final String sdkLocation = model.getStringProperty( ISDKProjectsImportDataModelProperties.SDK_LOCATION );
 
-		if ( selectedProjects != null ) {
+        if( selectedProjects != null )
+        {
 
-			SDKManager sdkManager = SDKManager.getInstance();
-			SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
-			Object[] seleBinaryRecords = (Object[]) selectedProjects;
-			ProjectRecord[] projectRecords = new ProjectRecord[1];
+            SDKManager sdkManager = SDKManager.getInstance();
+            SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
+            Object[] seleBinaryRecords = (Object[]) selectedProjects;
+            ProjectRecord[] projectRecords = new ProjectRecord[1];
 
-			if ( seleBinaryRecords != null ) {
-				BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord) seleBinaryRecords[0];
+            if( seleBinaryRecords != null )
+            {
+                BinaryProjectRecord pluginBinaryRecord = (BinaryProjectRecord) seleBinaryRecords[0];
 
-				// TODO: Verify the version and alert the user
+                try
+                {
+                    projectRecords[0] =
+                        ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
+                }
+                catch( IOException e )
+                {
+                    throw new ExecutionException(
+                        "Error while importing Binary:" + pluginBinaryRecord.getBinaryName(), e );
+                }
 
-				try {
-					projectRecords[0] =
-						ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
-				}
-				catch ( IOException e ) {
-					throw new ExecutionException(
-						"Error while importing Binary:" + pluginBinaryRecord.getBinaryName(), e );
-				}
+                getDataModel().setProperty( SELECTED_PROJECTS, projectRecords );
+            }
+        }
 
-				getDataModel().setProperty( SELECTED_PROJECTS, projectRecords );
-			}
-		}
-
-		return super.execute( monitor, info );
-	}
+        return super.execute( monitor, info );
+    }
 }

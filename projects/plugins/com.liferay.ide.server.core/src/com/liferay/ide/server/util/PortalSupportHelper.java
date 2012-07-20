@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,157 +37,172 @@ import org.eclipse.jdt.launching.JavaRuntime;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class PortalSupportHelper extends LaunchHelper {
-	
-	protected File errorFile;
-	
-	protected IPath[] libRoots;
-	
-	protected File outputFile;
-	
-	protected String[] portalLibs = new String[] {
-		"portal-impl.jar", "spring-aop.jar"
-	};
+@SuppressWarnings( "restriction" )
+public class PortalSupportHelper extends LaunchHelper
+{
 
-	protected IPath portalDir;
+    protected File errorFile;
 
-	protected URL[] supportLibs;
+    protected IPath[] libRoots;
 
-	protected String[] userLibs;
+    protected File outputFile;
 
-	public PortalSupportHelper(
-		IPath[] libRoots, IPath portalDir, String portalSupportClass, File outputFile, File errorFile,
-		URL[] supportLibs,
-		String[] userLibs) {
+    protected String[] portalLibs = new String[] { "portal-impl.jar", "spring-aop.jar" };
 
-		this(libRoots, portalDir, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null);
-	}
+    protected IPath portalDir;
 
-	public PortalSupportHelper(
-		IPath[] libRoots, IPath portalDir, String portalSupportClass, File outputFile, File errorFile,
-		URL[] supportLibs,
-		String[] userLibs, String extraArg) {
-		
-		super(IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+    protected URL[] supportLibs;
 
-		setLaunchSync(true);
+    protected String[] userLibs;
 
-		setLaunchInBackground(true);
+    public PortalSupportHelper(
+        IPath[] libRoots, IPath portalDir, String portalSupportClass, File outputFile, File errorFile,
+        URL[] supportLibs, String[] userLibs )
+    {
 
-		setLaunchCaptureInConsole(true);
+        this( libRoots, portalDir, portalSupportClass, outputFile, errorFile, supportLibs, userLibs, null );
+    }
 
-		setLaunchIsPrivate(true);
+    public PortalSupportHelper(
+        IPath[] libRoots, IPath portalDir, String portalSupportClass, File outputFile, File errorFile,
+        URL[] supportLibs, String[] userLibs, String extraArg )
+    {
 
-		setMainClass(portalSupportClass);
+        super( IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION );
 
-		setOutputFile(outputFile);
+        setLaunchSync( true );
 
-		setErrorFile(errorFile);
+        setLaunchInBackground( true );
 
-		setLaunchArgs(new String[] {
-			portalSupportClass, outputFile.getAbsolutePath(), errorFile.getAbsolutePath(), extraArg
-		});
+        setLaunchCaptureInConsole( true );
 
-		setMode(ILaunchManager.RUN_MODE);
+        setLaunchIsPrivate( true );
 
-		this.libRoots = libRoots;
+        setMainClass( portalSupportClass );
 
-		this.portalDir = portalDir;
+        setOutputFile( outputFile );
 
-		this.userLibs = userLibs;
-		
-		this.supportLibs = supportLibs;
+        setErrorFile( errorFile );
 
-//		this.launchTimeout = 2000;
-	}
+        setLaunchArgs( new String[] { portalSupportClass, outputFile.getAbsolutePath(), errorFile.getAbsolutePath(),
+            extraArg } );
 
-	@Override
-	public ILaunchConfigurationWorkingCopy createLaunchConfiguration()
-		throws CoreException {
-		
-		ILaunchConfigurationWorkingCopy config = super.createLaunchConfiguration();
+        setMode( ILaunchManager.RUN_MODE );
 
-		// set default for common settings
-		CommonTab tab = new CommonTab();
-		tab.setDefaults(config);
-		tab.dispose();
+        this.libRoots = libRoots;
 
-		config.setAttribute( IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, false );
-		config.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT, false );
-		config.setAttribute( IDebugUIConstants.ATTR_PRIVATE, true );
+        this.portalDir = portalDir;
 
-		return config;		
-	}
+        this.userLibs = userLibs;
 
-	public File getErrorFile() {
-		return this.errorFile;
-	}
+        this.supportLibs = supportLibs;
 
-	public File getOutputFile() {
-		return outputFile;
-	}
+        // this.launchTimeout = 2000;
+    }
 
-	public void setErrorFile(File errorFile) {
-		this.errorFile = errorFile;
-	}
+    @Override
+    public ILaunchConfigurationWorkingCopy createLaunchConfiguration() throws CoreException
+    {
 
-	public void setOutputFile(File outputFile) {
-		this.outputFile = outputFile;
-	}
+        ILaunchConfigurationWorkingCopy config = super.createLaunchConfiguration();
 
-	@Override
-	protected void addUserEntries(ClasspathModel model)
-		throws CoreException {
-		
-		if (supportLibs != null && supportLibs.length > 0) {
-			for (URL supportLib : supportLibs) {
-				model.addEntry(
-					ClasspathModel.USER,
-					JavaRuntime.newStringVariableClasspathEntry(new Path(supportLib.getPath()).toOSString()));
-			}
-		}
-		
-		for (IPath libRoot : libRoots) {
-			File[] libFiles = libRoot.toFile().listFiles(new FilenameFilter() {
+        // set default for common settings
+        CommonTab tab = new CommonTab();
+        tab.setDefaults( config );
+        tab.dispose();
 
-				public boolean accept(File dir, String name) {
-					return name.endsWith(".jar");
-				}
+        config.setAttribute( IDebugUIConstants.ATTR_CAPTURE_IN_CONSOLE, false );
+        config.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT, false );
+        config.setAttribute( IDebugUIConstants.ATTR_PRIVATE, true );
 
-			});
+        return config;
+    }
 
-			if (!CoreUtil.isNullOrEmpty(libFiles)) {
+    public File getErrorFile()
+    {
+        return this.errorFile;
+    }
 
-				for (File libFile : libFiles) {
-					model.addEntry(
-						ClasspathModel.USER, JavaRuntime.newStringVariableClasspathEntry(libFile.getAbsolutePath()));
-				}
+    public File getOutputFile()
+    {
+        return outputFile;
+    }
 
-			}
-		}
+    public void setErrorFile( File errorFile )
+    {
+        this.errorFile = errorFile;
+    }
 
-		for (String portalLib : portalLibs) {
-			model.addEntry(
-				ClasspathModel.USER,
-				JavaRuntime.newStringVariableClasspathEntry(portalDir.append("WEB-INF/lib").append(portalLib).toOSString()));
-		}
+    public void setOutputFile( File outputFile )
+    {
+        this.outputFile = outputFile;
+    }
 
-		if (userLibs != null) {
-			for (String userLib : userLibs) {
-				model.addEntry(
-					ClasspathModel.USER,
-					JavaRuntime.newStringVariableClasspathEntry(portalDir.append("WEB-INF/lib").append(userLib).toOSString()));
-			}
-		}
-		else {
-			for (String jarFile : this.portalDir.append("WEB-INF/lib").toFile().list()) {
-				if (jarFile.endsWith(".jar")) {
-					model.addEntry(
-						ClasspathModel.USER,
-						JavaRuntime.newStringVariableClasspathEntry(portalDir.append("WEB-INF/lib").append(jarFile).toOSString()));
-				}
-			}
-		}
-	}
+    @Override
+    protected void addUserEntries( ClasspathModel model ) throws CoreException
+    {
+
+        if( supportLibs != null && supportLibs.length > 0 )
+        {
+            for( URL supportLib : supportLibs )
+            {
+                model.addEntry(
+                    ClasspathModel.USER,
+                    JavaRuntime.newStringVariableClasspathEntry( new Path( supportLib.getPath() ).toOSString() ) );
+            }
+        }
+
+        for( IPath libRoot : libRoots )
+        {
+            File[] libFiles = libRoot.toFile().listFiles( new FilenameFilter()
+            {
+
+                public boolean accept( File dir, String name )
+                {
+                    return name.endsWith( ".jar" );
+                }
+
+            } );
+
+            if( !CoreUtil.isNullOrEmpty( libFiles ) )
+            {
+
+                for( File libFile : libFiles )
+                {
+                    model.addEntry(
+                        ClasspathModel.USER, JavaRuntime.newStringVariableClasspathEntry( libFile.getAbsolutePath() ) );
+                }
+
+            }
+        }
+
+        for( String portalLib : portalLibs )
+        {
+            model.addEntry(
+                ClasspathModel.USER,
+                JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( portalLib ).toOSString() ) );
+        }
+
+        if( userLibs != null )
+        {
+            for( String userLib : userLibs )
+            {
+                model.addEntry(
+                    ClasspathModel.USER,
+                    JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( userLib ).toOSString() ) );
+            }
+        }
+        else
+        {
+            for( String jarFile : this.portalDir.append( "WEB-INF/lib" ).toFile().list() )
+            {
+                if( jarFile.endsWith( ".jar" ) )
+                {
+                    model.addEntry(
+                        ClasspathModel.USER,
+                        JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( jarFile ).toOSString() ) );
+                }
+            }
+        }
+    }
 }

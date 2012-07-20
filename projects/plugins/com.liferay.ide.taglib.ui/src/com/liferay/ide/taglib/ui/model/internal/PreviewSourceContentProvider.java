@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,108 +15,129 @@
 
 package com.liferay.ide.taglib.ui.model.internal;
 
-import com.liferay.ide.taglib.ui.model.IAttribute;
-import com.liferay.ide.taglib.ui.model.ITag;
+import com.liferay.ide.taglib.ui.model.Attribute;
+import com.liferay.ide.taglib.ui.model.Tag;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.services.DerivedValueService;
 import org.eclipse.sapphire.services.DerivedValueServiceData;
 
+/**
+ * @author Gregory Amerson
+ */
+public class PreviewSourceContentProvider extends DerivedValueService
+{
 
-public class PreviewSourceContentProvider extends DerivedValueService {
+    @Override
+    protected DerivedValueServiceData compute()
+    {
+        boolean preview = "Preview".equals( context( ModelProperty.class ).getName() );
 
-	@Override
-	protected DerivedValueServiceData compute()
-	{
-		boolean preview = "Preview".equals( context( ModelProperty.class ).getName() );
+        Tag tag = (Tag) context( IModelElement.class );;
 
-		ITag tag = (ITag) context( IModelElement.class );;
+        StringBuffer buffer = new StringBuffer();
 
-		StringBuffer buffer = new StringBuffer();
+        String tagName = tag.getName().getContent();
 
-		String tagName = tag.getName().getContent();
+        String prefix = tag.getPrefix().getContent();
 
-		String prefix = tag.getPrefix().getContent();
+        if( preview )
+        {
+            buffer.append( "<span style='color:RGB(64,128,128)'>&lt;" );
+        }
+        else
+        {
+            buffer.append( "<" );
+        }
 
-		if (preview) {
-			buffer.append("<span style='color:RGB(64,128,128)'>&lt;");
-		}
-		else {
-			buffer.append("<");
-		}
+        buffer.append( prefix + ":" + tagName );
 
-		buffer.append(prefix + ":" + tagName);
+        if( preview )
+        {
+            buffer.append( "</span>" );
+        }
 
-		if (preview) {
-			buffer.append("</span>");
-		}
+        for( Attribute attr : tag.getRequiredAttributes() )
+        {
+            appendAttr( attr, buffer, preview );
+        }
 
-		for (IAttribute attr : tag.getRequiredAttributes()) {
-			appendAttr(attr, buffer, preview);
-		}
+        for( Attribute attr : tag.getOtherAttributes() )
+        {
+            appendAttr( attr, buffer, preview );
+        }
 
-		for (IAttribute attr : tag.getOtherAttributes()) {
-			appendAttr(attr, buffer, preview);
-		}
+        for( Attribute attr : tag.getEvents() )
+        {
+            appendAttr( attr, buffer, preview );
+        }
 
-		for (IAttribute attr : tag.getEvents()) {
-			appendAttr(attr, buffer, preview);
-		}
+        if( preview )
+        {
+            buffer.append( "<span style='color:RGB(64,128,128)'>&gt;&lt;" );
+        }
+        else
+        {
+            buffer.append( "><" );
+        }
 
-		if (preview) {
-			buffer.append("<span style='color:RGB(64,128,128)'>&gt;&lt;");
-		}
-		else {
-			buffer.append("><");
-		}
+        buffer.append( "/" + prefix + ":" + tagName );
 
-		buffer.append("/" + prefix + ":" + tagName);
+        if( preview )
+        {
+            buffer.append( "&gt;</span>" );
+        }
+        else
+        {
+            buffer.append( ">" );
+        }
 
-		if (preview) {
-			buffer.append("&gt;</span>");
-		}
-		else {
-			buffer.append(">");
-		}
+        return new DerivedValueServiceData( buffer.toString() );
+    }
 
-		return new DerivedValueServiceData( buffer.toString() );
-	}
+    protected void appendAttr( Attribute attr, StringBuffer buffer, boolean preview )
+    {
+        String content = attr.getValue().getContent();
 
-	protected void appendAttr(IAttribute attr, StringBuffer buffer, boolean preview) {
-		String content = attr.getValue().getContent();
+        if( content != null )
+        {
+            buffer.append( " " );
 
-		if (content != null) {
-			buffer.append(" ");
+            if( preview )
+            {
+                buffer.append( "<span style='color:RGB(127,0,127)'>" );
+            }
 
-			if (preview) {
-				buffer.append("<span style='color:RGB(127,0,127)'>");
-			}
+            buffer.append( attr.getName().getContent() );
 
-			buffer.append(attr.getName().getContent());
+            if( preview )
+            {
+                buffer.append( "</span>" );
+            }
 
-			if (preview) {
-				buffer.append("</span>");
-			}
+            buffer.append( "=" );
 
-			buffer.append("=");
+            if( preview )
+            {
+                buffer.append( "<span style='color:RGB(42,0,255);font-style:italic'>&quot;" );
+            }
+            else
+            {
+                buffer.append( "\"" );
+            }
 
-			if (preview) {
-				buffer.append("<span style='color:RGB(42,0,255);font-style:italic'>&quot;");
-			}
-			else {
-				buffer.append("\"");
-			}
+            buffer.append( content );
 
-			buffer.append(content);
-
-			if (preview) {
-				buffer.append("&quot;</span>");
-			}
-			else {
-				buffer.append("\"");
-			}
-		}
-	}
+            if( preview )
+            {
+                buffer.append( "&quot;</span>" );
+            }
+            else
+            {
+                buffer.append( "\"" );
+            }
+        }
+    }
 
 }

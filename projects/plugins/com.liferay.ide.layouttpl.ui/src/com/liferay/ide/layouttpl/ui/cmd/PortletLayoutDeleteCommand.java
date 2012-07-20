@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,7 +11,10 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.layouttpl.ui.cmd;
 
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
@@ -19,39 +22,45 @@ import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
 
-public class PortletLayoutDeleteCommand extends Command {
+/**
+ * @author Gregory Amerson
+ */
+public class PortletLayoutDeleteCommand extends Command
+{
+    protected final PortletLayout child;
+    protected final LayoutTplDiagram parent;
+    protected boolean wasRemoved;
 
-	protected final PortletLayout child;
+    public PortletLayoutDeleteCommand( LayoutTplDiagram parent, PortletLayout child )
+    {
+        if( parent == null || child == null )
+        {
+            throw new IllegalArgumentException();
+        }
 
-	protected final LayoutTplDiagram parent;
+        setLabel( "Portlet Row deleted" );
 
-	protected boolean wasRemoved;
+        this.parent = parent;
+        this.child = child;
+    }
 
-	public PortletLayoutDeleteCommand(LayoutTplDiagram parent, PortletLayout child) {
-		if (parent == null || child == null) {
-			throw new IllegalArgumentException();
-		}
+    public boolean canUndo()
+    {
+        return wasRemoved;
+    }
 
-		setLabel("Portlet Row deleted");
+    public void execute()
+    {
+        redo();
+    }
 
-		this.parent = parent;
-		this.child = child;
-	}
+    public void redo()
+    {
+        wasRemoved = parent.removeRow( child );
+    }
 
-
-	public boolean canUndo() {
-		return wasRemoved;
-	}
-
-	public void execute() {
-		redo();
-	}
-
-	public void redo() {
-		wasRemoved = parent.removeRow(child);
-	}
-
-	public void undo() {
-		parent.addRow(child);
-	}
+    public void undo()
+    {
+        parent.addRow( child );
+    }
 }

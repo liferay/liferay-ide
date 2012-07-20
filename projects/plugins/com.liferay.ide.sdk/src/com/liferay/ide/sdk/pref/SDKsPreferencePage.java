@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -36,127 +36,134 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 /**
  * @author Greg Amerson
  */
-public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
+{
 
-	public static final String ID = "com.liferay.ide.sdk.preferences.installedSDKs";
-	
-	private Composite parent;
+    public static final String ID = "com.liferay.ide.sdk.preferences.installedSDKs";
 
-	protected InstalledSDKsCompostite installedSDKsComposite;
+    private Composite parent;
 
-	public SDKsPreferencePage() {
-		setImageDescriptor(SDKPlugin.imageDescriptorFromPlugin(SDKPlugin.PLUGIN_ID, "/icons/e16/sdk.png"));
-	}
+    protected InstalledSDKsCompostite installedSDKsComposite;
 
-	@Override
-	public IPreferenceStore getPreferenceStore() {
-		return SDKPlugin.getDefault().getPreferenceStore();
-	}
+    public SDKsPreferencePage()
+    {
+        setImageDescriptor( SDKPlugin.imageDescriptorFromPlugin( SDKPlugin.PLUGIN_ID, "/icons/e16/sdk.png" ) );
+    }
 
-	public void init(IWorkbench workbench) {
-		noDefaultAndApplyButton();
-	}
+    @Override
+    public IPreferenceStore getPreferenceStore()
+    {
+        return SDKPlugin.getDefault().getPreferenceStore();
+    }
 
-	@Override
-	public boolean isValid() {
-		return this.installedSDKsComposite != null &&
-			(this.installedSDKsComposite.getSDKs().length == 0 || this.installedSDKsComposite.getCheckedSDK() != null);
-	}
+    public void init( IWorkbench workbench )
+    {
+        noDefaultAndApplyButton();
+    }
 
-	@Override
-	public boolean performOk() {
-		super.performOk();
+    @Override
+    public boolean isValid()
+    {
+        return this.installedSDKsComposite != null &&
+            ( this.installedSDKsComposite.getSDKs().length == 0 || this.installedSDKsComposite.getCheckedSDK() != null );
+    }
 
-		if (isValid()) {
-			SDK[] sdks = installedSDKsComposite.getSDKs();
+    @Override
+    public boolean performOk()
+    {
+        super.performOk();
 
-			if (sdks != null) {
-				SDKManager.getInstance().saveSDKs(sdks);
-			}
+        if( isValid() )
+        {
+            SDK[] sdks = installedSDKsComposite.getSDKs();
 
-			return true;
-		}
-		else {
-			setMessage("Must have at least one SDK checked as default", IMessageProvider.ERROR);
+            if( sdks != null )
+            {
+                SDKManager.getInstance().saveSDKs( sdks );
+            }
 
-			return false;
-		}
-	}
+            return true;
+        }
+        else
+        {
+            setMessage( "Must have at least one SDK checked as default", IMessageProvider.ERROR );
 
-	@Override
-	protected Control createContents(Composite parent) {
-		initializeDialogUnits(parent);
+            return false;
+        }
+    }
 
-		this.parent = parent;
+    @Override
+    protected Control createContents( Composite parent )
+    {
+        initializeDialogUnits( parent );
 
-		// GridLayout layout= new GridLayout();
-		// layout.numColumns= 1;
-		// layout.marginHeight = 0;
-		// layout.marginWidth = 0;
-		// parent.setLayout(layout);
+        this.parent = parent;
 
-		SWTUtil.createWrapLabel(
-			parent,
-			"Add, remove or edit SDK definitions. By default, the checked SDK is used for new Liferay Plugin projects.",
-			1, 100);
-		
-		SWTUtil.createVerticalSpacer(parent, 1, 1);
+        // GridLayout layout= new GridLayout();
+        // layout.numColumns= 1;
+        // layout.marginHeight = 0;
+        // layout.marginWidth = 0;
+        // parent.setLayout(layout);
 
-		installedSDKsComposite = new InstalledSDKsCompostite(parent, SWT.NONE);
-		installedSDKsComposite.setPreferencePage(this);
+        SWTUtil.createWrapLabel(
+            parent,
+            "Add, remove or edit SDK definitions. By default, the checked SDK is used for new Liferay Plugin projects.",
+            1, 100 );
 
-		GridData data = new GridData(GridData.FILL_BOTH);
-		data.horizontalSpan = 1;
+        SWTUtil.createVerticalSpacer( parent, 1, 1 );
 
-		installedSDKsComposite.setLayoutData(data);
-		installedSDKsComposite.setSDKs(SDKManager.getInstance().getSDKs());
+        installedSDKsComposite = new InstalledSDKsCompostite( parent, SWT.NONE );
+        installedSDKsComposite.setPreferencePage( this );
 
-		createFieldEditors();
+        GridData data = new GridData( GridData.FILL_BOTH );
+        data.horizontalSpan = 1;
 
-		initialize();
-		checkState();
+        installedSDKsComposite.setLayoutData( data );
+        installedSDKsComposite.setSDKs( SDKManager.getInstance().getSDKs() );
 
-		return parent;
-	}
+        createFieldEditors();
 
-	@Override
-	public void applyData(Object data) {
-		if ("new".equals(data)) {
-			this.getShell().getDisplay().asyncExec(new Runnable() {
+        initialize();
+        checkState();
 
-				public void run() {
-					installedSDKsComposite.addSDK();
-				}
-			});
-		}
-	}
+        return parent;
+    }
 
-	@Override
-	protected void createFieldEditors() {
-		FieldEditor edit = new RadioGroupFieldEditor
-		(
-		    SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, 
-		    "Update \"build." + System.getProperty( "user.name" ) + ".properties\" before SDK is used?",
-		    3,
-		    new String[][]
-		    { 
-		        { "Always", MessageDialogWithToggle.ALWAYS },
-		        { "Never", MessageDialogWithToggle.NEVER }, 
-		        { "Prompt", MessageDialogWithToggle.PROMPT } 
-		    },
-		    parent,
-			true
-		);
-		edit.setPreferenceStore(getPreferenceStore());
-		addField(edit);
-	}
+    @Override
+    public void applyData( Object data )
+    {
+        if( "new".equals( data ) )
+        {
+            this.getShell().getDisplay().asyncExec( new Runnable()
+            {
+                public void run()
+                {
+                    installedSDKsComposite.addSDK();
+                }
+            } );
+        }
+    }
 
-	@Override
-	protected void performDefaults() {
-		if (installedSDKsComposite != null && !installedSDKsComposite.isDisposed()) {
-			installedSDKsComposite.setSDKs(SDKManager.getInstance().getSDKs());
-		}
-		
-		getPreferenceStore().setValue(MessageDialogWithToggle.PROMPT, SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE);
-	}
+    @Override
+    protected void createFieldEditors()
+    {
+        FieldEditor edit =
+            new RadioGroupFieldEditor( SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, "Update \"build." +
+                System.getProperty( "user.name" ) + ".properties\" before SDK is used?", 3, new String[][] {
+                { "Always", MessageDialogWithToggle.ALWAYS }, { "Never", MessageDialogWithToggle.NEVER },
+                { "Prompt", MessageDialogWithToggle.PROMPT } }, parent, true );
+        edit.setPreferenceStore( getPreferenceStore() );
+        addField( edit );
+    }
+
+    @Override
+    protected void performDefaults()
+    {
+        if( installedSDKsComposite != null && !installedSDKsComposite.isDisposed() )
+        {
+            installedSDKsComposite.setSDKs( SDKManager.getInstance().getSDKs() );
+        }
+
+        getPreferenceStore().setValue( MessageDialogWithToggle.PROMPT, SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE );
+    }
 }

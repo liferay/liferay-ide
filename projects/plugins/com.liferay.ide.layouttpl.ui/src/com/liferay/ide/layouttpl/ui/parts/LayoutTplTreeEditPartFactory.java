@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,24 +22,30 @@ import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
+/**
+ * @author Gregory Amerson
+ */
+public class LayoutTplTreeEditPartFactory implements EditPartFactory
+{
 
-public class LayoutTplTreeEditPartFactory implements EditPartFactory {
+    public EditPart createEditPart( EditPart context, Object model )
+    {
+        if( model instanceof PortletColumn )
+        {
+            return new PortletColumnTreeEditPart( (PortletColumn) model );
+        }
 
+        if( model instanceof PortletLayout )
+        {
+            return new PortletLayoutTreeEditPart( (PortletLayout) model );
+        }
 
-	public EditPart createEditPart(EditPart context, Object model) {
-		if (model instanceof PortletColumn) {
-			return new PortletColumnTreeEditPart((PortletColumn) model);
-		}
+        if( model instanceof LayoutTplDiagram )
+        {
+            return new LayoutTplDiagramTreeEditPart( (LayoutTplDiagram) model );
+        }
 
-		if (model instanceof PortletLayout) {
-			return new PortletLayoutTreeEditPart((PortletLayout) model);
-		}
-
-		if (model instanceof LayoutTplDiagram) {
-			return new LayoutTplDiagramTreeEditPart((LayoutTplDiagram) model);
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 }

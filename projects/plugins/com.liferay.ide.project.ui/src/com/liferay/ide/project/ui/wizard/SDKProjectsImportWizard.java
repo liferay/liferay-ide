@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,8 +15,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.project.core.SDKProjectsImportDataModelProvider;
+import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.SDK;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -29,62 +29,66 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class SDKProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard {
+@SuppressWarnings( "restriction" )
+public class SDKProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard
+{
+    protected SDKProjectsImportWizardPage sdkProjectsImportWizardPage;
+    protected SDK sdk;
 
-	protected SDKProjectsImportWizardPage sdkProjectsImportWizardPage;
+    public SDKProjectsImportWizard()
+    {
+        this( (IDataModel) null );
+    }
 
-	protected SDK sdk;
+    public SDKProjectsImportWizard( IDataModel dataModel )
+    {
+        super( dataModel );
 
-	public SDKProjectsImportWizard() {
-		this( (IDataModel) null );
-	}
+        setWindowTitle( "Import Projects" );
+        setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
+    }
 
-	public SDKProjectsImportWizard(IDataModel dataModel) {
-		super(dataModel);
-		
-		setWindowTitle("Import Projects");
-		
-		setDefaultPageImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
-			ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png"));
-	}
+    public SDKProjectsImportWizard( SDK sdk )
+    {
+        this( (IDataModel) null );
+        this.sdk = sdk;
+    }
 
-	public SDKProjectsImportWizard( SDK sdk ) {
-		this( (IDataModel) null );
+    @Override
+    public boolean canFinish()
+    {
+        return getDataModel().isValid();
+    }
 
-		this.sdk = sdk;
-	}
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+    }
 
-	@Override
-	public boolean canFinish() {
-		return getDataModel().isValid();
-	}
+    @Override
+    protected void doAddPages()
+    {
+        if( sdk != null )
+        {
+            IDataModel model = getDataModel();
+            model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
+        }
 
-	public void init(IWorkbench workbench, IStructuredSelection selection) {
-	}
+        sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage( getDataModel(), "pageOne" );
 
-	@Override
-	protected void doAddPages() {
-		if ( sdk != null ) {
-			IDataModel model = getDataModel();
-			model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
-		}
+        addPage( sdkProjectsImportWizardPage );
+    }
 
-		sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage(getDataModel(), "pageOne");
+    @Override
+    protected IDataModelProvider getDefaultProvider()
+    {
+        return new SDKProjectsImportDataModelProvider();
+    }
 
-		addPage(sdkProjectsImportWizardPage);
-	}
-
-
-	@Override
-	protected IDataModelProvider getDefaultProvider() {
-		return new SDKProjectsImportDataModelProvider();
-	}
-
-	@Override
-	protected boolean runForked() {
-		return false;
-	}
-
+    @Override
+    protected boolean runForked()
+    {
+        return false;
+    }
 
 }

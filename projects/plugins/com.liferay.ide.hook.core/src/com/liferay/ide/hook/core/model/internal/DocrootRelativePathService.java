@@ -26,24 +26,26 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
-import com.liferay.ide.hook.core.model.IHook;
+import com.liferay.ide.hook.core.model.Hook;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
-public class DocrootRelativePathService extends RelativePathService {
+public class DocrootRelativePathService extends RelativePathService
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.services.RelativePathService#roots()
-	 */
-	@Override
-	public List<Path> roots() {
-		List<Path> roots = new ArrayList<Path>();
-		IModelElement modelElement = context( IHook.class );
-		IProject project = modelElement.adapt( IProject.class );
-		IPath docRootPath = project.getLocation().append( "docroot" );
-		roots.add( new Path( docRootPath.toPortableString() ) );
-		return roots;
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.services.RelativePathService#roots()
+     */
+    @Override
+    public List<Path> roots()
+    {
+        List<Path> roots = new ArrayList<Path>();
+        IModelElement modelElement = context( Hook.class );
+        IProject project = modelElement.adapt( IProject.class );
+        IPath docRootPath = project.getLocation().append( "docroot" );
+        roots.add( new Path( docRootPath.toPortableString() ) );
+        return roots;
+    }
 }

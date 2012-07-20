@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,12 +15,12 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.pref.SDKsPreferencePage;
 import com.liferay.ide.sdk.util.SDKUtil;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -46,118 +46,128 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
  * @author Greg Amerson
  */
 public class LiferayProjectPropertyPage extends PropertyPage
-	implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties {
+    implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties
+{
 
-	public LiferayProjectPropertyPage() {
-		super();
+    public LiferayProjectPropertyPage()
+    {
+        super();
 
-		setImageDescriptor(ProjectUIPlugin.imageDescriptorFromPlugin(
-			ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png"));
-	}
+        setImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
+            ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png" ) );
+    }
 
-	protected void configureSDKsLinkSelected(SelectionEvent e) {
-		// boolean noSDKs = SDKManager.getAllSDKs().length == 0;
+    protected void configureSDKsLinkSelected( SelectionEvent e )
+    {
+        // boolean noSDKs = SDKManager.getAllSDKs().length == 0;
 
-		String[] id = new String[] {
-			SDKsPreferencePage.ID
-		};
+        String[] id = new String[] { SDKsPreferencePage.ID };
 
-		PreferenceDialog dialog =
-			PreferencesUtil.createPreferenceDialogOn(this.getShell(), SDKsPreferencePage.ID, id, null);
+        PreferenceDialog dialog =
+            PreferencesUtil.createPreferenceDialogOn( this.getShell(), SDKsPreferencePage.ID, id, null );
 
-		int retval = dialog.open();
+        int retval = dialog.open();
 
-		if (retval == Window.OK) {
-			getContainer().updateButtons();
-		}
+        if( retval == Window.OK )
+        {
+            getContainer().updateButtons();
+        }
 
-		// if
-		// (getModel().getProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME).equals(
-		// IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME_DEFAULT_VALUE))
-		// {
-		// no default sdk set, lets set one if it exists
-		// SDK sdk = LiferayCore.getDefaultSDK();
-		// if (sdk != null) {
-		// getModel().setProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME,
-		// sdk.getName());
-		// sdkCombo.setItems(new String[0]);//refreish items
-		// }
-		// }
-		// modelHelper.synchAllUIWithModel();
-		// }
-	}
+        // if
+        // (getModel().getProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME).equals(
+        // IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME_DEFAULT_VALUE))
+        // {
+        // no default sdk set, lets set one if it exists
+        // SDK sdk = LiferayCore.getDefaultSDK();
+        // if (sdk != null) {
+        // getModel().setProperty(IPortalPluginProjectDataModelProperties.LIFERAY_SDK_NAME,
+        // sdk.getName());
+        // sdkCombo.setItems(new String[0]);//refreish items
+        // }
+        // }
+        // modelHelper.synchAllUIWithModel();
+        // }
+    }
 
-	@Override
-	protected Control createContents(Composite parent) {
-		Composite top = SWTUtil.createTopComposite( parent, 3 );
+    @Override
+    protected Control createContents( Composite parent )
+    {
+        Composite top = SWTUtil.createTopComposite( parent, 3 );
 
-		createSDKGroup(top);
+        createSDKGroup( top );
 
-		return top;
-	}
+        return top;
+    }
 
-	protected Group createDefaultGroup(Composite parent, String text, int columns) {
-		GridLayout gl = new GridLayout(columns, false);
+    protected Group createDefaultGroup( Composite parent, String text, int columns )
+    {
+        GridLayout gl = new GridLayout( columns, false );
 
-		Group group = new Group(parent, SWT.NONE);
-		group.setText(text);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		group.setLayout(gl);
+        Group group = new Group( parent, SWT.NONE );
+        group.setText( text );
+        group.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+        group.setLayout( gl );
 
-		return group;
-	}
+        return group;
+    }
 
-	protected void createSDKGroup(Composite parent) {
-		new Label( parent, SWT.LEFT ).setText( "Liferay Plugin SDK:" );
+    protected void createSDKGroup( Composite parent )
+    {
+        new Label( parent, SWT.LEFT ).setText( "Liferay Plugin SDK:" );
 
-		Text sdkLabel = new Text( parent, SWT.READ_ONLY | SWT.BORDER );
+        Text sdkLabel = new Text( parent, SWT.READ_ONLY | SWT.BORDER );
 
-		sdkLabel.setEnabled( false );
-		sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+        sdkLabel.setEnabled( false );
+        sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
-		SDK sdk = SDKUtil.getSDK( getProject() );
+        SDK sdk = SDKUtil.getSDK( getProject() );
 
-		if ( sdk != null ) {
-			sdkLabel.setText( sdk.getName() );
-		}
+        if( sdk != null )
+        {
+            sdkLabel.setText( sdk.getName() );
+        }
 
-		// labelContainer = new Composite(group, SWT.NONE);
-		// labelContainer.setLayout(gl);
-		// labelContainer.setLayoutData(gd);
+        // labelContainer = new Composite(group, SWT.NONE);
+        // labelContainer.setLayout(gl);
+        // labelContainer.setLayoutData(gd);
 
-		Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
+        Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
 
-		configureSDKsLink.setText("<a href=\"#\">Configure SDKs</a>");
-		configureSDKsLink.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-		configureSDKsLink.addSelectionListener(new SelectionAdapter() {
+        configureSDKsLink.setText( "<a href=\"#\">Configure SDKs</a>" );
+        configureSDKsLink.setLayoutData( new GridData( SWT.RIGHT, SWT.TOP, false, false ) );
+        configureSDKsLink.addSelectionListener( new SelectionAdapter()
+        {
 
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				configureSDKsLinkSelected(e);
-			}
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                configureSDKsLinkSelected( e );
+            }
 
-		});
+        } );
 
-	}
+    }
 
-	protected IFacetedProject getFacetedProject() {
-		IFacetedProject retval = null;
+    protected IFacetedProject getFacetedProject()
+    {
+        IFacetedProject retval = null;
 
-		IProject project = getProject();
+        IProject project = getProject();
 
-		if (project != null) {
-			retval = ProjectUtil.getFacetedProject(project);
-		}
+        if( project != null )
+        {
+            retval = ProjectUtil.getFacetedProject( project );
+        }
 
-		return retval;
-	}
+        return retval;
+    }
 
-	protected IProject getProject() {
-		IAdaptable adaptable = getElement();
+    protected IProject getProject()
+    {
+        IAdaptable adaptable = getElement();
 
-		IProject project = (IProject) adaptable.getAdapter( IProject.class );
-		return project;
-	}
-
+        IProject project = (IProject) adaptable.getAdapter( IProject.class );
+        return project;
+    }
 
 }

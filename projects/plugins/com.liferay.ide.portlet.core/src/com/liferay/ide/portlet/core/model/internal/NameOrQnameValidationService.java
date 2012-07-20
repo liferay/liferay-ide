@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,9 +17,9 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.IEventDefinition;
-import com.liferay.ide.portlet.core.model.IPublicRenderParameter;
-import com.liferay.ide.portlet.core.model.IQName;
+import com.liferay.ide.portlet.core.model.EventDefinition;
+import com.liferay.ide.portlet.core.model.PublicRenderParameter;
+import com.liferay.ide.portlet.core.model.QName;
 
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.modeling.CapitalizationType;
@@ -30,69 +30,78 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
-public class NameOrQnameValidationService extends ValidationService {
+public class NameOrQnameValidationService extends ValidationService
+{
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ModelPropertyValidationService#validate()
-	 */
-	@Override
-	public Status validate() {
-		IModelElement element = context( IModelElement.class );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ModelPropertyValidationService#validate()
+     */
+    @Override
+    public Status validate()
+    {
+        IModelElement element = context( IModelElement.class );
 
-		final String elementLabel =
-			element.type().getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false );
-		IEventDefinition eventDefinition = null;
-		IPublicRenderParameter publicRenderParameter = null;
-		IQName iqName = null;
-		String name = null;
-		String nsURI = null;
-		String localPart = null;
-		if ( element instanceof IQName ) {
-			iqName = (IQName) element;
-			nsURI = iqName.getNamespaceURI().getText( false );
-			localPart = iqName.getLocalPart().getText( false );
-		}
+        final String elementLabel = element.type().getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false );
+        EventDefinition eventDefinition = null;
+        PublicRenderParameter publicRenderParameter = null;
+        QName iqName = null;
+        String name = null;
+        String nsURI = null;
+        String localPart = null;
+        if( element instanceof QName )
+        {
+            iqName = (QName) element;
+            nsURI = iqName.getNamespaceURI().getText( false );
+            localPart = iqName.getLocalPart().getText( false );
+        }
 
-		if ( element instanceof IEventDefinition ) {
-			eventDefinition = (IEventDefinition) element;
-			name = eventDefinition.getName().getContent( false );
-		}
+        if( element instanceof EventDefinition )
+        {
+            eventDefinition = (EventDefinition) element;
+            name = eventDefinition.getName().getContent( false );
+        }
 
-		if ( element instanceof IPublicRenderParameter ) {
-			publicRenderParameter = (IPublicRenderParameter) element;
-			name = publicRenderParameter.getName().getContent( false );
-		}
+        if( element instanceof PublicRenderParameter )
+        {
+            publicRenderParameter = (PublicRenderParameter) element;
+            name = publicRenderParameter.getName().getContent( false );
+        }
 
-		if ( isEmptyOrNull( name ) && isEmptyOrNull( nsURI ) && isEmptyOrNull( localPart ) ) {
-			return Status.createErrorStatus( Resources.bind( Resources.message, elementLabel ) );
-		}
-		else if ( isEmptyOrNull( name ) && ( isEmptyOrNull( nsURI ) || isEmptyOrNull( localPart ) ) ) {
-			return Status.createErrorStatus( Resources.bind( Resources.invalidQname, elementLabel ) );
-		}
+        if( isEmptyOrNull( name ) && isEmptyOrNull( nsURI ) && isEmptyOrNull( localPart ) )
+        {
+            return Status.createErrorStatus( Resources.bind( Resources.message, elementLabel ) );
+        }
+        else if( isEmptyOrNull( name ) && ( isEmptyOrNull( nsURI ) || isEmptyOrNull( localPart ) ) )
+        {
+            return Status.createErrorStatus( Resources.bind( Resources.invalidQname, elementLabel ) );
+        }
 
-		return Status.createOkStatus();
-	}
+        return Status.createOkStatus();
+    }
 
-	/**
-	 * @param text
-	 * @return
-	 */
-	private boolean isEmptyOrNull( String text ) {
-		if ( text == null || text.trim().length() == 0 ) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * @param text
+     * @return
+     */
+    private boolean isEmptyOrNull( String text )
+    {
+        if( text == null || text.trim().length() == 0 )
+        {
+            return true;
+        }
+        return false;
+    }
 
-	private static final class Resources extends NLS {
+    private static final class Resources extends NLS
+    {
+        public static String message;
+        public static String invalidQname;
 
-		public static String message;
-		public static String invalidQname;
-
-		static {
-			initializeMessages( NameOrQnameValidationService.class.getName(), Resources.class );
-		}
-	}
+        static
+        {
+            initializeMessages( NameOrQnameValidationService.class.getName(), Resources.class );
+        }
+    }
 
 }

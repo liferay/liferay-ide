@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,110 +28,131 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings("restriction")
-public class PortletLayout extends ModelElement implements PropertyChangeListener {
+@SuppressWarnings( "restriction" )
+public class PortletLayout extends ModelElement implements PropertyChangeListener
+{
 
-	public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged";
+    public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged";
 
-	public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded";
+    public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded";
 
-	public static final String COLUMN_REMOVED_PROP = "PortletLayout.ColumnRemoved";
+    public static final String COLUMN_REMOVED_PROP = "PortletLayout.ColumnRemoved";
 
-	public static PortletLayout createFromElement(IDOMElement portletLayoutElement) {
-		if (portletLayoutElement == null) {
-			return null;
-		}
+    public static PortletLayout createFromElement( IDOMElement portletLayoutElement )
+    {
+        if( portletLayoutElement == null )
+        {
+            return null;
+        }
 
-		PortletLayout newPortletLayout = new PortletLayout();
+        PortletLayout newPortletLayout = new PortletLayout();
 
-		String existingClassName = portletLayoutElement.getAttribute("class");
+        String existingClassName = portletLayoutElement.getAttribute( "class" );
 
-		if ((!CoreUtil.isNullOrEmpty(existingClassName)) && existingClassName.contains("portlet-layout")) {
-			newPortletLayout.setClassName(existingClassName);
-		}
-		else {
-			newPortletLayout.setClassName("portlet-layout");
-		}
+        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-layout" ) )
+        {
+            newPortletLayout.setClassName( existingClassName );
+        }
+        else
+        {
+            newPortletLayout.setClassName( "portlet-layout" );
+        }
 
-		IDOMElement[] portletColumnElements =
-			LayoutTplUtil.findChildElementsByClassName(portletLayoutElement, "div", "portlet-column");
+        IDOMElement[] portletColumnElements =
+            LayoutTplUtil.findChildElementsByClassName( portletLayoutElement, "div", "portlet-column" );
 
-		for (IDOMElement portletColumnElement : portletColumnElements) {
-			PortletColumn newPortletColumn = PortletColumn.createFromElement(portletColumnElement);
-			newPortletLayout.addColumn(newPortletColumn);
-		}
+        for( IDOMElement portletColumnElement : portletColumnElements )
+        {
+            PortletColumn newPortletColumn = PortletColumn.createFromElement( portletColumnElement );
+            newPortletLayout.addColumn( newPortletColumn );
+        }
 
-		return newPortletLayout;
-	}
+        return newPortletLayout;
+    }
 
-	protected String className;
+    protected String className;
 
-	protected List<ModelElement> columns = new ArrayList<ModelElement>();
+    protected List<ModelElement> columns = new ArrayList<ModelElement>();
 
-	public PortletLayout() {
-		super();
-		this.className = "portlet-layout";
-	}
+    public PortletLayout()
+    {
+        super();
+        this.className = "portlet-layout";
+    }
 
-	public boolean addColumn(PortletColumn newColumn) {
-		return addColumn(newColumn, -1);
-	}
+    public boolean addColumn( PortletColumn newColumn )
+    {
+        return addColumn( newColumn, -1 );
+    }
 
-	public boolean addColumn(PortletColumn newColumn, int index) {
-		if (newColumn != null) {
-			if (index < 0) {
-				columns.add(newColumn);
-			}
-			else {
-				columns.add(index, newColumn);
-			}
+    public boolean addColumn( PortletColumn newColumn, int index )
+    {
+        if( newColumn != null )
+        {
+            if( index < 0 )
+            {
+                columns.add( newColumn );
+            }
+            else
+            {
+                columns.add( index, newColumn );
+            }
 
-			newColumn.setParent(this);
-			newColumn.addPropertyChangeListener(this);
+            newColumn.setParent( this );
+            newColumn.addPropertyChangeListener( this );
 
-			firePropertyChange(COLUMN_ADDED_PROP, null, newColumn);
+            firePropertyChange( COLUMN_ADDED_PROP, null, newColumn );
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public String getClassName() {
-		return className;
-	}
+    public String getClassName()
+    {
+        return className;
+    }
 
-	public List<ModelElement> getColumns() {
-		return columns;
-	}
+    public List<ModelElement> getColumns()
+    {
+        return columns;
+    }
 
-	public void propertyChange(PropertyChangeEvent evt) {
-		String prop = evt.getPropertyName();
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        String prop = evt.getPropertyName();
 
-		if (PortletColumn.WEIGHT_PROP.equals(prop)) {
-			firePropertyChange(CHILD_COLUMN_WEIGHT_CHANGED_PROP, null, evt.getSource());
-		}
-	}
+        if( PortletColumn.WEIGHT_PROP.equals( prop ) )
+        {
+            firePropertyChange( CHILD_COLUMN_WEIGHT_CHANGED_PROP, null, evt.getSource() );
+        }
+    }
 
-	@Override
-	public void removeChild(ModelElement child) {
-		if (columns.contains(child)) {
-			removeColumn((PortletColumn) child);
-		}
-	}
+    @Override
+    public void removeChild( ModelElement child )
+    {
+        if( columns.contains( child ) )
+        {
+            removeColumn( (PortletColumn) child );
+        }
+    }
 
-	public boolean removeColumn(PortletColumn existingColumn) {
-		if (existingColumn != null && columns.remove(existingColumn)) {
-			firePropertyChange(COLUMN_REMOVED_PROP, null, existingColumn);
+    public boolean removeColumn( PortletColumn existingColumn )
+    {
+        if( existingColumn != null && columns.remove( existingColumn ) )
+        {
+            firePropertyChange( COLUMN_REMOVED_PROP, null, existingColumn );
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
+    public void setClassName( String className )
+    {
+        this.className = className;
+    }
 
 }

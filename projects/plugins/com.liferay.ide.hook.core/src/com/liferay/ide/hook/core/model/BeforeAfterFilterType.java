@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,23 +26,23 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 public enum BeforeAfterFilterType
 {
 
-	@Label( standard = "Before Filter" )
-	@EnumSerialization( caseSensitive = true, primary = "before-filter" )
-	BEFORE_FILTER("before-filter"),
+    @Label( standard = "Before Filter" )
+    @EnumSerialization( caseSensitive = true, primary = "before-filter" )
+    BEFORE_FILTER("before-filter"),
 
-	@Label( standard = "After Filter" )
-	@EnumSerialization( caseSensitive = true, primary = "after-filter" )
-	AFTER_FILTER("after-filter");
+    @Label( standard = "After Filter" )
+    @EnumSerialization( caseSensitive = true, primary = "after-filter" )
+    AFTER_FILTER("after-filter");
 
-	private String text;
+    private String text;
 
-	private BeforeAfterFilterType( String primary )
-	{
-		text = primary;
-	}
+    private BeforeAfterFilterType( String primary )
+    {
+        text = primary;
+    }
 
-	public String getText()
-	{
-		return text;
-	}
+    public String getText()
+    {
+        return text;
+    }
 }

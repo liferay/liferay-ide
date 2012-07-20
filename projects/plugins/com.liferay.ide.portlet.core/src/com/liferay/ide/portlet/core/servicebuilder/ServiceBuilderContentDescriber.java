@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,14 +21,17 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 /**
  * @author Greg Amerson
  */
-public class ServiceBuilderContentDescriber extends AbstractContentDescriber {
+public class ServiceBuilderContentDescriber extends AbstractContentDescriber
+{
 
-	public ServiceBuilderContentDescriber() {
-		super();
-	}
+    public ServiceBuilderContentDescriber()
+    {
+        super();
+    }
 
-	protected AbstractDefaultHandler createDefaultHandler() {
-		return new ServiceBuilderContentHandler();
-	}
+    protected AbstractDefaultHandler createDefaultHandler()
+    {
+        return new ServiceBuilderContentHandler();
+    }
 
 }

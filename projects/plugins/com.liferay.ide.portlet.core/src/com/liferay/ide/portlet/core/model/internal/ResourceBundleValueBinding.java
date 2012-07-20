@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,64 +29,69 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
  */
 
-public final class ResourceBundleValueBinding
-
-extends XmlValueBindingImpl
-
+public final class ResourceBundleValueBinding extends XmlValueBindingImpl 
 {
 
-	private String[] params;
+    private String[] params;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
-	 */
-	@Override
-	public void init( final IModelElement element, final ModelProperty property, final String[] params ) {
-		super.init( element, property, params );
-		this.params = params;
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
+     * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+     */
+    @Override
+    public void init( final IModelElement element, final ModelProperty property, final String[] params )
+    {
+        super.init( element, property, params );
+        this.params = params;
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
-	 */
-	@Override
-	public String read() {
-		String value = null;
-		final XmlElement parent = xml( false );
-		if ( this.params != null && parent != null ) {
-			final XmlElement element = parent.getChildElement( this.params[0], false );
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+     */
+    @Override
+    public String read()
+    {
+        String value = null;
+        final XmlElement parent = xml( false );
+        if( this.params != null && parent != null )
+        {
+            final XmlElement element = parent.getChildElement( this.params[0], false );
 
-			if ( element != null ) {
+            if( element != null )
+            {
 
-				value = element.getText();
+                value = element.getText();
 
-				// System.out.println( "Reading VALUE ___________________ " + value );
+                // System.out.println( "Reading VALUE ___________________ " + value );
 
-				if ( value != null ) {
-					value = value.trim();
-				}
-			}
-		}
-		return value;
-	}
+                if( value != null )
+                {
+                    value = value.trim();
+                }
+            }
+        }
+        return value;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
-	 */
-	@Override
-	public void write( final String value ) {
-		final XmlElement element = xml( false ).getChildElement( this.params[0], true );
-		if ( value != null && ( value.endsWith( ".properties" ) || value.indexOf( "/" ) != -1 ) ) {
-			IProject project = element().adapt( IProject.class );
-			element.setText( PortletUtil.convertIOToJavaFileName( project, value.trim() ) );
-		}
-		else {
-			element.setText( value );
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+     */
+    @Override
+    public void write( final String value )
+    {
+        final XmlElement element = xml( false ).getChildElement( this.params[0], true );
+        if( value != null && ( value.endsWith( ".properties" ) || value.indexOf( "/" ) != -1 ) )
+        {
+            IProject project = element().adapt( IProject.class );
+            element.setText( PortletUtil.convertIOToJavaFileName( project, value.trim() ) );
+        }
+        else
+        {
+            element.setText( value );
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,8 +15,8 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
+import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
@@ -26,80 +26,89 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 /**
  * @author Greg Amerson
  */
-public abstract class AbstractPortletFrameworkDelegate implements IPortletFrameworkDelegate, IDataModelListener {
+public abstract class AbstractPortletFrameworkDelegate implements IPortletFrameworkDelegate, IDataModelListener
+{
+    protected String bundleId = null;
+    protected IDataModel dataModel;
+    protected boolean fragmentEnabled = false;
+    protected String frameworkId = null;
+    protected String iconUrl = null;
 
-	protected String bundleId = null;
+    public Composite createNewProjectOptionsComposite( Composite parent, IDataModel newProjectDataModel )
+    {
+        this.dataModel = newProjectDataModel;
 
-	protected IDataModel dataModel;
+        this.dataModel.addListener( this );
 
-	protected boolean fragmentEnabled = false;
+        Composite composite = createNewProjectOptionsComposite( parent );
 
-	protected String frameworkId = null;
+        updateFragmentEnabled( this.dataModel );
 
-	protected String iconUrl = null;
+        return composite;
+    }
 
-	public Composite createNewProjectOptionsComposite( Composite parent, IDataModel newProjectDataModel ) {
-		this.dataModel = newProjectDataModel;
+    public String getBundleId()
+    {
+        return bundleId;
+    }
 
-		this.dataModel.addListener( this );
+    public IDataModel getDataModel()
+    {
+        return dataModel;
+    }
 
-		Composite composite = createNewProjectOptionsComposite( parent );
+    public String getFrameworkId()
+    {
+        return frameworkId;
+    }
 
-		updateFragmentEnabled( this.dataModel );
+    public String getIconUrl()
+    {
+        return iconUrl;
+    }
 
-		return composite;
-	}
+    public IPluginWizardFragment getWizardFragment()
+    {
+        return null;
+    }
 
-	public String getBundleId() {
-		return bundleId;
-	}
+    public boolean isFragmentEnabled()
+    {
+        return fragmentEnabled;
+    }
 
-	public IDataModel getDataModel() {
-		return dataModel;
-	}
+    public void propertyChanged( DataModelEvent event )
+    {
+        if( event.getPropertyName().equals( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME ) ||
+            event.getPropertyName().equals( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID ) )
+        {
 
-	public String getFrameworkId() {
-		return frameworkId;
-	}
+            updateFragmentEnabled( event.getDataModel() );
+        }
+    }
 
-	public String getIconUrl() {
-		return iconUrl;
-	}
+    public void setBundleId( String bundleId )
+    {
+        this.bundleId = bundleId;
+    }
 
-	public IPluginWizardFragment getWizardFragment() {
-		return null;
-	}
+    public void setFragmentEnabled( boolean fragmentEnabled )
+    {
+        this.fragmentEnabled = fragmentEnabled;
+    }
 
-	public boolean isFragmentEnabled() {
-		return fragmentEnabled;
-	}
+    public void setFrameworkId( String id )
+    {
+        this.frameworkId = id;
+    }
 
-	public void propertyChanged( DataModelEvent event ) {
-		if ( event.getPropertyName().equals( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME ) ||
-			event.getPropertyName().equals( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID ) ) {
+    public void setIconUrl( String iconUrl )
+    {
+        this.iconUrl = iconUrl;
+    }
 
-			updateFragmentEnabled( event.getDataModel() );
-		}
-	}
+    protected abstract Composite createNewProjectOptionsComposite( Composite parent );
 
-	public void setBundleId(String bundleId) {
-		this.bundleId = bundleId;
-	}
-
-	public void setFragmentEnabled(boolean fragmentEnabled) {
-		this.fragmentEnabled = fragmentEnabled;
-	}
-
-	public void setFrameworkId(String id) {
-		this.frameworkId = id;
-	}
-
-	public void setIconUrl(String iconUrl) {
-		this.iconUrl = iconUrl;
-	}
-
-	protected abstract Composite createNewProjectOptionsComposite( Composite parent );
-
-	protected abstract void updateFragmentEnabled( IDataModel dataModel );
+    protected abstract void updateFragmentEnabled( IDataModel dataModel );
 
 }

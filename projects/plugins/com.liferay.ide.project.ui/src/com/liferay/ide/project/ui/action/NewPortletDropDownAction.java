@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,131 +39,155 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Greg Amerson
  */
-public class NewPortletDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2 {
+public class NewPortletDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
+{
+    protected final static String PL_NEW = "newWizards"; //$NON-NLS-1$
+    protected final static String TAG_CLASS = "class"; //$NON-NLS-1$
+    protected final static String TAG_NAME = "name";//$NON-NLS-1$
+    protected final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
+    protected final static String TAG_VALUE = "value";//$NON-NLS-1$
+    protected final static String TAG_WIZARD = "wizard";//$NON-NLS-1$
+    protected Menu fMenu;
+    protected Shell fWizardShell;
 
-	protected final static String PL_NEW = "newWizards"; //$NON-NLS-1$
-	protected final static String TAG_CLASS = "class"; //$NON-NLS-1$
-	protected final static String TAG_NAME = "name";//$NON-NLS-1$
-	protected final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
-	protected final static String TAG_VALUE = "value";//$NON-NLS-1$
-	protected final static String TAG_WIZARD = "wizard";//$NON-NLS-1$
-	protected Menu fMenu;
-	protected Shell fWizardShell;
+    public NewPortletDropDownAction()
+    {
+        fMenu = null;
 
-	public NewPortletDropDownAction() {
-		fMenu = null;
+        setMenuCreator( this );
+    }
 
-		setMenuCreator(this);
-	}
+    public void dispose()
+    {
+    }
 
-	public void dispose() {
-	}
+    public NewWizardAction[] getActionFromDescriptors( String typeAttribute )
+    {
+        ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
 
-	public NewWizardAction[] getActionFromDescriptors(String typeAttribute) {
-		ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
+        IExtensionPoint extensionPoint =
+            Platform.getExtensionRegistry().getExtensionPoint( PlatformUI.PLUGIN_ID, PL_NEW );
 
-		IExtensionPoint extensionPoint =
-			Platform.getExtensionRegistry().getExtensionPoint(PlatformUI.PLUGIN_ID, PL_NEW);
+        if( extensionPoint != null )
+        {
+            IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
 
-		if (extensionPoint != null) {
-			IConfigurationElement[] elements = extensionPoint.getConfigurationElements();
+            for( IConfigurationElement element : elements )
+            {
+                if( element.getName().equals( TAG_WIZARD ) && isLiferayArtifactWizard( element, typeAttribute ) )
+                {
+                    containers.add( new NewWizardAction( element ) );
+                }
+            }
+        }
 
-			for (IConfigurationElement element : elements) {
-				if (element.getName().equals(TAG_WIZARD) && isLiferayArtifactWizard(element, typeAttribute)) {
-					containers.add(new NewWizardAction(element));
-				}
-			}
-		}
+        NewWizardAction[] actions = (NewWizardAction[]) containers.toArray( new NewWizardAction[containers.size()] );
 
-		NewWizardAction[] actions = (NewWizardAction[]) containers.toArray(new NewWizardAction[containers.size()]);
+        Arrays.sort( actions );
 
-		Arrays.sort(actions);
+        return actions;
+    }
 
-		return actions;
-	}
+    public Action getDefaultAction()
+    {
+        Action[] actions = getActionFromDescriptors( getTypeAttribute() );
 
-	public Action getDefaultAction() {
-		Action[] actions = getActionFromDescriptors(getTypeAttribute());
+        if( actions.length > 0 )
+        {
+            return actions[0];
+        }
 
-		if (actions.length > 0) {
-			return actions[0];
-		}
+        return null;
+    }
 
-		return null;
-	}
+    public Menu getMenu( Control parent )
+    {
+        if( fMenu == null )
+        {
+            fMenu = new Menu( parent );
 
-	public Menu getMenu(Control parent) {
-		if (fMenu == null) {
-			fMenu = new Menu(parent);
+            NewWizardAction[] actions = getActionFromDescriptors( getTypeAttribute() );
 
-			NewWizardAction[] actions = getActionFromDescriptors(getTypeAttribute());
+            for( NewWizardAction action : actions )
+            {
+                action.setShell( fWizardShell );
 
-			for (NewWizardAction action : actions) {
-				action.setShell(fWizardShell);
+                ActionContributionItem item = new ActionContributionItem( action );
+                item.fill( fMenu, -1 );
+            }
 
-				ActionContributionItem item = new ActionContributionItem(action);
-				item.fill(fMenu, -1);
-			}
+            new Separator().fill( fMenu, -1 );
 
-			new Separator().fill(fMenu, -1);
+            NewWizardAction[] extraActions = getActionFromDescriptors( getExtraTypeAttribute() );
 
-			NewWizardAction[] extraActions = getActionFromDescriptors(getExtraTypeAttribute());
+            for( NewWizardAction action : extraActions )
+            {
+                action.setShell( fWizardShell );
 
-			for (NewWizardAction action : extraActions) {
-				action.setShell(fWizardShell);
+                ActionContributionItem item = new ActionContributionItem( action );
+                item.fill( fMenu, -1 );
+            }
+        }
 
-				ActionContributionItem item = new ActionContributionItem(action);
-				item.fill(fMenu, -1);
-			}
-		}
+        return fMenu;
+    }
 
-		return fMenu;
-	}
+    public Menu getMenu( Menu parent )
+    {
+        return null;
+    }
 
-	public Menu getMenu(Menu parent) {
-		return null;
-	}
+    public void init( IWorkbenchWindow window )
+    {
+        fWizardShell = window.getShell();
+    }
 
-	public void init(IWorkbenchWindow window) {
-		fWizardShell = window.getShell();
-	}
+    public void run( IAction action )
+    {
+        getDefaultAction().run();
+    }
 
-	public void run(IAction action) {
-		getDefaultAction().run();
-	}
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+    }
 
-	public void selectionChanged(IAction action, ISelection selection) {
-	}
+    private boolean isLiferayArtifactWizard( IConfigurationElement element, String typeAttribute )
+    {
+        IConfigurationElement[] classElements = element.getChildren( TAG_CLASS );
 
-	private boolean isLiferayArtifactWizard(IConfigurationElement element, String typeAttribute) {
-		IConfigurationElement[] classElements = element.getChildren(TAG_CLASS);
+        if( classElements.length > 0 )
+        {
+            for( IConfigurationElement classElement : classElements )
+            {
+                IConfigurationElement[] paramElements = classElement.getChildren( TAG_PARAMETER );
 
-		if (classElements.length > 0) {
-			for (IConfigurationElement classElement : classElements) {
-				IConfigurationElement[] paramElements = classElement.getChildren(TAG_PARAMETER);
+                for( IConfigurationElement paramElement : paramElements )
+                {
+                    String tagName = paramElement.getAttribute( TAG_NAME );
+                    if( tagName != null && tagName.equals( typeAttribute ) )
+                    {
+                        return Boolean.valueOf( paramElement.getAttribute( TAG_VALUE ) ).booleanValue();
+                    }
+                }
+            }
+        }
 
-				for (IConfigurationElement paramElement : paramElements) {
-					String tagName = paramElement.getAttribute(TAG_NAME);
-					if (tagName != null && tagName.equals(typeAttribute)) {
-						return Boolean.valueOf(paramElement.getAttribute(TAG_VALUE)).booleanValue();
-					}
-				}
-			}
-		}
+        // old way, deprecated
+        if( Boolean.valueOf( element.getAttribute( getTypeAttribute() ) ).booleanValue() )
+        {
+            return true;
+        }
 
-		// old way, deprecated
-		if (Boolean.valueOf(element.getAttribute(getTypeAttribute())).booleanValue()) {
-			return true;
-		}
+        return false;
+    }
 
-		return false;
-	}
+    protected String getExtraTypeAttribute()
+    {
+        return "liferay_extra_artifact";
+    }
 
-	protected String getExtraTypeAttribute() {
-		return "liferay_extra_artifact";
-	}
-
-	protected String getTypeAttribute() {
-		return "liferay_artifact";
-	}
+    protected String getTypeAttribute()
+    {
+        return "liferay_artifact";
+    }
 }

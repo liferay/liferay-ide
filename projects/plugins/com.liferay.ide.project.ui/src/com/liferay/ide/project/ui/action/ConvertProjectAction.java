@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,56 +30,65 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * @author Greg Amerson
  */
-public class ConvertProjectAction implements IObjectActionDelegate {
+public class ConvertProjectAction implements IObjectActionDelegate
+{
 
-	private ISelection fSelection;
+    private ISelection fSelection;
 
-	public ConvertProjectAction() {
-	}
+    public ConvertProjectAction()
+    {
+    }
 
-	public Display getDisplay() {
-		Display display = Display.getCurrent();
-		
-		if (display == null)
-			display = Display.getDefault();
-		
-		return display;
-	}
+    public Display getDisplay()
+    {
+        Display display = Display.getCurrent();
 
-	public void run(IAction action) {
+        if( display == null )
+            display = Display.getDefault();
 
-		if (fSelection instanceof IStructuredSelection) {
-			Object[] elems = ((IStructuredSelection) fSelection).toArray();
-			
-			IProject project = null;
-			
-			Object elem = elems[0];
+        return display;
+    }
 
-			if (elem instanceof IProject) {
-				project = (IProject) elem;
-			}
+    public void run( IAction action )
+    {
+        if( fSelection instanceof IStructuredSelection )
+        {
+            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
-			SDKProjectConvertWizard wizard = new SDKProjectConvertWizard(project);
+            IProject project = null;
 
-			final Display display = getDisplay();
-			
-			final WizardDialog dialog = new WizardDialog(display.getActiveShell(), wizard);
-			
-			BusyIndicator.showWhile(display, new Runnable() {
+            Object elem = elems[0];
 
-				public void run() {
-					dialog.open();
-				}
-			});
-		}
+            if( elem instanceof IProject )
+            {
+                project = (IProject) elem;
+            }
 
-	}
+            SDKProjectConvertWizard wizard = new SDKProjectConvertWizard( project );
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		fSelection = selection;
-	}
+            final Display display = getDisplay();
 
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
+            final WizardDialog dialog = new WizardDialog( display.getActiveShell(), wizard );
+
+            BusyIndicator.showWhile( display, new Runnable()
+            {
+
+                public void run()
+                {
+                    dialog.open();
+                }
+            } );
+        }
+
+    }
+
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        fSelection = selection;
+    }
+
+    public void setActivePart( IAction action, IWorkbenchPart targetPart )
+    {
+    }
 
 }
