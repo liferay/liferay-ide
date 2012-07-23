@@ -18,7 +18,7 @@
 
 package com.liferay.ide.eclipse.hook.core.model;
 
-import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.hook.core.model.internal.ResourceBundleRelativePathService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -34,7 +34,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 @GenerateImpl
 @Image( path = "images/elcl16/locale_16x16.gif" )

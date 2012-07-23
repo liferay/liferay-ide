@@ -17,7 +17,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import static com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+import static com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
 
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
@@ -44,7 +44,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 
