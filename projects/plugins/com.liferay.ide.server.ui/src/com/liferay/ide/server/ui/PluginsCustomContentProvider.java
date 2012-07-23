@@ -11,12 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.server.ui;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +37,9 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class PluginsCustomContentProvider extends ServerCustomContentProvider
+public class PluginsCustomContentProvider extends AbstractNavigatorContentProvider
 {
+
     protected final static Object[] EMPTY = new Object[] {};
 
     private PluginsContent pluginsContentNode = null;
@@ -155,6 +159,12 @@ public class PluginsCustomContentProvider extends ServerCustomContentProvider
         }
 
         return false;
+    }
+
+    @Override
+    public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
+    {
+        return hasChildren( element );
     }
 
     public boolean interceptRefresh( PipelinedViewerUpdate aRefreshSynchronization )

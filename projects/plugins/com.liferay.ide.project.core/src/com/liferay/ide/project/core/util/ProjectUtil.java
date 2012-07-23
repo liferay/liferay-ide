@@ -92,7 +92,8 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 @SuppressWarnings( "restriction" )
 public class ProjectUtil
 {
-	public static final String METADATA_FOLDER = ".metadata";
+	
+    public static final String METADATA_FOLDER = ".metadata";
 
 	public static void addLiferayPortletTldToWebXML( final IProject project )
 	{
@@ -637,6 +638,23 @@ public class ProjectUtil
 
 		return null;
 	}
+
+	public static IFile getPortletXmlFile( IProject project )
+    {
+        IFile retval = null;
+        
+        if( project != null && ProjectUtil.isLiferayProject( project ) )
+        {
+            final IFolder docroot = CoreUtil.getDocroot( project );
+            
+            if( docroot != null )
+            {
+                retval = docroot.getFile( "WEB-INF/portlet.xml" );
+            }
+        }
+        
+        return retval;
+    }
 
 	public static IProject getProject( IDataModel model )
 	{
