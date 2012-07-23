@@ -143,7 +143,7 @@
                 <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
                 <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
                 <greclipse-site>http://dist.springsource.org/release/GRECLIPSE/e3.7/</greclipse-site>
-                <xsd-site>file:target-platform/xsd-2.7.2</xsd-site>
+                <xsd-site>http://download.eclipse.org/modeling/mdt/updates/releases/</xsd-site>
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>

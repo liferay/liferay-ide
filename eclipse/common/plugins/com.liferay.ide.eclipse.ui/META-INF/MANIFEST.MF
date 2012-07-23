@@ -32,7 +32,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ant.ui,
  org.eclipse.help,
  org.eclipse.help.base,
- org.eclipse.help.ui
+ org.eclipse.help.ui,
+ org.eclipse.sapphire.modeling;bundle-version="0.5.1",
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.5.1",
+ org.eclipse.ui.navigator,
+ org.eclipse.ui.navigator.resources
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.ui,
@@ -40,6 +44,7 @@ Export-Package: com.liferay.ide.eclipse.ui,
  com.liferay.ide.eclipse.ui.dialog,
  com.liferay.ide.eclipse.ui.editor,
  com.liferay.ide.eclipse.ui.form,
+ com.liferay.ide.eclipse.ui.navigator,
  com.liferay.ide.eclipse.ui.pref,
  com.liferay.ide.eclipse.ui.toolbar,
  com.liferay.ide.eclipse.ui.util,

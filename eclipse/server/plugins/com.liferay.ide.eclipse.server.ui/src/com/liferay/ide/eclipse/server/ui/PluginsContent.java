@@ -25,31 +25,38 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 /**
  * @author Greg Amerson
  */
-public class PluginsContent {
+@SuppressWarnings( "restriction" )
+public class PluginsContent
+{
 
-	private Object parent;
-	
-	protected List<ModuleServer> input;
+    private Object parent;
 
-	public PluginsContent(List<ModuleServer> input, Object parent) {
-		this.input = input;
-		
-		this.parent = parent;
-	}
+    protected List<ModuleServer> input;
 
-	public Object[] getChildren() {
-		return input.toArray();
-	}
+    public PluginsContent( List<ModuleServer> input, Object parent )
+    {
+        this.input = input;
 
-	public List<ModuleServer> getInput() {
-		return input;
-	}
+        this.parent = parent;
+    }
 
-	public Object getParent() {
-		return parent;
-	}
+    public Object[] getChildren()
+    {
+        return input.toArray();
+    }
 
-	public int getSize() {
-		return input != null ? input.size() : 0;
-	}
+    public List<ModuleServer> getInput()
+    {
+        return input;
+    }
+
+    public Object getParent()
+    {
+        return parent;
+    }
+
+    public int getSize()
+    {
+        return input != null ? input.size() : 0;
+    }
 }
