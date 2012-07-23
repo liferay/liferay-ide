@@ -53,6 +53,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>com.liferay.ide.server.tomcat.core</module>
 		<module>com.liferay.ide.server.tomcat.ui</module>
 		<module>com.liferay.ide.server.ui</module>
+		<module>com.liferay.ide.service.core</module>
+		<module>com.liferay.ide.service.ui</module>
 		<module>com.liferay.ide.taglib.ui</module>
 		<module>com.liferay.ide.templates.core</module>
 		<module>com.liferay.ide.theme.core</module>
