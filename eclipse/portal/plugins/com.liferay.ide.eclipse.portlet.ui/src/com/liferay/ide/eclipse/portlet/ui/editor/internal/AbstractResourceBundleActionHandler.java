@@ -17,8 +17,8 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
+import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleRelativePathService;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 
@@ -51,7 +51,7 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public abstract class AbstractResourceBundleActionHandler extends SapphirePropertyEditorActionHandler {
 
