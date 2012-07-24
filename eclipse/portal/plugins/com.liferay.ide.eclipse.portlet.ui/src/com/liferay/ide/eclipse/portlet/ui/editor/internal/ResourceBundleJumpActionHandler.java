@@ -12,13 +12,14 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implemenation and ongoing maintanence
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import static com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
 
+import com.liferay.ide.eclipse.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
@@ -44,7 +45,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 
@@ -65,7 +66,7 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 			final IWorkspaceRoot wroot = workspace.getRoot();
 			final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-			String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+			String ioFileName = PortletUtil.convertJavaToIoFileName( text, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 			for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 				if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {
 					IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
@@ -102,7 +103,7 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		final IWorkspaceRoot wroot = workspace.getRoot();
 		final IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-		String ioFileName = PortletUtil.convertJavaToIoFileName( text, RB_FILE_EXTENSION );
+		String ioFileName = PortletUtil.convertJavaToIoFileName( text, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 
 		for ( IClasspathEntry iClasspathEntry : cpEntries ) {
 			if ( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() ) {

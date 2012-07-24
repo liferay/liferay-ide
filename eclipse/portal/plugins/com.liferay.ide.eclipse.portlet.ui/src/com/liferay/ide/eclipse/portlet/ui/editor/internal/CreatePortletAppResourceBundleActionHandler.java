@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,7 +18,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletApp;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 
@@ -44,7 +44,7 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
@@ -103,7 +103,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
         
 		final String defaultRBFileName =
 			PortletUtil.convertJavaToIoFileName(
-				resourceBundleText, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+				resourceBundleText, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 
 		final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
 		final IPath entryPath = rbSourecFolder.getLocation();

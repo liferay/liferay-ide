@@ -12,12 +12,13 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintanence
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.core.model;
 
-import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.eclipse.portlet.core.model.internal.ResourceBundleValueBinding;
 
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -38,7 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 @GenerateImpl
 @Image( path = "images/elcl16/resources_16x16.gif" )
@@ -48,7 +49,7 @@ public interface IResourceBundle extends IModelElement {
 
 	// *** ResourceBundle ***
 	@Type( base = Path.class )
-	@Services( value = { @Service( impl = ResourceBundleRelativePathService.class ) } )
+    @Services( value = { @Service( impl = GenericResourceBundlePathService.class ) } )
 	@FileExtensions( expr = "properties" )
 	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
 	@XmlBinding( path = "resource-bundle" )

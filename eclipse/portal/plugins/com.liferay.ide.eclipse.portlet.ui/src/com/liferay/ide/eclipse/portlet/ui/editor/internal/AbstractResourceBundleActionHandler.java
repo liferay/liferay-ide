@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,12 +12,13 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintanence
  *******************************************************************************/
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.portlet.core.util.PortletUtil;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
@@ -51,7 +52,7 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public abstract class AbstractResourceBundleActionHandler extends SapphirePropertyEditorActionHandler {
 
@@ -72,7 +73,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 		String rbFile = element.read( (ValueProperty) property ).getText();
 		if ( rbFile != null ) {
 			String ioFileName =
-				PortletUtil.convertJavaToIoFileName( rbFile, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+				PortletUtil.convertJavaToIoFileName( rbFile, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 			isEnabled = isEnabled && !getFileFromClasspath( project, ioFileName );
 		}
 		return isEnabled;

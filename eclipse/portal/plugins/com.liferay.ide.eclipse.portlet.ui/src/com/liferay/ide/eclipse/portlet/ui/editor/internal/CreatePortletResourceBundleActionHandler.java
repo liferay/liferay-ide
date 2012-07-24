@@ -18,7 +18,7 @@
 
 package com.liferay.ide.eclipse.portlet.ui.editor.internal;
 
-import com.liferay.ide.eclipse.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.eclipse.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.eclipse.portlet.core.model.IPortlet;
 import com.liferay.ide.eclipse.portlet.core.model.IPortletInfo;
 import com.liferay.ide.eclipse.portlet.core.model.ISupportedLocales;
@@ -44,7 +44,7 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class CreatePortletResourceBundleActionHandler extends AbstractResourceBundleActionHandler {
@@ -124,7 +124,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
         
         String defaultRBFileName =
 			PortletUtil.convertJavaToIoFileName(
-				text, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+				text, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 
 		int index = text.lastIndexOf( "." );
         
@@ -156,7 +156,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 				String locale = PortletUtil.localeString( iSupportedLocale.getSupportedLocale().getText() );
 				final String localizedIOFileName =
 					PortletUtil.convertJavaToIoFileName(
-						text, ResourceBundleRelativePathService.RB_FILE_EXTENSION, locale );
+						text, GenericResourceBundlePathService.RB_FILE_EXTENSION, locale );
 
 				if ( !getFileFromClasspath( project, localizedIOFileName ) ) {
 					final IFile rbFile = wroot.getFileForLocation( entryPath.append( localizedIOFileName ) );
