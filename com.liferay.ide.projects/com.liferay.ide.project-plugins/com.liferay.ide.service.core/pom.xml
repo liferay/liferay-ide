@@ -30,28 +30,9 @@
 
     <name>Liferay IDE Service Core</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>ant-contrib</groupId>
-            <artifactId>ant-contrib</artifactId>
-            <version>1.0b3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>ant</groupId>
-                    <artifactId>ant</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>ant</groupId>
-            <artifactId>ant-nodeps</artifactId>
-            <version>1.6.5</version>
-        </dependency>
-    </dependencies>
-
-
+  
     <build>
-         <plugins>
+        <plugins>
 		<plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-compiler-plugin</artifactId>
