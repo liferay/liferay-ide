@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -495,7 +496,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 		case IResource.FILE: {
 
 			if ( shouldProcessResourceDelta( delta ) ) {
-				new WorkspaceJob( "Processing plugin package resource." ) {
+				Job job = new WorkspaceJob( "Processing plugin package resource." ) {
 
 					@Override
 					public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException {
@@ -506,7 +507,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
 						return Status.OK_STATUS;
 					}
-				}.schedule();
+				};
+                
+                job.setRule( CoreUtil.getWorkspaceRoot() );
+				job.schedule();
 			}
 
 			return false;
