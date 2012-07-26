@@ -51,21 +51,8 @@
 
   <proxies/>
 
-  <servers>
-     <server>
-         <id>nexus</id>
-         <username>admin</username>
-         <password>shakti</password>
-     </server>
-     
-  </servers>
+  <servers/>
 
-  <mirrors>
-     <mirror>
-	  <id>nexus</id>
-	  <mirrorOf>*</mirrorOf>
-	  <url>http://localhost:8081/nexus/content/groups/public</url>
-      </mirror>
-  </mirrors>
+  <mirrors/>
 
 </settings>
