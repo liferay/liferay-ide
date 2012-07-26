@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.liferay.ide</groupId>
+	<artifactId>parent</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Liferay IDE :: Parent</name>
+	<url>http://www.liferay.com/</url>
+	<description>The Liferay IDE is a eclipse based environment doing development with Liferay  Portal</description>
+
+
+	<developers>
+		<developer>
+			<name>Gregory Amerson</name>
+			<email>gregory.amerson@liferay.com</email>
+		</developer>
+		<developer>
+			<name>Kamesh Sampath</name>
+			<email>kamesh.sampath@hotmail.com</email>
+		</developer>
+	</developers>
+
+	<!-- Common Properties applies to all plugins -->
+	<properties>
+		<tycho-version>0.15.0</tycho-version>
+		<tycho-extras-version>0.15.0</tycho-extras-version>
+		<orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
+		<sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
+	</properties>
+
+
+	<modules>
+		<module>../target-platform</module>
+	</modules>
+
+
+	<repositories>
+		<repository>
+			<id>orbit</id>
+			<layout>p2</layout>
+			<url>${orbit-site}</url>
+		</repository>
+		<repository>
+			<id>sapphire</id>
+			<layout>p2</layout>
+			<url>${sapphire-site}</url>
+		</repository>
+	</repositories>
+
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+
+		<pluginManagement>
+
+			<plugins>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<meminitial>256m</meminitial>
+						<maxmem>1024m</maxmem>
+						<compilerArgument>-proc:none</compilerArgument>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.bsc.maven</groupId>
+					<artifactId>maven-processor-plugin</artifactId>
+					<version>2.0.5</version>
+					<executions>
+						<execution>
+							<id>process</id>
+							<goals>
+								<goal>process</goal>
+							</goals>
+							<phase>generate-sources</phase>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-maven-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<extensions>true</extensions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-compiler-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- source for bundles -->
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-source-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<executions>
+						<execution>
+							<id>plugin-source</id>
+							<goals>
+								<goal>plugin-source</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>target-platform-configuration</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<resolver>p2</resolver>
+						<ignoreTychoRepositories>true</ignoreTychoRepositories>
+						<allowConflictingDependencies>true</allowConflictingDependencies>
+						<environments>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-packaging-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<format>'v'yyyyMMddHHmm</format>
+						<archiveSite>true</archiveSite>
+						<environments>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>macosx</os>
+								<ws>cocoa</ws>
+								<arch>x86_64</arch>
+							</environment>
+							<environment>
+								<os>win32</os>
+								<ws>win32</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86</arch>
+							</environment>
+							<environment>
+								<os>linux</os>
+								<ws>gtk</ws>
+								<arch>x86_64</arch>
+							</environment>
+						</environments>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.liferay.com/</url>
+	</issueManagement>
+
+
+	<scm>
+		<connection>scm:git:http://github.com/liferay/liferay-ide
+		</connection>
+		<developerConnection>scm:git:http://github.com/liferay/liferay-ide
+		</developerConnection>
+		<url>http://github.com/liferay/liferay-ide
+		</url>
+	</scm>
+
+	<profiles>
+		<profile>
+			<id>helios</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/heilos</eclipse-site>
+				<eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
+				<wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
+			</properties>
+			<repositories>
+				<repository>
+					<id>eclipse-site</id>
+					<layout>p2</layout>
+					<url>${eclipse-site}</url>
+				</repository>
+				<repository>
+					<id>eclipse-project</id>
+					<layout>p2</layout>
+					<url>${eclipse-project-update-site}</url>
+				</repository>
+				<repository>
+					<id>wtp</id>
+					<layout>p2</layout>
+					<url>${wtp-site}</url>
+				</repository>
+			</repositories>
+		</profile>
+		<profile>
+			<id>helios-release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/heilos</eclipse-site>
+				<eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
+				<wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
+			</properties>
+			<repositories>
+				<repository>
+					<id>eclipse-site</id>
+					<layout>p2</layout>
+					<url>${eclipse-site}</url>
+				</repository>
+				<repository>
+					<id>eclipse-project</id>
+					<layout>p2</layout>
+					<url>${eclipse-project-update-site}</url>
+				</repository>
+				<repository>
+					<id>wtp</id>
+					<layout>p2</layout>
+					<url>${wtp-site}</url>
+				</repository>
+			</repositories>
+		</profile>
+		<profile>
+			<id>indigo</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
+				<eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
+				<wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+			</properties>
+			<repositories>
+				<repository>
+					<id>eclipse-site</id>
+					<layout>p2</layout>
+					<url>${eclipse-site}</url>
+				</repository>
+				<repository>
+					<id>eclipse-project</id>
+					<layout>p2</layout>
+					<url>${eclipse-project-update-site}</url>
+				</repository>
+				<repository>
+					<id>wtp</id>
+					<layout>p2</layout>
+					<url>${wtp-site}</url>
+				</repository>
+			</repositories>
+		</profile>
+		<profile>
+			<id>indigo-release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
+				<eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
+				<wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+			</properties>
+			<repositories>
+				<repository>
+					<id>eclipse-site</id>
+					<layout>p2</layout>
+					<url>${eclipse-site}</url>
+				</repository>
+				<repository>
+					<id>eclipse-project</id>
+					<layout>p2</layout>
+					<url>${eclipse-project-update-site}</url>
+				</repository>
+				<repository>
+					<id>wtp</id>
+					<layout>p2</layout>
+					<url>${wtp-site}</url>
+				</repository>
+			</repositories>
+		</profile>
+		<profile>
+			<id>juno</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/juno</eclipse-site>
+				<eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.2</eclipse-project-update-site>
+				<wtp-site>http://download.eclipse.org/webtools/repository/juno</wtp-site>
+			</properties>
+			<repositories>
+				<repository>
+					<id>eclipse-site</id>
+					<layout>p2</layout>
+					<url>${eclipse-site}</url>
+				</repository>
+				<repository>
+					<id>eclipse-project</id>
+					<layout>p2</layout>
+					<url>${eclipse-project-update-site}</url>
+				</repository>
+				<repository>
+					<id>wtp</id>
+					<layout>p2</layout>
+					<url>${wtp-site}</url>
+				</repository>
+			</repositories>
+			
+		</profile>
+
+		<profile>
+			<id>juno-release</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<eclipse-site>http://download.eclipse.org/releases/juno</eclipse-site>
+				<eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.2</eclipse-project-update-site>
+				<wtp-site>http://download.eclipse.org/webtools/repository/juno</wtp-site>
+			</properties>
+			<repositories>
+				<repository>
+					<id>eclipse-site</id>
+					<layout>p2</layout>
+					<url>${eclipse-site}</url>
+				</repository>
+				<repository>
+					<id>eclipse-project</id>
+					<layout>p2</layout>
+					<url>${eclipse-project-update-site}</url>
+				</repository>
+				<repository>
+					<id>wtp</id>
+					<layout>p2</layout>
+					<url>${wtp-site}</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+</project>
