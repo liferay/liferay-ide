@@ -20,16 +20,17 @@
 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>com.liferay.ide.common</groupId>
-	<artifactId>plugins</artifactId>
-
-	<name>Liferay IDE Common Plugins</name>
-
-	<parent>	
+    <parent>
 		<groupId>com.liferay.ide</groupId>
 		<artifactId>common</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
+	
+	<groupId>com.liferay.ide.common</groupId>
+	<artifactId>plugins</artifactId>
+
+	<name>common.plugins</name>
+
 	
 	<packaging>pom</packaging>
 	
@@ -37,6 +38,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<module>com.liferay.ide.core</module>
 		<module>com.liferay.ide.freemarker</module>
 		<module>com.liferay.ide.ui</module>
+		<module>com.liferay.ide.sdk</module>
+		<module>com.liferay.ide.doc</module>
+		<module>com.liferay.ide.ui.snippets</module>
+		<module>com.liferay.ide.tools.branding</module>
+		<module>com.liferay.ide.server.core</module>
 	</modules>
 </project>
 	

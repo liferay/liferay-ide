@@ -1,183 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-/*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- *
- *******************************************************************************/
- -->
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.liferay.ide</groupId>
-    <artifactId>build</artifactId>
-    <name>Liferay IDE Build</name>
-    <version>2.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <properties>
-        <tycho-version>0.15.0</tycho-version>
-        <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
-        <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
-        <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
-        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-        <!--<sapphire-site>http://download.eclipse.org/sapphire/0.5.1/repository/</sapphire-site> -->
-        <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
-    </properties>
+	<parent>
+		<groupId>com.liferay.ide</groupId>
+		<artifactId>parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../build/parent/pom.xml</relativePath>
+	</parent>
 
-    <repositories>
-        <repository>
-            <id>eclipse-site</id>
-            <layout>p2</layout>
-            <url>${eclipse-site}</url>
-        </repository>
-        <repository>
-            <id>eclipse-project</id>
-            <layout>p2</layout>
-            <url>${eclipse-project-update-site}</url>
-        </repository>
-        <repository>
-            <id>orbit</id>
-            <layout>p2</layout>
-            <url>${orbit-site}</url>
-        </repository>
-        <repository>
-            <id>sapphire</id>
-            <layout>p2</layout>
-            <url>${sapphire-site}</url>
-        </repository>
-        <repository>
-            <id>wtp</id>
-            <layout>p2</layout>
-            <url>${wtp-site}</url>
-        </repository>
-    </repositories>
+	<groupId>com.liferay.ide</groupId>
+	<artifactId>com.liferay.ide.build</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../common</module>
-                <module>../projects</module>
-                <module>com.liferay.ide-repository</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>velocity</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <modules>
-                <module>../velocity</module>
-            </modules>
-        </profile>
-    </profiles>
+	<profiles>
+		
+		<profile>
+			<id>all</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>../common</module>
+				<module>../sdk</module>
+				<module>../maven</module>
+				<module>../velocity</module>
+				<module>releng</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>common</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>../common</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>sdk</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>../sdk</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>maven</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>../maven</module>
+			</modules>
+		</profile>
 
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <version>${tycho-version}</version>
-                <extensions>true</extensions>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>target-platform-configuration</artifactId>
-                <version>${tycho-version}</version>
-                <configuration>
-                    <resolver>p2</resolver>
-                    <ignoreTychoRepositories>true</ignoreTychoRepositories>
-                    <allowConflictingDependencies>true</allowConflictingDependencies>
-                    <environments>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                    </environments>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-packaging-plugin</artifactId>
-                <version>${tycho-version}</version>
-                <configuration>
-                    <format>'v'yyyyMMddHHmm</format>
-                    <archiveSite>true</archiveSite>
-                    <environments>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                    </environments>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-</project>	
+		<profile>
+			<id>velocity</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>../velocity</module>
+			</modules>
+		</profile>
+		
+		<profile>
+			<id>release</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>releng</module>
+			</modules>
+		</profile>
+
+	</profiles>
+
+</project>

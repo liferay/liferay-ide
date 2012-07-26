@@ -22,9 +22,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide.common</groupId>
-        <artifactId>plugins</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+      <groupId>com.liferay.ide.common</groupId>
+	<artifactId>plugins</artifactId>
+	<version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.core</artifactId>
@@ -32,5 +32,21 @@
     <packaging>eclipse-plugin</packaging>
 
     <name>Liferay IDE Core</name>
+
+
+    <build>
+        <plugins>
+		<plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-compiler-plugin</artifactId>
+		</plugin>
+		<plugin>
+		    <groupId>org.bsc.maven</groupId>
+		    <artifactId>maven-processor-plugin</artifactId>
+		</plugin>
+        </plugins>
+    </build>
+
+
 
 </project>
