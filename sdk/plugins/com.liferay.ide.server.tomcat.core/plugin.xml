@@ -241,7 +241,7 @@
       </liferayPluginPublisher>
    </extension>
  <extension
-       point="com.liferay.ide.eclipse.server.core.runtimeStubs">
+       point="com.liferay.ide.server.core.runtimeStubs">
     <liferayRuntimeStub
           default="true"
           name="Liferay v6.0 (Tomcat 6) Bundle"

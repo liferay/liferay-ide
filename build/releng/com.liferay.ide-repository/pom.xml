@@ -20,9 +20,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide</groupId>
+        <groupId>com.liferay.ide.releng</groupId>
         <artifactId>releng</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide-repository</artifactId>

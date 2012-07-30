@@ -21,13 +21,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<modelVersion>4.0.0</modelVersion>
 	
     <parent>
-		<groupId>com.liferay.ide</groupId>
+		<groupId>com.liferay.ide.common</groupId>
 		<artifactId>common</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	
 	<groupId>com.liferay.ide.common</groupId>
-	<artifactId>plugins</artifactId>
+	<artifactId>common-plugins</artifactId>
 
 	<name>common.plugins</name>
 

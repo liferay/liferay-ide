@@ -21,25 +21,25 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>	
-	     <groupId>com.liferay.ide</groupId>
-	     <artifactId>parent</artifactId>
-	     <version>2.0.0-SNAPSHOT</version>
- 	     <relativePath>../build/parent/pom.xml</relativePath>
+	<parent>
+		<groupId>com.liferay.ide</groupId>
+		<artifactId>parent</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+		<relativePath>../build/parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.liferay.ide</groupId>
+	<groupId>com.liferay.ide.maven</groupId>
 	<artifactId>maven</artifactId>
-
 	<name>maven.all</name>
 
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>plugins</module>
+		<module>features</module>
 		<!-- module>docs</module -->
-	        <!-- module>tests</module -->
-	        <!-- module>site</module -->
+		<!-- module>site</module -->
+		<!-- module>tests</module -->
 	</modules>
 </project>
 	

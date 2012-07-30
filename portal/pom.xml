@@ -28,9 +28,9 @@
 		<relativePath>../build/parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.liferay.ide.common</groupId>
-	<artifactId>common</artifactId>
-	<name>common.all</name>
+	<groupId>com.liferay.ide.portal</groupId>
+	<artifactId>portal</artifactId>
+	<name>portal.all</name>
 
 	<packaging>pom</packaging>
 

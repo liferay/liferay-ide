@@ -21,7 +21,7 @@
 
 	<parent>
 		<groupId>com.liferay.ide.sdk</groupId>	
-		<artifactId>features</artifactId>
+		<artifactId>sdk-features</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	

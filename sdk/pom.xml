@@ -28,7 +28,7 @@
 		<relativePath>../build/parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.liferay.ide</groupId>	
+	<groupId>com.liferay.ide.sdk</groupId>	
 	<artifactId>sdk</artifactId>
 	
 	<name>sdk.all</name>

@@ -27,6 +27,7 @@
 				<module>../common</module>
 				<module>../sdk</module>
 				<module>../maven</module>
+				<module>../portal</module>
 				<module>../velocity</module>
 				<module>releng</module>
 			</modules>
@@ -62,6 +63,15 @@
 			</modules>
 		</profile>
 
+        <profile>
+			<id>portal</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>../portal</module>
+			</modules>
+		</profile>
 		<profile>
 			<id>velocity</id>
 			<activation>
