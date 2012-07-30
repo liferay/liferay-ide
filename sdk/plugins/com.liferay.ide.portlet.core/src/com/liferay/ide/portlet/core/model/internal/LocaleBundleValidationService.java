@@ -17,7 +17,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import static com.liferay.ide.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+import static com.liferay.ide.core.model.internal.GenericResourceBundlePathService.RB_FILE_EXTENSION;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.model.Portlet;
@@ -43,7 +43,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class LocaleBundleValidationService extends ValidationService
 {

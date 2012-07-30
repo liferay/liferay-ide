@@ -22,7 +22,7 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class ExpandSectionOutlineNodeHandler extends SapphireActionHandler
 {
@@ -35,6 +35,7 @@ public class ExpandSectionOutlineNodeHandler extends SapphireActionHandler
     protected Object run( SapphireRenderingContext context )
     {
         final MasterDetailsContentNode mContentNode = getPart().nearest( MasterDetailsContentNode.class );
+        
         if( mContentNode.isExpanded() )
         {
             mContentNode.setExpanded( false );

@@ -18,7 +18,7 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import com.liferay.ide.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 
@@ -112,7 +112,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
 
         final String defaultRBFileName =
             PortletUtil.convertJavaToIoFileName(
-                resourceBundleText, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+                resourceBundleText, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 
         final IFolder rbSourecFolder = getResourceBundleFolderLocation( project, defaultRBFileName );
         final IPath entryPath = rbSourecFolder.getLocation();

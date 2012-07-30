@@ -18,7 +18,7 @@
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import com.liferay.ide.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.PortletInfo;
 import com.liferay.ide.portlet.core.model.SupportedLocales;
@@ -133,7 +133,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
         final String text = resourceBundle.getText();
 
         String defaultRBFileName =
-            PortletUtil.convertJavaToIoFileName( text, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+            PortletUtil.convertJavaToIoFileName( text, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 
         int index = text.lastIndexOf( "." );
 
@@ -167,7 +167,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
                 String locale = PortletUtil.localeString( iSupportedLocale.getSupportedLocale().getText() );
                 final String localizedIOFileName =
                     PortletUtil.convertJavaToIoFileName(
-                        text, ResourceBundleRelativePathService.RB_FILE_EXTENSION, locale );
+                        text, GenericResourceBundlePathService.RB_FILE_EXTENSION, locale );
 
                 if( !getFileFromClasspath( project, localizedIOFileName ) )
                 {

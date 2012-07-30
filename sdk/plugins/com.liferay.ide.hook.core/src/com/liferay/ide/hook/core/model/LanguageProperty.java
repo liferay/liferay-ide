@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,13 +12,13 @@
  * details.
  *
  * Contributors:
- *    Kamesh Sampath - initial implementation
- *    Gregory Amerson - IDE-355
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintanence
  ******************************************************************************/
 
 package com.liferay.ide.hook.core.model;
 
-import com.liferay.ide.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -34,7 +34,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 @GenerateImpl
 @Image( path = "images/elcl16/locale_16x16.gif" )
@@ -46,7 +46,7 @@ public interface LanguageProperty extends IModelElement
 
     @Label( standard = "Language Properties" )
     @XmlBinding( path = "" )
-    @Service( impl = ResourceBundleRelativePathService.class )
+    @Service( impl = GenericResourceBundlePathService.class )
     @FileExtensions( expr = "properties" )
     @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );

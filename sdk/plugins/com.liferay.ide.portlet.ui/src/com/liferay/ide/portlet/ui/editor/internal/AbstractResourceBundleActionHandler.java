@@ -12,12 +12,13 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintanence
  *******************************************************************************/
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import com.liferay.ide.core.model.internal.ResourceBundleRelativePathService;
+import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -51,7 +52,7 @@ import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public abstract class AbstractResourceBundleActionHandler extends SapphirePropertyEditorActionHandler
 {
@@ -75,7 +76,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
         if( rbFile != null )
         {
             String ioFileName =
-                PortletUtil.convertJavaToIoFileName( rbFile, ResourceBundleRelativePathService.RB_FILE_EXTENSION );
+                PortletUtil.convertJavaToIoFileName( rbFile, GenericResourceBundlePathService.RB_FILE_EXTENSION );
             isEnabled = isEnabled && !getFileFromClasspath( project, ioFileName );
         }
         return isEnabled;

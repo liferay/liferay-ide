@@ -11,8 +11,7 @@
 
 	<name>Liferay IDE :: Parent</name>
 	<url>http://www.liferay.com/</url>
-	<description>The Liferay IDE is a eclipse based environment doing development with Liferay  Portal</description>
-
+	<description>The Liferay IDE is an eclipse based environment for doing development with Liferay Portal</description>
 
 	<developers>
 		<developer>
@@ -30,14 +29,12 @@
 		<tycho-version>0.15.0</tycho-version>
 		<tycho-extras-version>0.15.0</tycho-extras-version>
 		<orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-		<sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
+		<sapphire-site>http://download.eclipse.org/sapphire/0.5.2/repository/</sapphire-site>
 	</properties>
-
 
 	<modules>
 		<module>../target-platform</module>
 	</modules>
-
 
 	<repositories>
 		<repository>
@@ -51,7 +48,6 @@
 			<url>${sapphire-site}</url>
 		</repository>
 	</repositories>
-
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>

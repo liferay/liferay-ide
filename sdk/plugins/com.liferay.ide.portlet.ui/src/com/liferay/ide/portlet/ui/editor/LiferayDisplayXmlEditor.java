@@ -23,7 +23,7 @@ import com.liferay.ide.portlet.core.display.model.Display;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class LiferayDisplayXmlEditor extends SapphireEditorForXml

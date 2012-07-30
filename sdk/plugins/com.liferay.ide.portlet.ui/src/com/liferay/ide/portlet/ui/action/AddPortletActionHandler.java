@@ -24,7 +24,7 @@ import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  */
 public class AddPortletActionHandler extends SapphireActionHandler
 {

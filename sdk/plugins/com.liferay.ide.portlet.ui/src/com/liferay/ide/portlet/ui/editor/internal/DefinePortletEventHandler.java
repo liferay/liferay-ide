@@ -27,7 +27,7 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNo
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class DefinePortletEventHandler extends SapphireActionHandler
 {
@@ -39,7 +39,6 @@ public class DefinePortletEventHandler extends SapphireActionHandler
     @Override
     protected Object run( SapphireRenderingContext context )
     {
-        // System.out.println( "DefinePortletEventHandler.run()" );
         PortletApp rootModel = (PortletApp) context.getPart().getModelElement();
         EventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
 
@@ -48,6 +47,7 @@ public class DefinePortletEventHandler extends SapphireActionHandler
         final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
         final MasterDetailsContentNode root = page.outline().getRoot();
         final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
+        
         if( node != null )
         {
             node.select();

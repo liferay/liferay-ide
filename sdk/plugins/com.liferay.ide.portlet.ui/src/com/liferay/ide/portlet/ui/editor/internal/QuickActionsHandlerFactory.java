@@ -41,7 +41,7 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNo
 import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
@@ -53,7 +53,9 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
     public void init( SapphireAction action, ActionHandlerFactoryDef def )
     {
         super.init( action, def );
+        
         String strModelElementNames = def.getParam( "MODEL_PROPERTIES" );
+        
         if( strModelElementNames != null )
         {
             this.modelProperties = strModelElementNames.split( "," );
@@ -109,7 +111,6 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
      */
     private static final class Handler extends SapphireActionHandler
     {
-
         private final String strModelProperty;
 
         public Handler( String modelProperty )
@@ -139,7 +140,6 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
         @Override
         protected Object run( SapphireRenderingContext context )
         {
-
             final IModelElement rootModel = context.getPart().getModelElement();
             final ModelProperty modelProperty = rootModel.type().property( this.strModelProperty );
             Object obj = rootModel.read( modelProperty );
@@ -147,7 +147,6 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
 
             if( obj instanceof ModelElementList<?> )
             {
-                // System.out.println( "QuickActionsHandlerFactory.Handler.run()" + obj.getClass() );
                 ModelElementList<?> list = (ModelElementList<?>) obj;
                 mElement = list.insert();
             }
@@ -190,9 +189,9 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
 
     private static final class Resources extends NLS
     {
-
         public static String message;
         public static String unsuportedOperation;
+        
         static
         {
             initializeMessages( QuickActionsHandlerFactory.class.getName(), Resources.class );

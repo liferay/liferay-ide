@@ -22,7 +22,7 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class PortletXmlEditor extends SapphireEditorForXml
 {
@@ -46,7 +46,6 @@ public class PortletXmlEditor extends SapphireEditorForXml
      */
     private void initEditorSettings()
     {
-
         setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
         setRootModelElementType( PortletApp.TYPE );
 

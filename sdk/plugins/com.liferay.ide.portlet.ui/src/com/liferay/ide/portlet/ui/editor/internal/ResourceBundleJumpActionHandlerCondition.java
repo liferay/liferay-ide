@@ -26,7 +26,7 @@ import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEditorCondition
 {
@@ -34,7 +34,6 @@ public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEd
     @Override
     protected boolean evaluate( PropertyEditorPart part )
     {
-
         final IModelElement element = part.getModelElement();
         final ModelProperty property = part.getProperty();
 

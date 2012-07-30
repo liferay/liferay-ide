@@ -12,12 +12,13 @@
  * details.
  *    
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implemenation and ongoing maintanence
  *******************************************************************************/
 
 package com.liferay.ide.portlet.ui.editor.internal;
 
-import static com.liferay.ide.core.model.internal.ResourceBundleRelativePathService.RB_FILE_EXTENSION;
+import static com.liferay.ide.core.model.internal.GenericResourceBundlePathService.RB_FILE_EXTENSION;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.util.PortletUtil;
@@ -44,7 +45,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler
 {
