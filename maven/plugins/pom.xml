@@ -29,7 +29,7 @@
     <groupId>com.liferay.ide.maven</groupId>
     <artifactId>maven-plugins</artifactId>
 
-    <name>maven.plugins</name>
+    <name>Liferay IDE Maven Plugins</name>
 
     <packaging>pom</packaging>
 

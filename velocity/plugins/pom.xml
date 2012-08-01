@@ -29,7 +29,7 @@
     <groupId>com.liferay.ide.velocity</groupId>
     <artifactId>velocity-plugins</artifactId>
 
-    <name>velocity.plugins</name>
+    <name>Liferay IDE Velocity Plugins</name>
 
     <packaging>pom</packaging>
 

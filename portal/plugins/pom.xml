@@ -16,23 +16,22 @@
  *******************************************************************************/
  -->
 
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>	
-  	     <groupId>com.liferay.ide.portal</groupId>
-	     <artifactId>portal</artifactId>
-	     <version>2.0.0-SNAPSHOT</version>
-	</parent>
-
+    <parent>
         <groupId>com.liferay.ide.portal</groupId>
-	<artifactId>portal-plugins</artifactId>
+        <artifactId>portal</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
 
-	<name>portal.plugins</name>
+    <groupId>com.liferay.ide.portal</groupId>
+    <artifactId>portal-plugins</artifactId>
 
-	<packaging>pom</packaging>
+    <name>Liferay IDE Portal Plugins</name>
+
+    <packaging>pom</packaging>
 
 </project>
 	

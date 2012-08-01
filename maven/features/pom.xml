@@ -30,7 +30,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<artifactId>maven-features</artifactId>
 	<packaging>pom</packaging>
 
-	<name>maven.features</name>
+	<name>Liferay IDE Maven Features</name>
 
 	<modules>
 		<module>com.liferay.ide.maven-feature</module>

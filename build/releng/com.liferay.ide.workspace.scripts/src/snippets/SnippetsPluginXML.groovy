@@ -6,10 +6,10 @@ import groovy.util.XmlParser
 import java.io.PrintWriter
 import java.io.StringWriter
 
-File outputXml = new File("../../common/plugins/com.liferay.ide.ui.snippets/plugin.xml")
+File outputXml = new File("../../common/plugins/com.liferay.ide.eclipse.ui.snippets/plugin.xml")
 String contenttypesVal = "org.eclipse.jst.jsp.core.jspsource"
-String categoryIdPrefix = "com.liferay.ide.ui.snippets.category"
-String itemIdPrefix = "com.liferay.ide.ui.snippets.item"
+String categoryIdPrefix = "com.liferay.ide.eclipse.ui.snippets.category"
+String itemIdPrefix = "com.liferay.ide.eclipse.ui.snippets.item"
 String iconPrefix = "icons/snippets"
 
 def mappings = [
@@ -19,7 +19,7 @@ def mappings = [
 				icon16 : "liferay_aui_tld_16x16.png",
 				icon32 : "liferay_aui_tld_32x32.png",
 				url : "http://liferay.com/tld/aui",
-				clazz : "com.liferay.ide.ui.snippets.TaglibSnippetInsertion"
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			"liferay-portlet" : [
 				desc : "Liferay Portlet Ext Taglib",
@@ -27,7 +27,7 @@ def mappings = [
 				icon16 : "portlet_ext_tld_16x16.png",
 				icon32 : "portlet_ext_tld_32x32.png",
 				url : "http://liferay.com/tld/portlet",
-				clazz : "com.liferay.ide.ui.snippets.TaglibSnippetInsertion"
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			portlet : [
 				desc : "Portlet Taglib",
@@ -35,7 +35,7 @@ def mappings = [
 				icon16 : "portlet_tld_16x16.png",
 				icon32 : "portlet_tld_32x32.png",
 				url : "http://java.sun.com/portlet",
-				clazz : "com.liferay.ide.ui.snippets.TaglibSnippetInsertion"
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			theme : [
 				desc : "Liferay Theme Taglib",
@@ -43,7 +43,7 @@ def mappings = [
 				icon16 : "liferay_theme_tld_16x16.png",
 				icon32 : "liferay_theme_tld_32x32.png",
 				url : "http://liferay.com/tld/theme",
-				clazz : "com.liferay.ide.ui.snippets.TaglibSnippetInsertion"
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			"liferay-ui" : [
 				desc : "Liferay UI Taglib",
@@ -51,7 +51,7 @@ def mappings = [
 				icon16 : "liferay_ui_tld_16x16.png",
 				icon32 : "liferay_ui_tld_32x32.png",
 				url : "http://liferay.com/tld/ui",
-				clazz : "com.liferay.ide.ui.snippets.TaglibSnippetInsertion"
+				clazz : "com.liferay.ide.eclipse.ui.snippets.TaglibSnippetInsertion"
 			],
 			alloy : [
 				desc : "Alloy Taglib",
@@ -59,7 +59,7 @@ def mappings = [
 				icon16 : "alloy_tld_16x16.png",
 				icon32 : "alloy_tld_32x32.png",
 				url : "http://alloy.liferay.com/tld/alloy",
-				clazz : "com.liferay.ide.ui.snippets.AlloyTagSnippetInsertion"
+				clazz : "com.liferay.ide.eclipse.ui.snippets.AlloyTagSnippetInsertion"
 			]
 		]
 

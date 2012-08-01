@@ -30,7 +30,7 @@
     <groupId>com.liferay.ide.velocity</groupId>
     <artifactId>velocity</artifactId>
 
-    <name>velocity.all</name>
+    <name>Liferay IDE Velocity</name>
 
     <packaging>pom</packaging>
 

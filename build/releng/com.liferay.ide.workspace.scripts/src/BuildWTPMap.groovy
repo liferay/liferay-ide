@@ -1,6 +1,6 @@
-def mapFile = new File("../../releng/com.liferay.ide.releng/files/wtp-3.3.0.map")
-def depsFile = new File("../../releng/com.liferay.ide.releng/files/wtp-3.3.0-deps.txt")
-def outputFile = new File("../../releng/com.liferay.ide.releng/files/wtp-3.3.0-deps.map")
+def mapFile = new File("../../releng/com.liferay.ide.eclipse.releng/files/wtp-3.3.0.map")
+def depsFile = new File("../../releng/com.liferay.ide.eclipse.releng/files/wtp-3.3.0-deps.txt")
+def outputFile = new File("../../releng/com.liferay.ide.eclipse.releng/files/wtp-3.3.0-deps.map")
 
 def deps = depsFile.readLines();
 

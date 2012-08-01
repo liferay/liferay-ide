@@ -28,7 +28,7 @@
     <artifactId>com.liferay.ide-repository</artifactId>
     <packaging>eclipse-repository</packaging>
 
-    <name>Liferay IDE :: Repository</name>
+    <name>Liferay IDE Repository</name>
 
     <build>
         <plugins>

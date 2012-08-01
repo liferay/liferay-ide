@@ -30,7 +30,7 @@
 
 	<groupId>com.liferay.ide.maven</groupId>
 	<artifactId>maven</artifactId>
-	<name>maven.all</name>
+	<name>Liferay IDE Maven All</name>
 
 	<packaging>pom</packaging>
 

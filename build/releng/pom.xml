@@ -29,12 +29,12 @@
     <groupId>com.liferay.ide.releng</groupId>
     <artifactId>releng</artifactId>
 
-    <name>Liferay IDE Release Engineering</name>
+    <name>Liferay IDE Releng</name>
+
     <packaging>pom</packaging>
 
     <modules>
         <module>com.liferay.ide-repository</module>
-        <module>com.liferay.ide.workspace.scripts</module>
         <module>com.liferay.ide.velocity-repository</module>
     </modules>
 </project>	
