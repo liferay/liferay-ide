@@ -39,7 +39,7 @@
         <image>icons/e16/builder_16x16.gif</image>
         <hint>
             <name>style</name>
-            <value>image+text</value>
+            <value>image</value>
         </hint>
         <context>Sapphire.EditorPage</context>
         <key-binding>SHIFT+CONTROL+b</key-binding>
@@ -55,7 +55,7 @@
         <context>Sapphire.Diagram.Editor</context>
         <hint>
             <name>style</name>
-            <value>image+text</value>
+            <value>image</value>
         </hint>
         <context>Sapphire.EditorPage</context>
         <tooltip>Build WSDD (Ctrl+Shift+Alt+b)</tooltip>
