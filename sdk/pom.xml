@@ -30,7 +30,7 @@
     <groupId>com.liferay.ide.sdk</groupId>
     <artifactId>sdk</artifactId>
 
-    <name>Liferay IDE SDK All</name>
+    <name>Liferay IDE SDK</name>
 
     <packaging>pom</packaging>
 
