@@ -11,6 +11,9 @@
 package com.liferay.ide.eclipse.ui.util;
 
 import com.liferay.ide.eclipse.ui.DebugGroup;
+import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
+
+import java.net.URL;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -20,6 +23,8 @@ import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -178,6 +183,33 @@ public class SWTUtil {
 		l.setLayoutData(gd);
 		return l;
 	}
+    
+	public static Link createHyperLink(Composite parent, int style, String text, int hspan, final String url) {
+        final Link link = createLink( parent, style, text, hspan );
+        
+        if( url != null )
+        {
+            link.addSelectionListener
+            ( 
+                new SelectionAdapter()
+                {
+                    public void widgetSelected( SelectionEvent e )
+                    {
+                        try
+                        {
+                            PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( new URL( url ) );
+                        }
+                        catch ( Exception e1 )
+                        {
+                            LiferayUIPlugin.logError( "Could not open external browser.", e1 );
+                        }
+                    }
+                }
+            );    
+        }
+        
+        return link;
+    }
 	
 	public static Link createLink(Composite parent, int style, String text, int hspan) {
 		Link l = new Link(parent, style);

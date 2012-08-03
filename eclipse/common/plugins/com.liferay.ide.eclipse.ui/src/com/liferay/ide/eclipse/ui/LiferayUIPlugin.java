@@ -107,7 +107,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 	}
 
 	public static void logError(Exception e) {
-		getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, e.getMessage(), e));
+        logError( e.getMessage(), e );
 	}
 
 	protected TextFileDocumentProvider fTextFileDocumentProvider;
@@ -241,6 +241,11 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup {
 		catch (Exception e) {
 		}
 	}
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+    }
 
 	// public synchronized IDocumentProvider
 	// getPluginPropertiesFileDocumentProvider() {
