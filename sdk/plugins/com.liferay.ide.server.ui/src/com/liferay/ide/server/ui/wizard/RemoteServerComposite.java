@@ -18,12 +18,14 @@ import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 import com.liferay.ide.server.remote.RemoteServer;
 import com.liferay.ide.server.remote.RemoteUtil;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.text.MessageFormat;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -213,26 +215,32 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         textServerManagerContextPath.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
         textServerManagerContextPath.addModifyListener( this );
 
-        Link link =
-            SWTUtil.createLink(
-                this, SWT.NONE,
-                "Need to the install server-manager-web plugin? <a>Download latest version from here.</a>", 1 );
-        final String downloadUrl = "http://sourceforge.net/projects/lportal/files/Liferay%20Plugins/";
-        link.addSelectionListener( new SelectionAdapter()
-        {
-
-            public void widgetSelected( SelectionEvent e )
+        final String marketplaceLinkLabel = "Need to install the <a>Remote IDE Connector</a> from Liferay Marketplace?";
+        final String appUrl = "http://www.liferay.com/marketplace/-/mp/application/15193785";
+        SWTUtil.createHyperLink( this, SWT.NONE, marketplaceLinkLabel, 1, appUrl );
+        
+        final String installLabel = "<a>Click here to install app into configured portal server.</a>";
+        final String installUrl = "{0}/group/control_panel/manage?p_p_id=1_WAR_marketplaceportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&appId=15193785"; 
+        final Link installLink = SWTUtil.createLink( this, SWT.NONE, installLabel, 1 );
+        installLink.addSelectionListener
+        (
+            new SelectionAdapter()
             {
-                try
+                public void widgetSelected(SelectionEvent e) 
                 {
-                    PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( new URL( downloadUrl ) );
-                }
-                catch( Exception e1 )
-                {
-                    LiferayServerUIPlugin.logError( "Could not open external browser.", e1 );
-                }
+                    try
+                    {
+                        final String url =
+                            MessageFormat.format( installUrl, "http://" + textHostname.getText() + ":" + textHTTP.getText() );
+                        PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( new URL( url ) );
+                    }
+                    catch ( Exception e1 )
+                    {
+                        LiferayUIPlugin.logError( "Could not open external browser.", e1 );
+                    }
+                };
             }
-        } );
+        );
 
         Composite validateComposite = new Composite( this, SWT.NONE );
         validateComposite.setLayoutData( new GridData( SWT.LEFT, SWT.BOTTOM, false, true ) );

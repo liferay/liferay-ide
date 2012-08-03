@@ -127,9 +127,8 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
                 buttons.add( templateButton );
 
                 final URL helpUrl = framework.getHelpUrl();
-                Link descriptionWithLink =
-                    SWTUtil.createLink( group, SWT.WRAP, framework.getDescription() +
-                        ( helpUrl != null ? " <a>Learn more....</a>" : "" ), 1 );
+                final String url = (helpUrl != null ? helpUrl.toExternalForm() : null);
+                Link descriptionWithLink = SWTUtil.createHyperLink(group, SWT.WRAP, framework.getDescription() + (helpUrl != null ? " <a>Learn more....</a>" : ""), 1, url);
                 descriptionWithLink.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
                 if( helpUrl != null )

@@ -83,6 +83,11 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, string );
     }
+    
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
+    }
 
     public static IWorkbenchPage getActivePage()
     {
@@ -112,9 +117,9 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         return ResourcesPlugin.getWorkspace();
     }
 
-    public static void logError( Exception e )
+    public static void logError(Exception e)
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+        logError( e.getMessage(), e );
     }
 
     protected TextFileDocumentProvider fTextFileDocumentProvider;

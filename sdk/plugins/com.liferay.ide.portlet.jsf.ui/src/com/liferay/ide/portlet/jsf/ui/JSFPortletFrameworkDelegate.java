@@ -17,28 +17,22 @@ package com.liferay.ide.portlet.jsf.ui;
 
 import com.liferay.ide.portlet.jsf.core.IJSFPortletFrameworkProperties;
 import com.liferay.ide.portlet.jsf.core.JSFPortletFrameworkWizardProvider;
-import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
-import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
-
-import java.net.URL;
+import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelSynchHelper;
 
@@ -135,28 +129,11 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             }
         );
         
-        final Link link = SWTUtil.createLink( parent, SWT.WRAP, desc, 1 );
+        final Link link = SWTUtil.createHyperLink( parent, SWT.WRAP, desc, 1, helpUrl );
         
         final GridData layoutData = new GridData( SWT.LEFT, SWT.TOP, true, false );
         layoutData.widthHint = 350;
         link.setLayoutData( layoutData );
-        
-        link.addSelectionListener
-        (
-            new SelectionAdapter()
-            {
-                public void widgetSelected( SelectionEvent e )
-                {
-                    try 
-                    {
-                        PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(helpUrl) );
-                    }
-                    catch (Exception e1) {
-                        ProjectUIPlugin.logError("Could not open external browser", e1);
-                    }
-                }
-            }
-        );
     }
 
     @Override

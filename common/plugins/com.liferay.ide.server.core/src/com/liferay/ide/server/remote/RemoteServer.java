@@ -44,8 +44,7 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy
 {
 
-    private static final String CONNECT_ERROR_MSG =
-        "Could not connect to the server manager. Make sure the server manager plugin is installed on remote Liferay instance.";
+    private static final String CONNECT_ERROR_MSG = "Could not connect to Remote IDE Connector plugin.";
 
     public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list";
 
