@@ -392,12 +392,12 @@ public class LiferayTomcatUtil {
 		File location = currentLocation.toFile();
 
 		if (location.exists() && location.isDirectory()) {
-			// check to see if this location contains tomcat dir tomcat-*
+			// check to see if this location contains tomcat dir *tomcat*
 			File[] files = location.listFiles();
 
 			boolean matches = false;
 
-			String pattern = "^tomcat-.*";
+			String pattern = ".*tomcat.*";
 
 			File tomcatDir = null;
 
