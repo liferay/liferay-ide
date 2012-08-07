@@ -19,6 +19,7 @@
 package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
@@ -189,7 +190,15 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
                     InputStream defaultContentStream = new ByteArrayInputStream( "".getBytes() );
 
                     file.create( defaultContentStream, true, null );
-                    file.refreshLocal( IResource.DEPTH_INFINITE, null );
+
+                    try
+                    {
+                        file.refreshLocal( IResource.DEPTH_INFINITE, null );
+                    }
+                    catch( Exception e )
+                    {
+                        HookUI.logError( e );
+                    }
 
                     modelElement.refresh( true, true );
                     // write the property again with the same value to force

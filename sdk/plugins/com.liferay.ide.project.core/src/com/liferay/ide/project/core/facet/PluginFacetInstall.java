@@ -432,7 +432,14 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         // cleanup portlet files
         newThemePath.toFile().delete();
 
-        this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        try
+        {
+            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e )
+        {
+            ProjectCorePlugin.logError( e );
+        }
     }
 
     protected boolean isProjectInSDK()

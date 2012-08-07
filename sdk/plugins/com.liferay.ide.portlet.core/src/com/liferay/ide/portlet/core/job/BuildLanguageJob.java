@@ -75,11 +75,25 @@ public class BuildLanguageJob extends SDKJob
 
             monitor.worked( 90 );
 
-            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            try
+            {
+                project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+            }
+            catch( Exception e )
+            {
+                PortletCore.logError( e );
+            }
 
             project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
 
-            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            try
+            {
+                project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+            }
+            catch( Exception e )
+            {
+                PortletCore.logError( e );
+            }
 
             // check generated properties files and set to UTF8
             for( IResource file : langFile.getParent().members() )

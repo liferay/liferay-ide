@@ -92,1035 +92,1058 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 @SuppressWarnings( "restriction" )
 public class ProjectUtil
 {
-	
+
     public static final String METADATA_FOLDER = ".metadata";
 
-	public static void addLiferayPortletTldToWebXML( final IProject project )
-	{
-		addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" );
-	}
-
-	public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
-	{
-		WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
-		TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-		tagLibRefType.setTaglibURI( uriValue );
-		tagLibRefType.setTaglibLocation( taglibLocation );
-		try
-		{
-			webXmlHelper.addTagLib( tagLibRefType );
-		}
-		catch( Exception e )
-		{
-			ProjectCorePlugin.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e );
-		}
-	}
-
-	public static boolean collectProjectsFromDirectory(
-		Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
-		Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor )
-	{
-
-		if( monitor.isCanceled() )
-		{
-			return false;
-		}
-
-		monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
-
-		File[] contents = directory.listFiles();
-
-		if( contents == null )
-		{
-			return false;
-		}
-
-		// Initialize recursion guard for recursive symbolic links
-		if( directoriesVisited == null )
-		{
-			directoriesVisited = new HashSet<String>();
-
-			try
-			{
-				directoriesVisited.add( directory.getCanonicalPath() );
-			}
-			catch( IOException exception )
-			{
-				StatusManager.getManager().handle(
-					StatusUtil.newStatus( IStatus.ERROR, exception.getLocalizedMessage(), exception ) );
-			}
-		}
-
-		// first look for project description files
-		final String dotProject = IProjectDescription.DESCRIPTION_FILE_NAME;
-
-		for( int i = 0; i < contents.length; i++ )
-		{
-			File file = contents[i];
-
-			if( isLiferayProjectDir( file ) )
-			{
-				// recurse to see if it has project file
-				int currentSize = eclipseProjectFiles.size();
-
-				collectProjectsFromDirectory(
-					eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor );
-
-				int newSize = eclipseProjectFiles.size();
-
-				if( newSize == currentSize )
-				{
-					liferayProjectDirs.add( file );
-				}
-			}
-			else if( file.isFile() && file.getName().equals( dotProject ) )
-			{
-				if( !eclipseProjectFiles.contains( file ) && isLiferayProjectDir( file.getParentFile() ) )
-				{
-					eclipseProjectFiles.add( file );
-
-					// don't search sub-directories since we can't have nested
-					// projects
-
-					return true;
-				}
-			}
-		}
-
-		// no project description found, so recurse into sub-directories
-		for( int i = 0; i < contents.length; i++ )
-		{
-			if( contents[i].isDirectory() )
-			{
-				if( !contents[i].getName().equals( METADATA_FOLDER ) )
-				{
-					try
-					{
-						String canonicalPath = contents[i].getCanonicalPath();
-
-						if( !directoriesVisited.add( canonicalPath ) )
-						{
-
-							// already been here --> do not recurse
-							continue;
-						}
-					}
-					catch( IOException exception )
-					{
-						StatusManager.getManager().handle(
-							StatusUtil.newStatus( IStatus.ERROR, exception.getLocalizedMessage(), exception ) );
-
-					}
-
-					// dont recurse directories that we have already determined
-					// are Liferay projects
-					if( !liferayProjectDirs.contains( contents[i] ) && recurse )
-					{
-						collectProjectsFromDirectory(
-							eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor );
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	public static String convertToDisplayName( String name )
-	{
-		if( CoreUtil.isNullOrEmpty( name ) )
-		{
-			return "";
-		}
-
-		String displayName = removePluginSuffix( name );
-
-		displayName = displayName.replaceAll( "-", " " ).replaceAll( "_", " " );
-
-		displayName = WordUtils.capitalize( displayName );
-
-		return displayName;
-	}
-
-	public static void createDefaultWebXml( File webxmlFile )
-	{
-		final String webXmlContents =
-			//"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE web-app PUBLIC \"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN\" \"http://java.sun.com/dtd/web-app_2_3.dtd\">\n<web-app>\n</web-app>";
-		      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.5\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd\">\n</web-app>"; //$NON-NLS-1$
-
-		try
-		{
-			org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile( webxmlFile, webXmlContents );
-		}
-		catch( Exception e )
-		{
-			ProjectCorePlugin.logError( "Unable to create default web xml", e );
-		}
-	}
-
-	public static IFile createEmptyProjectFile( String fileName, IFolder folder ) throws CoreException
-	{
-
-		IFile emptyFile = folder.getFile( fileName );
-
-		if( emptyFile.exists() )
-		{
-			return emptyFile;
-		}
-		else
-		{
-			emptyFile.create( new ByteArrayInputStream( "".getBytes() ), true, null );
-		}
-
-		return emptyFile;
-	}
-
-	public static IProject createExistingProject(
-		final ProjectRecord record, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
-		throws CoreException
-	{
-
-		String projectName = record.getProjectName();
-
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-		IProject project = workspace.getRoot().getProject( projectName );
-
-		if( record.description == null )
-		{
-			// error case
-			record.description = workspace.newProjectDescription( projectName );
-
-			IPath locationPath = new Path( record.projectSystemFile.getAbsolutePath() );
-
-			// If it is under the root use the default location
-			if( Platform.getLocation().isPrefixOf( locationPath ) )
-			{
-				record.description.setLocation( null );
-			}
-			else
-			{
-				record.description.setLocation( locationPath );
-			}
-		}
-		else
-		{
-			record.description.setName( projectName );
-		}
-
-		monitor.beginTask( "Importing project", 100 );
-
-		project.create( record.description, new SubProgressMonitor( monitor, 30 ) );
-
-		project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
-
-		// need to check to see if we an ext project with source folders with incorrect parent attributes
-		if( project.getName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			fixExtProjectClasspathEntries( project );
-		}
-
-		// IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
-
-		IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
-
-		FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
-
-		PluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
-
-		fpwc.commitChanges( monitor );
-
-		final IJavaProject javaProject = JavaCore.create( fProject.getProject() );
-
-		ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
-		{
-
-			public void run( IProgressMonitor monitor ) throws CoreException
-			{
-				for( IClasspathEntry entry : javaProject.getRawClasspath() )
-				{
-					if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-						entry.getPath().segment( 0 ).equals( PluginClasspathContainerInitializer.ID ) )
-					{
-						JavaCore.getClasspathContainerInitializer( PluginClasspathContainerInitializer.ID ).initialize(
-							entry.getPath(), javaProject );
-						break;
-					}
-				}
-
-				monitor.done();
-			}
-		}, monitor );
-
-		return project;
-	}
-
-	public static IProject createNewProject(
-		ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
-		throws CoreException
-	{
-
-		IDataModel newProjectDataModel =
-			DataModelFactory.createDataModel( new PluginFacetProjectCreationDataModelProvider() );
-
-		// we are importing so set flag to not create anything
-		newProjectDataModel.setBooleanProperty( IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false );
-
-		String sdkName = PluginFacetUtil.getSDKName( sdkLocation );
-		// if the get sdk from the location
-		newProjectDataModel.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName );
-
-		setGenerateDD( newProjectDataModel, false );
-
-		IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" );
-
-		if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true );
-
-			if( !( webXmlPath.toFile().exists() ) )
-			{
-				createDefaultWebXml( webXmlPath.toFile() );
-			}
-		}
-		else if( projectRecord.getProjectName().endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true );
-
-			if( !( webXmlPath.toFile().exists() ) )
-			{
-				createDefaultWebXml( webXmlPath.toFile() );
-			}
-		}
-		else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			webXmlPath =
-				webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) );
-
-			newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true );
-
-			if( !( webXmlPath.toFile().exists() ) )
-			{
-				createDefaultWebXml( webXmlPath.toFile() );
-			}
-		}
-		else if( projectRecord.getProjectName().endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true );
-		}
-		else if( projectRecord.getProjectName().endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true );
-		}
-
-		IFacetedProjectWorkingCopy fpjwc =
-			(IFacetedProjectWorkingCopy) newProjectDataModel.getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
-		fpjwc.setProjectName( projectRecord.getProjectName() );
-		fpjwc.setProjectLocation( projectRecord.getProjectLocation() );
-
-		PluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation );
-
-		fpjwc.commitChanges( monitor );
-
-		return fpjwc.getProject();
-	}
-
-	public static IFile findServiceJarForContext( String context )
-	{
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-
-		for( IProject project : projects )
-		{
-			if( project.getName().equals( context ) )
-			{
-				IFolder docroot = CoreUtil.getDocroot( project );
-
-				if( docroot != null && docroot.exists() )
-				{
-					IFile serviceJar = docroot.getFile( "WEB-INF/lib/" + project.getName() + "-service.jar" );
-
-					if( serviceJar.exists() )
-					{
-						return serviceJar;
-					}
-				}
-			}
-		}
-
-		return null;
-	}
-
-	private static void fixExtProjectClasspathEntries( IProject project )
-	{
-		try
-		{
-			boolean fixedAttr = false;
-
-			IJavaProject javaProject = JavaCore.create( project );
-
-			List<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>();
-
-			IClasspathEntry[] entries = javaProject.getRawClasspath();
-
-			for( IClasspathEntry entry : entries )
-			{
-				IClasspathEntry newEntry = null;
-
-				if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
-				{
-					List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
-
-					IClasspathAttribute[] attrs = entry.getExtraAttributes();
-
-					if( !CoreUtil.isNullOrEmpty( attrs ) )
-					{
-						for( IClasspathAttribute attr : attrs )
-						{
-							IClasspathAttribute newAttr = null;
-
-							if( "owner.project.facets".equals( attr.getName() ) &&
-								"liferay.plugin".equals( attr.getValue() ) )
-							{
-								newAttr = JavaCore.newClasspathAttribute( attr.getName(), "liferay.ext" );
-								fixedAttr = true;
-							}
-							else
-							{
-								newAttr = attr;
-							}
-
-							newAttrs.add( newAttr );
-						}
-
-						newEntry =
-							JavaCore.newSourceEntry(
-								entry.getPath(), entry.getInclusionPatterns(), entry.getExclusionPatterns(),
-								entry.getOutputLocation(), newAttrs.toArray( new IClasspathAttribute[0] ) );
-					}
-				}
-
-				if( newEntry == null )
-				{
-					newEntry = entry;
-				}
-
-				newEntries.add( newEntry );
-			}
-
-			if( fixedAttr )
-			{
-				IProgressMonitor monitor = new NullProgressMonitor();
-
-				javaProject.setRawClasspath( newEntries.toArray( new IClasspathEntry[0] ), monitor );
-
-				javaProject.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
-			}
-
-			fixExtProjectSrcFolderLinks( project );
-		}
-		catch( Exception ex )
-		{
-			ProjectCorePlugin.logError( "Exception trying to fix Ext project classpath entries.", ex );
-		}
-	}
-
-	/** IDE-270 */
-	public static void fixExtProjectSrcFolderLinks( IProject extProject ) throws JavaModelException
-	{
-
-		if( extProject != null )
-		{
-			IJavaProject javaProject = JavaCore.create( extProject );
-
-			if( javaProject != null )
-			{
-				final IVirtualComponent c = ComponentCore.createComponent( extProject, false );
-
-				if( c != null )
-				{
-					final IVirtualFolder jsrc = c.getRootFolder().getFolder( "/WEB-INF/classes" );
-
-					if( jsrc != null )
-					{
-						final IClasspathEntry[] cp = javaProject.getRawClasspath();
-
-						for( int i = 0; i < cp.length; i++ )
-						{
-							final IClasspathEntry cpe = cp[i];
-
-							if( cpe.getEntryKind() == IClasspathEntry.CPE_SOURCE )
-							{
-								if( cpe.getPath().removeFirstSegments( 1 ).segmentCount() > 0 )
-								{
-									try
-									{
-										IFolder srcFolder =
-											ResourcesPlugin.getWorkspace().getRoot().getFolder( cpe.getPath() );
-
-										IVirtualResource[] virtualResource = ComponentCore.createResources( srcFolder );
-
-										// create link for source folder only when it is not mapped
-										if( virtualResource.length == 0 )
-										{
-											jsrc.createLink( cpe.getPath().removeFirstSegments( 1 ), 0, null );
-										}
-									}
-									catch( Exception e )
-									{
-										ProjectCorePlugin.logError( e );
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static IFacetedProject getFacetedProject( IProject project )
-	{
-		try
-		{
-			return ProjectFacetsManager.create( project );
-		}
-		catch( CoreException e )
-		{
-			return null;
-		}
-	}
-
-	public static Set<IProjectFacetVersion> getFacetsForPreset( String presetId )
-	{
-		IPreset preset = ProjectFacetsManager.getPreset( presetId );
-		return preset.getProjectFacets();
-	}
-
-	public static IProjectFacet getLiferayFacet( IFacetedProject facetedProject )
-	{
-		for( IProjectFacetVersion projectFacet : facetedProject.getProjectFacets() )
-		{
-			if( isLiferayFacet( projectFacet.getProjectFacet() ) )
-			{
-				return projectFacet.getProjectFacet();
-			}
-		}
-		return null;
-	}
-
-	public static String getLiferayPluginType( String projectLocation )
-	{
-		if( isLiferayProjectDir( new File( projectLocation ) ) )
-		{
-			String suffix = "";
-			if( projectLocation.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
-			{
-				suffix = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
-			}
-			else if( projectLocation.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
-			{
-				suffix = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
-			}
-			else if( projectLocation.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
-			{
-				suffix = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
-			}
-			else if( projectLocation.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
-			{
-				suffix = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
-			}
-			else if( projectLocation.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
-			{
-				suffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
-			}
-
-			return suffix.replace( "-", "" );
-		}
-
-		return null;
-	}
-
-	public static IFile getPortletXmlFile( IProject project )
+    public static void addLiferayPortletTldToWebXML( final IProject project )
+    {
+        addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" );
+    }
+
+    public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
+    {
+        WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
+        TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
+        tagLibRefType.setTaglibURI( uriValue );
+        tagLibRefType.setTaglibLocation( taglibLocation );
+        
+        try
+        {
+            webXmlHelper.addTagLib( tagLibRefType );
+        }
+        catch( Exception e )
+        {
+            ProjectCorePlugin.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e );
+        }
+    }
+
+    public static boolean collectProjectsFromDirectory(
+        Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
+        Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor )
+    {
+        if( monitor.isCanceled() )
+        {
+            return false;
+        }
+
+        monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
+
+        File[] contents = directory.listFiles();
+
+        if( contents == null )
+        {
+            return false;
+        }
+
+        // Initialize recursion guard for recursive symbolic links
+        if( directoriesVisited == null )
+        {
+            directoriesVisited = new HashSet<String>();
+
+            try
+            {
+                directoriesVisited.add( directory.getCanonicalPath() );
+            }
+            catch( IOException exception )
+            {
+                StatusManager.getManager().handle(
+                    StatusUtil.newStatus( IStatus.ERROR, exception.getLocalizedMessage(), exception ) );
+            }
+        }
+
+        // first look for project description files
+        final String dotProject = IProjectDescription.DESCRIPTION_FILE_NAME;
+
+        for( int i = 0; i < contents.length; i++ )
+        {
+            File file = contents[i];
+
+            if( isLiferayProjectDir( file ) )
+            {
+                // recurse to see if it has project file
+                int currentSize = eclipseProjectFiles.size();
+
+                collectProjectsFromDirectory(
+                    eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor );
+
+                int newSize = eclipseProjectFiles.size();
+
+                if( newSize == currentSize )
+                {
+                    liferayProjectDirs.add( file );
+                }
+            }
+            else if( file.isFile() && file.getName().equals( dotProject ) )
+            {
+                if( !eclipseProjectFiles.contains( file ) && isLiferayProjectDir( file.getParentFile() ) )
+                {
+                    eclipseProjectFiles.add( file );
+
+                    // don't search sub-directories since we can't have nested
+                    // projects
+
+                    return true;
+                }
+            }
+        }
+
+        // no project description found, so recurse into sub-directories
+        for( int i = 0; i < contents.length; i++ )
+        {
+            if( contents[i].isDirectory() )
+            {
+                if( !contents[i].getName().equals( METADATA_FOLDER ) )
+                {
+                    try
+                    {
+                        String canonicalPath = contents[i].getCanonicalPath();
+
+                        if( !directoriesVisited.add( canonicalPath ) )
+                        {
+
+                            // already been here --> do not recurse
+                            continue;
+                        }
+                    }
+                    catch( IOException exception )
+                    {
+                        StatusManager.getManager().handle(
+                            StatusUtil.newStatus( IStatus.ERROR, exception.getLocalizedMessage(), exception ) );
+                    }
+
+                    // dont recurse directories that we have already determined
+                    // are Liferay projects
+                    if( !liferayProjectDirs.contains( contents[i] ) && recurse )
+                    {
+                        collectProjectsFromDirectory(
+                            eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor );
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public static String convertToDisplayName( String name )
+    {
+        if( CoreUtil.isNullOrEmpty( name ) )
+        {
+            return "";
+        }
+
+        String displayName = removePluginSuffix( name );
+
+        displayName = displayName.replaceAll( "-", " " ).replaceAll( "_", " " );
+
+        displayName = WordUtils.capitalize( displayName );
+
+        return displayName;
+    }
+
+    public static void createDefaultWebXml( File webxmlFile )
+    {
+        final String webXmlContents = // "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE web-app PUBLIC \"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN\" \"http://java.sun.com/dtd/web-app_2_3.dtd\">\n<web-app>\n</web-app>";
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.5\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd\">\n</web-app>"; //$NON-NLS-1$
+
+        try
+        {
+            org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile( webxmlFile, webXmlContents );
+        }
+        catch( Exception e )
+        {
+            ProjectCorePlugin.logError( "Unable to create default web xml", e );
+        }
+    }
+
+    public static IFile createEmptyProjectFile( String fileName, IFolder folder ) throws CoreException
+    {
+        IFile emptyFile = folder.getFile( fileName );
+
+        if( emptyFile.exists() )
+        {
+            return emptyFile;
+        }
+        else
+        {
+            emptyFile.create( new ByteArrayInputStream( "".getBytes() ), true, null );
+        }
+
+        return emptyFile;
+    }
+
+    public static IProject createExistingProject(
+        final ProjectRecord record, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
+        throws CoreException
+    {
+        String projectName = record.getProjectName();
+
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+        IProject project = workspace.getRoot().getProject( projectName );
+
+        if( record.description == null )
+        {
+            // error case
+            record.description = workspace.newProjectDescription( projectName );
+
+            IPath locationPath = new Path( record.projectSystemFile.getAbsolutePath() );
+
+            // If it is under the root use the default location
+            if( Platform.getLocation().isPrefixOf( locationPath ) )
+            {
+                record.description.setLocation( null );
+            }
+            else
+            {
+                record.description.setLocation( locationPath );
+            }
+        }
+        else
+        {
+            record.description.setName( projectName );
+        }
+
+        monitor.beginTask( "Importing project", 100 );
+
+        project.create( record.description, new SubProgressMonitor( monitor, 30 ) );
+
+        project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
+
+        // need to check to see if we an ext project with source folders with incorrect parent attributes
+        if( project.getName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            fixExtProjectClasspathEntries( project );
+        }
+
+        // IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
+
+        IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
+
+        FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
+
+        PluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
+
+        fpwc.commitChanges( monitor );
+
+        final IJavaProject javaProject = JavaCore.create( fProject.getProject() );
+
+        ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor ) throws CoreException
+            {
+                for( IClasspathEntry entry : javaProject.getRawClasspath() )
+                {
+                    if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
+                        entry.getPath().segment( 0 ).equals( PluginClasspathContainerInitializer.ID ) )
+                    {
+                        JavaCore.getClasspathContainerInitializer( PluginClasspathContainerInitializer.ID ).initialize(
+                            entry.getPath(), javaProject );
+                        break;
+                    }
+                }
+
+                monitor.done();
+            }
+        }, monitor );
+
+        return project;
+    }
+
+    public static IProject createNewProject(
+        ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
+        throws CoreException
+    {
+        IDataModel newProjectDataModel =
+            DataModelFactory.createDataModel( new PluginFacetProjectCreationDataModelProvider() );
+
+        // we are importing so set flag to not create anything
+        newProjectDataModel.setBooleanProperty( IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false );
+
+        String sdkName = PluginFacetUtil.getSDKName( sdkLocation );
+        // if the get sdk from the location
+        newProjectDataModel.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName );
+
+        setGenerateDD( newProjectDataModel, false );
+
+        IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" );
+
+        if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true );
+
+            if( !( webXmlPath.toFile().exists() ) )
+            {
+                createDefaultWebXml( webXmlPath.toFile() );
+            }
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true );
+
+            if( !( webXmlPath.toFile().exists() ) )
+            {
+                createDefaultWebXml( webXmlPath.toFile() );
+            }
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            webXmlPath =
+                webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) );
+
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true );
+
+            if( !( webXmlPath.toFile().exists() ) )
+            {
+                createDefaultWebXml( webXmlPath.toFile() );
+            }
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true );
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true );
+        }
+
+        IFacetedProjectWorkingCopy fpjwc =
+            (IFacetedProjectWorkingCopy) newProjectDataModel.getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
+        fpjwc.setProjectName( projectRecord.getProjectName() );
+        fpjwc.setProjectLocation( projectRecord.getProjectLocation() );
+
+        PluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation );
+
+        fpjwc.commitChanges( monitor );
+
+        return fpjwc.getProject();
+    }
+
+    public static IFile findServiceJarForContext( String context )
+    {
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+        for( IProject project : projects )
+        {
+            if( project.getName().equals( context ) )
+            {
+                IFolder docroot = CoreUtil.getDocroot( project );
+
+                if( docroot != null && docroot.exists() )
+                {
+                    IFile serviceJar = docroot.getFile( "WEB-INF/lib/" + project.getName() + "-service.jar" );
+
+                    if( serviceJar.exists() )
+                    {
+                        return serviceJar;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static void fixExtProjectClasspathEntries( IProject project )
+    {
+        try
+        {
+            boolean fixedAttr = false;
+
+            IJavaProject javaProject = JavaCore.create( project );
+
+            List<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>();
+
+            IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+            for( IClasspathEntry entry : entries )
+            {
+                IClasspathEntry newEntry = null;
+
+                if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
+                {
+                    List<IClasspathAttribute> newAttrs = new ArrayList<IClasspathAttribute>();
+
+                    IClasspathAttribute[] attrs = entry.getExtraAttributes();
+
+                    if( !CoreUtil.isNullOrEmpty( attrs ) )
+                    {
+                        for( IClasspathAttribute attr : attrs )
+                        {
+                            IClasspathAttribute newAttr = null;
+
+                            if( "owner.project.facets".equals( attr.getName() ) &&
+                                "liferay.plugin".equals( attr.getValue() ) )
+                            {
+                                newAttr = JavaCore.newClasspathAttribute( attr.getName(), "liferay.ext" );
+                                fixedAttr = true;
+                            }
+                            else
+                            {
+                                newAttr = attr;
+                            }
+
+                            newAttrs.add( newAttr );
+                        }
+
+                        newEntry =
+                            JavaCore.newSourceEntry(
+                                entry.getPath(), entry.getInclusionPatterns(), entry.getExclusionPatterns(),
+                                entry.getOutputLocation(), newAttrs.toArray( new IClasspathAttribute[0] ) );
+                    }
+                }
+
+                if( newEntry == null )
+                {
+                    newEntry = entry;
+                }
+
+                newEntries.add( newEntry );
+            }
+
+            if( fixedAttr )
+            {
+                IProgressMonitor monitor = new NullProgressMonitor();
+
+                javaProject.setRawClasspath( newEntries.toArray( new IClasspathEntry[0] ), monitor );
+
+                try
+                {
+                    javaProject.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                }
+                catch( Exception e )
+                {
+                    ProjectCorePlugin.logError( e );
+                }
+            }
+
+            fixExtProjectSrcFolderLinks( project );
+        }
+        catch( Exception ex )
+        {
+            ProjectCorePlugin.logError( "Exception trying to fix Ext project classpath entries.", ex );
+        }
+    }
+
+    /** IDE-270 */
+    public static void fixExtProjectSrcFolderLinks( IProject extProject ) throws JavaModelException
+    {
+        if( extProject != null )
+        {
+            IJavaProject javaProject = JavaCore.create( extProject );
+
+            if( javaProject != null )
+            {
+                final IVirtualComponent c = ComponentCore.createComponent( extProject, false );
+
+                if( c != null )
+                {
+                    final IVirtualFolder jsrc = c.getRootFolder().getFolder( "/WEB-INF/classes" );
+
+                    if( jsrc != null )
+                    {
+                        final IClasspathEntry[] cp = javaProject.getRawClasspath();
+
+                        for( int i = 0; i < cp.length; i++ )
+                        {
+                            final IClasspathEntry cpe = cp[i];
+
+                            if( cpe.getEntryKind() == IClasspathEntry.CPE_SOURCE )
+                            {
+                                if( cpe.getPath().removeFirstSegments( 1 ).segmentCount() > 0 )
+                                {
+                                    try
+                                    {
+                                        IFolder srcFolder =
+                                            ResourcesPlugin.getWorkspace().getRoot().getFolder( cpe.getPath() );
+
+                                        IVirtualResource[] virtualResource = ComponentCore.createResources( srcFolder );
+
+                                        // create link for source folder only when it is not mapped
+                                        if( virtualResource.length == 0 )
+                                        {
+                                            jsrc.createLink( cpe.getPath().removeFirstSegments( 1 ), 0, null );
+                                        }
+                                    }
+                                    catch( Exception e )
+                                    {
+                                        ProjectCorePlugin.logError( e );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static IFacetedProject getFacetedProject( IProject project )
+    {
+        try
+        {
+            return ProjectFacetsManager.create( project );
+        }
+        catch( CoreException e )
+        {
+            return null;
+        }
+    }
+
+    public static Set<IProjectFacetVersion> getFacetsForPreset( String presetId )
+    {
+        IPreset preset = ProjectFacetsManager.getPreset( presetId );
+        return preset.getProjectFacets();
+    }
+
+    public static IProjectFacet getLiferayFacet( IFacetedProject facetedProject )
+    {
+        for( IProjectFacetVersion projectFacet : facetedProject.getProjectFacets() )
+        {
+            if( isLiferayFacet( projectFacet.getProjectFacet() ) )
+            {
+                return projectFacet.getProjectFacet();
+            }
+        }
+
+        return null;
+    }
+
+    public static String getLiferayPluginType( String projectLocation )
+    {
+        if( isLiferayProjectDir( new File( projectLocation ) ) )
+        {
+            String suffix = "";
+
+            if( projectLocation.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                suffix = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+            }
+            else if( projectLocation.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                suffix = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+            }
+            else if( projectLocation.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                suffix = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+            }
+            else if( projectLocation.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                suffix = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+            }
+            else if( projectLocation.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                suffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+            }
+
+            return suffix.replace( "-", "" );
+        }
+
+        return null;
+    }
+
+    public static IFile getPortletXmlFile( IProject project )
     {
         IFile retval = null;
-        
+
         if( project != null && ProjectUtil.isLiferayProject( project ) )
         {
             final IFolder docroot = CoreUtil.getDocroot( project );
-            
+
             if( docroot != null )
             {
                 retval = docroot.getFile( "WEB-INF/portlet.xml" );
             }
         }
-        
+
         return retval;
     }
 
-	public static IProject getProject( IDataModel model )
-	{
-		if( model != null )
-		{
-			String projectName = model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
-			return CoreUtil.getProject( projectName );
-		}
-		return null;
-	}
+    public static IProject getProject( IDataModel model )
+    {
+        if( model != null )
+        {
+            String projectName = model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
+            return CoreUtil.getProject( projectName );
+        }
 
-	public static IProject getProject( String projectName )
-	{
-		return ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
-	}
+        return null;
+    }
 
-	public static ProjectRecord getProjectRecordForDir( String dir )
-	{
-		ProjectRecord projectRecord = null;
-		File projectDir = new File( dir );
+    public static IProject getProject( String projectName )
+    {
+        return ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
+    }
 
-		if( isLiferayProjectDir( projectDir ) )
-		{
-			// determine if this is a previous eclipse project or vanilla
+    public static ProjectRecord getProjectRecordForDir( String dir )
+    {
+        ProjectRecord projectRecord = null;
+        File projectDir = new File( dir );
 
-			String[] files = projectDir.list();
+        if( isLiferayProjectDir( projectDir ) )
+        {
+            // determine if this is a previous eclipse project or vanilla
 
-			for( String file : files )
-			{
-				if( IProjectDescription.DESCRIPTION_FILE_NAME.equals( file ) )
-				{
-					projectRecord = new ProjectRecord( new File( projectDir, file ) );
-				}
-			}
+            String[] files = projectDir.list();
 
-			if( projectRecord == null )
-			{
-				projectRecord = new ProjectRecord( projectDir );
-			}
-		}
+            for( String file : files )
+            {
+                if( IProjectDescription.DESCRIPTION_FILE_NAME.equals( file ) )
+                {
+                    projectRecord = new ProjectRecord( new File( projectDir, file ) );
+                }
+            }
 
-		return projectRecord;
-	}
+            if( projectRecord == null )
+            {
+                projectRecord = new ProjectRecord( projectDir );
+            }
+        }
 
-	public static String getRelativePathFromDocroot( IProject project, String path )
-	{
-		IFolder docroot = CoreUtil.getDocroot( project );
+        return projectRecord;
+    }
 
-		IPath pathValue = new Path( path );
+    public static String getRelativePathFromDocroot( IProject project, String path )
+    {
+        IFolder docroot = CoreUtil.getDocroot( project );
 
-		IPath relativePath = pathValue.makeRelativeTo( docroot.getFullPath() );
+        IPath pathValue = new Path( path );
 
-		String retval = relativePath.toPortableString();
+        IPath relativePath = pathValue.makeRelativeTo( docroot.getFullPath() );
 
-		return retval.startsWith( "/" ) ? retval : "/" + retval;
-	}
+        String retval = relativePath.toPortableString();
 
-	public static IPackageFragmentRoot[] getSourceContainers( IProject project )
-	{
-		IJavaProject jProject = JavaCore.create( project );
-		if( jProject == null )
-			return new IPackageFragmentRoot[0];
-		List<IPackageFragmentRoot> list = new ArrayList<IPackageFragmentRoot>();
-		IVirtualComponent vc = ComponentCore.createComponent( project );
-		IPackageFragmentRoot[] roots;
-		try
-		{
-			roots = jProject.getPackageFragmentRoots();
-			for( int i = 0; i < roots.length; i++ )
-			{
-				if( roots[i].getKind() != IPackageFragmentRoot.K_SOURCE )
-					continue;
-				IResource resource = roots[i].getResource();
-				if( null != resource )
-				{
-					IVirtualResource[] vResources = ComponentCore.createResources( resource );
-					boolean found = false;
-					for( int j = 0; !found && j < vResources.length; j++ )
-					{
-						if( vResources[j].getComponent().equals( vc ) )
-						{
-							if( !list.contains( roots[i] ) )
-								list.add( roots[i] );
-							found = true;
-						}
-					}
-				}
-			}
+        return retval.startsWith( "/" ) ? retval : "/" + retval;
+    }
 
-			if (list.size() == 0)
-			{
-			    for (IPackageFragmentRoot root : roots)
-			    {
-			        if (root.getKind() == IPackageFragmentRoot.K_SOURCE)
-			        {
-                        if (!list.contains( root ))
+    public static IPackageFragmentRoot[] getSourceContainers( IProject project )
+    {
+        IJavaProject jProject = JavaCore.create( project );
+
+        if( jProject == null )
+        {
+            return new IPackageFragmentRoot[0];
+        }
+
+        List<IPackageFragmentRoot> list = new ArrayList<IPackageFragmentRoot>();
+        IVirtualComponent vc = ComponentCore.createComponent( project );
+        IPackageFragmentRoot[] roots;
+
+        try
+        {
+            roots = jProject.getPackageFragmentRoots();
+
+            for( int i = 0; i < roots.length; i++ )
+            {
+                if( roots[i].getKind() != IPackageFragmentRoot.K_SOURCE )
+                {
+                    continue;
+                }
+
+                IResource resource = roots[i].getResource();
+
+                if( null != resource )
+                {
+                    IVirtualResource[] vResources = ComponentCore.createResources( resource );
+                    boolean found = false;
+
+                    for( int j = 0; !found && j < vResources.length; j++ )
+                    {
+                        if( vResources[j].getComponent().equals( vc ) )
                         {
-                            list.add(root);
+                            if( !list.contains( roots[i] ) )
+                            {
+                                list.add( roots[i] );
+                            }
+
+                            found = true;
                         }
-			        }
-			    }
-			}
-		}
-		catch( JavaModelException e )
-		{
-			ProjectCorePlugin.logError( e );
-		}
+                    }
+                }
+            }
 
-		return list.toArray( new IPackageFragmentRoot[list.size()] );
-	}
+            if( list.size() == 0 )
+            {
+                for( IPackageFragmentRoot root : roots )
+                {
+                    if( root.getKind() == IPackageFragmentRoot.K_SOURCE )
+                    {
+                        if( !list.contains( root ) )
+                        {
+                            list.add( root );
+                        }
+                    }
+                }
+            }
+        }
+        catch( JavaModelException e )
+        {
+            ProjectCorePlugin.logError( e );
+        }
 
-	public static IFolder[] getSourceFolders( IProject project )
-	{
-		List<IFolder> sourceFolders = new ArrayList<IFolder>();
+        return list.toArray( new IPackageFragmentRoot[list.size()] );
+    }
 
-		IPackageFragmentRoot[] sources = getSourceContainers( project );
+    public static IFolder[] getSourceFolders( IProject project )
+    {
+        List<IFolder> sourceFolders = new ArrayList<IFolder>();
 
-		for( IPackageFragmentRoot source : sources )
-		{
-			if( source.getResource() instanceof IFolder )
-			{
-				sourceFolders.add( ( (IFolder) source.getResource() ) );
-			}
-		}
+        IPackageFragmentRoot[] sources = getSourceContainers( project );
 
-		return sourceFolders.toArray( new IFolder[sourceFolders.size()] );
-	}
+        for( IPackageFragmentRoot source : sources )
+        {
+            if( source.getResource() instanceof IFolder )
+            {
+                sourceFolders.add( ( (IFolder) source.getResource() ) );
+            }
+        }
 
-	public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
-	{
-		boolean retval = false;
-		if( project == null || checkProjectFacet == null )
-		{
-			return retval;
-		}
+        return sourceFolders.toArray( new IFolder[sourceFolders.size()] );
+    }
 
-		try
-		{
-			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
-			if( facetedProject != null && checkProjectFacet != null )
-			{
-				for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
-				{
-					IProjectFacet projectFacet = facet.getProjectFacet();
-					if( checkProjectFacet.equals( projectFacet ) )
-					{
-						retval = true;
-						break;
-					}
-				}
-			}
-		}
-		catch( CoreException e )
-		{
-		}
-		return retval;
-	}
+    public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
+    {
+        boolean retval = false;
 
-	public static boolean hasFacet( IProject project, String facetId )
-	{
-		return hasFacet( project, ProjectFacetsManager.getProjectFacet( facetId ) );
-	}
+        if( project == null || checkProjectFacet == null )
+        {
+            return retval;
+        }
 
-	public static boolean hasProperty( IDataModel model, String propertyName )
-	{
-		boolean retval = false;
+        try
+        {
+            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
 
-		if( model == null || CoreUtil.isNullOrEmpty( propertyName ) )
-		{
-			return retval;
-		}
+            if( facetedProject != null && checkProjectFacet != null )
+            {
+                for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
+                {
+                    IProjectFacet projectFacet = facet.getProjectFacet();
 
-		for( Object property : model.getAllProperties() )
-		{
-			if( propertyName.equals( property ) )
-			{
-				retval = true;
-				break;
-			}
-		}
+                    if( checkProjectFacet.equals( projectFacet ) )
+                    {
+                        retval = true;
+                        break;
+                    }
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+        }
 
-		return retval;
-	}
+        return retval;
+    }
 
-	public static IProject importProject(
-		ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
-		throws CoreException
-	{
+    public static boolean hasFacet( IProject project, String facetId )
+    {
+        return hasFacet( project, ProjectFacetsManager.getProjectFacet( facetId ) );
+    }
 
-		IProject project = null;
+    public static boolean hasProperty( IDataModel model, String propertyName )
+    {
+        boolean retval = false;
 
-		if( projectRecord.projectSystemFile != null )
-		{
-			try
-			{
-				project = createExistingProject( projectRecord, runtime, sdkLocation, monitor );
-			}
-			catch( CoreException e )
-			{
-				throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
-			}
-		}
-		else if( projectRecord.liferayProjectDir != null )
-		{
-			try
-			{
-				project = createNewProject( projectRecord, runtime, sdkLocation, monitor );
-			}
-			catch( CoreException e )
-			{
-				throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
-			}
-		}
+        if( model == null || CoreUtil.isNullOrEmpty( propertyName ) )
+        {
+            return retval;
+        }
 
-		return project;
-	}
+        for( Object property : model.getAllProperties() )
+        {
+            if( propertyName.equals( property ) )
+            {
+                retval = true;
+                break;
+            }
+        }
 
-	public static boolean isDynamicWebFacet( IProjectFacet facet )
-	{
-		return facet != null && facet.getId().equals( IModuleConstants.JST_WEB_MODULE );
-	}
+        return retval;
+    }
 
-	public static boolean isDynamicWebFacet( IProjectFacetVersion facetVersion )
-	{
-		return facetVersion != null && isDynamicWebFacet( facetVersion.getProjectFacet() );
-	}
+    public static IProject importProject(
+        ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
+        throws CoreException
+    {
+        IProject project = null;
 
-	public static boolean isExtProject( IProject project )
-	{
-		return hasFacet( project, IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET );
-	}
+        if( projectRecord.projectSystemFile != null )
+        {
+            try
+            {
+                project = createExistingProject( projectRecord, runtime, sdkLocation, monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+            }
+        }
+        else if( projectRecord.liferayProjectDir != null )
+        {
+            try
+            {
+                project = createNewProject( projectRecord, runtime, sdkLocation, monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+            }
+        }
 
-	public static boolean isHookProject( IProject project )
-	{
-		return hasFacet( project, IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET );
-	}
+        return project;
+    }
 
-	public static boolean isJavaFacet( IProjectFacet facet )
-	{
-		return facet != null &&
-			( facet.getId().equals( JavaFacet.ID ) || facet.getId().equals( IModuleConstants.JST_JAVA ) );
-	}
+    public static boolean isDynamicWebFacet( IProjectFacet facet )
+    {
+        return facet != null && facet.getId().equals( IModuleConstants.JST_WEB_MODULE );
+    }
 
-	public static boolean isJavaFacet( IProjectFacetVersion facetVersion )
-	{
-		return facetVersion != null && isJavaFacet( facetVersion.getProjectFacet() );
-	}
+    public static boolean isDynamicWebFacet( IProjectFacetVersion facetVersion )
+    {
+        return facetVersion != null && isDynamicWebFacet( facetVersion.getProjectFacet() );
+    }
 
-	public static boolean isLayoutTplProject( IProject project )
-	{
-		return hasFacet( project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID );
-	}
+    public static boolean isExtProject( IProject project )
+    {
+        return hasFacet( project, IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET );
+    }
 
-	public static boolean isLiferayFacet( IProjectFacet projectFacet )
-	{
-		return ProjectCorePlugin.getProjectDefinition( projectFacet ) != null;
-	}
+    public static boolean isHookProject( IProject project )
+    {
+        return hasFacet( project, IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET );
+    }
 
-	public static boolean isLiferayFacet( IProjectFacetVersion projectFacetVersion )
-	{
-		return projectFacetVersion != null &&
-			ProjectCorePlugin.getProjectDefinition( projectFacetVersion.getProjectFacet() ) != null;
-	}
+    public static boolean isJavaFacet( IProjectFacet facet )
+    {
+        return facet != null &&
+            ( facet.getId().equals( JavaFacet.ID ) || facet.getId().equals( IModuleConstants.JST_JAVA ) );
+    }
 
-	public static boolean isLiferayPluginType( String type )
-	{
-		return type != null &&
-			( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-				ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-				ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-				ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith( type ) || ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
-	}
+    public static boolean isJavaFacet( IProjectFacetVersion facetVersion )
+    {
+        return facetVersion != null && isJavaFacet( facetVersion.getProjectFacet() );
+    }
 
-	public static boolean isLiferayProject( IFolder folder )
-	{
-		return folder != null && folder.exists() && folder.getRawLocation() != null &&
-			isLiferayProjectDir( folder.getRawLocation().toFile() );
-	}
+    public static boolean isLayoutTplProject( IProject project )
+    {
+        return hasFacet( project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID );
+    }
 
-	public static boolean isLiferayProject( IProject project )
-	{
-		boolean retval = false;
+    public static boolean isLiferayFacet( IProjectFacet projectFacet )
+    {
+        return ProjectCorePlugin.getProjectDefinition( projectFacet ) != null;
+    }
 
-		if( project == null )
-		{
-			return retval;
-		}
+    public static boolean isLiferayFacet( IProjectFacetVersion projectFacetVersion )
+    {
+        return projectFacetVersion != null &&
+            ProjectCorePlugin.getProjectDefinition( projectFacetVersion.getProjectFacet() ) != null;
+    }
 
-		try
-		{
-			IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+    public static boolean isLiferayPluginType( String type )
+    {
+        return type != null &&
+            ( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
+    }
 
-			if( facetedProject != null )
-			{
-				for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
-				{
-					IProjectFacet projectFacet = facet.getProjectFacet();
-					IProjectDefinition projectDefinition = ProjectCorePlugin.getProjectDefinition( projectFacet );
+    public static boolean isLiferayProject( IFolder folder )
+    {
+        return folder != null && folder.exists() && folder.getRawLocation() != null &&
+            isLiferayProjectDir( folder.getRawLocation().toFile() );
+    }
 
-					if( projectDefinition != null )
-					{
-						retval = true;
-						break;
-					}
-				}
-			}
-		}
-		catch( Exception e )
-		{
-		}
+    public static boolean isLiferayProject( IProject project )
+    {
+        boolean retval = false;
 
-		return retval;
-	}
+        if( project == null )
+        {
+            return retval;
+        }
 
-	public static boolean isLiferayProjectDir( File file )
-	{
-		if( file.isDirectory() && isValidLiferayProjectDir( file ) )
-		{
-			// check for build.xml and docroot
-			File[] contents = file.listFiles();
+        try
+        {
+            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
 
-			boolean hasBuildXml = false;
+            if( facetedProject != null )
+            {
+                for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
+                {
+                    IProjectFacet projectFacet = facet.getProjectFacet();
+                    IProjectDefinition projectDefinition = ProjectCorePlugin.getProjectDefinition( projectFacet );
 
-			boolean hasDocroot = false;
+                    if( projectDefinition != null )
+                    {
+                        retval = true;
+                        break;
+                    }
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
 
-			for( File content : contents )
-			{
-				if( content.getName().equals( "build.xml" ) )
-				{
-					hasBuildXml = true;
+        return retval;
+    }
 
-					continue;
-				}
+    public static boolean isLiferayProjectDir( File file )
+    {
+        if( file.isDirectory() && isValidLiferayProjectDir( file ) )
+        {
+            // check for build.xml and docroot
+            File[] contents = file.listFiles();
 
-				if( content.getName().equals( "docroot" ) )
-				{
-					hasDocroot = true;
+            boolean hasBuildXml = false;
 
-					continue;
-				}
-			}
+            boolean hasDocroot = false;
 
-			if( hasBuildXml && hasDocroot )
-			{
-				return true;
-			}
-		}
+            for( File content : contents )
+            {
+                if( content.getName().equals( "build.xml" ) )
+                {
+                    hasBuildXml = true;
 
-		return false;
-	}
+                    continue;
+                }
 
-	public static boolean isParent( IFolder folder, IResource resource )
-	{
-		if( folder == null || resource == null )
-		{
-			return false;
-		}
+                if( content.getName().equals( "docroot" ) )
+                {
+                    hasDocroot = true;
 
-		if( resource.getParent() != null && resource.getParent().equals( folder ) )
-		{
-			return true;
-		}
-		else
-		{
-			boolean retval = isParent( folder, resource.getParent() );
-			if( retval == true )
-			{
-				return true;
-			}
-		}
+                    continue;
+                }
+            }
 
-		return false;
-	}
+            if( hasBuildXml && hasDocroot )
+            {
+                return true;
+            }
+        }
 
-	public static boolean isPortletProject( IProject project )
-	{
-		return hasFacet( project, IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET );
-	}
+        return false;
+    }
 
-	public static boolean isSDKProject( IProject project )
-	{
-		if( project == null || ( !project.exists() ) || ( !project.isAccessible() ) )
-		{
-			return false;
-		}
+    public static boolean isParent( IFolder folder, IResource resource )
+    {
+        if( folder == null || resource == null )
+        {
+            return false;
+        }
 
-		return SDKUtil.isValidSDKLocation( project.getLocation().toOSString() );
-	}
+        if( resource.getParent() != null && resource.getParent().equals( folder ) )
+        {
+            return true;
+        }
+        else
+        {
+            boolean retval = isParent( folder, resource.getParent() );
 
-	public static boolean isThemeProject( IProject project )
-	{
-		return hasFacet( project, IPluginFacetConstants.LIFERAY_THEME_FACET_ID );
-	}
+            if( retval == true )
+            {
+                return true;
+            }
+        }
 
-	public static boolean isValidLiferayProjectDir( File dir )
-	{
-		String name = dir.getName();
+        return false;
+    }
 
-		if( name.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
-			name.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
-			name.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
-			name.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
-			name.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			return true;
-		}
+    public static boolean isPortletProject( IProject project )
+    {
+        return hasFacet( project, IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET );
+    }
 
-		return false;
-	}
+    public static boolean isSDKProject( IProject project )
+    {
+        if( project == null || ( !project.exists() ) || ( !project.isAccessible() ) )
+        {
+            return false;
+        }
 
-	public static String removePluginSuffix( String string )
-	{
-		if( string == null )
-		{
-			return null;
-		}
+        return SDKUtil.isValidSDKLocation( project.getLocation().toOSString() );
+    }
 
-		String regex = null;
+    public static boolean isThemeProject( IProject project )
+    {
+        return hasFacet( project, IPluginFacetConstants.LIFERAY_THEME_FACET_ID );
+    }
 
-		if( string.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			regex = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX + "$";
-		}
-		else if( string.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			regex = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX + "$";
-		}
-		else if( string.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			regex = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX + "$";
-		}
-		else if( string.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			regex = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "$";
-		}
-		else if( string.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
-		{
-			regex = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX + "$";
-		}
-		else
-		{
-			return string;
-		}
+    public static boolean isValidLiferayProjectDir( File dir )
+    {
+        String name = dir.getName();
 
-		return string.replaceFirst( regex, "" );
-	}
+        if( name.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
+            name.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
+            name.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
+            name.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
+            name.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            return true;
+        }
 
-	public static void setGenerateDD( IDataModel model, boolean generateDD )
-	{
-		IDataModel ddModel = null;
+        return false;
+    }
 
-		if( hasProperty( model, IJ2EEFacetInstallDataModelProperties.GENERATE_DD ) )
-		{
-			ddModel = model;
-		}
-		else if( hasProperty( model, IFacetProjectCreationDataModelProperties.FACET_DM_MAP ) )
-		{
-			FacetDataModelMap map =
-				(FacetDataModelMap) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_DM_MAP );
-			ddModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
-		}
+    public static String removePluginSuffix( String string )
+    {
+        if( string == null )
+        {
+            return null;
+        }
 
-		if( ddModel != null )
-		{
-			ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
-		}
-	}
+        String regex = null;
+
+        if( string.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            regex = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX + "$";
+        }
+        else if( string.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            regex = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX + "$";
+        }
+        else if( string.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            regex = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX + "$";
+        }
+        else if( string.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            regex = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "$";
+        }
+        else if( string.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            regex = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX + "$";
+        }
+        else
+        {
+            return string;
+        }
+
+        return string.replaceFirst( regex, "" );
+    }
+
+    public static void setGenerateDD( IDataModel model, boolean generateDD )
+    {
+        IDataModel ddModel = null;
+
+        if( hasProperty( model, IJ2EEFacetInstallDataModelProperties.GENERATE_DD ) )
+        {
+            ddModel = model;
+        }
+        else if( hasProperty( model, IFacetProjectCreationDataModelProperties.FACET_DM_MAP ) )
+        {
+            FacetDataModelMap map =
+                (FacetDataModelMap) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_DM_MAP );
+            ddModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
+        }
+
+        if( ddModel != null )
+        {
+            ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
+        }
+    }
 
 }

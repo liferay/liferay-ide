@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
 
@@ -69,7 +70,14 @@ public class HookPluginFacetInstall extends PluginFacetInstall
             // cleanup hook files
             FileUtil.deleteDir( tempInstallPath.toFile(), true );
 
-            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            try
+            {
+                this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            }
+            catch( Exception e )
+            {
+                ProjectCorePlugin.logError( e );
+            }
         }
         else
         {

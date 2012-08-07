@@ -19,6 +19,7 @@ package com.liferay.ide.layouttpl.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.sdk.ISDKConstants;
@@ -104,7 +105,14 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
             }
         }
 
-        this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        try
+        {
+            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e )
+        {
+            LayoutTplCore.logError( e );
+        }
     }
 
     @Override

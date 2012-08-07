@@ -123,7 +123,14 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             // cleanup portlet files
             FileUtil.deleteDir( newPortletPath.toFile(), true );
 
-            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            try
+            {
+                this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            }
+            catch( Exception e )
+            {
+                ProjectCorePlugin.logError( e );
+            }
 
             if( masterModel.getBooleanProperty( PLUGIN_FRAGMENT_ENABLED ) )
             {
@@ -177,7 +184,14 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 );
         }
 
-        this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        try
+        {
+            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e1 )
+        {
+            ProjectCorePlugin.logError( e1 );
+        }
 
         // IDE-417 set a project preference for disabling JSP fragment validation
         try

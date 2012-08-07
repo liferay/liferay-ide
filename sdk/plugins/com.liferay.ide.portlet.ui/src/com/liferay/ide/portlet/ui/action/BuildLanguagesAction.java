@@ -105,7 +105,16 @@ public class BuildLanguagesAction extends AbstractObjectAction
     protected boolean checkLanguageFileEncoding( IFile langFile ) throws CoreException
     {
         IProgressMonitor monitor = new NullProgressMonitor();
-        langFile.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        try
+        {
+            langFile.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e )
+        {
+            PortletUIPlugin.logError( e );
+        }
+
         String charset = langFile.getCharset( true );
 
         if( !"UTF-8".equals( charset ) )

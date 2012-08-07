@@ -90,7 +90,14 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             // cleanup ext temp files
             FileUtil.deleteDir( tempInstallPath.toFile(), true );
 
-            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            try
+            {
+                this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            }
+            catch( Exception e )
+            {
+                ProjectCorePlugin.logError( e );
+            }
 
             deleteFolder( this.project.getFolder( "docroot/WEB-INF/src" ) );
             deleteFolder( this.project.getFolder( "docroot/WEB-INF/classes" ) );
