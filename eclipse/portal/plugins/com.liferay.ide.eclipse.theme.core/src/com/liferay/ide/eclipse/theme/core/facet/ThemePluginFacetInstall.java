@@ -22,6 +22,7 @@ import com.liferay.ide.eclipse.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.theme.core.ThemeCSSBuilder;
+import com.liferay.ide.eclipse.theme.core.ThemeCore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +101,14 @@ public class ThemePluginFacetInstall extends PluginFacetInstall {
 
 		installThemeBuilder( this.project );
 
-		this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+		try
+        {
+            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e )
+        {
+            ThemeCore.logError( e );
+        }
 	}
 
 	@Override

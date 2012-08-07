@@ -83,7 +83,14 @@ public class BuildServiceJob extends SDKJob {
 
 					runBuildService(monitor);
 
-					getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					try
+                    {
+                        getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+                    }
+                    catch( Exception e )
+                    {
+                        PortletCore.logError( e );
+                    }
 
 					ResourcesPlugin.getWorkspace().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
@@ -91,7 +98,14 @@ public class BuildServiceJob extends SDKJob {
 				}
 			}, monitor);
 
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			try
+            {
+                getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+            }
+            catch( Exception e )
+            {
+                PortletCore.logError( e );
+            }
 		}
 		catch (CoreException e1) {
 			retval = PortletCore.createErrorStatus(e1);

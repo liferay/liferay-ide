@@ -110,7 +110,14 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
 		}
 
 		if (docroot != null && docroot.exists()) {
-			docroot.refreshLocal(IResource.DEPTH_INFINITE, null);
+			try
+            {
+                docroot.refreshLocal(IResource.DEPTH_INFINITE, null);
+            }
+            catch( Exception e )
+            {
+                ThemeCore.logError( e );
+            }
 		}
 		
 		return status;
@@ -182,9 +189,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder {
                 {
                     docroot.refreshLocal( IResource.DEPTH_INFINITE, monitor);
                 }
-                catch( CoreException e )
+                catch( Exception e )
                 {
-                    e.printStackTrace();
+                    ThemeCore.logError( e );
                 }
 
                 return Status.OK_STATUS;

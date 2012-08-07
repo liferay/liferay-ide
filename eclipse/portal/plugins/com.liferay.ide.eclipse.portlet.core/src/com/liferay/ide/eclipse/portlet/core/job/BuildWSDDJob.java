@@ -74,14 +74,36 @@ public class BuildWSDDJob extends SDKJob {
 
 					final IProject project = getProject();
 
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					try
+                    {
+                        project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+                    }
+                    catch( Exception e )
+                    {
+                        PortletCore.logError( e );
+                    }
+                    
 					project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
 
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					try
+                    {
+                        project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+                    }
+                    catch( Exception e )
+                    {
+                        PortletCore.logError( e );
+                    }
 				}
 			}, monitor);
 
-			getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+			try
+            {
+                project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+            }
+            catch( Exception e )
+            {
+                PortletCore.logError( e );
+            }
 		}
 		catch (CoreException e1) {
 			retval = PortletCore.createErrorStatus(e1);

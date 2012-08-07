@@ -411,7 +411,14 @@ public class PluginFacetUtil {
 				IProject project = fpjwc.getProject();
 
 				if (project != null) {
-					project.refreshLocal(IResource.DEPTH_INFINITE, null);
+					try
+                    {
+                        project.refreshLocal(IResource.DEPTH_INFINITE, null);
+                    }
+                    catch( Exception e )
+                    {
+                        ProjectCorePlugin.logError( e );
+                    }
 				}
 			}
 		}

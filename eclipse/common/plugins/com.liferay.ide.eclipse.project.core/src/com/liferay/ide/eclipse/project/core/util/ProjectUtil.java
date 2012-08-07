@@ -512,7 +512,14 @@ public class ProjectUtil
 
 				javaProject.setRawClasspath( newEntries.toArray( new IClasspathEntry[0] ), monitor );
 
-				javaProject.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+				try
+                {
+                    javaProject.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                }
+                catch( Exception e )
+                {
+                    ProjectCorePlugin.logError( e );
+                }
 			}
 
 			fixExtProjectSrcFolderLinks( project );
