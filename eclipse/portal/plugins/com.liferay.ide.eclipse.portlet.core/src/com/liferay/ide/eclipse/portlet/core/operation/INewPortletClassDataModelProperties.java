@@ -116,6 +116,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String[] DEFAULT_SECURITY_ROLE_NAMES = {
 		"administrator", "guest", "power-user", "user"
 	};
+	
+	public static final String SERVERESOURCE_OVERRIDE = "INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE";
 
 	public static final String DESTROY_OVERRIDE = "INewPortletClassDataModelProperties.DESTROY_OVERRIDE"; //$NON-NLS-1$
 

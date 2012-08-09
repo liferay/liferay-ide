@@ -361,6 +361,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		propertyNames.add(DOPREVIEW_OVERRIDE);
 		propertyNames.add(DOPRINT_OVERRIDE);
 		propertyNames.add(PROCESSACTION_OVERRIDE);
+		propertyNames.add(SERVERESOURCE_OVERRIDE);
 
 		propertyNames.add(PORTLET_NAME);
 		propertyNames.add(DISPLAY_NAME);
