@@ -28,6 +28,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewPortletClassOptionsWizardPage extends NewWebClassOptionsWizardPage
@@ -46,6 +47,7 @@ public class NewPortletClassOptionsWizardPage extends NewWebClassOptionsWizardPa
     protected boolean fragment;
     protected Button initButton;
     protected Button processActionButton;
+    protected Button serveResourceButton;
 
     public NewPortletClassOptionsWizardPage(
         IDataModel model, String pageName, String pageDesc, String pageTitle, boolean fragment )
@@ -120,6 +122,10 @@ public class NewPortletClassOptionsWizardPage extends NewWebClassOptionsWizardPa
         processActionButton.setText( "&processAction" ); //$NON-NLS-1$
         synchHelper.synchCheckbox(
             processActionButton, INewPortletClassDataModelProperties.PROCESSACTION_OVERRIDE, null );
+
+        serveResourceButton = new Button(comp, SWT.CHECK);
+        serveResourceButton.setText( "&serveResource" ); //$NON-NLS-1$
+        synchHelper.synchCheckbox( serveResourceButton, INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE, null );
     }
 
     @Override
@@ -156,6 +162,8 @@ public class NewPortletClassOptionsWizardPage extends NewWebClassOptionsWizardPa
         doPrintButton.setEnabled( !mvcPortlet && liferayPortlet && !getDataModel().getBooleanProperty( PRINT_MODE ) );
 
         processActionButton.setEnabled( !mvcPortlet );
+
+        serveResourceButton.setEnabled(!mvcPortlet);
     }
 
 }

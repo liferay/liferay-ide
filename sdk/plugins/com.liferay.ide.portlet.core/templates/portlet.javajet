@@ -70,6 +70,15 @@
         super.processAction(actionRequest, actionResponse);
     }
 <%  } %>
+<%  if (model.shouldGenerateOverride(SERVERESOURCE_OVERRIDE)) { %>
+
+    public void serveResource(
+            ResourceRequest request, ResourceResponse response)
+        throws PortletException, IOException {
+
+        super.serveResource(request, response);
+    }
+<% } %>
 <%  if (model.isMVCPortletSuperclass()) { %>
 <%@ include file="MVCPortlet.template" %>
 <%  } else if (model.isLiferayPortletSuperclass()) {%>

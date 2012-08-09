@@ -19,6 +19,7 @@ import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelPro
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings("restriction")
 public interface INewPortletClassDataModelProperties extends INewJavaClassDataModelProperties 
@@ -193,6 +194,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String QUALIFIED_LIFERAY_PORTLET = "com.liferay.portal.kernel.portlet.LiferayPortlet";
 
 	public static final String QUALIFIED_MVC_PORTLET = "com.liferay.util.bridges.mvc.MVCPortlet";
+
+	public static final String SERVERESOURCE_OVERRIDE = "INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE";
 
 	public static final String SHORT_TITLE = "INewPortletClassDataModelProperties.SHORT_TITLE";
 
