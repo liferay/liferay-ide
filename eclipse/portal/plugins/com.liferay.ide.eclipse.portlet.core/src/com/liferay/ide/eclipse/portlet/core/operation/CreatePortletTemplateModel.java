@@ -22,6 +22,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings("restriction")
 public class CreatePortletTemplateModel extends CreateWebClassTemplateModel {
@@ -55,6 +56,11 @@ public class CreatePortletTemplateModel extends CreateWebClassTemplateModel {
 		if (shouldGenerateOverride(INewPortletClassDataModelProperties.PROCESSACTION_OVERRIDE)) {
 			collection.add("javax.portlet.ActionRequest");
 			collection.add("javax.portlet.ActionResponse");
+		}
+		
+		if (shouldGenerateOverride(INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE)) {
+		    collection.add("javax.portlet.ResourceRequest");
+		    collection.add("javax.portlet.ResourceResponse");
 		}
 
 		return collection;
