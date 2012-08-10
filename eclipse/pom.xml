@@ -137,12 +137,8 @@
                 <platform-version-name>indigo</platform-version-name>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
-                <emf-site>http://download.eclipse.org/modeling/emf/updates/releases/</emf-site>
-                <gef-site>http://download.eclipse.org/tools/gef/updates/releases/</gef-site>
-                <mpc-site>http://download.eclipse.org/mpc/indigo/</mpc-site>
-                <datatools-site>http://download.eclipse.org/datatools/updates</datatools-site>
+                <indigo-site>http://download.eclipse.org/releases/indigo</indigo-site>
                 <greclipse-site>http://dist.springsource.org/release/GRECLIPSE/e3.7/</greclipse-site>
-                <xsd-site>http://download.eclipse.org/modeling/mdt/updates/releases/</xsd-site>
                 <platform-version>[3.7,3.8)</platform-version>
             </properties>
             <repositories>
@@ -166,35 +162,15 @@
                     <layout>p2</layout>
                     <url>${wtp-site}</url>
                 </repository>
-                <repository>
-                    <id>emf</id>
-                    <layout>p2</layout>
-                    <url>${emf-site}</url>
-                </repository>
-                <repository>
-                    <id>gef</id>
-                    <layout>p2</layout>
-                    <url>${gef-site}</url>
-                </repository>
-                <repository>
-                    <id>mpc</id>
-                    <layout>p2</layout>
-                    <url>${mpc-site}</url>
-                </repository>
-                <repository>
-                    <id>datatools</id>
-                    <layout>p2</layout>
-                    <url>${datatools-site}</url>
-                </repository>
-                <repository>
+               <repository>
                     <id>greclipse-site</id>
                     <layout>p2</layout>
                     <url>${greclipse-site}</url>
                 </repository>
                 <repository>
-                    <id>xsd</id>
+                    <id>indigo-site</id>
                     <layout>p2</layout>
-                    <url>${xsd-site}</url>
+                    <url>${indigo-site}</url>
                 </repository>
             </repositories>
         </profile>
