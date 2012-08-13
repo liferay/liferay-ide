@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.core.util.StringBufferOutputStream;
 import com.liferay.ide.eclipse.portlet.core.PortletCore;
 import com.liferay.ide.eclipse.portlet.core.dd.HookDescriptorHelper;
+import com.liferay.ide.eclipse.project.core.util.LiferayDataModelOperation;
 import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.util.ServerUtil;
@@ -57,7 +58,6 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
-import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
@@ -69,6 +69,7 @@ import org.eclipse.wst.validation.internal.ValidatorMutable;
 import org.eclipse.wst.validation.internal.model.FilterGroup;
 import org.eclipse.wst.validation.internal.model.FilterRule;
 import org.eclipse.wst.validation.internal.model.ProjectPreferences;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -76,16 +77,10 @@ import org.eclipse.wst.validation.internal.model.ProjectPreferences;
 @SuppressWarnings( {
 	"restriction", "unchecked"
 })
-public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties {
-
-	protected TemplateContextType contextType;
-	protected TemplateStore templateStore;
+public class AddHookOperation extends LiferayDataModelOperation implements INewHookDataModelProperties {
 
 	public AddHookOperation(IDataModel model, TemplateStore templateStore, TemplateContextType contextType) {
-		super(model);
-
-		this.templateStore = templateStore;
-		this.contextType = contextType;
+		super(model, templateStore, contextType );
 	}
 
 	@Override
@@ -290,8 +285,27 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 	protected void createDefaultHookDescriptorFile(IFile hookDescriptorFile)
 		throws UnsupportedEncodingException, CoreException, BadLocationException, TemplateException {
 
-		Template template = templateStore.findTemplateById(HOOK_DESCRIPTOR_TEMPLATE);
-
+	    Template template = null;
+	    
+	    try
+	    {
+	        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getTargetProject() );
+	        Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
+            
+	        if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )
+	        {
+	            template = getTemplateStore().findTemplateById( HOOK_DESCRIPTOR_61_TEMPLATE );
+	        }
+	    }
+	    catch( Exception e )
+	    {
+	    }
+	    
+	    if( template == null )
+	    {
+	        template = getTemplateStore().findTemplateById(HOOK_DESCRIPTOR_TEMPLATE);
+	    }
+	    
 		IDocument document = new Document();
 
 		TemplateContext context = new DocumentTemplateContext(contextType, document, 0, 0);
