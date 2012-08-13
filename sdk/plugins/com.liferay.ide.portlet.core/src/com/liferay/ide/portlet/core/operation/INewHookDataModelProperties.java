@@ -48,6 +48,8 @@ public interface INewHookDataModelProperties extends IArtifactEditOperationDataM
 
     public static final String HOOK_DESCRIPTOR_TEMPLATE = "com.liferay.ide.templates.hook.descriptor";
 
+    public static final String HOOK_DESCRIPTOR_61_TEMPLATE = "com.liferay.ide.eclipse.templates.hook.descriptor.61";
+
     public static final String LANGUAGE_PROPERTIES_FILES_CREATED =
         "INewHookDataModelProperties.LANGUAGE_PROPERTIES_FILES_CREATED";
 
