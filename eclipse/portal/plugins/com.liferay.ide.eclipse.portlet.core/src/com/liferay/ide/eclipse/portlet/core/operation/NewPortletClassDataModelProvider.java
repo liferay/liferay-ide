@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -630,6 +630,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			{
 				return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
 			}
+		}
+		else if( CLASS_NAME.equals( propertyName ) )
+		{
+		    if( getBooleanProperty( USE_DEFAULT_PORTLET_CLASS ) )
+		    {
+		        return Status.OK_STATUS;
+		    }
 		}
 
 		return super.validate(propertyName);
