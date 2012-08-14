@@ -631,6 +631,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 				return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
 			}
 		}
+		else if ( CLASS_NAME.equals( propertyName ) )
+		{
+		    if( getBooleanProperty( USE_DEFAULT_PORTLET_CLASS ))
+		    {
+		        return Status.OK_STATUS;
+		    }
+		}
 
 		return super.validate(propertyName);
 	}
