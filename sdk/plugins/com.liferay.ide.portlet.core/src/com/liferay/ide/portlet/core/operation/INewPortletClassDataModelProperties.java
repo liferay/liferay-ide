@@ -169,6 +169,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String INIT_OVERRIDE = "INewPortletClassDataModelProperties.INIT_OVERRIDE"; //$NON-NLS-1$
 
+	public static final String INIT_PARAMETER_NAME = "INewPortletClassDataModelProperties.INIT_PARAMETER_NAME";
+
 	public static final String INIT_PARAMS = "INewPortletClassDataModelProperties.INIT_PARAMS";
 
 	public static final String JAVASCRIPT_FILE = "INewPortletClassDataModelProperties.JAVASCRIPT_FILE";

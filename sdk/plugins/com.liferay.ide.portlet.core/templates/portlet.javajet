@@ -15,43 +15,43 @@
 <%  if (model.shouldGenerateOverride(INIT_OVERRIDE) && model.isLiferayPortletSuperclass()) {%>
     public void init() {
 <%      if (model.hasPortletMode(ABOUT_MODE)) {%>
-        aboutJSP = getInitParameter("about-jsp");
+        aboutJSP = getInitParameter("about-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(CONFIG_MODE)) {%>
-        configJSP = getInitParameter("config-jsp");
+        configJSP = getInitParameter("config-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(EDITDEFAULTS_MODE)) {%>
-        editDefaultsJSP = getInitParameter("edit-defaults-jsp");
+        editDefaultsJSP = getInitParameter("edit-defaults-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(EDITGUEST_MODE)) {%>
-        editGuestJSP = getInitParameter("edit-guest-jsp");
+        editGuestJSP = getInitParameter("edit-guest-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(PREVIEW_MODE)) {%>
-        previewJSP = getInitParameter("preview-jsp");
+        previewJSP = getInitParameter("preview-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(PRINT_MODE)) {%>
-        printJSP = getInitParameter("print-jsp");
+        printJSP = getInitParameter("print-<%=model.getInitParameterName()%>");
 <%      }%>
 <%      if (model.hasPortletMode(EDIT_MODE)) {%>
-        editJSP = getInitParameter("edit-jsp");
+        editJSP = getInitParameter("edit-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(HELP_MODE)) {%>
-        helpJSP = getInitParameter("help-jsp");
+        helpJSP = getInitParameter("help-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(VIEW_MODE)) {%>
-        viewJSP = getInitParameter("view-jsp");
+        viewJSP = getInitParameter("view-<%=model.getInitParameterName()%>");
 <%      }%>
     }
 <%  } else if (model.shouldGenerateOverride(INIT_OVERRIDE) && !model.isMVCPortletSuperclass()) {%>
     public void init() {
 <%      if (model.hasPortletMode(EDIT_MODE)) {%>
-        editJSP = getInitParameter("edit-jsp");
+        editJSP = getInitParameter("edit-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(HELP_MODE)) {%>
-        helpJSP = getInitParameter("help-jsp");
+        helpJSP = getInitParameter("help-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(VIEW_MODE)) {%>
-        viewJSP = getInitParameter("view-jsp");
+        viewJSP = getInitParameter("view-<%=model.getInitParameterName()%>");
 <%      }%>
     }
 <%  }%>
