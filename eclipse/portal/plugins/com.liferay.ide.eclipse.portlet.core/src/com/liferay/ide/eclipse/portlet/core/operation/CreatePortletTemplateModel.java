@@ -66,6 +66,10 @@ public class CreatePortletTemplateModel extends CreateWebClassTemplateModel {
 		return collection;
 	}
 
+    public String getInitParameterName() {
+        return dataModel.getStringProperty( INewPortletClassDataModelProperties.INIT_PARAMETER_NAME );
+    }
+
 	public boolean hasPortletMode(String portletModeProperty) {
 		return dataModel.getBooleanProperty(portletModeProperty);
 	}
