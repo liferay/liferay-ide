@@ -372,7 +372,7 @@
 	<extension
          point="org.eclipse.ui.actionSets">
       <actionSet
-            id="com.liferay.ide.ui.shortcuts.actionSet"
+            id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
             label="Liferay IDE Actions">
          <action
                class="com.liferay.ide.project.ui.action.NewServerDropDownAction"

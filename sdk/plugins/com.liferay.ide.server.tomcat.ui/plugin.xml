@@ -17,12 +17,12 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
-            configTypeID="com.liferay.ide.server.tomcat.60.launchConfigurationType"
+            configTypeID="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.tomcat.ui.launchConfigurationTypeImage.60">
       </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
-            configTypeID="com.liferay.ide.server.tomcat.70.launchConfigurationType"
+            configTypeID="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType"
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.tomcat.ui.launchConfigurationTypeImage.70">
       </launchConfigurationTypeImage>
@@ -86,7 +86,7 @@
             typeIds="com.liferay.ide.eclipse.server.tomcat.*">
          <enablement>
             <test
-                  property="com.liferay.ide.eclipse.server.tomcat.ui.hasConfiguration"
+                  property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
                   value="true">
             </test>
          </enablement>

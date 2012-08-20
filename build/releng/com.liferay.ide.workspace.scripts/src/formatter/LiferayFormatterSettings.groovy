@@ -3,7 +3,7 @@ package formatter;
 
 File workspaceDir = new File("..")
 File formatterSettingsXml = new File("bin/formatter/liferay_code_formatter_settings.xml")
-File formatterSettingsJava = new File(workspaceDir, "com.liferay.ide.eclipse.ui/src/com/liferay/ide/eclipse/ui/LiferayDefaultCodeFormatterSettings.java")
+File formatterSettingsJava = new File(workspaceDir, "com.liferay.ide.ui/src/com/liferay/ide/eclipse/ui/LiferayDefaultCodeFormatterSettings.java")
 
 XmlParser xmlParser = new XmlParser()
 
@@ -11,18 +11,18 @@ Node settingsRootNode = xmlParser.parse(formatterSettingsXml)
 
 def settings = []
 
-settingsRootNode.profile.setting.findAll {  
+settingsRootNode.profile.setting.findAll {
 	def key = it.'@id'
 	def value = it.'@value'
-	
+
 	key = key.replaceAll("org.eclipse.jdt.core.", "")
-	
+
 	def settingsKey
 	if (key.startsWith("formatter.")) {
 		def constant = key.substring("formatter.".length(), key.length())
 		constant = constant.replaceAll("\\.", "_")
 		settingsKey = "FORMATTER_${constant.toString().toUpperCase()}"
-		
+
 		settings << "\t\tsettings.put(${settingsKey}, \"${value}\");\n"
 	}
 }
@@ -43,7 +43,7 @@ def template = '''
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.ui;
+package com.liferay.ide.ui;
 
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class LiferayDefaultCodeFormatterSettings extends DefaultCodeFormatterCon
 	static {
 __settings__
 	}
-	
+
 }
 '''
 

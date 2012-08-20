@@ -196,7 +196,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
         layout.addActionSet( IDebugUIConstants.LAUNCH_ACTION_SET );
         layout.addActionSet( IDebugUIConstants.DEBUG_ACTION_SET );
         layout.addActionSet( IPageLayout.ID_NAVIGATE_ACTION_SET );
-        layout.addActionSet( "com.liferay.ide.common.ui.shortcuts.actionSet" );
+        layout.addActionSet( "com.liferay.ide.eclipse.ui.shortcuts.actionSet" );
         layout.addActionSet( "org.eclipse.wst.server.ui.internal.webbrowser.actionSet" );
         layout.addActionSet( "org.eclipse.wst.ws.explorer.explorer" );
 

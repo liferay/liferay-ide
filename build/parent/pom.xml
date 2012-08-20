@@ -88,6 +88,7 @@
                         <compilerArgument>-proc:none</compilerArgument>
                     </configuration>
                 </plugin>
+                <!--  
                 <plugin>
                     <groupId>org.bsc.maven</groupId>
                     <artifactId>maven-processor-plugin</artifactId>
@@ -102,7 +103,7 @@
                         </execution>
                     </executions>
                 </plugin>
-
+                -->
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>tycho-maven-plugin</artifactId>
