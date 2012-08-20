@@ -18,6 +18,7 @@
 
 package com.liferay.ide.portlet.core.model.lfrportlet600;
 
+
 import com.liferay.ide.portlet.core.model.lfrportlet.common.ControlPanelEntryCategory;
 import com.liferay.ide.portlet.core.model.lfrportlet.common.FacebookIntegration;
 import com.liferay.ide.portlet.core.model.lfrportlet.common.IAssetRendererFactory;
