@@ -34,7 +34,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView";
 
-    public static final String ID = "com.liferay.ide.common.ui.perspective.liferay";
+    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
 
     public static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
 
@@ -46,24 +46,22 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView";
 
-    public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.common.portlet.ui.wizard.hook";
+    public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.portlet.ui.wizard.hook";
 
-    public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.common.portlet.jsf.ui.wizard.portlet";
+    public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.portlet.jsf.ui.wizard.portlet";
 
-    public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
-        "com.liferay.ide.common.layouttpl.ui.wizard.layouttemplate";
+    public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD = "com.liferay.ide.layouttpl.ui.wizard.layouttemplate";
 
-    public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.common.project.ui.newProjectWizard";
+    public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.project.ui.newProjectWizard";
 
     public static final String ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE =
-        "com.liferay.ide.common.project.ui.newProjectWizardExistingSource";
+        "com.liferay.ide.project.ui.newProjectWizardExistingSource";
 
-    public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.common.portlet.ui.wizard.portlet";
+    public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.portlet.ui.wizard.portlet";
 
-    public static final String ID_NEW_SERVICE_BUILDER_WIZARD =
-        "com.liferay.ide.common.portlet.ui.wizard.servicebuilder";
+    public static final String ID_NEW_SERVICE_BUILDER_WIZARD = "com.liferay.ide.portlet.ui.wizard.servicebuilder";
 
-    public static final String ID_NEW_VAADIN_PORTLET_WIZARD = "com.liferay.ide.common.portlet.vaadin.ui.wizard.portlet";
+    public static final String ID_NEW_VAADIN_PORTLET_WIZARD = "com.liferay.ide.portlet.vaadin.ui.wizard.portlet";
 
     public static final String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
 

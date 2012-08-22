@@ -95,7 +95,7 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 
                     public void run()
                     {
-                        container.openPage( "com.liferay.ide.common.sdk.preferences.installedSDKs", null );
+                        container.openPage( "com.liferay.ide.sdk.preferences.installedSDKs", null );
                     }
 
                 } );

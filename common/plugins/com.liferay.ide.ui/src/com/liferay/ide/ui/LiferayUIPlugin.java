@@ -62,7 +62,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL";
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.common.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.ui";
 
     // The shared instance
     private static LiferayUIPlugin plugin;
@@ -70,7 +70,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     public static void clearAllPersistentSettings() throws BackingStoreException
     {
 
-        IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode( "com.liferay.ide.common.server.tomcat.core" );
+        IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode( "com.liferay.ide.server.tomcat.core" );
 
         tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_TOGGLE_KEY" );
         tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY" );

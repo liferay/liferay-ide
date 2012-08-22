@@ -18,8 +18,6 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import com.liferay.ide.portlet.core.model.lfrportlet600.ILiferayPortletApp;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -62,7 +60,7 @@ public class LiferayPortletXmlEditor extends SapphireEditor
     protected IModelElement createModel()
     {
         RootXmlResource rootXmlResource = new RootXmlResource( new XmlEditorResourceStore( this, sourceEditor ) );
-        model = ILiferayPortletApp.TYPE.instantiate( rootXmlResource );
+//        model = ILiferayPortletApp.TYPE.instantiate( rootXmlResource );
         // model.write( ILiferayPortletAppBase.PROP_VERSION, LiferayPortletAppVersion.v_6_0_0 );
         return model;
     }

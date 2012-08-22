@@ -405,10 +405,8 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             {
                 getContainer().run( false, false, new IRunnableWithProgress()
                 {
-
                     public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                     {
-
                         try
                         {
                             fragmentModel.getDefaultOperation().execute( monitor, null );
@@ -417,7 +415,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
                         {
                             ProjectUIPlugin.logError( "Error executing wizard fragment", e );
                         }
-
                     }
                 } );
             }
@@ -429,7 +426,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
         Display.getDefault().asyncExec( new Runnable()
         {
-
             private void addBuildInAntView()
             {
                 IProject project = getFacetedProject().getProject();
@@ -470,6 +466,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
                 {
                     // Just bail and return if there is no view
                 }
+
                 if( view == null )
                 {
                     return;
