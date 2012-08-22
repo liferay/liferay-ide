@@ -12,13 +12,11 @@
  * details.
  *
  * Contributors:
- *               Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.display.model;
-
-import com.liferay.ide.portlet.core.model.internal.Doctype;
-import com.liferay.ide.portlet.core.model.internal.DtdRootElementController;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -27,20 +25,21 @@ import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
+ * @author Gregory Amerson
  */
 @GenerateImpl
-@Doctype
-(
-    rootElementName = "display",
-    publicId = "-//Liferay//DTD Display 6.0.0//EN",
+@XmlDocumentType
+( 
+    publicId = "-//Liferay//DTD Display 6.0.0//EN", 
     systemId = "http://www.liferay.com/dtd/liferay-display_6_0_0.dtd" 
 )
-@CustomXmlRootBinding( value = DtdRootElementController.class )
+@XmlBinding( path = "display" )
 public interface Display extends IModelElement
 {
     ModelElementType TYPE = new ModelElementType( Display.class );
