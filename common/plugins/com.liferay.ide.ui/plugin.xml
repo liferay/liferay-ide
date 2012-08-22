@@ -47,7 +47,7 @@
                id="com.liferay.ide.eclipse.ui.shortcuts.actionSet">
          </actionSet>
          <perspectiveShortcut
-               id="com.liferay.ide.ui.perspective.liferay">
+               id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
                id="com.liferay.ide.project.ui.newProjectWizard">
@@ -68,7 +68,7 @@
                id="com.liferay.ide.eclipse.ui.shortcuts.actionSet">
          </actionSet>
          <perspectiveShortcut
-               id="com.liferay.ide.ui.perspective.liferay">
+               id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
                id="com.liferay.ide.project.ui.newProjectWizard">

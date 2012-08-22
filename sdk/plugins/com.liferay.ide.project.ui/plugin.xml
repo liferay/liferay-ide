@@ -11,11 +11,11 @@
       </category>
       <wizard
             category="com.liferay.ide.newWizards"
-            finalPerspective="com.liferay.ide.ui.perspective.liferay"
+            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
             icon="icons/n16/plugin_new.png"
             id="com.liferay.ide.project.ui.newProjectWizard"
             name="Liferay Project"
-            preferredPerspectives="com.liferay.ide.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
             project="true">
          <class class="com.liferay.ide.project.ui.wizard.NewPluginProjectWizard">
          	<parameter name="liferay_project" value="true"/>
@@ -31,11 +31,11 @@
       </wizard>
       <wizard
             category="com.liferay.ide.newWizards"
-            finalPerspective="com.liferay.ide.ui.perspective.liferay"
+            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
             icon="icons/n16/plugin_new.png"
             id="com.liferay.ide.project.ui.newProjectWizardExistingSource"
             name="Liferay Project from Existing Source"
-            preferredPerspectives="com.liferay.ide.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
             project="true">
          <class class="com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard">
          </class>
