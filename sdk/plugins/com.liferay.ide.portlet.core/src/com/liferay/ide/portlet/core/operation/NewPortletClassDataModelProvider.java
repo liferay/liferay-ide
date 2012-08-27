@@ -453,6 +453,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         propertyNames.add( TITLE );
         propertyNames.add( SHORT_TITLE );
         propertyNames.add( KEYWORDS );
+        propertyNames.add( INIT_PARAMETER_NAME );
         propertyNames.add( INIT_PARAMS );
 
         propertyNames.add( VIEW_MODE );
