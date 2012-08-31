@@ -129,7 +129,7 @@
       </liferayProjectDefinition>
    </extension>
    <extension
-         id="cssBuilder"
+         id="com.liferay.ide.eclipse.theme.core.cssBuilder"
          name="Theme CSS Builder"
          point="org.eclipse.core.resources.builders">
       <builder
