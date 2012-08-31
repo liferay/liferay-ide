@@ -54,7 +54,6 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
     public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
         throws CoreException
     {
-
         super.execute( project, fv, config, monitor );
 
         IDataModel model = (IDataModel) config;
@@ -100,6 +99,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
         {
             IFolder libFolder = (IFolder) libRes;
             IResource[] libFiles = libFolder.members( true );
+
             if( CoreUtil.isNullOrEmpty( libFiles ) )
             {
                 libRes.delete( true, monitor );
@@ -126,7 +126,6 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
 
     protected void installThemeBuilder( IProject project ) throws CoreException
     {
-
         if( project == null )
         {
             return;

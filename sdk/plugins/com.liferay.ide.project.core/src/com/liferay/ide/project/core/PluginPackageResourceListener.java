@@ -103,7 +103,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                 }
             }
         }
-
         catch( CoreException e )
         {
         }
@@ -275,11 +274,9 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                 {
                     new WorkspaceJob( "copy portal tlds" )
                     {
-
                         @Override
                         public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                         {
-
                             CoreUtil.prepareFolder( tldFolder );
 
                             for( IPath tldFileToCopy : tldFilesToCopy )
@@ -299,7 +296,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                             return Status.OK_STATUS;
                         }
                     }.schedule();
-
                 }
             }
         }
@@ -373,7 +369,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
         new WorkspaceJob( "Update virtual component." )
         {
-
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
@@ -386,18 +381,15 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
     protected void processResourceChanged( IResourceDelta delta ) throws CoreException
     {
-
         IPath deltaPath = delta.getFullPath();
 
         final IFile pluginPackagePropertiesFile = getWorkspaceFile( deltaPath );
 
         new WorkspaceJob( "Processing plugin package resource." )
         {
-
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
-
                 processPropertiesFile( pluginPackagePropertiesFile );
 
                 return Status.OK_STATUS;
@@ -474,7 +466,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
     protected void processVirtualRef(
         IVirtualComponent rootComponent, IVirtualReference ref, IDataModelProvider provider ) throws CoreException
     {
-
         IDataModel dm = DataModelFactory.createDataModel( provider );
         dm.setProperty( IAddReferenceDataModelProperties.SOURCE_COMPONENT, rootComponent );
         dm.setProperty( IAddReferenceDataModelProperties.TARGET_REFERENCE_LIST, Arrays.asList( ref ) );
@@ -505,7 +496,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         IVirtualComponent rootComponent, List<IVirtualReference> removeRefs, List<IVirtualReference> addRefs )
         throws CoreException
     {
-
         for( IVirtualReference ref : removeRefs )
         {
             removeVirtualRef( rootComponent, ref );
@@ -520,7 +510,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
     protected void updateWebClasspathContainer( IVirtualComponent rootComponent, List<IVirtualReference> addRefs )
         throws CoreException
     {
-
         IProject project = rootComponent.getProject();
 
         IJavaProject javaProject = JavaCore.create( project );
@@ -575,16 +564,13 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
             case IResource.FILE:
             {
-
                 if( shouldProcessResourceDelta( delta ) )
                 {
                     Job job = new WorkspaceJob( "Processing plugin package resource." )
                     {
-
                         @Override
                         public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                         {
-
                             final IResource resource = delta.getResource();
 
                             processPropertiesFile( (IFile) resource );
@@ -599,7 +585,6 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
                 return false;
             }
-
         }
 
         return false;

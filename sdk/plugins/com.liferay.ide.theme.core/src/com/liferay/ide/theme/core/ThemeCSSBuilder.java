@@ -59,7 +59,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
     public static IStatus cssBuild( IProject project ) throws CoreException
     {
-
         SDK sdk = SDKUtil.getSDK( project );
 
         if( sdk == null )
@@ -94,13 +93,16 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
             String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "" );
             IFile propsFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
             String name = id;
+
             if( propsFile.exists() )
             {
                 Properties props = new Properties();
+
                 try
                 {
                     props.load( propsFile.getContents() );
                     String nameValue = props.getProperty( "name" );
+
                     if( !CoreUtil.isNullOrEmpty( nameValue ) )
                     {
                         name = nameValue;
@@ -189,7 +191,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         new Job( "publish theme delta" )
         {
-
             @Override
             protected IStatus run( IProgressMonitor monitor )
             {
@@ -220,6 +221,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         else
         {
             IResourceDelta delta = getDelta( getProject() );
+
             if( delta == null )
             {
                 fullBuild( args, monitor );
@@ -229,6 +231,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 incrementalBuild( delta, monitor );
             }
         }
+
         return null;
     }
 
