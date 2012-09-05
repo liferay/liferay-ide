@@ -34,7 +34,7 @@ import org.eclipse.sapphire.services.RelativePathService;
 /**
  * @author Kamesh Sampath
  */
-public abstract class GenericResourceBundlePathService extends RelativePathService
+public class GenericResourceBundlePathService extends RelativePathService
 {
 
     public static final String RB_FILE_EXTENSION = "properties";
