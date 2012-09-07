@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Portal UI
+Bundle-SymbolicName: com.liferay.ide.portal.ui;singleton:=true
+Bundle-Version: 2.0.0.qualifier
+Bundle-Activator: com.liferay.ide.portal.ui.PortalUI
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy

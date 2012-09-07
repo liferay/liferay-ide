@@ -26,12 +26,16 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.liferay.ide.portal</groupId>
+    <groupId>com.liferay.ide.portal.plugins</groupId>
     <artifactId>portal-plugins</artifactId>
 
     <name>Liferay IDE Portal Plugins</name>
 
     <packaging>pom</packaging>
 
+	<modules>
+        <module>com.liferay.ide.portal.core</module>
+        <module>com.liferay.ide.portal.ui</module>
+	</modules>
 </project>
 	
