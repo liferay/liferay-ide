@@ -40,13 +40,6 @@
 				<section>
 					<label>Portlet Application</label>
 					<content>
-						<property-editor>
-							<property>Version</property>
-							<hint>
-								<name>prefer.combo</name>
-								<value>true</value>
-							</hint>
-						</property-editor>
 						<property-editor>DefaultNameSpace
 						</property-editor>
 						<property-editor>

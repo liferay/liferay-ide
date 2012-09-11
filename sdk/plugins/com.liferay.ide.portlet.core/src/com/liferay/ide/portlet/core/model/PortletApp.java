@@ -23,12 +23,10 @@ import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
-import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -38,7 +36,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
 /**
  * The root container model class that will have &lt;portlet-app&gt;
  * 
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a> <br/>
+ * @author Kamesh Sampath <br/>
  * @author Gregory Amerson
  */
 @GenerateImpl
@@ -54,23 +52,6 @@ public interface PortletApp extends ResourceBundle, Identifiable
 {
 
     ModelElementType TYPE = new ModelElementType( PortletApp.class );
-
-    /*
-     * Version
-     */
-
-    @Type( base = PortletAppVersion.class )
-    @Label( standard = "Version" )
-    @DefaultValue( text = "2.0" )
-    @Required
-    @XmlBinding( path = "@version" )
-    ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" );
-
-    Value<PortletAppVersion> getVersion();
-
-    void setVersion( PortletAppVersion version );
-
-    void setVersion( String version );
 
     /*
      * Portlets
