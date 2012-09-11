@@ -19,6 +19,10 @@
             <email>gregory.amerson@liferay.com</email>
         </developer>
         <developer>
+            <name>Cindy Li</name>
+            <email>cindy.li@liferay.com</email>
+        </developer>
+        <developer>
             <name>Kamesh Sampath</name>
             <email>kamesh.sampath@hotmail.com</email>
         </developer>
@@ -29,7 +33,7 @@
         <tycho-version>0.15.0</tycho-version>
         <tycho-extras-version>0.15.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-        <sapphire-site>http://download.eclipse.org/sapphire/0.5.2/repository/</sapphire-site>
+        <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
     </properties>
 
     <modules>

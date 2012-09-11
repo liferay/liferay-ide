@@ -451,7 +451,7 @@ element is true, then the json-enabled value in the column element is true.
                                             <path>Order</path>
                                             <label>Specify ordering</label>
                                             <panel>
-                                                <key>IOrder</key>
+                                                <key>Order</key>
                                                 <content>
                                                     <property-editor>by</property-editor>
                                                     <property-editor>
@@ -941,7 +941,7 @@ development of services.</content>
                 </page>
             </properties-view>
             <tool-palette-image>icons/Entity_16x16.gif</tool-palette-image>
-            <model-element-type>IEntity</model-element-type>
+            <model-element-type>Entity</model-element-type>
             <image>
                 <path>icons/e16/entity_55x50.png</path>
             </image>
