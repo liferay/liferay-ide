@@ -17,9 +17,9 @@ package com.liferay.ide.server.core;
 
 import com.liferay.ide.core.CorePlugin;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.remote.IRemoteConnection;
+import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.IRemoteServer;
-import com.liferay.ide.server.remote.RemoteConnection;
+import com.liferay.ide.server.remote.ServerManagerConnection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class LiferayServerCorePlugin extends CorePlugin
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.server.core";
 
-    private static Map<String, IRemoteConnection> connections = null;
+    private static Map<String, IServerManagerConnection> connections = null;
 
     // The shared instance
     private static LiferayServerCorePlugin plugin;
@@ -140,11 +140,11 @@ public class LiferayServerCorePlugin extends CorePlugin
         return pluginPublishers;
     }
 
-    public static IRemoteConnection getRemoteConnection( final IRemoteServer server )
+    public static IServerManagerConnection getRemoteConnection( final IRemoteServer server )
     {
         if( connections == null )
         {
-            connections = new HashMap<String, IRemoteConnection>();
+            connections = new HashMap<String, IServerManagerConnection>();
 
             ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
             {
@@ -161,7 +161,7 @@ public class LiferayServerCorePlugin extends CorePlugin
                 {
                     if( server.equals( s ) )
                     {
-                        IRemoteConnection service = connections.get( server.getId() );
+                        IServerManagerConnection service = connections.get( server.getId() );
 
                         if( service != null )
                         {
@@ -173,11 +173,11 @@ public class LiferayServerCorePlugin extends CorePlugin
             } );
         }
 
-        IRemoteConnection service = connections.get( server.getId() );
+        IServerManagerConnection service = connections.get( server.getId() );
 
         if( service == null )
         {
-            service = new RemoteConnection();
+            service = new ServerManagerConnection();
 
             updateConnectionSettings( server, service );
 
@@ -303,7 +303,7 @@ public class LiferayServerCorePlugin extends CorePlugin
         updateConnectionSettings( server, getRemoteConnection( server ) );
     }
 
-    public static void updateConnectionSettings( IRemoteServer server, IRemoteConnection remoteConnection )
+    public static void updateConnectionSettings( IRemoteServer server, IServerManagerConnection remoteConnection )
     {
         remoteConnection.setHost( server.getHost() );
         remoteConnection.setHttpPort( server.getHTTPPort() );

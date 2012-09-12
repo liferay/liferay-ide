@@ -14,7 +14,8 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
-package com.liferay.ide.core;
+
+package com.liferay.ide.core.remote;
 
 /**
  * @author Gregory Amerson
@@ -22,26 +23,27 @@ package com.liferay.ide.core;
 @SuppressWarnings( "serial" )
 public class APIException extends Exception
 {
-	private String msg;
-	private String api;
 
-	public APIException( String api, Exception e )
-	{
-		super( e );
+    private String msg;
+    private String api;
 
-		this.api = api;
-		this.msg = e.getMessage();
-	}
+    public APIException( String api, Exception e )
+    {
+        super( e );
 
-	public APIException( String api, String msg )
-	{
-		this.api = api;
-		this.msg = msg;
-	}
+        this.api = api;
+        this.msg = e.getMessage();
+    }
 
-	@Override
-	public String getMessage()
-	{
-		return msg + " API: " + api;
-	}
+    public APIException( String api, String msg )
+    {
+        this.api = api;
+        this.msg = msg;
+    }
+
+    @Override
+    public String getMessage()
+    {
+        return msg + " API: " + api;
+    }
 }

@@ -405,7 +405,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
                     getHTTPPort() );
             }
 
-            IRemoteConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );
+            IServerManagerConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );
 
             final IStatus createErrorStatus = LiferayServerCorePlugin.createErrorStatus( CONNECT_ERROR_MSG );
 

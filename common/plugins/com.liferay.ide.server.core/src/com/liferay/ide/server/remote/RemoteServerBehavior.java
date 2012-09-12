@@ -16,6 +16,7 @@
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
@@ -60,7 +61,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
     protected ILaunch currentLaunch;
-    protected IRemoteConnection remoteConnection;
+    protected IServerManagerConnection remoteConnection;
     protected Job remoteServerUpdateJob;
 
     public RemoteServerBehavior()
@@ -132,7 +133,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
             Object retval = null;
 
-            IRemoteConnection remoteConnection = getRemoteConnection();
+            IServerManagerConnection remoteConnection = getServerManagerConnection();
 
             try
             {
@@ -293,7 +294,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
                 try
                 {
-                    isAlive = getRemoteConnection().isAlive();
+                    isAlive = getServerManagerConnection().isAlive();
                 }
                 catch( Exception ex )
                 {
@@ -368,7 +369,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         };
     }
 
-    protected IRemoteConnection getRemoteConnection()
+    protected IServerManagerConnection getServerManagerConnection()
     {
         if( remoteConnection == null )
         {
@@ -404,9 +405,15 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             String appName = m.getProject().getName();
 
-            if( getRemoteConnection().isAppInstalled( appName ) )
+            try
             {
-                return true;
+                if( getServerManagerConnection().isAppInstalled( appName ) )
+                {
+                    return true;
+                }
+            }
+            catch( APIException e )
+            {
             }
         }
 
@@ -427,7 +434,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         try
         {
             config = getServer().getLaunchConfiguration( true, null ).getWorkingCopy();
-            IRemoteConnection remoteConnection = getRemoteConnection();
+            IServerManagerConnection remoteConnection = getServerManagerConnection();
             Integer debugPort = remoteConnection.getDebugPort();
 
             if( debugPort > 0 )
@@ -565,11 +572,20 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         monitor.subTask( "Getting Liferay connection..." );
 
-        IRemoteConnection connection = getRemoteConnection();
+        IServerManagerConnection connection = getServerManagerConnection();
 
         monitor.subTask( "Updating " + moduleProject.getName() + " on Liferay..." );
 
-        Object error = connection.updateApplication( appName, partialWar.getAbsolutePath(), monitor );
+        Object error = null;
+        
+        try
+        {
+            error = connection.updateApplication( appName, partialWar.getAbsolutePath(), monitor );
+        }
+        catch( APIException e )
+        {
+            error = e.getMessage();
+        }
 
         monitor.worked( 90 );
 
@@ -645,7 +661,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         String appName = moduleProject.getName();
 
-        IRemoteConnection remoteConnection = getRemoteConnection();
+        IServerManagerConnection remoteConnection = getServerManagerConnection();
 
         setModuleStatus( module, LiferayServerCorePlugin.createInfoStatus( "Installing..." ) );
 
@@ -755,7 +771,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         monitor.subTask( "Getting remote connection..." );
 
-        IRemoteConnection remoteConnection = getRemoteConnection();
+        IServerManagerConnection remoteConnection = getServerManagerConnection();
 
         monitor.worked( 25 ); // 25%
 
@@ -763,7 +779,16 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         monitor.subTask( "Uninstalling " + moduleProject.getName() + " from Liferay..." );
 
-        Object error = remoteConnection.uninstallApplication( appName, monitor );
+        Object error = null;
+        
+        try
+        {
+            error = remoteConnection.uninstallApplication( appName, monitor );
+        }
+        catch (APIException e)
+        {
+            error = e.getMessage();
+        }
 
         monitor.worked( 75 ); // 100%
 
@@ -842,7 +867,16 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         String appName = module.getProject().getName();
 
-        boolean appStarted = getRemoteConnection().isLiferayPluginStarted( appName );
+        boolean appStarted =false;
+        
+        try
+        {
+            appStarted = getServerManagerConnection().isLiferayPluginStarted( appName );
+        }
+        catch( APIException e )
+        {
+            LiferayServerCorePlugin.logError( e );
+        }
 
         IModule[] module2 = new IModule[] { module };
 
@@ -878,7 +912,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {
-            List<String> plugins = getRemoteConnection().getLiferayPlugins();
+            List<String> plugins = getServerManagerConnection().getLiferayPlugins();
 
             for( IModule module : modules )
             {

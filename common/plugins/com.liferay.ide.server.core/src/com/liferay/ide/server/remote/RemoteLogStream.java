@@ -45,7 +45,7 @@ public class RemoteLogStream extends BufferedInputStream
     public final static long OUTPUT_MONITOR_DELAY = _defaultPrefs.getLong( "output.monitor.delay", 1000 );
 
     protected static URL createBaseUrl(
-        IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log )
+        IServer server, IRemoteServer remoteServer, IServerManagerConnection connection, String log )
     {
         try
         {
@@ -59,7 +59,7 @@ public class RemoteLogStream extends BufferedInputStream
     }
 
     protected static InputStream createInputStream(
-        IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log )
+        IServer server, IRemoteServer remoteServer, IServerManagerConnection connection, String log )
     {
         try
         {
@@ -80,12 +80,12 @@ public class RemoteLogStream extends BufferedInputStream
         return "?format=raw";
     }
 
-    protected static String getLogURI( IRemoteConnection connection, String log )
+    protected static String getLogURI( IServerManagerConnection connection, String log )
     {
         return connection.getManagerURI() + "/server/log/" + log;
     }
 
-    protected static InputStream openInputStream( IRemoteConnection remote, URL url ) throws IOException
+    protected static InputStream openInputStream( IServerManagerConnection remote, URL url ) throws IOException
     {
         String username = remote.getUsername();
         String password = remote.getPassword();
@@ -104,13 +104,13 @@ public class RemoteLogStream extends BufferedInputStream
 
     protected URL baseUrl = null;
 
-    protected IRemoteConnection connection;
+    protected IServerManagerConnection connection;
 
     protected String log;
 
     protected long range = 0;
 
-    public RemoteLogStream( IServer server, IRemoteServer remoteServer, IRemoteConnection connection, String log )
+    public RemoteLogStream( IServer server, IRemoteServer remoteServer, IServerManagerConnection connection, String log )
     {
         super( createInputStream( server, remoteServer, connection, log ), 8192 );
         this.baseUrl = createBaseUrl( server, remoteServer, connection, log );

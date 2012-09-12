@@ -1,5 +1,13 @@
 package com.liferay.ide.portal.core;
 
+import com.googlecode.sardine.DavResource;
+import com.googlecode.sardine.Sardine;
+import com.googlecode.sardine.SardineFactory;
+import com.liferay.ide.core.util.CoreUtil;
+
+import java.io.IOException;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +21,33 @@ public class PortalTests
     public static void main( String[] args )
     {
         testGetStructures();
+        testWebdav();
+    }
+
+    private static void testWebdav()
+    {
+        
+        Sardine sardine = SardineFactory.begin("test@liferay.com", "test1");
+        
+        List<DavResource> resources;
+        try
+        {
+            resources = sardine.list("http://localhost:8080/webdav/guest");
+            
+            for (DavResource res : resources)
+            {
+                 System.out.println(res); // calls the .toString() method.
+            }
+            
+            System.out.println(CoreUtil.readStreamToString( sardine.get( "http://localhost:8080/webdav/guest/journal/Templates/10434" ) ) );
+        }
+        catch( IOException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
     }
 
     private static void testGetStructures()
@@ -63,10 +98,6 @@ public class PortalTests
                     System.out.println(article);
                 }
             }
-            
-            
-            
-            
         }
         catch( Exception e )
         {

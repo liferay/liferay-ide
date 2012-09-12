@@ -155,7 +155,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         throws CoreException
     {
 
-        IRemoteConnection connection =
+        IServerManagerConnection connection =
             LiferayServerCorePlugin.getRemoteConnection( (IRemoteServer) server.loadAdapter(
                 IRemoteServer.class, monitor ) );
 

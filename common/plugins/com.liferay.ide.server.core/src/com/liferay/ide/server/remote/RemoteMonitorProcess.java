@@ -34,14 +34,14 @@ import org.eclipse.wst.server.core.IServer;
 public class RemoteMonitorProcess extends Process implements IProcess
 {
 
-    protected IRemoteConnection remoteConnection;
+    protected IServerManagerConnection remoteConnection;
     protected String label;
     protected ILaunch launch;
     protected IServer server;
     protected IStreamsProxy streamsProxy;
     protected IRemoteServer remoteServer;
 
-    public RemoteMonitorProcess( IServer server, IRemoteConnection connection, ILaunch launch )
+    public RemoteMonitorProcess( IServer server, IServerManagerConnection connection, ILaunch launch )
     {
         this.server = server;
         this.remoteServer = (IRemoteServer) server.loadAdapter( IRemoteServer.class, null );

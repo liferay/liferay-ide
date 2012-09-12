@@ -11,52 +11,33 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
+ * Contributors:
+ * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.server.remote;
-
-import java.util.List;
-
-import org.eclipse.core.runtime.IProgressMonitor;
+package com.liferay.ide.core.remote;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface IRemoteConnection
 {
 
-    int getDebugPort();
+    String _API = "/api/jsonws";
 
-    List<String> getLiferayPlugins();
+    String getHost();
 
-    String getManagerURI();
+    int getHttpPort();
 
     String getPassword();
 
-    String getServerState();
-
     String getUsername();
-
-    Object installApplication( String absolutePath, String appName, IProgressMonitor monitor );
-
-    boolean isAlive();
-
-    boolean isAppInstalled( String appName );
-
-    boolean isLiferayPluginStarted( String name );
 
     void setHost( String host );
 
-    void setHttpPort( String port );
-
-    void setManagerContextPath( String path );
+    void setHttpPort( String httpPort );
 
     void setPassword( String password );
 
     void setUsername( String username );
-
-    Object uninstallApplication( String appName, IProgressMonitor monitor );
-
-    Object updateApplication( String appName, String absolutePath, IProgressMonitor monitor );
-
 }
