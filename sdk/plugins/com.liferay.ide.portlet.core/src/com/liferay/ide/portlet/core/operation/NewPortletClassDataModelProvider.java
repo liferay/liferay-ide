@@ -24,6 +24,7 @@ import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -60,6 +61,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 {
 
     protected Properties categories;
+    protected Properties entryCategories;
     protected TemplateContextType contextType;
     protected boolean fragment;
     protected IProject initialProject;
@@ -285,6 +287,18 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             return "category.sample";
         }
+        else if( ENTRY_CATEGORY.equals( propertyName ) )
+        {
+            return "category.my";
+        }
+        else if( ENTRY_WEIGHT.equals( propertyName ) )
+        {
+            return "1.5";
+        }
+        else if( ENTRY_CLASS_NAME.equals( propertyName ) )
+        {
+            return getStringProperty( CLASS_NAME ) + "ControlPanelEntry";
+        }
         else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
         {
             return true;
@@ -331,6 +345,30 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
 
         return super.getDefaultProperty( propertyName );
+    }
+
+    protected Properties getEntryCategories()
+    {
+        if( entryCategories == null )
+        {
+            IProject project = (IProject) getProperty( PROJECT );
+
+            if( project != null )
+            {
+                try
+                {
+                    ILiferayRuntime portalRuntime = getLiferayRuntime();
+
+                    entryCategories = portalRuntime.getPortletEntryCategories();
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return entryCategories;
     }
 
     protected Object getInitParams()
@@ -420,6 +458,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 return new DataModelPropertyDescriptor( "category.sample", "Sample" );
             }
         }
+        else if( ENTRY_CATEGORY.equals( propertyName ) )
+        {
+            if( getProperty( ENTRY_CATEGORY ).equals( "category.my" ) )
+            {
+                return new DataModelPropertyDescriptor( "category.my", "My Account Section" );
+            }
+        }
 
         return super.getPropertyDescriptor( propertyName );
     }
@@ -480,6 +525,11 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         propertyNames.add( CSS_CLASS_WRAPPER );
         propertyNames.add( ID );
         propertyNames.add( CATEGORY );
+        propertyNames.add( ADD_TO_CONTROL_PANEL );
+        propertyNames.add( ENTRY_CATEGORY );
+        propertyNames.add( ENTRY_WEIGHT );
+        propertyNames.add( CREATE_ENTRY_CLASS );
+        propertyNames.add( ENTRY_CLASS_NAME );
 
         propertyNames.add( FACET_RUNTIME );
         propertyNames.add( REMOVE_EXISTING_ARTIFACTS );
@@ -509,6 +559,25 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             {
                 return DataModelPropertyDescriptor.createDescriptors(
                     categories.keySet().toArray( new Object[0] ), categories.values().toArray( new String[0] ) );
+            }
+        }
+        else if( ENTRY_CATEGORY.equals( propertyName ) )
+        {
+            Properties entryCategories = getEntryCategories();
+
+            if( entryCategories != null && entryCategories.size() > 0 )
+            {
+                Object[] keys = entryCategories.keySet().toArray();
+                Arrays.sort( keys );
+
+                String[] values = new String[keys.length];
+
+                for( int i = 0; i < keys.length; i++ )
+                {
+                    values[i] = entryCategories.getProperty( keys[i].toString() );
+                }
+
+                return DataModelPropertyDescriptor.createDescriptors( keys, values );
             }
         }
 
@@ -756,6 +825,33 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             {
                 return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
             }
+        }
+        else if( ENTRY_WEIGHT.equals( propertyName ) )
+        {
+            String entryweight = getStringProperty( propertyName );
+
+            if( !CoreUtil.isNumeric( entryweight ) )
+            {
+                return PortletCore.createErrorStatus( "Must specify a valid double for entry weight." );
+            }
+
+            return Status.OK_STATUS;
+        }
+        else if( ENTRY_CLASS_NAME.equals( propertyName ) )
+        {
+            String entryclasswrapper = getStringProperty( propertyName );
+
+            if( validateJavaClassName( entryclasswrapper ).getSeverity() != IStatus.ERROR )
+            {
+                IStatus existsStatus = canCreateTypeInClasspath( entryclasswrapper );
+
+                if( existsStatus.matches( IStatus.ERROR | IStatus.WARNING ) )
+                {
+                    return existsStatus;
+                }
+            }
+
+            return validateJavaClassName( entryclasswrapper );
         }
 
         return super.validate( propertyName );

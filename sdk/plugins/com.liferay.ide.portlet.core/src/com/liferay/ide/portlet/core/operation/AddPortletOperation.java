@@ -96,6 +96,19 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
             }
         }
 
+        if( getDataModel().getBooleanProperty( CREATE_ENTRY_CLASS ) )
+        {
+            try
+            {
+                NewEntryClassOperation entryClassOperation = new NewEntryClassOperation( getDataModel() );
+                entryClassOperation.execute( monitor, info );
+            }
+            catch( ExecutionException e )
+            {
+                status = PortletCore.createErrorStatus( e );
+            }
+        }
+
         if( getDataModel().getBooleanProperty( CREATE_JSPS ) )
         {
             status = createModeJSPFiles();

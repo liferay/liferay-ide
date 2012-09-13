@@ -257,7 +257,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
         if( resourceBundleFilePath != null && !resourceBundleFilePath.isDisposed() )
         {
-            resourceBundleFilePath.setEnabled( false );
+            resourceBundleFilePath.setEnabled( createResourceBundleFileButton.getSelection() );
         }
     }
 

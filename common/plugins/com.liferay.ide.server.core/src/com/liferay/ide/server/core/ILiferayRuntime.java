@@ -45,6 +45,8 @@ public interface ILiferayRuntime extends IJavaRuntime
 
     Properties getPortletCategories();
 
+    Properties getPortletEntryCategories();
+
     IRuntime getRuntime();
 
     IPath getRuntimeLocation();

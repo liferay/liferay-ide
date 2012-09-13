@@ -148,11 +148,13 @@ public class LiferayTomcatUtil
                 while( names.hasMoreElements() )
                 {
                     String name = names.nextElement().toString();
+
                     if( name.startsWith( "category." ) )
                     {
                         categories.put( name, props.getProperty( name ) );
                     }
                 }
+
                 retval = categories;
 
             }
@@ -161,6 +163,19 @@ public class LiferayTomcatUtil
                 LiferayTomcatPlugin.logError( e );
             }
         }
+
+        return retval;
+    }
+
+    public static Properties getEntryCategories( IPath runtimeLocation, IPath portalDir )
+    {
+        Properties categories = getCategories( runtimeLocation, portalDir );
+
+        Properties retval = new Properties();
+        retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" );
+        retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" );
+        retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" );
+        retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" );
 
         return retval;
     }

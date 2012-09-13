@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
@@ -60,10 +61,16 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
     implements INewPortletClassDataModelProperties
 {
+
+    protected Button addToControlPanelButton;
     protected Button allowMultiInstanceButton;
     protected Combo category;
+    protected Button createEntryClassButton;
     protected Text cssClassWrapper;
     protected Text cssFile;
+    protected Combo entryCategory;
+    protected Text entryClassWrapper;
+    protected Text entryWeight;
     protected boolean fragment;
     protected Text iconFile;
     protected Text id;
@@ -85,16 +92,100 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         Group group = SWTUtil.createGroup( composite, "Liferay Display", 2 );
 
         GridData gd = new GridData( GridData.FILL_HORIZONTAL );
-        gd.horizontalSpan = 3;
 
         group.setLayoutData( gd );
 
-        SWTUtil.createLabel( group, "Category:", 1 );
+        SWTUtil.createLabel( group, "Display Category:", 1 );
 
         this.category = new Combo( group, SWT.DROP_DOWN );
         this.category.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         this.synchHelper.synchCombo( category, CATEGORY, null );
 
+        SWTUtil.createLabel(group, "", 1);
+
+        this.addToControlPanelButton = SWTUtil.createCheckButton(group, "Add to Control Panel", null, false, 1);
+        this.synchHelper.synchCheckbox(this.addToControlPanelButton, ADD_TO_CONTROL_PANEL, null);
+
+        final Label entryCategoryLabel = SWTUtil.createLabel(group, "Entry Catagory:", 1);
+        
+        this.entryCategory = new Combo(group, SWT.DROP_DOWN);
+        this.entryCategory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        this.synchHelper.synchCombo(entryCategory, ENTRY_CATEGORY, null);
+        
+        final Label entryWeightLabel = SWTUtil.createLabel(group, "Entry Weight:", 1);
+        
+        this.entryWeight = SWTUtil.createText(group, 1);
+        this.synchHelper.synchText(entryWeight, ENTRY_WEIGHT, null);
+        
+        SWTUtil.createLabel(group, "", 1);
+        
+        this.createEntryClassButton = SWTUtil.createCheckButton(group, "Create Entry Class", null, false, 1);
+        this.createEntryClassButton.setToolTipText
+        ( 
+            "The control-panel-entry-class value must be a class that implements\n " +
+            "com.liferay.portlet.ControlPanelEntry and is called by the Control Panel to\n " +
+            "decide whether the portlet should be shown to a specific user in a specific\n context." 
+        );
+        this.synchHelper.synchCheckbox(createEntryClassButton, CREATE_ENTRY_CLASS, null);
+        
+        final Label entryClassLabel = SWTUtil.createLabel(group, "Entry Class:", 1);
+        
+        this.entryClassWrapper = SWTUtil.createText(group, 1);
+        this.synchHelper.synchText(entryClassWrapper, ENTRY_CLASS_NAME, null);
+        
+        addToControlPanelButton.addSelectionListener
+        (
+            new SelectionAdapter() 
+            {
+                @Override
+                public void widgetSelected(SelectionEvent e) 
+                {
+                entryCategoryLabel.setEnabled( addToControlPanelButton.getSelection() );
+                entryCategory.setEnabled( addToControlPanelButton.getSelection() );
+
+                entryWeightLabel.setEnabled( addToControlPanelButton.getSelection() );
+                entryWeight.setEnabled( addToControlPanelButton.getSelection() );
+
+                createEntryClassButton.setEnabled( addToControlPanelButton.getSelection() );
+
+                entryClassLabel.setEnabled( addToControlPanelButton.getSelection() &&
+                    createEntryClassButton.getSelection() );
+                entryClassWrapper.setEnabled( addToControlPanelButton.getSelection() &&
+                    createEntryClassButton.getSelection() );
+                }
+            }
+        );
+        
+        createEntryClassButton.addSelectionListener
+        ( 
+            new SelectionAdapter()
+            {
+
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    entryClassLabel.setEnabled( createEntryClassButton.getSelection() );
+                    entryClassWrapper.setEnabled( createEntryClassButton.getSelection() );
+                }
+            }
+        );
+
+        if( entryCategory != null && !entryCategory.isDisposed() )
+        {
+            entryCategory.setEnabled( addToControlPanelButton.getSelection() );
+        }
+        if( entryWeight != null && !entryWeight.isDisposed() )
+        {
+            entryWeight.setEnabled( addToControlPanelButton.getSelection() );
+        }
+        if( createEntryClassButton != null && !createEntryClassButton.isDisposed() )
+        {
+            createEntryClassButton.setEnabled( addToControlPanelButton.getSelection() );
+        }
+        if( entryClassWrapper != null && !entryClassWrapper.isDisposed() )
+        {
+            entryClassWrapper.setEnabled( createEntryClassButton.getSelection() && createEntryClassButton.getEnabled() );
+        }
     }
 
     protected void createLiferayPortletInfoGroup( Composite composite )
@@ -282,8 +373,18 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
     @Override
     protected String[] getValidationPropertyNames()
     {
-        return new String[] { LIFERAY_PORTLET_NAME, ICON_FILE, ALLOW_MULTIPLE, CSS_FILE, JAVASCRIPT_FILE,
-            CSS_CLASS_WRAPPER, CATEGORY };
+        return new String[] 
+        { 
+            LIFERAY_PORTLET_NAME, 
+            ICON_FILE, 
+            ALLOW_MULTIPLE, 
+            CSS_FILE, 
+            JAVASCRIPT_FILE,
+            CSS_CLASS_WRAPPER, 
+            CATEGORY,
+            ENTRY_WEIGHT, 
+            ENTRY_CLASS_NAME
+        };
     }
 
     protected void handleFileBrowseButton( final Text text, String title, String message )

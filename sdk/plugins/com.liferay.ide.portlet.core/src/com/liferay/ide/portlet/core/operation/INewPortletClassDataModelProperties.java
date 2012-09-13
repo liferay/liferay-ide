@@ -75,6 +75,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.aboutjsp";
 
+	public static final String ADD_TO_CONTROL_PANEL = "INewPortletClassDataModelProperties.ADD_TO_CONTROL_PANEL";
+	
 	public static final String[] ALL_PORTLET_MODES = 
     {
 		"INewPortletClassDataModelProperties.VIEW_MODE", 
@@ -102,6 +104,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String CONFIG_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.configjsp";
 
 	public static final String CONTEXT_TYPE = "INewPortletClassDataModelProperties.CONTEXT_TYPE";
+
+	public static final String CREATE_ENTRY_CLASS = "INewPortletClassDataModelProperties.CREATE_ENTRY_CLASS";
 
 	public static final String CREATE_JSPS = "INewPortletClassDataModelProperties.CREATE_JSPS";
 
@@ -159,7 +163,13 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String EDITGUEST_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.editguestjsp";
 
-	public static final String HELP_MODE = "INewPortletClassDataModelProperties.HELP_MODE";
+	public static final String ENTRY_CATEGORY = "INewPortletClassDataModelProperties.ENTRY_CATEGORY";
+
+    public static final String ENTRY_CLASS_NAME = "INewPortletClassDataModelProperties.ENTRY_CLASS_NAME";
+
+    public static final String ENTRY_WEIGHT = "INewPortletClassDataModelProperties.ENTRY_WEIGHT";
+
+    public static final String HELP_MODE = "INewPortletClassDataModelProperties.HELP_MODE";
 
 	public static final String HELP_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.helpjsp";
 
