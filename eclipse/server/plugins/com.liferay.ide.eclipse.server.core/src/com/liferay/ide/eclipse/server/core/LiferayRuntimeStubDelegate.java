@@ -76,6 +76,10 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 	public Properties getPortletCategories() {
 		return getLiferayRuntime().getPortletCategories();
 	}
+	
+	public Properties getPortletEntryCategories() {
+	    return getLiferayRuntime().getPortletEntryCategories();
+	}
 
 	public IPath getRuntimeLocation() {
 		return getRuntime().getLocation();

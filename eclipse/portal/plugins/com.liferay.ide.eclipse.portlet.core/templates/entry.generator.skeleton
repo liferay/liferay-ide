@@ -14,10 +14,10 @@
  *******************************************************************************/
  
 /**
- * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings({"restriction","unused"})
-public class CLASS implements INewPortletClassDataModelProperties
+public class CLASS
  {
    public String generate(Object argument)
    {

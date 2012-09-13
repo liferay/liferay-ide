@@ -121,34 +121,46 @@ public class LiferayTomcatUtil {
 	}
 
 	public static Properties getCategories(IPath runtimeLocation, IPath portalDir) {
-		Properties retval = null;
+        Properties retval = null;
 
-		File implJar = portalDir.append("WEB-INF/lib/portal-impl.jar").toFile();
+        File implJar = portalDir.append("WEB-INF/lib/portal-impl.jar").toFile();
 
-		if (implJar.exists()) {
-			try {
-				JarFile jar = new JarFile(implJar);
-				Properties categories = new Properties();
-				Properties props = new Properties();
-				props.load(jar.getInputStream(jar.getEntry("content/Language.properties")));
-				Enumeration<?> names = props.propertyNames();
+        if (implJar.exists()) {
+            try {
+                JarFile jar = new JarFile(implJar);
+                Properties categories = new Properties();
+                Properties props = new Properties();
+                props.load(jar.getInputStream(jar.getEntry("content/Language.properties")));
+                Enumeration<?> names = props.propertyNames();
 
-				while (names.hasMoreElements()) {
-					String name = names.nextElement().toString();
-					if (name.startsWith("category.")) {
-						categories.put(name, props.getProperty(name));
-					}
-				}
-				retval = categories;
+                while (names.hasMoreElements()) {
+                    String name = names.nextElement().toString();
+                    if (name.startsWith("category.")) {
+                        categories.put(name, props.getProperty(name));
+                    }
+                }
+                retval = categories;
 
-			}
-			catch (IOException e) {
-				LiferayTomcatPlugin.logError(e);
-			}
-		}
+            }
+            catch (IOException e) {
+                LiferayTomcatPlugin.logError(e);
+            }
+        }
 
-		return retval;
-	}
+        return retval;
+    }
+	
+	public static Properties getEntryCategories(IPath runtimeLocation, IPath portalDir) {
+        Properties categories = getCategories( runtimeLocation, portalDir );
+        
+        Properties retval = new Properties();
+        retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" );
+        retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section");
+        retval.put( "category.server", categories.getProperty( "category.server" ) + " Section");
+        retval.put( "category.content", categories.getProperty( "category.content" ) + " Section");
+
+        return retval;
+    }
 
 	public static ILiferayTomcatRuntime getLiferayTomcatRuntime(IRuntime runtime) {
 		if (runtime != null) {

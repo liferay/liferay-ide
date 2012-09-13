@@ -187,6 +187,10 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return LiferayTomcatUtil.getCategories(getRuntimeLocation(), getPortalDir());
 	}
 
+	public Properties getPortletEntryCategories() {
+	    return LiferayTomcatUtil.getEntryCategories(getRuntimeLocation(), getPortalDir());
+	}
+	
 	protected ReleaseHelper getReleaseHelper(IPath serviceJar) {
 		if (releaseHelpers == null) {
 			releaseHelpers = new HashMap<IPath, ReleaseHelper>();
@@ -484,5 +488,5 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
 		return warning( "Javadoc URL should start with jar:file:, file:, or http:" );
 	}
-	
+
 }

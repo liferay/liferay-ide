@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,7 +31,6 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	// "INewPortletClassDataModelProperties.CREATE_CUSTOM_PORTLET_CLASS";
 
 	// liferay portlet view modes
-
     final String[] initNames60 =
     {
         "view-jsp",
@@ -71,9 +70,11 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
         "/print.jsp"
     };
 
-	public static final String ABOUT_MODE = "INewPortletClassDataModelProperties.ABOUT_MODE";
+    public static final String ABOUT_MODE = "INewPortletClassDataModelProperties.ABOUT_MODE";
 
-	public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.aboutjsp";
+    public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.aboutjsp";
+
+    public static final String ADD_TO_CONTROL_PANEL = "INewPortletClassDataModelProperties.ADD_TO_CONTROL_PANEL";
 
 	public static final String[] ALL_PORTLET_MODES = {
 		"INewPortletClassDataModelProperties.VIEW_MODE", "INewPortletClassDataModelProperties.EDIT_MODE",
@@ -84,21 +85,23 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String ALLOW_MULTIPLE = "INewPortletClassDataModelProperties.ALLOW_MULTIPLE";
 
-	// public static final String DEFAULT_PORTLET_CLASS =
-	// "com.liferay.util.bridges.mvc.MVCPortlet";
-
-	// public static final boolean DEFAULT_CREATE_CUSTOM_PORTLET_CLASS = false;
-
 	public static final String CATEGORY = "INewPortletClassDataModelProperties.CATEGORY";
 
 	public static final String CONFIG_MODE = "INewPortletClassDataModelProperties.CONFIG_MODE";
 
-	public static final String CONFIG_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.configjsp";
+	// public static final String DEFAULT_PORTLET_CLASS =
+	// "com.liferay.util.bridges.mvc.MVCPortlet";
 
+	// public static final boolean DEFAULT_CREATE_CUSTOM_PORTLET_CLASS = false;
+	
+	public static final String CONFIG_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.configjsp";
+	
 	public static final String CONTEXT_TYPE = "INewPortletClassDataModelProperties.CONTEXT_TYPE";
+	
+	public static final String CREATE_ENTRY_CLASS = "INewPortletClassDataModelProperties.CREATE_ENTRY_CLASS";
 
 	public static final String CREATE_JSPS = "INewPortletClassDataModelProperties.CREATE_JSPS";
-
+	
 	public static final String CREATE_JSPS_FOLDER = "INewPortletClassDataModelProperties.CREATE_JSPS_FOLDER";
 
 	public static final String CREATE_NEW_PORTLET_CLASS =
@@ -117,7 +120,7 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String[] DEFAULT_SECURITY_ROLE_NAMES = {
 		"administrator", "guest", "power-user", "user"
 	};
-	
+
 	public static final String DESTROY_OVERRIDE = "INewPortletClassDataModelProperties.DESTROY_OVERRIDE"; //$NON-NLS-1$
 
 	public static final String DISPLAY_NAME = "INewPortletClassDataModelProperties.DISPLAY_NAME";
@@ -129,7 +132,7 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String DOEDIT_OVERRIDE = "INewPortletClassDataModelProperties.DOEDIT_OVERRIDE";
 
 	public static final String DOEDITDEFAULTS_OVERRIDE = "INewPortletClassDataModelProperties.DOEDITDEFAULTS_OVERRIDE";
-
+	
 	public static final String DOEDITGUEST_OVERRIDE = "INewPortletClassDataModelProperties.DOEDITGUEST_OVERRIDE";
 
 	public static final String DOHELP_OVERRIDE = "INewPortletClassDataModelProperties.DOHELP_OVERRIDE";
@@ -151,6 +154,12 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 	public static final String EDITGUEST_MODE = "INewPortletClassDataModelProperties.EDITGUEST_MODE";
 
 	public static final String EDITGUEST_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.editguestjsp";
+
+	public static final String ENTRY_CATEGORY = "INewPortletClassDataModelProperties.ENTRY_CATEGORY";
+
+	public static final String ENTRY_CLASS_NAME = "INewPortletClassDataModelProperties.ENTRY_CLASS_NAME";
+
+	public static final String ENTRY_WEIGHT = "INewPortletClassDataModelProperties.ENTRY_WEIGHT";
 
 	public static final String HELP_MODE = "INewPortletClassDataModelProperties.HELP_MODE";
 

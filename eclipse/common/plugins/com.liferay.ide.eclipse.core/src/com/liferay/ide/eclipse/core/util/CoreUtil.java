@@ -308,6 +308,18 @@ public class CoreUtil {
 		return val == null || val.equals("") || val.trim().equals("");
 	}
 
+	public static boolean isNumeric( String str )
+    {
+        try {
+            Double.parseDouble( str );
+        }
+        catch( NumberFormatException nfe ) {
+            return false;
+        }
+
+        return true;
+    }
+
 	public static boolean isResourceInDocroot( IModuleResource resource ) {
 		IFile file = (IFile) resource.getAdapter( IFile.class );
 
@@ -392,7 +404,7 @@ public class CoreUtil {
 		return out.toString();
 	}
 
-	public static Version readVersionFile(File versionInfoFile) {
+    public static Version readVersionFile(File versionInfoFile) {
 		String versionContents = FileUtil.readContents(versionInfoFile);
 
 		if (CoreUtil.isNullOrEmpty(versionContents)) {
@@ -410,7 +422,7 @@ public class CoreUtil {
 
 		return version;
 	}
-
+    
     public static void removeChildren( Node node )
 	{
 		if( node != null )

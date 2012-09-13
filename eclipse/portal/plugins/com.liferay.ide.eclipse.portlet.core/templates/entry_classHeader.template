@@ -1,0 +1,3 @@
+/**
+ * Control panel entry class <%= model.getClassName() %>
+ */

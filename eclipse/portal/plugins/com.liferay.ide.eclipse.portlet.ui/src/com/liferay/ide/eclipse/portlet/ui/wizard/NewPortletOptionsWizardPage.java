@@ -45,41 +45,23 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 	implements INewPortletClassDataModelProperties {
 
 	protected Button aboutButton;
-
 	protected Text bundleFile;
-
 	protected Button configButton;
-
 	protected Button createJspsButton;
-
 	protected Button createResourceBundleFileButton;
-
 	protected Text displayName;
-
 	protected Button editButton;
-
 	protected Button editDefaultsButton;
-
 	protected Button editGuestButton;
-
 	protected boolean fragment;
-
 	protected Button helpButton;
-
 	protected Text jspFolder;
-
 	protected Label jspLabel;
-
 	protected Text portletName;
-
 	protected Button previewButton;
-
 	protected Button printButton;
-
 	protected Text resourceBundleFilePath;
-
 	protected Text title;
-
 	protected Button viewButton;
 
 	public NewPortletOptionsWizardPage(
@@ -262,7 +244,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 		super.enter();
 
 		if (resourceBundleFilePath != null && !resourceBundleFilePath.isDisposed()) {
-			resourceBundleFilePath.setEnabled(false);
+			resourceBundleFilePath.setEnabled(createResourceBundleFileButton.getSelection());
 		}
 	}
 
