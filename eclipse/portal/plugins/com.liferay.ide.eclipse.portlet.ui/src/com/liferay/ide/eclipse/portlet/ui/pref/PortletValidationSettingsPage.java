@@ -150,6 +150,8 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 		inner = createInnerComposite(parent, twistie, columns);
 
 		createCombo(inner, "Icon not found", ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND);
+        createCombo(inner, "Entry class not found", ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_CLASS_NOT_FOUND);
+        createCombo(inner, "Entry weight not valid", ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID);
 		createCombo(
 			inner, "Header portal css not found", ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND);
 		createCombo(

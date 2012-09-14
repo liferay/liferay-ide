@@ -17,10 +17,10 @@ package com.liferay.ide.eclipse.project.core;
 
 public class ValidationPreferences {
 
-	public static final String LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND =
+    public static final String LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND =
 		"validation-liferay-display-xml-portlet-id-not-found";
 
-	public static final String LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND =
+    public static final String LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND =
 		"validation-liferay-hook-xml-custom-jsp-dir-not-found";
 
 	public static final String LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND =
@@ -43,6 +43,12 @@ public class ValidationPreferences {
 
 	public static final String LIFERAY_LAYOUTTPL_XML_WAP_TEMPLATE_PATH_NOT_FOUND =
 		"validation-liferay-layouttpl-xml-wap-template-path-not-found";
+
+    public static final String LIFERAY_PORTLET_XML_ENTRY_CLASS_NOT_FOUND =
+        "validation-liferay-portlet-xml-entry-class-not-found";
+
+    public static final String LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID =
+        "validation-liferay-portlet-xml-entry-weight-not-valid";
 
 	public static final String LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND =
 		"validation-liferay-portlet-xml-footer-portal-css-not-found";
