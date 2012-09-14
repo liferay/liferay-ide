@@ -302,7 +302,7 @@
             activeByDefault="true"
             appearsBefore="org.eclipse.jst.servlet.ui.EnhancedJavaRendering"
             contentProvider="com.liferay.ide.portlet.ui.navigator.PortletResourcesContentProvider"
-            icon="icons/e16/liferay_portal_16x16.png"
+            icon="icons/e16/portlet.png"
             id="com.liferay.ide.ui.navigator.content.portlets"
             labelProvider="com.liferay.ide.portlet.ui.navigator.PortletResourcesLabelProvider"
             name="Liferay Portlet Resources"
@@ -317,9 +317,6 @@
                         value="liferay.portlet">
                   </test>
                </adapt>
-               <instanceof
-                     value="com.liferay.ide.portlet.ui.navigator.PortletResourcesRootNode">
-               </instanceof>
                <instanceof
                      value="com.liferay.ide.portlet.ui.navigator.PortletResourcesRootNode">
                </instanceof>

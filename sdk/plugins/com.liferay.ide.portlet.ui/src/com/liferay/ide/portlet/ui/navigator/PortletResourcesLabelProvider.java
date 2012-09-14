@@ -19,29 +19,30 @@
 package com.liferay.ide.portlet.ui.navigator;
 
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
  * @author Gregory Amerson
  */
-public class PortletResourcesLabelProvider extends LabelProvider
+public class PortletResourcesLabelProvider extends AbstractLabelProvider
 {
 
     private final static String PORTLETS = "PORTLETS";
     private final static String PORTLET = "PORTLET";
     private final static String MODULES = "MODULES";
-    private final ImageRegistry imageRegistry;
 
     public PortletResourcesLabelProvider()
     {
         super();
-
-        this.imageRegistry = new ImageRegistry();
-
+    }
+    
+    @Override
+    protected void initalizeImageRegistry( ImageRegistry imageRegistry )
+    {
         imageRegistry.put(
             PORTLETS,
             PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlets_16x16.png" ) );
@@ -54,25 +55,19 @@ public class PortletResourcesLabelProvider extends LabelProvider
     }
 
     @Override
-    public void dispose()
-    {
-        this.imageRegistry.dispose();
-    }
-
-    @Override
     public Image getImage( Object element )
     {
         if( element instanceof PortletResourcesRootNode )
         {
-            return this.imageRegistry.get( MODULES );
+            return getImageRegistry().get( MODULES );
         }
         else if( element instanceof PortletsNode )
         {
-            return this.imageRegistry.get( PORTLETS );
+            return this.getImageRegistry().get( PORTLETS );
         }
         else if( element instanceof PortletNode )
         {
-            return this.imageRegistry.get( PORTLET );
+            return this.getImageRegistry().get( PORTLET );
         }
 
         return null;

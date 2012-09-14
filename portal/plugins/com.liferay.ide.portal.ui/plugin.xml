@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="com.liferay.ide.portal.ui.navigator.PortalResourcesContentProvider"
+            icon="icons/e16/portal.png"
+            id="com.liferay.ide.portal.ui.navigator.portalResources"
+            labelProvider="com.liferay.ide.portal.ui.navigator.PortalResourcesLabelProvider"
+            name="Liferay Portal Resources"
+            priority="lowest">
+         <triggerPoints>
+            <or>
+               <instanceof
+                     value="org.eclipse.core.resources.IWorkspaceRoot">
+               </instanceof>
+               <instanceof
+                     value="com.liferay.ide.portal.ui.navigator.PortalResourcesRootNode">
+               </instanceof>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+               <instanceof
+                     value="com.liferay.ide.portal.ui.navigator.PortalResourcesRootNode">
+               </instanceof>
+            </or>
+         </possibleChildren>
+      </navigatorContent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension
+                  pattern="com.liferay.ide.portal.ui.navigator.*">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+   </extension>
+
+</plugin>
