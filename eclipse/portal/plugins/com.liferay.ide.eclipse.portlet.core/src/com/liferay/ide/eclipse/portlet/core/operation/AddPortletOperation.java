@@ -92,7 +92,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 			}
 		}
 
-        if (getDataModel().getBooleanProperty( CREATE_ENTRY_CLASS )) {
+        if (getDataModel().getBooleanProperty( CREATE_ENTRY_CLASS ) && getDataModel().getBooleanProperty( ADD_TO_CONTROL_PANEL )) {
             try {
                 NewEntryClassOperation entryClassOperation = new NewEntryClassOperation(getDataModel());
                 entryClassOperation.execute( monitor, info );
