@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Portal Core Tests
+Bundle-SymbolicName: com.liferay.ide.portal.core.tests
+Bundle-Version: 2.0.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.core.runtime,
+ com.liferay.ide.portal.core;bundle-version="2.0.0",
+ org.junit4;bundle-version="[4.3.0,5.0.0)"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy

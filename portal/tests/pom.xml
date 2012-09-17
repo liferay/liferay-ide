@@ -21,24 +21,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>com.liferay.ide.portal</groupId>
+        <artifactId>portal</artifactId>
         <version>2.0.0-SNAPSHOT</version>
-        <relativePath>../build/parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liferay.ide.portal</groupId>
-    <artifactId>portal</artifactId>
-    <name>Liferay IDE Portal All</name>
+    <groupId>com.liferay.ide.portal.tests</groupId>
+    <artifactId>portal-tests</artifactId>
+
+    <name>Liferay IDE Portal Tests</name>
 
     <packaging>pom</packaging>
 
-    <modules>
-        <module>plugins</module>
-        <module>features</module>
-		<module>tests</module>
-		<!-- module>docs</module -->
-		<!-- module>site</module -->
-    </modules>
+	<modules>
+        <module>com.liferay.ide.portal.core.tests</module>
+	</modules>
 </project>
 	
