@@ -33,7 +33,7 @@
         <tycho-version>0.15.0</tycho-version>
         <tycho-extras-version>0.15.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-        <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/415/artifact/build/repository/</sapphire-site>
+        <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.5.x/417/artifact/build/repository/</sapphire-site>
     </properties>
 
     <modules>

@@ -20,24 +20,18 @@ package com.liferay.ide.core.remote;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.AuthCache;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,20 +43,11 @@ import org.json.JSONObject;
 public class RemoteConnection implements IRemoteConnection
 {
 
-    private String host;
+    private String hostname;
     private DefaultHttpClient httpClient;
-    private BasicHttpContext httpContext;
     private int httpPort;
     private String password;
-    private HttpHost targetHost;
     private String username;
-
-    protected void clearFields()
-    {
-        this.httpClient = null;
-        this.targetHost = null;
-        this.httpContext = null;
-    }
 
     protected Object deleteJSONAPI( Object... args ) throws APIException
     {
@@ -78,7 +63,7 @@ public class RemoteConnection implements IRemoteConnection
 
     public String getHost()
     {
-        return host;
+        return hostname;
     }
 
     private HttpClient getHttpClient()
@@ -86,7 +71,7 @@ public class RemoteConnection implements IRemoteConnection
         if( httpClient == null )
         {
             httpClient = new DefaultHttpClient();
-
+            
             if( getUsername() != null || getPassword() != null )
             {
                 httpClient.getCredentialsProvider().setCredentials(
@@ -94,35 +79,8 @@ public class RemoteConnection implements IRemoteConnection
                     new UsernamePasswordCredentials( getUsername(), getPassword() ) );
             }
         }
-
+        
         return httpClient;
-    }
-
-    private BasicHttpContext getHttpContext()
-    {
-        if( httpContext == null )
-        {
-            // Create AuthCache instance
-            AuthCache authCache = new BasicAuthCache();
-            // Generate BASIC scheme object and add it to the local
-            // auth cache
-            BasicScheme basicAuth = new BasicScheme();
-            authCache.put( getHttpHost(), basicAuth );
-            httpContext = new BasicHttpContext();
-            httpContext.setAttribute( ClientContext.AUTH_CACHE, authCache );
-        }
-
-        return httpContext;
-    }
-
-    private HttpHost getHttpHost()
-    {
-        if( targetHost == null )
-        {
-            targetHost = new HttpHost( getHost(), getHttpPort(), "http" );
-        }
-
-        return targetHost;
     }
 
     public int getHttpPort()
@@ -132,7 +90,7 @@ public class RemoteConnection implements IRemoteConnection
 
     protected String getHttpResponse( HttpUriRequest request ) throws Exception
     {
-        HttpResponse response = getHttpClient().execute( request, getHttpContext() );
+        HttpResponse response = getHttpClient().execute( request );
 
         int statusCode = response.getStatusLine().getStatusCode();
 
@@ -146,8 +104,10 @@ public class RemoteConnection implements IRemoteConnection
 
             return body;
         }
-
-        return null;
+        else
+        {
+            return response.getStatusLine().getReasonPhrase();
+        }
     }
 
     protected Object getJSONAPI( Object... args ) throws APIException
@@ -159,7 +119,7 @@ public class RemoteConnection implements IRemoteConnection
 
         HttpGet getAPIMethod = new HttpGet();
 
-        return httpJSONAPI( getAPIMethod, args );
+        return httpJSONAPI( getAPIMethod, args[0] );
     }
 
     private Object getJSONResponse( String response )
@@ -246,7 +206,7 @@ public class RemoteConnection implements IRemoteConnection
 
                 if( jsonResponse == null )
                 {
-                    throw new APIException( api, "Unable to get API." );
+                    throw new APIException( api, "Unable to get response: " + response );
                 }
                 else
                 {
@@ -254,9 +214,24 @@ public class RemoteConnection implements IRemoteConnection
                 }
             }
         }
-        catch( Exception e )
+        catch( APIException e )
+        {
+            throw e;
+        }
+        catch (Exception e)
         {
             throw new APIException( api, e );
+        }
+        finally
+        {
+            try
+            {
+                request.releaseConnection();
+            }
+            finally
+            {
+                // no need to log error
+            }
         }
 
         return retval;
@@ -276,8 +251,8 @@ public class RemoteConnection implements IRemoteConnection
 
     public void setHost( String host )
     {
-        this.host = host;
-        clearFields();
+        this.hostname = host;
+        this.httpClient = null;
     }
 
     public void setHttpPort( String httpPort )
@@ -291,19 +266,19 @@ public class RemoteConnection implements IRemoteConnection
             this.httpPort = -1;
         }
         
-        clearFields();
+        this.httpClient = null;
     }
 
     public void setPassword( String password )
     {
         this.password = password;
-        clearFields();
+        this.httpClient = null;
     }
 
     public void setUsername( String username )
     {
         this.username = username;
-        clearFields();
+        this.httpClient = null;
     }
 
 }

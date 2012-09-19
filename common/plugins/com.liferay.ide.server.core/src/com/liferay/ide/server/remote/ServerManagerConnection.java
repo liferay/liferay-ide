@@ -234,7 +234,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         }
         else
         {
-            throw new APIException( getIsAliveAPI(), "Unable to get JSONObject" );
+            throw new APIException( getIsAliveAPI(), "Unable to connect to server manager." );
         }
         
         try
