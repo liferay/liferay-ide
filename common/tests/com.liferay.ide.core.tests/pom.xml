@@ -20,8 +20,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide.portal.tests</groupId>
-        <artifactId>portal-tests</artifactId>
+        <groupId>com.liferay.ide.common.tests</groupId>
+        <artifactId>common-tests</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
