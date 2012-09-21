@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.project.core.ProjectCorePlugin;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -109,6 +110,41 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
         if( !status.isOK() )
         {
             return status;
+        }
+
+        return status;
+    }
+
+    public IStatus deleteWelcomeFileListElements()
+    {
+        IFile file = getDescriptorFile( getDescriptorPath() );
+
+        IStatus status = null;
+
+        if( file != null && file.exists() )
+        {
+            status = new DOMModelEditOperation( file )
+            {
+                protected IStatus doExecute( IDOMDocument document )
+                {
+                    try
+                    {
+                        NodeList welcomeFileLists = document.getElementsByTagName( "welcome-file-list" );
+
+                        for( int i = 0; i < welcomeFileLists.getLength(); i++ )
+                        {
+                            Node welcomeFileList = welcomeFileLists.item( i );
+                            welcomeFileList.getParentNode().removeChild( welcomeFileList );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        return ProjectCorePlugin.createErrorStatus( e );
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            }.execute();
         }
 
         return status;
