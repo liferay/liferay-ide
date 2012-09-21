@@ -101,6 +101,34 @@ public class WebXMLDescriptorHelper extends DescriptorHelper {
 		return status;
 	}
 
+	public IStatus deleteWelcomeFileListElements() {
+	    IFile file = getDescriptorFile(getDescriptorPath());
+
+        IStatus status = null;
+
+        if (file != null && file.exists()) {
+            status = new DOMModelEditOperation(file) {
+
+                protected IStatus doExecute(IDOMDocument document) {
+                    try {
+                        NodeList welcomeFileLists = document.getElementsByTagName("welcome-file-list");
+
+                        for (int i = 0; i < welcomeFileLists.getLength(); i++) {
+                            Node welcomeFileList = welcomeFileLists.item(i);
+                            welcomeFileList.getParentNode().removeChild( welcomeFileList );
+                        }
+                    }
+                    catch (Exception e) {
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            }.execute();
+        }
+
+        return status;
+	}
+
 	protected IStatus doAddTagLib(IDOMDocument document, TagLibRefType tagLibRefType) {
 		if (tagLibReferenceExists(document, tagLibRefType)) {
 			return Status.OK_STATUS;
@@ -235,5 +263,4 @@ public class WebXMLDescriptorHelper extends DescriptorHelper {
 		
 		return false;
 	}
-
 }
