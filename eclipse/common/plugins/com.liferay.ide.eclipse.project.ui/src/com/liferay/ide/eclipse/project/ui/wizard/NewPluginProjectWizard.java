@@ -21,6 +21,8 @@ import com.liferay.ide.eclipse.project.core.ProjectCorePlugin;
 import com.liferay.ide.eclipse.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
+import com.liferay.ide.eclipse.project.core.util.WebXMLDescriptorHelper;
 import com.liferay.ide.eclipse.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
@@ -385,6 +387,18 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 			catch (InterruptedException e) {
 				ProjectUIPlugin.logError("Error executing wizard fragment", e);
 			}
+		}
+
+		IProject project = getFacetedProject().getProject();
+		if (project != null && ProjectUtil.isPortletProject( project )) {
+	        WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
+
+	        try {
+	            webXmlHelper.deleteWelcomeFileListElements();
+	        }
+	        catch( Exception e ) {
+	            ProjectCorePlugin.logError( "Failed to delete welcome file list elements", e );
+	        }
 		}
 
 		Display.getDefault().asyncExec(new Runnable() {
