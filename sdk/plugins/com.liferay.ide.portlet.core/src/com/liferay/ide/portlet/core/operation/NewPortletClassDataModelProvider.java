@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -59,6 +58,8 @@ import org.osgi.framework.Version;
 public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvider
     implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties
 {
+
+    private static final String PORTLET_SUFFIX_PATTERN = "(?<!^)portlet$";
 
     protected Properties categories;
     protected Properties entryCategories;
@@ -216,12 +217,12 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( PORTLET_NAME.equals( propertyName ) || LIFERAY_PORTLET_NAME.equals( propertyName ) )
         {
-            return getProperty( CLASS_NAME ).toString().toLowerCase();
+            return getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" );
         }
         else if( DISPLAY_NAME.equals( propertyName ) || TITLE.equals( propertyName ) ||
             SHORT_TITLE.equals( propertyName ) )
         {
-            return getProperty( CLASS_NAME );
+            return getDisplayNameFromClassName( getProperty( CLASS_NAME ).toString() );
         }
         else if( KEYWORDS.equals( propertyName ) )
         {
@@ -243,11 +244,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             if( getBooleanProperty( CREATE_NEW_PORTLET_CLASS ) )
             {
-                return "/html/" + getProperty( CLASS_NAME ).toString().toLowerCase();
+                return "/html/" +
+                    getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" );
             }
             else
             {
-                return "/html/" + getProperty( PORTLET_NAME ).toString().toLowerCase();
+                return "/html/" +
+                    getProperty( PORTLET_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" );
             }
 
         }
@@ -277,7 +280,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( CSS_CLASS_WRAPPER.equals( propertyName ) )
         {
-            return getProperty( PORTLET_NAME ).toString().toLowerCase() + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+            return getProperty( PORTLET_NAME ).toString().toLowerCase();
         }
         else if( ID.equals( propertyName ) )
         {
@@ -407,6 +410,24 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
 
         return initParams;
+    }
+
+    protected String getDisplayNameFromClassName( String oldName )
+    {
+        final String[] words = oldName.split( "(?<!^)(?=[A-Z])" );
+        String newName = new String();
+
+        for( int i = 0; i < words.length; i++ )
+        {
+            if( i > 0 )
+            {
+                newName = newName.concat( " " );
+            }
+
+            newName = newName.concat( words[i] );
+        }
+
+        return newName;
     }
 
     @Override

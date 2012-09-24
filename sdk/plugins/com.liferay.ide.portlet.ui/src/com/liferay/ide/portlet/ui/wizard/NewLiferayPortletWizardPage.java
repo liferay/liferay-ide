@@ -160,7 +160,6 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         ( 
             new SelectionAdapter()
             {
-
                 @Override
                 public void widgetSelected( SelectionEvent e )
                 {
@@ -169,23 +168,6 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
                 }
             }
         );
-
-        if( entryCategory != null && !entryCategory.isDisposed() )
-        {
-            entryCategory.setEnabled( addToControlPanelButton.getSelection() );
-        }
-        if( entryWeight != null && !entryWeight.isDisposed() )
-        {
-            entryWeight.setEnabled( addToControlPanelButton.getSelection() );
-        }
-        if( createEntryClassButton != null && !createEntryClassButton.isDisposed() )
-        {
-            createEntryClassButton.setEnabled( addToControlPanelButton.getSelection() );
-        }
-        if( entryClassWrapper != null && !entryClassWrapper.isDisposed() )
-        {
-            entryClassWrapper.setEnabled( createEntryClassButton.getSelection() && createEntryClassButton.getEnabled() );
-        }
     }
 
     protected void createLiferayPortletInfoGroup( Composite composite )
@@ -216,17 +198,19 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         else
         {
             Button iconFileBrowse = SWTUtil.createPushButton( group, "Browse...", null );
-            iconFileBrowse.addSelectionListener( new SelectionAdapter()
-            {
-
-                @Override
-                public void widgetSelected( SelectionEvent e )
+            iconFileBrowse.addSelectionListener
+            ( 
+                new SelectionAdapter()
                 {
-                    handleFileBrowseButton(
-                        NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: " );
+                    @Override
+                    public void widgetSelected( SelectionEvent e )
+                    {
+                        handleFileBrowseButton(
+                            NewLiferayPortletWizardPage.this.iconFile, "Icon Selection", "Choose an icon file: " );
+                    }
+    
                 }
-
-            } );
+            );
         }
 
         SWTUtil.createLabel( group, "", 1 );
@@ -246,17 +230,19 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         else
         {
             Button cssFileBrowse = SWTUtil.createPushButton( group, "Browse...", null );
-            cssFileBrowse.addSelectionListener( new SelectionAdapter()
-            {
-
-                @Override
-                public void widgetSelected( SelectionEvent e )
+            cssFileBrowse.addSelectionListener
+            ( 
+                new SelectionAdapter()
                 {
-                    handleFileBrowseButton(
-                        NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: " );
+                    @Override
+                    public void widgetSelected( SelectionEvent e )
+                    {
+                        handleFileBrowseButton(
+                            NewLiferayPortletWizardPage.this.cssFile, "CSS Selection", "Choose a css file: " );
+                    }
+    
                 }
-
-            } );
+            );
         }
 
         SWTUtil.createLabel( group, SWT.RIGHT, "JavaScript:", 1 );
@@ -271,18 +257,20 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         else
         {
             Button javascriptFileBrowse = SWTUtil.createPushButton( group, "Browse...", null );
-            javascriptFileBrowse.addSelectionListener( new SelectionAdapter()
-            {
-
-                @Override
-                public void widgetSelected( SelectionEvent e )
+            javascriptFileBrowse.addSelectionListener
+            (
+                new SelectionAdapter()
                 {
-                    handleFileBrowseButton(
-                        NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
-                        "Choose a javascript file: " );
+                    @Override
+                    public void widgetSelected( SelectionEvent e )
+                    {
+                        handleFileBrowseButton(
+                            NewLiferayPortletWizardPage.this.javascriptFile, "JavaScript Selection",
+                            "Choose a javascript file: " );
+                    }
+    
                 }
-
-            } );
+            );
         }
 
         SWTUtil.createLabel( group, SWT.RIGHT, "CSS classname:", 1 );
@@ -292,19 +280,20 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
         SWTUtil.createLabel( group, "", 1 );
 
-        this.synchHelper.getDataModel().addListener( new IDataModelListener()
-        {
-
-            public void propertyChanged( DataModelEvent event )
+        this.synchHelper.getDataModel().addListener
+        ( 
+            new IDataModelListener()
             {
-                if( INewJavaClassDataModelProperties.CLASS_NAME.equals( event.getPropertyName() ) ||
-                    PORTLET_NAME.equals( event.getPropertyName() ) )
+                public void propertyChanged( DataModelEvent event )
                 {
-
-                    synchHelper.synchAllUIWithModel();
+                    if( INewJavaClassDataModelProperties.CLASS_NAME.equals( event.getPropertyName() ) ||
+                        PORTLET_NAME.equals( event.getPropertyName() ) )
+                    {
+                        synchHelper.synchAllUIWithModel();
+                    }
                 }
             }
-        } );
+        );
     }
 
     @Override
@@ -319,11 +308,36 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         return composite;
     }
 
+    @Override
+    protected void enter()
+    {
+        super.enter();
+
+        if( entryCategory != null && !entryCategory.isDisposed() )
+        {
+            entryCategory.setEnabled( addToControlPanelButton.getSelection() );
+        }
+
+        if( entryWeight != null && !entryWeight.isDisposed() )
+        {
+            entryWeight.setEnabled( addToControlPanelButton.getSelection() );
+        }
+
+        if( createEntryClassButton != null && !createEntryClassButton.isDisposed() )
+        {
+            createEntryClassButton.setEnabled( addToControlPanelButton.getSelection() );
+        }
+
+        if( entryClassWrapper != null && !entryClassWrapper.isDisposed() )
+        {
+            entryClassWrapper.setEnabled( createEntryClassButton.getSelection() && createEntryClassButton.getEnabled() );
+        }
+    }
+
     protected ISelectionStatusValidator getContainerDialogSelectionValidator()
     {
         return new ISelectionStatusValidator()
         {
-
             public IStatus validate( Object[] selection )
             {
                 if( selection != null && selection.length > 0 && selection[0] != null &&
@@ -341,7 +355,6 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
     {
         return new ViewerFilter()
         {
-
             public boolean select( Viewer viewer, Object parent, Object element )
             {
                 if( element instanceof IProject )
@@ -427,7 +440,6 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
             {
                 // Do nothing
             }
-
         }
     }
 
