@@ -107,7 +107,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         this.entryCategory = new Combo(group, SWT.DROP_DOWN);
         this.entryCategory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         this.synchHelper.synchCombo(entryCategory, ENTRY_CATEGORY, null);
-        
+
         final Label entryWeightLabel = SWTUtil.createLabel(group, "Entry Weight:", 1);
         
         this.entryWeight = SWTUtil.createText(group, 1);
@@ -151,19 +151,6 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
                 entryClassWrapper.setEnabled(createEntryClassButton.getSelection());
             }
         });
-        
-        if (entryCategory != null && !entryCategory.isDisposed()) {
-            entryCategory.setEnabled(addToControlPanelButton.getSelection());
-        }
-        if (entryWeight != null && !entryWeight.isDisposed()) {
-            entryWeight.setEnabled(addToControlPanelButton.getSelection());
-        }
-        if (createEntryClassButton != null && !createEntryClassButton.isDisposed()) {
-            createEntryClassButton.setEnabled( addToControlPanelButton.getSelection() );
-        }
-        if (entryClassWrapper != null && !entryClassWrapper.isDisposed()) {
-            entryClassWrapper.setEnabled( createEntryClassButton.getSelection() && createEntryClassButton.getEnabled() );
-        }
 	}
 	
 	protected void createLiferayPortletInfoGroup(Composite composite) {
@@ -279,6 +266,24 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
 		return composite;
 	}
+
+    @Override
+    protected void enter() {
+        super.enter();
+
+        if (entryCategory != null && !entryCategory.isDisposed()) {
+            entryCategory.setEnabled(addToControlPanelButton.getSelection());
+        }
+        if (entryWeight != null && !entryWeight.isDisposed()) {
+            entryWeight.setEnabled(addToControlPanelButton.getSelection());
+        }
+        if (createEntryClassButton != null && !createEntryClassButton.isDisposed()) {
+            createEntryClassButton.setEnabled( addToControlPanelButton.getSelection() );
+        }
+        if (entryClassWrapper != null && !entryClassWrapper.isDisposed()) {
+            entryClassWrapper.setEnabled( createEntryClassButton.getSelection() && createEntryClassButton.getEnabled() );
+        }
+    }
 
 	protected ISelectionStatusValidator getContainerDialogSelectionValidator() {
 		return new ISelectionStatusValidator() {
