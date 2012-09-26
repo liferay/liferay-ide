@@ -237,7 +237,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 			});
 		}
 
-		SWTUtil.createLabel(group, SWT.RIGHT, "CSS classname:", 1);
+		SWTUtil.createLabel(group, SWT.RIGHT, "CSS class wrapper:", 1);
 
 		this.cssClassWrapper = SWTUtil.createText(group, 1);
 		this.synchHelper.synchText(cssClassWrapper, CSS_CLASS_WRAPPER, null);

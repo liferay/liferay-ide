@@ -256,7 +256,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 			return "/js/main.js";
 		}
 		else if (CSS_CLASS_WRAPPER.equals(propertyName)) {
-			return getProperty(PORTLET_NAME).toString().toLowerCase();
+			return getProperty(PORTLET_NAME).toString().toLowerCase() + "-portlet";
 		}
 		else if (ID.equals(propertyName)) {
 			return getProperty(PORTLET_NAME);
