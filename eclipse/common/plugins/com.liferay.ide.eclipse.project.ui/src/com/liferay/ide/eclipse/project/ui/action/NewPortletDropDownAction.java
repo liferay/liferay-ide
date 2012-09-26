@@ -15,8 +15,6 @@
 
 package com.liferay.ide.eclipse.project.ui.action;
 
-import com.liferay.ide.eclipse.ui.action.NewWizardAction;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -70,7 +68,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 
 			for (IConfigurationElement element : elements) {
 				if (element.getName().equals(TAG_WIZARD) && isLiferayArtifactWizard(element, typeAttribute)) {
-					containers.add(new NewWizardAction(element));
+					containers.add(new NewElementWizardAction(element));
 				}
 			}
 		}

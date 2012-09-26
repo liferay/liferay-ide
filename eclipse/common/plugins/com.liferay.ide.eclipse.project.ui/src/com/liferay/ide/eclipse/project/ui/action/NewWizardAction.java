@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.eclipse.ui.action;
+package com.liferay.ide.eclipse.project.ui.action;
 
 import com.liferay.ide.eclipse.ui.LiferayUIPlugin;
 import com.liferay.ide.eclipse.ui.wizard.INewProjectWizard;
@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+
 
 /**
  * @author Greg Amerson
@@ -59,6 +60,8 @@ public class NewWizardAction extends Action implements Comparable {
 	public final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
 
 	public final static String TAG_VALUE = "value";//$NON-NLS-1$
+
+	public final static String ATT_VALID_PROJECT_TYPES = "validProjectTypes";
 
 	protected IConfigurationElement fConfigurationElement;
 
@@ -96,32 +99,33 @@ public class NewWizardAction extends Action implements Comparable {
 		return projectType;
 	}
 
-	public void run() {
-		Shell shell = getShell();
-		try {
-			INewWizard wizard = createWizard();
+	public void run(){
+        Shell shell = getShell();
+        try {
+            INewWizard wizard = createWizard();
 
-			if (wizard instanceof INewProjectWizard && this.projectType != null) {
-				((INewProjectWizard) wizard).setProjectType(projectType);
-			}
+            if (wizard instanceof INewProjectWizard && this.projectType != null)
+            {
+                ((INewProjectWizard) wizard).setProjectType(projectType);
+            }
 
-			wizard.init(PlatformUI.getWorkbench(), getSelection());
+            wizard.init(PlatformUI.getWorkbench(), getSelection());
 
-			WizardDialog dialog = new WizardDialog(shell, wizard);
+            WizardDialog dialog = new WizardDialog(shell, wizard);
 
-			PixelConverter converter = new PixelConverter(JFaceResources.getDialogFont());
+            PixelConverter converter = new PixelConverter(JFaceResources.getDialogFont());
 
-			dialog.setMinimumPageSize(
-				converter.convertWidthInCharsToPixels(70), converter.convertHeightInCharsToPixels(20));
+            dialog.setMinimumPageSize(
+                converter.convertWidthInCharsToPixels(70), converter.convertHeightInCharsToPixels(20));
 
-			dialog.create();
+            dialog.create();
 
-			int res = dialog.open();
+            int res = dialog.open();
 
-			notifyResult(res == Window.OK);
-		}
-		catch (CoreException e) {
-		}
+            notifyResult(res == Window.OK);
+        }
+        catch (CoreException e) {
+        }
 	}
 
 	public void setMenuIndex(int menuIndex) {

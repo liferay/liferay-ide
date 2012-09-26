@@ -2,8 +2,6 @@ package com.liferay.ide.eclipse.project.ui.action;
 
 import com.liferay.ide.eclipse.project.ui.ProjectUIPlugin;
 import com.liferay.ide.eclipse.project.ui.wizard.NewProjectFromSourceWizard;
-import com.liferay.ide.eclipse.ui.action.AbstractNewProjectWizardProjectElement;
-import com.liferay.ide.eclipse.ui.action.NewWizardAction;
 
 
 public class ImportLiferayProjectWizardAction extends NewWizardAction {
