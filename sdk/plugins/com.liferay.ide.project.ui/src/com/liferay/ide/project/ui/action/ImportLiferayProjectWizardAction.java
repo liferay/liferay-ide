@@ -19,8 +19,6 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard;
-import com.liferay.ide.ui.action.AbstractNewProjectWizardProjectElement;
-import com.liferay.ide.ui.action.NewWizardAction;
 
 /**
  * @author Gregory Amerson

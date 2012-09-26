@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.ui.action;
+package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.AbstractConfigurationElement;
 

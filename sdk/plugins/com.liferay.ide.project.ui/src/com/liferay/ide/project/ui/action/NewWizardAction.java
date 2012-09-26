@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.ui.action;
+package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.wizard.INewProjectWizard;
@@ -61,6 +61,8 @@ public class NewWizardAction extends Action implements Comparable
     public final static String TAG_PARAMETER = "parameter";//$NON-NLS-1$
 
     public final static String TAG_VALUE = "value";//$NON-NLS-1$
+
+	public final static String ATT_VALID_PROJECT_TYPES = "validProjectTypes";
 
     protected IConfigurationElement fConfigurationElement;
 

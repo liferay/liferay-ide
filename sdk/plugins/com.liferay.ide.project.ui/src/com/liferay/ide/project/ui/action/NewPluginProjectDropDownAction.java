@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectDefinition;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
-import com.liferay.ide.ui.action.NewWizardAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +49,7 @@ import org.eclipse.ui.PlatformUI;
 public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
 {
 
-    private final class ProjectDefComparator implements Comparator<IProjectDefinition>
+    private static final class ProjectDefComparator implements Comparator<IProjectDefinition>
     {
         public int compare( IProjectDefinition o1, IProjectDefinition o2 )
         {
@@ -82,7 +81,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
     {
     }
 
-    public NewWizardAction[] getNewProjectActions()
+    public static NewWizardAction[] getNewProjectActions()
     {
         ArrayList<NewWizardAction> containers = new ArrayList<NewWizardAction>();
 
@@ -256,7 +255,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
     // return new String[0];
     // }
 
-    private boolean isProjectWizard( IConfigurationElement element, String typeAttribute )
+    private static boolean isProjectWizard( IConfigurationElement element, String typeAttribute )
     {
         IConfigurationElement[] classElements = element.getChildren( TAG_CLASS );
 
@@ -285,12 +284,12 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
         return false;
     }
 
-    protected String getExtraTypeAttribute()
+    protected static String getExtraTypeAttribute()
     {
         return "liferay_extra_project";
     }
 
-    protected String getTypeAttribute()
+    protected static String getTypeAttribute()
     {
         return "liferay_project";
     }
