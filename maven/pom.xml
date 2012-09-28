@@ -35,8 +35,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>plugins</module>
-		<module>features</module>
+		<!-- module>plugins</module -->
+		<!-- module>features</module -->
 		<!-- module>docs</module -->
 		<!-- module>site</module -->
 		<!-- module>tests</module -->
