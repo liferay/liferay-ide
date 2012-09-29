@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
  org.eclipse.wst.sse.ui;bundle-version="[1.1.100,2.0.0)",
  org.eclipse.wst.html.ui;bundle-version="[1.0.400,1.2.0)",
- org.eclipse.wst.xml.ui;bundle-version="[1.1.2,2.0.0)"
+ org.eclipse.wst.xml.ui;bundle-version="[1.1.2,2.0.0)",
+ com.liferay.ide.eclipse.project.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.eclipse.layouttpl.ui,

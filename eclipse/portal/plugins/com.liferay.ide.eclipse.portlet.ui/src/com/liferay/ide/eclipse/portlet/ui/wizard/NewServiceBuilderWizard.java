@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.portlet.core.operation.INewServiceBuilderDataMode
 import com.liferay.ide.eclipse.portlet.core.operation.NewServiceBuilderDataModelProvider;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.ServiceBuilderTemplateContextTypeIds;
+import com.liferay.ide.eclipse.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,8 +27,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
@@ -37,6 +40,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 @SuppressWarnings("restriction")
 public class NewServiceBuilderWizard extends NewWebArtifactWizard
 	implements INewWizard, INewServiceBuilderDataModelProperties {
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder";
 
 	public NewServiceBuilderWizard() {
 		this(null);
@@ -73,6 +78,14 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
 	@Override
 	protected String getTitle() {
 		return "New Service Builder";
+	}
+
+	@Override
+	public void init( IWorkbench workbench, IStructuredSelection selection )
+	{
+	    super.init( workbench, selection );
+        ValidProjectChecker checker = new ValidProjectChecker( ID );
+        checker.checkValidProjectTypes();
 	}
 
 	@Override
