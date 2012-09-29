@@ -68,7 +68,7 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 
 			for (IConfigurationElement element : elements) {
 				if (element.getName().equals(TAG_WIZARD) && isLiferayArtifactWizard(element, typeAttribute)) {
-					containers.add(new NewElementWizardAction(element));
+					containers.add(new NewWizardAction(element));
 				}
 			}
 		}

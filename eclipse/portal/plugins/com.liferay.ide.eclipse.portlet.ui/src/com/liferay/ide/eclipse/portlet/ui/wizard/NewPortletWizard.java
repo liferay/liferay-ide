@@ -22,6 +22,7 @@ import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.PortletTemplateContextTypeIds;
 import com.liferay.ide.eclipse.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.eclipse.project.ui.wizard.IPluginWizardFragment;
+import com.liferay.ide.eclipse.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -32,8 +33,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -48,6 +51,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 @SuppressWarnings("restriction")
 public class NewPortletWizard extends NewWebArtifactWizard
 	implements IPluginWizardFragment, INewPortletClassDataModelProperties {
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet";
 
 	protected boolean fragment;
 	protected IWizardPage hostPage;
@@ -109,6 +114,14 @@ public class NewPortletWizard extends NewWebArtifactWizard
 
 	public String getTitle() {
 		return "New Liferay Portlet";
+	}
+
+	@Override
+	public void init( IWorkbench workbench, IStructuredSelection selection )
+	{
+	    super.init( workbench, selection );
+        ValidProjectChecker checker = new ValidProjectChecker( ID );
+        checker.checkValidProjectTypes();
 	}
 
 	public void initFragmentDataModel(IDataModel parentDataModel, String projectName) {

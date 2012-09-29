@@ -19,6 +19,7 @@ import com.liferay.ide.eclipse.portlet.core.operation.INewHookDataModelPropertie
 import com.liferay.ide.eclipse.portlet.core.operation.NewHookDataModelProvider;
 import com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.eclipse.portlet.ui.template.HookTemplateContextTypeIds;
+import com.liferay.ide.eclipse.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
@@ -45,6 +46,8 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 public class NewHookWizard extends DataModelWizard implements INewWizard, INewHookDataModelProperties {
 
 	public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
 
 	public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
 
@@ -157,6 +160,8 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		getDataModel();
+        ValidProjectChecker checker = new ValidProjectChecker( ID );
+        checker.checkValidProjectTypes();
 	}
 
 	@Override
