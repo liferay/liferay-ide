@@ -15,6 +15,7 @@
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
+import com.liferay.ide.eclipse.project.ui.wizard.ValidProjectChecker;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.NewLayoutTplDataModelProvider;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
@@ -44,6 +45,8 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, INewLayoutTplDataModelProperties
 {
 
+    public static final String ID = "com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate";
+
     public static final String LAYOUTTPL_LAYOUT_PAGE = "layoutTplLayoutPage";
 
     public static final String LAYOUTTPL_PAGE = "layoutTplPage";
@@ -70,6 +73,8 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
         getDataModel();
+        ValidProjectChecker checker = new ValidProjectChecker( ID );
+        checker.checkValidProjectTypes();
     }
 
     @Override

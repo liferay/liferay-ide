@@ -8,6 +8,7 @@
             name="Liferay">
       </category>
       <wizard
+            canFinishEarly="true"
             category="com.liferay.ide.newWizards"
             icon="icons/n16/portlet_new.png"
             id="com.liferay.ide.portlet.ui.wizard.portlet"

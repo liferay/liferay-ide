@@ -22,6 +22,7 @@ import com.liferay.ide.portlet.jsf.ui.JSFPortletTemplateContextTypeIds;
 import com.liferay.ide.portlet.jsf.ui.JSFUIPlugin;
 import com.liferay.ide.portlet.ui.wizard.NewLiferayPortletWizardPage;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
+import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -30,6 +31,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -42,6 +45,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 @SuppressWarnings( "restriction" )
 public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPortletClassDataModelProperties
 {
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet";
 
     public NewJSFPortletWizard()
     {
@@ -95,6 +100,14 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
             JSFUIPlugin.getDefault().getTemplateContextRegistry().getContextType( JSFPortletTemplateContextTypeIds.NEW );
 
         return new NewJSFPortletClassDataModelProvider( templateStore, contextType, fragment );
+    }
+
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+        getDataModel();
+        ValidProjectChecker checker = new ValidProjectChecker( ID );
+        checker.checkValidProjectTypes();
     }
 
     @Override

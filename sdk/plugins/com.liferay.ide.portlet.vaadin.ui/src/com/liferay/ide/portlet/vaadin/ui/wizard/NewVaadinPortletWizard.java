@@ -21,10 +21,13 @@ import com.liferay.ide.portlet.ui.wizard.NewLiferayPortletWizardPage;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import com.liferay.ide.portlet.vaadin.core.operation.NewVaadinPortletClassDataModelProvider;
 import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
+import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
@@ -34,6 +37,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 @SuppressWarnings( "restriction" )
 public class NewVaadinPortletWizard extends NewPortletWizard
 {
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet";
 
     public NewVaadinPortletWizard()
     {
@@ -87,6 +92,14 @@ public class NewVaadinPortletWizard extends NewPortletWizard
     {
         return ImageDescriptor.createFromURL( VaadinUI.getDefault().getBundle().getEntry(
             "/icons/wizban/vaadin_wiz.png" ) );
+    }
+
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+        getDataModel();
+        ValidProjectChecker checker = new ValidProjectChecker( ID );
+        checker.checkValidProjectTypes();
     }
 
 }
