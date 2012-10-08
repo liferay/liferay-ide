@@ -24,10 +24,10 @@
         <maven>3.0</maven>
     </prerequisites>
 
-  <groupId>com.liferay.ide.eclipse</groupId>
-  <artifactId>ide-parent</artifactId>
-  <version>1.6.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <groupId>com.liferay.ide.eclipse</groupId>
+    <artifactId>ide-parent</artifactId>
+    <version>1.6.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
 
@@ -35,35 +35,35 @@
         <license>
             <name>GNU Lesser General Public License v2.1</name>
             <comments>
-		Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- 
-		This library is free software; you can redistribute it and/or modify it under
-		the terms of the GNU Lesser General Public License as published by the Free
-		Software Foundation; either version 2.1 of the License, or (at your option)
-		any later version.
- 
- 		This library is distributed in the hope that it will be useful, but WITHOUT
-		ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-		FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-		details.
-	   </comments>
+        		Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+         
+        		This library is free software; you can redistribute it and/or modify it under
+        		the terms of the GNU Lesser General Public License as published by the Free
+        		Software Foundation; either version 2.1 of the License, or (at your option)
+        		any later version.
+         
+         		This library is distributed in the hope that it will be useful, but WITHOUT
+        		ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+        		FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+        		details.
+            </comments>
         </license>
     </licenses>
 
-  <properties>
-    <tycho-version>0.15.0</tycho-version>
-    <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-    <sapphire-site>http://download.eclipse.org/sapphire/0.5.3/repository/</sapphire-site>
-  </properties>
+    <properties>
+        <tycho-version>0.15.0</tycho-version>
+        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
+        <sapphire-site>http://download.eclipse.org/sapphire/0.5.3/repository/</sapphire-site>
+    </properties>
 
     <profiles>
         <profile>
             <id>helioslocal</id>
             <properties>
                 <eclipse-site>file:target-platform/releases-helios</eclipse-site>
-		<eclipse-project-update-site>file:target-platform/eclipse-updates-3.6</eclipse-project-update-site>
-		<wtp-site>file:target-platform/webtools-repository-helios</wtp-site>
-		<orbit-site>file:target-platform/orbit</orbit-site>
+                <eclipse-project-update-site>file:target-platform/eclipse-updates-3.6</eclipse-project-update-site>
+                <wtp-site>file:target-platform/webtools-repository-helios</wtp-site>
+                <orbit-site>file:target-platform/orbit</orbit-site>
                 <platform-version>[3.6,3.7)</platform-version>
             </properties>
             <repositories>
@@ -94,7 +94,7 @@
                 </repository>
             </repositories>
         </profile>
-	<profile>
+        <profile>
             <id>helios</id>
             <properties>
                 <eclipse-site>http://download.eclipse.org/releases/helios</eclipse-site>
@@ -130,7 +130,7 @@
                 </repository>
             </repositories>
         </profile>
-        
+
         <profile>
             <id>indigo</id>
             <properties>
@@ -162,7 +162,7 @@
                     <layout>p2</layout>
                     <url>${wtp-site}</url>
                 </repository>
-               <repository>
+                <repository>
                     <id>greclipse-site</id>
                     <layout>p2</layout>
                     <url>${greclipse-site}</url>
@@ -174,10 +174,10 @@
                 </repository>
             </repositories>
         </profile>
-       
-       <profile>
+
+        <profile>
             <id>export</id>
-            
+
             <repositories>
                 <repository>
                     <id>export</id>
@@ -193,13 +193,13 @@
                     <id>jdt</id>
                     <layout>p2</layout>
                     <url>file:target-platform/eclipse-jdt-3.7.2</url>
-                </repository>   
+                </repository>
                 <repository>
                     <id>jdt-platform</id>
                     <layout>p2</layout>
                     <url>file:target-platform/eclipse-jdt-3.7.0</url>
                 </repository>
-                
+
                 <repository>
                     <id>dtp-site</id>
                     <layout>p2</layout>
@@ -212,11 +212,11 @@
                 </repository> -->
             </repositories>
         </profile>
-       
-       
+
+
         <profile>
             <id>indigolocal</id>
-            
+
             <repositories>
                 <repository>
                     <id>eclipse-platform</id>
@@ -300,8 +300,8 @@
                 </repository>
             </repositories>
         </profile>
-       
-		
+
+
     </profiles>
 
     <modules>
@@ -315,8 +315,8 @@
         <module>common/plugins/com.liferay.ide.eclipse.ui</module>
         <module>common/plugins/com.liferay.ide.eclipse.ui.snippets</module>
 
-	<module>portal/plugins/com.liferay.ide.eclipse.hook.core</module>
-	<module>portal/plugins/com.liferay.ide.eclipse.hook.ui</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.hook.core</module>
+        <module>portal/plugins/com.liferay.ide.eclipse.hook.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.core</module>
         <module>portal/plugins/com.liferay.ide.eclipse.layouttpl.ui</module>
         <module>portal/plugins/com.liferay.ide.eclipse.portlet.core</module>
@@ -341,22 +341,8 @@
         <module>common/features/com.liferay.ide.eclipse.tools</module>
         
         <!-- Release Management -->
-    	<module>releng/com.liferay.ide.eclipse-repository</module>
-<!--     	<module>releng/com.liferay.ide.eclipse-updatesite</module> -->
+        <module>releng/com.liferay.ide.eclipse-repository</module>
     </modules>
-
-
-<!--
-    <pluginRepositories>
-        <pluginRepository>
-            <id>tycho</id>
-		<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
--->
 
     <build>
         <sourceDirectory>src</sourceDirectory>
@@ -372,9 +358,18 @@
                 <artifactId>target-platform-configuration</artifactId>
                 <version>${tycho-version}</version>
                 <configuration>
+					<dependency-resolution>
+						<extraRequirements>
+						  <requirement>
+							<type>p2-installable-unit</type>
+							<id>org.eclipse.jdt.feature.group</id>
+							<versionRange>0.0.0</versionRange>
+						  </requirement>
+						</extraRequirements>
+					  </dependency-resolution>
                     <resolver>p2</resolver>
                     <ignoreTychoRepositories>true</ignoreTychoRepositories>
-                      <allowConflictingDependencies>true</allowConflictingDependencies>
+                    <allowConflictingDependencies>true</allowConflictingDependencies>
                     <environments>
                         <environment>
                             <os>win32</os>
@@ -424,33 +419,33 @@
                             <ws>win32</ws>
                             <arch>x86_64</arch>
                         </environment>
-					<environment>
-						<os>macosx</os>
-						<ws>cocoa</ws>
-						<arch>x86</arch>
-					</environment>
-					<environment>
-						<os>macosx</os>
-						<ws>cocoa</ws>
-						<arch>x86_64</arch>
-					</environment>
-					<environment>
-						<os>win32</os>
-						<ws>win32</ws>
-						<arch>x86</arch>
-					</environment>
-					
-					<environment>
-						<os>linux</os>
-						<ws>gtk</ws>
-						<arch>x86</arch>
-					</environment>
-					<environment>
-						<os>linux</os>
-						<ws>gtk</ws>
-						<arch>x86_64</arch>
-					</environment>
-					</environments>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>macosx</os>
+                            <ws>cocoa</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86</arch>
+                        </environment>
+
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86</arch>
+                        </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+                    </environments>
                 </configuration>
             </plugin>
         </plugins>
