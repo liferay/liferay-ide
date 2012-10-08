@@ -4,8 +4,7 @@
         Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
     </description>
 
-    <feature url="features/com.liferay.ide.velocity_0.0.0.qualifier.jar" id="com.liferay.ide.velocity-feature"
-        version="0.0.0">
+    <feature id="com.liferay.ide.velocity-feature" version="0.0.0">
         <category name="lidevelocity" />
     </feature>
 
