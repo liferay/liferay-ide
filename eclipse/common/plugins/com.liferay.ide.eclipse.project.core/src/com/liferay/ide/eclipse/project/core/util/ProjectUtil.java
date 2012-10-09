@@ -25,6 +25,7 @@ import com.liferay.ide.eclipse.project.core.facet.IPluginProjectDataModelPropert
 import com.liferay.ide.eclipse.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
+import com.liferay.ide.eclipse.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -76,6 +77,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
@@ -85,6 +87,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
+import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
 /**
  * @author Greg Amerson
@@ -1108,6 +1111,21 @@ public class ProjectUtil
 
 		return string.replaceFirst( regex, "" );
 	}
+
+	public static void setDefaultRuntime(IDataModel dataModel)
+    {
+        DataModelPropertyDescriptor[] validDescriptors =
+            dataModel.getValidPropertyDescriptors( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
+
+        for( DataModelPropertyDescriptor desc : validDescriptors ) {
+            Object runtime = desc.getPropertyValue();
+
+            if( runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime( (BridgedRuntime) runtime ) ) {
+                dataModel.setProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME, runtime );
+                break;
+            }
+        }
+    }
 
 	public static void setGenerateDD( IDataModel model, boolean generateDD )
 	{

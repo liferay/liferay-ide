@@ -213,17 +213,8 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
 		getDataModel().setProperty(LIFERAY_USE_SDK_LOCATION, true);
 
-		DataModelPropertyDescriptor[] validDescriptors = getDataModel().getValidPropertyDescriptors(FACET_RUNTIME);
+		ProjectUtil.setDefaultRuntime(getDataModel());
 
-		for (DataModelPropertyDescriptor desc : validDescriptors) {
-			Object runtime = desc.getPropertyValue();
-
-			if (runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime((BridgedRuntime) runtime)) {
-				getDataModel().setProperty(FACET_RUNTIME, runtime);
-				break;
-			}
-		}
-        
 		ProjectCorePlugin.getPortletFrameworks( true );
 	}
 

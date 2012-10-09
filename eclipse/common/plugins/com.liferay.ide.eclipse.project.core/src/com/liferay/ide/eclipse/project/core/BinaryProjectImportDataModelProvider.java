@@ -13,9 +13,12 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Cindy Li - IDE-692
  ******************************************************************************/
 
 package com.liferay.ide.eclipse.project.core;
+
+import com.liferay.ide.eclipse.project.core.util.ProjectUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -25,6 +28,16 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
  */
 public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataModelProvider {
 
+    
+    /*
+     * (non-Javadoc)
+     * @see com.liferay.ide.eclipse.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
+     */
+    @Override
+    public IStatus createSelectedProjectsErrorStatus() {
+        return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
+    }
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.liferay.ide.eclipse.project.core.LiferayProjectImportDataModelProvider#getDefaultOperation()
@@ -32,17 +45,13 @@ public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataM
 	@Override
 	public IDataModelOperation getDefaultOperation() {
 		return new BinaryProjectImportOperation( this.model );
-	}
+	}	
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.liferay.ide.eclipse.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
-	 */
-	@Override
-	public IStatus createSelectedProjectsErrorStatus() {
+    @Override
+    public void init() {
+        super.init();
 
-		return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
-
-	}
+        ProjectUtil.setDefaultRuntime(getDataModel());
+    }
 
 }
