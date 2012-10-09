@@ -13,9 +13,12 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Cindy Li - IDE-692
  ******************************************************************************/
 
 package com.liferay.ide.project.core;
+
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -44,6 +47,14 @@ public class BinaryProjectsImportDataModelProvider extends SDKProjectsImportData
     public IDataModelOperation getDefaultOperation()
     {
         return new BinaryProjectsImportOperation( this.model );
+    }
+
+    @Override
+    public void init()
+    {
+        super.init();
+
+        ProjectUtil.setDefaultRuntime(getDataModel());
     }
 
 }

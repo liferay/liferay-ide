@@ -126,6 +126,8 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
         // }
 
         // facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
+
+        ProjectUtil.setDefaultRuntime(getDataModel());
     }
 
     @Override

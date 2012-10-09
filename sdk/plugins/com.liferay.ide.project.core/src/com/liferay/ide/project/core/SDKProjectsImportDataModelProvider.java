@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKManager;
 import com.liferay.ide.sdk.util.SDKUtil;
@@ -156,6 +157,8 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
         // }
 
         // facetedProject.setFixedProjectFacets(Collections.unmodifiableSet(fixedFacets));
+
+        ProjectUtil.setDefaultRuntime(getDataModel());
     }
 
     @Override

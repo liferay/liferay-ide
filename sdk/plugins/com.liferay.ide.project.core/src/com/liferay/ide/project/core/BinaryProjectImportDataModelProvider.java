@@ -13,9 +13,12 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Cindy Li - IDE-692
  ******************************************************************************/
 
 package com.liferay.ide.project.core;
+
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -28,6 +31,16 @@ public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataM
 
     /*
      * (non-Javadoc)
+     * @see com.liferay.ide.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
+     */
+    @Override
+    public IStatus createSelectedProjectsErrorStatus()
+    {
+        return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
+    }
+
+    /*
+     * (non-Javadoc)
      * @see com.liferay.ide.project.core.LiferayProjectImportDataModelProvider#getDefaultOperation()
      */
     @Override
@@ -36,16 +49,12 @@ public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataM
         return new BinaryProjectImportOperation( this.model );
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.liferay.ide.project.core.SDKProjectsImportDataModelProvider#createProjectErrorStatus()
-     */
     @Override
-    public IStatus createSelectedProjectsErrorStatus()
+    public void init()
     {
+        super.init();
 
-        return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
-
+        ProjectUtil.setDefaultRuntime(getDataModel());
     }
 
 }
