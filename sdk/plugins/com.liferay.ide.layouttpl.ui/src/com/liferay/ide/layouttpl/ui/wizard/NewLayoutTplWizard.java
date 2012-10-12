@@ -15,10 +15,10 @@
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
-import com.liferay.ide.eclipse.project.ui.wizard.ValidProjectChecker;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.NewLayoutTplDataModelProvider;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
+import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
 
