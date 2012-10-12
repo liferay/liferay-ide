@@ -51,6 +51,10 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
         {
             return getPluginFacetId();
         }
+        else if( propertyName.equals( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE ) )
+        {
+            return true;
+        }
         else if( propertyName.equals( LIFERAY_PLUGIN_LIBRARY_DELEGATE ) )
         {
             if( libraryDelegate == null )
@@ -63,6 +67,10 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 
             return libraryDelegate;
         }
+        else if( propertyName.equals( SETUP_DEFAULT_OUTPUT_LOCATION ) )
+        {
+            return true;
+        }
 
         return super.getDefaultProperty( propertyName );
     }
@@ -72,16 +80,13 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
     {
         Set propNames = super.getPropertyNames();
 
+        propNames.add( CONFIGURE_DEPLOYMENT_ASSEMBLY );
+        propNames.add( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE );
         propNames.add( LIFERAY_PLUGIN_LIBRARY_DELEGATE );
         propNames.add( LIFERAY_SDK_NAME );
+        propNames.add( SETUP_DEFAULT_OUTPUT_LOCATION );
 
         return propNames;
-    }
-
-    @Override
-    public void init()
-    {
-        super.init();
     }
 
     @Override

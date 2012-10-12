@@ -57,6 +57,11 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
     {
         IPath portalDir = getPortalDir();
 
+        if( portalDir == null )
+        {
+            return;
+        }
+ 
         IPath portletTld = portalDir.append( "WEB-INF/tld/liferay-portlet.tld" );
 
         if( portletTld.toFile().exists() )
@@ -160,7 +165,10 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
         else
         {
-            setupDefaultOutputLocation();
+            if( shouldSetupDefaultOutputLocation() )
+            {
+                setupDefaultOutputLocation();
+            }
         }
 
         // modify the web.xml and add <jsp-config><taglib> for liferay tlds
@@ -207,8 +215,11 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             ProjectCorePlugin.logError( "Could not store jsp fragment validation preference", e );
         }
 
-        // IDE-565
-        configureDeploymentAssembly( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
+        if( shouldConfigureDeploymentAssembly() )
+        {
+            // IDE-565
+            configureDeploymentAssembly( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
+        }
     }
 
     @Override

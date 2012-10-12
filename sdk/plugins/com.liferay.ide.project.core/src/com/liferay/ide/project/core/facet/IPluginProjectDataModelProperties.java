@@ -26,6 +26,9 @@ public interface IPluginProjectDataModelProperties
     extends IJ2EEFacetProjectCreationDataModelProperties, IProjectCreationPropertiesNew
 {
 
+    public static final String CONFIGURE_DEPLOYMENT_ASSEMBLY = 
+                    "IPluginProjectDataModelProperties.CONFIGURE_DEPLOYMENT_ASSEMBLY";
+
     public static final String CREATE_PROJECT_OPERATION = "IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION";
 
     public static final String DISPLAY_NAME = "IPluginProjectCreationPropertiesNew.DISPLAY_NAME";
@@ -34,13 +37,13 @@ public interface IPluginProjectDataModelProperties
 
     public static final String HOOK_NAME = "IPluginProjectDataModelProperties.HOOK_NAME";
 
+    public static final String INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE =
+        "IPluginProjectDataModelProperties.INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE";
+
     public static final String LAYOUTTPL_NAME = "IPluginProjectDataModelProperties.LAYOUTTPL_NAME";
 
     public static final String LIFERAY_PLUGIN_LIBRARY_DELEGATE =
         "IPluginProjectDataModelProperties.LIFERAY_PLUGIN_LIBRARY_DELEGATE";
-
-    // public static final String LIFERAY_USE_WORKSPACE_LOCATION =
-    // "IPluginProjectDataModelProperties.LIFERAY_USE_WORKSPACE_LOCATION";
 
     public static final String LIFERAY_SDK_NAME = "IPluginProjectDataModelProperties.LIFERAY_SDK_NAME";
 
@@ -66,6 +69,9 @@ public interface IPluginProjectDataModelProperties
     public static final String PORTLET_FRAMEWORK_ID = "IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID";
 
     public static final String PORTLET_NAME = "IPluginProjectDataModelProperties.PORTLET_NAME";
+
+    public static final String SETUP_DEFAULT_OUTPUT_LOCATION =
+        "IPluginProjectDataModelProperties.SETUP_DEFAULT_OUTPUT_LOCATION";
 
     public static final String THEME_NAME = "IPluginProjectDataModelProperties.THEME_NAME";
 }

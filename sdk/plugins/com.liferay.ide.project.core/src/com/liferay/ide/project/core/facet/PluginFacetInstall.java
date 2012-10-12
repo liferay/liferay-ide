@@ -221,20 +221,16 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
             installPluginLibraryDelegate();
         }
 
-        // if (masterModel.getBooleanProperty(PLUGIN_TYPE_THEME)) {
-        // installThemeTemplate();
-        // } else if
-        // (masterModel.getBooleanProperty(PLUGIN_TYPE_LAYOUT_TEMPLATE)) {
-        // installLayoutTplTemplate();
-        // }
+        if( shouldSetupDefaultOutputLocation() )
+        {
+            setupDefaultOutputLocation();
 
-        setupDefaultOutputLocation();
+            IJavaProject javaProject = JavaCore.create( project );
 
-        IJavaProject javaProject = JavaCore.create( project );
+            IPath outputLocation = project.getFolder( getDefaultOutputLocation() ).getFullPath();
 
-        IPath outputLocation = project.getFolder( getDefaultOutputLocation() ).getFullPath();
-
-        javaProject.setOutputLocation( outputLocation, monitor );
+            javaProject.setOutputLocation( outputLocation, monitor );
+        }
     }
 
     protected IPath getAppServerDir()
@@ -542,9 +538,19 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         return true;
     }
 
+    protected boolean shouldConfigureDeploymentAssembly()
+    {
+        return this.model.getBooleanProperty( CONFIGURE_DEPLOYMENT_ASSEMBLY );
+    }
+
     protected boolean shouldInstallPluginLibraryDelegate()
     {
-        return true;
+        return this.model.getBooleanProperty( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE );
+    }
+ 
+    protected boolean shouldSetupDefaultOutputLocation()
+    {
+        return this.model.getBooleanProperty( SETUP_DEFAULT_OUTPUT_LOCATION );
     }
 
     // protected void configWebXML() {

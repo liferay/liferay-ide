@@ -58,14 +58,15 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
 
         if( file != null && file.exists() )
         {
-            status = new DOMModelEditOperation( file )
+            final DOMModelEditOperation op = new DOMModelEditOperation( file )
             {
-
                 protected IStatus doExecute( IDOMDocument document )
                 {
                     return doAddTagLib( document, tagLibRefType );
                 }
-            }.execute();
+            };
+ 
+            status = op.execute();
         }
         else
         {

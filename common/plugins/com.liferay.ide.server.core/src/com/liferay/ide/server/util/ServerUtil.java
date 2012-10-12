@@ -494,31 +494,33 @@ public class ServerUtil
     public static Object getRuntimeAdapter(
         org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime, Class<?> adapterClass )
     {
-
-        String runtimeId = facetRuntime.getProperty( "id" );
-
-        for( org.eclipse.wst.server.core.IRuntime runtime : ServerCore.getRuntimes() )
+        if( facetRuntime != null )
         {
-            if( runtime.getId().equals( runtimeId ) )
+            String runtimeId = facetRuntime.getProperty( "id" );
+
+            for( org.eclipse.wst.server.core.IRuntime runtime : ServerCore.getRuntimes() )
             {
-
-                if( IRuntime.class.equals( adapterClass ) )
+                if( runtime.getId().equals( runtimeId ) )
                 {
-                    return runtime;
-                }
 
-                IRuntimeWorkingCopy runtimeWC = null;
+                    if( IRuntime.class.equals( adapterClass ) )
+                    {
+                        return runtime;
+                    }
 
-                if( !runtime.isWorkingCopy() )
-                {
-                    runtimeWC = runtime.createWorkingCopy();
-                }
-                else
-                {
-                    runtimeWC = (IRuntimeWorkingCopy) runtime;
-                }
+                    IRuntimeWorkingCopy runtimeWC = null;
 
-                return (ILiferayRuntime) runtimeWC.loadAdapter( adapterClass, null );
+                    if( !runtime.isWorkingCopy() )
+                    {
+                        runtimeWC = runtime.createWorkingCopy();
+                    }
+                    else
+                    {
+                        runtimeWC = (IRuntimeWorkingCopy) runtime;
+                    }
+
+                    return (ILiferayRuntime) runtimeWC.loadAdapter( adapterClass, null );
+                }
             }
         }
 
