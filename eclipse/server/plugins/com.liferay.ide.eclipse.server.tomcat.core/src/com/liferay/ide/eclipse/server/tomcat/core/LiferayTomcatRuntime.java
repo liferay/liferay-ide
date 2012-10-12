@@ -213,7 +213,24 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 		return getRuntime().getLocation();
 	}
 
-	public String getServerInfo() {
+    public String getServerInfo() {
+        try {
+            String serverInfoFromManifest = LiferayTomcatUtil.getConfigInfoFromManifest( "server", getPortalDir() );
+ 
+            if( serverInfoFromManifest!=null ) {
+                return serverInfoFromManifest;
+            }
+
+            return getServerInfoFromClass();
+        }
+        catch( IOException e ) {
+            LiferayTomcatPlugin.logError(e);
+        }
+
+        return null;
+    }
+
+    public String getServerInfoFromClass() {
 		// check for existing server info
 		IPath location = getRuntime().getLocation();
 
