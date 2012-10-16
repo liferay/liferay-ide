@@ -20,13 +20,14 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.AbstractPluginPublisher;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 
-import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
@@ -52,7 +53,6 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
         ServerBehaviourDelegate delegate, int kind, int deltaKind, IModule[] moduleTree, IModuleResourceDelta[] delta,
         IProgressMonitor monitor )
     {
-
         boolean publish = true;
 
         if( ( kind != IServer.PUBLISH_FULL && kind != IServer.PUBLISH_INCREMENTAL && kind != IServer.PUBLISH_AUTO ) ||
@@ -78,20 +78,22 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
 
     protected void addThemeModule( ServerBehaviourDelegate delegate, IModule module ) throws CoreException
     {
-
         IProject project = module.getProject();
 
         // check to make sure they have a look-and-feel.xml file
-        IFolder docroot = CoreUtil.getDocroot( project );
+        // IDE-110 IDE-648
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        if( docroot != null && docroot.exists() )
+        for( IContainer container : webappRoot.getUnderlyingFolders() )
         {
-            if( !( docroot.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
-                !( docroot.exists( new Path( "css" ) ) ) )
+            if( container != null && container.exists() )
             {
-
-                ThemeCSSBuilder.cssBuild( project );
-                ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
+                if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
+                    !( container.exists( new Path( "css" ) ) ) )
+                {
+                    ThemeCSSBuilder.cssBuild( project );
+                    ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
+                }
             }
         }
     }

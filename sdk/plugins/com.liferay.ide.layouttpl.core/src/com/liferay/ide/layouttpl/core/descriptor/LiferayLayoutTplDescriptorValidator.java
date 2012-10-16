@@ -47,7 +47,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class LiferayLayoutTplDescriptorValidator extends BaseValidator
@@ -61,13 +61,13 @@ public class LiferayLayoutTplDescriptorValidator extends BaseValidator
 
     public static final String MARKER_TYPE = "com.liferay.ide.layouttpl.core.liferayLayoutTplDescriptorMarker";
 
-    public static final String MESSAGE_TEMPLATE_PATH_NOT_FOUND = "The template path {0} was not found in the docroot.";
+    public static final String MESSAGE_TEMPLATE_PATH_NOT_FOUND = "The template path {0} was not found in the web app.";
 
     public static final String MESSAGE_THUMBNAIL_PATH_NOT_FOUND =
-        "The thumbnail path {0} was not found in the docroot.";
+        "The thumbnail path {0} was not found in the web app.";
 
     public static final String MESSAGE_WAP_TEMPLATE_PATH_NOT_FOUND =
-        "The wap template path {0} was not found in the docroot.";
+        "The wap template path {0} was not found in the web app.";
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
@@ -129,7 +129,6 @@ public class LiferayLayoutTplDescriptorValidator extends BaseValidator
     protected void checkDocrootElements(
         IDOMDocument document, IProject project, IScopeContext[] preferenceScopes, List<Map<String, Object>> problems )
     {
-
         checkDocrootElement(
             document, TEMPLATE_PATH_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
             ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND, MESSAGE_TEMPLATE_PATH_NOT_FOUND,
@@ -150,7 +149,6 @@ public class LiferayLayoutTplDescriptorValidator extends BaseValidator
     protected Map<String, Object>[] detectProblems( IFile liferayLayoutTplXml, IScopeContext[] preferenceScopes )
         throws CoreException
     {
-
         List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
 
         IStructuredModel liferayLayputTplXmlModel = null;

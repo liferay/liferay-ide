@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.facet;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -98,10 +99,12 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             {
                 ProjectCorePlugin.logError( e );
             }
+ 
+            IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
 
-            deleteFolder( this.project.getFolder( "docroot/WEB-INF/src" ) );
-            deleteFolder( this.project.getFolder( "docroot/WEB-INF/classes" ) );
-            deleteFolder( this.project.getFolder( "docroot/WEB-INF/ext-web/docroot/WEB-INF/lib" ) );
+            deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) );
+            deleteFolder( webappRoot.getFolder( "WEB-INF/classes" ) );
+            deleteFolder( webappRoot.getFolder( "WEB-INF/ext-web/docroot/WEB-INF/lib" ) );
         }
 
         IJavaProject javaProject = JavaCore.create( project );
@@ -157,7 +160,9 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
     protected void fixTilesDefExtFile()
     {
-        IFile tilesDefExtFile = this.project.getFile( "docroot/WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml" );
+        IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
+
+        IFile tilesDefExtFile = webappRoot.getFile( "WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml" );
 
         if( tilesDefExtFile.exists() )
         {

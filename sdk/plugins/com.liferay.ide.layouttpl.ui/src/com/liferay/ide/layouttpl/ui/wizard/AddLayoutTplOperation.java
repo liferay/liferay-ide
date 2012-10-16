@@ -55,7 +55,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class AddLayoutTplOperation extends LiferayDataModelOperation implements INewLayoutTplDataModelProperties
@@ -69,7 +69,6 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
     @Override
     public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
     {
-
         IStatus retval = null;
         IStatus status = checkDescriptorFile( getTargetProject() );
 
@@ -128,8 +127,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
     protected void createThumbnailFile( String thumbnailFile, LayoutTplDiagram diagramModel ) throws CoreException,
         IOException
     {
-
-        IFolder docroot = CoreUtil.getDocroot( getTargetProject() );
+        IFolder docroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
         IFile thumbnailFileValue = docroot.getFile( thumbnailFile );
         URL iconFileURL = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/blank_columns.png" );
 
@@ -147,8 +145,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
     protected IFile createTemplateFile( String templateFile, LayoutTplDiagram diagramModel ) throws CoreException
     {
-
-        IFolder docroot = CoreUtil.getDocroot( getTargetProject() );
+        IFolder docroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
         IFile templateFileValue = docroot.getFile( templateFile );
         CoreUtil.prepareFolder( (IFolder) templateFileValue.getParent() );
 
@@ -286,7 +283,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
     protected IStatus checkDescriptorFile( IProject project )
     {
-        IFolder docroot = CoreUtil.getDocroot( project );
+        IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
         IFile layoutTplDescriptorFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
 
@@ -308,7 +305,6 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
     protected void createDefaultLayoutTplDescriptorFile( IFile layoutTplDescriptorFile )
         throws UnsupportedEncodingException, CoreException, BadLocationException, TemplateException
     {
-
         String templateString = null;
         IDocument document = new Document();
 

@@ -23,15 +23,18 @@ import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Greg Amerson
@@ -53,6 +56,26 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
         this.templateStore = templateStore;
         this.contextType = contextType;
+    }
+
+    private boolean checkDocrootFileExists(final IPath path)
+    {
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( getTargetProject() );
+
+        for( IContainer container : webappRoot.getUnderlyingFolders() )
+        {
+            if( container != null && container.exists() )
+            {
+                IFile file = container.getFile( path );
+
+                if( file.exists() )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -190,47 +213,29 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         }
         else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
         {
-            IProject targetProject = getTargetProject();
+            final IPath filePath = new Path( getStringProperty( LAYOUT_TEMPLATE_FILE ) );
 
-            if( targetProject != null )
+            if( checkDocrootFileExists( filePath ) )
             {
-                IFile templateFile =
-                    CoreUtil.getDocroot( targetProject ).getFile( getStringProperty( LAYOUT_TEMPLATE_FILE ) );
-
-                if( templateFile.exists() )
-                {
-                    return LayoutTplCore.createWarningStatus( "Template file already exists and will be overwritten." );
-                }
+                return LayoutTplCore.createWarningStatus( "Template file already exists and will be overwritten." );
             }
         }
         else if( LAYOUT_WAP_TEMPLATE_FILE.equals( propertyName ) )
         {
-            IProject targetProject = getTargetProject();
-
-            if( targetProject != null )
+            final IPath filePath = new Path( getStringProperty( LAYOUT_WAP_TEMPLATE_FILE ) );
+ 
+            if( checkDocrootFileExists( filePath ) )
             {
-                IFile wapTemplateFile =
-                    CoreUtil.getDocroot( targetProject ).getFile( getStringProperty( LAYOUT_WAP_TEMPLATE_FILE ) );
-
-                if( wapTemplateFile.exists() )
-                {
-                    return LayoutTplCore.createWarningStatus( "WAP template file already exists and will be overwritten." );
-                }
+                return LayoutTplCore.createWarningStatus( "WAP template file already exists and will be overwritten." );
             }
         }
         else if( LAYOUT_THUMBNAIL_FILE.equals( propertyName ) )
         {
-            IProject targetProject = getTargetProject();
+            final IPath filePath = new Path( getStringProperty( LAYOUT_THUMBNAIL_FILE ) );
 
-            if( targetProject != null )
+            if( checkDocrootFileExists( filePath ) )
             {
-                IFile thumbnailFile =
-                    CoreUtil.getDocroot( targetProject ).getFile( getStringProperty( LAYOUT_THUMBNAIL_FILE ) );
-
-                if( thumbnailFile.exists() )
-                {
-                    return LayoutTplCore.createWarningStatus( "Thumbnail file already exists and will be overwritten." );
-                }
+                return LayoutTplCore.createWarningStatus( "Thumbnail file already exists and will be overwritten." );
             }
         }
 

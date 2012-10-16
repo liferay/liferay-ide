@@ -13,23 +13,28 @@
  *
  * Contributors:
  *    Kamesh Sampath - initial implementation
+ *    Gregory Amerson - Ongoing maintenance
  ******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.model.Hook;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
-
-import com.liferay.ide.hook.core.model.Hook;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
+ * @author Gregory Amerson
  */
 public class DocrootRelativePathService extends RelativePathService
 {
@@ -44,8 +49,20 @@ public class DocrootRelativePathService extends RelativePathService
         List<Path> roots = new ArrayList<Path>();
         IModelElement modelElement = context( Hook.class );
         IProject project = modelElement.adapt( IProject.class );
-        IPath docRootPath = project.getLocation().append( "docroot" );
-        roots.add( new Path( docRootPath.toPortableString() ) );
+
+        // IDE-110
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+ 
+        for( IContainer container : webappRoot.getUnderlyingFolders() )
+        {
+            final IPath location = container.getLocation();
+
+            if( location != null )
+            {
+                roots.add( new Path( location.toPortableString() ) );
+            }
+        }
+
         return roots;
     }
 }

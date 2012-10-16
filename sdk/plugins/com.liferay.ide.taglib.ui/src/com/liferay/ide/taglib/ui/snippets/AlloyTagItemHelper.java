@@ -27,8 +27,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
@@ -37,6 +40,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.snippets.core.ISnippetItem;
 import org.eclipse.wst.common.snippets.core.ISnippetsEntry;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -126,18 +130,32 @@ public class AlloyTagItemHelper {
 		Document tldDocument = null;
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
-		tldFile = CoreUtil.getDocroot(editorFile.getProject()).getFile("WEB-INF/tld/alloy.tld");
+		final IProject project = editorFile.getProject();
+		// IDE-110 IDE-648
+		IVirtualFolder webappRoot = CoreUtil.getDocroot(project);
+		
+		for( IContainer container : webappRoot.getUnderlyingFolders() )
+        {
+            if( container != null && container.exists() )
+            {
+                tldFile = container.getFile( new Path( "WEB-INF/tld/alloy.tld") );
 
-		if (tldFile.exists()) {
-			try {
-				IDOMModel tldModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( tldFile );
-				tldDocument = tldModel.getDocument();
-			}
-			catch (Exception e) {
-				SnippetsUIPlugin.logError(e);
-			}
-		}
-		else {
+                if (tldFile.exists()) {
+                    try {
+                        IDOMModel tldModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( tldFile );
+                        tldDocument = tldModel.getDocument();
+                    }
+                    catch (Exception e) {
+                        SnippetsUIPlugin.logError(e);
+                    }
+ 
+                    break;
+                }
+            }
+        }
+
+		if( tldDocument == null )
+		{
 			// read alloy from plugin
 			try {
 				URL alloyURL = FileLocator.toFileURL( TaglibUI.getDefault().getBundle().getEntry( "deps/alloy.tld" ) );

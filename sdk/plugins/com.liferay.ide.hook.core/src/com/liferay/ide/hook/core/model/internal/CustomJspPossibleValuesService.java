@@ -17,11 +17,10 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.hook.core.model.CustomJspDir;
-import com.liferay.ide.hook.core.model.Hook;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -86,27 +85,10 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
         }
     }
 
-    private IFolder getCustomJspFolder()
-    {
-        CustomJspDir element = this.hook().getCustomJspDir().element();
-        IFolder docroot = CoreUtil.getDocroot( project() );
-
-        if( element != null && docroot != null )
-        {
-            Path customJspDir = element.getValue().getContent();
-            IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
-            return customJspFolder;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     @Override
     public Severity getInvalidValueSeverity( String invalidValue )
     {
-        IFolder customJspFolder = getCustomJspFolder();
+        IFolder customJspFolder = HookUtil.getCustomJspFolder( hook(), project() );
 
         if( customJspFolder != null )
         {

@@ -809,7 +809,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( ( !CoreUtil.isNullOrEmpty( folderValue ) ) && targetProject != null )
             {
-                IFolder docroot = CoreUtil.getDocroot( targetProject );
+                IFolder docroot = CoreUtil.getDefaultDocrootFolder( targetProject );
                 String errorMsg = FileUtil.validateNewFolder( docroot, folderValue );
 
                 if( errorMsg != null )

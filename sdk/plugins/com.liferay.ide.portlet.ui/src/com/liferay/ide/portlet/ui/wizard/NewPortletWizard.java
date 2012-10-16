@@ -26,10 +26,11 @@ import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
@@ -42,6 +43,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
@@ -155,12 +157,21 @@ public class NewPortletWizard extends NewWebArtifactWizard
                     ResourcesPlugin.getWorkspace().getRoot().getProject(
                         getDataModel().getStringProperty( PROJECT_NAME ) );
 
-                IFolder docroot = CoreUtil.getDocroot( project );
+                // IDE-110 IDE-648
+                IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                IFile viewFile = docroot.getFile( jspsFolder + "/view.jsp" );
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                {
+                    IFile viewFile = container.getFile( new Path( jspsFolder + "/view.jsp" ) );
 
-                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                IDE.openEditor( page, viewFile, true );
+                    if( viewFile.exists() )
+                    {
+                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                        IDE.openEditor( page, viewFile, true );
+
+                        return;
+                    }
+                }
             }
             catch( Exception e )
             {

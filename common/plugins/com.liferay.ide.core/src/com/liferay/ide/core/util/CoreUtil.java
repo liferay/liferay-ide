@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -60,7 +61,7 @@ import org.w3c.dom.Node;
 /**
  * Core Utility methods
  * 
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class CoreUtil
 {
@@ -221,9 +222,30 @@ public class CoreUtil
         return null;
     }
 
-    public static IFolder getDocroot( IProject project )
+    public static IFolder getDefaultDocrootFolder( IProject project )
     {
-        IContainer retval = null;
+        if( project != null )
+        {
+            IVirtualFolder webappRoot = getDocroot( project );
+
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            {
+                if( container != null && container.exists() )
+                {
+                    if( container.getFolder( new Path( "WEB-INF" ) ).exists() )
+                    {
+                        return container instanceof IFolder ? (IFolder) container : null;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static IVirtualFolder getDocroot( IProject project )
+    {
+        IVirtualFolder retval = null;
 
         if( project != null )
         {
@@ -231,19 +253,14 @@ public class CoreUtil
 
             if( comp != null )
             {
-                IVirtualFolder rootFolder = comp.getRootFolder();
-
-                if( rootFolder != null )
-                {
-                    retval = rootFolder.getUnderlyingFolder();
-                }
+                retval = comp.getRootFolder();
             }
         }
 
-        return retval instanceof IFolder ? (IFolder) retval : null;
+        return retval;
     }
 
-    public static IFolder getDocroot( String projectName )
+    public static IVirtualFolder getDocroot( String projectName )
     {
         IProject project = getProject( projectName );
 
@@ -361,9 +378,12 @@ public class CoreUtil
 
         if( file != null )
         {
-            IFolder docroot = getDocroot( file.getProject() );
+            IVirtualFolder docroot = getDocroot( file.getProject() );
 
-            return docroot != null && docroot.exists() && docroot.getFullPath().isPrefixOf( file.getFullPath() );
+            for( IContainer container : docroot.getUnderlyingFolders() )
+            {
+                return container != null && container.exists() && container.getFullPath().isPrefixOf( file.getFullPath() );
+            }
         }
 
         return false;

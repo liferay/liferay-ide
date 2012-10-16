@@ -35,6 +35,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -58,6 +59,7 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
@@ -206,19 +208,29 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
 
     protected IStatus checkDescriptorFile( IProject project )
     {
-        IFolder docroot = CoreUtil.getDocroot( project );
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        IFile hookDescriptorFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-
-        if( !hookDescriptorFile.exists() )
+        // IDE-648 IDE-110
+        for( IContainer container : webappRoot.getUnderlyingFolders() )
         {
-            try
+            if( container != null && container.exists() )
             {
-                createDefaultHookDescriptorFile( hookDescriptorFile );
-            }
-            catch( Exception ex )
-            {
-                return PortletCore.createErrorStatus( ex );
+                final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+                IFile hookDescriptorFile = container.getFile( path );
+
+                if( !hookDescriptorFile.exists() )
+                {
+                    try
+                    {
+                        createDefaultHookDescriptorFile( hookDescriptorFile );
+
+                        break;
+                    }
+                    catch( Exception ex )
+                    {
+                        return PortletCore.createErrorStatus( ex );
+                    }
+                }
             }
         }
 

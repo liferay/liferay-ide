@@ -134,7 +134,7 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
 
             if( !absolutePath.toFile().exists() )
             {
-                IFolder docroot = CoreUtil.getDocroot( project );
+                IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
                 IFolder customJspFolder =
                     docroot.getFolder( new org.eclipse.core.runtime.Path( customJspDirValue.toPortableString() ) );

@@ -30,6 +30,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -38,10 +39,12 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jst.jsp.core.internal.JSPCorePlugin;
 import org.eclipse.jst.jsp.core.internal.preferences.JSPCorePreferenceNames;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
@@ -148,11 +151,21 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                     {
                         if( fragmentModel.getBooleanProperty( IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS ) )
                         {
-                            IFolder docroot = CoreUtil.getDocroot( this.project );
-                            IFile viewJsp = docroot.getFile( "view.jsp" );
-                            if( viewJsp.exists() )
+                            // IDE-110 IDE-648
+                            IVirtualFolder webappRoot = CoreUtil.getDocroot( this.project );
+
+                            for( IContainer container : webappRoot.getUnderlyingFolders() )
                             {
-                                viewJsp.delete( true, monitor );
+                                if( container != null && container.exists() )
+                                {
+                                    IFile viewJsp = container.getFile( new Path( "view.jsp" ) );
+
+                                    if( viewJsp.exists() )
+                                    {
+                                        viewJsp.delete( true, monitor );
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -178,7 +191,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
 
         try
         {
-            IFolder docroot = CoreUtil.getDocroot( project );
+            IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
             // IDE-575
             if( !( docroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&

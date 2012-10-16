@@ -16,12 +16,13 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -39,6 +40,7 @@ import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.jst.jsp.ui.internal.breakpointproviders.JavaStratumBreakpointProvider;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.ui.internal.StructuredResourceMarkerAnnotationModel;
 
 /**
@@ -60,11 +62,24 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 			IResource res = getResourceFromInput(input);
 			if (res != null) {
 				String path = null;
+                //TODO IDE-648 IDE-110
 				// get docroot relative path
-				IFolder docroot = CoreUtil.getDocroot(res.getProject());
+				IVirtualFolder webappRoot = CoreUtil.getDocroot(res.getProject());
 
-				if (docroot != null) {
-					path = "/" + res.getFullPath().makeRelativeTo(docroot.getFullPath()).toPortableString();
+				if (webappRoot != null) {
+				    for( IContainer container : webappRoot.getUnderlyingFolders() )
+	                {
+	                    if( container != null && container.exists() )
+	                    {
+	                        IPath relativePath = res.getFullPath().makeRelativeTo(container.getFullPath());
+
+	                        if( relativePath != null && relativePath.segmentCount() > 0 )
+	                        {
+	                            path = "/" + relativePath.toPortableString();
+	                            break;
+	                        }
+	                    }
+	                }
 				}
 
 				IBreakpoint point =

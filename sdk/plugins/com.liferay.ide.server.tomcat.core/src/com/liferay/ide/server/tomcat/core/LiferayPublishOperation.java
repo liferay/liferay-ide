@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -36,6 +36,7 @@ import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResource;
@@ -269,16 +270,23 @@ public class LiferayPublishOperation extends PublishOperation {
 
 	private IModuleResource getWebXmlFile( IProject project, IPath modelDeployDirectory )
 	{
-		IFolder docroot = CoreUtil.getDocroot( project );
+	    // IDE-110 IDE-648
+		IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-		if (docroot != null)
+		if (webappRoot != null)
 		{
-			IFile webXml = docroot.getFile( WEB_XML_PATH );
+		    for( IContainer container : webappRoot.getUnderlyingFolders() )
+            {
+                if( container != null && container.exists() )
+                {
+                    IFile webXml = container.getFile( new Path( WEB_XML_PATH ) );
 
-			if ( webXml.exists() )
-			{
-				return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
-			}
+                    if ( webXml.exists() )
+                    {
+                        return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
+                    }
+                }
+            }
 		}
 
 		return null;

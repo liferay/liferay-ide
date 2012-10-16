@@ -24,6 +24,7 @@ import com.liferay.ide.portlet.core.PortletCore;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -43,6 +44,7 @@ import org.eclipse.jst.j2ee.internal.common.J2EECommonMessages;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.internal.plugin.WTPCommonPlugin;
 
@@ -455,36 +457,25 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
             return null;
         }
 
-        IFolder docroot = CoreUtil.getDocroot( getTargetProject() );
+        // IDE-110 IDE-648
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( getTargetProject() );
 
-        if( docroot == null )
+        for( IContainer container : webappRoot.getUnderlyingFolders() )
         {
-            return null;
+            if( container != null && container.exists() )
+            {
+                Path path = new Path( "WEB-INF/" + serviceFileProperty );
+                IFile file = container.getFile( path );
+
+                if( file.exists() )
+                {
+                    return file;
+                }
+            }
         }
 
-        return docroot.getFile( "WEB-INF/" + serviceFileProperty );
+        return null;
     }
-
-    // protected final IFolder getJavaSourceFolder() {
-    // IPackageFragmentRoot[] sources =
-    // J2EEProjectUtilities.getSourceContainers(getTargetProject());
-    // // Ensure there is valid source folder(s)
-    // if (sources == null || sources.length == 0)
-    // return null;
-    // String folderFullPath = getStringProperty(SOURCE_FOLDER);
-    // // Get the source folder whose path matches the source folder name value
-    // in the data model
-    // for (int i = 0; i < sources.length; i++) {
-    // if (sources[i].getPath().equals(new Path(folderFullPath))) {
-    // try {
-    // return (IFolder) sources[i].getCorrespondingResource();
-    // } catch (Exception e) {
-    // break;
-    // }
-    // }
-    // }
-    // return null;
-    // }
 
     protected IWorkspaceRoot getWorkspaceRoot()
     {

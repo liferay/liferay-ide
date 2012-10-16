@@ -91,30 +91,30 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
     public static final String MESSAGE_ENTRY_WEIGHT_NOT_VALID = "Must specify a valid double for entry weight.";
     
     public static final String MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND =
-        "The footer portal css resource {0} was not found in the docroot.";
+        "The footer portal css resource {0} was not found in the web app.";
 
     public static final String MESSAGE_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND =
-        "The footer portal javascript resource {0} was not found in the docroot.";
+        "The footer portal javascript resource {0} was not found in the web app.";
 
     public static final String MESSAGE_FOOTER_PORTLET_CSS_NOT_FOUND =
-        "The footer portlet css resource {0} was not found in the docroot.";
+        "The footer portlet css resource {0} was not found in the web app.";
 
     public static final String MESSAGE_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND =
-        "The footer portlet javascript resource {0} was not found in the docroot.";
+        "The footer portlet javascript resource {0} was not found in the web app.";
 
     public static final String MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND =
-        "The header portal css resource {0} was not found in the docroot.";
+        "The header portal css resource {0} was not found in the web app.";
 
     public static final String MESSAGE_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND =
-        "The header portal javascript resource {0} was not found in the docroot.";
+        "The header portal javascript resource {0} was not found in the web app.";
 
     public static final String MESSAGE_HEADER_PORTLET_CSS_NOT_FOUND =
-        "The header portlet css resource {0} was not found in the docroot.";
+        "The header portlet css resource {0} was not found in the web app.";
 
     public static final String MESSAGE_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND =
-        "The header portlet javascript resource {0} was not found in the docroot.";
+        "The header portlet javascript resource {0} was not found in the web app.";
 
-    public static final String MESSAGE_ICON_NOT_FOUND = "The icon resource {0} was not found in the docroot.";
+    public static final String MESSAGE_ICON_NOT_FOUND = "The icon resource {0} was not found in the web app.";
 
     public static final String MESSAGE_PORTLET_NAME_NOT_FOUND = "The portlet name {0} was not found in portlet.xml.";
 

@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -42,6 +43,7 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 
 /**
@@ -53,7 +55,6 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 {
 
     protected TemplateContextType contextType;
-
     protected TemplateStore templateStore;
 
     public NewHookDataModelProvider( TemplateStore templateStore, TemplateContextType contextType )
@@ -86,11 +87,20 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
                 if( customJspFolder != null )
                 {
-                    // folder should be relative to docroot
-                    return CoreUtil.getDocroot( targetProject ).getFolder( customJspFolder ).getFullPath().toPortableString();
+                    // folder should be relative to the web app folder root
+                    // IDE-110 IDE-648
+                    IVirtualFolder virtualJspFolder = CoreUtil.getDocroot( targetProject ).getFolder( customJspFolder );
+
+                    for( IContainer container : virtualJspFolder.getUnderlyingFolders() )
+                    {
+                        if( container != null && container.exists() )
+                        {
+                            return container.getFullPath().toPortableString();
+                        }
+                    }
                 }
 
-                return CoreUtil.getDocroot( targetProject ).getFullPath().append( "custom_jsps" ).toPortableString();
+                return CoreUtil.getDefaultDocrootFolder( targetProject ).getFullPath().append( "custom_jsps" ).toPortableString();
             }
         }
         else if( PORTAL_PROPERTIES_FILE.equals( propertyName ) )

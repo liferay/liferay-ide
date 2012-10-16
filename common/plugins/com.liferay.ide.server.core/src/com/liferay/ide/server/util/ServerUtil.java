@@ -39,7 +39,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -55,6 +54,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -70,7 +70,7 @@ import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class ServerUtil
@@ -83,7 +83,6 @@ public class ServerUtil
         IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
         String deletePrefix ) throws IOException
     {
-
         String archive = removeArchive( deltaPath.toPortableString() );
 
         ZipEntry zipEntry = null;
@@ -387,7 +386,6 @@ public class ServerUtil
 
     public static ILiferayRuntime getLiferayRuntime( IProject project ) throws CoreException
     {
-
         if( project == null )
         {
             return null;
@@ -460,7 +458,6 @@ public class ServerUtil
 
     public static IRuntime getRuntime( IProject project ) throws CoreException
     {
-
         return (IRuntime) getRuntimeAdapter( ProjectFacetsManager.create( project ).getPrimaryRuntime(), IRuntime.class );
     }
 
@@ -687,7 +684,6 @@ public class ServerUtil
         IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
         String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException
     {
-
         for( IModuleResourceDelta delta : deltas )
         {
             int deltaKind = delta.getKind();
@@ -696,10 +692,24 @@ public class ServerUtil
 
             IProject deltaProject = deltaResource.getProject();
 
-            IFolder docroot = CoreUtil.getDocroot( deltaProject );
+            // IDE-110 IDE-648
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
 
-            IPath deltaPath =
-                new Path( deltaPrefix + deltaResource.getFullPath().makeRelativeTo( docroot.getFullPath() ) );
+            IPath deltaPath = null;
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            {
+                if( container != null && container.exists() )
+                {
+                    final IPath deltaFullPath = deltaResource.getFullPath();
+                    final IPath containerFullPath = container.getFullPath();
+                    deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+
+                    if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                    {
+                        break;
+                    }
+                }
+            }
 
             if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
             {

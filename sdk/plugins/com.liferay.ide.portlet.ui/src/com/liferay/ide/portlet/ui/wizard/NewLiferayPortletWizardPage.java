@@ -27,12 +27,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.viewers.DecoratingLabelProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -44,12 +40,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
-import org.eclipse.ui.model.WorkbenchContentProvider;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
@@ -378,7 +371,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         };
     }
 
-    protected IFolder getDocroot()
+    protected IVirtualFolder getDocroot()
     {
         return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }
@@ -398,49 +391,6 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
             ENTRY_WEIGHT, 
             ENTRY_CLASS_NAME
         };
-    }
-
-    protected void handleFileBrowseButton( final Text text, String title, String message )
-    {
-        ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
-
-        ViewerFilter filter = getContainerDialogViewerFilter();
-
-        ITreeContentProvider contentProvider = new WorkbenchContentProvider();
-
-        ILabelProvider labelProvider =
-            new DecoratingLabelProvider(
-                new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
-
-        ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
-        dialog.setValidator( validator );
-        dialog.setTitle( title );
-        dialog.setMessage( message );
-        dialog.addFilter( filter );
-
-        IFolder docroot = CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
-
-        dialog.setInput( docroot );
-
-        if( dialog.open() == Window.OK )
-        {
-            Object element = dialog.getFirstResult();
-
-            try
-            {
-                if( element instanceof IFile )
-                {
-                    IFile file = (IFile) element;
-
-                    text.setText( "/" + file.getFullPath().makeRelativeTo( docroot.getFullPath() ).toPortableString() );
-                    // dealWithSelectedContainerResource(container);
-                }
-            }
-            catch( Exception ex )
-            {
-                // Do nothing
-            }
-        }
     }
 
     protected boolean isProjectValid( IProject project )

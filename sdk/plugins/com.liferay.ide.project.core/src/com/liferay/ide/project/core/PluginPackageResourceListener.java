@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -64,6 +65,7 @@ import org.eclipse.wst.common.componentcore.internal.operation.AddReferenceDataM
 import org.eclipse.wst.common.componentcore.internal.operation.RemoveReferenceDataModelProvider;
 import org.eclipse.wst.common.componentcore.internal.resources.VirtualArchiveComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualReference;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -154,20 +156,26 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         if( fullPath.lastSegment() != null &&
             fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
         {
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( delta.getResource().getProject() );
 
-            IFolder docroot = CoreUtil.getDocroot( delta.getResource().getProject() );
-
-            if( docroot == null )
+            if( webappRoot == null )
             {
                 return false;
             }
 
-            IPath filePath =
-                docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ).getFullPath();
-
-            if( filePath.equals( fullPath ) )
+            // TODO IDE-110 IDE-648
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                return true;
+                if( container != null && container.exists() )
+                {
+                    final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
+                    final IPath filePath = container.getFile( path ).getFullPath();
+
+                    if( filePath.equals( fullPath ) )
+                    {
+                        return true;
+                    }
+                }
             }
         }
 

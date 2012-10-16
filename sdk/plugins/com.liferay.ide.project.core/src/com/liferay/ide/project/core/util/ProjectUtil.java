@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -430,15 +431,20 @@ public class ProjectUtil
         {
             if( project.getName().equals( context ) )
             {
-                IFolder docroot = CoreUtil.getDocroot( project );
+                // IDE-110 IDE-648
+                IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                if( docroot != null && docroot.exists() )
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    IFile serviceJar = docroot.getFile( "WEB-INF/lib/" + project.getName() + "-service.jar" );
-
-                    if( serviceJar.exists() )
+                    if( container != null && container.exists() )
                     {
-                        return serviceJar;
+                        final Path path = new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" );
+                        IFile serviceJar = container.getFile( path );
+
+                        if( serviceJar.exists() )
+                        {
+                            return serviceJar;
+                        }
                     }
                 }
             }
@@ -647,19 +653,26 @@ public class ProjectUtil
 
     public static IFile getPortletXmlFile( IProject project )
     {
-        IFile retval = null;
-
         if( project != null && ProjectUtil.isLiferayProject( project ) )
         {
-            final IFolder docroot = CoreUtil.getDocroot( project );
+            // IDE-110 IDE-648
+            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-            if( docroot != null )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                retval = docroot.getFile( "WEB-INF/portlet.xml" );
+                if( container != null && container.exists() )
+                {
+                    IFile file = container.getFile( new Path( "WEB-INF/portlet.xml" ) );
+ 
+                    if( file.exists() )
+                    {
+                        return file;
+                    }
+                }
             }
         }
 
-        return retval;
+        return null;
     }
 
     public static IProject getProject( IDataModel model )
@@ -708,7 +721,7 @@ public class ProjectUtil
 
     public static String getRelativePathFromDocroot( IProject project, String path )
     {
-        IFolder docroot = CoreUtil.getDocroot( project );
+        IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
         IPath pathValue = new Path( path );
 

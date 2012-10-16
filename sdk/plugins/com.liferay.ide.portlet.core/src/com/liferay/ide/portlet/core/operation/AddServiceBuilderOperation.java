@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -34,6 +35,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -45,6 +47,7 @@ import org.eclipse.jface.text.templates.TemplateContext;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
 import org.osgi.framework.Version;
@@ -78,19 +81,28 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
     private IStatus createServiceBuilderFile( IProject project )
     {
-        IFolder docroot = CoreUtil.getDocroot( project );
+        // IDE-110 IDE-648
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        IFile serviceBuilderFile = docroot.getFile( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) );
-
-        if( !serviceBuilderFile.exists() )
+        for( IContainer container : webappRoot.getUnderlyingFolders() )
         {
-            try
+            if( container != null && container.exists() )
             {
-                createDefaultServiceBuilderFile( serviceBuilderFile );
-            }
-            catch( Exception ex )
-            {
-                return PortletCore.createErrorStatus( ex );
+                final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) );
+                IFile serviceBuilderFile = container.getFile( path );
+
+                if( !serviceBuilderFile.exists() )
+                {
+                    try
+                    {
+                        createDefaultServiceBuilderFile( serviceBuilderFile );
+                        break;
+                    }
+                    catch( Exception ex )
+                    {
+                        return PortletCore.createErrorStatus( ex );
+                    }
+                }
             }
         }
 

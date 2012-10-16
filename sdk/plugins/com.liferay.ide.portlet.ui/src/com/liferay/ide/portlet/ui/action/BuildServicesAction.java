@@ -21,11 +21,13 @@ import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.job.BuildServiceJob;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Greg Amerson
@@ -61,11 +63,18 @@ public class BuildServicesAction extends AbstractObjectAction
             }
 
             IFile servicesFile = null;
-            IFolder docroot = CoreUtil.getDocroot( project );
+            // IDE-110 IDE-648
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-            if( docroot != null && docroot.exists() )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                servicesFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                if( container != null && container.exists() )
+                {
+                    final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                    servicesFile = container.getFile( path );
+ 
+                    break;
+                }
             }
 
             if( servicesFile != null && servicesFile.exists() )

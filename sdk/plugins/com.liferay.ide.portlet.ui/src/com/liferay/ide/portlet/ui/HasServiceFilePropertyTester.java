@@ -20,12 +20,14 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class HasServiceFilePropertyTester extends PropertyTester
 {
@@ -42,16 +44,20 @@ public class HasServiceFilePropertyTester extends PropertyTester
             {
                 try
                 {
-                    IFolder docroot = CoreUtil.getDocroot( resource.getProject() );
+                    // IDE-110 IDE-648
+                    IVirtualFolder webappRoot = CoreUtil.getDocroot( resource.getProject() );
 
-                    if( docroot != null && docroot.exists() )
+                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        IFile serviceFile =
-                            docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
-
-                        if( serviceFile.exists() )
+                        if( container != null && container.exists() )
                         {
-                            return true;
+                            Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                            IFile serviceFile = container.getFile( path );
+
+                            if( serviceFile.exists() )
+                            {
+                                return true;
+                            }
                         }
                     }
                 }

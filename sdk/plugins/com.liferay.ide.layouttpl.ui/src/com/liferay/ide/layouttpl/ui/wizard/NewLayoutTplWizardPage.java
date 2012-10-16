@@ -22,7 +22,6 @@ import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,6 +32,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
@@ -201,7 +201,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
     }
 
     @Override
-    protected IFolder getDocroot()
+    protected IVirtualFolder getDocroot()
     {
         return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }

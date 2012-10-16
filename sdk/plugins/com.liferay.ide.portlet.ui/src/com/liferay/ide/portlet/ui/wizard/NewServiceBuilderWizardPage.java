@@ -24,7 +24,6 @@ import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
 import java.net.URL;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -50,6 +49,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 @SuppressWarnings( "restriction" )
@@ -189,7 +189,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
     }
 
     @Override
-    protected IFolder getDocroot()
+    protected IVirtualFolder getDocroot()
     {
         return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }

@@ -21,6 +21,7 @@ import com.liferay.ide.ui.LiferayUIPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -29,6 +30,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -61,6 +63,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPage;
 
@@ -120,7 +123,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
         };
     }
 
-    protected abstract IFolder getDocroot();
+    protected abstract IVirtualFolder getDocroot();
 
     protected IJavaElement getInitialJavaElement( ISelection selection )
     {
@@ -301,29 +304,39 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
         dialog.setMessage( message );
         dialog.addFilter( filter );
 
-        IFolder docroot = getDocroot();
+        // IDE-110
+        IVirtualFolder docroot = getDocroot();
 
-        dialog.setInput( docroot );
-
-        if( dialog.open() == Window.OK )
+        if( docroot != null )
         {
-            Object element = dialog.getFirstResult();
+            IContainer container = docroot.getUnderlyingFolder();
 
-            try
+            if( container != null && container.exists() )
             {
-                if( element instanceof IFile )
-                {
-                    IFile file = (IFile) element;
+                dialog.setInput( docroot );
 
-                    text.setText( "/" + file.getFullPath().makeRelativeTo( docroot.getFullPath() ).toPortableString() );
-                    // dealWithSelectedContainerResource(container);
+                if( dialog.open() == Window.OK )
+                {
+                    Object element = dialog.getFirstResult();
+
+                    try
+                    {
+                        if( element instanceof IFile )
+                        {
+                            IFile file = (IFile) element;
+
+                            final IPath relativePath = file.getFullPath().makeRelativeTo( container.getFullPath() );
+
+                            text.setText( "/" + relativePath.toPortableString() );
+                            // dealWithSelectedContainerResource(container);
+                        }
+                    }
+                    catch( Exception ex )
+                    {
+                        // Do nothing
+                    }
                 }
             }
-            catch( Exception ex )
-            {
-                // Do nothing
-            }
-
         }
     }
 

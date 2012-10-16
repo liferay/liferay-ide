@@ -17,11 +17,10 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.model.CustomJsp;
+import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.hook.core.model.CustomJsp;
-import com.liferay.ide.hook.core.model.CustomJspDir;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +34,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Resource;
 
 /**
@@ -51,7 +49,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     @Override
     protected List<?> readUnderlyingList()
     {
-        IFolder customJspFolder = getCustomJspFolder();
+        IFolder customJspFolder = HookUtil.getCustomJspFolder( this.hook(), project() );
 
         if( customJspFolder == null || this.portalDir == null )
         {
@@ -133,7 +131,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     {
         List<IFile> customJspFiles = new ArrayList<IFile>();
 
-        IFolder customJspFolder = getCustomJspFolder();
+        IFolder customJspFolder = HookUtil.getCustomJspFolder( hook(), project() );
 
         try
         {
@@ -145,23 +143,6 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
         }
 
         return customJspFiles.toArray( new IFile[0] );
-    }
-
-    private IFolder getCustomJspFolder()
-    {
-        CustomJspDir element = this.hook().getCustomJspDir().element();
-        IFolder docroot = CoreUtil.getDocroot( project() );
-
-        if( element != null && docroot != null )
-        {
-            Path customJspDir = element.getValue().getContent();
-            IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
-            return customJspFolder;
-        }
-        else
-        {
-            return null;
-        }
     }
 
     @Override

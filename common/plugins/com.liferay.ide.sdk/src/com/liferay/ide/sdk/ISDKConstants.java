@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface ISDKConstants
 {
@@ -191,7 +191,5 @@ public interface ISDKConstants
     public static final String THEME_PLUGIN_PROJECT_FOLDER = "themes";
 
     public static final String THEME_PLUGIN_PROJECT_SUFFIX = _THEME_PLUGIN_PROJECT_SUFFIX;
-
-    public static final String DEFAULT_WEBCONTENT_FOLDER = "docroot";
 
 }

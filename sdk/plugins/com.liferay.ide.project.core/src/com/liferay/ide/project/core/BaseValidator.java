@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -36,6 +36,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationEvent;
@@ -69,7 +70,6 @@ public abstract class BaseValidator extends AbstractValidator
         IJavaProject javaProject, Node classSpecifier, String preferenceNodeQualifier,
         IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
     {
-
         String className = NodeUtil.getTextContent( classSpecifier );
 
         if( className != null && className.length() > 0 )
@@ -91,7 +91,6 @@ public abstract class BaseValidator extends AbstractValidator
 
                 return createMarkerValues(
                     preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg );
-
             }
         }
 
@@ -102,7 +101,6 @@ public abstract class BaseValidator extends AbstractValidator
         IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
         IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
     {
-
         return checkClassResource(
             javaProject, classResourceSpecifier, preferenceNodeQualifier, preferenceScopes, preferenceKey,
             errorMessage, false );
@@ -112,7 +110,6 @@ public abstract class BaseValidator extends AbstractValidator
         IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
         IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, boolean warnPropertiesSuffix )
     {
-
         String classResource = NodeUtil.getTextContent( classResourceSpecifier );
 
         if( classResource != null && classResource.length() > 0 )
@@ -128,9 +125,9 @@ public abstract class BaseValidator extends AbstractValidator
 
             try
             {
+                IResource classResourceValue = null;
                 IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath( true );
 
-                IResource classResourceValue = null;
                 for( IClasspathEntry entry : classpathEntries )
                 {
                     if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
@@ -201,7 +198,7 @@ public abstract class BaseValidator extends AbstractValidator
             }
             catch( JavaModelException e1 )
             {
-
+                //no error msg
             }
         }
 
@@ -212,7 +209,6 @@ public abstract class BaseValidator extends AbstractValidator
         IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
         IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems )
     {
-
         NodeList elements = document.getElementsByTagName( element );
 
         for( int i = 0; i < elements.getLength(); i++ )
@@ -234,21 +230,28 @@ public abstract class BaseValidator extends AbstractValidator
         Node docrootResourceSpecifier, IProject project, String preferenceNodeQualifier,
         IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
     {
-
         String docrootResource = NodeUtil.getTextContent( docrootResourceSpecifier );
 
         if( docrootResource != null && docrootResource.length() > 0 )
         {
-            IFolder docroot = CoreUtil.getDocroot( project );
+            // IDE-110 IDE-648
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-            IResource docrootResourceValue = docroot.findMember( new Path( docrootResource ) );
-
-            if( docrootResourceValue == null )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                String msg = MessageFormat.format( errorMessage, new Object[] { docrootResource } );
+                if( container != null && container.exists() )
+                {
+                    IResource docrootResourceValue = container.findMember( new Path( docrootResource ) );
 
-                return createMarkerValues(
-                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) docrootResourceSpecifier, msg );
+                    if( docrootResourceValue == null )
+                    {
+                        String msg = MessageFormat.format( errorMessage, new Object[] { docrootResource } );
+
+                        return createMarkerValues(
+                            preferenceNodeQualifier, preferenceScopes, preferenceKey,
+                            (IDOMNode) docrootResourceSpecifier, msg );
+                    }
+                }
             }
         }
 
@@ -273,7 +276,6 @@ public abstract class BaseValidator extends AbstractValidator
 
         if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
         {
-
             start = domNode.getStartStructuredDocumentRegion().getEndOffset();
         }
 
@@ -281,7 +283,6 @@ public abstract class BaseValidator extends AbstractValidator
 
         if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
         {
-
             end = domNode.getEndStructuredDocumentRegion().getStartOffset();
         }
 

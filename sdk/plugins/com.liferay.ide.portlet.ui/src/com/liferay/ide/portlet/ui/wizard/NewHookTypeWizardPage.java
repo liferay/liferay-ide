@@ -26,7 +26,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -41,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
@@ -127,7 +127,8 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
         return topComposite;
     }
 
-    protected IFolder getDocroot()
+    @Override
+    protected IVirtualFolder getDocroot()
     {
         return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }

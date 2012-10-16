@@ -17,12 +17,11 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.HookCore;
+import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.hook.core.HookCore;
-import com.liferay.ide.hook.core.model.CustomJspDir;
-import com.liferay.ide.hook.core.model.Hook;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
@@ -84,7 +82,7 @@ public class CustomJspValidationService extends ValidationService
     {
         String customJsp = value.getContent().toString();
 
-        IFolder customFolder = getCustomJspFolder();
+        IFolder customFolder = HookUtil.getCustomJspFolder( hook(), project() );
 
         if( customFolder != null && customFolder.exists() )
         {
@@ -97,23 +95,6 @@ public class CustomJspValidationService extends ValidationService
         }
 
         return false;
-    }
-
-    private IFolder getCustomJspFolder()
-    {
-        CustomJspDir element = this.hook().getCustomJspDir().element();
-        IFolder docroot = CoreUtil.getDocroot( project() );
-
-        if( element != null && docroot != null )
-        {
-            Path customJspDir = element.getValue().getContent();
-            IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
-            return customJspFolder;
-        }
-        else
-        {
-            return null;
-        }
     }
 
     protected Hook hook()

@@ -125,6 +125,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
         Action action = facetedProject.getProjectFacetAction( jsfFacet );
         IDataModel jsfFacetDataModel = (IDataModel) action.getConfig();
 
+        //TODO IDE-648 IDE-110
         jsfFacetDataModel.setProperty( SERVLET_URL_PATTERNS, null );
         jsfFacetDataModel.setProperty( WEBCONTENT_DIR, "docroot" );
 
@@ -239,10 +240,11 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
         try
         {
+            //TODO IDE-648
             File originalWebXmlFile =
                 sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile();
 
-            IFolder docroot = CoreUtil.getDocroot( facetedProject.getProject() );
+            IFolder docroot = CoreUtil.getDefaultDocrootFolder( facetedProject.getProject() );
 
             docroot.getFile( "WEB-INF/web.xml" ).setContents(
                 new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );

@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathContainer;
@@ -45,6 +46,7 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorations;
 import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Greg Amerson
@@ -226,14 +228,30 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
         if( serviceJar.exists() )
         {
-            IFolder docroot = CoreUtil.getDocroot( serviceJar.getProject() );
-            IFolder serviceFolder = docroot.getFolder( "WEB-INF/service" );
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( serviceJar.getProject() );
 
-            entry =
-                createClasspathEntry( serviceJar.getLocation(), serviceFolder.exists()
-                    ? serviceFolder.getLocation() : null );
+            // TODO IDE-110 IDE-648
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            {
+                if( container != null && container.exists() )
+                {
+                    IFolder serviceFolder = container.getFolder( new Path( "WEB-INF/service") );
+
+                    if( serviceFolder.exists() )
+                    {
+                        entry = createClasspathEntry( serviceJar.getLocation(), serviceFolder.getLocation() );
+                        break;
+                    }
+                }
+            }
+
+            if( entry == null )
+            {
+                entry = createClasspathEntry( serviceJar.getLocation(), null );
+            }
         }
 
+        //TODO IDE-657
         if( entry == null )
         {
             IProject project = this.javaProject.getProject();

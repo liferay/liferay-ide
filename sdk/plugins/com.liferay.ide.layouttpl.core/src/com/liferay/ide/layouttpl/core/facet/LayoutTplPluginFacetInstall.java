@@ -93,15 +93,21 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
         removeUnneededClasspathEntries();
 
-        IResource libRes = project.findMember( "docroot/WEB-INF/lib" );
+        final IFolder folder = CoreUtil.getDefaultDocrootFolder( project );
 
-        if( libRes != null && libRes.exists() )
+        if( folder != null && folder.exists() )
         {
-            IFolder libFolder = (IFolder) libRes;
-            IResource[] libFiles = libFolder.members( true );
-            if( CoreUtil.isNullOrEmpty( libFiles ) )
+            IResource libRes = folder.findMember( "WEB-INF/lib" );
+
+            if( libRes != null && libRes.exists() )
             {
-                libRes.delete( true, monitor );
+                IFolder libFolder = (IFolder) libRes;
+                IResource[] libFiles = libFolder.members( true );
+
+                if( CoreUtil.isNullOrEmpty( libFiles ) )
+                {
+                    libRes.delete( true, monitor );
+                }
             }
         }
 

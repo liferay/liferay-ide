@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -33,6 +34,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.templates.DocumentTemplateContext;
@@ -44,18 +46,17 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.common.operations.AddJavaEEArtifactOperation;
 import org.eclipse.jst.j2ee.internal.common.operations.NewJavaEEArtifactClassOperation;
-import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class AddPortletOperation extends AddJavaEEArtifactOperation
     implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties
 {
-    protected IVirtualFolder docroot;
+    protected IVirtualFolder webappRoot;
     protected TemplateContextType portletContextType;
     protected TemplateStore templateStore;
 
@@ -63,7 +64,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
     {
         super( dataModel );
 
-        this.docroot = ComponentCore.createComponent( getTargetProject() ).getRootFolder();
+        this.webappRoot = CoreUtil.getDocroot( getTargetProject() );
         this.templateStore = (TemplateStore) getDataModel().getProperty( TEMPLATE_STORE );
         this.portletContextType = (TemplateContextType) getDataModel().getProperty( CONTEXT_TYPE );
     }
@@ -281,7 +282,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
             return;
         }
 
-        // need to get the path in docroot for the new jsp mode file
+        // need to get the path in the web app for the new jsp mode file
         IFile viewJspFile = null;
 
         List<ParamValue> initParams = (List<ParamValue>) getDataModel().getProperty( INIT_PARAMS );
@@ -351,7 +352,21 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
     protected IFile getProjectFile( String filePath )
     {
-        return this.docroot.getFile( filePath ).getUnderlyingFile();
+        // IDE-110
+        for( IContainer container : this.webappRoot.getUnderlyingFolders() )
+        {
+            if( container != null && container.exists() )
+            {
+                IFile file = container.getFile( new Path( filePath) );
+
+                if( file.exists() )
+                {
+                    return file;
+                }
+            }
+        }
+
+        return null;
     }
 
     protected boolean shouldGenerateMetaData( IDataModel aModel )
