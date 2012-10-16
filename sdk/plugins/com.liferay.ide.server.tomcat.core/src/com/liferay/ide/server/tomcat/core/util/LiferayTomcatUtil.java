@@ -266,12 +266,12 @@ public class LiferayTomcatUtil
 
     public static String getVersion( IPath location, IPath portalDir ) throws IOException
     {
-        String versionFromManifest = getConfigInfoFromManifest( "version", portalDir );
+//        String versionFromManifest = getConfigInfoFromManifest( "version", portalDir );
 
-        if( versionFromManifest != null )
-        {
-            return versionFromManifest;
-        }
+//        if( versionFromManifest != null )
+//        {
+//            return versionFromManifest;
+//        }
 
         return getVersionFromClass( location, portalDir );
     }
