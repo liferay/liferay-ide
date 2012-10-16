@@ -214,20 +214,20 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 	}
 
     public String getServerInfo() {
-        try {
-            String serverInfoFromManifest = LiferayTomcatUtil.getConfigInfoFromManifest( "server", getPortalDir() );
- 
-            if( serverInfoFromManifest!=null ) {
-                return serverInfoFromManifest;
-            }
-
+//        try {
+//            String serverInfoFromManifest = LiferayTomcatUtil.getConfigInfoFromManifest( "server", getPortalDir() );
+// 
+//            if( serverInfoFromManifest!=null ) {
+//                return serverInfoFromManifest;
+//            }
+//
             return getServerInfoFromClass();
-        }
-        catch( IOException e ) {
-            LiferayTomcatPlugin.logError(e);
-        }
-
-        return null;
+//        }
+//        catch( IOException e ) {
+//            LiferayTomcatPlugin.logError(e);
+//        }
+//
+//        return null;
     }
 
     public String getServerInfoFromClass() {
