@@ -172,6 +172,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         this.buildHelper = new BuildHelper();
     }
 
+    // TODO IDE-110 IDE-648
     protected void applyDiffsDeltaToDocroot(
         final IResourceDelta delta, final IContainer docroot, final IProgressMonitor monitor )
     {

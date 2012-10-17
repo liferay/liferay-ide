@@ -365,9 +365,9 @@ public class FileUtil
         }
     }
 
-    public static String validateNewFolder( IFolder docroot, String folderValue )
+    public static String validateNewFolder( IFolder folder, String folderValue )
     {
-        if( docroot == null || folderValue == null )
+        if( folder == null || folderValue == null )
         {
             return null;
         }
@@ -385,14 +385,14 @@ public class FileUtil
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
         IStatus result =
-            workspace.validatePath( docroot.getFolder( folderValue ).getFullPath().toString(), IResource.FOLDER );
+            workspace.validatePath( folder.getFolder( folderValue ).getFullPath().toString(), IResource.FOLDER );
 
         if( !result.isOK() )
         {
             return result.getMessage();
         }
 
-        if( docroot.getFolder( new Path( folderValue ) ).exists() )
+        if( folder.getFolder( new Path( folderValue ) ).exists() )
         {
             return "Folder already exists.";
         }

@@ -370,6 +370,7 @@ public class ProjectUtil
 
         setGenerateDD( newProjectDataModel, false );
 
+        // TODO IDE-110 IDE-648
         IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" );
 
         if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
@@ -392,6 +393,7 @@ public class ProjectUtil
         }
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
         {
+            // TODO IDE-110 IDE-648
             webXmlPath =
                 webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) );
 

@@ -127,8 +127,8 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
     protected void createThumbnailFile( String thumbnailFile, LayoutTplDiagram diagramModel ) throws CoreException,
         IOException
     {
-        IFolder docroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
-        IFile thumbnailFileValue = docroot.getFile( thumbnailFile );
+        IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
+        IFile thumbnailFileValue = defaultDocroot.getFile( thumbnailFile );
         URL iconFileURL = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/blank_columns.png" );
 
         CoreUtil.prepareFolder( (IFolder) thumbnailFileValue.getParent() );
@@ -145,8 +145,8 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
     protected IFile createTemplateFile( String templateFile, LayoutTplDiagram diagramModel ) throws CoreException
     {
-        IFolder docroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
-        IFile templateFileValue = docroot.getFile( templateFile );
+        IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
+        IFile templateFileValue = defaultDocroot.getFile( templateFile );
         CoreUtil.prepareFolder( (IFolder) templateFileValue.getParent() );
 
         if( diagramModel != null )
@@ -283,9 +283,9 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
     protected IStatus checkDescriptorFile( IProject project )
     {
-        IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+        IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
 
-        IFile layoutTplDescriptorFile = docroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
+        IFile layoutTplDescriptorFile = defaultDocroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
 
         if( !layoutTplDescriptorFile.exists() )
         {

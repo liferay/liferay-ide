@@ -93,8 +93,8 @@ public class HookXmlEditor extends SapphireEditorForXml
             if( customJspDirElement != null && customJspDirElement.validation().ok() )
             {
                 Path customJspDir = customJspDirElement.getValue().getContent();
-                IFolder docroot = CoreUtil.getDefaultDocrootFolder( getProject() );
-                IFolder customJspFolder = docroot.getFolder( customJspDir.toPortableString() );
+                IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getProject() );
+                IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
 
                 ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
                 IPath portalDir = liferayRuntime.getPortalDir();

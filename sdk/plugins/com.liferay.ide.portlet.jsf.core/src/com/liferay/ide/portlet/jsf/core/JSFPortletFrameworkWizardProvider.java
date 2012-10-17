@@ -244,9 +244,9 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
             File originalWebXmlFile =
                 sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile();
 
-            IFolder docroot = CoreUtil.getDefaultDocrootFolder( facetedProject.getProject() );
+            IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( facetedProject.getProject() );
 
-            docroot.getFile( "WEB-INF/web.xml" ).setContents(
+            defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents(
                 new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
         }
         catch( Exception e )

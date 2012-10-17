@@ -227,12 +227,12 @@ public abstract class BaseValidator extends AbstractValidator
     }
 
     protected Map<String, Object> checkDocrootResource(
-        Node docrootResourceSpecifier, IProject project, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
+        Node resourceSpecifier, IProject project, String preferenceNodeQualifier, IScopeContext[] preferenceScopes,
+        String preferenceKey, String errorMessage )
     {
-        String docrootResource = NodeUtil.getTextContent( docrootResourceSpecifier );
+        String resource = NodeUtil.getTextContent( resourceSpecifier );
 
-        if( docrootResource != null && docrootResource.length() > 0 )
+        if( resource != null && resource.length() > 0 )
         {
             // IDE-110 IDE-648
             IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
@@ -241,15 +241,14 @@ public abstract class BaseValidator extends AbstractValidator
             {
                 if( container != null && container.exists() )
                 {
-                    IResource docrootResourceValue = container.findMember( new Path( docrootResource ) );
+                    IResource resourceValue = container.findMember( new Path( resource ) );
 
-                    if( docrootResourceValue == null )
+                    if( resourceValue == null )
                     {
-                        String msg = MessageFormat.format( errorMessage, new Object[] { docrootResource } );
+                        String msg = MessageFormat.format( errorMessage, new Object[] { resource } );
 
                         return createMarkerValues(
-                            preferenceNodeQualifier, preferenceScopes, preferenceKey,
-                            (IDOMNode) docrootResourceSpecifier, msg );
+                            preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
                     }
                 }
             }

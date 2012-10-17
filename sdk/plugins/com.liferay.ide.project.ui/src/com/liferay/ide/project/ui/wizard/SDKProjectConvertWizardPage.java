@@ -264,6 +264,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
     private boolean isLiferayProjectDir( File file )
     {
+        // TODO IDE-110 IDE-648
         if( file.isDirectory() && isValidLiferayProjectDir( file ) )
         {
             // check for build.xml and docroot

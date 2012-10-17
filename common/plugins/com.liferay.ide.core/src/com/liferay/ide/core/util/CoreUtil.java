@@ -378,9 +378,9 @@ public class CoreUtil
 
         if( file != null )
         {
-            IVirtualFolder docroot = getDocroot( file.getProject() );
+            IVirtualFolder webappRoot = getDocroot( file.getProject() );
 
-            for( IContainer container : docroot.getUnderlyingFolders() )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
                 return container != null && container.exists() && container.getFullPath().isPrefixOf( file.getFullPath() );
             }

@@ -305,15 +305,15 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
         dialog.addFilter( filter );
 
         // IDE-110
-        IVirtualFolder docroot = getDocroot();
+        IVirtualFolder webappRoot = getDocroot();
 
-        if( docroot != null )
+        if( webappRoot != null )
         {
-            IContainer container = docroot.getUnderlyingFolder();
+            IContainer container = webappRoot.getUnderlyingFolder();
 
             if( container != null && container.exists() )
             {
-                dialog.setInput( docroot );
+                dialog.setInput( webappRoot );
 
                 if( dialog.open() == Window.OK )
                 {

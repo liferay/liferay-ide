@@ -123,6 +123,7 @@ public class ProjectImportUtil
 
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( bridgedRuntime );
             Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
+            // TODO IDE-110 IDE-648
             String docrootFolder = null;
 
             // Create Project

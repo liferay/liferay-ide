@@ -191,11 +191,11 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
 
         try
         {
-            IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+            IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
 
             // IDE-575
-            if( !( docroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&
-                docroot.getFile( "WEB-INF/tld/aui.tld" ).exists() )
+            if( !( defaultDocroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&
+                defaultDocroot.getFile( "WEB-INF/tld/aui.tld" ).exists() )
             {
                 ProjectUtil.addTldToWebXml( project, "http://liferay.com/tld/aui", "/WEB-INF/tld/aui.tld" );
             }
