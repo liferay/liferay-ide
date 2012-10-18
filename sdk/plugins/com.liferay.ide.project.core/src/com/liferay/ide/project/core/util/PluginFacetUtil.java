@@ -436,6 +436,7 @@ public class PluginFacetUtil
     private static void addDefaultWebXml( IFacetedProjectWorkingCopy fpjwc, IDataModel dm ) throws CoreException
     {
         // check for existing web.xml file, if not there, add a default one
+        // TODO IDE-110 IDE-648
         IPath webinfPath = fpjwc.getProjectLocation().append( "docroot/WEB-INF" );
 
         if( ProjectUtil.isExtProject( fpjwc.getProject() ) ||

@@ -548,7 +548,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                     IFile referencedFile = (IFile) ref.getReferencedComponent().getAdapter( IFile.class );
 
                     IProject referencedFileProject = referencedFile.getProject();
-
+                    // IDE-110 IDE-648
                     ( (ClasspathEntry) entry ).sourceAttachmentPath =
                         referencedFileProject.getFolder( "docroot/WEB-INF/service" ).getFullPath();
                 }

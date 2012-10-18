@@ -112,8 +112,6 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 
         project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
 
-        // IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
-
         IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
 
         FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );

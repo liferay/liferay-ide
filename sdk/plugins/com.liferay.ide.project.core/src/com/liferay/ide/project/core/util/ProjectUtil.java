@@ -320,8 +320,6 @@ public class ProjectUtil
             fixExtProjectClasspathEntries( project );
         }
 
-        // IFile webXmlPath = project.getFile("docroot/WEB-INF/web.xml");
-
         IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
 
         FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
@@ -1011,6 +1009,7 @@ public class ProjectUtil
 
     public static boolean isLiferayProjectDir( File file )
     {
+        // TODO IDE-110 IDE-648
         if( file.isDirectory() && isValidLiferayProjectDir( file ) )
         {
             // check for build.xml and docroot

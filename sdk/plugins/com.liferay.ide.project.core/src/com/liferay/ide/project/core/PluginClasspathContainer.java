@@ -251,7 +251,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
             }
         }
 
-        //TODO IDE-657
+        //TODO IDE-657 IDE-110
         if( entry == null )
         {
             IProject project = this.javaProject.getProject();
