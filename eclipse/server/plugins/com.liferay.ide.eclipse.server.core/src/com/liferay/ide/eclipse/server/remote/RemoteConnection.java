@@ -16,6 +16,8 @@
 package com.liferay.ide.eclipse.server.remote;
 
 
+import com.liferay.ide.eclipse.core.util.CoreUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,6 +173,11 @@ public class RemoteConnection implements IRemoteConnection {
 
 			if ( isSuccess( json ) ) {
 				System.out.println( "installApplication: Sucess.\n\n" );
+			}
+			else {
+			    if( isError( json ) ) {
+			        return json.getString( "error" );
+			    }
 			}
 
 			filePost.releaseConnection();
@@ -424,5 +431,18 @@ public class RemoteConnection implements IRemoteConnection {
 		String success = jsonObject.getString( "status" );
 		return "0".equals( success );
 	}
+	
+	private boolean isError( JSONObject jsonObject ) {
+        try
+        {
+            String error = jsonObject.getString( "error" );
+            return !CoreUtil.isNullOrEmpty( error );
+        }
+        catch( JSONException e )
+        {
+        }
+
+        return false;
+    }
 
 }
