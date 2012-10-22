@@ -84,17 +84,24 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
         // IDE-110 IDE-648
         IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        for( IContainer container : webappRoot.getUnderlyingFolders() )
+        if( webappRoot != null )
         {
-            if( container != null && container.exists() )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
-                    !( container.exists( new Path( "css" ) ) ) )
+                if( container != null && container.exists() )
                 {
-                    ThemeCSSBuilder.cssBuild( project );
-                    ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
+                    if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
+                        !( container.exists( new Path( "css" ) ) ) )
+                    {
+                        ThemeCSSBuilder.cssBuild( project );
+                        ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
+                    }
                 }
             }
+        }
+        else
+        {
+            ThemeCore.logError( "Could not add theme module: webappRoot not found" );
         }
     }
 }

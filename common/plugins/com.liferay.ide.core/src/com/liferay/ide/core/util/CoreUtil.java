@@ -228,13 +228,16 @@ public class CoreUtil
         {
             IVirtualFolder webappRoot = getDocroot( project );
 
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            if( webappRoot != null )
             {
-                if( container != null && container.exists() )
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    if( container.getFolder( new Path( "WEB-INF" ) ).exists() )
+                    if( container != null && container.exists() )
                     {
-                        return container instanceof IFolder ? (IFolder) container : null;
+                        if( container.getFolder( new Path( "WEB-INF" ) ).exists() )
+                        {
+                            return container instanceof IFolder ? (IFolder) container : null;
+                        }
                     }
                 }
             }
@@ -380,9 +383,13 @@ public class CoreUtil
         {
             IVirtualFolder webappRoot = getDocroot( file.getProject() );
 
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            if( webappRoot != null )
             {
-                return container != null && container.exists() && container.getFullPath().isPrefixOf( file.getFullPath() );
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                {
+                    return container != null && container.exists() &&
+                        container.getFullPath().isPrefixOf( file.getFullPath() );
+                }
             }
         }
 

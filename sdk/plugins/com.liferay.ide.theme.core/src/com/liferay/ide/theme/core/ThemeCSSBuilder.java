@@ -92,17 +92,20 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         IFile lookAndFeelFile = null;
 
-        for( IContainer container : webappRoot.getUnderlyingFolders() )
+        if( webappRoot != null )
         {
-            if( container != null && container.exists() )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
-                IFile file = container.getFile( path );
- 
-                if( file.exists() )
+                if( container != null && container.exists() )
                 {
-                    lookAndFeelFile = file;
-                    break;
+                    final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
+                    IFile file = container.getFile( path );
+
+                    if( file.exists() )
+                    {
+                        lookAndFeelFile = file;
+                        break;
+                    }
                 }
             }
         }
@@ -417,17 +420,20 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                                 // TODO IDE-110 IDE-648
                                 IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
 
-                                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                                if( webappRoot != null )
                                 {
-                                    if( container != null && container.exists() )
+                                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                                     {
-                                        IFolder diffs = container.getFolder( new Path( "_diffs" ) );
- 
-                                        if( diffs.exists() && diffs.getFullPath().isPrefixOf( fullResourcePath ) )
+                                        if( container != null && container.exists() )
                                         {
-                                            applyDiffsDeltaToDocroot( delta, container, monitor );
+                                            IFolder diffs = container.getFolder( new Path( "_diffs" ) );
+     
+                                            if( diffs.exists() && diffs.getFullPath().isPrefixOf( fullResourcePath ) )
+                                            {
+                                                applyDiffsDeltaToDocroot( delta, container, monitor );
 
-                                            return false;
+                                                return false;
+                                            }
                                         }
                                     }
                                 }

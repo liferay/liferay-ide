@@ -142,17 +142,20 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                 IFile lookAndFeelFile = null;
 
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                if( webappRoot != null )
                 {
-                    if( container != null && container.exists() )
+                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
-                        IFile file = container.getFile( path );
-
-                        if( file.exists() )
+                        if( container != null && container.exists() )
                         {
-                            lookAndFeelFile = file;
-                            break;
+                            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
+                            IFile file = container.getFile( path );
+
+                            if( file.exists() )
+                            {
+                                lookAndFeelFile = file;
+                                break;
+                            }
                         }
                     }
                 }

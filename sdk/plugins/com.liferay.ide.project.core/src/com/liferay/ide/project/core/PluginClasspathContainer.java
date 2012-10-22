@@ -231,16 +231,19 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
             IVirtualFolder webappRoot = CoreUtil.getDocroot( serviceJar.getProject() );
 
             // TODO IDE-110 IDE-648
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            if( webappRoot != null )
             {
-                if( container != null && container.exists() )
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    IFolder serviceFolder = container.getFolder( new Path( "WEB-INF/service") );
-
-                    if( serviceFolder.exists() )
+                    if( container != null && container.exists() )
                     {
-                        entry = createClasspathEntry( serviceJar.getLocation(), serviceFolder.getLocation() );
-                        break;
+                        IFolder serviceFolder = container.getFolder( new Path( "WEB-INF/service") );
+
+                        if( serviceFolder.exists() )
+                        {
+                            entry = createClasspathEntry( serviceJar.getLocation(), serviceFolder.getLocation() );
+                            break;
+                        }
                     }
                 }
             }

@@ -210,6 +210,11 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
     {
         IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
+        if( webappRoot == null )
+        {
+            return PortletCore.createErrorStatus( "Could not find webapp root folder." );
+        }
+
         // IDE-648 IDE-110
         for( IContainer container : webappRoot.getUnderlyingFolders() )
         {

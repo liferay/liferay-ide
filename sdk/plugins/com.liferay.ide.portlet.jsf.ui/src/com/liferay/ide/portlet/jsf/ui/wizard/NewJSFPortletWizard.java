@@ -127,19 +127,24 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
                 // IDE-110 IDE-648
                 final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                if( webappRoot != null )
                 {
-                    if( container != null && container.exists() )
+                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        final Path path = new Path( jspsFolder + "/portletViewMode.xhtml" );
-                        IFile viewFile = container.getFile( path );
-
-                        if( viewFile.exists() )
+                        if( container != null && container.exists() )
                         {
-                            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                            IDE.openEditor( page, viewFile, true );
+                            final Path path = new Path( jspsFolder + "/portletViewMode.xhtml" );
+                            IFile viewFile = container.getFile( path );
 
-                            return;
+                            if( viewFile.exists() )
+                            {
+                                IWorkbenchPage page =
+                                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+ 
+                                IDE.openEditor( page, viewFile, true );
+
+                                return;
+                            }
                         }
                     }
                 }

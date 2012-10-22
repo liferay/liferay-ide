@@ -53,13 +53,16 @@ public class DocrootRelativePathService extends RelativePathService
         // IDE-110
         IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
  
-        for( IContainer container : webappRoot.getUnderlyingFolders() )
+        if( webappRoot != null )
         {
-            final IPath location = container.getLocation();
-
-            if( location != null )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                roots.add( new Path( location.toPortableString() ) );
+                final IPath location = container.getLocation();
+
+                if( location != null )
+                {
+                    roots.add( new Path( location.toPortableString() ) );
+                }
             }
         }
 

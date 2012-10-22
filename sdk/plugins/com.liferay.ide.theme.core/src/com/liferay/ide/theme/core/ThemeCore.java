@@ -108,6 +108,11 @@ public class ThemeCore extends AbstractUIPlugin
         }
     }
 
+    public static void logError( String msg )
+    {
+        getDefault().getLog().log( createErrorStatus( msg ) );
+    }
+
     public static void logError( String msg, Exception e )
     {
         getDefault().getLog().log( createErrorStatus( msg, e ) );

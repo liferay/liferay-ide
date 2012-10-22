@@ -434,16 +434,19 @@ public class ProjectUtil
                 // IDE-110 IDE-648
                 IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                if( webappRoot != null )
                 {
-                    if( container != null && container.exists() )
+                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        final Path path = new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" );
-                        IFile serviceJar = container.getFile( path );
-
-                        if( serviceJar.exists() )
+                        if( container != null && container.exists() )
                         {
-                            return serviceJar;
+                            final Path path = new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" );
+                            IFile serviceJar = container.getFile( path );
+
+                            if( serviceJar.exists() )
+                            {
+                                return serviceJar;
+                            }
                         }
                     }
                 }
@@ -658,15 +661,18 @@ public class ProjectUtil
             // IDE-110 IDE-648
             final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            if( webappRoot != null )
             {
-                if( container != null && container.exists() )
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    IFile file = container.getFile( new Path( "WEB-INF/portlet.xml" ) );
- 
-                    if( file.exists() )
+                    if( container != null && container.exists() )
                     {
-                        return file;
+                        IFile file = container.getFile( new Path( "WEB-INF/portlet.xml" ) );
+
+                        if( file.exists() )
+                        {
+                            return file;
+                        }
                     }
                 }
             }

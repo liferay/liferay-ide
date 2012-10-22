@@ -89,18 +89,28 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                 {
                     // folder should be relative to the web app folder root
                     // IDE-110 IDE-648
-                    IVirtualFolder virtualJspFolder = CoreUtil.getDocroot( targetProject ).getFolder( customJspFolder );
+                    final IVirtualFolder webappRoot = CoreUtil.getDocroot( targetProject );
 
-                    for( IContainer container : virtualJspFolder.getUnderlyingFolders() )
+                    if( webappRoot != null )
                     {
-                        if( container != null && container.exists() )
+                        IVirtualFolder virtualJspFolder = webappRoot.getFolder( customJspFolder );
+
+                        for( IContainer container : virtualJspFolder.getUnderlyingFolders() )
                         {
-                            return container.getFullPath().toPortableString();
+                            if( container != null && container.exists() )
+                            {
+                                return container.getFullPath().toPortableString();
+                            }
                         }
                     }
                 }
 
-                return CoreUtil.getDefaultDocrootFolder( targetProject ).getFullPath().append( "custom_jsps" ).toPortableString();
+                final IFolder defaultWebappRoot = CoreUtil.getDefaultDocrootFolder( targetProject );
+ 
+                if( defaultWebappRoot != null )
+                {
+                    return defaultWebappRoot.getFullPath().append( "custom_jsps" ).toPortableString();
+                }
             }
         }
         else if( PORTAL_PROPERTIES_FILE.equals( propertyName ) )

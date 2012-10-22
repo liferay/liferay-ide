@@ -237,6 +237,11 @@ public abstract class BaseValidator extends AbstractValidator
             // IDE-110 IDE-648
             IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
+            if( webappRoot == null )
+            {
+                return null;
+            }
+
             for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
                 if( container != null && container.exists() )

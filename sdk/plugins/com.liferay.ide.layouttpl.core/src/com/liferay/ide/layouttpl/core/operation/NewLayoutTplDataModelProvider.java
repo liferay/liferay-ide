@@ -61,6 +61,11 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
     private boolean checkDocrootFileExists(final IPath path)
     {
         IVirtualFolder webappRoot = CoreUtil.getDocroot( getTargetProject() );
+ 
+        if( webappRoot == null )
+        {
+            return false;
+        }
 
         for( IContainer container : webappRoot.getUnderlyingFolders() )
         {

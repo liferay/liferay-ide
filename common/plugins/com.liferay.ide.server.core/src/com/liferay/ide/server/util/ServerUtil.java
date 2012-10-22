@@ -696,17 +696,21 @@ public class ServerUtil
             IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
 
             IPath deltaPath = null;
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+ 
+            if( webappRoot != null )
             {
-                if( container != null && container.exists() )
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    final IPath deltaFullPath = deltaResource.getFullPath();
-                    final IPath containerFullPath = container.getFullPath();
-                    deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
-
-                    if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                    if( container != null && container.exists() )
                     {
-                        break;
+                        final IPath deltaFullPath = deltaResource.getFullPath();
+                        final IPath containerFullPath = container.getFullPath();
+                        deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+
+                        if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                        {
+                            break;
+                        }
                     }
                 }
             }

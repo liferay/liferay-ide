@@ -160,16 +160,19 @@ public class NewPortletWizard extends NewWebArtifactWizard
                 // IDE-110 IDE-648
                 IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                if( webappRoot != null )
                 {
-                    IFile viewFile = container.getFile( new Path( jspsFolder + "/view.jsp" ) );
-
-                    if( viewFile.exists() )
+                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                        IDE.openEditor( page, viewFile, true );
+                        IFile viewFile = container.getFile( new Path( jspsFolder + "/view.jsp" ) );
 
-                        return;
+                        if( viewFile.exists() )
+                        {
+                            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                            IDE.openEditor( page, viewFile, true );
+
+                            return;
+                        }
                     }
                 }
             }

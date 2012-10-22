@@ -47,16 +47,19 @@ public class HasServiceFilePropertyTester extends PropertyTester
                     // IDE-110 IDE-648
                     IVirtualFolder webappRoot = CoreUtil.getDocroot( resource.getProject() );
 
-                    for( IContainer container : webappRoot.getUnderlyingFolders() )
+                    if( webappRoot != null )
                     {
-                        if( container != null && container.exists() )
+                        for( IContainer container : webappRoot.getUnderlyingFolders() )
                         {
-                            Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
-                            IFile serviceFile = container.getFile( path );
-
-                            if( serviceFile.exists() )
+                            if( container != null && container.exists() )
                             {
-                                return true;
+                                Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                                IFile serviceFile = container.getFile( path );
+
+                                if( serviceFile.exists() )
+                                {
+                                    return true;
+                                }
                             }
                         }
                     }

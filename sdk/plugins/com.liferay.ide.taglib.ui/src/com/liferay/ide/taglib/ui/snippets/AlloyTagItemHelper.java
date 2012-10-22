@@ -134,25 +134,29 @@ public class AlloyTagItemHelper {
 		// IDE-110 IDE-648
 		IVirtualFolder webappRoot = CoreUtil.getDocroot(project);
 		
-		for( IContainer container : webappRoot.getUnderlyingFolders() )
+        if( webappRoot != null )
         {
-            if( container != null && container.exists() )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
-                tldFile = container.getFile( new Path( "WEB-INF/tld/alloy.tld") );
+                if( container != null && container.exists() )
+                {
+                    tldFile = container.getFile( new Path( "WEB-INF/tld/alloy.tld") );
 
-                if (tldFile.exists()) {
-                    try {
-                        IDOMModel tldModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( tldFile );
-                        tldDocument = tldModel.getDocument();
+                    if (tldFile.exists()) {
+                        try {
+                            IDOMModel tldModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( tldFile );
+                            tldDocument = tldModel.getDocument();
+                        }
+                        catch (Exception e) {
+                            SnippetsUIPlugin.logError(e);
+                        }
+     
+                        break;
                     }
-                    catch (Exception e) {
-                        SnippetsUIPlugin.logError(e);
-                    }
- 
-                    break;
                 }
             }
         }
+		
 
 		if( tldDocument == null )
 		{

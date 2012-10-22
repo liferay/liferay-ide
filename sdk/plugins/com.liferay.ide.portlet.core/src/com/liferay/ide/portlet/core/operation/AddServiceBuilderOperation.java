@@ -84,6 +84,11 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
         // IDE-110 IDE-648
         IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
+        if( webappRoot == null )
+        {
+            return PortletCore.createErrorStatus( "Could not find webapp root folder." );
+        }
+
         for( IContainer container : webappRoot.getUnderlyingFolders() )
         {
             if( container != null && container.exists() )
