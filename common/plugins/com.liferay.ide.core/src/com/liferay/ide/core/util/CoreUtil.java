@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Properties;
 
@@ -503,6 +504,36 @@ public class CoreUtil
             {
                 node.removeChild( node.getFirstChild() );
             }
+        }
+    }
+
+    public static final String createStringDigest( final String str )
+    {
+        try
+        {
+            final MessageDigest md = MessageDigest.getInstance( "SHA-256" );
+            final byte[] input = str.getBytes( "UTF-8" );
+            final byte[] digest = md.digest( input );
+    
+            final StringBuilder buf = new StringBuilder();
+    
+            for( int i = 0; i < digest.length; i++ )
+            {
+                String hex = Integer.toHexString( 0xFF & digest[ i ] );
+    
+                if( hex.length() == 1 )
+                {
+                    buf.append( '0' );
+                }
+    
+                buf.append( hex );
+            }
+    
+            return buf.toString();
+        }
+        catch( Exception e )
+        {
+            throw new RuntimeException( e );
         }
     }
 }
