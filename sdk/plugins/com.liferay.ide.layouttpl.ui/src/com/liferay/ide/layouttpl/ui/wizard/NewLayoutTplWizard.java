@@ -102,13 +102,11 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
 
         return new NewLayoutTplDataModelProvider( templateStore, contextType )
         {
-
             @Override
             public IDataModelOperation getDefaultOperation()
             {
                 return new AddLayoutTplOperation( getDataModel(), templateStore, contextType );
             }
-
         };
     }
 
@@ -116,23 +114,25 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
     {
         if( file != null )
         {
-            getShell().getDisplay().asyncExec( new Runnable()
-            {
-
-                public void run()
+            getShell().getDisplay().asyncExec
+            ( 
+                new Runnable()
                 {
-                    try
+                    public void run()
                     {
-                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                        try
+                        {
+                            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-                        IDE.openEditor( page, file, true );
-                    }
-                    catch( PartInitException e )
-                    {
-                        LayoutTplUI.logError( e );
+                            IDE.openEditor( page, file, true );
+                        }
+                        catch( PartInitException e )
+                        {
+                            LayoutTplUI.logError( e );
+                        }
                     }
                 }
-            } );
+            );
         }
     }
 
@@ -151,7 +151,6 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
     @Override
     protected void postPerformFinish() throws InvocationTargetException
     {
-
         super.postPerformFinish();
 
         IFile layoutTplFile = (IFile) getDataModel().getProperty( LAYOUT_TPL_FILE_CREATED );

@@ -16,8 +16,8 @@
 package com.liferay.ide.portlet.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.List;
@@ -34,11 +34,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction" } )
-public class HookDescriptorHelper extends DescriptorHelper implements INewHookDataModelProperties
+public class HookDescriptorHelper extends LiferayDescriptorHelper implements INewHookDataModelProperties
 {
+    private static final String HOOK_DESCRIPTOR_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<!DOCTYPE hook PUBLIC \"-//Liferay//DTD Hook {0}//EN\" \"http://www.liferay.com/dtd/liferay-hook_{1}.dtd\">\n\n<hook>\n</hook>";
 
     public HookDescriptorHelper( IProject project )
     {
@@ -48,9 +51,14 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
     public IStatus addActionItems( final List<String[]> actionItems )
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-        
-        DOMModelEditOperation operation = new DOMModelEditOperation( descriptorFile )
+
+        DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                createDefaultDescriptor( HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return doAddActionItems( document, actionItems );
@@ -70,9 +78,14 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
     public IStatus addLanguageProperties( final List<String> languageProperties )
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-        
+
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                createDefaultDescriptor( HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return doAddLanguageProperties( document, languageProperties );
@@ -144,8 +157,8 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
         final String[] retval = new String[1];
 
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-        
-        DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
+
+        DOMModelOperation operation = new DOMModelReadOperation( descriptorFile )
         {
             protected IStatus doExecute( IDOMDocument document )
             {
@@ -187,9 +200,14 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
     public IStatus setCustomJSPDir( final IDataModel model )
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-        
+
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                createDefaultDescriptor( HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return doSetCustomJSPDir( document, model );
@@ -209,9 +227,14 @@ public class HookDescriptorHelper extends DescriptorHelper implements INewHookDa
     public IStatus setPortalProperties( final IDataModel model, final String propertiesFile )
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-        
+
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                createDefaultDescriptor( HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return doSetPortalProperties( document, model, propertiesFile );

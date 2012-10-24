@@ -60,18 +60,5 @@
          </description>
       </wizard>
  </extension>
-   <extension
-         point="org.eclipse.ui.editors.templates">
-      
-      <contextType
-            class="com.liferay.ide.layouttpl.ui.wizard.LayoutTplTemplateContextType"
-            id="layouttpl_new"
-            name="New Layout Template">
-      </contextType>
-      <include
-            file="templates/layouttpl-templates.xml"
-            translations="templates/layouttpl-templates.properties">
-      </include>
-   </extension>
    
 </plugin>

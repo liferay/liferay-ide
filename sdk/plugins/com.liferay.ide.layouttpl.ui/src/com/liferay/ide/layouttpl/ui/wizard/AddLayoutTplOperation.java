@@ -15,9 +15,7 @@
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
@@ -29,7 +27,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -41,16 +38,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.templates.DocumentTemplateContext;
-import org.eclipse.jface.text.templates.Template;
-import org.eclipse.jface.text.templates.TemplateBuffer;
-import org.eclipse.jface.text.templates.TemplateContext;
 import org.eclipse.jface.text.templates.TemplateContextType;
-import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
@@ -70,12 +58,6 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
     public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
     {
         IStatus retval = null;
-        IStatus status = checkDescriptorFile( getTargetProject() );
-
-        if( !status.isOK() )
-        {
-            return status;
-        }
 
         IDataModel dm = getDataModel();
 
@@ -279,45 +261,6 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
         String projectName = model.getStringProperty( PROJECT_NAME );
 
         return ProjectUtil.getProject( projectName );
-    }
-
-    protected IStatus checkDescriptorFile( IProject project )
-    {
-        IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
-
-        IFile layoutTplDescriptorFile = defaultDocroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
-
-        if( !layoutTplDescriptorFile.exists() )
-        {
-            try
-            {
-                createDefaultLayoutTplDescriptorFile( layoutTplDescriptorFile );
-            }
-            catch( Exception ex )
-            {
-                return LayoutTplCore.createErrorStatus( ex );
-            }
-        }
-
-        return Status.OK_STATUS;
-    }
-
-    protected void createDefaultLayoutTplDescriptorFile( IFile layoutTplDescriptorFile )
-        throws UnsupportedEncodingException, CoreException, BadLocationException, TemplateException
-    {
-        String templateString = null;
-        IDocument document = new Document();
-
-        TemplateContext context = new DocumentTemplateContext( contextType, document, 0, 0 );
-
-        Template template = templateStore.findTemplateById( LAYOUTTPL_DESCRIPTOR_TEMPLATE );
-
-        TemplateBuffer buffer = context.evaluate( template );
-
-        templateString = buffer.getString();
-
-        layoutTplDescriptorFile.create(
-            new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null );
     }
 
 }

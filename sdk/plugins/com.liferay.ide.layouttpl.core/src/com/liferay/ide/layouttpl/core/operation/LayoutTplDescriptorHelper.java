@@ -19,8 +19,8 @@ package com.liferay.ide.layouttpl.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -34,11 +34,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
-public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewLayoutTplDataModelProperties
+public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implements INewLayoutTplDataModelProperties
 {
+    private static final String LAYOUT_DESCRIPTOR_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<!DOCTYPE layout-templates PUBLIC \"-//Liferay//DTD Layout Templates {0}//EN\" \"http://www.liferay.com/dtd/liferay-layout-templates_{1}.dtd\">\n\n<layout-templates>\n</layout-templates>\n";
 
     public LayoutTplDescriptorHelper( IProject project )
     {
@@ -48,9 +51,14 @@ public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewL
     public IStatus addNewLayoutTemplate( final IDataModel dm )
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
-        
+
         final DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                createDefaultDescriptor( LAYOUT_DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return doAddLayoutTemplate( document, dm );
@@ -86,6 +94,7 @@ public class LayoutTplDescriptorHelper extends DescriptorHelper implements INewL
 
             customElement = document.createElement( "custom" );
             docRoot.insertBefore( customElement, standardElement );
+            appendTextNode( docRoot, "\n" );
         }
 
         customElement.appendChild( layoutTemplateElement );

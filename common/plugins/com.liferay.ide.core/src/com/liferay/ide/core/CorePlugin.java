@@ -22,7 +22,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plugin life cycle
  * 
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public class CorePlugin extends Plugin
 {
@@ -85,6 +85,11 @@ public class CorePlugin extends Plugin
     public static void logError( String msg )
     {
         getDefault().getLog().log( createErrorStatus( msg ) );
+    }
+
+    public static void logError( String msg, Throwable t )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, t ) );
     }
 
     public static void logError( Throwable t )

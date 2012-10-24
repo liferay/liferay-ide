@@ -16,10 +16,10 @@
 package com.liferay.ide.portlet.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -38,10 +38,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
-public class PortletDescriptorHelper extends DescriptorHelper implements INewPortletClassDataModelProperties
+public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties
 {
 
     public PortletDescriptorHelper( IProject project )
@@ -52,9 +53,20 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
     public IStatus addNewPortlet( final IDataModel model )
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        
-        DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+
+        DOMModelOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                String templateString =
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/"
+                        + "portlet/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:"
+                        + "schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/"
+                        + "xml/ns/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>";
+
+                createDefaultDescriptor( templateString, "" );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return updatePortletXML( document, model );
@@ -70,11 +82,26 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
         domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE ) )
         {
+            protected void createDefaultFile()
+            {
+                String templateString =
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//"
+                        + "DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd"
+                        + "\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-"
+                        + "name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-"
+                        + "mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n"
+                        + "\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n"
+                        + "\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n"
+                        + "\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</"
+                        + "role-mapper>\n</liferay-portlet-app>";
+
+                createDefaultDescriptor( templateString, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return updateLiferayPortletXML( document, model );
             }
-
         };
 
         status = domModelOperation.execute();
@@ -86,11 +113,19 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
         domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE ) )
         {
+            protected void createDefaultFile()
+            {
+                String templateString =
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE display PUBLIC \"-//Liferay//DTD Display "
+                        + "{0}//EN\" \"http://www.liferay.com/dtd/liferay-display_{1}.dtd\">\n\n<display>\n</display>";
+
+                createDefaultDescriptor( templateString, getDescriptorVersion() );
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return updateLiferayDisplayXML( document, model );
             }
-
         };
 
         status = domModelOperation.execute();
@@ -102,7 +137,7 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
     {
         final List<String> allPortletNames = new ArrayList<String>();
 
-        DOMModelEditOperation op = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) )
+        DOMModelOperation op = new DOMModelReadOperation( getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) )
         {
             protected IStatus doExecute( IDOMDocument document )
             {
@@ -129,9 +164,14 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
         final String categoryTagName = "category";
 
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        
+
         DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
         {
+            protected void createDefaultFile()
+            {
+                // we are deleting nodes, no need to create new file
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return removeAllElements( document, portletTagName );
@@ -147,6 +187,11 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
         domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE ) )
         {
+            protected void createDefaultFile()
+            {
+                // we are deleting nodes, no need to create new file
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return removeAllElements( document, portletTagName );
@@ -162,6 +207,11 @@ public class PortletDescriptorHelper extends DescriptorHelper implements INewPor
 
         domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE ) )
         {
+            protected void createDefaultFile()
+            {
+                // we are deleting nodes, no need to create new file
+            }
+
             protected IStatus doExecute( IDOMDocument document )
             {
                 return removeAllElements( document, categoryTagName );

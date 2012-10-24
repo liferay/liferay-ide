@@ -11,20 +11,21 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.CorePlugin;
 
+import java.io.ByteArrayInputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
@@ -40,7 +41,8 @@ import org.w3c.dom.NodeList;
 /**
  * Class for helping edit XML files in user projects.
  * 
- * @author Greg Amerson
+ * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class DescriptorHelper
@@ -53,13 +55,29 @@ public class DescriptorHelper
             super( descriptorFile );
         }
 
+        public void createDefaultDescriptor( String templateString, String version )
+        {
+            String content = MessageFormat.format( templateString, version, version.replace( '.', '_' ) );
+
+            try
+            {
+                this.file.create( new ByteArrayInputStream( content.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+            }
+            catch( Exception e )
+            {
+                CorePlugin.logError( e );
+            }
+        }
+
+        protected abstract void createDefaultFile();
+
         public IStatus execute()
         {
             IStatus retval = null;
 
             if( !this.file.exists() )
             {
-                return CorePlugin.createErrorStatus( this.file.getName() + " doesn't exist" );
+                createDefaultFile();
             }
 
             IDOMModel domModel = null;
@@ -125,6 +143,7 @@ public class DescriptorHelper
             }
 
             IDOMModel domModel = null;
+ 
             try
             {
                 domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( this.file );
@@ -168,6 +187,22 @@ public class DescriptorHelper
             {
                 newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
             }
+
+            parentElement.appendChild( newChildElement );
+        }
+
+        return newChildElement;
+    }
+
+    public static Node appendTextNode( Element parentElement, String initialTextContent )
+    {
+        Node newChildElement = null;
+
+        if( parentElement != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
+
+            newChildElement = ownerDocument.createTextNode( initialTextContent );
 
             parentElement.appendChild( newChildElement );
         }
@@ -219,7 +254,6 @@ public class DescriptorHelper
     public static Element insertChildElement(
         Element parentElement, Node refNode, String newElementName, String initialTextContent )
     {
-
         Element newChildElement = null;
 
         if( parentElement != null && newElementName != null )
