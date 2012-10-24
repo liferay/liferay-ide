@@ -48,7 +48,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
     public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.hook";
+    public static final String ID = "com.liferay.ide.portlet.ui.wizard.hook";
 
     public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
 

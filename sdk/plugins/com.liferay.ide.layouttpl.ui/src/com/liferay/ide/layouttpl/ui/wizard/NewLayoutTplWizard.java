@@ -45,7 +45,7 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, INewLayoutTplDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate";
+    public static final String ID = "com.liferay.ide.layouttpl.ui.wizard.layouttemplate";
 
     public static final String LAYOUTTPL_LAYOUT_PAGE = "layoutTplLayoutPage";
 

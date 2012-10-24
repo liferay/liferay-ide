@@ -152,7 +152,7 @@ public class ValidProjectChecker
 
     protected void init()
     {
-        if( wizardId != null && wizardId.equals( "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet" ) )
+        if( wizardId != null && wizardId.equals( "com.liferay.ide.portlet.jsf.ui.wizard.portlet" ) )
         {
             setJsfPortlet( true );
         }
