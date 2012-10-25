@@ -89,5 +89,5 @@ public class ValidationPreferences
     public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =
         "validation-portlet-xml-resource-bundle-not-found";
 
-    public static final String SDK_NOT_VALID = "validation-sdk-not-valid";
+    //public static final String SDK_NOT_VALID = "validation-sdk-not-valid";
 }

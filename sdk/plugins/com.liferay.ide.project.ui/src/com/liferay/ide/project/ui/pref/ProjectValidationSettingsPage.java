@@ -16,7 +16,6 @@
 package com.liferay.ide.project.ui.pref;
 
 import com.liferay.ide.project.core.ProjectCorePlugin;
-import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.ui.pref.AbstractValidationSettingsPage;
 
@@ -35,7 +34,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 
 /**
@@ -136,14 +134,14 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
         description.setFont( pageContent.getFont() );
         description.setLayoutData( gd );
 
-        ExpandableComposite twistie;
+//        ExpandableComposite twistie;
 
-        int columns = 3;
-        twistie = createTwistie( body, "Liferay Plugin SDK", columns );
-        Composite inner = createInnerComposite( parent, twistie, columns );
+//        int columns = 3;
+//        twistie = createTwistie( body, "Liferay Plugin SDK", columns );
+//        Composite inner = createInnerComposite( parent, twistie, columns );
 
-        inner = createInnerComposite( parent, twistie, columns );
-        createCombo( inner, "Liferay Plugin SDK is not valid", ValidationPreferences.SDK_NOT_VALID );
+//        inner = createInnerComposite( parent, twistie, columns );
+//        createCombo( inner, "Liferay Plugin SDK is not valid", ValidationPreferences.SDK_NOT_VALID );
 
         return parent;
     }

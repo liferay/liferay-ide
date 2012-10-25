@@ -54,7 +54,6 @@
          point="org.eclipse.ui.propertyPages">
       <page
             class="com.liferay.ide.project.ui.LiferayProjectPropertyPage"
-            icon="icons/e16/liferay.png"
             id="com.liferay.ide.project.ui.properties"
             name="Liferay">
          <enabledWhen>
@@ -342,6 +341,7 @@
       </decorator>
    </extension>
 
+<!--
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -368,6 +368,7 @@
          </enabledWhen>
       </page>
    </extension>
+-->
 
 	<extension
          point="org.eclipse.ui.actionSets">

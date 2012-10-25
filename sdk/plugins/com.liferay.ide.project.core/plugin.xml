@@ -414,6 +414,8 @@
             eventTypes="PRIMARY_RUNTIME_CHANGED">
       </listener>
    </extension>
+
+   <!--
    <extension
          point="org.eclipse.wst.common.project.facet.core.validators">
       <validator
@@ -438,6 +440,8 @@
          </facet>
       </validator>
    </extension>
+   -->
+ 
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
