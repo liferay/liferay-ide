@@ -23,12 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -36,7 +35,6 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationEvent;
@@ -230,31 +228,21 @@ public abstract class BaseValidator extends AbstractValidator
         Node resourceSpecifier, IProject project, String preferenceNodeQualifier, IScopeContext[] preferenceScopes,
         String preferenceKey, String errorMessage )
     {
-        String resource = NodeUtil.getTextContent( resourceSpecifier );
+        String resourceValue = NodeUtil.getTextContent( resourceSpecifier );
 
-        if( resource != null && resource.length() > 0 )
+        if( resourceValue != null && resourceValue.length() > 0 )
         {
             // IDE-110 IDE-648
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-            if( webappRoot == null )
+            if ( CoreUtil.getDocroot( project ) != null )
             {
-                return null;
-            }
+                IFile webappResource = CoreUtil.getDocrootFile( project, resourceValue );
 
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
+                if( webappResource == null )
                 {
-                    IResource resourceValue = container.findMember( new Path( resource ) );
+                    String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
 
-                    if( resourceValue == null )
-                    {
-                        String msg = MessageFormat.format( errorMessage, new Object[] { resource } );
-
-                        return createMarkerValues(
-                            preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
-                    }
+                    return createMarkerValues(
+                        preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
                 }
             }
         }

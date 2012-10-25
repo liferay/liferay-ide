@@ -5,6 +5,7 @@ import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -62,8 +63,70 @@ public class LiferayProjectConfigurator extends AbstractProjectConfigurator impl
                 }
             }
         }
+    }
 
-        System.out.println(request);
+    private boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
+    {
+        boolean loadedParent = false;
+        MavenProject mavenProject = facade.getMavenProject();
+
+        try
+        {
+            if( mavenProject.getModel().getParent() == null || mavenProject.getParent() != null )
+            {
+                // If the getParent() method is called without error,
+                // we can assume the project has been fully loaded, no need to continue.
+                return false;
+            }
+        }
+        catch( IllegalStateException e )
+        {
+            // The parent can not be loaded properly
+        }
+
+        MavenExecutionRequest request = null;
+
+        while( mavenProject != null && mavenProject.getModel().getParent() != null )
+        {
+            if( monitor.isCanceled() )
+            {
+                break;
+            }
+
+            if( request == null )
+            {
+                request = projectManager.createExecutionRequest( facade, monitor );
+            }
+
+            MavenProject parentProject = maven.resolveParentProject( request, mavenProject, monitor );
+
+            if( parentProject != null )
+           {
+                mavenProject.setParent( parentProject );
+                loadedParent = true;
+            }
+
+            mavenProject = parentProject;
+        }
+
+        return loadedParent;
+    }
+
+    private Plugin findLiferayMavenPlugin( MavenProject mavenProject )
+    {
+        Plugin retval = null;
+
+        if( mavenProject != null )
+        {
+            retval = mavenProject.getPlugin( "com.liferay.maven.plugins:liferay-maven-plugin" );
+
+            if( retval == null )
+            {
+                retval = findLiferayMavenPlugin( mavenProject.getParent() );
+            }
+        }
+
+        return retval;
     }
 
     private IDataModel getLiferayProjectConfig()

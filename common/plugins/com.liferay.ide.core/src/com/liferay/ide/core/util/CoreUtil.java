@@ -53,6 +53,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
@@ -177,6 +178,36 @@ public class CoreUtil
         return new Status( IStatus.ERROR, CorePlugin.PLUGIN_ID, msg );
     }
 
+    public static final String createStringDigest( final String str )
+    {
+        try
+        {
+            final MessageDigest md = MessageDigest.getInstance( "SHA-256" );
+            final byte[] input = str.getBytes( "UTF-8" );
+            final byte[] digest = md.digest( input );
+
+            final StringBuilder buf = new StringBuilder();
+
+            for( int i = 0; i < digest.length; i++ )
+            {
+                String hex = Integer.toHexString( 0xFF & digest[ i ] );
+
+                if( hex.length() == 1 )
+                {
+                    buf.append( '0' );
+                }
+
+                buf.append( hex );
+            }
+
+            return buf.toString();
+        }
+        catch( Exception e )
+        {
+            throw new RuntimeException( e );
+        }
+    }
+
     public static void deleteResource( IResource resource ) throws CoreException
     {
         if( resource == null || !resource.exists() )
@@ -269,6 +300,28 @@ public class CoreUtil
         IProject project = getProject( projectName );
 
         return getDocroot( project );
+    }
+
+    public static IFile getDocrootFile( IProject project, String filePath )
+    {
+        IFile retval = null;
+
+        if( project != null && !CoreUtil.isNullOrEmpty( filePath ) )
+        {
+            IVirtualFolder webappRoot = getDocroot( project );
+
+            if( webappRoot != null )
+            {
+                IVirtualFile file = webappRoot.getFile( filePath );
+
+                if( file != null && file.exists() ) 
+                {
+                    retval = file.getUnderlyingFile();
+                }
+            }
+        }
+
+        return retval;
     }
 
     public static Object getNewObject( Object[] oldObjects, Object[] newObjects )
@@ -504,36 +557,6 @@ public class CoreUtil
             {
                 node.removeChild( node.getFirstChild() );
             }
-        }
-    }
-
-    public static final String createStringDigest( final String str )
-    {
-        try
-        {
-            final MessageDigest md = MessageDigest.getInstance( "SHA-256" );
-            final byte[] input = str.getBytes( "UTF-8" );
-            final byte[] digest = md.digest( input );
-    
-            final StringBuilder buf = new StringBuilder();
-    
-            for( int i = 0; i < digest.length; i++ )
-            {
-                String hex = Integer.toHexString( 0xFF & digest[ i ] );
-    
-                if( hex.length() == 1 )
-                {
-                    buf.append( '0' );
-                }
-    
-                buf.append( hex );
-            }
-    
-            return buf.toString();
-        }
-        catch( Exception e )
-        {
-            throw new RuntimeException( e );
         }
     }
 }
