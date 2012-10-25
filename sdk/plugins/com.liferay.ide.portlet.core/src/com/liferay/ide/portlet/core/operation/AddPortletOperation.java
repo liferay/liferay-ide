@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -46,6 +45,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.common.operations.AddJavaEEArtifactOperation;
 import org.eclipse.jst.j2ee.internal.common.operations.NewJavaEEArtifactClassOperation;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
@@ -352,21 +352,15 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
     protected IFile getProjectFile( String filePath )
     {
-        // IDE-110
-        for( IContainer container : this.webappRoot.getUnderlyingFolders() )
-        {
-            if( container != null && container.exists() )
-            {
-                IFile file = container.getFile( new Path( filePath) );
+        IFile retval = null;
 
-                if( file.exists() )
-                {
-                    return file;
-                }
-            }
+        if( this.webappRoot != null )
+        {
+            IVirtualFile projectFile = this.webappRoot.getFile( new Path( filePath ) );
+            retval = projectFile.getUnderlyingFile();
         }
 
-        return null;
+        return retval;
     }
 
     protected boolean shouldGenerateMetaData( IDataModel aModel )
