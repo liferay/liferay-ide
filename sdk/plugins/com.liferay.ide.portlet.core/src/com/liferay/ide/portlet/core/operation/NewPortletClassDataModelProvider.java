@@ -18,6 +18,7 @@ package com.liferay.ide.portlet.core.operation;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.PortletCore;
+import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -743,6 +744,16 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             if( portletName == null || portletName.length() == 0 )
             {
                 return PortletCore.createErrorStatus( "Portlet name is empty." );
+            }
+
+            PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( getTargetProject() );
+            String[] portletNames = portletDescriptorHelper.getAllPortletNames();
+            for(String name: portletNames)
+            {
+                if(name.equals( portletName ))
+                {
+                    return PortletCore.createErrorStatus( "Portlet name already exists." );
+                }
             }
         }
         else if( CREATE_RESOURCE_BUNDLE_FILE_PATH.equals( propertyName ) )
