@@ -91,18 +91,13 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class ProjectUtil
 {
 
     public static final String METADATA_FOLDER = ".metadata";
-
-    public static void addLiferayPortletTldToWebXML( final IProject project )
-    {
-        addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" );
-    }
 
     public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
     {

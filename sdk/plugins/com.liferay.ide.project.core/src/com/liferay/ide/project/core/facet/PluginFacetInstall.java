@@ -553,29 +553,4 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         return this.model.getBooleanProperty( SETUP_DEFAULT_OUTPUT_LOCATION );
     }
 
-    // protected void configWebXML() {
-    // WebArtifactEdit webArtifactEdit =
-    // WebArtifactEdit.getWebArtifactEditForWrite(this.project);
-    // int j2eeVersion = webArtifactEdit.getJ2EEVersion();
-    // WebApp webApp = webArtifactEdit.getWebApp();
-    // webApp.setFileList(null);
-    // JSPConfig jspConfig = webApp.getJspConfig();
-    // if (jspConfig == null && webApp.getVersionID() != 23) {
-    // jspConfig = JspFactory.eINSTANCE.createJSPConfig();
-    // }
-    // TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-    // tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
-    // tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
-    // if (jspConfig != null) {
-    // jspConfig.getTagLibs().add(tagLibRefType);
-    // } else {
-    // EList tagLibs = webApp.getTagLibs();
-    // tagLibs.add(tagLibRefType);
-    // }
-    // if (jspConfig != null) {
-    // webApp.setJspConfig(jspConfig);
-    // }
-    // webArtifactEdit.saveIfNecessary(null);
-    // webArtifactEdit.dispose();
-    // }
 }

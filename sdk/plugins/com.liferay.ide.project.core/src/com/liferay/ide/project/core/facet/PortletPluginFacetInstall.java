@@ -23,6 +23,7 @@ import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -47,6 +48,7 @@ import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvi
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -55,6 +57,11 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 @SuppressWarnings( "restriction" )
 public class PortletPluginFacetInstall extends PluginFacetInstall
 {
+
+    public static void addLiferayPortletTldToWebXML( final IProject project )
+    {
+        ProjectUtil.addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" );
+    }
 
     protected void copyPortletTLD() throws CoreException
     {
@@ -184,25 +191,36 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             }
         }
 
-        // modify the web.xml and add <jsp-config><taglib> for liferay tlds
-        copyPortletTLD();
+        // IDE-719  if we have a runtime 6.2.0 or greater don't perform the workarounds for taglib imports.
+        ILiferayRuntime liferayRuntime = getLiferayRuntime();
 
-        ProjectUtil.addLiferayPortletTldToWebXML( this.project );
-
-        try
+        if( liferayRuntime != null )
         {
-            IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
+            Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
 
-            // IDE-575
-            if( !( defaultDocroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&
-                defaultDocroot.getFile( "WEB-INF/tld/aui.tld" ).exists() )
+            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 2, 0 ) ) < 0 )
             {
-                ProjectUtil.addTldToWebXml( project, "http://liferay.com/tld/aui", "/WEB-INF/tld/aui.tld" );
+                // modify the web.xml and add <jsp-config><taglib> for liferay tlds
+                copyPortletTLD();
+
+                PortletPluginFacetInstall.addLiferayPortletTldToWebXML( this.project );
+
+                try
+                {
+                    IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
+
+                    // IDE-575
+                    if( !( defaultDocroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&
+                        defaultDocroot.getFile( "WEB-INF/tld/aui.tld" ).exists() )
+                    {
+                        ProjectUtil.addTldToWebXml( project, "http://liferay.com/tld/aui", "/WEB-INF/tld/aui.tld" );
+                    }
+                }
+                catch( Exception e1 )
+                {
+                    LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 );
+                }
             }
-        }
-        catch( Exception e1 )
-        {
-            LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 );
         }
 
         try
@@ -240,52 +258,5 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
     {
         return IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
     }
-
-    // protected void overwriteProjectFromTemplate(IPath newProjectPath, IPortletFramework portletTemplate) {
-    // String bundleId = portletTemplate.getBundleId();
-    //
-    // try {
-    // URL url =
-    // FileLocator.toFileURL(Platform.getBundle(bundleId).getEntry(portletTemplate.getRequiredSDKVersion()));
-    // File templateZip = new File(url.getFile());
-    //
-    // if (templateZip.exists() && newProjectPath.toFile().isDirectory()) {
-    // File newProjectDir = newProjectPath.toFile();
-    // FileUtil.deleteDirContents(newProjectDir);
-    //
-    // ZipUtil.unzip(templateZip, newProjectPath.toFile());
-    // }
-    // }
-    // catch (IOException e) {
-    // ProjectCorePlugin.logError("Could not unzip project template from bundle.", e);
-    // }
-    // }
-
-    // @SuppressWarnings("unchecked")
-    // protected void configWebXML() {
-    // WebArtifactEdit webArtifactEdit =
-    // WebArtifactEdit.getWebArtifactEditForWrite(this.project);
-    // int j2eeVersion = webArtifactEdit.getJ2EEVersion();
-    // WebApp webApp = webArtifactEdit.getWebApp();
-    // webApp.setFileList(null);
-    // JSPConfig jspConfig = webApp.getJspConfig();
-    // if (jspConfig == null && webApp.getVersionID() != 23) {
-    // jspConfig = JspFactory.eINSTANCE.createJSPConfig();
-    // }
-    // TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-    // tagLibRefType.setTaglibURI("http://java.sun.com/portlet_2_0");
-    // tagLibRefType.setTaglibLocation("/WEB-INF/tld/liferay-portlet.tld");
-    // if (jspConfig != null) {
-    // jspConfig.getTagLibs().add(tagLibRefType);
-    // } else {
-    // EList tagLibs = webApp.getTagLibs();
-    // tagLibs.add(tagLibRefType);
-    // }
-    // if (jspConfig != null) {
-    // webApp.setJspConfig(jspConfig);
-    // }
-    // webArtifactEdit.saveIfNecessary(null);
-    // webArtifactEdit.dispose();
-    // }
 
 }
