@@ -415,7 +415,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
     protected String getDisplayNameFromClassName( String oldName )
     {
-        final String[] words = oldName.split( "(?<!^)(?=[A-Z])" );
+        final String[] words = oldName.split( "(?<!^)((?=[A-Z][^A-Z])|(?<![A-Z])(?=[A-Z]))" );
         String newName = new String();
 
         for( int i = 0; i < words.length; i++ )
