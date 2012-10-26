@@ -349,17 +349,28 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 		return initParams;
 	}
 
-    protected String getDisplayNameFromClassName(String oldName) {
-        String[] words = oldName.split("(?<!^)(?=[A-Z])");
-        String newName = new String();
-        for(int i = 0 ; i < words.length ; i++) {
-            if( i > 0 ) {
-                newName = newName.concat(" ");
+	protected String getDisplayNameFromClassName( String oldName )
+    {
+        /*
+         * Explaination for following regex
+         * first part, the rule is "before this place there is not a line start"
+         * then, two options - 1. after this place is: uppercase followed by lowercase. eg: NewJSF_Portlet
+         * or 2. before this place is lowercase and after this place is uppercase. eg: New_JSFPortlet
+         */
+        final String[] words = oldName.split( "(?<!^)((?=[A-Z][^A-Z])|(?<![A-Z])(?=[A-Z]))" );
+        StringBuilder newName = new StringBuilder();
+
+        for( int i = 0; i < words.length; i++ )
+        {
+            if( i > 0 )
+            {
+                newName.append( " " );
             }
-            newName = newName.concat( words[i] );
+
+            newName.append( words[i] );
         }
 
-        return newName;
+        return newName.toString();
     }
 
 	@Override
