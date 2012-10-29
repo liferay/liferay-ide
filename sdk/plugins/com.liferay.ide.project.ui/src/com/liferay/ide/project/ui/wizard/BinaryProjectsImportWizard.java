@@ -19,6 +19,9 @@ import com.liferay.ide.project.core.BinaryProjectsImportDataModelProvider;
 import com.liferay.ide.project.core.SDKProjectsImportDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.SDK;
+import com.liferay.ide.ui.util.UIUtil;
+
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
@@ -28,7 +31,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class BinaryProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard
@@ -88,6 +92,14 @@ public class BinaryProjectsImportWizard extends DataModelWizard implements IWork
 
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
+    }
+
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
+        UIUtil.switchToLiferayPerspective();
+
+        super.postPerformFinish();
     }
 
     /*

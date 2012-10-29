@@ -18,6 +18,9 @@ package com.liferay.ide.project.ui.wizard;
 import com.liferay.ide.project.core.SDKProjectsImportDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.SDK;
+import com.liferay.ide.ui.util.UIUtil;
+
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
@@ -28,6 +31,7 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class SDKProjectsImportWizard extends DataModelWizard implements IWorkbenchWizard
@@ -91,4 +95,11 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
         return false;
     }
 
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
+        UIUtil.switchToLiferayPerspective();
+
+        super.postPerformFinish();
+    }
 }

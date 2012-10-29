@@ -19,6 +19,9 @@ import com.liferay.ide.project.core.BinaryProjectImportDataModelProvider;
 import com.liferay.ide.project.core.SDKProjectsImportDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.SDK;
+import com.liferay.ide.ui.util.UIUtil;
+
+import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
@@ -28,7 +31,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class BinaryProjectImportWizard extends DataModelWizard implements IWorkbenchWizard
@@ -44,7 +48,7 @@ public class BinaryProjectImportWizard extends DataModelWizard implements IWorkb
     public BinaryProjectImportWizard( IDataModel dataModel )
     {
         super( dataModel );
-        
+
         setWindowTitle( "Import Project" );
         setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
             ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
@@ -80,4 +84,11 @@ public class BinaryProjectImportWizard extends DataModelWizard implements IWorkb
     {
     }
 
+    @Override
+    protected void postPerformFinish() throws InvocationTargetException
+    {
+        UIUtil.switchToLiferayPerspective();
+
+        super.postPerformFinish();
+    }
 }
