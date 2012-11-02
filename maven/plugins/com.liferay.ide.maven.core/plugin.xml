@@ -15,10 +15,9 @@
             secondaryTo="org.maven.ide.eclipse.configuration.wtp.configurator">
       </configurator>
       <configurator
-            class="com.liferay.ide.maven.core.LiferayMavenPluginConfigurator"
+            class="com.liferay.ide.maven.core.LiferayPluginConfigurator"
             id="com.liferay.ide.maven.core.plugin.configurator"
-            name="Liferay Maven Plugin Configurator"
-            secondaryTo="org.maven.ide.eclipse.configuration.wtp.configurator">
+            name="Liferay Plugin Configurator">
       </configurator>
    </extension>
    <extension
@@ -27,11 +26,6 @@
             class="com.liferay.ide.maven.core.LiferayProjectLifeCycleMapping"
             id="com.liferay.ide.maven.core.LiferayProjectLifeCycleMapping"
             name="Liferay Project Lifecycle mapping">
-      </lifecycleMapping>
-      <lifecycleMapping
-            class="com.liferay.ide.maven.core.LiferayMavenPluginLifeCycleMapping"
-            id="com.liferay.ide.maven.core.LiferayMavenPluginLifeCycleMapping"
-            name="Liferay Maven Plugin Lifecycle mapping">
       </lifecycleMapping>
    </extension>
 

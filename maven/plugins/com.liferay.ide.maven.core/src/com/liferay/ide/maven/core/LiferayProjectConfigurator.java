@@ -17,10 +17,12 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.runtime.CoreException;
@@ -233,4 +235,16 @@ public class LiferayProjectConfigurator extends AbstractProjectConfigurator impl
         return loadedParent;
     }
 
+        @Override
+        protected List<MojoExecution> getMojoExecutions( ProjectConfigurationRequest request, IProgressMonitor monitor )
+            throws CoreException
+        {
+            // TODO Auto-generated method stub
+            return super.getMojoExecutions( request, monitor );
+        }
+
+
 }
+
+
+
