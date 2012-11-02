@@ -86,14 +86,14 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             // delete WEB-INF/lib and META-INF
             CoreUtil.deleteResource( project.findMember( "docroot/META-INF" ) );
         }
-        else
+        else if( shouldSetupDefaultOutputLocation() )
         {
             setupDefaultOutputLocation();
         }
 
         removeUnneededClasspathEntries();
 
-        IResource libRes = project.findMember( "docroot/WEB-INF/lib" );
+        IResource libRes = CoreUtil.getDefaultDocrootFolder( project ).findMember( "WEB-INF/lib" );
 
         if( libRes != null && libRes.exists() )
         {

@@ -183,12 +183,9 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                 }
             }
         }
-        else
+        else if( shouldSetupDefaultOutputLocation() )
         {
-            if( shouldSetupDefaultOutputLocation() )
-            {
-                setupDefaultOutputLocation();
-            }
+            setupDefaultOutputLocation();
         }
 
         // IDE-719  if we have a runtime 6.2.0 or greater don't perform the workarounds for taglib imports.

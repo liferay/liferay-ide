@@ -31,7 +31,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * @author Greg Amerson
- * @author kamesh.sampath [IDE-450]
+ * @author Kamesh Sampath
  */
 public class HookPluginFacetInstall extends PluginFacetInstall
 {
@@ -79,7 +79,7 @@ public class HookPluginFacetInstall extends PluginFacetInstall
                 ProjectCorePlugin.logError( e );
             }
         }
-        else
+        else if( shouldSetupDefaultOutputLocation() )
         {
             setupDefaultOutputLocation();
         }
@@ -87,8 +87,11 @@ public class HookPluginFacetInstall extends PluginFacetInstall
         // IDE-491 don't add this in the webxml by default
         // ProjectUtil.addLiferayPortletTldToWebXML( this.project );
 
-        // IDE-565
-        configureDeploymentAssembly( IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
+        if( shouldConfigureDeploymentAssembly() )
+        {
+            // IDE-565
+            configureDeploymentAssembly( IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
+        }
     }
 
     @Override

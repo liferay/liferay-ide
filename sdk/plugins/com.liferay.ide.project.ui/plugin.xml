@@ -327,7 +327,7 @@
             lightweight="true"
             label="Liferay plugin project decorator"
             state="true"
-            class="com.liferay.ide.project.ui.PluginProjectDecorator"
+            class="com.liferay.ide.project.ui.LiferayPluginProjectDecorator"
             id="com.liferay.ide.project.ui.PluginProjectDecorator">
          <enablement>
            <or>

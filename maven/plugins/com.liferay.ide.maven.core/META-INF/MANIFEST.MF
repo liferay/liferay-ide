@@ -15,8 +15,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.common.frameworks,
  org.eclipse.wst.common.modulecore,
- com.liferay.ide.portlet.ui;bundle-version="2.0.0",
- org.eclipse.wst.common.emfworkbench.integration
+ org.eclipse.wst.common.emfworkbench.integration,
+ com.liferay.ide.layouttpl.core;bundle-version="2.0.0",
+ com.liferay.ide.theme.core;bundle-version="2.0.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

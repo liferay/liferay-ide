@@ -132,6 +132,22 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
         IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, List<Map<String, Object>> problems )
     {
         NodeList classes = document.getElementsByTagName( classElement );
+        
+//        Properties p = new Properties();
+//        try
+//        {
+//            p.load( this.getClass().getClassLoader().getResourceAsStream( "LiferayPortletClassElements.properties" ) );
+//            for( Object key : p.keySet() )
+//            {
+//                String elementName = key.toString();
+//                String typeName = p.get( key ).toString();
+//            }
+//        }
+//        catch( IOException e )
+//        {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
 
         for( int i = 0; i < classes.getLength(); i++ )
         {

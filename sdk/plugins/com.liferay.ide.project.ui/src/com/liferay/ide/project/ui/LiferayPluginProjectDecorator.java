@@ -32,7 +32,7 @@ import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
 /**
  * @author Greg Amerson
  */
-public class PluginProjectDecorator extends LabelProvider implements ILightweightLabelDecorator
+public class LiferayPluginProjectDecorator extends LabelProvider implements ILightweightLabelDecorator
 {
 
     private static ImageDescriptor EXT;
@@ -162,6 +162,7 @@ public class PluginProjectDecorator extends LabelProvider implements ILightweigh
 
             if( overlay != null )
             {
+                // next two lines dangerous!
                 // DecorationContext ctx = (DecorationContext) decoration.getDecorationContext();
                 // ctx.putProperty( IDecoration.ENABLE_REPLACE, true );
 

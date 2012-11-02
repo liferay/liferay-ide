@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * Contributors:
  *    Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
@@ -86,7 +86,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
             // cleanup files
             FileUtil.deleteDir( newLayoutTplPath.toFile(), true );
         }
-        else
+        else if( shouldSetupDefaultOutputLocation() )
         {
             setupDefaultOutputLocation();
         }
