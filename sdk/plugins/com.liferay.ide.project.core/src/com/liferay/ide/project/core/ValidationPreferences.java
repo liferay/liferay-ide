@@ -21,8 +21,13 @@ public class ValidationPreferences
     public static final String LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND =
         "validation-liferay-display-xml-portlet-id-not-found";
 
+    public static final String LIFERAY_HOOK_XML_CLASS_NOT_FOUND = "validation-liferay-hook-xml-class-not-found";
+
     public static final String LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND =
         "validation-liferay-hook-xml-custom-jsp-dir-not-found";
+
+    public static final String LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY =
+        "validation-liferay-hook-xml-incorrect-class-hierarchy";
 
     public static final String LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND =
         "validation-liferay-hook-xml-language-properties-not-found";
@@ -44,9 +49,8 @@ public class ValidationPreferences
 
     public static final String LIFERAY_LAYOUTTPL_XML_WAP_TEMPLATE_PATH_NOT_FOUND =
         "validation-liferay-layouttpl-xml-wap-template-path-not-found";
-    
-    public static final String LIFERAY_PORTLET_XML_ENTRY_CLASS_NOT_FOUND =
-        "validation-liferay-portlet-xml-entry-class-not-found";
+
+    public static final String LIFERAY_PORTLET_XML_CLASS_NOT_FOUND = "validation-liferay-portlet-xml-class-not-found";
 
     public static final String LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID =
         "validation-liferay-portlet-xml-entry-weight-not-valid";
@@ -77,17 +81,19 @@ public class ValidationPreferences
 
     public static final String LIFERAY_PORTLET_XML_ICON_NOT_FOUND = "validation-liferay-portlet-xml-icon-not-found";
 
+    public static final String LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY =
+        "validation-liferay-portlet-xml-incorrect-class-hierarchy";
+
     public static final String LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND =
         "validation-liferay-portlet-xml-portlet-name-not-found";
 
-    public static final String PORTLET_XML_FILTER_CLASS_NOT_FOUND = "validation-portlet-xml-filter-class-not-found";
+    public static final String PORTLET_XML_CLASS_NOT_FOUND = "validation-portlet-xml-class-not-found";
 
-    public static final String PORTLET_XML_LISTENER_CLASS_NOT_FOUND = "validation-portlet-xml-listener-class-not-found";
-
-    public static final String PORTLET_XML_PORTLET_CLASS_NOT_FOUND = "validation-portlet-xml-portlet-class-not-found";
+    public static final String PORTLET_XML_INCORRECT_CLASS_HIERARCHY =
+        "validation-portlet-xml-incorrect-class-hierarchy";
 
     public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =
         "validation-portlet-xml-resource-bundle-not-found";
 
-    //public static final String SDK_NOT_VALID = "validation-sdk-not-valid";
+    // public static final String SDK_NOT_VALID = "validation-sdk-not-valid";
 }

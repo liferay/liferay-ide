@@ -15,18 +15,22 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.CorePlugin;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
@@ -34,12 +38,16 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.AbstractValidator;
 import org.eclipse.wst.validation.ValidationEvent;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -51,6 +59,11 @@ import org.w3c.dom.NodeList;
 public abstract class BaseValidator extends AbstractValidator
 {
 
+    public static final String MESSAGE_CLASS_INCORRECT_HIERARCHY =
+        "{0} type hierarchy is incorrect. Should be type: {1}.";
+
+    public static final String MESSAGE_CLASS_NOT_FOUND = "The class {0} was not found on the Java Build Path.";
+
     protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
 
     public BaseValidator()
@@ -58,15 +71,52 @@ public abstract class BaseValidator extends AbstractValidator
         super();
     }
 
-    @Override
-    public boolean shouldClearMarkers( ValidationEvent event )
+    protected Map<String, Object>[] checkAllClassElements(
+        Map<String, String> map, IJavaProject javaProject, IFile liferayDescriptorXml, String classExistPreferenceKey,
+        String classHierarchyPreferenceKey, IScopeContext[] preferenceScopes, String preferenceNodeQualifier,
+        List<Map<String, Object>> problems ) throws CoreException
     {
-        return true;
+        IStructuredModel liferayDescriptorXmlModel = null;
+        IDOMDocument liferayDescriptorXmlDocument = null;
+
+        try
+        {
+            liferayDescriptorXmlModel = StructuredModelManager.getModelManager().getModelForRead( liferayDescriptorXml );
+
+            if( liferayDescriptorXmlModel != null && liferayDescriptorXmlModel instanceof IDOMModel && map != null)
+            {
+                liferayDescriptorXmlDocument = ( (IDOMModel) liferayDescriptorXmlModel ).getDocument();
+
+                for( String elementName : map.keySet() )
+                {
+                    checkClassElements(
+                        liferayDescriptorXmlDocument, javaProject, elementName, preferenceNodeQualifier,
+                        preferenceScopes, classExistPreferenceKey, classHierarchyPreferenceKey, problems,
+                        map.get( elementName ) );
+                }
+            }
+        }
+        catch( IOException e )
+        {
+            ProjectCorePlugin.logError( e );
+        }
+        finally
+        {
+            if( liferayDescriptorXmlModel != null )
+            {
+                liferayDescriptorXmlModel.releaseFromRead();
+            }
+        }
+
+        Map<String, Object>[] retval = new Map[problems.size()];
+
+        return (Map<String, Object>[]) problems.toArray( retval );
     }
 
     protected Map<String, Object> checkClass(
         IJavaProject javaProject, Node classSpecifier, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
+        IScopeContext[] preferenceScopes, String classExistPreferenceKey, String classHierarchyPreferenceKey,
+        String superTypeNames )
     {
         String className = NodeUtil.getTextContent( classSpecifier );
 
@@ -77,22 +127,89 @@ public abstract class BaseValidator extends AbstractValidator
             try
             {
                 type = javaProject.findType( className );
+
+                if( type == null || !type.exists() )
+                {
+                    final String msg = MessageFormat.format( MESSAGE_CLASS_NOT_FOUND, new Object[] { className } );
+
+                    return createMarkerValues(
+                        preferenceNodeQualifier, preferenceScopes, classExistPreferenceKey, (IDOMNode) classSpecifier,
+                        msg );
+                }
+
+                else if( superTypeNames != null )
+                {
+                    boolean typeFound = false;
+                    final String[] superTypes = superTypeNames.split( "," );
+
+                    for( String superType : superTypes )
+                    {
+                        try
+                        {
+                            IType checkType = javaProject.findType( superType );
+
+                            if( checkType != null )
+                            {
+                                ITypeHierarchy supertypeHierarchy = type.newSupertypeHierarchy( null );
+
+                                if( supertypeHierarchy.contains( checkType ) )
+                                {
+                                    typeFound = true;
+                                    break;
+                                }
+                            }
+                        }
+                        catch( JavaModelException e )
+                        {
+                            CorePlugin.logError( e );
+                        }
+                    }
+
+                    if( typeFound == false )
+                    {
+                        String msg = MessageFormat.format( MESSAGE_CLASS_INCORRECT_HIERARCHY, className, superTypeNames );
+
+                        if( superTypeNames.contains( "," ) )
+                        {
+                            msg = msg.replaceAll( "type:", "one of possible types:" );
+                        }
+
+                        return createMarkerValues(
+                            preferenceNodeQualifier, preferenceScopes, classHierarchyPreferenceKey,
+                            (IDOMNode) classSpecifier, msg );
+                    }
+                }
             }
             catch( JavaModelException e )
             {
                 return null;
             }
-
-            if( type == null || !type.exists() )
-            {
-                String msg = MessageFormat.format( errorMessage, new Object[] { className } );
-
-                return createMarkerValues(
-                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classSpecifier, msg );
-            }
         }
 
         return null;
+    }
+
+    protected void checkClassElements(
+        IDOMDocument document, IJavaProject javaProject, String classElement, String preferenceNodeQualifier,
+        IScopeContext[] preferenceScopes, String classExistPreferenceKey, String classHierarchyPreferenceKey,
+        List<Map<String, Object>> problems, String superTypeNames )
+    {
+        final NodeList classes = document.getElementsByTagName( classElement );
+
+        for( int i = 0; i < classes.getLength(); i++ )
+        {
+            final Node item = classes.item( i );
+
+            final Map<String, Object> problem =
+                checkClass(
+                    javaProject, item, preferenceNodeQualifier, preferenceScopes, classExistPreferenceKey,
+                    classHierarchyPreferenceKey, superTypeNames );
+
+            if( problem != null )
+            {
+                problems.add( problem );
+            }
+        }
     }
 
     protected Map<String, Object> checkClassResource(
@@ -196,7 +313,7 @@ public abstract class BaseValidator extends AbstractValidator
             }
             catch( JavaModelException e1 )
             {
-                //no error msg
+                // no error msg
             }
         }
 
@@ -233,7 +350,7 @@ public abstract class BaseValidator extends AbstractValidator
         if( resourceValue != null && resourceValue.length() > 0 )
         {
             // IDE-110 IDE-648
-            if ( CoreUtil.getDocroot( project ) != null )
+            if( CoreUtil.getDocroot( project ) != null )
             {
                 IFile webappResource = CoreUtil.getDocrootFile( project, resourceValue );
 
@@ -288,6 +405,30 @@ public abstract class BaseValidator extends AbstractValidator
         return markerValues;
     }
 
+    protected Map<String, String> getAllClasseElements( String liferayDescriptorClassElementsProperties )
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        Properties p = new Properties();
+        try
+        {
+            p.load( this.getClass().getClassLoader().getResourceAsStream( liferayDescriptorClassElementsProperties ) );
+
+            for( Object key : p.keySet() )
+            {
+                String elementName = key.toString();
+                String typeNames = p.get( key ).toString();
+
+                map.put( elementName, typeNames );
+            }
+        }
+        catch( IOException e )
+        {
+            CorePlugin.logError( e );
+        }
+
+        return map;
+    }
+
     protected Integer getMessageSeverity( String qualifier, IScopeContext[] preferenceScopes, String key )
     {
         int sev = fPreferencesService.getInt( qualifier, key, IMessage.NORMAL_SEVERITY, preferenceScopes );
@@ -308,6 +449,12 @@ public abstract class BaseValidator extends AbstractValidator
         }
 
         return new Integer( IMarker.SEVERITY_WARNING );
+    }
+
+    @Override
+    public boolean shouldClearMarkers( ValidationEvent event )
+    {
+        return true;
     }
 
 }

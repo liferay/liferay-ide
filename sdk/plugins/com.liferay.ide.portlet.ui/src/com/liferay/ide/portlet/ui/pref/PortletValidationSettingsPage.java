@@ -142,19 +142,18 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         twistie = createTwistie( body, "Portlet XML Descriptor", columns );
         Composite inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, "Portlet class not found", ValidationPreferences.PORTLET_XML_PORTLET_CLASS_NOT_FOUND );
+        createCombo( inner, "Class not found", ValidationPreferences.PORTLET_XML_CLASS_NOT_FOUND );
 
-        createCombo( inner, "Filter class not found", ValidationPreferences.PORTLET_XML_FILTER_CLASS_NOT_FOUND );
-
-        createCombo( inner, "Listener class not found", ValidationPreferences.PORTLET_XML_LISTENER_CLASS_NOT_FOUND );
+        createCombo( inner, "Incorrect class hierarchy", ValidationPreferences.PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
 
         createCombo( inner, "Resource bundle not found", ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND );
 
         twistie = createTwistie( body, "Liferay Portlet XML Descriptor", columns );
         inner = createInnerComposite( parent, twistie, columns );
 
+        createCombo( inner, "Class not found", ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND );
+        createCombo( inner, "Incorrect class hierarchy", ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
         createCombo( inner, "Icon not found", ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND );
-        createCombo( inner, "Entry class not found", ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_CLASS_NOT_FOUND );
         createCombo( inner, "Entry weight not valid", ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID );
         createCombo(
             inner, "Header portal css not found", ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND );
@@ -188,6 +187,8 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         twistie = createTwistie( body, "Liferay Hook XML Descriptor", columns );
         inner = createInnerComposite( parent, twistie, columns );
 
+        createCombo( inner, "Class not found", ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND );
+        createCombo( inner, "Incorrect class hierarchy", ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY );
         createCombo(
             inner, "Portal properties resource not found",
             ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND );

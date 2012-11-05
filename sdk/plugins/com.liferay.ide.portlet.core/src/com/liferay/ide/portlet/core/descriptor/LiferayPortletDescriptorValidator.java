@@ -85,11 +85,8 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
 
     public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayPortletDescriptorMarker";
 
-    public static final String MESSAGE_ENTRY_CLASS_NOT_FOUND =
-        "The entry class {0} was not found on the Java Build Path.";
-
     public static final String MESSAGE_ENTRY_WEIGHT_NOT_VALID = "Must specify a valid double for entry weight.";
-    
+
     public static final String MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND =
         "The footer portal css resource {0} was not found in the web app.";
 
@@ -125,42 +122,6 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
     public LiferayPortletDescriptorValidator()
     {
         super();
-    }
-    
-    protected void checkClassElements(
-        IDOMDocument document, IJavaProject javaProject, String classElement, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, List<Map<String, Object>> problems )
-    {
-        NodeList classes = document.getElementsByTagName( classElement );
-        
-//        Properties p = new Properties();
-//        try
-//        {
-//            p.load( this.getClass().getClassLoader().getResourceAsStream( "LiferayPortletClassElements.properties" ) );
-//            for( Object key : p.keySet() )
-//            {
-//                String elementName = key.toString();
-//                String typeName = p.get( key ).toString();
-//            }
-//        }
-//        catch( IOException e )
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-
-        for( int i = 0; i < classes.getLength(); i++ )
-        {
-            Node item = classes.item( i );
-
-            Map<String, Object> problem =
-                checkClass( javaProject, item, preferenceNodeQualifier, preferenceScopes, preferenceKey, errorMessage );
-
-            if( problem != null )
-            {
-                problems.add( problem );
-            }
-        }
     }
 
     protected void checkControlPanelEntryWeightElements(
@@ -287,8 +248,9 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
     }
 
     @SuppressWarnings( "unchecked" )
-    protected Map<String, Object>[] detectProblems(IJavaProject javaProject,
-        IFile liferayPortletXml, IFile portletXml, IScopeContext[] preferenceScopes ) throws CoreException
+    protected Map<String, Object>[] detectProblems(
+        IJavaProject javaProject, IFile liferayPortletXml, IFile portletXml, IScopeContext[] preferenceScopes )
+        throws CoreException
     {
         List<Map<String, Object>> problems = new ArrayList<Map<String, Object>>();
 
@@ -306,12 +268,12 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
 
                 checkDocrootElements(
                     liferayPortletXmlDocument, liferayPortletXml.getProject(), preferenceScopes, problems );
-                
-                checkClassElements(
-                    liferayPortletXmlDocument, javaProject, CONTROL_PANEL_ENTRY_CLASS_ELEMENT,
-                    PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-                    ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_CLASS_NOT_FOUND, MESSAGE_ENTRY_CLASS_NOT_FOUND,
-                    problems );
+
+                checkAllClassElements(
+                    getAllClasseElements( "LiferayPortletClassElements.properties" ), javaProject, liferayPortletXml,
+                    ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND,
+                    ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
+                    PREFERENCE_NODE_QUALIFIER, problems );
 
                 checkControlPanelEntryWeightElements(
                     liferayPortletXmlDocument, preferenceScopes,
@@ -333,7 +295,7 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
         }
         catch( IOException e )
         {
-
+            PortletCore.logError( e );
         }
         finally
         {
