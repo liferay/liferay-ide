@@ -17,6 +17,7 @@
 
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.remote.RemoteConnection;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;

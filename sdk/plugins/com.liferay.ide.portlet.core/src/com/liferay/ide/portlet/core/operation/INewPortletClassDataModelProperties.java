@@ -74,8 +74,6 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
     public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.aboutjsp";
 
-	public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.aboutjsp";
-
 	public static final String ADD_TO_CONTROL_PANEL = "INewPortletClassDataModelProperties.ADD_TO_CONTROL_PANEL";
 	
 	public static final String[] ALL_PORTLET_MODES = 
@@ -99,14 +97,8 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
 	public static final String CONFIG_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.configjsp";
 
-	// public static final boolean DEFAULT_CREATE_CUSTOM_PORTLET_CLASS = false;
-	
-	public static final String CONFIG_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.configjsp";
-	
 	public static final String CONTEXT_TYPE = "INewPortletClassDataModelProperties.CONTEXT_TYPE";
 	
-	public static final String CREATE_ENTRY_CLASS = "INewPortletClassDataModelProperties.CREATE_ENTRY_CLASS";
-
 	public static final String CREATE_ENTRY_CLASS = "INewPortletClassDataModelProperties.CREATE_ENTRY_CLASS";
 
 	public static final String CREATE_JSPS = "INewPortletClassDataModelProperties.CREATE_JSPS";
