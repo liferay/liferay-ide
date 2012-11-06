@@ -39,6 +39,10 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 
+/**
+ * @author Gregory Amerson
+ * @author Cindy Li
+ */
 @SuppressWarnings( "restriction" )
 public class PortletValidationSettingsPage extends AbstractValidationSettingsPage
 {
@@ -197,8 +201,6 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
             ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND );
         createCombo(
             inner, "Custom jsp directory not found", ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND );
-        createCombo( inner, "Service type not found", ValidationPreferences.LIFERAY_HOOK_XML_SERVICE_TYPE_NOT_FOUND );
-        createCombo( inner, "Service impl not found", ValidationPreferences.LIFERAY_HOOK_XML_SERVICE_IMPL_NOT_FOUND );
 
         twistie = createTwistie( body, "Liferay Layout Templates Descriptor", columns );
         inner = createInnerComposite( parent, twistie, columns );

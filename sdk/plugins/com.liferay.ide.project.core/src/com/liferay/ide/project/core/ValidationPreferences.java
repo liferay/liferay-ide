@@ -35,12 +35,6 @@ public class ValidationPreferences
     public static final String LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND =
         "validation-liferay-hook-xml-portal-properties-not-found";
 
-    public static final String LIFERAY_HOOK_XML_SERVICE_IMPL_NOT_FOUND =
-        "validation-liferay-hook-xml-service-impl-not-found";
-
-    public static final String LIFERAY_HOOK_XML_SERVICE_TYPE_NOT_FOUND =
-        "validation-liferay-hook-xml-service-type-not-found";
-
     public static final String LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND =
         "validation-liferay-layouttpl-xml-template-path-not-found";
 
