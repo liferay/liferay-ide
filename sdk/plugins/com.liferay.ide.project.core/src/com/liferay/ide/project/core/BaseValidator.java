@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.CorePlugin;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 
@@ -161,7 +160,7 @@ public abstract class BaseValidator extends AbstractValidator
                         }
                         catch( JavaModelException e )
                         {
-                            CorePlugin.logError( e );
+                            ProjectCorePlugin.logError( e );
                         }
                     }
 
@@ -423,7 +422,7 @@ public abstract class BaseValidator extends AbstractValidator
         }
         catch( IOException e )
         {
-            CorePlugin.logError( e );
+            ProjectCorePlugin.logError( e );
         }
 
         return map;
