@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.liferay.ide</groupId>
+    <artifactId>target-platform</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Liferay IDE Target Platforms</name>
+    <description>This modules defines all target platforms for Liferay IDE</description>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>liferay-ide-e42.target</file>
+                                    <type>target</type>
+                                    <classifier>liferay-ide-e42</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>liferay-ide-e372.target</file>
+                                    <type>target</type>
+                                    <classifier>liferay-ide-e372</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>liferay-ide-e36.target</file>
+                                    <type>target</type>
+                                    <classifier>liferay-ide-e36</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

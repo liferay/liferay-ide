@@ -1,0 +1,1301 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+    <dynamic-element dataType="string" name="ClimateForcast_PROGRAM_ID" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.PROGRAM_ID]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_COMMAND_LINE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.COMMAND_LINE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_HISTORY" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.HISTORY]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_TABLE_ID" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.TABLE_ID]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_INSTITUTION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.INSTITUTION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_SOURCE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.SOURCE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_CONTACT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.CONTACT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_PROJECT_ID" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.PROJECT_ID]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_CONVENTIONS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.CONVENTIONS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_REFERENCES" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.REFERENCES]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_ACKNOWLEDGEMENT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.ACKNOWLEDGEMENT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_REALIZATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.REALIZATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_EXPERIMENT_ID" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.EXPERIMENT_ID]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_COMMENT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.COMMENT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="ClimateForcast_MODEL_NAME_ENGLISH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.ClimateForcast.MODEL_NAME_ENGLISH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="CreativeCommons_LICENSE_URL" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.CreativeCommons.LICENSE_URL]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="CreativeCommons_LICENSE_LOCATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.CreativeCommons.LICENSE_LOCATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="CreativeCommons_WORK_TYPE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.CreativeCommons.WORK_TYPE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_FORMAT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.FORMAT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_IDENTIFIER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.IDENTIFIER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_MODIFIED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.MODIFIED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_CONTRIBUTOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.CONTRIBUTOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_COVERAGE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.COVERAGE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_CREATOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.CREATOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_DESCRIPTION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.DESCRIPTION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_LANGUAGE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.LANGUAGE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_PUBLISHER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.PUBLISHER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_RELATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.RELATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_RIGHTS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.RIGHTS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_SOURCE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.SOURCE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_SUBJECT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.SUBJECT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_TITLE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.TITLE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required">
+<![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_TYPE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.TYPE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Geographic_LATITUDE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Geographic.LATITUDE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Geographic_LONGITUDE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Geographic.LONGITUDE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Geographic_ALTITUDE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Geographic.ALTITUDE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_ENCODING" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_ENCODING]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_LANGUAGE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_LANGUAGE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_LENGTH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_LENGTH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_LOCATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_LOCATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_DISPOSITION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_DISPOSITION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_MD5" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_MD5]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_CONTENT_TYPE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.CONTENT_TYPE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_LAST_MODIFIED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.LAST_MODIFIED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="HttpHeaders_LOCATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.HttpHeaders.LOCATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Message_MESSAGE_RECIPIENT_ADDRESS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Message.MESSAGE_RECIPIENT_ADDRESS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Message_MESSAGE_FROM" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Message.MESSAGE_FROM]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Message_MESSAGE_TO" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Message.MESSAGE_TO]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Message_MESSAGE_CC" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Message.MESSAGE_CC]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="Message_MESSAGE_BCC" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.Message.MESSAGE_BCC]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_KEYWORDS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.KEYWORDS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_COMMENTS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.COMMENTS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LAST_AUTHOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LAST_AUTHOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_APPLICATION_NAME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.APPLICATION_NAME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CHARACTER_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CHARACTER_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LAST_PRINTED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LAST_PRINTED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LAST_SAVED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LAST_SAVED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_PAGE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.PAGE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_REVISION_NUMBER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.REVISION_NUMBER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_WORD_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.WORD_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_TEMPLATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.TEMPLATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_AUTHOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.AUTHOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_TOTAL_TIME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.TOTAL_TIME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_SLIDE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.SLIDE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_PRESENTATION_FORMAT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.PRESENTATION_FORMAT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_PARAGRAPH_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.PARAGRAPH_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_NOTES" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.NOTES]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_MANAGER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.MANAGER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LINE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LINE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CHARACTER_COUNT_WITH_SPACES" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CHARACTER_COUNT_WITH_SPACES]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_APPLICATION_VERSION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.APPLICATION_VERSION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_VERSION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.VERSION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CONTENT_STATUS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CONTENT_STATUS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CATEGORY" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CATEGORY]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_COMPANY" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.COMPANY]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_SECURITY" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.SECURITY]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_EDIT_TIME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.EDIT_TIME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CREATION_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CREATION_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_BITS_PER_SAMPLE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.BITS_PER_SAMPLE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_IMAGE_LENGTH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.IMAGE_LENGTH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_IMAGE_WIDTH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.IMAGE_WIDTH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_SAMPLES_PER_PIXEL" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.SAMPLES_PER_PIXEL]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_FLASH_FIRED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.FLASH_FIRED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_EXPOSURE_TIME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.EXPOSURE_TIME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_F_NUMBER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.F_NUMBER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_FOCAL_LENGTH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.FOCAL_LENGTH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_ISO_SPEED_RATINGS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.ISO_SPEED_RATINGS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_EQUIPMENT_MAKE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.EQUIPMENT_MAKE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_EQUIPMENT_MODEL" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.EQUIPMENT_MODEL]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_SOFTWARE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.SOFTWARE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_ORIENTATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.ORIENTATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_RESOLUTION_HORIZONTAL" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.RESOLUTION_HORIZONTAL]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_RESOLUTION_VERTICAL" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.RESOLUTION_VERTICAL]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_RESOLUTION_UNIT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.RESOLUTION_UNIT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TIFF_ORIGINAL_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TIFF.ORIGINAL_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TikaMetadataKeys_RESOURCE_NAME_KEY" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TikaMetadataKeys.RESOURCE_NAME_KEY]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TikaMetadataKeys_PROTECTED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TikaMetadataKeys.PROTECTED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TikaMimeKeys_TIKA_MIME_FILE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TikaMimeKeys.TIKA_MIME_FILE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TikaMimeKeys_MIME_TYPE_MAGIC" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TikaMimeKeys.MIME_TYPE_MAGIC]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_DURATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.DURATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_ABS_PEAK_AUDIO_FILE_PATH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.ABS_PEAK_AUDIO_FILE_PATH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_ALBUM" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.ALBUM]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_ALT_TAPE_NAME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.ALT_TAPE_NAME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_ARTIST" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.ARTIST]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_AUDIO_MOD_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.AUDIO_MOD_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_AUDIO_SAMPLE_RATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.AUDIO_SAMPLE_RATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_AUDIO_SAMPLE_TYPE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.AUDIO_SAMPLE_TYPE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_AUDIO_CHANNEL_TYPE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.AUDIO_CHANNEL_TYPE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_AUDIO_COMPRESSOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.AUDIO_COMPRESSOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_COMPOSER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.COMPOSER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_COPYRIGHT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.COPYRIGHT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_ENGINEER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.ENGINEER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_FILE_DATA_RATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.FILE_DATA_RATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_GENRE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.GENRE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_INSTRUMENT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.INSTRUMENT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_KEY" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.KEY]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_LOG_COMMENT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.LOG_COMMENT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_LOOP" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.LOOP]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_NUMBER_OF_BEATS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.NUMBER_OF_BEATS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_METADATA_MOD_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.METADATA_MOD_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_PULL_DOWN" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.PULL_DOWN]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_RELATIVE_PEAK_AUDIO_FILE_PATH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.RELATIVE_PEAK_AUDIO_FILE_PATH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_RELEASE_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.RELEASE_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_SCALE_TYPE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.SCALE_TYPE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_SCENE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.SCENE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_SHOT_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.SHOT_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_SHOT_LOCATION" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.SHOT_LOCATION]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_SHOT_NAME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.SHOT_NAME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_SPEAKER_PLACEMENT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.SPEAKER_PLACEMENT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_STRETCH_MODE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.STRETCH_MODE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_TAPE_NAME" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.TAPE_NAME]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_TEMPO" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.TEMPO]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_TIME_SIGNATURE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.TIME_SIGNATURE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_TRACK_NUMBER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.TRACK_NUMBER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_ALPHA_MODE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_ALPHA_MODE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_ALPHA_UNITY_IS_TRANSPARENT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_ALPHA_UNITY_IS_TRANSPARENT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_COLOR_SPACE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_COLOR_SPACE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_COMPRESSOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_COMPRESSOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_FIELD_ORDER" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_FIELD_ORDER]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_FRAME_RATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_FRAME_RATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_MOD_DATE" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_MOD_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_PIXEL_DEPTH" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_PIXEL_DEPTH]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="XMPDM_VIDEO_PIXEL_ASPECT_RATIO" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.XMPDM.VIDEO_PIXEL_ASPECT_RATIO]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+</root>

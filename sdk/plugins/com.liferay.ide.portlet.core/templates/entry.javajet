@@ -1,0 +1,20 @@
+<%@ jet package="com.liferay.ide.portlet.core.operation" 
+    imports="java.util.* com.liferay.ide.portlet.core.operation.* org.eclipse.jst.j2ee.internal.common.operations.*" 
+    class="EntryTemplate" 
+    skeleton="entry.generator.skeleton"
+%>
+<% CreateEntryTemplateModel model = (CreateEntryTemplateModel) argument; %>
+<%@ include file="_package.template" %>
+<%@ include file="_imports.template" %>
+<%@ include file="entry_classHeader.template" %>
+<%@ include file="_constructors.template" %>
+
+public class <%= model.getClassName() %> extends BaseControlPanelEntry {
+
+    @Override
+    public boolean isVisible(PermissionChecker permissionChecker, Portlet portlet)
+            throws Exception {
+        return false;
+    }
+
+}

@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*******************************************************************************
+ * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+ -->
+
+
+<definition>
+	<import>
+		<bundle>com.liferay.ide.portlet.ui</bundle>
+        <package>com.liferay.ide.hook.core.model</package>
+        <package>com.liferay.ide.hook.core.model.internal</package>
+        <package>com.liferay.ide.hook.ui.action</package>
+        <package>com.liferay.ide.hook.ui.editor</package>
+        <package>org.eclipse.sapphire.java.jdt.ui.internal</package>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>org.eclipse.sapphire.ui.swt.renderer.actions.internal</package>
+	</import>
+	<editor></editor>
+	<editor-page>
+		<id>HookConfigurationPage</id>
+		<page-name>Overview</page-name>
+		<page-header-text>Liferay Hook Configuration</page-header-text>
+		<root-node>
+			<node>
+				<image>icons/e16/hook.png</image>
+				<section>
+					<label>Internationalization</label>
+					<scale-vertically>true</scale-vertically>
+					<collapsible>false</collapsible>
+					<content>
+						<property-editor>
+							<property>LanguageProperties</property>
+							<show-label>false</show-label>
+                            <child-property>Value</child-property>
+						</property-editor>
+					</content>
+				</section>
+				<label>Hook Configuration</label>
+                <node-include>PortalPropertiesNode</node-include>
+                <node-include>CustomJSPsNode</node-include>
+                <node-include>ServicesNode</node-include>
+                <node-include>FiltersAndMappingsNode</node-include>
+                <node-include>StrutsActionsNode</node-include>
+                <node-include>IndexersNode</node-include>
+
+			</node>
+		</root-node>
+        <page-header-image>images/hook.png</page-header-image>
+	</editor-page>
+    <node>
+        <id>PortalPropertiesNode</id>
+        <label>Portal Properties</label>
+        <section>
+            <content>
+                <with>
+                    <path>PortalPropertiesFile</path>
+                    <panel>
+                        <key>IPortalPropertiesFile</key>
+                        <content>
+                            <property-editor>
+                                <property>Value</property>
+                                <action-handler>
+                                    <action>Sapphire.Create</action>
+                                    <label>Create Properties File</label>
+                                    <impl>CreateSrcFileActionHandler</impl>
+                                    <condition>CreateSrcFileActionHandler$Condition</condition>
+                                    <id>Sapphire.Create.Properties.File</id>
+                                </action-handler>
+                                <action-handler>
+                                    <action>Sapphire.Jump</action>
+                                    <id>Sapphire.Jump.Path.Relative</id>
+                                    <impl>RelativePathJumpActionHandler</impl>
+                                    <label>Open Properties File</label>
+                                </action-handler>
+                            </property-editor>
+                            <separator></separator>
+                            <property-editor>
+                                <property>../PortalPropertiesOverrides</property>
+                                <hint>
+                                    <value>DefaultListPropertyEditorRenderer$Factory</value>
+                                    <name>factory</name>
+                                </hint>
+                            </property-editor>
+                             
+                            <separator>
+                                <label>Details</label>
+                            </separator>
+                            <switching-panel>
+                                <list-selection-controller>
+                                    <property>../PortalPropertiesOverrides</property>
+                                </list-selection-controller>
+                                <panel>
+                                    <key>IPortalProperty</key>
+                                    <content>
+                                        <property-editor>
+                                            <property>Name</property>
+                                            <label>Override Name</label>
+                                        </property-editor>
+                                        <property-editor>
+                                            <property>Value</property>
+                                            <label>Override Value</label>
+                                        </property-editor>
+                                    </content>
+                                </panel>
+                                <default-panel>
+                                    <content>
+                                        <label>Select a portal property item above to view or edit additional parameters.</label>
+                                    </content>
+                                </default-panel>
+                            </switching-panel>
+                        </content>
+                    </panel>
+                    <label>Customize Liferay Portal Properties</label>
+                </with>
+            </content>
+        </section>
+        <image>icons/e16/properties_16x16.gif</image>
+    </node>
+	<node>
+        <id>CustomJSPsNode</id>
+        <section>
+            <content>
+                <with>
+                    <path>CustomJspDir</path>
+                    <label>Customize Liferay Portal JSPs</label>
+                    <panel>
+                        <key>ICustomJspDir</key>
+                        <content>
+                            <property-editor>
+                                <property>Value</property>
+                                <action-handler>
+						            <action>Sapphire.Create</action>
+						            <id>Create.Directory.Sapphire.Action</id>
+						            <label>Create Directory</label>
+						            <impl>CreateDirectoryActionHandler</impl>
+						            <condition>CreateDirectoryActionHandler$Condition</condition>
+						        </action-handler>
+                            </property-editor>
+                            <separator></separator>
+                            <property-editor>
+                                <property>../CustomJsps</property>
+                                <hint>
+                                    <name>factory</name>
+                                    <value>DefaultListPropertyEditorRenderer$Factory</value>
+                                </hint>
+                                <show-label>true</show-label>
+                            </property-editor>
+                            <separator>
+                                <label>Details</label>
+                            </separator>
+                            <switching-panel>
+                                <list-selection-controller>
+                                    <property>../CustomJsps</property>
+                                </list-selection-controller>
+                                <default-panel>
+                                    <content>
+                                        <label>Select a custom jsp item above to view or edit additional parameters.</label>
+                                    </content>
+                                </default-panel>
+                                <panel>
+                                    <key>ICustomJsp</key>
+                                    <content>
+                                        <property-editor>
+                                            <property>Value</property>
+                                            <show-label>true</show-label>
+                                        </property-editor>
+                                    </content>
+                                </panel>
+                            </switching-panel> 
+                        </content>
+                    </panel>
+                </with>
+            </content>
+        </section>
+        <label>Custom JSPs</label>
+        <image>icons/e16/folder_16x16.gif</image>
+        
+    </node>
+	<node>
+        <id>ServicesNode</id>
+        <label>Service Wrappers</label>
+        <section>
+            <content>
+                <label>Define service wrapper implementation classes that will wrap existing Liferay Services.</label>
+                <spacer></spacer>
+                <action-link>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image></show-image>
+                    <label>Add a Service Wrapper</label>
+                </action-link>
+            </content>
+        </section>
+        <node-include>ServicesNodeList</node-include>
+        <image>icons/e16/service_obj_16x16.gif</image>
+    </node>
+    <node-factory>
+        <id>ServicesNodeList</id>
+        <property>Services</property>
+        <case>
+            <image>${ Image() }</image>
+            <label>${ServiceType != null ? ServiceType : &quot;&lt;service&gt;&quot;}</label>
+            <section>
+                <label>Service Wrapper Detail</label>
+                <content>
+                    <label>Service Type is the existing Liferay service that the Service Impl will wrap. If there is no existing Service Impl class one can be created by typing in the desired class name value and click the &quot;Create&quot; action.</label>
+                    <spacer></spacer>
+                    <property-editor>
+                        <property>ServiceType</property>
+                        <action-handler-filter>
+                            <impl>CustomTypeActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <action>Sapphire.Browse</action>
+                            <id>ServiceTypeImpl.Browse.Java.Type</id>
+                            <description>Opens a browse dialog to list the possible service types that can be selected.</description>
+                            <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                            <impl>ServiceTypeImplBrowseActionHandler</impl>
+                            <param>
+                                <name>kind</name>
+                                <value>type</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
+                    <property-editor>
+                        <property>ServiceImpl</property>
+                        <action-handler-filter>
+                            <impl>NoBrowseActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>ServiceTypeImpl.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>ServiceTypeImplBrowseActionHandler</impl>
+                            <param>
+                                <name>kind</name>
+                                <value>impl</value>
+                            </param>
+                            <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                        </action-handler>
+                    </property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    <node>
+        <id>FiltersAndMappingsNode</id>
+        <node-include>ServletFiltersNodeList</node-include>
+        <node-include>ServletFilterMappingsNodeList</node-include>
+        <label>Filters and Mappings</label>
+        <section>
+            <content>
+                <label>Define custom filters to be executed before or after existing Liferay filters.</label>
+                <spacer></spacer>
+                <action-link>
+                    <label>Add a Servlet Filter</label>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image></show-image>
+                    <action-handler-id>Sapphire.Add.IServletFilter</action-handler-id>
+                </action-link>
+                <action-link>
+                    <label>Add a Servlet Filter Mapping</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.Add</action-id>
+                    <action-handler-id>Sapphire.Add.IServletFilterMapping</action-handler-id>
+                </action-link>
+            </content>
+        </section>
+    </node>
+    <node-factory>
+		<id>ServletFiltersNodeList</id>
+		<property>ServletFilters</property>
+		<case>
+			<image>${ Image() }</image>
+			<section>
+				<content>
+					<property-editor>ServletFilterName</property-editor>
+                    <property-editor>
+                        <property>ServletFilterImpl</property>
+                        <action-handler-filter>
+                            <impl>NoBrowseActionHandlerFilter</impl>
+                        </action-handler-filter>
+                        <action-handler>
+                            <action>Sapphire.Browse</action>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <impl>HierarchyJavaTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>type</name>
+                                <value>javax.servlet.Filter</value>
+                            </param>
+                            <param>
+                                <name>filter</name>
+                                <value>**</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
+					<property-editor>InitParams</property-editor>
+				</content>
+                <label>Servlet Filter Editor</label>
+			</section>
+			<label>${ ServletFilterName != null ? ServletFilterName : '&lt;servlet-filter-name&gt;' }</label></case>
+	</node-factory>
+    <node-factory>
+		<id>ServletFilterMappingsNodeList</id>
+		<property>ServletFilterMappings</property>
+		<case>
+			<image>${ Image() }</image>
+			<section>
+				<content>
+					<property-editor>ServletFilterName</property-editor>
+					<property-editor>BeforeAfterFilterType</property-editor>
+					<property-editor>BeforeAfterFilterName</property-editor>
+					<property-editor>URLPatterns</property-editor>
+					<property-editor>
+						<property>Dispatchers</property>
+						<show-label>true</show-label>
+						<hint>
+							<name>show.header</name>
+							<value>false</value>
+						</hint>
+					</property-editor>
+				</content>
+			</section>
+			<label>${ServletFilterName!=null?concat(ServletFilterName,' Mapping'):'&lt;servlet-filter-name-mapping&gt;'}</label>
+		</case>
+	</node-factory>
+    <node>
+        <id>StrutsActionsNode</id>
+        <label>Struts Actions</label>
+        <node-include>StrutsActionsNodeList</node-include>
+        <section>
+            <content>
+                <label>Add new struts actions to portal or override any existing action. There are two interfaces com.liferay.portal.kernel.struts.StrutsAction and com.liferay.portal.kernel.struts.StrutsPortletAction. The StrutsAction is used for regular struts actions like /c/portal/update_password and StrutsPortletAction is used for those that are used from portlets.</label>
+                <spacer></spacer>
+                <action-link>
+                    <label>Add a Struts Action</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.Add</action-id>
+                </action-link>
+            </content>
+        </section>
+    </node>
+    <node-factory>
+		<id>StrutsActionsNodeList</id>
+		<property>StrutsActions</property>
+		<case>
+			<section>
+				<content>
+					<label>Select an existing struts path to override or specify a new one. Then select the struts action impl class. The impl class must implement either StrutsAction or StrutsPortletAction. StrutsAction is used for regular struts actions like /c/portal/update_password and StrutsPortletAction is used for those that are used from portlets.</label>
+					<spacer></spacer>
+                    <property-editor>StrutsActionPath</property-editor>
+                    <property-editor>
+						<property>StrutsActionImpl</property>
+						<show-label>true</show-label>
+					</property-editor>
+				</content>
+				<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action&gt;'}</label>
+			</section>
+			<label>${StrutsActionPath!=null?StrutsActionPath:'&lt;struts-action&gt;'}
+			</label>
+			<image>${ Image() }</image>
+		</case>
+	</node-factory>
+    <node>
+        <id>IndexersNode</id>
+        <label>Indexer Post Processors</label>
+        <section>
+            <content>
+                <label>Define Indexer Post Processors.</label>
+                <spacer></spacer>
+                <action-link>
+                    <label>Add an Indexer Post Processor</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.Add</action-id>
+                </action-link>
+            </content>
+        </section>
+        <node-include>IndexerPostProcessorsList</node-include>
+    </node>
+    <node-factory>
+        <id>IndexerPostProcessorsList</id>
+        <property>IndexerPostProcessors</property>
+        <case>
+            <image>${ Image() }</image>
+            <label>${IndexerClassName!=null?IndexerClassName:'&lt;index-post-processor&gt;'}</label>
+            <section>
+                <content>
+                    <label>Select which Liferay portal model class that can be indexed. Then specify the implementation class that will implement the com.liferay.portal.kernel.searchIndexerPostProcessor interface.</label>
+                    <spacer></spacer>
+                    <property-editor>
+                        <property>IndexerClassName</property>
+                        <action-handler-filter>
+                            <impl>CustomTypeActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>HierarchyJavaTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>type</name>
+                                <value>com.liferay.portal.model.BaseModel</value>
+                            </param>
+                            <param>
+                                <name>filter</name>
+                                <value>**</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
+                    <property-editor>
+                        <property>IndexerClassImpl</property>
+                        <action-handler-filter>
+                            <impl>NoBrowseActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>HierarchyJavaTypeBrowseActionHandler</impl>
+                            <param>
+                                <name>type</name>
+                                <value>com.liferay.portal.kernel.search.IndexerPostProcessor</value>
+                            </param>
+                            <param>
+                                <name>filter</name>
+                                <value>**</value>
+                            </param>
+                        </action-handler>
+                    </property-editor>
+                </content>
+                <label>IndexerPostProcessor Editor</label>
+            </section>
+        </case>
+    </node-factory>
+
+</definition>

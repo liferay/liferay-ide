@@ -1,8 +1,0 @@
-#plugin@org.eclipse.wst.common.project.facet.core=v201103170332,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.project.facet.core
-#plugin@org.eclipse.wst.common.project.facet.ui=v201103311536,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,common/plugins/org.eclipse.wst.common.project.facet.ui
-plugin@org.eclipse.jst.server.tomcat.core=v20110427,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.tomcat.core
-plugin@org.eclipse.jst.server.tomcat.ui=v20100418,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.tomcat.ui
-#plugin@org.eclipse.wst.server.core=v20110816_1717,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.wst.server.core
-#plugin@org.eclipse.wst.server.ui=v20110823_1704,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.wst.server.ui
-#plugin@org.eclipse.jst.server.core=v20110419,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.core
-#plugin@org.eclipse.jst.server.ui=v20110419,:pserver:anonymous@dev.eclipse.org:/cvsroot/webtools,,servertools/plugins/org.eclipse.jst.server.ui

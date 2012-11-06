@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.liferay.ide</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../build/parent/pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.liferay.ide.build</groupId>
+    <artifactId>build</artifactId>
+
+    <packaging>pom</packaging>
+
+    <name>Liferay IDE Build</name>
+
+    <profiles>
+
+        <profile>
+            <id>all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../common</module>
+                <module>../sdk</module>
+                <module>../maven</module>
+                <module>../portal</module>
+                <module>../velocity</module>
+                <module>releng</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>common</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../common</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>sdk</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../sdk</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>maven</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../maven</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>portal</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../portal</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>velocity</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../velocity</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>releng</module>
+            </modules>
+        </profile>
+
+    </profiles>
+
+</project>

@@ -1,6 +1,10 @@
-.apt_generated/
 .DS_Store
+.apt_generated/
+.project
 .resources/
+.settings/
+.springBeans
 *.swp
 bin/
+rebel.xml
 target/

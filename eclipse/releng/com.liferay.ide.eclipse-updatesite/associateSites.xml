@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<associateSites>
-	<associateSite url="http://download.eclipse.org/graphiti/updates/nightly" label="Graphiti nightly" />
-	<associateSite url="https://hudson.eclipse.org/hudson/job/sapphire-0.3.x/lastSuccessfulBuild/artifact/build/repository/" label="Sapphire integration build" />
-</associateSites>

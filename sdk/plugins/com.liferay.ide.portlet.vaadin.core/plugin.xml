@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
+      <portletFrameworkWizardProvider
+            class="com.liferay.ide.portlet.vaadin.core.VaadinPortletFrameworkWizardProvider"
+            default="false"
+            description="Vaadin is a Java framework for building modern web applications which can be run as portlets inside of Liferay Portal."
+            displayName="Vaadin"
+            helpUrl="http://vaadin.com"
+            id="com.liferay.ide.project.core.framework.vaadin"
+            requiredSDKVersion="6.0.5"
+            shortName="vaadin">
+      </portletFrameworkWizardProvider>
+   </extension>
+
+</plugin>

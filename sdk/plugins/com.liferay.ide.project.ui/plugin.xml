@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="portletFrameworkDelegates" name="Portlet Framework Delegates" schema="schema/portletFrameworkDelegates.exsd"/>
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.liferay.ide.newWizards"
+            name="Liferay">
+      </category>
+      <wizard
+            category="com.liferay.ide.newWizards"
+            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+            icon="icons/n16/plugin_new.png"
+            id="com.liferay.ide.project.ui.newProjectWizard"
+            name="Liferay Project"
+            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+            project="true">
+         <class class="com.liferay.ide.project.ui.wizard.NewPluginProjectWizard">
+         	<parameter name="liferay_project" value="true"/>
+            <parameter name="menuIndex" value="10" />
+         </class>
+            
+         <description>
+            Create a project for developing Liferay Plugins to deploy to Liferay Portal Server
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      <wizard
+            category="com.liferay.ide.newWizards"
+            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+            icon="icons/n16/plugin_new.png"
+            id="com.liferay.ide.project.ui.newProjectWizardExistingSource"
+            name="Liferay Project from Existing Source"
+            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+            project="true">
+         <class class="com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard">
+         </class>
+            
+         <description>
+            Create a Liferay plugin project from existing plugin source.
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+      
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="com.liferay.ide.project.ui.LiferayProjectPropertyPage"
+            id="com.liferay.ide.project.ui.properties"
+            name="Liferay">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="com.liferay.ide.project.ui.isLiferayProject">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.project.ui.LiferayProjectPropertyTester"
+            id="com.liferay.ide.project.ui.isLiferayProject"
+            namespace="com.liferay.ide.project.ui"
+            properties="isLiferayProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.ui.SDKProjectPropertyTester"
+            id="com.liferay.ide.project.ui.isSDKProject"
+            namespace="com.liferay.ide.project.ui"
+            properties="isSDKProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.ui.ProjectNaturePropertyTester"
+            id="com.liferay.ide.project.ui.hasNature"
+            namespace="com.liferay.ide.project.ui"
+            properties="hasNature"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.ui.ServiceFilePropertyTester"
+            id="com.liferay.ide.project.ui.isServiceFile"
+            namespace="com.liferay.ide.project.ui"
+            properties="isServiceFile"
+            type="org.eclipse.core.resources.IFile">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.ui.LiferayProjectPropertyTester"
+            id="com.liferay.ide.project.ui.isLiferayProjectFolder"
+            namespace="com.liferay.ide.project.ui"
+            properties="isLiferayProjectFolder"
+            type="org.eclipse.core.resources.IFolder">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.ui.BuildFilePropertyTester"
+            id="com.liferay.ide.project.ui.isBuildFile"
+            namespace="com.liferay.ide.project.ui"
+            properties="isBuildFile"
+            type="org.eclipse.core.resources.IFile">
+      </propertyTester>
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="com.liferay.ide.project.ui.keyword"
+            label="Liferay">
+      </keyword>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.liferay.ide.projects.import"
+            name="Liferay">
+      </category>
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.wizard.LiferayProjectImportWizard"
+            icon="icons/e16/import.png"
+            id="com.liferay.ide.project.ui.importExistingProjectWizard"
+            name="Liferay Project from Existing Source">
+         <description>
+            Import an existing Liferay project that is located in a Plugins SDK directory.
+         </description>
+      </wizard>
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.wizard.SDKProjectsImportWizard"
+            icon="icons/e16/import.png"
+            id="com.liferay.ide.project.ui.importSDKProjectWizard"
+            name="Liferay Projects from Plugins SDK">
+         <description>
+            Import existing projects for a Liferay Plugin SDK directory for developing against Liferay Portal Server
+         </description>
+      </wizard>
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"
+            icon="icons/e16/import.png"
+            id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
+            name="Liferay Binary Plugin">
+         <description>
+            Import and exisiting Liferay project from binary file, e.g. .war file.
+         </description>
+      </wizard>
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.wizard.BinaryProjectsImportWizard"
+            icon="icons/e16/import.png"
+            id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
+            name="Liferay Binary Plugins">
+         <description>
+            Import existing Plugin binary projects e.g. importing projects from *.war
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution objectClass="org.eclipse.core.resources.IResource" adaptable="true" id="com.liferay.ide.ui.popupmenu">
+         <menu
+               icon="icons/e16/liferay.png"
+               id="liferayPopupMenuCategory"
+               label="Liferay">
+            <separator name="slot1"/> 
+         </menu>
+  	</objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.convert.popup"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="com.liferay.ide.project.ui.action.ConvertProjectAction"
+               enablesFor="1"
+               icon="icons/e16/convert.png"
+               id="com.liferay.ide.project.ui.convert.popup.action"
+               label="Convert to Liferay project..."
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Convert to Liferay project...">
+         </action>
+         <enablement>
+         	<adapt type="org.eclipse.core.resources.IProject">
+         		<and>
+         			<or>
+         				<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="jst.web" />
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="jst.java" />
+						</adapt>
+						<adapt type="org.eclipse.core.resources.IProject">
+				  			<test forcePluginActivation="true"
+								property="com.liferay.ide.project.ui.hasNature"
+								value="org.eclipse.jdt.core.javanature" />
+						</adapt>
+         			</or>
+         			
+					<not>
+						<or>
+							<adapt type="org.eclipse.core.resources.IProject">
+							<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.portlet" />
+							</adapt>
+							<adapt type="org.eclipse.core.resources.IProject">
+							<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.hook" />
+							</adapt>
+							<adapt type="org.eclipse.core.resources.IProject">
+							<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.ext" />
+							</adapt>
+							<adapt type="org.eclipse.core.resources.IProject">
+							<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.layouttpl" />
+							</adapt>
+							<adapt type="org.eclipse.core.resources.IProject">
+							<test forcePluginActivation="true"
+								property="org.eclipse.wst.common.project.facet.core.projectFacet"
+								value="liferay.theme" />
+							</adapt>
+						</or>
+					</not>
+				</and>
+			 </adapt> 
+         </enablement>
+         
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.importSDKProjects"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="com.liferay.ide.project.ui.action.SDKProjectsImportAction"
+               enablesFor="1"
+               icon="icons/e16/import.png"
+               id="com.liferay.ide.project.ui.sdk.projects.import"
+               label="Import Liferay Projects..."
+               menubarPath="liferayPopupMenuCategory/slot1">
+         </action>
+         <enablement>
+         	<adapt type="org.eclipse.core.resources.IProject">
+         		<test
+					property="com.liferay.ide.project.ui.isSDKProject" />
+         	</adapt>
+         </enablement>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.existingLiferayProject"
+            objectClass="org.eclipse.core.resources.IFolder">
+         <action
+               class="com.liferay.ide.project.ui.action.ImportLiferayProjectAction"
+               enablesFor="1"
+               icon="icons/e16/import.png"
+               id="com.liferay.ide.project.ui.import.liferay.project"
+               label="Import Liferay Project..."
+               menubarPath="liferayPopupMenuCategory/slot1">
+         </action>
+         <enablement>
+           <adapt type="org.eclipse.core.resources.IFolder">
+             <test property="com.liferay.ide.project.ui.isLiferayProjectFolder" />
+           </adapt>
+         </enablement>
+      </objectContribution>
+      
+   </extension>
+   
+   
+   <extension
+         point="org.eclipse.wst.common.project.facet.ui.images">
+      <image
+            category="liferay.plugins"
+            facet="liferay.portlet"
+            path="icons/e16/portlet.png">
+      </image>
+      <image
+            category="liferay.plugins"
+            facet="liferay.hook"
+            path="icons/e16/hook.png">
+      </image>
+      <image
+            category="liferay.plugins"
+            facet="liferay.ext"
+            path="icons/e16/ext.png">
+      </image>
+      <image
+            category="liferay.plugins"
+            path="icons/e16/liferay.png">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.wst.common.project.facet.ui.wizardPages">
+      <wizard-pages
+            action="liferay.portlet.install">
+         <page
+               class="com.liferay.ide.project.ui.wizard.PortletPluginFacetInstallPage">
+         </page>
+      </wizard-pages>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            location="TOP_RIGHT"
+            lightweight="true"
+            label="Liferay plugin project decorator"
+            state="true"
+            class="com.liferay.ide.project.ui.LiferayPluginProjectDecorator"
+            id="com.liferay.ide.project.ui.PluginProjectDecorator">
+         <enablement>
+           <or>
+            <objectClass name="org.eclipse.core.resources.IProject"/>
+            <objectClass name="org.eclipse.jdt.core.IJavaProject"/>
+           </or>
+         </enablement>
+         <description>
+            Liferay plugin project decorator
+         </description>
+      </decorator>
+   </extension>
+
+<!--
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.project.ui.pref.ProjectValidationSettingsPage"
+            id="com.liferay.ide.project.ui.validation"
+            name="Project Validation">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="com.liferay.ide.project.ui.properties"
+            class="com.liferay.ide.project.ui.pref.ProjectValidationSettingsPage"
+            id="com.liferay.ide.project.ui.propertyPage.project.validation"
+            name="Project Validation">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="com.liferay.ide.project.ui.isLiferayProject">
+               </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
+-->
+
+	<extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
+            label="Liferay IDE Actions">
+         <action
+               class="com.liferay.ide.project.ui.action.NewServerDropDownAction"
+               icon="icons/n16/server_new.png"
+               id="com.liferay.ide.ui.action.newLiferayServer"
+               label="New Liferay Server"
+               style="pulldown"
+               toolbarPath="Normal/Liferay"
+               tooltip="Create a new Liferay Server">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.NewPortletDropDownAction"
+               icon="icons/n16/portlet_new.png"
+               id="com.liferay.ide.ui.action.newPortlet"
+               label="New Liferay Portlet"
+               style="pulldown"
+               toolbarPath="Normal/Liferay"
+               tooltip="Create a new Liferay Portlet">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction"
+               icon="icons/n16/plugin_new.png"
+               id="com.liferay.ide.ui.action.newPluginProject"
+               label="New Liferay Project"
+               style="pulldown"
+               toolbarPath="Normal/Liferay"
+               tooltip="Create a new Liferay Plugin Project">
+         </action>
+      </actionSet>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.ui.popupmenu"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               icon="icons/e16/liferay.png"
+               id="liferayPopupMenuCategory"
+               label="Liferay">
+            <separator
+                  name="slot1">
+            </separator>
+            <groupMarker
+                  name="sdk">
+            </groupMarker>
+         </menu>
+         <menu
+               icon="icons/e16/sdk.png"
+               id="liferayPopupMenuSDKCategory"
+               label="SDK"
+               path="liferayPopupMenuCategory/sdk">
+            <groupMarker
+                  name="all">
+            </groupMarker>
+            <groupMarker
+                  name="build-client">
+            </groupMarker>
+            <groupMarker
+                  name="build-db">
+            </groupMarker>
+            <groupMarker
+                  name="build-lang">
+            </groupMarker>
+            <groupMarker
+                  name="build-service">
+            </groupMarker>
+            <groupMarker
+                  name="build-wsdd">
+            </groupMarker>
+            <groupMarker
+                  name="clean">
+            </groupMarker>
+            <groupMarker
+                  name="compile">
+            </groupMarker>
+            <groupMarker
+                  name="compile-test">
+            </groupMarker>
+            <groupMarker
+                  name="deploy">
+            </groupMarker>
+            <groupMarker
+                  name="direct-deploy">
+            </groupMarker>
+            <groupMarker
+                  name="formatsource">
+            </groupMarker>
+            <groupMarker
+                  name="merge">
+            </groupMarker>
+            <groupMarker
+                  name="test">
+            </groupMarker>
+            <groupMarker
+                  name="war">
+            </groupMarker>
+         </menu>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.sdk.popup"
+            objectClass="org.eclipse.core.resources.IResource">
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.AllAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.all"
+               label="all"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/all">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.BuildClientAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.build-client"
+               label="build-client"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-client">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.BuildDBAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.build-db"
+               label="build-db"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-db">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.BuildLangAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.build-lang"
+               label="build-lang"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-lang">
+         </action>
+          <action
+               class="com.liferay.ide.project.ui.action.sdk.BuildServiceAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.build-service"
+               label="build-service"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-service">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.BuildWSDDAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.build-wsdd"
+               label="build-wsdd"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-wsdd">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.CleanAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.clean"
+               label="clean"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/clean">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.CompileAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.compile"
+               label="compile"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/compile">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.CompileTestAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.compile-test"
+               label="compile-test"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/compile-test">
+         </action>         
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.DeployAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.deploy"
+               label="deploy"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/deploy">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.DirectDeployAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.direct-deploy"
+               label="direct-deploy"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/direct-deploy">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.FormatSourceAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.formatsource"
+               label="format-source"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/formatsource">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.MergeAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.merge"
+               label="merge"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/merge">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.TestAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.test"
+               label="test"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/test">
+         </action>
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.WarAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.war"
+               label="war"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/war">
+         </action> 
+         <enablement>
+         	<adapt type="org.eclipse.core.resources.IResource">
+	          <or>
+	          	<adapt type="org.eclipse.core.resources.IFile">
+		  			<test forcePluginActivation="true"
+						property="com.liferay.ide.project.ui.isBuildFile"
+						value="true" />
+				</adapt>
+				<or>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.portlet" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.hook" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.ext" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.layouttpl" />
+					</adapt>
+					<adapt type="org.eclipse.core.resources.IProject">
+			  			<test forcePluginActivation="true"
+							property="org.eclipse.wst.common.project.facet.core.projectFacet"
+							value="liferay.theme" />
+					</adapt>
+				</or>
+			  </or>
+			</adapt>
+         </enablement>
+      </objectContribution>
+  </extension>
+   <extension
+         point="org.eclipse.jdt.ui.classpathContainerPage">
+      <classpathContainerPage
+            class="com.liferay.ide.project.ui.wizard.PluginClasspathContainerPage"
+            id="com.liferay.ide.project.ui.pluginClasspathContainerPage"
+            name="Liferay Plugin API">
+      </classpathContainerPage>
+   </extension>
+</plugin>
