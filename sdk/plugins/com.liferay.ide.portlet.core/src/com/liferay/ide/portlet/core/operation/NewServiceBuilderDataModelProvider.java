@@ -345,7 +345,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
     /**
      * Subclasses may extend this method to perform their own retrieval mechanism. This implementation simply returns
      * the JDT package fragment root for the selected source folder. This method may return null.
-     * 
+     *
      * @see IJavaProject#getPackageFragmentRoot(org.eclipse.core.resources.IResource)
      * @return IPackageFragmentRoot
      */
@@ -462,16 +462,15 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 
         if( webappRoot != null )
         {
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
-                {
-                    Path path = new Path( "WEB-INF/" + serviceFileProperty );
-                    IFile file = container.getFile( path );
+            IVirtualFolder webInfFolder = webappRoot.getFolder( "WEB-INF" );
 
-                    if( file.exists() )
+            if( webInfFolder != null )
+            {
+                for( IContainer container : webInfFolder.getUnderlyingFolders() )
+                {
+                    if( container != null && container.exists() )
                     {
-                        return file;
+                        return container.getFile( new Path( serviceFileProperty ) );
                     }
                 }
             }
