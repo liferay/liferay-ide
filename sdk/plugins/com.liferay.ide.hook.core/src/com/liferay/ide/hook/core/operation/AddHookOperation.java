@@ -13,13 +13,13 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.hook.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringBufferOutputStream;
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.dd.HookDescriptorHelper;
+import com.liferay.ide.hook.core.HookCore;
+import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.project.core.util.LiferayDataModelOperation;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -55,9 +55,7 @@ import org.eclipse.jface.text.templates.DocumentTemplateContext;
 import org.eclipse.jface.text.templates.Template;
 import org.eclipse.jface.text.templates.TemplateBuffer;
 import org.eclipse.jface.text.templates.TemplateContext;
-import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.TemplateException;
-import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -80,9 +78,9 @@ import org.osgi.framework.Version;
 public class AddHookOperation extends LiferayDataModelOperation implements INewHookDataModelProperties
 {
 
-    public AddHookOperation( IDataModel model, TemplateStore templateStore, TemplateContextType contextType )
+    public AddHookOperation( IDataModel model )
     {
-        super( model, templateStore, contextType );
+        super( model, null, null );
     }
 
     @Override
@@ -202,7 +200,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
         }
         catch( Exception e )
         {
-            PortletCore.logError( "Unable to add jsp syntax validation folder exclude rule.", e );
+            HookCore.logError( "Unable to add jsp syntax validation folder exclude rule.", e );
         }
     }
 
@@ -212,7 +210,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
 
         if( webappRoot == null )
         {
-            return PortletCore.createErrorStatus( "Could not find webapp root folder." );
+            return HookCore.createErrorStatus( "Could not find webapp root folder." );
         }
 
         // IDE-648 IDE-110
@@ -233,7 +231,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
                     }
                     catch( Exception ex )
                     {
-                        return PortletCore.createErrorStatus( ex );
+                        return HookCore.createErrorStatus( ex );
                     }
                 }
             }
@@ -289,7 +287,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
         }
         catch( CoreException e )
         {
-            return PortletCore.createErrorStatus( e );
+            return HookCore.createErrorStatus( e );
         }
 
         List<String[]> customJsps = (List<String[]>) dm.getProperty( CUSTOM_JSPS_ITEMS );
@@ -313,7 +311,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
                 }
                 catch( Exception e )
                 {
-                    PortletCore.logError( e );
+                    HookCore.logError( e );
                 }
             }
         }
@@ -382,7 +380,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
         }
         catch( CoreException e )
         {
-            return PortletCore.createErrorStatus( e );
+            return HookCore.createErrorStatus( e );
         }
 
         List<String[]> languagePropertiesFiles = (List<String[]>) dm.getProperty( LANGUAGE_PROPERTIES_ITEMS );
@@ -409,7 +407,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
                 }
                 catch( Exception e )
                 {
-                    PortletCore.logError( e );
+                    HookCore.logError( e );
                 }
             }
         }
@@ -446,7 +444,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
         }
         else
         {
-            return PortletCore.createErrorStatus( "Could not add language-properties to hook descriptor file." );
+            return HookCore.createErrorStatus( "Could not add language-properties to hook descriptor file." );
         }
 
     }
@@ -474,7 +472,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
             }
             catch( Exception e )
             {
-                return PortletCore.createErrorStatus( e );
+                return HookCore.createErrorStatus( e );
             }
         }
 
@@ -506,7 +504,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
         }
         catch( IOException e )
         {
-            return PortletCore.createErrorStatus( e );
+            return HookCore.createErrorStatus( e );
         }
 
         try
@@ -526,7 +524,7 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
         }
         catch( Exception e )
         {
-            return PortletCore.createErrorStatus( e );
+            return HookCore.createErrorStatus( e );
         }
 
         HookDescriptorHelper hookDescHelper = new HookDescriptorHelper( getTargetProject() );

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            describer="com.liferay.ide.hook.core.descriptor.LiferayHookContentDescriber"
+            file-extensions="xml"
+            file-names="liferay-hook.xml"
+            id="liferayhookxml"
+            name="Liferay Hook Descriptor"
+            priority="high">
+      </content-type>
+   </extension>
+   <extension
+         id="liferayhookdescriptorvalidator"
+         name="Liferay Hook Descriptor Validator"
+         point="org.eclipse.wst.validation.validatorV2">
+      <validator
+            build="true"
+            class="com.liferay.ide.hook.core.descriptor.LiferayHookDescriptorValidator"
+            manual="true"
+            markerId="com.liferay.ide.hook.core.liferayHookDescriptorMarker"
+            version="1">
+         <include>
+            <rules>
+               <contentType
+                     id="com.liferay.ide.hook.core.liferayhookxml">
+               </contentType>
+            </rules>
+         </include>
+         <group
+               id="org.eclipse.wst.sse.core.structuredModelGroup">
+         </group>
+      </validator>
+   </extension>
+   <extension
+         id="liferayHookDescriptorMarker"
+         name="Liferay Hook Descriptor Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.wst.validation.problemmarker">
+      </super>
+   </extension>
+   <extension
+         point="com.liferay.ide.project.core.liferayProjects">
+      <liferayProjectDefinition
+            class="com.liferay.ide.hook.core.LiferayHookDefinition"
+            displayName="Liferay Hook"
+            facetId="liferay.hook"
+            facetedProjectTemplateId="liferay.hook.template"
+            menuIndex="20"
+            shortName="hook">
+      </liferayProjectDefinition>
+   </extension>
+
+</plugin>

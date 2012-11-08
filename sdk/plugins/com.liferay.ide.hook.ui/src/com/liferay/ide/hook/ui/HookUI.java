@@ -36,6 +36,11 @@ public class HookUI extends AbstractUIPlugin
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.hook.ui"; //$NON-NLS-1$
 
+    public static IStatus createErrorStatus( String string )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, string );
+    }
+
     /**
      * Returns the shared instance
      * 
@@ -77,5 +82,4 @@ public class HookUI extends AbstractUIPlugin
         plugin = null;
         super.stop( context );
     }
-
 }

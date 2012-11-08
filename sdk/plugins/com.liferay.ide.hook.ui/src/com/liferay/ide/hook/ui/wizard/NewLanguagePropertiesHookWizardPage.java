@@ -13,13 +13,14 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
 import org.eclipse.core.resources.IFile;
@@ -35,6 +36,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -57,46 +59,22 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
+public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
 {
-    protected EventActionsTableWizardSection eventActionsSection;
-    protected Text portalPropertiesFile;
-    protected PropertyOverridesTableWizardSection propertyOverridesSection;
 
-    public NewPortalPropertiesHookWizardPage( IDataModel dataModel, String pageName )
+    protected Text contentFolder;
+
+    protected StringArrayTableWizardSection languagePropertiesSection;
+
+    public NewLanguagePropertiesHookWizardPage( IDataModel dataModel, String pageName )
     {
-        super( dataModel, pageName, "Create Portal Properties", PortletUIPlugin.imageDescriptorFromPlugin(
-            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( dataModel, pageName, "Create Language Properties", HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
 
-        setDescription( "Specify which portal properties to override." );
+        setDescription( "Create new Language properties files." );
     }
 
-    protected void createEventActionsGroup( Composite topComposite )
-    {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 2 );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
-
-        eventActionsSection =
-            new EventActionsTableWizardSection(
-                composite, "Define actions to be executed on portal events:", "Add Event Action", "Add...", "Edit...",
-                "Remove...", new String[] { "Event", "Class" }, new String[] { "Event:", "Class:" }, null,
-                getDataModel(), PORTAL_PROPERTIES_ACTION_ITEMS );
-
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 150;
-
-        eventActionsSection.setLayoutData( gd );
-        eventActionsSection.setCallback( new StringArrayTableWizardSectionCallback() );
-
-        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
-
-        if( project != null )
-        {
-            eventActionsSection.setProject( project );
-        }
-    }
-
-    protected void createPortalPropertiesFileGroup( Composite topComposite )
+    protected void createContentFolderGroup( Composite topComposite )
     {
         Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
 
@@ -106,10 +84,10 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
         composite.setLayout( gl );
         composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-        SWTUtil.createLabel( composite, SWT.LEAD, "Portal properties file:", 1 );
+        SWTUtil.createLabel( composite, SWT.LEAD, "Content folder:", 1 );
 
-        portalPropertiesFile = SWTUtil.createText( composite, 1 );
-        this.synchHelper.synchText( portalPropertiesFile, PORTAL_PROPERTIES_FILE, null );
+        contentFolder = SWTUtil.createText( composite, 1 );
+        this.synchHelper.synchText( contentFolder, CONTENT_FOLDER, null );
 
         Button iconFileBrowse = SWTUtil.createPushButton( composite, "Browse...", null );
         iconFileBrowse.addSelectionListener( new SelectionAdapter()
@@ -118,49 +96,47 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                handleBrowseButton( NewPortalPropertiesHookWizardPage.this.portalPropertiesFile );
+                handleFileBrowseButton( NewLanguagePropertiesHookWizardPage.this.contentFolder );
             }
         } );
     }
 
-    protected void createPropertiesOverridesGroup( Composite topComposite )
+    protected void createLanguagePropertiesGroup( Composite parent )
     {
-        Composite composite = SWTUtil.createTopComposite( topComposite, 2 );
+        Composite composite = SWTUtil.createTopComposite( parent, 2 );
         composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-        propertyOverridesSection =
-            new PropertyOverridesTableWizardSection(
-                composite, "Specify properties to override:", "Add Property Override", "Add...", "Edit...",
-                "Remove...", new String[] { "Property", "Value" }, new String[] { "Property:", "Value:" }, null,
-                getDataModel(), PORTAL_PROPERTIES_OVERRIDE_ITEMS );
+        languagePropertiesSection =
+            new StringArrayTableWizardSection(
+                composite, "Language property files:", "Language property file", "Add...", "Edit...", "Remove...",
+                new String[] { "Add" }, new String[] { "Language property file:" }, null, getDataModel(),
+                LANGUAGE_PROPERTIES_ITEMS );
 
         GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 150;
+        gd.heightHint = 175;
 
-        propertyOverridesSection.setLayoutData( gd );
-        propertyOverridesSection.setCallback( new StringArrayTableWizardSectionCallback() );
-
-        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
-
-        if( project != null )
-        {
-            propertyOverridesSection.setProject( project );
-        }
+        languagePropertiesSection.setLayoutData( gd );
+        languagePropertiesSection.setCallback( new StringArrayTableWizardSectionCallback() );
     }
 
     @Override
     protected Composite createTopLevelComposite( Composite parent )
     {
         Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
-        topComposite.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
-        createPortalPropertiesFileGroup( topComposite );
+        createContentFolderGroup( topComposite );
 
-        createEventActionsGroup( topComposite );
-
-        createPropertiesOverridesGroup( topComposite );
+        createLanguagePropertiesGroup( topComposite );
 
         return topComposite;
+    }
+
+    @Override
+    protected void enter()
+    {
+        super.enter();
+
+        this.synchHelper.synchAllUIWithModel();
     }
 
     protected ISelectionStatusValidator getContainerDialogSelectionValidator()
@@ -171,12 +147,12 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
             public IStatus validate( Object[] selection )
             {
                 if( selection != null && selection.length > 0 && selection[0] != null &&
-                    !( selection[0] instanceof IProject ) )
+                    !( selection[0] instanceof IProject ) && !( selection[0] instanceof IFile ) )
                 {
                     return Status.OK_STATUS;
                 }
 
-                return PortletUIPlugin.createErrorStatus( "Choose a valid file or folder for portal.properties." );
+                return HookUI.createErrorStatus( "Choose a valid folder for language properties files." );
             }
         };
     }
@@ -217,12 +193,6 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
                         }
                     }
                 }
-                else if( element instanceof IFile )
-                {
-                    IFile file = (IFile) element;
-
-                    return file.exists() && file.getName().equals( "portal.properties" );
-                }
 
                 return false;
             }
@@ -232,10 +202,10 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
     @Override
     protected String[] getValidationPropertyNames()
     {
-        return new String[] { PORTAL_PROPERTIES_FILE, PORTAL_PROPERTIES_ACTION_ITEMS, PORTAL_PROPERTIES_OVERRIDE_ITEMS };
+        return new String[] { CONTENT_FOLDER, LANGUAGE_PROPERTIES_ITEMS };
     }
 
-    protected void handleBrowseButton( final Text text )
+    protected void handleFileBrowseButton( final Text text )
     {
         ISelectionStatusValidator validator = getContainerDialogSelectionValidator();
 
@@ -249,8 +219,8 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
         ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog( getShell(), labelProvider, contentProvider );
         dialog.setValidator( validator );
-        dialog.setTitle( "Portal properties File" );
-        dialog.setMessage( "Portal properties File" );
+        dialog.setTitle( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_TITLE );
+        dialog.setMessage( J2EEUIMessages.CONTAINER_SELECTION_DIALOG_DESC );
         dialog.addFilter( filter );
         dialog.setInput( CoreUtil.getWorkspaceRoot() );
 
@@ -260,17 +230,16 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
             try
             {
-                if( element instanceof IFile )
-                {
-                    IFile file = (IFile) element;
-
-                    text.setText( file.getFullPath().toPortableString() );
-                }
-                else if( element instanceof IFolder )
+                if( element instanceof IFolder )
                 {
                     IFolder folder = (IFolder) element;
 
-                    text.setText( folder.getFullPath().append( "portal.properties" ).toPortableString() );
+                    if( folder.equals( CoreUtil.getFirstSrcFolder( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
+                    {
+                        folder = folder.getFolder( "content" );
+                    }
+
+                    text.setText( folder.getFullPath().toPortableString() );
                 }
             }
             catch( Exception ex )
@@ -280,5 +249,4 @@ public class NewPortalPropertiesHookWizardPage extends DataModelWizardPage imple
 
         }
     }
-
 }

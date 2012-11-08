@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.portlet.core.operation.NewServiceWrapperClassDataModelProvider;
-import com.liferay.ide.portlet.core.operation.NewServiceWrapperClassOperation;
+import com.liferay.ide.hook.core.operation.NewServiceWrapperClassDataModelProvider;
+import com.liferay.ide.hook.core.operation.NewServiceWrapperClassOperation;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;

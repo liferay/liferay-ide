@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
@@ -38,8 +38,8 @@ public class NewServicesHookWizardPage extends DataModelWizardPage implements IN
 
     public NewServicesHookWizardPage( IDataModel dataModel, String pageName )
     {
-        super( dataModel, pageName, "Create Service Hook", PortletUIPlugin.imageDescriptorFromPlugin(
-            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( dataModel, pageName, "Create Service Hook", HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
 
         setDescription( "Specify which Liferay services to extend." );
     }

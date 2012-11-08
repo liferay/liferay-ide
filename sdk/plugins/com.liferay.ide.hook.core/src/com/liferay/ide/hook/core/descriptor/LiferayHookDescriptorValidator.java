@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.descriptor;
+package com.liferay.ide.hook.core.descriptor;
 
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.portlet.core.PortletCore;
+import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.ValidationPreferences;
@@ -228,7 +228,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                     }
                     catch( JavaModelException e )
                     {
-                        PortletCore.logError( e );
+                        HookCore.logError( e );
                     }
                 }
             }
@@ -273,7 +273,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         }
         catch( IOException e )
         {
-            PortletCore.logError( e );
+            HookCore.logError( e );
         }
         finally
         {
@@ -334,7 +334,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
             }
             catch( Exception e )
             {
-                PortletCore.logError( e );
+                HookCore.logError( e );
             }
         }
 

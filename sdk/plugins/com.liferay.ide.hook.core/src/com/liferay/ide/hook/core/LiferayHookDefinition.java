@@ -15,7 +15,7 @@
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core;
+package com.liferay.ide.hook.core;
 
 import com.liferay.ide.project.core.AbstractProjectDefinition;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;

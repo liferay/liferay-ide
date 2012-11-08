@@ -49,8 +49,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
@@ -322,6 +324,28 @@ public class CoreUtil
         }
 
         return retval;
+    }
+
+    public static IFolder getFirstSrcFolder( IProject project )
+    {
+        @SuppressWarnings( "deprecation" )
+        IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
+
+        if( sourceFolders != null && sourceFolders.length > 0 )
+        {
+            IResource resource = sourceFolders[0].getResource();
+
+            return resource instanceof IFolder ? (IFolder) resource : null;
+        }
+
+        return null;
+    }
+
+    public static IFolder getFirstSrcFolder( String projectName )
+    {
+        IProject project = getProject( projectName );
+
+        return getFirstSrcFolder( project );
     }
 
     public static Object getNewObject( Object[] oldObjects, Object[] newObjects )

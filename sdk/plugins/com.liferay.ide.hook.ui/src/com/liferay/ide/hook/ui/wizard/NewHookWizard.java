@@ -13,12 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.portlet.core.operation.NewHookDataModelProvider;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.portlet.ui.template.HookTemplateContextTypeIds;
+import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.hook.core.operation.NewHookDataModelProvider;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,8 +25,6 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.text.templates.TemplateContextType;
-import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -48,7 +45,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
     public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
 
-    public static final String ID = "com.liferay.ide.portlet.ui.wizard.hook";
+    public static final String ID = "com.liferay.ide.hook.ui.wizard.hook";
 
     public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
 
@@ -216,18 +213,13 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
     protected ImageDescriptor getDefaultImageDescriptor()
     {
-        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" );
+        return HookUI.imageDescriptorFromPlugin( HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" );
     }
 
     @Override
     protected IDataModelProvider getDefaultProvider()
     {
-        TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
-
-        TemplateContextType contextType =
-            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType( HookTemplateContextTypeIds.NEW );
-
-        return new NewHookDataModelProvider( templateStore, contextType );
+        return new NewHookDataModelProvider();
     }
 
     protected void openEditor( final IFile file )
@@ -247,7 +239,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
                     }
                     catch( PartInitException e )
                     {
-                        PortletUIPlugin.logError( e );
+                        HookUI.logError( e );
                     }
                 }
             } );
@@ -262,7 +254,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
         }
         catch( Exception cantOpen )
         {
-            PortletUIPlugin.logError( cantOpen );
+            HookUI.logError( cantOpen );
         }
     }
 

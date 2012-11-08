@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
 import java.io.File;
 

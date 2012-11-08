@@ -13,21 +13,29 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.hook.core.descriptor;
 
-import org.eclipse.jst.j2ee.internal.common.operations.NewJavaClassOperation;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import com.liferay.ide.core.AbstractDefaultHandler;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
-public class NewServiceWrapperClassOperation extends NewJavaClassOperation
+public class LiferayHookContentHandler extends AbstractDefaultHandler
 {
 
-    public NewServiceWrapperClassOperation( IDataModel dataModel )
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Hook";
+
+    public static final String PUBLIC_ID_SUFFIX = "//EN";
+
+    public static final String LIFERAY_PORTLET_APP = "hook";
+
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-hook_";
+
+    public static final String SYSTEM_ID_SUFFIX = ".dtd";
+
+    public LiferayHookContentHandler()
     {
-        super( dataModel );
+        super( PUBLIC_ID_PREFIX, PUBLIC_ID_SUFFIX, SYSTEM_ID_PREFIX, SYSTEM_ID_SUFFIX, LIFERAY_PORTLET_APP );
     }
 
 }

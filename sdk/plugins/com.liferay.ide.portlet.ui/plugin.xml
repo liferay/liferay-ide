@@ -24,20 +24,6 @@
       </wizard>
       <wizard
             category="com.liferay.ide.newWizards"
-            icon="icons/n16/hook_new.png"
-            id="com.liferay.ide.portlet.ui.wizard.hook"
-            name="Liferay Hook">
-         <class class="com.liferay.ide.portlet.ui.wizard.NewHookWizard">
-         	<parameter name="liferay_artifact" value="true"/>
-            <parameter name="menuIndex" value="20" />
-            <parameter name="validProjectTypes" value="portlet,hook" />
-         </class>
-         <description>
-            Create a new Liferay Hook
-         </description>
-      </wizard>
-      <wizard
-            category="com.liferay.ide.newWizards"
             icon="icons/n16/service_new.png"
             id="com.liferay.ide.portlet.ui.wizard.servicebuilder"
             name="Liferay Service Builder">
@@ -61,15 +47,6 @@
       <include
             file="templates/portlet-jsp-templates.xml"
             translations="templates/portlet-jsp-templates.properties">
-      </include>
-      <contextType
-            class="com.liferay.ide.portlet.ui.template.HookTemplateContextType"
-            id="hook_new"
-            name="New Liferay Hook">
-      </contextType>
-      <include
-            file="templates/hook-templates.xml"
-            translations="templates/hook-templates.properties">
       </include>
       <contextType
             class="com.liferay.ide.portlet.ui.template.ServiceBuilderTemplateContextType"

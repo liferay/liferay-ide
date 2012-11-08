@@ -25,10 +25,30 @@
             name="Liferay Hook Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
-               contentTypeId="com.liferay.ide.portlet.core.liferayhookxml">
+               contentTypeId="com.liferay.ide.hook.core.liferayhookxml">
          </contentTypeBinding>
       </editor>
       
    </extension>
-  
+     <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.liferay.ide.newWizards"
+            name="Liferay">
+      </category>
+      <wizard
+            category="com.liferay.ide.newWizards"
+            icon="icons/n16/hook_new.png"
+            id="com.liferay.ide.hook.ui.wizard.hook"
+            name="Liferay Hook">
+         <class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
+          <parameter name="liferay_artifact" value="true"/>
+            <parameter name="menuIndex" value="20" />
+            <parameter name="validProjectTypes" value="portlet,hook" />
+         </class>
+         <description>
+            Create a new Liferay Hook
+         </description>
+      </wizard>
+   </extension>
 </plugin>

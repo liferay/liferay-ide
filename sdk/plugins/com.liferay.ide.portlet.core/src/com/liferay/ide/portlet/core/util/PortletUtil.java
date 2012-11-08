@@ -23,9 +23,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -34,7 +32,6 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 
 /**
  * @author Greg Amerson
@@ -43,28 +40,6 @@ import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 @SuppressWarnings( "restriction" )
 public class PortletUtil
 {
-
-    public static IFolder getFirstSrcFolder( IProject project )
-    {
-        @SuppressWarnings( "deprecation" )
-        IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
-
-        if( sourceFolders != null && sourceFolders.length > 0 )
-        {
-            IResource resource = sourceFolders[0].getResource();
-
-            return resource instanceof IFolder ? (IFolder) resource : null;
-        }
-
-        return null;
-    }
-
-    public static IFolder getFirstSrcFolder( String projectName )
-    {
-        IProject project = CoreUtil.getProject( projectName );
-
-        return getFirstSrcFolder( project );
-    }
 
     /**
      * This method will return the first source folder of the Java project

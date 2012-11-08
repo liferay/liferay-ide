@@ -13,29 +13,24 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.internal.core.search.BasicSearchEngine;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
@@ -46,7 +41,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -56,14 +53,14 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class ServicesTableWizardSection extends StringArrayTableWizardSection
+public class EventActionsTableWizardSection extends StringArrayTableWizardSection
 {
 
-    public class AddServiceDialog extends AddStringArrayDialog
+    protected class AddEventActionDialog extends AddStringArrayDialog
     {
         protected String[] buttonLabels;
 
-        public AddServiceDialog( Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels )
+        public AddEventActionDialog( Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels )
         {
             super( shell, windowTitle, labelsForTextField );
 
@@ -85,11 +82,11 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             // GridData data = new GridData(GridData.FILL_HORIZONTAL);
             // composite.setLayoutData(data);
             // composite.setLayout(new GridLayout(2, false));
+
             final Text text = new Text( parent, SWT.SINGLE | SWT.BORDER );
 
             GridData data = new GridData( GridData.FILL_HORIZONTAL );
             // data.widthHint = 200;
-
             text.setLayoutData( data );
 
             Composite buttonComposite = new Composite( parent, SWT.NONE );
@@ -124,38 +121,21 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
         {
             if( index == 0 )
             { // select event
-                handleSelectServiceButton( text );
+                handleSelectEventButton( text );
             }
             else if( index == 1 && "Select...".equals( label ) )
             {
-                handleSelectImplClassButton( text );
+                handleSelectClassButton( text );
             }
             else if( index == 1 && "New...".equals( label ) )
             {
-                handleNewImplClassButton( text );
+                handleNewClassButton( text );
             }
         }
 
-        protected void handleNewImplClassButton( Text text )
+        protected void handleNewClassButton( Text text )
         {
-            if( CoreUtil.isNullOrEmpty( texts[0].getText() ) )
-            {
-                MessageDialog.openWarning( getParentShell(), "Add Service", "Please specify a service type first." );
-
-                return;
-            }
-
-            String serviceType = texts[0].getText();
-
-            String wrapperType = "";
-
-            if( serviceType.endsWith( "Service" ) )
-            {
-                wrapperType = serviceType + "Wrapper";
-            }
-
-            NewEventActionClassDialog dialog =
-                new NewServiceWrapperClassDialog( getShell(), model, serviceType, wrapperType );
+            NewEventActionClassDialog dialog = new NewEventActionClassDialog( getShell(), model );
 
             if( dialog.open() == Window.OK )
             {
@@ -165,49 +145,44 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             }
         }
 
-        protected void handleSelectImplClassButton( Text text )
+        protected void handleSelectClassButton( Text text )
         {
-            if( CoreUtil.isNullOrEmpty( texts[0].getText() ) )
-            {
-                MessageDialog.openWarning( getParentShell(), "Add Service", "Please specify a service type first." );
+            Control control = text;
 
-                return;
-            }
-
-            IPackageFragmentRoot packRoot =
-                (IPackageFragmentRoot) model.getProperty( INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT );
-
-            if( packRoot == null )
-            {
-                return;
-            }
+            // IPackageFragmentRoot packRoot = (IPackageFragmentRoot)
+            // model.getProperty(INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT);
+            // if (packRoot == null)
+            // return;
 
             IJavaSearchScope scope = null;
 
             try
             {
-                // get the Service type and replace Service with Wrapper and
-                // make it the supertype
-                String serviceType = texts[0].getText();
+                // scope =
+                // BasicSearchEngine.createHierarchyScope(packRoot.getJavaProject().findType("com.liferay.portal.kernel.events.SimpleAction"));
+                scope =
+                    BasicSearchEngine.createJavaSearchScope( new IJavaElement[] { JavaCore.create( CoreUtil.getProject( model.getStringProperty( INewJavaClassDataModelProperties.PROJECT_NAME ) ) ) } );
 
-                if( serviceType.endsWith( "Service" ) )
-                {
-                    String wrapperType = serviceType + "Wrapper";
-
-                    scope = BasicSearchEngine.createHierarchyScope( packRoot.getJavaProject().findType( wrapperType ) );
-                }
             }
-            catch( JavaModelException e )
+            catch( Exception e )
             {
-                PortletUIPlugin.logError( e );
+                HookUI.logError( e );
 
                 return;
             }
+
+            // This includes all entries on the classpath. This behavior is
+            // identical
+            // to the Super Class Browse Button on the Create new Java Class
+            // Wizard
+            // final IJavaSearchScope scope =
+            // SearchEngine.createJavaSearchScope(new
+            // IJavaElement[] {root.getJavaProject()} );
 
             FilteredTypesSelectionDialog dialog =
                 new FilteredTypesSelectionDialogEx( getShell(), false, null, scope, IJavaSearchConstants.CLASS );
-            dialog.setTitle( J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE );
-            dialog.setMessage( J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC );
+            dialog.setTitle( "Event selection" );
+            dialog.setMessage( "Select an event action:" );
 
             if( dialog.open() == Window.OK )
             {
@@ -220,56 +195,56 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
                     classFullPath = type.getFullyQualifiedName();
                 }
 
-                text.setText( classFullPath );
+                if( control instanceof Text )
+                {
+                    ( (Text) control ).setText( classFullPath );
+                }
+                else if( control instanceof Combo )
+                {
+                    ( (Combo) control ).setText( classFullPath );
+                }
+
+                return;
             }
         }
 
-        protected void handleSelectServiceButton( Text text )
+        protected void handleSelectEventButton( Text text )
         {
-            PortalServiceSearchScope scope = new PortalServiceSearchScope();
-            scope.setResourcePattern( new String[] { ".*Service.class$" } );
+            String[] hookProperties = new String[] {};
 
-            IProject project = ProjectUtil.getProject( model );
+            ILiferayRuntime runtime;
 
             try
             {
-                ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( project );
+                runtime = ServerUtil.getLiferayRuntime( project );
 
-                IPath[] libs = runtime.getAllUserClasspathLibraries();
-
-                for( IPath lib : libs )
-                {
-                    if( lib.lastSegment().equals( "portal-service.jar" ) )
-                    {
-                        scope.setEnclosingJarPaths( new IPath[] { lib } );
-
-                        break;
-                    }
-                }
+                hookProperties = runtime.getSupportedHookProperties();
             }
-            catch( CoreException e1 )
+            catch( CoreException e )
             {
-                PortletUIPlugin.logError( e1 );
-                return;
+                HookUI.logError( e );
             }
 
-            FilteredTypesSelectionDialog dialog =
-                new FilteredTypesSelectionDialogEx( getShell(), false, null, scope, IJavaSearchConstants.INTERFACE );
-            dialog.setTitle( J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE );
-            dialog.setMessage( J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC );
+            // if (eventActionPropertiesFile == null) {
+            // try {
+            // loadEventActionsPropertiesFile();
+            // }
+            // catch (Exception e) {
+            // HookUI.logError(e);
+            // return;
+            // }
+            // }
+
+            PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell(), ".*events.*" );
+            dialog.setTitle( "Property selection" );
+            dialog.setMessage( "Please select a property:" );
+            dialog.setInput( hookProperties );
 
             if( dialog.open() == Window.OK )
             {
-                IType type = (IType) dialog.getFirstResult();
+                Object[] selected = dialog.getResult();
 
-                String classFullPath = J2EEUIMessages.EMPTY_STRING;
-
-                if( type != null )
-                {
-                    classFullPath = type.getFullyQualifiedName();
-                }
-
-                text.setText( classFullPath );
+                text.setText( selected[0].toString() );
             }
         }
 
@@ -277,20 +252,19 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
 
     protected String[] buttonLabels;
 
+    // protected File eventActionPropertiesFile;
+
     protected IProject project;
 
-    protected File servicesPropertiesFile;
-
-    public ServicesTableWizardSection(
+    public EventActionsTableWizardSection(
         Composite parent, String componentLabel, String dialogTitle, String addButtonLabel, String editButtonLabel,
         String removeButtonLabel, String[] columnTitles, String[] fieldLabels, Image labelProviderImage,
         IDataModel model, String propertyName )
     {
+
         super( parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles, fieldLabels, labelProviderImage, model, propertyName );
 
         this.buttonLabels = new String[] { "Select...", "Select...,New..." };
-
-        this.servicesPropertiesFile = null;
     }
 
     public void setProject( IProject project )
@@ -301,7 +275,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
     @Override
     protected void handleAddButtonSelected()
     {
-        AddServiceDialog dialog = new AddServiceDialog( getShell(), dialogTitle, fieldLabels, buttonLabels );
+        AddEventActionDialog dialog = new AddEventActionDialog( getShell(), dialogTitle, fieldLabels, buttonLabels );
 
         if( dialog.open() == Window.OK )
         {

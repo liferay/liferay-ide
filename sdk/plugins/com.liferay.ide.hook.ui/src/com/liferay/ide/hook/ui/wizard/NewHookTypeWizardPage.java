@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
@@ -61,8 +61,8 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
     public NewHookTypeWizardPage( IDataModel model, String pageName )
     {
-        super( model, pageName, "Create Liferay Hook", PortletUIPlugin.imageDescriptorFromPlugin(
-            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( model, pageName, "Create Liferay Hook", HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
 
         setDescription( "Define a new hook plugin." );
     }
@@ -235,7 +235,7 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
     protected void setShellImage()
     {
-        URL url = PortletUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/hook.png" );
+        URL url = HookUI.getDefault().getBundle().getEntry( "/icons/e16/hook.png" );
 
         Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 

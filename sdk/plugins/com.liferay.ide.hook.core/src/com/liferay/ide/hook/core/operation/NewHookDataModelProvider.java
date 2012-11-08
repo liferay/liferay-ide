@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.hook.core.operation;
 
 import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.JAVA_PACKAGE_FRAGMENT_ROOT;
 import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.JAVA_SOURCE_FOLDER;
@@ -21,9 +21,8 @@ import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataM
 import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.SOURCE_FOLDER;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.dd.HookDescriptorHelper;
-import com.liferay.ide.portlet.core.util.PortletUtil;
+import com.liferay.ide.hook.core.HookCore;
+import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,8 +38,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jem.workbench.utility.JemProjectUtilities;
-import org.eclipse.jface.text.templates.TemplateContextType;
-import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
@@ -54,21 +51,15 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
     implements INewHookDataModelProperties
 {
 
-    protected TemplateContextType contextType;
-    protected TemplateStore templateStore;
-
-    public NewHookDataModelProvider( TemplateStore templateStore, TemplateContextType contextType )
+    public NewHookDataModelProvider()
     {
         super();
-
-        this.templateStore = templateStore;
-        this.contextType = contextType;
     }
 
     @Override
     public IDataModelOperation getDefaultOperation()
     {
-        return new AddHookOperation( getDataModel(), this.templateStore, this.contextType );
+        return new AddHookOperation( getDataModel() );
     }
 
     @Override
@@ -119,7 +110,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( targetProject != null )
             {
-                return PortletUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "portal.properties" ).toPortableString();
+                return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "portal.properties" ).toPortableString();
             }
         }
         else if( CONTENT_FOLDER.equals( propertyName ) )
@@ -128,7 +119,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( targetProject != null )
             {
-                return PortletUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "content" ).toPortableString();
+                return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "content" ).toPortableString();
             }
         }
         else if( propertyName.equals( PROJECT ) )
@@ -210,7 +201,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( CoreUtil.isNullOrEmpty( jspFolder ) )
             {
-                return PortletCore.createErrorStatus( "Custom JSPs folder not configured." );
+                return HookCore.createErrorStatus( "Custom JSPs folder not configured." );
             }
         }
         else if( CUSTOM_JSPS_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
@@ -227,7 +218,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                 }
             }
 
-            return PortletCore.createErrorStatus( "Need to specify at least one JSP to override." );
+            return HookCore.createErrorStatus( "Need to specify at least one JSP to override." );
         }
         else if( PORTAL_PROPERTIES_FILE.equals( propertyName ) && getBooleanProperty( CREATE_PORTAL_PROPERTIES ) )
         {
@@ -235,7 +226,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( CoreUtil.isNullOrEmpty( portalPropertiesFile ) )
             {
-                return PortletCore.createErrorStatus( "portal.properties file not configured." );
+                return HookCore.createErrorStatus( "portal.properties file not configured." );
             }
         }
         else if( PORTAL_PROPERTIES_ACTION_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_PORTAL_PROPERTIES ) )
@@ -252,7 +243,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             }
             else
             {
-                return PortletCore.createErrorStatus( "Need to specify at least one Event Action or Property to override." );
+                return HookCore.createErrorStatus( "Need to specify at least one Event Action or Property to override." );
             }
         }
         else if( SERVICES_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_SERVICES ) )
@@ -265,7 +256,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             }
             else
             {
-                return PortletCore.createErrorStatus( "Need to specify at least one Service to override." );
+                return HookCore.createErrorStatus( "Need to specify at least one Service to override." );
             }
         }
         else if( CONTENT_FOLDER.equals( propertyName ) && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
@@ -274,7 +265,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( CoreUtil.isNullOrEmpty( contentFolder ) )
             {
-                return PortletCore.createErrorStatus( "Content folder not configured." );
+                return HookCore.createErrorStatus( "Content folder not configured." );
             }
         }
         else if( LANGUAGE_PROPERTIES_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
@@ -290,7 +281,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                     return Status.OK_STATUS;
                 }
             }
-            return PortletCore.createErrorStatus( "Need to specify at least one language property file." );
+            return HookCore.createErrorStatus( "Need to specify at least one language property file." );
         }
 
         return super.validate( propertyName );
@@ -400,6 +391,6 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             }
         }
 
-        return PortletCore.createErrorStatus( "Need to specify at least one item." );
+        return HookCore.createErrorStatus( "Need to specify at least one item." );
     }
 }

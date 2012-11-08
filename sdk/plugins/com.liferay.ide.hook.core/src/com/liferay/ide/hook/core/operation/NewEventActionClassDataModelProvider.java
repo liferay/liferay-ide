@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.hook.core.operation;
 
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.common.operations.NewJavaClassDataModelProvider;
@@ -23,20 +23,18 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class NewServiceWrapperClassDataModelProvider extends NewJavaClassDataModelProvider
+public class NewEventActionClassDataModelProvider extends NewJavaClassDataModelProvider
     implements INewJavaClassDataModelProperties
 {
-
     protected IDataModel hookModel;
     protected String qualifiedClassname;
     protected String qualifiedSuperclassname;
 
-    public NewServiceWrapperClassDataModelProvider(
-        IDataModel model, String qualifiedClassname, String qualifiedSuperclassname )
+    public NewEventActionClassDataModelProvider( IDataModel model, String qualifiedClassname, String text )
     {
         this.hookModel = model;
         this.qualifiedClassname = qualifiedClassname;
-        this.qualifiedSuperclassname = qualifiedSuperclassname;
+        this.qualifiedSuperclassname = text;
     }
 
     @Override

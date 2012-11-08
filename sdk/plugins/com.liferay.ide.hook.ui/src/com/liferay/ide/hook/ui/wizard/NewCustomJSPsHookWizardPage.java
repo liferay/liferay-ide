@@ -13,24 +13,23 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.portlet.core.util.PortletUtil;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.hook.ui.HookUI;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
-import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -38,7 +37,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
-import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -60,35 +58,91 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
+public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
 {
 
-    protected Text contentFolder;
+    protected Text customJSPsFolder;
 
-    protected StringArrayTableWizardSection languagePropertiesSection;
+    protected Button disableJSPFolderValidation;
 
-    public NewLanguagePropertiesHookWizardPage( IDataModel dataModel, String pageName )
+    protected CustomJSPsTableWizardSection jspItemsSection;
+
+    public NewCustomJSPsHookWizardPage( IDataModel dataModel, String pageName )
     {
-        super( dataModel, pageName, "Create Language Properties", PortletUIPlugin.imageDescriptorFromPlugin(
-            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( dataModel, pageName, "Create Custom JSPs", HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
 
-        setDescription( "Create new Language properties files." );
+        setDescription( "Create customs JSP folder and select JSPs to override." );
     }
 
-    protected void createContentFolderGroup( Composite topComposite )
+    protected void createCustomJSPsGroup( Composite parent )
+    {
+        Composite composite = SWTUtil.createTopComposite( parent, 2 );
+        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+
+        jspItemsSection =
+            new CustomJSPsTableWizardSection(
+                composite, "JSP files to override", "JSP File Path", "Add...", "Edit...", "Remove...",
+                new String[] { "Add" }, new String[] { "JSP File Path" }, null, getDataModel(), CUSTOM_JSPS_ITEMS );
+
+        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
+        gd.heightHint = 175;
+
+        jspItemsSection.setLayoutData( gd );
+        jspItemsSection.setCallback( new StringArrayTableWizardSectionCallback() );
+
+        IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+
+        if( project != null )
+        {
+            try
+            {
+                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+
+                IPath portalDir = liferayRuntime.getPortalDir();
+
+                if( portalDir != null && portalDir.toFile().exists() )
+                {
+                    jspItemsSection.setPortalDir( portalDir.toFile() );
+                }
+            }
+            catch( CoreException e )
+            {
+                HookUI.logError( e );
+            }
+        }
+
+    }
+
+    protected void createDisableJSPFolderValidation( Composite topComposite )
     {
         Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
 
-        GridLayout gl = new GridLayout( 3, false );
-        gl.marginLeft = 5;
+        GridLayout gl = new GridLayout( 1, false );
+        // gl.marginLeft = 5;
 
         composite.setLayout( gl );
         composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-        SWTUtil.createLabel( composite, SWT.LEAD, "Content folder:", 1 );
+        disableJSPFolderValidation = new Button( composite, SWT.CHECK );
+        disableJSPFolderValidation.setText( "Disable JSP syntax validation for custom JSP folder (recommended)." );
+        this.synchHelper.synchCheckbox( disableJSPFolderValidation, DISABLE_CUSTOM_JSP_FOLDER_VALIDATION, null );
+    }
 
-        contentFolder = SWTUtil.createText( composite, 1 );
-        this.synchHelper.synchText( contentFolder, CONTENT_FOLDER, null );
+    protected void createJSPFolderGroup( Composite topComposite )
+    {
+        Composite composite = SWTUtil.createTopComposite( topComposite, 3 );
+
+        GridLayout gl = new GridLayout( 3, false );
+        // gl.marginLeft = 5;
+
+        composite.setLayout( gl );
+        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
+
+        SWTUtil.createLabel( composite, SWT.LEAD, "Custom JSP folder:", 1 );
+
+        customJSPsFolder = SWTUtil.createText( composite, 1 );
+        this.synchHelper.synchText( customJSPsFolder, CUSTOM_JSPS_FOLDER, null );
 
         Button iconFileBrowse = SWTUtil.createPushButton( composite, "Browse...", null );
         iconFileBrowse.addSelectionListener( new SelectionAdapter()
@@ -97,27 +151,9 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                handleFileBrowseButton( NewLanguagePropertiesHookWizardPage.this.contentFolder );
+                handleFileBrowseButton( NewCustomJSPsHookWizardPage.this.customJSPsFolder );
             }
         } );
-    }
-
-    protected void createLanguagePropertiesGroup( Composite parent )
-    {
-        Composite composite = SWTUtil.createTopComposite( parent, 2 );
-        composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
-
-        languagePropertiesSection =
-            new StringArrayTableWizardSection(
-                composite, "Language property files:", "Language property file", "Add...", "Edit...", "Remove...",
-                new String[] { "Add" }, new String[] { "Language property file:" }, null, getDataModel(),
-                LANGUAGE_PROPERTIES_ITEMS );
-
-        GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
-        gd.heightHint = 175;
-
-        languagePropertiesSection.setLayoutData( gd );
-        languagePropertiesSection.setCallback( new StringArrayTableWizardSectionCallback() );
     }
 
     @Override
@@ -125,9 +161,11 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
     {
         Composite topComposite = SWTUtil.createTopComposite( parent, 3 );
 
-        createContentFolderGroup( topComposite );
+        createJSPFolderGroup( topComposite );
 
-        createLanguagePropertiesGroup( topComposite );
+        createCustomJSPsGroup( topComposite );
+
+        createDisableJSPFolderValidation( topComposite );
 
         return topComposite;
     }
@@ -153,7 +191,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
                     return Status.OK_STATUS;
                 }
 
-                return PortletUIPlugin.createErrorStatus( "Choose a valid folder for language properties files." );
+                return HookUI.createErrorStatus( "Choose a valid folder for custom jsps." );
             }
         };
     }
@@ -162,7 +200,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
     {
         return new ViewerFilter()
         {
-            @SuppressWarnings( "deprecation" )
+
             public boolean select( Viewer viewer, Object parent, Object element )
             {
                 if( element instanceof IProject )
@@ -174,25 +212,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
                 }
                 else if( element instanceof IFolder )
                 {
-                    IFolder folder = (IFolder) element;
-
-                    // only show source folders
-                    IProject project =
-                        ProjectUtilities.getProject( model.getStringProperty( IArtifactEditOperationDataModelProperties.PROJECT_NAME ) );
-
-                    IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
-
-                    for( int i = 0; i < sourceFolders.length; i++ )
-                    {
-                        if( sourceFolders[i].getResource() != null && sourceFolders[i].getResource().equals( folder ) )
-                        {
-                            return true;
-                        }
-                        else if( ProjectUtil.isParent( folder, sourceFolders[i].getResource() ) )
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
 
                 return false;
@@ -203,7 +223,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
     @Override
     protected String[] getValidationPropertyNames()
     {
-        return new String[] { CONTENT_FOLDER, LANGUAGE_PROPERTIES_ITEMS };
+        return new String[] { CUSTOM_JSPS_FOLDER, CUSTOM_JSPS_ITEMS };
     }
 
     protected void handleFileBrowseButton( final Text text )
@@ -235,9 +255,9 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
                 {
                     IFolder folder = (IFolder) element;
 
-                    if( folder.equals( PortletUtil.getFirstSrcFolder( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
+                    if( folder.equals( CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
                     {
-                        folder = folder.getFolder( "content" );
+                        folder = folder.getFolder( "custom_jsps" );
                     }
 
                     text.setText( folder.getFullPath().toPortableString() );
@@ -247,7 +267,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
             {
                 // Do nothing
             }
-
         }
     }
+
 }

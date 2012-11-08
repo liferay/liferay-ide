@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
@@ -132,7 +132,7 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
             }
             catch( CoreException e )
             {
-                PortletUIPlugin.logError( e );
+                HookUI.logError( e );
             }
 
             PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell() );

@@ -13,29 +13,21 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.template;
+package com.liferay.ide.hook.core.operation;
 
-import org.eclipse.jface.text.templates.GlobalTemplateVariables;
-import org.eclipse.jface.text.templates.TemplateContextType;
+import org.eclipse.jst.j2ee.internal.common.operations.NewJavaClassOperation;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
  */
-public class HookTemplateContextType extends TemplateContextType
+@SuppressWarnings( "restriction" )
+public class NewEventActionClassOperation extends NewJavaClassOperation
 {
 
-    public HookTemplateContextType()
+    public NewEventActionClassOperation( IDataModel dataModel )
     {
-        super();
-
-        addResolver( new GlobalTemplateVariables.Cursor() );
-        addResolver( new GlobalTemplateVariables.Date() );
-        addResolver( new GlobalTemplateVariables.Dollar() );
-        addResolver( new GlobalTemplateVariables.LineSelection() );
-        addResolver( new GlobalTemplateVariables.Time() );
-        addResolver( new GlobalTemplateVariables.User() );
-        addResolver( new GlobalTemplateVariables.WordSelection() );
-        addResolver( new GlobalTemplateVariables.Year() );
+        super( dataModel );
     }
 
 }

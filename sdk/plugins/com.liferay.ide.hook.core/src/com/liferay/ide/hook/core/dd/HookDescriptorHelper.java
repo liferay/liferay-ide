@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.dd;
+package com.liferay.ide.hook.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.portlet.core.operation.INewHookDataModelProperties;
+import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 

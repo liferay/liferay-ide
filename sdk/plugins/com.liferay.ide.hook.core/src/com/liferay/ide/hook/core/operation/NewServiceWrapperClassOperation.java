@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.hook.core.operation;
 
 import org.eclipse.jst.j2ee.internal.common.operations.NewJavaClassOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -22,10 +22,10 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class NewEventActionClassOperation extends NewJavaClassOperation
+public class NewServiceWrapperClassOperation extends NewJavaClassOperation
 {
 
-    public NewEventActionClassOperation( IDataModel dataModel )
+    public NewServiceWrapperClassOperation( IDataModel dataModel )
     {
         super( dataModel );
     }

@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.portlet.core.operation.NewEventActionClassDataModelProvider;
-import com.liferay.ide.portlet.core.operation.NewEventActionClassOperation;
+import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
+import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jdt.core.IJavaElement;

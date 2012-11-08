@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.descriptor;
+package com.liferay.ide.hook.core.descriptor;
 
 import com.liferay.ide.core.AbstractContentDescriber;
 import com.liferay.ide.core.AbstractDefaultHandler;

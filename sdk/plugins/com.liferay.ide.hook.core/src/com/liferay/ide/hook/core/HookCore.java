@@ -26,11 +26,26 @@ import org.osgi.framework.BundleContext;
 public class HookCore extends AbstractUIPlugin
 {
 
+    // The shared instance
+    private static HookCore plugin;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.hook.core"; //$NON-NLS-1$
 
-    // The shared instance
-    private static HookCore plugin;
+    public static IStatus createErrorStatus( Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
+    }
+
+    public static IStatus createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
+    }
+
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
 
     /**
      * Returns the shared instance
@@ -40,6 +55,11 @@ public class HookCore extends AbstractUIPlugin
     public static HookCore getDefault()
     {
         return plugin;
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
     }
 
     public static void logError( Throwable t )
