@@ -68,7 +68,7 @@
                 <with>
                     <path>PortalPropertiesFile</path>
                     <panel>
-                        <key>IPortalPropertiesFile</key>
+                        <key>PortalPropertiesFile</key>
                         <content>
                             <property-editor>
                                 <property>Value</property>
@@ -103,7 +103,7 @@
                                     <property>../PortalPropertiesOverrides</property>
                                 </list-selection-controller>
                                 <panel>
-                                    <key>IPortalProperty</key>
+                                    <key>PortalProperty</key>
                                     <content>
                                         <property-editor>
                                             <property>Name</property>
@@ -137,7 +137,7 @@
                     <path>CustomJspDir</path>
                     <label>Customize Liferay Portal JSPs</label>
                     <panel>
-                        <key>ICustomJspDir</key>
+                        <key>CustomJspDir</key>
                         <content>
                             <property-editor>
                                 <property>Value</property>
@@ -171,7 +171,7 @@
                                     </content>
                                 </default-panel>
                                 <panel>
-                                    <key>ICustomJsp</key>
+                                    <key>CustomJsp</key>
                                     <content>
                                         <property-editor>
                                             <property>Value</property>

@@ -36,24 +36,28 @@ public class HookUtil
     public static IFolder getCustomJspFolder(Hook hook, IProject project)
     {
         CustomJspDir element = hook.getCustomJspDir().element();
-        // IDE-110 IDE-648
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        if( element != null && webappRoot != null )
+        if( element != null )
         {
-            org.eclipse.sapphire.modeling.Path customJspDir = element.getValue().getContent();
+            // IDE-110 IDE-648
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-            for( IContainer folder : webappRoot.getUnderlyingFolders() )
+            if( element != null && webappRoot != null )
             {
-                IFolder customJspFolder = folder.getFolder( new Path( customJspDir.toPortableString() ) );
+                org.eclipse.sapphire.modeling.Path customJspDir = element.getValue().getContent();
 
-                if( customJspFolder != null )
+                for( IContainer folder : webappRoot.getUnderlyingFolders() )
                 {
-                    return customJspFolder;
+                    IFolder customJspFolder = folder.getFolder( new Path( customJspDir.toPortableString() ) );
+
+                    if( customJspFolder != null )
+                    {
+                        return customJspFolder;
+                    }
                 }
             }
         }
- 
+
         return null;
     }
 
