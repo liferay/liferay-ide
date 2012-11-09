@@ -13,12 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.service.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.operation.INewServiceBuilderDataModelProperties;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
+import com.liferay.ide.service.ui.ServiceUI;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
@@ -69,8 +69,8 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
     public NewServiceBuilderWizardPage( IDataModel dataModel, String pageName, String title, String description )
     {
-        super( dataModel, pageName, title, PortletUIPlugin.imageDescriptorFromPlugin(
-            PortletUIPlugin.PLUGIN_ID, "/icons/wizban/service_wiz.png" ) );
+        super( dataModel, pageName, title, ServiceUI.imageDescriptorFromPlugin(
+            ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" ) );
 
         setDescription( description );
     }
@@ -345,7 +345,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
     protected void setShellImage()
     {
-        URL url = PortletUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/service.png" );
+        URL url = ServiceUI.getDefault().getBundle().getEntry( "/icons/e16/service.png" );
 
         Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 

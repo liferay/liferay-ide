@@ -16,8 +16,6 @@
 package com.liferay.ide.portlet.core;
 
 import com.liferay.ide.portlet.core.job.BuildLanguageJob;
-import com.liferay.ide.portlet.core.job.BuildServiceJob;
-import com.liferay.ide.portlet.core.job.BuildWSDDJob;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
@@ -42,20 +40,6 @@ public class PortletCore extends Plugin
     public static BuildLanguageJob createBuildLanguageJob( IFile file )
     {
         BuildLanguageJob job = new BuildLanguageJob( file );
-
-        return job;
-    }
-
-    public static BuildServiceJob createBuildServiceJob( IFile file )
-    {
-        BuildServiceJob job = new BuildServiceJob( file );
-
-        return job;
-    }
-
-    public static BuildWSDDJob createBuildWSDDJob( IFile file )
-    {
-        BuildWSDDJob job = new BuildWSDDJob( file );
 
         return job;
     }

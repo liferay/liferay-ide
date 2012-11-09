@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.service.core.operation;
 
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 

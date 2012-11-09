@@ -16,7 +16,6 @@
 package com.liferay.ide.portlet.ui;
 
 import com.liferay.ide.portlet.ui.template.PortletTemplateContextTypeIds;
-import com.liferay.ide.portlet.ui.template.ServiceBuilderTemplateContextTypeIds;
 
 import java.io.IOException;
 
@@ -90,7 +89,6 @@ public class PortletUIPlugin extends AbstractUIPlugin
             ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
 
             registry.addContextType( PortletTemplateContextTypeIds.NEW );
-            registry.addContextType( ServiceBuilderTemplateContextTypeIds.NEW );
 
             fContextTypeRegistry = registry;
         }

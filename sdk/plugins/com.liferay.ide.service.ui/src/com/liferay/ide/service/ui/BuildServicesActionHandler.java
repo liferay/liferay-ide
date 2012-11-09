@@ -15,8 +15,8 @@
 
 package com.liferay.ide.service.ui;
 
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.job.BuildServiceJob;
+import com.liferay.ide.service.core.ServiceCore;
+import com.liferay.ide.service.core.job.BuildServiceJob;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,7 +36,7 @@ public class BuildServicesActionHandler extends SapphireActionHandler
 
         if( file != null && file.exists() )
         {
-            BuildServiceJob job = PortletCore.createBuildServiceJob( file );
+            BuildServiceJob job = ServiceCore.createBuildServiceJob( file );
 
             job.schedule();
         }

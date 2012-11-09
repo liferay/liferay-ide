@@ -13,13 +13,13 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.job;
+package com.liferay.ide.service.core.job;
 
-import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.job.SDKJob;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.service.core.ServiceCore;
 
 import java.text.MessageFormat;
 
@@ -66,12 +66,12 @@ public class BuildServiceJob extends SDKJob
 
         if( getProject() == null )
         {
-            return PortletCore.createErrorStatus( "This action can only be executed from a Liferay project.  Use Liferay project import wizard to import the project before continuing to build services." );
+            return ServiceCore.createErrorStatus( "This action can only be executed from a Liferay project.  Use Liferay project import wizard to import the project before continuing to build services." );
         }
 
         if( !ProjectUtil.isLiferayProject( getProject() ) )
         {
-            return PortletCore.createErrorStatus( MessageFormat.format(
+            return ServiceCore.createErrorStatus( MessageFormat.format(
                 "This action is unavailable because {0} is not a Liferay plugin project. Use \"Convert to Liferay project\" context-menu action and then run again.",
                 getProject().getName() ) );
         }
@@ -92,7 +92,7 @@ public class BuildServiceJob extends SDKJob
                     }
                     catch( Exception e )
                     {
-                        PortletCore.logError( e );
+                        ServiceCore.logError( e );
                     }
 
                     ResourcesPlugin.getWorkspace().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
@@ -107,12 +107,12 @@ public class BuildServiceJob extends SDKJob
             }
             catch( Exception e )
             {
-                PortletCore.logError( e );
+                ServiceCore.logError( e );
             }
         }
         catch( CoreException e1 )
         {
-            retval = PortletCore.createErrorStatus( e1 );
+            retval = ServiceCore.createErrorStatus( e1 );
         }
 
         return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
@@ -125,7 +125,7 @@ public class BuildServiceJob extends SDKJob
         if( sdk == null )
         {
             throw new CoreException(
-                PortletCore.createErrorStatus( "Could not determine the SDK name for project. Specify correct SDK in Liferay Project Properties page" ) );
+                ServiceCore.createErrorStatus( "Could not determine the SDK name for project. Specify correct SDK in Liferay Project Properties page" ) );
         }
 
         monitor.worked( 50 );
@@ -142,7 +142,7 @@ public class BuildServiceJob extends SDKJob
 
         if( container == null )
         {
-            return PortletCore.createWarningStatus( "Could not update classpath containers" );
+            return ServiceCore.createWarningStatus( "Could not update classpath containers" );
         }
 
         container.refresh();

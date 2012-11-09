@@ -13,13 +13,13 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.wizard;
+package com.liferay.ide.service.ui.wizard;
 
-import com.liferay.ide.portlet.core.operation.INewServiceBuilderDataModelProperties;
-import com.liferay.ide.portlet.core.operation.NewServiceBuilderDataModelProvider;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.portlet.ui.template.ServiceBuilderTemplateContextTypeIds;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
+import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
+import com.liferay.ide.service.core.operation.NewServiceBuilderDataModelProvider;
+import com.liferay.ide.service.ui.ServiceUI;
+import com.liferay.ide.service.ui.template.ServiceBuilderTemplateContextTypeIds;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -42,7 +42,7 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
     implements INewWizard, INewServiceBuilderDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.portlet.ui.wizard.servicebuilder";
+    public static final String ID = "com.liferay.ide.service.ui.wizard.servicebuilder";
 
     public NewServiceBuilderWizard()
     {
@@ -67,10 +67,10 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
     @Override
     protected IDataModelProvider getDefaultProvider()
     {
-        TemplateStore templateStore = PortletUIPlugin.getDefault().getTemplateStore();
+        TemplateStore templateStore = ServiceUI.getDefault().getTemplateStore();
 
         TemplateContextType contextType =
-            PortletUIPlugin.getDefault().getTemplateContextRegistry().getContextType(
+            ServiceUI.getDefault().getTemplateContextRegistry().getContextType(
                 ServiceBuilderTemplateContextTypeIds.NEW );
 
         return new NewServiceBuilderDataModelProvider( templateStore, contextType );
@@ -78,7 +78,7 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
 
     protected ImageDescriptor getImage()
     {
-        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/service_wiz.png" );
+        return ServiceUI.imageDescriptorFromPlugin( ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" );
     }
 
     @Override

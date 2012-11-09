@@ -13,13 +13,13 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.service.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.util.LiferayDataModelOperation;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.service.core.ServiceCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -86,7 +86,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
         if( webappRoot == null )
         {
-            return PortletCore.createErrorStatus( "Could not find webapp root folder." );
+            return ServiceCore.createErrorStatus( "Could not find webapp root folder." );
         }
 
         for( IContainer container : webappRoot.getUnderlyingFolders() )
@@ -105,7 +105,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
                     }
                     catch( Exception ex )
                     {
-                        return PortletCore.createErrorStatus( ex );
+                        return ServiceCore.createErrorStatus( ex );
                     }
                 }
             }
@@ -178,7 +178,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
         }
         catch( IOException e )
         {
-            PortletCore.logError( e );
+            ServiceCore.logError( e );
         }
 
         getDataModel().setProperty( CREATED_SERVICE_FILE, serviceBuilderFile );

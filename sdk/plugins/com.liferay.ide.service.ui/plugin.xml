@@ -3,17 +3,84 @@
 
 <plugin>
    <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.liferay.ide.newWizards"
+            name="Liferay">
+      </category>
+      <wizard
+            category="com.liferay.ide.newWizards"
+            icon="icons/n16/service_new.png"
+            id="com.liferay.ide.service.ui.wizard.servicebuilder"
+            name="Liferay Service Builder">
+         <class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
+          <parameter name="liferay_artifact" value="true"/>
+            <parameter name="menuIndex" value="30" />
+            <parameter name="validProjectTypes" value="portlet,hook,ext" />
+         </class>
+         <description>
+            Create a new Liferay Service
+         </description>
+      </wizard>
+   </extension>
+      <extension
+         point="org.eclipse.ui.editors.templates">
+      <contextType
+            class="com.liferay.ide.service.ui.template.ServiceBuilderTemplateContextType"
+            id="servicebuilder_new"
+            name="New Service Builder">
+      </contextType>
+      <include
+            file="templates/servicebuilder-templates.xml"
+            translations="templates/servicebuilder-templates.properties">
+      </include>
+   </extension>
+      <extension
+         point="org.eclipse.ui.popupMenus">
+         <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.service.ui.service.popup"
+            objectClass="org.eclipse.core.resources.IResource">
+         <action
+               class="com.liferay.ide.service.ui.action.BuildWSDDAction"
+               enablesFor="1"
+               icon="icons/e16/service.png"
+               id="com.liferay.ide.service.ui.wsdd.popup.action"
+               label="Build WSDD"
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Build web services descriptor">
+         </action>
+         <action
+               class="com.liferay.ide.service.ui.action.BuildServicesAction"
+               enablesFor="1"
+               icon="icons/e16/service.png"
+               id="com.liferay.ide.service.ui.service.popup.action"
+               label="Build Services"
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Build services">
+         </action>
+
+         <enablement>
+          <adapt type="org.eclipse.core.resources.IResource">
+                                  <test forcePluginActivation="true"
+                                            property="com.liferay.ide.service.ui.hasServiceFile"
+                                            value="true" />
+                        </adapt>
+         </enablement>
+      </objectContribution>
+   </extension>
+   <extension
          point="org.eclipse.ui.editors">
       <editor
             class="com.liferay.ide.service.ui.ServiceBuilderEditor"
             contributorClass="com.liferay.ide.service.ui.ServiceBuilderEditorActionBarContributor"
             default="true"
             icon="icons/e16/service.png"
-            id="com.liferay.ide.eclipse.portlet.ui.editor.servicebuilder"
+            id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
             name="Service Builder Configuration Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
-               contentTypeId="com.liferay.ide.portlet.core.servicebuildercontent">
+               contentTypeId="com.liferay.ide.service.core.servicebuildercontent">
          </contentTypeBinding>
       </editor>
       

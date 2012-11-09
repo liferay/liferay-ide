@@ -13,12 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.action;
+package com.liferay.ide.service.ui.actions;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.job.BuildWSDDJob;
+import com.liferay.ide.service.core.ServiceCore;
+import com.liferay.ide.service.core.job.BuildServiceJob;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IContainer;
@@ -32,10 +32,10 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 /**
  * @author Greg Amerson
  */
-public class BuildWSDDAction extends AbstractObjectAction
+public class BuildServicesAction extends AbstractObjectAction
 {
 
-    public BuildWSDDAction()
+    public BuildServicesAction()
     {
         super();
     }
@@ -46,41 +46,43 @@ public class BuildWSDDAction extends AbstractObjectAction
         {
             Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
-            IFile servicesFile = null;
-
             Object elem = elems[0];
+
+            IProject project = null;
 
             if( elem instanceof IFile )
             {
-                servicesFile = (IFile) elem;
+                IFile projectFile = (IFile) elem;
 
+                project = projectFile.getProject();
             }
             else if( elem instanceof IProject )
             {
-                IProject project = (IProject) elem;
+                project = (IProject) elem;
 
-                // IDE-110 IDE-648
-                IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+            }
 
-                if( webappRoot != null )
+            IFile servicesFile = null;
+            // IDE-110 IDE-648
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+
+            if( webappRoot != null )
+            {
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    for( IContainer container : webappRoot.getUnderlyingFolders() )
+                    if( container != null && container.exists() )
                     {
-                        if( container != null && container.exists() )
-                        {
-                            final Path path =
-                                new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
-                            servicesFile = container.getFile( path );
+                        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                        servicesFile = container.getFile( path );
 
-                            break;
-                        }
+                        break;
                     }
                 }
             }
 
             if( servicesFile != null && servicesFile.exists() )
             {
-                BuildWSDDJob job = PortletCore.createBuildWSDDJob( servicesFile );
+                BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
 
                 job.schedule();
             }

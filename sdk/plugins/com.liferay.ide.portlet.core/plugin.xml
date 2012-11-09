@@ -6,16 +6,6 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
-            describer="com.liferay.ide.portlet.core.servicebuilder.ServiceBuilderContentDescriber"
-            file-extensions="xml"
-            file-names="service.xml"
-            id="servicebuildercontent"
-            name="Service Builder"
-            priority="high">
-      </content-type>
-      <content-type
-            base-type="org.eclipse.core.runtime.xml"
-            default-charset="UTF-8"
             file-extensions="xml"
             file-names="portlet.xml"
             id="portletxml"

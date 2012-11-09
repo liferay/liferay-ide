@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.template;
+package com.liferay.ide.service.ui.template;
 
 import org.eclipse.jface.text.templates.GlobalTemplateVariables;
 import org.eclipse.jface.text.templates.TemplateContextType;

@@ -13,13 +13,13 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.operation;
+package com.liferay.ide.service.core.operation;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.PortletCore;
+import com.liferay.ide.service.core.ServiceCore;
 
 import java.util.List;
 import java.util.Set;
@@ -209,17 +209,17 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 
             if( serviceFile == null )
             {
-                return PortletCore.createErrorStatus( "Service file must be specified." );
+                return ServiceCore.createErrorStatus( "Service file must be specified." );
             }
 
             if( !( "xml".equals( serviceFile.getFileExtension() ) ) )
             {
-                return PortletCore.createErrorStatus( "Service file must be have xml file extension." );
+                return ServiceCore.createErrorStatus( "Service file must be have xml file extension." );
             }
 
             if( serviceFile.exists() )
             {
-                return PortletCore.createErrorStatus( "Project already contains service.xml file, please select another project." );
+                return ServiceCore.createErrorStatus( "Project already contains service.xml file, please select another project." );
             }
         }
         else if( PACKAGE_PATH.equals( propertyName ) )
@@ -228,7 +228,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 
             if( empty( packagePath ) )
             {
-                return PortletCore.createErrorStatus( "Package path cannot be empty." );
+                return ServiceCore.createErrorStatus( "Package path cannot be empty." );
             }
 
             if( !empty( packagePath ) )
@@ -242,7 +242,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 
             if( empty( namespace ) )
             {
-                return PortletCore.createErrorStatus( "Namespace cannot be empty." );
+                return ServiceCore.createErrorStatus( "Namespace cannot be empty." );
             }
         }
 
@@ -251,7 +251,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         // String jspFolder = getStringProperty(CUSTOM_JSPS_FOLDER);
         // if (jspFolder == null || jspFolder.isEmpty()) {
         // return
-        // PortletCore.createErrorStatus("Custom JSPs folder not configured.");
+        // ServiceCore.createErrorStatus("Custom JSPs folder not configured.");
         // }
         // } else if (CUSTOM_JSPS_ITEMS.equals(propertyName) &&
         // getBooleanProperty(CREATE_CUSTOM_JSPS)) {
@@ -263,14 +263,14 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         // }
         // }
         // return
-        // PortletCore.createErrorStatus("Need to specify at least one JSP to override.");
+        // ServiceCore.createErrorStatus("Need to specify at least one JSP to override.");
         // } else if (PORTAL_PROPERTIES_FILE.equals(propertyName) &&
         // getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
         // String portalPropertiesFile =
         // getStringProperty(PORTAL_PROPERTIES_FILE);
         // if (CoreUtil.isNullOrEmpty(portalPropertiesFile)) {
         // return
-        // PortletCore.createErrorStatus("portal.properties file not configured.");
+        // ServiceCore.createErrorStatus("portal.properties file not configured.");
         // }
         // } else if (PORTAL_PROPERTIES_ACTION_ITEMS.equals(propertyName) &&
         // getBooleanProperty(CREATE_PORTAL_PROPERTIES)) {
@@ -282,7 +282,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         // return Status.OK_STATUS;
         // } else {
         // return
-        // PortletCore.createErrorStatus("Need to specify at least one Event Action or Property to override.");
+        // ServiceCore.createErrorStatus("Need to specify at least one Event Action or Property to override.");
         // }
         // } else if (SERVICES_ITEMS.equals(propertyName) &&
         // getBooleanProperty(CREATE_SERVICES)) {
@@ -291,14 +291,14 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         // return Status.OK_STATUS;
         // } else {
         // return
-        // PortletCore.createErrorStatus("Need to specify at least one Service to override.");
+        // ServiceCore.createErrorStatus("Need to specify at least one Service to override.");
         // }
         // } else if (CONTENT_FOLDER.equals(propertyName) &&
         // getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
         // String contentFolder = getStringProperty(CONTENT_FOLDER);
         // if (contentFolder == null || contentFolder.isEmpty()) {
         // return
-        // PortletCore.createErrorStatus("Content folder not configured.");
+        // ServiceCore.createErrorStatus("Content folder not configured.");
         // }
         // } else if (LANGUAGE_PROPERTIES_ITEMS.equals(propertyName) &&
         // getBooleanProperty(CREATE_LANGUAGE_PROPERTIES)) {
@@ -310,7 +310,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         // }
         // }
         // return
-        // PortletCore.createErrorStatus("Need to specify at least one language property file.");
+        // ServiceCore.createErrorStatus("Need to specify at least one language property file.");
         // }
 
         return super.validate( propertyName );
@@ -499,6 +499,6 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
             }
         }
 
-        return PortletCore.createErrorStatus( "Need to specify at least one item." );
+        return ServiceCore.createErrorStatus( "Need to specify at least one item." );
     }
 }

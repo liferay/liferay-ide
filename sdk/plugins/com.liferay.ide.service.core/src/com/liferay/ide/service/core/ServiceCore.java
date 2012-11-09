@@ -15,6 +15,10 @@
 
 package com.liferay.ide.service.core;
 
+import com.liferay.ide.service.core.job.BuildServiceJob;
+import com.liferay.ide.service.core.job.BuildWSDDJob;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -26,11 +30,40 @@ import org.osgi.framework.BundleContext;
 public class ServiceCore extends AbstractUIPlugin
 {
 
+    // The shared instance
+    private static ServiceCore plugin;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.service.core"; //$NON-NLS-1$
 
-    // The shared instance
-    private static ServiceCore plugin;
+    public static BuildServiceJob createBuildServiceJob( IFile file )
+    {
+        BuildServiceJob job = new BuildServiceJob( file );
+
+        return job;
+    }
+
+    public static BuildWSDDJob createBuildWSDDJob( IFile file )
+    {
+        BuildWSDDJob job = new BuildWSDDJob( file );
+
+        return job;
+    }
+
+    public static IStatus createErrorStatus( Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e );
+    }
+
+    public static IStatus createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg );
+    }
+
+    public static IStatus createWarningStatus( String msg )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID, msg );
+    }
 
     /**
      * Returns the shared instance

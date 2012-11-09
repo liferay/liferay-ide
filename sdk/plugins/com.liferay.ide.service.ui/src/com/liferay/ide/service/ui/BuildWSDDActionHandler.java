@@ -15,8 +15,8 @@
 
 package com.liferay.ide.service.ui;
 
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.job.BuildWSDDJob;
+import com.liferay.ide.service.core.ServiceCore;
+import com.liferay.ide.service.core.job.BuildWSDDJob;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
@@ -35,7 +35,7 @@ public class BuildWSDDActionHandler extends SapphireActionHandler
 
         if( file != null && file.exists() )
         {
-            BuildWSDDJob job = PortletCore.createBuildWSDDJob( file );
+            BuildWSDDJob job = ServiceCore.createBuildWSDDJob( file );
 
             job.schedule();
         }

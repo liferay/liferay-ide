@@ -13,12 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.job;
+package com.liferay.ide.service.core.job;
 
-import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.job.SDKJob;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.service.core.ServiceCore;
 
 import java.util.Map;
 
@@ -82,7 +82,7 @@ public class BuildWSDDJob extends SDKJob
                     }
                     catch( Exception e )
                     {
-                        PortletCore.logError( e );
+                        ServiceCore.logError( e );
                     }
 
                     project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
@@ -93,7 +93,7 @@ public class BuildWSDDJob extends SDKJob
                     }
                     catch( Exception e )
                     {
-                        PortletCore.logError( e );
+                        ServiceCore.logError( e );
                     }
                 }
             }, monitor );
@@ -104,12 +104,12 @@ public class BuildWSDDJob extends SDKJob
             }
             catch( Exception e )
             {
-                PortletCore.logError( e );
+                ServiceCore.logError( e );
             }
         }
         catch( CoreException e1 )
         {
-            retval = PortletCore.createErrorStatus( e1 );
+            retval = ServiceCore.createErrorStatus( e1 );
         }
 
         return retval == null || retval.isOK() ? Status.OK_STATUS : retval;

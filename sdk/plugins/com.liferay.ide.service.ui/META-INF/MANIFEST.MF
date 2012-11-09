@@ -14,15 +14,27 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help,
  org.eclipse.ui.forms,
  org.eclipse.ui.views.properties.tabbed,
- com.liferay.ide.portlet.core,
  org.eclipse.ui.editors,
- com.liferay.ide.portlet.ui,
  org.eclipse.sapphire.osgi;bundle-version="0.3.0",
  org.eclipse.sapphire.workspace.ui;bundle-version="0.3.0",
  org.eclipse.sapphire.platform;bundle-version="0.3.0",
  org.eclipse.sapphire.ui.swt.gef;bundle-version="0.5.0",
  org.eclipse.gef,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.eclipse.jface.text,
+ org.eclipse.jdt.ui,
+ com.liferay.ide.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.wst.common.modulecore,
+ org.eclipse.core.resources,
+ com.liferay.ide.project.core,
+ org.eclipse.jst.j2ee.ui,
+ org.eclipse.jst.servlet.ui,
+ com.liferay.ide.project.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.service.ui
+Export-Package: com.liferay.ide.service.ui,
+ com.liferay.ide.service.ui.actions,
+ com.liferay.ide.service.ui.internal,
+ com.liferay.ide.service.ui.template,
+ com.liferay.ide.service.ui.wizard

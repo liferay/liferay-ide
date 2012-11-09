@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui;
+package com.liferay.ide.service.ui;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
