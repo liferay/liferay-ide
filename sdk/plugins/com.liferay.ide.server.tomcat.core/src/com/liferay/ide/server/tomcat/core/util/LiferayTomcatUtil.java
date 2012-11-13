@@ -88,7 +88,7 @@ public class LiferayTomcatUtil
     private static String CONFIG_DIR = "conf";
     public static final String CONFIG_TYPE_SERVER = "server";
     public static final String CONFIG_TYPE_VERSION = "version";
- 
+
     private static String DEFAULT_PORTAL_CONTEXT_FILE = "ROOT.xml";
     private static String DEFAULT_PORTAL_DIR = "/webapps/ROOT";
     private static String HOST_NAME = "localhost";
@@ -790,12 +790,12 @@ public class LiferayTomcatUtil
 
         if( location.exists() && location.isDirectory() )
         {
-            // check to see if this location contains tomcat dir tomcat-*
+            // check to see if this location contains tomcat dir *tomcat*
             File[] files = location.listFiles();
 
             boolean matches = false;
 
-            String pattern = "^tomcat-.*";
+            String pattern = ".*tomcat.*";
 
             File tomcatDir = null;
 
@@ -823,7 +823,7 @@ public class LiferayTomcatUtil
     public static void saveConfigInfoIntoCache( String configType, String configInfo, IPath portalDir )
     {
         IPath versionsInfoPath = null;
- 
+
         if( configType.equals( CONFIG_TYPE_VERSION ) )
         {
             versionsInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" );
@@ -841,7 +841,7 @@ public class LiferayTomcatUtil
             {
                 String portalDirKey = CoreUtil.createStringDigest( portalDir.toPortableString() );
                 Properties properties = new Properties();
- 
+
                 try
                 {
                     properties.load( new FileInputStream( versionInfoFile ) );
@@ -856,7 +856,7 @@ public class LiferayTomcatUtil
                 }
 
                 properties.put( portalDirKey, configInfo );
- 
+
                 try
                 {
                     properties.store( new FileOutputStream( versionInfoFile ), "" );
