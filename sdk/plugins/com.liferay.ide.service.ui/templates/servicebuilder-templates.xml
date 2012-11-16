@@ -8,12 +8,4 @@
 	<template name="%Templates.servicebuilder.sample.file.name" description="%Templates.servicebuilder.sample.file.desc" 
             id="com.liferay.ide.templates.servicebuilder.sample.file" context="servicebuilder_new" 
             enabled="true">%Templates.servicebuilder.sample.file.content</template>
-            
-    <template name="%Templates.servicebuilder61.file.name" description="%Templates.servicebuilder61.file.desc" 
-            id="com.liferay.ide.templates.servicebuilder61.file" context="servicebuilder_new" 
-            enabled="true">%Templates.servicebuilder61.file.content</template>
-
-    <template name="%Templates.servicebuilder61.sample.file.name" description="%Templates.servicebuilder61.sample.file.desc" 
-            id="com.liferay.ide.templates.servicebuilder61.sample.file" context="servicebuilder_new" 
-            enabled="true">%Templates.servicebuilder61.sample.file.content</template>
 </templates>

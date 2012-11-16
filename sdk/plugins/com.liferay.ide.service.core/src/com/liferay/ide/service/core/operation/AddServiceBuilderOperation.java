@@ -24,6 +24,7 @@ import com.liferay.ide.service.core.ServiceCore;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.MessageFormat;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
@@ -119,29 +120,18 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
     {
         Template template = null;
 
+        String descriptorVersion = null;
+
         try
         {
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getTargetProject() );
+
             Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
 
-            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )
-            {
-                if( getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ) )
-                {
-                    template = getTemplateStore().findTemplateById( SAMPLE_SERVICE_61_FILE_TEMPLATE );
-                }
-                else
-                {
-                    template = getTemplateStore().findTemplateById( SERVICE_61_FILE_TEMPLATE );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
+            descriptorVersion =
+                Integer.toString( portalVersion.getMajor() ) + "." + Integer.toString( portalVersion.getMinor() ) +
+                    ".0";
 
-        if( template == null )
-        {
             if( getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ) )
             {
                 template = getTemplateStore().findTemplateById( SAMPLE_SERVICE_FILE_TEMPLATE );
@@ -150,6 +140,9 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
             {
                 template = getTemplateStore().findTemplateById( SERVICE_FILE_TEMPLATE );
             }
+        }
+        catch( Exception e )
+        {
         }
 
         IDocument document = new Document();
@@ -163,7 +156,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
         TemplateBuffer buffer = context.evaluate( template );
 
-        templateString = buffer.getString();
+        templateString = MessageFormat.format( buffer.getString(), descriptorVersion, descriptorVersion.replace( '.', '_' ) );
 
         CoreUtil.prepareFolder( (IFolder) serviceBuilderFile.getParent() );
 
