@@ -54,7 +54,8 @@ import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
 import org.osgi.framework.Version;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction" } )
 public class AddServiceBuilderOperation extends LiferayDataModelOperation
@@ -118,8 +119,6 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
     protected void createDefaultServiceBuilderFile( IFile serviceBuilderFile ) throws UnsupportedEncodingException,
         CoreException, BadLocationException, TemplateException
     {
-        Template template = null;
-
         String descriptorVersion = null;
 
         try
@@ -128,21 +127,23 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
             Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
 
-            descriptorVersion =
-                Integer.toString( portalVersion.getMajor() ) + "." + Integer.toString( portalVersion.getMinor() ) +
-                    ".0";
-
-            if( getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ) )
-            {
-                template = getTemplateStore().findTemplateById( SAMPLE_SERVICE_FILE_TEMPLATE );
-            }
-            else
-            {
-                template = getTemplateStore().findTemplateById( SERVICE_FILE_TEMPLATE );
-            }
+            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";
         }
         catch( Exception e )
         {
+            ServiceCore.logError( "Could not determine liferay runtime version", e );
+            descriptorVersion = "6.0.0";
+        }
+
+        Template template = null;
+
+        if( getDataModel().getBooleanProperty( USE_SAMPLE_TEMPLATE ) )
+        {
+            template = getTemplateStore().findTemplateById( SAMPLE_SERVICE_FILE_TEMPLATE );
+        }
+        else
+        {
+            template = getTemplateStore().findTemplateById( SERVICE_FILE_TEMPLATE );
         }
 
         IDocument document = new Document();
@@ -156,7 +157,8 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
         TemplateBuffer buffer = context.evaluate( template );
 
-        templateString = MessageFormat.format( buffer.getString(), descriptorVersion, descriptorVersion.replace( '.', '_' ) );
+        templateString =
+            MessageFormat.format( buffer.getString(), descriptorVersion, descriptorVersion.replace( '.', '_' ) );
 
         CoreUtil.prepareFolder( (IFolder) serviceBuilderFile.getParent() );
 

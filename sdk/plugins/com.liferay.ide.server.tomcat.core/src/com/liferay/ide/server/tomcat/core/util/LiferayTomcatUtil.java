@@ -792,7 +792,6 @@ public class LiferayTomcatUtil
         {
             // check to see if this location contains tomcat dir *tomcat*
             File[] files = location.listFiles();
-
             boolean matches = false;
 
             String pattern = ".*tomcat.*";
