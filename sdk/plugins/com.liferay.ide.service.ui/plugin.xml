@@ -42,7 +42,7 @@
             id="com.liferay.ide.service.ui.service.popup"
             objectClass="org.eclipse.core.resources.IResource">
          <action
-               class="com.liferay.ide.service.ui.action.BuildWSDDAction"
+               class="com.liferay.ide.service.ui.actions.BuildWSDDAction"
                enablesFor="1"
                icon="icons/e16/service.png"
                id="com.liferay.ide.service.ui.wsdd.popup.action"
@@ -51,7 +51,7 @@
                tooltip="Build web services descriptor">
          </action>
          <action
-               class="com.liferay.ide.service.ui.action.BuildServicesAction"
+               class="com.liferay.ide.service.ui.actions.BuildServicesAction"
                enablesFor="1"
                icon="icons/e16/service.png"
                id="com.liferay.ide.service.ui.service.popup.action"
@@ -83,7 +83,16 @@
                contentTypeId="com.liferay.ide.service.core.servicebuildercontent">
          </contentTypeBinding>
       </editor>
-      
    </extension>
-  
+      <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.service.ui.HasServiceFilePropertyTester"
+            id="com.liferay.ide.service.ui.hasServiceFile"
+            namespace="com.liferay.ide.service.ui"
+            properties="hasServiceFile"
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+   </extension>
+
 </plugin>

@@ -163,13 +163,6 @@
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
-            class="com.liferay.ide.portlet.ui.HasServiceFilePropertyTester"
-            id="com.liferay.ide.portlet.ui.hasServiceFile"
-            namespace="com.liferay.ide.portlet.ui"
-            properties="hasServiceFile"
-            type="org.eclipse.core.resources.IResource">
-      </propertyTester>
-      <propertyTester
             class="com.liferay.ide.portlet.ui.HasLangFilePropertyTester"
             id="com.liferay.ide.portlet.ui.hasLangFile"
             namespace="com.liferay.ide.portlet.ui"

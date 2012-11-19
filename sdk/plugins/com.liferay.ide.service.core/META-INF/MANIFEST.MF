@@ -22,8 +22,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jem.workbench
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.portlet.core.servicebuilder,
- com.liferay.ide.service.core,
+Export-Package: com.liferay.ide.service.core,
  com.liferay.ide.service.core.job,
  com.liferay.ide.service.core.model,
  com.liferay.ide.service.core.model.internal,

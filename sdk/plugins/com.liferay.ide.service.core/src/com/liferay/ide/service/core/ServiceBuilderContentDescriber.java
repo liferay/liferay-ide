@@ -13,29 +13,25 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.servicebuilder;
+package com.liferay.ide.service.core;
 
+import com.liferay.ide.core.AbstractContentDescriber;
 import com.liferay.ide.core.AbstractDefaultHandler;
 
 /**
  * @author Greg Amerson
  */
-public class ServiceBuilderContentHandler extends AbstractDefaultHandler
+public class ServiceBuilderContentDescriber extends AbstractContentDescriber
 {
 
-    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Service Builder ";
-
-    public static final String PUBLIC_ID_SUFFIX = "//EN";
-
-    public static final String SERVICE_BUILDER = "service-builder";
-
-    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-service-builder_";
-
-    public static final String SYSTEM_ID_SUFFIX = ".dtd";
-
-    public ServiceBuilderContentHandler()
+    public ServiceBuilderContentDescriber()
     {
-        super( PUBLIC_ID_PREFIX, PUBLIC_ID_SUFFIX, SYSTEM_ID_PREFIX, SYSTEM_ID_SUFFIX, SERVICE_BUILDER );
+        super();
+    }
+
+    protected AbstractDefaultHandler createDefaultHandler()
+    {
+        return new ServiceBuilderContentHandler();
     }
 
 }
