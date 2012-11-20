@@ -251,17 +251,6 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
     }
 
     @Override
-    protected void enter()
-    {
-        super.enter();
-
-        if( resourceBundleFilePath != null && !resourceBundleFilePath.isDisposed() )
-        {
-            resourceBundleFilePath.setEnabled( createResourceBundleFileButton.getSelection() );
-        }
-    }
-
-    @Override
     protected IVirtualFolder getDocroot()
     {
         return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
