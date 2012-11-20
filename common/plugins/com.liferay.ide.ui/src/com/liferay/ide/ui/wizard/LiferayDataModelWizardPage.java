@@ -311,9 +311,9 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
         {
             IContainer container = webappRoot.getUnderlyingFolder();
 
-            if( container != null && container.exists() )
+            if( container != null && container.exists() && container.getAdapter( IFolder.class ) != null )
             {
-                dialog.setInput( webappRoot );
+                dialog.setInput( (IFolder) container.getAdapter( IFolder.class ) );
 
                 if( dialog.open() == Window.OK )
                 {
