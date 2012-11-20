@@ -22,13 +22,13 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Class for helping edit XML files in user projects.
- * 
+ *
  * @author Gregory Amerson
  * @author Cindy Li
  */
@@ -143,7 +143,7 @@ public class DescriptorHelper
             }
 
             IDOMModel domModel = null;
- 
+
             try
             {
                 domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( this.file );
@@ -237,18 +237,25 @@ public class DescriptorHelper
 
     public static IFile getDescriptorFile( IProject project, String fileName )
     {
-        IVirtualComponent comp = ComponentCore.createComponent( project );
+        IVirtualFolder docroot = CoreUtil.getDocroot( project );
 
-        if( comp == null )
+        if( docroot != null )
         {
-            return null;
+            for( IContainer container : docroot.getUnderlyingFolders() )
+            {
+                if( container != null && container.exists() )
+                {
+                    IFolder webInf = container.getFolder( new Path( "WEB-INF" ) );
+
+                    if( webInf.exists() )
+                    {
+                        return webInf.getFile( fileName );
+                    }
+                }
+            }
         }
 
-        IVirtualFolder webRoot = comp.getRootFolder();
-
-        IFolder webInfFolder = (IFolder) webRoot.getFolder( "WEB-INF" ).getUnderlyingFolder();
-
-        return webInfFolder.getFile( fileName );
+        return null;
     }
 
     public static Element insertChildElement(

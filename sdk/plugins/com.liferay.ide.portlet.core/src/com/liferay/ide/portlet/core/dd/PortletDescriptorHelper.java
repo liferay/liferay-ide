@@ -137,23 +137,28 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     {
         final List<String> allPortletNames = new ArrayList<String>();
 
-        DOMModelOperation op = new DOMModelReadOperation( getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) )
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+
+        if( descriptorFile != null )
         {
-            protected IStatus doExecute( IDOMDocument document )
+            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
             {
-                NodeList nodeList = document.getElementsByTagName( "portlet-name" );
-
-                for( int i = 0; i < nodeList.getLength(); i++ )
+                protected IStatus doExecute( IDOMDocument document )
                 {
-                    Element portletName = (Element) nodeList.item( i );
-                    allPortletNames.add( NodeUtil.getTextContent( portletName ) );
+                    NodeList nodeList = document.getElementsByTagName( "portlet-name" );
+
+                    for( int i = 0; i < nodeList.getLength(); i++ )
+                    {
+                        Element portletName = (Element) nodeList.item( i );
+                        allPortletNames.add( NodeUtil.getTextContent( portletName ) );
+                    }
+
+                    return Status.OK_STATUS;
                 }
+            };
 
-                return Status.OK_STATUS;
-            }
-        };
-
-        op.execute();
+            op.execute();
+        }
 
         return allPortletNames.toArray( new String[0] );
     }
