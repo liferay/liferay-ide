@@ -66,7 +66,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
     public static final String LANGUAGE_PROPERTIES_ELEMENT = "language-properties";
 
-    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayHookDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.hook.core.liferayHookDescriptorMarker";
 
     public static final String MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND =
         "The custom jsp directory {0} was not found in the web app.";

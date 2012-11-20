@@ -19,8 +19,7 @@
 
 <definition>
 	<import>
-		<bundle>com.liferay.ide.portlet.ui</bundle>
-        <package>com.liferay.ide.hook.core.model</package>
+		<package>com.liferay.ide.hook.core.model</package>
         <package>com.liferay.ide.hook.core.model.internal</package>
         <package>com.liferay.ide.hook.ui.action</package>
         <package>com.liferay.ide.hook.ui.editor</package>
@@ -94,7 +93,7 @@
                                     <name>factory</name>
                                 </hint>
                             </property-editor>
-                             
+
                             <separator>
                                 <label>Details</label>
                             </separator>
@@ -179,7 +178,7 @@
                                         </property-editor>
                                     </content>
                                 </panel>
-                            </switching-panel> 
+                            </switching-panel>
                         </content>
                     </panel>
                 </with>
@@ -187,7 +186,7 @@
         </section>
         <label>Custom JSPs</label>
         <image>icons/e16/folder_16x16.gif</image>
-        
+
     </node>
 	<node>
         <id>ServicesNode</id>

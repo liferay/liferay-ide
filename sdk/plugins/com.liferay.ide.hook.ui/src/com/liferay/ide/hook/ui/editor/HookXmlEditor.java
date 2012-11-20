@@ -149,7 +149,6 @@ public class HookXmlEditor extends SapphireEditorForXml
             {
                 switch( dtdVersion )
                 {
-
                     case v6_0_0:
                         setRootModelElementType( Hook600.TYPE );
                         break;
@@ -224,7 +223,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 
     /**
      * A small utility method used to compute the DTD version
-     * 
+     *
      * @param document
      *            - the document that is loaded by the editor
      * @return - {@link HookVersionType}
