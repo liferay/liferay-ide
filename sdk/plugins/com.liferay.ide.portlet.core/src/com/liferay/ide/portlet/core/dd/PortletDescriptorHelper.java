@@ -309,13 +309,13 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", "" );
             appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory );
             appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) );
-        }
 
-        if( model.getBooleanProperty( CREATE_ENTRY_CLASS ) )
-        {
-            appendChildElement(
-                newPortletElement, "control-panel-entry-class",
-                model.getStringProperty( JAVA_PACKAGE ) + "." + model.getStringProperty( ENTRY_CLASS_NAME ) );
+            if( model.getBooleanProperty( CREATE_ENTRY_CLASS ) )
+            {
+                appendChildElement(
+                    newPortletElement, "control-panel-entry-class", model.getStringProperty( JAVA_PACKAGE ) + "." +
+                        model.getStringProperty( ENTRY_CLASS_NAME ) );
+            }
         }
 
         appendChildElement(
