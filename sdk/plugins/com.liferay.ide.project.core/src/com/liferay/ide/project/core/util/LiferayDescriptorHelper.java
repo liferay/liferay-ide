@@ -46,12 +46,7 @@ public class LiferayDescriptorHelper extends DescriptorHelper
             if( runtime != null )
             {
                 String versionStr = runtime.getPortalVersion();
-                Version version = new Version( versionStr );
-
-                int major = version.getMajor();
-                int minor = version.getMinor();
-
-                retval = Integer.toString( major ) + "." + Integer.toString( minor ) + ".0";
+                retval = getDescriptorVersionFromPortalVersion( versionStr );
             }
         }
         catch( CoreException e )
@@ -67,4 +62,15 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         return retval;
     }
 
+    protected String getDescriptorVersionFromPortalVersion( String versionStr )
+    {
+        String retval;
+        Version version = new Version( versionStr );
+
+        int major = version.getMajor();
+        int minor = version.getMinor();
+
+        retval = Integer.toString( major ) + "." + Integer.toString( minor ) + ".0";
+        return retval;
+    }
 }

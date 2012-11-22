@@ -143,10 +143,8 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                     if( liferayRuntime != null )
                     {
-                        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
-                        lookAndFeelFile = container.getFile( path );
-                        ThemeDescriptorHelper.createDefaultFile(
-                            lookAndFeelFile, liferayRuntime.getPortalVersion() + "+", id, name );
+                        ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
+                        themeDescriptorHelper.createDefaultFile( container, liferayRuntime.getPortalVersion() , id, name );
                     }
 
                     try
