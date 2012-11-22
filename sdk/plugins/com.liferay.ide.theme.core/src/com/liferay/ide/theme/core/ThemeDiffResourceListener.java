@@ -197,7 +197,8 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                             if( liferayRuntime != null )
                             {
-                                ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
+                                final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
+
                                 themeDescriptorHelper.createDefaultFile( container, liferayRuntime.getPortalVersion() , id, name );
                             }
 

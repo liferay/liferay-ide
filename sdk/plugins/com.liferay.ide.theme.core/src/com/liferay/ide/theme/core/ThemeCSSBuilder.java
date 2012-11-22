@@ -143,7 +143,8 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                     if( liferayRuntime != null )
                     {
-                        ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
+                        final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
+
                         themeDescriptorHelper.createDefaultFile( container, liferayRuntime.getPortalVersion() , id, name );
                     }
 
@@ -155,7 +156,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                     {
                         ThemeCore.logError( e );
                     }
- 
+
                     break;
                 }
             }
@@ -404,7 +405,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         try
         {
             delta.accept
-            ( 
+            (
                 new IResourceDeltaVisitor()
                 {
                     public boolean visit( IResourceDelta delta )
@@ -425,7 +426,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                                         if( container != null && container.exists() )
                                         {
                                             IFolder diffs = container.getFolder( new Path( "_diffs" ) );
-     
+
                                             if( diffs.exists() && diffs.getFullPath().isPrefixOf( fullResourcePath ) )
                                             {
                                                 applyDiffsDeltaToDocroot( delta, container, monitor );

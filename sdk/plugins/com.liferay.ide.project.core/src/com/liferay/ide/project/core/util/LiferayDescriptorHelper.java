@@ -41,11 +41,11 @@ public class LiferayDescriptorHelper extends DescriptorHelper
 
         try
         {
-            ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( project );
+            final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( project );
 
             if( runtime != null )
             {
-                String versionStr = runtime.getPortalVersion();
+                final String versionStr = runtime.getPortalVersion();
                 retval = getDescriptorVersionFromPortalVersion( versionStr );
             }
         }
@@ -56,7 +56,7 @@ public class LiferayDescriptorHelper extends DescriptorHelper
 
         if( retval == null )
         {
-            retval = "6.0.0"; // use 6.0 as the default
+            retval = "6.0.0"; // use 6.0.0 as the default
         }
 
         return retval;
@@ -64,13 +64,11 @@ public class LiferayDescriptorHelper extends DescriptorHelper
 
     protected String getDescriptorVersionFromPortalVersion( String versionStr )
     {
-        String retval;
-        Version version = new Version( versionStr );
+        final Version version = new Version( versionStr );
 
-        int major = version.getMajor();
-        int minor = version.getMinor();
+        final int major = version.getMajor();
+        final int minor = version.getMinor();
 
-        retval = Integer.toString( major ) + "." + Integer.toString( minor ) + ".0";
-        return retval;
+        return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0";
     }
 }

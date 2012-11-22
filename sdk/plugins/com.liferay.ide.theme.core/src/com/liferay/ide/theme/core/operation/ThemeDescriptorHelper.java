@@ -18,6 +18,7 @@ package com.liferay.ide.theme.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.theme.core.ThemeCore;
 
 import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
@@ -46,28 +47,30 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper
 
     public void createDefaultFile( IContainer container, String version, String id, String name )
     {
-        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
-        IFile lookAndFeelFile = container.getFile( path );
-
-        if( lookAndFeelFile == null || id == null || name == null )
+        if( container == null || id == null || name == null )
         {
             return;
         }
 
         try
         {
+            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
+            final IFile lookAndFeelFile = container.getFile( path );
+            final String descriptorVersion = getDescriptorVersionFromPortalVersion( version );
+
             CoreUtil.prepareFolder( (IFolder) lookAndFeelFile.getParent() );
-            String descriptorVersion = getDescriptorVersionFromPortalVersion( version );
+
             String contents =
                 MessageFormat.format( DEFUALT_FILE_TEMPLATE, descriptorVersion, descriptorVersion.replace( '.', '_' ) );
             contents =
                 contents.replaceAll( "__VERSION__", version + "+" ).replaceAll( "__ID__", id ).replaceAll(
                     "__NAME__", name );
+
             lookAndFeelFile.create( new ByteArrayInputStream( contents.getBytes() ), true, null );
         }
         catch( CoreException e )
         {
-            e.printStackTrace();
+            ThemeCore.logError( "Error creating default descriptor file", e );
         }
     }
 
