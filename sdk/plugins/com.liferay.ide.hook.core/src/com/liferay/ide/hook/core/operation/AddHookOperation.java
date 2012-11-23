@@ -20,7 +20,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringBufferOutputStream;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
-import com.liferay.ide.project.core.util.LiferayDataModelOperation;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -49,15 +48,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.templates.DocumentTemplateContext;
-import org.eclipse.jface.text.templates.Template;
-import org.eclipse.jface.text.templates.TemplateBuffer;
-import org.eclipse.jface.text.templates.TemplateContext;
 import org.eclipse.jface.text.templates.TemplateException;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
@@ -69,18 +63,17 @@ import org.eclipse.wst.validation.internal.ValidatorMutable;
 import org.eclipse.wst.validation.internal.model.FilterGroup;
 import org.eclipse.wst.validation.internal.model.FilterRule;
 import org.eclipse.wst.validation.internal.model.ProjectPreferences;
-import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
-public class AddHookOperation extends LiferayDataModelOperation implements INewHookDataModelProperties
+public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties
 {
 
     public AddHookOperation( IDataModel model )
     {
-        super( model, null, null );
+        super( model );
     }
 
     @Override
@@ -331,39 +324,8 @@ public class AddHookOperation extends LiferayDataModelOperation implements INewH
     protected void createDefaultHookDescriptorFile( IFile hookDescriptorFile ) throws UnsupportedEncodingException,
         CoreException, BadLocationException, TemplateException
     {
-        Template template = null;
-
-        try
-        {
-            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getTargetProject() );
-            Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
-
-            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )
-            {
-                template = getTemplateStore().findTemplateById( HOOK_DESCRIPTOR_61_TEMPLATE );
-            }
-        }
-        catch( Exception e )
-        {
-        }
-
-        if( template == null )
-        {
-            template = getTemplateStore().findTemplateById( HOOK_DESCRIPTOR_TEMPLATE );
-        }
-
-        IDocument document = new Document();
-
-        TemplateContext context = new DocumentTemplateContext( contextType, document, 0, 0 );
-
-        String templateString = null;
-
-        TemplateBuffer buffer = context.evaluate( template );
-
-        templateString = buffer.getString();
-
-        hookDescriptorFile.create(
-            new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+        HookDescriptorHelper helper = new HookDescriptorHelper( getTargetProject() );
+        helper.createDefaultDescriptor();
     }
 
     protected IStatus createLanguageProperties( IDataModel dm )

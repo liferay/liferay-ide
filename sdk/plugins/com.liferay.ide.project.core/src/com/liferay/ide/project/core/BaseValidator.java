@@ -39,6 +39,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
@@ -349,16 +351,24 @@ public abstract class BaseValidator extends AbstractValidator
         if( resourceValue != null && resourceValue.length() > 0 )
         {
             // IDE-110 IDE-648
-            if( CoreUtil.getDocroot( project ) != null )
+            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+
+            if( webappRoot != null )
             {
-                IFile webappResource = CoreUtil.getDocrootFile( project, resourceValue );
+                // check for file first
+                IVirtualFile resourceFile = webappRoot.getFile( resourceValue );
 
-                if( webappResource == null )
+                if( resourceFile == null || !resourceFile.exists() )
                 {
-                    String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
+                    IVirtualFolder resourceFolder = webappRoot.getFolder( resourceValue );
 
-                    return createMarkerValues(
-                        preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
+                    if( resourceFolder == null || !resourceFolder.exists() )
+                    {
+                        String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
+
+                        return createMarkerValues(
+                            preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
+                    }
                 }
             }
         }

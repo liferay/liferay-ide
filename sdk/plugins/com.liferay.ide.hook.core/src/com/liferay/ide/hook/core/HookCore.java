@@ -16,14 +16,14 @@
 package com.liferay.ide.hook.core;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class HookCore extends AbstractUIPlugin
+public class HookCore extends Plugin
 {
 
     // The shared instance
@@ -49,7 +49,7 @@ public class HookCore extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static HookCore getDefault()

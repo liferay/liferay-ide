@@ -102,6 +102,109 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         return status;
     }
 
+    public void createDefaultDescriptor()
+    {
+        final IFile descriptorFile = getDescriptorFile( getProject(), ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+
+        final DOMModelEditOperation operation = new DOMModelEditOperation( descriptorFile )
+        {
+            @Override
+            protected void createDefaultFile()
+            {
+                createDefaultDescriptor( HOOK_DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+            }
+
+            @Override
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return Status.OK_STATUS;
+            }
+        };
+
+        operation.execute();
+    }
+
+    protected IStatus doAddActionItems( IDOMDocument document, List<String[]> actionItems )
+    {
+        // <hook> element
+        Element docRoot = document.getDocumentElement();
+
+        FormatProcessorXML processor = new FormatProcessorXML();
+
+        Element newServiceElement = null;
+
+        if( actionItems != null )
+        {
+            for( String[] actionItem : actionItems )
+            {
+                newServiceElement = appendChildElement( docRoot, "service" );
+
+                appendChildElement( newServiceElement, "service-type", actionItem[0] );
+
+                appendChildElement( newServiceElement, "service-impl", actionItem[1] );
+
+                processor.formatNode( newServiceElement );
+            }
+            if( newServiceElement != null )
+            {
+                // append a newline text node
+                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) );
+
+                processor.formatNode( newServiceElement );
+            }
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    protected IStatus doAddLanguageProperties( IDOMDocument document, List<String> languageProperties )
+    {
+        // <hook> element
+        Element docRoot = document.getDocumentElement();
+
+        FormatProcessorXML processor = new FormatProcessorXML();
+
+        Element newLanguageElement = null;
+
+        // check if we have existing custom_dir
+        Node refChild = null;
+
+        NodeList nodeList = docRoot.getElementsByTagName( "custom-jsp-dir" );
+
+        if( nodeList != null && nodeList.getLength() > 0 )
+        {
+            refChild = nodeList.item( 0 );
+        }
+        else
+        {
+            nodeList = docRoot.getElementsByTagName( "service" );
+
+            if( nodeList != null && nodeList.getLength() > 0 )
+            {
+                refChild = nodeList.item( 0 );
+            }
+        }
+
+        if( languageProperties != null )
+        {
+            for( String languageProperty : languageProperties )
+            {
+                newLanguageElement = insertChildElement( docRoot, refChild, "language-properties", languageProperty );
+
+                processor.formatNode( newLanguageElement );
+            }
+            if( newLanguageElement != null )
+            {
+                // append a newline text node
+                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) );
+
+                processor.formatNode( newLanguageElement );
+            }
+        }
+
+        return Status.OK_STATUS;
+    }
+
     public IStatus doSetCustomJSPDir( IDOMDocument document, IDataModel model )
     {
         // <hook> element
@@ -148,6 +251,40 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         FormatProcessorXML processor = new FormatProcessorXML();
 
         processor.formatNode( customJspElement );
+
+        return Status.OK_STATUS;
+    }
+
+    protected IStatus doSetPortalProperties( IDOMDocument document, IDataModel model, String propertiesFile )
+    {
+        // <hook> element
+        Element docRoot = document.getDocumentElement();
+
+        // check for existing element
+        Element portalPropertiesElement = null;
+
+        NodeList nodeList = docRoot.getElementsByTagName( "portal-properties" );
+
+        if( nodeList != null && nodeList.getLength() > 0 )
+        {
+            portalPropertiesElement = (Element) nodeList.item( 0 );
+
+            removeChildren( portalPropertiesElement );
+
+            Node textNode = document.createTextNode( propertiesFile );
+
+            portalPropertiesElement.appendChild( textNode );
+        }
+        else
+        {
+            portalPropertiesElement =
+                insertChildElement( docRoot, docRoot.getFirstChild(), "portal-properties", propertiesFile );
+        }
+
+        // format the new node added to the model;
+        FormatProcessorXML processor = new FormatProcessorXML();
+
+        processor.formatNode( portalPropertiesElement );
 
         return Status.OK_STATUS;
     }
@@ -249,121 +386,6 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         }
 
         return status;
-    }
-
-    protected IStatus doAddActionItems( IDOMDocument document, List<String[]> actionItems )
-    {
-        // <hook> element
-        Element docRoot = document.getDocumentElement();
-
-        FormatProcessorXML processor = new FormatProcessorXML();
-
-        Element newServiceElement = null;
-
-        if( actionItems != null )
-        {
-            for( String[] actionItem : actionItems )
-            {
-                newServiceElement = appendChildElement( docRoot, "service" );
-
-                appendChildElement( newServiceElement, "service-type", actionItem[0] );
-
-                appendChildElement( newServiceElement, "service-impl", actionItem[1] );
-
-                processor.formatNode( newServiceElement );
-            }
-            if( newServiceElement != null )
-            {
-                // append a newline text node
-                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) );
-
-                processor.formatNode( newServiceElement );
-            }
-        }
-
-        return Status.OK_STATUS;
-    }
-
-    protected IStatus doAddLanguageProperties( IDOMDocument document, List<String> languageProperties )
-    {
-        // <hook> element
-        Element docRoot = document.getDocumentElement();
-
-        FormatProcessorXML processor = new FormatProcessorXML();
-
-        Element newLanguageElement = null;
-
-        // check if we have existing custom_dir
-        Node refChild = null;
-
-        NodeList nodeList = docRoot.getElementsByTagName( "custom-jsp-dir" );
-
-        if( nodeList != null && nodeList.getLength() > 0 )
-        {
-            refChild = nodeList.item( 0 );
-        }
-        else
-        {
-            nodeList = docRoot.getElementsByTagName( "service" );
-
-            if( nodeList != null && nodeList.getLength() > 0 )
-            {
-                refChild = nodeList.item( 0 );
-            }
-        }
-
-        if( languageProperties != null )
-        {
-            for( String languageProperty : languageProperties )
-            {
-                newLanguageElement = insertChildElement( docRoot, refChild, "language-properties", languageProperty );
-
-                processor.formatNode( newLanguageElement );
-            }
-            if( newLanguageElement != null )
-            {
-                // append a newline text node
-                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) );
-
-                processor.formatNode( newLanguageElement );
-            }
-        }
-
-        return Status.OK_STATUS;
-    }
-
-    protected IStatus doSetPortalProperties( IDOMDocument document, IDataModel model, String propertiesFile )
-    {
-        // <hook> element
-        Element docRoot = document.getDocumentElement();
-
-        // check for existing element
-        Element portalPropertiesElement = null;
-
-        NodeList nodeList = docRoot.getElementsByTagName( "portal-properties" );
-
-        if( nodeList != null && nodeList.getLength() > 0 )
-        {
-            portalPropertiesElement = (Element) nodeList.item( 0 );
-
-            removeChildren( portalPropertiesElement );
-
-            Node textNode = document.createTextNode( propertiesFile );
-
-            portalPropertiesElement.appendChild( textNode );
-        }
-        else
-        {
-            portalPropertiesElement =
-                insertChildElement( docRoot, docRoot.getFirstChild(), "portal-properties", propertiesFile );
-        }
-
-        // format the new node added to the model;
-        FormatProcessorXML processor = new FormatProcessorXML();
-
-        processor.formatNode( portalPropertiesElement );
-
-        return Status.OK_STATUS;
     }
 
 }
