@@ -156,80 +156,108 @@ public class LiferayHookDescriptorValidator extends BaseValidator
             final Element serviceTag = (Element) elements.item( i );
 
             final NodeList serviceTypes = serviceTag.getElementsByTagName( SERVICE_TYPE_ELEMENT );
-            final NodeList serviceImpls = serviceTag.getElementsByTagName( SERVICE_IMPL_ELEMENT );
 
             final Node itemServiceType = serviceTypes.item( 0 );
 
-            Map<String, Object> problem = checkClass(
-                    javaProject, itemServiceType, preferenceNodeQualifier, preferenceScopes,
-                    ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
-                    ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, null );
+            boolean serviceTypeValid = false;
 
-            if( problem != null )
-            {
-                problems.add( problem );
-            }
-            else
-            {
-                final String serviceTypeContent = NodeUtil.getTextContent( itemServiceType );
+            String serviceTypeContent = null;
 
-                if( serviceTypeContent != null && serviceTypeContent.length() > 0 )
+            Map<String, Object> problem = null;
+
+            if( itemServiceType != null )
+            {
+                serviceTypeContent = NodeUtil.getTextContent( itemServiceType );
+
+                problem =
+                    checkClass(
+                        javaProject, itemServiceType, preferenceNodeQualifier, preferenceScopes,
+                        ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
+                        ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, null );
+
+                if( problem != null )
                 {
-                    try
+                    problems.add( problem );
+                }
+                else
+                {
+                    if( serviceTypeContent != null && serviceTypeContent.length() > 0 )
                     {
-                        final IType typeServiceType = javaProject.findType( serviceTypeContent );
-
-                        if( !typeServiceType.isInterface() )
+                        try
                         {
-                            String msg =
-                                MessageFormat.format(
-                                    MESSAGE_SERVICE_TYPE_IS_NOT_INTERFACE, new Object[] { serviceTypeContent } );
+                            final IType typeServiceType = javaProject.findType( serviceTypeContent );
 
-                            problem =
-                                createMarkerValues(
-                                    preferenceNodeQualifier, preferenceScopes,
-                                    ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
-                                    (IDOMNode) itemServiceType, msg );
-
-                            if( problem != null )
+                            if( !typeServiceType.isInterface() )
                             {
-                                problems.add( problem );
+                                String msg =
+                                    MessageFormat.format(
+                                        MESSAGE_SERVICE_TYPE_IS_NOT_INTERFACE, new Object[] { serviceTypeContent } );
+
+                                problem =
+                                    createMarkerValues(
+                                        preferenceNodeQualifier, preferenceScopes,
+                                        ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
+                                        (IDOMNode) itemServiceType, msg );
+
+                                if( problem != null )
+                                {
+                                    problems.add( problem );
+                                }
+                            }
+                            else if( !serviceTypeContent.matches( "com.liferay.*Service" ) )
+                            {
+                                problem =
+                                    createMarkerValues(
+                                        preferenceNodeQualifier, preferenceScopes,
+                                        ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
+                                        (IDOMNode) itemServiceType, MESSAGE_SERVICE_TYPE_INVALID );
+
+                                if( problem != null )
+                                {
+                                    problems.add( problem );
+                                }
+                            }
+                            else
+                            {
+                                serviceTypeValid = true;
                             }
                         }
-                        else if( !serviceTypeContent.matches( "com.liferay.*Service" ) )
+                        catch( JavaModelException e )
                         {
-                            problem =
-                                createMarkerValues(
-                                    preferenceNodeQualifier, preferenceScopes,
-                                    ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
-                                    (IDOMNode) itemServiceType, MESSAGE_SERVICE_TYPE_INVALID );
-
-                            if( problem != null )
-                            {
-                                problems.add( problem );
-                            }
-                        }
-                        else
-                        {
-                            final Node itemServiceImpl = serviceImpls.item( 0 );
-
-                            problem =
-                                checkClass(
-                                    javaProject, itemServiceImpl, preferenceNodeQualifier, preferenceScopes,
-                                    ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
-                                    ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
-                                    serviceTypeContent + "Wrapper" );
-
-                            if( problem != null )
-                            {
-                                problems.add( problem );
-                            }
+                            HookCore.logError( e );
                         }
                     }
-                    catch( JavaModelException e )
-                    {
-                        HookCore.logError( e );
-                    }
+                }
+            }
+
+            final NodeList serviceImpls = serviceTag.getElementsByTagName( SERVICE_IMPL_ELEMENT );
+
+            final Node itemServiceImpl = serviceImpls.item( 0 );
+
+            if( itemServiceImpl != null )
+            {
+                if( serviceTypeValid )
+                {
+                    problem =
+                        checkClass(
+                            javaProject, itemServiceImpl, preferenceNodeQualifier, preferenceScopes,
+                            ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
+                            ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, serviceTypeContent +
+                                "Wrapper" );
+
+                }
+                else
+                {
+                    problem =
+                        checkClass(
+                            javaProject, itemServiceImpl, preferenceNodeQualifier, preferenceScopes,
+                            ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
+                            ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, null );
+
+                }
+                if( problem != null )
+                {
+                    problems.add( problem );
                 }
             }
         }
