@@ -152,11 +152,11 @@ public class LiferayTomcatServer extends TomcatServer
             }
 
             String id = getServer().getServerType().getId();
-            if( id.indexOf( "60" ) > 0 )
+            if( id.endsWith( "60" ) )
             {
                 configuration = new LiferayTomcat60Configuration( folder );
             }
-            else if( id.indexOf( "70" ) > 0 )
+            else if( id.endsWith( "70" ) )
             {
                 configuration = new LiferayTomcat70Configuration( folder );
             }
@@ -216,11 +216,11 @@ public class LiferayTomcatServer extends TomcatServer
 
         String id = getServer().getServerType().getId();
         IFolder folder = getServer().getServerConfiguration();
-        if( id.indexOf( "60" ) > 0 )
+        if( id.endsWith( "60" ) )
         {
             configuration = new LiferayTomcat60Configuration( folder );
         }
-        else if( id.indexOf( "70" ) > 0 )
+        else if( id.endsWith( "70" ) )
         {
             configuration = new LiferayTomcat70Configuration( folder );
         }

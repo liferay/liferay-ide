@@ -6,12 +6,12 @@
       <image
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.tomcat.ui.image"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70,com.liferay.ide.server.62.tomcat.runtime.70">
       </image>
       <image
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.tomcat.runtime.ui.image"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.60,com.liferay.ide.eclipse.server.tomcat.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.60,com.liferay.ide.eclipse.server.tomcat.70,com.liferay.ide.server.62.tomcat.70">
       </image>
    </extension>
    <extension
@@ -26,6 +26,11 @@
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.tomcat.ui.launchConfigurationTypeImage.70">
       </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.server.62.tomcat.ui.launchConfigurationTypeImage.70">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
@@ -39,13 +44,18 @@
             id="com.liferay.ide.server.tomcat70.ui.launchConfigurationTabGroup"
             type="com.liferay.ide.eclipse.server.tomcat.70.launchConfigurationType">
       </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            class="com.liferay.ide.server.tomcat.ui.LiferayTomcatLaunchConfigTabGroup"
+            id="com.liferay.ide.server.62.tomcat70.ui.launchConfigurationTabGroup"
+            type="com.liferay.ide.server.62.tomcat.70.launchConfigurationType">
+      </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.wst.server.ui.wizardFragments">
       <fragment
             class="com.liferay.ide.server.tomcat.ui.wizard.LiferayTomcatRuntimeFragment"
             id="com.liferay.ide.server.tomcat.runtime"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.runtime.60,com.liferay.ide.eclipse.server.tomcat.runtime.70,com.liferay.ide.server.62.tomcat.runtime.70">
       </fragment>
    </extension>
    <extension
@@ -66,7 +76,7 @@
             id="com.liferay.ide.server.tomcat.ui.context"
             name="Update context path"
             order="0"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
+            typeIds="com.liferay.ide.*">
       </publisher>
    </extension>
    <extension
@@ -76,14 +86,14 @@
             id="com.liferay.ide.server.tomcat.editor.instance"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
+            typeIds="com.liferay.ide.*">
       </section>
       <section
             class="org.eclipse.jst.server.tomcat.ui.internal.editor.ConfigurationMimeEditorSection"
             id="com.liferay.ide.server.tomcat.configuration.editor.mime"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="20"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
+            typeIds="com.liferay.ide.*">
          <enablement>
             <test
                   property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
@@ -96,7 +106,7 @@
             id="com.liferay.ide.server.tomcat.configuration.editor.port"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="10"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
+            typeIds="com.liferay.ide.*">
          <enablement>
             <test
                   property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
