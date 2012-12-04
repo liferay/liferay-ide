@@ -11,6 +11,8 @@
  *******************************************************************************/
 package com.liferay.ide.ui.form;
 
+import com.liferay.ide.core.model.IBaseModel;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -21,6 +23,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
@@ -55,8 +58,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-
-import com.liferay.ide.core.model.IBaseModel;
 
 public abstract class IDEFormPage extends FormPage {
 
@@ -394,7 +395,7 @@ public abstract class IDEFormPage extends FormPage {
 
 		int sectionStyle = Section.DESCRIPTION | ExpandableComposite.TITLE_BAR;
 		// Create the message section
-		Section messageSection = createUISection(parent, "Message", errorMessage, sectionStyle);
+		Section messageSection = createUISection(parent, Msgs.message, errorMessage, sectionStyle);
 		Composite messageClient = createUISectionContainer(messageSection, 1);
 		// Bind the widgets
 		toolkit.paintBordersFor(messageClient);
@@ -404,7 +405,7 @@ public abstract class IDEFormPage extends FormPage {
 			return;
 		}
 		// Create the details section
-		Section detailsSection = createUISection(parent, "Details", e.getMessage(), sectionStyle);
+		Section detailsSection = createUISection(parent, Msgs.details, e.getMessage(), sectionStyle);
 		Composite detailsClient = createUISectionContainer(detailsSection, 1);
 		// Create text widget holding the exception trace
 		int style = SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.READ_ONLY;
@@ -466,4 +467,14 @@ public abstract class IDEFormPage extends FormPage {
 		return null;
 	}
 
+    private static class Msgs extends NLS
+    {
+        public static String details;
+        public static String message;
+
+        static
+        {
+            initializeMessages( IDEFormPage.class.getName(), Msgs.class );
+        }
+    }
 }

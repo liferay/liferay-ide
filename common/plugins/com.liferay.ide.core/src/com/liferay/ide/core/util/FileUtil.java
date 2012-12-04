@@ -43,6 +43,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.osgi.util.NLS;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
@@ -59,7 +60,7 @@ public class FileUtil
         {
             try
             {
-                RandomAccessFile file = new RandomAccessFile( versionFile, "rw" );
+                RandomAccessFile file = new RandomAccessFile( versionFile, "rw" ); //$NON-NLS-1$
                 file.setLength( 0 );
                 file.close();
             }
@@ -96,7 +97,7 @@ public class FileUtil
         }
         catch( Exception e )
         {
-            CorePlugin.logError( "Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath() );
+            CorePlugin.logError( "Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath() ); //$NON-NLS-1$ //$NON-NLS-2$
         }
         finally
         {
@@ -198,13 +199,13 @@ public class FileUtil
 
                 if( includeNewlines )
                 {
-                    contents.append( "\n" );
+                    contents.append( "\n" ); //$NON-NLS-1$
                 }
             }
         }
         catch( Exception e )
         {
-            CorePlugin.logError( "Could not read file: " + file.getPath() );
+            CorePlugin.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
         }
         finally
         {
@@ -286,7 +287,7 @@ public class FileUtil
         }
         catch( Exception e )
         {
-            CorePlugin.logError( "Could not read file: " + file.getPath() );
+            CorePlugin.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
         }
         finally
         {
@@ -374,12 +375,12 @@ public class FileUtil
 
         if( CoreUtil.isNullOrEmpty( folderValue ) )
         {
-            return "Folder value cannot be empty.";
+            return Msgs.folderValueNotEmpty;
         }
 
         if( !Path.ROOT.isValidPath( folderValue ) )
         {
-            return "Folder value is invalid.";
+            return Msgs.folderValueInvalid;
         }
 
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -394,7 +395,7 @@ public class FileUtil
 
         if( folder.getFolder( new Path( folderValue ) ).exists() )
         {
-            return "Folder already exists.";
+            return Msgs.folderAlreadyExists;
         }
 
         return null;
@@ -432,4 +433,15 @@ public class FileUtil
         return bytesTotal;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String folderAlreadyExists;
+        public static String folderValueInvalid;
+        public static String folderValueNotEmpty;
+
+        static
+        {
+            initializeMessages( FileUtil.class.getName(), Msgs.class );
+        }
+    }
 }

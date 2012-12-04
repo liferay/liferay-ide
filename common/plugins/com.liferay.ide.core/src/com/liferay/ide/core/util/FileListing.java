@@ -111,22 +111,22 @@ public class FileListing
     {
         if( aDirectory == null )
         {
-            throw new IllegalArgumentException( "Directory should not be null." );
+            throw new IllegalArgumentException( "Directory should not be null." ); //$NON-NLS-1$
         }
 
         if( !aDirectory.exists() )
         {
-            throw new FileNotFoundException( "Directory does not exist: " + aDirectory );
+            throw new FileNotFoundException( "Directory does not exist: " + aDirectory ); //$NON-NLS-1$
         }
 
         if( !aDirectory.isDirectory() )
         {
-            throw new IllegalArgumentException( "Is not a directory: " + aDirectory );
+            throw new IllegalArgumentException( "Is not a directory: " + aDirectory ); //$NON-NLS-1$
         }
 
         if( !aDirectory.canRead() )
         {
-            throw new IllegalArgumentException( "Directory cannot be read: " + aDirectory );
+            throw new IllegalArgumentException( "Directory cannot be read: " + aDirectory ); //$NON-NLS-1$
         }
     }
 

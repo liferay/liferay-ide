@@ -115,7 +115,7 @@ public class StringsFilteredDialog extends FilteredElementTreeSelectionDialog
 
     }
 
-    protected static final String DIALOG_SETTINGS = "com.liferay.ide.server.ui.wizard.StringsFilteredDialog";
+    protected static final String DIALOG_SETTINGS = "com.liferay.ide.server.ui.wizard.StringsFilteredDialog"; //$NON-NLS-1$
 
     public StringsFilteredDialog( Shell shell )
     {

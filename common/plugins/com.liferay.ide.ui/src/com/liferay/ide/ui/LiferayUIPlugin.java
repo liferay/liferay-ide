@@ -57,12 +57,12 @@ import org.osgi.service.prefs.BackingStoreException;
 public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
 {
 
-    public static final String FIRST_STARTUP_COMPLETE = "FIRST_STARTUP_COMPLETE";
+    public static final String FIRST_STARTUP_COMPLETE = "FIRST_STARTUP_COMPLETE"; //$NON-NLS-1$
 
-    public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL";
+    public static final String IMG_LIFERAY_ICON_SMALL = "IMG_LIFERAY_ICON_SMALL"; //$NON-NLS-1$
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static LiferayUIPlugin plugin;
@@ -70,11 +70,11 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     public static void clearAllPersistentSettings() throws BackingStoreException
     {
 
-        IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode( "com.liferay.ide.server.tomcat.core" );
+        IEclipsePreferences tomcatCorePrefs = new InstanceScope().getNode( "com.liferay.ide.server.tomcat.core" ); //$NON-NLS-1$
 
-        tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_TOGGLE_KEY" );
-        tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY" );
-        tomcatCorePrefs.remove( "REMOVE_EXT_PLUGIN_TOGGLE_KEY" );
+        tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_TOGGLE_KEY" ); //$NON-NLS-1$
+        tomcatCorePrefs.remove( "ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY" ); //$NON-NLS-1$
+        tomcatCorePrefs.remove( "REMOVE_EXT_PLUGIN_TOGGLE_KEY" ); //$NON-NLS-1$
 
         tomcatCorePrefs.flush();
     }
@@ -217,7 +217,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
             // add liferay profile
             final Profile eclipseProfile =
                 new CustomProfile(
-                    "Liferay [plug-in]", getLiferaySettings(), profileVersioner.getCurrentVersion(),
+                    "Liferay [plug-in]", getLiferaySettings(), profileVersioner.getCurrentVersion(), //$NON-NLS-1$
                     profileVersioner.getProfileKind() );
             profiles.add( eclipseProfile );
 
@@ -253,7 +253,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     @Override
     protected void initializeImageRegistry( ImageRegistry reg )
     {
-        registerImage( reg, IMG_LIFERAY_ICON_SMALL, "/icons/e16/liferay.png" );
+        registerImage( reg, IMG_LIFERAY_ICON_SMALL, "/icons/e16/liferay.png" ); //$NON-NLS-1$
     }
 
     protected void registerImage( ImageRegistry registry, String key, String path )

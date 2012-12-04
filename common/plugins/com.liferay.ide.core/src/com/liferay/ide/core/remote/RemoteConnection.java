@@ -18,6 +18,7 @@
 package com.liferay.ide.core.remote;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -53,7 +54,7 @@ public class RemoteConnection implements IRemoteConnection
     {
         if( !( args[0] instanceof String ) )
         {
-            throw new IllegalArgumentException( "First argument must be a string." );
+            throw new IllegalArgumentException( "First argument must be a string." ); //$NON-NLS-1$
         }
 
         HttpDelete deleteAPIMethod = new HttpDelete();
@@ -114,7 +115,7 @@ public class RemoteConnection implements IRemoteConnection
     {
         if( !( args[0] instanceof String ) )
         {
-            throw new IllegalArgumentException( "First argument must be a string." );
+            throw new IllegalArgumentException( "First argument must be a string." ); //$NON-NLS-1$
         }
 
         HttpGet getAPIMethod = new HttpGet();
@@ -158,7 +159,7 @@ public class RemoteConnection implements IRemoteConnection
     {
         if( !( args[0] instanceof HttpRequestBase ) )
         {
-            throw new IllegalArgumentException( "First argument must be a HttpRequestBase." );
+            throw new IllegalArgumentException( "First argument must be a HttpRequestBase." ); //$NON-NLS-1$
         }
 
         Object retval = null;
@@ -170,7 +171,7 @@ public class RemoteConnection implements IRemoteConnection
         try
         {
             URIBuilder builder = new URIBuilder();
-            builder.setScheme( "http" );
+            builder.setScheme( "http" ); //$NON-NLS-1$
             builder.setHost( getHost() );
             builder.setPort( getHttpPort() );
             builder.setPath( api );
@@ -180,7 +181,7 @@ public class RemoteConnection implements IRemoteConnection
                 for( int i = 1; i < args.length; i += 2 )
                 {
                     String name = null;
-                    String value = "";
+                    String value = StringUtil.EMPTY;
 
                     if( args[i] != null )
                     {
@@ -206,7 +207,7 @@ public class RemoteConnection implements IRemoteConnection
 
                 if( jsonResponse == null )
                 {
-                    throw new APIException( api, "Unable to get response: " + response );
+                    throw new APIException( api, "Unable to get response: " + response ); //$NON-NLS-1$
                 }
                 else
                 {
@@ -241,7 +242,7 @@ public class RemoteConnection implements IRemoteConnection
     {
         if( !( args[0] instanceof String ) )
         {
-            throw new IllegalArgumentException( "First argument must be a string." );
+            throw new IllegalArgumentException( "First argument must be a string." ); //$NON-NLS-1$
         }
 
         HttpPost post = new HttpPost();

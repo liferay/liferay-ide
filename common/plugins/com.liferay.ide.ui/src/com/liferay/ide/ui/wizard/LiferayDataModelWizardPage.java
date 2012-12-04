@@ -51,6 +51,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
@@ -91,7 +92,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
                     return Status.OK_STATUS;
                 }
 
-                return LiferayUIPlugin.createErrorStatus( "Choose a valid project file" );
+                return LiferayUIPlugin.createErrorStatus( Msgs.chooseValidProjectFile );
             }
         };
     }
@@ -327,7 +328,7 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
 
                             final IPath relativePath = file.getFullPath().makeRelativeTo( container.getFullPath() );
 
-                            text.setText( "/" + relativePath.toPortableString() );
+                            text.setText( "/" + relativePath.toPortableString() ); //$NON-NLS-1$
                             // dealWithSelectedContainerResource(container);
                         }
                     }
@@ -429,5 +430,15 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
 
     protected void validateProjectRequirements( IProject project )
     {
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String chooseValidProjectFile;
+
+        static
+        {
+            initializeMessages( LiferayDataModelWizardPage.class.getName(), Msgs.class );
+        }
     }
 }

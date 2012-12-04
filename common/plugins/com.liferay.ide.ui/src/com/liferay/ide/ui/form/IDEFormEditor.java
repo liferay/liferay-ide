@@ -443,9 +443,9 @@ public abstract class IDEFormEditor extends FormEditor implements IInputContextL
 		} catch (InterruptedException e) {
 			// Ignore
 		} catch (Exception e) {
-			String title = "Save As Problem";
+			String title = "Save As Problem"; //$NON-NLS-1$
 			
-			String message = "Save not completed.";
+			String message = "Save not completed."; //$NON-NLS-1$
 			if (e.getMessage() != null) {
 				message = message + ' ' + e.getMessage();
 			}

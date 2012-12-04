@@ -16,6 +16,7 @@
 package com.liferay.ide.ui.dialog;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
@@ -40,7 +41,7 @@ public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog
     {
         super( shell, multi, context, scope, elementKinds );
 
-        setInitialPattern( "**" );
+        setInitialPattern( StringUtil.DOUBLE_ASTERISK );
     }
 
     @Override
@@ -65,7 +66,7 @@ public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog
                     {
                         ignoreEvent = true;
 
-                        text.setText( "**" );
+                        text.setText( StringUtil.DOUBLE_ASTERISK );
 
                         ignoreEvent = false;
                     }

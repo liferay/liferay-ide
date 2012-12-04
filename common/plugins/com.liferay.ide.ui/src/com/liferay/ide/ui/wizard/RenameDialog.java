@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -125,7 +126,7 @@ public class RenameDialog extends SelectionStatusDialog
         container.setLayoutData( gd );
 
         Label label = new Label( container, SWT.NULL );
-        label.setText( "Enter new name" );
+        label.setText( Msgs.enterNewName );
 
         text = new Text( container, SWT.SINGLE | SWT.BORDER );
         text.addModifyListener( new ModifyListener()
@@ -175,7 +176,7 @@ public class RenameDialog extends SelectionStatusDialog
                 ( !isCaseSensitive && text.equalsIgnoreCase( oldNames.get( i ).toString() ) ) )
             {
                 status =
-                    new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, IStatus.ERROR, "Name already exists", null );
+                    new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, IStatus.ERROR, Msgs.nameAlreadyExists, null );
                 updateStatus( status );
                 okButton.setEnabled( false );
                 break;
@@ -218,5 +219,16 @@ public class RenameDialog extends SelectionStatusDialog
     public void setInputValidator( IInputValidator validator )
     {
         fValidator = validator;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String enterNewName;
+        public static String nameAlreadyExists;
+
+        static
+        {
+            initializeMessages( RenameDialog.class.getName(), Msgs.class );
+        }
     }
 }

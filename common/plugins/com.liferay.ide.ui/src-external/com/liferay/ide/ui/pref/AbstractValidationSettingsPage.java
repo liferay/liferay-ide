@@ -12,8 +12,6 @@
  *******************************************************************************/
 package com.liferay.ide.ui.pref;
 
-import com.liferay.ide.ui.pref.ComboData;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +31,7 @@ import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -326,15 +325,15 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 	public boolean performOk() {
 		if(super.performOk() && shouldRevalidateOnSettingsChange()) {
 			MessageBox mb = new MessageBox(this.getShell(), SWT.APPLICATION_MODAL | SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_INFORMATION | SWT.RIGHT);
-			mb.setText("Validation");
+			mb.setText(Msgs.validation);
 			/* Choose which message to use based on if its project or workspace settings */
-			String msg = (getProject() == null) ? "Workspace validation" : "Project level validation";
+			String msg = (getProject() == null) ? Msgs.workspaceValidation : Msgs.projectLevelValidation;
 			mb.setMessage(msg);
 			switch(mb.open()) {
 				case SWT.CANCEL:
 					return false;
 				case SWT.YES:
-				ValidateJob job = new ValidateJob("Validation job");
+				ValidateJob job = new ValidateJob(Msgs.validationJob);
 					job.schedule();
 				case SWT.NO:
 				default:
@@ -386,5 +385,17 @@ public abstract class AbstractValidationSettingsPage extends PropertyPreferenceP
 		}
 		
 	}
-	
+
+    private static class Msgs extends NLS
+    {
+        public static String validationJob;
+        public static String projectLevelValidation;
+        public static String validation;
+        public static String workspaceValidation;
+
+        static
+        {
+            initializeMessages( AbstractValidationSettingsPage.class.getName(), Msgs.class );
+        }
+    }
 }

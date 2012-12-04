@@ -44,6 +44,6 @@ public class APIException extends Exception
     @Override
     public String getMessage()
     {
-        return msg + " API: " + api;
+        return msg + " API: " + api; //$NON-NLS-1$
     }
 }

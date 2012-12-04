@@ -11,7 +11,6 @@
 
 package com.liferay.ide.ui.util;
 
-import com.liferay.ide.ui.DebugGroup;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.net.URL;
@@ -91,7 +90,7 @@ public class SWTUtil
     public static boolean showPreferencePage( String id, Shell shell )
     {
         PreferenceManager manager = PlatformUI.getWorkbench().getPreferenceManager();
-        IPreferenceNode node = manager.find( "org.eclipse.jdt.ui.preferences.JavaBasePreferencePage" ).findSubNode( id );
+        IPreferenceNode node = manager.find( "org.eclipse.jdt.ui.preferences.JavaBasePreferencePage" ).findSubNode( id ); //$NON-NLS-1$
         PreferenceManager manager2 = new PreferenceManager();
         manager2.addToRoot( node );
         PreferenceDialog dialog = new PreferenceDialog( shell, manager2 );
@@ -184,7 +183,7 @@ public class SWTUtil
                         }
                         catch ( Exception e1 )
                         {
-                            LiferayUIPlugin.logError( "Could not open external browser.", e1 );
+                            LiferayUIPlugin.logError( "Could not open external browser.", e1 ); //$NON-NLS-1$
                         }
                     }
                 }
@@ -437,20 +436,6 @@ public class SWTUtil
         }
         setButtonDimensionHint( button );
         return button;
-    }
-
-    public static Group createDebugGroup( Composite parent, String text, int numColumns )
-    {
-        Group group = new DebugGroup( parent, SWT.NULL );
-        group.setText( text );
-        GridLayout layout = new GridLayout( numColumns, false );
-        group.setLayout( layout );
-        GridData data = new GridData();
-        data.verticalAlignment = GridData.FILL;
-        data.horizontalAlignment = GridData.FILL;
-        data.widthHint = 300;
-        group.setLayoutData( data );
-        return group;
     }
 
     public static Group createGroup( Composite parent, String text, int numColumns )

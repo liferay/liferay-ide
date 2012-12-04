@@ -30,7 +30,7 @@ public class CorePlugin extends Plugin
     private static CorePlugin plugin;
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.core"; //$NON-NLS-1$
 
     public static IStatus createErrorStatus( Exception e )
     {

@@ -71,7 +71,7 @@ public abstract class TableSection extends StructuredViewerSection {
 
 		protected void updateLabel() {
 			if (fCount != null && !fCount.isDisposed())
-				fCount.setText(NLS.bind("Total: {0}", Integer.toString(getTableViewer().getTable().getItemCount())));
+				fCount.setText(NLS.bind(Msgs.totalLabel, Integer.toString(getTableViewer().getTable().getItemCount())));
 		}
 	}
 
@@ -120,4 +120,14 @@ public abstract class TableSection extends StructuredViewerSection {
 	protected boolean createCount() {
 		return false;
 	}
+
+    private static class Msgs extends NLS
+    {
+        public static String totalLabel;
+
+        static
+        {
+            initializeMessages( TableSection.class.getName(), Msgs.class );
+        }
+    }
 }

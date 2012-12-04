@@ -10,17 +10,18 @@
  *******************************************************************************/
 package com.liferay.ide.ui.editor;
 
+import com.liferay.ide.core.model.IModelChangeProvider;
+import com.liferay.ide.core.model.IModelChangedEvent;
+import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.ui.form.IDEFormEditor;
+
 import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.forms.editor.IFormPage;
-
-import com.liferay.ide.core.model.IModelChangeProvider;
-import com.liferay.ide.core.model.IModelChangedEvent;
-import com.liferay.ide.core.model.IModelChangedListener;
-import com.liferay.ide.ui.form.IDEFormEditor;
 
 public abstract class ModelUndoManager implements IModelUndoManager, IModelChangedListener {
 	private boolean ignoreChanges;
@@ -178,30 +179,30 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 	private String getUndoText() {
 		IModelChangedEvent op = getCurrentOperation();
 		if (op == null) {
-			return "Undo";
+			return Msgs.undo;
 		}
-		return NLS.bind("Undo {0}", getOperationText(op));
+		return NLS.bind(Msgs.undoText, getOperationText(op));
 	}
 
 	private String getRedoText() {
 		IModelChangedEvent op = getNextOperation();
 		if (op == null) {
-			return "Redo";
+			return Msgs.redo;
 		}
-		return NLS.bind("Redo {0}", getOperationText(op));
+		return NLS.bind(Msgs.redoText, getOperationText(op));
 	}
 
 	private String getOperationText(IModelChangedEvent op) {
-		String opText = ""; //$NON-NLS-1$
+		String opText = StringUtil.EMPTY;
 		switch (op.getChangeType()) {
 			case IModelChangedEvent.INSERT :
-				opText = "Insert";
+				opText = Msgs.insert;
 				break;
 			case IModelChangedEvent.REMOVE :
-				opText = "Remove";
+				opText = Msgs.remove;
 				break;
 			case IModelChangedEvent.CHANGE :
-				opText = "Property Change";
+				opText = Msgs.propertyChange;
 				break;
 		}
 		return opText;
@@ -213,5 +214,21 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 
 	public void setIgnoreChanges(boolean ignore) {
 		this.ignoreChanges = ignore;
+	}
+
+	private static class Msgs extends NLS
+	{
+	    public static String insert;
+	    public static String propertyChange;
+	    public static String redo;
+	    public static String redoText;
+	    public static String remove;
+	    public static String undo;
+	    public static String undoText;
+
+	    static
+	    {
+	        initializeMessages( ModelUndoManager.class.getName(), Msgs.class );
+	    }
 	}
 }

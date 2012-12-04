@@ -10,6 +10,11 @@
  *******************************************************************************/
 package com.liferay.ide.ui.editor;
 
+import com.liferay.ide.core.model.IBaseModel;
+import com.liferay.ide.core.model.IModelChangeProvider;
+import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.form.IDEFormEditor;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -27,11 +32,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
-
-import com.liferay.ide.core.model.IBaseModel;
-import com.liferay.ide.core.model.IModelChangeProvider;
-import com.liferay.ide.ui.LiferayUIPlugin;
-import com.liferay.ide.ui.form.IDEFormEditor;
 
 public abstract class InputContextManager implements IResourceChangeListener {
 	protected IDEFormEditor editor;
@@ -145,7 +145,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 		if (inputContexts.containsKey(oldInput)) {
 			value = inputContexts.remove(oldInput);
 		} else {
-			throw new Exception("Input context not found.");
+			throw new Exception("Input context not found."); //$NON-NLS-1$
 		}
 		// Re-insert the input context back into the context manager using the
 		// new editor input as its key
@@ -170,7 +170,7 @@ public abstract class InputContextManager implements IResourceChangeListener {
 			// Update the context manager accordingly
 			updateInputContext(newInput, oldInput);
 		} else {
-			throw new Exception("Input context not found.");
+			throw new Exception("Input context not found."); //$NON-NLS-1$
 		}
 	}
 

@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.liferay.ide.ui.form;
 
+import com.liferay.ide.ui.wizard.RenameDialog;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -17,10 +19,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
-import com.liferay.ide.ui.wizard.RenameDialog;
 
 public class EditableTablePart extends TablePart {
 	private boolean editable;
@@ -28,7 +29,7 @@ public class EditableTablePart extends TablePart {
 
 	class RenameAction extends Action {
 		public RenameAction() {
-			super("Rename...");
+			super(Msgs.renameAction);
 		}
 
 		public void run() {
@@ -85,7 +86,7 @@ public class EditableTablePart extends TablePart {
 			String oldName = obj.toString();
 			RenameDialog dialog = new RenameDialog(getControl().getShell(), oldName);
 			dialog.create();
-			dialog.getShell().setText("Rename");
+			dialog.getShell().setText(Msgs.renameTitle);
 			dialog.getShell().setSize(300, 150);
 			if (dialog.open() == Window.OK) {
 				entryModified(obj, dialog.getNewName());
@@ -95,4 +96,15 @@ public class EditableTablePart extends TablePart {
 
 	protected void entryModified(Object entry, String value) {
 	}
+
+    private static class Msgs extends NLS
+    {
+        public static String renameAction;
+        public static String renameTitle;
+
+        static
+        {
+            initializeMessages( EditableTablePart.class.getName(), Msgs.class );
+        }
+    }
 }

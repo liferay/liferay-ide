@@ -98,7 +98,7 @@ public final class ZipUtil {
 			final Enumeration<? extends ZipEntry> entries = zip.entries();
 
 			final int totalWork = zip.size();
-			monitor.beginTask( "Unzipping file: " + file.getName() + " " + Resources.progressUnzipping, totalWork );
+			monitor.beginTask( Resources.progressUnzipping, totalWork );
 
 			int c = 0;
 

@@ -61,7 +61,7 @@ public class DescriptorHelper
 
             try
             {
-                this.file.create( new ByteArrayInputStream( content.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+                this.file.create( new ByteArrayInputStream( content.getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
             }
             catch( Exception e )
             {
@@ -139,7 +139,7 @@ public class DescriptorHelper
 
             if( !this.file.exists() )
             {
-                return CorePlugin.createErrorStatus( this.file.getName() + " doesn't exist" );
+                return CorePlugin.createErrorStatus( this.file.getName() + " doesn't exist" ); //$NON-NLS-1$
             }
 
             IDOMModel domModel = null;
@@ -245,7 +245,7 @@ public class DescriptorHelper
             {
                 if( container != null && container.exists() )
                 {
-                    IFolder webInf = container.getFolder( new Path( "WEB-INF" ) );
+                    IFolder webInf = container.getFolder( new Path( "WEB-INF" ) ); //$NON-NLS-1$
 
                     if( webInf.exists() )
                     {

@@ -23,7 +23,7 @@ package com.liferay.ide.core.remote;
 public interface IRemoteConnection
 {
 
-    String _API = "/api/jsonws";
+    String _API = "/api/jsonws"; //$NON-NLS-1$
 
     String getHost();
 

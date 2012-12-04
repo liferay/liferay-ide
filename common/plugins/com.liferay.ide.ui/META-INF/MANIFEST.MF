@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE UI
+Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.ui;singleton:=true
 Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: com.liferay.ide.ui.LiferayUIPlugin
-Bundle-Vendor: Liferay, Inc.
+Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.common.frameworks;bundle-version="1.1.300",
  org.eclipse.jdt.ui,

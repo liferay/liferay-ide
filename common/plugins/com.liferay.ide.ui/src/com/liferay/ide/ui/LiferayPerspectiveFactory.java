@@ -32,9 +32,9 @@ import org.eclipse.ui.views.IViewDescriptor;
 public class LiferayPerspectiveFactory implements IPerspectiveFactory
 {
 
-    public static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView";
+    public static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView"; //$NON-NLS-1$
 
-    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay";
+    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay"; //$NON-NLS-1$
 
     public static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
 
@@ -42,34 +42,34 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_J2EE_HIERARCHY_VIEW = "org.eclipse.ui.navigator.ProjectExplorer"; //$NON-NLS-1$
 
-    public static final String ID_JAVADOC_VIEW = "org.eclipse.jdt.ui.JavadocView";
+    public static final String ID_JAVADOC_VIEW = "org.eclipse.jdt.ui.JavadocView"; //$NON-NLS-1$
 
-    public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView";
+    public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView"; //$NON-NLS-1$
 
-    public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.portlet.ui.wizard.hook";
+    public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.portlet.ui.wizard.hook"; //$NON-NLS-1$
 
-    public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.portlet.jsf.ui.wizard.portlet";
+    public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.portlet.jsf.ui.wizard.portlet"; //$NON-NLS-1$
 
-    public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD = "com.liferay.ide.layouttpl.ui.wizard.layouttemplate";
+    public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD = "com.liferay.ide.layouttpl.ui.wizard.layouttemplate"; //$NON-NLS-1$
 
-    public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.project.ui.newProjectWizard";
+    public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.project.ui.newProjectWizard"; //$NON-NLS-1$
 
     public static final String ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE =
-        "com.liferay.ide.project.ui.newProjectWizardExistingSource";
+        "com.liferay.ide.project.ui.newProjectWizardExistingSource"; //$NON-NLS-1$
 
-    public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.portlet.ui.wizard.portlet";
+    public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.portlet.ui.wizard.portlet"; //$NON-NLS-1$
 
-    public static final String ID_NEW_SERVICE_BUILDER_WIZARD = "com.liferay.ide.portlet.ui.wizard.servicebuilder";
+    public static final String ID_NEW_SERVICE_BUILDER_WIZARD = "com.liferay.ide.portlet.ui.wizard.servicebuilder"; //$NON-NLS-1$
 
-    public static final String ID_NEW_VAADIN_PORTLET_WIZARD = "com.liferay.ide.portlet.vaadin.ui.wizard.portlet";
+    public static final String ID_NEW_VAADIN_PORTLET_WIZARD = "com.liferay.ide.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
 
-    public static final String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer";
+    public static final String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer"; //$NON-NLS-1$
 
     public static final String ID_SEARCH_VIEW = "org.eclipse.search.ui.views.SearchView"; //$NON-NLS-1$
 
     public static final String ID_SERVERS_VIEW = "org.eclipse.wst.server.ui.ServersView"; //$NON-NLS-1$
 
-    public static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks";
+    public static final String ID_TASKLIST_VIEW = "org.eclipse.mylyn.tasks.ui.views.tasks"; //$NON-NLS-1$
 
     public static final String ID_WST_SNIPPETS_VIEW = "org.eclipse.wst.common.snippets.internal.ui.SnippetsView"; //$NON-NLS-1$	
 
@@ -99,36 +99,36 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
         layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.folder" );//$NON-NLS-1$
         layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
         layout.addNewWizardShortcut( "org.eclipse.ui.editors.wizards.UntitledTextFileWizard" );//$NON-NLS-1$
-        layout.addPerspectiveShortcut( "org.eclipse.jst.j2ee.J2EEPerspective" );
-        layout.addPerspectiveShortcut( "org.eclipse.jdt.ui.JavaPerspective" );
-        layout.addPerspectiveShortcut( "org.eclipse.debug.ui.DebugPerspective" );
+        layout.addPerspectiveShortcut( "org.eclipse.jst.j2ee.J2EEPerspective" ); //$NON-NLS-1$
+        layout.addPerspectiveShortcut( "org.eclipse.jdt.ui.JavaPerspective" ); //$NON-NLS-1$
+        layout.addPerspectiveShortcut( "org.eclipse.debug.ui.DebugPerspective" ); //$NON-NLS-1$
         layout.addShowViewShortcut( ANT_VIEW_ID );
 
         IPerspectiveDescriptor desc =
             PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(
-                "org.eclipse.team.cvs.ui.cvsPerspective" );
+                "org.eclipse.team.cvs.ui.cvsPerspective" ); //$NON-NLS-1$
 
         if( desc != null )
         {
-            layout.addPerspectiveShortcut( "org.eclipse.team.cvs.ui.cvsPerspective" );
+            layout.addPerspectiveShortcut( "org.eclipse.team.cvs.ui.cvsPerspective" ); //$NON-NLS-1$
         }
 
         desc =
             PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(
-                "org.tigris.subversion.subclipse.ui.svnPerspective" );
+                "org.tigris.subversion.subclipse.ui.svnPerspective" ); //$NON-NLS-1$
 
         if( desc != null )
         {
-            layout.addPerspectiveShortcut( "org.tigris.subversion.subclipse.ui.svnPerspective" );
+            layout.addPerspectiveShortcut( "org.tigris.subversion.subclipse.ui.svnPerspective" ); //$NON-NLS-1$
         }
 
         desc =
             PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(
-                "org.eclipse.team.svn.ui.repository.RepositoryPerspective" );
+                "org.eclipse.team.svn.ui.repository.RepositoryPerspective" ); //$NON-NLS-1$
 
         if( desc != null )
         {
-            layout.addPerspectiveShortcut( "org.eclipse.team.svn.ui.repository.RepositoryPerspective" );
+            layout.addPerspectiveShortcut( "org.eclipse.team.svn.ui.repository.RepositoryPerspective" ); //$NON-NLS-1$
         }
     }
 
@@ -166,11 +166,11 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
 
         topRight.addPlaceholder( IPageLayout.ID_BOOKMARKS );
 
-        IFolderLayout topRightBottom = layout.createFolder( "topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight" );
+        IFolderLayout topRightBottom = layout.createFolder( "topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight" ); //$NON-NLS-1$ //$NON-NLS-2$
         topRightBottom.addView( ANT_VIEW_ID );
         topRightBottom.addView( IPageLayout.ID_PROP_SHEET );
 
-        IFolderLayout bottomTopLeft = layout.createFolder( "bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft" );
+        IFolderLayout bottomTopLeft = layout.createFolder( "bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         bottomTopLeft.addView( ID_SERVERS_VIEW );
 
@@ -194,9 +194,9 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
         layout.addActionSet( IDebugUIConstants.LAUNCH_ACTION_SET );
         layout.addActionSet( IDebugUIConstants.DEBUG_ACTION_SET );
         layout.addActionSet( IPageLayout.ID_NAVIGATE_ACTION_SET );
-        layout.addActionSet( "com.liferay.ide.eclipse.ui.shortcuts.actionSet" );
-        layout.addActionSet( "org.eclipse.wst.server.ui.internal.webbrowser.actionSet" );
-        layout.addActionSet( "org.eclipse.wst.ws.explorer.explorer" );
+        layout.addActionSet( "com.liferay.ide.eclipse.ui.shortcuts.actionSet" ); //$NON-NLS-1$
+        layout.addActionSet( "org.eclipse.wst.server.ui.internal.webbrowser.actionSet" ); //$NON-NLS-1$
+        layout.addActionSet( "org.eclipse.wst.ws.explorer.explorer" ); //$NON-NLS-1$
 
         layout.addShowViewShortcut( ID_J2EE_HIERARCHY_VIEW );
         layout.addShowViewShortcut( ID_SERVERS_VIEW );

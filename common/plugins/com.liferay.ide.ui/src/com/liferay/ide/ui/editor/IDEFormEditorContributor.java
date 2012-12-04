@@ -27,6 +27,7 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
@@ -97,7 +98,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 	class CutAction extends ClipboardAction {
 		public CutAction() {
 			super(ActionFactory.CUT.getId());
-			setText("Cut");
+			setText(Msgs.cut);
 			setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 			setDisabledImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
 			setActionDefinitionId(ActionFactory.CUT.getCommandId());
@@ -111,7 +112,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 	class CopyAction extends ClipboardAction {
 		public CopyAction() {
 			super(ActionFactory.COPY.getId());
-			setText("Copy");
+			setText(Msgs.copy);
 			setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
 			setDisabledImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 			setActionDefinitionId(ActionFactory.COPY.getCommandId());
@@ -125,7 +126,7 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 	class PasteAction extends ClipboardAction {
 		public PasteAction() {
 			super(ActionFactory.PASTE.getId());
-			setText("Paste");
+			setText(Msgs.paste);
 			setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 			setDisabledImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
 			setActionDefinitionId(ActionFactory.PASTE.getCommandId());
@@ -248,9 +249,9 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 		addGlobalAction(IDEActionFactory.BOOKMARK.getId());
 		// save/revert
 		fSaveAction = new SaveAction();
-		fSaveAction.setText("Save");
+		fSaveAction.setText(Msgs.save);
 		fRevertAction = new RevertAction();
-		fRevertAction.setText("Revert");
+		fRevertAction.setText(Msgs.revert);
 		addGlobalAction(ActionFactory.REVERT.getId(), fRevertAction);
 	}
 
@@ -304,5 +305,19 @@ public class IDEFormEditorContributor extends MultiPageEditorActionBarContributo
 		if (fSharedImages == null)
 			fSharedImages = getPage().getWorkbenchWindow().getWorkbench().getSharedImages();
 		return fSharedImages;
+	}
+
+	private static class Msgs extends NLS
+	{
+	    public static String copy;
+	    public static String cut;
+	    public static String paste;
+	    public static String revert;
+	    public static String save;
+
+	    static
+	    {
+	        initializeMessages( IDEFormEditorContributor.class.getName(), Msgs.class );
+	    }
 	}
 }

@@ -184,8 +184,8 @@ public class CoreUtil
     {
         try
         {
-            final MessageDigest md = MessageDigest.getInstance( "SHA-256" );
-            final byte[] input = str.getBytes( "UTF-8" );
+            final MessageDigest md = MessageDigest.getInstance( "SHA-256" ); //$NON-NLS-1$
+            final byte[] input = str.getBytes( "UTF-8" ); //$NON-NLS-1$
             final byte[] digest = md.digest( input );
 
             final StringBuilder buf = new StringBuilder();
@@ -268,7 +268,7 @@ public class CoreUtil
                 {
                     if( container != null && container.exists() )
                     {
-                        if( container.getFolder( new Path( "WEB-INF" ) ).exists() )
+                        if( container.getFolder( new Path( "WEB-INF" ) ).exists() ) //$NON-NLS-1$
                         {
                             return container instanceof IFolder ? (IFolder) container : null;
                         }
@@ -436,7 +436,7 @@ public class CoreUtil
 
     public static boolean isNullOrEmpty( String val )
     {
-        return val == null || val.equals( "" ) || val.trim().equals( "" );
+        return val == null || val.equals( StringUtil.EMPTY ) || val.trim().equals( StringUtil.EMPTY );
     }
 
     public static boolean isNumeric( String str )
@@ -534,7 +534,7 @@ public class CoreUtil
 
         StringBuilder out = new StringBuilder();
 
-        Reader in = new InputStreamReader( contents, "UTF-8" );
+        Reader in = new InputStreamReader( contents, "UTF-8" ); //$NON-NLS-1$
 
         int read;
         do

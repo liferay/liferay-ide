@@ -10,6 +10,15 @@
  *******************************************************************************/
 package com.liferay.ide.ui.editor;
 
+import com.liferay.ide.core.model.IBaseModel;
+import com.liferay.ide.core.model.IEditable;
+import com.liferay.ide.core.model.IEditingModel;
+import com.liferay.ide.core.model.IModelChangeProvider;
+import com.liferay.ide.core.model.IModelChangedEvent;
+import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.form.IDEFormEditor;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -45,15 +54,6 @@ import org.eclipse.ui.editors.text.ForwardingDocumentProvider;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.IElementStateListener;
-
-import com.liferay.ide.core.model.IBaseModel;
-import com.liferay.ide.core.model.IEditable;
-import com.liferay.ide.core.model.IEditingModel;
-import com.liferay.ide.core.model.IModelChangeProvider;
-import com.liferay.ide.core.model.IModelChangedEvent;
-import com.liferay.ide.core.model.IModelChangedListener;
-import com.liferay.ide.ui.LiferayUIPlugin;
-import com.liferay.ide.ui.form.IDEFormEditor;
 
 /**
  * This class maintains objects associated with a single editor input.
@@ -502,7 +502,7 @@ public abstract class InputContext {
 		dialog.create();
 		// Warn the user if the underlying file does not exist
 		if (fDocumentProvider.isDeleted(fEditorInput) && (file != null)) {
-			String message = NLS.bind("File does not exist: {0}", file.getName());
+			String message = NLS.bind("File does not exist: {0}", file.getName()); //$NON-NLS-1$
 			dialog.setErrorMessage(null);
 			dialog.setMessage(message, IMessageProvider.WARNING);
 		}
@@ -526,7 +526,7 @@ public abstract class InputContext {
 		// Ensure a new location was selected
 		if (path == null) {
 			monitor.setCanceled(true);
-			throw new Exception("Location not set.");
+			throw new Exception("Location not set."); //$NON-NLS-1$
 		}
 		// Resolve the new file location	
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();

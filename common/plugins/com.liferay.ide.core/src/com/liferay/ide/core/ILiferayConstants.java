@@ -26,14 +26,14 @@ import org.osgi.framework.Version;
 public interface ILiferayConstants
 {
     Version LEAST_SUPPORTED_VERSION = new Version( 6, 0, 2 );
-    String LIFERAY_DISPLAY_XML_FILE = "liferay-display.xml";
-    String LIFERAY_HOOK_XML_FILE = "liferay-hook.xml";
-    String LIFERAY_LAYOUTTPL_XML_FILE = "liferay-layout-templates.xml";
-    String LIFERAY_LOOK_AND_FEEL_XML_FILE = "liferay-look-and-feel.xml";
-    String LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE = "liferay-plugin-package.properties";
-    String LIFERAY_PLUGIN_PACKAGE_PROPERTIES_XML_FILE = "liferay-plugin-package.xml";
-    String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml";
-    String LIFERAY_SERVICE_BUILDER_XML_FILE = "service.xml";
-    String PORTLET_XML_FILE = "portlet.xml";
-    String WEB_XML_FILE = "web.xml";
+    String LIFERAY_DISPLAY_XML_FILE = "liferay-display.xml"; //$NON-NLS-1$
+    String LIFERAY_HOOK_XML_FILE = "liferay-hook.xml"; //$NON-NLS-1$
+    String LIFERAY_LAYOUTTPL_XML_FILE = "liferay-layout-templates.xml"; //$NON-NLS-1$
+    String LIFERAY_LOOK_AND_FEEL_XML_FILE = "liferay-look-and-feel.xml"; //$NON-NLS-1$
+    String LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE = "liferay-plugin-package.properties"; //$NON-NLS-1$
+    String LIFERAY_PLUGIN_PACKAGE_PROPERTIES_XML_FILE = "liferay-plugin-package.xml"; //$NON-NLS-1$
+    String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml"; //$NON-NLS-1$
+    String LIFERAY_SERVICE_BUILDER_XML_FILE = "service.xml"; //$NON-NLS-1$
+    String PORTLET_XML_FILE = "portlet.xml"; //$NON-NLS-1$
+    String WEB_XML_FILE = "web.xml"; //$NON-NLS-1$
 }

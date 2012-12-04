@@ -12,13 +12,13 @@
       <page
             class="com.liferay.ide.ui.pref.LiferayUIPreferencePage"
             id="com.liferay.ide.ui.preferences.liferay"
-            name="Liferay">
+            name="%preference.page.name">
       </page>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
          <objectContribution objectClass="org.eclipse.core.resources.IProject" adaptable="true" id="com.liferay.ide.ui.popupmenu">
-	         <menu label="Liferay"  id="liferayPopupMenuCategory">
+	         <menu label="%liferay.popup.menu.label"  id="liferayPopupMenuCategory">
 	            <separator name="slot1"/> 
 	         </menu>
       	</objectContribution>
@@ -27,7 +27,7 @@
          point="org.eclipse.ui.keywords">
       <keyword
             id="com.liferay.ide.ui.keyword"
-            label="Liferay">
+            label="%keyword.label">
       </keyword>
    </extension>
    <extension
@@ -36,7 +36,7 @@
             class="com.liferay.ide.ui.LiferayPerspectiveFactory"
             icon="icons/e16/liferay.png"
             id="com.liferay.ide.eclipse.ui.perspective.liferay"
-            name="Liferay">
+            name="%liferay.perspective.name">
       </perspective>
    </extension>
    <extension

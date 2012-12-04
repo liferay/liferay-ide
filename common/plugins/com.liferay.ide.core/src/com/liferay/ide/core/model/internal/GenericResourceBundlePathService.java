@@ -38,7 +38,7 @@ import org.eclipse.sapphire.services.RelativePathService;
 public class GenericResourceBundlePathService extends RelativePathService
 {
 
-    public static final String RB_FILE_EXTENSION = "properties";
+    public static final String RB_FILE_EXTENSION = "properties"; //$NON-NLS-1$
     
     private final IWorkspaceRoot WORKSPACE_ROOT = CoreUtil.getWorkspaceRoot();
 
