@@ -105,7 +105,7 @@ public class ProjectUtil
         TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
         tagLibRefType.setTaglibURI( uriValue );
         tagLibRefType.setTaglibLocation( taglibLocation );
-        
+
         try
         {
             webXmlHelper.addTagLib( tagLibRefType );
@@ -157,7 +157,7 @@ public class ProjectUtil
         {
             File file = contents[i];
 
-            if( isLiferayProjectDir( file ) )
+            if( isLiferaySDKProjectDir( file ) )
             {
                 // recurse to see if it has project file
                 int currentSize = eclipseProjectFiles.size();
@@ -174,7 +174,7 @@ public class ProjectUtil
             }
             else if( file.isFile() && file.getName().equals( dotProject ) )
             {
-                if( !eclipseProjectFiles.contains( file ) && isLiferayProjectDir( file.getParentFile() ) )
+                if( !eclipseProjectFiles.contains( file ) && isLiferaySDKProjectDir( file.getParentFile() ) )
                 {
                     eclipseProjectFiles.add( file );
 
@@ -319,7 +319,7 @@ public class ProjectUtil
 
         FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
 
-        PluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
 
         fpwc.commitChanges( monitor );
 
@@ -347,7 +347,7 @@ public class ProjectUtil
         return project;
     }
 
-    public static IProject createNewProject(
+    public static IProject createNewSDKProject(
         ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
         throws CoreException
     {
@@ -357,13 +357,12 @@ public class ProjectUtil
         // we are importing so set flag to not create anything
         newProjectDataModel.setBooleanProperty( IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false );
 
-        String sdkName = PluginFacetUtil.getSDKName( sdkLocation );
+        String sdkName = SDKPluginFacetUtil.getSDKName( sdkLocation );
         // if the get sdk from the location
         newProjectDataModel.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName );
 
         setGenerateDD( newProjectDataModel, false );
 
-        // TODO IDE-110 IDE-648
         IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" );
 
         if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
@@ -386,7 +385,6 @@ public class ProjectUtil
         }
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
         {
-            // TODO IDE-110 IDE-648
             webXmlPath =
                 webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) );
 
@@ -411,7 +409,7 @@ public class ProjectUtil
         fpjwc.setProjectName( projectRecord.getProjectName() );
         fpjwc.setProjectLocation( projectRecord.getProjectLocation() );
 
-        PluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation );
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation );
 
         fpjwc.commitChanges( monitor );
 
@@ -618,7 +616,7 @@ public class ProjectUtil
 
     public static String getLiferayPluginType( String projectLocation )
     {
-        if( isLiferayProjectDir( new File( projectLocation ) ) )
+        if( isLiferaySDKProjectDir( new File( projectLocation ) ) )
         {
             String suffix = "";
 
@@ -697,7 +695,7 @@ public class ProjectUtil
         ProjectRecord projectRecord = null;
         File projectDir = new File( dir );
 
-        if( isLiferayProjectDir( projectDir ) )
+        if( isLiferaySDKProjectDir( projectDir ) )
         {
             // determine if this is a previous eclipse project or vanilla
 
@@ -899,7 +897,7 @@ public class ProjectUtil
         {
             try
             {
-                project = createNewProject( projectRecord, runtime, sdkLocation, monitor );
+                project = createNewSDKProject( projectRecord, runtime, sdkLocation, monitor );
             }
             catch( CoreException e )
             {
@@ -970,7 +968,7 @@ public class ProjectUtil
     public static boolean isLiferayProject( IFolder folder )
     {
         return folder != null && folder.exists() && folder.getRawLocation() != null &&
-            isLiferayProjectDir( folder.getRawLocation().toFile() );
+            isLiferaySDKProjectDir( folder.getRawLocation().toFile() );
     }
 
     public static boolean isLiferayProject( IProject project )
@@ -1008,10 +1006,9 @@ public class ProjectUtil
         return retval;
     }
 
-    public static boolean isLiferayProjectDir( File file )
+    public static boolean isLiferaySDKProjectDir( File file )
     {
-        // TODO IDE-110 IDE-648
-        if( file.isDirectory() && isValidLiferayProjectDir( file ) )
+        if( file != null && file.isDirectory() && isValidLiferayProjectDir( file ) )
         {
             // check for build.xml and docroot
             File[] contents = file.listFiles();
@@ -1148,11 +1145,11 @@ public class ProjectUtil
         DataModelPropertyDescriptor[] validDescriptors =
             dataModel.getValidPropertyDescriptors( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-        for( DataModelPropertyDescriptor desc : validDescriptors ) 
+        for( DataModelPropertyDescriptor desc : validDescriptors )
 		{
             Object runtime = desc.getPropertyValue();
 
-            if( runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime( (BridgedRuntime) runtime ) ) 
+            if( runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime( (BridgedRuntime) runtime ) )
 			{
                 dataModel.setProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME, runtime );
                 break;

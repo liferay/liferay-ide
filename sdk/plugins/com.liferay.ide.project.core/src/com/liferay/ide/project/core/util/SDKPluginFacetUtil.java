@@ -51,16 +51,16 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 /**
  * @author Greg Amerson
  */
-public class PluginFacetUtil
+public class SDKPluginFacetUtil
 {
 
-    public static final IProjectFacet[] LIFERAY_FACETS = new IProjectFacet[] 
+    public static final IProjectFacet[] LIFERAY_FACETS = new IProjectFacet[]
     {
-        IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET, 
+        IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET,
         IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET,
-        IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET, 
+        IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET,
         IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET,
-        IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET 
+        IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET
     };
 
     public static void configureJavaFacet( IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, IPreset preset )
@@ -436,7 +436,7 @@ public class PluginFacetUtil
     private static void addDefaultWebXml( IFacetedProjectWorkingCopy fpjwc, IDataModel dm ) throws CoreException
     {
         // check for existing web.xml file, if not there, add a default one
-        // TODO IDE-110 IDE-648
+        // IDE-110 IDE-648
         IPath webinfPath = fpjwc.getProjectLocation().append( "docroot/WEB-INF" );
 
         if( ProjectUtil.isExtProject( fpjwc.getProject() ) ||

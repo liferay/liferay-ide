@@ -262,10 +262,9 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
     // return wsProjects;
     // }
 
-    private boolean isLiferayProjectDir( File file )
+    private boolean isLiferaySDKProjectDir( File file )
     {
-        // TODO IDE-110 IDE-648
-        if( file.isDirectory() && isValidLiferayProjectDir( file ) )
+        if( file != null && file.isDirectory() && isValidLiferayProjectDir( file ) )
         {
             // check for build.xml and docroot
             File[] contents = file.listFiles();
@@ -299,34 +298,6 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
         return false;
     }
-
-    // private boolean isProjectInWorkspace(String projectName) {
-    // if (projectName == null) {
-    // return false;
-    // }
-    //
-    // IProject[] workspaceProjects = getProjectsInWorkspace();
-    //
-    // for (int i = 0; i < workspaceProjects.length; i++) {
-    // if (projectName.equals(workspaceProjects[i].getName())) {
-    // return true;
-    // }
-    // }
-    //
-    // return false;
-    // }
-
-    // public ProjectRecord[] getProjectRecords() {
-    // List projectRecords = new ArrayList();
-    // for (int i = 0; i < selectedProjects.length; i++) {
-    // if (isProjectInWorkspace(selectedProjects[i].getProjectName())) {
-    // selectedProjects[i].setHasConflicts(true);
-    // }
-    // projectRecords.add(selectedProjects[i]);
-    // }
-    // return (ProjectRecord[]) projectRecords
-    // .toArray(new ProjectRecord[projectRecords.size()]);
-    // }
 
     protected boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -371,7 +342,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
         {
             File file = contents[i];
 
-            if( isLiferayProjectDir( file ) )
+            if( isLiferaySDKProjectDir( file ) )
             {
                 // recurse to see if it has project file
                 int currentSize = eclipseProjectFiles.size();

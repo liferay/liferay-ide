@@ -57,10 +57,10 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
     protected static final Collection<String> portalSourceJars = Arrays.asList
     (
-        "util-bridges.jar", 
-        "util-java.jar", 
-        "util-taglib.jar", 
-        "portal-impl.jar" 
+        "util-bridges.jar",
+        "util-java.jar",
+        "util-taglib.jar",
+        "portal-impl.jar"
     );
 
     protected static ClasspathDecorationsManager cpDecorations;
@@ -230,7 +230,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
         {
             IVirtualFolder webappRoot = CoreUtil.getDocroot( serviceJar.getProject() );
 
-            // TODO IDE-110 IDE-648
+            // IDE-110 IDE-648
             if( webappRoot != null )
             {
                 for( IContainer container : webappRoot.getUnderlyingFolders() )

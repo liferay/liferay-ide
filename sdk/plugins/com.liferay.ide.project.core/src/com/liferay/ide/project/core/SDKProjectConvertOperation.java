@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.project.core.util.PluginFacetUtil;
+import com.liferay.ide.project.core.util.SDKPluginFacetUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKManager;
 import com.liferay.ide.sdk.util.SDKUtil;
@@ -120,7 +120,7 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 
         final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-        PluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
 
         fpwc.commitChanges( monitor );
 

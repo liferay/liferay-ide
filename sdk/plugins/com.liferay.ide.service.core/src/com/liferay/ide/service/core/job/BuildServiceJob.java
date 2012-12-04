@@ -142,7 +142,7 @@ public class BuildServiceJob extends SDKJob
 
         if( container == null )
         {
-            return ServiceCore.createWarningStatus( "Could not update classpath containers" );
+            return Status.OK_STATUS;
         }
 
         container.refresh();
@@ -150,8 +150,6 @@ public class BuildServiceJob extends SDKJob
         container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer( project );
 
         IClasspathEntry[] webappEntries = container.getClasspathEntries();
-        
-        //TODO IDE-648 IDE-110
 
         for( IClasspathEntry entry2 : webappEntries )
         {

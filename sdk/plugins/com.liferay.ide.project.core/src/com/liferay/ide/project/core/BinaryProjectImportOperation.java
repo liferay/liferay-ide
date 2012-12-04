@@ -72,7 +72,7 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation
                 try
                 {
                     projectRecords[0] =
-                        ProjectImportUtil.createPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
+                        ProjectImportUtil.createSDKPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
                 }
                 catch( IOException e )
                 {

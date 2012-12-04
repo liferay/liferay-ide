@@ -64,7 +64,7 @@ public class ProjectImportUtil
     /**
      * This method was added as part of the IDE-381 fix, this method will collect all the binaries based on the binaries
      * list
-     * 
+     *
      * @return true if the directory has some binaries
      */
     public static boolean collectBinariesFromDirectory(
@@ -108,7 +108,7 @@ public class ProjectImportUtil
      * @return
      * @throws IOException
      */
-    public static ProjectRecord createPluginProject(
+    public static ProjectRecord createSDKPluginProject(
         BridgedRuntime bridgedRuntime, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException
     {
         ProjectRecord projectRecord = null;
@@ -123,7 +123,7 @@ public class ProjectImportUtil
 
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( bridgedRuntime );
             Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
-            // TODO IDE-110 IDE-648
+            // IDE-110 IDE-648
             String docrootFolder = null;
 
             // Create Project
@@ -206,7 +206,7 @@ public class ProjectImportUtil
 
     /**
      * This will create the Eclipse Workspace projects
-     * 
+     *
      * @param monitor
      * @throws CoreException
      */
@@ -263,7 +263,7 @@ public class ProjectImportUtil
 
     /**
      * This method is used to validate whether the given plugin binary is a valid Liferay Plugin Archieve
-     * 
+     *
      * @param binaryFile
      *            - the binary file to be validated
      * @return

@@ -34,7 +34,6 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -47,6 +46,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -62,7 +62,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
     public static IStatus cssBuild( IProject project ) throws CoreException
     {
-        SDK sdk = SDKUtil.getSDK( project );
+        final SDK sdk = SDKUtil.getSDK( project );
 
         if( sdk == null )
         {
@@ -70,7 +70,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 ThemeCore.createErrorStatus( "No SDK for project configured. Could not build theme." ) );
         }
 
-        ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
 
         if( liferayRuntime == null )
         {
@@ -78,35 +78,28 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 ThemeCore.createErrorStatus( "Could not get portal runtime for project.  Could not build theme." ) );
         }
 
-        Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+        final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
 
-        IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
+        final IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
 
         if( !status.isOK() )
         {
             throw new CoreException( status );
         }
 
-        // TODO IDE-110 IDE-648
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        // IDE-110 IDE-648
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        IFile lookAndFeelFile = null;
+        IVirtualFile lookAndFeelFile = null;
 
         if( webappRoot != null )
         {
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
-                {
-                    final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
-                    IFile file = container.getFile( path );
+            final IVirtualFile file =
+                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) );
 
-                    if( file.exists() )
-                    {
-                        lookAndFeelFile = file;
-                        break;
-                    }
-                }
+            if( file != null && file.exists() )
+            {
+                lookAndFeelFile = file;
             }
         }
 
@@ -114,50 +107,43 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         {
             String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "" );
 
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            IVirtualFile propertiesFile = webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+            String name = id;
+
+            if( propertiesFile != null && propertiesFile.exists() )
             {
-                if( container != null && container.exists() )
+                Properties props = new Properties();
+
+                try
                 {
-                    IFile propsFile = container.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
-                    String name = id;
+                    final IFile underlyingFile = propertiesFile.getUnderlyingFile();
+                    props.load( underlyingFile.getContents() );
+                    String nameValue = props.getProperty( "name" );
 
-                    if( propsFile.exists() )
+                    if( !CoreUtil.isNullOrEmpty( nameValue ) )
                     {
-                        Properties props = new Properties();
-
-                        try
-                        {
-                            props.load( propsFile.getContents() );
-                            String nameValue = props.getProperty( "name" );
-
-                            if( !CoreUtil.isNullOrEmpty( nameValue ) )
-                            {
-                                name = nameValue;
-                            }
-                        }
-                        catch( IOException e )
-                        {
-                            ThemeCore.logError( "Unable to load plugin package properties.", e );
-                        }
+                        name = nameValue;
                     }
 
                     if( liferayRuntime != null )
                     {
                         final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                        themeDescriptorHelper.createDefaultFile( container, liferayRuntime.getPortalVersion() , id, name );
+                        themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), liferayRuntime.getPortalVersion() , id, name );
                     }
 
                     try
                     {
-                        container.refreshLocal( IResource.DEPTH_INFINITE, null );
+                        underlyingFile.getParent().refreshLocal( IResource.DEPTH_INFINITE, null );
                     }
                     catch( Exception e )
                     {
                         ThemeCore.logError( e );
                     }
-
-                    break;
+                }
+                catch( IOException e )
+                {
+                    ThemeCore.logError( "Unable to load plugin package properties.", e );
                 }
             }
         }
@@ -174,7 +160,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         this.buildHelper = new BuildHelper();
     }
 
-    // TODO IDE-110 IDE-648
     protected void applyDiffsDeltaToDocroot(
         final IResourceDelta delta, final IContainer docroot, final IProgressMonitor monitor )
     {
@@ -280,75 +265,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         }
     }
 
-    // private IPath getRestoreLocation( IFolder docroot )
-    // {
-    // IProject project = docroot.getProject();
-    //
-    // IPath restoreLocation = ThemeCore.getDefault().getStateLocation().append( project.getName() + "-restore-location"
-    // );
-    //
-    // File restoreDirectory = restoreLocation.toFile();
-    //
-    // if (!restoreDirectory.exists())
-    // {
-    // restoreDirectory.mkdirs();
-    // }
-    //
-    // if (restoreDirectory.list().length <= 0)
-    // {
-    // /* create a temp theme with the same build.xml and invoke theme compile and then extract the contents */
-    // SDK sdk = SDKUtil.getSDK( project );
-    //
-    // String tmpName = String.valueOf(System.currentTimeMillis());
-    //
-    // IPath tmpTheme = sdk.createNewThemeProject( tmpName, tmpName );
-    //
-    // File buildFile = CoreUtil.getResourceLocation( project.getFile( "build.xml" ) ).toFile();
-    //
-    // File newThemeDir = tmpTheme.toFile().listFiles()[0];
-    //
-    // FileUtil.copyFileToDir( buildFile, newThemeDir);
-    //
-    // IPath newThemeDestDir = CoreUtil.getResourceLocation( project ).removeLastSegments( 1 ).append(
-    // newThemeDir.getName() );
-    //
-    // try
-    // {
-    // FileUtils.copyDirectory( newThemeDir, newThemeDestDir.toFile() );
-    // SDKHelper helper = new SDKHelper( sdk );
-    // IPath newBuildFile = newThemeDestDir.append( "build.xml" );
-    // helper.runTarget( newBuildFile, ISDKConstants.TARGET_COMPILE, null );
-    //
-    // /* copy files from freshly compiled theme to restore-location */
-    // File[] restoreFiles = newThemeDestDir.append("docroot").toFile().listFiles();
-    //
-    // for (File restoreFile : restoreFiles)
-    // {
-    // if (!"_diffs".equals(restoreFile.getName()))
-    // {
-    // if (restoreFile.isDirectory())
-    // {
-    // FileUtils.copyDirectory( restoreFile, newThemeDestDir.toFile() );
-    // }
-    // else
-    // {
-    //
-    // }
-    // }
-    // }
-    //
-    //
-    // FileUtil.deleteDir( newThemeDestDir.toFile(), true );
-    // }
-    // catch( Exception e )
-    // {
-    // System.out.println(e);
-    // }
-    // }
-    //
-    // return restoreLocation;
-    // }
-
     protected IProject getProject( Map args )
     {
         return this.getProject();
@@ -416,24 +332,19 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                         {
                             if( "_diffs".equals( segment ) )
                             {
-                                // TODO IDE-110 IDE-648
+                                // IDE-110 IDE-648
                                 IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
 
                                 if( webappRoot != null )
                                 {
-                                    for( IContainer container : webappRoot.getUnderlyingFolders() )
+                                    IVirtualFolder diffs = webappRoot.getFolder( new Path("_diffs") );
+
+                                    if( diffs != null && diffs.exists() &&
+                                        diffs.getUnderlyingFolder().getFullPath().isPrefixOf( fullResourcePath ) )
                                     {
-                                        if( container != null && container.exists() )
-                                        {
-                                            IFolder diffs = container.getFolder( new Path( "_diffs" ) );
+                                        applyDiffsDeltaToDocroot( delta, diffs.getUnderlyingFolder().getParent(), monitor );
 
-                                            if( diffs.exists() && diffs.getFullPath().isPrefixOf( fullResourcePath ) )
-                                            {
-                                                applyDiffsDeltaToDocroot( delta, container, monitor );
-
-                                                return false;
-                                            }
-                                        }
+                                        return false;
                                     }
                                 }
                             }
@@ -458,26 +369,20 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         }
 
         // check to see if there is any files in the _diffs folder
-        // TODO IDE-110 IDE-648
+        // IDE-110 IDE-648
         IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
 
         if( webappRoot != null )
         {
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            IVirtualFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) );
+
+            if( diffs != null && diffs.exists() )
             {
-                if( container != null && container.exists() )
+                IResource[] diffMembers = diffs.getUnderlyingResources();
+
+                if( !CoreUtil.isNullOrEmpty( diffMembers ) )
                 {
-                    IFolder diffs = container.getFolder( new Path( "_diffs" ) );
-
-                    if( diffs.exists() )
-                    {
-                        IResource[] diffMembers = diffs.members();
-
-                        if( !CoreUtil.isNullOrEmpty( diffMembers ) )
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
             }
         }

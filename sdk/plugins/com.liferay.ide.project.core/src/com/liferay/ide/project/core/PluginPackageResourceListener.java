@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -65,6 +64,7 @@ import org.eclipse.wst.common.componentcore.internal.operation.AddReferenceDataM
 import org.eclipse.wst.common.componentcore.internal.operation.RemoveReferenceDataModelProvider;
 import org.eclipse.wst.common.componentcore.internal.resources.VirtualArchiveComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualReference;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
@@ -151,30 +151,29 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
     protected boolean shouldProcessResourceDelta( IResourceDelta delta )
     {
-        IPath fullPath = delta.getFullPath();
+        final IPath fullPath = delta.getFullPath();
 
         if( fullPath.lastSegment() != null &&
             fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
         {
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( delta.getResource().getProject() );
+            final IVirtualFolder webappRoot = CoreUtil.getDocroot( delta.getResource().getProject() );
 
             if( webappRoot == null )
             {
                 return false;
             }
 
-            // TODO IDE-110 IDE-648
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
-                {
-                    final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
-                    final IPath filePath = container.getFile( path ).getFullPath();
+            // IDE-110 648
+            final IVirtualFile propertiesFile =
+                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
 
-                    if( filePath.equals( fullPath ) )
-                    {
-                        return true;
-                    }
+            if( propertiesFile != null && propertiesFile.exists() )
+            {
+                final IPath filePath = propertiesFile.getUnderlyingFile().getFullPath();
+
+                if( filePath.equals( fullPath ) )
+                {
+                    return true;
                 }
             }
         }
@@ -586,7 +585,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                             return Status.OK_STATUS;
                         }
                     };
-                    
+
                     job.setRule( CoreUtil.getWorkspaceRoot() );
                     job.schedule();
                 }
