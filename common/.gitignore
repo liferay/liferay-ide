@@ -5,7 +5,6 @@
 bin/
 target/
 .project
-.settings/
 .springBeans
 target/
 rebel.xml
