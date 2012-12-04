@@ -46,11 +46,9 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEModuleFacetInstallDataModelProperties;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModelProperties;
@@ -115,7 +113,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
     }
 
-    protected void copyToProject( IPath parent, File newFile, boolean prompt ) throws CoreException, IOException
+    protected void copyToProject( IPath parent, File newFile ) throws CoreException, IOException
     {
         if( newFile == null || !shouldCopyToProject( newFile ) )
         {
@@ -144,11 +142,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
             }
             else if( projectEntry instanceof IFile )
             {
-                if( prompt && !promptForOverwrite( projectEntry ) )
-                {
-                    return;
-                }
-
                 ( (IFile) projectEntry ).setContents( new FileInputStream( newFile ), IResource.FORCE, null );
             }
         }
@@ -423,7 +416,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
         IPath newThemePath = sdk.createNewThemeProject( themeName, displayName );
 
-        processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ), false );
+        processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
 
         // cleanup portlet files
         newThemePath.toFile().delete();
@@ -443,7 +436,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         return masterModel.getBooleanProperty( LIFERAY_USE_SDK_LOCATION );
     }
 
-    protected void processNewFiles( IPath path, boolean prompt ) throws CoreException
+    protected void processNewFiles( IPath path ) throws CoreException
     {
         try
         {
@@ -453,7 +446,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
             {
                 try
                 {
-                    copyToProject( path, file, prompt );
+                    copyToProject( path, file );
                 }
                 catch( Exception e )
                 {
@@ -467,25 +460,24 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
     }
 
-    protected boolean promptForOverwrite( final IResource projectEntryPath )
-    {
-        final boolean[] retval = new boolean[1];
-
-        PlatformUI.getWorkbench().getDisplay().syncExec( new Runnable()
-        {
-
-            public void run()
-            {
-                retval[0] =
-                    MessageDialog.openQuestion(
-                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Overwrite project file?",
-                        "Overwrite project file: " + projectEntryPath.getLocation() );
-            }
-
-        } );
-
-        return retval[0];
-    }
+//    protected boolean promptForOverwrite( final IResource projectEntryPath )
+//    {
+//        final boolean[] retval = new boolean[1];
+//
+//        PlatformUI.getWorkbench().getDisplay().syncExec( new Runnable()
+//        {
+//            public void run()
+//            {
+//                retval[0] =
+//                    MessageDialog.openQuestion(
+//                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Overwrite project file?",
+//                        "Overwrite project file: " + projectEntryPath.getLocation() );
+//            }
+//
+//        } );
+//
+//        return retval[0];
+//    }
 
     protected void setupDefaultOutputLocation() throws CoreException
     {
@@ -547,7 +539,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
     {
         return this.model.getBooleanProperty( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE );
     }
- 
+
     protected boolean shouldSetupDefaultOutputLocation()
     {
         return this.model.getBooleanProperty( SETUP_DEFAULT_OUTPUT_LOCATION );

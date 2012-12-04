@@ -80,8 +80,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
             IPath newLayoutTplPath = sdk.createNewLayoutTplProject( layoutTplName, displayName, appServerProperties );
 
-            processNewFiles(
-                newLayoutTplPath.append( layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ), false );
+            processNewFiles( newLayoutTplPath.append( layoutTplName + ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) );
 
             // cleanup files
             FileUtil.deleteDir( newLayoutTplPath.toFile(), true );

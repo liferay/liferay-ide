@@ -27,6 +27,7 @@ import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.Hook600;
 import com.liferay.ide.hook.core.model.Hook610;
 import com.liferay.ide.hook.core.model.HookVersionType;
+import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -56,7 +57,6 @@ import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
 
 /**
  * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
@@ -143,7 +143,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 
             resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
             Document document = resource.getDomDocument();
-            dtdVersion = getDTDVersion( document );
+            dtdVersion = HookUtil.getDTDVersion( document );
 
             if( document != null )
             {
@@ -219,38 +219,6 @@ public class HookXmlEditor extends SapphireEditorForXml
         {
             super.doSave( monitor );
         }
-    }
-
-    /**
-     * A small utility method used to compute the DTD version
-     *
-     * @param document
-     *            - the document that is loaded by the editor
-     * @return - {@link HookVersionType}
-     */
-    private HookVersionType getDTDVersion( Document document )
-    {
-        HookVersionType dtdVersion = null;
-        DocumentType docType = document.getDoctype();
-        if( docType != null )
-        {
-            String publicId = docType.getPublicId();
-            String systemId = docType.getSystemId();
-            if( publicId != null && systemId != null )
-            {
-                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
-                {
-                    dtdVersion = HookVersionType.v6_0_0;
-                }
-                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
-                {
-                    dtdVersion = HookVersionType.v6_1_0;
-                }
-            }
-
-        }
-
-        return dtdVersion;
     }
 
     public InputStream getFileContents() throws CoreException, MalformedURLException, IOException

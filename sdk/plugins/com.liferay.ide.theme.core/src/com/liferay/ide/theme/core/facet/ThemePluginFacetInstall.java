@@ -78,7 +78,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
 
             IPath newThemePath = sdk.createNewThemeProject( themeName, displayName );
 
-            processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ), false );
+            processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
 
             // cleanup files
             FileUtil.deleteDir( newThemePath.toFile(), true );

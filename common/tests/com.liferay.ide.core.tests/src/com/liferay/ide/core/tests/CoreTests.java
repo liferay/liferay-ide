@@ -32,20 +32,20 @@ public class CoreTests
     protected final void deleteProject( final String name ) throws Exception
     {
         String n = getClass().getName();
-        
+
         if( name != null )
         {
             n = n + "." + name;
         }
-        
+
         final IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject( n );
-        
+
         if( p.exists() )
         {
             p.delete( true, null );
         }
     }
-    
+
     protected final IFolder createFolder( final IProject project, final String path ) throws Exception
     {
         final IFolder folder = project.getFolder( path );

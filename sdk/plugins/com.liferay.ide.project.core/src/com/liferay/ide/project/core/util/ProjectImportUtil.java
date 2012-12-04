@@ -50,7 +50,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 
@@ -75,7 +74,7 @@ public class ProjectImportUtil
             return false;
         }
 
-        monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
+        monitor.subTask( NLS.bind( "Checking: {0}", directory.getPath() ) );
 
         List<String> wildCards = Arrays.asList( ISDKConstants.BINARY_PLUGIN_PROJECT_WILDCARDS );
 

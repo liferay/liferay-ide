@@ -65,7 +65,7 @@ public class HookPluginFacetInstall extends PluginFacetInstall
 
             IPath tempInstallPath = installPath.append( hookName + ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX );
 
-            processNewFiles( tempInstallPath, false );
+            processNewFiles( tempInstallPath );
 
             // cleanup hook files
             FileUtil.deleteDir( tempInstallPath.toFile(), true );

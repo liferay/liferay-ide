@@ -87,7 +87,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
             IPath tempInstallPath = newExtPath.append( extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX );
 
-            processNewFiles( tempInstallPath, false );
+            processNewFiles( tempInstallPath );
             // cleanup ext temp files
             FileUtil.deleteDir( tempInstallPath.toFile(), true );
 
@@ -99,7 +99,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             {
                 ProjectCorePlugin.logError( e );
             }
- 
+
             IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
 
             deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) );

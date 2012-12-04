@@ -49,7 +49,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -66,9 +65,6 @@ import org.eclipse.jst.j2ee.jsp.TagLibRefType;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.ui.internal.ide.StatusUtil;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
-import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties.FacetDataModelMap;
@@ -125,7 +121,7 @@ public class ProjectUtil
             return false;
         }
 
-        monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
+        monitor.subTask( NLS.bind( "Checking: {0}", directory.getPath() ) );
 
         File[] contents = directory.listFiles();
 
@@ -145,8 +141,7 @@ public class ProjectUtil
             }
             catch( IOException exception )
             {
-                StatusManager.getManager().handle(
-                    StatusUtil.newStatus( IStatus.ERROR, exception.getLocalizedMessage(), exception ) );
+                ProjectCorePlugin.logError( exception.getLocalizedMessage(), exception );
             }
         }
 
@@ -206,8 +201,7 @@ public class ProjectUtil
                     }
                     catch( IOException exception )
                     {
-                        StatusManager.getManager().handle(
-                            StatusUtil.newStatus( IStatus.ERROR, exception.getLocalizedMessage(), exception ) );
+                        ProjectCorePlugin.logError( exception.getLocalizedMessage(), exception );
                     }
 
                     // dont recurse directories that we have already determined

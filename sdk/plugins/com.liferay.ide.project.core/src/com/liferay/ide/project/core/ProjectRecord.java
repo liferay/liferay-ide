@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 /**
- * 
+ *
  */
 
 package com.liferay.ide.project.core;
@@ -22,12 +22,12 @@ import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 /**
  * @author Greg Amerson
@@ -54,7 +54,7 @@ public class ProjectRecord
 
     /**
      * Create a record for a project based on the info in the file.
-     * 
+     *
      * @param file
      */
     public ProjectRecord( File file )
@@ -111,7 +111,7 @@ public class ProjectRecord
 
     /**
      * Gets the label to be used when rendering this project record in the UI.
-     * 
+     *
      * @return String the label
      * @since 3.4
      */
@@ -148,7 +148,7 @@ public class ProjectRecord
 
     /**
      * Get the name of the project
-     * 
+     *
      * @return String
      */
     public String getProjectName()
@@ -171,7 +171,7 @@ public class ProjectRecord
 
     /**
      * Returns whether the given project description file path is in the default location for a project
-     * 
+     *
      * @param path
      *            The path to examine
      * @return Whether the given path is the default location for a project
@@ -208,11 +208,11 @@ public class ProjectRecord
                     {
                         projectName = path.segment( path.segmentCount() - 2 );
 
-                        description = IDEWorkbenchPlugin.getPluginWorkspace().newProjectDescription( projectName );
+                        description = ResourcesPlugin.getWorkspace().newProjectDescription( projectName );
                     }
                     else
                     {
-                        description = IDEWorkbenchPlugin.getPluginWorkspace().loadProjectDescription( path );
+                        description = ResourcesPlugin.getWorkspace().loadProjectDescription( path );
 
                         projectName = description.getName();
                     }
@@ -223,7 +223,7 @@ public class ProjectRecord
 
                     projectName = path.lastSegment();
 
-                    description = IDEWorkbenchPlugin.getPluginWorkspace().newProjectDescription( projectName );
+                    description = ResourcesPlugin.getWorkspace().newProjectDescription( projectName );
                 }
                 else if( project != null )
                 {

@@ -36,7 +36,7 @@ public class PortalCoreTests extends CoreTests
 
         final StructuresRoot todo =
             StructuresRoot.TYPE.instantiate( new RootXmlResource( new XmlResourceStore( todoFile.getContents() ) ) );
-        
+
         assertEquals( todo.getAvailableLocales().getContent(), "en_US" );
         assertEquals( todo.getDefaultLocale().getContent(), "en_US" );
     }

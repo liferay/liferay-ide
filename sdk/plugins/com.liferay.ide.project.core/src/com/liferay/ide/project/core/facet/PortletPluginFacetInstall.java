@@ -71,7 +71,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         {
             return;
         }
- 
+
         IPath portletTld = portalDir.append( "WEB-INF/tld/liferay-portlet.tld" );
 
         if( portletTld.toFile().exists() )
@@ -133,7 +133,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             IPath newPortletPath =
                 sdk.createNewPortletProject( portletName, displayName, frameworkName, appServerProperties );
 
-            processNewFiles( newPortletPath.append( portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ), false );
+            processNewFiles( newPortletPath.append( portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) );
 
             // cleanup portlet files
             FileUtil.deleteDir( newPortletPath.toFile(), true );
