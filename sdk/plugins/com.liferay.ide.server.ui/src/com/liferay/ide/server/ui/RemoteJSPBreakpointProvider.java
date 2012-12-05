@@ -66,7 +66,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 			IResource res = getResourceFromInput(input);
 			if (res != null) {
 				String path = null;
-                //TODO IDE-648 IDE-110
+                // IDE-648 IDE-110
 				// get docroot relative path
 				IVirtualFolder webappRoot = CoreUtil.getDocroot(res.getProject());
 

@@ -117,7 +117,7 @@
             modes="run, debug, profile"
             name="Liferay v6.0 CE (Tomcat 6)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
@@ -125,7 +125,7 @@
             modes="run, debug, profile"
             name="Liferay v6.1 CE (Tomcat 7)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
@@ -133,7 +133,7 @@
             modes="run, debug, profile"
             name="Liferay v6.2 CE (Tomcat 7)"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.eclipse.server.tomcat.sourcePathComputer">
+            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
    </extension>
    <extension
