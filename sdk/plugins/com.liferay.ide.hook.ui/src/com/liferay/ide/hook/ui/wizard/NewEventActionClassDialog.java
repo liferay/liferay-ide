@@ -29,6 +29,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -122,7 +123,7 @@ public class NewEventActionClassDialog extends Dialog
     {
         if( IDialogConstants.OK_ID == id )
         {
-            return super.createButton( parent, id, "Create", defaultButton );
+            return super.createButton( parent, id, Msgs.create, defaultButton );
         }
 
         return super.createButton( parent, id, label, defaultButton );
@@ -132,7 +133,7 @@ public class NewEventActionClassDialog extends Dialog
     {
         // class name
         classLabel = new Label( parent, SWT.LEFT );
-        classLabel.setText( "Classname:" );
+        classLabel.setText( Msgs.classname );
         classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
@@ -173,8 +174,8 @@ public class NewEventActionClassDialog extends Dialog
 
         superCombo = new Combo( parent, SWT.DROP_DOWN );
         superCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        superCombo.setItems( new String[] { "com.liferay.portal.kernel.events.SimpleAction",
-            "com.liferay.portal.kernel.events.SessionAction", "com.liferay.portal.kernel.events.Action" } );
+        superCombo.setItems( new String[] { "com.liferay.portal.kernel.events.SimpleAction", //$NON-NLS-1$
+            "com.liferay.portal.kernel.events.SessionAction", "com.liferay.portal.kernel.events.Action" } ); //$NON-NLS-1$ //$NON-NLS-2$
         superCombo.addSelectionListener( new SelectionAdapter()
         {
 
@@ -270,7 +271,17 @@ public class NewEventActionClassDialog extends Dialog
 
     protected void updateQualifiedClassname()
     {
-        this.qualifiedClassname = packageText.getText() + "." + classText.getText();
+        this.qualifiedClassname = packageText.getText() + "." + classText.getText(); //$NON-NLS-1$
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String classname;
+        public static String create;
+
+        static
+        {
+            initializeMessages( NewEventActionClassDialog.class.getName(), Msgs.class );
+        }
+    }
 }

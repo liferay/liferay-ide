@@ -28,11 +28,11 @@ public enum BeforeAfterFilterType
 
     @Label( standard = "Before Filter" )
     @EnumSerialization( caseSensitive = true, primary = "before-filter" )
-    BEFORE_FILTER("before-filter"),
+    BEFORE_FILTER("before-filter"), //$NON-NLS-1$
 
     @Label( standard = "After Filter" )
     @EnumSerialization( caseSensitive = true, primary = "after-filter" )
-    AFTER_FILTER("after-filter");
+    AFTER_FILTER("after-filter"); //$NON-NLS-1$
 
     private String text;
 

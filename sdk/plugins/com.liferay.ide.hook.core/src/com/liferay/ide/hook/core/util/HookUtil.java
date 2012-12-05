@@ -81,11 +81,11 @@ public class HookUtil
             String systemId = docType.getSystemId();
             if( publicId != null && systemId != null )
             {
-                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
+                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                     dtdVersion = HookVersionType.v6_0_0;
                 }
-                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
+                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                     dtdVersion = HookVersionType.v6_1_0;
                 }

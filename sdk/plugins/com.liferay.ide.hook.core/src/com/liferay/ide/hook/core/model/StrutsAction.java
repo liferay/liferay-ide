@@ -57,7 +57,7 @@ public interface StrutsAction extends IModelElement
     @Required
     // @Services( { @Service( impl = UrlPathValidationService.class ),
     @Service( impl = StrutsActionPathPossibleValuesService.class )
-    ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" );
+    ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" ); //$NON-NLS-1$
 
     Value<String> getStrutsActionPath();
 
@@ -72,7 +72,7 @@ public interface StrutsAction extends IModelElement
     @MustExist
     @Required
     @XmlBinding( path = "struts-action-impl" )
-    ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty( TYPE, "StrutsActionImpl" );
+    ValueProperty PROP_STRUTS_ACTION_IMPL = new ValueProperty( TYPE, "StrutsActionImpl" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getStrutsActionImpl();
 

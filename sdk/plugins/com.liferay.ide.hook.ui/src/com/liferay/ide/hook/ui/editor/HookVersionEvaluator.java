@@ -36,7 +36,7 @@ public class HookVersionEvaluator extends SapphireModelCondition
     @Override
     protected void initCondition( ISapphirePart part, String parameter )
     {
-        String[] nonApplicableVersions = parameter.split( "," );
+        String[] nonApplicableVersions = parameter.split( "," ); //$NON-NLS-1$
         versions = Arrays.asList( nonApplicableVersions );
     }
 

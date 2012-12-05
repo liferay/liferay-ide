@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.modeling.CapitalizationType;
@@ -44,7 +45,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
  */
 public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseActionHandler
 {
-    public static final String ID = "Hierarchy.Browse.Java.Type";
+    public static final String ID = "Hierarchy.Browse.Java.Type"; //$NON-NLS-1$
     
     private String typeName;
     private String filter;
@@ -55,8 +56,8 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
         super.init( action, def );
         setId( ID );
 
-        this.typeName = def.getParam( "type" );
-        this.filter = def.getParam( "filter" );
+        this.typeName = def.getParam( "type" ); //$NON-NLS-1$
+        this.filter = def.getParam( "filter" ); //$NON-NLS-1$
     }
 
     @Override
@@ -124,7 +125,7 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
 
             final String title = property.getLabel( true, CapitalizationType.TITLE_STYLE, false );
 
-            dlg.setTitle( "Select " + title );
+            dlg.setTitle( Msgs.select + title );
 
             if( dlg.open() == SelectionDialog.OK )
             {
@@ -145,4 +146,13 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
         return null;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String select;
+
+        static
+        {
+            initializeMessages( HierarchyJavaTypeBrowseActionHandler.class.getName(), Msgs.class );
+        }
+    }
 }

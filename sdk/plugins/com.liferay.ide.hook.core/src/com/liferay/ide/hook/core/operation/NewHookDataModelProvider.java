@@ -39,6 +39,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jem.workbench.utility.JemProjectUtilities;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -100,7 +101,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
  
                 if( defaultWebappRoot != null )
                 {
-                    return defaultWebappRoot.getFullPath().append( "custom_jsps" ).toPortableString();
+                    return defaultWebappRoot.getFullPath().append( "custom_jsps" ).toPortableString(); //$NON-NLS-1$
                 }
             }
         }
@@ -110,7 +111,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( targetProject != null )
             {
-                return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "portal.properties" ).toPortableString();
+                return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "portal.properties" ).toPortableString(); //$NON-NLS-1$
             }
         }
         else if( CONTENT_FOLDER.equals( propertyName ) )
@@ -119,7 +120,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( targetProject != null )
             {
-                return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "content" ).toPortableString();
+                return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "content" ).toPortableString(); //$NON-NLS-1$
             }
         }
         else if( propertyName.equals( PROJECT ) )
@@ -201,7 +202,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( CoreUtil.isNullOrEmpty( jspFolder ) )
             {
-                return HookCore.createErrorStatus( "Custom JSPs folder not configured." );
+                return HookCore.createErrorStatus( Msgs.customJSPsFolderNotConfigured );
             }
         }
         else if( CUSTOM_JSPS_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
@@ -218,7 +219,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                 }
             }
 
-            return HookCore.createErrorStatus( "Need to specify at least one JSP to override." );
+            return HookCore.createErrorStatus( Msgs.specifyOneJSP );
         }
         else if( PORTAL_PROPERTIES_FILE.equals( propertyName ) && getBooleanProperty( CREATE_PORTAL_PROPERTIES ) )
         {
@@ -226,7 +227,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( CoreUtil.isNullOrEmpty( portalPropertiesFile ) )
             {
-                return HookCore.createErrorStatus( "portal.properties file not configured." );
+                return HookCore.createErrorStatus( Msgs.portalPropertiesFileNotConfigured );
             }
         }
         else if( PORTAL_PROPERTIES_ACTION_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_PORTAL_PROPERTIES ) )
@@ -243,7 +244,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             }
             else
             {
-                return HookCore.createErrorStatus( "Need to specify at least one Event Action or Property to override." );
+                return HookCore.createErrorStatus( Msgs.specifyOneEventActionProperty );
             }
         }
         else if( SERVICES_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_SERVICES ) )
@@ -256,7 +257,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             }
             else
             {
-                return HookCore.createErrorStatus( "Need to specify at least one Service to override." );
+                return HookCore.createErrorStatus( Msgs.specifyOneService );
             }
         }
         else if( CONTENT_FOLDER.equals( propertyName ) && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
@@ -265,7 +266,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
             if( CoreUtil.isNullOrEmpty( contentFolder ) )
             {
-                return HookCore.createErrorStatus( "Content folder not configured." );
+                return HookCore.createErrorStatus( Msgs.contentFolderNotConfigured );
             }
         }
         else if( LANGUAGE_PROPERTIES_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
@@ -281,7 +282,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                     return Status.OK_STATUS;
                 }
             }
-            return HookCore.createErrorStatus( "Need to specify at least one language property file." );
+            return HookCore.createErrorStatus( Msgs.specifyOneLanguagePropertyFile );
         }
 
         return super.validate( propertyName );
@@ -391,6 +392,23 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             }
         }
 
-        return HookCore.createErrorStatus( "Need to specify at least one item." );
+        return HookCore.createErrorStatus( Msgs.specifyOneItem );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String contentFolderNotConfigured;
+        public static String customJSPsFolderNotConfigured;
+        public static String portalPropertiesFileNotConfigured;
+        public static String specifyOneEventActionProperty;
+        public static String specifyOneItem;
+        public static String specifyOneJSP;
+        public static String specifyOneLanguagePropertyFile;
+        public static String specifyOneService;
+
+        static
+        {
+            initializeMessages( NewHookDataModelProvider.class.getName(), Msgs.class );
+        }
     }
 }

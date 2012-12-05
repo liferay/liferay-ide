@@ -17,10 +17,10 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.properties.core.PortalPropertiesConfiguration;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalProperty;
+import com.liferay.ide.properties.core.PortalPropertiesConfiguration;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -221,7 +221,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             }
         };
 
-        hook().attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.getName() + "/*" );
+        hook().attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.getName() + "/*" ); //$NON-NLS-1$
 
         updateConfigurationForFile();
     }

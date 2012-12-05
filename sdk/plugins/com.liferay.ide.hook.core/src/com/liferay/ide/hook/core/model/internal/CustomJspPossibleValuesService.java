@@ -47,7 +47,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
         public boolean accept( File pathname )
         {
-            return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" );
+            return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" ); //$NON-NLS-1$
         }
     };
 
@@ -57,7 +57,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
     protected void fillPossibleValues( SortedSet<String> values )
     {
         final File portalDirFile = portalDir.toFile();
-        final File htmlDirFile = new File( portalDirFile, "html" );
+        final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
 
         if( htmlDirFile.exists() )
         {

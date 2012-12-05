@@ -55,7 +55,7 @@ public interface ServletFilterMapping extends IModelElement
     @Label( standard = "Servlet Filter Name" )
     @XmlBinding( path = "servlet-filter-name" )
     @PossibleValues( property = "/ServletFilters/ServletFilterName" )
-    ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" );
+    ValueProperty PROP_SERVLET_FILTER_NAME = new ValueProperty( TYPE, "ServletFilterName" ); //$NON-NLS-1$
 
     Value<String> getServletFilterName();
 
@@ -64,7 +64,7 @@ public interface ServletFilterMapping extends IModelElement
     @Type( base = BeforeAfterFilterType.class )
     @DefaultValue( text = "before-filter" )
     @CustomXmlValueBinding( impl = BeforeAfterFilterTypeBinding.class )
-    ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty( TYPE, "BeforeAfterFilterType" );
+    ValueProperty PROP_BEFORE_AFTER_FILTER_TYPE = new ValueProperty( TYPE, "BeforeAfterFilterType" ); //$NON-NLS-1$
 
     Value<BeforeAfterFilterType> getBeforeAfterFilterType();
 
@@ -77,7 +77,7 @@ public interface ServletFilterMapping extends IModelElement
     @Label( standard = "Portal Filter Name" )
     @CustomXmlValueBinding( impl = BeforeAfterFilterNameBinding.class )
     @Service( impl = PortalFilterNamesPossibleValuesService.class )
-    ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty( TYPE, "BeforeAfterFilterName" );
+    ValueProperty PROP_BEFORE_AFTER_FILTER_NAME = new ValueProperty( TYPE, "BeforeAfterFilterName" ); //$NON-NLS-1$
 
     Value<String> getBeforeAfterFilterName();
 
@@ -89,7 +89,7 @@ public interface ServletFilterMapping extends IModelElement
     @Label( standard = "url patterns" )
     @CountConstraint( min = 1 )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = URLPattern.class ) } )
-    ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" );
+    ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" ); //$NON-NLS-1$
 
     ModelElementList<URLPattern> getURLPatterns();
 
@@ -98,7 +98,7 @@ public interface ServletFilterMapping extends IModelElement
     @Type( base = Dispatcher.class )
     @Label( standard = "Dispatchers" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "dispatcher", type = Dispatcher.class ) } )
-    ListProperty PROP_DISPATCHERS = new ListProperty( TYPE, "Dispatchers" );
+    ListProperty PROP_DISPATCHERS = new ListProperty( TYPE, "Dispatchers" ); //$NON-NLS-1$
 
     ModelElementList<Dispatcher> getDispatchers();
 

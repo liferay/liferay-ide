@@ -49,7 +49,7 @@ public interface CustomJspDir extends IModelElement
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @DefaultValue( text = "/META-INF/custom_jsps" )
     @MustExist
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<Path> getValue();
 

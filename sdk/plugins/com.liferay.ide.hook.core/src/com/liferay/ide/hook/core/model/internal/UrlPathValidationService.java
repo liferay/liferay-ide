@@ -41,7 +41,7 @@ public class UrlPathValidationService extends ValidationService
         final ValueProperty valueProperty = context( ValueProperty.class );
         final Value<?> value = context( IModelElement.class ).read( valueProperty );
         final String urlPath = value.getText();
-        if( urlPath != null && !urlPath.startsWith( "/" ) )
+        if( urlPath != null && !urlPath.startsWith( "/" ) ) //$NON-NLS-1$
         {
             return Status.createErrorStatus( Resources.bind(
                 Resources.invalidUrlPath, valueProperty.getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false ) ) );

@@ -54,7 +54,7 @@ public interface PortalPropertiesFile extends IModelElement
     @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @FileExtensions( expr = "properties" )
     @MustExist
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<Path> getValue();
 

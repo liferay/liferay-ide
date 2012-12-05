@@ -62,12 +62,12 @@ public class PortalPropertyNameValidationService extends ValidationService
 
         if( isValueEmpty( value ) )
         {
-            final String msg = NLS.bind( "Non-empty value for {0} required. ", label );
+            final String msg = NLS.bind( Msgs.nonEmptyValueRequired, label );
             return Status.createErrorStatus( msg );
         }
         else if( !isValidPortalPropertyName( value ) )
         {
-            final String msg = NLS.bind( "Invalid portal property name {0}. ", label );
+            final String msg = NLS.bind( Msgs.invalidPortalPropertyName, label );
             return Status.createErrorStatus( msg );
         }
 
@@ -90,4 +90,14 @@ public class PortalPropertyNameValidationService extends ValidationService
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String invalidPortalPropertyName;
+        public static String nonEmptyValueRequired;
+
+        static
+        {
+            initializeMessages( PortalPropertyNameValidationService.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -17,6 +17,7 @@
 
 package com.liferay.ide.hook.ui.action;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.model.ServiceWrapper;
 
 import org.eclipse.core.resources.IProject;
@@ -32,6 +33,7 @@ import org.eclipse.jdt.ui.dialogs.ITypeInfoFilterExtension;
 import org.eclipse.jdt.ui.dialogs.ITypeInfoRequestor;
 import org.eclipse.jdt.ui.dialogs.TypeSelectionExtension;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -49,7 +51,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActionHandler
 {
 
-    public static final String ID = "ServiceTypeImpl.Browse.Java.Type";
+    public static final String ID = "ServiceTypeImpl.Browse.Java.Type"; //$NON-NLS-1$
 
     private int browseDialogStyle;
 
@@ -68,7 +70,7 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
 
             TypeSelectionExtension extension = null;
 
-            if( "type".equals( kind ) )
+            if( "type".equals( kind ) ) //$NON-NLS-1$
             {
                 scope = SearchEngine.createJavaSearchScope( new IJavaProject[] { JavaCore.create( project ) } );
 
@@ -81,28 +83,28 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
                         {
                             public boolean select( ITypeInfoRequestor typeInfoRequestor )
                             {
-                                return typeInfoRequestor.getPackageName().startsWith( "com.liferay" ) &&
-                                    typeInfoRequestor.getTypeName().endsWith( "Service" );
+                                return typeInfoRequestor.getPackageName().startsWith( "com.liferay" ) && //$NON-NLS-1$
+                                    typeInfoRequestor.getTypeName().endsWith( "Service" ); //$NON-NLS-1$
                             }
                         };
                     }
                 };
             }
-            else if( "impl".equals( kind ) )
+            else if( "impl".equals( kind ) ) //$NON-NLS-1$
             {
                 String serviceType = getServiceType( element, property );
 
                 if( serviceType != null )
                 {
-                    String wrapperType = serviceType + "Wrapper";
+                    String wrapperType = serviceType + "Wrapper"; //$NON-NLS-1$
 
                     scope = SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( wrapperType ) );
                 }
                 else
                 {
                     MessageDialog.openInformation(
-                        context.getShell(), "Service Impl Browse",
-                        "A valid Service Type property must be set before browsing for a Service Impl class" );
+                        context.getShell(), Msgs.serviceImplBrowse,
+                        Msgs.validServiceTypeProperty );
 
                     return null;
                 }
@@ -110,10 +112,10 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
 
             final SelectionDialog dlg =
                 JavaUI.createTypeDialog(
-                    context.getShell(), null, scope, this.browseDialogStyle, false, "**", extension );
+                    context.getShell(), null, scope, this.browseDialogStyle, false, StringUtil.DOUBLE_ASTERISK, extension );
 
             final String title = property.getLabel( true, CapitalizationType.TITLE_STYLE, false );
-            dlg.setTitle( "Select " + title );
+            dlg.setTitle( Msgs.select + title );
 
             if( dlg.open() == SelectionDialog.OK )
             {
@@ -157,16 +159,27 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
 
         setId( ID );
 
-        this.kind = def.getParam( "kind" );
+        this.kind = def.getParam( "kind" ); //$NON-NLS-1$
 
-        if( "type".equals( kind ) )
+        if( "type".equals( kind ) ) //$NON-NLS-1$
         {
             this.browseDialogStyle = IJavaElementSearchConstants.CONSIDER_INTERFACES;
         }
-        else if( "impl".equals( kind ) )
+        else if( "impl".equals( kind ) ) //$NON-NLS-1$
         {
             this.browseDialogStyle = IJavaElementSearchConstants.CONSIDER_CLASSES;
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String select;
+        public static String serviceImplBrowse;
+        public static String validServiceTypeProperty;
+
+        static
+        {
+            initializeMessages( ServiceTypeImplBrowseActionHandler.class.getName(), Msgs.class );
+        }
+    }
 }

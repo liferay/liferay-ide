@@ -22,6 +22,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -38,10 +39,10 @@ public class NewServicesHookWizardPage extends DataModelWizardPage implements IN
 
     public NewServicesHookWizardPage( IDataModel dataModel, String pageName )
     {
-        super( dataModel, pageName, "Create Service Hook", HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( dataModel, pageName, Msgs.createServiceHook, HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
 
-        setDescription( "Specify which Liferay services to extend." );
+        setDescription( Msgs.specifyLiferayServices );
     }
 
     protected void createServicesFileGroup( Composite topComposite )
@@ -51,9 +52,9 @@ public class NewServicesHookWizardPage extends DataModelWizardPage implements IN
 
         servicesSection =
             new ServicesTableWizardSection(
-                composite, "Define portal services to extend:", "Add Service Wrapper", "Add...", "Edit...",
-                "Remove...", new String[] { "Service Type", "Impl Class" }, new String[] { "Service Type:",
-                    "Impl Class:" }, null, getDataModel(), SERVICES_ITEMS );
+                composite, Msgs.definePortalServices, Msgs.addServiceWrapper, Msgs.add, Msgs.edit,
+                Msgs.remove, new String[] { Msgs.serviceTypeTitle, Msgs.implClassTitle }, new String[] { Msgs.serviceTypeLabel,
+                    Msgs.impleClassLabel }, null, getDataModel(), SERVICES_ITEMS );
 
         GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
         gd.heightHint = 150;
@@ -83,5 +84,25 @@ public class NewServicesHookWizardPage extends DataModelWizardPage implements IN
     protected String[] getValidationPropertyNames()
     {
         return new String[] { SERVICES_ITEMS };
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String addServiceWrapper;
+        public static String createServiceHook;
+        public static String definePortalServices;
+        public static String edit;
+        public static String implClassTitle;
+        public static String impleClassLabel;
+        public static String remove;
+        public static String serviceTypeLabel;
+        public static String serviceTypeTitle;
+        public static String specifyLiferayServices;
+
+        static
+        {
+            initializeMessages( NewServicesHookWizardPage.class.getName(), Msgs.class );
+        }
     }
 }

@@ -53,7 +53,7 @@ public interface IndexerPostProcessor extends IModelElement
     @Label( standard = "Indexer Class Name" )
     @XmlBinding( path = "indexer-class-name" )
     @Required
-    ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty( TYPE, "IndexerClassName" );
+    ValueProperty PROP_INDEXER_CLASS_NAME = new ValueProperty( TYPE, "IndexerClassName" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getIndexerClassName();
 
@@ -70,7 +70,7 @@ public interface IndexerPostProcessor extends IModelElement
     @MustExist
     @Required
     @XmlBinding( path = "indexer-post-processor-impl" )
-    ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty( TYPE, "IndexerClassImpl" );
+    ValueProperty PROP_INDEXER_CLASS_IMPL = new ValueProperty( TYPE, "IndexerClassImpl" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getIndexerClassImpl();
 

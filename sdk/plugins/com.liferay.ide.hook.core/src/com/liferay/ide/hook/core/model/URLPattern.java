@@ -41,7 +41,7 @@ public interface URLPattern extends IModelElement
 
     @Label( standard = "url pattern" )
     @XmlBinding( path = "" )
-    ValueProperty PROP_URL_PATTERN = new ValueProperty( TYPE, "URLPattern" );
+    ValueProperty PROP_URL_PATTERN = new ValueProperty( TYPE, "URLPattern" ); //$NON-NLS-1$
 
     Value<String> getURLPattern();
 

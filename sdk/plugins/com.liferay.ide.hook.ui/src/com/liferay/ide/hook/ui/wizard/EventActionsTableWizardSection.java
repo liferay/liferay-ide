@@ -34,6 +34,7 @@ import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -91,7 +92,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
             Composite buttonComposite = new Composite( parent, SWT.NONE );
 
-            String[] buttonLbls = buttonLabels[index].split( "," );
+            String[] buttonLbls = buttonLabels[index].split( "," ); //$NON-NLS-1$
 
             GridLayout gl = new GridLayout( buttonLbls.length, true );
             gl.marginWidth = 0;
@@ -123,11 +124,11 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             { // select event
                 handleSelectEventButton( text );
             }
-            else if( index == 1 && "Select...".equals( label ) )
+            else if( index == 1 && Msgs.select.equals( label ) )
             {
                 handleSelectClassButton( text );
             }
-            else if( index == 1 && "New...".equals( label ) )
+            else if( index == 1 && Msgs.newLabel.equals( label ) )
             {
                 handleNewClassButton( text );
             }
@@ -181,8 +182,8 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
             FilteredTypesSelectionDialog dialog =
                 new FilteredTypesSelectionDialogEx( getShell(), false, null, scope, IJavaSearchConstants.CLASS );
-            dialog.setTitle( "Event selection" );
-            dialog.setMessage( "Select an event action:" );
+            dialog.setTitle( Msgs.eventSelection );
+            dialog.setMessage( Msgs.selectEventAction );
 
             if( dialog.open() == Window.OK )
             {
@@ -235,9 +236,9 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             // }
             // }
 
-            PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell(), ".*events.*" );
-            dialog.setTitle( "Property selection" );
-            dialog.setMessage( "Please select a property:" );
+            PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell(), ".*events.*" ); //$NON-NLS-1$
+            dialog.setTitle( Msgs.propertySelection );
+            dialog.setMessage( Msgs.selectProperty );
             dialog.setInput( hookProperties );
 
             if( dialog.open() == Window.OK )
@@ -264,7 +265,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
         super( parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles, fieldLabels, labelProviderImage, model, propertyName );
 
-        this.buttonLabels = new String[] { "Select...", "Select...,New..." };
+        this.buttonLabels = new String[] { Msgs.select, Msgs.selectNew };
     }
 
     public void setProject( IProject project )
@@ -285,4 +286,19 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String eventSelection;
+        public static String newLabel;
+        public static String propertySelection;
+        public static String select;
+        public static String selectEventAction;
+        public static String selectNew;
+        public static String selectProperty;
+
+        static
+        {
+            initializeMessages( EventActionsTableWizardSection.class.getName(), Msgs.class );
+        }
+    }
 }

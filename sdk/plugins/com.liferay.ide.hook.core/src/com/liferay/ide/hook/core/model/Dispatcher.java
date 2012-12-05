@@ -45,7 +45,7 @@ public interface Dispatcher extends IModelElement
     @NoDuplicates
     @XmlBinding( path = "" )
     @PossibleValues( values = { "FORWARD", "REQUEST", "INCLUDE", "ERROR" }, caseSensitive = false )
-    ValueProperty PROP_DISPATCHER = new ValueProperty( TYPE, "Dispatcher" );
+    ValueProperty PROP_DISPATCHER = new ValueProperty( TYPE, "Dispatcher" ); //$NON-NLS-1$
 
     Value<String> getDispatcher();
 

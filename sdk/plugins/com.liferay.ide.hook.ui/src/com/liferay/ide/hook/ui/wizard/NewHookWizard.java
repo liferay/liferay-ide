@@ -26,6 +26,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -43,20 +44,20 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 public class NewHookWizard extends DataModelWizard implements INewWizard, INewHookDataModelProperties
 {
 
-    public static final String CUSTOM_JSPS_PAGE = "customJSPsPage";
+    public static final String CUSTOM_JSPS_PAGE = "customJSPsPage"; //$NON-NLS-1$
 
-    public static final String ID = "com.liferay.ide.hook.ui.wizard.hook";
+    public static final String ID = "com.liferay.ide.hook.ui.wizard.hook"; //$NON-NLS-1$
 
-    public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage";
+    public static final String LANGUAGE_PROPERTIES_PAGE = "languagePropertiesPage"; //$NON-NLS-1$
 
     public static final String[] PAGE_PROPERTIES = new String[] { CREATE_CUSTOM_JSPS, CREATE_PORTAL_PROPERTIES,
         CREATE_SERVICES, CREATE_LANGUAGE_PROPERTIES };
 
-    public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage";
+    public static final String PORTAL_PROPERTIES_PAGE = "portalPropertiesPage"; //$NON-NLS-1$
 
-    public static final String SERVICES_PAGE = "servicesPage";
+    public static final String SERVICES_PAGE = "servicesPage"; //$NON-NLS-1$
 
-    public static final String TYPE_PAGE = "typePage";
+    public static final String TYPE_PAGE = "typePage"; //$NON-NLS-1$
 
     public static final String[] WIZARD_PAGES = new String[] 
     { 
@@ -85,7 +86,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
     {
         super( dataModel );
 
-        setWindowTitle( "New Liferay Hook" );
+        setWindowTitle( Msgs.newLiferayHook );
 
         setDefaultPageImageDescriptor( getDefaultImageDescriptor() );
     }
@@ -213,7 +214,7 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
 
     protected ImageDescriptor getDefaultImageDescriptor()
     {
-        return HookUI.imageDescriptorFromPlugin( HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" );
+        return HookUI.imageDescriptorFromPlugin( HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ); //$NON-NLS-1$
     }
 
     @Override
@@ -289,4 +290,13 @@ public class NewHookWizard extends DataModelWizard implements INewWizard, INewHo
         return false;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newLiferayHook;
+
+        static
+        {
+            initializeMessages( NewHookWizard.class.getName(), Msgs.class );
+        }
+    }
 }

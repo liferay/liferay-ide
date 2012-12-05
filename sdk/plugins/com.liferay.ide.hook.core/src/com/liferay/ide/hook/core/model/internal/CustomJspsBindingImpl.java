@@ -115,7 +115,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
 
         for( IResource member : members )
         {
-            if( member instanceof IFile && "jsp".equals( member.getFileExtension() ) )
+            if( member instanceof IFile && "jsp".equals( member.getFileExtension() ) ) //$NON-NLS-1$
             {
                 jspFiles.add( (IFile) member );
             }

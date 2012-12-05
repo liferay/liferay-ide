@@ -56,7 +56,7 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
         Control control = super.createDialogArea( parent );
 
         String defaultClassname =
-            "Ext" + this.serviceType.substring( this.serviceType.lastIndexOf( '.' ) + 1, this.serviceType.length() );
+            "Ext" + this.serviceType.substring( this.serviceType.lastIndexOf( '.' ) + 1, this.serviceType.length() ); //$NON-NLS-1$
 
         classText.setText( defaultClassname );
 

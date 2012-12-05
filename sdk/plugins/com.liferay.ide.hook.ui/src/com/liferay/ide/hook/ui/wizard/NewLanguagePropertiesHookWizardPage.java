@@ -38,6 +38,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -68,10 +69,10 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
     public NewLanguagePropertiesHookWizardPage( IDataModel dataModel, String pageName )
     {
-        super( dataModel, pageName, "Create Language Properties", HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( dataModel, pageName, Msgs.createLanguageProperties, HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
 
-        setDescription( "Create new Language properties files." );
+        setDescription( Msgs.createNewLanguagePropertiesFiles );
     }
 
     protected void createContentFolderGroup( Composite topComposite )
@@ -84,12 +85,12 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
         composite.setLayout( gl );
         composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-        SWTUtil.createLabel( composite, SWT.LEAD, "Content folder:", 1 );
+        SWTUtil.createLabel( composite, SWT.LEAD, Msgs.contentFolder, 1 );
 
         contentFolder = SWTUtil.createText( composite, 1 );
         this.synchHelper.synchText( contentFolder, CONTENT_FOLDER, null );
 
-        Button iconFileBrowse = SWTUtil.createPushButton( composite, "Browse...", null );
+        Button iconFileBrowse = SWTUtil.createPushButton( composite, Msgs.browse, null );
         iconFileBrowse.addSelectionListener( new SelectionAdapter()
         {
 
@@ -108,8 +109,8 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
         languagePropertiesSection =
             new StringArrayTableWizardSection(
-                composite, "Language property files:", "Language property file", "Add...", "Edit...", "Remove...",
-                new String[] { "Add" }, new String[] { "Language property file:" }, null, getDataModel(),
+                composite, Msgs.languagePropertyFiles, Msgs.languagePropertyFileTitle, Msgs.add, Msgs.edit, Msgs.remove,
+                new String[] { Msgs.add }, new String[] { Msgs.languagePropertyFileLabel }, null, getDataModel(),
                 LANGUAGE_PROPERTIES_ITEMS );
 
         GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
@@ -152,7 +153,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
                     return Status.OK_STATUS;
                 }
 
-                return HookUI.createErrorStatus( "Choose a valid folder for language properties files." );
+                return HookUI.createErrorStatus( Msgs.chooseValidFolder );
             }
         };
     }
@@ -236,7 +237,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
                     if( folder.equals( CoreUtil.getFirstSrcFolder( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
                     {
-                        folder = folder.getFolder( "content" );
+                        folder = folder.getFolder( "content" ); //$NON-NLS-1$
                     }
 
                     text.setText( folder.getFullPath().toPortableString() );
@@ -247,6 +248,26 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
                 // Do nothing
             }
 
+        }
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String browse;
+        public static String chooseValidFolder;
+        public static String contentFolder;
+        public static String createLanguageProperties;
+        public static String createNewLanguagePropertiesFiles;
+        public static String edit;
+        public static String languagePropertyFileLabel;
+        public static String languagePropertyFiles;
+        public static String languagePropertyFileTitle;
+        public static String remove;
+
+        static
+        {
+            initializeMessages( NewLanguagePropertiesHookWizardPage.class.getName(), Msgs.class );
         }
     }
 }

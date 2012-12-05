@@ -58,7 +58,7 @@ public interface ServiceWrapper extends IModelElement
     @Label( standard = "Service Type" )
     @XmlBinding( path = "service-type" )
     @Required
-    ValueProperty PROP_SERVICE_TYPE = new ValueProperty( TYPE, "ServiceType" );
+    ValueProperty PROP_SERVICE_TYPE = new ValueProperty( TYPE, "ServiceType" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getServiceType();
 
@@ -75,7 +75,7 @@ public interface ServiceWrapper extends IModelElement
     @MustExist
     @Required
     @Service( impl = ServiceImplJavaTypeConstraintService.class )
-    ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" );
+    ValueProperty PROP_SERVICE_IMPL = new ValueProperty( TYPE, "ServiceImpl" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getServiceImpl();
 

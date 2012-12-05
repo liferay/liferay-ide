@@ -47,7 +47,7 @@ public interface CustomJsp extends IModelElement
     @NoDuplicates
     @Service( impl = CustomJspPossibleValuesService.class )
     // @Service( impl = CustomJspValidationService.class ) } )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<String> getValue();
 

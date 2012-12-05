@@ -29,7 +29,7 @@ public class NoCreateActionHandlerFilter extends SapphireActionHandlerFilter
     @Override
     public boolean check( SapphireActionHandler handler )
     {
-        return !( handler.getId().contains( "Sapphire.Create.Java" ) );
+        return !( handler.getId().contains( "Sapphire.Create.Java" ) ); //$NON-NLS-1$
     }
 
 }

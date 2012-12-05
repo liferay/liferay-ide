@@ -22,7 +22,7 @@
             default="true"
             icon="icons/e16/hook.png"
             id="com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor"
-            name="Liferay Hook Editor"
+            name="%liferay.hook.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
                contentTypeId="com.liferay.ide.hook.core.liferayhookxml">
@@ -34,20 +34,20 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="com.liferay.ide.newWizards"
-            name="Liferay">
+            name="%liferay.category.name">
       </category>
       <wizard
             category="com.liferay.ide.newWizards"
             icon="icons/n16/hook_new.png"
             id="com.liferay.ide.hook.ui.wizard.hook"
-            name="Liferay Hook">
+            name="%liferay.hook.wizard.name">
          <class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
           <parameter name="liferay_artifact" value="true"/>
             <parameter name="menuIndex" value="20" />
             <parameter name="validProjectTypes" value="portlet,hook" />
          </class>
          <description>
-            Create a new Liferay Hook
+            %liferay.wizard.description
          </description>
       </wizard>
    </extension>

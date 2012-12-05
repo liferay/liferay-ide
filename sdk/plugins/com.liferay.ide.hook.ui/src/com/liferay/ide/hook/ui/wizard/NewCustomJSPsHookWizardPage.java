@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -69,10 +70,10 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
     public NewCustomJSPsHookWizardPage( IDataModel dataModel, String pageName )
     {
-        super( dataModel, pageName, "Create Custom JSPs", HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( dataModel, pageName, Msgs.createCustomJSPs, HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
 
-        setDescription( "Create customs JSP folder and select JSPs to override." );
+        setDescription( Msgs.createCustomsJSPFolderSelectJSPs );
     }
 
     protected void createCustomJSPsGroup( Composite parent )
@@ -82,8 +83,8 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
         jspItemsSection =
             new CustomJSPsTableWizardSection(
-                composite, "JSP files to override", "JSP File Path", "Add...", "Edit...", "Remove...",
-                new String[] { "Add" }, new String[] { "JSP File Path" }, null, getDataModel(), CUSTOM_JSPS_ITEMS );
+                composite, Msgs.jspFilesOverride, Msgs.jspFilePath, Msgs.add, Msgs.edit, Msgs.remove,
+                new String[] { Msgs.add }, new String[] { Msgs.jspFilePath }, null, getDataModel(), CUSTOM_JSPS_ITEMS );
 
         GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, true, 1, 1 );
         gd.heightHint = 175;
@@ -125,7 +126,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
         composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
         disableJSPFolderValidation = new Button( composite, SWT.CHECK );
-        disableJSPFolderValidation.setText( "Disable JSP syntax validation for custom JSP folder (recommended)." );
+        disableJSPFolderValidation.setText( Msgs.disableJSPSyntaxValidation );
         this.synchHelper.synchCheckbox( disableJSPFolderValidation, DISABLE_CUSTOM_JSP_FOLDER_VALIDATION, null );
     }
 
@@ -139,12 +140,12 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
         composite.setLayout( gl );
         composite.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 3, 1 ) );
 
-        SWTUtil.createLabel( composite, SWT.LEAD, "Custom JSP folder:", 1 );
+        SWTUtil.createLabel( composite, SWT.LEAD, Msgs.customJSPFolder, 1 );
 
         customJSPsFolder = SWTUtil.createText( composite, 1 );
         this.synchHelper.synchText( customJSPsFolder, CUSTOM_JSPS_FOLDER, null );
 
-        Button iconFileBrowse = SWTUtil.createPushButton( composite, "Browse...", null );
+        Button iconFileBrowse = SWTUtil.createPushButton( composite, Msgs.browse, null );
         iconFileBrowse.addSelectionListener( new SelectionAdapter()
         {
 
@@ -191,7 +192,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
                     return Status.OK_STATUS;
                 }
 
-                return HookUI.createErrorStatus( "Choose a valid folder for custom jsps." );
+                return HookUI.createErrorStatus( Msgs.chooseValidFolder );
             }
         };
     }
@@ -257,7 +258,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
                     if( folder.equals( CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
                     {
-                        folder = folder.getFolder( "custom_jsps" );
+                        folder = folder.getFolder( "custom_jsps" ); //$NON-NLS-1$
                     }
 
                     text.setText( folder.getFullPath().toPortableString() );
@@ -270,4 +271,23 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String browse;
+        public static String chooseValidFolder;
+        public static String createCustomJSPs;
+        public static String createCustomsJSPFolderSelectJSPs;
+        public static String customJSPFolder;
+        public static String disableJSPSyntaxValidation;
+        public static String edit;
+        public static String jspFilePath;
+        public static String jspFilesOverride;
+        public static String remove;
+
+        static
+        {
+            initializeMessages( NewCustomJSPsHookWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

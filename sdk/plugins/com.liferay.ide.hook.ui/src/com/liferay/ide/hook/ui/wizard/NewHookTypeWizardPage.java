@@ -29,6 +29,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -61,27 +62,27 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
     public NewHookTypeWizardPage( IDataModel model, String pageName )
     {
-        super( model, pageName, "Create Liferay Hook", HookUI.imageDescriptorFromPlugin(
-            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) );
+        super( model, pageName, Msgs.createLiferayHook, HookUI.imageDescriptorFromPlugin(
+            HookUI.PLUGIN_ID, "/icons/wizban/hook_wiz.png" ) ); //$NON-NLS-1$
 
-        setDescription( "Define a new hook plugin." );
+        setDescription( Msgs.defineNewHookPlugin );
     }
 
     protected void createHookTypesGroup( Composite parent )
     {
-        Group group = SWTUtil.createGroup( parent, "Select hook type(s) to create", 1 );
+        Group group = SWTUtil.createGroup( parent, Msgs.selectHookTypes, 1 );
         group.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 2, 1 ) );
 
-        customJSPButton = SWTUtil.createCheckButton( group, "Custom JSPs", null, false, 1 );
+        customJSPButton = SWTUtil.createCheckButton( group, Msgs.customJSPs, null, false, 1 );
         this.synchHelper.synchCheckbox( customJSPButton, CREATE_CUSTOM_JSPS, null );
 
-        portalPropertiesButton = SWTUtil.createCheckButton( group, "Portal properties", null, false, 1 );
+        portalPropertiesButton = SWTUtil.createCheckButton( group, Msgs.portalProperties, null, false, 1 );
         this.synchHelper.synchCheckbox( portalPropertiesButton, CREATE_PORTAL_PROPERTIES, null );
 
-        servicesButton = SWTUtil.createCheckButton( group, "Services", null, false, 1 );
+        servicesButton = SWTUtil.createCheckButton( group, Msgs.services, null, false, 1 );
         this.synchHelper.synchCheckbox( servicesButton, CREATE_SERVICES, null );
 
-        languagePropertiesButton = SWTUtil.createCheckButton( group, "Language properties", null, false, 1 );
+        languagePropertiesButton = SWTUtil.createCheckButton( group, Msgs.languageProperties, null, false, 1 );
         this.synchHelper.synchCheckbox( languagePropertiesButton, CREATE_LANGUAGE_PROPERTIES, null );
     }
 
@@ -235,11 +236,26 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
 
     protected void setShellImage()
     {
-        URL url = HookUI.getDefault().getBundle().getEntry( "/icons/e16/hook.png" );
+        URL url = HookUI.getDefault().getBundle().getEntry( "/icons/e16/hook.png" ); //$NON-NLS-1$
 
         Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 
         getShell().setImage( shellImage );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String createLiferayHook;
+        public static String customJSPs;
+        public static String defineNewHookPlugin;
+        public static String languageProperties;
+        public static String portalProperties;
+        public static String selectHookTypes;
+        public static String services;
+
+        static
+        {
+            initializeMessages( NewHookTypeWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

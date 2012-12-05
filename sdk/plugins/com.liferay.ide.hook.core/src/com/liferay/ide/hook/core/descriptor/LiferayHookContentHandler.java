@@ -23,15 +23,15 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 public class LiferayHookContentHandler extends AbstractDefaultHandler
 {
 
-    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Hook";
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Hook"; //$NON-NLS-1$
 
-    public static final String PUBLIC_ID_SUFFIX = "//EN";
+    public static final String PUBLIC_ID_SUFFIX = "//EN"; //$NON-NLS-1$
 
-    public static final String LIFERAY_PORTLET_APP = "hook";
+    public static final String LIFERAY_PORTLET_APP = "hook"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-hook_";
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-hook_"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_SUFFIX = ".dtd";
+    public static final String SYSTEM_ID_SUFFIX = ".dtd"; //$NON-NLS-1$
 
     public LiferayHookContentHandler()
     {

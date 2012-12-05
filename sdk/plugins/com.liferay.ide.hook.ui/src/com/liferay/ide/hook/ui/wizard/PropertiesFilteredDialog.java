@@ -114,7 +114,7 @@ public class PropertiesFilteredDialog extends FilteredElementTreeSelectionDialog
     {
     }
 
-    protected static final String DIALOG_SETTINGS = "com.liferay.ide.hook.ui.wizard.PropertiesFilteredDialog";
+    protected static final String DIALOG_SETTINGS = "com.liferay.ide.hook.ui.wizard.PropertiesFilteredDialog"; //$NON-NLS-1$
 
     protected File portalDir;
 

@@ -19,10 +19,10 @@ package com.liferay.ide.hook.core.model.internal;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.StrutsAction;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.util.SortedSet;
@@ -55,7 +55,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
             if( this.possibleValues == null )
             {
                 this.possibleValues = new TreeSet<String>();
-                File strutsConfigFile = this.portalDir.append( "WEB-INF/struts-config.xml" ).toFile();
+                File strutsConfigFile = this.portalDir.append( "WEB-INF/struts-config.xml" ).toFile(); //$NON-NLS-1$
 
                 if( strutsConfigFile.exists() )
                 {
@@ -63,7 +63,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
                     {
                         Document doc =
                             DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( strutsConfigFile );
-                        NodeList actions = doc.getElementsByTagName( "action" );
+                        NodeList actions = doc.getElementsByTagName( "action" ); //$NON-NLS-1$
 
                         if( actions != null )
                         {
@@ -71,7 +71,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
                             {
                                 Node action = actions.item( i );
 
-                                Node path = action.getAttributes().getNamedItem( "path" );
+                                Node path = action.getAttributes().getNamedItem( "path" ); //$NON-NLS-1$
 
                                 if( path != null )
                                 {

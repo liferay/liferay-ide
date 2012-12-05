@@ -42,6 +42,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -62,40 +63,35 @@ import org.w3c.dom.NodeList;
 public class LiferayHookDescriptorValidator extends BaseValidator
 {
 
-    public static final String CUSTOM_JSP_DIR_ELEMENT = "custom-jsp-dir";
+    public static final String CUSTOM_JSP_DIR_ELEMENT = "custom-jsp-dir"; //$NON-NLS-1$
 
-    public static final String LANGUAGE_PROPERTIES_ELEMENT = "language-properties";
+    public static final String LANGUAGE_PROPERTIES_ELEMENT = "language-properties"; //$NON-NLS-1$
 
-    public static final String MARKER_TYPE = "com.liferay.ide.hook.core.liferayHookDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.hook.core.liferayHookDescriptorMarker"; //$NON-NLS-1$
 
-    public static final String MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND =
-        "The custom jsp directory {0} was not found in the web app.";
+    public static final String MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND = Msgs.customJspDirectoryNotFound;
 
-    public static final String MESSAGE_LANGUAGE_PROPERTIES_NOT_FOUND =
-        "The resource {0} was not found on the Java Build Path";
+    public static final String MESSAGE_LANGUAGE_PROPERTIES_NOT_FOUND = Msgs.resourceNotFound;
 
-    public static final String MESSAGE_PORTAL_PROPERTIES_NOT_FOUND =
-        "The resource {0} was not found on the Java Build Path";
+    public static final String MESSAGE_PORTAL_PROPERTIES_NOT_FOUND = Msgs.resourceNotFound;
 
-    public static final String MESSAGE_SERVICE_IMPL_NOT_FOUND =
-        "The service impl {0} was not found on the Java Build Path";
+    public static final String MESSAGE_SERVICE_IMPL_NOT_FOUND = Msgs.serviceImplNotFound;
 
-    private static final String MESSAGE_SERVICE_TYPE_INVALID = "Service type is invalid.";
+    private static final String MESSAGE_SERVICE_TYPE_INVALID = Msgs.serviceTypeInvalid;
 
-    private static final String MESSAGE_SERVICE_TYPE_IS_NOT_INTERFACE = "The service type {0} is not an interface.";
+    private static final String MESSAGE_SERVICE_TYPE_IS_NOT_INTERFACE = Msgs.serviceTypeNotInterface;
 
-    public static final String MESSAGE_SERVICE_TYPE_NOT_FOUND =
-        "The service type {0} was not found on the Java Build Path";
+    public static final String MESSAGE_SERVICE_TYPE_NOT_FOUND = Msgs.serviceTypeNotFound;
 
-    public static final String PORTAL_PROPERTIES_ELEMENT = "portal-properties";
+    public static final String PORTAL_PROPERTIES_ELEMENT = "portal-properties"; //$NON-NLS-1$
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
-    private static final String SERVICE_ELEMENT = "service";
+    private static final String SERVICE_ELEMENT = "service"; //$NON-NLS-1$
 
-    public static final String SERVICE_IMPL_ELEMENT = "service-impl";
+    public static final String SERVICE_IMPL_ELEMENT = "service-impl"; //$NON-NLS-1$
 
-    public static final String SERVICE_TYPE_ELEMENT = "service-type";
+    public static final String SERVICE_TYPE_ELEMENT = "service-type"; //$NON-NLS-1$
 
     public LiferayHookDescriptorValidator()
     {
@@ -204,7 +200,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                                     problems.add( problem );
                                 }
                             }
-                            else if( !serviceTypeContent.matches( "com.liferay.*Service" ) )
+                            else if( !serviceTypeContent.matches( "com.liferay.*Service" ) ) //$NON-NLS-1$
                             {
                                 problem =
                                     createMarkerValues(
@@ -243,7 +239,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                             javaProject, itemServiceImpl, preferenceNodeQualifier, preferenceScopes,
                             ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
                             ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, serviceTypeContent +
-                                "Wrapper" );
+                                "Wrapper" ); //$NON-NLS-1$
 
                 }
                 else
@@ -290,7 +286,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                 checkClassResourceElements(
                     liferayHookXmlDocument, javaProject, PREFERENCE_NODE_QUALIFIER, preferenceScopes, problems );
 
-                Map<String, String> map = getAllClasseElements( "LiferayHookClassElements.properties" );
+                Map<String, String> map = getAllClasseElements( "LiferayHookClassElements.properties" ); //$NON-NLS-1$
 
                 checkAllClassElements(
                     map, javaProject, liferayHookXml, ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
@@ -369,4 +365,18 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         return result;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String customJspDirectoryNotFound;
+        public static String resourceNotFound;
+        public static String serviceImplNotFound;
+        public static String serviceTypeInvalid;
+        public static String serviceTypeNotFound;
+        public static String serviceTypeNotInterface;
+
+        static
+        {
+            initializeMessages( LiferayHookDescriptorValidator.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -56,7 +56,7 @@ public interface Hook extends IModelElement
 
     @Type( base = HookVersionType.class )
     @Label( standard = "Version" )
-    TransientProperty PROP_VERSION = new TransientProperty( TYPE, "Version" );
+    TransientProperty PROP_VERSION = new TransientProperty( TYPE, "Version" ); //$NON-NLS-1$
 
     Transient<HookVersionType> getVersion();
 
@@ -66,7 +66,7 @@ public interface Hook extends IModelElement
 
     @Type( base = PortalPropertiesFile.class )
     @XmlBinding( path = "portal-properties" )
-    ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty( TYPE, "PortalPropertiesFile" );
+    ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty( TYPE, "PortalPropertiesFile" ); //$NON-NLS-1$
 
     ModelElementHandle<PortalPropertiesFile> getPortalPropertiesFile();
 
@@ -77,7 +77,7 @@ public interface Hook extends IModelElement
     @FixedOrderList
     @Service( impl = PortalPropertiesOverridesEnablementService.class )
     @CustomXmlListBinding( impl = PortalPropertiesBindingImpl.class )
-    ListProperty PROP_PORTAL_PROPERTIES_OVERRIDES = new ListProperty( TYPE, "PortalPropertiesOverrides" );
+    ListProperty PROP_PORTAL_PROPERTIES_OVERRIDES = new ListProperty( TYPE, "PortalPropertiesOverrides" ); //$NON-NLS-1$
 
     ModelElementList<PortalProperty> getPortalPropertiesOverrides();
 
@@ -88,7 +88,7 @@ public interface Hook extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping(
                     element = "language-properties",
                     type = LanguageProperty.class ) } )
-    ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty( TYPE, "LanguageProperties" );
+    ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty( TYPE, "LanguageProperties" ); //$NON-NLS-1$
 
     ModelElementList<LanguageProperty> getLanguageProperties();
 
@@ -97,7 +97,7 @@ public interface Hook extends IModelElement
     @FixedOrderList
     @CustomXmlListBinding( impl = CustomJspsBindingImpl.class )
     @DependsOn( value = { "CustomJspDir/Value" } )
-    ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" );
+    ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" ); //$NON-NLS-1$
 
     ModelElementList<CustomJsp> getCustomJsps();
 
@@ -106,7 +106,7 @@ public interface Hook extends IModelElement
     @Type( base = CustomJspDir.class )
     @Label( standard = "Custom JSP Dir" )
     @XmlBinding( path = "custom-jsp-dir" )
-    ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty( TYPE, "CustomJspDir" );
+    ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty( TYPE, "CustomJspDir" ); //$NON-NLS-1$
 
     ModelElementHandle<CustomJspDir> getCustomJspDir();
 
@@ -116,7 +116,7 @@ public interface Hook extends IModelElement
     @Label( standard = "Custom JSP Global" )
     @XmlBinding( path = "custom-jsp-global" )
     @DefaultValue( text = "true" )
-    ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty( TYPE, "CustomJspGlobal" );
+    ValueProperty PROP_CUSTOM_JSP_GLOBAL = new ValueProperty( TYPE, "CustomJspGlobal" ); //$NON-NLS-1$
 
     Value<Boolean> getCustomJspGlobal();
 
@@ -131,7 +131,7 @@ public interface Hook extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping(
                     element = "indexer-post-processor",
                     type = IndexerPostProcessor.class ) } )
-    ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty( TYPE, "IndexerPostProcessors" );
+    ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty( TYPE, "IndexerPostProcessors" ); //$NON-NLS-1$
 
     ModelElementList<IndexerPostProcessor> getIndexerPostProcessors();
 
@@ -140,7 +140,7 @@ public interface Hook extends IModelElement
     @Type( base = ServiceWrapper.class )
     @Label( standard = "Service Wrappers" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "service", type = ServiceWrapper.class ) } )
-    ListProperty PROP_SERVICES = new ListProperty( TYPE, "Services" );
+    ListProperty PROP_SERVICES = new ListProperty( TYPE, "Services" ); //$NON-NLS-1$
 
     ModelElementList<ServiceWrapper> getServices();
 
@@ -149,7 +149,7 @@ public interface Hook extends IModelElement
     @Type( base = ServletFilter.class )
     @Label( standard = "Servlet filters" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "servlet-filter", type = ServletFilter.class ) } )
-    ListProperty PROP_SERVLET_FILTERS = new ListProperty( TYPE, "ServletFilters" );
+    ListProperty PROP_SERVLET_FILTERS = new ListProperty( TYPE, "ServletFilters" ); //$NON-NLS-1$
 
     ModelElementList<ServletFilter> getServletFilters();
 
@@ -160,7 +160,7 @@ public interface Hook extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping(
                     element = "servlet-filter-mapping",
                     type = ServletFilterMapping.class ) } )
-    ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty( TYPE, "ServletFilterMappings" );
+    ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty( TYPE, "ServletFilterMappings" ); //$NON-NLS-1$
 
     ModelElementList<ServletFilterMapping> getServletFilterMappings();
 
@@ -169,7 +169,7 @@ public interface Hook extends IModelElement
     @Type( base = StrutsAction.class )
     @Label( standard = "Struts Actions" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "struts-action", type = StrutsAction.class ) } )
-    ListProperty PROP_STRUTS_ACTIONS = new ListProperty( TYPE, "StrutsActions" );
+    ListProperty PROP_STRUTS_ACTIONS = new ListProperty( TYPE, "StrutsActions" ); //$NON-NLS-1$
 
     ModelElementList<StrutsAction> getStrutsActions();
 

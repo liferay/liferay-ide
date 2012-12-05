@@ -18,6 +18,7 @@ package com.liferay.ide.hook.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringBufferOutputStream;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -135,7 +136,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
             {
                 validators[i] = new ValidatorMutable( vals[i] );
 
-                if( "org.eclipse.jst.jsp.core.JSPBatchValidator".equals( validators[i].getId() ) )
+                if( "org.eclipse.jst.jsp.core.JSPBatchValidator".equals( validators[i].getId() ) ) //$NON-NLS-1$
                 {
                     // check for exclude group
                     FilterGroup excludeGroup = null;
@@ -193,7 +194,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         }
         catch( Exception e )
         {
-            HookCore.logError( "Unable to add jsp syntax validation folder exclude rule.", e );
+            HookCore.logError( "Unable to add jsp syntax validation folder exclude rule.", e ); //$NON-NLS-1$
         }
     }
 
@@ -203,7 +204,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         if( webappRoot == null )
         {
-            return HookCore.createErrorStatus( "Could not find webapp root folder." );
+            return HookCore.createErrorStatus( "Could not find webapp root folder." ); //$NON-NLS-1$
         }
 
         // IDE-648 IDE-110
@@ -211,7 +212,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         {
             if( container != null && container.exists() )
             {
-                final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+                final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE ); //$NON-NLS-1$
                 IFile hookDescriptorFile = container.getFile( path );
 
                 if( !hookDescriptorFile.exists() )
@@ -357,7 +358,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
                     if( createdFile != null )
                     {
-                        createdFile.setCharset( "UTF-8", null );
+                        createdFile.setCharset( "UTF-8", null ); //$NON-NLS-1$
 
                         Set<IFile> languageFilesCreated =
                             (Set<IFile>) dm.getProperty( LANGUAGE_PROPERTIES_FILES_CREATED );
@@ -406,7 +407,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         }
         else
         {
-            return HookCore.createErrorStatus( "Could not add language-properties to hook descriptor file." );
+            return HookCore.createErrorStatus( "Could not add language-properties to hook descriptor file." ); //$NON-NLS-1$
         }
 
     }
@@ -462,7 +463,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         try
         {
-            properties.store( buffer, "" );
+            properties.store( buffer, StringUtil.EMPTY );
         }
         catch( IOException e )
         {
@@ -471,7 +472,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         try
         {
-            ByteArrayInputStream bis = new ByteArrayInputStream( buffer.toString().getBytes( "UTF-8" ) );
+            ByteArrayInputStream bis = new ByteArrayInputStream( buffer.toString().getBytes( "UTF-8" ) ); //$NON-NLS-1$
 
             if( propertiesFile.exists() )
             {

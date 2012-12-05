@@ -29,7 +29,7 @@ public class CustomTypeActionHandlerFilter extends SapphireActionHandlerFilter
     @Override
     public boolean check( SapphireActionHandler handler )
     {
-        return !( handler.getId().contains( "Sapphire.Create.Java" ) || "Sapphire.Browse.Java.Type".equals( handler.getId() ) );
+        return !( handler.getId().contains( "Sapphire.Create.Java" ) || "Sapphire.Browse.Java.Type".equals( handler.getId() ) ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

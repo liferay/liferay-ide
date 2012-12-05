@@ -23,6 +23,7 @@ import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -82,7 +83,7 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
             {
                 Composite buttonComposite = new Composite( parent, SWT.NONE );
 
-                String[] buttonLbls = buttonLabels[index].split( "," );
+                String[] buttonLbls = buttonLabels[index].split( "," ); //$NON-NLS-1$
 
                 GridLayout gl = new GridLayout( buttonLbls.length, true );
                 gl.marginWidth = 0;
@@ -136,8 +137,8 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
             }
 
             PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell() );
-            dialog.setTitle( "Property selection" );
-            dialog.setMessage( "Please select a property" );
+            dialog.setTitle( Msgs.propertySelection );
+            dialog.setMessage( Msgs.selectProperty );
             dialog.setInput( hookProperties );
 
             if( dialog.open() == Window.OK )
@@ -162,7 +163,7 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 
         super( parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles, fieldLabels, labelProviderImage, model, propertyName );
 
-        this.buttonLabels = new String[] { "Select...", null };
+        this.buttonLabels = new String[] { Msgs.select, null };
     }
 
     public void setProject( IProject project )
@@ -184,4 +185,15 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String propertySelection;
+        public static String select;
+        public static String selectProperty;
+
+        static
+        {
+            initializeMessages( PropertyOverridesTableWizardSection.class.getName(), Msgs.class );
+        }
+    }
 }

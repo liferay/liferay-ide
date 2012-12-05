@@ -121,16 +121,26 @@ public class CustomJspValidationService extends ValidationService
 
         if( isValueEmpty( value ) )
         {
-            final String msg = NLS.bind( "Non-empty value for {0} required. ", label );
+            final String msg = NLS.bind( Msgs.nonEmptyValueRequired, label );
             return Status.createErrorStatus( msg );
         }
         else if( !isValidPortalJsp( value ) && !isValidProjectJsp( value ) )
         {
-            final String msg = NLS.bind( "Invalid path {0} for custom jsp. Path does not exist in portal. ", label );
+            final String msg = NLS.bind( Msgs.customJspInvalidPath, label );
             return Status.createErrorStatus( msg );
         }
 
         return Status.createOkStatus();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String customJspInvalidPath;
+        public static String nonEmptyValueRequired;
+    
+        static
+        {
+            initializeMessages( CustomJspValidationService.class.getName(), Msgs.class );
+        }
+    }
 }

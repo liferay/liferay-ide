@@ -49,7 +49,7 @@ public interface LanguageProperty extends IModelElement
     @Service( impl = GenericResourceBundlePathService.class )
     @FileExtensions( expr = "properties" )
     @ValidFileSystemResourceType( FileSystemResourceType.FILE )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<String> getValue();
 

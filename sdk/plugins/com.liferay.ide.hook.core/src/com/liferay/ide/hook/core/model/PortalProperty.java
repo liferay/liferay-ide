@@ -45,7 +45,7 @@ public interface PortalProperty extends IModelElement
     @NoDuplicates
     @Services( { @Service( impl = PortalPropertyNamePossibleValuesService.class ),
         @Service( impl = PortalPropertyNameValidationService.class ) } )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -53,7 +53,7 @@ public interface PortalProperty extends IModelElement
 
     // *** Value ***
 
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<String> getValue();
 

@@ -77,7 +77,7 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
             }
         };
 
-        this.service.attach( listener, "ServiceType" );
+        this.service.attach( listener, "ServiceType" ); //$NON-NLS-1$
     }
 
     private Set<String> getServiceTypes()
@@ -88,7 +88,7 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
 
         if( type != null )
         {
-            types.add( type.qualified() + "Wrapper" );
+            types.add( type.qualified() + "Wrapper" ); //$NON-NLS-1$
         }
 
         return types;
