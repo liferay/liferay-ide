@@ -29,6 +29,7 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.web.operations.INewWebClassDataModelProperties;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 
 /**
@@ -58,12 +59,12 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
 
             String[] names =
             { 
-                "javax.portlet.faces.defaultViewId.view", 
-                "javax.portlet.faces.defaultViewId.edit",
-                "javax.portlet.faces.defaultViewId.help" 
+                "javax.portlet.faces.defaultViewId.view",  //$NON-NLS-1$
+                "javax.portlet.faces.defaultViewId.edit", //$NON-NLS-1$
+                "javax.portlet.faces.defaultViewId.help"  //$NON-NLS-1$
             };
 
-            String[] values = { "/portletViewMode.xhtml", "/portletEditMode.xhtml", "/portletHelpMode.xhtml" };
+            String[] values = { "/portletViewMode.xhtml", "/portletEditMode.xhtml", "/portletHelpMode.xhtml" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
             ParamValue[] paramVals = createDefaultParamValuesForModes( modes, names, values );
 
@@ -84,7 +85,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
     {
         if( CLASS_NAME.equals( propertyName ) )
         {
-            return "NewJSFPortlet";
+            return "NewJSFPortlet"; //$NON-NLS-1$
         }
         else if( JSF_PORTLET_CLASS.equals( propertyName ) )
         {
@@ -96,7 +97,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
         }
         else if( CREATE_JSPS_FOLDER.equals( propertyName ) )
         {
-            return "/xhtml/" + getProperty( PORTLET_NAME ).toString().toLowerCase();
+            return "/xhtml/" + getProperty( PORTLET_NAME ).toString().toLowerCase(); //$NON-NLS-1$
         }
         else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
         {
@@ -135,7 +136,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
             {
                 if( currentPortletName.equals( portletName ) )
                 {
-                    return JSFCorePlugin.createErrorStatus( "Duplicate portlet name exists." );
+                    return JSFCorePlugin.createErrorStatus( Msgs.duplicatePortletName );
                 }
             }
         }
@@ -143,4 +144,13 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
         return super.validate( propertyName );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String duplicatePortletName;
+
+        static
+        {
+            initializeMessages( NewJSFPortletClassDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

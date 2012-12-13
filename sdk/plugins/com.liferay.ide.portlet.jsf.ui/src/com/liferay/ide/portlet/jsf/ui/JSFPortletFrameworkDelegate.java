@@ -24,6 +24,7 @@ import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -53,55 +54,55 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
     {
         this.syncHelper = new DataModelSynchHelper( this.dataModel );
         
-        final Group group = SWTUtil.createGroup( parent, "Select JSF component suite", 2 );
+        final Group group = SWTUtil.createGroup( parent, Msgs.selectJSFComponentSuite, 2 );
         
         createComponentSuiteOption
         (
             group, 
-            "JSF standard", 
-            "Standard UI components provided by the JSF runtime. <a>Learn more...</a>", 
-            "icons/e16/jsf-logo-16x16.png", 
-            "http://javaserverfaces.java.net/",
+            Msgs.jsfStandard,
+            Msgs.jsfStandardDescription,
+            "icons/e16/jsf-logo-16x16.png",  //$NON-NLS-1$
+            "http://javaserverfaces.java.net/", //$NON-NLS-1$
             COMPONENT_SUITE_JSF_STANDARD
         );
         
         createComponentSuiteOption
         (
             group, 
-            "Liferay Faces Alloy", 
-            "Components that utilize Liferay's Alloy UI technology based on YUI3. <a>Learn more...</a>", 
-            "icons/e16/liferay_faces.png", 
-            "http://www.liferay.com/community/liferay-projects/liferay-faces/alloy",
+            Msgs.liferayFacesAlloy,
+            Msgs.liferayFacesAlloyDescription,
+            "icons/e16/liferay_faces.png",  //$NON-NLS-1$
+            "http://www.liferay.com/community/liferay-projects/liferay-faces/alloy", //$NON-NLS-1$
             COMPONENT_SUITE_LIFERAY_FACES_ALLOY
         );
         
         createComponentSuiteOption
         (
             group, 
-            "ICEfaces", 
-            "Components based in part on YUI and jQuery with automatic Ajax and Ajax Push support. <a>Learn more...</a>", 
-            "icons/e16/icefaces_16x16.png", 
-            "http://www.icesoft.org/projects/ICEfaces",
+            Msgs.iceFaces,
+            Msgs.componentsJQuery,
+            "icons/e16/icefaces_16x16.png",  //$NON-NLS-1$
+            "http://www.icesoft.org/projects/ICEfaces", //$NON-NLS-1$
             COMPONENT_SUITE_ICEFACES
         );
         
         createComponentSuiteOption
         (
             group, 
-            "PrimeFaces", 
-            "Lightweight, zero-configuration JSF UI framework built on jQuery. <a>Learn more...</a>", 
-            "icons/e16/primefaces_16x16.png", 
-            "http://www.primefaces.org/",
+            Msgs.primeFaces,
+            Msgs.primeFacesDescription,
+            "icons/e16/primefaces_16x16.png",  //$NON-NLS-1$
+            "http://www.primefaces.org/", //$NON-NLS-1$
             COMPONENT_SUITE_PRIMEFACES
         );
         
         createComponentSuiteOption
         (
             group, 
-            "RichFaces", 
-            "Next-generation JSF component framework by JBoss. <a>Learn more...</a>", 
-            "icons/e16/portlet_16x16.png", 
-            "http://www.jboss.org/richfaces",
+            Msgs.richFaces,
+            Msgs.richFacesDescription,
+            "icons/e16/portlet_16x16.png",  //$NON-NLS-1$
+            "http://www.jboss.org/richfaces", //$NON-NLS-1$
             COMPONENT_SUITE_RICHFACES
         );
         
@@ -149,4 +150,23 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String richFacesDescription;
+        public static String primeFacesDescription;
+        public static String componentsJQuery;
+        public static String liferayFacesAlloyDescription;
+        public static String jsfStandardDescription;
+        public static String iceFaces;
+        public static String jsfStandard;
+        public static String liferayFacesAlloy;
+        public static String primeFaces;
+        public static String richFaces;
+        public static String selectJSFComponentSuite;
+
+        static
+        {
+            initializeMessages( JSFPortletFrameworkDelegate.class.getName(), Msgs.class );
+        }
+    }
 }

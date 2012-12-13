@@ -37,6 +37,7 @@ import org.eclipse.jst.common.project.facet.core.libprov.ILibraryProvider;
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
 import org.eclipse.jst.jsf.core.IJSFCoreConstants;
 import org.eclipse.jst.jsf.core.internal.project.facet.IJSFFacetInstallDataModelProperties;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
@@ -51,7 +52,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkWizardProvider
     implements IJSFPortletFrameworkProperties, IJSFFacetInstallDataModelProperties
 {
-	public static final String JSF_FACET_SUPPORTED_VERSION = "2.0";
+	public static final String JSF_FACET_SUPPORTED_VERSION = "2.0"; //$NON-NLS-1$
 	
 	private static final String[] PROPERTY_NAMES = 
     {
@@ -66,11 +67,11 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 	
 	private static final Map<String, String> SUITES = new HashMap<String, String>();
     {
-        SUITES.put( COMPONENT_SUITE_JSF_STANDARD, "jsf" );
-        SUITES.put( COMPONENT_SUITE_LIFERAY_FACES_ALLOY, "liferay_faces_alloy" );
-        SUITES.put( COMPONENT_SUITE_ICEFACES, "icefaces" );
-        SUITES.put( COMPONENT_SUITE_PRIMEFACES, "primefaces" );
-        SUITES.put( COMPONENT_SUITE_RICHFACES, "richfaces" );
+        SUITES.put( COMPONENT_SUITE_JSF_STANDARD, "jsf" ); //$NON-NLS-1$
+        SUITES.put( COMPONENT_SUITE_LIFERAY_FACES_ALLOY, "liferay_faces_alloy" ); //$NON-NLS-1$
+        SUITES.put( COMPONENT_SUITE_ICEFACES, "icefaces" ); //$NON-NLS-1$
+        SUITES.put( COMPONENT_SUITE_PRIMEFACES, "primefaces" ); //$NON-NLS-1$
+        SUITES.put( COMPONENT_SUITE_RICHFACES, "richfaces" ); //$NON-NLS-1$
     }
     
     private Map<String, Object> propertyValues = new HashMap<String, Object>();
@@ -90,7 +91,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
             final String suiteShortName = SUITES.get( propertyName );
 
-            final String templatePath = "tools/portlet_" + suiteShortName + "_tmpl";
+            final String templatePath = "tools/portlet_" + suiteShortName + "_tmpl"; //$NON-NLS-1$ //$NON-NLS-2$
 
             if( sdk.getLocation().append( templatePath ).toFile().exists() )
             {
@@ -99,8 +100,8 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
             else
             {
                 retval =
-                    JSFCorePlugin.createErrorStatus( "Plugins SDK does not contain template " + templatePath +
-                        ".\nPlease see liferay.com to download a SDK that is 6.1 GA2 or greater.", null );
+                    JSFCorePlugin.createErrorStatus(
+                        NLS.bind(Msgs.pluginsSDKNotContainTemplate, templatePath ), null );
             }
         }
         catch( Exception e )
@@ -127,7 +128,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
         //TODO IDE-648 IDE-110
         jsfFacetDataModel.setProperty( SERVLET_URL_PATTERNS, null );
-        jsfFacetDataModel.setProperty( WEBCONTENT_DIR, "docroot" );
+        jsfFacetDataModel.setProperty( WEBCONTENT_DIR, "docroot" ); //$NON-NLS-1$
 
         LibraryInstallDelegate libraryInstallDelegate =
             (LibraryInstallDelegate) jsfFacetDataModel.getProperty( LIBRARY_PROVIDER_DELEGATE );
@@ -138,7 +139,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
         for( ILibraryProvider provider : providers )
         {
-            if( provider.getId().equals( "jsf-no-op-library-provider" ) )
+            if( provider.getId().equals( "jsf-no-op-library-provider" ) ) //$NON-NLS-1$
             {
                 noOpProvider = provider;
                 break;
@@ -213,8 +214,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
     @Override
     public IStatus getUnsupportedSDKErrorMsg()
     {
-        return JSFCorePlugin.createErrorStatus( "JSF framework requires SDK version " + requiredSDKVersion +
-            ". Download a compatible SDK at www.portletfaces.org/projects/portletfaces-bridge/liferay-ide" );
+        return JSFCorePlugin.createErrorStatus( NLS.bind( Msgs.jsfFrameworkRequiresSDKVersion, requiredSDKVersion ) );
     }
 
     @Override
@@ -235,23 +235,23 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
         if( sdk == null )
         {
-            return JSFCorePlugin.createErrorStatus( "Could not get SDK from newly created project." );
+            return JSFCorePlugin.createErrorStatus( "Could not get SDK from newly created project." ); //$NON-NLS-1$
         }
 
         try
         {
             //TODO IDE-648
             File originalWebXmlFile =
-                sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile();
+                sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
 
             IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( facetedProject.getProject() );
 
-            defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents(
+            defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents( //$NON-NLS-1$
                 new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
         }
         catch( Exception e )
         {
-            return JSFCorePlugin.createErrorStatus( "Could not copy original web.xml from JSF template in SDK.", e );
+            return JSFCorePlugin.createErrorStatus( "Could not copy original web.xml from JSF template in SDK.", e ); //$NON-NLS-1$
         }
 
         return Status.OK_STATUS;
@@ -296,4 +296,14 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
         return retval;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String jsfFrameworkRequiresSDKVersion;
+        public static String pluginsSDKNotContainTemplate;
+
+        static
+        {
+            initializeMessages( JSFPortletFrameworkWizardProvider.class.getName(), Msgs.class );
+        }
+    }
 }

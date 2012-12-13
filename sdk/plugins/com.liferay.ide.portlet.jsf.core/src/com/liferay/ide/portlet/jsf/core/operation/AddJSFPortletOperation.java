@@ -57,10 +57,10 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
 
         IFolder sourceFolder = ResourcesPlugin.getWorkspace().getRoot().getFolder( new Path( sourceFolderValue ) );
 
-        IFile i18nPropertiesFile = sourceFolder.getFile( "i18n.properties" );
+        IFile i18nPropertiesFile = sourceFolder.getFile( "i18n.properties" ); //$NON-NLS-1$
 
         String outputToAppend =
-            getDataModel().getStringProperty( PORTLET_NAME ) + "-hello-world=Hello " +
+            getDataModel().getStringProperty( PORTLET_NAME ) + "-hello-world=Hello " + //$NON-NLS-1$
                 getDataModel().getStringProperty( DISPLAY_NAME );
 
         try
@@ -69,19 +69,19 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
             {
                 String propsContents = FileUtil.readContents( i18nPropertiesFile.getContents() );
 
-                String newContents = propsContents + "\n" + outputToAppend;
+                String newContents = propsContents + "\n" + outputToAppend; //$NON-NLS-1$
 
                 i18nPropertiesFile.setContents(
-                    new ByteArrayInputStream( newContents.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+                    new ByteArrayInputStream( newContents.getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
             }
             else
             {
-                i18nPropertiesFile.create( new ByteArrayInputStream( outputToAppend.getBytes( "UTF-8" ) ), true, null );
+                i18nPropertiesFile.create( new ByteArrayInputStream( outputToAppend.getBytes( "UTF-8" ) ), true, null ); //$NON-NLS-1$
             }
         }
         catch( Exception e )
         {
-            JSFCorePlugin.logError( "Could not append to i18n.properties file.", e );
+            JSFCorePlugin.logError( "Could not append to i18n.properties file.", e ); //$NON-NLS-1$
         }
 
         return null;
@@ -93,21 +93,21 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
         IDataModel dm = getDataModel();
 
         TemplateContext context = new DocumentTemplateContext( portletContextType, new Document(), 0, 0 );
-        context.setVariable( "portlet_name", getDataModel().getStringProperty( PORTLET_NAME ) );
+        context.setVariable( "portlet_name", getDataModel().getStringProperty( PORTLET_NAME ) ); //$NON-NLS-1$
 
         if( dm.getBooleanProperty( VIEW_MODE ) )
         {
-            createResourceForMode( "javax.portlet.faces.defaultViewId.view", JSF_VIEW_MODE_TEMPLATE, context );
+            createResourceForMode( "javax.portlet.faces.defaultViewId.view", JSF_VIEW_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( EDIT_MODE ) )
         {
-            createResourceForMode( "javax.portlet.faces.defaultViewId.edit", JSF_EDIT_MODE_TEMPLATE, context );
+            createResourceForMode( "javax.portlet.faces.defaultViewId.edit", JSF_EDIT_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( HELP_MODE ) )
         {
-            createResourceForMode( "javax.portlet.faces.defaultViewId.help", JSF_HELP_MODE_TEMPLATE, context );
+            createResourceForMode( "javax.portlet.faces.defaultViewId.help", JSF_HELP_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         return Status.OK_STATUS;

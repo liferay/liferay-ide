@@ -29,7 +29,7 @@ public class JSFPortletTemplateContextTypeIds
 
     public static final String NEW = getNew();
 
-    public static final String NEW_TAG = "tag_new";
+    public static final String NEW_TAG = "tag_new"; //$NON-NLS-1$
 
     public static final String TAG = getTag();
 

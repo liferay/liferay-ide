@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.jsf.ui.wizard;
 
 import com.liferay.ide.portlet.ui.wizard.NewPortletOptionsWizardPage;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -40,8 +41,8 @@ public class NewJSFPortletOptionsWizardPage extends NewPortletOptionsWizardPage
     {
         super.createJSPsField( parent );
 
-        createJspsButton.setText( "Create xhtml files" );
-        jspLabel.setText( "XHTML folder:" );
+        createJspsButton.setText( Msgs.createXhtmlFiles );
+        jspLabel.setText( Msgs.xhtmlFolder );
     }
 
     @Override
@@ -76,4 +77,14 @@ public class NewJSFPortletOptionsWizardPage extends NewPortletOptionsWizardPage
         return top;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String createXhtmlFiles;
+        public static String xhtmlFolder;
+
+        static
+        {
+            initializeMessages( NewJSFPortletOptionsWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

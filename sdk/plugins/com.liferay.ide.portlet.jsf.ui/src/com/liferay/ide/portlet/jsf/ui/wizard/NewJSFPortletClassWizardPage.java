@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.jsf.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.jsf.core.JSFPortletUtil;
 import com.liferay.ide.portlet.jsf.core.operation.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.portlet.ui.wizard.NewPortletClassWizardPage;
@@ -27,6 +28,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -66,7 +68,7 @@ public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
     {
         // portlet class
         jsfPortletClassLabel = new Label( parent, SWT.LEFT );
-        jsfPortletClassLabel.setText( "Portlet class:" );
+        jsfPortletClassLabel.setText( Msgs.portletClass );
         jsfPortletClassLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         jsfPortletClassText = new Text( parent, SWT.BORDER );
@@ -75,7 +77,7 @@ public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( parent, "", 1 );
+            SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
         }
         else
         {
@@ -132,7 +134,7 @@ public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
     protected void handlePortletClassButtonSelected( Control control )
     {
         handleClassButtonSelected(
-            control, "javax.portlet.GenericPortlet", "Portlet Class Selection", "Choose a portlet class:" );
+            control, "javax.portlet.GenericPortlet", Msgs.portletClassSelection, Msgs.choosePortletClass ); //$NON-NLS-1$
     }
 
     @Override
@@ -154,4 +156,15 @@ public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
         // dont set focus nothing really needs to be done on this page
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String choosePortletClass;
+        public static String portletClass;
+        public static String portletClassSelection;
+
+        static
+        {
+            initializeMessages( NewJSFPortletClassWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

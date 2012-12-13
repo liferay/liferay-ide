@@ -24,18 +24,18 @@ public interface INewJSFPortletClassDataModelProperties extends INewPortletClass
 {
     String[] ALL_JSF_PORTLET_MODES = 
     { 
-        "INewPortletClassDataModelProperties.VIEW_MODE",
-        "INewPortletClassDataModelProperties.EDIT_MODE", 
-        "INewPortletClassDataModelProperties.HELP_MODE", 
+        "INewPortletClassDataModelProperties.VIEW_MODE", //$NON-NLS-1$
+        "INewPortletClassDataModelProperties.EDIT_MODE",  //$NON-NLS-1$
+        "INewPortletClassDataModelProperties.HELP_MODE",  //$NON-NLS-1$
     };
 
-    String JSF_EDIT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.edit";
+    String JSF_EDIT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.edit"; //$NON-NLS-1$
 
-    String JSF_HELP_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.help";
+    String JSF_HELP_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.help"; //$NON-NLS-1$
 
-    String JSF_PORTLET_CLASS = "INewJSFPortletClassDataModelProperties.JSF_PORTLET_CLASS";
+    String JSF_PORTLET_CLASS = "INewJSFPortletClassDataModelProperties.JSF_PORTLET_CLASS"; //$NON-NLS-1$
 
-    String JSF_VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.view";
+    String JSF_VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.view"; //$NON-NLS-1$
 
-    String QUALIFIED_JSF_PORTLET = "org.portletfaces.bridge.GenericFacesPortlet";
+    String QUALIFIED_JSF_PORTLET = "org.portletfaces.bridge.GenericFacesPortlet"; //$NON-NLS-1$
 }

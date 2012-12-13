@@ -24,9 +24,9 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
  */
 public interface IJSFPortletFrameworkProperties extends IPluginProjectDataModelProperties
 {
-    String COMPONENT_SUITE_JSF_STANDARD = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_JSF_STANDARD";
-    String COMPONENT_SUITE_LIFERAY_FACES_ALLOY = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_LIFERAY_FACES_ALLOY";
-    String COMPONENT_SUITE_ICEFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_ICEFACES";
-    String COMPONENT_SUITE_PRIMEFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_PRIMEFACES";
-    String COMPONENT_SUITE_RICHFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_RICHFACES";
+    String COMPONENT_SUITE_JSF_STANDARD = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_JSF_STANDARD"; //$NON-NLS-1$
+    String COMPONENT_SUITE_LIFERAY_FACES_ALLOY = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_LIFERAY_FACES_ALLOY"; //$NON-NLS-1$
+    String COMPONENT_SUITE_ICEFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_ICEFACES"; //$NON-NLS-1$
+    String COMPONENT_SUITE_PRIMEFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_PRIMEFACES"; //$NON-NLS-1$
+    String COMPONENT_SUITE_RICHFACES = "IJSFPortletFrameworkProperties.COMPONENT_SUITE_RICHFACES"; //$NON-NLS-1$
 }

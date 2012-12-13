@@ -87,7 +87,7 @@ public class JSFUIPlugin extends AbstractUIPlugin
             fTemplateStore =
                 new ContributionTemplateStore(
                     getTemplateContextRegistry(), getPreferenceStore(),
-                    "com.liferay.ide.portlet.jsf.ui.custom_templates" );
+                    "com.liferay.ide.portlet.jsf.ui.custom_templates" ); //$NON-NLS-1$
 
             try
             {

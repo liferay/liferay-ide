@@ -6,8 +6,8 @@
       <portletFrameworkWizardProvider
             class="com.liferay.ide.portlet.jsf.core.JSFPortletFrameworkWizardProvider"
             default="false"
-            description="Enables development of JSF 2.x applications using Liferay Faces Bridge that run seamlessly inside of Liferay Portal."
-            displayName="JSF 2.x"
+            description="%jsf.portlet.framework.description"
+            displayName="%jsf.portlet.framework.display.name"
             helpUrl="http://www.portletfaces.org/projects/portletfaces-bridge"
             id="com.liferay.ide.project.core.template.jsf"
             requiredSDKVersion="6.1.0"
