@@ -17,6 +17,7 @@ package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
@@ -46,6 +47,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IRuntime;
 
@@ -113,7 +115,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
     protected void processResourceChanged( final IResourceDelta delta ) throws CoreException
     {
-        new WorkspaceJob( "Compiling theme" )
+        new WorkspaceJob( Msgs.compilingTheme )
         {
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -125,7 +127,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                 if( sdk == null )
                 {
                     throw new CoreException(
-                        ThemeCore.createErrorStatus( "No SDK for project configured. Could not deploy theme module" ) );
+                        ThemeCore.createErrorStatus( "No SDK for project configured. Could not deploy theme module" ) ); //$NON-NLS-1$
                 }
 
                 Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
@@ -148,7 +150,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                     {
                         if( container != null && container.exists() )
                         {
-                            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
+                            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ); //$NON-NLS-1$
                             IFile file = container.getFile( path );
 
                             if( file.exists() )
@@ -162,13 +164,13 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                 if( lookAndFeelFile == null )
                 {
-                    String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "" );
+                    String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringUtil.EMPTY );
 
                     for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
                         if( container != null && container.exists() )
                         {
-                            IFile propsFile = container.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+                            IFile propsFile = container.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
                             String name = id;
 
                             if( propsFile.exists() )
@@ -178,7 +180,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                                 try
                                 {
                                     props.load( propsFile.getContents() );
-                                    String nameValue = props.getProperty( "name" );
+                                    String nameValue = props.getProperty( "name" ); //$NON-NLS-1$
 
                                     if( !CoreUtil.isNullOrEmpty( nameValue ) )
                                     {
@@ -187,7 +189,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                                 }
                                 catch( IOException e )
                                 {
-                                    ThemeCore.logError( "Unable to load plugin package properties.", e );
+                                    ThemeCore.logError( "Unable to load plugin package properties.", e ); //$NON-NLS-1$
                                 }
                             }
 
@@ -254,7 +256,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
         {
             if( container != null && container.exists() )
             {
-                IPath diffPath = container.getFolder( new Path( "_diffs" ) ).getFullPath();
+                IPath diffPath = container.getFolder( new Path( "_diffs" ) ).getFullPath(); //$NON-NLS-1$
 
                 return diffPath.isPrefixOf( fullPath );
             }
@@ -263,4 +265,13 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
         return false;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String compilingTheme;
+
+        static
+        {
+            initializeMessages( ThemeDiffResourceListener.class.getName(), Msgs.class );
+        }
+    }
 }

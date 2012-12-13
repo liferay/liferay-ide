@@ -61,7 +61,7 @@ public class BuildHelper
 
     private static final File defaultTempDir = ThemeCore.getDefault().getStateLocation().toFile();
 
-    private static final String TEMPFILE_PREFIX = "tmp";
+    private static final String TEMPFILE_PREFIX = "tmp"; //$NON-NLS-1$
 
     private File tempDir;
 
@@ -101,7 +101,7 @@ public class BuildHelper
         try
         {
             File file = to.toFile();
-            tempFile = File.createTempFile( TEMPFILE_PREFIX, "." + to.getFileExtension(), tempDir );
+            tempFile = File.createTempFile( TEMPFILE_PREFIX, "." + to.getFileExtension(), tempDir ); //$NON-NLS-1$
 
             out = new FileOutputStream( tempFile );
 
@@ -209,7 +209,7 @@ public class BuildHelper
         }
         catch( Exception e )
         {
-            ThemeCore.logError( "Error deleting directory " + dir.getAbsolutePath(), e );
+            ThemeCore.logError( "Error deleting directory " + dir.getAbsolutePath(), e ); //$NON-NLS-1$
             status.add( new Status( IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, e.getLocalizedMessage(), null ) );
         }
 
@@ -627,7 +627,7 @@ public class BuildHelper
 
         for (int i = 0; i < diffsPath.segmentCount(); i++)
         {
-            if ("_diffs".equals(diffsPath.segment( i )))
+            if ("_diffs".equals(diffsPath.segment( i ))) //$NON-NLS-1$
             {
                 diffsRelativePath = diffsPath.removeFirstSegments( i + 1 );
                 break;
@@ -665,7 +665,7 @@ public class BuildHelper
                     catch( IOException e )
                     {
                         throw new CoreException( new Status( IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(
-                            "Error restoring theme file.", path2 ), null ) );
+                            "Error restoring theme file.", path2 ), null ) ); //$NON-NLS-1$
                     }
                 }
             }
@@ -921,7 +921,7 @@ public class BuildHelper
         }
         catch( Exception e )
         {
-            ThemeCore.logError( "Error copying file", e );
+            ThemeCore.logError( "Error copying file", e ); //$NON-NLS-1$
             return new Status( IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(
                 Messages.errorCopyingFile, new String[] { to, e.getLocalizedMessage() } ), e );
         }

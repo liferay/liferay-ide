@@ -84,7 +84,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             FileUtil.deleteDir( newThemePath.toFile(), true );
 
             // delete WEB-INF/lib and META-INF
-            CoreUtil.deleteResource( project.findMember( "docroot/META-INF" ) );
+            CoreUtil.deleteResource( project.findMember( "docroot/META-INF" ) ); //$NON-NLS-1$
         }
         else if( shouldSetupDefaultOutputLocation() )
         {
@@ -93,7 +93,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
 
         removeUnneededClasspathEntries();
 
-        IResource libRes = CoreUtil.getDefaultDocrootFolder( project ).findMember( "WEB-INF/lib" );
+        IResource libRes = CoreUtil.getDefaultDocrootFolder( project ).findMember( "WEB-INF/lib" ); //$NON-NLS-1$
 
         if( libRes != null && libRes.exists() )
         {
@@ -174,9 +174,9 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
                 else if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
                 {
                     String path = entry.getPath().toPortableString();
-                    if( path.contains( "org.eclipse.jdt.launching.JRE_CONTAINER" ) ||
-                        path.contains( "org.eclipse.jst.j2ee.internal.web.container" ) ||
-                        path.contains( "org.eclipse.jst.j2ee.internal.module.container" ) )
+                    if( path.contains( "org.eclipse.jdt.launching.JRE_CONTAINER" ) || //$NON-NLS-1$
+                        path.contains( "org.eclipse.jst.j2ee.internal.web.container" ) || //$NON-NLS-1$
+                        path.contains( "org.eclipse.jst.j2ee.internal.module.container" ) ) //$NON-NLS-1$
                     {
                         continue;
                     }

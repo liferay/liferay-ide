@@ -38,7 +38,7 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper
 {
 
     public static final String DEFUALT_FILE_TEMPLATE =
-        "<?xml version=\"1.0\"?>\n<!DOCTYPE look-and-feel PUBLIC \"-//Liferay//DTD Look and Feel {0}//EN\" \"http://www.liferay.com/dtd/liferay-look-and-feel_{1}.dtd\">\n\n<look-and-feel>\n\t<compatibility>\n\t\t<version>__VERSION__</version>\n\t</compatibility>\n\t<theme id=\"__ID__\" name=\"__NAME__\" />\n</look-and-feel>";
+        "<?xml version=\"1.0\"?>\n<!DOCTYPE look-and-feel PUBLIC \"-//Liferay//DTD Look and Feel {0}//EN\" \"http://www.liferay.com/dtd/liferay-look-and-feel_{1}.dtd\">\n\n<look-and-feel>\n\t<compatibility>\n\t\t<version>__VERSION__</version>\n\t</compatibility>\n\t<theme id=\"__ID__\" name=\"__NAME__\" />\n</look-and-feel>"; //$NON-NLS-1$
 
     public ThemeDescriptorHelper( IProject project )
     {
@@ -54,7 +54,7 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper
 
         try
         {
-            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE );
+            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ); //$NON-NLS-1$
             final IFile lookAndFeelFile = container.getFile( path );
             final String descriptorVersion = getDescriptorVersionFromPortalVersion( version );
 
@@ -63,14 +63,14 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper
             String contents =
                 MessageFormat.format( DEFUALT_FILE_TEMPLATE, descriptorVersion, descriptorVersion.replace( '.', '_' ) );
             contents =
-                contents.replaceAll( "__VERSION__", version + "+" ).replaceAll( "__ID__", id ).replaceAll(
-                    "__NAME__", name );
+                contents.replaceAll( "__VERSION__", version + "+" ).replaceAll( "__ID__", id ).replaceAll( //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                    "__NAME__", name ); //$NON-NLS-1$
 
             lookAndFeelFile.create( new ByteArrayInputStream( contents.getBytes() ), true, null );
         }
         catch( CoreException e )
         {
-            ThemeCore.logError( "Error creating default descriptor file", e );
+            ThemeCore.logError( "Error creating default descriptor file", e ); //$NON-NLS-1$
         }
     }
 

@@ -30,7 +30,7 @@ public class ThemeCore extends AbstractUIPlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.theme.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.theme.core"; //$NON-NLS-1$
 
     // The shared instance
     private static ThemeCore plugin;

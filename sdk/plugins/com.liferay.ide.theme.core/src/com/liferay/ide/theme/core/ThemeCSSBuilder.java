@@ -18,6 +18,7 @@ package com.liferay.ide.theme.core;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.util.SDKUtil;
@@ -56,9 +57,8 @@ import org.w3c.dom.NodeList;
 public class ThemeCSSBuilder extends IncrementalProjectBuilder
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.theme.core.cssBuilder";
-    public static final String NAME = "Theme CSS Builder";
-    public static final String[] THEME_PARENTS = { "classic", "_styled", "_unstyled" };
+    public static final String ID = "com.liferay.ide.eclipse.theme.core.cssBuilder"; //$NON-NLS-1$
+    public static final String[] THEME_PARENTS = { "classic", "_styled", "_unstyled" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     public static IStatus cssBuild( IProject project ) throws CoreException
     {
@@ -67,7 +67,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         if( sdk == null )
         {
             throw new CoreException(
-                ThemeCore.createErrorStatus( "No SDK for project configured. Could not build theme." ) );
+                ThemeCore.createErrorStatus( "No SDK for project configured. Could not build theme." ) ); //$NON-NLS-1$
         }
 
         final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
@@ -75,7 +75,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         if( liferayRuntime == null )
         {
             throw new CoreException(
-                ThemeCore.createErrorStatus( "Could not get portal runtime for project.  Could not build theme." ) );
+                ThemeCore.createErrorStatus( "Could not get portal runtime for project.  Could not build theme." ) ); //$NON-NLS-1$
         }
 
         final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
@@ -95,7 +95,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         if( webappRoot != null )
         {
             final IVirtualFile file =
-                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) );
+                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ); //$NON-NLS-1$
 
             if( file != null && file.exists() )
             {
@@ -105,9 +105,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         if( lookAndFeelFile == null )
         {
-            String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, "" );
+            String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringUtil.EMPTY );
 
-            IVirtualFile propertiesFile = webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+            IVirtualFile propertiesFile = webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
             String name = id;
 
             if( propertiesFile != null && propertiesFile.exists() )
@@ -118,7 +118,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 {
                     final IFile underlyingFile = propertiesFile.getUnderlyingFile();
                     props.load( underlyingFile.getContents() );
-                    String nameValue = props.getProperty( "name" );
+                    String nameValue = props.getProperty( "name" ); //$NON-NLS-1$
 
                     if( !CoreUtil.isNullOrEmpty( nameValue ) )
                     {
@@ -143,7 +143,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 }
                 catch( IOException e )
                 {
-                    ThemeCore.logError( "Unable to load plugin package properties.", e );
+                    ThemeCore.logError( "Unable to load plugin package properties.", e ); //$NON-NLS-1$
                 }
             }
         }
@@ -180,7 +180,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         try
         {
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
-            themesPath = liferayRuntime.getPortalDir().append( "html/themes" );
+            themesPath = liferayRuntime.getPortalDir().append( "html/themes" ); //$NON-NLS-1$
         }
         catch( CoreException e1 )
         {
@@ -204,7 +204,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
             }
         }
 
-        new Job( "publish theme delta" )
+        new Job( "publish theme delta" ) //$NON-NLS-1$
         {
             @Override
             protected IStatus run( IProgressMonitor monitor )
@@ -261,7 +261,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         }
         catch( Exception e )
         {
-            ThemeCore.logError( "Full build failed for Theme CSS Builder", e );
+            ThemeCore.logError( "Full build failed for Theme CSS Builder", e ); //$NON-NLS-1$
         }
     }
 
@@ -276,18 +276,18 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         try
         {
-            Document buildXmlDoc = FileUtil.readXML( project.getFile( "build.xml" ).getContents(), null, null );
+            Document buildXmlDoc = FileUtil.readXML( project.getFile( "build.xml" ).getContents(), null, null ); //$NON-NLS-1$
 
-            NodeList properties = buildXmlDoc.getElementsByTagName( "property" );
+            NodeList properties = buildXmlDoc.getElementsByTagName( "property" ); //$NON-NLS-1$
 
             for( int i = 0; i < properties.getLength(); i++ )
             {
                 final Node item = properties.item( i );
-                Node name = item.getAttributes().getNamedItem( "name" );
+                Node name = item.getAttributes().getNamedItem( "name" ); //$NON-NLS-1$
 
-                if( name != null && "theme.parent".equals( name.getNodeValue() ) )
+                if( name != null && "theme.parent".equals( name.getNodeValue() ) ) //$NON-NLS-1$
                 {
-                    Node value = item.getAttributes().getNamedItem( "value" );
+                    Node value = item.getAttributes().getNamedItem( "value" ); //$NON-NLS-1$
 
                     retval = value.getNodeValue();
                     break;
@@ -301,7 +301,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         if( retval == null )
         {
-            retval = "_styled";
+            retval = "_styled"; //$NON-NLS-1$
         }
 
         return retval;
@@ -330,14 +330,14 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                         for( String segment : fullResourcePath.segments() )
                         {
-                            if( "_diffs".equals( segment ) )
+                            if( "_diffs".equals( segment ) ) //$NON-NLS-1$
                             {
                                 // IDE-110 IDE-648
                                 IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
 
                                 if( webappRoot != null )
                                 {
-                                    IVirtualFolder diffs = webappRoot.getFolder( new Path("_diffs") );
+                                    IVirtualFolder diffs = webappRoot.getFolder( new Path("_diffs") ); //$NON-NLS-1$
 
                                     if( diffs != null && diffs.exists() &&
                                         diffs.getUnderlyingFolder().getFullPath().isPrefixOf( fullResourcePath ) )
@@ -363,7 +363,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
     protected boolean shouldFullBuild( Map args ) throws CoreException
     {
-        if( args != null && args.get( "force" ) != null && args.get( "force" ).equals( "true" ) )
+        if( args != null && args.get( "force" ) != null && args.get( "force" ).equals( "true" ) )   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         {
             return true;
         }
@@ -374,7 +374,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         if( webappRoot != null )
         {
-            IVirtualFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) );
+            IVirtualFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
 
             if( diffs != null && diffs.exists() )
             {

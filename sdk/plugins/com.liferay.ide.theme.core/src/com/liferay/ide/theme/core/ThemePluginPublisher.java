@@ -69,7 +69,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
             }
             catch( Exception e )
             {
-                ThemeCore.logError( "Unable to pre-publish module.", e );
+                ThemeCore.logError( "Unable to pre-publish module.", e ); //$NON-NLS-1$
             }
         }
 
@@ -90,8 +90,8 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
             {
                 if( container != null && container.exists() )
                 {
-                    if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
-                        !( container.exists( new Path( "css" ) ) ) )
+                    if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) || //$NON-NLS-1$
+                        !( container.exists( new Path( "css" ) ) ) ) //$NON-NLS-1$
                     {
                         ThemeCSSBuilder.cssBuild( project );
                         ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
@@ -101,7 +101,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
         }
         else
         {
-            ThemeCore.logError( "Could not add theme module: webappRoot not found" );
+            ThemeCore.logError( "Could not add theme module: webappRoot not found" ); //$NON-NLS-1$
         }
     }
 }
