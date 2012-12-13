@@ -27,6 +27,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
@@ -38,7 +39,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 public class NewVaadinPortletWizard extends NewPortletWizard
 {
 
-    public static final String ID = "com.liferay.ide.portlet.vaadin.ui.wizard.portlet";
+    public static final String ID = "com.liferay.ide.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
 
     public NewVaadinPortletWizard()
     {
@@ -53,26 +54,26 @@ public class NewVaadinPortletWizard extends NewPortletWizard
     @Override
     public String getTitle()
     {
-        return "New Liferay Vaadin Portlet";
+        return Msgs.newLiferayVaadinPortlet;
     }
 
     @Override
     protected void doAddPages()
     {
         addPage( new NewVaadinApplicationClassWizardPage(
-            getDataModel(), "pageOne", "Create a Vaadin portlet application class.", getDefaultPageTitle(), fragment ) );
+            getDataModel(), "pageOne", Msgs.createVaadinPortletApplicationClass, getDefaultPageTitle(), fragment ) ); //$NON-NLS-1$
         addPage( new NewVaadinPortletOptionsWizardPage(
-            getDataModel(), "pageTwo", "Specify Vaadin portlet deployment descriptor details.", getDefaultPageTitle(),
+            getDataModel(), "pageTwo", Msgs.specifyVaadinPortletDeployment, getDefaultPageTitle(), //$NON-NLS-1$
             fragment ) );
         addPage( new NewLiferayPortletWizardPage(
-            getDataModel(), "pageThree", "Specify Liferay portlet deployment descriptor details.",
+            getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, //$NON-NLS-1$
             getDefaultPageTitle(), fragment ) );
     }
 
     @Override
     protected String getDefaultPageTitle()
     {
-        return "Create Liferay Vaadin Portlet";
+        return Msgs.createLiferayVaadinPortlet;
     }
 
     @Override
@@ -91,7 +92,7 @@ public class NewVaadinPortletWizard extends NewPortletWizard
     protected ImageDescriptor getImage()
     {
         return ImageDescriptor.createFromURL( VaadinUI.getDefault().getBundle().getEntry(
-            "/icons/wizban/vaadin_wiz.png" ) );
+            "/icons/wizban/vaadin_wiz.png" ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -102,4 +103,17 @@ public class NewVaadinPortletWizard extends NewPortletWizard
         checker.checkValidProjectTypes();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String createLiferayVaadinPortlet;
+        public static String createVaadinPortletApplicationClass;
+        public static String newLiferayVaadinPortlet;
+        public static String specifyLiferayPortletDeployment;
+        public static String specifyVaadinPortletDeployment;
+
+        static
+        {
+            initializeMessages( NewVaadinPortletWizard.class.getName(), Msgs.class );
+        }
+    }
 }

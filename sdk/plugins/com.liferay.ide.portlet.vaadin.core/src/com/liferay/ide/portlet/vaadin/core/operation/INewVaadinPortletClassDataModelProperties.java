@@ -20,7 +20,7 @@ package com.liferay.ide.portlet.vaadin.core.operation;
  */
 public interface INewVaadinPortletClassDataModelProperties
 {
-    public static final String QUALIFIED_VAADIN_APPLICATION = "com.vaadin.Application";
-    public static final String QUALIFIED_VAADIN_PORTLET = "com.vaadin.terminal.gwt.server.ApplicationPortlet2";
-    public static final String VAADIN_PORTLET_CLASS = "INewVaadinPortletClassDataModelProperties.VAADIN_PORTLET_CLASS";
+    public static final String QUALIFIED_VAADIN_APPLICATION = "com.vaadin.Application"; //$NON-NLS-1$
+    public static final String QUALIFIED_VAADIN_PORTLET = "com.vaadin.terminal.gwt.server.ApplicationPortlet2"; //$NON-NLS-1$
+    public static final String VAADIN_PORTLET_CLASS = "INewVaadinPortletClassDataModelProperties.VAADIN_PORTLET_CLASS"; //$NON-NLS-1$
 }

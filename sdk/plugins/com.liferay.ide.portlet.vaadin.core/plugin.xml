@@ -6,8 +6,8 @@
       <portletFrameworkWizardProvider
             class="com.liferay.ide.portlet.vaadin.core.VaadinPortletFrameworkWizardProvider"
             default="false"
-            description="Vaadin is a Java framework for building modern web applications which can be run as portlets inside of Liferay Portal."
-            displayName="Vaadin"
+            description="%vaadin.portlet.framework.description"
+            displayName="%vaadin.portlet.framework.display.name"
             helpUrl="http://vaadin.com"
             id="com.liferay.ide.project.core.framework.vaadin"
             requiredSDKVersion="6.0.5"

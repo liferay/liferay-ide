@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.ui.wizard.NewPortletClassWizardPage;
 import com.liferay.ide.portlet.vaadin.core.operation.INewVaadinPortletClassDataModelProperties;
 import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
@@ -28,6 +29,7 @@ import java.util.List;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -64,7 +66,7 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
     {
         // class name
         classLabel = new Label( parent, SWT.LEFT );
-        classLabel.setText( "Application class:" );
+        classLabel.setText( Msgs.applicationClass );
         classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
@@ -84,7 +86,7 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
     {
         // portlet class
         vaadinPortletClassLabel = new Label( parent, SWT.LEFT );
-        vaadinPortletClassLabel.setText( "Portlet class:" );
+        vaadinPortletClassLabel.setText( Msgs.portletClass );
         vaadinPortletClassLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         vaadinPortletClassCombo = new Combo( parent, SWT.DROP_DOWN );
@@ -93,7 +95,7 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( parent, "", 1 );
+            SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
         }
         else
         {
@@ -158,16 +160,28 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
     protected void handlePortletClassButtonSelected( Control control )
     {
         handleClassButtonSelected(
-            control, "javax.portlet.GenericPortlet", "Portlet Class Selection", "Choose a portlet class:" );
+            control, "javax.portlet.GenericPortlet", Msgs.portletClassSelection, Msgs.choosePortletClass ); //$NON-NLS-1$
     }
 
     protected void setShellImage()
     {
-        URL url = VaadinUI.getDefault().getBundle().getEntry( "/icons/e16/vaadinportlet.png" );
+        URL url = VaadinUI.getDefault().getBundle().getEntry( "/icons/e16/vaadinportlet.png" ); //$NON-NLS-1$
 
         Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 
         getShell().setImage( shellImage );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String applicationClass;
+        public static String choosePortletClass;
+        public static String portletClass;
+        public static String portletClassSelection;
+
+        static
+        {
+            initializeMessages( NewVaadinApplicationClassWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

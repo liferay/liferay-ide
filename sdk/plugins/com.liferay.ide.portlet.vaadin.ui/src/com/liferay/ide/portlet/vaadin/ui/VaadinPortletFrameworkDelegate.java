@@ -39,7 +39,7 @@ public class VaadinPortletFrameworkDelegate extends AbstractPortletFrameworkDele
 {
     protected IPluginWizardFragment wizardFragment;
 
-    private final static Version v61 = new Version( "6.1" );
+    private final static Version v61 = new Version( "6.1" ); //$NON-NLS-1$
 
     public VaadinPortletFrameworkDelegate()
     {

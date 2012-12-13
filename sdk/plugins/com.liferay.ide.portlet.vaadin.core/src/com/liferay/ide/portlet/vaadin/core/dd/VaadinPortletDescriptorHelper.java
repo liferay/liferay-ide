@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.vaadin.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPropertiesConfiguration;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
@@ -61,7 +62,7 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
             return status;
         }
 
-        return addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" );
+        return addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" ); //$NON-NLS-1$
     }
 
     public IStatus addPortalDependency( String propertyName, String value )
@@ -79,20 +80,20 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
 
             if( comp == null )
             {
-                IStatus warning = VaadinCore.createWarningStatus( "Could not add Vaadin dependency to the project." );
+                IStatus warning = VaadinCore.createWarningStatus( "Could not add Vaadin dependency to the project." ); //$NON-NLS-1$
                 VaadinCore.getDefault().getLog().log( warning );
                 return Status.OK_STATUS;
             }
 
             IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
             IFile pluginPackageFile =
-                webroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
+                webroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ); //$NON-NLS-1$
 
             if( !pluginPackageFile.exists() )
             {
                 IStatus warning =
-                    VaadinCore.createWarningStatus( "No " + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE +
-                        " file in the project, not adding Vaadin dependency." );
+                    VaadinCore.createWarningStatus( "No " + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE + //$NON-NLS-1$
+                        " file in the project, not adding Vaadin dependency." ); //$NON-NLS-1$
 
                 VaadinCore.getDefault().getLog().log( warning );
 
@@ -104,9 +105,9 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
             pluginPackageProperties = new PluginPropertiesConfiguration();
             pluginPackageProperties.load( osfile );
 
-            String existingDeps = pluginPackageProperties.getString( propertyName, "" );
+            String existingDeps = pluginPackageProperties.getString( propertyName, StringUtil.EMPTY );
 
-            String[] existingValues = existingDeps.split( "," );
+            String[] existingValues = existingDeps.split( "," ); //$NON-NLS-1$
 
             for( String existingValue : existingValues )
             {
@@ -124,7 +125,7 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
             }
             else
             {
-                newPortalDeps = existingDeps + "," + value;
+                newPortalDeps = existingDeps + "," + value; //$NON-NLS-1$
             }
 
             pluginPackageProperties.setProperty( propertyName, newPortalDeps );
@@ -146,7 +147,7 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
         catch( Exception e )
         {
             VaadinCore.logError( e );
-            return VaadinCore.createErrorStatus( "Could not add dependency to vaadin.jar in liferay-plugin-package.properties ." );
+            return VaadinCore.createErrorStatus( "Could not add dependency to vaadin.jar in liferay-plugin-package.properties ." ); //$NON-NLS-1$
         }
 
         return Status.OK_STATUS;

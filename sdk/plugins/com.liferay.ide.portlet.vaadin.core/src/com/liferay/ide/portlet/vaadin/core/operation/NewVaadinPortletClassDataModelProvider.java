@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.sdk.ISDKConstants;
 
@@ -56,7 +57,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
     {
         if( CLASS_NAME.equals( propertyName ) )
         {
-            return "NewVaadinPortletApplication";
+            return "NewVaadinPortletApplication"; //$NON-NLS-1$
         }
         else if( PORTLET_NAME.equals( propertyName ) || LIFERAY_PORTLET_NAME.equals( propertyName ) )
         {
@@ -97,7 +98,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 
     private String getPortletName()
     {
-        return getProperty( CLASS_NAME ).toString().replaceAll( "Application", "" );
+        return getProperty( CLASS_NAME ).toString().replaceAll( "Application", StringUtil.EMPTY ); //$NON-NLS-1$
     }
 
     @Override
@@ -162,11 +163,11 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
         if( getStringProperty( VAADIN_PORTLET_CLASS ).equals( QUALIFIED_VAADIN_PORTLET ) )
         {
             ParamValue paramValue = CommonFactory.eINSTANCE.createParamValue();
-            paramValue.setName( "application" );
+            paramValue.setName( "application" ); //$NON-NLS-1$
 
             String pkg = getDataModel().getStringProperty( JAVA_PACKAGE );
             String cls = getDataModel().getStringProperty( CLASS_NAME );
-            String qualifiedApplicationClass = ( pkg == null || "".equals( pkg ) ) ? cls : pkg + "." + cls;
+            String qualifiedApplicationClass = ( pkg == null || StringUtil.EMPTY.equals( pkg ) ) ? cls : pkg + "." + cls; //$NON-NLS-1$
 
             paramValue.setValue( qualifiedApplicationClass );
 

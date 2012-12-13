@@ -44,9 +44,9 @@ public class CreateVaadinPortletTemplateModel extends CreateWebClassTemplateMode
     {
         Collection<String> collection = super.getImports();
 
-        collection.add( "com.vaadin.Application" );
-        collection.add( "com.vaadin.ui.Label" );
-        collection.add( "com.vaadin.ui.Window" );
+        collection.add( "com.vaadin.Application" ); //$NON-NLS-1$
+        collection.add( "com.vaadin.ui.Label" ); //$NON-NLS-1$
+        collection.add( "com.vaadin.ui.Window" ); //$NON-NLS-1$
 
         return collection;
     }
