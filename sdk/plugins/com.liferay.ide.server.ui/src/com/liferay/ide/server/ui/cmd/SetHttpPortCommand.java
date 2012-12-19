@@ -17,6 +17,8 @@ package com.liferay.ide.server.ui.cmd;
 
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 
+import org.eclipse.osgi.util.NLS;
+
 /**
  * @author Greg Amerson
  */
@@ -28,7 +30,7 @@ public class SetHttpPortCommand extends RemoteServerCommand
 
     public SetHttpPortCommand( IRemoteServerWorkingCopy server, String httpPort )
     {
-        super( server, "Set Http Port" );
+        super( server, Msgs.setHttpPort );
         this.httpPort = httpPort;
     }
 
@@ -41,5 +43,15 @@ public class SetHttpPortCommand extends RemoteServerCommand
     public void undo()
     {
         server.setHTTPPort( oldHttpPort );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setHttpPort;
+
+        static
+        {
+            initializeMessages( SetHttpPortCommand.class.getName(), Msgs.class );
+        }
     }
 }

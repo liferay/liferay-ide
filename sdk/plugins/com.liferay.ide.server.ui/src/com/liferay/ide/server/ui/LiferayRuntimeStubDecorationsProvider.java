@@ -36,7 +36,7 @@ public class LiferayRuntimeStubDecorationsProvider implements IAdapterFactory
         public ImageDescriptor getIcon()
         {
             return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                LiferayServerUIPlugin.PLUGIN_ID, "icons/e16/server.png" );
+                LiferayServerUIPlugin.PLUGIN_ID, "icons/e16/server.png" ); //$NON-NLS-1$
         }
 
     }

@@ -70,7 +70,7 @@ public class WebServicesHelper
         }
         catch( IOException e1 )
         {
-            LiferayServerCorePlugin.logError( "Unable to initial web services list." );
+            LiferayServerCorePlugin.logError( "Unable to initial web services list." ); //$NON-NLS-1$
         }
     }
 
@@ -78,7 +78,7 @@ public class WebServicesHelper
     {
         List<String> links = new ArrayList<String>();
 
-        String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+        String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]"; //$NON-NLS-1$
         Pattern p = Pattern.compile( regex );
         Matcher m = p.matcher( text );
 
@@ -86,7 +86,7 @@ public class WebServicesHelper
         {
             String urlStr = m.group();
 
-            if( urlStr.startsWith( "(" ) && urlStr.endsWith( ")" ) )
+            if( urlStr.startsWith( "(" ) && urlStr.endsWith( ")" ) ) //$NON-NLS-1$ //$NON-NLS-2$
             {
                 urlStr = urlStr.substring( 1, urlStr.length() - 1 );
             }
@@ -98,7 +98,7 @@ public class WebServicesHelper
 
     private String pullServiceName( String wsdlUrl )
     {
-        String regex = "axis/(\\w+)\\?wsdl$";
+        String regex = "axis/(\\w+)\\?wsdl$"; //$NON-NLS-1$
         Pattern p = Pattern.compile( regex );
         Matcher m = p.matcher( wsdlUrl );
 

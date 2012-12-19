@@ -17,6 +17,8 @@ package com.liferay.ide.server.ui.action;
 
 import java.net.URL;
 
+import org.eclipse.osgi.util.NLS;
+
 /**
  * @author Greg Amerson
  */
@@ -36,7 +38,16 @@ public class OpenPortalHomeAction extends OpenPortalURLAction
     @Override
     protected String getPortalURLTitle()
     {
-        return "Liferay Portal";
+        return Msgs.liferayPortal;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String liferayPortal;
+
+        static
+        {
+            initializeMessages( OpenPortalHomeAction.class.getName(), Msgs.class );
+        }
+    }
 }

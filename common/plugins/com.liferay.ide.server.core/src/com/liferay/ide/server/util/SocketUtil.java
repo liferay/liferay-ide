@@ -53,7 +53,7 @@ public class SocketUtil
         }
         catch( Exception e )
         {
-            status = LiferayServerCorePlugin.createErrorStatus( "Could not connect." );
+            status = LiferayServerCorePlugin.createErrorStatus( "Could not connect." ); //$NON-NLS-1$
             // e.printStackTrace();
         }
         finally

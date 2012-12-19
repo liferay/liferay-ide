@@ -20,6 +20,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.ui.wizards.IClasspathContainerPage;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 
 /**
@@ -30,14 +31,14 @@ public class PortletPluginClasspathConatinerPage extends WizardPage implements I
 
     public PortletPluginClasspathConatinerPage()
     {
-        super( "portlet.container" );
+        super( "portlet.container" ); //$NON-NLS-1$
     }
 
     public void createControl( Composite parent )
     {
         Composite topComposite = SWTUtil.createTopComposite( parent, 1 );
 
-        SWTUtil.createLabel( topComposite, "This is a test", 1 );
+        SWTUtil.createLabel( topComposite, Msgs.test, 1 );
     }
 
     public boolean finish()
@@ -54,4 +55,13 @@ public class PortletPluginClasspathConatinerPage extends WizardPage implements I
     {
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String test;
+
+        static
+        {
+            initializeMessages( PortletPluginClasspathConatinerPage.class.getName(), Msgs.class );
+        }
+    }
 }

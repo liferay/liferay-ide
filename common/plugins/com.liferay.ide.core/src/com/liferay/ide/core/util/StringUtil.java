@@ -20,6 +20,7 @@ package com.liferay.ide.core.util;
  */
 public class StringUtil
 {
-    public static String EMPTY = ""; //$NON-NLS-1$
+    public static String COMMA = ","; //$NON-NLS-1$
     public static String DOUBLE_ASTERISK = "**"; //$NON-NLS-1$
+    public static String EMPTY = ""; //$NON-NLS-1$
 }

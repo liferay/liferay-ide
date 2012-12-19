@@ -34,7 +34,7 @@ public class ReleaseHelper
     {
         if( !serviceJarPath.toFile().exists() )
         {
-            throw new IllegalArgumentException( "Service jar file must exist." );
+            throw new IllegalArgumentException( "Service jar file must exist." ); //$NON-NLS-1$
         }
 
         serviceJarFile = serviceJarPath.toFile();
@@ -49,11 +49,11 @@ public class ReleaseHelper
 
         try
         {
-            Class infoClass = loader.loadClass( "com.liferay.portal.kernel.util.ReleaseInfo" );
+            Class infoClass = loader.loadClass( "com.liferay.portal.kernel.util.ReleaseInfo" ); //$NON-NLS-1$
 
             Object o = infoClass.newInstance();
 
-            Method m = infoClass.getMethod( "getVersion" );
+            Method m = infoClass.getMethod( "getVersion" ); //$NON-NLS-1$
 
             Object result = m.invoke( o );
 

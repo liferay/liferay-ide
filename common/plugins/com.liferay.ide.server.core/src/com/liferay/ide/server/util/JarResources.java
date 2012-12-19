@@ -15,6 +15,8 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -89,7 +91,7 @@ public final class JarResources {
              }
              if (debugOn) {
                 System.out.println(
-                   "ze.getName()="+ze.getName()+","+"getSize()="+ze.getSize()
+                   "ze.getName()="+ze.getName()+ StringUtil.COMMA +"getSize()="+ze.getSize() //$NON-NLS-1$ //$NON-NLS-2$
                    );
              }
              int size=(int)ze.getSize();
@@ -111,14 +113,14 @@ public final class JarResources {
              htJarContents.put(ze.getName(),b);
              if (debugOn) {
                 System.out.println(
-                   ze.getName()+"  rb="+rb+
-                   ",size="+size+
-                   ",csize="+ze.getCompressedSize()
+                   ze.getName()+"  rb="+rb+ //$NON-NLS-1$
+                   ",size="+size+ //$NON-NLS-1$
+                   ",csize="+ze.getCompressedSize() //$NON-NLS-1$
                    );
              }
           }
        } catch (NullPointerException e) {
-          System.out.println("done.");
+          System.out.println("done."); //$NON-NLS-1$
        } catch (FileNotFoundException e) {
           e.printStackTrace();
        } catch (IOException e) {
@@ -133,20 +135,20 @@ public final class JarResources {
    private String dumpZipEntry(ZipEntry ze) {
        StringBuffer sb=new StringBuffer();
        if (ze.isDirectory()) {
-          sb.append("d "); 
+          sb.append("d ");  //$NON-NLS-1$
        } else {
-          sb.append("f "); 
+          sb.append("f ");  //$NON-NLS-1$
        }
        if (ze.getMethod()==ZipEntry.STORED) {
-          sb.append("stored   "); 
+          sb.append("stored   ");  //$NON-NLS-1$
        } else {
-          sb.append("defalted ");
+          sb.append("defalted "); //$NON-NLS-1$
        }
        sb.append(ze.getName());
-       sb.append("\t");
-       sb.append(""+ze.getSize());
+       sb.append("\t"); //$NON-NLS-1$
+       sb.append(StringUtil.EMPTY+ze.getSize());
        if (ze.getMethod()==ZipEntry.DEFLATED) {
-          sb.append("/"+ze.getCompressedSize());
+          sb.append("/"+ze.getCompressedSize()); //$NON-NLS-1$
        }
        return (sb.toString());
    }
@@ -172,16 +174,16 @@ public final class JarResources {
    public static void main(String[] args) throws IOException {
        if (args.length!=2) {
           System.err.println(
-             "usage: java JarResources <jar file name> <resource name>"
+             "usage: java JarResources <jar file name> <resource name>" //$NON-NLS-1$
              );
           System.exit(1);
        }
        JarResources jr=new JarResources(args[0]);
        byte[] buff=jr.getResource(args[1]);
        if (buff==null) {
-          System.out.println("Could not find "+args[1]+".");
+          System.out.println("Could not find "+args[1]+"."); //$NON-NLS-1$ //$NON-NLS-2$
        } else {
-          System.out.println("Found "+args[1]+ " (length="+buff.length+").");
+          System.out.println("Found "+args[1]+ " (length="+buff.length+")."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
        }
    }
 

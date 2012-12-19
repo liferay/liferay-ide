@@ -40,9 +40,9 @@ public class RemoteLogStream extends BufferedInputStream
     public static final IEclipsePreferences _defaultPrefs =
         new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
 
-    public static final long LOG_QUERY_RANGE = _defaultPrefs.getLong( "log.query.range", 51200 );
+    public static final long LOG_QUERY_RANGE = _defaultPrefs.getLong( "log.query.range", 51200 ); //$NON-NLS-1$
 
-    public final static long OUTPUT_MONITOR_DELAY = _defaultPrefs.getLong( "output.monitor.delay", 1000 );
+    public final static long OUTPUT_MONITOR_DELAY = _defaultPrefs.getLong( "output.monitor.delay", 1000 ); //$NON-NLS-1$
 
     protected static URL createBaseUrl(
         IServer server, IRemoteServer remoteServer, IServerManagerConnection connection, String log )
@@ -77,12 +77,12 @@ public class RemoteLogStream extends BufferedInputStream
 
     protected static String getFormatQuery()
     {
-        return "?format=raw";
+        return "?format=raw"; //$NON-NLS-1$
     }
 
     protected static String getLogURI( IServerManagerConnection connection, String log )
     {
-        return connection.getManagerURI() + "/server/log/" + log;
+        return connection.getManagerURI() + "/server/log/" + log; //$NON-NLS-1$
     }
 
     protected static InputStream openInputStream( IServerManagerConnection remote, URL url ) throws IOException
@@ -90,12 +90,12 @@ public class RemoteLogStream extends BufferedInputStream
         String username = remote.getUsername();
         String password = remote.getPassword();
 
-        String authString = username + ":" + password;
+        String authString = username + ":" + password; //$NON-NLS-1$
         byte[] authEncBytes = Base64.encodeBase64( authString.getBytes() );
         String authStringEnc = new String( authEncBytes );
 
         URLConnection conn = url.openConnection();
-        conn.setRequestProperty( "Authorization", "Basic " + authStringEnc );
+        conn.setRequestProperty( "Authorization", "Basic " + authStringEnc ); //$NON-NLS-1$ //$NON-NLS-2$
         Authenticator.setDefault( null );
         conn.setAllowUserInteraction( false );
 
@@ -160,7 +160,7 @@ public class RemoteLogStream extends BufferedInputStream
 
         while( !goodUrl )
         {
-            URL newUrl = new URL( getLogURI( connection, log ) + "/" + range + getFormatQuery() );
+            URL newUrl = new URL( getLogURI( connection, log ) + "/" + range + getFormatQuery() ); //$NON-NLS-1$
 
             try
             {
@@ -197,7 +197,7 @@ public class RemoteLogStream extends BufferedInputStream
         {
             String peek = new String( buf );
 
-            if( peek != null && ( !peek.contains( "Error 416: Invalid Range values." ) ) )
+            if( peek != null && ( !peek.contains( "Error 416: Invalid Range values." ) ) ) //$NON-NLS-1$
             {
                 return true;
             }

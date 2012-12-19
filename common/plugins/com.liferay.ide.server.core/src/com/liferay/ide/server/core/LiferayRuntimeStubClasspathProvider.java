@@ -54,16 +54,16 @@ public class LiferayRuntimeStubClasspathProvider extends RuntimeClasspathProvide
 
             IConfigurationElement[] elements =
                 Platform.getExtensionRegistry().getConfigurationElementsFor(
-                    "org.eclipse.jst.server.core.runtimeClasspathProviders" );
+                    "org.eclipse.jst.server.core.runtimeClasspathProviders" ); //$NON-NLS-1$
 
             for( IConfigurationElement element : elements )
             {
-                String runtimeTypeIds = element.getAttribute( "runtimeTypeIds" );
+                String runtimeTypeIds = element.getAttribute( "runtimeTypeIds" ); //$NON-NLS-1$
                 if( runtimeTypeIds.contains( runtimeStubTypeId ) )
                 {
                     try
                     {
-                        stubDelegate = (RuntimeClasspathProviderDelegate) element.createExecutableExtension( "class" );
+                        stubDelegate = (RuntimeClasspathProviderDelegate) element.createExecutableExtension( "class" ); //$NON-NLS-1$
                         break;
                     }
                     catch( CoreException e )

@@ -57,8 +57,8 @@ public class JarClassLoader extends MultiClassLoader
 	    if (args.length != 2)
 		{
 		System.err.println
-		    ("Usage: java JarClassLoader " +
-		     "<jar file name> <class name>");
+		    ("Usage: java JarClassLoader " + //$NON-NLS-1$
+		     "<jar file name> <class name>"); //$NON-NLS-1$
 		System.exit (1);
 		}
 

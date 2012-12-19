@@ -13,6 +13,8 @@ package com.liferay.ide.server.ui.cmd;
 
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 
+import org.eclipse.osgi.util.NLS;
+
 public class SetUsernameCommand extends RemoteServerCommand
 {
 
@@ -21,7 +23,7 @@ public class SetUsernameCommand extends RemoteServerCommand
 
     public SetUsernameCommand( IRemoteServerWorkingCopy server, String username )
     {
-        super( server, "Set Username" );
+        super( server, Msgs.setUsername );
         this.username = username;
     }
 
@@ -40,5 +42,15 @@ public class SetUsernameCommand extends RemoteServerCommand
     public void undo()
     {
         server.setUsername( oldUsername );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setUsername;
+
+        static
+        {
+            initializeMessages( SetUsernameCommand.class.getName(), Msgs.class );
+        }
     }
 }

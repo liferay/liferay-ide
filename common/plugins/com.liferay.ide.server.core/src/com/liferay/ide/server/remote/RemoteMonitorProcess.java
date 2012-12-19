@@ -15,6 +15,8 @@
 
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -57,7 +59,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
     @Override
     public void destroy()
     {
-        System.out.println( "destroy" );
+        System.out.println( "destroy" ); //$NON-NLS-1$
     }
 
     @Override
@@ -83,7 +85,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
     @Override
     public InputStream getErrorStream()
     {
-        return new RemoteLogStream( server, remoteServer, remoteConnection, "error" );
+        return new RemoteLogStream( server, remoteServer, remoteConnection, "error" ); //$NON-NLS-1$
     }
 
     public int getExitValue() throws DebugException
@@ -95,7 +97,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
     @Override
     public InputStream getInputStream()
     {
-        return new RemoteLogStream( server, remoteServer, remoteConnection, "output" );
+        return new RemoteLogStream( server, remoteServer, remoteConnection, "output" ); //$NON-NLS-1$
     }
 
     public String getLabel()
@@ -117,7 +119,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
                 port = wasServer.getHTTPPort();
             }
 
-            this.label = ( host != null ? host : "" ) + ":" + ( port != null ? port : "" );
+            this.label = ( host != null ? host : StringUtil.EMPTY ) + ":" + ( port != null ? port : StringUtil.EMPTY ); //$NON-NLS-1$
         }
 
         return this.label;
@@ -138,7 +140,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
     {
         if( streamsProxy == null )
         {
-            streamsProxy = new StreamsProxy( this, "UTF-8" );
+            streamsProxy = new StreamsProxy( this, "UTF-8" ); //$NON-NLS-1$
         }
 
         return streamsProxy;

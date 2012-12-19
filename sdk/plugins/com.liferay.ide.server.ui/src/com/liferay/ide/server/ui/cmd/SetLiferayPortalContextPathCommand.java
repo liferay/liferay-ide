@@ -17,6 +17,8 @@ package com.liferay.ide.server.ui.cmd;
 
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 
+import org.eclipse.osgi.util.NLS;
+
 /**
  * @author Greg Amerson
  */
@@ -28,7 +30,7 @@ public class SetLiferayPortalContextPathCommand extends RemoteServerCommand
 
     public SetLiferayPortalContextPathCommand( IRemoteServerWorkingCopy server, String liferayPortalContextPath )
     {
-        super( server, "Set Liferay Portal Context Path" );
+        super( server, Msgs.setLiferayPortalContextPath );
         this.liferayPortalContextPath = liferayPortalContextPath;
     }
 
@@ -41,5 +43,15 @@ public class SetLiferayPortalContextPathCommand extends RemoteServerCommand
     public void undo()
     {
         server.setLiferayPortalContextPath( oldLiferayPortalContextPath );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setLiferayPortalContextPath;
+
+        static
+        {
+            initializeMessages( SetLiferayPortalContextPathCommand.class.getName(), Msgs.class );
+        }
     }
 }

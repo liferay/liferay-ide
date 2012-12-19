@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 
@@ -32,31 +33,31 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
     public static final IEclipsePreferences defaultPrefs =
         new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
 
-    String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp";
+    String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp"; //$NON-NLS-1$
 
-    String ATTR_HOSTNAME = "hostname";
+    String ATTR_HOSTNAME = "hostname"; //$NON-NLS-1$
 
-    String ATTR_HTTP_PORT = "http-port";
+    String ATTR_HTTP_PORT = "http-port"; //$NON-NLS-1$
 
-    String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path";
+    String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path"; //$NON-NLS-1$
 
-    String ATTR_PASSWORD = "password";
+    String ATTR_PASSWORD = "password"; //$NON-NLS-1$
 
-    String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path";
+    String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path"; //$NON-NLS-1$
 
-    String ATTR_USERNAME = "username";
+    String ATTR_USERNAME = "username"; //$NON-NLS-1$
 
-    boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true );
+    boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true ); //$NON-NLS-1$
 
-    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", "" );
+    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", StringUtil.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", "" );
+    String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", StringUtil.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", "" );
+    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", StringUtil.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", "" );
+    String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", StringUtil.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", "" );
+    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", StringUtil.EMPTY ); //$NON-NLS-1$
 
     boolean getAdjustDeploymentTimestamp();
 

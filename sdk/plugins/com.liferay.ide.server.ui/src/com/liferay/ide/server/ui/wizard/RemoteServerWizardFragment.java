@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.navigator.CommonViewer;
@@ -55,10 +56,10 @@ public class RemoteServerWizardFragment extends WizardFragment
 
         composite = new RemoteServerComposite( parent, this, wizard );
 
-        wizard.setTitle( "Remote Liferay Server" );
-        wizard.setDescription( "Configure remote Liferay server instance." );
+        wizard.setTitle( Msgs.remoteLiferayServer );
+        wizard.setDescription( Msgs.configureRemoteLiferayServerInstance );
         wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/wizban/server_wiz.png" ) ) );
+            "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
 
         return composite;
     }
@@ -127,7 +128,7 @@ public class RemoteServerWizardFragment extends WizardFragment
 
                         public void run()
                         {
-                            IViewPart serversView = UIUtil.showView( "org.eclipse.wst.server.ui.ServersView" );
+                            IViewPart serversView = UIUtil.showView( "org.eclipse.wst.server.ui.ServersView" ); //$NON-NLS-1$
                             CommonViewer viewer = (CommonViewer) serversView.getAdapter( CommonViewer.class );
                             viewer.setSelection( new StructuredSelection( server ) );
                         }
@@ -159,4 +160,14 @@ public class RemoteServerWizardFragment extends WizardFragment
         return (IRemoteServerWorkingCopy) getServerWorkingCopy().loadAdapter( IRemoteServerWorkingCopy.class, null );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String configureRemoteLiferayServerInstance;
+        public static String remoteLiferayServer;
+
+        static
+        {
+            initializeMessages( RemoteServerWizardFragment.class.getName(), Msgs.class );
+        }
+    }
 }

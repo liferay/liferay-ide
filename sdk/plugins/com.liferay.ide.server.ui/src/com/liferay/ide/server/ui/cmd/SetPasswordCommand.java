@@ -11,8 +11,9 @@
 
 package com.liferay.ide.server.ui.cmd;
 
-import com.liferay.ide.server.ui.cmd.RemoteServerCommand;
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
+
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -25,7 +26,7 @@ public class SetPasswordCommand extends RemoteServerCommand
 
     public SetPasswordCommand( IRemoteServerWorkingCopy server, String password )
     {
-        super( server, "Set Password" );
+        super( server, Msgs.setPassword );
         this.password = password;
     }
 
@@ -44,5 +45,15 @@ public class SetPasswordCommand extends RemoteServerCommand
     public void undo()
     {
         server.setPassword( oldPassword );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setPassword;
+
+        static
+        {
+            initializeMessages( SetPasswordCommand.class.getName(), Msgs.class );
+        }
     }
 }

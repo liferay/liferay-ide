@@ -26,7 +26,7 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
 public interface IRuntimeDelegateValidator
 {
 
-    String ID = "com.liferay.ide.server.core.runtimeDelegateValidators";
+    String ID = "com.liferay.ide.server.core.runtimeDelegateValidators"; //$NON-NLS-1$
 
     IStatus validateRuntimeDelegate( RuntimeDelegate runtimeDelegate );
 

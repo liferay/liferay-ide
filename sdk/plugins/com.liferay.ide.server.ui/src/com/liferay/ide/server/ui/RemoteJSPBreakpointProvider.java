@@ -16,6 +16,7 @@
 package com.liferay.ide.server.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 
 	                        if( relativePath != null && relativePath.segmentCount() > 0 )
 	                        {
-	                            path = "/" + relativePath.toPortableString();
+	                            path = "/" + relativePath.toPortableString(); //$NON-NLS-1$
 	                            break;
 	                        }
 	                    }
@@ -143,7 +144,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				/*
 				 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=154475
 				 */
-				return initData + ",_" + shortName;
+				return initData + ",_" + shortName; //$NON-NLS-1$
 			}
 			else if (initData instanceof Map && resource.isAccessible() && resource.getType() == IResource.FILE) {
 				IContentType[] types = Platform.getContentTypeManager().findContentTypesFor(resource.getName());
@@ -169,18 +170,18 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				if (types == null) {
 					types = Platform.getContentTypeManager().findContentTypesFor(resource.getName());
 				}
-				StringBuffer patternBuffer = new StringBuffer("_" + shortName);
+				StringBuffer patternBuffer = new StringBuffer("_" + shortName); //$NON-NLS-1$
 				for (int i = 0; i < types.length; i++) {
 					Object pattern = ((Map) initData).get(types[i].getId());
 					if (pattern != null) {
-						patternBuffer.append(","); //$NON-NLS-1$
+						patternBuffer.append(StringUtil.COMMA);
 						patternBuffer.append(pattern);
 					}
 				}
 				return patternBuffer.toString();
 			}
 		}
-		return "org.apache.jsp*";
+		return "org.apache.jsp*"; //$NON-NLS-1$
 	}
 
 	private IResource getResourceFromInput(IEditorInput input) {

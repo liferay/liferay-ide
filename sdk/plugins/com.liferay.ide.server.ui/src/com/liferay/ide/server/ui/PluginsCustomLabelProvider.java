@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -44,7 +45,7 @@ public class PluginsCustomLabelProvider extends LabelProvider
         if( element instanceof PluginsContent )
         {
             return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage();
+                LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage(); //$NON-NLS-1$
         }
         else if( element instanceof ModuleServer )
         {
@@ -58,13 +59,13 @@ public class PluginsCustomLabelProvider extends LabelProvider
                     IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
                     IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition( liferayFacet );
                     return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png" ).createImage();
+                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 else
                 {
                     String type = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
                     return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage();
+                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             }
             catch( Exception ex )
@@ -81,7 +82,7 @@ public class PluginsCustomLabelProvider extends LabelProvider
     {
         if( element instanceof PluginsContent )
         {
-            return "Liferay Plugins";
+            return Msgs.liferayPlugins;
         }
         else
         {
@@ -89,4 +90,13 @@ public class PluginsCustomLabelProvider extends LabelProvider
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String liferayPlugins;
+
+        static
+        {
+            initializeMessages( PluginsCustomLabelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

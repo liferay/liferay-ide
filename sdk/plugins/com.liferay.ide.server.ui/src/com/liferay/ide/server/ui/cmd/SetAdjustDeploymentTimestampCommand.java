@@ -25,7 +25,7 @@ public class SetAdjustDeploymentTimestampCommand extends ServerCommand
 
     public SetAdjustDeploymentTimestampCommand( IRemoteServer server, boolean adjustTimestamp )
     {
-        super( null, "Set Deploy Custom Portlet XML" );
+        super( null, "Set Deploy Custom Portlet XML" ); //$NON-NLS-1$
         this.remoteServer = server;
         this.adjustDemploymentTimestamp = adjustTimestamp;
     }

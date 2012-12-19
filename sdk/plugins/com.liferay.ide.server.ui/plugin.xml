@@ -23,7 +23,7 @@
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.ui.serverview.plugins"
             labelProvider="com.liferay.ide.server.ui.PluginsCustomLabelProvider"
-            name="Liferay IDE Plugins"
+            name="%navigator.content.name"
             priority="highest">
          <triggerPoints>
             <or>
@@ -76,21 +76,21 @@
                enablesFor="1"
                icon="icons/e16/test_web_services_16x16.png"
                id="com.liferay.ide.server.ui.action.testWebServices.server"
-               label="Test Liferay Web Services...">
+               label="%test.services.action.label">
          </action>
          <action
                class="com.liferay.ide.server.ui.action.OpenJSONWSAPIAction"
                enablesFor="1"
                icon="icons/e16/test_web_services_16x16.png"
                id="com.liferay.ide.server.ui.action.openJSONWSAPIAction"
-               label="Test JSON Web Services">
+               label="%test.json.services.action.label">
          </action>
          <action
                class="com.liferay.ide.server.ui.action.OpenPortalHomeAction"
                enablesFor="1"
                icon="icons/e16/open_portal_16x16.png"
                id="com.liferay.ide.server.ui.action.openPortalHomeAction"
-               label="Open Liferay Portal Home">
+               label="%open.portal.home.action.label">
          </action>
       </objectContribution>
       <objectContribution
@@ -103,14 +103,14 @@
                enablesFor="1"
                icon="icons/e16/test_web_services_16x16.png"
                id="com.liferay.ide.server.ui.action.testWebServices.plugin"
-               label="Test Liferay Web Services...">
+               label="%test.services.action.label">
          </action>
          <action
                class="com.liferay.ide.server.ui.action.RedeployAction"
                enablesFor="1"
                icon="icons/e16/redeploy_16x16.gif"
                id="com.liferay.ide.server.ui.action.redeploy"
-               label="Redeploy">
+               label="%redeploy.action.label">
          </action>
          
       </objectContribution>

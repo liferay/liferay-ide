@@ -17,9 +17,9 @@
 
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.remote.RemoteConnection;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 
 import java.io.File;
@@ -87,22 +87,22 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
     private String getDebugPortAPI()
     {
-        return managerContextPath + "/server/debug-port";
+        return managerContextPath + "/server/debug-port"; //$NON-NLS-1$
     }
 
     private String getDeployURI( String appName )
     {
-        return getPluginsAPI() + "/" + appName;
+        return getPluginsAPI() + "/" + appName; //$NON-NLS-1$
     }
 
     private String getIsAliveAPI()
     {
-        return managerContextPath + "/status";
+        return managerContextPath + "/status"; //$NON-NLS-1$
     }
 
     private String getJSONOutput( JSONObject json ) throws JSONException
     {
-        return json.getString( "output" );
+        return json.getString( "output" ); //$NON-NLS-1$
     }
     
     public List<String> getLiferayPlugins()
@@ -148,28 +148,28 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
     public String getManagerURI() 
     {
-        return "http://" + getHost() + ":" + getHttpPort() + managerContextPath;
+        return "http://" + getHost() + ":" + getHttpPort() + managerContextPath; //$NON-NLS-1$ //$NON-NLS-2$
     }
     
     private String getPluginsAPI()
     {
-        return managerContextPath + "/plugins";
+        return managerContextPath + "/plugins"; //$NON-NLS-1$
     }
 
     private String getPluginURI( String appName )
     {
-        return getPluginsAPI() + "/" + appName;
+        return getPluginsAPI() + "/" + appName; //$NON-NLS-1$
     }
 
     public String getServerState() throws APIException
     {
         if( isAlive() )
         {
-            return "STARTED";
+            return "STARTED"; //$NON-NLS-1$
         }
         else
         {
-            return "STOPPED";
+            return "STOPPED"; //$NON-NLS-1$
         }
     }
     
@@ -191,7 +191,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             FileBody fileBody = new FileBody( new File( absolutePath ) );
             
             MultipartEntity entity = new MultipartEntity();
-            entity.addPart( "deployWar", fileBody );
+            entity.addPart( "deployWar", fileBody ); //$NON-NLS-1$
             
             HttpPost httpPost = new HttpPost();
             httpPost.setEntity( entity );
@@ -204,17 +204,17 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
                 if( isSuccess( json ) )
                 {
-                    System.out.println( "installApplication: Sucess.\n\n" );
+                    System.out.println( "installApplication: Sucess.\n\n" ); //$NON-NLS-1$
                 }
                 else
                 {
 					if( isError( json ) )
 					{
-						return json.getString( "error" );
+						return json.getString( "error" ); //$NON-NLS-1$
 					}
 					else
 					{
-						return "installApplication error " + getDeployURI(appName);
+						return "installApplication error " + getDeployURI(appName); //$NON-NLS-1$
 					}
                 }
             }
@@ -242,7 +242,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         }
         else
         {
-            throw new APIException( getIsAliveAPI(), "Unable to connect to server manager." );
+            throw new APIException( getIsAliveAPI(), "Unable to connect to server manager." ); //$NON-NLS-1$
         }
         
         try
@@ -275,7 +275,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
                     String output = getJSONOutput( json );
                     JSONObject jsonOutput = new JSONObject( output );
 
-                    Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "installed" ) );
+                    Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "installed" ) ); //$NON-NLS-1$
 
                     if( installed )
                     {
@@ -296,7 +296,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 	{
 		try
 		{
-			String error = jsonObject.getString( "error" );
+			String error = jsonObject.getString( "error" ); //$NON-NLS-1$
 			return !CoreUtil.isNullOrEmpty( error );
 		}
 		catch ( JSONException e )
@@ -322,7 +322,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
                     JSONObject jsonOutput = new JSONObject( output );
 
-                    Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "started" ) );
+                    Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "started" ) ); //$NON-NLS-1$
 
                     if( installed )
                     {
@@ -341,8 +341,8 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
     private boolean isSuccess( JSONObject jsonObject ) throws JSONException
     {
-        String success = jsonObject.getString( "status" );
-        return "0".equals( success );
+        String success = jsonObject.getString( "status" ); //$NON-NLS-1$
+        return "0".equals( success ); //$NON-NLS-1$
     }
 
     public void setHost( String host )
@@ -372,7 +372,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             {
                 if( !isSuccess( json ) )
                 {
-                    System.out.println("uninstallApplication: success");
+                    System.out.println("uninstallApplication: success"); //$NON-NLS-1$
                     
                     return json;
                 }
@@ -407,11 +407,11 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
                 
                 if( isSuccess( json ))
                 {
-                    System.out.println( "updateApplication: success." );
+                    System.out.println( "updateApplication: success." ); //$NON-NLS-1$
                 }
                 else
                 {
-                    return "updateApplication: error " + getUpdateURI(appName);
+                    return "updateApplication: error " + getUpdateURI(appName); //$NON-NLS-1$
                 }
             }
 

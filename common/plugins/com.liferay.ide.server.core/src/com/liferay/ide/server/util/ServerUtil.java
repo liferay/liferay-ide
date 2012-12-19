@@ -16,6 +16,7 @@
 package com.liferay.ide.server.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
@@ -75,9 +76,9 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 @SuppressWarnings( "restriction" )
 public class ServerUtil
 {
-    protected static final IStatus emptyInstallDirStatus = createErrorStatus( "Install directory is empty." );
-    protected static final IStatus installDirDoesNotExist = createErrorStatus( "Install directory does not exist." );
-    protected static final IStatus invalidInstallDirStatus = createErrorStatus( "Invalid installation directory." );
+    protected static final IStatus emptyInstallDirStatus = createErrorStatus( "Install directory is empty." ); //XXX they are also not used? //$NON-NLS-1$
+    protected static final IStatus installDirDoesNotExist = createErrorStatus( "Install directory does not exist." ); //$NON-NLS-1$
+    protected static final IStatus invalidInstallDirStatus = createErrorStatus( "Invalid installation directory." ); //$NON-NLS-1$
 
     private static void addRemoveProps(
         IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
@@ -98,7 +99,7 @@ public class ServerUtil
 
         if( zipEntry == null )
         {
-            zipEntry = new ZipEntry( archive + "META-INF/" + deletePrefix + "-partialapp-delete.props" );
+            zipEntry = new ZipEntry( archive + "META-INF/" + deletePrefix + "-partialapp-delete.props" ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         String existingFiles = deleteEntries.get( zipEntry );
@@ -108,10 +109,10 @@ public class ServerUtil
 
         if( deltaResource.getType() == IResource.FOLDER )
         {
-            file += "/.*";
+            file += "/.*"; //$NON-NLS-1$
         }
 
-        deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : "" ) + ( file + "\n" ) );
+        deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : StringUtil.EMPTY ) + ( file + "\n" ) ); //$NON-NLS-1$
     }
 
     private static void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
@@ -213,7 +214,7 @@ public class ServerUtil
         String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, String deltaPrefix,
         boolean adjustGMTOffset )
     {
-        IPath path = LiferayServerCorePlugin.getTempLocation( "partial-ear", archiveName );
+        IPath path = LiferayServerCorePlugin.getTempLocation( "partial-ear", archiveName ); //$NON-NLS-1$
 
         FileOutputStream outputStream = null;
         ZipOutputStream zip = null;
@@ -265,7 +266,7 @@ public class ServerUtil
     public static File createPartialWAR(
         String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset )
     {
-        IPath path = LiferayServerCorePlugin.getTempLocation( "partial-war", archiveName );
+        IPath path = LiferayServerCorePlugin.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
 
         FileOutputStream outputStream = null;
         ZipOutputStream zip = null;
@@ -280,7 +281,7 @@ public class ServerUtil
 
             Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
-            processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, "", adjustGMTOffset );
+            processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, StringUtil.EMPTY, adjustGMTOffset );
 
             for( ZipEntry entry : deleteEntries.keySet() )
             {
@@ -322,7 +323,7 @@ public class ServerUtil
             {
                 try
                 {
-                    return serverType.createServer( "server", null, runtime, null );
+                    return serverType.createServer( "server", null, runtime, null ); //$NON-NLS-1$
                 }
                 catch( CoreException e )
                 {
@@ -368,7 +369,7 @@ public class ServerUtil
     {
         if( bridgedRuntime != null )
         {
-            String id = bridgedRuntime.getProperty( "id" );
+            String id = bridgedRuntime.getProperty( "id" ); //$NON-NLS-1$
 
             if( id != null )
             {
@@ -463,7 +464,7 @@ public class ServerUtil
 
     public static IRuntime getRuntime( org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime )
     {
-        return ServerCore.findRuntime( runtime.getProperty( "id" ) );
+        return ServerCore.findRuntime( runtime.getProperty( "id" ) ); //$NON-NLS-1$
     }
 
     public static IRuntimeWorkingCopy getRuntime( String runtimeTypeId, IPath location )
@@ -472,10 +473,10 @@ public class ServerUtil
 
         try
         {
-            IRuntime runtime = runtimeType.createRuntime( "runtime", null );
+            IRuntime runtime = runtimeType.createRuntime( "runtime", null ); //$NON-NLS-1$
 
             IRuntimeWorkingCopy runtimeWC = runtime.createWorkingCopy();
-            runtimeWC.setName( "Runtime" );
+            runtimeWC.setName( "Runtime" ); //$NON-NLS-1$
             runtimeWC.setLocation( location );
 
             return runtimeWC;
@@ -493,7 +494,7 @@ public class ServerUtil
     {
         if( facetRuntime != null )
         {
-            String runtimeId = facetRuntime.getProperty( "id" );
+            String runtimeId = facetRuntime.getProperty( "id" ); //$NON-NLS-1$
 
             for( org.eclipse.wst.server.core.IRuntime runtime : ServerCore.getRuntimes() )
             {
@@ -591,12 +592,12 @@ public class ServerUtil
 
     public static boolean isExtProject( IProject project )
     {
-        return hasFacet( project, ProjectFacetsManager.getProjectFacet( "liferay.ext" ) );
+        return hasFacet( project, ProjectFacetsManager.getProjectFacet( "liferay.ext" ) ); //$NON-NLS-1$
     }
 
     public static boolean isLiferayFacet( IProjectFacet projectFacet )
     {
-        return projectFacet != null && projectFacet.getId().startsWith( "liferay" );
+        return projectFacet != null && projectFacet.getId().startsWith( "liferay" ); //$NON-NLS-1$
     }
 
     public static boolean isLiferayProject( IProject project )
@@ -618,7 +619,7 @@ public class ServerUtil
                 {
                     IProjectFacet projectFacet = facet.getProjectFacet();
 
-                    if( projectFacet.getId().startsWith( "liferay" ) )
+                    if( projectFacet.getId().startsWith( "liferay" ) ) //$NON-NLS-1$
                     {
                         retval = true;
                         break;
@@ -637,7 +638,7 @@ public class ServerUtil
     {
         if( bridgedRuntime != null )
         {
-            String id = bridgedRuntime.getProperty( "id" );
+            String id = bridgedRuntime.getProperty( "id" ); //$NON-NLS-1$
 
             if( id != null )
             {
@@ -733,14 +734,14 @@ public class ServerUtil
 
     private static String removeArchive( String archive )
     {
-        int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) );
+        int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) ); //$NON-NLS-1$ //$NON-NLS-2$
 
         if( index >= 0 )
         {
             return archive.substring( 0, index + 5 );
         }
 
-        return "";
+        return StringUtil.EMPTY;
     }
 
     public static void terminateLaunchesForConfig( ILaunchConfigurationWorkingCopy config ) throws DebugException

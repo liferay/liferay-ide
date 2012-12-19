@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -82,13 +83,13 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
         FormToolkit toolkit = getFormToolkit( parent.getDisplay() );
 
         remoteSettings = createSettingsSection( parent, toolkit );
-        remoteSettings.setText( "Remote Liferay Settings" );
+        remoteSettings.setText( Msgs.remoteLiferaySettings );
         remoteSettings.setLayoutData( new GridData( GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL ) );
-        remoteSettings.setDescription( "Specify settings for remote Liferay Portal server." );
+        remoteSettings.setDescription( Msgs.specifySettings );
 
         Composite settingsComposite = createSectionComposite( toolkit, remoteSettings );
 
-        Label soapPortLabel = createLabel( toolkit, settingsComposite, "HTTP Port:" );
+        Label soapPortLabel = createLabel( toolkit, settingsComposite, Msgs.httpPort );
         soapPortLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textHttpPort = toolkit.createText( settingsComposite, null );
@@ -113,7 +114,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         } );
 
-        Label usernameLabel = createLabel( toolkit, settingsComposite, "Username:" );
+        Label usernameLabel = createLabel( toolkit, settingsComposite, Msgs.username );
         usernameLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textUsername = toolkit.createText( settingsComposite, null );
@@ -136,7 +137,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         } );
 
-        Label passwordLabel = createLabel( toolkit, settingsComposite, "Password:" );
+        Label passwordLabel = createLabel( toolkit, settingsComposite, Msgs.password );
         passwordLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textPassword = toolkit.createText( settingsComposite, null, SWT.PASSWORD );
@@ -159,7 +160,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         } );
 
-        Label labelLiferayPortalContextPath = createLabel( toolkit, settingsComposite, "Liferay Portal Context Path:" );
+        Label labelLiferayPortalContextPath = createLabel( toolkit, settingsComposite, Msgs.liferayPortalContextPath );
         labelLiferayPortalContextPath.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textLiferayPortalContextPath = toolkit.createText( settingsComposite, null );
@@ -182,7 +183,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
             }
         } );
 
-        Label labelServerManagerContextPath = createLabel( toolkit, settingsComposite, "Server Manager Context Path:" );
+        Label labelServerManagerContextPath = createLabel( toolkit, settingsComposite, Msgs.serverManagerContextPath );
         labelServerManagerContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
 
         textServerManagerContextPath = toolkit.createText( settingsComposite, null );
@@ -207,7 +208,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         adjustTimestamp =
             toolkit.createButton(
-                settingsComposite, "Adjust deployment timestamps to GMT timezone (Liferay default)", SWT.CHECK );
+                settingsComposite, Msgs.adjustDeploymentTimestamps, SWT.CHECK );
         GridData gd = new GridData( SWT.FILL, SWT.CENTER, true, false );
         gd.horizontalSpan = 2;
         adjustTimestamp.setLayoutData( gd );
@@ -409,5 +410,22 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
         }
 
         return status[0];
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String adjustDeploymentTimestamps;
+        public static String httpPort;
+        public static String liferayPortalContextPath;
+        public static String password;
+        public static String remoteLiferaySettings;
+        public static String serverManagerContextPath;
+        public static String specifySettings;
+        public static String username;
+
+        static
+        {
+            initializeMessages( RemoteSettingsEditorSection.class.getName(), Msgs.class );
+        }
     }
 }

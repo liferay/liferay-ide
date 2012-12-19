@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.server.core.FacetUtil;
 import org.eclipse.jst.server.core.IWebModule;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.internal.ServerPlugin;
 import org.eclipse.wst.server.core.model.ServerDelegate;
@@ -44,9 +45,9 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy
 {
 
-    private static final String CONNECT_ERROR_MSG = "Could not connect to Remote IDE Connector plugin.";
+    private static final String CONNECT_ERROR_MSG = Msgs.notConnectRemoteIDEConnectorPlugin;
 
-    public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list";
+    public static final String ATTR_REMOTE_SERVER_MODULE_IDS_LIST = "remote-server-module-ids-list"; //$NON-NLS-1$
 
     public RemoteServer()
     {
@@ -103,7 +104,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
                 if( !ServerUtil.isLiferayProject( addModuleProject ) )
                 {
-                    return LiferayServerCorePlugin.createErrorStatus( "Cannot add non Liferay plugin project module." );
+                    return LiferayServerCorePlugin.createErrorStatus( Msgs.notAddNonLiferayPluginProjectModule );
                 }
 
                 IStatus facetStatus = FacetUtil.verifyFacets( addModuleProject, getServer() );
@@ -116,7 +117,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
                 // make sure that EXT is disabled for now for remote deployment
                 if( ServerUtil.isExtProject( addModuleProject ) )
                 {
-                    return LiferayServerCorePlugin.createErrorStatus( "Ext plugin deployment to remote server is not supported at this time." );
+                    return LiferayServerCorePlugin.createErrorStatus( Msgs.extPluginDeployment );
                 }
             }
 
@@ -234,7 +235,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
         {
             try
             {
-                return new URL( "http://" + getServer().getHost() + ":" + httpPort + context );
+                return new URL( "http://" + getServer().getHost() + ":" + httpPort + context ); //$NON-NLS-1$ //$NON-NLS-2$
             }
             catch( MalformedURLException e )
             {
@@ -253,7 +254,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
         {
             try
             {
-                return new URL( "http://" + getServer().getHost() + ":" + httpPort + contextUrl );
+                return new URL( "http://" + getServer().getHost() + ":" + httpPort + contextUrl ); //$NON-NLS-1$ //$NON-NLS-2$
             }
             catch( MalformedURLException e )
             {
@@ -293,11 +294,11 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
     {
         try
         {
-            return new URL( "http://" + getServer().getHost() + ":" + getHTTPPort() + "/tunnel-web/axis" );
+            return new URL( "http://" + getServer().getHost() + ":" + getHTTPPort() + "/tunnel-web/axis" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
         catch( MalformedURLException e )
         {
-            LiferayServerCorePlugin.logError( "Unable to get web services list URL", e );
+            LiferayServerCorePlugin.logError( "Unable to get web services list URL", e ); //$NON-NLS-1$
         }
 
         return null;
@@ -349,13 +350,13 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
     {
         super.setDefaults( monitor );
         // getServerWorkingCopy().setAttribute( Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_DISABLE );
-        String baseName = "Remote Liferay Server at " + getServer().getHost();
+        String baseName = "Remote Liferay Server at " + getServer().getHost(); //$NON-NLS-1$
         String defaultName = baseName;
 
         int collision = 1;
         while( ServerPlugin.isNameInUse( getServer(), defaultName ) )
         {
-            defaultName = baseName + " (" + ( collision++ ) + ")";
+            defaultName = baseName + " (" + ( collision++ ) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         getServerWorkingCopy().setName( defaultName );
@@ -396,13 +397,13 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
             if( monitor != null )
             {
-                monitor.beginTask( "Validating connection to " + host + ":" + getHTTPPort(), IProgressMonitor.UNKNOWN );
+                monitor.beginTask( NLS.bind( Msgs.validatingConnection, host, getHTTPPort() ), IProgressMonitor.UNKNOWN );
             }
 
             if( !canMakeHttpConnection() )
             {
-                return LiferayServerCorePlugin.createWarningStatus( "Server is not available at " + host + ":" +
-                    getHTTPPort() );
+                return LiferayServerCorePlugin.createWarningStatus( NLS.bind(
+                    Msgs.serverNotAvailable, host, getHTTPPort() ) );
             }
 
             IServerManagerConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );
@@ -439,4 +440,17 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
         return ATTR_REMOTE_SERVER_MODULE_IDS_LIST;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String extPluginDeployment;
+        public static String notAddNonLiferayPluginProjectModule;
+        public static String notConnectRemoteIDEConnectorPlugin;
+        public static String serverNotAvailable;
+        public static String validatingConnection;
+
+        static
+        {
+            initializeMessages( RemoteServer.class.getName(), Msgs.class );
+        }
+    }
 }

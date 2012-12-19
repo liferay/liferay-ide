@@ -66,7 +66,7 @@ public class PortletDeployer extends LaunchHelper
 
         config.setAttribute(
             IDebugUIConstants.ATTR_CAPTURE_IN_FILE,
-            LiferayServerCorePlugin.getDefault().getStateLocation().append( "portlet.deployer.log" ).toOSString() );
+            LiferayServerCorePlugin.getDefault().getStateLocation().append( "portlet.deployer.log" ).toOSString() ); //$NON-NLS-1$
 
         config.setAttribute( IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, deployerClass );
 
@@ -74,7 +74,7 @@ public class PortletDeployer extends LaunchHelper
 
         for( int i = 0; i < args.length; i++ )
         {
-            sb.append( "\"" + args[i] + "\" " );
+            sb.append( "\"" + args[i] + "\" " ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         config.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, sb.toString() );

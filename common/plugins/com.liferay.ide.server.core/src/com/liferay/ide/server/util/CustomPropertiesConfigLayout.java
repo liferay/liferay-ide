@@ -35,7 +35,7 @@ import org.apache.commons.lang.StringUtils;
 public class CustomPropertiesConfigLayout extends PropertiesConfigurationLayout
 {
 
-    private static final String ESCAPE = "\\";
+    private static final String ESCAPE = "\\"; //$NON-NLS-1$
 
     private static final char[] SEPARATORS = new char[] { '=', ':' };
 
@@ -82,7 +82,7 @@ public class CustomPropertiesConfigLayout extends PropertiesConfigurationLayout
             }
 
             write( escapeKey( key ) );
-            write( "=" );
+            write( "=" ); //$NON-NLS-1$
             write( v );
 
             writeln( null );

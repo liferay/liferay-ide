@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -90,9 +91,7 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
 
         if( portalUrl == null )
         {
-            MessageDialog.openError(
-                getActiveShell(), "Open Portal URL",
-                "Could not determine portal URL. Please make sure the server is properly configured." );
+            MessageDialog.openError( getActiveShell(), Msgs.openPortalURL, Msgs.notDeterminePortalURL );
             return;
         }
 
@@ -105,7 +104,7 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
         {
             final ILiferayServer portalServer = getLiferayServer();
 
-            new Job( "Open portal url" )
+            new Job( "Open portal url" ) //$NON-NLS-1$
             {
                 @Override
                 protected IStatus run( IProgressMonitor monitor )
@@ -118,4 +117,14 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String notDeterminePortalURL;
+        public static String openPortalURL;
+
+        static
+        {
+            initializeMessages( OpenPortalURLAction.class.getName(), Msgs.class );
+        }
+    }
 }

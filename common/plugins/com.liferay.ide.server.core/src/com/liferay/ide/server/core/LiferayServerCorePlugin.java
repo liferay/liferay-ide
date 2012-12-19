@@ -17,8 +17,9 @@ package com.liferay.ide.server.core;
 
 import com.liferay.ide.core.CorePlugin;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.remote.IServerManagerConnection;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.remote.IRemoteServer;
+import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class LiferayServerCorePlugin extends CorePlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.server.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.server.core"; //$NON-NLS-1$
 
     private static Map<String, IServerManagerConnection> connections = null;
 
@@ -118,13 +119,13 @@ public class LiferayServerCorePlugin extends CorePlugin
 
                 for( IConfigurationElement element : elements )
                 {
-                    final Object o = element.createExecutableExtension( "class" );
+                    final Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
 
                     if( o instanceof AbstractPluginPublisher )
                     {
                         AbstractPluginPublisher pluginDeployer = (AbstractPluginPublisher) o;
-                        pluginDeployer.setFacetId( element.getAttribute( "facetId" ) );
-                        pluginDeployer.setRuntimeTypeId( element.getAttribute( "runtimeTypeId" ) );
+                        pluginDeployer.setFacetId( element.getAttribute( "facetId" ) ); //$NON-NLS-1$
+                        pluginDeployer.setRuntimeTypeId( element.getAttribute( "runtimeTypeId" ) ); //$NON-NLS-1$
                         deployers.add( pluginDeployer );
                     }
                 }
@@ -133,7 +134,7 @@ public class LiferayServerCorePlugin extends CorePlugin
             }
             catch( Exception e )
             {
-                logError( "Unable to get plugin deployer extensions", e );
+                logError( "Unable to get plugin deployer extensions", e ); //$NON-NLS-1$
             }
         }
 
@@ -200,8 +201,8 @@ public class LiferayServerCorePlugin extends CorePlugin
 
                 for( IConfigurationElement element : elements )
                 {
-                    final Object o = element.createExecutableExtension( "class" );
-                    final String runtimeTypeId = element.getAttribute( "runtimeTypeId" );
+                    final Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
+                    final String runtimeTypeId = element.getAttribute( "runtimeTypeId" ); //$NON-NLS-1$
 
                     if( o instanceof AbstractRuntimeDelegateValidator )
                     {
@@ -215,7 +216,7 @@ public class LiferayServerCorePlugin extends CorePlugin
             }
             catch( Exception e )
             {
-                logError( "Unable to get IRuntimeDelegateValidator extensions", e );
+                logError( "Unable to get IRuntimeDelegateValidator extensions", e ); //$NON-NLS-1$
             }
         }
 
@@ -271,7 +272,7 @@ public class LiferayServerCorePlugin extends CorePlugin
                     }
                     catch( Exception e )
                     {
-                        logError( "Could not create liferay runtime stub.", e );
+                        logError( "Could not create liferay runtime stub.", e ); //$NON-NLS-1$
                     }
                 }
 
@@ -284,8 +285,8 @@ public class LiferayServerCorePlugin extends CorePlugin
 
     public static IPath getTempLocation( String prefix, String fileName )
     {
-        return getDefault().getStateLocation().append( "tmp" ).append(
-            prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? "" : "/" + fileName ) );
+        return getDefault().getStateLocation().append( "tmp" ).append( //$NON-NLS-1$
+            prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? StringUtil.EMPTY : "/" + fileName ) ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static void logError( Exception e )

@@ -10,6 +10,8 @@
  **********************************************************************/
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -73,14 +75,14 @@ public class ModuleTraverser {
      * Name of the custom Java classpath entry attribute that is used to flag entries
      * which should be exposed as module dependencies via the virtual component API.
      */
-	public static final String CLASSPATH_COMPONENT_DEPENDENCY = "org.eclipse.jst.component.dependency"; //$NON-NLS-1
+	public static final String CLASSPATH_COMPONENT_DEPENDENCY = "org.eclipse.jst.component.dependency"; //$NON-NLS-1$
     
 	/**
 	 * Name of the custom Java classpath entry attribute that is used to flag
 	 * the resolved entries of classpath containers that should not be exposed
 	 * via the virtual component API.
 	 */
-	public static final String CLASSPATH_COMPONENT_NON_DEPENDENCY = "org.eclipse.jst.component.nondependency"; //$NON-NLS-1
+	public static final String CLASSPATH_COMPONENT_NON_DEPENDENCY = "org.eclipse.jst.component.nondependency"; //$NON-NLS-1$
 	
 	/**
 	 * Argument values that are used to select component dependency attribute type. 
@@ -107,7 +109,7 @@ public class ModuleTraverser {
 
         if (component == null) {
             // can happen if project has been closed
-            Trace.trace(Trace.WARNING, "Unable to create component for module "
+            Trace.trace(Trace.WARNING, "Unable to create component for module " //$NON-NLS-1$
                     + module.getName());
             return;
         }
@@ -162,9 +164,9 @@ public class ModuleTraverser {
             WorkbenchComponent comp = warStruct.getComponent();
             if (comp == null) {
                 Trace.trace(Trace.SEVERE,
-                        "Error getting WorkbenchComponent from war project. IProject=\""
-                                + proj + "\" StructureEdit=\"" + warStruct
-                                + "\" WorkbenchComponent=\"" + comp + "\"");
+                        "Error getting WorkbenchComponent from war project. IProject=\"" //$NON-NLS-1$
+                                + proj + "\" StructureEdit=\"" + warStruct //$NON-NLS-1$
+                                + "\" WorkbenchComponent=\"" + comp + "\""); //$NON-NLS-1$ //$NON-NLS-2$
                 return;
             }
             traverseWebComponentLocalEntries(comp, visitor, monitor);
@@ -189,7 +191,7 @@ public class ModuleTraverser {
                     		}
                     		else {
                     			Trace.trace(Trace.WARNING, NLS.bind(
-                    					"Could not get the location of a referenced component.  It may not exist.  Project={0}, Parent Component={1}, Referenced Component Path={2}",
+                    					"Could not get the location of a referenced component.  It may not exist.  Project={0}, Parent Component={1}, Referenced Component Path={2}", //$NON-NLS-1$
                     					new Object[] { proj.getName(), comp.getName(), refPath}));
                     		}
                     	}
@@ -249,9 +251,9 @@ public class ModuleTraverser {
 			String rtFolder = attrib.getValue();
 			if (rtFolder == null) {
 				if (isClassFolder) {
-					rtFolder = "/WEB-INF/classes";
+					rtFolder = "/WEB-INF/classes"; //$NON-NLS-1$
 				} else {
-					rtFolder = "/WEB-INF/lib";
+					rtFolder = "/WEB-INF/lib"; //$NON-NLS-1$
 				}
 			} 
 			IPath entryPath = entry.getPath();
@@ -289,25 +291,25 @@ public class ModuleTraverser {
             IClasspathEntry cpe = getClasspathEntry(project, srcPath);
             if (cpe != null) {
                 visitor.visitDependentComponent(runtimeFolder.append(rtPath)
-                        .append(name + ".jar"), getOSPath(dependentProject,
+                        .append(name + ".jar"), getOSPath(dependentProject, //$NON-NLS-1$
                         project, cpe.getOutputLocation()));
             }
             // Handle META-INF/resources
     		String path = rtPath.toString();
     		IFolder resFolder = null;
-    		String targetPath = "";
-    		if ("/".equals(path)) {
-    			resFolder = dependentProject.getFolder(srcPath.append("META-INF/resources"));
+    		String targetPath = StringUtil.EMPTY;
+    		if ("/".equals(path)) { //$NON-NLS-1$
+    			resFolder = dependentProject.getFolder(srcPath.append("META-INF/resources")); //$NON-NLS-1$
     		}
-    		else if ("/META-INF".equals(path)) {
-    			resFolder = dependentProject.getFolder(srcPath.append("resources"));
+    		else if ("/META-INF".equals(path)) { //$NON-NLS-1$
+    			resFolder = dependentProject.getFolder(srcPath.append("resources")); //$NON-NLS-1$
     		}
-    		else if ("/META-INF/resources".equals(path)) {
+    		else if ("/META-INF/resources".equals(path)) { //$NON-NLS-1$
     			resFolder = dependentProject.getFolder(srcPath);
     		}
-    		else if (path.startsWith("/META-INF/resources/")) {
+    		else if (path.startsWith("/META-INF/resources/")) { //$NON-NLS-1$
     			resFolder = dependentProject.getFolder(srcPath);
-    			targetPath = path.substring("/META-INF/resources".length());
+    			targetPath = path.substring("/META-INF/resources".length()); //$NON-NLS-1$
     		}
     		if (resFolder != null && resFolder.exists()) {
     			visitor.visitDependentContentResource(new Path(targetPath), resFolder.getLocation());
@@ -321,9 +323,9 @@ public class ModuleTraverser {
 			boolean isClassFolder = isClassFolderEntry(entry);
 			String rtFolder = null;
 			if (isClassFolder) {
-				rtFolder = "/";
+				rtFolder = "/"; //$NON-NLS-1$
 			} else {
-				rtFolder = "/WEB-INF/lib";
+				rtFolder = "/WEB-INF/lib"; //$NON-NLS-1$
 			}
 			IPath entryPath = entry.getPath();
 			IResource entryRes = ResourcesPlugin.getWorkspace().getRoot().findMember(entryPath);
@@ -333,7 +335,7 @@ public class ModuleTraverser {
 			// TODO Determine if different handling is needed for some use cases
 			if (isClassFolder) {
 				 visitor.visitDependentComponent(runtimeFolder.append(rtFolder)
-		                    .append(name + ".jar"), getOSPath(dependentProject,
+		                    .append(name + ".jar"), getOSPath(dependentProject, //$NON-NLS-1$
 		                    project, entry.getPath()));
 			} else {
 				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);
@@ -402,7 +404,7 @@ public class ModuleTraverser {
 				}
 			}
 			Trace.trace(Trace.WARNING,
-					NLS.bind("Tomcat publishing could not resolve dependency URI \"{0}\".  A value for classpath variable {1} was not found.", uri, classpathVar));
+					NLS.bind("Tomcat publishing could not resolve dependency URI \"{0}\".  A value for classpath variable {1} was not found.", uri, classpathVar)); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -541,20 +543,20 @@ public class ModuleTraverser {
 
 		String runtimePath = getRuntimePath(attrib, isWebApp, isClassFolder);
 		if (!isWebApp) {
-			if (!runtimePath.equals("../") && !runtimePath.equals("/")) {
+			if (!runtimePath.equals("../") && !runtimePath.equals("/")) {  //$NON-NLS-1$//$NON-NLS-2$
 				return false;
 			}
-			if (isClassFolder && !runtimePath.equals("/")) {
+			if (isClassFolder && !runtimePath.equals("/")) { //$NON-NLS-1$
 				return false;
 			}
 		}
 		else {
-			if (runtimePath != null && !runtimePath.equals("/WEB-INF/lib")
-					&& !runtimePath.equals("/WEB-INF/classes")
-					&& !runtimePath.equals("../")) {
+			if (runtimePath != null && !runtimePath.equals("/WEB-INF/lib") //$NON-NLS-1$
+					&& !runtimePath.equals("/WEB-INF/classes") //$NON-NLS-1$
+					&& !runtimePath.equals("../")) { //$NON-NLS-1$
 				return false;
 			}
-			if (isClassFolder && !runtimePath.equals("/WEB-INF/classes")) {
+			if (isClassFolder && !runtimePath.equals("/WEB-INF/classes")) { //$NON-NLS-1$
 				return false;
 			}
 		}
@@ -591,9 +593,9 @@ public class ModuleTraverser {
     	}
     	if (attrib == null || attrib.getValue()== null || attrib.getValue().length() == 0) {
     		if (isWebApp) {
-    			return isClassFolder ? "/WEB_INF/classes" : "WEB-INF/lib";
+    			return isClassFolder ? "/WEB_INF/classes" : "WEB-INF/lib"; //$NON-NLS-1$ //$NON-NLS-2$
     		}
-			return isClassFolder ? "/" : "../";
+			return isClassFolder ? "/" : "../"; //$NON-NLS-1$ //$NON-NLS-2$
     	}
     	return attrib.getValue();
 	}

@@ -6,13 +6,13 @@ import org.eclipse.core.runtime.IStatus;
 public interface ILiferayRuntimeStub
 {
 
-    String EXTENSION_ID = "com.liferay.ide.server.core.runtimeStubs";
+    String EXTENSION_ID = "com.liferay.ide.server.core.runtimeStubs"; //$NON-NLS-1$
 
-    String RUNTIME_TYPE_ID = "runtimeTypeId";
+    String RUNTIME_TYPE_ID = "runtimeTypeId"; //$NON-NLS-1$
 
-    String DEFAULT = "default";
+    String DEFAULT = "default"; //$NON-NLS-1$
 
-    String NAME = "name";
+    String NAME = "name"; //$NON-NLS-1$
 
     String getRuntimeStubTypeId();
 

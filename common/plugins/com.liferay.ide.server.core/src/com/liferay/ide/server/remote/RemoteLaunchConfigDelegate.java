@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.remote;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMConnector;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
@@ -39,13 +41,13 @@ import org.eclipse.wst.server.core.ServerCore;
 public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate
 {
 
-    public static final String SERVER_ID = "server-id";
+    public static final String SERVER_ID = "server-id"; //$NON-NLS-1$
 
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
 
-        String serverId = configuration.getAttribute( SERVER_ID, "" );
+        String serverId = configuration.getAttribute( SERVER_ID, StringUtil.EMPTY );
         IServer server = ServerCore.findServer( serverId );
 
         if( server == null )
@@ -60,7 +62,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         if( state != IServer.STATE_STARTED )
         {
             throw new CoreException(
-                LiferayServerCorePlugin.createErrorStatus( "Server is not running. The WebSphere server adapter only supports connecting to already running instance of WebSphere." ) );
+                LiferayServerCorePlugin.createErrorStatus( Msgs.serverNotRunning ) );
         }
 
         if( ILaunchManager.RUN_MODE.equals( mode ) )
@@ -73,7 +75,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         }
         else
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Profile mode is not supported." ) );
+            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Profile mode is not supported." ) ); //$NON-NLS-1$
         }
     }
 
@@ -107,7 +109,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         if( connector == null )
         {
             abort(
-                "Debugging connector not specified.", null,
+                "Debugging connector not specified.", null, //$NON-NLS-1$
                 IJavaLaunchConfigurationConstants.ERR_CONNECTOR_NOT_AVAILABLE );
         }
 
@@ -115,7 +117,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
 
         int connectTimeout = JavaRuntime.getPreferences().getInt( JavaRuntime.PREF_CONNECT_TIMEOUT );
 
-        connectMap.put( "timeout", "" + connectTimeout );
+        connectMap.put( "timeout", StringUtil.EMPTY + connectTimeout ); //$NON-NLS-1$
 
         // check for cancellation
         if( monitor.isCanceled() )
@@ -164,4 +166,13 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         launch.addProcess( process );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String serverNotRunning;
+
+        static
+        {
+            initializeMessages( RemoteLaunchConfigDelegate.class.getName(), Msgs.class );
+        }
+    }
 }

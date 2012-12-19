@@ -34,10 +34,10 @@ import org.osgi.framework.BundleContext;
 public class LiferayServerUIPlugin extends AbstractUIPlugin
 {
 
-    public static final String IMG_WIZ_RUNTIME = "imgWizRuntime";
+    public static final String IMG_WIZ_RUNTIME = "imgWizRuntime"; //$NON-NLS-1$
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.server.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.server.ui"; //$NON-NLS-1$
 
     // base url for icons
     private static URL ICON_BASE_URL;
@@ -142,7 +142,7 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
     {
         if( ICON_BASE_URL == null )
         {
-            String pathSuffix = "icons/";
+            String pathSuffix = "icons/"; //$NON-NLS-1$
 
             ICON_BASE_URL = plugin.getBundle().getEntry( pathSuffix );
         }
@@ -165,7 +165,7 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
     {
         ImageRegistry registry = new ImageRegistry();
 
-        registerImage( registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png" );
+        registerImage( registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png" ); //$NON-NLS-1$
 
         return registry;
     }

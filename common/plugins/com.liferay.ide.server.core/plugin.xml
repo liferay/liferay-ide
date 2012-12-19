@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="pluginPublishers" name="Liferay Plugin Publishers" schema="schema/pluginPublishers.exsd"/>
-   <extension-point id="runtimeDelegateValidators" name="Liferay Runtime Delegate Validators" schema="schema/runtimeDelegateValidators.exsd"/>
-   <extension-point id="runtimeStubs" name="Liferay Runtime Stubs" schema="schema/runtimeStubs.exsd"/>
+   <extension-point id="pluginPublishers" name="%plugin.publishers.extension.point.name" schema="schema/pluginPublishers.exsd"/>
+   <extension-point id="runtimeDelegateValidators" name="%runtime.delegate.validators.extension.point.name" schema="schema/runtimeDelegateValidators.exsd"/>
+   <extension-point id="runtimeStubs" name="%runtime.stubs.extension.point.name" schema="schema/runtimeStubs.exsd"/>
 
    <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
@@ -1026,9 +1026,9 @@
          point="org.eclipse.wst.server.core.runtimeTypes">
       <runtimeType
             class="com.liferay.ide.server.core.LiferayRuntimeStubDelegate"
-            description="Liferay v6.x Runtime Stub"
+            description="%runtime.type.description"
             id="com.liferay.ide.eclipse.server.runtime.stub"
-            name="Liferay v6.x Runtime Stub"
+            name="%runtime.type.name"
             vendor="Liferay, Inc.">
          <moduleType
                types="jst.web"
@@ -1045,11 +1045,11 @@
       <serverType
             behaviourClass="com.liferay.ide.server.remote.RemoteServerBehavior"
             class="com.liferay.ide.server.remote.RemoteServer"
-            description="Liferay Portal Server running at a remote IP address"
+            description="%server.type.description"
             hasConfiguration="true"
             id="com.liferay.ide.eclipse.server.remote"
             launchConfigId="com.liferay.ide.server.remote.launchConfigurationType"
-            name="Remote Liferay Server (Liferay 6.1)"
+            name="%server.type.name"
             runtime="true"
             runtimeTypeId="com.liferay.ide.eclipse.server.runtime.stub"
             supportsRemoteHosts="true">
@@ -1061,7 +1061,7 @@
             delegate="com.liferay.ide.server.remote.RemoteLaunchConfigDelegate"
             id="com.liferay.ide.server.remote.launchConfigurationType"
             modes="run, debug"
-            name="Liferay Server (Remote)"
+            name="%launch.configuration.type.name"
             public="true"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
             sourcePathComputerId="com.liferay.ide.server.remote.sourcePathComputer">

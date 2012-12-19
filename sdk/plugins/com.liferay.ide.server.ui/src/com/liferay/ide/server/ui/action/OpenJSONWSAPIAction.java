@@ -42,7 +42,7 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
     {
         try
         {
-            return new URL( getLiferayServer().getPortalHomeUrl(), "/api/jsonws" );
+            return new URL( getLiferayServer().getPortalHomeUrl(), "/api/jsonws" ); //$NON-NLS-1$
         }
         catch( MalformedURLException e )
         {
@@ -54,7 +54,7 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
     @Override
     protected String getPortalURLTitle()
     {
-        return "JSON WS API";
+        return "JSON WS API"; //$NON-NLS-1$
     }
 
     @Override
@@ -77,7 +77,7 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
                     {
                         Version v = new Version( liferayRuntime.getPortalVersion() );
 
-                        if( CoreUtil.compareVersions( v, new Version( "6.1.0" ) ) < 0 )
+                        if( CoreUtil.compareVersions( v, new Version( "6.1.0" ) ) < 0 ) //$NON-NLS-1$
                         {
                             action.setEnabled( false );
                         }

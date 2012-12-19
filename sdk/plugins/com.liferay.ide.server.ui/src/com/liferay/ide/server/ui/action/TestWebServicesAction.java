@@ -28,6 +28,7 @@ import java.util.Vector;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.ws.internal.explorer.LaunchOption;
 import org.eclipse.wst.ws.internal.explorer.LaunchOptions;
@@ -70,7 +71,7 @@ public class TestWebServicesAction extends AbstractServerRunningAction
             try
             {
                 webServicesListURL =
-                    new URL( portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/axis" );
+                    new URL( portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/axis" ); //$NON-NLS-1$
             }
             catch( MalformedURLException e )
             {
@@ -82,8 +83,8 @@ public class TestWebServicesAction extends AbstractServerRunningAction
         WebServicesHelper helper = new WebServicesHelper( webServicesListURL );
         String[] names = helper.getWebServiceNames();
         StringsFilteredDialog dialog = new StringsFilteredDialog( getActiveShell() );
-        dialog.setTitle( "Web Service selection" );
-        dialog.setMessage( "Please select a web service to test:" );
+        dialog.setTitle( Msgs.webServiceSelection );
+        dialog.setMessage( Msgs.selectWebService );
         dialog.setInput( names );
         int retval = dialog.open();
 
@@ -127,5 +128,16 @@ public class TestWebServicesAction extends AbstractServerRunningAction
     protected int getRequiredServerState()
     {
         return IServer.STATE_STARTED;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String selectWebService;
+        public static String webServiceSelection;
+
+        static
+        {
+            initializeMessages( TestWebServicesAction.class.getName(), Msgs.class );
+        }
     }
 }

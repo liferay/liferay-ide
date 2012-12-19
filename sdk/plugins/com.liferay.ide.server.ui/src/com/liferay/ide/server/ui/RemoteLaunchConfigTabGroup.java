@@ -62,6 +62,6 @@ public class RemoteLaunchConfigTabGroup extends AbstractLaunchConfigurationTabGr
 
     protected String getServerTypeId()
     {
-        return "com.liferay.ide.eclipse.server.remote";
+        return "com.liferay.ide.eclipse.server.remote"; //$NON-NLS-1$
     }
 }

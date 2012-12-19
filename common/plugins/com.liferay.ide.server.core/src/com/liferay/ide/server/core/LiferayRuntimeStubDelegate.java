@@ -17,6 +17,8 @@
 
 package com.liferay.ide.server.core;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.Properties;
 
 import org.eclipse.core.runtime.CoreException;
@@ -36,7 +38,7 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
 public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILiferayRuntime
 {
 
-    protected static final String PROP_STUB_TYPE_ID = "stub-type-id";
+    protected static final String PROP_STUB_TYPE_ID = "stub-type-id"; //$NON-NLS-1$
     // protected ILiferayRuntimeStub runtimeStub = null;
     protected IRuntimeWorkingCopy tempRuntime = null;
 
@@ -120,7 +122,7 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 
     public String getRuntimeStubTypeId()
     {
-        return getAttribute( PROP_STUB_TYPE_ID, "" );
+        return getAttribute( PROP_STUB_TYPE_ID, StringUtil.EMPTY );
     }
 
     public String[] getServletFilterNames()
@@ -145,12 +147,12 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
             IRuntimeType runtimeType = ServerCore.findRuntimeType( getRuntimeStubTypeId() );
             try
             {
-                tempRuntime = runtimeType.createRuntime( getRuntimeStubTypeId() + "-stub", new NullProgressMonitor() );
+                tempRuntime = runtimeType.createRuntime( getRuntimeStubTypeId() + "-stub", new NullProgressMonitor() ); //$NON-NLS-1$
                 tempRuntime.setLocation( getRuntime().getLocation() );
             }
             catch( CoreException e )
             {
-                LiferayServerCorePlugin.logError( "Error creating runtime", e );
+                LiferayServerCorePlugin.logError( "Error creating runtime", e ); //$NON-NLS-1$
             }
         }
 

@@ -30,7 +30,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 public interface IPluginPublisher
 {
 
-    public static final String ID = "com.liferay.ide.server.core.pluginPublishers";
+    public static final String ID = "com.liferay.ide.server.core.pluginPublishers"; //$NON-NLS-1$
 
     public IStatus canPublishModule( IServer server, IModule module );
 

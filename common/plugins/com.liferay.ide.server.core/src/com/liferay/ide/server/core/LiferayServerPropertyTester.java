@@ -36,7 +36,7 @@ public class LiferayServerPropertyTester extends PropertyTester
 
             try
             {
-                return server.getRuntime().getRuntimeType().getId().startsWith( "com.liferay." );
+                return server.getRuntime().getRuntimeType().getId().startsWith( "com.liferay." ); //$NON-NLS-1$
             }
             catch( Throwable t )
             {

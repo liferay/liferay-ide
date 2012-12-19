@@ -74,7 +74,7 @@ public class LiferayPublishHelper
                     }
                     catch( Exception e )
                     {
-                        LiferayServerCorePlugin.logError( "Plugin publisher failed", e );
+                        LiferayServerCorePlugin.logError( "Plugin publisher failed", e ); //$NON-NLS-1$
                     }
                 }
             }

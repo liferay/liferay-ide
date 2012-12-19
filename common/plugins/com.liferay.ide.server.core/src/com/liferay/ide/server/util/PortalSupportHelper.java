@@ -47,7 +47,7 @@ public class PortalSupportHelper extends LaunchHelper
 
     protected File outputFile;
 
-    protected String[] portalLibs = new String[] { "portal-impl.jar", "spring-aop.jar" };
+    protected String[] portalLibs = new String[] { "portal-impl.jar", "spring-aop.jar" }; //$NON-NLS-1$ //$NON-NLS-2$
 
     protected IPath portalDir;
 
@@ -159,7 +159,7 @@ public class PortalSupportHelper extends LaunchHelper
 
                 public boolean accept( File dir, String name )
                 {
-                    return name.endsWith( ".jar" );
+                    return name.endsWith( ".jar" ); //$NON-NLS-1$
                 }
 
             } );
@@ -180,7 +180,7 @@ public class PortalSupportHelper extends LaunchHelper
         {
             model.addEntry(
                 ClasspathModel.USER,
-                JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( portalLib ).toOSString() ) );
+                JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( portalLib ).toOSString() ) ); //$NON-NLS-1$
         }
 
         if( userLibs != null )
@@ -189,18 +189,18 @@ public class PortalSupportHelper extends LaunchHelper
             {
                 model.addEntry(
                     ClasspathModel.USER,
-                    JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( userLib ).toOSString() ) );
+                    JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( userLib ).toOSString() ) ); //$NON-NLS-1$
             }
         }
         else
         {
-            for( String jarFile : this.portalDir.append( "WEB-INF/lib" ).toFile().list() )
+            for( String jarFile : this.portalDir.append( "WEB-INF/lib" ).toFile().list() ) //$NON-NLS-1$
             {
-                if( jarFile.endsWith( ".jar" ) )
+                if( jarFile.endsWith( ".jar" ) ) //$NON-NLS-1$
                 {
                     model.addEntry(
                         ClasspathModel.USER,
-                        JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( jarFile ).toOSString() ) );
+                        JavaRuntime.newStringVariableClasspathEntry( portalDir.append( "WEB-INF/lib" ).append( jarFile ).toOSString() ) ); //$NON-NLS-1$
                 }
             }
         }

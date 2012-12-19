@@ -44,22 +44,22 @@ public synchronized Class loadClass(String className,
 
     Class   result;
     byte[]  classBytes;
-    monitor(">> MultiClassLoader.loadClass(" + className + ", " + resolveIt + ")");
+    monitor(">> MultiClassLoader.loadClass(" + className + ", " + resolveIt + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     //----- Check our local cache of classes
     result = (Class)classes.get(className);
     if (result != null) {
-        monitor(">> returning cached result.");
+        monitor(">> returning cached result."); //$NON-NLS-1$
         return result;
     }
 
     //----- Check with the primordial class loader
     try {
         result = super.findSystemClass(className);
-        monitor(">> returning system class (in CLASSPATH).");
+        monitor(">> returning system class (in CLASSPATH)."); //$NON-NLS-1$
         return result;
     } catch (ClassNotFoundException e) {
-        monitor(">> Not a system class.");
+        monitor(">> Not a system class."); //$NON-NLS-1$
     }
 
     //----- Try to load it from preferred source
@@ -80,7 +80,7 @@ public synchronized Class loadClass(String className,
 
     // Done
     classes.put(className, result);
-    monitor(">> Returning newly loaded class.");
+    monitor(">> Returning newly loaded class."); //$NON-NLS-1$
     return result;
 }
 //---------- Public Methods ------------------------------
@@ -100,11 +100,11 @@ protected abstract byte[] loadClassBytes(String className);
 protected String formatClassName(String className) {
     if (classNameReplacementChar == '\u0000') {
         // '/' is used to map the package to the path
-        return className.replace('.', '/') + ".class";
+        return className.replace('.', '/') + ".class"; //$NON-NLS-1$
     } else {
         // Replace '.' with custom char, such as '_'
         return className.replace('.',
-            classNameReplacementChar) + ".class";
+            classNameReplacementChar) + ".class"; //$NON-NLS-1$
     }
 }
 protected void monitor(String text) {
