@@ -44,7 +44,7 @@ public interface FinderColumn extends IModelElement
 	@Label(standard = "&name")
     @Required
 
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name"); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -55,7 +55,7 @@ public interface FinderColumn extends IModelElement
 	@Type(base = Boolean.class)
 	@Label(standard = "&case sensitive")
 	@XmlBinding(path = "@case-sensitive")
-	ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive");
+	ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive"); //$NON-NLS-1$
 
 	Value<Boolean> isCaseSensitive();
 
@@ -68,7 +68,7 @@ public interface FinderColumn extends IModelElement
 	@Label(standard = "comparator")
 	@XmlBinding(path = "@comparator")
 	@PossibleValues(values = { "=", "!=", "<", "<=", ">", ">=", "LIKE" }, invalidValueMessage = "{0} is not a valid comparator.")
-	ValueProperty PROP_COMPARATOR = new ValueProperty(TYPE, "Comparator");
+	ValueProperty PROP_COMPARATOR = new ValueProperty(TYPE, "Comparator"); //$NON-NLS-1$
 
 	Value<String> getComparator();
 
@@ -79,7 +79,7 @@ public interface FinderColumn extends IModelElement
 	@Label(standard = "arrayable operator")
 	@XmlBinding(path = "@arrayable-operator")
 	@PossibleValues(values = { "AND", "OR" }, invalidValueMessage = "{0} is not a valid arryable operator.")
-	ValueProperty PROP_ARRAYABLE_OPERATOR = new ValueProperty(TYPE, "ArrayableOperator");
+	ValueProperty PROP_ARRAYABLE_OPERATOR = new ValueProperty(TYPE, "ArrayableOperator"); //$NON-NLS-1$
 
 	Value<String> getArrayableOperator();
 

@@ -46,7 +46,7 @@ public interface Column extends IModelElement
     @XmlBinding( path = "@name" )
     @Label( standard = "&name" )
     @Required
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -56,7 +56,7 @@ public interface Column extends IModelElement
 
     @XmlBinding( path = "@db-name" )
     @Label( standard = "&db name" )
-    ValueProperty PROP_DB_NAME = new ValueProperty( TYPE, "DbName" );
+    ValueProperty PROP_DB_NAME = new ValueProperty( TYPE, "DbName" ); //$NON-NLS-1$
 
     Value<String> getDbName();
 
@@ -72,7 +72,7 @@ public interface Column extends IModelElement
         values = { "String", "long", "boolean", "int", "double", "Date", "Collection" },
         invalidValueMessage = "{0} is not a valid type." 
     )
-    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" );
+    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" ); //$NON-NLS-1$
 
     Value<String> getType();
 
@@ -84,7 +84,7 @@ public interface Column extends IModelElement
     @Label( standard = "&primary" )
     @XmlBinding( path = "@primary" )
     @DefaultValue( text = "false" )
-    ValueProperty PROP_PRIMARY = new ValueProperty( TYPE, "Primary" );
+    ValueProperty PROP_PRIMARY = new ValueProperty( TYPE, "Primary" ); //$NON-NLS-1$
 
     Value<Boolean> isPrimary();
 
@@ -98,7 +98,7 @@ public interface Column extends IModelElement
     @Label( standard = "&filter primary" )
     @XmlBinding( path = "@filter-primary" )
     @DefaultValue( text = "false" )
-    ValueProperty PROP_FILTER_PRIMARY = new ValueProperty( TYPE, "FilterPrimary" );
+    ValueProperty PROP_FILTER_PRIMARY = new ValueProperty( TYPE, "FilterPrimary" ); //$NON-NLS-1$
 
     Value<Boolean> isFilterPrimary();
 
@@ -110,7 +110,7 @@ public interface Column extends IModelElement
 
     @XmlBinding( path = "@entity" )
     @Label( standard = "&entity" )
-    ValueProperty PROP_ENTITY = new ValueProperty( TYPE, "Entity" );
+    ValueProperty PROP_ENTITY = new ValueProperty( TYPE, "Entity" ); //$NON-NLS-1$
 
     Value<String> getEntity();
 
@@ -120,7 +120,7 @@ public interface Column extends IModelElement
 
     @XmlBinding( path = "@mapping-key" )
     @Label( standard = "&mapping key" )
-    ValueProperty PROP_MAPPING_KEY = new ValueProperty( TYPE, "MappingKey" );
+    ValueProperty PROP_MAPPING_KEY = new ValueProperty( TYPE, "MappingKey" ); //$NON-NLS-1$
 
     Value<String> getMappingKey();
 
@@ -130,7 +130,7 @@ public interface Column extends IModelElement
 
     @XmlBinding( path = "@mapping-table" )
     @Label( standard = "&mapping table" )
-    ValueProperty PROP_MAPPING_TABLE = new ValueProperty( TYPE, "MappingTable" );
+    ValueProperty PROP_MAPPING_TABLE = new ValueProperty( TYPE, "MappingTable" ); //$NON-NLS-1$
 
     Value<String> getMappingTable();
 
@@ -144,7 +144,7 @@ public interface Column extends IModelElement
         values = { "class", "increment", "identity", "sequence" },
         invalidValueMessage = "{0} is not a valid ID type." 
     )
-    ValueProperty PROP_ID_TYPE = new ValueProperty( TYPE, "IdType" );
+    ValueProperty PROP_ID_TYPE = new ValueProperty( TYPE, "IdType" ); //$NON-NLS-1$
 
     Value<String> getIdType();
 
@@ -154,7 +154,7 @@ public interface Column extends IModelElement
 
     @XmlBinding( path = "@id-param" )
     @Label( standard = "&id param" )
-    ValueProperty PROP_ID_PARAM = new ValueProperty( TYPE, "IdParam" );
+    ValueProperty PROP_ID_PARAM = new ValueProperty( TYPE, "IdParam" ); //$NON-NLS-1$
 
     Value<String> getIdParam();
 
@@ -166,7 +166,7 @@ public interface Column extends IModelElement
     @Label( standard = "&convert null" )
     @XmlBinding( path = "@convert-null" )
     @DefaultValue( text = "true" )
-    ValueProperty PROP_CONVERT_NULL = new ValueProperty( TYPE, "ConvertNull" );
+    ValueProperty PROP_CONVERT_NULL = new ValueProperty( TYPE, "ConvertNull" ); //$NON-NLS-1$
 
     Value<Boolean> isConvertNull();
 
@@ -178,7 +178,7 @@ public interface Column extends IModelElement
     @Label( standard = "&lazy" )
     @XmlBinding( path = "@lazy" )
     @DefaultValue( text = "true" )
-    ValueProperty PROP_LAZY = new ValueProperty( TYPE, "Lazy" );
+    ValueProperty PROP_LAZY = new ValueProperty( TYPE, "Lazy" ); //$NON-NLS-1$
 
     Value<Boolean> isLazy();
 
@@ -192,7 +192,7 @@ public interface Column extends IModelElement
     @Label( standard = "&localized" )
     @XmlBinding( path = "@localized" )
     @DefaultValue( text = "false" )
-    ValueProperty PROP_LOCALIZED = new ValueProperty( TYPE, "Localized" );
+    ValueProperty PROP_LOCALIZED = new ValueProperty( TYPE, "Localized" ); //$NON-NLS-1$
 
     Value<Boolean> isLocalized();
 
@@ -206,7 +206,7 @@ public interface Column extends IModelElement
     @Label( standard = "&JSON enabled" )
     @XmlBinding( path = "@json-enabled" )
     @DefaultValue( text = "true" )
-    ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" );
+    ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" ); //$NON-NLS-1$
 
     Value<Boolean> isJsonEnabled();
 
@@ -221,7 +221,7 @@ public interface Column extends IModelElement
     @Label( standard = "&accessor" )
     @DefaultValue( text = "false" )
     @Documentation( content = "This [b]accessor[/b] value specifies whether or not to generate an accessor for this column. This accessor will provide a fast and type-safe way to access column value." )
-    ValueProperty PROP_ACCESSOR = new ValueProperty( TYPE, "Accessor" );
+    ValueProperty PROP_ACCESSOR = new ValueProperty( TYPE, "Accessor" ); //$NON-NLS-1$
 
     Value<Boolean> getAccessor();
 

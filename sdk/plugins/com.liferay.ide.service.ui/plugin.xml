@@ -6,20 +6,20 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="com.liferay.ide.newWizards"
-            name="Liferay">
+            name="%category.name">
       </category>
       <wizard
             category="com.liferay.ide.newWizards"
             icon="icons/n16/service_new.png"
             id="com.liferay.ide.service.ui.wizard.servicebuilder"
-            name="Liferay Service Builder">
+            name="%service.wizard.name">
          <class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
           <parameter name="liferay_artifact" value="true"/>
             <parameter name="menuIndex" value="30" />
             <parameter name="validProjectTypes" value="portlet,hook,ext" />
          </class>
          <description>
-            Create a new Liferay Service
+            %service.wizard.description
          </description>
       </wizard>
    </extension>
@@ -28,7 +28,7 @@
       <contextType
             class="com.liferay.ide.service.ui.template.ServiceBuilderTemplateContextType"
             id="servicebuilder_new"
-            name="New Service Builder">
+            name="%context.type.name">
       </contextType>
       <include
             file="templates/servicebuilder-templates.xml"
@@ -46,18 +46,18 @@
                enablesFor="1"
                icon="icons/e16/service.png"
                id="com.liferay.ide.service.ui.wsdd.popup.action"
-               label="Build WSDD"
+               label="%action.label"
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Build web services descriptor">
+               tooltip="%build.web.services.descriptor.action.tooltip">
          </action>
          <action
                class="com.liferay.ide.service.ui.actions.BuildServicesAction"
                enablesFor="1"
                icon="icons/e16/service.png"
                id="com.liferay.ide.service.ui.service.popup.action"
-               label="Build Services"
+               label="%build.services.action.label"
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Build services">
+               tooltip="%build.services.action.tooltip">
          </action>
 
          <enablement>
@@ -77,7 +77,7 @@
             default="true"
             icon="icons/e16/service.png"
             id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
-            name="Service Builder Configuration Editor"
+            name="%service.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
                contentTypeId="com.liferay.ide.service.core.servicebuildercontent">

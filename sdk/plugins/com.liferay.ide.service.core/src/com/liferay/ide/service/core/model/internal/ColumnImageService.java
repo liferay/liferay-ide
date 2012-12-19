@@ -34,10 +34,10 @@ public class ColumnImageService extends ImageService
 {
 
 	private static final ImageData IMG_COLUMN = ImageData.readFromClassLoader(
-		ColumnImageService.class, "images/column_16x16.gif" );
+		ColumnImageService.class, "images/column_16x16.gif" ); //$NON-NLS-1$
 
 	private static final ImageData IMG_COLUMN_PRIMARY = ImageData.readFromClassLoader(
-		ColumnImageService.class, "images/column_primary_16x16.png" );
+		ColumnImageService.class, "images/column_primary_16x16.png" ); //$NON-NLS-1$
 
 	private Listener listener;
 

@@ -86,7 +86,7 @@ public class ServiceUI extends AbstractUIPlugin
         {
             fTemplateStore =
                 new ContributionTemplateStore(
-                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" );
+                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" ); //$NON-NLS-1$
 
             try
             {

@@ -20,6 +20,7 @@ import com.liferay.ide.service.core.job.BuildServiceJob;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
@@ -42,13 +43,20 @@ public class BuildServicesActionHandler extends SapphireActionHandler
         }
         else
         {
-            MessageDialog.openWarning(
-                context.getShell(),
-                "Build Services",
-                "This action is unavailable for files that are outside of an eclipse workspace. Import the project using Import Liferay Project from Existing Source wizard." );
+            MessageDialog.openWarning( context.getShell(), Msgs.buildServices, Msgs.ActionUnavailableImportProject );
         }
 
         return null;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String ActionUnavailableImportProject;
+        public static String buildServices;
+
+        static
+        {
+            initializeMessages( BuildServicesActionHandler.class.getName(), Msgs.class );
+        }
+    }
 }

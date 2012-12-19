@@ -125,7 +125,7 @@ public class RelationshipResource extends Resource
             {
                 final Column column = fromEntity.getColumns().insert();
                 column.setName( primaryKeyColumn.getName().getContent() );
-                column.setType( "long" );
+                column.setType( "long" ); //$NON-NLS-1$
             }
         }
     }

@@ -44,7 +44,7 @@ public interface Finder extends IModelElement
 	@XmlBinding(path = "@name")
 	@Label(standard = "&name")
 	@Required
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name"); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -55,7 +55,7 @@ public interface Finder extends IModelElement
 	@XmlBinding(path = "@return-type")
 	@Label(standard = "&return type")
 	@Required
-	ValueProperty PROP_RETURN_TYPE = new ValueProperty(TYPE, "ReturnType");
+	ValueProperty PROP_RETURN_TYPE = new ValueProperty(TYPE, "ReturnType"); //$NON-NLS-1$
 
 	Value<String> getReturnType();
 
@@ -67,7 +67,7 @@ public interface Finder extends IModelElement
 	@Label(standard = "&unique")
 	@XmlBinding(path = "@unique")
 	@DefaultValue(text = "false")
-	ValueProperty PROP_UNIQUE = new ValueProperty(TYPE, "Unique");
+	ValueProperty PROP_UNIQUE = new ValueProperty(TYPE, "Unique"); //$NON-NLS-1$
 
 	Value<Boolean> isUnique();
 
@@ -79,7 +79,7 @@ public interface Finder extends IModelElement
 
 	@XmlBinding(path = "@where")
 	@Label(standard = "&where")
-	ValueProperty PROP_WHERE = new ValueProperty(TYPE, "Where");
+	ValueProperty PROP_WHERE = new ValueProperty(TYPE, "Where"); //$NON-NLS-1$
 
 	Value<String> getWhere();
 
@@ -91,7 +91,7 @@ public interface Finder extends IModelElement
 	@Label(standard = "&db index")
 	@XmlBinding(path = "@db-index")
 	@DefaultValue(text = "true")
-	ValueProperty PROP_DB_INDEX = new ValueProperty(TYPE, "DbIndex");
+	ValueProperty PROP_DB_INDEX = new ValueProperty(TYPE, "DbIndex"); //$NON-NLS-1$
 
 	Value<Boolean> isDbIndex();
 
@@ -105,7 +105,7 @@ public interface Finder extends IModelElement
 	@Label(standard = "finder columns")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "finder-column", type = FinderColumn.class))
 	@CountConstraint(min = 1)
-	ListProperty PROP_FINDER_COLUMNS = new ListProperty(TYPE, "FinderColumns");
+	ListProperty PROP_FINDER_COLUMNS = new ListProperty(TYPE, "FinderColumns"); //$NON-NLS-1$
 
 	ModelElementList<FinderColumn> getFinderColumns();
 

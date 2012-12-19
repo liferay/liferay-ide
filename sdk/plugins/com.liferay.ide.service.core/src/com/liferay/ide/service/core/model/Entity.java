@@ -44,7 +44,7 @@ public interface Entity extends IModelElement
     @XmlBinding(path = "@name")
 	@Label(standard = "&name")
     @Required
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name"); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -54,7 +54,7 @@ public interface Entity extends IModelElement
 
 	@XmlBinding(path = "@human-name")
 	@Label(standard = "&human name")
-	ValueProperty PROP_HUMAN_NAME = new ValueProperty(TYPE, "HumanName");
+	ValueProperty PROP_HUMAN_NAME = new ValueProperty(TYPE, "HumanName"); //$NON-NLS-1$
 
     Value<String> getHumanName();
 
@@ -64,7 +64,7 @@ public interface Entity extends IModelElement
 
 	@XmlBinding(path = "@table")
 	@Label(standard = "&table")
-	ValueProperty PROP_TABLE = new ValueProperty(TYPE, "Table");
+	ValueProperty PROP_TABLE = new ValueProperty(TYPE, "Table"); //$NON-NLS-1$
 
 	Value<String> getTable();
 
@@ -76,7 +76,7 @@ public interface Entity extends IModelElement
 	@XmlBinding(path = "@uuid")
 	@Label(standard = "&uuid")
 	@DefaultValue(text = "false")
-	ValueProperty PROP_UUID = new ValueProperty(TYPE, "Uuid");
+	ValueProperty PROP_UUID = new ValueProperty(TYPE, "Uuid"); //$NON-NLS-1$
 
 	Value<Boolean> getUuid();
 
@@ -91,7 +91,7 @@ public interface Entity extends IModelElement
 	@Label( standard = "&uuid accessor" )
 	@DefaultValue( text = "false" )
 	@Documentation( content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID." )
-	ValueProperty PROP_UUID_ACCESSOR = new ValueProperty( TYPE, "UuidAccessor" );
+	ValueProperty PROP_UUID_ACCESSOR = new ValueProperty( TYPE, "UuidAccessor" ); //$NON-NLS-1$
 
 	Value<Boolean> getUuidAccessor();
 
@@ -105,7 +105,7 @@ public interface Entity extends IModelElement
 	@Label(standard = "&local service")
 	@DefaultValue(text = "false")
 	@XmlBinding(path = "@local-service")
-	ValueProperty PROP_LOCAL_SERVICE = new ValueProperty(TYPE, "LocalService");
+	ValueProperty PROP_LOCAL_SERVICE = new ValueProperty(TYPE, "LocalService"); //$NON-NLS-1$
 
 	Value<Boolean> isLocalService();
 	void setLocalService(String value);
@@ -117,7 +117,7 @@ public interface Entity extends IModelElement
 	@Label(standard = "&remote service")
 	@DefaultValue(text = "true")
 	@XmlBinding(path = "@remote-service")
-	ValueProperty PROP_REMOTE_SERVICE = new ValueProperty(TYPE, "RemoteService");
+	ValueProperty PROP_REMOTE_SERVICE = new ValueProperty(TYPE, "RemoteService"); //$NON-NLS-1$
 
 	Value<Boolean> isRemoteService();
 
@@ -129,7 +129,7 @@ public interface Entity extends IModelElement
 
 	@XmlBinding(path = "@persistence-class")
 	@Label(standard = "&persistence class")
-	ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty(TYPE, "PersistenceClass");
+	ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty(TYPE, "PersistenceClass"); //$NON-NLS-1$
 
     Value<String> getPersistenceClass();
 
@@ -139,7 +139,7 @@ public interface Entity extends IModelElement
 
 	@XmlBinding(path = "@data-source")
 	@Label(standard = "&data source")
-	ValueProperty PROP_DATA_SOURCE = new ValueProperty(TYPE, "DataSource");
+	ValueProperty PROP_DATA_SOURCE = new ValueProperty(TYPE, "DataSource"); //$NON-NLS-1$
 
 	Value<String> getDataSource();
 
@@ -149,7 +149,7 @@ public interface Entity extends IModelElement
 
 	@XmlBinding(path = "@session-factory")
 	@Label(standard = "&session factory")
-	ValueProperty PROP_SESSION_FACTORY = new ValueProperty(TYPE, "SessionFactory");
+	ValueProperty PROP_SESSION_FACTORY = new ValueProperty(TYPE, "SessionFactory"); //$NON-NLS-1$
 
 	Value<String> getSessionFactory();
 
@@ -159,7 +159,7 @@ public interface Entity extends IModelElement
 
 	@XmlBinding(path = "@tx-manager")
 	@Label(standard = "tx &manager")
-	ValueProperty PROP_TX_MANAGER = new ValueProperty(TYPE, "TxManager");
+	ValueProperty PROP_TX_MANAGER = new ValueProperty(TYPE, "TxManager"); //$NON-NLS-1$
 
 	Value<String> getTxManager();
 
@@ -171,7 +171,7 @@ public interface Entity extends IModelElement
 	@Label(standard = "&cache enabled")
 	@XmlBinding(path = "@cache-enabled")
 	@DefaultValue(text = "true")
-	ValueProperty PROP_CACHE_ENABLED = new ValueProperty(TYPE, "CacheEnabled");
+	ValueProperty PROP_CACHE_ENABLED = new ValueProperty(TYPE, "CacheEnabled"); //$NON-NLS-1$
 
 	Value<Boolean> isCacheEnabled();
 
@@ -185,7 +185,7 @@ public interface Entity extends IModelElement
 	@Label( standard = "&JSON enabled" )
 	@XmlBinding( path = "@json-enabled" )
 	@DefaultValue( text = "true" )
-	ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" );
+	ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" ); //$NON-NLS-1$
 
 	Value<Boolean> isJsonEnabled();
 
@@ -195,14 +195,14 @@ public interface Entity extends IModelElement
 	@Type(base = Column.class)
 	@Label(standard = "column")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "column", type = Column.class))
-	ListProperty PROP_COLUMNS = new ListProperty(TYPE, "Columns");
+	ListProperty PROP_COLUMNS = new ListProperty(TYPE, "Columns"); //$NON-NLS-1$
 
 	ModelElementList<Column> getColumns();
 
 	@Type(base = Order.class)
 	@Label(standard = "order")
 	@XmlElementBinding(mappings = @XmlElementBinding.Mapping(element = "order", type = Order.class))
-	ElementProperty PROP_ORDER = new ElementProperty(TYPE, "Order");
+	ElementProperty PROP_ORDER = new ElementProperty(TYPE, "Order"); //$NON-NLS-1$
 
 	ModelElementHandle<Order> getOrder();
 
@@ -214,7 +214,7 @@ public interface Entity extends IModelElement
 	@Type(base = Finder.class)
 	@Label(standard = "finder")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "finder", type = Finder.class))
-	ListProperty PROP_FINDERS = new ListProperty(TYPE, "Finders");
+	ListProperty PROP_FINDERS = new ListProperty(TYPE, "Finders"); //$NON-NLS-1$
 
 	ModelElementList<Finder> getFinders();
 
@@ -223,7 +223,7 @@ public interface Entity extends IModelElement
 	@Type(base = Reference.class)
 	@Label(standard = "references")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "reference", type = Reference.class))
-	ListProperty PROP_REFERENCES = new ListProperty(TYPE, "References");
+	ListProperty PROP_REFERENCES = new ListProperty(TYPE, "References"); //$NON-NLS-1$
 
 	ModelElementList<Reference> getReferences();
 
@@ -232,7 +232,7 @@ public interface Entity extends IModelElement
 	@Type(base = TxRequired.class)
 	@Label(standard = "tx requireds")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "tx-required", type = TxRequired.class))
-	ListProperty PROP_TX_REQUIREDS = new ListProperty(TYPE, "TxRequireds");
+	ListProperty PROP_TX_REQUIREDS = new ListProperty(TYPE, "TxRequireds"); //$NON-NLS-1$
 
 	ModelElementList<TxRequired> getTxRequireds();
 

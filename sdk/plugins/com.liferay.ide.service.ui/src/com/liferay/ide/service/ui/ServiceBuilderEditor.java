@@ -54,14 +54,14 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
         super( ServiceUI.PLUGIN_ID );
 
         setEditorDefinitionPath( ServiceUI.PLUGIN_ID +
-            "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/serviceBuilderPage" );
+            "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/serviceBuilderPage" ); //$NON-NLS-1$
     }
 
     @Override
     protected void createDiagramPages() throws PartInitException
     {
         IPath path =
-            new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/diagramPage" );
+            new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/diagramPage" ); //$NON-NLS-1$
         this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
         addEditorPage( 0, this.pageDiagram );
     }
@@ -130,11 +130,11 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
             String systemId = docType.getSystemId();
             if( publicId != null && systemId != null )
             {
-                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) )
+                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                     dtdVersion = ServiceBuilderVersionType.v6_0_0;
                 }
-                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) )
+                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                     dtdVersion = ServiceBuilderVersionType.v6_1_0;
                 }

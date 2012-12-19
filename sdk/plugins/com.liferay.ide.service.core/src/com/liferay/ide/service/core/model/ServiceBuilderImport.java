@@ -51,7 +51,7 @@ public interface ServiceBuilderImport extends IModelElement
 	@FileExtensions( expr = "xml" )
 	@MustExist
 	@Required
-	ValueProperty PROP_FILE = new ValueProperty( TYPE, "File" );
+	ValueProperty PROP_FILE = new ValueProperty( TYPE, "File" ); //$NON-NLS-1$
 
 	Value<Path> getFile();
 

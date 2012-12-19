@@ -88,14 +88,14 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
         if( webappRoot == null )
         {
-            return ServiceCore.createErrorStatus( "Could not find webapp root folder." );
+            return ServiceCore.createErrorStatus( "Could not find webapp root folder." ); //$NON-NLS-1$
         }
 
         for( IContainer container : webappRoot.getUnderlyingFolders() )
         {
             if( container != null && container.exists() )
             {
-                final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) );
+                final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) ); //$NON-NLS-1$
                 IFile serviceBuilderFile = container.getFile( path );
 
                 if( !serviceBuilderFile.exists() )
@@ -127,12 +127,12 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
             Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
 
-            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";
+            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
         }
         catch( Exception e )
         {
-            ServiceCore.logError( "Could not determine liferay runtime version", e );
-            descriptorVersion = "6.0.0";
+            ServiceCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
+            descriptorVersion = "6.0.0"; //$NON-NLS-1$
         }
 
         Template template = null;
@@ -149,9 +149,9 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
         IDocument document = new Document();
 
         TemplateContext context = new DocumentTemplateContext( getContextType(), document, 0, 0 );
-        context.setVariable( "package_path", getDataModel().getStringProperty( PACKAGE_PATH ) );
-        context.setVariable( "namespace", getDataModel().getStringProperty( NAMESPACE ) );
-        context.setVariable( "author", getDataModel().getStringProperty( AUTHOR ) );
+        context.setVariable( "package_path", getDataModel().getStringProperty( PACKAGE_PATH ) ); //$NON-NLS-1$
+        context.setVariable( "namespace", getDataModel().getStringProperty( NAMESPACE ) ); //$NON-NLS-1$
+        context.setVariable( "author", getDataModel().getStringProperty( AUTHOR ) ); //$NON-NLS-1$
 
         String templateString = null;
 
@@ -163,7 +163,7 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
         CoreUtil.prepareFolder( (IFolder) serviceBuilderFile.getParent() );
 
         serviceBuilderFile.create(
-            new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+            new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
 
         FormatProcessorXML processor = new FormatProcessorXML();
 

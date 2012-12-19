@@ -43,7 +43,7 @@ public interface Order extends IModelElement
 	@Label(standard = "by")
 	@XmlBinding(path = "@by")
 	@PossibleValues(values = { "asc", "desc" }, invalidValueMessage = "{0} is not valid.")
-	ValueProperty PROP_BY = new ValueProperty(TYPE, "By");
+	ValueProperty PROP_BY = new ValueProperty(TYPE, "By"); //$NON-NLS-1$
 
 	Value<String> getBy();
 
@@ -55,7 +55,7 @@ public interface Order extends IModelElement
 	@Label(standard = "order columns")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "order-column", type = OrderColumn.class))
 	@CountConstraint(min = 1)
-	ListProperty PROP_ORDER_COLUMNS = new ListProperty(TYPE, "OrderColumns");
+	ListProperty PROP_ORDER_COLUMNS = new ListProperty(TYPE, "OrderColumns"); //$NON-NLS-1$
 
 	ModelElementList<OrderColumn> getOrderColumns();
 

@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -42,7 +43,7 @@ public class BuildWSDDJob extends SDKJob
 
     public BuildWSDDJob( IFile serviceXmlFile )
     {
-        super( "Build web services descriptor" );
+        super( "Build web services descriptor" ); //$NON-NLS-1$
 
         this.serviceXmlFile = serviceXmlFile;
 
@@ -56,7 +57,7 @@ public class BuildWSDDJob extends SDKJob
     {
         IStatus retval = null;
 
-        monitor.beginTask( "Building Liferay web services deployment descriptor...", 100 );
+        monitor.beginTask( Msgs.buildingLiferayWebServicesDeploymentDescriptor, 100 );
 
         try
         {
@@ -115,4 +116,13 @@ public class BuildWSDDJob extends SDKJob
         return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String buildingLiferayWebServicesDeploymentDescriptor;
+
+        static
+        {
+            initializeMessages( BuildWSDDJob.class.getName(), Msgs.class );
+        }
+    }
 }

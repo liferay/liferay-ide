@@ -10,7 +10,7 @@
             file-extensions="xml"
             file-names="service.xml"
             id="servicebuildercontent"
-            name="Service Builder"
+            name="%service.content.type.name"
             priority="high">
       </content-type>
    </extension>

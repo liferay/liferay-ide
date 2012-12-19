@@ -38,7 +38,7 @@ public interface Exception extends IModelElement
 
     @XmlBinding( path = "" )
     @Label( standard = "&exception" )
-    ValueProperty PROP_EXCEPTION = new ValueProperty( TYPE, "Exception" );
+    ValueProperty PROP_EXCEPTION = new ValueProperty( TYPE, "Exception" ); //$NON-NLS-1$
 
     Value<String> getException();
 

@@ -16,6 +16,7 @@
 package com.liferay.ide.service.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.service.ui.ServiceUI;
@@ -36,6 +37,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -70,7 +72,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
     public NewServiceBuilderWizardPage( IDataModel dataModel, String pageName, String title, String description )
     {
         super( dataModel, pageName, title, ServiceUI.imageDescriptorFromPlugin(
-            ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" ) );
+            ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" ) ); //$NON-NLS-1$
 
         setDescription( description );
     }
@@ -82,7 +84,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
         // package
         packageLabel = new Label( group, SWT.LEFT );
-        packageLabel.setText( "Package path:" );
+        packageLabel.setText( Msgs.packagePath );
         packageLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         packageText = new Text( group, SWT.SINGLE | SWT.BORDER );
@@ -123,20 +125,20 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
             }
         } );
 
-        SWTUtil.createLabel( group, SWT.LEAD, "Namespace:", 1 );
+        SWTUtil.createLabel( group, SWT.LEAD, Msgs.namespace, 1 );
         namespace = SWTUtil.createText( group, 1 );
         this.synchHelper.synchText( namespace, NAMESPACE, null );
-        SWTUtil.createLabel( group, SWT.LEAD, "", 1 );
+        SWTUtil.createLabel( group, SWT.LEAD, StringUtil.EMPTY, 1 );
 
-        SWTUtil.createLabel( group, SWT.LEAD, "Author", 1 );
+        SWTUtil.createLabel( group, SWT.LEAD, Msgs.author, 1 );
         author = SWTUtil.createText( group, 1 );
         this.synchHelper.synchText( author, AUTHOR, null );
-        SWTUtil.createLabel( group, "", 1 );
+        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
 
-        SWTUtil.createLabel( group, "", 1 );
+        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
         Composite checkboxParent = SWTUtil.createComposite( group, 1, 1, SWT.FILL, 0, 3 );
         useSampleTemplate =
-            SWTUtil.createCheckButton( checkboxParent, "Include sample entity in new file.", null, true, 1 );
+            SWTUtil.createCheckButton( checkboxParent, Msgs.includeSampleEntity, null, true, 1 );
         GridData data = new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 );
         useSampleTemplate.setLayoutData( data );
         this.synchHelper.synchCheckbox( useSampleTemplate, USE_SAMPLE_TEMPLATE, null );
@@ -167,7 +169,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
             projectName = initialProjectName;
         }
 
-        SWTUtil.createLabel( parent, SWT.LEAD, "Service file:", 1 );
+        SWTUtil.createLabel( parent, SWT.LEAD, Msgs.serviceFile, 1 );
         serviceFile = SWTUtil.createText( parent, 1 );
         this.synchHelper.synchText( serviceFile, SERVICE_FILE, null );
     }
@@ -345,7 +347,7 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
     protected void setShellImage()
     {
-        URL url = ServiceUI.getDefault().getBundle().getEntry( "/icons/e16/service.png" );
+        URL url = ServiceUI.getDefault().getBundle().getEntry( "/icons/e16/service.png" ); //$NON-NLS-1$
 
         Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 
@@ -353,4 +355,17 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String author;
+        public static String includeSampleEntity;
+        public static String namespace;
+        public static String packagePath;
+        public static String serviceFile;
+
+        static
+        {
+            initializeMessages( NewServiceBuilderWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

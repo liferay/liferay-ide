@@ -42,7 +42,7 @@ public interface OrderColumn extends IModelElement
 	@Label(standard = "&name")
     @Required
 
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name");
+	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name"); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -53,7 +53,7 @@ public interface OrderColumn extends IModelElement
 	@Type(base = Boolean.class)
 	@Label(standard = "&case sensitive")
 	@XmlBinding(path = "@case-sensitive")
-	ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive");
+	ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive"); //$NON-NLS-1$
 
 	Value<Boolean> isCaseSensitive();
 
@@ -66,7 +66,7 @@ public interface OrderColumn extends IModelElement
 	@Label(standard = "order by")
 	@XmlBinding(path = "@order-by")
 	@PossibleValues(values = { "asc", "desc" }, invalidValueMessage = "{0} is not valid.")
-	ValueProperty PROP_ORDER_BY = new ValueProperty(TYPE, "OrderBy");
+	ValueProperty PROP_ORDER_BY = new ValueProperty(TYPE, "OrderBy"); //$NON-NLS-1$
 
 	Value<String> getOrderBy();
 

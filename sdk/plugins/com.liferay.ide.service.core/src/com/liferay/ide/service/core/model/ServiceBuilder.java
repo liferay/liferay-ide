@@ -45,7 +45,7 @@ public interface ServiceBuilder extends IModelElement
 
 	@XmlBinding(path = "@package-path")
 	@Label(standard = "&Package path")
-	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath");
+	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath"); //$NON-NLS-1$
 
 	Value<String> getPackagePath();
 
@@ -56,7 +56,7 @@ public interface ServiceBuilder extends IModelElement
 	@Type(base = Boolean.class)
 	@Label(standard = "&Auto namespace tables")
 	@XmlBinding(path = "@auto-namespace-tables")
-	ValueProperty PROP_AUTO_NAMESPACE_TABLES = new ValueProperty(TYPE, "AutoNamespaceTables");
+	ValueProperty PROP_AUTO_NAMESPACE_TABLES = new ValueProperty(TYPE, "AutoNamespaceTables"); //$NON-NLS-1$
 
 	Value<Boolean> isAutoNamespaceTables();
 
@@ -68,7 +68,7 @@ public interface ServiceBuilder extends IModelElement
 
 	@XmlBinding(path = "author")
 	@Label(standard = "&Author")
-	ValueProperty PROP_AUTHOR = new ValueProperty(TYPE, "Author");
+	ValueProperty PROP_AUTHOR = new ValueProperty(TYPE, "Author"); //$NON-NLS-1$
 
 	Value<String> getAuthor();
 
@@ -78,7 +78,7 @@ public interface ServiceBuilder extends IModelElement
 
 	@XmlBinding(path = "namespace")
 	@Label(standard = "&Namespace")
-	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace");
+	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace"); //$NON-NLS-1$
 
 	Value<String> getNamespace();
 
@@ -89,7 +89,7 @@ public interface ServiceBuilder extends IModelElement
 	@Type(base = Entity.class)
 	@Label(standard = "Entities")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "entity", type = Entity.class))
-	ListProperty PROP_ENTITIES = new ListProperty(TYPE, "Entities");
+	ListProperty PROP_ENTITIES = new ListProperty(TYPE, "Entities"); //$NON-NLS-1$
 
 	ModelElementList<Entity> getEntities();
 
@@ -98,21 +98,21 @@ public interface ServiceBuilder extends IModelElement
 	@Type(base = Exception.class)
 	@Label(standard = "exceptions")
 	@XmlListBinding(path = "exceptions", mappings = @XmlListBinding.Mapping(element = "exception", type = Exception.class))
-	ListProperty PROP_EXCEPTIONS = new ListProperty(TYPE, "Exceptions");
+	ListProperty PROP_EXCEPTIONS = new ListProperty(TYPE, "Exceptions"); //$NON-NLS-1$
 
 	ModelElementList<Exception> getExceptions();
 
 	@Type(base = ServiceBuilderImport.class)
 	@Label(standard = "service builder imports")
 	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "service-builder-import", type = ServiceBuilderImport.class))
-	ListProperty PROP_SERVICE_BUILDER_IMPORTS = new ListProperty(TYPE, "ServiceBuilderImports");
+	ListProperty PROP_SERVICE_BUILDER_IMPORTS = new ListProperty(TYPE, "ServiceBuilderImports"); //$NON-NLS-1$
 
 	ModelElementList<ServiceBuilderImport> getServiceBuilderImports();
 
 	@Type( base = Boolean.class )
 	@DefaultValue( text = "true" )
 	@CustomXmlValueBinding( impl = ShowRelationshipLabelsBinding.class )
-	ValueProperty PROP_SHOW_RELATIONSHIP_LABELS = new ValueProperty( TYPE, "ShowRelationshipLabels" );
+	ValueProperty PROP_SHOW_RELATIONSHIP_LABELS = new ValueProperty( TYPE, "ShowRelationshipLabels" ); //$NON-NLS-1$
 
 	Value<Boolean> getShowRelationshipLabels();
 
@@ -122,7 +122,7 @@ public interface ServiceBuilder extends IModelElement
 
 	@Type(base = Relationship.class)
     @CustomXmlListBinding( impl = RelationshipsBindingImpl.class )
-    ListProperty PROP_RELATIONSHIPS = new ListProperty(TYPE, "Relationships");
+    ListProperty PROP_RELATIONSHIPS = new ListProperty(TYPE, "Relationships"); //$NON-NLS-1$
 
     ModelElementList<Relationship> getRelationships();
 

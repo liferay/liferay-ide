@@ -29,6 +29,7 @@ import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -42,7 +43,7 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
     implements INewWizard, INewServiceBuilderDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.service.ui.wizard.servicebuilder";
+    public static final String ID = "com.liferay.ide.service.ui.wizard.servicebuilder"; //$NON-NLS-1$
 
     public NewServiceBuilderWizard()
     {
@@ -60,8 +61,8 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
     protected void doAddPages()
     {
         addPage( new NewServiceBuilderWizardPage(
-            getDataModel(), "pageOne", "New Liferay Service Builder",
-            "Create a new service builder xml file in a project." ) );
+            getDataModel(), "pageOne", Msgs.newLiferayServiceBuilder, //$NON-NLS-1$
+            Msgs.createNewServiceBuilderXmlFile ) );
     }
 
     @Override
@@ -78,13 +79,13 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
 
     protected ImageDescriptor getImage()
     {
-        return ServiceUI.imageDescriptorFromPlugin( ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" );
+        return ServiceUI.imageDescriptorFromPlugin( ServiceUI.PLUGIN_ID, "/icons/wizban/service_wiz.png" ); //$NON-NLS-1$
     }
 
     @Override
     protected String getTitle()
     {
-        return "New Service Builder";
+        return Msgs.newServiceBuilder;
     }
 
     @Override
@@ -106,4 +107,15 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String createNewServiceBuilderXmlFile;
+        public static String newLiferayServiceBuilder;
+        public static String newServiceBuilder;
+
+        static
+        {
+            initializeMessages( NewServiceBuilderWizard.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -39,7 +39,7 @@ public interface Relationship extends IModelElement
 	@Reference(target = Entity.class)
 	@Service(impl = EntityRelationshipService.class)
 	@Required
-	ValueProperty PROP_FROM_ENTITY = new ValueProperty(TYPE, "FromEntity");
+	ValueProperty PROP_FROM_ENTITY = new ValueProperty(TYPE, "FromEntity"); //$NON-NLS-1$
 
 	ReferenceValue<String, Entity> getFromEntity();
 	void setFromEntity(String value);
@@ -47,7 +47,7 @@ public interface Relationship extends IModelElement
 	@Reference(target = Entity.class)
     @Service(impl = EntityRelationshipService.class)
     @Required
-    ValueProperty PROP_TO_ENTITY = new ValueProperty(TYPE, "ToEntity");
+    ValueProperty PROP_TO_ENTITY = new ValueProperty(TYPE, "ToEntity"); //$NON-NLS-1$
 
     ReferenceValue<String, Entity> getToEntity();
     void setToEntity(String value);

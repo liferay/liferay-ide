@@ -53,7 +53,7 @@ public class HasServiceFilePropertyTester extends PropertyTester
                         {
                             if( container != null && container.exists() )
                             {
-                                Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                                Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ); //$NON-NLS-1$
                                 IFile serviceFile = container.getFile( path );
 
                                 if( serviceFile.exists() )

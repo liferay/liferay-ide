@@ -40,6 +40,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.core.ClasspathEntry;
 import org.eclipse.jst.common.jdt.internal.classpath.FlexibleProjectContainer;
 import org.eclipse.jst.j2ee.internal.common.classpath.J2EEComponentClasspathContainerUtils;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -52,7 +53,7 @@ public class BuildServiceJob extends SDKJob
 
     public BuildServiceJob( IFile serviceXmlFile )
     {
-        super( "Build services" );
+        super( Msgs.buildServices );
 
         this.serviceXmlFile = serviceXmlFile;
         setUser( true );
@@ -66,17 +67,16 @@ public class BuildServiceJob extends SDKJob
 
         if( getProject() == null )
         {
-            return ServiceCore.createErrorStatus( "This action can only be executed from a Liferay project.  Use Liferay project import wizard to import the project before continuing to build services." );
+            return ServiceCore.createErrorStatus( Msgs.useLiferayProjectImportWizard );
         }
 
         if( !ProjectUtil.isLiferayProject( getProject() ) )
         {
             return ServiceCore.createErrorStatus( MessageFormat.format(
-                "This action is unavailable because {0} is not a Liferay plugin project. Use \"Convert to Liferay project\" context-menu action and then run again.",
-                getProject().getName() ) );
+                Msgs.useConvertLiferayProject, getProject().getName() ) );
         }
 
-        monitor.beginTask( "Building Liferay services...", 100 );
+        monitor.beginTask( Msgs.buildingLiferayServices, 100 );
 
         try
         {
@@ -124,8 +124,7 @@ public class BuildServiceJob extends SDKJob
 
         if( sdk == null )
         {
-            throw new CoreException(
-                ServiceCore.createErrorStatus( "Could not determine the SDK name for project. Specify correct SDK in Liferay Project Properties page" ) );
+            throw new CoreException( ServiceCore.createErrorStatus( Msgs.specifyCorrectSDK ) );
         }
 
         monitor.worked( 50 );
@@ -153,17 +152,17 @@ public class BuildServiceJob extends SDKJob
 
         for( IClasspathEntry entry2 : webappEntries )
         {
-            if( entry2.getPath().lastSegment().equals( getProject().getName() + "-service.jar" ) )
+            if( entry2.getPath().lastSegment().equals( getProject().getName() + "-service.jar" ) ) //$NON-NLS-1$
             {
                 ( (ClasspathEntry) entry2 ).sourceAttachmentPath =
-                    getProject().getFolder( "docroot/WEB-INF/service" ).getFullPath();
+                    getProject().getFolder( "docroot/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
 
                 break;
             }
         }
 
         ClasspathContainerInitializer initializer =
-            JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" );
+            JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" ); //$NON-NLS-1$
 
         IJavaProject javaProject = JavaCore.create( project );
 
@@ -172,4 +171,17 @@ public class BuildServiceJob extends SDKJob
         return Status.OK_STATUS;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String buildingLiferayServices;
+        public static String buildServices;
+        public static String specifyCorrectSDK;
+        public static String useConvertLiferayProject;
+        public static String useLiferayProjectImportWizard;
+
+        static
+        {
+            initializeMessages( BuildServiceJob.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -37,7 +37,7 @@ public interface TxRequired extends IModelElement
 
 	@XmlBinding(path = "")
 	@Label(standard = "&tx required")
-	ValueProperty PROP_TX_REQUIRED = new ValueProperty(TYPE, "TxRequired");
+	ValueProperty PROP_TX_REQUIRED = new ValueProperty(TYPE, "TxRequired"); //$NON-NLS-1$
 
 	Value<String> getTxRequired();
 

@@ -78,7 +78,7 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
             }
         },
 
-        "Entities/*" );
+        "Entities/*" ); //$NON-NLS-1$
 
         refreshRelationships();
     }

@@ -72,7 +72,7 @@ public class BuildServicesAction extends AbstractObjectAction
                 {
                     if( container != null && container.exists() )
                     {
-                        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+                        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ); //$NON-NLS-1$
                         servicesFile = container.getFile( path );
 
                         break;

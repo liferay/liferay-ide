@@ -37,7 +37,7 @@ public interface Reference extends IModelElement
 
 	@XmlBinding(path = "@package-path")
 	@Label(standard = "&Package path")
-	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath");
+	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath"); //$NON-NLS-1$
 
 	Value<String> getPackagePath();
 
@@ -47,7 +47,7 @@ public interface Reference extends IModelElement
 
 	@XmlBinding(path = "@entity")
 	@Label(standard = "&entity")
-	ValueProperty PROP_ENTITY = new ValueProperty(TYPE, "Entity");
+	ValueProperty PROP_ENTITY = new ValueProperty(TYPE, "Entity"); //$NON-NLS-1$
 
 	Value<String> getEntity();
 
