@@ -10,13 +10,13 @@
             file-extensions="xml"
             file-names="liferay-hook.xml"
             id="liferayhookxml"
-            name="%liferay.hook.content.type.name"
+            name="%hook.content.type.name"
             priority="high">
       </content-type>
    </extension>
    <extension
          id="liferayhookdescriptorvalidator"
-         name="%liferay.hook.descriptor.validator.name"
+         name="%hook.descriptor.validator.name"
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="true"
@@ -38,7 +38,7 @@
    </extension>
    <extension
          id="liferayHookDescriptorMarker"
-         name="%liferay.hook.descriptor.problem.name"
+         name="%hook.descriptor.problem.name"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
