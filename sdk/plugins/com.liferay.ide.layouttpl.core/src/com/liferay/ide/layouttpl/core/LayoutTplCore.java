@@ -31,7 +31,7 @@ public class LayoutTplCore extends AbstractUIPlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.core"; //$NON-NLS-1$
 
     // The shared instance
     private static LayoutTplCore plugin;

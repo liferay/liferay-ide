@@ -18,9 +18,9 @@
 package com.liferay.ide.layouttpl.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
@@ -28,11 +28,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
@@ -88,7 +88,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
     {
         if( LAYOUT_TEMPLATE_NAME.equals( propertyName ) )
         {
-            return "New Template";
+            return "New Template"; //$NON-NLS-1$
         }
         else if( LAYOUT_TEMPLATE_ID.equals( propertyName ) )
         {
@@ -96,20 +96,20 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( !CoreUtil.isNullOrEmpty( name ) )
             {
-                return name.replaceAll( "[^a-zA-Z0-9]+", "" ).toLowerCase();
+                return name.replaceAll( "[^a-zA-Z0-9]+", StringUtil.EMPTY ).toLowerCase(); //$NON-NLS-1$
             }
         }
         else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
         {
-            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".tpl";
+            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".tpl";  //$NON-NLS-1$//$NON-NLS-2$
         }
         else if( LAYOUT_WAP_TEMPLATE_FILE.equals( propertyName ) )
         {
-            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".wap.tpl";
+            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".wap.tpl";  //$NON-NLS-1$//$NON-NLS-2$
         }
         else if( LAYOUT_THUMBNAIL_FILE.equals( propertyName ) )
         {
-            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".png";
+            return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".png";  //$NON-NLS-1$//$NON-NLS-2$
         }
         else if( LAYOUT_IMAGE_BLANK_COLUMN.equals( propertyName ) )
         {
@@ -197,11 +197,11 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( helper.hasTemplateId( getStringProperty( propertyName ) ) )
             {
-                return LayoutTplCore.createErrorStatus( "Template id already exists in project." );
+                return LayoutTplCore.createErrorStatus( Msgs.templateIdExists );
             }
 
             // to avoid marking text like "this" as bad add a z to the end of the string
-            String idValue = getStringProperty( propertyName ) + "z";
+            String idValue = getStringProperty( propertyName ) + "z"; //$NON-NLS-1$
 
             if( CoreUtil.isNullOrEmpty( idValue ) )
             {
@@ -213,7 +213,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( !status.isOK() )
             {
-                return LayoutTplCore.createErrorStatus( "Template id is invalid." );
+                return LayoutTplCore.createErrorStatus( Msgs.templateIdInvalid );
             }
         }
         else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
@@ -222,7 +222,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( checkDocrootFileExists( filePath ) )
             {
-                return LayoutTplCore.createWarningStatus( "Template file already exists and will be overwritten." );
+                return LayoutTplCore.createWarningStatus( Msgs.templateFileExists );
             }
         }
         else if( LAYOUT_WAP_TEMPLATE_FILE.equals( propertyName ) )
@@ -231,7 +231,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
  
             if( checkDocrootFileExists( filePath ) )
             {
-                return LayoutTplCore.createWarningStatus( "WAP template file already exists and will be overwritten." );
+                return LayoutTplCore.createWarningStatus( Msgs.wapTemplateFileExists );
             }
         }
         else if( LAYOUT_THUMBNAIL_FILE.equals( propertyName ) )
@@ -240,27 +240,24 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( checkDocrootFileExists( filePath ) )
             {
-                return LayoutTplCore.createWarningStatus( "Thumbnail file already exists and will be overwritten." );
+                return LayoutTplCore.createWarningStatus( Msgs.thumbnailFileExists );
             }
         }
 
         return super.validate( propertyName );
     }
 
-    protected IStatus validateListItems( String propertyName )
+    private static class Msgs extends NLS
     {
-        Object items = getProperty( propertyName );
+        public static String templateFileExists;
+        public static String templateIdExists;
+        public static String templateIdInvalid;
+        public static String thumbnailFileExists;
+        public static String wapTemplateFileExists;
 
-        if( items instanceof List )
+        static
         {
-            List itemsList = (List) items;
-
-            if( itemsList.size() > 0 )
-            {
-                return Status.OK_STATUS;
-            }
+            initializeMessages( NewLayoutTplDataModelProvider.class.getName(), Msgs.class );
         }
-
-        return LayoutTplCore.createErrorStatus( "Need to specify at least one item." );
     }
 }

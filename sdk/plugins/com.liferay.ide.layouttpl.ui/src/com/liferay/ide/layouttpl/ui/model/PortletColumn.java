@@ -16,6 +16,7 @@
 package com.liferay.ide.layouttpl.ui.model;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
@@ -31,7 +32,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 public class PortletColumn extends ModelElement
 {
     public static final int DEFAULT_WEIGHT = -1;
-    public static final String WEIGHT_PROP = "PortletColumn.weight";
+    public static final String WEIGHT_PROP = "PortletColumn.weight"; //$NON-NLS-1$
 
     // public static final String SIZE_PROP = "PortletColumn.size";
     // public static final String LOCATION_PROP = "PortletColumn.location";
@@ -42,7 +43,7 @@ public class PortletColumn extends ModelElement
     {
         descriptors = new IPropertyDescriptor[] {
         // id and description pair
-        new TextPropertyDescriptor( WEIGHT_PROP, "Weight" ), };
+        new TextPropertyDescriptor( WEIGHT_PROP, "Weight" ), }; //$NON-NLS-1$
 
         // use a custom cell editor validator for all four array entries
         for( int i = 0; i < descriptors.length; i++ )
@@ -59,9 +60,9 @@ public class PortletColumn extends ModelElement
                     }
                     catch( NumberFormatException exc )
                     {
-                        return "Not a number";
+                        return "Not a number"; //$NON-NLS-1$
                     }
-                    return ( intValue >= 0 ) ? null : "Value must be >=  0";
+                    return ( intValue >= 0 ) ? null : "Value must be >=  0"; //$NON-NLS-1$
                 }
             } );
         }
@@ -76,14 +77,14 @@ public class PortletColumn extends ModelElement
 
         PortletColumn newPortletColumn = new PortletColumn();
 
-        String existingClassName = portletColumnElement.getAttribute( "class" );
-        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-column" ) )
+        String existingClassName = portletColumnElement.getAttribute( "class" ); //$NON-NLS-1$
+        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-column" ) ) //$NON-NLS-1$
         {
             newPortletColumn.setClassName( existingClassName );
         }
         else
         {
-            newPortletColumn.setClassName( "portlet-column" );
+            newPortletColumn.setClassName( "portlet-column" ); //$NON-NLS-1$
         }
 
         newPortletColumn.setWeight( LayoutTplUtil.getWeightValue( portletColumnElement, -1 ) );
@@ -99,12 +100,12 @@ public class PortletColumn extends ModelElement
 
     public PortletColumn()
     {
-        this( DEFAULT_WEIGHT, "portlet-column" );
+        this( DEFAULT_WEIGHT, "portlet-column" ); //$NON-NLS-1$
     }
 
     public PortletColumn( int weight )
     {
-        this( weight, "portlet-column" );
+        this( weight, "portlet-column" ); //$NON-NLS-1$
     }
 
     public PortletColumn( int weight, String className )
@@ -137,11 +138,11 @@ public class PortletColumn extends ModelElement
         {
             if( getWeight() == DEFAULT_WEIGHT )
             {
-                return "100%";
+                return "100%"; //$NON-NLS-1$
             }
             else
             {
-                return Integer.toString( getWeight() ) + "%";
+                return Integer.toString( getWeight() ) + "%"; //$NON-NLS-1$
             }
         }
 
@@ -192,7 +193,7 @@ public class PortletColumn extends ModelElement
     {
         if( WEIGHT_PROP.equals( propertyId ) )
         {
-            String val = value.toString().replaceAll( "%", "" );
+            String val = value.toString().replaceAll( "%", StringUtil.EMPTY ); //$NON-NLS-1$
             int weight = Integer.parseInt( val );
             setWeight( weight );
         }

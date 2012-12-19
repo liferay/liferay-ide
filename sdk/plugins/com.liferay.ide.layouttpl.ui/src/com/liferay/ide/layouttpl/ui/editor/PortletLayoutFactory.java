@@ -32,12 +32,12 @@ public class PortletLayoutFactory implements CreationFactory
     {
         if( numCols < 1 )
         {
-            throw new IllegalArgumentException( "Number of columns must be greater than 0" );
+            throw new IllegalArgumentException( "Number of columns must be greater than 0" ); //$NON-NLS-1$
         }
 
         if( numCols != weights.length )
         {
-            throw new IllegalArgumentException( "Number of weight args must match number of columns." );
+            throw new IllegalArgumentException( "Number of weight args must match number of columns." ); //$NON-NLS-1$
         }
 
         this.numColumns = numCols;

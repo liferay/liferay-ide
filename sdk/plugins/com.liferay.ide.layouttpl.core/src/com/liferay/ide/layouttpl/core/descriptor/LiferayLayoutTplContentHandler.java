@@ -25,15 +25,15 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 public class LiferayLayoutTplContentHandler extends AbstractDefaultHandler
 {
 
-    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Layout Templates";
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Layout Templates"; //$NON-NLS-1$
 
-    public static final String PUBLIC_ID_SUFFIX = "//EN";
+    public static final String PUBLIC_ID_SUFFIX = "//EN"; //$NON-NLS-1$
 
-    public static final String LIFERAY_PORTLET_APP = "layout-templates";
+    public static final String LIFERAY_PORTLET_APP = "layout-templates"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-layout-templates_";
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-layout-templates_"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_SUFFIX = ".dtd";
+    public static final String SYSTEM_ID_SUFFIX = ".dtd"; //$NON-NLS-1$
 
     public LiferayLayoutTplContentHandler()
     {

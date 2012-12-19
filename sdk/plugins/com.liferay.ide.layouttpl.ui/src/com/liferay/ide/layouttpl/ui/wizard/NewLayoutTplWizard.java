@@ -27,6 +27,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -45,11 +46,11 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
 public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, INewLayoutTplDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.layouttpl.ui.wizard.layouttemplate";
+    public static final String ID = "com.liferay.ide.layouttpl.ui.wizard.layouttemplate"; //$NON-NLS-1$
 
-    public static final String LAYOUTTPL_LAYOUT_PAGE = "layoutTplLayoutPage";
+    public static final String LAYOUTTPL_LAYOUT_PAGE = "layoutTplLayoutPage"; //$NON-NLS-1$
 
-    public static final String LAYOUTTPL_PAGE = "layoutTplPage";
+    public static final String LAYOUTTPL_PAGE = "layoutTplPage"; //$NON-NLS-1$
 
     public static final String[] WIZARD_PAGES = new String[] { LAYOUTTPL_PAGE, LAYOUTTPL_LAYOUT_PAGE };
 
@@ -66,7 +67,7 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
     {
         super( dataModel );
 
-        this.setWindowTitle( "New Layout Template" );
+        this.setWindowTitle( Msgs.newLayoutTemplate );
         this.setDefaultPageImageDescriptor( getDefaultImageDescriptor() );
     }
 
@@ -89,7 +90,7 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
 
     protected ImageDescriptor getDefaultImageDescriptor()
     {
-        return LayoutTplUI.imageDescriptorFromPlugin( LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png" );
+        return LayoutTplUI.imageDescriptorFromPlugin( LayoutTplUI.PLUGIN_ID, "/icons/wizban/layout_template_wiz.png" ); //$NON-NLS-1$
     }
 
     @Override
@@ -167,4 +168,13 @@ public class NewLayoutTplWizard extends DataModelWizard implements INewWizard, I
         return false;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newLayoutTemplate;
+
+        static
+        {
+            initializeMessages( NewLayoutTplWizard.class.getName(), Msgs.class );
+        }
+    }
 }

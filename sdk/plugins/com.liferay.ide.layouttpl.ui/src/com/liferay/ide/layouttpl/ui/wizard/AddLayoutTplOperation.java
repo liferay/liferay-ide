@@ -16,6 +16,7 @@
 package com.liferay.ide.layouttpl.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
@@ -111,7 +112,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
     {
         IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
         IFile thumbnailFileValue = defaultDocroot.getFile( thumbnailFile );
-        URL iconFileURL = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/blank_columns.png" );
+        URL iconFileURL = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/blank_columns.png" ); //$NON-NLS-1$
 
         CoreUtil.prepareFolder( (IFolder) thumbnailFileValue.getParent() );
 
@@ -137,7 +138,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
         }
         else
         {
-            ByteArrayInputStream input = new ByteArrayInputStream( "".getBytes() );
+            ByteArrayInputStream input = new ByteArrayInputStream( StringUtil.EMPTY.getBytes() );
 
             if( templateFileValue.exists() )
             {

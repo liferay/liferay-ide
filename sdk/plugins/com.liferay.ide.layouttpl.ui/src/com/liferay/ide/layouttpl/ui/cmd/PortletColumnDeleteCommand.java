@@ -22,6 +22,7 @@ import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
@@ -40,7 +41,7 @@ public class PortletColumnDeleteCommand extends Command
             throw new IllegalArgumentException();
         }
 
-        setLabel( "Portlet Column deleted" );
+        setLabel( Msgs.portletColumnDeleted );
 
         this.parent = parent;
         this.child = child;
@@ -74,6 +75,16 @@ public class PortletColumnDeleteCommand extends Command
         if( diagram != null )
         {
             diagram.addRow( parent );
+        }
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String portletColumnDeleted;
+
+        static
+        {
+            initializeMessages( PortletColumnDeleteCommand.class.getName(), Msgs.class );
         }
     }
 }

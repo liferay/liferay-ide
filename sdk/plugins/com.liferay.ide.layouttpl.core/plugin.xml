@@ -133,13 +133,13 @@
             file-extensions="xml"
             file-names="liferay-layout-templates.xml"
             id="liferaylayouttplxml"
-            name="Liferay Layout Templates Descriptor"
+            name="%layout.content.type.name"
             priority="high">
       </content-type>
    </extension>
    <extension
          id="liferaylayouttpldescriptorvalidator"
-         name="Liferay Layout Templates Descriptor Validator"
+         name="%layout.templates.descriptor.validator.name"
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="true"
@@ -161,7 +161,7 @@
    </extension>
    <extension
          id="liferayLayoutTplDescriptorMarker"
-         name="Liferay Layout Templates Descriptor Problem"
+         name="%layout.templates.descriptor.problem.name"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">

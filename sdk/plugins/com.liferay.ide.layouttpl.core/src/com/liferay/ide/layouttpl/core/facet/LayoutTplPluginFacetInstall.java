@@ -96,7 +96,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
         if( folder != null && folder.exists() )
         {
-            IResource libRes = folder.findMember( "WEB-INF/lib" );
+            IResource libRes = folder.findMember( "WEB-INF/lib" ); //$NON-NLS-1$
 
             if( libRes != null && libRes.exists() )
             {
@@ -146,9 +146,9 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
                 {
                     String path = entry.getPath().toPortableString();
 
-                    if( path.contains( "org.eclipse.jdt.launching.JRE_CONTAINER" ) ||
-                        path.contains( "org.eclipse.jst.j2ee.internal.web.container" ) ||
-                        path.contains( "org.eclipse.jst.j2ee.internal.module.container" ) )
+                    if( path.contains( "org.eclipse.jdt.launching.JRE_CONTAINER" ) || //$NON-NLS-1$
+                        path.contains( "org.eclipse.jst.j2ee.internal.web.container" ) || //$NON-NLS-1$
+                        path.contains( "org.eclipse.jst.j2ee.internal.module.container" ) ) //$NON-NLS-1$
                     {
                         continue;
                     }

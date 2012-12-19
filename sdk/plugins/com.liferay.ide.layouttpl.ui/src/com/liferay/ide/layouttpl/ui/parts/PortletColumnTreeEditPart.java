@@ -24,6 +24,7 @@ import java.net.URL;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -38,7 +39,7 @@ public class PortletColumnTreeEditPart extends BaseTreeEditPart
     {
         super( model );
 
-        URL url = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/e16/layout.png" );
+        URL url = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/e16/layout.png" ); //$NON-NLS-1$
         icon = ImageDescriptor.createFromURL( url ).createImage();
     }
 
@@ -60,15 +61,15 @@ public class PortletColumnTreeEditPart extends BaseTreeEditPart
 
     protected String getText()
     {
-        String text = "Portlet Column";
+        String text = Msgs.portletColumn;
 
         if( getCastedModel().getWeight() == PortletColumn.DEFAULT_WEIGHT )
         {
-            text += " - 100%";
+            text += " - 100%"; //$NON-NLS-1$
         }
         else
         {
-            text += " - " + getCastedModel().getWeight() + "%";
+            text += " - " + getCastedModel().getWeight() + "%"; //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return text;
@@ -77,5 +78,15 @@ public class PortletColumnTreeEditPart extends BaseTreeEditPart
     public void propertyChange( PropertyChangeEvent evt )
     {
         refreshVisuals();
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String portletColumn;
+
+        static
+        {
+            initializeMessages( PortletColumnTreeEditPart.class.getName(), Msgs.class );
+        }
     }
 }

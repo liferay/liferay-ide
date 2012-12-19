@@ -40,8 +40,8 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implements INewLayoutTplDataModelProperties
 {
-    private static final String LAYOUT_DESCRIPTOR_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            + "<!DOCTYPE layout-templates PUBLIC \"-//Liferay//DTD Layout Templates {0}//EN\" \"http://www.liferay.com/dtd/liferay-layout-templates_{1}.dtd\">\n\n<layout-templates>\n</layout-templates>\n";
+    private static final String LAYOUT_DESCRIPTOR_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //$NON-NLS-1$
+            + "<!DOCTYPE layout-templates PUBLIC \"-//Liferay//DTD Layout Templates {0}//EN\" \"http://www.liferay.com/dtd/liferay-layout-templates_{1}.dtd\">\n\n<layout-templates>\n</layout-templates>\n"; //$NON-NLS-1$
 
     public LayoutTplDescriptorHelper( IProject project )
     {
@@ -80,21 +80,21 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
         // <layout-templates> element
         Element docRoot = document.getDocumentElement();
 
-        Element layoutTemplateElement = document.createElement( "layout-template" );
-        layoutTemplateElement.setAttribute( "id", model.getStringProperty( LAYOUT_TEMPLATE_ID ) );
-        layoutTemplateElement.setAttribute( "name", model.getStringProperty( LAYOUT_TEMPLATE_NAME ) );
+        Element layoutTemplateElement = document.createElement( "layout-template" ); //$NON-NLS-1$
+        layoutTemplateElement.setAttribute( "id", model.getStringProperty( LAYOUT_TEMPLATE_ID ) ); //$NON-NLS-1$
+        layoutTemplateElement.setAttribute( "name", model.getStringProperty( LAYOUT_TEMPLATE_NAME ) ); //$NON-NLS-1$
 
         // find the <custom> element and if it doesn't exist create it
-        Node customElement = NodeUtil.getFirstNamedChildNode( docRoot, "custom" );
+        Node customElement = NodeUtil.getFirstNamedChildNode( docRoot, "custom" ); //$NON-NLS-1$
 
         if( customElement == null )
         {
             // if we are going to create a new <custom> it must be after the <standard>
-            Node standardElement = NodeUtil.getFirstNamedChildNode( docRoot, "standard" );
+            Node standardElement = NodeUtil.getFirstNamedChildNode( docRoot, "standard" ); //$NON-NLS-1$
 
-            customElement = document.createElement( "custom" );
+            customElement = document.createElement( "custom" ); //$NON-NLS-1$
             docRoot.insertBefore( customElement, standardElement );
-            appendTextNode( docRoot, "\n" );
+            appendTextNode( docRoot, "\n" ); //$NON-NLS-1$
         }
 
         customElement.appendChild( layoutTemplateElement );
@@ -104,9 +104,9 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
         String wapTemplatePath = model.getStringProperty( LAYOUT_WAP_TEMPLATE_FILE );
         String thumbnailPath = model.getStringProperty( LAYOUT_THUMBNAIL_FILE );
 
-        appendChildElement( layoutTemplateElement, "template-path", templatePath );
-        appendChildElement( layoutTemplateElement, "wap-template-path", wapTemplatePath );
-        appendChildElement( layoutTemplateElement, "thumbnail-path", thumbnailPath );
+        appendChildElement( layoutTemplateElement, "template-path", templatePath ); //$NON-NLS-1$
+        appendChildElement( layoutTemplateElement, "wap-template-path", wapTemplatePath ); //$NON-NLS-1$
+        appendChildElement( layoutTemplateElement, "thumbnail-path", thumbnailPath ); //$NON-NLS-1$
 
         // format the new node added to the model;
         FormatProcessorXML processor = new FormatProcessorXML();
@@ -131,7 +131,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
                 @Override
                 protected IStatus doExecute( IDOMDocument document )
                 {
-                    NodeList layoutTemplates = document.getElementsByTagName( "layout-template" );
+                    NodeList layoutTemplates = document.getElementsByTagName( "layout-template" ); //$NON-NLS-1$
 
                     if( layoutTemplates != null && layoutTemplates.getLength() > 0 )
                     {
@@ -139,7 +139,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
                         {
                             Element layoutTemplate = (Element) layoutTemplates.item( i );
 
-                            if( templateId.equals( layoutTemplate.getAttribute( "id" ) ) )
+                            if( templateId.equals( layoutTemplate.getAttribute( "id" ) ) ) //$NON-NLS-1$
                             {
                                 retval[0] = true;
                                 break;

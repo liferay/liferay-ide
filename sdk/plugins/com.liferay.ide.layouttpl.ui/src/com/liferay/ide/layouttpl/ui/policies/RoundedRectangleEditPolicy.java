@@ -63,7 +63,7 @@ public class RoundedRectangleEditPolicy extends ResizableEditPolicy
 
                 try
                 {
-                    Field f = ResizeHandle.class.getDeclaredField( "cursorDirection" );
+                    Field f = ResizeHandle.class.getDeclaredField( "cursorDirection" ); //$NON-NLS-1$
                     f.setAccessible( true );
                     int cursorDirection = f.getInt( tempResizeHandle );
 
@@ -119,7 +119,7 @@ public class RoundedRectangleEditPolicy extends ResizableEditPolicy
                 }
 
             };
-            feedbackLabel.setText( "50%" );
+            feedbackLabel.setText( "50%" ); //$NON-NLS-1$
             Font font = feedbackFigure.getFont();
             FontData[] fontData = font.getFontData();
             for( int i = 0; i < fontData.length; i++ )

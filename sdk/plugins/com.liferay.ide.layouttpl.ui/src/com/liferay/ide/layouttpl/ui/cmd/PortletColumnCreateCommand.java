@@ -24,6 +24,7 @@ import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -39,7 +40,7 @@ public class PortletColumnCreateCommand extends Command
         this.newColumn = newColumn;
         this.diagram = diagram;
         this.layoutConstraint = constraint;
-        setLabel( "Portlet column added" );
+        setLabel( Msgs.portletColumnAdded );
     }
 
     public boolean canExecute()
@@ -99,8 +100,17 @@ public class PortletColumnCreateCommand extends Command
         }
         else
         {
-            System.out.println( "UNDO not supported!" );
+            System.out.println( "UNDO not supported!" ); //$NON-NLS-1$
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String portletColumnAdded;
+
+        static
+        {
+            initializeMessages( PortletColumnCreateCommand.class.getName(), Msgs.class );
+        }
+    }
 }

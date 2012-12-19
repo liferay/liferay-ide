@@ -26,6 +26,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextInputListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -231,7 +232,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
     protected void addSourcePage() throws PartInitException
     {
         int index = addPage( sourceEditor, getEditorInput() );
-        setPageText( index, "Source" );
+        setPageText( index, Msgs.source );
 
         firePropertyChange( PROP_TITLE );
 
@@ -250,7 +251,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
     {
         IEditorPart editor = createVisualEditor();
         int index = addPage( editor, getEditorInput() );
-        setPageText( index, "Visual (Experimental)" );
+        setPageText( index, Msgs.visual );
     }
 
     @Override
@@ -389,5 +390,16 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
     {
         setActivePage( 1 );
         IDE.gotoMarker( sourceEditor, marker );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String source;
+        public static String visual;
+
+        static
+        {
+            initializeMessages( LayoutTplMultiPageEditor.class.getName(), Msgs.class );
+        }
     }
 }

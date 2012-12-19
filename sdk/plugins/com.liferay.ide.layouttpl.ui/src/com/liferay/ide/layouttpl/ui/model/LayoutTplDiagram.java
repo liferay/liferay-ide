@@ -41,8 +41,8 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 @SuppressWarnings( "restriction" )
 public class LayoutTplDiagram extends ModelElement implements PropertyChangeListener
 {
-    public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded";
-    public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved";
+    public static final String ROW_ADDED_PROP = "LayoutTplDiagram.RowAdded"; //$NON-NLS-1$
+    public static final String ROW_REMOVED_PROP = "LayoutTplDiagram.RowRemoved"; //$NON-NLS-1$
 
     public static LayoutTplDiagram createDefaultDiagram()
     {
@@ -65,7 +65,7 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
         }
         catch( Exception e )
         {
-            LayoutTplUI.logError( "Unable to read layout template file " + file.getName(), e );
+            LayoutTplUI.logError( "Unable to read layout template file " + file.getName(), e ); //$NON-NLS-1$
             model = new LayoutTplDiagram();
         }
 
@@ -85,14 +85,14 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
         IDOMElement mainContentElement = LayoutTplUtil.findMainContentElement( rootDocument );
 
         newDiagram = new LayoutTplDiagram();
-        newDiagram.setId( "main-content" );
+        newDiagram.setId( "main-content" ); //$NON-NLS-1$
 
         if( mainContentElement != null )
         {
-            newDiagram.setRole( LayoutTplUtil.getRoleValue( mainContentElement, "main" ) );
+            newDiagram.setRole( LayoutTplUtil.getRoleValue( mainContentElement, "main" ) ); //$NON-NLS-1$
 
             IDOMElement[] portletLayoutElements =
-                LayoutTplUtil.findChildElementsByClassName( mainContentElement, "div", "portlet-layout" );
+                LayoutTplUtil.findChildElementsByClassName( mainContentElement, "div", "portlet-layout" ); //$NON-NLS-1$ //$NON-NLS-2$
 
             if( !CoreUtil.isNullOrEmpty( portletLayoutElements ) )
             {
@@ -105,7 +105,7 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
         }
         else
         {
-            newDiagram.setRole( "main" );
+            newDiagram.setRole( "main" ); //$NON-NLS-1$
         }
 
         return newDiagram;
@@ -119,8 +119,8 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
     {
         super();
 
-        this.id = "main-content";
-        this.role = "main";
+        this.id = "main-content"; //$NON-NLS-1$
+        this.role = "main"; //$NON-NLS-1$
     }
 
     public void addRow( PortletLayout newRow )
@@ -201,15 +201,15 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 
     public void saveToFile( IFile file, IProgressMonitor monitor )
     {
-        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" );
+        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
         templateOperation.setOutputFile( file );
 
         try
         {
             VelocityContext ctx = templateOperation.getContext();
-            ctx.put( "root", this );
+            ctx.put( "root", this ); //$NON-NLS-1$
             String name = file.getFullPath().removeFileExtension().lastSegment();
-            ctx.put( "templateName", name );
+            ctx.put( "templateName", name ); //$NON-NLS-1$
             templateOperation.execute( monitor );
         }
         catch( Exception e )
@@ -255,11 +255,11 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 
     public String getTemplateSource( String templateName )
     {
-        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" );
+        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
         StringBuffer buffer = new StringBuffer();
         templateOperation.setOutputBuffer( buffer );
-        templateOperation.getContext().put( "root", this );
-        templateOperation.getContext().put( "templateName", templateName );
+        templateOperation.getContext().put( "root", this ); //$NON-NLS-1$
+        templateOperation.getContext().put( "templateName", templateName ); //$NON-NLS-1$
 
         try
         {
@@ -267,7 +267,7 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
         }
         catch( Exception ex )
         {
-            LayoutTplUI.logError( "Error getting template source.", ex );
+            LayoutTplUI.logError( "Error getting template source.", ex ); //$NON-NLS-1$
         }
 
         return buffer.toString();

@@ -128,7 +128,7 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart
             columnWeight = 100;
         }
 
-        getCastedFigure().setText( columnWeight + "%" );
+        getCastedFigure().setText( columnWeight + "%" ); //$NON-NLS-1$
     }
 
     public GridData createGridData()

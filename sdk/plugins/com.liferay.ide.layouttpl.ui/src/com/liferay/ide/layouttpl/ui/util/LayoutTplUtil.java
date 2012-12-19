@@ -77,7 +77,7 @@ public class LayoutTplUtil
 
         IDOMElement mainContentElement = null;
 
-        mainContentElement = (IDOMElement) rootDocument.getElementById( "main-content" );
+        mainContentElement = (IDOMElement) rootDocument.getElementById( "main-content" ); //$NON-NLS-1$
 
         return mainContentElement;
     }
@@ -105,7 +105,7 @@ public class LayoutTplUtil
     public static String getRoleValue( IDOMElement mainContentElement, String defaultValue )
     {
         String retval = defaultValue;
-        String currentRoleValue = mainContentElement.getAttribute( "role" );
+        String currentRoleValue = mainContentElement.getAttribute( "role" ); //$NON-NLS-1$
 
         if( !CoreUtil.isNullOrEmpty( currentRoleValue ) )
         {
@@ -145,14 +145,14 @@ public class LayoutTplUtil
             return weightValue;
         }
 
-        String classAttr = portletColumnElement.getAttribute( "class" );
+        String classAttr = portletColumnElement.getAttribute( "class" ); //$NON-NLS-1$
 
         if( CoreUtil.isNullOrEmpty( classAttr ) )
         {
             return weightValue;
         }
 
-        Pattern pattern = Pattern.compile( ".*aui-w([-\\d]+).*" );
+        Pattern pattern = Pattern.compile( ".*aui-w([-\\d]+).*" ); //$NON-NLS-1$
         Matcher matcher = pattern.matcher( classAttr );
 
         if( matcher.matches() )
@@ -214,7 +214,7 @@ public class LayoutTplUtil
 
         if( domElement != null )
         {
-            String classAttr = domElement.getAttribute( "class" );
+            String classAttr = domElement.getAttribute( "class" ); //$NON-NLS-1$
 
             if( !CoreUtil.isNullOrEmpty( classAttr ) )
             {

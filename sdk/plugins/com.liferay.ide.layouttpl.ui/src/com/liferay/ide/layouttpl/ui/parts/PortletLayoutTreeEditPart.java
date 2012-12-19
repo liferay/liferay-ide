@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -40,7 +41,7 @@ public class PortletLayoutTreeEditPart extends BaseTreeEditPart
     {
         super( model );
 
-        URL url = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/e16/layout.png" );
+        URL url = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/e16/layout.png" ); //$NON-NLS-1$
         icon = ImageDescriptor.createFromURL( url ).createImage();
     }
 
@@ -67,17 +68,17 @@ public class PortletLayoutTreeEditPart extends BaseTreeEditPart
 
     protected String getText()
     {
-        String text = "Portlet Row";
+        String text = Msgs.portletRow;
 
         int numcols = getCastedModel().getColumns().size();
 
         if( numcols == 1 )
         {
-            text += " - 1 column";
+            text += Msgs.column;
         }
         else if( numcols > 1 )
         {
-            text += " - " + numcols + " columns";
+            text += NLS.bind( Msgs.columns, numcols );
         }
 
         return text;
@@ -103,6 +104,18 @@ public class PortletLayoutTreeEditPart extends BaseTreeEditPart
         else
         {
             refreshVisuals();
+        }
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String column;
+        public static String columns;
+        public static String portletRow;
+
+        static
+        {
+            initializeMessages( PortletLayoutTreeEditPart.class.getName(), Msgs.class );
         }
     }
 }

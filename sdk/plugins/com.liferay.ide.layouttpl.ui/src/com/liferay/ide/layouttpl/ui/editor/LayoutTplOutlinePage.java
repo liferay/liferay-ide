@@ -71,7 +71,7 @@ public class LayoutTplOutlinePage extends ContentOutlinePage
             new LayoutTplContextMenuProvider( getViewer(), this.layoutTplEditor.getActionRegistry() );
         getViewer().setContextMenu( cmProvider );
         getSite().registerContextMenu(
-            "com.liferay.ide.layouttpl.ui.outline.contextmenu", cmProvider, getSite().getSelectionProvider() );
+            "com.liferay.ide.layouttpl.ui.outline.contextmenu", cmProvider, getSite().getSelectionProvider() ); //$NON-NLS-1$
         // hook outline viewer
         this.layoutTplEditor.getSelectionSynchronizer().addViewer( getViewer() );
         // initialize outline viewer with model

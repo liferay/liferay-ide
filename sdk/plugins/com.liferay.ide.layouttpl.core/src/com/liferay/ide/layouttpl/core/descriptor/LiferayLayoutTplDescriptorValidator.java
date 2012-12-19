@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -53,21 +54,19 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 public class LiferayLayoutTplDescriptorValidator extends BaseValidator
 {
 
-    public static final String TEMPLATE_PATH_ELEMENT = "template-path";
+    public static final String TEMPLATE_PATH_ELEMENT = "template-path"; //$NON-NLS-1$
 
-    public static final String THUMBNAIL_PATH_ELEMENT = "thumbnail-path";
+    public static final String THUMBNAIL_PATH_ELEMENT = "thumbnail-path"; //$NON-NLS-1$
 
-    public static final String WAP_TEMPLATE_PATH_ELEMENT = "wap-template-path";
+    public static final String WAP_TEMPLATE_PATH_ELEMENT = "wap-template-path"; //$NON-NLS-1$
 
-    public static final String MARKER_TYPE = "com.liferay.ide.layouttpl.core.liferayLayoutTplDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.layouttpl.core.liferayLayoutTplDescriptorMarker"; //$NON-NLS-1$
 
-    public static final String MESSAGE_TEMPLATE_PATH_NOT_FOUND = "The template path {0} was not found in the web app.";
+    public static final String MESSAGE_TEMPLATE_PATH_NOT_FOUND = Msgs.templatePathNotFound;
 
-    public static final String MESSAGE_THUMBNAIL_PATH_NOT_FOUND =
-        "The thumbnail path {0} was not found in the web app.";
+    public static final String MESSAGE_THUMBNAIL_PATH_NOT_FOUND = Msgs.thumbnailPathNotFound;
 
-    public static final String MESSAGE_WAP_TEMPLATE_PATH_NOT_FOUND =
-        "The wap template path {0} was not found in the web app.";
+    public static final String MESSAGE_WAP_TEMPLATE_PATH_NOT_FOUND = Msgs.wapTemplatePathNotFound;
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
@@ -182,4 +181,15 @@ public class LiferayLayoutTplDescriptorValidator extends BaseValidator
         return (Map<String, Object>[]) problems.toArray( retval );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String templatePathNotFound;
+        public static String thumbnailPathNotFound;
+        public static String wapTemplatePathNotFound;
+
+        static
+        {
+            initializeMessages( LiferayLayoutTplDescriptorValidator.class.getName(), Msgs.class );
+        }
+    }
 }

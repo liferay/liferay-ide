@@ -23,6 +23,7 @@ import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
@@ -38,7 +39,7 @@ public class PortletLayoutCreateCommand extends Command
         this.newLayout = newLayout;
         this.diagram = diagram;
         this.layoutConstraint = constraint;
-        setLabel( "Portlet row added" );
+        setLabel( Msgs.portletRowAdded );
     }
 
     public boolean canExecute()
@@ -64,7 +65,16 @@ public class PortletLayoutCreateCommand extends Command
 
     public void undo()
     {
-        System.out.println( "UNDO not yet supported!" );
+        System.out.println( "UNDO not yet supported!" ); //$NON-NLS-1$
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String portletRowAdded;
+
+        static
+        {
+            initializeMessages( PortletLayoutCreateCommand.class.getName(), Msgs.class );
+        }
+    }
 }

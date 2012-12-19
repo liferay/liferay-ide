@@ -48,12 +48,12 @@ public class LayoutConstraint
     {
         if( this.equals( EMPTY ) )
         {
-            return "LayoutConstraint { EMPTY }";
+            return "LayoutConstraint { EMPTY }"; //$NON-NLS-1$
         }
         else
         {
-            return "LayoutConstraint { rowIndex = " + rowIndex + ", newRowIndex = " + newRowIndex +
-                ", newColumnIndex = " + newColumnIndex + ", weight = " + weight + "}";
+            return "LayoutConstraint { rowIndex = " + rowIndex + ", newRowIndex = " + newRowIndex + //$NON-NLS-1$ //$NON-NLS-2$
+                ", newColumnIndex = " + newColumnIndex + ", weight = " + weight + "}"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
     }
 

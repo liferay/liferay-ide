@@ -32,11 +32,11 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 public class PortletLayout extends ModelElement implements PropertyChangeListener
 {
 
-    public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged";
+    public static final String CHILD_COLUMN_WEIGHT_CHANGED_PROP = "PortletLayout.ChildColumnWeightChanged"; //$NON-NLS-1$
 
-    public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded";
+    public static final String COLUMN_ADDED_PROP = "PortletLayout.ColumnAdded"; //$NON-NLS-1$
 
-    public static final String COLUMN_REMOVED_PROP = "PortletLayout.ColumnRemoved";
+    public static final String COLUMN_REMOVED_PROP = "PortletLayout.ColumnRemoved"; //$NON-NLS-1$
 
     public static PortletLayout createFromElement( IDOMElement portletLayoutElement )
     {
@@ -47,19 +47,19 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
 
         PortletLayout newPortletLayout = new PortletLayout();
 
-        String existingClassName = portletLayoutElement.getAttribute( "class" );
+        String existingClassName = portletLayoutElement.getAttribute( "class" ); //$NON-NLS-1$
 
-        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-layout" ) )
+        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-layout" ) ) //$NON-NLS-1$
         {
             newPortletLayout.setClassName( existingClassName );
         }
         else
         {
-            newPortletLayout.setClassName( "portlet-layout" );
+            newPortletLayout.setClassName( "portlet-layout" ); //$NON-NLS-1$
         }
 
         IDOMElement[] portletColumnElements =
-            LayoutTplUtil.findChildElementsByClassName( portletLayoutElement, "div", "portlet-column" );
+            LayoutTplUtil.findChildElementsByClassName( portletLayoutElement, "div", "portlet-column" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         for( IDOMElement portletColumnElement : portletColumnElements )
         {
@@ -77,7 +77,7 @@ public class PortletLayout extends ModelElement implements PropertyChangeListene
     public PortletLayout()
     {
         super();
-        this.className = "portlet-layout";
+        this.className = "portlet-layout"; //$NON-NLS-1$
     }
 
     public boolean addColumn( PortletColumn newColumn )

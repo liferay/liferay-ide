@@ -23,6 +23,7 @@ import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
 
 import org.eclipse.gef.commands.Command;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -42,7 +43,7 @@ public class PortletColumnChangeConstraintCommand extends Command
         this.currentParent = currentParent;
         this.newParent = newParent;
         this.layoutConstraint = constraint;
-        setLabel( "Portlet column changed" );
+        setLabel( Msgs.portletColumnChanged );
     }
 
     public boolean canExecute()
@@ -80,7 +81,16 @@ public class PortletColumnChangeConstraintCommand extends Command
 
     public void undo()
     {
-        System.out.println( "UNDO" );
+        System.out.println( "UNDO" ); //$NON-NLS-1$
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String portletColumnChanged;
+
+        static
+        {
+            initializeMessages( PortletColumnChangeConstraintCommand.class.getName(), Msgs.class );
+        }
+    }
 }

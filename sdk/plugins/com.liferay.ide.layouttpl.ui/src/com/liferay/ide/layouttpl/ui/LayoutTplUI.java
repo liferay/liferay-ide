@@ -39,7 +39,7 @@ public class LayoutTplUI extends AbstractUIPlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static LayoutTplUI plugin;
@@ -105,7 +105,7 @@ public class LayoutTplUI extends AbstractUIPlugin
         {
             fTemplateStore =
                 new ContributionTemplateStore(
-                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.layouttpl.ui.custom_templates" );
+                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.layouttpl.ui.custom_templates" ); //$NON-NLS-1$
 
             try
             {
