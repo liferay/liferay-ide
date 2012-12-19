@@ -89,7 +89,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         Composite settingsComposite = createSectionComposite( toolkit, remoteSettings );
 
-        Label soapPortLabel = createLabel( toolkit, settingsComposite, Msgs.httpPort );
+        Label soapPortLabel = createLabel( toolkit, settingsComposite, Msgs.httpPortLabel );
         soapPortLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textHttpPort = toolkit.createText( settingsComposite, null );
@@ -137,7 +137,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         } );
 
-        Label passwordLabel = createLabel( toolkit, settingsComposite, Msgs.password );
+        Label passwordLabel = createLabel( toolkit, settingsComposite, Msgs.passwordLabel );
         passwordLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textPassword = toolkit.createText( settingsComposite, null, SWT.PASSWORD );
@@ -160,7 +160,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
         } );
 
-        Label labelLiferayPortalContextPath = createLabel( toolkit, settingsComposite, Msgs.liferayPortalContextPath );
+        Label labelLiferayPortalContextPath = createLabel( toolkit, settingsComposite, Msgs.liferayPortalContextPathLabel );
         labelLiferayPortalContextPath.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         textLiferayPortalContextPath = toolkit.createText( settingsComposite, null );
@@ -183,7 +183,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
             }
         } );
 
-        Label labelServerManagerContextPath = createLabel( toolkit, settingsComposite, Msgs.serverManagerContextPath );
+        Label labelServerManagerContextPath = createLabel( toolkit, settingsComposite, Msgs.serverManagerContextPathLabel );
         labelServerManagerContextPath.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false ) );
 
         textServerManagerContextPath = toolkit.createText( settingsComposite, null );
@@ -415,11 +415,11 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
     private static class Msgs extends NLS
     {
         public static String adjustDeploymentTimestamps;
-        public static String httpPort;
-        public static String liferayPortalContextPath;
-        public static String password;
+        public static String httpPortLabel;
+        public static String liferayPortalContextPathLabel;
+        public static String passwordLabel;
         public static String remoteLiferaySettings;
-        public static String serverManagerContextPath;
+        public static String serverManagerContextPathLabel;
         public static String specifySettings;
         public static String username;
 

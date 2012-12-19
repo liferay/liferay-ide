@@ -771,7 +771,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         setModuleStatus( module, LiferayServerCorePlugin.createInfoStatus( Msgs.uninstalling ) );
 
-        monitor.subTask( "Getting remote connection..." ); //$NON-NLS-1$
+        monitor.subTask( Msgs.gettingRemoteConnection );
 
         IServerManagerConnection remoteConnection = getServerManagerConnection();
 
@@ -779,7 +779,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         // File scriptFile = getScriptFile( "publish/uninstallApplicationScript.groovy" );
 
-        monitor.subTask( "Uninstalling " + moduleProject.getName() + " from Liferay..." ); //$NON-NLS-1$ //$NON-NLS-2$
+        monitor.subTask( NLS.bind( Msgs.uninstallingModuleProject, moduleProject.getName() ));
 
         Object error = null;
         
@@ -894,7 +894,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             return Status.OK_STATUS;
         }
 
-        monitor.beginTask( "Updating server status...", 100 ); //$NON-NLS-1$
+        monitor.beginTask( Msgs.updatingServerStatus, 100 );
 
         int remoteState = getRemoteServerState( currentServerState, monitor );
 
@@ -941,6 +941,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         public static String checkConnectionSettings;
         public static String gettingLiferayConnection;
+        public static String gettingRemoteConnection;
         public static String installing;
         public static String liferayServerInstanceRemote;
         public static String notPublishRemoteServer;
@@ -950,8 +951,10 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         public static String stoppingRemoteLiferayServerNotSupported;
         public static String undeployingModuleProject;
         public static String uninstalling;
+        public static String uninstallingModuleProject;
         public static String updatingModuleProject;
         public static String updatingServerState;
+        public static String updatingServerStatus;
 
         static
         {

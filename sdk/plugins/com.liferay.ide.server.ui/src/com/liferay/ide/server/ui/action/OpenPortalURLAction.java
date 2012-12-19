@@ -104,7 +104,7 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
         {
             final ILiferayServer portalServer = getLiferayServer();
 
-            new Job( "Open portal url" ) //$NON-NLS-1$
+            new Job( Msgs.openPortalUrl )
             {
                 @Override
                 protected IStatus run( IProgressMonitor monitor )
@@ -121,6 +121,7 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
     {
         public static String notDeterminePortalURL;
         public static String openPortalURL;
+        public static String openPortalUrl;
 
         static
         {

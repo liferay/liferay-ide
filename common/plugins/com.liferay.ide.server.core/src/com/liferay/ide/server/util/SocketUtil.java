@@ -24,6 +24,7 @@ import java.net.Socket;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -53,7 +54,7 @@ public class SocketUtil
         }
         catch( Exception e )
         {
-            status = LiferayServerCorePlugin.createErrorStatus( "Could not connect." ); //$NON-NLS-1$
+            status = LiferayServerCorePlugin.createErrorStatus( Msgs.notConnect );
             // e.printStackTrace();
         }
         finally
@@ -86,4 +87,13 @@ public class SocketUtil
         return status;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String notConnect;
+
+        static
+        {
+            initializeMessages( SocketUtil.class.getName(), Msgs.class );
+        }
+    }
 }

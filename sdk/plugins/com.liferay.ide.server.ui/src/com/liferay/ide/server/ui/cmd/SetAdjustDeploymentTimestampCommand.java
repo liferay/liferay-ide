@@ -13,6 +13,7 @@ package com.liferay.ide.server.ui.cmd;
 
 import com.liferay.ide.server.remote.IRemoteServer;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.ui.internal.command.ServerCommand;
 
 @SuppressWarnings( "restriction" )
@@ -25,7 +26,7 @@ public class SetAdjustDeploymentTimestampCommand extends ServerCommand
 
     public SetAdjustDeploymentTimestampCommand( IRemoteServer server, boolean adjustTimestamp )
     {
-        super( null, "Set Deploy Custom Portlet XML" ); //$NON-NLS-1$
+        super( null, Msgs.setDeployCustomPortletXML );
         this.remoteServer = server;
         this.adjustDemploymentTimestamp = adjustTimestamp;
     }
@@ -39,5 +40,15 @@ public class SetAdjustDeploymentTimestampCommand extends ServerCommand
     public void undo()
     {
         remoteServer.setAdjustDeploymentTimestamp( oldAdjustDemploymentTimestamp );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setDeployCustomPortletXML;
+
+        static
+        {
+            initializeMessages( SetAdjustDeploymentTimestampCommand.class.getName(), Msgs.class );
+        }
     }
 }

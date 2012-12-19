@@ -23,6 +23,7 @@ import java.net.URL;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.osgi.framework.Version;
@@ -54,7 +55,7 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
     @Override
     protected String getPortalURLTitle()
     {
-        return "JSON WS API"; //$NON-NLS-1$
+        return Msgs.jsonWsApi;
     }
 
     @Override
@@ -87,4 +88,13 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String jsonWsApi;
+
+        static
+        {
+            initializeMessages( OpenJSONWSAPIAction.class.getName(), Msgs.class );
+        }
+    }
 }

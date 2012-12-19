@@ -181,7 +181,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         textHostname.addModifyListener( this );
 
         labelHttpPort = new Label( connectionGroup, SWT.NONE );
-        labelHttpPort.setText( Msgs.httpPort );
+        labelHttpPort.setText( Msgs.httpPortLabel );
 
         textHTTP = new Text( connectionGroup, SWT.BORDER );
         textHTTP.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
@@ -221,7 +221,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         final String appUrl = "http://www.liferay.com/marketplace/-/mp/application/15193785"; //$NON-NLS-1$
         SWTUtil.createHyperLink( this, SWT.NONE, marketplaceLinkLabel, 1, appUrl );
         
-        final String installLabel = Msgs.clickHere;
+        final String installLabel = NLS.bind( "<a>{0}</a>", Msgs.clickHereLink ); //$NON-NLS-1$
         final String installUrl = "{0}/group/control_panel/manage?p_p_id=1_WAR_marketplaceportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&appId=15193785";  //$NON-NLS-1$
         final Link installLink = SWTUtil.createLink( this, SWT.NONE, installLabel, 1 );
         installLink.addSelectionListener
@@ -417,10 +417,10 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 
     private static class Msgs extends NLS
     {
-        public static String clickHere;
+        public static String clickHereLink;
         public static String connectionSettings;
         public static String hostname;
-        public static String httpPort;
+        public static String httpPortLabel;
         public static String installRemoteIDEConnector;
         public static String liferayPortalContextPath;
         public static String password;
