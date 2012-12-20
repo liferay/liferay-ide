@@ -50,13 +50,13 @@ public class PortletModelUtil
     {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
-        transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "no" );
-        transformer.setOutputProperty( OutputKeys.METHOD, "xml" );
-        transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
-        transformer.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
-        transformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" );
+        transformer.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "no" ); //$NON-NLS-1$
+        transformer.setOutputProperty( OutputKeys.METHOD, "xml" ); //$NON-NLS-1$
+        transformer.setOutputProperty( OutputKeys.INDENT, "yes" ); //$NON-NLS-1$
+        transformer.setOutputProperty( OutputKeys.ENCODING, "UTF-8" ); //$NON-NLS-1$
+        transformer.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "4" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        transformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( out, "UTF-8" ) ) );
+        transformer.transform( new DOMSource( doc ), new StreamResult( new OutputStreamWriter( out, "UTF-8" ) ) ); //$NON-NLS-1$
     }
 
     /**
@@ -74,7 +74,7 @@ public class PortletModelUtil
         boolean nsDefined = false;
         String currNodeValue = element.getText();
         Attr attrib = null;
-        if( currNodeValue != null && currNodeValue.indexOf( ":" ) != -1 )
+        if( currNodeValue != null && currNodeValue.indexOf( ":" ) != -1 ) //$NON-NLS-1$
         {
             String name = PortletUtil.stripSuffix( currNodeValue );
             // Check if the NS is already declared
@@ -113,7 +113,7 @@ public class PortletModelUtil
             domNode.setAttributeNS( namespaceURI, qualifiedName, namespaceURI );
         }
 
-        qualifiedNodeValue = defaultPrefix + ":" + currValueAsQName.getLocalPart();
+        qualifiedNodeValue = defaultPrefix + ":" + currValueAsQName.getLocalPart(); //$NON-NLS-1$
 
         return qualifiedNodeValue;
 

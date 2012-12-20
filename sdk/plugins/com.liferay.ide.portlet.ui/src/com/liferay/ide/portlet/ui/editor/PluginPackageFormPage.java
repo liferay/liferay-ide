@@ -19,6 +19,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.form.FormLayoutFactory;
 import com.liferay.ide.ui.form.IDEFormPage;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +39,7 @@ public class PluginPackageFormPage extends IDEFormPage
 
     public PluginPackageFormPage( PluginPackageEditor editor )
     {
-        super( editor, "pluginPackage", "Properties" );
+        super( editor, "pluginPackage", Msgs.properties ); //$NON-NLS-1$
     }
 
     @Override
@@ -57,8 +58,8 @@ public class PluginPackageFormPage extends IDEFormPage
         FormToolkit toolkit = managedForm.getToolkit();
         toolkit.decorateFormHeading( form.getForm() );
 
-        form.setText( "Liferay Plugin Package Properties" );
-        form.setImage( PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage() );
+        form.setText( Msgs.liferayPluginPackageProperties );
+        form.setImage( PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage() ); //$NON-NLS-1$
 
         toolkit = managedForm.getToolkit();
 
@@ -90,11 +91,26 @@ public class PluginPackageFormPage extends IDEFormPage
 
     private String[] getContextsSectionLabels()
     {
-        return new String[] { "Add...", "Remove", "Up", "Down" };
+        return new String[] { Msgs.add, Msgs.remove, Msgs.up, Msgs.down };
     }
 
     private String[] getPortalSectionLabels()
     {
-        return new String[] { "Add...", "Remove" };
+        return new String[] { Msgs.add, Msgs.remove };
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String down;
+        public static String liferayPluginPackageProperties;
+        public static String properties;
+        public static String remove;
+        public static String up;
+
+        static
+        {
+            initializeMessages( PluginPackageFormPage.class.getName(), Msgs.class );
+        }
     }
 }

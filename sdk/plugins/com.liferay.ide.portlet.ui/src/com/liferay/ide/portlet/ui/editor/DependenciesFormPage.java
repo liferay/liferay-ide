@@ -15,6 +15,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.form.FormLayoutFactory;
 import com.liferay.ide.ui.form.IDEFormPage;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -30,15 +31,15 @@ public class DependenciesFormPage extends IDEFormPage
 
     public DependenciesFormPage( FormEditor editor )
     {
-        super( editor, PAGE_ID, "Dependencies" );
+        super( editor, PAGE_ID, Msgs.dependencies );
     }
 
     protected void createFormContent( IManagedForm managedForm )
     {
         super.createFormContent( managedForm );
         ScrolledForm form = managedForm.getForm();
-        form.setImage( PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage() );
-        form.setText( "Dependencies" );
+        form.setImage( PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage() ); //$NON-NLS-1$
+        form.setText( Msgs.dependencies );
         Composite body = form.getBody();
         body.setLayout( FormLayoutFactory.createFormGridLayout( true, 2 ) );
 
@@ -63,10 +64,21 @@ public class DependenciesFormPage extends IDEFormPage
 
     private String[] getRequiredSectionLabels()
     {
-        return new String[] { "Add...", "Remove",
+        return new String[] { Msgs.add, Msgs.remove,
         // "Up",
         // "Down"
         };
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String dependencies;
+        public static String remove;
+
+        static
+        {
+            initializeMessages( DependenciesFormPage.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -68,7 +69,7 @@ public class BuildLanguagesAction extends AbstractObjectAction
 
                 for( IFolder src : srcFolders )
                 {
-                    IFile file = src.getFile( "content/Language.properties" );
+                    IFile file = src.getFile( "content/Language.properties" ); //$NON-NLS-1$
 
                     if( file.exists() )
                     {
@@ -117,30 +118,25 @@ public class BuildLanguagesAction extends AbstractObjectAction
 
         String charset = langFile.getCharset( true );
 
-        if( !"UTF-8".equals( charset ) )
+        if( !"UTF-8".equals( charset ) ) //$NON-NLS-1$
         {
-            String dialogMessage =
-                "The language file character set is set to " +
-                    charset +
-                    " which could lead to unexpected results.  Liferay expects the file to be encoded as UTF-8.  Would you like to force Eclipse to recognize this file as UTF-8?";
+            String dialogMessage = NLS.bind( Msgs.languageFileCharacterSet, charset );
 
             MessageDialog dialog =
                 new MessageDialog(
-                    getDisplay().getActiveShell(), "Incompatible Character Set", getDisplay().getSystemImage(
-                        SWT.ICON_WARNING ), dialogMessage, MessageDialog.WARNING,
-                    new String[] { "Yes", "No", "Cancel" }, 0 );
+                    getDisplay().getActiveShell(), Msgs.incompatibleCharacterSet, getDisplay().getSystemImage(
+                        SWT.ICON_WARNING ), dialogMessage, MessageDialog.WARNING, new String[] { Msgs.yes, Msgs.no,
+                        Msgs.cancel }, 0 );
 
             int retval = dialog.open();
 
             if( retval == 0 )
             {
-                langFile.setCharset( "UTF-8", monitor );
+                langFile.setCharset( "UTF-8", monitor ); //$NON-NLS-1$
 
-                String question =
-                    langFile.getName() +
-                        " has been forced to use UTF-8 encoding.  Would you like to edit the file to verify the contents?";
+                String question = NLS.bind( Msgs.forcedEditFile, langFile.getName() );
 
-                if( MessageDialog.openQuestion( getDisplay().getActiveShell(), "Preview file", question ) )
+                if( MessageDialog.openQuestion( getDisplay().getActiveShell(), Msgs.previewFile, question ) )
                 {
                     IDE.openEditor( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), langFile );
                 }
@@ -156,4 +152,19 @@ public class BuildLanguagesAction extends AbstractObjectAction
         return true;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String cancel;
+        public static String forcedEditFile;
+        public static String incompatibleCharacterSet;
+        public static String languageFileCharacterSet;
+        public static String no;
+        public static String previewFile;
+        public static String yes;
+
+        static
+        {
+            initializeMessages( BuildLanguagesAction.class.getName(), Msgs.class );
+        }
+    }
 }

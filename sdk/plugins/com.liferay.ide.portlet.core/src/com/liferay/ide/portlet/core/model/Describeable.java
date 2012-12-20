@@ -41,7 +41,7 @@ public interface Describeable extends IModelElement {
 	@Label( standard = "Description" )
 	@NoDuplicates
 	@XmlBinding( path = "description" )
-	ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" );
+	ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" ); //$NON-NLS-1$
 
 	Value<String> getDescription();
 

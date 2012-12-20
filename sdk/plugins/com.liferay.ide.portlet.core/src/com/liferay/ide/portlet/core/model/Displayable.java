@@ -40,7 +40,7 @@ public interface Displayable extends IModelElement
 
     @Label( standard = "Display name" )
     @XmlBinding( path = "display-name" )
-    ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" );
+    ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" ); //$NON-NLS-1$
 
     Value<String> getDisplayName();
 

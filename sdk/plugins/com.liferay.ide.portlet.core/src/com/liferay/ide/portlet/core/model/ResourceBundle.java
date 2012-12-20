@@ -55,7 +55,7 @@ public interface ResourceBundle extends IModelElement
     @XmlBinding( path = "resource-bundle" )
     @DependsOn( { "/Portlets/SupportedLocales" } )
     @CustomXmlValueBinding( impl = ResourceBundleValueBinding.class, params = { "resource-bundle" } )
-    ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" );
+    ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" ); //$NON-NLS-1$
 
     Value<Path> getResourceBundle();
 

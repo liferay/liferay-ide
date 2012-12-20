@@ -42,7 +42,7 @@ public interface ContainerRuntimeOption extends IModelElement, Nameable
     @Type( base = OptionValue.class )
     @Label( standard = "Options" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( type = OptionValue.class, element = "value" ) } )
-    ListProperty PROP_OPTIONS = new ListProperty( TYPE, "Options" );
+    ListProperty PROP_OPTIONS = new ListProperty( TYPE, "Options" ); //$NON-NLS-1$
 
     ModelElementList<OptionValue> getOptions();
 

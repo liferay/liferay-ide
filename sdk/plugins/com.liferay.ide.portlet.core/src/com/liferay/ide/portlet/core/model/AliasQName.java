@@ -45,7 +45,7 @@ public interface AliasQName extends IModelElement
     @XmlBinding( path = "alias" )
     @Required
     @CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "alias" } )
-    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
+    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" ); //$NON-NLS-1$
 
     Value<String> getNamespaceURI();
 
@@ -57,7 +57,7 @@ public interface AliasQName extends IModelElement
     @XmlBinding( path = "alias" )
     @Required
     @CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "alias" } )
-    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
+    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" ); //$NON-NLS-1$
 
     Value<String> getLocalPart();
 

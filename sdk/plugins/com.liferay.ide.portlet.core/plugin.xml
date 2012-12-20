@@ -9,7 +9,7 @@
             file-extensions="xml"
             file-names="portlet.xml"
             id="portletxml"
-            name="Portlet Descriptor"
+            name="%portlet.descriptor.name"
             priority="high">
          <describer
                class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
@@ -26,7 +26,7 @@
             file-extensions="xml"
             file-names="liferay-portlet.xml"
             id="liferayportletxml"
-            name="Liferay Portlet Descriptor"
+            name="%display.descriptor.problem.name"
             priority="high">
          <describer
                class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
@@ -39,13 +39,13 @@
             file-extensions="xml"
             file-names="liferay-display.xml"
             id="liferaydisplayxml"
-            name="Liferay Display Descriptor"
+            name="%display.descriptor.name"
             priority="high">
       </content-type>
    </extension>
    <extension
          id="portletdescriptorvalidator"
-         name="Portlet Descriptor Validator"
+         name="%portlet.descriptor.validator.name"
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="true"
@@ -67,7 +67,7 @@
    </extension>
    <extension
          id="liferayportletdescriptorvalidator"
-         name="Liferay Portlet Descriptor Validator"
+         name="%liferay.portlet.descriptor.validator.name"
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="true"
@@ -89,7 +89,7 @@
    </extension>
    <extension
          id="liferaydisplaydescriptorvalidator"
-         name="Liferay Display Descriptor Validator"
+         name="%display.descriptor.validator.name"
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="true"
@@ -111,7 +111,7 @@
    </extension>
    <extension
          id="portletDescriptorMarker"
-         name="Portlet Descriptor Problem"
+         name="%portlet.descriptor.problem.name"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
@@ -122,7 +122,7 @@
    </extension>
    <extension
          id="liferayPortletDescriptorMarker"
-         name="Liferay Portlet Descriptor Problem"
+         name="%liferay.portlet.descriptor.problem.name"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
@@ -133,7 +133,7 @@
    </extension>
    <extension
          id="liferayDisplayDescriptorMarker"
-         name="Liferay Display Descriptor Problem"
+         name="%display.descriptor.problem.name"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
@@ -169,8 +169,8 @@
     <portletFrameworkWizardProvider
           class="com.liferay.ide.portlet.core.MVCPortletFrameworkWizardProvider"
           default="true"
-          description="Simple and lightweight MVC framework using JSPs that is built-in to Liferay Portal."
-          displayName="Liferay MVC"
+          description="%portlet.framework.description"
+          displayName="%portlet.framework.display.name"
           helpUrl="http://www.liferay.com/documentation/liferay-portal/6.1/development/-/ai/portlet-development"
           id="com.liferay.ide.project.core.framework.mvc"
           requiredSDKVersion="6.0.1"

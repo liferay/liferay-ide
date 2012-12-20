@@ -38,7 +38,7 @@ public interface OptionValue extends IModelElement
 
     @Label( standard = "Option Value" )
     @XmlBinding( path = "" )
-    ValueProperty PROP_OPTION_VALUE = new ValueProperty( TYPE, "OptionValue" );
+    ValueProperty PROP_OPTION_VALUE = new ValueProperty( TYPE, "OptionValue" ); //$NON-NLS-1$
 
     Value<String> getOptionValue();
 

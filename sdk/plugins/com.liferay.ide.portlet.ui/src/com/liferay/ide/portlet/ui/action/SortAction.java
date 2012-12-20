@@ -49,7 +49,7 @@ public class SortAction extends Action
         setToolTipText( tooltipText );
         // Set the image
         setImageDescriptor( ImageDescriptor.createFromURL( PortletUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/e16/alphab_sort_co.gif" ) ) );
+            "/icons/e16/alphab_sort_co.gif" ) ) ); //$NON-NLS-1$
         // Set the default comparator
         fDefaultComparator = defaultSorter;
         // Set the viewer

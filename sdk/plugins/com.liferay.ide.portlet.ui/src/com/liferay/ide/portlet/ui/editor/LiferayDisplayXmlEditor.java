@@ -29,10 +29,10 @@ import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 public class LiferayDisplayXmlEditor extends SapphireEditorForXml
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor";
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"; //$NON-NLS-1$
 
     private static final String EDITOR_DEFINITION_PATH =
-        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/liferay-display.sdef/DetailsPage";
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/liferay-display.sdef/DetailsPage"; //$NON-NLS-1$
 
     public LiferayDisplayXmlEditor()
     {

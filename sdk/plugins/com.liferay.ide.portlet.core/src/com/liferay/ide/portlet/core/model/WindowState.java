@@ -48,7 +48,7 @@ public interface WindowState extends IModelElement
     @NoDuplicates
     @XmlBinding( path = "" )
     @Service( impl = WindowStatesPossibleValueService.class )
-    ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" );
+    ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
 
     Value<String> getWindowState();
 

@@ -44,7 +44,7 @@ public interface PortletName extends IModelElement
     @XmlBinding( path = "" )
     @PossibleValues( property = "/Portlets/PortletName" )
     @Service( impl = PortletReferenceService.class, params = { @Service.Param( name = "0", value = "portlet-name" ) } )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 

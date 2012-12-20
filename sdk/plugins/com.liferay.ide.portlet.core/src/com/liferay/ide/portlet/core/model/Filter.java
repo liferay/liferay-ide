@@ -53,7 +53,7 @@ public interface Filter extends IModelElement, Describeable, Displayable
     @Label( standard = "name" )
     @Required
     @XmlBinding( path = "filter-name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -68,7 +68,7 @@ public interface Filter extends IModelElement, Describeable, Displayable
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.filter.ResourceFilter",
         "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter" } )
     @XmlBinding( path = "filter-class" )
-    ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" );
+    ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getImplementation();
 
@@ -82,7 +82,7 @@ public interface Filter extends IModelElement, Describeable, Displayable
     @Label( standard = "lifecycle" )
     @CountConstraint( min = 1 )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "lifecycle", type = LifeCycle.class ) )
-    ListProperty PROP_LIFE_CYCLE = new ListProperty( TYPE, "LifeCycle" );
+    ListProperty PROP_LIFE_CYCLE = new ListProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
 
     ModelElementList<LifeCycle> getLifeCycle();
 
@@ -91,7 +91,7 @@ public interface Filter extends IModelElement, Describeable, Displayable
     @Type( base = Param.class )
     @Label( standard = "initialization parameters" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "init-param", type = Param.class ) )
-    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" );
+    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
 
     ModelElementList<Param> getInitParams();
 

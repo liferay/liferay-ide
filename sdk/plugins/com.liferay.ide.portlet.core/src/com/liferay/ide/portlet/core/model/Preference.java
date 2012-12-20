@@ -42,7 +42,7 @@ public interface Preference extends IModelElement, Identifiable, NameValue
     @Type( base = Boolean.class )
     @Label( standard = "Read Only" )
     @CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class, params = "read-only" )
-    ValueProperty PROP_READ_ONLY = new ValueProperty( TYPE, "ReadOnly" );
+    ValueProperty PROP_READ_ONLY = new ValueProperty( TYPE, "ReadOnly" ); //$NON-NLS-1$
 
     Value<Boolean> getReadOnly();
 

@@ -35,6 +35,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.ui.SapphireEditor;
@@ -60,8 +61,8 @@ import org.eclipse.ui.part.FileEditorInput;
 public class OpenPortletResourceAction extends BaseSelectionListenerAction
 {
 
-    private static final String ACTION_MESSAGE = "Open portlet configuration file";
-    private static final String PORTLETS_NODE_LABEL = "Portlets";
+    private static final String ACTION_MESSAGE = Msgs.openPortletConfigurationFile;
+    private static final String PORTLETS_NODE_LABEL = Msgs.portlets;
 
     protected IEditorPart editorPart;
     protected Object selectedNode;
@@ -145,7 +146,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
             }
             catch( Exception e )
             {
-                MessageDialog.openError( page.getWorkbenchWindow().getShell(), "Error Opening File", e.getMessage() );
+                MessageDialog.openError( page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile, e.getMessage() );
             }
         }
 
@@ -206,7 +207,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
                                     catch( Exception e )
                                     {
                                         MessageDialog.openError(
-                                            page.getWorkbenchWindow().getShell(), "Error Opening File", e.getMessage() );
+                                            page.getWorkbenchWindow().getShell(), Msgs.errorOpeningFile, e.getMessage() );
                                     }
                                 }
                             }
@@ -328,4 +329,15 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
         return false;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String errorOpeningFile;
+        public static String openPortletConfigurationFile;
+        public static String portlets;
+
+        static
+        {
+            initializeMessages( OpenPortletResourceAction.class.getName(), Msgs.class );
+        }
+    }
 }

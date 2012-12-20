@@ -22,12 +22,12 @@ package com.liferay.ide.portlet.core.util;
  */
 public interface PortletAppModelConstants
 {
-    public static final String COLON = ":";
-    public static final String DEFAULT_QNAME_PREFIX = "x";
-    public static final String LOCAL_PART_DEFAULT_VALUE = "LOCAL_PART";
-    public static final String NAMESPACE_URI_DEFAULT_VALUE = "NAMESPACE_URI";
-    public static final String DEFAULT_DERIVED_QNAME_VALUE = "{NAMESPACE_URI}LOCAL_PART";
-    public static final String XMLNS_NS_URI = "http://www.w3.org/2001/XMLSchema";
-    public static final String DEFAULT_QNAME_NS_DECL = "xmlns" + COLON + DEFAULT_QNAME_PREFIX;
-    public static final String NS_DECL = "xmlns:%s";
+    public static final String COLON = ":"; //$NON-NLS-1$
+    public static final String DEFAULT_QNAME_PREFIX = "x"; //$NON-NLS-1$
+    public static final String LOCAL_PART_DEFAULT_VALUE = "LOCAL_PART"; //$NON-NLS-1$
+    public static final String NAMESPACE_URI_DEFAULT_VALUE = "NAMESPACE_URI"; //$NON-NLS-1$
+    public static final String DEFAULT_DERIVED_QNAME_VALUE = "{NAMESPACE_URI}LOCAL_PART"; //$NON-NLS-1$
+    public static final String XMLNS_NS_URI = "http://www.w3.org/2001/XMLSchema"; //$NON-NLS-1$
+    public static final String DEFAULT_QNAME_NS_DECL = "xmlns" + COLON + DEFAULT_QNAME_PREFIX; //$NON-NLS-1$
+    public static final String NS_DECL = "xmlns:%s"; //$NON-NLS-1$
 }

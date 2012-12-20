@@ -38,7 +38,7 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
 public class PluginPackageInputContext extends InputContext
 {
 
-    public static final String CONTEXT_ID = "plugin-package-context";
+    public static final String CONTEXT_ID = "plugin-package-context"; //$NON-NLS-1$
 
     public PluginPackageInputContext( IDEFormEditor editor, IEditorInput input, boolean primary )
     {
@@ -90,7 +90,7 @@ public class PluginPackageInputContext extends InputContext
     @Override
     protected String getDefaultCharset()
     {
-        return "UTF-8";
+        return "UTF-8"; //$NON-NLS-1$
     }
 
     @Override

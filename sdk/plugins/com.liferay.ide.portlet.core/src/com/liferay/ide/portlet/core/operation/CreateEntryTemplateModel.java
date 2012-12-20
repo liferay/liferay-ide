@@ -44,9 +44,9 @@ public class CreateEntryTemplateModel extends CreateWebClassTemplateModel
     public Collection<String> getImports()
     {
         Collection<String> collection = super.getImports();
-        collection.add( "com.liferay.portlet.BaseControlPanelEntry" );
-        collection.add( "com.liferay.portal.model.Portlet" );
-        collection.add( "com.liferay.portal.security.permission.PermissionChecker" );
+        collection.add( "com.liferay.portlet.BaseControlPanelEntry" ); //$NON-NLS-1$
+        collection.add( "com.liferay.portal.model.Portlet" ); //$NON-NLS-1$
+        collection.add( "com.liferay.portal.security.permission.PermissionChecker" ); //$NON-NLS-1$
 
         return collection;
     }

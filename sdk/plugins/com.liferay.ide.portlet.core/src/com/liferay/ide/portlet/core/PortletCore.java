@@ -32,7 +32,7 @@ public class PortletCore extends Plugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.portlet.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.portlet.core"; //$NON-NLS-1$
 
     // The shared instance
     private static PortletCore plugin;

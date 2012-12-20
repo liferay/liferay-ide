@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -61,61 +62,53 @@ import org.w3c.dom.NodeList;
 public class LiferayPortletDescriptorValidator extends BaseValidator
 {
 
-    public static final String CONTROL_PANEL_ENTRY_CLASS_ELEMENT = "control-panel-entry-class";
+    public static final String CONTROL_PANEL_ENTRY_CLASS_ELEMENT = "control-panel-entry-class"; //$NON-NLS-1$
 
-    public static final String CONTROL_PANEL_ENTRY_WEIGHT_ELEMENT = "control-panel-entry-weight";
+    public static final String CONTROL_PANEL_ENTRY_WEIGHT_ELEMENT = "control-panel-entry-weight"; //$NON-NLS-1$
 
-    public static final String FOOTER_PORTAL_CSS_ELEMENT = "footer-portal-css";
+    public static final String FOOTER_PORTAL_CSS_ELEMENT = "footer-portal-css"; //$NON-NLS-1$
 
-    public static final String FOOTER_PORTAL_JAVASCRIPT_ELEMENT = "footer-portal-javascript";
+    public static final String FOOTER_PORTAL_JAVASCRIPT_ELEMENT = "footer-portal-javascript"; //$NON-NLS-1$
 
-    public static final String FOOTER_PORTLET_CSS_ELEMENT = "footer-portlet-css";
+    public static final String FOOTER_PORTLET_CSS_ELEMENT = "footer-portlet-css"; //$NON-NLS-1$
 
-    public static final String FOOTER_PORTLET_JAVASCRIPT_ELEMENT = "footer-portlet-javascript";
+    public static final String FOOTER_PORTLET_JAVASCRIPT_ELEMENT = "footer-portlet-javascript"; //$NON-NLS-1$
 
-    public static final String HEADER_PORTAL_CSS_ELEMENT = "header-portal-css";
+    public static final String HEADER_PORTAL_CSS_ELEMENT = "header-portal-css"; //$NON-NLS-1$
 
-    public static final String HEADER_PORTAL_JAVASCRIPT_ELEMENT = "header-portal-javascript";
+    public static final String HEADER_PORTAL_JAVASCRIPT_ELEMENT = "header-portal-javascript"; //$NON-NLS-1$
 
-    public static final String HEADER_PORTLET_CSS_ELEMENT = "header-portlet-css";
+    public static final String HEADER_PORTLET_CSS_ELEMENT = "header-portlet-css"; //$NON-NLS-1$
 
-    public static final String HEADER_PORTLET_JAVASCRIPT_ELEMENT = "header-portlet-javascript";
+    public static final String HEADER_PORTLET_JAVASCRIPT_ELEMENT = "header-portlet-javascript"; //$NON-NLS-1$
 
-    public static final String ICON_ELEMENT = "icon";
+    public static final String ICON_ELEMENT = "icon"; //$NON-NLS-1$
 
-    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayPortletDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayPortletDescriptorMarker"; //$NON-NLS-1$
 
-    public static final String MESSAGE_ENTRY_WEIGHT_NOT_VALID = "Must specify a valid double for entry weight.";
+    public static final String MESSAGE_ENTRY_WEIGHT_NOT_VALID = Msgs.specifyValidDouble;
 
-    public static final String MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND =
-        "The footer portal css resource {0} was not found in the web app.";
+    public static final String MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND = Msgs.footerPortalCssNotFound;
 
-    public static final String MESSAGE_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND =
-        "The footer portal javascript resource {0} was not found in the web app.";
+    public static final String MESSAGE_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND = Msgs.footerPortalJavascriptNotFound;
 
-    public static final String MESSAGE_FOOTER_PORTLET_CSS_NOT_FOUND =
-        "The footer portlet css resource {0} was not found in the web app.";
+    public static final String MESSAGE_FOOTER_PORTLET_CSS_NOT_FOUND = Msgs.footerPortletCssNotFound;
 
-    public static final String MESSAGE_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND =
-        "The footer portlet javascript resource {0} was not found in the web app.";
+    public static final String MESSAGE_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND = Msgs.footerPortletJavascriptNotFound;
 
-    public static final String MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND =
-        "The header portal css resource {0} was not found in the web app.";
+    public static final String MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND = Msgs.headerPortalCssNotFound;
 
-    public static final String MESSAGE_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND =
-        "The header portal javascript resource {0} was not found in the web app.";
+    public static final String MESSAGE_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND = Msgs.headerPortalJavascriptNotFound;
 
-    public static final String MESSAGE_HEADER_PORTLET_CSS_NOT_FOUND =
-        "The header portlet css resource {0} was not found in the web app.";
+    public static final String MESSAGE_HEADER_PORTLET_CSS_NOT_FOUND = Msgs.headerPortletCssNotFound;
 
-    public static final String MESSAGE_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND =
-        "The header portlet javascript resource {0} was not found in the web app.";
+    public static final String MESSAGE_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND = Msgs.headerPortletJavascriptNotFound;
 
-    public static final String MESSAGE_ICON_NOT_FOUND = "The icon resource {0} was not found in the web app.";
+    public static final String MESSAGE_ICON_NOT_FOUND = Msgs.iconNotFound;
 
-    public static final String MESSAGE_PORTLET_NAME_NOT_FOUND = "The portlet name {0} was not found in portlet.xml.";
+    public static final String MESSAGE_PORTLET_NAME_NOT_FOUND = Msgs.portletNameNotFound;
 
-    public static final String PORTLET_NAME_ELEMENT = "portlet-name";
+    public static final String PORTLET_NAME_ELEMENT = "portlet-name"; //$NON-NLS-1$
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
@@ -270,7 +263,7 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
                     liferayPortletXmlDocument, liferayPortletXml.getProject(), preferenceScopes, problems );
 
                 checkAllClassElements(
-                    getAllClasseElements( "LiferayPortletClassElements.properties" ), javaProject, liferayPortletXml,
+                    getAllClasseElements( "LiferayPortletClassElements.properties" ), javaProject, liferayPortletXml, //$NON-NLS-1$
                     ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND,
                     ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
@@ -376,4 +369,23 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
         return result;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String footerPortalCssNotFound;
+        public static String footerPortalJavascriptNotFound;
+        public static String footerPortletCssNotFound;
+        public static String footerPortletJavascriptNotFound;
+        public static String headerPortalCssNotFound;
+        public static String headerPortalJavascriptNotFound;
+        public static String headerPortletCssNotFound;
+        public static String headerPortletJavascriptNotFound;
+        public static String iconNotFound;
+        public static String portletNameNotFound;
+        public static String specifyValidDouble;
+
+        static
+        {
+            initializeMessages( LiferayPortletDescriptorValidator.class.getName(), Msgs.class );
+        }
+    }
 }

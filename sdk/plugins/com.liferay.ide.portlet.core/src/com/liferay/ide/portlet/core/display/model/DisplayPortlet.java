@@ -45,7 +45,7 @@ public interface DisplayPortlet extends IModelElement
     @XmlBinding( path = "@id" )
     @Required
     @Service( impl = PortletNamePossibleValueService.class )
-    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
+    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" ); //$NON-NLS-1$
 
     Value<String> getId();
 

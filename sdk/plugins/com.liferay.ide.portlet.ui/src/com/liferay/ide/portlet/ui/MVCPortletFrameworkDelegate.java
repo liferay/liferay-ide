@@ -24,6 +24,7 @@ import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
 import com.liferay.ide.ui.util.SWTUtil;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,10 +48,10 @@ public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
 
     public Composite createNewProjectOptionsComposite( Composite parent )
     {
-        Group group = SWTUtil.createGroup( parent, "Additional Options", 1 );
+        Group group = SWTUtil.createGroup( parent, Msgs.additionalOptions, 1 );
 
         final Button createCustomClassButton = new Button( group, SWT.CHECK );
-        createCustomClassButton.setText( "Create custom portlet class" );
+        createCustomClassButton.setText( Msgs.createCustomPortletClass );
         createCustomClassButton.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -94,4 +95,14 @@ public class MVCPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String additionalOptions;
+        public static String createCustomPortletClass;
+
+        static
+        {
+            initializeMessages( MVCPortletFrameworkDelegate.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -46,7 +46,7 @@ public interface QName extends IModelElement
     @XmlBinding( path = "qname" )
     @Service( impl = NameOrQnameValidationService.class )
     @CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
-    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
+    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" ); //$NON-NLS-1$
 
     Value<String> getNamespaceURI();
 
@@ -58,7 +58,7 @@ public interface QName extends IModelElement
     @XmlBinding( path = "qname" )
     @Service( impl = NameOrQnameValidationService.class )
     @CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname", "localpart" } )
-    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
+    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" ); //$NON-NLS-1$
 
     Value<String> getLocalPart();
 

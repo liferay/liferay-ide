@@ -98,7 +98,7 @@ public class PortalJarViewerFilter extends ViewerFilter
             {
                 // we only want to show the directory if it had children that
                 // have jsps
-                if( directoryContainsFiles( file, "jar", viewer ) )
+                if( directoryContainsFiles( file, "jar", viewer ) ) //$NON-NLS-1$
                 {
                     cachedDirs.add( file );
 
@@ -115,7 +115,7 @@ public class PortalJarViewerFilter extends ViewerFilter
                     }
                 }
 
-                if( filePath.getFileExtension().contains( "jar" ) )
+                if( filePath.getFileExtension().contains( "jar" ) ) //$NON-NLS-1$
                 {
                     return true;
                 }

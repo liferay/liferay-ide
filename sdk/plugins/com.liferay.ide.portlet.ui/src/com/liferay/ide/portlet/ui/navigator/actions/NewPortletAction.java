@@ -21,6 +21,7 @@ import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
@@ -30,7 +31,7 @@ import org.eclipse.ui.actions.BaseSelectionListenerAction;
 public class NewPortletAction extends BaseSelectionListenerAction
 {
 
-    private static final String ACTION_MESSAGE = "New Portlet";
+    private static final String ACTION_MESSAGE = Msgs.newPortlet;
     protected Object selectedNode;
 
     /**
@@ -80,4 +81,13 @@ public class NewPortletAction extends BaseSelectionListenerAction
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newPortlet;
+
+        static
+        {
+            initializeMessages( NewPortletAction.class.getName(), Msgs.class );
+        }
+    }
 }

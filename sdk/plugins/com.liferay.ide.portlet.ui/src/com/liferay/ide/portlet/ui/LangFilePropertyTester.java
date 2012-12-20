@@ -32,7 +32,7 @@ public class LangFilePropertyTester extends PropertyTester
         {
             IFile file = (IFile) receiver;
 
-            if( file.exists() && file.getName().matches( "Language.*\\.properties" ) )
+            if( file.exists() && file.getName().matches( "Language.*\\.properties" ) ) //$NON-NLS-1$
             {
                 return ProjectUtil.isLiferayProject( file.getProject() );
             }

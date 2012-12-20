@@ -98,7 +98,7 @@ public class PortalTldViewerFilter extends ViewerFilter
             {
                 // we only want to show the directory if it had children that
                 // have jsps
-                if( directoryContainsFiles( file, "tld", viewer ) )
+                if( directoryContainsFiles( file, "tld", viewer ) ) //$NON-NLS-1$
                 {
                     cachedDirs.add( file );
 
@@ -115,7 +115,7 @@ public class PortalTldViewerFilter extends ViewerFilter
                     }
                 }
 
-                if( filePath.getFileExtension().contains( "tld" ) )
+                if( filePath.getFileExtension().contains( "tld" ) ) //$NON-NLS-1$
                 {
                     return true;
                 }

@@ -37,6 +37,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -55,7 +56,7 @@ public class NewPortletWizard extends NewWebArtifactWizard
     implements IPluginWizardFragment, INewPortletClassDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.portlet.ui.wizard.portlet";
+    public static final String ID = "com.liferay.ide.portlet.ui.wizard.portlet"; //$NON-NLS-1$
 
     protected boolean fragment;
     protected IWizardPage hostPage;
@@ -83,17 +84,17 @@ public class NewPortletWizard extends NewWebArtifactWizard
     protected void doAddPages()
     {
         addPage( new NewPortletClassWizardPage(
-            getDataModel(), "pageOne", "Create a portlet class.", getDefaultPageTitle(), this.fragment,
+            getDataModel(), "pageOne", Msgs.createPortletClass, getDefaultPageTitle(), this.fragment, //$NON-NLS-1$
             ( initialProject != null ) ) );
         addPage( new NewPortletOptionsWizardPage(
-            getDataModel(), "pageTwo", "Specify portlet deployment descriptor details.", getDefaultPageTitle(),
+            getDataModel(), "pageTwo", Msgs.specifyPortletDeployment, getDefaultPageTitle(), //$NON-NLS-1$
             this.fragment ) );
         addPage( new NewLiferayPortletWizardPage(
-            getDataModel(), "pageThree", "Specify Liferay portlet deployment descriptor details.",
+            getDataModel(), "pageThree", Msgs.specifyLiferayPortletDeployment, //$NON-NLS-1$
             getDefaultPageTitle(), this.fragment ) );
         addPage( new NewPortletClassOptionsWizardPage(
-            getDataModel(), "pageFour",
-            "Specify modifiers, interfaces, and method stubs to generate in Portlet class.", getDefaultPageTitle(),
+            getDataModel(), "pageFour", //$NON-NLS-1$
+            Msgs.specifyModifiersInterfacesMethodStubs, getDefaultPageTitle(),
             this.fragment ) );
     }
 
@@ -104,7 +105,7 @@ public class NewPortletWizard extends NewWebArtifactWizard
 
     protected String getDefaultPageTitle()
     {
-        return "Create Liferay Portlet";
+        return Msgs.createLiferayPortlet;
     }
 
     @Override
@@ -120,12 +121,12 @@ public class NewPortletWizard extends NewWebArtifactWizard
 
     protected ImageDescriptor getImage()
     {
-        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/portlet_wiz.png" );
+        return PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "/icons/wizban/portlet_wiz.png" ); //$NON-NLS-1$
     }
 
     public String getTitle()
     {
-        return "New Liferay Portlet";
+        return Msgs.newLiferayPortlet;
     }
 
     @Override
@@ -164,7 +165,7 @@ public class NewPortletWizard extends NewWebArtifactWizard
                 {
                     for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        IFile viewFile = container.getFile( new Path( jspsFolder + "/view.jsp" ) );
+                        IFile viewFile = container.getFile( new Path( jspsFolder + "/view.jsp" ) ); //$NON-NLS-1$
 
                         if( viewFile.exists() )
                         {
@@ -215,5 +216,20 @@ public class NewPortletWizard extends NewWebArtifactWizard
     public void setHostPage( IWizardPage hostPage )
     {
         this.hostPage = hostPage;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String createLiferayPortlet;
+        public static String createPortletClass;
+        public static String newLiferayPortlet;
+        public static String specifyLiferayPortletDeployment;
+        public static String specifyModifiersInterfacesMethodStubs;
+        public static String specifyPortletDeployment;
+
+        static
+        {
+            initializeMessages( NewPortletWizard.class.getName(), Msgs.class );
+        }
     }
 }

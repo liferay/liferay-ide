@@ -27,7 +27,7 @@ public class AddPortletActionFilter extends SapphireActionHandlerFilter
         // "AddPortletActionFilter.check() - Action Handler[Action-ID=%s, Handler-ID=%s,Model-Element=%s]",
         // handler.getAction().getId(), handler.getId(), iModelElement.getClass().getName() ) );
 
-        if( "Sapphire.Add.IPortlet".equals( handler.getId() ) && "Sapphire.Add".equals( handler.getAction().getId() ) )
+        if( "Sapphire.Add.IPortlet".equals( handler.getId() ) && "Sapphire.Add".equals( handler.getAction().getId() ) ) //$NON-NLS-1$ //$NON-NLS-2$
         {
             return false;
         }

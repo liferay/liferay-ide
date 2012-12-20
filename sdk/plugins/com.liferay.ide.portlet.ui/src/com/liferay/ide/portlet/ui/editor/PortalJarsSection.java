@@ -13,6 +13,7 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
 import com.liferay.ide.ui.form.DefaultContentProvider;
@@ -41,6 +42,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -88,7 +90,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
         if( portalDir != null )
         {
             for (String portalJar : portalJars) {
-                File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim());
+                File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim()); //$NON-NLS-1$
 
                 if (jarFile.isFile() && jarFile.exists()) {
                     fJars.add(jarFile);
@@ -109,15 +111,15 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 				File file = (File)element;
 				return file.getName();
 			}
-			return "";
+			return StringUtil.EMPTY;
 		}
 		
 	}
 
 	public PortalJarsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
-		getSection().setText("Portal Dependency Jars");
-		getSection().setDescription("Specify which jars the plugin package requires.");
+		getSection().setText(Msgs.portalDependencyJars);
+		getSection().setDescription(Msgs.specifyJars);
 		getSection().getTextClient().getParent().layout(true);
 		getTablePart().setEditable(true);
 	}
@@ -138,7 +140,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		gd.grabExcessVerticalSpace = true;
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
-		section.setText("Portal Dependency Jars");
+		section.setText(Msgs.portalDependencyJars);
 		createSectionToolbar(section, toolkit);
 		initialize();
 	}
@@ -306,7 +308,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		{
             ExternalFileSelectionDialog dialog =
                 new ExternalFileSelectionDialog( getPage().getShell(), new PortalJarViewerFilter(
-                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/lib" }, existingJars ), true, false );
+                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/lib" }, existingJars ), true, false );  //$NON-NLS-1$//$NON-NLS-2$
             dialog.setInput(portalDir.toFile());
 	        dialog.create();
 	        if (dialog.open() == Window.OK) {
@@ -325,8 +327,7 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
         else
         {
             MessageDialog.openInformation(
-                getPage().getShell(), "Liferay Plugin Package Editor",
-                "Can not determine portal directory. Make sure Liferay portal is set as the targeted runtime." );
+                getPage().getShell(), Msgs.liferayPluginPackageEditor, Msgs.notDeterminePortalDirectory );
         }
 	}
 	
@@ -371,13 +372,13 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	}
 
 	private void makeActions() {
-		fAddAction = new Action("Add...") {
+		fAddAction = new Action(Msgs.add) {
 			public void run() {
 				handleAdd();
 			}
 		};
 		
-		fRemoveAction = new Action("Remove") {
+		fRemoveAction = new Action(Msgs.remove) {
 			public void run() {
 				handleRemove();
 			}
@@ -512,4 +513,18 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 	// return fSortAction.isChecked();
 	// }
 
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String liferayPluginPackageEditor;
+        public static String notDeterminePortalDirectory;
+        public static String portalDependencyJars;
+        public static String remove;
+        public static String specifyJars;
+
+        static
+        {
+            initializeMessages( PortalJarsSection.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -106,7 +106,7 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
         XmlElement parent = xml( true );
         // System.out.println( "VALUE ___________________ " + qNameAsString );
 
-        if( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) )
+        if( qNameAsString != null && !"Q_NAME".equals( qNameAsString ) ) //$NON-NLS-1$
         {
             qNameAsString = value.trim();
             QName qName = QName.valueOf( qNameAsString );

@@ -22,6 +22,7 @@ import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -31,9 +32,9 @@ import org.eclipse.swt.graphics.Image;
 public class PortletResourcesLabelProvider extends AbstractLabelProvider
 {
 
-    private final static String PORTLETS = "PORTLETS";
-    private final static String PORTLET = "PORTLET";
-    private final static String MODULES = "MODULES";
+    private final static String PORTLETS = "PORTLETS"; //$NON-NLS-1$
+    private final static String PORTLET = "PORTLET"; //$NON-NLS-1$
+    private final static String MODULES = "MODULES"; //$NON-NLS-1$
 
     public PortletResourcesLabelProvider()
     {
@@ -45,13 +46,13 @@ public class PortletResourcesLabelProvider extends AbstractLabelProvider
     {
         imageRegistry.put(
             PORTLETS,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlets_16x16.png" ) );
+            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlets_16x16.png" ) ); //$NON-NLS-1$
         imageRegistry.put(
             PORTLET,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlet_16x16.png" ) );
+            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlet_16x16.png" ) ); //$NON-NLS-1$
         imageRegistry.put(
             MODULES,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/liferay_modules.png" ) );
+            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/liferay_modules.png" ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -78,11 +79,11 @@ public class PortletResourcesLabelProvider extends AbstractLabelProvider
     {
         if( element instanceof PortletResourcesRootNode )
         {
-            return "Liferay Portlet Resources";
+            return Msgs.liferayPortletResources;
         }
         else if( element instanceof PortletsNode )
         {
-            return "Portlets";
+            return Msgs.portlets;
         }
         else if( element instanceof PortletNode )
         {
@@ -92,5 +93,16 @@ public class PortletResourcesLabelProvider extends AbstractLabelProvider
         }
 
         return null;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String liferayPortletResources;
+        public static String portlets;
+
+        static
+        {
+            initializeMessages( PortletResourcesLabelProvider.class.getName(), Msgs.class );
+        }
     }
 }

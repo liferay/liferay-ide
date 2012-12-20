@@ -13,6 +13,7 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
 import com.liferay.ide.project.ui.dialog.LiferayProjectSelectionDialog;
@@ -41,6 +42,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -79,7 +81,7 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 				return element.toString();
 			}
 
-			return "";
+			return StringUtil.EMPTY;
 		}
 		
 	}
@@ -98,8 +100,8 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 	
 	public RequiredDeploymentContextsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
-		getSection().setText("Required Deployment Contexts");
-		getSection().setDescription("Specify which plugins are required to be deployed before this plugin.");
+		getSection().setText(Msgs.requiredDeploymentContexts);
+		getSection().setDescription(Msgs.specifyPlugins);
 		getSection().getTextClient().getParent().layout(true);
 		getTablePart().setEditable(true);
 	}
@@ -120,7 +122,7 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 		gd.grabExcessVerticalSpace = true;
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
-		section.setText("Service Dependencies");
+		section.setText(Msgs.serviceDependencies);
 		createSectionToolbar(section, toolkit);
 		initialize();
 	}
@@ -323,13 +325,13 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 	}
 
 	private void makeActions() {
-		fAddAction = new Action("Add...") {
+		fAddAction = new Action(Msgs.add) {
 			public void run() {
 				handleAdd();
 			}
 		};
 		
-		fRemoveAction = new Action("Remove") {
+		fRemoveAction = new Action(Msgs.remove) {
 			public void run() {
 				handleRemove();
 			}
@@ -432,4 +434,17 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 	// return fSortAction.isChecked();
 	// }
 
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String remove;
+        public static String requiredDeploymentContexts;
+        public static String serviceDependencies;
+        public static String specifyPlugins;
+
+        static
+        {
+            initializeMessages( RequiredDeploymentContextsSection.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -27,10 +27,10 @@ import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 public class PortletXmlEditor extends SapphireEditorForXml
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor";
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"; //$NON-NLS-1$
 
     private static final String EDITOR_DEFINITION_PATH =
-        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/portlet-app.sdef/portlet-app.editor";
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/portlet-app.sdef/portlet-app.editor"; //$NON-NLS-1$
 
     /**
 	 * 

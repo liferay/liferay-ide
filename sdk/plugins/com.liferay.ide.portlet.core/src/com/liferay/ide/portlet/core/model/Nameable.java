@@ -44,7 +44,7 @@ public interface Nameable extends IModelElement
     @Required
     @NoDuplicates
     @XmlBinding( path = "name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 

@@ -30,8 +30,8 @@ import org.eclipse.sapphire.services.ReferenceService;
 public final class PortletReferenceService extends ReferenceService
 {
 
-    private static final String QUERY_BY_NAME = "portlet-name";
-    private static final String QUERY_BY_DISPLAY_NAME = "display-name";
+    private static final String QUERY_BY_NAME = "portlet-name"; //$NON-NLS-1$
+    private static final String QUERY_BY_DISPLAY_NAME = "display-name"; //$NON-NLS-1$
 
     /**
 	 * 
@@ -45,14 +45,14 @@ public final class PortletReferenceService extends ReferenceService
         {
             for( Portlet portlet : portletApp.getPortlets() )
             {
-                if( params() == null || QUERY_BY_NAME.equals( param( "0" ) ) )
+                if( params() == null || QUERY_BY_NAME.equals( param( "0" ) ) ) //$NON-NLS-1$
                 {
                     if( equal( portlet.getPortletName().getContent(), reference ) )
                     {
                         return portlet;
                     }
                 }
-                else if( params() == null || QUERY_BY_DISPLAY_NAME.equals( param( "0" ) ) )
+                else if( params() == null || QUERY_BY_DISPLAY_NAME.equals( param( "0" ) ) ) //$NON-NLS-1$
                 {
                     if( equal( portlet.getPortletName().getContent(), reference ) )
                     {

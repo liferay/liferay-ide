@@ -37,16 +37,16 @@ public class PortletModeImageService extends ImageService
 {
 
     private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/portlet.png" );
+        PortletModeImageService.class, "images/portlet.png" ); //$NON-NLS-1$
 
     private static final ImageData IMG_VIEW = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/view.png" );
+        PortletModeImageService.class, "images/view.png" ); //$NON-NLS-1$
 
     private static final ImageData IMG_EDIT = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/edit.png" );
+        PortletModeImageService.class, "images/edit.png" ); //$NON-NLS-1$
 
     private static final ImageData IMG_HELP = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/help.png" );
+        PortletModeImageService.class, "images/help.png" ); //$NON-NLS-1$
 
     private Listener listener;
 
@@ -85,15 +85,15 @@ public class PortletModeImageService extends ImageService
 
         if( portletMode != null )
         {
-            if( "VIEW".equalsIgnoreCase( portletMode ) )
+            if( "VIEW".equalsIgnoreCase( portletMode ) ) //$NON-NLS-1$
             {
                 imageData = IMG_VIEW;
             }
-            else if( "EDIT".equalsIgnoreCase( portletMode ) )
+            else if( "EDIT".equalsIgnoreCase( portletMode ) ) //$NON-NLS-1$
             {
                 imageData = IMG_EDIT;
             }
-            else if( "HELP".equalsIgnoreCase( portletMode ) )
+            else if( "HELP".equalsIgnoreCase( portletMode ) ) //$NON-NLS-1$
             {
                 imageData = IMG_HELP;
             }

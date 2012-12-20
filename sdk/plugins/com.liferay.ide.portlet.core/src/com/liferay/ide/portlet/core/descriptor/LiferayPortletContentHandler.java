@@ -23,15 +23,15 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 public class LiferayPortletContentHandler extends AbstractDefaultHandler
 {
 
-    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Portlet Application ";
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Portlet Application "; //$NON-NLS-1$
 
-    public static final String PUBLIC_ID_SUFFIX = "//EN";
+    public static final String PUBLIC_ID_SUFFIX = "//EN"; //$NON-NLS-1$
 
-    public static final String LIFERAY_PORTLET_APP = "liferay-portlet-app";
+    public static final String LIFERAY_PORTLET_APP = "liferay-portlet-app"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-portlet-app_";
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-portlet-app_"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_SUFFIX = ".dtd";
+    public static final String SYSTEM_ID_SUFFIX = ".dtd"; //$NON-NLS-1$
 
     public LiferayPortletContentHandler()
     {

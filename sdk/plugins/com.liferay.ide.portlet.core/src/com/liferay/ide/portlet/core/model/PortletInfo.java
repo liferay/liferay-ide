@@ -42,7 +42,7 @@ public interface PortletInfo extends IModelElement, Identifiable
     @Label( standard = "Title" )
     @XmlBinding( path = "title" )
     @CountConstraint( min = 0, max = 1 )
-    ValueProperty PROP_TITLE = new ValueProperty( TYPE, "Title" );
+    ValueProperty PROP_TITLE = new ValueProperty( TYPE, "Title" ); //$NON-NLS-1$
 
     Value<String> getTitle();
 
@@ -53,7 +53,7 @@ public interface PortletInfo extends IModelElement, Identifiable
     @Label( standard = "Short Title" )
     @XmlBinding( path = "short-title" )
     @CountConstraint( min = 0, max = 1 )
-    ValueProperty PROP_SHORT_TITLE = new ValueProperty( TYPE, "ShortTitle" );
+    ValueProperty PROP_SHORT_TITLE = new ValueProperty( TYPE, "ShortTitle" ); //$NON-NLS-1$
 
     Value<String> getShortTitle();
 
@@ -64,7 +64,7 @@ public interface PortletInfo extends IModelElement, Identifiable
     @Label( standard = "Keywords" )
     @XmlBinding( path = "keywords" )
     @CountConstraint( min = 0, max = 1 )
-    ValueProperty PROP_KEYWORDS = new ValueProperty( TYPE, "Keywords" );
+    ValueProperty PROP_KEYWORDS = new ValueProperty( TYPE, "Keywords" ); //$NON-NLS-1$
 
     Value<String> getKeywords();
 

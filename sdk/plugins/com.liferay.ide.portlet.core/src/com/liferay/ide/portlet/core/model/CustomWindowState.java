@@ -47,7 +47,7 @@ public interface CustomWindowState extends IModelElement, Describeable, Identifi
     @XmlBinding( path = "window-state" )
     @Required
     @Service( impl = WindowStatesPossibleValueService.class )
-    ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" );
+    ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
 
     Value<String> getWindowState();
 

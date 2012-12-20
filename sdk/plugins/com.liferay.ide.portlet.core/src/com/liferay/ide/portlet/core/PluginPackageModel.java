@@ -19,6 +19,7 @@ import com.liferay.ide.core.model.AbstractEditingModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.ModelChangedEvent;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -69,9 +70,9 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
             return;
         }
 
-        String existingDeps = pluginPackageProperties.getString( propertyName, "" );
+        String existingDeps = pluginPackageProperties.getString( propertyName, StringUtil.EMPTY );
 
-        String[] existingValues = existingDeps.split( "," );
+        String[] existingValues = existingDeps.split( "," ); //$NON-NLS-1$
 
         for( String existingValue : existingValues )
         {
@@ -89,14 +90,14 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
         }
         else
         {
-            newDeps = existingDeps + "," + value;
+            newDeps = existingDeps + "," + value; //$NON-NLS-1$
         }
 
         pluginPackageProperties.setProperty( propertyName, newDeps );
 
         flushProperties();
 
-        fireModelChanged( new ModelChangedEvent( this, IModelChangedEvent.INSERT, newDeps.split( "," ), propertyName ) );
+        fireModelChanged( new ModelChangedEvent( this, IModelChangedEvent.INSERT, newDeps.split( "," ), propertyName ) ); //$NON-NLS-1$
     }
 
     public void addPortalDependencyJar( String jar )
@@ -177,7 +178,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         if( portalJars != null )
         {
-            return portalJars.split( "," );
+            return portalJars.split( "," ); //$NON-NLS-1$
         }
         else
         {
@@ -191,7 +192,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         if( portalTlds != null )
         {
-            return portalTlds.split( "," );
+            return portalTlds.split( "," ); //$NON-NLS-1$
         }
         else
         {
@@ -205,7 +206,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         if( contexts != null )
         {
-            return contexts.split( "," );
+            return contexts.split( "," ); //$NON-NLS-1$
         }
         else
         {
@@ -271,7 +272,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         List<String> updatedValues = new ArrayList<String>();
 
-        String[] deps = portalDependencies.split( "," );
+        String[] deps = portalDependencies.split( "," ); //$NON-NLS-1$
 
         for( String dep : deps )
         {
@@ -294,7 +295,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         if( updatedValues.size() > 0 )
         {
-            pluginPackageProperties.setProperty( propertyName, "" );
+            pluginPackageProperties.setProperty( propertyName, StringUtil.EMPTY );
 
             for( String updatedValue : updatedValues )
             {
@@ -400,7 +401,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         if( depsValue != null )
         {
-            deps = depsValue.split( "," );
+            deps = depsValue.split( "," ); //$NON-NLS-1$
         }
         else
         {
@@ -421,7 +422,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         for( String val : newValues )
         {
-            buffer.append( val + "," );
+            buffer.append( val + "," ); //$NON-NLS-1$
         }
 
         String newValue = buffer.toString().substring( 0, buffer.length() - 1 );

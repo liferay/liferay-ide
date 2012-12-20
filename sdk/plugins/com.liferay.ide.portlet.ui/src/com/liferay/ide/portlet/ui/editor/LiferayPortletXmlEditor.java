@@ -35,10 +35,10 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 public class LiferayPortletXmlEditor extends SapphireEditor
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor";
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor"; //$NON-NLS-1$
 
     private static final String EDITOR_DEFINITION_PATH =
-        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/liferay-portlet-app.sdef/portlet-app.editor";
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/liferay-portlet-app.sdef/portlet-app.editor"; //$NON-NLS-1$
 
     private StructuredTextEditor sourceEditor;
     private MasterDetailsEditorPage formEditor;
@@ -76,7 +76,7 @@ public class LiferayPortletXmlEditor extends SapphireEditor
         sourceEditor.setEditorPart( this );
         final IFileEditorInput fileEditorInput = (IFileEditorInput) getEditorInput();
         int pgIndex = addPage( sourceEditor, fileEditorInput );
-        setPageText( pgIndex, "liferay-portlet.xml" );
+        setPageText( pgIndex, "liferay-portlet.xml" ); //$NON-NLS-1$
 
     }
 

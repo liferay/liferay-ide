@@ -59,7 +59,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @NoDuplicates
     @MustExist
     @XmlBinding( path = "portlet-name" )
-    ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" );
+    ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" ); //$NON-NLS-1$
 
     Value<String> getPortletName();
 
@@ -73,7 +73,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Label( standard = "Portlet class" )
     @Required
     @XmlBinding( path = "portlet-class" )
-    ValueProperty PROP_PORTLET_CLASS = new ValueProperty( TYPE, "PortletClass" );
+    ValueProperty PROP_PORTLET_CLASS = new ValueProperty( TYPE, "PortletClass" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getPortletClass();
 
@@ -87,7 +87,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Label( standard = "Expiration Cache" )
     @CountConstraint( min = 0, max = 1 )
     @XmlBinding( path = "expiration-cache" )
-    ValueProperty PROP_EXPIRATION_CACHE = new ValueProperty( TYPE, "ExpirationCache" );
+    ValueProperty PROP_EXPIRATION_CACHE = new ValueProperty( TYPE, "ExpirationCache" ); //$NON-NLS-1$
 
     Value<Integer> getExpirationCache();
 
@@ -100,7 +100,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Label( standard = "Cache scope" )
     @XmlBinding( path = "cache-scope" )
     @CountConstraint( min = 0, max = 1 )
-    ValueProperty PROP_CACHE_SCOPE = new ValueProperty( TYPE, "CacheScope" );
+    ValueProperty PROP_CACHE_SCOPE = new ValueProperty( TYPE, "CacheScope" ); //$NON-NLS-1$
 
     Value<String> getCacheScope();
 
@@ -112,7 +112,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Label( standard = "Supports" )
     @Required
     @CustomXmlElementBinding( impl = DefaultXmlBinding.class, params = { "supports" } )
-    ImpliedElementProperty PROP_SUPPORTS = new ImpliedElementProperty( TYPE, "Supports" );
+    ImpliedElementProperty PROP_SUPPORTS = new ImpliedElementProperty( TYPE, "Supports" ); //$NON-NLS-1$
 
     Supports getSupports();
 
@@ -121,7 +121,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = SupportedLocales.class )
     @Label( standard = "Supported Locales" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "supported-locale", type = SupportedLocales.class ) )
-    ListProperty PROP_SUPPORTED_LOCALES = new ListProperty( TYPE, "SupportedLocales" );
+    ListProperty PROP_SUPPORTED_LOCALES = new ListProperty( TYPE, "SupportedLocales" ); //$NON-NLS-1$
 
     ModelElementList<SupportedLocales> getSupportedLocales();
 
@@ -130,7 +130,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = PortletInfo.class )
     @Label( standard = "Portlet Information" )
     @XmlBinding( path = "portlet-info" )
-    ImpliedElementProperty PROP_PORTLET_INFO = new ImpliedElementProperty( TYPE, "PortletInfo" );
+    ImpliedElementProperty PROP_PORTLET_INFO = new ImpliedElementProperty( TYPE, "PortletInfo" ); //$NON-NLS-1$
 
     PortletInfo getPortletInfo();
 
@@ -140,7 +140,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @CountConstraint( min = 0, max = 1 )
     @Label( standard = "label" )
     @XmlBinding( path = "portlet-preferences" )
-    ImpliedElementProperty PROP_PORTLET_PREFERENCE = new ImpliedElementProperty( TYPE, "PortletPreference" );
+    ImpliedElementProperty PROP_PORTLET_PREFERENCE = new ImpliedElementProperty( TYPE, "PortletPreference" ); //$NON-NLS-1$
 
     PortletPreference getPortletPreference();
 
@@ -148,7 +148,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
 
     @Type( base = Param.class )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "init-param", type = Param.class ) )
-    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" );
+    ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
 
     ModelElementList<Param> getInitParams();
 
@@ -157,7 +157,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = SecurityRoleRef.class )
     @Label( standard = "Security Role Ref" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "security-role-ref", type = SecurityRoleRef.class ) )
-    ListProperty PROP_SECURITY_ROLE_REFS = new ListProperty( TYPE, "SecurityRoleRefs" );
+    ListProperty PROP_SECURITY_ROLE_REFS = new ListProperty( TYPE, "SecurityRoleRefs" ); //$NON-NLS-1$
 
     ModelElementList<SecurityRoleRef> getSecurityRoleRefs();
 
@@ -173,7 +173,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
             type = EventDefinitionRef.class
         )
     )
-    ListProperty PROP_SUPPORTED_PROCESSING_EVENTS = new ListProperty( TYPE, "SupportedProcessingEvents" );
+    ListProperty PROP_SUPPORTED_PROCESSING_EVENTS = new ListProperty( TYPE, "SupportedProcessingEvents" ); //$NON-NLS-1$
 
     ModelElementList<EventDefinitionRef> getSupportedProcessingEvents();
 
@@ -189,7 +189,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
             type = EventDefinitionRef.class
         )
     )
-    ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty( TYPE, "SupportedPublishingEvents" );
+    ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty( TYPE, "SupportedPublishingEvents" ); //$NON-NLS-1$
 
     ModelElementList<EventDefinitionRef> getSupportedPublishingEvents();
 
@@ -205,7 +205,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
             type = SupportedPublicRenderParameter.class
         )
     )
-    ListProperty PROP_SUPPORTED_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "SupportedPublicRenderParameters" );
+    ListProperty PROP_SUPPORTED_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "SupportedPublicRenderParameters" ); //$NON-NLS-1$
 
     ModelElementList<SupportedPublicRenderParameter> getSupportedPublicRenderParameters();
 
@@ -221,7 +221,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
             type = ContainerRuntimeOption.class 
         )
     )
-    ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" );
+    ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
 
     ModelElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
 

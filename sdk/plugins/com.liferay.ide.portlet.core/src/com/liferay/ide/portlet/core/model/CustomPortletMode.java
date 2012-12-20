@@ -49,7 +49,7 @@ public interface CustomPortletMode extends IModelElement, Describeable, Identifi
     @Label( standard = "Portlet Mode" )
     @XmlBinding( path = "portlet-mode" )
     @Service( impl = PortletModePossibleValueService.class )
-    ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" );
+    ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" ); //$NON-NLS-1$
 
     Value<String> getPortletMode();
 
@@ -64,7 +64,7 @@ public interface CustomPortletMode extends IModelElement, Describeable, Identifi
     @Type( base = Boolean.class )
     @Label( standard = "Portlet managed" )
     @CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class, params = "portal-managed" )
-    ValueProperty PROP_PORTLET_MANAGED = new ValueProperty( TYPE, "PortletManaged" );
+    ValueProperty PROP_PORTLET_MANAGED = new ValueProperty( TYPE, "PortletManaged" ); //$NON-NLS-1$
 
     Value<Boolean> getPortletManaged();
 

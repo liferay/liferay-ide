@@ -40,7 +40,7 @@ public interface LifeCycle extends IModelElement
     @Type( base = LifeCycleType.class )
     @Label( standard = "life cyle name" )
     @XmlBinding( path = "" )
-    ValueProperty PROP_LIFE_CYCLE = new ValueProperty( TYPE, "LifeCycle" );
+    ValueProperty PROP_LIFE_CYCLE = new ValueProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
 
     Value<LifeCycleType> getLifeCycle();
 

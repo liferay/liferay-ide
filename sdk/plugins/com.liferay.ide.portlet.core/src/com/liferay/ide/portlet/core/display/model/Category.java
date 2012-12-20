@@ -47,7 +47,7 @@ public interface Category extends IModelElement
     @Required
     @NoDuplicates
     @XmlBinding( path = "@name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -58,7 +58,7 @@ public interface Category extends IModelElement
     @Type( base = Category.class )
     @Label( standard = "Categories" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "category", type = Category.class ) } )
-    ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" );
+    ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" ); //$NON-NLS-1$
 
     ModelElementList<Category> getCategories();
 
@@ -67,7 +67,7 @@ public interface Category extends IModelElement
     @Type( base = DisplayPortlet.class )
     @Label( standard = "Portlets" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "portlet", type = DisplayPortlet.class ) } )
-    ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" );
+    ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" ); //$NON-NLS-1$
 
     ModelElementList<DisplayPortlet> getPortlets();
 

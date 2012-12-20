@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
@@ -59,12 +60,12 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             protected void createDefaultFile()
             {
                 String templateString =
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/"
-                        + "portlet/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:"
-                        + "schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/"
-                        + "xml/ns/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>";
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/" //$NON-NLS-1$
+                        + "portlet/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:" //$NON-NLS-1$
+                        + "schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/" //$NON-NLS-1$
+                        + "xml/ns/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>"; //$NON-NLS-1$
 
-                createDefaultDescriptor( templateString, "" );
+                createDefaultDescriptor( templateString, "" ); //$NON-NLS-1$
             }
 
             protected IStatus doExecute( IDOMDocument document )
@@ -85,15 +86,15 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             protected void createDefaultFile()
             {
                 String templateString =
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//"
-                        + "DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd"
-                        + "\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-"
-                        + "name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-"
-                        + "mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n"
-                        + "\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n"
-                        + "\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n"
-                        + "\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</"
-                        + "role-mapper>\n</liferay-portlet-app>";
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//" //$NON-NLS-1$
+                        + "DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd" //$NON-NLS-1$
+                        + "\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-" //$NON-NLS-1$
+                        + "name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-" //$NON-NLS-1$
+                        + "mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n" //$NON-NLS-1$
+                        + "\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n" //$NON-NLS-1$
+                        + "\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n" //$NON-NLS-1$
+                        + "\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</" //$NON-NLS-1$
+                        + "role-mapper>\n</liferay-portlet-app>"; //$NON-NLS-1$
 
                 createDefaultDescriptor( templateString, getDescriptorVersion() );
             }
@@ -116,8 +117,8 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             protected void createDefaultFile()
             {
                 String templateString =
-                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE display PUBLIC \"-//Liferay//DTD Display "
-                        + "{0}//EN\" \"http://www.liferay.com/dtd/liferay-display_{1}.dtd\">\n\n<display>\n</display>";
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE display PUBLIC \"-//Liferay//DTD Display " //$NON-NLS-1$
+                        + "{0}//EN\" \"http://www.liferay.com/dtd/liferay-display_{1}.dtd\">\n\n<display>\n</display>"; //$NON-NLS-1$
 
                 createDefaultDescriptor( templateString, getDescriptorVersion() );
             }
@@ -145,7 +146,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             {
                 protected IStatus doExecute( IDOMDocument document )
                 {
-                    NodeList nodeList = document.getElementsByTagName( "portlet-name" );
+                    NodeList nodeList = document.getElementsByTagName( "portlet-name" ); //$NON-NLS-1$
 
                     for( int i = 0; i < nodeList.getLength(); i++ )
                     {
@@ -165,8 +166,8 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
     public IStatus removeAllPortlets()
     {
-        final String portletTagName = "portlet";
-        final String categoryTagName = "category";
+        final String portletTagName = "portlet"; //$NON-NLS-1$
+        final String categoryTagName = "category"; //$NON-NLS-1$
 
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
 
@@ -241,7 +242,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         for( Element child : getChildElements( docRoot ) )
         {
-            if( child.getNodeName().equals( "category" ) && modelCategory.equals( child.getAttribute( "name" ) ) )
+            if( child.getNodeName().equals( "category" ) && modelCategory.equals( child.getAttribute( "name" ) ) ) //$NON-NLS-1$ //$NON-NLS-2$
             {
                 category = child;
 
@@ -259,7 +260,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             // this category
             for( Element child : getChildElements( category ) )
             {
-                if( child.getNodeName().equals( "portlet" ) && modelId.equals( child.getAttribute( "id" ) ) )
+                if( child.getNodeName().equals( "portlet" ) && modelId.equals( child.getAttribute( "id" ) ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
                     id = child;
 
@@ -269,19 +270,19 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         }
         else
         {
-            category = document.createElement( "category" );
-            category.setAttribute( "name", modelCategory );
+            category = document.createElement( "category" ); //$NON-NLS-1$
+            category.setAttribute( "name", modelCategory ); //$NON-NLS-1$
 
             docRoot.appendChild( category );
 
-            Node newline = document.createTextNode( System.getProperty( "line.separator" ) );
+            Node newline = document.createTextNode( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
 
             docRoot.appendChild( newline );
         }
 
         if( id == null )
         {
-            appendChildElement( category, "portlet" ).setAttribute( "id", modelId );
+            appendChildElement( category, "portlet" ).setAttribute( "id", modelId ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         // format the new node added to the model;
@@ -298,48 +299,48 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         Element docRoot = document.getDocumentElement();
 
         // new <portlet> element
-        Element newPortletElement = document.createElement( "portlet" );
+        Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( LIFERAY_PORTLET_NAME ) );
+        appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( LIFERAY_PORTLET_NAME ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "icon", model.getStringProperty( ICON_FILE ) );
+        appendChildElement( newPortletElement, "icon", model.getStringProperty( ICON_FILE ) ); //$NON-NLS-1$
 
         if( model.getBooleanProperty( ADD_TO_CONTROL_PANEL ) )
         {
-            String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", "" );
-            appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory );
-            appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) );
+            String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", StringUtil.EMPTY ); //$NON-NLS-1$
+            appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory ); //$NON-NLS-1$
+            appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) ); //$NON-NLS-1$
 
             if( model.getBooleanProperty( CREATE_ENTRY_CLASS ) )
             {
                 appendChildElement(
-                    newPortletElement, "control-panel-entry-class", model.getStringProperty( JAVA_PACKAGE ) + "." +
+                    newPortletElement, "control-panel-entry-class", model.getStringProperty( JAVA_PACKAGE ) + "." + //$NON-NLS-1$ //$NON-NLS-2$
                         model.getStringProperty( ENTRY_CLASS_NAME ) );
             }
         }
 
         appendChildElement(
-            newPortletElement, "instanceable", Boolean.toString( model.getBooleanProperty( ALLOW_MULTIPLE ) ) );
+            newPortletElement, "instanceable", Boolean.toString( model.getBooleanProperty( ALLOW_MULTIPLE ) ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "header-portlet-css", model.getStringProperty( CSS_FILE ) );
+        appendChildElement( newPortletElement, "header-portlet-css", model.getStringProperty( CSS_FILE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "footer-portlet-javascript", model.getStringProperty( JAVASCRIPT_FILE ) );
+        appendChildElement( newPortletElement, "footer-portlet-javascript", model.getStringProperty( JAVASCRIPT_FILE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "css-class-wrapper", model.getStringProperty( CSS_CLASS_WRAPPER ) );
+        appendChildElement( newPortletElement, "css-class-wrapper", model.getStringProperty( CSS_CLASS_WRAPPER ) ); //$NON-NLS-1$
 
         // must append this before any role-mapper elements
         Element firstRoleMapper = null;
 
         for( Element child : getChildElements( docRoot ) )
         {
-            if( child.getNodeName().equals( "role-mapper" ) )
+            if( child.getNodeName().equals( "role-mapper" ) ) //$NON-NLS-1$
             {
                 firstRoleMapper = child;
 
                 break;
             }
         }
-        Node newline = document.createTextNode( System.getProperty( "line.separator" ) );
+        Node newline = document.createTextNode( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
 
         if( firstRoleMapper != null )
         {
@@ -368,33 +369,33 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         Element docRoot = document.getDocumentElement();
 
         // new <portlet> element
-        Element newPortletElement = document.createElement( "portlet" );
+        Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( PORTLET_NAME ) );
+        appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( PORTLET_NAME ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "display-name", model.getStringProperty( DISPLAY_NAME ) );
+        appendChildElement( newPortletElement, "display-name", model.getStringProperty( DISPLAY_NAME ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "portlet-class", getPortletClassText( model ) );
+        appendChildElement( newPortletElement, "portlet-class", getPortletClassText( model ) ); //$NON-NLS-1$
 
         // add <init-param> elements as needed
         List<ParamValue> initParams = (List<ParamValue>) model.getProperty( INIT_PARAMS );
 
         for( ParamValue initParam : initParams )
         {
-            Element newInitParamElement = appendChildElement( newPortletElement, "init-param" );
+            Element newInitParamElement = appendChildElement( newPortletElement, "init-param" ); //$NON-NLS-1$
 
-            appendChildElement( newInitParamElement, "name", initParam.getName() );
+            appendChildElement( newInitParamElement, "name", initParam.getName() ); //$NON-NLS-1$
 
-            appendChildElement( newInitParamElement, "value", initParam.getValue() );
+            appendChildElement( newInitParamElement, "value", initParam.getValue() ); //$NON-NLS-1$
         }
 
         // expiration cache
-        appendChildElement( newPortletElement, "expiration-cache", "0" );
+        appendChildElement( newPortletElement, "expiration-cache", "0" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         // supports node
-        Element newSupportsElement = appendChildElement( newPortletElement, "supports" );
+        Element newSupportsElement = appendChildElement( newPortletElement, "supports" ); //$NON-NLS-1$
 
-        appendChildElement( newSupportsElement, "mime-type", "text/html" );
+        appendChildElement( newSupportsElement, "mime-type", "text/html" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         // for all support modes need to add into
         for( String portletMode : ALL_PORTLET_MODES )
@@ -402,7 +403,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             if( model.getBooleanProperty( portletMode ) )
             {
                 appendChildElement(
-                    newSupportsElement, "portlet-mode",
+                    newSupportsElement, "portlet-mode", //$NON-NLS-1$
                     model.getPropertyDescriptor( portletMode ).getPropertyDescription() );
             }
         }
@@ -411,23 +412,23 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         {
             // need to remove .properties off the end of the bundle_file_path
             String bundlePath = model.getStringProperty( CREATE_RESOURCE_BUNDLE_FILE_PATH );
-            String bundleValue = bundlePath.replaceAll( "\\.properties$", "" );
-            appendChildElement( newPortletElement, "resource-bundle", bundleValue );
+            String bundleValue = bundlePath.replaceAll( "\\.properties$", StringUtil.EMPTY ); //$NON-NLS-1$
+            appendChildElement( newPortletElement, "resource-bundle", bundleValue ); //$NON-NLS-1$
         }
 
         // add portlet-info
-        Element newPortletInfoElement = appendChildElement( newPortletElement, "portlet-info" );
+        Element newPortletInfoElement = appendChildElement( newPortletElement, "portlet-info" ); //$NON-NLS-1$
 
-        appendChildElement( newPortletInfoElement, "title", model.getStringProperty( TITLE ) );
+        appendChildElement( newPortletInfoElement, "title", model.getStringProperty( TITLE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletInfoElement, "short-title", model.getStringProperty( SHORT_TITLE ) );
+        appendChildElement( newPortletInfoElement, "short-title", model.getStringProperty( SHORT_TITLE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletInfoElement, "keywords", model.getStringProperty( KEYWORDS ) );
+        appendChildElement( newPortletInfoElement, "keywords", model.getStringProperty( KEYWORDS ) ); //$NON-NLS-1$
 
         // security role refs
         for( String roleName : DEFAULT_SECURITY_ROLE_NAMES )
         {
-            appendChildElement( appendChildElement( newPortletElement, "security-role-ref" ), "role-name", roleName );
+            appendChildElement( appendChildElement( newPortletElement, "security-role-ref" ), "role-name", roleName ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         // check for event-definition elements
@@ -435,9 +436,9 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         Node refNode = null;
 
         String[] refElementNames =
-            new String[] { "custom-portlet-mode", "custom-window-state", "user-attribute", "security-constraint",
-                "resource-bundle", "filter", "filter-mapping", "default-namespace", "event-definition",
-                "public-render-parameter", "listener", "container-runtime-option" };
+            new String[] { "custom-portlet-mode", "custom-window-state", "user-attribute", "security-constraint", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+                "resource-bundle", "filter", "filter-mapping", "default-namespace", "event-definition", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+                "public-render-parameter", "listener", "container-runtime-option" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         for( int i = 0; i < refElementNames.length; i++ )
         {
@@ -452,7 +453,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         docRoot.insertBefore( newPortletElement, refNode );
 
         // append a newline text node
-        docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) );
+        docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
 
         // format the new node added to the model;
         FormatProcessorXML processor = new FormatProcessorXML();
@@ -472,7 +473,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         if( document == null )
         {
             return PortletCore.createErrorStatus( MessageFormat.format(
-                "Could not remove {0} elements: null document", tagName ) );
+                "Could not remove {0} elements: null document", tagName ) ); //$NON-NLS-1$
         }
 
         NodeList elements = document.getElementsByTagName( tagName );
@@ -490,7 +491,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         }
         catch( Exception ex )
         {
-            return PortletCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex );
+            return PortletCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
         }
 
         return Status.OK_STATUS;

@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
@@ -45,6 +46,7 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.web.operations.NewWebClassDataModelProvider;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -60,7 +62,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
     implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties
 {
 
-    private static final String PORTLET_SUFFIX_PATTERN = "(?<!^)portlet$";
+    private static final String PORTLET_SUFFIX_PATTERN = "(?<!^)portlet$"; //$NON-NLS-1$
 
     protected Properties categories;
     protected Properties entryCategories;
@@ -117,9 +119,9 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 }
                 else
                 {
-                    if( CoreUtil.isNullOrEmpty( prependPath ) || ( !prependPath.startsWith( "/" ) ) )
+                    if( CoreUtil.isNullOrEmpty( prependPath ) || ( !prependPath.startsWith( "/" ) ) ) //$NON-NLS-1$
                     {
-                        prependPath = "/" + prependPath;
+                        prependPath = "/" + prependPath; //$NON-NLS-1$
                     }
                     paramValue.setValue( prependPath + values[i] );
                 }
@@ -210,15 +212,15 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( JAVA_PACKAGE.equals( propertyName ) )
         {
-            return "com.test";
+            return "com.test"; //$NON-NLS-1$
         }
         else if( CLASS_NAME.equals( propertyName ) )
         {
-            return "NewPortlet";
+            return "NewPortlet"; //$NON-NLS-1$
         }
         else if( PORTLET_NAME.equals( propertyName ) || LIFERAY_PORTLET_NAME.equals( propertyName ) )
         {
-            return getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" );
+            return getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, StringUtil.EMPTY );
         }
         else if( DISPLAY_NAME.equals( propertyName ) || TITLE.equals( propertyName ) ||
             SHORT_TITLE.equals( propertyName ) )
@@ -227,7 +229,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( KEYWORDS.equals( propertyName ) )
         {
-            return "";
+            return StringUtil.EMPTY;
         }
         else if( INIT_PARAMS.equals( propertyName ) )
         {
@@ -245,19 +247,19 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             if( getBooleanProperty( CREATE_NEW_PORTLET_CLASS ) )
             {
-                return "/html/" +
-                    getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" );
+                return "/html/" + //$NON-NLS-1$
+                    getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" ); //$NON-NLS-1$
             }
             else
             {
-                return "/html/" +
-                    getProperty( PORTLET_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" );
+                return "/html/" + //$NON-NLS-1$
+                    getProperty( PORTLET_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, "" ); //$NON-NLS-1$
             }
 
         }
         else if( ICON_FILE.equals( propertyName ) )
         {
-            return "/icon.png";
+            return "/icon.png"; //$NON-NLS-1$
         }
         else if( CREATE_RESOURCE_BUNDLE_FILE.equals( propertyName ) )
         {
@@ -265,7 +267,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( CREATE_RESOURCE_BUNDLE_FILE_PATH.equals( propertyName ) )
         {
-            return "content/Language.properties";
+            return "content/Language.properties"; //$NON-NLS-1$
         }
         else if( ALLOW_MULTIPLE.equals( propertyName ) )
         {
@@ -273,15 +275,15 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( CSS_FILE.equals( propertyName ) )
         {
-            return "/css/main.css";
+            return "/css/main.css"; //$NON-NLS-1$
         }
         else if( JAVASCRIPT_FILE.equals( propertyName ) )
         {
-            return "/js/main.js";
+            return "/js/main.js"; //$NON-NLS-1$
         }
         else if( CSS_CLASS_WRAPPER.equals( propertyName ) )
         {
-            return getProperty( PORTLET_NAME ).toString().toLowerCase() + "-portlet";
+            return getProperty( PORTLET_NAME ).toString().toLowerCase() + "-portlet"; //$NON-NLS-1$
         }
         else if( ID.equals( propertyName ) )
         {
@@ -289,19 +291,19 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( CATEGORY.equals( propertyName ) )
         {
-            return "category.sample";
+            return "category.sample"; //$NON-NLS-1$
         }
         else if( ENTRY_CATEGORY.equals( propertyName ) )
         {
-            return "category.my";
+            return "category.my"; //$NON-NLS-1$
         }
         else if( ENTRY_WEIGHT.equals( propertyName ) )
         {
-            return "1.5";
+            return "1.5"; //$NON-NLS-1$
         }
         else if( ENTRY_CLASS_NAME.equals( propertyName ) )
         {
-            return getStringProperty( CLASS_NAME ) + "ControlPanelEntry";
+            return getStringProperty( CLASS_NAME ) + "ControlPanelEntry"; //$NON-NLS-1$
         }
         else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
         {
@@ -328,7 +330,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( INIT_PARAMETER_NAME.equals( propertyName ) )
         {
-            String initParameterName = "template";
+            String initParameterName = "template"; //$NON-NLS-1$
 
             try
             {
@@ -338,7 +340,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
                 if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) < 0 )
                 {
-                    initParameterName = "jsp";
+                    initParameterName = "jsp"; //$NON-NLS-1$
                 }
             }
             catch( Exception e )
@@ -421,14 +423,14 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
          * then, two options - 1. after this place is: uppercase followed by lowercase. eg: NewJSF_Portlet
          * or 2. before this place is lowercase and after this place is uppercase. eg: New_JSFPortlet
          */
-        final String[] words = oldName.split( "(?<!^)((?=[A-Z][^A-Z])|(?<![A-Z])(?=[A-Z]))" );
+        final String[] words = oldName.split( "(?<!^)((?=[A-Z][^A-Z])|(?<![A-Z])(?=[A-Z]))" ); //$NON-NLS-1$
         StringBuilder newName = new StringBuilder();
 
         for( int i = 0; i < words.length; i++ )
         {
             if( i > 0 )
             {
-                newName.append( " " );
+                newName.append( StringUtil.SPACE ); //$NON-NLS-1$
             }
 
             newName.append( words[i] );
@@ -442,55 +444,55 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
     {
         if( VIEW_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "view" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "view" ); //$NON-NLS-1$
         }
         else if( EDIT_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit" ); //$NON-NLS-1$
         }
         else if( HELP_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "help" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "help" ); //$NON-NLS-1$
         }
         /**
          * Values for liferay modes taking from LiferayPortletMode.java
          */
         else if( ABOUT_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "about" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "about" ); //$NON-NLS-1$
         }
         else if( CONFIG_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "config" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "config" ); //$NON-NLS-1$
         }
         else if( EDITDEFAULTS_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit_defaults" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit_defaults" ); //$NON-NLS-1$
         }
         else if( EDITGUEST_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit_guest" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "edit_guest" ); //$NON-NLS-1$
         }
         else if( PREVIEW_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "preview" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "preview" ); //$NON-NLS-1$
         }
         else if( PRINT_MODE.equals( propertyName ) )
         {
-            return new DataModelPropertyDescriptor( getProperty( propertyName ), "print" );
+            return new DataModelPropertyDescriptor( getProperty( propertyName ), "print" ); //$NON-NLS-1$
         }
         else if( CATEGORY.equals( propertyName ) )
         {
-            if( getProperty( CATEGORY ).equals( "category.sample" ) )
+            if( getProperty( CATEGORY ).equals( "category.sample" ) ) //$NON-NLS-1$
             {
-                return new DataModelPropertyDescriptor( "category.sample", "Sample" );
+                return new DataModelPropertyDescriptor( "category.sample", "Sample" ); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
         else if( ENTRY_CATEGORY.equals( propertyName ) )
         {
-            if( getProperty( ENTRY_CATEGORY ).equals( "category.my" ) )
+            if( getProperty( ENTRY_CATEGORY ).equals( "category.my" ) ) //$NON-NLS-1$
             {
-                return new DataModelPropertyDescriptor( "category.my", "My Account Section" );
+                return new DataModelPropertyDescriptor( "category.my", "My Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 
@@ -757,7 +759,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( portletName == null || portletName.length() == 0 )
             {
-                return PortletCore.createErrorStatus( "Portlet name is empty." );
+                return PortletCore.createErrorStatus( Msgs.portletNameEmpty );
             }
 
             PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( getTargetProject() );
@@ -767,7 +769,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             {
                 if( name.equals( portletName ) )
                 {
-                    return PortletCore.createErrorStatus( "Portlet name already exists." );
+                    return PortletCore.createErrorStatus( Msgs.portletNameExists );
                 }
             }
         }
@@ -785,7 +787,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( CoreUtil.isNullOrEmpty( val ) )
             {
-                return PortletCore.createErrorStatus( "Resource bundle file path must be a valid path." );
+                return PortletCore.createErrorStatus( Msgs.resourceBundleFilePathValid );
             }
 
             try
@@ -793,7 +795,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 IPath path = new Path( val );
                 validPath = path.isValidPath( val );
 
-                if( "properties".equals( path.getFileExtension() ) )
+                if( "properties".equals( path.getFileExtension() ) ) //$NON-NLS-1$
                 {
                     validFileName = true;
                 }
@@ -805,7 +807,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( !validPath )
             {
-                return PortletCore.createErrorStatus( "Resource bundle file path must be a valid path." );
+                return PortletCore.createErrorStatus( Msgs.resourceBundleFilePathValid );
             }
 
             if( validFileName )
@@ -814,7 +816,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             }
             else
             {
-                return PortletCore.createWarningStatus( "Resource bundle file path should end with .properties" );
+                return PortletCore.createWarningStatus( Msgs.resourceBundleFilePathEndWithProperties );
             }
         }
         else if( CREATE_JSPS_FOLDER.equals( propertyName ) )
@@ -828,7 +830,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( CoreUtil.isNullOrEmpty( folderValue ) )
             {
-                return PortletCore.createErrorStatus( "JSP folder cannot be empty." );
+                return PortletCore.createErrorStatus( Msgs.jspFolderNotEmpty );
             }
 
             IProject targetProject = getTargetProject();
@@ -847,7 +849,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 String path = new Path( folderValue ).segment( 0 );
                 if( !CoreUtil.isNullOrEmpty( path ) && path.equals( getStringProperty( PORTLET_NAME ) ) )
                 {
-                    return PortletCore.createErrorStatus( "JSP folder cannot match portlet name" );
+                    return PortletCore.createErrorStatus( Msgs.jspFolderNotMatchPortletName );
                 }
             }
         }
@@ -859,7 +861,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
                 if( CoreUtil.isNullOrEmpty( superclass ) )
                 {
-                    return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
+                    return PortletCore.createErrorStatus( Msgs.specifyPortletSuperclass );
                 }
             }
 
@@ -870,7 +872,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             String superclass = getStringProperty( propertyName );
             if( CoreUtil.isNullOrEmpty( superclass ) )
             {
-                return PortletCore.createErrorStatus( "Must specify a portlet superclass." );
+                return PortletCore.createErrorStatus( Msgs.specifyPortletSuperclass );
             }
         }
         else if( ENTRY_WEIGHT.equals( propertyName ) )
@@ -879,7 +881,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( !CoreUtil.isNumeric( entryweight ) )
             {
-                return PortletCore.createErrorStatus( "Must specify a valid double for entry weight." );
+                return PortletCore.createErrorStatus( Msgs.specifyValidDouble );
             }
 
             return Status.OK_STATUS;
@@ -911,4 +913,20 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         return super.validate( propertyName );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String jspFolderNotEmpty;
+        public static String jspFolderNotMatchPortletName;
+        public static String portletNameEmpty;
+        public static String portletNameExists;
+        public static String resourceBundleFilePathEndWithProperties;
+        public static String resourceBundleFilePathValid;
+        public static String specifyPortletSuperclass;
+        public static String specifyValidDouble;
+
+        static
+        {
+            initializeMessages( NewPortletClassDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -36,13 +36,13 @@ public class WindowStateImageService extends ImageService
 {
 
     private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
-        WindowStateImageService.class, "images/window_states.png" );
+        WindowStateImageService.class, "images/window_states.png" ); //$NON-NLS-1$
 
     private static final ImageData IMG_MAXIMIZED = ImageData.readFromClassLoader(
-        WindowStateImageService.class, "images/maximize.png" );
+        WindowStateImageService.class, "images/maximize.png" ); //$NON-NLS-1$
 
     private static final ImageData IMG_MINIMIZED = ImageData.readFromClassLoader(
-        WindowStateImageService.class, "images/minimize.png" );
+        WindowStateImageService.class, "images/minimize.png" ); //$NON-NLS-1$
 
     private Listener listener;
 
@@ -80,11 +80,11 @@ public class WindowStateImageService extends ImageService
             strWindowState = windowState.getWindowState().getContent();
         }
 
-        if( "MAXIMIZED".equalsIgnoreCase( strWindowState ) )
+        if( "MAXIMIZED".equalsIgnoreCase( strWindowState ) ) //$NON-NLS-1$
         {
             imageData = IMG_MAXIMIZED;
         }
-        else if( "MINIMIZED".equalsIgnoreCase( strWindowState ) )
+        else if( "MINIMIZED".equalsIgnoreCase( strWindowState ) ) //$NON-NLS-1$
         {
             imageData = IMG_MINIMIZED;
         }

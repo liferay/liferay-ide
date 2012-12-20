@@ -44,7 +44,7 @@ public interface NameValue extends IModelElement
     @Required
     @NoDuplicates
     @XmlBinding( path = "name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -56,7 +56,7 @@ public interface NameValue extends IModelElement
 
     @Label( standard = "Value" )
     @XmlBinding( path = "value" )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<String> getValue();
 

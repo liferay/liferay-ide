@@ -27,6 +27,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridData;
@@ -48,17 +49,17 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 {
 
     public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
-        "com.liferay.ide.portlet.ui.propertyPage.project.validation";
+        "com.liferay.ide.portlet.ui.propertyPage.project.validation"; //$NON-NLS-1$
 
-    public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation";
+    public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation"; //$NON-NLS-1$
 
     protected static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
 
     protected static final int[] ERROR_VALUES = new int[] { 1, 2, -1 };
 
-    protected static final String[] ERRORS = new String[] { "Error", "Warning", "Ignore" };
+    protected static final String[] ERRORS = new String[] { Msgs.error, Msgs.warning, Msgs.ignore };
 
-    protected static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities";
+    protected static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities"; //$NON-NLS-1$
 
     static
     {
@@ -135,7 +136,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         gd.horizontalIndent = 0;
 
         Label description = new Label( body, SWT.NONE );
-        description.setText( "Select the severity level for the following validation problems:" );
+        description.setText( Msgs.selectSeverityLevel );
         description.setFont( pageContent.getFont() );
         description.setLayoutData( gd );
 
@@ -143,76 +144,76 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
         int columns = 3;
 
-        twistie = createTwistie( body, "Portlet XML Descriptor", columns );
+        twistie = createTwistie( body, Msgs.portletXMLDescriptor, columns );
         Composite inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, "Class not found", ValidationPreferences.PORTLET_XML_CLASS_NOT_FOUND );
+        createCombo( inner, Msgs.classNotFound, ValidationPreferences.PORTLET_XML_CLASS_NOT_FOUND );
 
-        createCombo( inner, "Incorrect class hierarchy", ValidationPreferences.PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
+        createCombo( inner, Msgs.incorrectClassHierarchy, ValidationPreferences.PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
 
-        createCombo( inner, "Resource bundle not found", ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND );
+        createCombo( inner, Msgs.resourceBundleNotFound, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND );
 
-        twistie = createTwistie( body, "Liferay Portlet XML Descriptor", columns );
+        twistie = createTwistie( body, Msgs.liferayPortletXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, "Class not found", ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND );
-        createCombo( inner, "Incorrect class hierarchy", ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
-        createCombo( inner, "Icon not found", ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND );
-        createCombo( inner, "Entry weight not valid", ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID );
+        createCombo( inner, Msgs.classNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND );
+        createCombo( inner, Msgs.incorrectClassHierarchy, ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
+        createCombo( inner, Msgs.iconNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND );
+        createCombo( inner, Msgs.entryWeightNotValid, ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID );
         createCombo(
-            inner, "Header portal css not found", ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND );
+            inner, Msgs.headerPortalCssNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND );
         createCombo(
-            inner, "Header portlet css not found",
+            inner, Msgs.headerPortletCssNotFound,
             ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_CSS_NOT_FOUND );
         createCombo(
-            inner, "Header portal javascript not found",
+            inner, Msgs.headerPortalJavascriptNotFound,
             ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND );
         createCombo(
-            inner, "Header portlet javascript not found",
+            inner, Msgs.headerPortletJavascriptNotFound,
             ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND );
         createCombo(
-            inner, "Footer portal css not found", ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND );
+            inner, Msgs.footerPortalCssNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND );
         createCombo(
-            inner, "Footer portlet css not found",
+            inner, Msgs.footerPortletCssNotFound,
             ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_CSS_NOT_FOUND );
         createCombo(
-            inner, "Footer portal javascript not found",
+            inner, Msgs.footerPortalJavascriptNotFound,
             ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND );
         createCombo(
-            inner, "Footer portlet javascript not found",
+            inner, Msgs.footerPortletJavascriptNotFound,
             ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND );
-        createCombo( inner, "Portlet name not found", ValidationPreferences.LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND );
+        createCombo( inner, Msgs.portletNameNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND );
 
-        twistie = createTwistie( body, "Liferay Display XML Descriptor", columns );
+        twistie = createTwistie( body, Msgs.liferayDisplayXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, "Portlet id not found", ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND );
+        createCombo( inner, Msgs.portletIdNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND );
 
-        twistie = createTwistie( body, "Liferay Hook XML Descriptor", columns );
+        twistie = createTwistie( body, Msgs.liferayHookXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, "Class not found", ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND );
-        createCombo( inner, "Incorrect class hierarchy", ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY );
+        createCombo( inner, Msgs.classNotFound, ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND );
+        createCombo( inner, Msgs.incorrectClassHierarchy, ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY );
         createCombo(
-            inner, "Portal properties resource not found",
+            inner, Msgs.portalPropertiesResourceNotFound,
             ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND );
         createCombo(
-            inner, "Language properties resource not found",
+            inner, Msgs.languagePropertiesResourceNotFound,
             ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND );
         createCombo(
-            inner, "Custom jsp directory not found", ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND );
+            inner, Msgs.customJspDirectoryNotFound, ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND );
 
-        twistie = createTwistie( body, "Liferay Layout Templates Descriptor", columns );
+        twistie = createTwistie( body, Msgs.liferayLayoutTemplatesDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
         createCombo(
-            inner, "Template path resource not found",
+            inner, Msgs.templatePathResourceNotFound,
             ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND );
         createCombo(
-            inner, "WAP Template path resource not found",
+            inner, Msgs.wapTemplatePathResourceNotFound,
             ValidationPreferences.LIFERAY_LAYOUTTPL_XML_WAP_TEMPLATE_PATH_NOT_FOUND );
         createCombo(
-            inner, "Thumbnail path resource not found",
+            inner, Msgs.thumbnailPathResourceNotFound,
             ValidationPreferences.LIFERAY_LAYOUTTPL_XML_THUMBNAIL_PATH_NOT_FOUND );
 
         return parent;
@@ -293,4 +294,42 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         setValid( errorMessage == null );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String classNotFound;
+        public static String customJspDirectoryNotFound;
+        public static String entryWeightNotValid;
+        public static String error;
+        public static String footerPortalCssNotFound;
+        public static String footerPortalJavascriptNotFound;
+        public static String footerPortletCssNotFound;
+        public static String footerPortletJavascriptNotFound;
+        public static String headerPortalCssNotFound;
+        public static String headerPortalJavascriptNotFound;
+        public static String headerPortletCssNotFound;
+        public static String headerPortletJavascriptNotFound;
+        public static String iconNotFound;
+        public static String ignore;
+        public static String incorrectClassHierarchy;
+        public static String languagePropertiesResourceNotFound;
+        public static String liferayDisplayXMLDescriptor;
+        public static String liferayHookXMLDescriptor;
+        public static String liferayLayoutTemplatesDescriptor;
+        public static String liferayPortletXMLDescriptor;
+        public static String portalPropertiesResourceNotFound;
+        public static String portletIdNotFound;
+        public static String portletNameNotFound;
+        public static String portletXMLDescriptor;
+        public static String resourceBundleNotFound;
+        public static String selectSeverityLevel;
+        public static String templatePathResourceNotFound;
+        public static String thumbnailPathResourceNotFound;
+        public static String wapTemplatePathResourceNotFound;
+        public static String warning;
+
+        static
+        {
+            initializeMessages( PortletValidationSettingsPage.class.getName(), Msgs.class );
+        }
+    }
 }

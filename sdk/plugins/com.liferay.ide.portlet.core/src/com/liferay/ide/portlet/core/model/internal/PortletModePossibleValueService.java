@@ -34,15 +34,15 @@ public class PortletModePossibleValueService extends PossibleValuesService
     // provided by Portlet Specification and Liferay
     private static final String[] DEFAULT_MODES = 
     { 
-        "view", 
-        "edit", 
-        "help", 
-        "about", 
-        "config", 
-        "edit_defaults",
-        "edit_guest", 
-        "preview", 
-        "print" 
+        "view",  //$NON-NLS-1$
+        "edit",  //$NON-NLS-1$
+        "help",  //$NON-NLS-1$
+        "about",  //$NON-NLS-1$
+        "config",  //$NON-NLS-1$
+        "edit_defaults", //$NON-NLS-1$
+        "edit_guest",  //$NON-NLS-1$
+        "preview",  //$NON-NLS-1$
+        "print"  //$NON-NLS-1$
     };
 
     /*

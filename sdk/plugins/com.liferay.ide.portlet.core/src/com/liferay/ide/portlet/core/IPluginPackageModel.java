@@ -24,30 +24,30 @@ import com.liferay.ide.core.model.IModelChangeProvider;
 public interface IPluginPackageModel extends IModel, IModelChangeProvider
 {
 
-    String PROPERTY_AUTHOR = "author";
+    String PROPERTY_AUTHOR = "author"; //$NON-NLS-1$
 
-    String PROPERTY_CHANGE_LOG = "change-log";
+    String PROPERTY_CHANGE_LOG = "change-log"; //$NON-NLS-1$
 
-    String PROPERTY_LICENSES = "licenses";
+    String PROPERTY_LICENSES = "licenses"; //$NON-NLS-1$
 
-    String PROPERTY_MODULE_GROUP_ID = "module-group-id";
+    String PROPERTY_MODULE_GROUP_ID = "module-group-id"; //$NON-NLS-1$
 
-    String PROPERTY_MODULE_INCREMENTAL_VERSION = "module-incremental-version";
+    String PROPERTY_MODULE_INCREMENTAL_VERSION = "module-incremental-version"; //$NON-NLS-1$
 
-    String PROPERTY_NAME = "name";
+    String PROPERTY_NAME = "name"; //$NON-NLS-1$
 
-    String PROPERTY_PAGE_URL = "page-url";
+    String PROPERTY_PAGE_URL = "page-url"; //$NON-NLS-1$
 
-    String PROPERTY_PORTAL_DEPENDENCY_JARS = "portal-dependency-jars";
+    String PROPERTY_PORTAL_DEPENDENCY_JARS = "portal-dependency-jars"; //$NON-NLS-1$
 
-    String PROPERTY_PORTAL_DEPENDENCY_TLDS = "portal-dependency-tlds";
+    String PROPERTY_PORTAL_DEPENDENCY_TLDS = "portal-dependency-tlds"; //$NON-NLS-1$
 
-    String PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS = "required-deployment-contexts";
+    String PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS = "required-deployment-contexts"; //$NON-NLS-1$
 
-    String PROPERTY_SHORT_DESCRIPTION = "short-description";
+    String PROPERTY_SHORT_DESCRIPTION = "short-description"; //$NON-NLS-1$
 
-    String PROPERTY_SPEED_FILTERS_ENABLED = "speed-filters-enabled";
+    String PROPERTY_SPEED_FILTERS_ENABLED = "speed-filters-enabled"; //$NON-NLS-1$
 
-    String PROPERTY_TAGS = "tags";
+    String PROPERTY_TAGS = "tags"; //$NON-NLS-1$
 
 }

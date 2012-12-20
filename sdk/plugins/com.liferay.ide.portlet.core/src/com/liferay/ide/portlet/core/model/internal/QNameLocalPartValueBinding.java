@@ -17,6 +17,7 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.util.PortletAppModelConstants;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 
@@ -122,27 +123,27 @@ public final class QNameLocalPartValueBinding extends XmlValueBindingImpl
         // System.out.println( "TextNodeValueBinding.write() - Parent " + xml( true ).getParent() );
         if( qNameElement != null )
         {
-            val = val != null ? value.trim() : "";
-            if( params.length == 2 && "localpart".equals( params[1] ) )
+            val = val != null ? value.trim() : StringUtil.EMPTY;
+            if( params.length == 2 && "localpart".equals( params[1] ) ) //$NON-NLS-1$
             { // update only local part
                 // System.out.println( "VALUE ___________________ " + val );
                 String existingText = qNameElement.getText();
-                if( existingText != null && existingText.indexOf( ":" ) != -1 )
+                if( existingText != null && existingText.indexOf( ":" ) != -1 ) //$NON-NLS-1$
                 {
-                    String updatedLocalPart = existingText.substring( 0, ( existingText.indexOf( ":" ) + 1 ) );
+                    String updatedLocalPart = existingText.substring( 0, ( existingText.indexOf( ":" ) + 1 ) ); //$NON-NLS-1$
                     updatedLocalPart = updatedLocalPart + val;
                     // System.out.println( "Updated value ___________________ " + updatedLocalPart );
                     qNameElement.setText( updatedLocalPart );
                 }
                 else
                 {
-                    qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+                    qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val ); //$NON-NLS-1$
                 }
 
             }
             else
             {
-                qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val );
+                qNameElement.setText( PortletAppModelConstants.DEFAULT_QNAME_PREFIX + ":" + val ); //$NON-NLS-1$
             }
         }
 

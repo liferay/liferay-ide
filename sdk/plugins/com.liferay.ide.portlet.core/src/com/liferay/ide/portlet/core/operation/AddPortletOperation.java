@@ -195,7 +195,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
         IDataModel dm = getDataModel();
 
         TemplateContext context = new DocumentTemplateContext( portletContextType, new Document(), 0, 0 );
-        context.setVariable( "portlet_display_name", getDataModel().getStringProperty( DISPLAY_NAME ) );
+        context.setVariable( "portlet_display_name", getDataModel().getStringProperty( DISPLAY_NAME ) ); //$NON-NLS-1$
 
         List<ParamValue> initParams = (List<ParamValue>) getDataModel().getProperty( INIT_PARAMS );
 
@@ -203,56 +203,56 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
         if( initNames61[0].equals( initParams.get( 0 ).getName() ) )
         {
-            initParamSuffix = "template";
+            initParamSuffix = "template"; //$NON-NLS-1$
         }
         else
         {
-            initParamSuffix = "jsp";
+            initParamSuffix = "jsp"; //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( ABOUT_MODE ) )
         {
-            createResourceForMode( "about-" + initParamSuffix, ABOUT_MODE_TEMPLATE, context );
+            createResourceForMode( "about-" + initParamSuffix, ABOUT_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( CONFIG_MODE ) )
         {
-            createResourceForMode( "config-" + initParamSuffix, CONFIG_MODE_TEMPLATE, context );
+            createResourceForMode( "config-" + initParamSuffix, CONFIG_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( EDIT_MODE ) )
         {
-            createResourceForMode( "edit-" + initParamSuffix, EDIT_MODE_TEMPLATE, context );
+            createResourceForMode( "edit-" + initParamSuffix, EDIT_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( EDITDEFAULTS_MODE ) )
         {
-            createResourceForMode( "edit-defaults-" + initParamSuffix, EDITDEFAULTS_MODE_TEMPLATE, context );
+            createResourceForMode( "edit-defaults-" + initParamSuffix, EDITDEFAULTS_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( EDITGUEST_MODE ) )
         {
-            createResourceForMode( "edit-guest-" + initParamSuffix, EDITGUEST_MODE_TEMPLATE, context );
+            createResourceForMode( "edit-guest-" + initParamSuffix, EDITGUEST_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( HELP_MODE ) )
         {
-            createResourceForMode( "help-" + initParamSuffix, HELP_MODE_TEMPLATE, context );
+            createResourceForMode( "help-" + initParamSuffix, HELP_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( PREVIEW_MODE ) )
         {
-            createResourceForMode( "preview-" + initParamSuffix, PREVIEW_MODE_TEMPLATE, context );
+            createResourceForMode( "preview-" + initParamSuffix, PREVIEW_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( PRINT_MODE ) )
         {
-            createResourceForMode( "print-" + initParamSuffix, PRINT_MODE_TEMPLATE, context );
+            createResourceForMode( "print-" + initParamSuffix, PRINT_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         if( dm.getBooleanProperty( VIEW_MODE ) )
         {
-            createResourceForMode( "view-" + initParamSuffix, VIEW_MODE_TEMPLATE, context );
+            createResourceForMode( "view-" + initParamSuffix, VIEW_MODE_TEMPLATE, context ); //$NON-NLS-1$
         }
 
         return Status.OK_STATUS;
@@ -304,14 +304,14 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
                 if( viewJspFile.exists() )
                 {
                     viewJspFile.setContents(
-                        new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+                        new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
                 }
                 else
                 {
                     // make sure that full path to jspfile is available
                     CoreUtil.prepareFolder( (IFolder) viewJspFile.getParent() );
                     viewJspFile.create(
-                        new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+                        new ByteArrayInputStream( templateString.getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
                 }
             }
             catch( Exception ex )

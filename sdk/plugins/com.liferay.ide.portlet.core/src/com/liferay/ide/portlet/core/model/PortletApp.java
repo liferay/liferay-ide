@@ -59,7 +59,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
 
     @Type( base = Portlet.class )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet", type = Portlet.class ) )
-    ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" );
+    ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" ); //$NON-NLS-1$
 
     ModelElementList<Portlet> getPortlets();
 
@@ -74,7 +74,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
             type = CustomPortletMode.class
         ) 
     )
-    ListProperty PROP_CUSTOM_PORTLET_MODES = new ListProperty( TYPE, "CustomPortletModes" );
+    ListProperty PROP_CUSTOM_PORTLET_MODES = new ListProperty( TYPE, "CustomPortletModes" ); //$NON-NLS-1$
 
     ModelElementList<CustomPortletMode> getCustomPortletModes();
 
@@ -89,7 +89,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
             type = CustomWindowState.class
         )
     )
-    ListProperty PROP_CUSTOM_WINDOW_STATES = new ListProperty( TYPE, "CustomWindowStates" );
+    ListProperty PROP_CUSTOM_WINDOW_STATES = new ListProperty( TYPE, "CustomWindowStates" ); //$NON-NLS-1$
 
     ModelElementList<CustomWindowState> getCustomWindowStates();
 
@@ -98,7 +98,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = UserAttribute.class )
     @Label( standard = "User Attribute" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( type = UserAttribute.class, element = "user-attribute" ) } )
-    ListProperty PROP_USER_ATTRIBUTES = new ListProperty( TYPE, "UserAttributes" );
+    ListProperty PROP_USER_ATTRIBUTES = new ListProperty( TYPE, "UserAttributes" ); //$NON-NLS-1$
 
     ModelElementList<UserAttribute> getUserAttributes();
 
@@ -109,7 +109,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = { @XmlListBinding.Mapping(
                     type = SecurityConstraint.class,
                     element = "security-constraint" ) } )
-    ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty( TYPE, "SecurityConstraints" );
+    ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty( TYPE, "SecurityConstraints" ); //$NON-NLS-1$
 
     ModelElementList<SecurityConstraint> getSecurityConstraints();
 
@@ -118,7 +118,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = Filter.class )
     @Label( standard = "filters" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "filter", type = Filter.class ) )
-    ListProperty PROP_FILTERS = new ListProperty( TYPE, "Filters" );
+    ListProperty PROP_FILTERS = new ListProperty( TYPE, "Filters" ); //$NON-NLS-1$
 
     ModelElementList<Filter> getFilters();
 
@@ -127,7 +127,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = FilterMapping.class )
     @Label( standard = "filter mappings" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "filter-mapping", type = FilterMapping.class ) )
-    ListProperty PROP_FILTER_MAPPINGS = new ListProperty( TYPE, "FilterMappings" );
+    ListProperty PROP_FILTER_MAPPINGS = new ListProperty( TYPE, "FilterMappings" ); //$NON-NLS-1$
 
     ModelElementList<FilterMapping> getFilterMappings();
 
@@ -136,7 +136,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Label( standard = "Default Namespace" )
     @NoDuplicates
     @XmlBinding( path = "default-namespace" )
-    ValueProperty PROP_DEFAULT_NAMESPACE = new ValueProperty( TYPE, "DefaultNameSpace" );
+    ValueProperty PROP_DEFAULT_NAMESPACE = new ValueProperty( TYPE, "DefaultNameSpace" ); //$NON-NLS-1$
 
     Value<String> getDefaultNameSpace();
 
@@ -147,7 +147,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = EventDefinition.class )
     @Label( standard = "Event Definitions" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "event-definition", type = EventDefinition.class ) )
-    ListProperty PROP_EVENT_DEFINITIONS = new ListProperty( TYPE, "EventDefinitions" );
+    ListProperty PROP_EVENT_DEFINITIONS = new ListProperty( TYPE, "EventDefinitions" ); //$NON-NLS-1$
 
     ModelElementList<EventDefinition> getEventDefinitions();
 
@@ -163,7 +163,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
             type = PublicRenderParameter.class
         ) 
     )
-    ListProperty PROP_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "PublicRenderParameters" );
+    ListProperty PROP_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "PublicRenderParameters" ); //$NON-NLS-1$
 
     ModelElementList<PublicRenderParameter> getPublicRenderParameters();
 
@@ -172,7 +172,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = Listener.class )
     @Label( standard = "listeners" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "listener", type = Listener.class ) )
-    ListProperty PROP_LISTENERS = new ListProperty( TYPE, "Listeners" );
+    ListProperty PROP_LISTENERS = new ListProperty( TYPE, "Listeners" ); //$NON-NLS-1$
 
     ModelElementList<Listener> getListeners();
 
@@ -188,7 +188,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
             type = ContainerRuntimeOption.class
         )
     )
-    ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" );
+    ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
 
     ModelElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
 

@@ -20,6 +20,8 @@ package com.liferay.ide.portlet.core.model.internal;
 import static org.eclipse.sapphire.modeling.xml.XmlUtil.createQualifiedName;
 import static org.eclipse.sapphire.modeling.xml.XmlUtil.equal;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.util.List;
 
 import javax.xml.namespace.QName;
@@ -84,7 +86,7 @@ public class DefaultXmlBinding extends LayeredElementBindingImpl
 
         QName xmlElementName = this.xmlElementName;
 
-        if( xmlElementName.getNamespaceURI().equals( "" ) )
+        if( xmlElementName.getNamespaceURI().equals( StringUtil.EMPTY ) )
         {
             xmlElementName = new QName( parent.getNamespace(), xmlElementName.getLocalPart() );
         }
@@ -137,7 +139,7 @@ public class DefaultXmlBinding extends LayeredElementBindingImpl
         }
         else
         {
-            throw new IllegalStateException( "This Annotation combination currently not supported" );
+            throw new IllegalStateException( "This Annotation combination currently not supported" ); //$NON-NLS-1$
         }
 
     }

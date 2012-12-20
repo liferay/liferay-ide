@@ -54,7 +54,7 @@ public class PortletNamePossibleValueService extends PossibleValuesService
         IContainer resourceFolder = eresource.getParent();
         try
         {
-            IResource resource = resourceFolder.findMember( "portlet.xml" );
+            IResource resource = resourceFolder.findMember( "portlet.xml" ); //$NON-NLS-1$
             if( resource != null )
             {
                 File file = resource.getLocation().toFile();

@@ -5,21 +5,21 @@
          point="org.eclipse.ui.newWizards">
       <category
             id="com.liferay.ide.newWizards"
-            name="Liferay">
+            name="%category.name">
       </category>
       <wizard
             canFinishEarly="true"
             category="com.liferay.ide.newWizards"
             icon="icons/n16/portlet_new.png"
             id="com.liferay.ide.portlet.ui.wizard.portlet"
-            name="Liferay Portlet">
+            name="%lifeay.portlet.wizard.name">
          <class class="com.liferay.ide.portlet.ui.wizard.NewPortletWizard">
          	<parameter name="liferay_artifact" value="true"/>
             <parameter name="menuIndex" value="10" />
             <parameter name="validProjectTypes" value="portlet" />
          </class>
          <description>
-            Create a new Liferay Portlet
+            %wizard.description
          </description>
       </wizard>
    </extension>
@@ -28,7 +28,7 @@
       <contextType
             class="com.liferay.ide.portlet.ui.template.PortletJSPTemplateContextType"
             id="portlet_jsp_new"
-            name="New Portlet JSP">
+            name="%portal.context.type.name">
       </contextType>
       <include
             file="templates/portlet-jsp-templates.xml"
@@ -44,7 +44,7 @@
             filenames="liferay-plugin-package.properties"
             icon="icons/e16/plugin.png"
             id="com.liferay.ide.eclipse.portlet.ui.editor.pluginpackage"
-            name="Plugin Package Editor"
+            name="%plugin.package.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
       </editor>
       <editor
@@ -52,7 +52,7 @@
             default="true"
             icon="icons/e16/portlet.png"
             id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
-            name="Portlet Application Configuration Editor"
+            name="%portlet.application.configuration.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
                contentTypeId="com.liferay.ide.portlet.core.portletxml">
@@ -62,7 +62,7 @@
             class="com.liferay.ide.portlet.ui.editor.LiferayDisplayXmlEditor"
             default="true"
             icon="icons/elcl16/liferay_ui_16x16.png"
-            name="Liferay Display Configuration Editor"
+            name="%display.configuration.editor.name"
             id="com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
@@ -92,7 +92,7 @@
          <menu
                icon="icons/e16/liferay.png"
                id="liferayPopupMenuCategory"
-               label="Liferay">
+               label="%menu.label">
             <separator
                   name="slot1">
             </separator>
@@ -107,9 +107,9 @@
                enablesFor="1"
                icon="icons/e16/liferay.png"
                id="com.liferay.ide.portlet.ui.lang.popup.action"
-               label="Build Languages"
+               label="%portlet.action.label"
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Build Languages">
+               tooltip="%portlet.action.tooltip">
          </action>
          <enablement>
          	<adapt type="org.eclipse.core.resources.IResource">
@@ -183,7 +183,7 @@
             category="com.liferay.ide.ui.preferences.liferay"
             class="com.liferay.ide.portlet.ui.pref.PortletValidationSettingsPage"
             id="com.liferay.ide.portlet.ui.validation"
-            name="Plugin Validation">
+            name="%portlet.plugin.validation.page.name">
       </page>
    </extension>
    <extension
@@ -192,7 +192,7 @@
             category="com.liferay.ide.project.ui.properties"
             class="com.liferay.ide.portlet.ui.pref.PortletValidationSettingsPage"
             id="com.liferay.ide.portlet.ui.propertyPage.project.validation"
-            name="Plugin Validation">
+            name="%portlet.plugin.validation.page.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -224,7 +224,7 @@
             icon="icons/e16/portlet.png"
             id="com.liferay.ide.ui.navigator.content.portlets"
             labelProvider="com.liferay.ide.portlet.ui.navigator.PortletResourcesLabelProvider"
-            name="Liferay Portlet Resources"
+            name="%portlet.navigator.content.name"
             priority="highest">
          <triggerPoints>
             <or>

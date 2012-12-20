@@ -54,13 +54,13 @@ public final class InvertingBooleanXmlValueBinding extends XmlValueBindingImpl
 
             if( value != null )
             {
-                if( value.equalsIgnoreCase( "true" ) )
+                if( value.equalsIgnoreCase( "true" ) ) //$NON-NLS-1$
                 {
-                    value = "false";
+                    value = "false"; //$NON-NLS-1$
                 }
-                else if( value.equalsIgnoreCase( "false" ) )
+                else if( value.equalsIgnoreCase( "false" ) ) //$NON-NLS-1$
                 {
-                    value = "true";
+                    value = "true"; //$NON-NLS-1$
                 }
             }
         }
@@ -75,13 +75,13 @@ public final class InvertingBooleanXmlValueBinding extends XmlValueBindingImpl
 
         if( val != null )
         {
-            if( val.equalsIgnoreCase( "true" ) )
+            if( val.equalsIgnoreCase( "true" ) ) //$NON-NLS-1$
             {
-                val = "false";
+                val = "false"; //$NON-NLS-1$
             }
-            else if( val.equalsIgnoreCase( "false" ) )
+            else if( val.equalsIgnoreCase( "false" ) ) //$NON-NLS-1$
             {
-                val = "true";
+                val = "true"; //$NON-NLS-1$
             }
         }
 

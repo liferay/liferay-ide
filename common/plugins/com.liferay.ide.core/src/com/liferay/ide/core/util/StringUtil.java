@@ -23,4 +23,5 @@ public class StringUtil
     public static String COMMA = ","; //$NON-NLS-1$
     public static String DOUBLE_ASTERISK = "**"; //$NON-NLS-1$
     public static String EMPTY = ""; //$NON-NLS-1$
+    public static String SPACE = " "; //$NON-NLS-1$
 }

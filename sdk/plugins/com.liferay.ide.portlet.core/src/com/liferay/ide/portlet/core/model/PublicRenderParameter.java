@@ -57,7 +57,7 @@ public interface PublicRenderParameter extends QName, Identifiable
     @Required
     @NoDuplicates
     @XmlBinding( path = "identifier" )
-    ValueProperty PROP_IDENTIFIER = new ValueProperty( TYPE, "Identifier" );
+    ValueProperty PROP_IDENTIFIER = new ValueProperty( TYPE, "Identifier" ); //$NON-NLS-1$
 
     Value<String> getIdentifier();
 
@@ -70,7 +70,7 @@ public interface PublicRenderParameter extends QName, Identifiable
     @XmlBinding( path = "qname" )
     @Service( impl = NameOrQnameValidationService.class, params = { @Param( name = "qname", value = "" ) } )
     @CustomXmlValueBinding( impl = QNamespaceValueBinding.class, params = { "qname" } )
-    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" );
+    ValueProperty PROP_NAMESPACE_URI = new ValueProperty( TYPE, "NamespaceURI" ); //$NON-NLS-1$
 
     Value<String> getNamespaceURI();
 
@@ -82,7 +82,7 @@ public interface PublicRenderParameter extends QName, Identifiable
     @XmlBinding( path = "qname" )
     @Service( impl = NameOrQnameValidationService.class, params = { @Param( name = "qname", value = "" ) } )
     @CustomXmlValueBinding( impl = QNameLocalPartValueBinding.class, params = { "qname" } )
-    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" );
+    ValueProperty PROP_LOCAL_PART = new ValueProperty( TYPE, "LocalPart" ); //$NON-NLS-1$
 
     Value<String> getLocalPart();
 
@@ -95,7 +95,7 @@ public interface PublicRenderParameter extends QName, Identifiable
     @Service( impl = NameOrQnameValidationService.class )
     @Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
     @CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -106,7 +106,7 @@ public interface PublicRenderParameter extends QName, Identifiable
     @Type( base = AliasQName.class )
     @Label( standard = "Aliases" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = AliasQName.class ) } )
-    ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" );
+    ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" ); //$NON-NLS-1$
 
     ModelElementList<AliasQName> getAliases();
 

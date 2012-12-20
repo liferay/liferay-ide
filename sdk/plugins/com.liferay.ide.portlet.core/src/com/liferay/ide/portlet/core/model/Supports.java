@@ -52,7 +52,7 @@ public interface Supports extends IModelElement
     @InitialValue( text = "text/html" )
     @Required
     @XmlBinding( path = "mime-type" )
-    ValueProperty PROP_MIME_TYPE = new ValueProperty( TYPE, "MimeType" );
+    ValueProperty PROP_MIME_TYPE = new ValueProperty( TYPE, "MimeType" ); //$NON-NLS-1$
 
     Value<String> getMimeType();
 
@@ -64,7 +64,7 @@ public interface Supports extends IModelElement
     @Label( standard = "Portlet Modes" )
     @Service( impl = PortletModePossibleValueService.class )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet-mode", type = PortletMode.class ) )
-    ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" );
+    ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" ); //$NON-NLS-1$
 
     ModelElementList<PortletMode> getPortletModes();
 
@@ -73,7 +73,7 @@ public interface Supports extends IModelElement
     @Type( base = WindowState.class )
     @Label( standard = "Window States" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "window-state", type = WindowState.class ) )
-    ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" );
+    ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" ); //$NON-NLS-1$
 
     ModelElementList<WindowState> getWindowStates();
 }

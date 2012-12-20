@@ -42,7 +42,7 @@ public interface SecurityRoleRef extends IModelElement, Identifiable, Describeab
     @Required
     @NoDuplicates
     @XmlBinding( path = "role-name" )
-    ValueProperty PROP_ROLE_NAME = new ValueProperty( TYPE, "RoleName" );
+    ValueProperty PROP_ROLE_NAME = new ValueProperty( TYPE, "RoleName" ); //$NON-NLS-1$
 
     Value<String> getRoleName();
 
@@ -53,7 +53,7 @@ public interface SecurityRoleRef extends IModelElement, Identifiable, Describeab
     @Label( standard = "Role Link" )
     @NoDuplicates
     @XmlBinding( path = "role-link" )
-    ValueProperty PROP_ROLE_LINK = new ValueProperty( TYPE, "RoleLink" );
+    ValueProperty PROP_ROLE_LINK = new ValueProperty( TYPE, "RoleLink" ); //$NON-NLS-1$
 
     Value<String> getRoleLink();
 

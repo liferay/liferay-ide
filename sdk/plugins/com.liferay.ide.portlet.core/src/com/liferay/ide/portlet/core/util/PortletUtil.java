@@ -68,7 +68,7 @@ public class PortletUtil
      */
     public static String localeString( String text )
     {
-        int dash = text.indexOf( "-" );
+        int dash = text.indexOf( "-" ); //$NON-NLS-1$
         String localeString = text.substring( dash + 1, text.length() );
         return localeString.trim();
     }
@@ -79,7 +79,7 @@ public class PortletUtil
      */
     public static String localeDisplayString( String text )
     {
-        int dash = text.indexOf( "-" );
+        int dash = text.indexOf( "-" ); //$NON-NLS-1$
         String localeDisplatString = text.substring( 0, dash );
         return localeDisplatString.trim();
     }
@@ -92,7 +92,7 @@ public class PortletUtil
     public static String buildLocaleDisplayString( String displayName, Locale locale )
     {
         StringBuilder builder = new StringBuilder( displayName );
-        builder.append( " - " );
+        builder.append( " - " ); //$NON-NLS-1$
         builder.append( locale.toString() );
         return builder.toString();
     }
@@ -107,7 +107,7 @@ public class PortletUtil
      */
     public static String convertIOToJavaFileName( IProject project, String value )
     {
-        String rbIOFile = value.substring( value.lastIndexOf( "/" ) + 1 );
+        String rbIOFile = value.substring( value.lastIndexOf( "/" ) + 1 ); //$NON-NLS-1$
         IFile resourceBundleFile = null;
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         IWorkspaceRoot wroot = workspace.getRoot();
@@ -157,9 +157,9 @@ public class PortletUtil
         // Attach extension
         if( locales != null && locales.length > 0 )
         {
-            strFileName = strFileName + "_" + locales[0];
+            strFileName = strFileName + "_" + locales[0]; //$NON-NLS-1$
         }
-        strFileName = strFileName + "." + extension;
+        strFileName = strFileName + "." + extension; //$NON-NLS-1$
         return strFileName;
     }
 

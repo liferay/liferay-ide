@@ -53,7 +53,7 @@ public interface EventDefinitionRef extends IModelElement, Identifiable, Describ
     @Service( impl = QNamesPossibleValuesService.class, params = { @Service.Param( name = "0", value = "Q_NAME" ) } )
     @DependsOn( { "/EventDefinitions/NamespaceURI", "/EventDefinitions/LocalPart" } )
     @CustomXmlValueBinding( impl = QNameTextNodeValueBinding.class, params = { "qname" } )
-    ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" );
+    ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" ); //$NON-NLS-1$
 
     Value<String> getQname();
 
@@ -67,7 +67,7 @@ public interface EventDefinitionRef extends IModelElement, Identifiable, Describ
     @Enablement( expr = "${Qname == 'Q_NAME'}" )
     @PossibleValues( property = "/EventDefinitions/Name" )
     @Service( impl = EventDefinitionReferenceService.class, params = { @Param( name = "0", value = "name" ) } )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 

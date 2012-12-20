@@ -38,7 +38,7 @@ public interface Identifiable extends IModelElement
 
     @Label( standard = "Id" )
     @XmlBinding( path = "@id" )
-    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
+    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" ); //$NON-NLS-1$
 
     Value<String> getId();
 

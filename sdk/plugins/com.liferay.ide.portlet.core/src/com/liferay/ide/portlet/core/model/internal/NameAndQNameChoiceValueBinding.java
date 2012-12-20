@@ -31,8 +31,8 @@ import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
 public final class NameAndQNameChoiceValueBinding extends XmlValueBindingImpl
 {
-    private static final String Q_NAME = "qname";
-    private static final String NAME = "name";
+    private static final String Q_NAME = "qname"; //$NON-NLS-1$
+    private static final String NAME = "name"; //$NON-NLS-1$
 
     private String[] params;
     private XmlPath path;

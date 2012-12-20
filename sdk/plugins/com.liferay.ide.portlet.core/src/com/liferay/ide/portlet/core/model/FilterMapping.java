@@ -53,7 +53,7 @@ public interface FilterMapping extends IModelElement
     @Required
     @PossibleValues( property = "/Filters/Name" )
     @XmlBinding( path = "filter-name" )
-    ValueProperty PROP_FILTER = new ValueProperty( TYPE, "Filter" );
+    ValueProperty PROP_FILTER = new ValueProperty( TYPE, "Filter" ); //$NON-NLS-1$
 
     ReferenceValue<String, Filter> getFilter();
 
@@ -67,7 +67,7 @@ public interface FilterMapping extends IModelElement
     @Required
     @PossibleValues( property = "/Portlets/PortletName" )
     @XmlValueBinding( path = "portlet-name", removeNodeOnSetIfNull = false )
-    ValueProperty PROP_PORTLET = new ValueProperty( TYPE, "Portlet" );
+    ValueProperty PROP_PORTLET = new ValueProperty( TYPE, "Portlet" ); //$NON-NLS-1$
 
     ReferenceValue<String, Portlet> getPortlet();
 

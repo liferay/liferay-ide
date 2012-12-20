@@ -42,7 +42,7 @@ public interface SupportedPublicRenderParameter extends IModelElement
     @Label( standard = "Render Parameter" )
     @XmlBinding( path = "" )
     @Service( impl = PublicRenderParameterValuesService.class )
-    ValueProperty PROP_RENDER_PARAMETER = new ValueProperty( TYPE, "RenderParameter" );
+    ValueProperty PROP_RENDER_PARAMETER = new ValueProperty( TYPE, "RenderParameter" ); //$NON-NLS-1$
 
     Value<String> getRenderParameter();
 

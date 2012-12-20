@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -58,14 +59,13 @@ import org.w3c.dom.NodeList;
 public class LiferayDisplayDescriptorValidator extends BaseValidator
 {
 
-    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayDisplayDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.liferayDisplayDescriptorMarker"; //$NON-NLS-1$
 
-    public static final String MESSAGE_PORTLET_NAME_NOT_FOUND =
-        "The portlet id {0} did not match a portlet name found in portlet.xml.";
+    public static final String MESSAGE_PORTLET_NAME_NOT_FOUND = Msgs.portletIdNotMatchPortletName;
 
-    public static final String PORTLET_ELEMENT = "portlet";
+    public static final String PORTLET_ELEMENT = "portlet"; //$NON-NLS-1$
 
-    public static final String PORTLET_NAME_ELEMENT = "portlet-name";
+    public static final String PORTLET_NAME_ELEMENT = "portlet-name"; //$NON-NLS-1$
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
@@ -144,7 +144,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator
 
         NodeList elements = portletXmlDocument.getElementsByTagName( PORTLET_NAME_ELEMENT );
 
-        Node portletId = portletIdNode.getAttributes().getNamedItem( "id" );
+        Node portletId = portletIdNode.getAttributes().getNamedItem( "id" ); //$NON-NLS-1$
 
         if( portletId != null )
         {
@@ -251,4 +251,13 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator
         return (Map<String, Object>[]) problems.toArray( retval );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String portletIdNotMatchPortletName;
+
+        static
+        {
+            initializeMessages( LiferayDisplayDescriptorValidator.class.getName(), Msgs.class );
+        }
+    }
 }

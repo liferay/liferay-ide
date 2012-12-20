@@ -49,7 +49,7 @@ public interface Display extends IModelElement
     @Type( base = Category.class )
     @Label( standard = "Categories" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "category", type = Category.class ) } )
-    ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" );
+    ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" ); //$NON-NLS-1$
 
     ModelElementList<Category> getCategories();
 

@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.validation.ValidationResult;
@@ -55,20 +56,19 @@ import org.w3c.dom.NodeList;
 public class PortletDescriptorValidator extends BaseValidator
 {
 
-    public static final String FILTER_CLASS_ELEMENT = "filter-class";
+    public static final String FILTER_CLASS_ELEMENT = "filter-class"; //$NON-NLS-1$
 
-    public static final String LISTENER_CLASS_ELEMENT = "listener-class";
+    public static final String LISTENER_CLASS_ELEMENT = "listener-class"; //$NON-NLS-1$
 
-    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.portletDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.portletDescriptorMarker"; //$NON-NLS-1$
 
-    public static final String MESSAGE_RESOURCE_BUNDLE_NOT_FOUND =
-        "The resource bundle {0} was not found on the Java Build Path";
+    public static final String MESSAGE_RESOURCE_BUNDLE_NOT_FOUND = Msgs.resourceBundleNotFound;
 
-    public static final String PORTLET_CLASS_ELEMENT = "portlet-class";
+    public static final String PORTLET_CLASS_ELEMENT = "portlet-class"; //$NON-NLS-1$
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
-    public static final String RESOURCE_BUNDLE_ELEMENT = "resource-bundle";
+    public static final String RESOURCE_BUNDLE_ELEMENT = "resource-bundle"; //$NON-NLS-1$
 
     public PortletDescriptorValidator()
     {
@@ -115,7 +115,7 @@ public class PortletDescriptorValidator extends BaseValidator
                 IDOMDocument document = ( (IDOMModel) model ).getDocument();
 
                 checkAllClassElements(
-                    getAllClasseElements( "PortletClassElements.properties" ), javaProject, portletXml,
+                    getAllClasseElements( "PortletClassElements.properties" ), javaProject, portletXml, //$NON-NLS-1$
                     ValidationPreferences.PORTLET_XML_CLASS_NOT_FOUND,
                     ValidationPreferences.PORTLET_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
@@ -196,4 +196,13 @@ public class PortletDescriptorValidator extends BaseValidator
         return result;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String resourceBundleNotFound;
+
+        static
+        {
+            initializeMessages( PortletDescriptorValidator.class.getName(), Msgs.class );
+        }
+    }
 }

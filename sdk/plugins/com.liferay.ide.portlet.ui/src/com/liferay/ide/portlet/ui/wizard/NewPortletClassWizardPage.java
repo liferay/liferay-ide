@@ -16,6 +16,7 @@
 package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -57,6 +58,7 @@ import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelPro
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.jst.j2ee.internal.wizard.NewJavaClassWizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -123,7 +125,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
     {
         // class name
         classLabel = new Label( parent, SWT.LEFT );
-        classLabel.setText( "Portlet class:" );
+        classLabel.setText( Msgs.portletClassLabel );
         classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
@@ -198,10 +200,10 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
         composite.setLayout( new GridLayout( 2, false ) );
 
         createNewClassRadio = new Button( composite, SWT.RADIO );
-        createNewClassRadio.setText( "Create new portlet" );
+        createNewClassRadio.setText( Msgs.createNewPortlet );
 
         useDefaultPortletRadio = new Button( composite, SWT.RADIO );
-        useDefaultPortletRadio.setText( "Use default portlet (MVCPortlet)" );
+        useDefaultPortletRadio.setText( Msgs.useDefaultPortlet );
 
         new Label( parent, SWT.NONE );
 
@@ -252,7 +254,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( parent, "", 1 );
+            SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
         }
         else
         {
@@ -341,7 +343,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( parent, "", 1 );
+            SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
         }
         else
         {
@@ -360,7 +362,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
                 {
                     // handleSuperButtonPressed();
                     handleClassButtonSelected(
-                        superCombo, "javax.portlet.GenericPortlet", J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE,
+                        superCombo, "javax.portlet.GenericPortlet", J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE, //$NON-NLS-1$
                         J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC );
                 }
             } );
@@ -854,7 +856,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
 
     protected void setShellImage()
     {
-        URL url = PortletUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/portlet.png" );
+        URL url = PortletUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/portlet.png" ); //$NON-NLS-1$
 
         Image shellImage = ImageDescriptor.createFromURL( url ).createImage();
 
@@ -866,4 +868,15 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
         super.validateProjectRequirements( project );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String createNewPortlet;
+        public static String portletClassLabel;
+        public static String useDefaultPortlet;
+
+        static
+        {
+            initializeMessages( NewPortletClassWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

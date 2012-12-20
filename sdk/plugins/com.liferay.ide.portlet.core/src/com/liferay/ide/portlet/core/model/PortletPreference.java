@@ -51,7 +51,7 @@ public interface PortletPreference extends IModelElement, Identifiable
     @Type( base = Preference.class )
     @Label( standard = "Preferences" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "preference", type = Preference.class ) )
-    ListProperty PROP_PORTLET_PREFERENCES = new ListProperty( TYPE, "PortletPreferences" );
+    ListProperty PROP_PORTLET_PREFERENCES = new ListProperty( TYPE, "PortletPreferences" ); //$NON-NLS-1$
 
     ModelElementList<Preference> getPortletPreferences();
 
@@ -63,7 +63,7 @@ public interface PortletPreference extends IModelElement, Identifiable
     @Label( standard = "Preference Validator" )
     @NoDuplicates
     @XmlBinding( path = "preferences-validator" )
-    ValueProperty PROP_PREFERERNCE_VALIDATOR = new ValueProperty( TYPE, "PreferernceValidator" );
+    ValueProperty PROP_PREFERERNCE_VALIDATOR = new ValueProperty( TYPE, "PreferernceValidator" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getPreferernceValidator();
 

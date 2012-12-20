@@ -48,7 +48,7 @@ public interface UserDataConstraint extends IModelElement, Identifiable, Describ
     @Required
     @XmlBinding( path = "transport-guarantee" )
     @DefaultValue( text = "NONE" )
-    ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty( TYPE, "TransportGuarantee" );
+    ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty( TYPE, "TransportGuarantee" ); //$NON-NLS-1$
 
     Value<TransportGuarantee> getTransportGuarantee();
 

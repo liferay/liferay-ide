@@ -48,14 +48,14 @@ public class HasLangFilePropertyTester extends PropertyTester
 
                         for( IResource member : members )
                         {
-                            if( member.getType() == IResource.FOLDER && member.getName().equals( "content" ) )
+                            if( member.getType() == IResource.FOLDER && member.getName().equals( "content" ) ) //$NON-NLS-1$
                             {
                                 IResource[] content = ( (IFolder) member ).members();
 
                                 for( IResource res : content )
                                 {
                                     if( res.getType() == IResource.FILE &&
-                                        res.getName().matches( "Language.*\\.properties" ) )
+                                        res.getName().matches( "Language.*\\.properties" ) ) //$NON-NLS-1$
                                     {
 
                                         return true;

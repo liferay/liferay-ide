@@ -13,6 +13,7 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.core.model.IBaseModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
 import com.liferay.ide.ui.form.DefaultContentProvider;
@@ -39,6 +40,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -85,7 +87,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		String[] portalTlds = model.getPortalDependencyTlds();
 		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
 		for (String portalTld : portalTlds) {
-			File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim());
+			File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim()); //$NON-NLS-1$
 			if (tldFile.isFile() && tldFile.exists()) {
 				fTlds.add(tldFile);
 			}
@@ -103,15 +105,15 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 				File file = (File)element;
 				return file.getName();
 			}
-			return "";
+			return StringUtil.EMPTY;
 		}
 		
 	}
 
 	public PortalTldsSection(IDEFormPage page, Composite parent, String[] labels) {
 		super(page, parent, Section.DESCRIPTION, labels);
-		getSection().setText("Portal Dependency Tlds");
-		getSection().setDescription("Specify which TLDs the plugin package requires.");
+		getSection().setText(Msgs.portalDependencyTlds);
+		getSection().setDescription(Msgs.specifyTLDs);
 		getSection().getTextClient().getParent().layout(true);
 		getTablePart().setEditable(true);
 	}
@@ -132,7 +134,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		gd.grabExcessVerticalSpace = true;
 		section.setLayout(FormLayoutFactory.createClearGridLayout(false, 1));
 		section.setLayoutData(gd);
-		section.setText("Portal Dependency Tlds");
+		section.setText(Msgs.portalDependencyTlds);
 		createSectionToolbar(section, toolkit);
 		initialize();
 	}
@@ -300,7 +302,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		{
 		    ExternalFileSelectionDialog dialog =
                 new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(
-                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);
+                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);  //$NON-NLS-1$//$NON-NLS-2$
             dialog.setInput(portalDir.toFile());
             dialog.create();
             if (dialog.open() == Window.OK) {
@@ -319,8 +321,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
         else
         {
             MessageDialog.openInformation(
-                getPage().getShell(), "Liferay Plugin Package Editor",
-                "Can not determine portal directory. Make sure Liferay portal is set as the targeted runtime." );
+                getPage().getShell(), Msgs.liferayPluginPackageEditor, Msgs.notDeterminePortalDirectory );
         }
 	}
 	
@@ -355,13 +356,13 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	private void makeActions() {
-		fAddAction = new Action("Add...") {
+		fAddAction = new Action(Msgs.add) {
 			public void run() {
 				handleAdd();
 			}
 		};
 		
-		fRemoveAction = new Action("Remove") {
+		fRemoveAction = new Action(Msgs.remove) {
 			public void run() {
 				handleRemove();
 			}
@@ -430,4 +431,18 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	// return fSortAction.isChecked();
 	// }
 
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String liferayPluginPackageEditor;
+        public static String notDeterminePortalDirectory;
+        public static String portalDependencyTlds;
+        public static String remove;
+        public static String specifyTLDs;
+
+        static
+        {
+            initializeMessages( PortalTldsSection.class.getName(), Msgs.class );
+        }
+    }
 }

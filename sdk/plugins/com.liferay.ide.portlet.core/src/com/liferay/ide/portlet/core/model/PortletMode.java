@@ -48,7 +48,7 @@ public interface PortletMode extends IModelElement
     @NoDuplicates
     @XmlBinding( path = "" )
     @Service( impl = PortletModePossibleValueService.class )
-    ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" );
+    ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" ); //$NON-NLS-1$
 
     void setPortletMode( String mode );
 

@@ -46,27 +46,27 @@ public class CreatePortletTemplateModel extends CreateWebClassTemplateModel
 
         if( !isMVCPortletSuperclass() )
         {
-            collection.add( "java.io.IOException" );
-            collection.add( "javax.portlet.PortletException" );
+            collection.add( "java.io.IOException" ); //$NON-NLS-1$
+            collection.add( "javax.portlet.PortletException" ); //$NON-NLS-1$
             // collection.add("javax.portlet.PortletRequest");
-            collection.add( "javax.portlet.PortletRequestDispatcher" );
+            collection.add( "javax.portlet.PortletRequestDispatcher" ); //$NON-NLS-1$
             // collection.add("javax.portlet.PortletResponse");
-            collection.add( "javax.portlet.RenderRequest" );
-            collection.add( "javax.portlet.RenderResponse" );
-            collection.add( "com.liferay.portal.kernel.log.Log" );
-            collection.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
+            collection.add( "javax.portlet.RenderRequest" ); //$NON-NLS-1$
+            collection.add( "javax.portlet.RenderResponse" ); //$NON-NLS-1$
+            collection.add( "com.liferay.portal.kernel.log.Log" ); //$NON-NLS-1$
+            collection.add( "com.liferay.portal.kernel.log.LogFactoryUtil" ); //$NON-NLS-1$
         }
 
         if( shouldGenerateOverride( INewPortletClassDataModelProperties.PROCESSACTION_OVERRIDE ) )
         {
-            collection.add( "javax.portlet.ActionRequest" );
-            collection.add( "javax.portlet.ActionResponse" );
+            collection.add( "javax.portlet.ActionRequest" ); //$NON-NLS-1$
+            collection.add( "javax.portlet.ActionResponse" ); //$NON-NLS-1$
         }
 
         if( shouldGenerateOverride( INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE ) )
         {
-            collection.add( "javax.portlet.ResourceRequest" );
-            collection.add( "javax.portlet.ResourceResponse" );
+            collection.add( "javax.portlet.ResourceRequest" ); //$NON-NLS-1$
+            collection.add( "javax.portlet.ResourceResponse" ); //$NON-NLS-1$
         }
 
         return collection;

@@ -32,7 +32,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
 {
 
     // provided by Portlet Specification
-    private static final String[] DEFAULT_STATES = { "maximized", "minimized", "normal" };
+    private static final String[] DEFAULT_STATES = { "maximized", "minimized", "normal" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     /*
      * (non-Javadoc)

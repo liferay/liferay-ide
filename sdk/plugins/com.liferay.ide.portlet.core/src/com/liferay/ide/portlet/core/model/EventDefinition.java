@@ -59,7 +59,7 @@ public interface EventDefinition extends QName, Identifiable, Describeable
     @Service( impl = NameOrQnameValidationService.class )
     @Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
     @CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -70,7 +70,7 @@ public interface EventDefinition extends QName, Identifiable, Describeable
     @Type( base = AliasQName.class )
     @Label( standard = "Aliases" )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = AliasQName.class ) } )
-    ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" );
+    ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" ); //$NON-NLS-1$
 
     ModelElementList<AliasQName> getAliases();
 
@@ -81,7 +81,7 @@ public interface EventDefinition extends QName, Identifiable, Describeable
     @JavaTypeConstraint( kind = { JavaTypeKind.CLASS, JavaTypeKind.INTERFACE }, type = { "java.io.Serializable" } )
     @Label( standard = "Value Type" )
     @XmlBinding( path = "value-type" )
-    ValueProperty PROP_EVENT_VALUE_TYPE = new ValueProperty( TYPE, "EventValueType" );
+    ValueProperty PROP_EVENT_VALUE_TYPE = new ValueProperty( TYPE, "EventValueType" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getEventValueType();
 

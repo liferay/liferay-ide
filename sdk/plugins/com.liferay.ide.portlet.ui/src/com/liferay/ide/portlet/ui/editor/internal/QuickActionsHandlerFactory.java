@@ -54,15 +54,15 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
     {
         super.init( action, def );
         
-        String strModelElementNames = def.getParam( "MODEL_PROPERTIES" );
+        String strModelElementNames = def.getParam( "MODEL_PROPERTIES" ); //$NON-NLS-1$
         
         if( strModelElementNames != null )
         {
-            this.modelProperties = strModelElementNames.split( "," );
+            this.modelProperties = strModelElementNames.split( "," ); //$NON-NLS-1$
         }
         else
         {
-            throw new IllegalStateException( Resources.bind( Resources.message, "MODEL_PROPERTIES" ) );
+            throw new IllegalStateException( Resources.bind( Resources.message, "MODEL_PROPERTIES" ) ); //$NON-NLS-1$
         }
 
     }
@@ -80,12 +80,12 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
         {
             String modelProperty = this.modelProperties[i];
 
-            if( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) && isPartInLiferayProject() )
+            if( modelProperty != null && "Portlets".equalsIgnoreCase( modelProperty ) && isPartInLiferayProject() ) //$NON-NLS-1$
             {
                 SapphireActionHandler handler = new CreateLiferayPortletActionHandler();
                 handler.init( this.getAction(), null );
                 handler.addImage( Portlet.TYPE.image() );
-                handler.setLabel( getActionLabel( "Portlets" ) );
+                handler.setLabel( getActionLabel( Msgs.portlets ) );
 
                 listOfHandlers.add( handler );
             }
@@ -174,14 +174,14 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
      */
     private static String getActionLabel( String labelText )
     {
-        if( labelText.endsWith( "s" ) )
+        if( labelText.endsWith( "s" ) ) //$NON-NLS-1$
         {
-            labelText = labelText.substring( 0, labelText.lastIndexOf( "s" ) );
+            labelText = labelText.substring( 0, labelText.lastIndexOf( "s" ) ); //$NON-NLS-1$
         }
 
-        if( labelText.equals( "Portlet" ) )
+        if( labelText.equals( Msgs.portlet ) )
         {
-            labelText += "...";
+            labelText += "..."; //$NON-NLS-1$
         }
 
         return labelText;
@@ -198,4 +198,14 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String portlet;
+        public static String portlets;
+
+        static
+        {
+            initializeMessages( QuickActionsHandlerFactory.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -54,7 +54,7 @@ public interface Listener extends IModelElement, Describeable, Displayable
     @Required
     @XmlBinding( path = "listener-class" )
     @Documentation( content = "The listener implementation class." )
-    ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" );
+    ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" ); //$NON-NLS-1$
 
     ReferenceValue<JavaTypeName, JavaType> getImplementation();
 

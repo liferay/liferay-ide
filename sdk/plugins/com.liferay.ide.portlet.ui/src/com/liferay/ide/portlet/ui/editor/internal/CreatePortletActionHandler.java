@@ -37,7 +37,7 @@ public class CreatePortletActionHandler extends SapphireActionHandler
 {
 
     private static final String NEW_PORTLET_WIZARD_DEF =
-        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/portlet-app.sdef!new.portlet.wizard";
+        "com.liferay.ide.portlet.ui/com/liferay/ide/portlet/ui/editor/portlet-app.sdef!new.portlet.wizard"; //$NON-NLS-1$
 
     /*
      * (non-Javadoc)

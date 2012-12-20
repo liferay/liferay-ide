@@ -23,15 +23,15 @@ import com.liferay.ide.core.AbstractDefaultHandler;
 public class LiferayDisplayContentHandler extends AbstractDefaultHandler
 {
 
-    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Display ";
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Display "; //$NON-NLS-1$
 
-    public static final String PUBLIC_ID_SUFFIX = "//EN";
+    public static final String PUBLIC_ID_SUFFIX = "//EN"; //$NON-NLS-1$
 
-    public static final String LIFERAY_DISPLAY = "display";
+    public static final String LIFERAY_DISPLAY = "display"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-display_";
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-display_"; //$NON-NLS-1$
 
-    public static final String SYSTEM_ID_SUFFIX = ".dtd";
+    public static final String SYSTEM_ID_SUFFIX = ".dtd"; //$NON-NLS-1$
 
     public LiferayDisplayContentHandler()
     {

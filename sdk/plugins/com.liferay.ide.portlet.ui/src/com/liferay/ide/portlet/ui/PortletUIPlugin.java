@@ -39,7 +39,7 @@ public class PortletUIPlugin extends AbstractUIPlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.portlet.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.portlet.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static PortletUIPlugin plugin;
@@ -102,7 +102,7 @@ public class PortletUIPlugin extends AbstractUIPlugin
         {
             fTemplateStore =
                 new ContributionTemplateStore(
-                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" );
+                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" ); //$NON-NLS-1$
 
             try
             {

@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -41,7 +42,7 @@ public class BuildLanguageJob extends SDKJob
 
     public BuildLanguageJob( IFile langFile )
     {
-        super( "Build Languages" );
+        super( Msgs.buildLanguages );
 
         this.langFile = langFile;
 
@@ -53,7 +54,7 @@ public class BuildLanguageJob extends SDKJob
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
-        monitor.beginTask( "Building languages...", 100 );
+        monitor.beginTask( Msgs.buildingLanguages, 100 );
 
         IWorkspaceDescription desc = ResourcesPlugin.getWorkspace().getDescription();
 
@@ -98,10 +99,10 @@ public class BuildLanguageJob extends SDKJob
             // check generated properties files and set to UTF8
             for( IResource file : langFile.getParent().members() )
             {
-                if( file.getName().matches( "Language_.*\\.properties" ) )
+                if( file.getName().matches( "Language_.*\\.properties" ) ) //$NON-NLS-1$
                 {
                     IFile generatedLangFile = (IFile) file;
-                    generatedLangFile.setCharset( "UTF-8", monitor );
+                    generatedLangFile.setCharset( "UTF-8", monitor ); //$NON-NLS-1$
                 }
             }
         }
@@ -127,4 +128,14 @@ public class BuildLanguageJob extends SDKJob
         return Status.OK_STATUS;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String buildingLanguages;
+        public static String buildLanguages;
+
+        static
+        {
+            initializeMessages( BuildLanguageJob.class.getName(), Msgs.class );
+        }
+    }
 }

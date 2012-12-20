@@ -59,7 +59,7 @@ public interface SecurityConstraint extends IModelElement, Identifiable, Display
             type = PortletName.class 
         ) 
     )
-    ListProperty PROP_PORTLET_NAMES = new ListProperty( TYPE, "PortletNames" );
+    ListProperty PROP_PORTLET_NAMES = new ListProperty( TYPE, "PortletNames" ); //$NON-NLS-1$
 
     ModelElementList<PortletName> getPortletNames();
 
@@ -69,7 +69,7 @@ public interface SecurityConstraint extends IModelElement, Identifiable, Display
     @Label( standard = "User Data Constraint" )
     @Required
     @CustomXmlElementBinding( impl = DefaultXmlBinding.class, params = { "user-data-constraint" } )
-    ImpliedElementProperty PROP_USER_DATA_CONSTRAINT = new ImpliedElementProperty( TYPE, "UserDataConstraint" );
+    ImpliedElementProperty PROP_USER_DATA_CONSTRAINT = new ImpliedElementProperty( TYPE, "UserDataConstraint" ); //$NON-NLS-1$
 
     UserDataConstraint getUserDataConstraint();
 

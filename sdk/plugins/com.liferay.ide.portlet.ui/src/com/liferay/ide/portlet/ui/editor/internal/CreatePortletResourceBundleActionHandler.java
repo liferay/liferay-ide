@@ -135,7 +135,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
         String defaultRBFileName =
             PortletUtil.convertJavaToIoFileName( text, GenericResourceBundlePathService.RB_FILE_EXTENSION );
 
-        int index = text.lastIndexOf( "." );
+        int index = text.lastIndexOf( "." ); //$NON-NLS-1$
 
         if( index == -1 )
         {
@@ -192,23 +192,23 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
     private StringBuilder buildDefaultRBContent( PortletInfo portletInfo )
     {
         final StringBuilder rbFileBuffer = new StringBuilder();
-        rbFileBuffer.append( "#Portlet Information\n" );
-        rbFileBuffer.append( "javax.portlet.title" );
-        rbFileBuffer.append( "=" );
-        rbFileBuffer.append( ( portletInfo != null && portletInfo.getTitle() != null ) ? portletInfo.getTitle() : "" );
-        rbFileBuffer.append( "\n" );
-        rbFileBuffer.append( "javax.portlet.short-title" );
-        rbFileBuffer.append( "=" );
+        rbFileBuffer.append( "#Portlet Information\n" ); //$NON-NLS-1$
+        rbFileBuffer.append( "javax.portlet.title" ); //$NON-NLS-1$
+        rbFileBuffer.append( "=" ); //$NON-NLS-1$
+        rbFileBuffer.append( ( portletInfo != null && portletInfo.getTitle() != null ) ? portletInfo.getTitle() : "" ); //$NON-NLS-1$
+        rbFileBuffer.append( "\n" ); //$NON-NLS-1$
+        rbFileBuffer.append( "javax.portlet.short-title" ); //$NON-NLS-1$
+        rbFileBuffer.append( "=" ); //$NON-NLS-1$
         rbFileBuffer.append( ( portletInfo != null && portletInfo.getShortTitle() != null )
-            ? portletInfo.getShortTitle() : "" );
-        rbFileBuffer.append( "\n" );
-        rbFileBuffer.append( "javax.portlet.keywords" );
-        rbFileBuffer.append( "=" );
+            ? portletInfo.getShortTitle() : "" ); //$NON-NLS-1$
+        rbFileBuffer.append( "\n" ); //$NON-NLS-1$
+        rbFileBuffer.append( "javax.portlet.keywords" ); //$NON-NLS-1$
+        rbFileBuffer.append( "=" ); //$NON-NLS-1$
         rbFileBuffer.append( ( portletInfo != null && portletInfo.getKeywords() != null )
-            ? portletInfo.getKeywords() : "" );
-        rbFileBuffer.append( "\n" );
-        rbFileBuffer.append( "#Other Properties" );
-        rbFileBuffer.append( "\n" );
+            ? portletInfo.getKeywords() : "" ); //$NON-NLS-1$
+        rbFileBuffer.append( "\n" ); //$NON-NLS-1$
+        rbFileBuffer.append( "#Other Properties" ); //$NON-NLS-1$
+        rbFileBuffer.append( "\n" ); //$NON-NLS-1$
         return rbFileBuffer;
     }
 

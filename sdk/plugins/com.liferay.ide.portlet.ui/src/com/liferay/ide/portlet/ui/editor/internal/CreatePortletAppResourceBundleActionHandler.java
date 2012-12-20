@@ -101,7 +101,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
         final Value<Path> resourceBundle = element.read( (ValueProperty) property );
         final String resourceBundleText = resourceBundle.getText();
 
-        int index = resourceBundleText.lastIndexOf( "." );
+        int index = resourceBundleText.lastIndexOf( "." ); //$NON-NLS-1$
 
         if( index == -1 )
         {
@@ -119,7 +119,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
         if( getModelElement() instanceof PortletApp )
         {
             List<IFile> missingRBFiles = new ArrayList<IFile>();
-            final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" );
+            final StringBuilder rbFileBuffer = new StringBuilder( "#Portlet Application Resource Bundle \n" ); //$NON-NLS-1$
             final IFile rbFile = wroot.getFileForLocation( entryPath.append( defaultRBFileName ) );
             missingRBFiles.add( rbFile );
             createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
