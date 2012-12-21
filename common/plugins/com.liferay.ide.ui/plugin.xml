@@ -56,10 +56,10 @@
                id="com.liferay.ide.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.portlet.ui.wizard.hook">
+               id="com.liferay.ide.hook.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.portlet.ui.wizard.servicebuilder">
+               id="com.liferay.ide.service.ui.wizard.servicebuilder">
          </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
@@ -77,10 +77,10 @@
                id="com.liferay.ide.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.portlet.ui.wizard.hook">
+               id="com.liferay.ide.hook.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.portlet.ui.wizard.servicebuilder">
+               id="com.liferay.ide.service.ui.wizard.servicebuilder">
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>
