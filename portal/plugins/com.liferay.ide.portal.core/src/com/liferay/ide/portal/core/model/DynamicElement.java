@@ -41,7 +41,7 @@ public interface DynamicElement extends IModelElement
 
     @Label( standard = "data type" )
     @XmlBinding( path = "@dataType" )
-    ValueProperty PROP_DATA_TYPE = new ValueProperty( TYPE, "DataType" );
+    ValueProperty PROP_DATA_TYPE = new ValueProperty( TYPE, "DataType" ); //$NON-NLS-1$
 
     Value<String> getDataType();
 
@@ -51,7 +51,7 @@ public interface DynamicElement extends IModelElement
 
     @Label( standard = "field namespace" )
     @XmlBinding( path = "@fieldNamespace" )
-    ValueProperty PROP_FIELD_NAMESPACE = new ValueProperty( TYPE, "FieldNamespace" );
+    ValueProperty PROP_FIELD_NAMESPACE = new ValueProperty( TYPE, "FieldNamespace" ); //$NON-NLS-1$
 
     Value<String> getFieldNamespace();
 
@@ -61,7 +61,7 @@ public interface DynamicElement extends IModelElement
 
     @Label( standard = "name" )
     @XmlBinding( path = "@name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -71,7 +71,7 @@ public interface DynamicElement extends IModelElement
 
     @Label( standard = "type" )
     @XmlBinding( path = "@type" )
-    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" );
+    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" ); //$NON-NLS-1$
 
     Value<String> getType();
 
@@ -82,7 +82,7 @@ public interface DynamicElement extends IModelElement
     @Type( base = DynamicElementMetadata.class )
     @Label( standard = "metadata" )
     @XmlBinding( path = "meta-data" )
-    ElementProperty PROP_METADATA = new ElementProperty( TYPE, "Metadata" );
+    ElementProperty PROP_METADATA = new ElementProperty( TYPE, "Metadata" ); //$NON-NLS-1$
 
     ModelElementHandle<DynamicElementMetadata> getMetadata();
 

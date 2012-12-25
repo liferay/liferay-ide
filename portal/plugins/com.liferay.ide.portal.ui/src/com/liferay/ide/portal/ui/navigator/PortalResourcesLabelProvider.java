@@ -20,6 +20,7 @@ import com.liferay.ide.portal.ui.PortalUI;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -34,14 +35,14 @@ public class PortalResourcesLabelProvider extends AbstractLabelProvider
         super();
     }
     
-    private final static String PORTAL = "PORTAL";
+    private final static String PORTAL = "PORTAL"; //$NON-NLS-1$
 
     @Override
     protected void initalizeImageRegistry( ImageRegistry registry )
     {
         registry.put(
             PORTAL,
-            PortalUI.imageDescriptorFromPlugin( PortalUI.PLUGIN_ID, "icons/e16/portal.png" ) );
+            PortalUI.imageDescriptorFromPlugin( PortalUI.PLUGIN_ID, "icons/e16/portal.png" ) ); //$NON-NLS-1$
     }
     
     @Override
@@ -60,9 +61,19 @@ public class PortalResourcesLabelProvider extends AbstractLabelProvider
     {
         if( element instanceof PortalResourcesRootNode )
         {
-            return "Liferay Portal Resources";
+            return Msgs.liferayPortalResources;
         }
 
         return null;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String liferayPortalResources;
+
+        static
+        {
+            initializeMessages( PortalResourcesLabelProvider.class.getName(), Msgs.class );
+        }
     }
 }

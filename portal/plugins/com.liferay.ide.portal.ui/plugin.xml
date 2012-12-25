@@ -9,7 +9,7 @@
             icon="icons/e16/portal.png"
             id="com.liferay.ide.portal.ui.navigator.portalResources"
             labelProvider="com.liferay.ide.portal.ui.navigator.PortalResourcesLabelProvider"
-            name="Liferay Portal Resources"
+            name="%portal.resource.name"
             priority="lowest">
          <triggerPoints>
             <or>

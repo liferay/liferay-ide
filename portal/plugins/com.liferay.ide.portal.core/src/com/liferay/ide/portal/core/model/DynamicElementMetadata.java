@@ -42,7 +42,7 @@ public interface DynamicElementMetadata extends IModelElement
 
     @Label( standard = "locale" )
     @XmlBinding( path = "@locale" )
-    ValueProperty PROP_LOCALE = new ValueProperty( TYPE, "Locale" );
+    ValueProperty PROP_LOCALE = new ValueProperty( TYPE, "Locale" ); //$NON-NLS-1$
 
     Value<String> getLocale();
 
@@ -63,7 +63,7 @@ public interface DynamicElementMetadata extends IModelElement
             ) 
         }
     )
-    ListProperty PROP_ENTRIES = new ListProperty( TYPE, "Entries" );
+    ListProperty PROP_ENTRIES = new ListProperty( TYPE, "Entries" ); //$NON-NLS-1$
 
     ModelElementList<Entry> getEntries();
 

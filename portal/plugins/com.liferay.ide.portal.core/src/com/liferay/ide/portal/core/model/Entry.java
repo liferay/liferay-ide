@@ -41,7 +41,7 @@ public interface Entry extends IModelElement
 
     @Label( standard = "name" )
     @XmlBinding( path = "@name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -52,7 +52,7 @@ public interface Entry extends IModelElement
     @Label( standard = "value" )
     @XmlBinding( path = "" )
     @CustomXmlValueBinding( impl = EntryValueBinding.class )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<String> getValue();
 

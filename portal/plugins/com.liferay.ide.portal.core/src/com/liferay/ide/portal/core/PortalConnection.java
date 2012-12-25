@@ -33,7 +33,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
     {
         JSONObject company = null;
         
-        Object jsonResponse = getJSONAPI( GET_COMPANY_BY_VIRTUAL_HOST_API, "virtualHost", getHost() );
+        Object jsonResponse = getJSONAPI( GET_COMPANY_BY_VIRTUAL_HOST_API, "virtualHost", getHost() ); //$NON-NLS-1$
         
         if( jsonResponse instanceof JSONObject )
         {
@@ -41,7 +41,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
         }
         else
         {
-            throw new APIException( GET_COMPANY_BY_VIRTUAL_HOST_API, "Unable to get JSONObject" );
+            throw new APIException( GET_COMPANY_BY_VIRTUAL_HOST_API, "Unable to get JSONObject" ); //$NON-NLS-1$
         }
 
         return company;
@@ -51,7 +51,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
     {
         JSONArray journalArticles = null;
         
-        Object jsonResponse = getJSONAPI( GET_JOURNAL_ARTICLES_API, "groupId", groupId, "userId", userId, "start", -1, "end", -1, "-obc", null );
+        Object jsonResponse = getJSONAPI( GET_JOURNAL_ARTICLES_API, "groupId", groupId, "userId", userId, "start", -1, "end", -1, "-obc", null ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         
         if( jsonResponse instanceof JSONArray )
         {
@@ -59,7 +59,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
         }
         else
         {
-            throw new APIException( GET_JOURNAL_ARTICLES_API, "Unable to get JSONArray" );
+            throw new APIException( GET_JOURNAL_ARTICLES_API, "Unable to get JSONArray" ); //$NON-NLS-1$
         }
 
         return journalArticles;
@@ -69,7 +69,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
     {
         JSONArray structures = null;
         
-        Object jsonResponse = getJSONAPI( GET_STRUCTURES_API, "groupId", groupId );
+        Object jsonResponse = getJSONAPI( GET_STRUCTURES_API, "groupId", groupId ); //$NON-NLS-1$
         
         if( jsonResponse instanceof JSONArray )
         {
@@ -77,7 +77,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
         }
         else
         {
-            throw new APIException( GET_STRUCTURES_API, "Unable to get JSONArray" );
+            throw new APIException( GET_STRUCTURES_API, "Unable to get JSONArray" ); //$NON-NLS-1$
         }
 
         return structures;
@@ -87,7 +87,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
     {
         JSONArray structureTemplates = null;
         
-        Object jsonResponse = getJSONAPI( GET_STRUCTURE_TEMPLATES_API, "groupId", groupId, "structureId", structureId );
+        Object jsonResponse = getJSONAPI( GET_STRUCTURE_TEMPLATES_API, "groupId", groupId, "structureId", structureId ); //$NON-NLS-1$ //$NON-NLS-2$
         
         if( jsonResponse instanceof JSONArray )
         {
@@ -95,7 +95,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
         }
         else
         {
-            throw new APIException( GET_STRUCTURE_TEMPLATES_API, "Unable to get JSONArray" );
+            throw new APIException( GET_STRUCTURE_TEMPLATES_API, "Unable to get JSONArray" ); //$NON-NLS-1$
         }
 
         return structureTemplates;
@@ -105,7 +105,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
     {
         JSONObject user = null;
         
-        Object jsonResponse = getJSONAPI( GET_USER_BY_EMAIL_ADDRESS_API, "companyId", Long.toString( companyId), "emailAddress", getUsername() );
+        Object jsonResponse = getJSONAPI( GET_USER_BY_EMAIL_ADDRESS_API, "companyId", Long.toString( companyId), "emailAddress", getUsername() ); //$NON-NLS-1$ //$NON-NLS-2$
         
         if( jsonResponse instanceof JSONObject )
         {
@@ -113,7 +113,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
         }
         else
         {
-            throw new APIException( GET_USER_BY_EMAIL_ADDRESS_API, "Unable to get JSONObject" );
+            throw new APIException( GET_USER_BY_EMAIL_ADDRESS_API, "Unable to get JSONObject" ); //$NON-NLS-1$
         }
 
         return user;
@@ -131,7 +131,7 @@ public class PortalConnection extends RemoteConnection implements IPortalConnect
         }
         else
         {
-            throw new APIException( GET_USER_SITES_API, "Unable to get JSONArray" );
+            throw new APIException( GET_USER_SITES_API, "Unable to get JSONArray" ); //$NON-NLS-1$
         }
         
         return sites;

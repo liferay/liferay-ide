@@ -43,7 +43,7 @@ public interface StructuresRoot extends IModelElement
 
     @Label( standard = "available locales" )
     @XmlBinding( path = "@available-locales" )
-    ValueProperty PROP_AVAILABLE_LOCALES = new ValueProperty( TYPE, "AvailableLocales" );
+    ValueProperty PROP_AVAILABLE_LOCALES = new ValueProperty( TYPE, "AvailableLocales" ); //$NON-NLS-1$
 
     Value<String> getAvailableLocales();
 
@@ -53,7 +53,7 @@ public interface StructuresRoot extends IModelElement
 
     @Label( standard = "default locale" )
     @XmlBinding( path = "@default-locale" )
-    ValueProperty PROP_DEFAULT_LOCALE = new ValueProperty( TYPE, "DefaultLocale" );
+    ValueProperty PROP_DEFAULT_LOCALE = new ValueProperty( TYPE, "DefaultLocale" ); //$NON-NLS-1$
 
     Value<String> getDefaultLocale();
 
@@ -74,7 +74,7 @@ public interface StructuresRoot extends IModelElement
             ) 
         }
     )
-    ListProperty PROP_DYNAMIC_ELEMENTS = new ListProperty( TYPE, "DynamicElements" );
+    ListProperty PROP_DYNAMIC_ELEMENTS = new ListProperty( TYPE, "DynamicElements" ); //$NON-NLS-1$
 
     ModelElementList<DynamicElement> getDynamicElements();
     
