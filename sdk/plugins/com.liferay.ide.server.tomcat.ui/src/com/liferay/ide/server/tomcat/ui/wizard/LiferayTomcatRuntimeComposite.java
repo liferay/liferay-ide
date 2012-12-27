@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.tomcat.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
@@ -34,8 +35,8 @@ import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jst.server.core.IJavaRuntime;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
-import org.eclipse.jst.server.tomcat.ui.internal.Messages;
 import org.eclipse.jst.server.tomcat.ui.internal.TomcatRuntimeComposite;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -65,7 +66,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
     {
         if( field != null && !field.isDisposed() )
         {
-            field.setText( value != null ? value : "" );
+            field.setText( value != null ? value : StringUtil.EMPTY );
         }
     }
 
@@ -80,8 +81,8 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
     {
         super( parent, wizard );
 
-        wizard.setTitle( "Liferay Tomcat Runtime" );
-        wizard.setDescription( "Specify the installation directory of the Tomcat configured with Liferay." );
+        wizard.setTitle( Msgs.liferayTomcatRuntime );
+        wizard.setDescription( Msgs.specifyInstallationDirectory );
         wizard.setImageDescriptor( LiferayServerUIPlugin.getImageDescriptor( LiferayServerUIPlugin.IMG_WIZ_RUNTIME ) );
     }
 
@@ -192,20 +193,20 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
     protected void createFields()
     {
-        nameField = createTextField( "Name" );
+        nameField = createTextField( Msgs.name );
         nameField.addModifyListener( this );
 
-        dirField = createTextField( "Liferay Tomcat directory" );
+        dirField = createTextField( Msgs.liferayTomcatDirectory );
         dirField.addModifyListener( this );
 
-        SWTUtil.createButton( this, "Browse..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( this, Msgs.browse ).addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
                 DirectoryDialog dd = new DirectoryDialog( LiferayTomcatRuntimeComposite.this.getShell() );
 
-                dd.setMessage( "Select Liferay Tomcat directory" );
+                dd.setMessage( Msgs.selectLiferayTomcatDirectory );
                 dd.setFilterPath( dirField.getText() );
 
                 String selectedDir = dd.open();
@@ -224,10 +225,10 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
         installLabel.setLayoutData( data );
 
-        install = SWTUtil.createButton( this, Messages.install );
+        install = SWTUtil.createButton( this, Msgs.install );
         install.setVisible( false );
 
-        jreLabel = createLabel( "Select runtime JRE" );
+        jreLabel = createLabel( Msgs.selecteRuntimeJRE );
 
         jreCombo = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
         jreCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
@@ -251,13 +252,13 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
             }
         } );
 
-        jreButton = SWTUtil.createButton( this, "Installed JREs..." );
+        jreButton = SWTUtil.createButton( this, Msgs.installedJREs );
         jreButton.addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
-                if( SWTUtil.showPreferencePage( "org.eclipse.jdt.debug.ui.preferences.VMPreferencePage", getShell() ) )
+                if( SWTUtil.showPreferencePage( "org.eclipse.jdt.debug.ui.preferences.VMPreferencePage", getShell() ) ) //$NON-NLS-1$
                 {
                     updateJREs();
                     validate();
@@ -266,8 +267,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
         } );
 
-        Link link =
-            createLink( "For extra settings including Javadoc and Ext plugin configuration see <a>additional configuration page.</a>" );
+        Link link = createLink( Msgs.seeAdditionalConfigurationPage );
         link.addSelectionListener( new SelectionAdapter()
         {
 
@@ -356,7 +356,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
         }
 
         setFieldValue( nameField, getRuntime().getName() );
-        setFieldValue( dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : "" );
+        setFieldValue( dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : StringUtil.EMPTY );
     }
 
     protected void updateJREs()
@@ -388,7 +388,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
         size = installedJREs.size();
 
         jreNames = new String[size + 1];
-        jreNames[0] = "<Default Workbench JRE>";
+        jreNames[0] = "<Default Workbench JRE>"; //$NON-NLS-1$
 
         for( int i = 0; i < size; i++ )
         {
@@ -409,4 +409,22 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String browse;
+        public static String install;
+        public static String installedJREs;
+        public static String liferayTomcatDirectory;
+        public static String liferayTomcatRuntime;
+        public static String name;
+        public static String seeAdditionalConfigurationPage;
+        public static String selecteRuntimeJRE;
+        public static String selectLiferayTomcatDirectory;
+        public static String specifyInstallationDirectory;
+
+        static
+        {
+            initializeMessages( LiferayTomcatRuntimeComposite.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -37,7 +37,7 @@ public class LiferayTomcatRuntimeComponentLabelProvider extends FacetRuntimeComp
 
         public String getLabel()
         {
-            return rc.getProperty( "type" );
+            return rc.getProperty( "type" ); //$NON-NLS-1$
         }
     }
 

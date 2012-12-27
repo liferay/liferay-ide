@@ -15,6 +15,8 @@
 
 package com.liferay.ide.server.tomcat.core;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
@@ -26,17 +28,17 @@ public interface ILiferayTomcatConstants
     @SuppressWarnings( "deprecation" )
     IEclipsePreferences _defaultPrefs = new DefaultScope().getNode( LiferayTomcatPlugin.PLUGIN_ID );
 
-    String DEFAULT_AUTO_DEPLOY_INTERVAL = _defaultPrefs.get( "default.auto.deploy.interval", "500" );
+    String DEFAULT_AUTO_DEPLOY_INTERVAL = _defaultPrefs.get( "default.auto.deploy.interval", "500" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-    String DEFAULT_AUTO_DEPLOYDIR = "../deploy";
+    String DEFAULT_AUTO_DEPLOYDIR = "../deploy"; //$NON-NLS-1$
 
-    String DEFAULT_DEPLOYDIR = "webapps";
+    String DEFAULT_DEPLOYDIR = "webapps"; //$NON-NLS-1$
 
-    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m" );
+    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-    String DEFAULT_USER_TIMEZONE = _defaultPrefs.get( "default.user.timezone", "GMT" );
+    String DEFAULT_USER_TIMEZONE = _defaultPrefs.get( "default.user.timezone", "GMT" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-    String[] LIB_EXCLUDES = _defaultPrefs.get( "tomcat.lib.excludes", "" ).split( "," );
+    String[] LIB_EXCLUDES = _defaultPrefs.get( "tomcat.lib.excludes", StringUtil.EMPTY ).split( StringUtil.COMMA ); //$NON-NLS-1$
 
-    boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean( "prevent.multi.ext.plugins.deploy", false );
+    boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean( "prevent.multi.ext.plugins.deploy", false ); //$NON-NLS-1$
 }

@@ -17,6 +17,7 @@ package com.liferay.ide.server.tomcat.ui.wizard;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
@@ -37,6 +38,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jst.server.core.IJavaRuntime;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatRuntimeWorkingCopy;
 import org.eclipse.jst.server.tomcat.ui.internal.TomcatRuntimeComposite;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -65,7 +67,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
     {
         if( field != null && !field.isDisposed() )
         {
-            field.setText( value != null ? value : "" );
+            field.setText( value != null ? value : StringUtil.EMPTY );
         }
     }
 
@@ -78,8 +80,8 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
     {
         super( parent, wizard );
 
-        wizard.setTitle( "Liferay Runtime Tomcat Bundle" );
-        wizard.setDescription( "Specify extra settings for Liferay Tomcat bundle." );
+        wizard.setTitle( Msgs.liferayRuntimeTomcatBundle );
+        wizard.setDescription( Msgs.specifyExtraSettings );
         wizard.setImageDescriptor( LiferayServerUIPlugin.getImageDescriptor( LiferayServerUIPlugin.IMG_WIZ_RUNTIME ) );
     }
 
@@ -117,17 +119,16 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
     public static Text createJavadocField( final Composite parent )
     {
-        final Text javadocField =
-            createTextField( parent, "Liferay Javadoc URL (zip file, local directory, or online url)" );
+        final Text javadocField = createTextField( parent, Msgs.liferayJavadocURL );
 
-        SWTUtil.createButton( parent, "Browse zip..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( parent, Msgs.browseZip ).addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
                 FileDialog fd = new FileDialog( parent.getShell() );
 
-                fd.setText( "Select Liferay Javadoc zip file." );
+                fd.setText( Msgs.selectLiferayJavadocZipFile );
 
                 String selectedFile = fd.open();
 
@@ -141,24 +142,22 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
                     }
                     else
                     {
-                        MessageDialog.openInformation(
-                            parent.getShell(), "Liferay Tomcat Runtime",
-                            "Selected file is not a valid Liferay Javadoc zip file." );
+                        MessageDialog.openInformation( parent.getShell(), Msgs.liferayTomcatRuntime, Msgs.fileNotValid );
                     }
                 }
             }
         } );
 
-        SWTUtil.createLabel( parent, "", 1 );
+        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
 
-        SWTUtil.createButton( parent, "Browse directory..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( parent, Msgs.browseDirectory ).addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
                 DirectoryDialog dd = new DirectoryDialog( parent.getShell() );
 
-                dd.setText( "Select Liferay Javadoc directory." );
+                dd.setText( Msgs.selectLiferayJavadocDirectory );
                 dd.setFilterPath( javadocField.getText() );
 
                 String selectedFile = dd.open();
@@ -174,8 +173,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
                     else
                     {
                         MessageDialog.openInformation(
-                            parent.getShell(), "Liferay Tomcat Runtime",
-                            "Selected directory is not a valid Liferay Javadoc directory location." );
+                            parent.getShell(), Msgs.liferayTomcatRuntime, Msgs.directoryNotValid );
                     }
                 }
             }
@@ -186,16 +184,16 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
     public static Text createSourceField( final Composite parent )
     {
-        final Text sourceField = createTextField( parent, "Liferay source location (zip file or local directory)" );
+        final Text sourceField = createTextField( parent, Msgs.liferaysourceLocation );
 
-        SWTUtil.createButton( parent, "Browse zip..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( parent, Msgs.browseZip ).addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
                 FileDialog fd = new FileDialog( parent.getShell() );
 
-                fd.setText( "Select Liferay source zip file." );
+                fd.setText( Msgs.selectLiferaySourceZipFile );
 
                 String selectedFile = fd.open();
 
@@ -206,16 +204,16 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             }
         } );
 
-        SWTUtil.createLabel( parent, "", 1 );
+        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
 
-        SWTUtil.createButton( parent, "Browse directory..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( parent, Msgs.browseDirectory ).addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
                 DirectoryDialog dd = new DirectoryDialog( parent.getShell() );
 
-                dd.setText( "Select Liferay source directory." );
+                dd.setText( Msgs.selectLiferaySourceDirectory );
                 dd.setFilterPath( sourceField.getText() );
 
                 String selectedFile = dd.open();
@@ -233,17 +231,16 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
     public static Text createBundleZipField( final Composite parent )
     {
 
-        final Text bundleZipField =
-            createTextField( parent, "Liferay Tomcat bundle zip file (required for Ext plugins)" );
+        final Text bundleZipField = createTextField( parent, Msgs.liferayTomcatBundleZipFile );
 
-        SWTUtil.createButton( parent, "Browse..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( parent, Msgs.browse ).addSelectionListener( new SelectionAdapter()
         {
 
             public void widgetSelected( SelectionEvent e )
             {
                 FileDialog fd = new FileDialog( parent.getShell() );
 
-                fd.setText( "Select Liferay Tomcat bundle zip file" );
+                fd.setText( Msgs.selectLiferayTomcatBundleZipFile );
                 fd.setFilterPath( bundleZipField.getText() );
 
                 String selectedFile = fd.open();
@@ -304,7 +301,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             {
                 for( File nestedFile : files )
                 {
-                    if( nestedFile.getName().equals( "javadocs" ) )
+                    if( nestedFile.getName().equals( "javadocs" ) ) //$NON-NLS-1$
                     {
                         javadocDirectory = nestedFile;
                     }
@@ -312,13 +309,13 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
                 for( File nestedFile : files )
                 {
-                    if( nestedFile.getName().equals( "javadocs-all" ) )
+                    if( nestedFile.getName().equals( "javadocs-all" ) ) //$NON-NLS-1$
                     {
                         javadocDirectory = nestedFile;
                     }
                 }
 
-                File liferayDir = new File( javadocDirectory, "com/liferay" );
+                File liferayDir = new File( javadocDirectory, "com/liferay" ); //$NON-NLS-1$
 
                 if( liferayDir.exists() )
                 {
@@ -353,7 +350,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             ZipEntry rootEntry = zipEntries.nextElement();
             rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
 
-            if( rootEntryName.endsWith( "/" ) )
+            if( rootEntryName.endsWith( StringUtil.FORWARD_SLASH ) )
             {
                 rootEntryName = rootEntryName.substring( 0, rootEntryName.length() - 1 );
             }
@@ -364,9 +361,9 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             {
                 String entryName = entry.getName();
 
-                if( entryName.startsWith( rootEntryName + "/javadocs" ) )
+                if( entryName.startsWith( rootEntryName + "/javadocs" ) ) //$NON-NLS-1$
                 {
-                    ZipEntry allEntry = new ZipEntry( rootEntryName + "/javadocs-all" );
+                    ZipEntry allEntry = new ZipEntry( rootEntryName + "/javadocs-all" ); //$NON-NLS-1$
 
                     if( zipFile.getInputStream( allEntry ) != null )
                     {
@@ -383,7 +380,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
             if( javadocEntry != null )
             {
-                retval = "jar:" + javadocFile.toURI().toURL().toExternalForm() + "!/" + javadocEntry.getName();
+                retval = "jar:" + javadocFile.toURI().toURL().toExternalForm() + "!/" + javadocEntry.getName(); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
         catch( Exception e )
@@ -418,13 +415,13 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         }
 
         IPath bundleZipLocation = getLiferayTomcatRuntime().getBundleZipLocation();
-        setFieldValue( bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : "" );
+        setFieldValue( bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : StringUtil.EMPTY );
 
         String javadocURL = getLiferayTomcatRuntime().getJavadocURL();
-        setFieldValue( javadocField, javadocURL != null ? javadocURL : "" );
+        setFieldValue( javadocField, javadocURL != null ? javadocURL : StringUtil.EMPTY );
 
         IPath sourceLocation = getLiferayTomcatRuntime().getSourceLocation();
-        setFieldValue( sourceField, sourceLocation != null ? sourceLocation.toOSString() : "" );
+        setFieldValue( sourceField, sourceLocation != null ? sourceLocation.toOSString() : StringUtil.EMPTY );
     }
 
     public void modifyText( ModifyEvent e )
@@ -450,7 +447,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             {
                 URL javadocURL = new URL( javadocValue );
 
-                if( javadocURL.getProtocol() != null && javadocURL.getProtocol().startsWith( "http" ) )
+                if( javadocURL.getProtocol() != null && javadocURL.getProtocol().startsWith( "http" ) ) //$NON-NLS-1$
                 {
                     newJavadocURL = javadocValue;
                 }
@@ -506,4 +503,28 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         validate();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String browse;
+        public static String browseDirectory;
+        public static String browseZip;
+        public static String directoryNotValid;
+        public static String fileNotValid;
+        public static String liferayJavadocURL;
+        public static String liferayRuntimeTomcatBundle;
+        public static String liferaysourceLocation;
+        public static String liferayTomcatBundleZipFile;
+        public static String liferayTomcatRuntime;
+        public static String selectLiferayJavadocDirectory;
+        public static String selectLiferayJavadocZipFile;
+        public static String selectLiferaySourceDirectory;
+        public static String selectLiferaySourceZipFile;
+        public static String selectLiferayTomcatBundleZipFile;
+        public static String specifyExtraSettings;
+
+        static
+        {
+            initializeMessages( LiferayTomcatRuntimeOptionalComposite.class.getName(), Msgs.class );
+        }
+    }
 }

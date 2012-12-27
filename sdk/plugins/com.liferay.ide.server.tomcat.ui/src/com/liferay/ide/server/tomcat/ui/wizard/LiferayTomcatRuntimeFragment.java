@@ -40,7 +40,7 @@ public class LiferayTomcatRuntimeFragment extends TomcatRuntimeWizardFragment
         comp = new LiferayTomcatRuntimeComposite( parent, wizard );
 
         wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayTomcatUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/wizban/server_wiz.png" ) ) );
+            "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
 
         return comp;
     }

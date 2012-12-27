@@ -18,6 +18,7 @@ import static com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin.warning;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
@@ -30,7 +31,6 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
@@ -49,6 +49,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMStandin;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatVersionHandler;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatRuntime;
+import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.Version;
 
 /**
@@ -57,11 +58,11 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime
 {
-    public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location";
+    public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location"; //$NON-NLS-1$
 
-    public static final String PROP_JAVADOC_URL = "javadoc-url";
+    public static final String PROP_JAVADOC_URL = "javadoc-url"; //$NON-NLS-1$
 
-    public static final String PROP_SOURCE_LOCATION = "source-location";
+    public static final String PROP_SOURCE_LOCATION = "source-location"; //$NON-NLS-1$
 
     protected HashMap<IPath, ReleaseHelper> releaseHelpers;
 
@@ -83,12 +84,12 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
                 public boolean accept( File dir, String name )
                 {
-                    return name.startsWith( "jre" );
+                    return name.startsWith( "jre" ); //$NON-NLS-1$
                 }
             } );
             for( String dir : jre )
             {
-                File javaw = new File( location.toFile(), dir + "/win/bin/javaw.exe" );
+                File javaw = new File( location.toFile(), dir + "/win/bin/javaw.exe" ); //$NON-NLS-1$
                 if( javaw.exists() )
                 {
                     return new Path( javaw.getPath() ).removeLastSegments( 2 );
@@ -123,11 +124,11 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
             newVM.setInstallLocation( jrePath.toFile() );
             if( !CoreUtil.isNullOrEmpty( getRuntime().getName() ) )
             {
-                newVM.setName( getRuntime().getName() + " JRE" );
+                newVM.setName( getRuntime().getName() + " JRE" ); //$NON-NLS-1$
             }
             else
             {
-                newVM.setName( "Liferay JRE" );
+                newVM.setName( "Liferay JRE" ); //$NON-NLS-1$
             }
 
             // make sure the new VM name isn't the same as existing name
@@ -136,7 +137,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
             int num = 1;
             while( existingVMWithSameName )
             {
-                newVM.setName( getRuntime().getName() + " JRE (" + ( num++ ) + ")" );
+                newVM.setName( getRuntime().getName() + " JRE (" + ( num++ ) + ")" ); //$NON-NLS-1$ //$NON-NLS-2$
                 existingVMWithSameName = ServerUtil.isExistingVMName( newVM.getName() );
             }
 
@@ -159,7 +160,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public String getAppServerType()
     {
-        return "tomcat";
+        return "tomcat"; //$NON-NLS-1$
     }
 
     public IPath getBundleZipLocation()
@@ -171,12 +172,12 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public IPath getDeployDir()
     {
-        return getAppServerDir().append( "/webapps" );
+        return getAppServerDir().append( "/webapps" ); //$NON-NLS-1$
     }
 
     protected String getExpectedServerInfo()
     {
-        return "Liferay Portal";
+        return Msgs.liferayPortal;
     }
 
     public String getJavadocURL()
@@ -191,7 +192,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public IPath getLibGlobalDir()
     {
-        return getAppServerDir().append( "/lib/ext" );
+        return getAppServerDir().append( "/lib/ext" ); //$NON-NLS-1$
     }
 
     public IPath getPortalDir()
@@ -208,7 +209,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
         catch( IOException e )
         {
-            return "";
+            return StringUtil.EMPTY;
         }
     }
 
@@ -284,14 +285,14 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         // check for existing server info
         IPath location = getRuntime().getLocation();
 
-        File serverInfoFile = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfo.txt" ).toFile();
+        File serverInfoFile = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfo.txt" ).toFile(); //$NON-NLS-1$
 
         if( serverInfoFile.exists() )
         {
             FileUtil.clearContents( serverInfoFile );
         }
 
-        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfoError.log" );
+        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfoError.log" ); //$NON-NLS-1$
 
         File errorFile = errorPath.toFile();
 
@@ -337,11 +338,11 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     public ITomcatVersionHandler getVersionHandler()
     {
         String id = getRuntime().getRuntimeType().getId();
-        if( id.indexOf( "runtime.60" ) > 0 )
+        if( id.indexOf( "runtime.60" ) > 0 ) //$NON-NLS-1$
         {
             return new LiferayTomcat60Handler();
         }
-        else if( id.indexOf( "runtime.70" ) > 0 )
+        else if( id.indexOf( "runtime.70" ) > 0 ) //$NON-NLS-1$
         {
             return new LiferayTomcat70Handler();
         }
@@ -385,9 +386,9 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     protected void loadServerInfoFile( IPath location, File versionInfoFile, File errorFile )
     {
-        String portalSupportClass = "com.liferay.ide.server.core.support.ReleaseInfoGetServerInfo";
+        String portalSupportClass = "com.liferay.ide.server.core.support.ReleaseInfoGetServerInfo"; //$NON-NLS-1$
 
-        IPath[] libRoots = new IPath[] { location.append( "lib" ), location.append( "lib/ext" ) };
+        IPath[] libRoots = new IPath[] { location.append( "lib" ), location.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
 
         IPath portalDir = getPortalDir();
 
@@ -395,7 +396,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         {
             URL[] supportUrls =
                 new URL[] { FileLocator.toFileURL( LiferayServerCorePlugin.getDefault().getBundle().getEntry(
-                    "portal-support/portal-support.jar" ) ) };
+                    "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
 
             PortalSupportHelper helper =
                 new PortalSupportHelper(
@@ -461,8 +462,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         if( portalVersion != null && ( CoreUtil.compareVersions( portalVersion, getLeastSupportedVersion() ) < 0 ) )
         {
             status =
-                LiferayTomcatPlugin.createErrorStatus( "Portal version not supported.  Need at least " +
-                    getLeastSupportedVersion() );
+                LiferayTomcatPlugin.createErrorStatus( NLS.bind(
+                    Msgs.portalVersionNotSupported, getLeastSupportedVersion() ) );
         }
 
         if( !getRuntime().isStub() )
@@ -472,8 +473,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
             if( CoreUtil.isNullOrEmpty( serverInfo ) || serverInfo.indexOf( getExpectedServerInfo() ) < 0 )
             {
                 status =
-                    LiferayTomcatPlugin.createErrorStatus( "Portal server not supported.  Expecting " +
-                        getExpectedServerInfo() );
+                    LiferayTomcatPlugin.createErrorStatus( NLS.bind(
+                        Msgs.portalServerNotSupported, getExpectedServerInfo() ) );
             }
         }
 
@@ -504,7 +505,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
                 ZipEntry rootEntry = zis.getNextEntry();
                 rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
 
-                if( rootEntryName.endsWith( "/" ) )
+                if( rootEntryName.endsWith( StringUtil.FORWARD_SLASH ) )
                 {
                     rootEntryName = rootEntryName.substring( 0, rootEntryName.length() - 1 );
                 }
@@ -517,7 +518,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
                 {
                     String entryName = entry.getName();
 
-                    if( entryName.startsWith( rootEntryName + "/tomcat-" ) )
+                    if( entryName.startsWith( rootEntryName + "/tomcat-" ) ) //$NON-NLS-1$
                     {
                         foundTomcat = true;
                     }
@@ -527,7 +528,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
             }
             catch( Exception e )
             {
-                return LiferayTomcatPlugin.createWarningStatus( "Bundle zip location does not specify a valid Liferay Tomcat bundle." );
+                return LiferayTomcatPlugin.createWarningStatus( Msgs.bundleZipLocationNotValid );
             }
 
             // if we get here then the user has specified a good zip installation so now we need to see if the
@@ -537,9 +538,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
             if( !bundleDir.equals( rootEntryName ) )
             {
-                return LiferayTomcatPlugin.createWarningStatus( MessageFormat.format(
-                    "The runtime location directory \"{0}\" does not match the directory in zip file \"{1}\"",
-                    bundleDir, rootEntryName ) );
+                return LiferayTomcatPlugin.createWarningStatus( NLS.bind(
+                    Msgs.runtimeLocationDirectoryNotMatch, bundleDir, rootEntryName ) );
             }
         }
 
@@ -548,13 +548,27 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     private IStatus validateJavadocUrlValue( String javadocUrlValue )
     {
-        if( javadocUrlValue.startsWith( "http" ) || javadocUrlValue.startsWith( "jar:file:" ) ||
-            javadocUrlValue.startsWith( "file:" ) )
+        if( javadocUrlValue.startsWith( "http" ) || javadocUrlValue.startsWith( "jar:file:" ) || //$NON-NLS-1$ //$NON-NLS-2$
+            javadocUrlValue.startsWith( "file:" ) ) //$NON-NLS-1$
         {
             return Status.OK_STATUS;
         }
 
-        return warning( "Javadoc URL should start with jar:file:, file:, or http:" );
+        return warning( Msgs.javadocURLStart );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String bundleZipLocationNotValid;
+        public static String javadocURLStart;
+        public static String liferayPortal;
+        public static String portalServerNotSupported;
+        public static String portalVersionNotSupported;
+        public static String runtimeLocationDirectoryNotMatch;
+
+        static
+        {
+            initializeMessages( LiferayTomcatRuntime.class.getName(), Msgs.class );
+        }
+    }
 }

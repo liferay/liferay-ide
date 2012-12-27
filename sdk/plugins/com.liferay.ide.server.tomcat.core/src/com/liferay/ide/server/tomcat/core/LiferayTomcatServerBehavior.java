@@ -104,13 +104,13 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
     public IStatus moveContextToAutoDeployDir(
         IModule module, IPath deployDir, IPath baseDir, IPath autoDeployDir, boolean noPath, boolean serverStopped )
     {
-        IPath confDir = baseDir.append( "conf" );
-        IPath serverXml = confDir.append( "server.xml" );
+        IPath confDir = baseDir.append( "conf" ); //$NON-NLS-1$
+        IPath serverXml = confDir.append( "server.xml" ); //$NON-NLS-1$
 
         try
         {
             Factory factory = new Factory();
-            factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" );
+            factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
             Server publishedServer = (Server) factory.loadDocument( new FileInputStream( serverXml.toFile() ) );
             ServerInstance publishedInstance = new ServerInstance( publishedServer, null, null );
 
@@ -133,21 +133,21 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
             }
 
             Context context = publishedInstance.createContext( -1 );
-            context.setReloadable( "true" );
-            context.setSource( "org.eclipse.jst.jee.server:" + module.getName() );
+            context.setReloadable( "true" ); //$NON-NLS-1$
+            context.setSource( "org.eclipse.jst.jee.server:" + module.getName() ); //$NON-NLS-1$
 
-            if( Boolean.valueOf( context.getAttributeValue( "antiResourceLocking" ) ).booleanValue() )
+            if( Boolean.valueOf( context.getAttributeValue( "antiResourceLocking" ) ).booleanValue() ) //$NON-NLS-1$
             {
-                context.setAttributeValue( "antiResourceLocking", "false" );
+                context.setAttributeValue( "antiResourceLocking", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
-            File contextFile = new File( contextDir, module.getName() + ".xml" );
+            File contextFile = new File( contextDir, module.getName() + ".xml" ); //$NON-NLS-1$
             if( !LiferayTomcatUtil.isExtProjectContext( context ) )
             {
                 // If requested, remove path attribute
                 if( noPath )
                 {
-                    context.removeAttribute( "path" );
+                    context.removeAttribute( "path" ); //$NON-NLS-1$
                 }
 
                 // need to fix the doc base to contain entire path to help autoDeployer for Liferay
@@ -194,7 +194,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 
         super.setupLaunchConfiguration( workingCopy, monitor );
 
-        workingCopy.setAttribute( DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8" );
+        workingCopy.setAttribute( DebugPlugin.ATTR_CONSOLE_ENCODING, "UTF-8" ); //$NON-NLS-1$
 
         String existingVMArgs =
             workingCopy.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null );
@@ -209,7 +209,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
             {
                 for( String pArg : parsedVMArgs )
                 {
-                    if( pArg.startsWith( "-Xm" ) || pArg.startsWith( "-XX:" ) )
+                    if( pArg.startsWith( "-Xm" ) || pArg.startsWith( "-XX:" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                     {
                         memoryArgs.add( pArg );
                     }

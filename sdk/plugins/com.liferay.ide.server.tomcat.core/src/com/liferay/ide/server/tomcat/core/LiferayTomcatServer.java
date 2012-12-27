@@ -13,6 +13,7 @@
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
@@ -28,7 +29,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatVersionHandler;
-import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatConfiguration;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatServer;
@@ -62,7 +62,7 @@ public class LiferayTomcatServer extends TomcatServer
 
     public String getAutoDeployDirectory()
     {
-        return getAttribute( PROPERTY_AUTO_DEPLOY_DIR, "../deploy" );
+        return getAttribute( PROPERTY_AUTO_DEPLOY_DIR, "../deploy" ); //$NON-NLS-1$
     }
 
     public String getAutoDeployInterval()
@@ -72,7 +72,7 @@ public class LiferayTomcatServer extends TomcatServer
 
     public String getExternalProperties()
     {
-        return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, "" );
+        return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, StringUtil.EMPTY );
     }
 
     public String getMemoryArgs()
@@ -84,7 +84,7 @@ public class LiferayTomcatServer extends TomcatServer
     {
         try
         {
-            return new URL( getPortalHomeUrl(), "/" + context );
+            return new URL( getPortalHomeUrl(), StringUtil.FORWARD_SLASH + context );
         }
         catch( Exception ex )
         {
@@ -112,11 +112,11 @@ public class LiferayTomcatServer extends TomcatServer
             if( config == null )
                 return null;
 
-            String url = "http://" + getServer().getHost();
+            String url = "http://" + getServer().getHost(); //$NON-NLS-1$
             int port = config.getMainPort().getPort();
-            port = ServerUtil.getMonitoredPort( getServer(), port, "web" );
+            port = ServerUtil.getMonitoredPort( getServer(), port, "web" ); //$NON-NLS-1$
             if( port != 80 )
-                url += ":" + port;
+                url += ":" + port; //$NON-NLS-1$
             return new URL( url );
         }
         catch( Exception ex )
@@ -145,18 +145,18 @@ public class LiferayTomcatServer extends TomcatServer
                     IProject project = folder.getProject();
                     if( project != null && project.exists() && !project.isOpen() )
                         throw new CoreException( new Status( IStatus.ERROR, TomcatPlugin.PLUGIN_ID, 0, NLS.bind(
-                            Messages.errorConfigurationProjectClosed, path, project.getName() ), null ) );
+                            Msgs.errorConfigurationProjectClosed, path, project.getName() ), null ) );
                 }
                 throw new CoreException( new Status( IStatus.ERROR, TomcatPlugin.PLUGIN_ID, 0, NLS.bind(
-                    Messages.errorNoConfiguration, path ), null ) );
+                    Msgs.errorNoConfiguration, path ), null ) );
             }
 
             String id = getServer().getServerType().getId();
-            if( id.endsWith( "60" ) )
+            if( id.endsWith( "60" ) ) //$NON-NLS-1$
             {
                 configuration = new LiferayTomcat60Configuration( folder );
             }
-            else if( id.endsWith( "70" ) )
+            else if( id.endsWith( "70" ) ) //$NON-NLS-1$
             {
                 configuration = new LiferayTomcat70Configuration( folder );
             }
@@ -194,11 +194,11 @@ public class LiferayTomcatServer extends TomcatServer
     {
         try
         {
-            return new URL( getPortalHomeUrl(), "/tunnel-web/axis" );
+            return new URL( getPortalHomeUrl(), "/tunnel-web/axis" ); //$NON-NLS-1$
         }
         catch( MalformedURLException e )
         {
-            LiferayTomcatPlugin.logError( "Unable to get web services list URL", e );
+            LiferayTomcatPlugin.logError( "Unable to get web services list URL", e ); //$NON-NLS-1$
         }
 
         return null;
@@ -212,15 +212,15 @@ public class LiferayTomcatServer extends TomcatServer
             configuration = null;
             return;
         }
-        IPath path = runtime.getLocation().append( "conf" );
+        IPath path = runtime.getLocation().append( "conf" ); //$NON-NLS-1$
 
         String id = getServer().getServerType().getId();
         IFolder folder = getServer().getServerConfiguration();
-        if( id.endsWith( "60" ) )
+        if( id.endsWith( "60" ) ) //$NON-NLS-1$
         {
             configuration = new LiferayTomcat60Configuration( folder );
         }
-        else if( id.endsWith( "70" ) )
+        else if( id.endsWith( "70" ) ) //$NON-NLS-1$
         {
             configuration = new LiferayTomcat70Configuration( folder );
         }
@@ -292,8 +292,7 @@ public class LiferayTomcatServer extends TomcatServer
         if( !addingExt && removingExt )
         {
             LiferayTomcatUtil.displayToggleMessage(
-                "Removing the Ext plugin will only update the metadata; it will not actually restore any changes made by the Ext plugin.  To restore the server to its original state, use the \"Clean App Server\" action available in the project context menu.",
-                LiferayTomcatPlugin.PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY );
+                Msgs.removingExtPlugin, LiferayTomcatPlugin.PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY );
         }
         // int lastSetting =
         // getServer().getAttribute("last-" + Server.PROP_AUTO_PUBLISH_SETTING, Server.AUTO_PUBLISH_RESOURCE);
@@ -320,17 +319,10 @@ public class LiferayTomcatServer extends TomcatServer
 
         if( serverInfo != null && expectedServerInfo != null )
         {
-            if( serverInfo.contains( "Enterprise Edition" ) && !( expectedServerInfo.contains( "Enterprise Edition" ) ) )
+            if( serverInfo.contains( Msgs.enterpriseEdition ) && !( expectedServerInfo.contains( Msgs.enterpriseEdition ) ) )
             {
-
                 LiferayTomcatUtil.displayToggleMessage(
-                    "The runtime type for this Server is Liferay Portal CE (Community Edition). However, the actual "
-                        + "runtime configured is Liferay Portal Enterprise Edition. The current server will work correctly "
-                        + "but please consider switching to the Liferay Portal EE runtime type for enhanced support.\n\n"
-                        + "The Liferay Portal EE adapter is found in Liferay Developer Studio which is available for free "
-                        + "to EE customers.  More infomation is on the customer portal home page on "
-                        + "http://www.liferay.com/group/customer",
-                    LiferayTomcatPlugin.PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY );
+                    Msgs.switchRuntimeType, LiferayTomcatPlugin.PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY );
             }
         }
 
@@ -376,4 +368,17 @@ public class LiferayTomcatServer extends TomcatServer
         return LiferayTomcatPlugin.getPreferenceStore();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String enterpriseEdition;
+        public static String errorConfigurationProjectClosed;
+        public static String errorNoConfiguration;
+        public static String removingExtPlugin;
+        public static String switchRuntimeType;
+
+        static
+        {
+            initializeMessages( LiferayTomcatServer.class.getName(), Msgs.class );
+        }
+    }
 }

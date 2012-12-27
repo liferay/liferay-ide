@@ -17,6 +17,7 @@
 
 package com.liferay.ide.server.tomcat.core;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFolder;
@@ -52,7 +53,7 @@ public class LiferayTomcat70Configuration extends Tomcat70Configuration implemen
     {
         if( webModule != null && ProjectUtil.isLiferayProject( webModule.getProject() ) )
         {
-            return ""; // just go to portal root, no need to view the webapp
+            return StringUtil.EMPTY; // just go to portal root, no need to view the webapp
                        // context url
         }
 

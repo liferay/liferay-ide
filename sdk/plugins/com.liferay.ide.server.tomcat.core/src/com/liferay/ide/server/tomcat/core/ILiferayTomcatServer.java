@@ -29,15 +29,15 @@ public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
     /**
      * Property which specifies the directory where liferay scans for autodeployment
      */
-    String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir";
+    String PROPERTY_AUTO_DEPLOY_DIR = "autoDeployDir"; //$NON-NLS-1$
 
-    String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval";
+    String PROPERTY_AUTO_DEPLOY_INTERVAL = "autoDeployInterval"; //$NON-NLS-1$
 
-    String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
+    String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties"; //$NON-NLS-1$
 
-    String PROPERTY_MEMORY_ARGS = "memoryArgs";
+    String PROPERTY_MEMORY_ARGS = "memoryArgs"; //$NON-NLS-1$
 
-    String PROPERTY_USER_TIMEZONE = "userTimezone";
+    String PROPERTY_USER_TIMEZONE = "userTimezone"; //$NON-NLS-1$
 
     String getAutoDeployDirectory();
 

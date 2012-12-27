@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
@@ -43,7 +44,7 @@ public class CleanAppServerJob extends SDKJob
 
     public CleanAppServerJob( IProject project )
     {
-        super( "Clean App Server" );
+        super( "Clean App Server" ); //$NON-NLS-1$
 
         setUser( true );
 
@@ -55,7 +56,7 @@ public class CleanAppServerJob extends SDKJob
 
         if( status == null )
         {
-            throw new CoreException( LiferayTomcatPlugin.createErrorStatus( "null status" ) );
+            throw new CoreException( LiferayTomcatPlugin.createErrorStatus( "null status" ) ); //$NON-NLS-1$
         }
 
         if( !status.isOK() )
@@ -71,7 +72,7 @@ public class CleanAppServerJob extends SDKJob
 
         if( monitor != null )
         {
-            monitor.beginTask( "Running clean-app-server task...", IProgressMonitor.UNKNOWN );
+            monitor.beginTask( Msgs.runningCleanAppServerTask, IProgressMonitor.UNKNOWN );
         }
 
         try
@@ -126,4 +127,13 @@ public class CleanAppServerJob extends SDKJob
         return retval;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String runningCleanAppServerTask;
+
+        static
+        {
+            initializeMessages( CleanAppServerJob.class.getName(), Msgs.class );
+        }
+    }
 }

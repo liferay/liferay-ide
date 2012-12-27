@@ -29,7 +29,7 @@ public class LiferayTomcatUIPlugin extends AbstractUIPlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.server.tomcat.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.server.tomcat.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static LiferayTomcatUIPlugin plugin;

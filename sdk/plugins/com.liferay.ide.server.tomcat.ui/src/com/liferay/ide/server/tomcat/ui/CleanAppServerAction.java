@@ -36,10 +36,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.TaskModel;
-import org.eclipse.wst.server.ui.internal.Messages;
 import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
 import org.eclipse.wst.server.ui.internal.wizard.TaskWizard;
 import org.eclipse.wst.server.ui.internal.wizard.WizardTaskUtil;
@@ -92,11 +92,8 @@ public class CleanAppServerAction extends AbstractObjectAction
             {
                 boolean retval =
                     MessageDialog.openQuestion(
-                        getDisplay().getActiveShell(),
-                        getTitle(),
-                        "A valid bundle zip location is required for performing this action.  The runtime \"" +
-                            runtime.getName() +
-                            "\" does not have a valid zip location.\n\nDo you want to specify the location of the bundle zip file now?" );
+                        getDisplay().getActiveShell(), getTitle(),
+                        NLS.bind( Msgs.validBundleZipLocationRequired, runtime.getName() ) );
 
                 if( retval )
                 {
@@ -144,10 +141,7 @@ public class CleanAppServerAction extends AbstractObjectAction
 
         MessageDialog dialog =
             new MessageDialog(
-                getDisplay().getActiveShell(),
-                getTitle(),
-                null,
-                "Performing this action will delete the entire tomcat directory including all configuration, data, and deployed webapps.  If you have other plugins deployed they will have to be republished.\n\nDo you wish to continue?",
+                getDisplay().getActiveShell(), getTitle(), null, Msgs.deleteEntireTomcatDirectory,
                 MessageDialog.WARNING, labels, 1 );
 
         int retval = dialog.open();
@@ -176,12 +170,12 @@ public class CleanAppServerAction extends AbstractObjectAction
 
     protected String getTitle()
     {
-        return "Clean App Server";
+        return Msgs.cleanAppServer;
     }
 
     protected int showWizard( final IRuntimeWorkingCopy runtimeWorkingCopy )
     {
-        String title = Messages.wizEditRuntimeWizardTitle;
+        String title = Msgs.wizEditRuntimeWizardTitle;
         final WizardFragment fragment2 = ServerUIPlugin.getWizardFragment( runtimeWorkingCopy.getRuntimeType().getId() );
         if( fragment2 == null )
             return Window.CANCEL;
@@ -205,4 +199,16 @@ public class CleanAppServerAction extends AbstractObjectAction
         return dialog.open();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String cleanAppServer;
+        public static String deleteEntireTomcatDirectory;
+        public static String validBundleZipLocationRequired;
+        public static String wizEditRuntimeWizardTitle;
+
+        static
+        {
+            initializeMessages( CleanAppServerAction.class.getName(), Msgs.class );
+        }
+    }
 }

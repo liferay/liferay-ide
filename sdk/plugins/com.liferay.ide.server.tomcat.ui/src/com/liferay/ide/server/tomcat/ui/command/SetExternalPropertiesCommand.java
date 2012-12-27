@@ -15,6 +15,7 @@ package com.liferay.ide.server.tomcat.ui.command;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * Command to change the external properties
@@ -36,7 +37,7 @@ public class SetExternalPropertiesCommand extends ServerCommand
      */
     public SetExternalPropertiesCommand( LiferayTomcatServer server, String externalProperties )
     {
-        super( server, "Set External properties" );
+        super( server, Msgs.setExternalProperties );
         this.externalProperties = externalProperties;
     }
 
@@ -55,5 +56,15 @@ public class SetExternalPropertiesCommand extends ServerCommand
     public void undo()
     {
         ( (LiferayTomcatServer) server ).setExternalProperties( oldExternalProperties );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setExternalProperties;
+
+        static
+        {
+            initializeMessages( SetExternalPropertiesCommand.class.getName(), Msgs.class );
+        }
     }
 }

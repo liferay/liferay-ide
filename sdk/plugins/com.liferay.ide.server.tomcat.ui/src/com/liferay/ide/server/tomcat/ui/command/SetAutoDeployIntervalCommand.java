@@ -15,6 +15,7 @@ package com.liferay.ide.server.tomcat.ui.command;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
 
 import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * Command to change the deploy directory
@@ -36,7 +37,7 @@ public class SetAutoDeployIntervalCommand extends ServerCommand
      */
     public SetAutoDeployIntervalCommand( LiferayTomcatServer server, String autoDeployInterval )
     {
-        super( server, "Set Auto Deploy Interval" );
+        super( server, Msgs.setAutoDeployInterval );
         this.autoDeployInterval = autoDeployInterval;
     }
 
@@ -55,5 +56,15 @@ public class SetAutoDeployIntervalCommand extends ServerCommand
     public void undo()
     {
         ( (LiferayTomcatServer) server ).setAutoDeployInterval( oldAutoDeployInterval );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String setAutoDeployInterval;
+
+        static
+        {
+            initializeMessages( SetAutoDeployIntervalCommand.class.getName(), Msgs.class );
+        }
     }
 }

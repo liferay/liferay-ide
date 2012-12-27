@@ -12,6 +12,7 @@
 package com.liferay.ide.server.tomcat.ui.editor;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
@@ -35,7 +36,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 import org.eclipse.jst.server.tomcat.ui.internal.ContextIds;
-import org.eclipse.jst.server.tomcat.ui.internal.Messages;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -106,7 +106,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 	protected Text autoDeployInterval;
 
 	// Avoid hardcoding this at some point
-	private final static String METADATADIR = ".metadata";
+	private final static String METADATADIR = ".metadata"; //$NON-NLS-1$
 	/**
 	 * ServerGeneralEditorPart constructor comment.
 	 */
@@ -189,7 +189,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			| ExpandableComposite.TITLE_BAR | Section.DESCRIPTION | ExpandableComposite.FOCUS_TITLE);
 //		section.setText(Messages.serverEditorLocationsSection);
 //		section.setDescription(Messages.serverEditorLocationsDescription);
-		section.setText("Liferay settings");
+		section.setText(Msgs.liferaySettings);
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.VERTICAL_ALIGN_FILL));
 
 		Composite composite = toolkit.createComposite(section);
@@ -347,7 +347,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 //		deployDirBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		
 
-		Label label = createLabel(toolkit, composite, "Memory args:");
+		Label label = createLabel(toolkit, composite, Msgs.memoryArgsLabel);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 
@@ -367,11 +367,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		});
 
-		label = createLabel(toolkit, composite, "");
+		label = createLabel(toolkit, composite, StringUtil.EMPTY);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 
-		label = createLabel(toolkit, composite, "User timezone:");
+		label = createLabel(toolkit, composite, Msgs.userTimezoneLabel);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 
@@ -391,11 +391,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		});
 
-		label = createLabel(toolkit, composite, "");
+		label = createLabel(toolkit, composite, StringUtil.EMPTY);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 
-		label = createLabel(toolkit, composite, "External properties:");
+		label = createLabel(toolkit, composite, Msgs.externalPropertiesLabel);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 
@@ -417,7 +417,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			}
 		});
 
-		externalPropertiesBrowse = toolkit.createButton(composite, Messages.editorBrowse, SWT.PUSH);
+		externalPropertiesBrowse = toolkit.createButton(composite, Msgs.editorBrowse, SWT.PUSH);
 		externalPropertiesBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		externalPropertiesBrowse.addSelectionListener(new SelectionAdapter() {
 
@@ -436,7 +436,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		});
 
 		// auto deploy directory
-		label = createLabel(toolkit, composite, "Auto deploy path:");
+		label = createLabel(toolkit, composite, Msgs.autoDeployPathLabel);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 		
@@ -455,11 +455,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			}
 		});
 
-		autoDeployDirBrowse = toolkit.createButton(composite, Messages.editorBrowse, SWT.PUSH);
+		autoDeployDirBrowse = toolkit.createButton(composite, Msgs.editorBrowse, SWT.PUSH);
 		autoDeployDirBrowse.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent se) {
 				DirectoryDialog dialog = new DirectoryDialog(autoDeployDir.getShell());
-				dialog.setMessage(Messages.serverEditorBrowseDeployMessage);
+				dialog.setMessage(Msgs.serverEditorBrowseDeployMessage);
 				dialog.setFilterPath(autoDeployDir.getText());
 				String selectedDirectory = dialog.open();
 				if (selectedDirectory != null && !selectedDirectory.equals(autoDeployDir.getText())) {
@@ -473,7 +473,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		});
 		autoDeployDirBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		
-		label = createLabel(toolkit, composite, "Auto deploy interval:");
+		label = createLabel(toolkit, composite, Msgs.autoDeployIntervalLabel);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 		
@@ -492,11 +492,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			}
 		});
 		
-		createLabel(toolkit, composite, "milliseconds");
+		createLabel(toolkit, composite, Msgs.millisecondsLabel);
 		data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
 		label.setLayoutData(data);
 		
-		setDefault = toolkit.createHyperlink(composite, "Restore defaults.", SWT.WRAP);
+		setDefault = toolkit.createHyperlink(composite, Msgs.restoreDefaultsLink, SWT.WRAP);
 		setDefault.addHyperlinkListener(new HyperlinkAdapter() {
 			public void linkActivated(HyperlinkEvent e) {
 				updating = true;
@@ -504,8 +504,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				memoryArgs.setText(ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS);
 				execute(new SetUserTimezoneCommand(tomcatServer, ILiferayTomcatConstants.DEFAULT_USER_TIMEZONE));
 				userTimezone.setText(ILiferayTomcatConstants.DEFAULT_USER_TIMEZONE);
-				execute(new SetExternalPropertiesCommand(tomcatServer, ""));
-				externalProperties.setText("");
+				execute(new SetExternalPropertiesCommand(tomcatServer, StringUtil.EMPTY));
+				externalProperties.setText(StringUtil.EMPTY);
 				execute(new SetAutoDeployDirectoryCommand(tomcatServer, ILiferayTomcatConstants.DEFAULT_AUTO_DEPLOYDIR));
 				autoDeployDir.setText(ILiferayTomcatConstants.DEFAULT_AUTO_DEPLOYDIR);
 				execute(new SetAutoDeployIntervalCommand(tomcatServer, ILiferayTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL));
@@ -566,9 +566,9 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		IRuntime runtime = server.getRuntime();
 		// If not Tomcat 3.2, update description to mention catalina.base
-		if (runtime != null && runtime.getRuntimeType().getId().indexOf("32") < 0)
+		if (runtime != null && runtime.getRuntimeType().getId().indexOf("32") < 0) //$NON-NLS-1$
 //			section.setDescription(Messages.serverEditorLocationsDescription2);
-			section.setDescription("Configure Liferay portal server settings.");
+			section.setDescription(Msgs.configureLiferayPortalServerSettings);
 		if (runtime != null)
 			installDirPath = runtime.getLocation();
 
@@ -577,7 +577,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		IPath basePath = tomcatServer.getRuntimeBaseDirectory();
 		if (!readOnly) {
 			// If server has not been published, or server is published with no modules, allow editing
-			if ((basePath != null && !basePath.append("conf").toFile().exists())
+			if ((basePath != null && !basePath.append("conf").toFile().exists()) //$NON-NLS-1$
 					|| (server.getOriginal().getServerPublishState() == IServer.PUBLISH_STATE_NONE
 							&& server.getOriginal().getModules().length == 0)) {
 				allowRestrictedEditing = true;
@@ -700,7 +700,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				// Must not be the same as the workspace location
 				if (dir.length() == 0 || workspacePath.equals(path)) {
 					return new IStatus [] {
-							new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Messages.errorServerDirIsRoot)};
+							new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.errorServerDirIsRoot)};
 				}
 				// User specified value may not be under the ".metadata" folder of the workspace 
 				else if (workspacePath.isPrefixOf(path)
@@ -708,21 +708,21 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					int cnt = path.matchingFirstSegments(workspacePath);
 					if (METADATADIR.equals(path.segment(cnt))) {
 						return new IStatus [] {
-								new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, NLS.bind(Messages.errorServerDirUnderRoot, METADATADIR))};
+								new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, NLS.bind(Msgs.errorServerDirUnderRoot, METADATADIR))};
 					}
 				}
 				else if (path.equals(installDirPath))
 					return new IStatus [] {
 						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID,
-								NLS.bind(Messages.errorServerDirCustomNotInstall,
-										NLS.bind(Messages.serverEditorServerDirInstall, "").trim()))};
+								NLS.bind(Msgs.errorServerDirCustomNotInstall,
+										NLS.bind(Msgs.serverEditorServerDirInstall, StringUtil.EMPTY).trim()))};
 			}
 			else {
 				IPath path = tomcatServer.getRuntimeBaseDirectory();
 				// If non-custom instance dir is not the install and metadata isn't the selection, return error
 				if (!path.equals(installDirPath) /* && !serverDirMetadata.getSelection()*/) {
 					return new IStatus [] {
-							new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, "Changing runtime base directories not supported.")};
+							new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.changingRuntimeBaseDirectoriesNotSupported)};
 				}
 			}
 
@@ -731,7 +731,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			// Deploy directory must be set
 			if (dir == null || dir.length() == 0) {
 				return new IStatus [] {
-						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Messages.errorDeployDirNotSpecified)};
+						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.errorDeployDirNotSpecified)};
 			}
 
 			String externalPropetiesValue = tomcatServer.getExternalProperties();
@@ -741,7 +741,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 				if ((!externalPropertiesFile.exists()) || (!ServerUtil.isValidPropertiesFile(externalPropertiesFile))) {
 					return new IStatus[] {
-						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, "Invalid external properties file")
+						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.invalidExternalProperitesFile)
 					};
 				}
 			}
@@ -750,9 +750,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			if ( CoreUtil.isNullOrEmpty( autoDeployInterval ) )
 			{
-				return new IStatus[] { new Status(
-					IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID,
-					"Must specify auto deploy interval in milliseconds." ) };
+                return new IStatus[] { new Status(
+                    IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.specifyAutoDeployInterval ) };
 			}
 			else
 			{
@@ -762,8 +761,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				}
 				catch ( NumberFormatException e )
 				{
-					return new IStatus[] { new Status(
-						IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, "Auto deploy interval is not an integer." ) };
+                    return new IStatus[] { new Status(
+                        IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.autoDeployIntervalNotInteger ) };
 				}
 
 			}
@@ -781,7 +780,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				IPath path = new Path(dir);
 				// Must not be the same as the workspace location
 				if (dir.length() == 0 || workspacePath.equals(path)) {
-					setErrorMessage(Messages.errorServerDirIsRoot);
+					setErrorMessage(Msgs.errorServerDirIsRoot);
 					return;
 				}
 				// User specified value may not be under the ".metadata" folder of the workspace 
@@ -789,13 +788,13 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 						|| (!path.isAbsolute() && METADATADIR.equals(path.segment(0)))) {
 					int cnt = path.matchingFirstSegments(workspacePath);
 					if (METADATADIR.equals(path.segment(cnt))) {
-						setErrorMessage(NLS.bind(Messages.errorServerDirUnderRoot, METADATADIR));
+						setErrorMessage(NLS.bind(Msgs.errorServerDirUnderRoot, METADATADIR));
 						return;
 					}
 				}
 				else if (path.equals(installDirPath)) {
-					setErrorMessage(NLS.bind(Messages.errorServerDirCustomNotInstall,
-							NLS.bind(Messages.serverEditorServerDirInstall, "").trim()));
+					setErrorMessage(NLS.bind(Msgs.errorServerDirCustomNotInstall,
+							NLS.bind(Msgs.serverEditorServerDirInstall, StringUtil.EMPTY).trim()));
 					return;
 				}
 			}
@@ -803,8 +802,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				IPath path = tomcatServer.getRuntimeBaseDirectory();
 				// If non-custom instance dir is not the install and metadata isn't the selection, return error
 				if (path != null && !path.equals(installDirPath) /*&& !serverDirMetadata.getSelection()*/) {
-					setErrorMessage(NLS.bind(Messages.errorServerDirCustomNotMetadata, 
-							NLS.bind(Messages.serverEditorServerDirMetadata, "").trim()));
+					setErrorMessage(NLS.bind(Msgs.errorServerDirCustomNotMetadata, 
+							NLS.bind(Msgs.serverEditorServerDirMetadata, StringUtil.EMPTY).trim()));
 				}
 			}
 
@@ -812,7 +811,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			dir = tomcatServer.getDeployDirectory();
 			// Deploy directory must be set
 			if (dir == null || dir.length() == 0) {
-				setErrorMessage(Messages.errorDeployDirNotSpecified);
+				setErrorMessage(Msgs.errorDeployDirNotSpecified);
 				return;
 			}
 
@@ -822,7 +821,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				File externalPropertiesFile = new File(externalPropetiesValue);
 
 				if ((!externalPropertiesFile.exists()) || (!ServerUtil.isValidPropertiesFile(externalPropertiesFile))) {
-					setErrorMessage("Invalid external properties file");
+					setErrorMessage(Msgs.invalidExternalPropertiesFile);
 
 					return;
 				}
@@ -832,7 +831,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			if ( CoreUtil.isNullOrEmpty( autoDeployInterval ) )
 			{
-				setErrorMessage( "Must specify auto deploy interval in milliseconds." );
+				setErrorMessage( Msgs.specifyAutoDeployInterval );
 				return;
 			}
 			else
@@ -843,7 +842,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				}
 				catch ( NumberFormatException e )
 				{
-					setErrorMessage( "Auto deploy interval is not an integer." );
+					setErrorMessage( Msgs.autoDeployIntervalNotInteger );
 					return;
 				}
 
@@ -853,4 +852,36 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 		// All is okay, clear any previous error
 		setErrorMessage(null);
 	}
+
+    private static class Msgs extends NLS
+    {
+        public static String autoDeployIntervalLabel;
+        public static String autoDeployIntervalNotInteger;
+        public static String autoDeployPathLabel;
+        public static String changingRuntimeBaseDirectoriesNotSupported;
+        public static String configureLiferayPortalServerSettings;
+        public static String editorBrowse;
+        public static String errorDeployDirNotSpecified;
+        public static String errorServerDirCustomNotInstall;
+        public static String errorServerDirCustomNotMetadata;
+        public static String errorServerDirIsRoot;
+        public static String errorServerDirUnderRoot;
+        public static String externalPropertiesLabel;
+        public static String invalidExternalProperitesFile;
+        public static String invalidExternalPropertiesFile;
+        public static String liferaySettings;
+        public static String memoryArgsLabel;
+        public static String millisecondsLabel;
+        public static String restoreDefaultsLink;
+        public static String serverEditorBrowseDeployMessage;
+        public static String serverEditorServerDirInstall;
+        public static String serverEditorServerDirMetadata;
+        public static String specifyAutoDeployInterval;
+        public static String userTimezoneLabel;
+
+        static
+        {
+            initializeMessages( LiferayServerSettingsEditorSection.class.getName(), Msgs.class );
+        }
+    }
 }

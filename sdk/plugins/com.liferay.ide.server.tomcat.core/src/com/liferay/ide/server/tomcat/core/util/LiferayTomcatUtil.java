@@ -18,6 +18,7 @@ package com.liferay.ide.server.tomcat.core.util;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.IPluginPublisher;
@@ -61,6 +62,7 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.Factory;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Context;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
@@ -85,14 +87,14 @@ public class LiferayTomcatUtil
     // to read liferay info from manifest need at least version 6.2.0
     private static final Version MANIFEST_VERSION_REQUIRED = new Version( 6, 2, 0 );
 
-    private static String CONFIG_DIR = "conf";
-    public static final String CONFIG_TYPE_SERVER = "server";
-    public static final String CONFIG_TYPE_VERSION = "version";
+    private static String CONFIG_DIR = "conf"; //$NON-NLS-1$
+    public static final String CONFIG_TYPE_SERVER = "server"; //$NON-NLS-1$
+    public static final String CONFIG_TYPE_VERSION = "version"; //$NON-NLS-1$
 
-    private static String DEFAULT_PORTAL_CONTEXT_FILE = "ROOT.xml";
-    private static String DEFAULT_PORTAL_DIR = "/webapps/ROOT";
-    private static String HOST_NAME = "localhost";
-    private static String SERVICE_NAME = "Catalina";
+    private static String DEFAULT_PORTAL_CONTEXT_FILE = "ROOT.xml"; //$NON-NLS-1$
+    private static String DEFAULT_PORTAL_DIR = "/webapps/ROOT"; //$NON-NLS-1$
+    private static String HOST_NAME = "localhost"; //$NON-NLS-1$
+    private static String SERVICE_NAME = "Catalina"; //$NON-NLS-1$
 
     public static void addRuntimeVMArgments(
         List<String> runtimeVMArgs, IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv,
@@ -100,9 +102,9 @@ public class LiferayTomcatUtil
     {
         addUserVMArgs( runtimeVMArgs, currentServer, liferayTomcatServer );
 
-        runtimeVMArgs.add( "-Dfile.encoding=UTF8" );
-        runtimeVMArgs.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" );
-        runtimeVMArgs.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" );
+        runtimeVMArgs.add( "-Dfile.encoding=UTF8" ); //$NON-NLS-1$
+        runtimeVMArgs.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" ); //$NON-NLS-1$
+        runtimeVMArgs.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" ); //$NON-NLS-1$
 
         ILiferayRuntime liferayRuntime =
             (ILiferayRuntime) currentServer.getRuntime().loadAdapter( ILiferayRuntime.class, null );
@@ -111,27 +113,27 @@ public class LiferayTomcatUtil
 
         if( CoreUtil.compareVersions( portalVersion, LiferayTomcatRuntime70.leastSupportedVersion ) < 0 )
         {
-            runtimeVMArgs.add( "-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"" );
+            runtimeVMArgs.add( "-Djava.security.auth.login.config=\"" + configPath.toOSString() + "/conf/jaas.config\"" ); //$NON-NLS-1$ //$NON-NLS-2$
         }
         else
         {
-            runtimeVMArgs.add( "-Djava.net.preferIPv4Stack=true" );
+            runtimeVMArgs.add( "-Djava.net.preferIPv4Stack=true" ); //$NON-NLS-1$
         }
 
-        runtimeVMArgs.add( "-Djava.util.logging.config.file=\"" + installPath.toOSString() +
-            "/conf/logging.properties\"" );
-        runtimeVMArgs.add( "-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"" );
+        runtimeVMArgs.add( "-Djava.util.logging.config.file=\"" + installPath.toOSString() + //$NON-NLS-1$
+            "/conf/logging.properties\"" ); //$NON-NLS-1$
+        runtimeVMArgs.add( "-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         File externalPropertiesFile =
             getExternalPropertiesFile( installPath, configPath, currentServer, liferayTomcatServer );
 
-        runtimeVMArgs.add( "-Dexternal-properties=\"" + externalPropertiesFile.getAbsolutePath() + "\"" );
+        runtimeVMArgs.add( "-Dexternal-properties=\"" + externalPropertiesFile.getAbsolutePath() + "\"" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     private static void addUserVMArgs(
         List<String> runtimeVMArgs, IServer currentServer, ILiferayTomcatServer portalTomcatServer )
     {
-        String[] memoryArgs = ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS.split( " " );
+        String[] memoryArgs = ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS.split( StringUtil.SPACE );
         String userTimezone = ILiferayTomcatConstants.DEFAULT_USER_TIMEZONE;
 
         if( currentServer != null && portalTomcatServer != null )
@@ -149,7 +151,7 @@ public class LiferayTomcatUtil
             }
         }
 
-        runtimeVMArgs.add( "-Duser.timezone=" + userTimezone );
+        runtimeVMArgs.add( "-Duser.timezone=" + userTimezone ); //$NON-NLS-1$
     }
 
     public static IStatus canAddModule( IModule module, IServer currentServer )
@@ -240,22 +242,21 @@ public class LiferayTomcatUtil
     public static void displayToggleMessage( String msg, String key )
     {
         UIUtil.postInfoWithToggle(
-            "Liferay Tomcat Server", msg, "Do not show this message again", false,
-            LiferayTomcatPlugin.getPreferenceStore(), key );
+            Msgs.liferayTomcatServer, msg, Msgs.notShowMessage, false, LiferayTomcatPlugin.getPreferenceStore(), key );
     }
 
     private static File ensurePortalIDEPropertiesExists(
         IPath installPath, IPath configPath, IServer currentServer, ILiferayTomcatServer portalServer )
     {
 
-        IPath idePropertiesPath = installPath.append( "../portal-ide.properties" );
+        IPath idePropertiesPath = installPath.append( "../portal-ide.properties" ); //$NON-NLS-1$
 
-        String hostName = "localhost";
+        String hostName = "localhost"; //$NON-NLS-1$
 
         try
         {
             ServerInstance server =
-                TomcatVersionHelper.getCatalinaServerInstance( configPath.append( "conf/server.xml" ), null, null );
+                TomcatVersionHelper.getCatalinaServerInstance( configPath.append( "conf/server.xml" ), null, null ); //$NON-NLS-1$
 
             hostName = server.getHost().getName();
         }
@@ -284,13 +285,13 @@ public class LiferayTomcatUtil
 
         Properties props = new Properties();
 
-        props.put( "include-and-override", "portal-developer.properties" );
+        props.put( "include-and-override", "portal-developer.properties" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        props.put( "com.liferay.portal.servlet.filters.etag.ETagFilter", "false" );
-        props.put( "com.liferay.portal.servlet.filters.header.HeaderFilter", "false" );
-        props.put( "json.service.auth.token.enabled", "false" );
+        props.put( "com.liferay.portal.servlet.filters.etag.ETagFilter", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+        props.put( "com.liferay.portal.servlet.filters.header.HeaderFilter", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+        props.put( "json.service.auth.token.enabled", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        props.put( "auto.deploy.tomcat.conf.dir", configPath.append( "conf/Catalina/" + hostName ).toOSString() );
+        props.put( "auto.deploy.tomcat.conf.dir", configPath.append( "conf/Catalina/" + hostName ).toOSString() ); //$NON-NLS-1$ //$NON-NLS-2$
 
         if( currentServer != null && portalServer != null )
         {
@@ -304,7 +305,7 @@ public class LiferayTomcatUtil
 
                 if( autoDeployDirPath.isAbsolute() && autoDeployDirPath.toFile().exists() )
                 {
-                    props.put( "auto.deploy.deploy.dir", portalServer.getAutoDeployDirectory() );
+                    props.put( "auto.deploy.deploy.dir", portalServer.getAutoDeployDirectory() ); //$NON-NLS-1$
                 }
                 else
                 {
@@ -312,16 +313,16 @@ public class LiferayTomcatUtil
 
                     if( autoDeployDirFile.exists() )
                     {
-                        props.put( "auto.deploy.deploy.dir", autoDeployDirFile.getPath() );
+                        props.put( "auto.deploy.deploy.dir", autoDeployDirFile.getPath() ); //$NON-NLS-1$
                     }
                 }
             }
 
-            props.put( "auto.deploy.interval", portalServer.getAutoDeployInterval() );
+            props.put( "auto.deploy.interval", portalServer.getAutoDeployInterval() ); //$NON-NLS-1$
         }
 
         // props.put( "json.service.public.methods", "*" );
-        props.put( "jsonws.web.service.public.methods", "*" );
+        props.put( "jsonws.web.service.public.methods", "*" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         File file = idePropertiesPath.toFile();
 
@@ -340,8 +341,8 @@ public class LiferayTomcatUtil
     public static IPath[] getAllUserClasspathLibraries( IPath runtimeLocation, IPath portalDir )
     {
         List<IPath> libs = new ArrayList<IPath>();
-        IPath libFolder = runtimeLocation.append( "lib" );
-        IPath webinfLibFolder = portalDir.append( "WEB-INF/lib" );
+        IPath libFolder = runtimeLocation.append( "lib" ); //$NON-NLS-1$
+        IPath webinfLibFolder = portalDir.append( "WEB-INF/lib" ); //$NON-NLS-1$
 
         try
         {
@@ -349,7 +350,7 @@ public class LiferayTomcatUtil
 
             for( File lib : libFiles )
             {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) )
+                if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
                 {
                     libs.add( new Path( lib.getPath() ) );
                 }
@@ -359,7 +360,7 @@ public class LiferayTomcatUtil
 
             for( File lib : libFiles )
             {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) )
+                if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
                 {
                     libs.add( new Path( lib.getPath() ) );
                 }
@@ -377,7 +378,7 @@ public class LiferayTomcatUtil
     {
         Properties retval = null;
 
-        File implJar = portalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile();
+        File implJar = portalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile(); //$NON-NLS-1$
 
         if( implJar.exists() )
         {
@@ -386,14 +387,14 @@ public class LiferayTomcatUtil
                 JarFile jar = new JarFile( implJar );
                 Properties categories = new Properties();
                 Properties props = new Properties();
-                props.load( jar.getInputStream( jar.getEntry( "content/Language.properties" ) ) );
+                props.load( jar.getInputStream( jar.getEntry( "content/Language.properties" ) ) ); //$NON-NLS-1$
                 Enumeration<?> names = props.propertyNames();
 
                 while( names.hasMoreElements() )
                 {
                     String name = names.nextElement().toString();
 
-                    if( name.startsWith( "category." ) )
+                    if( name.startsWith( "category." ) ) //$NON-NLS-1$
                     {
                         categories.put( name, props.getProperty( name ) );
                     }
@@ -417,12 +418,12 @@ public class LiferayTomcatUtil
 
         if( configType.equals( CONFIG_TYPE_VERSION ) )
         {
-            configInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" );
+            configInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" ); //$NON-NLS-1$
         }
 
         else if( configType.equals( CONFIG_TYPE_SERVER ) )
         {
-            configInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" );
+            configInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" ); //$NON-NLS-1$
         }
 
         else
@@ -458,7 +459,7 @@ public class LiferayTomcatUtil
 
     public static String getConfigInfoFromManifest( String configType, IPath portalDir ) throws IOException
     {
-        File implJar = portalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile();
+        File implJar = portalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile(); //$NON-NLS-1$
 
         String version = null;
         String serverInfo = null;
@@ -473,8 +474,8 @@ public class LiferayTomcatUtil
 
                 Attributes attributes = manifest.getMainAttributes();
 
-                version = attributes.getValue( "Liferay-Portal-Version" );
-                serverInfo = attributes.getValue( "Liferay-Portal-Server-Info" );
+                version = attributes.getValue( "Liferay-Portal-Version" ); //$NON-NLS-1$
+                serverInfo = attributes.getValue( "Liferay-Portal-Server-Info" ); //$NON-NLS-1$
 
                 if( CoreUtil.compareVersions( Version.parseVersion( version ), MANIFEST_VERSION_REQUIRED ) < 0 )
                 {
@@ -506,10 +507,10 @@ public class LiferayTomcatUtil
         Properties categories = getCategories( runtimeLocation, portalDir );
 
         Properties retval = new Properties();
-        retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" );
-        retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" );
-        retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" );
-        retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" );
+        retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         return retval;
     }
@@ -561,18 +562,18 @@ public class LiferayTomcatUtil
     {
         List<String> retval = new ArrayList<String>();
 
-        File filtersWebXmlFile = portalDir.append( "WEB-INF/liferay-web.xml" ).toFile();
+        File filtersWebXmlFile = portalDir.append( "WEB-INF/liferay-web.xml" ).toFile(); //$NON-NLS-1$
 
         if( !filtersWebXmlFile.exists() )
         {
-            filtersWebXmlFile = portalDir.append( "WEB-INF/web.xml" ).toFile();
+            filtersWebXmlFile = portalDir.append( "WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
         }
 
         if( filtersWebXmlFile.exists() )
         {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( filtersWebXmlFile );
 
-            NodeList filterNameElements = document.getElementsByTagName( "filter-name" );
+            NodeList filterNameElements = document.getElementsByTagName( "filter-name" ); //$NON-NLS-1$
 
             for( int i = 0; i < filterNameElements.getLength(); i++ )
             {
@@ -594,10 +595,10 @@ public class LiferayTomcatUtil
     {
 
         IPath hookPropertiesPath =
-            LiferayTomcatPlugin.getDefault().getStateLocation().append( "hook_properties" ).append(
-                runtimeLocation.toPortableString().replaceAll( "\\/", "_" ) + "_hook_properties.txt" );
+            LiferayTomcatPlugin.getDefault().getStateLocation().append( "hook_properties" ).append( //$NON-NLS-1$
+                runtimeLocation.toPortableString().replaceAll( "\\/", "_" ) + "_hook_properties.txt" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "hookError.log" );
+        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "hookError.log" ); //$NON-NLS-1$
 
         File hookPropertiesFile = hookPropertiesPath.toFile();
 
@@ -644,14 +645,14 @@ public class LiferayTomcatUtil
 
     public static String getVersionFromClass( IPath location, IPath portalDir ) throws IOException
     {
-        File versionFile = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.txt" ).toFile();
+        File versionFile = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.txt" ).toFile(); //$NON-NLS-1$
 
         if( versionFile.exists() )
         {
             FileUtil.clearContents( versionFile );
         }
 
-        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "versionError.log" );
+        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "versionError.log" ); //$NON-NLS-1$
 
         File errorFile = errorPath.toFile();
 
@@ -691,7 +692,7 @@ public class LiferayTomcatUtil
             try
             {
                 Factory factory = new Factory();
-                factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" );
+                factory.setPackageName( "org.eclipse.jst.server.tomcat.core.internal.xml.server40" ); //$NON-NLS-1$
                 fis = new FileInputStream( contextFile );
                 context = (Context) factory.loadDocument( fis );
                 if( context != null )
@@ -701,10 +702,10 @@ public class LiferayTomcatUtil
                     if( path == null )
                     {
                         String fileName = contextFile.getName();
-                        path = fileName.substring( 0, fileName.length() - ".xml".length() );
-                        if( "ROOT".equals( path ) )
-                            path = "";
-                        context.setPath( "/" + path );
+                        path = fileName.substring( 0, fileName.length() - ".xml".length() ); //$NON-NLS-1$
+                        if( "ROOT".equals( path ) ) //$NON-NLS-1$
+                            path = StringUtil.EMPTY;
+                        context.setPath( StringUtil.FORWARD_SLASH + path );
                     }
                 }
             }
@@ -730,13 +731,13 @@ public class LiferayTomcatUtil
     public static void loadHookPropertiesFile(
         IPath runtimeLocation, IPath portalDir, File hookPropertiesFile, File errorFile ) throws IOException
     {
-        String portalSupportClass = "com.liferay.ide.server.core.support.GetSupportedHookProperties";
+        String portalSupportClass = "com.liferay.ide.server.core.support.GetSupportedHookProperties"; //$NON-NLS-1$
 
-        IPath[] libRoots = new IPath[] { runtimeLocation.append( "lib" ), runtimeLocation.append( "lib/ext" ) };
+        IPath[] libRoots = new IPath[] { runtimeLocation.append( "lib" ), runtimeLocation.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
 
         URL[] urls =
             new URL[] { FileLocator.toFileURL( LiferayServerCorePlugin.getDefault().getBundle().getEntry(
-                "portal-support/portal-support.jar" ) ) };
+                "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
 
         PortalSupportHelper helper =
             new PortalSupportHelper(
@@ -755,13 +756,13 @@ public class LiferayTomcatUtil
     public static void loadVersionInfoFile( IPath runtimeLocation, IPath portalDir, File versionInfoFile, File errorFile )
         throws IOException
     {
-        String portalSupportClass = "com.liferay.ide.server.core.support.ReleaseInfoGetVersion";
+        String portalSupportClass = "com.liferay.ide.server.core.support.ReleaseInfoGetVersion"; //$NON-NLS-1$
 
-        IPath[] libRoots = new IPath[] { runtimeLocation.append( "lib" ), runtimeLocation.append( "lib/ext" ) };
+        IPath[] libRoots = new IPath[] { runtimeLocation.append( "lib" ), runtimeLocation.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
 
         URL[] urls =
             new URL[] { FileLocator.toFileURL( LiferayServerCorePlugin.getDefault().getBundle().getEntry(
-                "portal-support/portal-support.jar" ) ) };
+                "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
 
         PortalSupportHelper helper =
             new PortalSupportHelper(
@@ -794,7 +795,7 @@ public class LiferayTomcatUtil
             File[] files = location.listFiles();
             boolean matches = false;
 
-            String pattern = ".*tomcat.*";
+            String pattern = ".*tomcat.*"; //$NON-NLS-1$
 
             File tomcatDir = null;
 
@@ -825,11 +826,11 @@ public class LiferayTomcatUtil
 
         if( configType.equals( CONFIG_TYPE_VERSION ) )
         {
-            versionsInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" );
+            versionsInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" ); //$NON-NLS-1$
         }
         else if( configType.equals( CONFIG_TYPE_SERVER ) )
         {
-            versionsInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" );
+            versionsInfoPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" ); //$NON-NLS-1$
         }
 
         if( versionsInfoPath != null )
@@ -858,7 +859,7 @@ public class LiferayTomcatUtil
 
                 try
                 {
-                    properties.store( new FileOutputStream( versionInfoFile ), "" );
+                    properties.store( new FileOutputStream( versionInfoFile ), StringUtil.EMPTY );
                 }
                 catch( Exception e )
                 {
@@ -881,9 +882,9 @@ public class LiferayTomcatUtil
             {
                 props.load( new FileInputStream( externalPropertiesFile ) );
 
-                props.setProperty( "include-and-override", portalIdePropFile.getAbsolutePath() );
+                props.setProperty( "include-and-override", portalIdePropFile.getAbsolutePath() ); //$NON-NLS-1$
 
-                props.setHeader( "# Last modified by Liferay IDE " + new Date() );
+                props.setHeader( "# Last modified by Liferay IDE " + new Date() ); //$NON-NLS-1$
 
                 props.save( new FileOutputStream( externalPropertiesFile ) );
 
@@ -975,5 +976,16 @@ public class LiferayTomcatUtil
             return LiferayTomcatPlugin.createErrorStatus( e );
         }
 
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String liferayTomcatServer;
+        public static String notShowMessage;
+
+        static
+        {
+            initializeMessages( LiferayTomcatUtil.class.getName(), Msgs.class );
+        }
     }
 }

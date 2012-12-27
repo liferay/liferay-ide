@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
@@ -62,7 +63,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
                 {
                     if( ProjectUtil.isExtProject( currentModule.getProject() ) )
                     {
-                        return LiferayTomcatPlugin.createErrorStatus( "Portal can only have on Ext-plugin deployed at a time." );
+                        return LiferayTomcatPlugin.createErrorStatus( Msgs.oneExtPlugin );
                     }
                 }
             }
@@ -79,8 +80,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
         if( kind == IServer.PUBLISH_AUTO )
         {
             LiferayTomcatUtil.displayToggleMessage(
-                "The Ext plugin does not support auto-publishing.  To redeploy changes from this plugin you will need to manually publish the server from the Servers view.",
-                LiferayTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY );
+                Msgs.extPluginNotSupportAutoPublishing, LiferayTomcatPlugin.PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY );
 
             return false;
         }
@@ -104,7 +104,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
         }
         catch( Exception e )
         {
-            LiferayTomcatPlugin.logError( "Failed pre-publishing ext module.", e );
+            LiferayTomcatPlugin.logError( "Failed pre-publishing ext module.", e ); //$NON-NLS-1$
             return false;
         }
 
@@ -123,7 +123,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
         if( sdk == null )
         {
             throw new CoreException(
-                LiferayTomcatPlugin.createErrorStatus( "No SDK for project configured. Could not deploy ext module" ) );
+                LiferayTomcatPlugin.createErrorStatus( "No SDK for project configured. Could not deploy ext module" ) ); //$NON-NLS-1$
         }
 
         String mode =
@@ -150,7 +150,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
     {
         if( status == null )
         {
-            throw new CoreException( LiferayTomcatPlugin.createErrorStatus( "null status" ) );
+            throw new CoreException( LiferayTomcatPlugin.createErrorStatus( "null status" ) ); //$NON-NLS-1$
         }
 
         if( !status.isOK() )
@@ -164,4 +164,14 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
     {
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String extPluginNotSupportAutoPublishing;
+        public static String oneExtPlugin;
+
+        static
+        {
+            initializeMessages( TomcatExtPluginPublisher.class.getName(), Msgs.class );
+        }
+    }
 }

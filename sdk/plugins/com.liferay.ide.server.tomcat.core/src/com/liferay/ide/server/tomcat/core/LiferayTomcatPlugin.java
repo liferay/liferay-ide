@@ -37,16 +37,16 @@ public class LiferayTomcatPlugin extends CorePlugin
     private static LiferayTomcatPlugin plugin;
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.server.tomcat.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.server.tomcat.core"; //$NON-NLS-1$
 
-    public static final String PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY = "ADDED_EXT_PLUGIN_TOGGLE_KEY";
+    public static final String PREFERENCES_ADDED_EXT_PLUGIN_TOGGLE_KEY = "ADDED_EXT_PLUGIN_TOGGLE_KEY"; //$NON-NLS-1$
 
     public static final String PREFERENCES_ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY =
-        "ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY";
+        "ADDED_EXT_PLUGIN_WITHOUT_ZIP_TOGGLE_KEY"; //$NON-NLS-1$
 
-    public static final String PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY = "EE_UPGRADE_MSG_TOGGLE_KEY";
+    public static final String PREFERENCES_EE_UPGRADE_MSG_TOGGLE_KEY = "EE_UPGRADE_MSG_TOGGLE_KEY"; //$NON-NLS-1$
 
-    public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY";
+    public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY"; //$NON-NLS-1$
 
     public static IStatus createErrorStatus( String msg )
     {
@@ -93,7 +93,7 @@ public class LiferayTomcatPlugin extends CorePlugin
 
     private void cleanupVersionFiles()
     {
-        File versionProps = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" ).toFile();
+        File versionProps = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.properties" ).toFile(); //$NON-NLS-1$
 
         if( versionProps.exists() )
         {
@@ -104,7 +104,7 @@ public class LiferayTomcatPlugin extends CorePlugin
         }
 
         File serverInfos =
-            LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" ).toFile();
+            LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" ).toFile(); //$NON-NLS-1$
 
         if( serverInfos.exists() )
         {

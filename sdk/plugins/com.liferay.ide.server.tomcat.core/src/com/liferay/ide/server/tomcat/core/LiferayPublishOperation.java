@@ -32,10 +32,10 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jst.server.core.IJ2EEModule;
 import org.eclipse.jst.server.core.IWebModule;
-import org.eclipse.jst.server.tomcat.core.internal.Messages;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -51,9 +51,9 @@ import org.eclipse.wst.server.core.util.PublishHelper;
 @SuppressWarnings( "restriction" )
 public class LiferayPublishOperation extends PublishOperation {
 
-	private static final String LIFERAY_WEB_XML_PATH = "WEB-INF/liferay-web.xml";
+	private static final String LIFERAY_WEB_XML_PATH = "WEB-INF/liferay-web.xml"; //$NON-NLS-1$
 
-	private static final String WEB_XML_PATH = "WEB-INF/web.xml";
+	private static final String WEB_XML_PATH = "WEB-INF/web.xml"; //$NON-NLS-1$
 
 	protected LiferayTomcatServerBehavior server;
 	protected IModule[] module;
@@ -71,14 +71,14 @@ public class LiferayPublishOperation extends PublishOperation {
 	 * @param deltaKind kind of change
 	 */
 	public LiferayPublishOperation(LiferayTomcatServerBehavior server, int kind, IModule[] module, int deltaKind) {
-		super("Publish to server", "Publish Web module to Tomcat server");
+		super(Msgs.publishServer, Msgs.publishWebModule);
 		this.server = server;
 		this.module = module;
 		this.kind = kind;
 		this.deltaKind = deltaKind;
 		IPath base = server.getRuntimeBaseDirectory();
 		if (base != null) {
-			helper = new PublishHelper(base.append("temp").toFile());
+			helper = new PublishHelper(base.append("temp").toFile()); //$NON-NLS-1$
 		}
 		else {
 			// We are doomed without a base directory.  However, allow the catastrophe
@@ -153,10 +153,10 @@ public class LiferayPublishOperation extends PublishOperation {
 			if (f.exists()) {
 				try {
 					IPath baseDir = server.getRuntimeBaseDirectory();
-					IPath serverXml = baseDir.append("conf").append("server.xml");
+					IPath serverXml = baseDir.append("conf").append("server.xml"); //$NON-NLS-1$ //$NON-NLS-2$
 					ServerInstance oldInstance = TomcatVersionHelper.getCatalinaServerInstance(serverXml, null, null);
-					IPath contextDir = oldInstance.getContextXmlDirectory(baseDir.append("conf"));
-					String contextFileName = path.lastSegment() + ".xml";
+					IPath contextDir = oldInstance.getContextXmlDirectory(baseDir.append("conf")); //$NON-NLS-1$
+					String contextFileName = path.lastSegment() + ".xml"; //$NON-NLS-1$
 					File contextFile = contextDir.append(contextFileName).toFile();
 
 					if (contextFile.exists()) {
@@ -172,7 +172,7 @@ public class LiferayPublishOperation extends PublishOperation {
 					}
 				}
 				catch (Exception e) {
-					LiferayTomcatPlugin.logError("Could not delete context xml file.", e);
+					LiferayTomcatPlugin.logError("Could not delete context xml file.", e); //$NON-NLS-1$
 				}
 
 				IStatus[] stat = PublishHelper.deleteDirectory(f, monitor);
@@ -210,10 +210,10 @@ public class LiferayPublishOperation extends PublishOperation {
 
 		// check to see if we need to re-invoke the liferay plugin deployer
 		String[] paths =
-			new String[] { WEB_XML_PATH, "WEB-INF/portlet.xml", "WEB-INF/liferay-portlet.xml",
-				"WEB-INF/liferay-display.xml", "WEB-INF/liferay-look-and-feel.xml", "WEB-INF/liferay-hook.xml",
-				"WEB-INF/liferay-layout-templates.xml", "WEB-INF/liferay-plugin-package.properties",
-				"WEB-INF/liferay-plugin-package.xml", "WEB-INF/server-config.wsdd", };
+			new String[] { WEB_XML_PATH, "WEB-INF/portlet.xml", "WEB-INF/liferay-portlet.xml", //$NON-NLS-1$ //$NON-NLS-2$
+				"WEB-INF/liferay-display.xml", "WEB-INF/liferay-look-and-feel.xml", "WEB-INF/liferay-hook.xml",  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+				"WEB-INF/liferay-layout-templates.xml", "WEB-INF/liferay-plugin-package.properties",  //$NON-NLS-1$//$NON-NLS-2$
+				"WEB-INF/liferay-plugin-package.xml", "WEB-INF/server-config.wsdd", }; //$NON-NLS-1$ //$NON-NLS-2$
 
 		for ( IModuleResourceDelta del : delta )
 		{
@@ -305,7 +305,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
 		// If we don't have a jar URI, make a guess so we have one if we need it
 		if (jarURI == null) {
-			jarURI = "WEB-INF/lib/" + module[1].getName() + ".jar";
+			jarURI = "WEB-INF/lib/" + module[1].getName() + ".jar";  //$NON-NLS-1$//$NON-NLS-2$
 		}
 		IPath jarPath = path.append(jarURI);
 		// Make our best determination of the path to the old jar
@@ -358,7 +358,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
 		// If we don't have a jar URI, make a guess so we have one if we need it
 		if (jarURI == null) {
-			jarURI = "WEB-INF/lib/" + module[1].getName();
+			jarURI = "WEB-INF/lib/" + module[1].getName(); //$NON-NLS-1$
 		}
 		IPath jarPath = path.append(jarURI);
 		// Make our best determination of the path to the old jar
@@ -416,7 +416,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
 		IStatus[] children = new IStatus[status.size()];
 		status.toArray(children);
-		String message = Messages.errorPublish;
+		String message = Msgs.errorPublish;
 		MultiStatus status2 = new MultiStatus(TomcatPlugin.PLUGIN_ID, 0, children, message, null);
 		throw new CoreException(status2);
 	}
@@ -429,4 +429,16 @@ public class LiferayPublishOperation extends PublishOperation {
 		for (int i = 0; i < size; i++)
 			list.add(a[i]);
 	}
+
+    private static class Msgs extends NLS
+    {
+        public static String errorPublish;
+        public static String publishServer;
+        public static String publishWebModule;
+
+        static
+        {
+            initializeMessages( LiferayPublishOperation.class.getName(), Msgs.class );
+        }
+    }
 }

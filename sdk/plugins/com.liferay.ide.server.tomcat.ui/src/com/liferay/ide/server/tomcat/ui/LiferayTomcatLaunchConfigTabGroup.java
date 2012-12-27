@@ -63,6 +63,6 @@ public class LiferayTomcatLaunchConfigTabGroup extends TomcatLaunchConfiguration
 
     protected String getServerTypeId()
     {
-        return "com.liferay.ide.eclipse.server.tomcat";
+        return "com.liferay.ide.eclipse.server.tomcat"; //$NON-NLS-1$
     }
 }

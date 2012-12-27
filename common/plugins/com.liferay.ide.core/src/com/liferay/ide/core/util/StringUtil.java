@@ -25,5 +25,6 @@ public class StringUtil
     public static String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
     public static String EMPTY = ""; //$NON-NLS-1$
     public static String EQUALS = "="; //$NON-NLS-1$
+    public static String FORWARD_SLASH = "/"; //$NON-NLS-1$
     public static String SPACE = " "; //$NON-NLS-1$
 }

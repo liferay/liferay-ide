@@ -37,7 +37,7 @@ import org.eclipse.wst.server.core.IRuntime;
 public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspathProvider
 {
 
-    private static final String[] JARS = { "portal-impl.jar", "portal-service.jar", "support-tomcat.jar", };
+    private static final String[] JARS = { "portal-impl.jar", "portal-service.jar", "support-tomcat.jar", }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     public LiferayTomcatRuntimeClasspathProvider()
     {
@@ -204,10 +204,10 @@ public class LiferayTomcatRuntimeClasspathProvider extends TomcatRuntimeClasspat
     {
         List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
 
-        if( runtimeTypeId.endsWith( "60" ) || runtimeTypeId.endsWith( "70" ) ||
-            installPath.append( "lib" ).toFile().exists() )
+        if( runtimeTypeId.endsWith( "60" ) || runtimeTypeId.endsWith( "70" ) || //$NON-NLS-1$ //$NON-NLS-2$
+            installPath.append( "lib" ).toFile().exists() ) //$NON-NLS-1$
         {
-            IPath path = installPath.append( "lib" );
+            IPath path = installPath.append( "lib" ); //$NON-NLS-1$
 
             addLibraryEntries( list, path.toFile(), true );
         }

@@ -72,9 +72,9 @@
          point="org.eclipse.wst.server.core.publishers">
       <publisher
             class="org.eclipse.jst.server.tomcat.ui.internal.ContextPublisherDelegate"
-            description="Prompt to update context paths when they are out of sync."
+            description="%update.context.path.publisher.description"
             id="com.liferay.ide.server.tomcat.ui.context"
-            name="Update context path"
+            name="%update.context.path.publisher.name"
             order="0"
             typeIds="com.liferay.ide.*">
       </publisher>
@@ -156,7 +156,7 @@
          <menu
                icon="icons/e16/liferay.png"
                id="liferayPopupMenuCategory"
-               label="Liferay">
+               label="%menu.label">
             <separator
                   name="slot1">
             </separator>
@@ -171,9 +171,9 @@
                enablesFor="1"
                icon="icons/e16/clear_16x16.gif"
                id="com.liferay.ide.project.ui.cleanAppServer"
-               label="Clean App Server..."
+               label="%clean.app.server.action.label"
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Clean App Server...">
+               tooltip="%clean.app.server.action.tooltip">
          </action>
          <enablement>
             <adapt
