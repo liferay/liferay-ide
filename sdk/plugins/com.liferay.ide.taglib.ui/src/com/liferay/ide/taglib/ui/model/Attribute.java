@@ -40,14 +40,14 @@ public interface Attribute extends IModelElement
 
     @XmlBinding( path = "name" )
     @ReadOnly
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
     // *** Value ***
 
     @XmlBinding( path = "value" )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<String> getValue();
 
@@ -55,7 +55,7 @@ public interface Attribute extends IModelElement
 
     @XmlBinding( path = "default-value" )
     @ReadOnly
-    ValueProperty PROP_DEFAULT_VALUE = new ValueProperty( TYPE, "DefaultValue" );
+    ValueProperty PROP_DEFAULT_VALUE = new ValueProperty( TYPE, "DefaultValue" ); //$NON-NLS-1$
 
     Value<String> getDefaultValue();
 
@@ -64,7 +64,7 @@ public interface Attribute extends IModelElement
     @XmlBinding( path = "description" )
     @ReadOnly
     @CustomXmlValueBinding( impl = DescriptionBinding.class )
-    ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" );
+    ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" ); //$NON-NLS-1$
 
     Value<String> getDescription();
 
@@ -73,7 +73,7 @@ public interface Attribute extends IModelElement
     @Type( base = Boolean.class )
     @XmlBinding( path = "required" )
     @ReadOnly
-    ValueProperty PROP_REQUIRED = new ValueProperty( TYPE, "Required" );
+    ValueProperty PROP_REQUIRED = new ValueProperty( TYPE, "Required" ); //$NON-NLS-1$
 
     Value<Boolean> isRequired();
 
@@ -81,7 +81,7 @@ public interface Attribute extends IModelElement
 
     @XmlBinding( path = "type" )
     @ReadOnly
-    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" );
+    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" ); //$NON-NLS-1$
 
     Value<String> getType();
 

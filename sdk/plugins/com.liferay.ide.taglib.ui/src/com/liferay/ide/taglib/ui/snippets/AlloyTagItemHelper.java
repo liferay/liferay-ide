@@ -11,6 +11,7 @@
 package com.liferay.ide.taglib.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.taglib.ui.TaglibUI;
 import com.liferay.ide.taglib.ui.model.Tag;
 import com.liferay.ide.ui.snippets.SnippetsUIPlugin;
@@ -65,14 +66,14 @@ public class AlloyTagItemHelper {
 
 	public static String getInsertString(final Shell host, ISnippetItem item, IEditorInput editorInput, boolean clearModality) {
 		if (item == null)
-			return ""; //$NON-NLS-1$
+			return StringUtil.EMPTY;
 		String insertString = null;
 
 		Tag model = getTagModel(editorInput, item);
 
 		AlloyTagInsertDialog dialog =
 			new AlloyTagInsertDialog( host, model, TaglibUI.PLUGIN_ID +
-				"/com/liferay/ide/taglib/ui/snippets/AlloyTag.sdef!tagInsertDialog", clearModality );
+				"/com/liferay/ide/taglib/ui/snippets/AlloyTag.sdef!tagInsertDialog", clearModality ); //$NON-NLS-1$
 
 		// VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, clearModality);
 		// dialog.setItem(item);
@@ -140,7 +141,7 @@ public class AlloyTagItemHelper {
             {
                 if( container != null && container.exists() )
                 {
-                    tldFile = container.getFile( new Path( "WEB-INF/tld/alloy.tld") );
+                    tldFile = container.getFile( new Path( "WEB-INF/tld/alloy.tld") ); //$NON-NLS-1$
 
                     if (tldFile.exists()) {
                         try {
@@ -162,7 +163,7 @@ public class AlloyTagItemHelper {
 		{
 			// read alloy from plugin
 			try {
-				URL alloyURL = FileLocator.toFileURL( TaglibUI.getDefault().getBundle().getEntry( "deps/alloy.tld" ) );
+				URL alloyURL = FileLocator.toFileURL( TaglibUI.getDefault().getBundle().getEntry( "deps/alloy.tld" ) ); //$NON-NLS-1$
 				File alloyFile = new File(alloyURL.getFile());
 				tldDocument = docFactory.newDocumentBuilder().parse(alloyFile);
 			}
@@ -176,14 +177,14 @@ public class AlloyTagItemHelper {
 		}
 
 		try {
-			NodeList tags = tldDocument.getElementsByTagName("tag");
+			NodeList tags = tldDocument.getElementsByTagName("tag"); //$NON-NLS-1$
 
 			Element alloyTag = null;
 
 			for (int i = 0; i < tags.getLength(); i++) {
 				Element tag = (Element) tags.item(i);
 
-				NodeList children = tag.getElementsByTagName("name");
+				NodeList children = tag.getElementsByTagName("name"); //$NON-NLS-1$
 
 				if (children.getLength() > 0) {
 					String name = children.item(0).getChildNodes().item(0).getNodeValue();
@@ -203,43 +204,43 @@ public class AlloyTagItemHelper {
 
 			DocumentBuilder newDocumentBuilder = docFactory.newDocumentBuilder();
 			Document doc = newDocumentBuilder.newDocument();
-			Element destTag = doc.createElement("tag");
+			Element destTag = doc.createElement("tag"); //$NON-NLS-1$
 
-			Element name = doc.createElement("name");
+			Element name = doc.createElement("name"); //$NON-NLS-1$
 			name.appendChild(doc.createTextNode(item.getLabel()));
 			destTag.appendChild(name);
 
-			Element prefix = doc.createElement("prefix");
-			prefix.appendChild(doc.createTextNode("alloy"));
+			Element prefix = doc.createElement("prefix"); //$NON-NLS-1$
+			prefix.appendChild(doc.createTextNode("alloy")); //$NON-NLS-1$
 			destTag.appendChild(prefix);
 
-			Element required = (Element) destTag.appendChild(doc.createElement("required"));
-			Element events = (Element) destTag.appendChild(doc.createElement("events"));
-			Element other = (Element) destTag.appendChild(doc.createElement("other"));
+			Element required = (Element) destTag.appendChild(doc.createElement("required")); //$NON-NLS-1$
+			Element events = (Element) destTag.appendChild(doc.createElement("events")); //$NON-NLS-1$
+			Element other = (Element) destTag.appendChild(doc.createElement("other")); //$NON-NLS-1$
 
-			NodeList attrs = alloyTag.getElementsByTagName("attribute");
+			NodeList attrs = alloyTag.getElementsByTagName("attribute"); //$NON-NLS-1$
 			for (int i = 0; i < attrs.getLength(); i++) {
 				try {
 					Element attr = (Element) attrs.item(i);
 					String desc =
-						( (Element) attr.getElementsByTagName( "description" ).item( 0 ) ).getFirstChild().getNodeValue();
-					String json = desc.substring(desc.indexOf("<!--") + 4, desc.indexOf("-->"));
+						( (Element) attr.getElementsByTagName( "description" ).item( 0 ) ).getFirstChild().getNodeValue(); //$NON-NLS-1$
+					String json = desc.substring(desc.indexOf("<!--") + 4, desc.indexOf("-->")); //$NON-NLS-1$ //$NON-NLS-2$
 					JSONObject jsonObject = new JSONObject(json);
 					Node newAttr = null;
 
-					if (jsonObject.getBoolean("required")) {
+					if (jsonObject.getBoolean("required")) { //$NON-NLS-1$
 						newAttr = required.appendChild(doc.importNode(attr, true));
 					}
-					else if (jsonObject.getBoolean("event")) {
+					else if (jsonObject.getBoolean("event")) { //$NON-NLS-1$
 						newAttr = events.appendChild(doc.importNode(attr, true));
 					}
 					else {
 						newAttr = other.appendChild(doc.importNode(attr, true));
 					}
 
-					if (jsonObject.has("defaultValue")) {
-						Element defaultValElement = doc.createElement("default-value");
-						defaultValElement.appendChild(doc.createTextNode(jsonObject.get("defaultValue").toString()));
+					if (jsonObject.has("defaultValue")) { //$NON-NLS-1$
+						Element defaultValElement = doc.createElement("default-value"); //$NON-NLS-1$
+						defaultValElement.appendChild(doc.createTextNode(jsonObject.get("defaultValue").toString())); //$NON-NLS-1$
 						newAttr.appendChild(defaultValElement);
 					}
 				}
@@ -251,7 +252,7 @@ public class AlloyTagItemHelper {
 			doc.appendChild(destTag);
 
 			Transformer trans = TransformerFactory.newInstance().newTransformer();
-			trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+			trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
 
 			// create string from xml tree
 			StringWriter sw = new StringWriter();

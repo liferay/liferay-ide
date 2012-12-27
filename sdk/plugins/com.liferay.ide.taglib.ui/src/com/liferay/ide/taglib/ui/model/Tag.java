@@ -45,7 +45,7 @@ public interface Tag extends IModelElement
 
     @XmlBinding( path = "name" )
     @ReadOnly
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
@@ -53,7 +53,7 @@ public interface Tag extends IModelElement
 
     @XmlBinding( path = "prefix" )
     @ReadOnly
-    ValueProperty PROP_PREFIX = new ValueProperty( TYPE, "Prefix" );
+    ValueProperty PROP_PREFIX = new ValueProperty( TYPE, "Prefix" ); //$NON-NLS-1$
 
     Value<String> getPrefix();
 
@@ -70,7 +70,7 @@ public interface Tag extends IModelElement
             type = Attribute.class 
         ) 
     )
-    ListProperty PROP_REQUIRED_ATTRIBUTES = new ListProperty( TYPE, "RequiredAttributes" );
+    ListProperty PROP_REQUIRED_ATTRIBUTES = new ListProperty( TYPE, "RequiredAttributes" ); //$NON-NLS-1$
 
     ModelElementList<Attribute> getRequiredAttributes();
 
@@ -87,7 +87,7 @@ public interface Tag extends IModelElement
             type = Attribute.class 
         ) 
     )
-    ListProperty PROP_EVENTS = new ListProperty( TYPE, "Events" );
+    ListProperty PROP_EVENTS = new ListProperty( TYPE, "Events" ); //$NON-NLS-1$
 
     ModelElementList<Attribute> getEvents();
 
@@ -96,21 +96,21 @@ public interface Tag extends IModelElement
     @Type( base = Attribute.class )
     @ReadOnly
     @XmlListBinding( path = "other", mappings = @XmlListBinding.Mapping( element = "attribute", type = Attribute.class ) )
-    ListProperty PROP_OTHER_ATTRIBUTES = new ListProperty( TYPE, "OtherAttributes" );
+    ListProperty PROP_OTHER_ATTRIBUTES = new ListProperty( TYPE, "OtherAttributes" ); //$NON-NLS-1$
 
     ModelElementList<Attribute> getOtherAttributes();
 
     @Service( impl = PreviewSourceContentProvider.class )
     @DependsOn( { "RequiredAttributes/*", "Events/*", "OtherAttributes/*" } )
     @ReadOnly
-    ValueProperty PROP_PREVIEW = new ValueProperty( TYPE, "Preview" );
+    ValueProperty PROP_PREVIEW = new ValueProperty( TYPE, "Preview" ); //$NON-NLS-1$
 
     Value<String> getPreview();
 
     @Service( impl = PreviewSourceContentProvider.class )
     @DependsOn( { "RequiredAttributes/*", "Events/*", "OtherAttributes/*" } )
     @ReadOnly
-    ValueProperty PROP_SOURCE = new ValueProperty( TYPE, "Source" );
+    ValueProperty PROP_SOURCE = new ValueProperty( TYPE, "Source" ); //$NON-NLS-1$
 
     Value<String> getSource();
 }

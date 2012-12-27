@@ -15,6 +15,7 @@
 
 package com.liferay.ide.taglib.ui.model.internal;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.taglib.ui.model.Attribute;
 import com.liferay.ide.taglib.ui.model.Tag;
 
@@ -32,7 +33,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
     @Override
     protected DerivedValueServiceData compute()
     {
-        boolean preview = "Preview".equals( context( ModelProperty.class ).getName() );
+        boolean preview = "Preview".equals( context( ModelProperty.class ).getName() ); //$NON-NLS-1$
 
         Tag tag = (Tag) context( IModelElement.class );;
 
@@ -44,18 +45,18 @@ public class PreviewSourceContentProvider extends DerivedValueService
 
         if( preview )
         {
-            buffer.append( "<span style='color:RGB(64,128,128)'>&lt;" );
+            buffer.append( "<span style='color:RGB(64,128,128)'>&lt;" ); //$NON-NLS-1$
         }
         else
         {
-            buffer.append( "<" );
+            buffer.append( "<" ); //$NON-NLS-1$
         }
 
-        buffer.append( prefix + ":" + tagName );
+        buffer.append( prefix + ":" + tagName ); //$NON-NLS-1$
 
         if( preview )
         {
-            buffer.append( "</span>" );
+            buffer.append( "</span>" ); //$NON-NLS-1$
         }
 
         for( Attribute attr : tag.getRequiredAttributes() )
@@ -75,22 +76,22 @@ public class PreviewSourceContentProvider extends DerivedValueService
 
         if( preview )
         {
-            buffer.append( "<span style='color:RGB(64,128,128)'>&gt;&lt;" );
+            buffer.append( "<span style='color:RGB(64,128,128)'>&gt;&lt;" ); //$NON-NLS-1$
         }
         else
         {
-            buffer.append( "><" );
+            buffer.append( "><" ); //$NON-NLS-1$
         }
 
-        buffer.append( "/" + prefix + ":" + tagName );
+        buffer.append( "/" + prefix + ":" + tagName ); //$NON-NLS-1$ //$NON-NLS-2$
 
         if( preview )
         {
-            buffer.append( "&gt;</span>" );
+            buffer.append( "&gt;</span>" ); //$NON-NLS-1$
         }
         else
         {
-            buffer.append( ">" );
+            buffer.append( ">" ); //$NON-NLS-1$
         }
 
         return new DerivedValueServiceData( buffer.toString() );
@@ -102,40 +103,40 @@ public class PreviewSourceContentProvider extends DerivedValueService
 
         if( content != null )
         {
-            buffer.append( " " );
+            buffer.append( StringUtil.SPACE );
 
             if( preview )
             {
-                buffer.append( "<span style='color:RGB(127,0,127)'>" );
+                buffer.append( "<span style='color:RGB(127,0,127)'>" ); //$NON-NLS-1$
             }
 
             buffer.append( attr.getName().getContent() );
 
             if( preview )
             {
-                buffer.append( "</span>" );
+                buffer.append( "</span>" ); //$NON-NLS-1$
             }
 
-            buffer.append( "=" );
+            buffer.append( StringUtil.EQUALS );
 
             if( preview )
             {
-                buffer.append( "<span style='color:RGB(42,0,255);font-style:italic'>&quot;" );
+                buffer.append( "<span style='color:RGB(42,0,255);font-style:italic'>&quot;" ); //$NON-NLS-1$
             }
             else
             {
-                buffer.append( "\"" );
+                buffer.append( StringUtil.DOUBLE_QUOTE );
             }
 
             buffer.append( content );
 
             if( preview )
             {
-                buffer.append( "&quot;</span>" );
+                buffer.append( "&quot;</span>" ); //$NON-NLS-1$
             }
             else
             {
-                buffer.append( "\"" );
+                buffer.append( StringUtil.DOUBLE_QUOTE );
             }
         }
     }

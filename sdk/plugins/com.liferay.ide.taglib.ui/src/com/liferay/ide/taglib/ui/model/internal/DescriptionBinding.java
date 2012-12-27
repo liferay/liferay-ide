@@ -15,6 +15,8 @@
 
 package com.liferay.ide.taglib.ui.model.internal;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
@@ -31,7 +33,7 @@ public class DescriptionBinding extends XmlValueBindingImpl
 
         final XmlElement element = xml( false );
 
-        XmlElement desc = element.getChildElement( "description", false );
+        XmlElement desc = element.getChildElement( "description", false ); //$NON-NLS-1$
 
         if( desc != null )
         {
@@ -40,7 +42,7 @@ public class DescriptionBinding extends XmlValueBindingImpl
             // remove everything that is in a comment
             if( value != null )
             {
-                value = value.replaceAll( "<!--.*-->", "" );
+                value = value.replaceAll( "<!--.*-->", StringUtil.EMPTY ); //$NON-NLS-1$
             }
         }
 
