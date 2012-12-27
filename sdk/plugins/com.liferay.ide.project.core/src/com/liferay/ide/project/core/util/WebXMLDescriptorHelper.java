@@ -173,48 +173,48 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
 
         if( typeId != null && typeId.contains( "2.3" ) )
         {
-            Element taglibNextSibling = findChildElement( docRoot, "resource-env-ref" );
+            Element taglibNextSibling = NodeUtil.findChildElement( docRoot, "resource-env-ref" );
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "resource-ref" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "resource-ref" );
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "security-constraint" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "security-constraint" );
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "login-config" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "login-config" );
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "security-role" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "security-role" );
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "env-entry" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "env-entry" );
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "ejb-ref" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "ejb-ref" );
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = findChildElement( docRoot, "ejb-local-ref" );
+                taglibNextSibling = NodeUtil.findChildElement( docRoot, "ejb-local-ref" );
             }
 
-            Element taglib = insertChildElement( docRoot, taglibNextSibling, "taglib", "" );
+            Element taglib = NodeUtil.insertChildElement( docRoot, taglibNextSibling, "taglib", "" );
 
-            appendChildElement( taglib, "taglib-uri", tagLibRefType.getTaglibURI() );
+            NodeUtil.appendChildElement( taglib, "taglib-uri", tagLibRefType.getTaglibURI() );
 
-            appendChildElement( taglib, "taglib-location", tagLibRefType.getTaglibLocation() );
+            NodeUtil.appendChildElement( taglib, "taglib-location", tagLibRefType.getTaglibLocation() );
 
             if( taglibNextSibling == null )
             {
@@ -227,18 +227,18 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
         }
         else
         {
-            Element jspConfig = findChildElement( docRoot, "jsp-config" );
+            Element jspConfig = NodeUtil.findChildElement( docRoot, "jsp-config" );
 
             if( jspConfig == null )
             {
-                jspConfig = appendChildElement( docRoot, "jsp-config" );
+                jspConfig = NodeUtil.appendChildElement( docRoot, "jsp-config" );
             }
 
-            Element taglib = appendChildElement( jspConfig, "taglib" );
+            Element taglib = NodeUtil.appendChildElement( jspConfig, "taglib" );
 
-            appendChildElement( taglib, "taglib-uri", tagLibRefType.getTaglibURI() );
+            NodeUtil.appendChildElement( taglib, "taglib-uri", tagLibRefType.getTaglibURI() );
 
-            appendChildElement( taglib, "taglib-location", tagLibRefType.getTaglibLocation() );
+            NodeUtil.appendChildElement( taglib, "taglib-location", tagLibRefType.getTaglibLocation() );
 
             docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) );
 

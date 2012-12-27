@@ -94,7 +94,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
 
             customElement = document.createElement( "custom" ); //$NON-NLS-1$
             docRoot.insertBefore( customElement, standardElement );
-            appendTextNode( docRoot, "\n" ); //$NON-NLS-1$
+            NodeUtil.appendTextNode( docRoot, "\n" ); //$NON-NLS-1$
         }
 
         customElement.appendChild( layoutTemplateElement );
@@ -104,9 +104,9 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
         String wapTemplatePath = model.getStringProperty( LAYOUT_WAP_TEMPLATE_FILE );
         String thumbnailPath = model.getStringProperty( LAYOUT_THUMBNAIL_FILE );
 
-        appendChildElement( layoutTemplateElement, "template-path", templatePath ); //$NON-NLS-1$
-        appendChildElement( layoutTemplateElement, "wap-template-path", wapTemplatePath ); //$NON-NLS-1$
-        appendChildElement( layoutTemplateElement, "thumbnail-path", thumbnailPath ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( layoutTemplateElement, "template-path", templatePath ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( layoutTemplateElement, "wap-template-path", wapTemplatePath ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( layoutTemplateElement, "thumbnail-path", thumbnailPath ); //$NON-NLS-1$
 
         // format the new node added to the model;
         FormatProcessorXML processor = new FormatProcessorXML();

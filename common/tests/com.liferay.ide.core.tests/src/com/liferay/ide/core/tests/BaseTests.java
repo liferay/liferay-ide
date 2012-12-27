@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
-public class CoreTests
+public class BaseTests
 {
 
     protected final IProject createProject( final String name ) throws Exception

@@ -3,7 +3,7 @@ package com.liferay.ide.portal.core.tests;
 
 import static org.junit.Assert.assertEquals;
 
-import com.liferay.ide.core.tests.CoreTests;
+import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.portal.core.model.StructuresRoot;
 
 import org.eclipse.core.resources.IFile;
@@ -13,7 +13,7 @@ import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PortalCoreTests extends CoreTests
+public class PortalCoreTests extends BaseTests
 {
 
     private static final String STRUCTURES_TODO_XML = "structures/todo.xml";

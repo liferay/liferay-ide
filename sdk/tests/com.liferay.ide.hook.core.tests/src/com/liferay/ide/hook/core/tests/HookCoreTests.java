@@ -1,7 +1,7 @@
 
 package com.liferay.ide.hook.core.tests;
 
-import com.liferay.ide.core.tests.CoreTests;
+import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook610;
 import com.liferay.ide.hook.core.model.HookVersionType;
@@ -16,7 +16,7 @@ import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HookCoreTests extends CoreTests
+public class HookCoreTests extends BaseTests
 {
 
     private static final String LIFERAY_HOOK_610_XML = "files/liferay-hook-610.xml";

@@ -1,7 +1,7 @@
 
 package com.liferay.ide.project.core.tests;
 
-import com.liferay.ide.core.tests.CoreTests;
+import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -23,7 +23,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ProjectCoreTests extends CoreTests
+public class ProjectCoreTests extends BaseTests
 {
 
     private IProject a;

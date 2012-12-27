@@ -282,7 +282,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         if( id == null )
         {
-            appendChildElement( category, "portlet" ).setAttribute( "id", modelId ); //$NON-NLS-1$ //$NON-NLS-2$
+            NodeUtil.appendChildElement( category, "portlet" ).setAttribute( "id", modelId ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         // format the new node added to the model;
@@ -301,32 +301,32 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         // new <portlet> element
         Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( LIFERAY_PORTLET_NAME ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( LIFERAY_PORTLET_NAME ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "icon", model.getStringProperty( ICON_FILE ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "icon", model.getStringProperty( ICON_FILE ) ); //$NON-NLS-1$
 
         if( model.getBooleanProperty( ADD_TO_CONTROL_PANEL ) )
         {
             String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", StringUtil.EMPTY ); //$NON-NLS-1$
-            appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory ); //$NON-NLS-1$
-            appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) ); //$NON-NLS-1$
+            NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory ); //$NON-NLS-1$
+            NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) ); //$NON-NLS-1$
 
             if( model.getBooleanProperty( CREATE_ENTRY_CLASS ) )
             {
-                appendChildElement(
+                NodeUtil.appendChildElement(
                     newPortletElement, "control-panel-entry-class", model.getStringProperty( JAVA_PACKAGE ) + "." + //$NON-NLS-1$ //$NON-NLS-2$
                         model.getStringProperty( ENTRY_CLASS_NAME ) );
             }
         }
 
-        appendChildElement(
+        NodeUtil.appendChildElement(
             newPortletElement, "instanceable", Boolean.toString( model.getBooleanProperty( ALLOW_MULTIPLE ) ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "header-portlet-css", model.getStringProperty( CSS_FILE ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "header-portlet-css", model.getStringProperty( CSS_FILE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "footer-portlet-javascript", model.getStringProperty( JAVASCRIPT_FILE ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "footer-portlet-javascript", model.getStringProperty( JAVASCRIPT_FILE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "css-class-wrapper", model.getStringProperty( CSS_CLASS_WRAPPER ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "css-class-wrapper", model.getStringProperty( CSS_CLASS_WRAPPER ) ); //$NON-NLS-1$
 
         // must append this before any role-mapper elements
         Element firstRoleMapper = null;
@@ -371,38 +371,38 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         // new <portlet> element
         Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( PORTLET_NAME ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "portlet-name", model.getStringProperty( PORTLET_NAME ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "display-name", model.getStringProperty( DISPLAY_NAME ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "display-name", model.getStringProperty( DISPLAY_NAME ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletElement, "portlet-class", getPortletClassText( model ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletElement, "portlet-class", getPortletClassText( model ) ); //$NON-NLS-1$
 
         // add <init-param> elements as needed
         List<ParamValue> initParams = (List<ParamValue>) model.getProperty( INIT_PARAMS );
 
         for( ParamValue initParam : initParams )
         {
-            Element newInitParamElement = appendChildElement( newPortletElement, "init-param" ); //$NON-NLS-1$
+            Element newInitParamElement = NodeUtil.appendChildElement( newPortletElement, "init-param" ); //$NON-NLS-1$
 
-            appendChildElement( newInitParamElement, "name", initParam.getName() ); //$NON-NLS-1$
+            NodeUtil.appendChildElement( newInitParamElement, "name", initParam.getName() ); //$NON-NLS-1$
 
-            appendChildElement( newInitParamElement, "value", initParam.getValue() ); //$NON-NLS-1$
+            NodeUtil.appendChildElement( newInitParamElement, "value", initParam.getValue() ); //$NON-NLS-1$
         }
 
         // expiration cache
-        appendChildElement( newPortletElement, "expiration-cache", "0" ); //$NON-NLS-1$ //$NON-NLS-2$
+        NodeUtil.appendChildElement( newPortletElement, "expiration-cache", "0" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         // supports node
-        Element newSupportsElement = appendChildElement( newPortletElement, "supports" ); //$NON-NLS-1$
+        Element newSupportsElement = NodeUtil.appendChildElement( newPortletElement, "supports" ); //$NON-NLS-1$
 
-        appendChildElement( newSupportsElement, "mime-type", "text/html" ); //$NON-NLS-1$ //$NON-NLS-2$
+        NodeUtil.appendChildElement( newSupportsElement, "mime-type", "text/html" ); //$NON-NLS-1$ //$NON-NLS-2$
 
         // for all support modes need to add into
         for( String portletMode : ALL_PORTLET_MODES )
         {
             if( model.getBooleanProperty( portletMode ) )
             {
-                appendChildElement(
+                NodeUtil.appendChildElement(
                     newSupportsElement, "portlet-mode", //$NON-NLS-1$
                     model.getPropertyDescriptor( portletMode ).getPropertyDescription() );
             }
@@ -413,22 +413,22 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             // need to remove .properties off the end of the bundle_file_path
             String bundlePath = model.getStringProperty( CREATE_RESOURCE_BUNDLE_FILE_PATH );
             String bundleValue = bundlePath.replaceAll( "\\.properties$", StringUtil.EMPTY ); //$NON-NLS-1$
-            appendChildElement( newPortletElement, "resource-bundle", bundleValue ); //$NON-NLS-1$
+            NodeUtil.appendChildElement( newPortletElement, "resource-bundle", bundleValue ); //$NON-NLS-1$
         }
 
         // add portlet-info
-        Element newPortletInfoElement = appendChildElement( newPortletElement, "portlet-info" ); //$NON-NLS-1$
+        Element newPortletInfoElement = NodeUtil.appendChildElement( newPortletElement, "portlet-info" ); //$NON-NLS-1$
 
-        appendChildElement( newPortletInfoElement, "title", model.getStringProperty( TITLE ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletInfoElement, "title", model.getStringProperty( TITLE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletInfoElement, "short-title", model.getStringProperty( SHORT_TITLE ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletInfoElement, "short-title", model.getStringProperty( SHORT_TITLE ) ); //$NON-NLS-1$
 
-        appendChildElement( newPortletInfoElement, "keywords", model.getStringProperty( KEYWORDS ) ); //$NON-NLS-1$
+        NodeUtil.appendChildElement( newPortletInfoElement, "keywords", model.getStringProperty( KEYWORDS ) ); //$NON-NLS-1$
 
         // security role refs
         for( String roleName : DEFAULT_SECURITY_ROLE_NAMES )
         {
-            appendChildElement( appendChildElement( newPortletElement, "security-role-ref" ), "role-name", roleName ); //$NON-NLS-1$ //$NON-NLS-2$
+            NodeUtil.appendChildElement( NodeUtil.appendChildElement( newPortletElement, "security-role-ref" ), "role-name", roleName ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         // check for event-definition elements

@@ -33,7 +33,6 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -168,73 +167,6 @@ public class DescriptorHelper
         }
     }
 
-    public static Element appendChildElement( Element parentElement, String newElementName )
-    {
-        return appendChildElement( parentElement, newElementName, null );
-    }
-
-    public static Element appendChildElement( Element parentElement, String newElementName, String initialTextContent )
-    {
-        Element newChildElement = null;
-
-        if( parentElement != null && newElementName != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
-
-            newChildElement = ownerDocument.createElement( newElementName );
-
-            if( initialTextContent != null )
-            {
-                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
-            }
-
-            parentElement.appendChild( newChildElement );
-        }
-
-        return newChildElement;
-    }
-
-    public static Node appendTextNode( Element parentElement, String initialTextContent )
-    {
-        Node newChildElement = null;
-
-        if( parentElement != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
-
-            newChildElement = ownerDocument.createTextNode( initialTextContent );
-
-            parentElement.appendChild( newChildElement );
-        }
-
-        return newChildElement;
-    }
-
-    public static Element findChildElement( Element parentElement, String elementName )
-    {
-        Element retval = null;
-
-        if( parentElement == null )
-        {
-            return retval;
-        }
-
-        NodeList children = parentElement.getChildNodes();
-
-        for( int i = 0; i < children.getLength(); i++ )
-        {
-            Node child = children.item( i );
-
-            if( child instanceof Element && child.getNodeName().equals( elementName ) )
-            {
-                retval = (Element) child;
-                break;
-            }
-        }
-
-        return retval;
-    }
-
     public static IFile getDescriptorFile( IProject project, String fileName )
     {
         IVirtualFolder docroot = CoreUtil.getDocroot( project );
@@ -256,43 +188,6 @@ public class DescriptorHelper
         }
 
         return null;
-    }
-
-    public static Element insertChildElement(
-        Element parentElement, Node refNode, String newElementName, String initialTextContent )
-    {
-        Element newChildElement = null;
-
-        if( parentElement != null && newElementName != null )
-        {
-            Document ownerDocument = parentElement.getOwnerDocument();
-
-            newChildElement = ownerDocument.createElement( newElementName );
-
-            if( initialTextContent != null )
-            {
-                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
-            }
-
-            parentElement.insertBefore( newChildElement, refNode );
-        }
-
-        return newChildElement;
-    }
-
-    public static void removeChildren( Node node )
-    {
-        if( node == null || node.getChildNodes() == null || node.getChildNodes().getLength() <= 0 )
-        {
-            return;
-        }
-
-        NodeList children = node.getChildNodes();
-
-        for( int i = 0; i < children.getLength(); i++ )
-        {
-            node.removeChild( children.item( i ) );
-        }
     }
 
     protected String descriptorPath;

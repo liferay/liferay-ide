@@ -16,8 +16,8 @@
 package com.liferay.ide.hook.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringBufferOutputStream;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;

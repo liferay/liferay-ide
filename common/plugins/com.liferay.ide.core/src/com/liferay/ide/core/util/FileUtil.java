@@ -18,6 +18,7 @@
 package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.StringBufferOutputStream;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

@@ -15,7 +15,7 @@
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.core.util;
+package com.liferay.ide.core;
 
 import java.io.IOException;
 import java.io.OutputStream;

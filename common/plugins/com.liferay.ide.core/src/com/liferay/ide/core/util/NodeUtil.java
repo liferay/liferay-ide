@@ -17,6 +17,7 @@
 
 package com.liferay.ide.core.util;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -27,6 +28,73 @@ import org.w3c.dom.Text;
  */
 public class NodeUtil
 {
+
+    public static Element appendChildElement( Element parentElement, String newElementName )
+    {
+        return NodeUtil.appendChildElement( parentElement, newElementName, null );
+    }
+
+    public static Element appendChildElement( Element parentElement, String newElementName, String initialTextContent )
+    {
+        Element newChildElement = null;
+
+        if( parentElement != null && newElementName != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
+
+            newChildElement = ownerDocument.createElement( newElementName );
+
+            if( initialTextContent != null )
+            {
+                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
+            }
+
+            parentElement.appendChild( newChildElement );
+        }
+
+        return newChildElement;
+    }
+
+    public static Node appendTextNode( Element parentElement, String initialTextContent )
+    {
+        Node newChildElement = null;
+
+        if( parentElement != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
+
+            newChildElement = ownerDocument.createTextNode( initialTextContent );
+
+            parentElement.appendChild( newChildElement );
+        }
+
+        return newChildElement;
+    }
+
+    public static Element findChildElement( Element parentElement, String elementName )
+    {
+        Element retval = null;
+
+        if( parentElement == null )
+        {
+            return retval;
+        }
+
+        NodeList children = parentElement.getChildNodes();
+
+        for( int i = 0; i < children.getLength(); i++ )
+        {
+            Node child = children.item( i );
+
+            if( child instanceof Element && child.getNodeName().equals( elementName ) )
+            {
+                retval = (Element) child;
+                break;
+            }
+        }
+
+        return retval;
+    }
 
     public static Node findFirstChild( Element element, String elementName )
     {
@@ -115,11 +183,48 @@ public class NodeUtil
         return s.toString().trim();
     }
 
+    public static Element insertChildElement(
+        Element parentElement, Node refNode, String newElementName, String initialTextContent )
+    {
+        Element newChildElement = null;
+
+        if( parentElement != null && newElementName != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
+
+            newChildElement = ownerDocument.createElement( newElementName );
+
+            if( initialTextContent != null )
+            {
+                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
+            }
+
+            parentElement.insertBefore( newChildElement, refNode );
+        }
+
+        return newChildElement;
+    }
+
     public static void removeChildren( Element element )
     {
         while( element != null && element.hasChildNodes() )
         {
             element.removeChild( element.getFirstChild() );
+        }
+    }
+
+    public static void removeChildren( Node node )
+    {
+        if( node == null || node.getChildNodes() == null || node.getChildNodes().getLength() <= 0 )
+        {
+            return;
+        }
+
+        NodeList children = node.getChildNodes();
+
+        for( int i = 0; i < children.getLength(); i++ )
+        {
+            node.removeChild( children.item( i ) );
         }
     }
 
