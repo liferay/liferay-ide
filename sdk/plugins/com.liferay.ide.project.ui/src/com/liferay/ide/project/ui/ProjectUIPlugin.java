@@ -37,16 +37,16 @@ import org.osgi.framework.BundleContext;
 public class ProjectUIPlugin extends AbstractUIPlugin
 {
 
-    public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location";
+    public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.project.ui";
+    public static final String PLUGIN_ID = "com.liferay.ide.project.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static ProjectUIPlugin plugin;
 
     // Shared images
-    public static final String IMAGE_ID = "war.image";
+    public static final String IMAGE_ID = "war.image"; //$NON-NLS-1$
 
     /**
      * Returns the shared instance
@@ -130,7 +130,7 @@ public class ProjectUIPlugin extends AbstractUIPlugin
     protected void initializeImageRegistry( ImageRegistry registry )
     {
         Bundle bundle = Platform.getBundle( PLUGIN_ID );
-        IPath path = new Path( "icons/e16/war.gif" );
+        IPath path = new Path( "icons/e16/war.gif" ); //$NON-NLS-1$
         URL url = FileLocator.find( bundle, path, null );
         ImageDescriptor desc = ImageDescriptor.createFromURL( url );
         registry.put( IMAGE_ID, desc );

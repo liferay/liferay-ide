@@ -17,6 +17,7 @@
 
 package com.liferay.ide.project.ui.dialog;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
@@ -41,6 +42,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
@@ -107,8 +109,8 @@ public class LiferayProjectSelectionDialog extends SelectionStatusDialog
     public LiferayProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
     {
         super( parentShell );
-        setTitle( "Project Selection" );
-        setMessage( "Select project" );
+        setTitle( Msgs.projectSelection );
+        setMessage( Msgs.selectProject );
 
         fFilter = filter;
     }
@@ -172,12 +174,12 @@ public class LiferayProjectSelectionDialog extends SelectionStatusDialog
     {
         if( objects.length != 1 )
         {
-            updateStatus( new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, "" ) ); //$NON-NLS-1$
+            updateStatus( new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, StringUtil.EMPTY ) );
             setSelectionResult( null );
         }
         else
         {
-            updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, "" ) ); //$NON-NLS-1$
+            updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringUtil.EMPTY ) );
             setSelectionResult( objects );
         }
     }
@@ -210,5 +212,16 @@ public class LiferayProjectSelectionDialog extends SelectionStatusDialog
      */
     protected void computeResult()
     {
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String projectSelection;
+        public static String selectProject;
+
+        static
+        {
+            initializeMessages( LiferayProjectSelectionDialog.class.getName(), Msgs.class );
+        }
     }
 }

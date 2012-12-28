@@ -23,6 +23,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -48,9 +49,9 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
     {
         super( dataModel );
 
-        setWindowTitle( "Import Projects" );
+        setWindowTitle( Msgs.importProjects );
         setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) ); //$NON-NLS-1$
     }
 
     public SDKProjectsImportWizard( SDK sdk )
@@ -78,7 +79,7 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
             model.setStringProperty( SDKProjectsImportDataModelProvider.LIFERAY_SDK_NAME, sdk.getName() );
         }
 
-        sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage( getDataModel(), "pageOne" );
+        sdkProjectsImportWizardPage = new SDKProjectsImportWizardPage( getDataModel(), "pageOne" ); //$NON-NLS-1$
 
         addPage( sdkProjectsImportWizardPage );
     }
@@ -101,5 +102,15 @@ public class SDKProjectsImportWizard extends DataModelWizard implements IWorkben
         UIUtil.switchToLiferayPerspective();
 
         super.postPerformFinish();
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String importProjects;
+
+        static
+        {
+            initializeMessages( SDKProjectsImportWizard.class.getName(), Msgs.class );
+        }
     }
 }

@@ -51,12 +51,12 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         }
         catch( CoreException e )
         {
-            CorePlugin.logError( "Could not get liferay runtime.", e );
+            CorePlugin.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
         }
 
         if( retval == null )
         {
-            retval = "6.0.0"; // use 6.0.0 as the default
+            retval = "6.0.0"; // use 6.0.0 as the default //$NON-NLS-1$
         }
 
         return retval;
@@ -69,6 +69,6 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         final int major = version.getMajor();
         final int minor = version.getMinor();
 
-        return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0";
+        return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

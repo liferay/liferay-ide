@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.sdk.ISDKConstants;
@@ -59,7 +60,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.internal.ide.StatusUtil;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -99,7 +99,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
         }
     }
 
-    public static final String METADATA_FOLDER = ".metadata";
+    public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
 
     protected long lastModified;
     protected String lastPath;
@@ -114,9 +114,9 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
     {
         super( model, pageName );
 
-        setTitle( "Convert Project" );
+        setTitle( Msgs.convertProject );
 
-        setDescription( "Convert existing project to Liferay plugin." );
+        setDescription( Msgs.convertExistingProject );
     }
 
     public void updateProjectsList( final String path )
@@ -124,7 +124,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
         // on an empty path empty selectedProjects
         if( path == null || path.length() == 0 )
         {
-            setMessage( DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription );
+            setMessage( Msgs.importProjectsDescription );
 
             selectedProjects = new ProjectRecord[0];
 
@@ -166,7 +166,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
                  */
                 public void run( IProgressMonitor monitor )
                 {
-                    monitor.beginTask( DataTransferMessages.WizardProjectsImportPage_SearchingMessage, 100 );
+                    monitor.beginTask( Msgs.searchingMessage, 100 );
 
                     monitor.worked( 10 );
 
@@ -235,7 +235,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
         if( selectedProjects.length == 0 )
         {
-            setMessage( DataTransferMessages.WizardProjectsImportPage_noProjectsToImport, WARNING );
+            setMessage( Msgs.noProjectsToImport, WARNING );
         }
 
         Object[] checkedProjects = projectsList.getCheckedElements();
@@ -275,7 +275,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
             for( File content : contents )
             {
-                if( content.getName().equals( "build.xml" ) ||
+                if( content.getName().equals( "build.xml" ) || //$NON-NLS-1$
                     file.getName().endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
                 {
                     hasBuildXml = true;
@@ -283,7 +283,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
                     continue;
                 }
 
-                if( content.getName().equals( "docroot" ) )
+                if( content.getName().equals( "docroot" ) ) //$NON-NLS-1$
                 {
                     hasDocroot = true;
 
@@ -310,7 +310,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
             return false;
         }
 
-        monitor.subTask( NLS.bind( DataTransferMessages.WizardProjectsImportPage_CheckingMessage, directory.getPath() ) );
+        monitor.subTask( NLS.bind( Msgs.checkingMessage, directory.getPath() ) );
 
         File[] contents = directory.listFiles();
 
@@ -412,7 +412,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
     {
         Label title = new Label( workArea, SWT.NONE );
 
-        title.setText( "Project to import:" );
+        title.setText( Msgs.importProjectLabel );
         title.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false, 3, 1 ) );
 
         // Composite listComposite = new Composite(workArea, SWT.NONE);
@@ -500,7 +500,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
     protected void createSDKLocationField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK Location:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKLocationLabel, 1 );
 
         sdkLocation = SWTUtil.createText( topComposite, 2 );
 
@@ -510,19 +510,19 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
     protected void createSDKVersionField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK Version:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKVersionLabel, 1 );
 
         sdkVersion = SWTUtil.createText( topComposite, 2 );
 
         this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-        SWTUtil.createLabel( topComposite, "", 1 );
+        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
     }
 
     protected void createTargetRuntimeGroup( Composite parent )
     {
         Label label = new Label( parent, SWT.NONE );
-        label.setText( "Liferay target runtime:" );
+        label.setText( Msgs.liferayTargetRuntimeLabel );
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         serverTargetCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
@@ -530,7 +530,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
         Button newServerTargetButton = new Button( parent, SWT.NONE );
 
-        newServerTargetButton.setText( "New..." );
+        newServerTargetButton.setText( Msgs.newButton );
         newServerTargetButton.addSelectionListener( new SelectionAdapter()
         {
             public void widgetSelected( SelectionEvent e )
@@ -538,7 +538,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
                 final DataModelPropertyDescriptor[] preAdditionDescriptors =
                     model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." ); //$NON-NLS-1$
 
                 if( isOK )
                 {
@@ -630,5 +630,25 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
         }
 
         return false;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String checkingMessage;
+        public static String convertExistingProject;
+        public static String convertProject;
+        public static String importProjectLabel;
+        public static String importProjectsDescription;
+        public static String liferayPluginSDKLocationLabel;
+        public static String liferayPluginSDKVersionLabel;
+        public static String liferayTargetRuntimeLabel;
+        public static String newButton;
+        public static String noProjectsToImport;
+        public static String searchingMessage;
+
+        static
+        {
+            initializeMessages( SDKProjectConvertWizardPage.class.getName(), Msgs.class );
+        }
     }
 }

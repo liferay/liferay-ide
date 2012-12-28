@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.IProjectDefinition;
 import com.liferay.ide.project.core.ProjectCorePlugin;
@@ -37,6 +38,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jst.j2ee.internal.web.archive.operations.WebFacetProjectCreationDataModelProvider;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
@@ -225,7 +227,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         {
             Object val = getProperty( propertyName );
 
-            if( IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals( val ) || "".equals( val ) )
+            if( IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals( val ) || StringUtil.EMPTY.equals( val ) )
             {
                 return new DataModelPropertyDescriptor(
                     getProperty( propertyName ), IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION );
@@ -484,12 +486,12 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( ProjectUtil.getProject( testProjectName ).exists() )
             {
-                return ProjectCorePlugin.createErrorStatus( "A project already exists with that name." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.projectExists );
             }
 
             // before we do a basic java validation we need to strip "-" and "." characters
 
-            String nameValidation = testProjectName.replaceAll( "-", "" ).replaceAll( "\\.", "" );
+            String nameValidation = testProjectName.replaceAll( "-", StringUtil.EMPTY ).replaceAll( "\\.", StringUtil.EMPTY ); //$NON-NLS-1$ //$NON-NLS-2$
 
             IStatus status =
                 JavaConventions.validateIdentifier(
@@ -497,7 +499,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( !status.isOK() )
             {
-                return ProjectCorePlugin.createErrorStatus( "Project name is invalid." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.projectNameInvalid );
             }
         }
         else if( LIFERAY_SDK_NAME.equals( propertyName ) )
@@ -506,7 +508,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( sdkVal instanceof String && IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals( sdkVal ) )
             {
-                return ProjectCorePlugin.createErrorStatus( "Plugin SDK must be configured." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.configurePluginSDK );
             }
             else if( !CoreUtil.isNullOrEmpty( sdkVal.toString() ) )
             {
@@ -514,7 +516,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
                 if( sdk == null || !sdk.isValid() )
                 {
-                    return ProjectCorePlugin.createErrorStatus( "Plugin SDK is invalid." );
+                    return ProjectCorePlugin.createErrorStatus( Msgs.pluginSDKInvalid );
                 }
                 else
                 {
@@ -536,7 +538,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( facetRuntime == null )
             {
-                return ProjectCorePlugin.createErrorStatus( "Liferay Portal runtime must be configured and selected." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.configureLiferayPortalRuntime );
             }
             else if( facetRuntime instanceof BridgedRuntime )
             {
@@ -546,7 +548,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
                 }
                 else
                 {
-                    return ProjectCorePlugin.createErrorStatus( "Must select a Liferay Portal runtime." );
+                    return ProjectCorePlugin.createErrorStatus( Msgs.selectLiferayPortalRuntime );
                 }
             }
         }
@@ -566,7 +568,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( selectedSDK == null )
             {
-                return ProjectCorePlugin.createErrorStatus( "Unable to determine SDK version for " + sdkName );
+                return ProjectCorePlugin.createErrorStatus( NLS.bind( Msgs.unableDetermineSDKVersion, sdkName ) );
             }
 
             Version sdkVersion = new Version( selectedSDK.getVersion() );
@@ -589,5 +591,21 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         }
 
         return super.validate( propertyName );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String configureLiferayPortalRuntime;
+        public static String configurePluginSDK;
+        public static String pluginSDKInvalid;
+        public static String projectExists;
+        public static String projectNameInvalid;
+        public static String selectLiferayPortalRuntime;
+        public static String unableDetermineSDKVersion;
+
+        static
+        {
+            initializeMessages( PluginFacetProjectCreationDataModelProvider.class.getName(), Msgs.class );
+        }
     }
 }

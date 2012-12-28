@@ -12,7 +12,7 @@
       <page
             class="com.liferay.ide.ui.pref.LiferayUIPreferencePage"
             id="com.liferay.ide.ui.preferences.liferay"
-            name="%preference.page.name">
+            name="%liferay.preference.page.name">
       </page>
    </extension>
    <extension
@@ -27,7 +27,7 @@
          point="org.eclipse.ui.keywords">
       <keyword
             id="com.liferay.ide.ui.keyword"
-            label="%keyword.label">
+            label="%liferay.keyword.label">
       </keyword>
    </extension>
    <extension

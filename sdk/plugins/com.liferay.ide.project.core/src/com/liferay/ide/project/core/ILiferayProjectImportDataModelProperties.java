@@ -23,12 +23,12 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCr
 public interface ILiferayProjectImportDataModelProperties extends IFacetProjectCreationDataModelProperties
 {
 
-    public static final String PLUGIN_TYPE = "ILiferayProjectImportDataModelProperties.PLUGIN_TYPE";
+    public static final String PLUGIN_TYPE = "ILiferayProjectImportDataModelProperties.PLUGIN_TYPE"; //$NON-NLS-1$
 
-    public static final String PROJECT_LOCATION = "ILiferayProjectImportDataModelProperties.PROJECT_LOCATION";
+    public static final String PROJECT_LOCATION = "ILiferayProjectImportDataModelProperties.PROJECT_LOCATION"; //$NON-NLS-1$
 
-    public static final String PROJECT_RECORD = "ILiferayProjectImportDataModelProperties.PROJECT_RECORD";
+    public static final String PROJECT_RECORD = "ILiferayProjectImportDataModelProperties.PROJECT_RECORD"; //$NON-NLS-1$
 
-    public static final String SDK_VERSION = "ILiferayProjectImportDataModelProperties.SDK_VERSION";
+    public static final String SDK_VERSION = "ILiferayProjectImportDataModelProperties.SDK_VERSION"; //$NON-NLS-1$
 
 }

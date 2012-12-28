@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IProjectDefinition;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectCorePlugin;
@@ -93,7 +94,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 public class ProjectUtil
 {
 
-    public static final String METADATA_FOLDER = ".metadata";
+    public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
 
     public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
     {
@@ -108,7 +109,7 @@ public class ProjectUtil
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e );
+            ProjectCorePlugin.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e ); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
@@ -121,7 +122,7 @@ public class ProjectUtil
             return false;
         }
 
-        monitor.subTask( NLS.bind( "Checking: {0}", directory.getPath() ) );
+        monitor.subTask( NLS.bind( Msgs.checking, directory.getPath() ) );
 
         File[] contents = directory.listFiles();
 
@@ -222,12 +223,12 @@ public class ProjectUtil
     {
         if( CoreUtil.isNullOrEmpty( name ) )
         {
-            return "";
+            return StringUtil.EMPTY;
         }
 
         String displayName = removePluginSuffix( name );
 
-        displayName = displayName.replaceAll( "-", " " ).replaceAll( "_", " " );
+        displayName = displayName.replaceAll( "-", " " ).replaceAll( "_", " " ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         displayName = WordUtils.capitalize( displayName );
 
@@ -245,7 +246,7 @@ public class ProjectUtil
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( "Unable to create default web xml", e );
+            ProjectCorePlugin.logError( "Unable to create default web xml", e ); //$NON-NLS-1$
         }
     }
 
@@ -259,7 +260,7 @@ public class ProjectUtil
         }
         else
         {
-            emptyFile.create( new ByteArrayInputStream( "".getBytes() ), true, null );
+            emptyFile.create( new ByteArrayInputStream( StringUtil.EMPTY.getBytes() ), true, null );
         }
 
         return emptyFile;
@@ -297,7 +298,7 @@ public class ProjectUtil
             record.description.setName( projectName );
         }
 
-        monitor.beginTask( "Importing project", 100 );
+        monitor.beginTask( Msgs.importingProject, 100 );
 
         project.create( record.description, new SubProgressMonitor( monitor, 30 ) );
 
@@ -357,7 +358,7 @@ public class ProjectUtil
 
         setGenerateDD( newProjectDataModel, false );
 
-        IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" );
+        IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" ); //$NON-NLS-1$
 
         if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
         {
@@ -380,7 +381,7 @@ public class ProjectUtil
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
         {
             webXmlPath =
-                webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) );
+                webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) ); //$NON-NLS-1$
 
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true );
 
@@ -427,7 +428,7 @@ public class ProjectUtil
                     {
                         if( container != null && container.exists() )
                         {
-                            final Path path = new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" );
+                            final Path path = new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" ); //$NON-NLS-1$ //$NON-NLS-2$
                             IFile serviceJar = container.getFile( path );
 
                             if( serviceJar.exists() )
@@ -471,10 +472,10 @@ public class ProjectUtil
                         {
                             IClasspathAttribute newAttr = null;
 
-                            if( "owner.project.facets".equals( attr.getName() ) &&
-                                "liferay.plugin".equals( attr.getValue() ) )
+                            if( "owner.project.facets".equals( attr.getName() ) && //$NON-NLS-1$
+                                "liferay.plugin".equals( attr.getValue() ) ) //$NON-NLS-1$
                             {
-                                newAttr = JavaCore.newClasspathAttribute( attr.getName(), "liferay.ext" );
+                                newAttr = JavaCore.newClasspathAttribute( attr.getName(), "liferay.ext" ); //$NON-NLS-1$
                                 fixedAttr = true;
                             }
                             else
@@ -520,7 +521,7 @@ public class ProjectUtil
         }
         catch( Exception ex )
         {
-            ProjectCorePlugin.logError( "Exception trying to fix Ext project classpath entries.", ex );
+            ProjectCorePlugin.logError( "Exception trying to fix Ext project classpath entries.", ex ); //$NON-NLS-1$
         }
     }
 
@@ -537,7 +538,7 @@ public class ProjectUtil
 
                 if( c != null )
                 {
-                    final IVirtualFolder jsrc = c.getRootFolder().getFolder( "/WEB-INF/classes" );
+                    final IVirtualFolder jsrc = c.getRootFolder().getFolder( "/WEB-INF/classes" ); //$NON-NLS-1$
 
                     if( jsrc != null )
                     {
@@ -612,7 +613,7 @@ public class ProjectUtil
     {
         if( isLiferaySDKProjectDir( new File( projectLocation ) ) )
         {
-            String suffix = "";
+            String suffix = StringUtil.EMPTY;
 
             if( projectLocation.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
             {
@@ -635,7 +636,7 @@ public class ProjectUtil
                 suffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
             }
 
-            return suffix.replace( "-", "" );
+            return suffix.replace( "-", StringUtil.EMPTY ); //$NON-NLS-1$
         }
 
         return null;
@@ -654,7 +655,7 @@ public class ProjectUtil
                 {
                     if( container != null && container.exists() )
                     {
-                        IFile file = container.getFile( new Path( "WEB-INF/portlet.xml" ) );
+                        IFile file = container.getFile( new Path( "WEB-INF/portlet.xml" ) ); //$NON-NLS-1$
 
                         if( file.exists() )
                         {
@@ -722,7 +723,7 @@ public class ProjectUtil
 
         String retval = relativePath.toPortableString();
 
-        return retval.startsWith( "/" ) ? retval : "/" + retval;
+        return retval.startsWith( "/" ) ? retval : "/" + retval; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static IPackageFragmentRoot[] getSourceContainers( IProject project )
@@ -1013,14 +1014,14 @@ public class ProjectUtil
 
             for( File content : contents )
             {
-                if( content.getName().equals( "build.xml" ) )
+                if( content.getName().equals( "build.xml" ) ) //$NON-NLS-1$
                 {
                     hasBuildXml = true;
 
                     continue;
                 }
 
-                if( content.getName().equals( "docroot" ) )
+                if( content.getName().equals( "docroot" ) ) //$NON-NLS-1$
                 {
                     hasDocroot = true;
 
@@ -1108,30 +1109,30 @@ public class ProjectUtil
 
         if( string.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
         {
-            regex = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX + "$";
+            regex = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
         }
         else if( string.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
         {
-            regex = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX + "$";
+            regex = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
         }
         else if( string.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
         {
-            regex = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX + "$";
+            regex = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
         }
         else if( string.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
         {
-            regex = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "$";
+            regex = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
         }
         else if( string.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
         {
-            regex = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX + "$";
+            regex = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
         }
         else
         {
             return string;
         }
 
-        return string.replaceFirst( regex, "" );
+        return string.replaceFirst( regex, StringUtil.EMPTY );
     }
 
     public static void setDefaultRuntime(IDataModel dataModel)
@@ -1172,4 +1173,14 @@ public class ProjectUtil
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String checking;
+        public static String importingProject;
+
+        static
+        {
+            initializeMessages( ProjectUtil.class.getName(), Msgs.class );
+        }
+    }
 }

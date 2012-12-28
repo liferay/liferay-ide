@@ -19,6 +19,7 @@ import com.liferay.ide.sdk.pref.SDKsPreferencePage;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.window.Window;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +47,7 @@ public class LiferaySDKField
         Composite parent, IDataModel model, SelectionAdapter selectionAdapter, String fieldPropertyName,
         DataModelSynchHelper synchHelper )
     {
-        this( parent, model, selectionAdapter, fieldPropertyName, synchHelper, "Liferay Plugins SDK" );
+        this( parent, model, selectionAdapter, fieldPropertyName, synchHelper, Msgs.liferayPluginsSDK );
     }
 
     public LiferaySDKField(
@@ -74,7 +75,7 @@ public class LiferaySDKField
 
         Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
         // Button configureSDKsLink = new Button(group, SWT.PUSH);
-        configureSDKsLink.setText( "<a href=\"#\">Configure</a>" );
+        configureSDKsLink.setText( NLS.bind( "<a href=\"#\">{0}</a>", Msgs.configure ) ); //$NON-NLS-1$
         // configureSDKsLink.setText("Configure ...");
         configureSDKsLink.setLayoutData( new GridData( SWT.LEFT, SWT.TOP, false, false ) );
         configureSDKsLink.addSelectionListener( new SelectionAdapter()
@@ -103,4 +104,14 @@ public class LiferaySDKField
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String configure;
+        public static String liferayPluginsSDK;
+
+        static
+        {
+            initializeMessages( LiferaySDKField.class.getName(), Msgs.class );
+        }
+    }
 }

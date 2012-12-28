@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -44,6 +45,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -58,7 +60,6 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
-import org.eclipse.ui.internal.wizards.datatransfer.DataTransferMessages;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.server.ui.ServerUIUtil;
@@ -111,8 +112,8 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
     {
         super( model, pageName );
 
-        setTitle( "Import Liferay Projects" );
-        setDescription( "Select a Liferay Plugin SDK and import existing projects." );
+        setTitle( Msgs.importLiferayProjects );
+        setDescription( Msgs.selectLiferayPluginSDK );
     }
 
     protected void createPluginsSDKField( Composite parent )
@@ -134,7 +135,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
     protected void createProjectsList( Composite workArea )
     {
         labelProjectsList = new Label( workArea, SWT.NONE );
-        labelProjectsList.setText( "Projects to import:" );
+        labelProjectsList.setText( Msgs.importProjectsLabel );
         labelProjectsList.setLayoutData( new GridData( SWT.LEFT, SWT.CENTER, false, false, 3, 1 ) );
 
         projectsList = new CheckboxTreeViewer( workArea, SWT.BORDER );
@@ -203,13 +204,13 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
     protected void createSDKLocationField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK Location:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKLocationLabel, 1 );
 
         sdkLocation = SWTUtil.createText( topComposite, 1 );
         ( (GridData) sdkLocation.getLayoutData() ).widthHint = 300;
         this.synchHelper.synchText( sdkLocation, SDK_LOCATION, null );
 
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, StringUtil.EMPTY, 1 );
 
         // Button iconFileBrowse = SWTUtil.createPushButton(topComposite, "Browse...", null);
         // iconFileBrowse.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
@@ -225,12 +226,12 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
     protected void createSDKVersionField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK Version:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKVersionLabel, 1 );
 
         sdkVersion = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-        SWTUtil.createLabel( topComposite, "", 1 );
+        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
     }
 
     /**
@@ -251,7 +252,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
         buttonsComposite.setLayoutData( new GridData( GridData.VERTICAL_ALIGN_BEGINNING ) );
 
         Button selectAll = new Button( buttonsComposite, SWT.PUSH );
-        selectAll.setText( "Select All" );
+        selectAll.setText( Msgs.selectAll );
         selectAll.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -268,7 +269,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
         setButtonLayoutData( selectAll );
 
         Button deselectAll = new Button( buttonsComposite, SWT.PUSH );
-        deselectAll.setText( "Deselect All" );
+        deselectAll.setText( Msgs.deselectAll );
         deselectAll.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -285,7 +286,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
         setButtonLayoutData( deselectAll );
 
         Button refresh = new Button( buttonsComposite, SWT.PUSH );
-        refresh.setText( "Refresh" );
+        refresh.setText( Msgs.refresh );
         refresh.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -305,14 +306,14 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
     protected void createTargetRuntimeGroup( Composite parent )
     {
         Label label = new Label( parent, SWT.NONE );
-        label.setText( "Liferay target runtime:" );
+        label.setText( Msgs.liferayTargetRuntimeLabel );
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         serverTargetCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
         serverTargetCombo.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 
         Button newServerTargetButton = new Button( parent, SWT.NONE );
-        newServerTargetButton.setText( "New..." );
+        newServerTargetButton.setText( Msgs.newButton );
         newServerTargetButton.addSelectionListener( new SelectionAdapter()
         {
             public void widgetSelected( SelectionEvent e )
@@ -320,7 +321,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
                 final DataModelPropertyDescriptor[] preAdditionDescriptors =
                     model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." ); //$NON-NLS-1$
 
                 if( isOK )
                 {
@@ -463,7 +464,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
     {
         DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
 
-        dd.setText( "Select Liferay Plugin SDK folder" );
+        dd.setText( Msgs.selectLiferayPluginSDKFolder );
 
         if( !CoreUtil.isNullOrEmpty( sdkLocation.getText() ) )
         {
@@ -573,7 +574,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
         // on an empty path empty selectedProjects
         if( path == null || path.length() == 0 )
         {
-            setMessage( DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription );
+            setMessage( Msgs.importProjectsDescription );
 
             selectedProjects = new ProjectRecord[0];
 
@@ -616,7 +617,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
                  */
                 public void run( IProgressMonitor monitor )
                 {
-                    monitor.beginTask( DataTransferMessages.WizardProjectsImportPage_SearchingMessage, 100 );
+                    monitor.beginTask( Msgs.searchingMessage, 100 );
 
                     selectedProjects = new ProjectRecord[0];
 
@@ -640,7 +641,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
                         monitor.worked( 50 );
 
-                        monitor.subTask( DataTransferMessages.WizardProjectsImportPage_ProcessingMessage );
+                        monitor.subTask( Msgs.processingMessage );
 
                         for( File eclipseProjectFile : eclipseProjectFiles )
                         {
@@ -694,18 +695,18 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
         if( displayWarning )
         {
-            setMessage( DataTransferMessages.WizardProjectsImportPage_projectsInWorkspace, WARNING );
+            setMessage( Msgs.projectsInWorkspace, WARNING );
         }
         else
         {
-            setMessage( DataTransferMessages.WizardProjectsImportPage_ImportProjectsDescription );
+            setMessage( Msgs.importProjectsDescription );
         }
 
         setPageComplete( projectsList.getCheckedElements().length > 0 );
 
         if( selectedProjects.length == 0 )
         {
-            setMessage( DataTransferMessages.WizardProjectsImportPage_noProjectsToImport, WARNING );
+            setMessage( Msgs.noProjectsToImport, WARNING );
         }
         // else {
         // if (!sdkLocation.isDisposed()) {
@@ -728,4 +729,28 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String deselectAll;
+        public static String importLiferayProjects;
+        public static String importProjectsDescription;
+        public static String importProjectsLabel;
+        public static String liferayPluginSDKLocationLabel;
+        public static String liferayPluginSDKVersionLabel;
+        public static String liferayTargetRuntimeLabel;
+        public static String newButton;
+        public static String noProjectsToImport;
+        public static String processingMessage;
+        public static String projectsInWorkspace;
+        public static String refresh;
+        public static String searchingMessage;
+        public static String selectAll;
+        public static String selectLiferayPluginSDK;
+        public static String selectLiferayPluginSDKFolder;
+
+        static
+        {
+            initializeMessages( SDKProjectsImportWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

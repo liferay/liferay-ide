@@ -25,7 +25,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 public interface IPluginWizardFragment
 {
 
-    public static final String ID = "com.liferay.ide.project.ui.pluginWizardFragment";
+    public static final String ID = "com.liferay.ide.project.ui.pluginWizardFragment"; //$NON-NLS-1$
 
     public void addPages();
 

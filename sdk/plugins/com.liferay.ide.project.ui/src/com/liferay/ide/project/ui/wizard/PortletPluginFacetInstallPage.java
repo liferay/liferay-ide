@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PortletPluginFacetInstallDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
@@ -22,6 +23,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -44,15 +46,15 @@ public class PortletPluginFacetInstallPage extends DataModelWizardPage
 
     public PortletPluginFacetInstallPage()
     {
-        super( DataModelFactory.createDataModel( new PortletPluginFacetInstallDataModelProvider() ), "portlet.plugin.facet.install.page" );
+        super( DataModelFactory.createDataModel( new PortletPluginFacetInstallDataModelProvider() ), "portlet.plugin.facet.install.page" ); //$NON-NLS-1$
 
         setImageDescriptor( ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/wizban/plugin_project.png" ) ) );
+            "/icons/wizban/plugin_project.png" ) ) ); //$NON-NLS-1$
 
-        setTitle( "Modify Liferay Plugin Project" );
+        setTitle( Msgs.modifyLiferayPluginProject );
 
         setMessage(
-            "Manually converting projects to Liferay plugins is currently not available.", IMessageProvider.WARNING );
+            Msgs.convertingProjectsNotAvailable, IMessageProvider.WARNING );
     }
 
     public void setConfig( Object config )
@@ -81,17 +83,11 @@ public class PortletPluginFacetInstallPage extends DataModelWizardPage
     {
         Composite topComposite = SWTUtil.createTopComposite( parent, 2 );
 
-        Label label = SWTUtil.createLabel( topComposite, "", 1 );
+        Label label = SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
 
         label.setImage( PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJS_INFO_TSK ) );
 
-        label =
-            SWTUtil.createLabel(
-                topComposite,
-                SWT.WRAP,
-                "The best way to convert a project to a Liferay project is to close this "
-                    + "page, right-click the project you wish to convert and use the Liferay > Convert to Liferay menu action.",
-                1 );
+        label = SWTUtil.createLabel( topComposite, SWT.WRAP, Msgs.bestWayConvertProject, 1 );
         GridData gd = new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 );
         gd.widthHint = 400;
 
@@ -106,4 +102,15 @@ public class PortletPluginFacetInstallPage extends DataModelWizardPage
         return new String[] { LIFERAY_SDK_NAME };
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String bestWayConvertProject;
+        public static String convertingProjectsNotAvailable;
+        public static String modifyLiferayPluginProject;
+
+        static
+        {
+            initializeMessages( PortletPluginFacetInstallPage.class.getName(), Msgs.class );
+        }
+    }
 }

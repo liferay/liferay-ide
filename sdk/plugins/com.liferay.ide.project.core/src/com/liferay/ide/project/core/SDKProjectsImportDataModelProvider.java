@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
@@ -189,7 +190,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return ProjectCorePlugin.createErrorStatus( "Invalid Plugin SDK location." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.invalidPluginSDKLocation );
             }
         }
         else if( SDK_VERSION.equals( name ) )
@@ -202,7 +203,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return ProjectCorePlugin.createErrorStatus( "Invalid Plugin SDK version, must be greater than " +
+                return ProjectCorePlugin.createErrorStatus( Msgs.invalidPluginSDKVersion +
                     SDKManager.getLeastValidVersion() );
             }
         }
@@ -229,7 +230,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
             if( !( runtime instanceof BridgedRuntime ) )
             {
-                return ProjectCorePlugin.createErrorStatus( "A valid Liferay runtime must be selected." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.selectValidLiferayRuntime );
             }
             else
             {
@@ -251,7 +252,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
      */
     public IStatus createSelectedProjectsErrorStatus()
     {
-        return ProjectCorePlugin.createErrorStatus( "Must select one Liferay project to import." );
+        return ProjectCorePlugin.createErrorStatus( Msgs.selectOneLiferayProject );
     }
 
     protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy()
@@ -270,4 +271,16 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
         return super.validate( name );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String invalidPluginSDKLocation;
+        public static String invalidPluginSDKVersion;
+        public static String selectOneLiferayProject;
+        public static String selectValidLiferayRuntime;
+
+        static
+        {
+            initializeMessages( SDKProjectsImportDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

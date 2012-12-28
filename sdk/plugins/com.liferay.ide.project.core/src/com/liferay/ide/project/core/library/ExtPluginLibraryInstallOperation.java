@@ -29,7 +29,7 @@ public class ExtPluginLibraryInstallOperation extends PluginLibraryInstallOperat
 
     protected IPath getClasspathContainerPath()
     {
-        return new Path( PluginClasspathContainerInitializer.ID + "/" + ExtClasspathContainer.SEGMENT_PATH );
+        return new Path( PluginClasspathContainerInitializer.ID + "/" + ExtClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
     }
 
 }

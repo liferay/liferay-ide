@@ -16,10 +16,10 @@
 package com.liferay.ide.project.ui.action.sdk;
 
 import com.liferay.ide.project.ui.ProjectUIPlugin;
-import com.liferay.ide.ui.action.AbstractObjectAction;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.util.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import java.util.Map;
 
@@ -65,7 +65,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
             else if( elem instanceof IProject )
             {
                 project = (IProject) elem;
-                buildXmlFile = project.getFile( "build.xml" );
+                buildXmlFile = project.getFile( "build.xml" ); //$NON-NLS-1$
             }
 
             if( buildXmlFile.exists() )
@@ -73,7 +73,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
                 final IProject p = project;
                 final IFile buildFile = buildXmlFile;
 
-                new Job( p.getName() + " : " + getSDKCommand() )
+                new Job( p.getName() + " : " + getSDKCommand() ) //$NON-NLS-1$
                 {
 
                     @Override
@@ -91,7 +91,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
                         }
                         catch( Exception e )
                         {
-                            return ProjectUIPlugin.createErrorStatus( "Error running SDK command " + getSDKCommand(), e );
+                            return ProjectUIPlugin.createErrorStatus( "Error running SDK command " + getSDKCommand(), e ); //$NON-NLS-1$
                         }
 
                         return Status.OK_STATUS;

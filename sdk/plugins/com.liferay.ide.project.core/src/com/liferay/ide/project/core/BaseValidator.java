@@ -17,6 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -39,6 +40,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -60,10 +62,9 @@ import org.w3c.dom.NodeList;
 public abstract class BaseValidator extends AbstractValidator
 {
 
-    public static final String MESSAGE_CLASS_INCORRECT_HIERARCHY =
-        "{0} type hierarchy is incorrect. Should be type: {1}.";
+    public static final String MESSAGE_CLASS_INCORRECT_HIERARCHY = Msgs.typeHierarchyIncorrect;
 
-    public static final String MESSAGE_CLASS_NOT_FOUND = "The class {0} was not found on the Java Build Path.";
+    public static final String MESSAGE_CLASS_NOT_FOUND = Msgs.classNotFound;
 
     protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
 
@@ -141,7 +142,7 @@ public abstract class BaseValidator extends AbstractValidator
                 else if( superTypeNames != null )
                 {
                     boolean typeFound = false;
-                    final String[] superTypes = superTypeNames.split( "," );
+                    final String[] superTypes = superTypeNames.split( StringUtil.COMMA );
 
                     for( String superType : superTypes )
                     {
@@ -170,9 +171,9 @@ public abstract class BaseValidator extends AbstractValidator
                     {
                         String msg = MessageFormat.format( MESSAGE_CLASS_INCORRECT_HIERARCHY, className, superTypeNames );
 
-                        if( superTypeNames.contains( "," ) )
+                        if( superTypeNames.contains( StringUtil.COMMA ) )
                         {
-                            msg = msg.replaceAll( "type:", "one of possible types:" );
+                            msg = msg.replaceAll( Msgs.typeLabel, Msgs.possibleTypes );
                         }
 
                         return createMarkerValues(
@@ -230,11 +231,11 @@ public abstract class BaseValidator extends AbstractValidator
 
         if( classResource != null && classResource.length() > 0 )
         {
-            if( classResource.endsWith( ".properties" ) && warnPropertiesSuffix )
+            if( classResource.endsWith( ".properties" ) && warnPropertiesSuffix ) //$NON-NLS-1$
             {
                 String msg =
                     MessageFormat.format(
-                        "The class resource {0} should not end with .properties", new Object[] { classResource } );
+                        Msgs.classResourceNotEndWithProperties, new Object[] { classResource } );
                 return createMarkerValues(
                     preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
             }
@@ -259,7 +260,7 @@ public abstract class BaseValidator extends AbstractValidator
                             break;
                         }
 
-                        IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) );
+                        IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) ); //$NON-NLS-1$ //$NON-NLS-2$
 
                         classResourceValue =
                             javaProject.getJavaModel().getWorkspace().getRoot().findMember( qualifiedResourcePath );
@@ -277,7 +278,7 @@ public abstract class BaseValidator extends AbstractValidator
                             // that doesn't append the .properties
                             IPath parent = classResourcePath.removeLastSegments( 1 );
 
-                            IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" );
+                            IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" ); //$NON-NLS-1$
 
                             classResourceValue =
                                 javaProject.getJavaModel().getWorkspace().getRoot().findMember(
@@ -289,7 +290,7 @@ public abstract class BaseValidator extends AbstractValidator
                             }
 
                             propertiesClassResourcePath =
-                                parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" );
+                                parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
                             classResourceValue =
                                 javaProject.getJavaModel().getWorkspace().getRoot().findMember(
@@ -466,4 +467,17 @@ public abstract class BaseValidator extends AbstractValidator
         return true;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String classNotFound;
+        public static String classResourceNotEndWithProperties;
+        public static String possibleTypes;
+        public static String typeLabel;
+        public static String typeHierarchyIncorrect;
+
+        static
+        {
+            initializeMessages( BaseValidator.class.getName(), Msgs.class );
+        }
+    }
 }

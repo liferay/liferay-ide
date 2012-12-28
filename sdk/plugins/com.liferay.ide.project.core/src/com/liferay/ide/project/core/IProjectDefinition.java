@@ -28,7 +28,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 public interface IProjectDefinition
 {
 
-    public static final String ID = "com.liferay.ide.project.core.liferayProjects";
+    public static final String ID = "com.liferay.ide.project.core.liferayProjects"; //$NON-NLS-1$
 
     public String getDisplayName();
 

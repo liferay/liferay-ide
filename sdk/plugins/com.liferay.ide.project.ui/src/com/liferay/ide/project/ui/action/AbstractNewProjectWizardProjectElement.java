@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.spi.RegistryContributor;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
@@ -49,7 +50,7 @@ public abstract class AbstractNewProjectWizardProjectElement extends AbstractCon
         @Override
         public String getValue() throws InvalidRegistryObjectException
         {
-            return "Import description";
+            return Msgs.importDescription;
         }
     }
 
@@ -108,4 +109,13 @@ public abstract class AbstractNewProjectWizardProjectElement extends AbstractCon
 
     protected abstract String getProjectParameterElementAttribute( String name );
 
+    private static class Msgs extends NLS
+    {
+        public static String importDescription;
+
+        static
+        {
+            initializeMessages( AbstractNewProjectWizardProjectElement.class.getName(), Msgs.class );
+        }
+    }
 }

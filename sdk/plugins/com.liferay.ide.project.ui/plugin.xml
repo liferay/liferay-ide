@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="portletFrameworkDelegates" name="Portlet Framework Delegates" schema="schema/portletFrameworkDelegates.exsd"/>
+   <extension-point id="portletFrameworkDelegates" name="%portlet.framework.delegates.name" schema="schema/portletFrameworkDelegates.exsd"/>
    
    <extension
          point="org.eclipse.ui.newWizards">
       <category
             id="com.liferay.ide.newWizards"
-            name="Liferay">
+            name="%category.name">
       </category>
       <wizard
             category="com.liferay.ide.newWizards"
             finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
             icon="icons/n16/plugin_new.png"
             id="com.liferay.ide.project.ui.newProjectWizard"
-            name="Liferay Project"
+            name="%new.project.wizard.name"
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
             project="true">
          <class class="com.liferay.ide.project.ui.wizard.NewPluginProjectWizard">
@@ -23,7 +23,7 @@
          </class>
             
          <description>
-            Create a project for developing Liferay Plugins to deploy to Liferay Portal Server
+            %new.project.wizard.description
          </description>
          <selection
                class="org.eclipse.core.resources.IResource">
@@ -34,14 +34,14 @@
             finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
             icon="icons/n16/plugin_new.png"
             id="com.liferay.ide.project.ui.newProjectWizardExistingSource"
-            name="Liferay Project from Existing Source"
+            name="%import.project.wizard.name"
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
             project="true">
          <class class="com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard">
          </class>
             
          <description>
-            Create a Liferay plugin project from existing plugin source.
+            %import.project.wizard.description
          </description>
          <selection
                class="org.eclipse.core.resources.IResource">
@@ -55,7 +55,7 @@
       <page
             class="com.liferay.ide.project.ui.LiferayProjectPropertyPage"
             id="com.liferay.ide.project.ui.properties"
-            name="Liferay">
+            name="%liferay.page.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
@@ -118,23 +118,23 @@
          point="org.eclipse.ui.keywords">
       <keyword
             id="com.liferay.ide.project.ui.keyword"
-            label="Liferay">
+            label="%liferay.keyword.label">
       </keyword>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
       <category
             id="com.liferay.ide.projects.import"
-            name="Liferay">
+            name="%category.name">
       </category>
       <wizard
             category="com.liferay.ide.projects.import"
             class="com.liferay.ide.project.ui.wizard.LiferayProjectImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.importExistingProjectWizard"
-            name="Liferay Project from Existing Source">
+            name="%import.existing.project.wizard.name">
          <description>
-            Import an existing Liferay project that is located in a Plugins SDK directory.
+            %import.existing.project.wizard.description
          </description>
       </wizard>
       <wizard
@@ -142,9 +142,9 @@
             class="com.liferay.ide.project.ui.wizard.SDKProjectsImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.importSDKProjectWizard"
-            name="Liferay Projects from Plugins SDK">
+            name="%import.projects.sdk.wizard.name">
          <description>
-            Import existing projects for a Liferay Plugin SDK directory for developing against Liferay Portal Server
+            %import.projects.sdk.wizard.description
          </description>
       </wizard>
       <wizard
@@ -152,9 +152,9 @@
             class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
-            name="Liferay Binary Plugin">
+            name="%import.binary.plugin.wizard.name">
          <description>
-            Import and exisiting Liferay project from binary file, e.g. .war file.
+            %import.binary.plugin.wizard.description
          </description>
       </wizard>
       <wizard
@@ -162,9 +162,9 @@
             class="com.liferay.ide.project.ui.wizard.BinaryProjectsImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
-            name="Liferay Binary Plugins">
+            name="%import.binary.plugins.wizard.name">
          <description>
-            Import existing Plugin binary projects e.g. importing projects from *.war
+            %import.binary.plugins.wizard.description
          </description>
       </wizard>
    </extension>
@@ -174,7 +174,7 @@
          <menu
                icon="icons/e16/liferay.png"
                id="liferayPopupMenuCategory"
-               label="Liferay">
+               label="%liferay.menu.label">
             <separator name="slot1"/> 
          </menu>
   	</objectContribution>
@@ -187,9 +187,9 @@
                enablesFor="1"
                icon="icons/e16/convert.png"
                id="com.liferay.ide.project.ui.convert.popup.action"
-               label="Convert to Liferay project..."
+               label="%convert.project.action.label"
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Convert to Liferay project...">
+               tooltip="%convert.project.action.tooltip">
          </action>
          <enablement>
          	<adapt type="org.eclipse.core.resources.IProject">
@@ -255,7 +255,7 @@
                enablesFor="1"
                icon="icons/e16/import.png"
                id="com.liferay.ide.project.ui.sdk.projects.import"
-               label="Import Liferay Projects..."
+               label="%import.projects.action.label"
                menubarPath="liferayPopupMenuCategory/slot1">
          </action>
          <enablement>
@@ -274,7 +274,7 @@
                enablesFor="1"
                icon="icons/e16/import.png"
                id="com.liferay.ide.project.ui.import.liferay.project"
-               label="Import Liferay Project..."
+               label="%import.project.action.label"
                menubarPath="liferayPopupMenuCategory/slot1">
          </action>
          <enablement>
@@ -325,7 +325,7 @@
             adaptable="true"
             location="TOP_RIGHT"
             lightweight="true"
-            label="Liferay plugin project decorator"
+            label="%plugin.project.decorator.label"
             state="true"
             class="com.liferay.ide.project.ui.LiferayPluginProjectDecorator"
             id="com.liferay.ide.project.ui.PluginProjectDecorator">
@@ -336,7 +336,7 @@
            </or>
          </enablement>
          <description>
-            Liferay plugin project decorator
+            %plugin.project.decorator.description
          </description>
       </decorator>
    </extension>
@@ -374,33 +374,33 @@
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
-            label="Liferay IDE Actions">
+            label="%ide.actions.label">
          <action
                class="com.liferay.ide.project.ui.action.NewServerDropDownAction"
                icon="icons/n16/server_new.png"
                id="com.liferay.ide.ui.action.newLiferayServer"
-               label="New Liferay Server"
+               label="%new.server.action.label"
                style="pulldown"
                toolbarPath="Normal/Liferay"
-               tooltip="Create a new Liferay Server">
+               tooltip="%new.server.action.tooltip">
          </action>
          <action
                class="com.liferay.ide.project.ui.action.NewPortletDropDownAction"
                icon="icons/n16/portlet_new.png"
                id="com.liferay.ide.ui.action.newPortlet"
-               label="New Liferay Portlet"
+               label="%new.portlet.action.label"
                style="pulldown"
                toolbarPath="Normal/Liferay"
-               tooltip="Create a new Liferay Portlet">
+               tooltip="%new.portlet.action.tooltip">
          </action>
          <action
                class="com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction"
                icon="icons/n16/plugin_new.png"
                id="com.liferay.ide.ui.action.newPluginProject"
-               label="New Liferay Project"
+               label="%new.project.action.label"
                style="pulldown"
                toolbarPath="Normal/Liferay"
-               tooltip="Create a new Liferay Plugin Project">
+               tooltip="%new.project.action.tooltip">
          </action>
       </actionSet>
    </extension>
@@ -414,7 +414,7 @@
          <menu
                icon="icons/e16/liferay.png"
                id="liferayPopupMenuCategory"
-               label="Liferay">
+               label="%liferay.menu.label">
             <separator
                   name="slot1">
             </separator>
@@ -425,7 +425,7 @@
          <menu
                icon="icons/e16/sdk.png"
                id="liferayPopupMenuSDKCategory"
-               label="SDK"
+               label="%sdk.menu.label"
                path="liferayPopupMenuCategory/sdk">
             <groupMarker
                   name="all">
@@ -643,7 +643,7 @@
       <classpathContainerPage
             class="com.liferay.ide.project.ui.wizard.PluginClasspathContainerPage"
             id="com.liferay.ide.project.ui.pluginClasspathContainerPage"
-            name="Liferay Plugin API">
+            name="%plugin.api.classpath.container.page.name">
       </classpathContainerPage>
    </extension>
 </plugin>

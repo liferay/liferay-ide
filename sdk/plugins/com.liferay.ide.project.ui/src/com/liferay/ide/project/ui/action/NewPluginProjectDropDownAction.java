@@ -36,6 +36,7 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
@@ -112,9 +113,8 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
                         if( projectDef != null )
                         {
                             wizardAction.setImageDescriptor( ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
-                                "/icons/n16/" + projectDef.getShortName() + "_new.png" ) ) );
-                            wizardAction.setText( wizardAction.getText().replaceAll(
-                                "Liferay Plugin", projectDef.getDisplayName() + " Plugin" ) );
+                                "/icons/n16/" + projectDef.getShortName() + "_new.png" ) ) ); //$NON-NLS-1$ //$NON-NLS-2$
+                            wizardAction.setText( wizardAction.getText().replaceAll( Msgs.liferayPlugin, NLS.bind( Msgs.plugin, projectDef.getDisplayName()) ));
                         }
 
                         containers.add( wizardAction );
@@ -286,11 +286,22 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
     protected static String getExtraTypeAttribute()
     {
-        return "liferay_extra_project";
+        return "liferay_extra_project"; //$NON-NLS-1$
     }
 
     protected static String getTypeAttribute()
     {
-        return "liferay_project";
+        return "liferay_project"; //$NON-NLS-1$
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String liferayPlugin;
+        public static String plugin;
+
+        static
+        {
+            initializeMessages( NewPluginProjectDropDownAction.class.getName(), Msgs.class );
+        }
     }
 }

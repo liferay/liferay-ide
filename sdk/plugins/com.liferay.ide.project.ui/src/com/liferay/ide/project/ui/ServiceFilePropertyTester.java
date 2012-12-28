@@ -40,7 +40,7 @@ public class ServiceFilePropertyTester extends PropertyTester
                 {
                     IContentType contentType = description.getContentType();
 
-                    if( contentType.getId().equals( "com.liferay.ide.portlet.core.servicebuildercontent" ) )
+                    if( contentType.getId().equals( "com.liferay.ide.portlet.core.servicebuildercontent" ) ) //$NON-NLS-1$
                     {
                         return true;
                     }

@@ -17,6 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.util.SDKUtil;
@@ -57,15 +58,15 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
     protected static final Collection<String> portalSourceJars = Arrays.asList
     (
-        "util-bridges.jar",
-        "util-java.jar",
-        "util-taglib.jar",
-        "portal-impl.jar"
+        "util-bridges.jar", //$NON-NLS-1$
+        "util-java.jar", //$NON-NLS-1$
+        "util-taglib.jar", //$NON-NLS-1$
+        "portal-impl.jar" //$NON-NLS-1$
     );
 
     protected static ClasspathDecorationsManager cpDecorations;
 
-    protected static final String SEPARATOR = "!";
+    protected static final String SEPARATOR = "!"; //$NON-NLS-1$
 
     static
     {
@@ -237,7 +238,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
                 {
                     if( container != null && container.exists() )
                     {
-                        IFolder serviceFolder = container.getFolder( new Path( "WEB-INF/service") );
+                        IFolder serviceFolder = container.getFolder( new Path( "WEB-INF/service") ); //$NON-NLS-1$
 
                         if( serviceFolder.exists() )
                         {
@@ -264,16 +265,16 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
             IPath sdkLocation = sdk.getLocation();
 
             String type =
-                ProjectUtil.isPortletProject( project ) ? "portlets" : ProjectUtil.isHookProject( project )
-                    ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : "";
+                ProjectUtil.isPortletProject( project ) ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
+                    ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : StringUtil.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
             IPath serviceJarPath =
-                sdkLocation.append( type ).append( context ).append( "docroot/WEB-INF/lib" ).append(
-                    context + "-service.jar" );
+                sdkLocation.append( type ).append( context ).append( "docroot/WEB-INF/lib" ).append( //$NON-NLS-1$
+                    context + "-service.jar" ); //$NON-NLS-1$
 
             if( serviceJarPath.toFile().exists() )
             {
-                IPath servicePath = serviceJarPath.removeLastSegments( 2 ).append( "service" );
+                IPath servicePath = serviceJarPath.removeLastSegments( 2 ).append( "service" ); //$NON-NLS-1$
 
                 entry = createClasspathEntry( serviceJarPath, servicePath.toFile().exists() ? servicePath : null );
             }
@@ -284,7 +285,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
     protected IClasspathEntry createPortalJarClasspathEntry( String portalJar )
     {
-        IPath entryPath = this.portalDir.append( "/WEB-INF/lib/" + portalJar );
+        IPath entryPath = this.portalDir.append( "/WEB-INF/lib/" + portalJar ); //$NON-NLS-1$
 
         IPath sourcePath = null;
 
@@ -357,9 +358,9 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
         try
         {
-            String deps = getPropertyValue( "portal-dependency-jars", pluginPackageFile );
+            String deps = getPropertyValue( "portal-dependency-jars", pluginPackageFile ); //$NON-NLS-1$
 
-            String[] split = deps.split( "," );
+            String[] split = deps.split( StringUtil.COMMA );
 
             if( split.length > 0 && !( CoreUtil.isNullOrEmpty( split[0] ) ) )
             {
@@ -392,7 +393,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
             contents = getPluginPackageFile().getContents();
             props.load( contents );
 
-            retval = props.getProperty( key, "" );
+            retval = props.getProperty( key, StringUtil.EMPTY );
         }
         catch( Exception e )
         {
@@ -423,9 +424,9 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
         try
         {
-            String context = getPropertyValue( "required-deployment-contexts", pluginPackageFile );
+            String context = getPropertyValue( "required-deployment-contexts", pluginPackageFile ); //$NON-NLS-1$
 
-            String[] split = context.split( "," );
+            String[] split = context.split( StringUtil.COMMA );
 
             if( split.length > 0 && !( CoreUtil.isNullOrEmpty( split[0] ) ) )
             {
@@ -454,14 +455,14 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
                 IFolder webroot = (IFolder) resource;
 
                 pluginPackageFile =
-                    webroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
+                    webroot.getFile( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ); //$NON-NLS-1$
 
                 if( !pluginPackageFile.exists() )
                 {
                     // IDE-226 the file may be missing because we are in an ext plugin which has a different layout
                     // check for ext-web in the path to the docroot
 
-                    if( webroot.getFullPath().toPortableString().endsWith( "WEB-INF/ext-web/docroot" ) )
+                    if( webroot.getFullPath().toPortableString().endsWith( "WEB-INF/ext-web/docroot" ) ) //$NON-NLS-1$
                     {
                         // look for packages file in first docroot
                         IPath parentDocroot = webroot.getFullPath().removeFirstSegments( 1 ).removeLastSegments( 3 );
@@ -470,7 +471,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
                         if( parentWebroot.exists() )
                         {
                             pluginPackageFile =
-                                parentWebroot.getFile( "WEB-INF/" +
+                                parentWebroot.getFile( "WEB-INF/" + //$NON-NLS-1$
                                     ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
                         }
                     }

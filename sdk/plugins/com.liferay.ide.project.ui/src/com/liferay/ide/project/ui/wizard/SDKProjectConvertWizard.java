@@ -20,6 +20,7 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
@@ -45,10 +46,10 @@ public class SDKProjectConvertWizard extends DataModelWizard implements IWorkben
 
         this.project = project;
 
-        setWindowTitle( "Convert Project" );
+        setWindowTitle( Msgs.convertProject );
 
         setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/convert_wiz.png" ) );
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/convert_wiz.png" ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -64,7 +65,7 @@ public class SDKProjectConvertWizard extends DataModelWizard implements IWorkben
     @Override
     protected void doAddPages()
     {
-        sdkProjectConvertWizardPage = new SDKProjectConvertWizardPage( getDataModel(), "pageOne" );
+        sdkProjectConvertWizardPage = new SDKProjectConvertWizardPage( getDataModel(), "pageOne" ); //$NON-NLS-1$
 
         addPage( sdkProjectConvertWizardPage );
     }
@@ -81,4 +82,13 @@ public class SDKProjectConvertWizard extends DataModelWizard implements IWorkben
         return false;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String convertProject;
+
+        static
+        {
+            initializeMessages( SDKProjectConvertWizard.class.getName(), Msgs.class );
+        }
+    }
 }

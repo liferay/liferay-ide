@@ -37,7 +37,7 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager
 public class PluginClasspathContainerInitializer extends ClasspathContainerInitializer
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.server.plugin.container";
+    public static final String ID = "com.liferay.ide.eclipse.server.plugin.container"; //$NON-NLS-1$
 
     protected static final ClasspathDecorationsManager cpDecorations = PluginClasspathContainer.getDecorationsManager();
 
@@ -58,7 +58,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         if( count != 2 )
         {
             throw new CoreException(
-                ProjectCorePlugin.createErrorStatus( "Invalid plugin classpath container should expecting 2 segments." ) );
+                ProjectCorePlugin.createErrorStatus( "Invalid plugin classpath container should expecting 2 segments." ) ); //$NON-NLS-1$
         }
 
         String root = containerPath.segment( 0 );
@@ -66,7 +66,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         if( !ID.equals( root ) )
         {
             throw new CoreException(
-                ProjectCorePlugin.createErrorStatus( "Invalid plugin classpath container, expecting container root " +
+                ProjectCorePlugin.createErrorStatus( "Invalid plugin classpath container, expecting container root " + //$NON-NLS-1$
                     ID ) );
         }
 
@@ -201,7 +201,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         }
         else
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Invalid final segment of type: " +
+            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Invalid final segment of type: " + //$NON-NLS-1$
                 finalSegment ) );
         }
 

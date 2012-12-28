@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectValidator;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -38,7 +39,7 @@ import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 public abstract class PluginFacetValidator implements IFacetedProjectValidator
 {
 
-    public final static String MARKER_ID = "com.liferay.ide.project.core.facet.validator";
+    public final static String MARKER_ID = "com.liferay.ide.project.core.facet.validator"; //$NON-NLS-1$
 
     public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
 
@@ -106,7 +107,7 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator
             if( !status.isOK() )
             {
                 fproj.createErrorMarker(
-                    MARKER_ID + ".sdkError", "Configured Liferay Plugin SDK is invalid: " + status.getMessage() );
+                    MARKER_ID + ".sdkError", NLS.bind( Msgs.liferayPluginSDKInvalid, status.getMessage() ) ); //$NON-NLS-1$
             }
         }
 
@@ -136,4 +137,13 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator
 
     protected abstract IProjectFacet getProjectFacet();
 
+    private static class Msgs extends NLS
+    {
+        public static String liferayPluginSDKInvalid;
+
+        static
+        {
+            initializeMessages( PluginFacetValidator.class.getName(), Msgs.class );
+        }
+    }
 }

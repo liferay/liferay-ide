@@ -94,10 +94,10 @@ public class BinaryProjectRecord
             {
                 displayName = binaryName.substring( 0, index );
             }
-            index = binaryName.lastIndexOf( "-" );
+            index = binaryName.lastIndexOf( "-" ); //$NON-NLS-1$
             if( index != -1 )
             {
-                liferayVersion = binaryName.substring( index + 1, binaryName.lastIndexOf( "." ) );
+                liferayVersion = binaryName.substring( index + 1, binaryName.lastIndexOf( "." ) ); //$NON-NLS-1$
             }
         }
 

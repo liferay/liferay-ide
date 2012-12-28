@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.wizards.IClasspathContainerPage;
 import org.eclipse.jdt.ui.wizards.IClasspathContainerPageExtension;
 import org.eclipse.jdt.ui.wizards.NewElementWizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -42,9 +43,9 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
 
     public PluginClasspathContainerPage()
     {
-        super( "PluginClasspathContainerPage" );
-        setTitle( "Liferay Plugin API Library" );
-        setDescription( "This container dynamically manages the classpath entries for Liferay plugin projects." );
+        super( "PluginClasspathContainerPage" ); //$NON-NLS-1$
+        setTitle( Msgs.liferayPluginAPILibrary );
+        setDescription( Msgs.containerManagesClasspathEntries );
     }
 
     public void createControl( Composite parent )
@@ -53,9 +54,9 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
         composite.setLayout( new GridLayout( 2, false ) );
 
         final Label label = new Label( composite, SWT.NONE );
-        label.setText( "Liferay Plugin Type:" );
+        label.setText( Msgs.liferayPluginTypeLabel );
 
-        final String[] types = new String[] { "portlet", "hook", "ext" };
+        final String[] types = new String[] { "portlet", "hook", "ext" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         this.typeCombo = new Combo( composite, SWT.READ_ONLY );
         this.typeCombo.setItems( types );
@@ -108,14 +109,14 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
         }
         else
         {
-            setErrorMessage( "Selected project is not a Liferay project. Please convert it to Liferay project first." );
+            setErrorMessage( Msgs.selectedProjectNotLiferayProject );
             return false;
         }
     }
 
     public IClasspathEntry getSelection()
     {
-        IPath path = new Path( PluginClasspathContainerInitializer.ID + "/" );
+        IPath path = new Path( PluginClasspathContainerInitializer.ID + "/" ); //$NON-NLS-1$
 
         final int index = this.typeCombo.getSelectionIndex();
 
@@ -157,4 +158,16 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
         return -1;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String containerManagesClasspathEntries;
+        public static String liferayPluginAPILibrary;
+        public static String liferayPluginTypeLabel;
+        public static String selectedProjectNotLiferayProject;
+
+        static
+        {
+            initializeMessages( PluginClasspathContainerPage.class.getName(), Msgs.class );
+        }
+    }
 }

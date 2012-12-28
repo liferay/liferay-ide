@@ -26,11 +26,11 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 public interface IPortletFrameworkDelegate
 {
 
-    String EXTENSION_ID = "com.liferay.ide.project.ui.portletFrameworkDelegates";
+    String EXTENSION_ID = "com.liferay.ide.project.ui.portletFrameworkDelegates"; //$NON-NLS-1$
 
-    String FRAMEWORK_ID = "frameworkId";
+    String FRAMEWORK_ID = "frameworkId"; //$NON-NLS-1$
 
-    String ICON = "icon";
+    String ICON = "icon"; //$NON-NLS-1$
 
     Composite createNewProjectOptionsComposite( Composite parent, IDataModel iDataModel );
 

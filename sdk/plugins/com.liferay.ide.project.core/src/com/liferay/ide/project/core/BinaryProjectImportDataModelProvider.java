@@ -21,6 +21,7 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 
 /**
@@ -36,7 +37,7 @@ public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataM
     @Override
     public IStatus createSelectedProjectsErrorStatus()
     {
-        return ProjectCorePlugin.createErrorStatus( "Select a binary to import." );
+        return ProjectCorePlugin.createErrorStatus( Msgs.selectBinary );
     }
 
     /*
@@ -57,4 +58,13 @@ public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataM
         ProjectUtil.setDefaultRuntime(getDataModel());
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String selectBinary;
+
+        static
+        {
+            initializeMessages( BinaryProjectImportDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

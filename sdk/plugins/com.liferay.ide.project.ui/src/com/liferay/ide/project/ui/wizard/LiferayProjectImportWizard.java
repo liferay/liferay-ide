@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -50,9 +51,9 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
     {
         super( dataModel );
 
-        setWindowTitle( "Import Project" );
+        setWindowTitle( Msgs.importProject );
         setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) );
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/import_wiz.png" ) ); //$NON-NLS-1$
         setNeedsProgressMonitor( true );
     }
 
@@ -84,7 +85,7 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 
         }
 
-        liferayProjectImportWizardPage = new LiferayProjectImportWizardPage( getDataModel(), "pageOne", this );
+        liferayProjectImportWizardPage = new LiferayProjectImportWizardPage( getDataModel(), "pageOne", this ); //$NON-NLS-1$
 
         if( folder != null )
         {
@@ -119,4 +120,13 @@ public class LiferayProjectImportWizard extends DataModelWizard implements IWork
 
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String importProject;
+
+        static
+        {
+            initializeMessages( LiferayProjectImportWizard.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -25,6 +25,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.layout.PixelConverter;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridData;
@@ -46,14 +47,14 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
     public static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
 
     public static final int[] ERROR_VALUES = new int[] { 1, 2, -1 };
-    public static final String[] ERRORS = new String[] { "Error", "Warning", "Ignore" };
+    public static final String[] ERRORS = new String[] { Msgs.error, Msgs.warning, Msgs.ignore };
 
     public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
-        "com.liferay.ide.portlet.ui.propertyPage.project.validation";
+        "com.liferay.ide.portlet.ui.propertyPage.project.validation"; //$NON-NLS-1$
 
-    public static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities";
+    public static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities"; //$NON-NLS-1$
 
-    public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation";
+    public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation"; //$NON-NLS-1$
 
     static
     {
@@ -130,7 +131,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
         gd.horizontalIndent = 0;
 
         Label description = new Label( body, SWT.NONE );
-        description.setText( "Select the severity level for the following validation problems:" );
+        description.setText( Msgs.selectSeverityLevelLabel );
         description.setFont( pageContent.getFont() );
         description.setLayoutData( gd );
 
@@ -221,4 +222,16 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
         setValid( errorMessage == null );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String error;
+        public static String ignore;
+        public static String selectSeverityLevelLabel;
+        public static String warning;
+
+        static
+        {
+            initializeMessages( ProjectValidationSettingsPage.class.getName(), Msgs.class );
+        }
+    }
 }

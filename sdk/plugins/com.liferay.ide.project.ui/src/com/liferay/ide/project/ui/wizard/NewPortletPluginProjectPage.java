@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -30,6 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jst.j2ee.internal.wizard.J2EEComponentFacetCreationWizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -59,12 +61,12 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
     public NewPortletPluginProjectPage( NewPluginProjectWizard wizard, IDataModel model )
     {
-        super( model, "advanced.page" );
+        super( model, "advanced.page" ); //$NON-NLS-1$
 
         setWizard( wizard );
         setImageDescriptor( wizard.getDefaultPageImageDescriptor() );
-        setTitle( "Liferay Portlet Plugin Project" );
-        setDescription( "Choose from available portlet frameworks depending on which technology is most appropriate for this project." );
+        setTitle( Msgs.liferayPortletPluginProject );
+        setDescription( Msgs.choosePortletFrameworks );
     }
 
     @Override
@@ -75,7 +77,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
     protected void createFrameworkGroup( Composite parent )
     {
-        Group group = SWTUtil.createGroup( parent, "Select portlet framework", 2 );
+        Group group = SWTUtil.createGroup( parent, Msgs.selectPortletFramework, 2 );
         GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 );
         layoutData.widthHint = 500;// make sure the width doesn't grow the dialog
         group.setLayoutData( layoutData );
@@ -101,7 +103,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
                 }
                 else
                 {
-                    iconUrl = "icons/e16/jsp-template.png";
+                    iconUrl = "icons/e16/jsp-template.png"; //$NON-NLS-1$
                     bundleId = ProjectUIPlugin.PLUGIN_ID;
                 }
 
@@ -128,7 +130,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
                 final URL helpUrl = framework.getHelpUrl();
                 final String url = (helpUrl != null ? helpUrl.toExternalForm() : null);
-                Link descriptionWithLink = SWTUtil.createHyperLink(group, SWT.WRAP, framework.getDescription() + (helpUrl != null ? " <a>Learn more....</a>" : ""), 1, url);
+                Link descriptionWithLink = SWTUtil.createHyperLink(group, SWT.WRAP, framework.getDescription() + (helpUrl != null ? NLS.bind( " <a>{0}</a>", Msgs.learnMoreLink ) : StringUtil.EMPTY), 1, url); //$NON-NLS-1$
                 descriptionWithLink.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
                 if( helpUrl != null )
@@ -145,7 +147,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
                             }
                             catch( Exception e1 )
                             {
-                                ProjectUIPlugin.logError( "Could not open external browser", e1 );
+                                ProjectUIPlugin.logError( "Could not open external browser", e1 ); //$NON-NLS-1$
                             }
                         }
 
@@ -291,4 +293,16 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
         return (NewPluginProjectWizard) super.getWizard();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String choosePortletFrameworks;
+        public static String learnMoreLink;
+        public static String liferayPortletPluginProject;
+        public static String selectPortletFramework;
+
+        static
+        {
+            initializeMessages( NewPortletPluginProjectPage.class.getName(), Msgs.class );
+        }
+    }
 }

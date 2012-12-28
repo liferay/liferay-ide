@@ -70,12 +70,12 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDataModelProperties
 {
 
-    protected static final String DEFAULT_DEPLOY_PATH = "/WEB-INF/classes";
+    protected static final String DEFAULT_DEPLOY_PATH = "/WEB-INF/classes"; //$NON-NLS-1$
 
     /**
      * copied from ProjectFacetPreferencesGroup
      */
-    private static final String PATH_IN_PROJECT = ".settings/org.eclipse.wst.common.project.facet.core.prefs.xml";
+    private static final String PATH_IN_PROJECT = ".settings/org.eclipse.wst.common.project.facet.core.prefs.xml"; //$NON-NLS-1$
 
     protected IDataModel masterModel = null;
 
@@ -99,7 +99,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( CoreException e )
         {
-            ProjectCorePlugin.logError( "Unable to create link", e );
+            ProjectCorePlugin.logError( "Unable to create link", e ); //$NON-NLS-1$
         }
 
         try
@@ -109,7 +109,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( JavaModelException e )
         {
-            ProjectCorePlugin.logError( "Unable to set java-ouput-path", e );
+            ProjectCorePlugin.logError( "Unable to set java-ouput-path", e ); //$NON-NLS-1$
         }
     }
 
@@ -499,7 +499,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
                     IContainer outputParent = oldOutputFolder.getParent();
                     oldOutputFolder.delete( true, null );
 
-                    if( outputParent.members().length == 0 && outputParent.getName().equals( "build" ) )
+                    if( outputParent.members().length == 0 && outputParent.getName().equals( "build" ) ) //$NON-NLS-1$
                     {
                         outputParent.delete( true, null );
                     }

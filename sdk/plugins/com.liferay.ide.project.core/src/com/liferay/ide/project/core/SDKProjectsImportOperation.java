@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -49,7 +50,7 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
         final Object[] projects =
             (Object[]) model.getProperty( ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS );
 
-        WorkspaceJob workspaceJob = new WorkspaceJob( "Creating SDK Projects" )
+        WorkspaceJob workspaceJob = new WorkspaceJob( Msgs.creatingSDKProjects )
         {
             /*
              * (non-Javadoc)
@@ -78,4 +79,13 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
         return Status.OK_STATUS;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String creatingSDKProjects;
+
+        static
+        {
+            initializeMessages( SDKProjectsImportOperation.class.getName(), Msgs.class );
+        }
+    }
 }

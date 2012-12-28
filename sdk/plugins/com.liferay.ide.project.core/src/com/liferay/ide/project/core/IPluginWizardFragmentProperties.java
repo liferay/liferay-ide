@@ -21,8 +21,8 @@ package com.liferay.ide.project.core;
 public interface IPluginWizardFragmentProperties
 {
 
-    public static final String FACET_RUNTIME = "IPluginWizardFragmentProperties.FACET_RUNTIME";
+    public static final String FACET_RUNTIME = "IPluginWizardFragmentProperties.FACET_RUNTIME"; //$NON-NLS-1$
 
-    public static final String REMOVE_EXISTING_ARTIFACTS = "IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS";
+    public static final String REMOVE_EXISTING_ARTIFACTS = "IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS"; //$NON-NLS-1$
 
 }

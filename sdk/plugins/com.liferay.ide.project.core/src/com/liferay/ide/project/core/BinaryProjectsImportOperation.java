@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -66,7 +67,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
         final BridgedRuntime bridgedRuntime =
             (BridgedRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-        WorkspaceJob job = new WorkspaceJob( "Importing Binary Project Plugins" )
+        WorkspaceJob job = new WorkspaceJob( Msgs.importingBinaryProjectPlugins )
         {
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -76,7 +77,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
                     SDKManager sdkManager = SDKManager.getInstance();
                     SDK liferaySDK = sdkManager.getSDK( new Path( sdkLocation ) );
                     Object[] seleBinaryRecords = (Object[]) projects;
-                    monitor.beginTask( "Creating SDK Projects", seleBinaryRecords.length );
+                    monitor.beginTask( Msgs.creatingSDKProjects, seleBinaryRecords.length );
                     ProjectRecord[] projectRecords = new ProjectRecord[seleBinaryRecords.length];
 
                     for( int i = 0; i < seleBinaryRecords.length; i++ )
@@ -85,14 +86,14 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 
                         try
                         {
-                            monitor.setTaskName( "Creating Plugin  " + pluginBinaryRecord.getLiferayPluginName() );
+                            monitor.setTaskName( Msgs.creatingPlugin + pluginBinaryRecord.getLiferayPluginName() );
                             projectRecords[i] =
                                 ProjectImportUtil.createSDKPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
                             monitor.worked( 1 );
                         }
                         catch( IOException e )
                         {
-                            throw new CoreException( ProjectCorePlugin.createErrorStatus( "Error creating project.", e ) );
+                            throw new CoreException( ProjectCorePlugin.createErrorStatus( "Error creating project.", e ) ); //$NON-NLS-1$
                         }
 
                     }
@@ -113,4 +114,15 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
         return Status.OK_STATUS;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String creatingPlugin;
+        public static String creatingSDKProjects;
+        public static String importingBinaryProjectPlugins;
+
+        static
+        {
+            initializeMessages( BinaryProjectsImportOperation.class.getName(), Msgs.class );
+        }
+    }
 }

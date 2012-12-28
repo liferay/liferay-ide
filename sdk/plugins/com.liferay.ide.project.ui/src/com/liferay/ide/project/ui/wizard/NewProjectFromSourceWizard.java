@@ -19,6 +19,7 @@ package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
@@ -36,10 +37,19 @@ public class NewProjectFromSourceWizard extends LiferayProjectImportWizard
     {
         super( dataModel );
 
-        setWindowTitle( "New Liferay Project" );
+        setWindowTitle( Msgs.newLiferayProject );
         setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/plugin_project.png" ) );
+            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/plugin_project.png" ) ); //$NON-NLS-1$
         setNeedsProgressMonitor( true );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newLiferayProject;
+
+        static
+        {
+            initializeMessages( NewProjectFromSourceWizard.class.getName(), Msgs.class );
+        }
+    }
 }

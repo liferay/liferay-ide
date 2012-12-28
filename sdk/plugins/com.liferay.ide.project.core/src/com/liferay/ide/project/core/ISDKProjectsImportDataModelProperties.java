@@ -23,12 +23,12 @@ import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCr
 public interface ISDKProjectsImportDataModelProperties extends IFacetProjectCreationDataModelProperties
 {
 
-    public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME";
+    public static final String LIFERAY_SDK_NAME = "ISDKProjectsImportDataModelProperties.LIFERAY_SDK_NAME"; //$NON-NLS-1$
 
-    public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION";
+    public static final String SDK_LOCATION = "ISDKProjectsImportDataModelProperties.SDK_LOCATION"; //$NON-NLS-1$
 
-    public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION";
+    public static final String SDK_VERSION = "ISDKProjectsImportDataModelProperties.SDK_VERSION"; //$NON-NLS-1$
 
-    public static final String SELECTED_PROJECTS = "ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS";
+    public static final String SELECTED_PROJECTS = "ISDKProjectsImportDataModelProperties.SELECTED_PROJECTS"; //$NON-NLS-1$
 
 }

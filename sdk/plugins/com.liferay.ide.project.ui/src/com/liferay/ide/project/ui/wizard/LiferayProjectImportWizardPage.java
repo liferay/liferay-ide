@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ILiferayProjectImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -25,6 +26,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -65,19 +67,19 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 
         if( parentWizard instanceof NewProjectFromSourceWizard )
         {
-            setTitle( "New Liferay Project from Existing Source" );
-            setDescription( "Browse to an existing Liferay project to import." );
+            setTitle( Msgs.newLiferayProject );
+            setDescription( Msgs.browseExistingLiferayProject );
         }
         else
         {
-            setTitle( "Import Liferay Project" );
-            setDescription( "Select an existing Liferay project to import." );
+            setTitle( Msgs.importLiferayProject );
+            setDescription( Msgs.selectExistingLiferayProject );
         }
     }
 
     protected void createProjectLocationField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay project location:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayProjectLocationLabel, 1 );
 
         projectLocation = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( projectLocation, PROJECT_LOCATION, null );
@@ -94,7 +96,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
             }
         } );
 
-        Button iconFileBrowse = SWTUtil.createPushButton( topComposite, "Browse...", null );
+        Button iconFileBrowse = SWTUtil.createPushButton( topComposite, Msgs.browse, null );
         iconFileBrowse.setLayoutData( new GridData( GridData.VERTICAL_ALIGN_BEGINNING ) );
         iconFileBrowse.addSelectionListener( new SelectionAdapter()
         {
@@ -109,35 +111,35 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
 
     protected void createSDKVersionField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK version:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKVersionLabel, 1 );
 
         sdkVersion = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-        SWTUtil.createLabel( topComposite, "", 1 );
+        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
     }
 
     protected void createPluginTypeField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay plugin type:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginTypeLabel, 1 );
 
         pluginType = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( pluginType, PLUGIN_TYPE, null );
 
-        SWTUtil.createLabel( topComposite, "", 1 );
+        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
     }
 
     protected void createTargetRuntimeGroup( Composite parent )
     {
         Label label = new Label( parent, SWT.NONE );
-        label.setText( "Liferay target runtime:" );
+        label.setText( Msgs.liferayTargetRuntimeLabel );
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         serverTargetCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
         serverTargetCombo.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 
         Button newServerTargetButton = new Button( parent, SWT.NONE );
-        newServerTargetButton.setText( "New..." );
+        newServerTargetButton.setText( Msgs.newButton );
         newServerTargetButton.addSelectionListener( new SelectionAdapter()
         {
             @Override
@@ -146,7 +148,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
                 final DataModelPropertyDescriptor[] preAdditionDescriptors =
                     model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." ); //$NON-NLS-1$
 
                 if( isOK )
                 {
@@ -213,7 +215,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
     {
         DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
 
-        dd.setText( "Select Liferay project folder" );
+        dd.setText( Msgs.selectLiferayProjectFolder );
 
         if( !CoreUtil.isNullOrEmpty( projectLocation.getText() ) )
         {
@@ -279,5 +281,25 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
         }
 
         return false;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String browse;
+        public static String browseExistingLiferayProject;
+        public static String importLiferayProject;
+        public static String liferayPluginSDKVersionLabel;
+        public static String liferayPluginTypeLabel;
+        public static String liferayProjectLocationLabel;
+        public static String liferayTargetRuntimeLabel;
+        public static String newButton;
+        public static String newLiferayProject;
+        public static String selectExistingLiferayProject;
+        public static String selectLiferayProjectFolder;
+
+        static
+        {
+            initializeMessages( LiferayProjectImportWizardPage.class.getName(), Msgs.class );
+        }
     }
 }

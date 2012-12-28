@@ -51,6 +51,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
@@ -138,7 +139,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         {
             liferayWizardImageDescriptor =
                 ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
-                    "/icons/wizban/plugin_project.png" ) );
+                    "/icons/wizban/plugin_project.png" ) ); //$NON-NLS-1$
         }
 
         return liferayWizardImageDescriptor;
@@ -253,7 +254,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
                     try
                     {
                         AbstractPortletFrameworkDelegate delegate =
-                            (AbstractPortletFrameworkDelegate) element.createExecutableExtension( "class" );
+                            (AbstractPortletFrameworkDelegate) element.createExecutableExtension( "class" ); //$NON-NLS-1$
                         delegate.setFrameworkId( frameworkId );
                         delegate.setIconUrl( iconUrl );
                         delegate.setBundleId( element.getContributor().getName() );
@@ -262,7 +263,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
                     }
                     catch( CoreException e )
                     {
-                        ProjectUIPlugin.logError( "Could not create portlet plugin template delegate.", e );
+                        ProjectUIPlugin.logError( "Could not create portlet plugin template delegate.", e ); //$NON-NLS-1$
                     }
 
                 }
@@ -308,7 +309,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
     @Override
     protected IFacetedProjectTemplate getTemplate()
     {
-        return ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_DEFAULT_FACET_TEMPLATE ); //$NON-NLS-1$
+        return ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_DEFAULT_FACET_TEMPLATE );
     }
 
     @Override
@@ -386,10 +387,10 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             {
                 Map<String, String> args = new HashMap<String, String>();
 
-                args.put( "force", "true" );
+                args.put( "force", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
 
                 getFacetedProject().getProject().build(
-                    IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
+                    IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null ); //$NON-NLS-1$
             }
             catch( CoreException e )
             {
@@ -415,14 +416,14 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
                         }
                         catch( ExecutionException e )
                         {
-                            ProjectUIPlugin.logError( "Error executing wizard fragment", e );
+                            ProjectUIPlugin.logError( "Error executing wizard fragment", e ); //$NON-NLS-1$
                         }
                     }
                 } );
             }
             catch( InterruptedException e )
             {
-                ProjectUIPlugin.logError( "Error executing wizard fragment", e );
+                ProjectUIPlugin.logError( "Error executing wizard fragment", e ); //$NON-NLS-1$
             }
         }
         
@@ -438,7 +439,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             }
             catch( Exception e )
             {
-                ProjectCorePlugin.logError( "Failed to delete welcome file list elements", e );
+                ProjectCorePlugin.logError( "Failed to delete welcome file list elements", e ); //$NON-NLS-1$
             }
         }
 
@@ -450,7 +451,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
                 if( project != null )
                 {
-                    IFile buildXmlFile = project.getFile( "build.xml" );
+                    IFile buildXmlFile = project.getFile( "build.xml" ); //$NON-NLS-1$
 
                     if( buildXmlFile.exists() )
                     {
@@ -460,7 +461,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
                         IViewPart antView =
                             PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-                                "org.eclipse.ant.ui.views.AntView" );
+                                "org.eclipse.ant.ui.views.AntView" ); //$NON-NLS-1$
 
                         if( antView instanceof AntView )
                         {
@@ -512,8 +513,17 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
     protected void setupWizard()
     {
-        setWindowTitle( "New Liferay Project" );
+        setWindowTitle( Msgs.newLiferayProject );
         setShowFacetsSelectionPage( false );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newLiferayProject;
+
+        static
+        {
+            initializeMessages( NewPluginProjectWizard.class.getName(), Msgs.class );
+        }
+    }
 }

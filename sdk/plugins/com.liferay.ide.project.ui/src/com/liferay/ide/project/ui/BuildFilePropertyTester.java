@@ -30,7 +30,7 @@ public class BuildFilePropertyTester extends PropertyTester
         {
             IFile file = (IFile) receiver;
 
-            if( file.exists() && file.getName().equals( "build.xml" ) )
+            if( file.exists() && file.getName().equals( "build.xml" ) ) //$NON-NLS-1$
             {
                 return true;
             }

@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
@@ -39,6 +40,7 @@ import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -62,7 +64,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
     protected final class BinaryLabelProvider extends StyledCellLabelProvider
     {
-        private static final String GREY_COLOR = "already_exist_element_color";
+        private static final String GREY_COLOR = "already_exist_element_color"; //$NON-NLS-1$
         private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
         private final Styler GREYED_STYLER;
 
@@ -99,7 +101,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
                 // TODO:show warning that some project exists, similar to what we get when importing projects with
                 // standard import existing project into workspace
                 styledString = new StyledString( binaryProjectRecord.getBinaryName(), GREYED_STYLER );
-                styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
+                styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER ); //$NON-NLS-1$ //$NON-NLS-2$
             }
             else
             {
@@ -107,7 +109,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
                     new StyledString( binaryProjectRecord.getBinaryName(), StyledString.createColorRegistryStyler(
                         JFacePreferences.CONTENT_ASSIST_FOREGROUND_COLOR,
                         JFacePreferences.CONTENT_ASSIST_BACKGROUND_COLOR ) );
-                styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER );
+                styledString.append( " (" + binaryProjectRecord.getFilePath() + ") ", GREYED_STYLER ); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
             cell.setImage( getImage() );
@@ -124,19 +126,19 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
     {
         super( model, pageName );
 
-        setTitle( "Import Liferay Binary Plugins" );
-        setDescription( "Select binary plugins (wars) to import as new Liferay Plugin Projects" );
+        setTitle( Msgs.importLiferayBinaryPlugins );
+        setDescription( Msgs.selectBinaryPlugins );
     }
 
     protected void createBinaryLocationField( Composite parent )
     {
         Label label = new Label( parent, SWT.NONE );
-        label.setText( "Select plugins root directory:" );
+        label.setText( Msgs.selectPluginsRootDirectoryLabel );
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         binariesLocation = SWTUtil.createSingleText( parent, 1 );
 
-        Button browse = SWTUtil.createButton( parent, "Browse..." );
+        Button browse = SWTUtil.createButton( parent, Msgs.browse );
         browse.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -167,7 +169,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         };
 
         new LiferaySDKField(
-            parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Select SDK to copy into:" );
+            parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, Msgs.selectSDKLabel );
     }
 
     @Override
@@ -175,7 +177,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
     {
         super.createProjectsList( workArea );
 
-        this.labelProjectsList.setText( "Binary plugins:" );
+        this.labelProjectsList.setText( Msgs.binaryPluginsLabel );
     }
 
     @Override
@@ -195,11 +197,11 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         if( filterPath != null )
         {
             dd.setFilterPath( filterPath );
-            dd.setText( "Select root directory " + " - " + filterPath ); //$NON-NLS-1$
+            dd.setText( NLS.bind( Msgs.selectRootDirectoryPath, filterPath ) );
         }
         else
         {
-            dd.setText( "Select root directory" );
+            dd.setText( Msgs.selectRootDirectory );
         }
 
         if( CoreUtil.isNullOrEmpty( binariesLocation.getText() ) )
@@ -315,7 +317,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         // on an empty path empty selectedProjects
         if( path == null || path.length() == 0 )
         {
-            setMessage( "" ); //$NON-NLS-1$
+            setMessage( StringUtil.EMPTY );
 
             selectedProjects = new BinaryProjectRecord[0];
 
@@ -334,7 +336,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         String sdkLocationPath = sdkLocation.getText();
         if( sdkLocationPath != null && sdkLocationPath.equals( path ) )
         {
-            path = sdkLocationPath + "/dist";
+            path = sdkLocationPath + "/dist"; //$NON-NLS-1$
         }
 
         final File directory = new File( path );
@@ -367,7 +369,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
                 public void run( IProgressMonitor monitor )
                 {
 
-                    monitor.beginTask( "", 100 ); //$NON-NLS-1$
+                    monitor.beginTask( StringUtil.EMPTY, 100 );
 
                     selectedProjects = new BinaryProjectRecord[0];
 
@@ -389,7 +391,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
                         monitor.worked( 50 );
 
-                        monitor.subTask( "" ); //$NON-NLS-1$
+                        monitor.subTask( StringUtil.EMPTY );
 
                         for( File binaryFile : projectBinaries )
                         {
@@ -425,7 +427,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
         if( selectedProjects.length == 0 )
         {
-            setMessage( "", WARNING ); //$NON-NLS-1$
+            setMessage( StringUtil.EMPTY, WARNING );
         }
 
         Object[] checkedBinaries = projectsList.getCheckedElements();
@@ -442,4 +444,20 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String binaryPluginsLabel;
+        public static String browse;
+        public static String importLiferayBinaryPlugins;
+        public static String selectBinaryPlugins;
+        public static String selectPluginsRootDirectoryLabel;
+        public static String selectRootDirectory;
+        public static String selectRootDirectoryPath;
+        public static String selectSDKLabel;
+
+        static
+        {
+            initializeMessages( BinaryProjectsImportWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

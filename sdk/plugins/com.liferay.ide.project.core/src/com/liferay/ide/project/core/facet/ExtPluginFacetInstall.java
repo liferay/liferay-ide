@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.ISDKConstants;
@@ -102,9 +103,9 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
             IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
 
-            deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) );
-            deleteFolder( webappRoot.getFolder( "WEB-INF/classes" ) );
-            deleteFolder( webappRoot.getFolder( "WEB-INF/ext-web/docroot/WEB-INF/lib" ) );
+            deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) ); //$NON-NLS-1$
+            deleteFolder( webappRoot.getFolder( "WEB-INF/classes" ) ); //$NON-NLS-1$
+            deleteFolder( webappRoot.getFolder( "WEB-INF/ext-web/docroot/WEB-INF/lib" ) ); //$NON-NLS-1$
         }
 
         IJavaProject javaProject = JavaCore.create( project );
@@ -123,7 +124,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
                 this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i] ).getFullPath();
 
             IClasspathAttribute[] attributes =
-                new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "owner.project.facets", "liferay.ext" ) };
+                new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "owner.project.facets", "liferay.ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
 
             IClasspathEntry sourceEntry =
                 JavaCore.newSourceEntry( sourcePath, new IPath[0], new IPath[0], outputPath, attributes );
@@ -162,7 +163,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
     {
         IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
 
-        IFile tilesDefExtFile = webappRoot.getFile( "WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml" );
+        IFile tilesDefExtFile = webappRoot.getFile( "WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml" ); //$NON-NLS-1$
 
         if( tilesDefExtFile.exists() )
         {
@@ -177,12 +178,12 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
                 Element root = document.getDocumentElement();
 
-                Element def = document.createElement( "definition" );
+                Element def = document.createElement( "definition" ); //$NON-NLS-1$
 
-                def.setAttribute( "name", "" );
+                def.setAttribute( "name", StringUtil.EMPTY ); //$NON-NLS-1$
 
                 root.appendChild( def );
-                root.appendChild( document.createTextNode( "\n" ) );
+                root.appendChild( document.createTextNode( "\n" ) ); //$NON-NLS-1$
 
                 new FormatProcessorXML().formatNode( def );
 

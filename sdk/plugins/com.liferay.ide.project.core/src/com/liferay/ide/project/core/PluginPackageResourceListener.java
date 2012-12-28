@@ -17,6 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -58,6 +59,7 @@ import org.eclipse.jdt.internal.core.ClasspathEntry;
 import org.eclipse.jst.common.jdt.internal.classpath.FlexibleProjectContainer;
 import org.eclipse.jst.j2ee.internal.J2EEConstants;
 import org.eclipse.jst.j2ee.internal.common.classpath.J2EEComponentClasspathContainerUtils;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IAddReferenceDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.operation.AddReferenceDataModelProvider;
@@ -96,7 +98,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                 {
                     IProjectFacet projectFacet = facet.getProjectFacet();
 
-                    if( projectFacet.getId().startsWith( "liferay." ) )
+                    if( projectFacet.getId().startsWith( "liferay." ) ) //$NON-NLS-1$
                     {
                         retval = true;
 
@@ -165,7 +167,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
             // IDE-110 648
             final IVirtualFile propertiesFile =
-                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
 
             if( propertiesFile != null && propertiesFile.exists() )
             {
@@ -244,11 +246,11 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
     protected void processPortalDependencyTlds( Properties props, IProject project )
     {
-        String portalDependencyTlds = props.getProperty( "portal-dependency-tlds" );
+        String portalDependencyTlds = props.getProperty( "portal-dependency-tlds" ); //$NON-NLS-1$
 
         if( portalDependencyTlds != null )
         {
-            String[] portalTlds = portalDependencyTlds.split( "," );
+            String[] portalTlds = portalDependencyTlds.split( StringUtil.COMMA );
 
             IVirtualComponent comp = ComponentCore.createComponent( project );
 
@@ -256,7 +258,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             {
                 IFolder webroot = (IFolder) comp.getRootFolder().getUnderlyingFolder();
 
-                final IFolder tldFolder = webroot.getFolder( "WEB-INF/tld" );
+                final IFolder tldFolder = webroot.getFolder( "WEB-INF/tld" ); //$NON-NLS-1$
 
                 IPath portalDir = ServerUtil.getPortalDir( project );
 
@@ -268,7 +270,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
                     if( !tldFile.exists() )
                     {
-                        IPath realPortalTld = portalDir.append( "WEB-INF/tld/" + portalTld );
+                        IPath realPortalTld = portalDir.append( "WEB-INF/tld/" + portalTld ); //$NON-NLS-1$
 
                         if( realPortalTld.toFile().exists() )
                         {
@@ -279,7 +281,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
                 if( tldFilesToCopy.size() > 0 )
                 {
-                    new WorkspaceJob( "copy portal tlds" )
+                    new WorkspaceJob( "copy portal tlds" ) //$NON-NLS-1$
                     {
                         @Override
                         public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -335,7 +337,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             IPath path = entry.getPath();
             String archiveName = path.lastSegment();
 
-            if( archiveName.endsWith( "-service.jar" ) )
+            if( archiveName.endsWith( "-service.jar" ) ) //$NON-NLS-1$
             {
                 IFile file = getWorkspaceFile( path );
 
@@ -354,11 +356,11 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
         final List<IVirtualReference> addRefs = new ArrayList<IVirtualReference>();
 
-        String requiredDeploymenContexts = props.getProperty( "required-deployment-contexts" );
+        String requiredDeploymenContexts = props.getProperty( "required-deployment-contexts" ); //$NON-NLS-1$
 
         if( requiredDeploymenContexts != null )
         {
-            String[] contexts = requiredDeploymenContexts.split( "," );
+            String[] contexts = requiredDeploymenContexts.split( StringUtil.COMMA );
 
             if( !CoreUtil.isNullOrEmpty( contexts ) )
             {
@@ -374,7 +376,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             }
         }
 
-        new WorkspaceJob( "Update virtual component." )
+        new WorkspaceJob( "Update virtual component." ) //$NON-NLS-1$
         {
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -392,7 +394,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
         final IFile pluginPackagePropertiesFile = getWorkspaceFile( deltaPath );
 
-        new WorkspaceJob( "Processing plugin package resource." )
+        new WorkspaceJob( Msgs.processingPluginPackageResource )
         {
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -549,13 +551,13 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                     IProject referencedFileProject = referencedFile.getProject();
                     // IDE-110 IDE-648
                     ( (ClasspathEntry) entry ).sourceAttachmentPath =
-                        referencedFileProject.getFolder( "docroot/WEB-INF/service" ).getFullPath();
+                        referencedFileProject.getFolder( "docroot/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
                 }
             }
         }
 
         ClasspathContainerInitializer initializer =
-            JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" );
+            JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" ); //$NON-NLS-1$
 
         initializer.requestClasspathContainerUpdate( container.getPath(), javaProject, container );
     }
@@ -573,7 +575,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             {
                 if( shouldProcessResourceDelta( delta ) )
                 {
-                    Job job = new WorkspaceJob( "Processing plugin package resource." )
+                    Job job = new WorkspaceJob( Msgs.processingPluginPackageResource )
                     {
                         @Override
                         public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -597,4 +599,13 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         return false;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String processingPluginPackageResource;
+
+        static
+        {
+            initializeMessages( PluginPackageResourceListener.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -30,21 +30,21 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 public interface IPortletFrameworkWizardProvider
 {
 
-    String DEFAULT = "default";
+    String DEFAULT = "default"; //$NON-NLS-1$
 
-    String DESCRIPTION = "description";
+    String DESCRIPTION = "description"; //$NON-NLS-1$
 
-    String DISPLAY_NAME = "displayName";
+    String DISPLAY_NAME = "displayName"; //$NON-NLS-1$
 
-    String EXTENSION_ID = "com.liferay.ide.project.core.portletFrameworkWizardProviders";
+    String EXTENSION_ID = "com.liferay.ide.project.core.portletFrameworkWizardProviders"; //$NON-NLS-1$
 
-    String HELP_URL = "helpUrl";
+    String HELP_URL = "helpUrl"; //$NON-NLS-1$
 
-    String ID = "id";
+    String ID = "id"; //$NON-NLS-1$
 
-    String REQUIRED_SDK_VERSION = "requiredSDKVersion";
+    String REQUIRED_SDK_VERSION = "requiredSDKVersion"; //$NON-NLS-1$
 
-    String SHORT_NAME = "shortName";
+    String SHORT_NAME = "shortName"; //$NON-NLS-1$
 
     IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
 

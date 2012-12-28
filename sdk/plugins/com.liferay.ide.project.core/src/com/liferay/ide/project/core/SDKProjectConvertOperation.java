@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -108,7 +109,7 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
             record.description.setName( projectName );
         }
 
-        monitor.beginTask( "Importing project", 100 );
+        monitor.beginTask( Msgs.importingProject, 100 );
 
         project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
 
@@ -173,5 +174,15 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
         }
 
         return sdkName;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String importingProject;
+
+        static
+        {
+            initializeMessages( SDKProjectConvertOperation.class.getName(), Msgs.class );
+        }
     }
 }

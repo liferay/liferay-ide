@@ -181,11 +181,11 @@ public class NewPortletDropDownAction extends Action implements IMenuCreator, IW
 
     protected String getExtraTypeAttribute()
     {
-        return "liferay_extra_artifact";
+        return "liferay_extra_artifact"; //$NON-NLS-1$
     }
 
     protected String getTypeAttribute()
     {
-        return "liferay_artifact";
+        return "liferay_artifact"; //$NON-NLS-1$
     }
 }

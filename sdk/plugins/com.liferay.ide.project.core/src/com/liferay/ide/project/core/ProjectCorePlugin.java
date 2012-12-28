@@ -40,9 +40,9 @@ public class ProjectCorePlugin extends CorePlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.project.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
 
-    public static final String USE_PROJECT_SETTINGS = "use-project-settings";
+    public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
     // The shared instance
     private static ProjectCorePlugin plugin;
@@ -117,7 +117,7 @@ public class ProjectCorePlugin extends CorePlugin
                     try
                     {
                         AbstractPortletFrameworkWizardProvider framework =
-                            (AbstractPortletFrameworkWizardProvider) element.createExecutableExtension( "class" );
+                            (AbstractPortletFrameworkWizardProvider) element.createExecutableExtension( "class" ); //$NON-NLS-1$
                         framework.setId( id );
                         framework.setShortName( shortName );
                         framework.setDisplayName( displayName );
@@ -131,7 +131,7 @@ public class ProjectCorePlugin extends CorePlugin
                     }
                     catch( Exception e )
                     {
-                        logError( "Could not create portlet framework.", e );
+                        logError( "Could not create portlet framework.", e ); //$NON-NLS-1$
                     }
                 }
 
@@ -220,21 +220,21 @@ public class ProjectCorePlugin extends CorePlugin
 
                 for( IConfigurationElement element : elements )
                 {
-                    final Object o = element.createExecutableExtension( "class" );
+                    final Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
 
                     if( o instanceof AbstractProjectDefinition )
                     {
                         AbstractProjectDefinition projectDefinition = (AbstractProjectDefinition) o;
-                        projectDefinition.setFacetId( element.getAttribute( "facetId" ) );
-                        projectDefinition.setShortName( element.getAttribute( "shortName" ) );
-                        projectDefinition.setDisplayName( element.getAttribute( "displayName" ) );
-                        projectDefinition.setFacetedProjectTemplateId( element.getAttribute( "facetedProjectTemplateId" ) );
+                        projectDefinition.setFacetId( element.getAttribute( "facetId" ) ); //$NON-NLS-1$
+                        projectDefinition.setShortName( element.getAttribute( "shortName" ) ); //$NON-NLS-1$
+                        projectDefinition.setDisplayName( element.getAttribute( "displayName" ) ); //$NON-NLS-1$
+                        projectDefinition.setFacetedProjectTemplateId( element.getAttribute( "facetedProjectTemplateId" ) ); //$NON-NLS-1$
 
                         int menuIndex = Integer.MAX_VALUE;
 
                         try
                         {
-                            String intVal = element.getAttribute( "menuIndex" );
+                            String intVal = element.getAttribute( "menuIndex" ); //$NON-NLS-1$
 
                             if( intVal != null )
                             {
@@ -243,7 +243,7 @@ public class ProjectCorePlugin extends CorePlugin
                         }
                         catch( Exception e )
                         {
-                            ProjectCorePlugin.logError( "Error reading project definition.", e );
+                            ProjectCorePlugin.logError( "Error reading project definition.", e ); //$NON-NLS-1$
                         }
 
                         projectDefinition.setMenuIndex( menuIndex );

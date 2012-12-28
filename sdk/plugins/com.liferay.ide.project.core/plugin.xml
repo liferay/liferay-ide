@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="liferayProjects" name="Liferay Project Definitions" schema="schema/liferayProjects.exsd"/>
-   <extension-point id="portletFrameworkWizardProviders" name="Portlet Plugin Framework Wizard Providers" schema="schema/portletFrameworkWizardProviders.exsd"/>
+   <extension-point id="liferayProjects" name="%project.definitions.name" schema="schema/liferayProjects.exsd"/>
+   <extension-point id="portletFrameworkWizardProviders" name="%portlet.plugin.framework.wizard.providers.name" schema="schema/portletFrameworkWizardProviders.exsd"/>
    
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">

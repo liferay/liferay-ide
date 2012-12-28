@@ -77,7 +77,7 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation
                 catch( IOException e )
                 {
                     throw new ExecutionException(
-                        "Error while importing Binary:" + pluginBinaryRecord.getBinaryName(), e );
+                        "Error while importing Binary:" + pluginBinaryRecord.getBinaryName(), e ); //$NON-NLS-1$
                 }
 
                 getDataModel().setProperty( SELECTED_PROJECTS, projectRecords );

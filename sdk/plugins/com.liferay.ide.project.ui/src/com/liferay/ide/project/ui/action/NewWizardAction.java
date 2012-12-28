@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.action;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.wizard.INewProjectWizard;
 
@@ -30,6 +31,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -50,7 +52,7 @@ public class NewWizardAction extends Action implements Comparable
 
     public final static String ATT_NAME = "name";//$NON-NLS-1$
 
-    public final static String ATT_PROJECTTYPE = "project_type";
+    public final static String ATT_PROJECTTYPE = "project_type"; //$NON-NLS-1$
 
     public final static String TAG_CLASS = "class"; //$NON-NLS-1$
 
@@ -62,7 +64,7 @@ public class NewWizardAction extends Action implements Comparable
 
     public final static String TAG_VALUE = "value";//$NON-NLS-1$
 
-	public final static String ATT_VALID_PROJECT_TYPES = "validProjectTypes";
+	public final static String ATT_VALID_PROJECT_TYPES = "validProjectTypes"; //$NON-NLS-1$
 
     protected IConfigurationElement fConfigurationElement;
 
@@ -80,7 +82,7 @@ public class NewWizardAction extends Action implements Comparable
 
         String description = getDescriptionFromConfig( fConfigurationElement );
 
-        setText( "New " + element.getAttribute( ATT_NAME ) );
+        setText( NLS.bind( Msgs.newAction, element.getAttribute( ATT_NAME ) ) );
         setDescription( description );
         setToolTipText( description );
         setImageDescriptor( getIconFromConfig( fConfigurationElement ) );
@@ -177,7 +179,7 @@ public class NewWizardAction extends Action implements Comparable
             return children[0].getValue();
         }
 
-        return ""; //$NON-NLS-1$
+        return StringUtil.EMPTY;
     }
 
     private ImageDescriptor getIconFromConfig( IConfigurationElement config )
@@ -262,5 +264,15 @@ public class NewWizardAction extends Action implements Comparable
         }
 
         return fShell;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String newAction;
+
+        static
+        {
+            initializeMessages( NewWizardAction.class.getName(), Msgs.class );
+        }
     }
 }

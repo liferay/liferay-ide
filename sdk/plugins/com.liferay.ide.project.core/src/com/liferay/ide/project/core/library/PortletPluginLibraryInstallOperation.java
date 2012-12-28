@@ -29,6 +29,6 @@ public class PortletPluginLibraryInstallOperation extends PluginLibraryInstallOp
 
     protected IPath getClasspathContainerPath()
     {
-        return new Path( PluginClasspathContainerInitializer.ID + "/" + PortletClasspathContainer.SEGMENT_PATH );
+        return new Path( PluginClasspathContainerInitializer.ID + "/" + PortletClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
     }
 }

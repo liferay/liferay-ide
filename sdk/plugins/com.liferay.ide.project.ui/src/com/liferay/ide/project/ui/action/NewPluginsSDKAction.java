@@ -21,6 +21,7 @@ import com.liferay.ide.sdk.pref.SDKsPreferencePage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
@@ -33,17 +34,26 @@ public class NewPluginsSDKAction extends Action
 
     public NewPluginsSDKAction( Shell shell )
     {
-        super( "New Liferay SDK", ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
-            "/icons/n16/sdk_new.png" ) ) );
+        super( Msgs.newLiferaySDK, ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
+            "/icons/n16/sdk_new.png" ) ) ); //$NON-NLS-1$
         this.shell = shell;
     }
 
     @Override
     public void run()
     {
-        PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn( shell, SDKsPreferencePage.ID, null, "new" );
+        PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn( shell, SDKsPreferencePage.ID, null, "new" ); //$NON-NLS-1$
 
         dialog.open();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newLiferaySDK;
+
+        static
+        {
+            initializeMessages( NewPluginsSDKAction.class.getName(), Msgs.class );
+        }
+    }
 }

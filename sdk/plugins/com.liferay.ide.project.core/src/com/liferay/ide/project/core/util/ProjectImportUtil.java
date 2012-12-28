@@ -74,7 +74,7 @@ public class ProjectImportUtil
             return false;
         }
 
-        monitor.subTask( NLS.bind( "Checking: {0}", directory.getPath() ) );
+        monitor.subTask( NLS.bind( Msgs.checking, directory.getPath() ) );
 
         List<String> wildCards = Arrays.asList( ISDKConstants.BINARY_PLUGIN_PROJECT_WILDCARDS );
 
@@ -186,7 +186,7 @@ public class ProjectImportUtil
             ZipUtil.unzip( binaryFile, docRoot );
 
             // IDE-569 check to see if the project already has .project
-            File projectFile = new File( liferayPluginProjectDir, ".project" );
+            File projectFile = new File( liferayPluginProjectDir, ".project" ); //$NON-NLS-1$
 
             if( projectFile.exists() )
             {
@@ -215,7 +215,7 @@ public class ProjectImportUtil
     {
         final List<IProject> createdProjects = new ArrayList<IProject>();
 
-        monitor.beginTask( "Creating SDK Workspace Projects", projects.length );
+        monitor.beginTask( Msgs.creatingSDKWorkspaceProjects, projects.length );
 
         if( projects != null && projects.length > 0 )
         {
@@ -254,7 +254,7 @@ public class ProjectImportUtil
      */
     public static final String getConfigFileLocation( String configFile )
     {
-        StringBuilder sb = new StringBuilder( "WEB-INF/" );
+        StringBuilder sb = new StringBuilder( "WEB-INF/" ); //$NON-NLS-1$
         sb.append( configFile );
         return sb.toString();
 
@@ -328,4 +328,14 @@ public class ProjectImportUtil
         return isValid;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String checking;
+        public static String creatingSDKWorkspaceProjects;
+
+        static
+        {
+            initializeMessages( ProjectImportUtil.class.getName(), Msgs.class );
+        }
+    }
 }

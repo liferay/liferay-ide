@@ -17,21 +17,22 @@ package com.liferay.ide.project.core;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
  */
 public class PortletClasspathContainer extends PluginClasspathContainer
 {
-    public final static String SEGMENT_PATH = "portlet";
+    public final static String SEGMENT_PATH = "portlet"; //$NON-NLS-1$
 
     protected static final String[] portalJars = 
     { 
-        "commons-logging.jar", 
-        "log4j.jar", 
-        "util-bridges.jar",
-        "util-java.jar", 
-        "util-taglib.jar", 
+        "commons-logging.jar",  //$NON-NLS-1$
+        "log4j.jar",  //$NON-NLS-1$
+        "util-bridges.jar", //$NON-NLS-1$
+        "util-java.jar",  //$NON-NLS-1$
+        "util-taglib.jar",  //$NON-NLS-1$
     };
 
     public PortletClasspathContainer(
@@ -42,7 +43,7 @@ public class PortletClasspathContainer extends PluginClasspathContainer
 
     public String getDescription()
     {
-        return "Liferay Portlet Plugin API";
+        return Msgs.liferayPortletPluginAPI;
     }
 
     @Override
@@ -51,4 +52,13 @@ public class PortletClasspathContainer extends PluginClasspathContainer
         return portalJars;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String liferayPortletPluginAPI;
+
+        static
+        {
+            initializeMessages( PortletClasspathContainer.class.getName(), Msgs.class );
+        }
+    }
 }

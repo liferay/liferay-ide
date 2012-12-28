@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
@@ -25,6 +26,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -65,19 +67,19 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
     {
         super( model, pageName );
 
-        setTitle( "Import a Liferay Binary Plugin" );
-        setDescription( "Select a binary plugin (war)to import as new Liferay Plugin Project" );
+        setTitle( Msgs.importLiferayBinaryPlugin );
+        setDescription( Msgs.selectBinaryPlugin );
     }
 
     protected void createBinaryLocationField( Composite parent )
     {
         Label label = new Label( parent, SWT.NONE );
-        label.setText( "Binary plugin file (war)" );
+        label.setText( Msgs.binaryPluginFile );
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         binariesLocation = SWTUtil.createSingleText( parent, 1 );
 
-        Button browse = SWTUtil.createButton( parent, "Browse..." );
+        Button browse = SWTUtil.createButton( parent, Msgs.browse );
         browse.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -104,41 +106,41 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
         };
 
         new LiferaySDKField(
-            parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, "Select SDK to copy into:" );
+            parent, getDataModel(), selectionAdapter, LIFERAY_SDK_NAME, this.synchHelper, Msgs.selectSDKLabel );
     }
 
     protected void createSDKLocationField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK Location:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKLocationLabel, 1 );
 
         sdkLocation = SWTUtil.createText( topComposite, 1 );
         ( (GridData) sdkLocation.getLayoutData() ).widthHint = 300;
         this.synchHelper.synchText( sdkLocation, SDK_LOCATION, null );
 
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, StringUtil.EMPTY, 1 );
     }
 
     protected void createSDKVersionField( Composite topComposite )
     {
-        SWTUtil.createLabel( topComposite, SWT.LEAD, "Liferay Plugin SDK Version:", 1 );
+        SWTUtil.createLabel( topComposite, SWT.LEAD, Msgs.liferayPluginSDKVersionLabel, 1 );
 
         sdkVersion = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-        SWTUtil.createLabel( topComposite, "", 1 );
+        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
     }
 
     protected void createTargetRuntimeGroup( Composite parent )
     {
         Label label = new Label( parent, SWT.NONE );
-        label.setText( "Liferay target runtime:" );
+        label.setText( Msgs.liferayTargetRuntimeLabel );
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         serverTargetCombo = new Combo( parent, SWT.BORDER | SWT.READ_ONLY );
         serverTargetCombo.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
 
         Button newServerTargetButton = new Button( parent, SWT.NONE );
-        newServerTargetButton.setText( "New..." );
+        newServerTargetButton.setText( Msgs.newButton );
         newServerTargetButton.addSelectionListener( new SelectionAdapter()
         {
             @Override
@@ -147,7 +149,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
                 final DataModelPropertyDescriptor[] preAdditionDescriptors =
                     model.getValidPropertyDescriptors( FACET_RUNTIME );
 
-                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." );
+                boolean isOK = ServerUIUtil.showNewRuntimeWizard( getShell(), getModuleTypeID(), null, "com.liferay." ); //$NON-NLS-1$
 
                 if( isOK )
                 {
@@ -224,11 +226,11 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
         if( filterPath != null )
         {
             fd.setFilterPath( filterPath );
-            fd.setText( "Select Liferay Plugin binary folder - " + filterPath );
+            fd.setText( NLS.bind( Msgs.selectLiferayPluginBinaryFolderPath, filterPath ) );
         }
         else
         {
-            fd.setText( "Select Liferay Plugin binary folder - " );
+            fd.setText( Msgs.selectLiferayPluginBinaryFolder );
         }
 
         if( CoreUtil.isNullOrEmpty( binariesLocation.getText() ) )
@@ -250,7 +252,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
             }
             else
             {
-                this.setErrorMessage( "Select a valid Liferay Plugin Binary" );
+                this.setErrorMessage( Msgs.selectValidLiferayPluginBinary );
             }
         }
     }
@@ -274,7 +276,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
     {
         DirectoryDialog dd = new DirectoryDialog( this.getShell(), SWT.OPEN );
 
-        dd.setText( "Select Liferay Plugin SDK folder" );
+        dd.setText( Msgs.selectLiferayPluginSDKFolder );
 
         if( !CoreUtil.isNullOrEmpty( sdkLocation.getText() ) )
         {
@@ -319,4 +321,25 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
         return true;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String binaryPluginFile;
+        public static String browse;
+        public static String importLiferayBinaryPlugin;
+        public static String liferayPluginSDKLocationLabel;
+        public static String liferayPluginSDKVersionLabel;
+        public static String liferayTargetRuntimeLabel;
+        public static String newButton;
+        public static String selectBinaryPlugin;
+        public static String selectLiferayPluginBinaryFolder;
+        public static String selectLiferayPluginBinaryFolderPath;
+        public static String selectLiferayPluginSDKFolder;
+        public static String selectSDKLabel;
+        public static String selectValidLiferayPluginBinary;
+
+        static
+        {
+            initializeMessages( BinaryProjectImportWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

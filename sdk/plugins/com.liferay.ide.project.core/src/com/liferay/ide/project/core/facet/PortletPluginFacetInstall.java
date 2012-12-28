@@ -60,7 +60,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
 
     public static void addLiferayPortletTldToWebXML( final IProject project )
     {
-        ProjectUtil.addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" );
+        ProjectUtil.addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     protected void copyPortletTLD() throws CoreException
@@ -72,15 +72,15 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             return;
         }
 
-        IPath portletTld = portalDir.append( "WEB-INF/tld/liferay-portlet.tld" );
+        IPath portletTld = portalDir.append( "WEB-INF/tld/liferay-portlet.tld" ); //$NON-NLS-1$
 
         if( portletTld.toFile().exists() )
         {
-            IFolder tldFolder = getWebRootFolder().getFolder( "WEB-INF/tld" );
+            IFolder tldFolder = getWebRootFolder().getFolder( "WEB-INF/tld" ); //$NON-NLS-1$
 
             CoreUtil.prepareFolder( tldFolder );
 
-            IFile tldFile = tldFolder.getFile( "liferay-portlet.tld" );
+            IFile tldFile = tldFolder.getFile( "liferay-portlet.tld" ); //$NON-NLS-1$
 
             if( !tldFile.exists() )
             {
@@ -165,7 +165,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                             {
                                 if( container != null && container.exists() )
                                 {
-                                    IFile viewJsp = container.getFile( new Path( "view.jsp" ) );
+                                    IFile viewJsp = container.getFile( new Path( "view.jsp" ) ); //$NON-NLS-1$
 
                                     if( viewJsp.exists() )
                                     {
@@ -178,7 +178,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                     }
                     catch( Exception ex )
                     {
-                        ProjectCorePlugin.logError( "Error deleting view.jsp", ex );
+                        ProjectCorePlugin.logError( "Error deleting view.jsp", ex ); //$NON-NLS-1$
                     }
                 }
             }
@@ -207,15 +207,15 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                     IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
 
                     // IDE-575
-                    if( !( defaultDocroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) &&
-                        defaultDocroot.getFile( "WEB-INF/tld/aui.tld" ).exists() )
+                    if( !( defaultDocroot.getFile( "WEB-INF/tld/liferay-aui.tld" ).exists() ) && //$NON-NLS-1$
+                        defaultDocroot.getFile( "WEB-INF/tld/aui.tld" ).exists() ) //$NON-NLS-1$
                     {
-                        ProjectUtil.addTldToWebXml( project, "http://liferay.com/tld/aui", "/WEB-INF/tld/aui.tld" );
+                        ProjectUtil.addTldToWebXml( project, "http://liferay.com/tld/aui", "/WEB-INF/tld/aui.tld" ); //$NON-NLS-1$ //$NON-NLS-2$
                     }
                 }
                 catch( Exception e1 )
                 {
-                    LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 );
+                    LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 ); //$NON-NLS-1$
                 }
             }
         }
@@ -240,7 +240,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( "Could not store jsp fragment validation preference", e );
+            ProjectCorePlugin.logError( "Could not store jsp fragment validation preference", e ); //$NON-NLS-1$
         }
 
         if( shouldConfigureDeploymentAssembly() )

@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
@@ -163,7 +164,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 
                 if( existingProject != null && existingProject.exists() )
                 {
-                    return ProjectCorePlugin.createErrorStatus( "Project name already exists." );
+                    return ProjectCorePlugin.createErrorStatus( Msgs.projectNameExists );
                 }
 
                 File projectDir = record.getProjectLocation().toFile();
@@ -177,11 +178,11 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
                 }
                 else
                 {
-                    return ProjectCorePlugin.createErrorStatus( "Project is not located inside Liferay Plugins SDK." );
+                    return ProjectCorePlugin.createErrorStatus( Msgs.projectNotLocated );
                 }
             }
 
-            return ProjectCorePlugin.createErrorStatus( "Invalid project location." );
+            return ProjectCorePlugin.createErrorStatus( Msgs.invalidProjectLocation );
         }
         else if( SDK_VERSION.equals( name ) )
         {
@@ -197,7 +198,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
                 }
                 else
                 {
-                    return ProjectCorePlugin.createErrorStatus( "Invalid Plugin SDK version, must be greater than " +
+                    return ProjectCorePlugin.createErrorStatus( Msgs.invalidPluginSDKVersion +
                         SDKManager.getLeastValidVersion() );
                 }
             }
@@ -214,7 +215,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
             }
             else
             {
-                return ProjectCorePlugin.createErrorStatus( "Invalid Liferay plugin type." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.invalidLiferayPluginType );
             }
         }
         else if( FACET_RUNTIME.equals( name ) )
@@ -223,7 +224,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 
             if( !( runtime instanceof BridgedRuntime ) )
             {
-                return ProjectCorePlugin.createErrorStatus( "A valid Liferay runtime must be selected." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.validLiferayRuntimeSelected );
             }
             else
             {
@@ -243,4 +244,18 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
         return (IFacetedProjectWorkingCopy) this.model.getProperty( FACETED_PROJECT_WORKING_COPY );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String invalidLiferayPluginType;
+        public static String invalidPluginSDKVersion;
+        public static String invalidProjectLocation;
+        public static String projectNameExists;
+        public static String projectNotLocated;
+        public static String validLiferayRuntimeSelected;
+
+        static
+        {
+            initializeMessages( LiferayProjectImportDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

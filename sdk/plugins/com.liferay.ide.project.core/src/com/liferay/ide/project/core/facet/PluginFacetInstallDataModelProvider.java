@@ -25,6 +25,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModelProperties;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
@@ -112,14 +113,14 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 
             if( CoreUtil.isNullOrEmpty( sdkName ) )
             {
-                return ProjectCorePlugin.createErrorStatus( "No Plugin SDK configured." );
+                return ProjectCorePlugin.createErrorStatus( Msgs.noPluginSDKConfigured );
             }
 
             SDK sdk = SDKManager.getInstance().getSDK( sdkName );
 
             if( sdk == null )
             {
-                return ProjectCorePlugin.createErrorStatus( "Plugin SDK (" + sdkName + ") is not defined." );
+                return ProjectCorePlugin.createErrorStatus( NLS.bind( Msgs.pluginSDKNotDefined, sdkName ) );
             }
 
             return Status.OK_STATUS;
@@ -130,4 +131,14 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 
     protected abstract String getPluginFacetId();
 
+    private static class Msgs extends NLS
+    {
+        public static String noPluginSDKConfigured;
+        public static String pluginSDKNotDefined;
+
+        static
+        {
+            initializeMessages( PluginFacetInstallDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

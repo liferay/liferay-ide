@@ -18,6 +18,8 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.util.StringUtil;
+
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
@@ -123,9 +125,9 @@ public class ProjectRecord
         String path =
             projectSystemFile != null ? projectSystemFile.getParent() : ( liferayProjectDir != null
                 ? liferayProjectDir.getPath() : ( project != null
-                    ? new Path( project.getLocationURI().getPath() ).toOSString() : "" ) );
+                    ? new Path( project.getLocationURI().getPath() ).toOSString() : StringUtil.EMPTY ) );
 
-        return NLS.bind( "{0} ({1})", projectName, path );
+        return NLS.bind( "{0} ({1})", projectName, path ); //$NON-NLS-1$
     }
 
     public IPath getProjectLocation()

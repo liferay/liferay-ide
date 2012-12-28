@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -38,6 +39,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jst.common.project.facet.IJavaFacetInstallDataModelProperties;
 import org.eclipse.jst.common.project.facet.core.JavaFacetInstallConfig;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
@@ -84,7 +86,7 @@ public class SDKPluginFacetUtil
         IDataModel dm = (IDataModel) Platform.getAdapterManager().getAdapter( config, IDataModel.class );
         String presetId = preset.getId();
 
-        if( presetId.contains( "portlet" ) )
+        if( presetId.contains( "portlet" ) ) //$NON-NLS-1$
         {
             javaConfig.setSourceFolder( new Path( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER ) );
             javaConfig.setDefaultOutputFolder( new Path( IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER ) );
@@ -97,7 +99,7 @@ public class SDKPluginFacetUtil
                 IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
                 IPluginFacetConstants.PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER );
         }
-        else if( presetId.contains( "hook" ) )
+        else if( presetId.contains( "hook" ) ) //$NON-NLS-1$
         {
             javaConfig.setSourceFolder( new Path( IPluginFacetConstants.HOOK_PLUGIN_SDK_SOURCE_FOLDER ) );
             javaConfig.setDefaultOutputFolder( new Path( IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER ) );
@@ -110,7 +112,7 @@ public class SDKPluginFacetUtil
                 IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
                 IPluginFacetConstants.HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER );
         }
-        else if( presetId.contains( "layouttpl" ) || presetId.contains( "theme" ) )
+        else if( presetId.contains( "layouttpl" ) || presetId.contains( "theme" ) ) //$NON-NLS-1$ //$NON-NLS-2$
         {
             dm.setStringProperty( IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME, null );
             dm.setStringProperty(
@@ -186,10 +188,7 @@ public class SDKPluginFacetUtil
 
         if( preset == null )
         {
-            throw new CoreException(
-                ProjectCorePlugin.createErrorStatus( "No facet preset found for project name " +
-                    fpjwc.getProjectName() +
-                    ", make sure your project is a valid liferay plugins sdk project with an expected prefix, e.g. -portlet, -hook, etc." ) );
+            throw new CoreException( ProjectCorePlugin.createErrorStatus( NLS.bind( Msgs.noFacetPreset, fpjwc.getProjectName() ) ) );
         }
 
         Set<IProjectFacetVersion> currentProjectFacetVersions = fpjwc.getProjectFacets();
@@ -280,7 +279,7 @@ public class SDKPluginFacetUtil
         {
             IDataModel dm = (IDataModel) config;
 
-            if( preset.getId().contains( "portlet" ) )
+            if( preset.getId().contains( "portlet" ) ) //$NON-NLS-1$
             {
                 dm.setStringProperty(
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
@@ -291,7 +290,7 @@ public class SDKPluginFacetUtil
 
                 addDefaultWebXml( fpjwc, dm );
             }
-            else if( preset.getId().contains( "hook" ) )
+            else if( preset.getId().contains( "hook" ) ) //$NON-NLS-1$
             {
                 dm.setStringProperty(
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
@@ -302,7 +301,7 @@ public class SDKPluginFacetUtil
 
                 addDefaultWebXml( fpjwc, dm );
             }
-            else if( preset.getId().contains( "ext" ) )
+            else if( preset.getId().contains( "ext" ) ) //$NON-NLS-1$
             {
                 dm.setStringProperty(
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
@@ -310,14 +309,14 @@ public class SDKPluginFacetUtil
 
                 addDefaultWebXml( fpjwc, dm );
             }
-            else if( preset.getId().contains( "layouttpl" ) )
+            else if( preset.getId().contains( "layouttpl" ) ) //$NON-NLS-1$
             {
                 dm.setStringProperty(
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
                     IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER );
                 ProjectUtil.setGenerateDD( dm, false );
             }
-            else if( preset.getId().contains( "theme" ) )
+            else if( preset.getId().contains( "theme" ) ) //$NON-NLS-1$
             {
                 dm.setStringProperty(
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
@@ -334,7 +333,7 @@ public class SDKPluginFacetUtil
         String projName = fpjwc.getProjectName();
         IPath location = fpjwc.getProjectLocation();
 
-        String directoryName = "";
+        String directoryName = StringUtil.EMPTY;
 
         if( location != null )
         {
@@ -375,7 +374,7 @@ public class SDKPluginFacetUtil
         IFacetedProjectTemplate template = null;
         String projName = fpjwc.getProjectName();
         IPath location = fpjwc.getProjectLocation();
-        String directoryName = "";
+        String directoryName = StringUtil.EMPTY;
 
         if( location != null )
         {
@@ -437,17 +436,17 @@ public class SDKPluginFacetUtil
     {
         // check for existing web.xml file, if not there, add a default one
         // IDE-110 IDE-648
-        IPath webinfPath = fpjwc.getProjectLocation().append( "docroot/WEB-INF" );
+        IPath webinfPath = fpjwc.getProjectLocation().append( "docroot/WEB-INF" ); //$NON-NLS-1$
 
         if( ProjectUtil.isExtProject( fpjwc.getProject() ) ||
-            fpjwc.getProjectLocation().lastSegment().endsWith( "-ext" ) )
+            fpjwc.getProjectLocation().lastSegment().endsWith( "-ext" ) ) //$NON-NLS-1$
         {
             fpjwc.getProjectLocation().append( IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER );
         }
 
         if( webinfPath.toFile().exists() )
         {
-            File webXml = webinfPath.append( "web.xml" ).toFile();
+            File webXml = webinfPath.append( "web.xml" ).toFile(); //$NON-NLS-1$
 
             if( !webXml.exists() )
             {
@@ -472,4 +471,13 @@ public class SDKPluginFacetUtil
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String noFacetPreset;
+
+        static
+        {
+            initializeMessages( SDKPluginFacetUtil.class.getName(), Msgs.class );
+        }
+    }
 }

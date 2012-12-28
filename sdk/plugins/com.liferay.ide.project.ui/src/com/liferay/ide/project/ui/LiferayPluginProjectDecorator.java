@@ -47,7 +47,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
     private static ImageDescriptor LAYOUTTPL;
 
-    private static final String LAYOUTTPL_FACET = "liferay.layouttpl";
+    private static final String LAYOUTTPL_FACET = "liferay.layouttpl"; //$NON-NLS-1$
 
     private static ImageDescriptor PORTLET;
 
@@ -56,7 +56,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
     private static ImageDescriptor THEME;
 
-    private static final String THEME_FACET = "liferay.theme";
+    private static final String THEME_FACET = "liferay.theme"; //$NON-NLS-1$
 
     private static ImageDescriptor getExt()
     {

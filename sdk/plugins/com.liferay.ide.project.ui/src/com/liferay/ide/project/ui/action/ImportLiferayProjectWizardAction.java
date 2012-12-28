@@ -17,8 +17,11 @@
 
 package com.liferay.ide.project.ui.action;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard;
+
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
@@ -38,11 +41,11 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction
         {
             if( NewWizardAction.ATT_NAME.equals( attr ) )
             {
-                return "";
+                return StringUtil.EMPTY;
             }
             else if( NewWizardAction.ATT_ICON.equals( attr ) )
             {
-                return "/icons/n16/plugin_new.png";
+                return "/icons/n16/plugin_new.png"; //$NON-NLS-1$
             }
 
             return null;
@@ -63,7 +66,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction
             }
             else if( NewWizardAction.TAG_VALUE.equals( name ) )
             {
-                return "100";
+                return "100"; //$NON-NLS-1$
             }
 
             return null;
@@ -74,7 +77,16 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction
     public ImportLiferayProjectWizardAction()
     {
         super( new ImportLiferayProjectElement() );
-        setText( "New Liferay Project from Existing Source" );
+        setText( Msgs.newLiferayProject );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String newLiferayProject;
+
+        static
+        {
+            initializeMessages( ImportLiferayProjectWizardAction.class.getName(), Msgs.class );
+        }
+    }
 }

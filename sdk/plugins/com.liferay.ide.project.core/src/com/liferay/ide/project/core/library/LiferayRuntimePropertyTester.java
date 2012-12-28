@@ -38,7 +38,7 @@ public class LiferayRuntimePropertyTester extends PropertyTester
             IFacetedProjectBase projectBase = ctx.getFacetedProject();
             IRuntime serverRuntime = FacetUtil.getRuntime( projectBase.getPrimaryRuntime() );
 
-            if( serverRuntime.getRuntimeType().getId().startsWith( "com.liferay." ) )
+            if( serverRuntime.getRuntimeType().getId().startsWith( "com.liferay." ) ) //$NON-NLS-1$
             {
                 retval = true;
             }

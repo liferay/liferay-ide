@@ -21,6 +21,7 @@ import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -91,8 +92,7 @@ public abstract class AbstractPortletFrameworkWizardProvider implements IPortlet
 
     public IStatus getUnsupportedSDKErrorMsg()
     {
-        return ProjectCorePlugin.createErrorStatus( "At least SDK version " + requiredSDKVersion +
-            " is required to use the selected portlet framework." );
+        return ProjectCorePlugin.createErrorStatus( NLS.bind( Msgs.SDKVersionRequired, requiredSDKVersion ) );
     }
 
     public boolean hasPropertyName( String propertyName )
@@ -154,9 +154,19 @@ public abstract class AbstractPortletFrameworkWizardProvider implements IPortlet
     {
         this.shortName = shortName;
     }
-    
+
     public IStatus validate( final IDataModel model, final String propertyName )
     {
         return Status.OK_STATUS;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String SDKVersionRequired;
+
+        static
+        {
+            initializeMessages( AbstractPortletFrameworkWizardProvider.class.getName(), Msgs.class );
+        }
     }
 }
