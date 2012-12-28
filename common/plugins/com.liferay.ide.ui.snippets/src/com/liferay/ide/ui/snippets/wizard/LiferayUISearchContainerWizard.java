@@ -15,6 +15,7 @@
 
 package com.liferay.ide.ui.snippets.wizard;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 
 /**
@@ -26,13 +27,13 @@ public class LiferayUISearchContainerWizard extends AbstractModelWizard
     public LiferayUISearchContainerWizard( IEditorPart fEditorPart )
     {
         super( fEditorPart );
-        setWindowTitle( "Insert Search Container" );
+        setWindowTitle( Msgs.insertSearchContainer );
     }
 
     @Override
     protected AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart )
     {
-        return new LiferayUISearchContainerWizardPage( "liferayUISearchContainerWizardPage", editorPart );
+        return new LiferayUISearchContainerWizardPage( "liferayUISearchContainerWizardPage", editorPart ); //$NON-NLS-1$
     }
 
     public String getModelClass()
@@ -40,4 +41,13 @@ public class LiferayUISearchContainerWizard extends AbstractModelWizard
         return wizardPage.getModelClass();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String insertSearchContainer;
+
+        static
+        {
+            initializeMessages( LiferayUISearchContainerWizard.class.getName(), Msgs.class );
+        }
+    }
 }

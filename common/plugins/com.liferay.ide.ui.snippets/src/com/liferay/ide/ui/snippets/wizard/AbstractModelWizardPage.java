@@ -16,6 +16,7 @@
 package com.liferay.ide.ui.snippets.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
-import org.eclipse.jdt.internal.ui.wizards.NewWizardMessages;
 import org.eclipse.jdt.internal.ui.wizards.SuperInterfaceSelectionDialog;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.CheckedListDialogField;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.jsf.common.util.JDTBeanIntrospector;
 import org.eclipse.jst.jsf.common.util.JDTBeanProperty;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -115,7 +116,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
 
     protected IEditorPart editorPart;
 
-    protected String lastVarName = "";
+    protected String lastVarName = StringUtil.EMPTY;
 
     protected StringButtonDialogField modelClassDialogField;
 
@@ -134,14 +135,14 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
         TypeFieldAdapter adapter = new TypeFieldAdapter();
 
         modelClassDialogField = new StringButtonDialogField( adapter );
-        modelClassDialogField.setLabelText( "Model class:" );
-        modelClassDialogField.setButtonLabel( NewWizardMessages.NewTypeWizardPage_superclass_button );
+        modelClassDialogField.setLabelText( Msgs.modelClassLabel );
+        modelClassDialogField.setButtonLabel( Msgs.newTypeWizardPage_superclass_button );
 
-        String[] buttonLabels = new String[] { "Select All", "Deselect All" };
+        String[] buttonLabels = new String[] { Msgs.selectAllLabel, Msgs.deselectAllLabel };
 
         propertyListField = new CheckedListDialogField( adapter, buttonLabels, new LabelProvider() );
         propertyListField.setDialogFieldListener( adapter );
-        propertyListField.setLabelText( "Property columns:" );
+        propertyListField.setLabelText( Msgs.propertyColumnsLabel );
         propertyListField.setCheckAllButtonIndex( IDX_SELECT );
         propertyListField.setUncheckAllButtonIndex( IDX_DESELECT );
     }
@@ -173,7 +174,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
         propertyListField.getTableViewer().setComparator( new ViewerComparator() );
 
         varNameLabel = new Label( topComposite, SWT.LEFT );
-        varNameLabel.setText( "Variable name:" );
+        varNameLabel.setText( Msgs.variableNameLabel );
         varNameLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
 
         varNameText = new Text( topComposite, SWT.SINGLE | SWT.BORDER );
@@ -218,7 +219,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
         {
 
         }
-        return "";
+        return StringUtil.EMPTY;
     }
 
     public String getModelClass()
@@ -262,8 +263,8 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
         FilteredTypesSelectionDialog dialog =
             new FilteredTypesSelectionDialog(
                 getShell(), false, getWizard().getContainer(), scope, IJavaSearchConstants.CLASS_AND_INTERFACE );
-        dialog.setTitle( "Model class selection" );
-        dialog.setMessage( NewWizardMessages.NewTypeWizardPage_SuperClassDialog_message );
+        dialog.setTitle( Msgs.modelClassSelection );
+        dialog.setMessage( Msgs.newTypeWizardPage_SuperClassDialog_message );
         dialog.setInitialPattern( getSuperClass() );
 
         if( dialog.open() == Window.OK )
@@ -339,7 +340,23 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
 
         propertyListField.setElements( propNames );
 
-        varNameText.setText( "a" + getModel() );
+        varNameText.setText( "a" + getModel() ); //$NON-NLS-1$
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String deselectAllLabel;
+        public static String modelClassLabel;
+        public static String modelClassSelection;
+        public static String newTypeWizardPage_superclass_button;
+        public static String newTypeWizardPage_SuperClassDialog_message;
+        public static String propertyColumnsLabel;
+        public static String selectAllLabel;
+        public static String variableNameLabel;
+
+        static
+        {
+            initializeMessages( AbstractModelWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

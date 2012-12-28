@@ -16,6 +16,7 @@
 package com.liferay.ide.ui.snippets.wizard;
 
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 
 /**
@@ -29,7 +30,7 @@ public abstract class AbstractModelWizard extends Wizard
     public AbstractModelWizard( IEditorPart fEditorPart )
     {
         super();
-        setWindowTitle( "Model" );
+        setWindowTitle( Msgs.model );
         editorPart = fEditorPart;
     }
 
@@ -63,4 +64,13 @@ public abstract class AbstractModelWizard extends Wizard
 
     protected abstract AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart );
 
+    private static class Msgs extends NLS
+    {
+        public static String model;
+
+        static
+        {
+            initializeMessages( AbstractModelWizard.class.getName(), Msgs.class );
+        }
+    }
 }

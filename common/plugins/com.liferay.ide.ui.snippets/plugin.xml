@@ -1,7 +1,7 @@
 <plugin>
-  <extension id="jsp" name="JSP" point="org.eclipse.wst.common.snippets.SnippetContributions">
-    <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="Liferay UI Search Container" id="com.liferay.ide.ui.snippets.search_container" label="Liferay UI Search Container" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
-      <item class="com.liferay.ide.ui.snippets.SearchContainerSnippetInsertion" id="com.liferay.ide.ui.snippets.item.portal_model_search_container" label="Model Search Container" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+  <extension id="jsp" name="%jsp.extension.name" point="org.eclipse.wst.common.snippets.SnippetContributions">
+    <category contenttypes="org.eclipse.jst.jsp.core.jspsource" description="%ui.search.container.category.description" id="com.liferay.ide.ui.snippets.search_container" label="%ui.search.container.category.label" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
+      <item class="com.liferay.ide.ui.snippets.SearchContainerSnippetInsertion" id="com.liferay.ide.ui.snippets.item.portal_model_search_container" label="%model.search.container.item.label" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:search-container&gt;
 	&lt;liferay-ui:search-container-results
@@ -21,16 +21,16 @@
 &lt;/liferay-ui:search-container&gt;
         </content>
       </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.ui.snippets.item.search_container_column_text" label="Search Container Column Text" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.ui.snippets.item.search_container_column_text" label="%search.container.column.text.item.label" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;liferay-ui:search-container-column-text property=&quot;${property}&quot; name=&quot;${name}&quot; /&gt;
         </content>
-        <variable id="com.liferay.ide.ui.snippets.item.search_container_column_text.property" name="property"/>
-        <variable id="com.liferay.ide.ui.snippets.item.search_container_column_text.name" name="name"/>
+        <variable id="com.liferay.ide.ui.snippets.item.search_container_column_text.property" name="%property.variable.name"/>
+        <variable id="com.liferay.ide.ui.snippets.item.search_container_column_text.name" name="%name.variable.name"/>
       </item>
     </category>
-    <category contenttypes="org.eclipse.wst.xml.core.xmlsource" description="Service Builder" id="com.liferay.ide.ui.snippets.service_builder" label="Service Builder" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.ui.snippets.item.service_builder_entity" label="Sample Entity" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+    <category contenttypes="org.eclipse.wst.xml.core.xmlsource" description="%service.builder.category.description" id="com.liferay.ide.ui.snippets.service_builder" label="%service.builder.category.label" largeicon="icons/snippets/search.png" smallicon="icons/snippets/search.png">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.ui.snippets.item.service_builder_entity" label="%sample.entity.item.label" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
         <content>
           &lt;entity name=&quot;Foo&quot; local-service=&quot;true&quot; remote-service=&quot;true&quot;&gt;
 
@@ -87,7 +87,7 @@
           </entity>
         </content>
       </item>
-      <item class="com.liferay.ide.ui.snippets.AddModelEntitySnippetInsertion" id="com.liferay.ide.ui.snippets.item.service_builder_add_model_entity" label="Add Model Entity" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+      <item class="com.liferay.ide.ui.snippets.AddModelEntitySnippetInsertion" id="com.liferay.ide.ui.snippets.item.service_builder_add_model_entity" label="%add.model.entity.item.label" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
         <content>
           try {
 			${model} ${varName} = ${varName}Persistence.create(CounterLocalServiceUtil.increment());
@@ -99,7 +99,7 @@
 		}
         </content>
       </item>
-      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.ui.snippets.item.service_builder_primary_key_column" label="Primary Key Column" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
+      <item class="org.eclipse.wst.common.snippets.ui.DefaultSnippetInsertion" id="com.liferay.ide.ui.snippets.item.service_builder_primary_key_column" label="%primary.key.column.item.label" largeicon="icons/snippets/tag-generic.gif" smallicon="icons/snippets/tag-generic.gif">
         <content>
           <column name="${name}Id" type="long" primary="true"/>
         </content>

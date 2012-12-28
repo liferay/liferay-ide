@@ -15,6 +15,7 @@
 
 package com.liferay.ide.ui.snippets;
 
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 
 import org.eclipse.jface.window.Window;
@@ -52,8 +53,8 @@ public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion
     {
         String text = fItem.getContentString();
 
-        text = StringUtils.replace( text, "${model}", wizard.getModel() );
-        text = StringUtils.replace( text, "${varName}", wizard.getVarName() );
+        text = StringUtils.replace( text, "${model}", wizard.getModel() ); //$NON-NLS-1$
+        text = StringUtils.replace( text, "${varName}", wizard.getVarName() ); //$NON-NLS-1$
 
         // Update EOLs (bug 80231)
         String systemEOL = System.getProperty( "line.separator" ); //$NON-NLS-1$
@@ -79,7 +80,7 @@ public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion
             return getPreparedText( wizard );
         }
 
-        return "";
+        return StringUtil.EMPTY;
     }
 
 }

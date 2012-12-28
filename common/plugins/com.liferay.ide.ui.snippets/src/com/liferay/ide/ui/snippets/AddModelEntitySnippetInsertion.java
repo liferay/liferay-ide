@@ -16,6 +16,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 import com.liferay.ide.ui.snippets.wizard.AddModelEntityWizard;
 
@@ -51,12 +52,12 @@ public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion
         {
             for( String prop : propColumns )
             {
-                fields.append( var + ".set" + StringUtils.capitalize( prop ) + "(" + prop + ");\n" );
+                fields.append( var + ".set" + StringUtils.capitalize( prop ) + "(" + prop + ");\n" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
             }
         }
 
         String fieldsVal = fields.toString();
-        text = StringUtils.replace( text, "${fields}", CoreUtil.isNullOrEmpty( fieldsVal ) ? "" : fieldsVal );
+        text = StringUtils.replace( text, "${fields}", CoreUtil.isNullOrEmpty( fieldsVal ) ? StringUtil.EMPTY : fieldsVal ); //$NON-NLS-1$
 
         return text;
     }

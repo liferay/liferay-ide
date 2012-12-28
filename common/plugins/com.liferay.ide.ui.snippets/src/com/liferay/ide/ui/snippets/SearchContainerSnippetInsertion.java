@@ -16,6 +16,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 import com.liferay.ide.ui.snippets.wizard.LiferayUISearchContainerWizard;
 
@@ -38,7 +39,7 @@ public class SearchContainerSnippetInsertion extends ModelSnippetInsertion
     {
         String text = super.getPreparedText( wizard );
 
-        text = StringUtils.replace( text, "${modelClass}", ( (LiferayUISearchContainerWizard) wizard ).getModelClass() );
+        text = StringUtils.replace( text, "${modelClass}", ( (LiferayUISearchContainerWizard) wizard ).getModelClass() ); //$NON-NLS-1$
 
         StringBuffer columns = new StringBuffer();
         String[] propColumns = wizard.getPropertyColumns();
@@ -47,14 +48,14 @@ public class SearchContainerSnippetInsertion extends ModelSnippetInsertion
         {
             for( String prop : propColumns )
             {
-                columns.append( "<liferay-ui:search-container-column-text property=\"" );
+                columns.append( "<liferay-ui:search-container-column-text property=\"" ); //$NON-NLS-1$
                 columns.append( prop );
-                columns.append( "\" />\n\n\t\t" );
+                columns.append( "\" />\n\n\t\t" ); //$NON-NLS-1$
             }
         }
 
         String columnsVal = columns.toString();
-        text = StringUtils.replace( text, "${columns}", CoreUtil.isNullOrEmpty( columnsVal ) ? "" : columnsVal );
+        text = StringUtils.replace( text, "${columns}", CoreUtil.isNullOrEmpty( columnsVal ) ? StringUtil.EMPTY : columnsVal ); //$NON-NLS-1$
 
         return text;
     }

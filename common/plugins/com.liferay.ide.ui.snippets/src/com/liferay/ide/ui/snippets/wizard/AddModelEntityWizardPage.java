@@ -15,6 +15,7 @@
 
 package com.liferay.ide.ui.snippets.wizard;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorPart;
 
@@ -27,8 +28,8 @@ public class AddModelEntityWizardPage extends AbstractModelWizardPage
     public AddModelEntityWizardPage( String pageName, IEditorPart editor )
     {
         super( pageName, editor );
-        setTitle( "Add Model Entity" );
-        setDescription( "Insert code to create a new model entity.." );
+        setTitle( Msgs.addModelEntity );
+        setDescription( Msgs.insertCode );
     }
 
     public void createControl( Composite parent )
@@ -44,4 +45,14 @@ public class AddModelEntityWizardPage extends AbstractModelWizardPage
         return getModel().toLowerCase();
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String addModelEntity;
+        public static String insertCode;
+
+        static
+        {
+            initializeMessages( AddModelEntityWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

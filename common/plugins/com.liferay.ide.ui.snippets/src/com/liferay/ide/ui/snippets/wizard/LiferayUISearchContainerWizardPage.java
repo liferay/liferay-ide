@@ -15,6 +15,7 @@
 
 package com.liferay.ide.ui.snippets.wizard;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 
 /**
@@ -26,8 +27,18 @@ public class LiferayUISearchContainerWizardPage extends AbstractModelWizardPage
     public LiferayUISearchContainerWizardPage( String pageName, IEditorPart editor )
     {
         super( pageName, editor );
-        setTitle( "Liferay UI Search Container" );
-        setDescription( "Insert a Liferay UI Search Container JSP tag." );
+        setTitle( Msgs.liferayUISearchContainer );
+        setDescription( Msgs.insertLiferayUISearchContainerJSPTag );
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String insertLiferayUISearchContainerJSPTag;
+        public static String liferayUISearchContainer;
+
+        static
+        {
+            initializeMessages( LiferayUISearchContainerWizardPage.class.getName(), Msgs.class );
+        }
+    }
 }

@@ -15,6 +15,7 @@
 
 package com.liferay.ide.ui.snippets.wizard;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IEditorPart;
 
 /**
@@ -26,13 +27,22 @@ public class AddModelEntityWizard extends AbstractModelWizard
     public AddModelEntityWizard( IEditorPart fEditorPart )
     {
         super( fEditorPart );
-        setWindowTitle( "Add Model Entity" );
+        setWindowTitle( Msgs.addModelEntity );
     }
 
     @Override
     protected AbstractModelWizardPage createModelWizardPage( IEditorPart editorPart )
     {
-        return new AddModelEntityWizardPage( "addModelEntityWizardPage", editorPart );
+        return new AddModelEntityWizardPage( "addModelEntityWizardPage", editorPart ); //$NON-NLS-1$
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String addModelEntity;
+
+        static
+        {
+            initializeMessages( AddModelEntityWizard.class.getName(), Msgs.class );
+        }
+    }
 }

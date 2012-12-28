@@ -18,10 +18,12 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -56,11 +58,11 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
         if( control instanceof Composite )
         {
             Composite composite = (Composite) control;
-            replaceUIText( composite, "variable", "attribute" );
-            replaceUIText( composite, "Variable", "Attribute" );
+            replaceUIText( composite, Msgs.variableLowercase, Msgs.attributeLowercase );
+            replaceUIText( composite, Msgs.variableUppercase, Msgs.attributeUppercase );
         }
 
-        fTableViewer.getTable().getColumns()[0].setText( "Attribute Name" );
+        fTableViewer.getTable().getColumns()[0].setText( Msgs.attributeName );
         fTableViewer.getTable().redraw();
 
         return control;
@@ -75,7 +77,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
 
         if( isFreemarkerEditor( editor ) )
         {
-            Pattern p1 = Pattern.compile( "(.*)-([a-z])(.*)" );
+            Pattern p1 = Pattern.compile( "(.*)-([a-z])(.*)" ); //$NON-NLS-1$
             Matcher m1 = p1.matcher( text );
             while( m1.matches() )
             {
@@ -83,8 +85,8 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
                 m1 = p1.matcher( text );
             }
 
-            text = text.replaceAll( "<([a-zA-Z]+):", "<@$1\\." );
-            text = text.replaceAll( "</([a-zA-Z]+):", "</@$1\\." );
+            text = text.replaceAll( "<([a-zA-Z]+):", "<@$1\\." ); //$NON-NLS-1$ //$NON-NLS-2$
+            text = text.replaceAll( "</([a-zA-Z]+):", "</@$1\\." ); //$NON-NLS-1$ //$NON-NLS-2$
 
             setPreparedText( text );
             return;
@@ -104,7 +106,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
 
             if( !CoreUtil.isNullOrEmpty( value ) )
             {
-                value = " " + variables[i].getName() + "=\"" + value + "\"";
+                value = StringUtil.SPACE + variables[i].getName() + "=\"" + value + StringUtil.DOUBLE_QUOTE; //$NON-NLS-1$
             }
 
             text = StringUtils.replace( text, "${" + variables[i].getName() + "}", value ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -128,7 +130,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
     {
         try
         {
-            if( ( (IStorageEditorInput) editorPart.getEditorInput() ).getStorage().getName().endsWith( ".ftl" ) )
+            if( ( (IStorageEditorInput) editorPart.getEditorInput() ).getStorage().getName().endsWith( ".ftl" ) ) //$NON-NLS-1$
             {
                 return true;
             }
@@ -178,4 +180,17 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
         }
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String attributeLowercase;
+        public static String attributeName;
+        public static String attributeUppercase;
+        public static String variableLowercase;
+        public static String variableUppercase;
+
+        static
+        {
+            initializeMessages( TaglibVariableInsertionDialog.class.getName(), Msgs.class );
+        }
+    }
 }
