@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE
+Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.tools.branding
 Bundle-Version: 2.0.0.qualifier
-Bundle-Vendor: Liferay, Inc.
+Bundle-Vendor: %bundle.vendor
