@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="templateDefinition" name="Layout Template Definition" schema="schema/templateDefinition.exsd"/>
+   <extension-point id="templateDefinition" name="%layout.template.definition.extension.point.name" schema="schema/templateDefinition.exsd"/>
 
 </plugin>

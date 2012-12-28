@@ -23,7 +23,7 @@ public class TemplatesCore extends AbstractUIPlugin
 {
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.templates.core";
+    public static final String PLUGIN_ID = "com.liferay.ide.templates.core"; //$NON-NLS-1$
 
     // The shared instance
     private static TemplatesCore plugin;
@@ -86,9 +86,9 @@ public class TemplatesCore extends AbstractUIPlugin
         TemplateModel templateModel = null;
         try
         {
-            String id = element.getAttribute( "id" );
-            String name = element.getAttribute( "name" );
-            String resource = element.getAttribute( "resource" );
+            String id = element.getAttribute( "id" ); //$NON-NLS-1$
+            String name = element.getAttribute( "name" ); //$NON-NLS-1$
+            String resource = element.getAttribute( "resource" ); //$NON-NLS-1$
             String templateFolder = null;
             List<TemplateVariable> paramList = new ArrayList<TemplateVariable>();
 
@@ -96,15 +96,15 @@ public class TemplatesCore extends AbstractUIPlugin
 
             for( IConfigurationElement item : items )
             {
-                if( "templatesFolder".equals( item.getName() ) )
+                if( "templatesFolder".equals( item.getName() ) ) //$NON-NLS-1$
                 {
-                    templateFolder = item.getAttribute( "path" );
+                    templateFolder = item.getAttribute( "path" ); //$NON-NLS-1$
                 }
 
-                if( "templateVariable".equals( item.getName() ) )
+                if( "templateVariable".equals( item.getName() ) ) //$NON-NLS-1$
                 {
-                    String paramName = item.getAttribute( "name" );
-                    String reqVal = item.getAttribute( "required" );
+                    String paramName = item.getAttribute( "name" ); //$NON-NLS-1$
+                    String reqVal = item.getAttribute( "required" ); //$NON-NLS-1$
                     paramList.add( new TemplateVariable( paramName, reqVal ) );
                 }
             }
@@ -177,9 +177,9 @@ public class TemplatesCore extends AbstractUIPlugin
 
         for( IConfigurationElement element : elements )
         {
-            if( "template".equals( element.getName() ) )
+            if( "template".equals( element.getName() ) ) //$NON-NLS-1$
             {
-                if( templateId.equals( element.getAttribute( "id" ) ) )
+                if( templateId.equals( element.getAttribute( "id" ) ) ) //$NON-NLS-1$
                 {
                     return element;
                 }
@@ -194,7 +194,7 @@ public class TemplatesCore extends AbstractUIPlugin
         if( tplDefinitionElements == null )
         {
             tplDefinitionElements =
-                Platform.getExtensionRegistry().getConfigurationElementsFor( PLUGIN_ID + ".templateDefinition" );
+                Platform.getExtensionRegistry().getConfigurationElementsFor( PLUGIN_ID + ".templateDefinition" ); //$NON-NLS-1$
         }
 
         return tplDefinitionElements;
@@ -205,12 +205,12 @@ public class TemplatesCore extends AbstractUIPlugin
 
         VelocityEngine engine = templateModel.getEngine();
 
-        engine.setProperty( "resource.loader", "url" );
+        engine.setProperty( "resource.loader", "url" ); //$NON-NLS-1$ //$NON-NLS-2$
         engine.setProperty(
-            "url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader" );
+            "url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader" ); //$NON-NLS-1$ //$NON-NLS-2$
         URL loaderRoot = Platform.getBundle( templateModel.bundleId ).getEntry( templateModel.templateFolder );
-        engine.setProperty( "url.resource.loader.root", loaderRoot.toURI().toASCIIString() );
-        engine.setProperty( "url.resource.loader.cache", true );
+        engine.setProperty( "url.resource.loader.root", loaderRoot.toURI().toASCIIString() ); //$NON-NLS-1$
+        engine.setProperty( "url.resource.loader.cache", true ); //$NON-NLS-1$
         // properties.put("url.resource.loader.modificationCheckInterval", 10);
 
         templateModel.getEngine().init();

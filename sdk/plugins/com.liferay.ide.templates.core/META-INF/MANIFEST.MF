@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Liferay IDE Templates Core
+Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.templates.core;singleton:=true
 Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: com.liferay.ide.templates.core.TemplatesCore
-Bundle-Vendor: Liferay, Inc.
+Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

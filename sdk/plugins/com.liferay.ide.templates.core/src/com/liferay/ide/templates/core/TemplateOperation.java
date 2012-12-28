@@ -62,8 +62,8 @@ public class TemplateOperation implements ITemplateOperation
                 {
                     if( !( getContext().containsKey( name ) ) )
                     {
-                        TemplatesCore.logError( "Could not execute template operation: context var " + name +
-                            " not found." );
+                        TemplatesCore.logError( "Could not execute template operation: context var " + name + //$NON-NLS-1$
+                            " not found." ); //$NON-NLS-1$
                         return false;
                     }
                 }
