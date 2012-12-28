@@ -87,6 +87,14 @@
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
             typeIds="com.liferay.ide.*">
+         <enablement>
+            <not>
+               <test
+                     property="com.liferay.ide.server.core.isRemoteServer"
+                     value="true">
+               </test>
+            </not>
+         </enablement>
       </section>
       <section
             class="org.eclipse.jst.server.tomcat.ui.internal.editor.ConfigurationMimeEditorSection"
