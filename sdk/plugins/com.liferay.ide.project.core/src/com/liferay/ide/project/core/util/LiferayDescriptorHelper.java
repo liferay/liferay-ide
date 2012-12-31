@@ -35,7 +35,7 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         super( project );
     }
 
-    protected String getDescriptorVersion()
+    public String getDescriptorVersion()
     {
         String retval = null;
 

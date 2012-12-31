@@ -17,6 +17,7 @@
 
 package com.liferay.ide.service.ui;
 
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 import com.liferay.ide.service.core.model.ServiceBuilder600;
 import com.liferay.ide.service.core.model.ServiceBuilder610;
 import com.liferay.ide.service.core.model.ServiceBuilderVersionType;
@@ -82,16 +83,33 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
 
             if( document != null )
             {
-                switch( dtdVersion )
+                if( dtdVersion != null )
                 {
-                    case v6_0_0:
-                        setRootModelElementType( ServiceBuilder600.TYPE );
-                        break;
+                    switch( dtdVersion )
+                    {
+                        case v6_0_0:
+                            setRootModelElementType( ServiceBuilder600.TYPE );
+                            break;
 
-                    case v6_1_0:
-                    default:
+                        case v6_1_0:
+                        default:
+                            setRootModelElementType( ServiceBuilder610.TYPE );
+                            break;
+                    }
+                }
+                else
+                {
+                    LiferayDescriptorHelper liferayDescriptorHelper = new LiferayDescriptorHelper( getProject() );
+                    String descriptorVersion = liferayDescriptorHelper.getDescriptorVersion();
+
+                    if( "6.0.0".equals( descriptorVersion ) )
+                    {
+                        setRootModelElementType( ServiceBuilder600.TYPE );
+                    }
+                    else
+                    {
                         setRootModelElementType( ServiceBuilder610.TYPE );
-                        break;
+                    }
                 }
             }
         }
