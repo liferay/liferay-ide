@@ -98,6 +98,14 @@
             id="com.liferay.ide.server.ui.popup.module"
             objectClass="org.eclipse.wst.server.ui.IServerModule">
          
+         <visibility>
+            <and>
+                      <objectState
+                            name="serverType"
+                            value="com.liferay.*">
+                      </objectState>
+            </and>
+         </visibility>
          <action
                class="com.liferay.ide.server.ui.action.TestWebServicesAction"
                enablesFor="1"
