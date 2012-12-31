@@ -39,7 +39,7 @@ public interface PluginPackageProperties extends IModelElement
 
 	@Label( standard = "&Author" )
 	@PropertyBinding( key = "author" )
-	ValueProperty PROP_AUTHOR = new ValueProperty( TYPE, "Author" );
+	ValueProperty PROP_AUTHOR = new ValueProperty( TYPE, "Author" ); //$NON-NLS-1$
 
 	Value<String> getAuthor();
 
@@ -49,7 +49,7 @@ public interface PluginPackageProperties extends IModelElement
 
 	@Label( standard = "&Change Log" )
 	@PropertyBinding( key = "change-log" )
-	ValueProperty PROP_CHANGE_LOG = new ValueProperty( TYPE, "ChangeLog" );
+	ValueProperty PROP_CHANGE_LOG = new ValueProperty( TYPE, "ChangeLog" ); //$NON-NLS-1$
 
 	Value<String> getChangeLog();
 
@@ -59,7 +59,7 @@ public interface PluginPackageProperties extends IModelElement
 
 	@Label( standard = "Short &Description" )
 	@PropertyBinding( key = "short-description" )
-	ValueProperty PROP_SHORT_DESCRIPTION = new ValueProperty( TYPE, "ShortDescription" );
+	ValueProperty PROP_SHORT_DESCRIPTION = new ValueProperty( TYPE, "ShortDescription" ); //$NON-NLS-1$
 
 	Value<String> getShortDescription();
 
@@ -68,7 +68,7 @@ public interface PluginPackageProperties extends IModelElement
 	@Type( base = Boolean.class )
 	@Label( standard = "Speed &Filters" )
 	@PropertyBinding( key = "speed-filters-enabled" )
-	ValueProperty PROP_SPEED_FILTERS = new ValueProperty( TYPE, "SpeedFilters" );
+	ValueProperty PROP_SPEED_FILTERS = new ValueProperty( TYPE, "SpeedFilters" ); //$NON-NLS-1$
 
 	Value<Boolean> getSpeedFilters();
 

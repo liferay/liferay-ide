@@ -16,6 +16,7 @@
 package com.liferay.ide.properties.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -44,7 +45,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
     {
 
         /** Constant for the escaping character. */
-        private static final String ESCAPE = "\\";
+        private static final String ESCAPE = "\\"; //$NON-NLS-1$
 
         /** The list of possible key/value separators */
         private static final char[] SEPARATORS = new char[] { '=', ':' };
@@ -83,7 +84,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
             }
             else if( wrappedProperty )
             {
-                String[] values = value.toString().split( "," );
+                String[] values = value.toString().split( StringUtil.COMMA );
 
                 if( values.length == 1 )
                 {
@@ -97,12 +98,12 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
                     {
                         if( CoreUtil.isNullOrEmpty( buf.toString() ) )
                         {
-                            buf.append( "\\\n" );
-                            buf.append( "    " + escapeValue( val ) );
+                            buf.append( "\\\n" ); //$NON-NLS-1$
+                            buf.append( "    " + escapeValue( val ) ); //$NON-NLS-1$
                         }
                         else
                         {
-                            buf.append( ",\\\n    " + escapeValue( val ) );
+                            buf.append( ",\\\n    " + escapeValue( val ) ); //$NON-NLS-1$
                         }
                     }
                     v = buf.toString();
@@ -114,7 +115,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
             }
 
             write( escapeKey( key ) );
-            write( "=" );
+            write( StringUtil.EQUALS );
             write( v );
 
             writeln( null );
@@ -194,17 +195,17 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
 
     public static final String[] sortedKeys = new String[] 
     { 
-        "name", 
-        "module-group-id", 
-        "module-incremental-version",
-        "tags", 
-        "short-description", 
-        "change-log", 
-        "page-url", 
-        "author", 
-        "licenses", 
-        "portal-dependency-jars",
-        "portal-dependency-tlds" 
+        "name",  //$NON-NLS-1$
+        "module-group-id",  //$NON-NLS-1$
+        "module-incremental-version", //$NON-NLS-1$
+        "tags",  //$NON-NLS-1$
+        "short-description",  //$NON-NLS-1$
+        "change-log",  //$NON-NLS-1$
+        "page-url",  //$NON-NLS-1$
+        "author",  //$NON-NLS-1$
+        "licenses",  //$NON-NLS-1$
+        "portal-dependency-jars", //$NON-NLS-1$
+        "portal-dependency-tlds"  //$NON-NLS-1$
     };
 
     public PortalPropertiesConfigurationLayout( PropertiesConfiguration config )
