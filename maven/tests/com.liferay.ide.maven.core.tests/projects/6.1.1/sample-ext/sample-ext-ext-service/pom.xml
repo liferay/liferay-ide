@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>com.liferay.sample</groupId>
+		<artifactId>sample-ext</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.liferay.sample</groupId>
+	<artifactId>sample-ext-ext-service</artifactId>
+	<packaging>jar</packaging>
+	<name>sample-ext Ext Service</name>
+	<version>1.0-SNAPSHOT</version>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.liferay.maven.plugins</groupId>
+				<artifactId>liferay-maven-plugin</artifactId>
+				<version>${liferay.version}</version>
+				<configuration>
+					<implBaseDir>${basedir}/../sample-ext-ext-impl</implBaseDir>
+					<sqlDir>${basedir}/../sample-ext-ext/src/main/webapp/WEB-INF/sql</sqlDir>
+					<webappBaseDir>${basedir}/../sample-ext-ext-web</webappBaseDir>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>sample-ext-ext-lib-global</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.liferay.portal</groupId>
+			<artifactId>portal-service</artifactId>
+			<version>${liferay.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

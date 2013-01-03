@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.liferay.ide.maven.core.test.projects</groupId>
+    <artifactId>liferay-maven-test-projects-root</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Liferay Maven Test Projects Root</name>
+
+    <properties>
+        <liferay.version>6.1.1</liferay.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.liferay.maven.plugins</groupId>
+                <artifactId>liferay-maven-plugin</artifactId>
+                <version>${liferay.version}</version>
+                <configuration>
+                    <liferayVersion>${liferay.version}</liferayVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+  <modules>
+    <module>sample-portlet</module>
+    <module>sample-hook</module>
+    <module>sample-ext</module>
+    <module>sample-layouttpl</module>
+    <module>sample-theme</module>
+    <module>sample-icefaces-portlet</module>
+    <module>sample-jsf-portlet</module>
+    <module>sample-liferay-faces-alloy-portlet</module>
+    <module>sample-primefaces-portlet</module>
+    <module>sample-richfaces-portlet</module>
+    <module>sample-servicebuilder</module>
+  </modules>
+</project>
