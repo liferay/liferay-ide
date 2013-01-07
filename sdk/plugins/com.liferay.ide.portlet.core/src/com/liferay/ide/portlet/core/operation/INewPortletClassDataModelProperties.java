@@ -72,7 +72,7 @@ public interface INewPortletClassDataModelProperties extends INewJavaClassDataMo
 
     public static final String ABOUT_MODE = "INewPortletClassDataModelProperties.ABOUT_MODE"; //$NON-NLS-1$
 
-    public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.eclipse.templates.portlet.aboutjsp"; //$NON-NLS-1$
+    public static final String ABOUT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.aboutjsp"; //$NON-NLS-1$
 
 	public static final String ADD_TO_CONTROL_PANEL = "INewPortletClassDataModelProperties.ADD_TO_CONTROL_PANEL"; //$NON-NLS-1$
 	
