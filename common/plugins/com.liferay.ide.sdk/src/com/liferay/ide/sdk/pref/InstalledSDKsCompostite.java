@@ -16,6 +16,7 @@
 package com.liferay.ide.sdk.pref;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKManager;
 import com.liferay.ide.sdk.SDKPlugin;
@@ -49,6 +50,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -129,7 +131,7 @@ public class InstalledSDKsCompostite extends Composite
             }
             else
             {
-                retval = "";
+                retval = StringUtil.EMPTY;
             }
             return retval;
         }
@@ -217,7 +219,7 @@ public class InstalledSDKsCompostite extends Composite
 
     protected void createControl( Composite parent )
     {
-        SWTUtil.createLabel( parent, "Installed Liferay Plugin SDKs:", 2 );
+        SWTUtil.createLabel( parent, Msgs.installedLiferayPluginSDKsLabel, 2 );
 
         this.table = new Table( parent, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION );
 
@@ -231,17 +233,17 @@ public class InstalledSDKsCompostite extends Composite
         this.table.setLinesVisible( true );
 
         TableColumn column = new TableColumn( this.table, SWT.NULL );
-        column.setText( "Name" );
+        column.setText( Msgs.name );
 
         int defaultwidth = ( gd.widthHint / 3 ) + 1;
         column.setWidth( defaultwidth );
 
         column = new TableColumn( this.table, SWT.NULL );
-        column.setText( "Version" );
+        column.setText( Msgs.version );
         column.setWidth( defaultwidth - 60 );
 
         column = new TableColumn( this.table, SWT.NULL );
-        column.setText( "Location" );
+        column.setText( Msgs.location );
         column.setWidth( defaultwidth + 90 );
 
         // column = new TableColumn(this.table, SWT.NULL);
@@ -280,7 +282,7 @@ public class InstalledSDKsCompostite extends Composite
 
         Composite buttons = SWTUtil.createComposite( parent, 1, 1, GridData.VERTICAL_ALIGN_BEGINNING, 0, 0 );
 
-        fAddButton = SWTUtil.createPushButton( buttons, "Add...", null );
+        fAddButton = SWTUtil.createPushButton( buttons, Msgs.add, null );
         fAddButton.addListener( SWT.Selection, new Listener()
         {
             public void handleEvent( Event evt )
@@ -289,7 +291,7 @@ public class InstalledSDKsCompostite extends Composite
             }
         } );
 
-        fEditButton = SWTUtil.createPushButton( buttons, "Edit...", null );
+        fEditButton = SWTUtil.createPushButton( buttons, Msgs.edit, null );
         fEditButton.addListener( SWT.Selection, new Listener()
         {
             public void handleEvent( Event evt )
@@ -298,7 +300,7 @@ public class InstalledSDKsCompostite extends Composite
             }
         } );
 
-        fRemoveButton = SWTUtil.createPushButton( buttons, "Remove", null );
+        fRemoveButton = SWTUtil.createPushButton( buttons, Msgs.remove, null );
         fRemoveButton.addListener( SWT.Selection, new Listener()
         {
             public void handleEvent( Event evt )
@@ -307,7 +309,7 @@ public class InstalledSDKsCompostite extends Composite
             }
         } );
 
-        fOpenInEclipse = SWTUtil.createPushButton( buttons, "Open in Eclipse", null );
+        fOpenInEclipse = SWTUtil.createPushButton( buttons, Msgs.openInEclipse, null );
         fOpenInEclipse.addListener( SWT.Selection, new Listener()
         {
             public void handleEvent( Event event )
@@ -540,11 +542,8 @@ public class InstalledSDKsCompostite extends Composite
                 {
                     boolean remove =
                         MessageDialog.openQuestion(
-                            this.getShell(),
-                            "Installed SDKs",
-                            MessageFormat.format(
-                                "The SDK named \"{0}\" is currently being used by workspace projects.  Continue to remove it?",
-                                sdk.getName() ) );
+                            this.getShell(), Msgs.installedSDKs,
+                            MessageFormat.format( Msgs.sdkRemovalConfirmation, sdk.getName() ) );
 
                     if( !remove )
                     {
@@ -632,6 +631,25 @@ public class InstalledSDKsCompostite extends Composite
 
                 fireSelectionChanged();
             }
+        }
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String add;
+        public static String edit;
+        public static String installedLiferayPluginSDKsLabel;
+        public static String installedSDKs;
+        public static String location;
+        public static String name;
+        public static String openInEclipse;
+        public static String remove;
+        public static String sdkRemovalConfirmation;
+        public static String version;
+
+        static
+        {
+            initializeMessages( InstalledSDKsCompostite.class.getName(), Msgs.class );
         }
     }
 }

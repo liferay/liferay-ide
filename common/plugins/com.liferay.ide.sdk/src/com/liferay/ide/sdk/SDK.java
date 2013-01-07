@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 
@@ -53,14 +54,14 @@ public class SDK
 {
 
     private static final String MSG_MANAGED_BY_LIFERAY_IDE =
-        "Managed by Liferay IDE (remove this comment to prevent future updates)";
+        "Managed by Liferay IDE (remove this comment to prevent future updates)"; //$NON-NLS-1$
 
     private static final String PROJECT_FILE_PATTERN =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<projectDescription>\n\t<name>{0}</name>\n\t<comment></comment>\n\t<projects></projects>\n\t<buildSpec></buildSpec>\n\t<natures></natures>\n</projectDescription>\n";
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<projectDescription>\n\t<name>{0}</name>\n\t<comment></comment>\n\t<projects></projects>\n\t<buildSpec></buildSpec>\n\t<natures></natures>\n</projectDescription>\n"; //$NON-NLS-1$
 
     public static String createXMLNameValuePair( String name, String value )
     {
-        return name + "=\"" + value + "\" ";
+        return name + "=\"" + value + "\" "; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     protected static IPreferenceStore getPrefStore()
@@ -99,7 +100,7 @@ public class SDK
         if( this.location.toFile().exists() )
         {
             // check for existing project file
-            File projectFile = this.location.append( ".project" ).toFile();
+            File projectFile = this.location.append( ".project" ).toFile(); //$NON-NLS-1$
 
             if( !projectFile.exists() )
             {
@@ -108,7 +109,7 @@ public class SDK
                     FileUtil.writeFileFromStream(
                         projectFile,
                         new ByteArrayInputStream( MessageFormat.format(
-                            PROJECT_FILE_PATTERN, new Object[] { this.name } ).getBytes( "UTF-8" ) ) );
+                            PROJECT_FILE_PATTERN, new Object[] { this.name } ).getBytes( "UTF-8" ) ) ); //$NON-NLS-1$
                 }
                 catch( Exception e )
                 {
@@ -236,7 +237,7 @@ public class SDK
             properties.put( ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation.toOSString() );
             properties.put( ISDKConstants.PROPERTY_EXT_WORK_DIR, workPath.toOSString() );
 
-            IStatus status = runTarget( project, properties, "clean-app-server", true );
+            IStatus status = runTarget( project, properties, "clean-app-server", true ); //$NON-NLS-1$
 
             if( !status.isOK() )
             {
@@ -529,7 +530,7 @@ public class SDK
 
     public boolean hasProjectFile()
     {
-        return this.location != null && this.location.append( ".project" ).toFile().exists();
+        return this.location != null && this.location.append( ".project" ).toFile().exists(); //$NON-NLS-1$
     }
 
     public boolean isContributed()
@@ -566,9 +567,9 @@ public class SDK
 
     public void loadFromMemento( IMemento sdkElement )
     {
-        setName( sdkElement.getString( "name" ) );
-        setLocation( Path.fromPortableString( sdkElement.getString( "location" ) ) );
-        setVersion( sdkElement.getString( "version" ) );
+        setName( sdkElement.getString( "name" ) ); //$NON-NLS-1$
+        setLocation( Path.fromPortableString( sdkElement.getString( "location" ) ) ); //$NON-NLS-1$
+        setVersion( sdkElement.getString( "version" ) ); //$NON-NLS-1$
         // setRuntime(sdkElement.getString("runtime"));
     }
 
@@ -580,9 +581,9 @@ public class SDK
 
         // check for build.<username>.properties
 
-        String userName = System.getProperty( "user.name" );
+        String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
 
-        File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile();
+        File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
 
         if( userBuildFile.exists() )
         {
@@ -654,15 +655,13 @@ public class SDK
             public void run()
             {
                 String message =
-                    MessageFormat.format(
-                        "The user build.properties file in \"{0}\" SDK has not been updated with the latest app server build properties.  Should these properties be written to the file \"{1}\"?\n\nAnswering no will pass these properties directly to Ant and disregard any settings in the user build.properties file.",
-                        new Object[] { getName(), userBuildFile.getName() } );
+                    MessageFormat.format( Msgs.userBuildPropertiesFileNotUpdated, new Object[] { getName(),
+                        userBuildFile.getName() } );
 
                 MessageDialogWithToggle dialog =
                     MessageDialogWithToggle.openYesNoQuestion(
-                        Display.getDefault().getActiveShell(), "Plugins SDK", message,
-                        "Remember this answer for future SDK operations.", false, getPrefStore(),
-                        SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE );
+                        Display.getDefault().getActiveShell(), Msgs.pluginsSDK, message, Msgs.rememberAnswer, false,
+                        getPrefStore(), SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE );
 
                 retval[0] = dialog.getReturnCode() == IDialogConstants.YES_ID;
             }
@@ -718,9 +717,9 @@ public class SDK
 
     public void saveToMemento( IMemento child )
     {
-        child.putString( "name", getName() );
-        child.putString( "location", getLocation().toPortableString() );
-        child.putString( "version", getVersion() );
+        child.putString( "name", getName() ); //$NON-NLS-1$
+        child.putString( "location", getLocation().toPortableString() ); //$NON-NLS-1$
+        child.putString( "version", getVersion() ); //$NON-NLS-1$
         // child.putString("runtime", getRuntime() != null ? getRuntime() : "");
     }
 
@@ -759,13 +758,13 @@ public class SDK
     {
         StringBuilder builder = new StringBuilder();
 
-        builder.append( "<sdk " );
-        builder.append( createXMLNameValuePair( "name", getName() ) );
-        builder.append( createXMLNameValuePair( "location", getLocation().toPortableString() ) );
+        builder.append( "<sdk " ); //$NON-NLS-1$
+        builder.append( createXMLNameValuePair( "name", getName() ) ); //$NON-NLS-1$
+        builder.append( createXMLNameValuePair( "location", getLocation().toPortableString() ) ); //$NON-NLS-1$
         // builder.append(createXMLNameValuePair("runtime", getRuntime() != null
         // ? getRuntime() : ""));
-        builder.append( createXMLNameValuePair( "version", getVersion() ) );
-        builder.append( "/>" );
+        builder.append( createXMLNameValuePair( "version", getVersion() ) ); //$NON-NLS-1$
+        builder.append( "/>" ); //$NON-NLS-1$
 
         return builder.toString();
     }
@@ -774,16 +773,16 @@ public class SDK
     {
         boolean validLocation = SDKUtil.isValidSDKLocation( getLocation().toOSString() );
 
-        boolean buildXmlExists = getLocation().append( "build.xml" ).toFile().exists();
+        boolean buildXmlExists = getLocation().append( "build.xml" ).toFile().exists(); //$NON-NLS-1$
 
         if( !validLocation )
         {
-            return SDKPlugin.createErrorStatus( "SDK location is invalid." );
+            return SDKPlugin.createErrorStatus( Msgs.SDKLocationInvalid );
         }
 
         if( !buildXmlExists )
         {
-            return SDKPlugin.createErrorStatus( "build.xml file does not exist." );
+            return SDKPlugin.createErrorStatus( Msgs.buildXmlFileNotExist );
         }
 
         return Status.OK_STATUS;
@@ -828,4 +827,17 @@ public class SDK
         return Status.OK_STATUS;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String buildXmlFileNotExist;
+        public static String pluginsSDK;
+        public static String rememberAnswer;
+        public static String SDKLocationInvalid;
+        public static String userBuildPropertiesFileNotUpdated;
+
+        static
+        {
+            initializeMessages( SDK.class.getName(), Msgs.class );
+        }
+    }
 }

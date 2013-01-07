@@ -16,6 +16,7 @@
 package com.liferay.ide.sdk.pref;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKPlugin;
@@ -34,6 +35,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -129,7 +131,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
         this.existingSDKs = existingSdks;
         setShellStyle( getShellStyle() | SWT.RESIZE );
         setTitleImage( ImageDescriptor.createFromURL(
-            SDKPlugin.getDefault().getBundle().getEntry( "/icons/wizban/sdk_wiz.png" ) ).createImage() );
+            SDKPlugin.getDefault().getBundle().getEntry( "/icons/wizban/sdk_wiz.png" ) ).createImage() ); //$NON-NLS-1$
     }
 
     @Override
@@ -137,7 +139,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
     {
         super.configureShell( shell );
 
-        shell.setText( ( sdkToEdit == null ? "New" : "Edit" ) + " Liferay Plugin SDK" );
+        shell.setText( NLS.bind( Msgs.liferayPluginSDK, ( sdkToEdit == null ? Msgs.newSDKAction : Msgs.editSDKAction ) ) );
     }
 
     @Override
@@ -153,18 +155,18 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
     @Override
     protected Control createDialogArea( Composite parent )
     {
-        setTitle( ( sdkToEdit == null ? "Add" : "Edit" ) + " Liferay Plugin SDK" );
+        setTitle( NLS.bind( Msgs.liferayPluginSDK, ( sdkToEdit == null ? Msgs.addSDKAction : Msgs.editSDKAction ) ) );
 
         setMessage( getDefaultMessage() );
 
         Composite container = (Composite) SWTUtil.createTopComposite( parent, 3 );
         container.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
-        SWTUtil.createLabel( container, "Location", 1 );
+        SWTUtil.createLabel( container, Msgs.locationLabel, 1 );
 
         location = SWTUtil.createSingleText( container, 1 );
 
-        Button browse = SWTUtil.createButton( container, "Browse" );
+        Button browse = SWTUtil.createButton( container, Msgs.browse );
         browse.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -184,7 +186,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         location.addModifyListener( this );
 
-        SWTUtil.createLabel( container, "Name", 1 );
+        SWTUtil.createLabel( container, Msgs.nameLabel, 1 );
 
         name = SWTUtil.createSingleText( container, 1 );
 
@@ -195,18 +197,17 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         name.addModifyListener( this );
 
-        SWTUtil.createLabel( container, "", 1 );// spacer
+        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 );// spacer
 
-        SWTUtil.createLabel( container, "", 1 );// spacer
+        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 );// spacer
 
-        final Button addProject =
-            SWTUtil.createCheckButton( container, "Add Eclipse .project file (if it does not exist).", null, true, 1 );
+        final Button addProject = SWTUtil.createCheckButton( container, Msgs.addEclipseProjectFile, null, true, 1 );
 
-        SWTUtil.createLabel( container, "", 1 ); // spacer
+        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 ); // spacer
 
-        SWTUtil.createLabel( container, "", 1 );// spacer
+        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 );// spacer
 
-        final Button openInEclipse = SWTUtil.createCheckButton( container, "Open in Eclipse", null, true, 1 );
+        final Button openInEclipse = SWTUtil.createCheckButton( container, Msgs.openEclipse, null, true, 1 );
         openInEclipse.addSelectionListener
         ( 
             new SelectionAdapter()
@@ -255,11 +256,11 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
         if( filterPath != null )
         {
             dd.setFilterPath( filterPath );
-            dd.setText( "Select Liferay Plugin SDK folder - " + filterPath );
+            dd.setText( NLS.bind( Msgs.selectFolderParamLabel, filterPath ) );
         }
         else
         {
-            dd.setText( "Select Liferay Plugin SDK folder" );
+            dd.setText( Msgs.selectFolderLabel );
         }
 
         if( CoreUtil.isNullOrEmpty( location.getText() ) )
@@ -287,7 +288,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
     protected String getDefaultMessage()
     {
-        return "Configure a Liferay Plugin SDK location.";
+        return Msgs.configureLiferayPluginSDKLocation;
     }
 
     protected void updateRuntimeItems()
@@ -296,7 +297,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         for( IRuntime runtime : ServerCore.getRuntimes() )
         {
-            if( runtime.getRuntimeType().getId().startsWith( "com.liferay.ide.eclipse.server" ) )
+            if( runtime.getRuntimeType().getId().startsWith( "com.liferay.ide.eclipse.server" ) ) //$NON-NLS-1$
             {
                 validRuntimes.add( runtime.getName() );
             }
@@ -318,7 +319,7 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         if( CoreUtil.isNullOrEmpty( lastName ) )
         {
-            return CoreUtil.createErrorStatus( "Name must have a value." );
+            return CoreUtil.createErrorStatus( Msgs.nameHaveValue );
         }
 
         // make sure new sdk name doesn't collide with existing one
@@ -334,25 +335,50 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         if( CoreUtil.isNullOrEmpty( lastLocation ) )
         {
-            return CoreUtil.createErrorStatus( "Location must have a value." );
+            return CoreUtil.createErrorStatus( Msgs.locationHaveValue );
         }
 
         if( !new File( lastLocation ).exists() )
         {
-            return CoreUtil.createErrorStatus( "Location must exist." );
+            return CoreUtil.createErrorStatus( Msgs.locationExists );
         }
 
         if( !SDKUtil.isValidSDKLocation( lastLocation ) )
         {
-            return CoreUtil.createErrorStatus( "Location must be a valid Liferay Plugin SDK." );
+            return CoreUtil.createErrorStatus( Msgs.locationValidLiferayPluginSDK );
         }
 
         if( !SDKUtil.isSDKSupported( lastLocation ) )
         {
-            return CoreUtil.createErrorStatus( "SDK version must be greater or equal to " +
-                ISDKConstants.LEAST_SUPPORTED_SDK_VERSION );
+            return CoreUtil.createErrorStatus( NLS.bind( Msgs.SDKVersionGreaterEqual, ISDKConstants.LEAST_SUPPORTED_SDK_VERSION ) );
         }
 
         return Status.OK_STATUS;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String addEclipseProjectFile;
+        public static String addSDKAction;
+        public static String browse;
+        public static String configureLiferayPluginSDKLocation;
+        public static String editSDKAction;
+        public static String liferayPluginSDK;
+        public static String locationExists;
+        public static String locationHaveValue;
+        public static String locationLabel;
+        public static String locationValidLiferayPluginSDK;
+        public static String nameHaveValue;
+        public static String nameLabel;
+        public static String newSDKAction;
+        public static String openEclipse;
+        public static String SDKVersionGreaterEqual;
+        public static String selectFolderLabel;
+        public static String selectFolderParamLabel;
+
+        static
+        {
+            initializeMessages( AddSDKDialog.class.getName(), Msgs.class );
+        }
     }
 }

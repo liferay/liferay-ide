@@ -33,7 +33,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 public class SDKClasspathProvider extends AntClasspathProvider
 {
 
-    public static final String ID = "com.liferay.ide.sdk.SDKClasspathProvider";
+    public static final String ID = "com.liferay.ide.sdk.SDKClasspathProvider"; //$NON-NLS-1$
 
     public SDKClasspathProvider()
     {

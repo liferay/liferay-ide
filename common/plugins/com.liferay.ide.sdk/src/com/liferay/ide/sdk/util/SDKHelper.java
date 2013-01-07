@@ -16,6 +16,7 @@
 package com.liferay.ide.sdk.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKClasspathProvider;
 import com.liferay.ide.sdk.SDKPlugin;
@@ -45,7 +46,7 @@ import org.eclipse.ui.externaltools.internal.model.IExternalToolConstants;
 public class SDKHelper extends LaunchHelper
 {
 
-    public static final String ANT_CLASSPATH_PROVIDER = "org.eclipse.ant.ui.AntClasspathProvider";
+    public static final String ANT_CLASSPATH_PROVIDER = "org.eclipse.ant.ui.AntClasspathProvider"; //$NON-NLS-1$
 
     public static final String ANT_LAUNCH_CONFIG_TYPE_ID = IAntLaunchConstants.ID_ANT_LAUNCH_CONFIGURATION_TYPE;
 
@@ -90,10 +91,10 @@ public class SDKHelper extends LaunchHelper
 
         launchConfig.setAttribute(
             IDebugUIConstants.ATTR_CAPTURE_IN_FILE,
-            SDKPlugin.getDefault().getStateLocation().append( "sdk.log" ).toOSString() );
+            SDKPlugin.getDefault().getStateLocation().append( "sdk.log" ).toOSString() ); //$NON-NLS-1$
 
         launchConfig.setAttribute(
-            IJavaLaunchConfigurationConstants.ATTR_SOURCE_PATH_PROVIDER, "org.eclipse.ant.ui.AntClasspathProvider" );
+            IJavaLaunchConfigurationConstants.ATTR_SOURCE_PATH_PROVIDER, "org.eclipse.ant.ui.AntClasspathProvider" ); //$NON-NLS-1$
 
         // launchConfig.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
         // "org.eclipse.ant.internal.ui.antsupport.InternalAntRunner");
@@ -121,13 +122,13 @@ public class SDKHelper extends LaunchHelper
 
     private String getVMArgumentsAttr()
     {
-        StringBuffer args = new StringBuffer( "-Xmx768m" );
+        StringBuffer args = new StringBuffer( "-Xmx768m" ); //$NON-NLS-1$
 
         if( !CoreUtil.isNullOrEmpty( additionalVMArgs ) )
         {
             for( String vmArg : additionalVMArgs )
             {
-                args.append( " " + vmArg );
+                args.append( StringUtil.SPACE + vmArg );
             }
         }
 
@@ -165,9 +166,9 @@ public class SDKHelper extends LaunchHelper
 
         if( this.currentTargets != null )
         {
-            buffer.append( " [" );
+            buffer.append( " [" ); //$NON-NLS-1$
             buffer.append( this.currentTargets );
-            buffer.append( "]" );
+            buffer.append( "]" ); //$NON-NLS-1$
         }
 
         return buffer.toString();
@@ -185,7 +186,7 @@ public class SDKHelper extends LaunchHelper
 
         if( isLaunchRunning() )
         {
-            throw new IllegalStateException( "Existing launch in progress" );
+            throw new IllegalStateException( "Existing launch in progress" ); //$NON-NLS-1$
         }
 
         this.currentBuildFile = buildFile;

@@ -170,7 +170,7 @@ public final class SDKManager
 
         IPreferenceStore prefs = getPrefStore();
 
-        String sdksXmlString = prefs.getString( "sdks" );
+        String sdksXmlString = prefs.getString( "sdks" ); //$NON-NLS-1$
 
         if( !CoreUtil.isNullOrEmpty( sdksXmlString ) )
         {
@@ -178,11 +178,11 @@ public final class SDKManager
             {
                 XMLMemento root =
                     XMLMemento.createReadRoot( new InputStreamReader( new ByteArrayInputStream(
-                        sdksXmlString.getBytes( "UTF-8" ) ) ) );
+                        sdksXmlString.getBytes( "UTF-8" ) ) ) ); //$NON-NLS-1$
 
-                String defaultSDKName = root.getString( "default" );
+                String defaultSDKName = root.getString( "default" ); //$NON-NLS-1$
 
-                IMemento[] children = root.getChildren( "sdk" );
+                IMemento[] children = root.getChildren( "sdk" ); //$NON-NLS-1$
 
                 for( IMemento sdkElement : children )
                 {
@@ -205,17 +205,17 @@ public final class SDKManager
 
     private void saveSDKs()
     {
-        XMLMemento root = XMLMemento.createWriteRoot( "sdks" );
+        XMLMemento root = XMLMemento.createWriteRoot( "sdks" ); //$NON-NLS-1$
 
         for( SDK sdk : sdkList )
         {
-            IMemento child = root.createChild( "sdk" );
+            IMemento child = root.createChild( "sdk" ); //$NON-NLS-1$
 
             sdk.saveToMemento( child );
 
             if( sdk.isDefault() )
             {
-                root.putString( "default", sdk.getName() );
+                root.putString( "default", sdk.getName() ); //$NON-NLS-1$
             }
         }
 
@@ -224,7 +224,7 @@ public final class SDKManager
         {
             root.save( writer );
 
-            getPrefStore().setValue( "sdks", writer.toString() );
+            getPrefStore().setValue( "sdks", writer.toString() ); //$NON-NLS-1$
             getPrefStore().save();
         }
         catch( IOException e )

@@ -201,8 +201,8 @@ public class SDKUtil
     public static String readSDKVersion( String path ) throws FileNotFoundException, IOException
     {
         Properties properties = new Properties();
-        properties.load( new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ) );
+        properties.load( new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ) ); //$NON-NLS-1$
 
-        return properties.getProperty( "lp.version" );
+        return properties.getProperty( "lp.version" ); //$NON-NLS-1$
     }
 }

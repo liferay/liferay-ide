@@ -26,6 +26,7 @@ import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -39,7 +40,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
 
-    public static final String ID = "com.liferay.ide.sdk.preferences.installedSDKs";
+    public static final String ID = "com.liferay.ide.sdk.preferences.installedSDKs"; //$NON-NLS-1$
 
     private Composite parent;
 
@@ -47,7 +48,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
 
     public SDKsPreferencePage()
     {
-        setImageDescriptor( SDKPlugin.imageDescriptorFromPlugin( SDKPlugin.PLUGIN_ID, "/icons/e16/sdk.png" ) );
+        setImageDescriptor( SDKPlugin.imageDescriptorFromPlugin( SDKPlugin.PLUGIN_ID, "/icons/e16/sdk.png" ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -86,7 +87,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         }
         else
         {
-            setMessage( "Must have at least one SDK checked as default", IMessageProvider.ERROR );
+            setMessage( Msgs.haveOneSDK, IMessageProvider.ERROR );
 
             return false;
         }
@@ -105,10 +106,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         // layout.marginWidth = 0;
         // parent.setLayout(layout);
 
-        SWTUtil.createWrapLabel(
-            parent,
-            "Add, remove or edit SDK definitions. By default, the checked SDK is used for new Liferay Plugin projects.",
-            1, 100 );
+        SWTUtil.createWrapLabel( parent, Msgs.addRemoveEditSDKDefinitionsLabel, 1, 100 );
 
         SWTUtil.createVerticalSpacer( parent, 1, 1 );
 
@@ -132,7 +130,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
     @Override
     public void applyData( Object data )
     {
-        if( "new".equals( data ) )
+        if( "new".equals( data ) ) //$NON-NLS-1$
         {
             this.getShell().getDisplay().asyncExec( new Runnable()
             {
@@ -148,10 +146,10 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
     protected void createFieldEditors()
     {
         FieldEditor edit =
-            new RadioGroupFieldEditor( SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, "Update \"build." +
-                System.getProperty( "user.name" ) + ".properties\" before SDK is used?", 3, new String[][] {
-                { "Always", MessageDialogWithToggle.ALWAYS }, { "Never", MessageDialogWithToggle.NEVER },
-                { "Prompt", MessageDialogWithToggle.PROMPT } }, parent, true );
+            new RadioGroupFieldEditor( SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE,
+                NLS.bind( Msgs.updateProperties, System.getProperty( "user.name" ) ), 3, new String[][] { //$NON-NLS-1$
+                { Msgs.always, MessageDialogWithToggle.ALWAYS }, { Msgs.never, MessageDialogWithToggle.NEVER },
+                { Msgs.prompt, MessageDialogWithToggle.PROMPT } }, parent, true );
         edit.setPreferenceStore( getPreferenceStore() );
         addField( edit );
     }
@@ -165,5 +163,20 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         }
 
         getPreferenceStore().setValue( MessageDialogWithToggle.PROMPT, SDKPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String addRemoveEditSDKDefinitionsLabel;
+        public static String always;
+        public static String haveOneSDK;
+        public static String never;
+        public static String prompt;
+        public static String updateProperties;
+
+        static
+        {
+            initializeMessages( SDKsPreferencePage.class.getName(), Msgs.class );
+        }
     }
 }

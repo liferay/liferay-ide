@@ -7,7 +7,7 @@
             category="com.liferay.ide.ui.preferences.liferay"
             class="com.liferay.ide.sdk.pref.SDKsPreferencePage"
             id="com.liferay.ide.sdk.preferences.installedSDKs"
-            name="Installed Plugin SDKs">
+            name="%installed.plugin.sdks.page.name">
          <keywordReference
                id="com.liferay.ide.ui.keyword">
          </keywordReference>

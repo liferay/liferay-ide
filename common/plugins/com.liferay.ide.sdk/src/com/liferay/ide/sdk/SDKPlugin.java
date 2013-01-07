@@ -38,12 +38,12 @@ import org.osgi.framework.BundleContext;
 public class SDKPlugin extends AbstractUIPlugin
 {
 
-    public static final String IMG_ICON_SDK_SMALL = "IMG_ICON_SDK_SMALL";
+    public static final String IMG_ICON_SDK_SMALL = "IMG_ICON_SDK_SMALL"; //$NON-NLS-1$
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.sdk";
+    public static final String PLUGIN_ID = "com.liferay.ide.sdk"; //$NON-NLS-1$
 
-    public static final String PREF_KEY_OVERWRITE_USER_BUILD_FILE = "OVERWRITE_USER_BUILD_FILE";
+    public static final String PREF_KEY_OVERWRITE_USER_BUILD_FILE = "OVERWRITE_USER_BUILD_FILE"; //$NON-NLS-1$
 
     // The shared instance
     private static SDKPlugin plugin;
@@ -112,7 +112,7 @@ public class SDKPlugin extends AbstractUIPlugin
     {
 
         // delete tmp folder
-        File createDir = getDefault().getStateLocation().append( "create" ).toFile();
+        File createDir = getDefault().getStateLocation().append( "create" ).toFile(); //$NON-NLS-1$
 
         if( createDir.exists() )
         {
@@ -126,7 +126,7 @@ public class SDKPlugin extends AbstractUIPlugin
     @Override
     protected void initializeImageRegistry( ImageRegistry reg )
     {
-        registerImage( reg, IMG_ICON_SDK_SMALL, "/icons/e16/sdk.png" );
+        registerImage( reg, IMG_ICON_SDK_SMALL, "/icons/e16/sdk.png" ); //$NON-NLS-1$
     }
 
     protected void registerImage( ImageRegistry registry, String key, String path )
