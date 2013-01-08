@@ -32,6 +32,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -201,7 +202,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                             {
                                 final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                                themeDescriptorHelper.createDefaultFile( container, liferayRuntime.getPortalVersion() , id, name );
+                                IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) );
+                                themeDescriptorHelper.createDefaultFile(
+                                    descriptorParent, liferayRuntime.getPortalVersion(), id, name );
                             }
 
                             try

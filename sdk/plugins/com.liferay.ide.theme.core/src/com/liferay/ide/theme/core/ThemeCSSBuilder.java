@@ -131,21 +131,21 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                         themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), liferayRuntime.getPortalVersion() , id, name );
                     }
-
-                    try
-                    {
-                        underlyingFile.getParent().refreshLocal( IResource.DEPTH_INFINITE, null );
-                    }
-                    catch( Exception e )
-                    {
-                        ThemeCore.logError( e );
-                    }
                 }
                 catch( IOException e )
                 {
                     ThemeCore.logError( "Unable to load plugin package properties.", e ); //$NON-NLS-1$
                 }
             }
+        }
+
+        try
+        {
+            project.refreshLocal( IResource.DEPTH_INFINITE, null );
+        }
+        catch( Exception e )
+        {
+            ThemeCore.logError( e );
         }
 
         return status;

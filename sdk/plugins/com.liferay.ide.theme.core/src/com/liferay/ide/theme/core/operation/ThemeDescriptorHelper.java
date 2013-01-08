@@ -54,7 +54,7 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper
 
         try
         {
-            final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ); //$NON-NLS-1$
+            final Path path = new Path( ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ); //$NON-NLS-1$
             final IFile lookAndFeelFile = container.getFile( path );
             final String descriptorVersion = getDescriptorVersionFromPortalVersion( version );
 
