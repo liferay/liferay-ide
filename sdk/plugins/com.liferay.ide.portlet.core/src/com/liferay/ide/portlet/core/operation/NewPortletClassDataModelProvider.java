@@ -430,7 +430,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             if( i > 0 )
             {
-                newName.append( StringUtil.SPACE ); //$NON-NLS-1$
+                newName.append( StringUtil.SPACE );
             }
 
             newName.append( words[i] );

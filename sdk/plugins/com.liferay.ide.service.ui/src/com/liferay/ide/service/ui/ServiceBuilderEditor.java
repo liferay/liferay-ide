@@ -17,22 +17,15 @@
 
 package com.liferay.ide.service.ui;
 
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.service.core.model.ServiceBuilder600;
-import com.liferay.ide.service.core.model.ServiceBuilder610;
-import com.liferay.ide.service.core.model.ServiceBuilderVersionType;
+import com.liferay.ide.service.core.model.ServiceBuilder6xx;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.xml.RootXmlResource;
-import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.gef.SapphireDiagramEditor;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
@@ -40,8 +33,6 @@ import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
 
 /**
  * @author Gregory Amerson
@@ -52,81 +43,27 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
 
     public ServiceBuilderEditor()
     {
-        super( ServiceUI.PLUGIN_ID );
-
-        setEditorDefinitionPath( ServiceUI.PLUGIN_ID +
-            "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/serviceBuilderPage" ); //$NON-NLS-1$
+        super
+        (
+            ServiceBuilder6xx.TYPE,
+            DefinitionLoader
+                .sdef( ServiceBuilderEditor.class )
+                .page( "serviceBuilderPage" )//$NON-NLS-1$
+        );
     }
 
     @Override
     protected void createDiagramPages() throws PartInitException
     {
-        IPath path =
-            new Path( ServiceUI.PLUGIN_ID + "/com/liferay/ide/service/ui/ServiceBuilderEditor.sdef/diagramPage" ); //$NON-NLS-1$
-        this.pageDiagram = new SapphireDiagramEditor( this, this.getModelElement(), path );
+        this.pageDiagram = new SapphireDiagramEditor
+        (
+            this, this.getModelElement(),
+            DefinitionLoader
+                .sdef( ServiceBuilderEditor.class )
+                .page( "diagramPage" ) //$NON-NLS-1$
+        );
+
         addEditorPage( 0, this.pageDiagram );
-    }
-
-    @Override
-    protected IModelElement createModel()
-    {
-        RootXmlResource resource = null;
-
-        try
-        {
-            InputStream editorContents = getFileContents();
-            ServiceBuilderVersionType dtdVersion = null;
-
-            resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
-            Document document = resource.getDomDocument();
-            dtdVersion = getDTDVersion( document );
-
-            if( document != null )
-            {
-                if( dtdVersion != null )
-                {
-                    switch( dtdVersion )
-                    {
-                        case v6_0_0:
-                            setRootModelElementType( ServiceBuilder600.TYPE );
-                            break;
-
-                        case v6_1_0:
-                        default:
-                            setRootModelElementType( ServiceBuilder610.TYPE );
-                            break;
-                    }
-                }
-                else
-                {
-                    LiferayDescriptorHelper liferayDescriptorHelper = new LiferayDescriptorHelper( getProject() );
-                    String descriptorVersion = liferayDescriptorHelper.getDescriptorVersion();
-
-                    if( "6.0.0".equals( descriptorVersion ) )
-                    {
-                        setRootModelElementType( ServiceBuilder600.TYPE );
-                    }
-                    else
-                    {
-                        setRootModelElementType( ServiceBuilder610.TYPE );
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            ServiceUI.logError( e );
-            setRootModelElementType( ServiceBuilder600.TYPE );
-        }
-        finally
-        {
-            if( resource != null )
-            {
-                resource.dispose();
-            }
-        }
-
-        return super.createModel();
     }
 
     @Override
@@ -135,32 +72,6 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
         super.doSave( monitor );
 
         this.pageDiagram.doSave( monitor );
-    }
-
-    protected ServiceBuilderVersionType getDTDVersion( Document document )
-    {
-        ServiceBuilderVersionType dtdVersion = null;
-        DocumentType docType = document.getDoctype();
-
-        if( docType != null )
-        {
-            String publicId = docType.getPublicId();
-            String systemId = docType.getSystemId();
-            if( publicId != null && systemId != null )
-            {
-                if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
-                {
-                    dtdVersion = ServiceBuilderVersionType.v6_0_0;
-                }
-                else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
-                {
-                    dtdVersion = ServiceBuilderVersionType.v6_1_0;
-                }
-            }
-
-        }
-
-        return dtdVersion;
     }
 
     public InputStream getFileContents() throws CoreException, MalformedURLException, IOException

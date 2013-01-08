@@ -1,38 +1,36 @@
 /*******************************************************************************
- *  Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *  
+ *  Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
  *   This library is free software; you can redistribute it and/or modify it under
  *   the terms of the GNU Lesser General Public License as published by the Free
  *   Software Foundation; either version 2.1 of the License, or (at your option)
  *   any later version.
- *  
+ *
  *   This library is distributed in the hope that it will be useful, but WITHOUT
  *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  *   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  *   details.
- *  
- *   Contributors:
- *          Kamesh Sampath - initial implementation
+ *
  *******************************************************************************/
 
-package com.liferay.ide.hook.core.model;
+package com.liferay.ide.portlet.core.display.model;
+
+import com.liferay.ide.portlet.core.display.model.internal.DisplayRootElementController;
 
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlDocumentType;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Gregory Amerson
  */
-@XmlDocumentType(
-                publicId = "-//Liferay//DTD Hook 6.0.0//EN",
-                systemId = "http://www.liferay.com/dtd/liferay-hook_6_0_0.dtd" )
-@XmlBinding( path = "hook" )
+@CustomXmlRootBinding( value = DisplayRootElementController.class )
+@XmlBinding( path = "display" )
 @GenerateImpl
-public interface Hook600 extends Hook
+public interface Display6xx extends Display
 {
 
-    ModelElementType TYPE = new ModelElementType( Hook600.class );
+    ModelElementType TYPE = new ModelElementType( Display6xx.class );
 
 }

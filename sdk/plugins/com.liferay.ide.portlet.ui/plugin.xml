@@ -69,19 +69,7 @@
                contentTypeId="com.liferay.ide.portlet.core.liferaydisplayxml">
          </contentTypeBinding>
       </editor>
-<!--
-      <editor
-            class="com.liferay.ide.portlet.ui.editor.LiferayPortletXmlEditor"
-            default="true"
-            icon="icons/e16/portlet.png"
-            id="com.liferay.ide.portlet.ui.editor.LiferayPortletXmlEditor"
-            name="Liferay Portlet Application Configuration Editor"
-            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
-         <contentTypeBinding
-               contentTypeId="com.liferay.ide.portlet.core.liferayportletxml">
-         </contentTypeBinding>
-      </editor>      
--->
+
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

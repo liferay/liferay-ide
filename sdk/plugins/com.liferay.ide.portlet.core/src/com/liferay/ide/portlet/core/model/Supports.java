@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -18,6 +18,7 @@
 package com.liferay.ide.portlet.core.model;
 
 import com.liferay.ide.portlet.core.model.internal.PortletModePossibleValueService;
+import com.liferay.ide.portlet.core.model.internal.WindowStatesPossibleValueService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -73,6 +74,7 @@ public interface Supports extends IModelElement
     @Type( base = WindowState.class )
     @Label( standard = "Window States" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "window-state", type = WindowState.class ) )
+    @Service( impl = WindowStatesPossibleValueService.class )
     ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" ); //$NON-NLS-1$
 
     ModelElementList<WindowState> getWindowStates();

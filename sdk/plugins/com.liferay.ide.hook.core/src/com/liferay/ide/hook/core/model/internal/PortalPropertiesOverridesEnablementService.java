@@ -37,7 +37,6 @@ public class PortalPropertiesOverridesEnablementService extends EnablementServic
     {
         Listener listener = new FilteredListener<PropertyEvent>()
         {
-
             protected void handleTypedEvent( PropertyEvent event )
             {
                 refresh();

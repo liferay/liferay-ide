@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.service.core.model;
 
+import org.eclipse.sapphire.Since;
 import org.eclipse.sapphire.modeling.ElementProperty;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
@@ -35,205 +36,208 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 @GenerateImpl
 @Image(path = "images/Entity_16x16.gif")
-public interface Entity extends IModelElement 
+public interface Entity extends IModelElement
 {
     ModelElementType TYPE = new ModelElementType( Entity.class );
 
-	// *** Name ***
+    // *** Name ***
 
-    @XmlBinding(path = "@name")
-	@Label(standard = "&name")
+    @XmlBinding( path = "@name" )
+    @Label( standard = "&name" )
     @Required
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name"); //$NON-NLS-1$
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
-	void setName(String value);
+    void setName( String value );
 
-	// *** Human Name ***
+    // *** Human Name ***
 
-	@XmlBinding(path = "@human-name")
-	@Label(standard = "&human name")
-	ValueProperty PROP_HUMAN_NAME = new ValueProperty(TYPE, "HumanName"); //$NON-NLS-1$
+    @XmlBinding( path = "@human-name" )
+    @Label( standard = "&human name" )
+    ValueProperty PROP_HUMAN_NAME = new ValueProperty( TYPE, "HumanName" ); //$NON-NLS-1$
 
     Value<String> getHumanName();
 
-	void setHumanName(String value);
+    void setHumanName( String value );
 
-	// *** Table ***
+    // *** Table ***
 
-	@XmlBinding(path = "@table")
-	@Label(standard = "&table")
-	ValueProperty PROP_TABLE = new ValueProperty(TYPE, "Table"); //$NON-NLS-1$
+    @XmlBinding( path = "@table" )
+    @Label( standard = "&table" )
+    ValueProperty PROP_TABLE = new ValueProperty( TYPE, "Table" ); //$NON-NLS-1$
 
-	Value<String> getTable();
+    Value<String> getTable();
 
-	void setTable(String value);
+    void setTable( String value );
 
-	// *** UUID ***
+    // *** UUID ***
 
-	@Type(base = Boolean.class)
-	@XmlBinding(path = "@uuid")
-	@Label(standard = "&uuid")
-	@DefaultValue(text = "false")
-	ValueProperty PROP_UUID = new ValueProperty(TYPE, "Uuid"); //$NON-NLS-1$
+    @Type( base = Boolean.class )
+    @XmlBinding( path = "@uuid" )
+    @Label( standard = "&uuid" )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_UUID = new ValueProperty( TYPE, "Uuid" ); //$NON-NLS-1$
 
-	Value<Boolean> getUuid();
+    Value<Boolean> getUuid();
 
-	void setUuid(String value);
+    void setUuid( String value );
 
-	void setUuid(Boolean value);
+    void setUuid( Boolean value );
 
-	// *** UUID Accessor ***
+    // *** UUID Accessor ***
 
-	@Type( base = Boolean.class )
-	@XmlBinding( path = "@uuid-accessor" )
-	@Label( standard = "&uuid accessor" )
-	@DefaultValue( text = "false" )
-	@Documentation( content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID." )
-	ValueProperty PROP_UUID_ACCESSOR = new ValueProperty( TYPE, "UuidAccessor" ); //$NON-NLS-1$
+    @Type( base = Boolean.class )
+    @XmlBinding( path = "@uuid-accessor" )
+    @Label( standard = "&uuid accessor" )
+    @DefaultValue( text = "false" )
+    @Documentation( content = "If the [b]uuid-accessor[/b] value is true, then the service will generate a UUID column accessor for the service. This accessor will provide a fast and type-safe way to access entity's UUID." )
+    @Since( "6.1" )
+    ValueProperty PROP_UUID_ACCESSOR = new ValueProperty( TYPE, "UuidAccessor" ); //$NON-NLS-1$
 
-	Value<Boolean> getUuidAccessor();
+    Value<Boolean> getUuidAccessor();
 
-	void setUuidAccessor( String value );
+    void setUuidAccessor( String value );
 
-	void setUuidAccessor( Boolean value );
+    void setUuidAccessor( Boolean value );
 
-	// *** LocalService
+    // *** LocalService
 
-	@Type(base = Boolean.class)
-	@Label(standard = "&local service")
-	@DefaultValue(text = "false")
-	@XmlBinding(path = "@local-service")
-	ValueProperty PROP_LOCAL_SERVICE = new ValueProperty(TYPE, "LocalService"); //$NON-NLS-1$
+    @Type( base = Boolean.class )
+    @Label( standard = "&local service" )
+    @DefaultValue( text = "false" )
+    @XmlBinding( path = "@local-service" )
+    ValueProperty PROP_LOCAL_SERVICE = new ValueProperty( TYPE, "LocalService" ); //$NON-NLS-1$
 
-	Value<Boolean> isLocalService();
-	void setLocalService(String value);
-	void setLocalService(Boolean value);
+    Value<Boolean> isLocalService();
 
-	// *** RemoteService
+    void setLocalService( String value );
 
-	@Type(base = Boolean.class)
-	@Label(standard = "&remote service")
-	@DefaultValue(text = "true")
-	@XmlBinding(path = "@remote-service")
-	ValueProperty PROP_REMOTE_SERVICE = new ValueProperty(TYPE, "RemoteService"); //$NON-NLS-1$
+    void setLocalService( Boolean value );
 
-	Value<Boolean> isRemoteService();
+    // *** RemoteService
 
-	void setRemoteService(String value);
+    @Type( base = Boolean.class )
+    @Label( standard = "&remote service" )
+    @DefaultValue( text = "true" )
+    @XmlBinding( path = "@remote-service" )
+    ValueProperty PROP_REMOTE_SERVICE = new ValueProperty( TYPE, "RemoteService" ); //$NON-NLS-1$
 
-	void setRemoteService(Boolean value);
+    Value<Boolean> isRemoteService();
 
-	// *** Persistence Class ***
+    void setRemoteService( String value );
 
-	@XmlBinding(path = "@persistence-class")
-	@Label(standard = "&persistence class")
-	ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty(TYPE, "PersistenceClass"); //$NON-NLS-1$
+    void setRemoteService( Boolean value );
+
+    // *** Persistence Class ***
+
+    @XmlBinding( path = "@persistence-class" )
+    @Label( standard = "&persistence class" )
+    ValueProperty PROP_PERSISTENCE_CLASS = new ValueProperty( TYPE, "PersistenceClass" ); //$NON-NLS-1$
 
     Value<String> getPersistenceClass();
 
-	void setPersistenceClass(String value);
+    void setPersistenceClass( String value );
 
-	// *** Data Source ***
+    // *** Data Source ***
 
-	@XmlBinding(path = "@data-source")
-	@Label(standard = "&data source")
-	ValueProperty PROP_DATA_SOURCE = new ValueProperty(TYPE, "DataSource"); //$NON-NLS-1$
+    @XmlBinding( path = "@data-source" )
+    @Label( standard = "&data source" )
+    ValueProperty PROP_DATA_SOURCE = new ValueProperty( TYPE, "DataSource" ); //$NON-NLS-1$
 
-	Value<String> getDataSource();
+    Value<String> getDataSource();
 
-	void setDataSource(String value);
+    void setDataSource( String value );
 
-	// *** Session Factory ***
+    // *** Session Factory ***
 
-	@XmlBinding(path = "@session-factory")
-	@Label(standard = "&session factory")
-	ValueProperty PROP_SESSION_FACTORY = new ValueProperty(TYPE, "SessionFactory"); //$NON-NLS-1$
+    @XmlBinding( path = "@session-factory" )
+    @Label( standard = "&session factory" )
+    ValueProperty PROP_SESSION_FACTORY = new ValueProperty( TYPE, "SessionFactory" ); //$NON-NLS-1$
 
-	Value<String> getSessionFactory();
+    Value<String> getSessionFactory();
 
-	void setSessionFactory(String value);
+    void setSessionFactory( String value );
 
-	// *** Tx manager ***
+    // *** Tx manager ***
 
-	@XmlBinding(path = "@tx-manager")
-	@Label(standard = "tx &manager")
-	ValueProperty PROP_TX_MANAGER = new ValueProperty(TYPE, "TxManager"); //$NON-NLS-1$
+    @XmlBinding( path = "@tx-manager" )
+    @Label( standard = "tx &manager" )
+    ValueProperty PROP_TX_MANAGER = new ValueProperty( TYPE, "TxManager" ); //$NON-NLS-1$
 
-	Value<String> getTxManager();
+    Value<String> getTxManager();
 
-	void setTxManager(String value);
+    void setTxManager( String value );
 
-	// *** Cache Enabled
+    // *** Cache Enabled
 
-	@Type(base = Boolean.class)
-	@Label(standard = "&cache enabled")
-	@XmlBinding(path = "@cache-enabled")
-	@DefaultValue(text = "true")
-	ValueProperty PROP_CACHE_ENABLED = new ValueProperty(TYPE, "CacheEnabled"); //$NON-NLS-1$
+    @Type( base = Boolean.class )
+    @Label( standard = "&cache enabled" )
+    @XmlBinding( path = "@cache-enabled" )
+    @DefaultValue( text = "true" )
+    ValueProperty PROP_CACHE_ENABLED = new ValueProperty( TYPE, "CacheEnabled" ); //$NON-NLS-1$
 
-	Value<Boolean> isCacheEnabled();
+    Value<Boolean> isCacheEnabled();
 
-	void setCacheEnabled(String value);
+    void setCacheEnabled( String value );
 
-	void setCacheEnabled(Boolean value);
+    void setCacheEnabled( Boolean value );
 
-	// *** Json Enabled
+    // *** Json Enabled
 
-	@Type( base = Boolean.class )
-	@Label( standard = "&JSON enabled" )
-	@XmlBinding( path = "@json-enabled" )
-	@DefaultValue( text = "true" )
-	ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" ); //$NON-NLS-1$
+    @Type( base = Boolean.class )
+    @Label( standard = "&JSON enabled" )
+    @XmlBinding( path = "@json-enabled" )
+    @DefaultValue( text = "true" )
+    ValueProperty PROP_JSON_ENABLED = new ValueProperty( TYPE, "JsonEnabled" ); //$NON-NLS-1$
 
-	Value<Boolean> isJsonEnabled();
+    Value<Boolean> isJsonEnabled();
 
-	void setJsonEnabled( String value );
+    void setJsonEnabled( String value );
 
-	void setJsonEnabled( Boolean value );
-	@Type(base = Column.class)
-	@Label(standard = "column")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "column", type = Column.class))
-	ListProperty PROP_COLUMNS = new ListProperty(TYPE, "Columns"); //$NON-NLS-1$
+    void setJsonEnabled( Boolean value );
+    @Type( base = Column.class )
+    @Label( standard = "column" )
+    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "column", type = Column.class ) )
+    ListProperty PROP_COLUMNS = new ListProperty( TYPE, "Columns" ); //$NON-NLS-1$
 
-	ModelElementList<Column> getColumns();
+    ModelElementList<Column> getColumns();
 
-	@Type(base = Order.class)
-	@Label(standard = "order")
-	@XmlElementBinding(mappings = @XmlElementBinding.Mapping(element = "order", type = Order.class))
-	ElementProperty PROP_ORDER = new ElementProperty(TYPE, "Order"); //$NON-NLS-1$
+    @Type( base = Order.class )
+    @Label( standard = "order" )
+    @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element = "order", type = Order.class ) )
+    ElementProperty PROP_ORDER = new ElementProperty( TYPE, "Order" ); //$NON-NLS-1$
 
-	ModelElementHandle<Order> getOrder();
+    ModelElementHandle<Order> getOrder();
 
-	// @XmlElementBinding(path = "order")
-	// ImpliedElementProperty PROP_ORDER = new ImpliedElementProperty(TYPE, "Order");
+    // @XmlElementBinding(path = "order")
+    // ImpliedElementProperty PROP_ORDER = new ImpliedElementProperty(TYPE, "Order");
 
-	// IOrder getOrder();
+    // IOrder getOrder();
 
-	@Type(base = Finder.class)
-	@Label(standard = "finder")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "finder", type = Finder.class))
-	ListProperty PROP_FINDERS = new ListProperty(TYPE, "Finders"); //$NON-NLS-1$
+    @Type( base = Finder.class )
+    @Label( standard = "finder" )
+    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "finder", type = Finder.class ) )
+    ListProperty PROP_FINDERS = new ListProperty( TYPE, "Finders" ); //$NON-NLS-1$
 
-	ModelElementList<Finder> getFinders();
+    ModelElementList<Finder> getFinders();
 
-	// *** References ***
+    // *** References ***
 
-	@Type(base = Reference.class)
-	@Label(standard = "references")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "reference", type = Reference.class))
-	ListProperty PROP_REFERENCES = new ListProperty(TYPE, "References"); //$NON-NLS-1$
+    @Type( base = Reference.class )
+    @Label( standard = "references" )
+    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "reference", type = Reference.class ) )
+    ListProperty PROP_REFERENCES = new ListProperty( TYPE, "References" ); //$NON-NLS-1$
 
-	ModelElementList<Reference> getReferences();
+    ModelElementList<Reference> getReferences();
 
-	// *** TxRequireds ***
+    // *** TxRequireds ***
 
-	@Type(base = TxRequired.class)
-	@Label(standard = "tx requireds")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "tx-required", type = TxRequired.class))
-	ListProperty PROP_TX_REQUIREDS = new ListProperty(TYPE, "TxRequireds"); //$NON-NLS-1$
+    @Type( base = TxRequired.class )
+    @Label( standard = "tx requireds" )
+    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "tx-required", type = TxRequired.class ) )
+    ListProperty PROP_TX_REQUIREDS = new ListProperty( TYPE, "TxRequireds" ); //$NON-NLS-1$
 
-	ModelElementList<TxRequired> getTxRequireds();
+    ModelElementList<TxRequired> getTxRequireds();
 
 }

@@ -3,8 +3,7 @@ package com.liferay.ide.hook.core.tests;
 
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.hook.core.model.CustomJspDir;
-import com.liferay.ide.hook.core.model.Hook610;
-import com.liferay.ide.hook.core.model.HookVersionType;
+import com.liferay.ide.hook.core.model.Hook6xx;
 import com.liferay.ide.hook.core.util.HookUtil;
 
 import junit.framework.Assert;
@@ -39,11 +38,11 @@ public class HookCoreTests extends BaseTests
 
         final RootXmlResource resource = new RootXmlResource( new XmlResourceStore( hooksFile.getContents() ) );
 
-        HookVersionType dtdVersion = HookUtil.getDTDVersion( resource.getDomDocument() );
+        String dtdVersion = HookUtil.getDTDVersion( resource.getDomDocument() );
 
-        Assert.assertEquals( dtdVersion, HookVersionType.v6_1_0 );
+        Assert.assertEquals( dtdVersion, "6.1.0" );
 
-        final Hook610 hook610 = Hook610.TYPE.instantiate( resource );
+        final Hook6xx hook610 = Hook6xx.TYPE.instantiate( resource );
 
         //CustomJspDir customJspDir = hook610.getCustomJspDir().element( false );
 

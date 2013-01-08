@@ -14,3 +14,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portal.core.tests
+Bundle-ClassPath: .,
+ lib/sardine.jar,
+ lib/slf4j-api-1.6.2.jar

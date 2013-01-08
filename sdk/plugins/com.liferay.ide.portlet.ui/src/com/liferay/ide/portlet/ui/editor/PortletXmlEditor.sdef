@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ *  Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *
+ *  This library is free software; you can redistribute it and/or modify it under
+ *  the terms of the GNU Lesser General Public License as published by the Free
+ *  Software Foundation; either version 2.1 of the License, or (at your option)
+ *  any later version.
+ *
+ *  This library is distributed in the hope that it will be useful, but WITHOUT
+ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ *  FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ *  details.
+ *
+ *  Contributors:
+ *      Kamesh Sampath - initial implementation
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
+-->
+
+<definition>
+    <import>
+        <package>com.liferay.ide.portlet.ui</package>
+        <package>com.liferay.ide.portlet.ui.action</package>
+        <package>com.liferay.ide.portlet.core.model</package>
+        <package>com.liferay.ide.portlet.core.model.internal</package>
+        <package>com.liferay.ide.portlet.ui.parts</package>
+        <package>com.liferay.ide.portlet.ui.action.filters</package>
+        <package>com.liferay.ide.portlet.ui.editor.internal</package>
+    </import>
+    <editor-page>
+        <id>portlet-app.editor</id>
+        <page-name>Overview</page-name>
+        <page-header-text>Portlet Application</page-header-text>
+        <root-node>
+            <node>
+                <label>Portlet Application</label>
+                <section>
+                    <label>Portlet Application</label>
+                    <content>
+                        <property-editor>DefaultNameSpace
+                        </property-editor>
+                        <property-editor>
+                            <property>ResourceBundle</property>
+                            <action>
+                                <id>LiferayIDE.PortletApp.RB.Create</id>
+                                <label>Create Bundle</label>
+                                <image>icons/elcl16/new_doc_16x16.png</image>
+                                <hint>
+                                    <name>style</name>
+                                    <value>image</value>
+                                </hint>
+                                <context>Sapphire.ValuePropertyEditor</context>
+                                <location>after:Sapphire.Browse</location>
+                            </action>
+                            <action-handler>
+                                <action>LiferayIDE.PortletApp.RB.Create</action>
+                                <id>LiferayIDE.PortletApp.RB.Create</id>
+                                <impl>CreatePortletAppResourceBundleActionHandler</impl>
+                            </action-handler>
+                        </property-editor>
+                    </content>
+                    <collapsible>false</collapsible>
+                    <scroll-vertically>true</scroll-vertically>
+                    <scroll-horizontally>true</scroll-horizontally>
+                    <indent>true</indent>
+                </section>
+                <node>
+                    <label>Portlets</label>
+                    <node-include>PortletsNodeList</node-include>
+                    <section>
+                        <label>Portlets Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>Portlets</property>
+                                <child-property>
+                                    <property>PortletName</property>
+                                </child-property>
+                                <child-property>DisplayName
+                                </child-property>
+                                <child-property>
+                                    <property>PortletClass</property>
+                                </child-property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <image>icons/e16/portlets_16x16.png</image>
+
+                </node>
+                <node>
+                    <label>Filters and Mappings</label>
+                    <section>
+                        <label>Filters and Mappings Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>Filters</property>
+                                <child-property>Name</child-property>
+                                <child-property>
+                                    <property>Implementation</property>
+                                </child-property>
+                            </property-editor>
+                            <property-editor>
+                                <property>FilterMappings</property>
+                                <child-property>Filter</child-property>
+                                <child-property>Portlet</child-property>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <node-include>FiltersNodeList</node-include>
+                    <node-include>FilterMappingsNodeList</node-include>
+                    <image>images/filters_mappings_16x16.png</image>
+                </node>
+                <node>
+                    <label>Events</label>
+                    <node-include>EventDefinitionsList</node-include>
+                    <section>
+                        <label>Events Quick Edit</label>
+                        <content>
+                            <include>event.def.quickedit.composite
+                            </include>
+                        </content>
+                    </section>
+                    <image>images/events_16x16.png</image>
+                </node>
+                <node>
+                    <label>Public Render Parameters</label>
+                    <section>
+                        <label>Public Render Parameters Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>PublicRenderParameters</property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                                <child-property>Identifier</child-property>
+                                <child-property>NamespaceURI</child-property>
+                                <child-property>LocalPart</child-property>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <node-include>PublicRenderParametersList</node-include>
+                    <image>images/parameters_16x16.png</image>
+                </node>
+                <node>
+                    <label>Listeners</label>
+                    <section>
+                        <label>Listeners Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>Listeners</property>
+                                <hint>
+                                    <value>false</value>
+                                    <name>show.label</name>
+                                </hint>
+                                <child-property>DisplayName</child-property>
+                                <child-property>Description</child-property>
+                                <child-property>Implementation</child-property>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <image>icons/elcl16/listener_16x16.gif</image>
+                    <node-include>ListenersNodeList</node-include>
+                </node>
+                <node>
+                    <label>Security Constraints</label>
+                    <node-include>SecurityConstraintNodeList</node-include>
+                    <section>
+                        <label>Security Constraints Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>SecurityConstraints</property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                                <child-property>DisplayName</child-property>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <image>images/constraints_16x16.png</image>
+                </node>
+                <node>
+                    <label>Customizations</label>
+                    <section>
+                        <label>Customizations</label>
+                        <collapsible>false</collapsible>
+                        <content>
+                            <property-editor>
+                                <property>CustomPortletModes</property>
+                                <child-property>
+                                    <property>PortletMode</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>40</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>
+                                    <property>PortletManaged</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>30</value>
+                                    </hint>
+                                </child-property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>true</value>
+                                </hint>
+                                <child-property>Description</child-property>
+                            </property-editor>
+                            <spacer></spacer>
+                            <property-editor>
+                                <property>CustomWindowStates</property>
+                                <child-property>
+                                    <property>WindowState</property>
+                                    <hint>
+                                        <name>column.widths</name>
+                                        <value>40</value>
+                                    </hint>
+                                </child-property>
+                                <child-property>Description</child-property>
+                                <hint>
+                                    <name>show.label</name>
+                                    <value>true</value>
+                                </hint>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <image>images/customizations_16x16.gif</image>
+
+                </node>
+                <node>
+                    <label>Container Runtime Options</label>
+                    <section>
+                        <label>Container Runtime Options Quick Edit</label>
+                        <content>
+                            <property-editor>
+                                <property>ContainerRuntimeOptions</property>
+                                <show-label>false</show-label>
+                                <span>true</span>
+                                <child-property>Name</child-property>
+                            </property-editor>
+                        </content>
+                    </section>
+                    <node-include>ContainerRuntimeOptionsNodeList</node-include>
+                    <image>images/options_16x16.gif</image>
+                </node>
+                <image>images/portlet.png</image>
+            </node>
+        </root-node>
+        <initial-selection>Portlets</initial-selection>
+        <action>
+            <id>Quick.Actions</id>
+            <hint>
+                <name>style</name>
+                <value>image+text</value>
+            </hint>
+            <context>Sapphire.EditorPage</context>
+            <label>New...</label>
+            <image>icons/elcl16/quick_actions_16x16.gif</image>
+            <description>This will configure a set of quick actions that will be
+                placed on the Editor Page header
+            </description>
+        </action>
+        <action-handler-factory>
+            <action>Quick.Actions</action>
+            <description>The Quick actions that appear on the Editor Page Header
+            </description>
+            <impl>QuickActionsHandlerFactory</impl>
+            <param>
+                <name>MODEL_PROPERTIES</name>
+                <value>Portlets,Filters,EventDefinitions,PublicRenderParameters,Listeners,SecurityConstraints,ContainerRuntimeOptions
+                </value>
+            </param>
+        </action-handler-factory>
+        <page-header-image>images/portlet.png</page-header-image>
+        <action>
+            <id>Sapphire.ShowInSource</id>
+            <label>Show in Source</label>
+            <hint>
+                <name>style</name>
+                <value>image+text</value>
+            </hint>
+            <context>Sapphire.EditorPage.Outline.Node</context>
+        </action>
+        <element-type>PortletApp</element-type>
+    </editor-page>
+    <node-factory>
+        <id>PortletsNodeList</id>
+        <property>Portlets</property>
+        <case>
+			<!--
+				<label>${ PortletName == null ? '&lt;portlet-name&gt;' :
+				DisplayName == null ? 'foo' :
+				concat ( concat ( concat ( PortletName, ' [' ), DisplayName ), ']' )}</label>
+			-->
+            <label>${PortletName != null ? ( DisplayName != null ? concat ( concat ( concat ( PortletName, ' [' ),
+                DisplayName ), ']' ) : PortletName ) : '&lt;portlet-name&gt;'}</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <include>portlet.basic.composite</include>
+                </content>
+                <label>${ PortletName != null ? concat( PortletName, ' Details' ) : '&lt;portlet-name&gt;' }</label>
+                <collapsible>false</collapsible>
+                <action>
+                    <id>LiferayIDE.PortletNode.Expand</id>
+                    <context>Sapphire.Section</context>
+                    <type>TOGGLE</type>
+                    <label>More Details</label>
+                    <image>icons/elcl16/toggle_info_16x16.png</image>
+                    <location>before:Sapphire.Restore.Defaults</location>
+                </action>
+                <action-handler>
+                    <action>LiferayIDE.PortletNode.Expand</action>
+                    <id>LiferayIDE.PortletNode.Expand</id>
+                    <impl>ExpandSectionOutlineNodeHandler</impl>
+                </action-handler>
+            </section>
+            <section>
+                <label>Supports</label>
+                <content>
+                    <with>
+                        <path>Supports</path>
+                        <default-panel>
+                            <content>
+                                <property-editor>MimeType</property-editor>
+                                <property-editor>
+                                    <property>PortletModes</property>
+                                    <hint>
+                                        <name>browse.only</name>
+                                        <value>true</value>
+                                    </hint>
+                                </property-editor>
+                                <property-editor>
+                                    <property>WindowStates</property>
+                                    <hint>
+                                        <name>browse.only</name>
+                                        <value>true</value>
+                                    </hint>
+                                </property-editor>
+                            </content>
+                        </default-panel>
+                    </with>
+                </content>
+                <collapsible>true</collapsible>
+                <collapsed-initially>true</collapsed-initially>
+            </section>
+            <section>
+                <label>Portlet Information</label>
+                <collapsible>true</collapsible>
+                <content>
+                    <with>
+                        <path>PortletInfo</path>
+                        <default-panel>
+                            <content>
+                                <property-editor>Title</property-editor>
+                                <property-editor>ShortTitle</property-editor>
+                                <property-editor>Keywords</property-editor>
+                            </content>
+                        </default-panel>
+                    </with>
+                </content>
+                <collapsed-initially>true</collapsed-initially>
+            </section>
+            <section>
+                <content>
+                    <include>init.param.composite</include>
+                </content>
+                <label>Initialization Parameters</label>
+                <collapsible>true</collapsible>
+                <collapsed-initially>true</collapsed-initially>
+            </section>
+            <node>
+                <label>Additional Settings</label>
+                <section>
+                    <label>Security</label>
+                    <content>
+                        <property-editor>
+                            <property>SecurityRoleRefs</property>
+                            <child-property>RoleName</child-property>
+                            <child-property>RoleLink</child-property>
+                            <child-property>Description</child-property>
+                            <span>true</span>
+                        </property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <section>
+                    <label>Preferences</label>
+                    <content>
+                        <with>
+                            <path>PortletPreference</path>
+                            <default-panel>
+                                <content>
+                                    <property-editor>
+                                        <property>PortletPreferences</property>
+                                        <child-property>Name</child-property>
+                                        <child-property>Value</child-property>
+                                        <child-property>ReadOnly</child-property>
+                                        <show-label>false</show-label>
+                                        <span>true</span>
+                                    </property-editor>
+                                </content>
+                            </default-panel>
+                        </with>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <section>
+                    <label>Caching</label>
+                    <content>
+                        <property-editor>ExpirationCache</property-editor>
+                        <property-editor>CacheScope</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>true</collapsed-initially>
+                </section>
+                <section>
+                    <label>Runtime Options</label>
+                    <content>
+                        <property-editor>
+                            <property>ContainerRuntimeOptions</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                            <child-property>Name</child-property>
+                        </property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>true</collapsed-initially>
+                </section>
+                <image>images/settings_16x16.gif</image>
+            </node>
+            <node>
+                <label>Inter-Portlet Communication</label>
+                <section>
+                    <label>Supported Public Render Parameters</label>
+                    <content>
+                        <property-editor>
+                            <property>SupportedPublicRenderParameters
+                            </property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                        </property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <section>
+                    <label>Supported Processing Events</label>
+                    <content>
+                        <include>
+                            <part>support.eventdef.composite</part>
+                            <param>
+                                <value>SupportedProcessingEvents</value>
+                                <name>Property</name>
+                            </param>
+                        </include>
+                    </content>
+                    <collapsible>true</collapsible>
+                </section>
+                <section>
+                    <label>Supported Publishing Events</label>
+                    <collapsible>true</collapsible>
+                    <content>
+                        <include>
+                            <part>support.eventdef.composite</part>
+                            <param>
+                                <name>Property</name>
+                                <value>SupportedPublishingEvents</value>
+                            </param>
+                        </include>
+                    </content>
+                </section>
+                <image>images/ipc_16x16.gif</image>
+            </node>
+            <section>
+                <label>Internationalization and Localization</label>
+                <collapsible>true</collapsible>
+                <collapsed-initially>true</collapsed-initially>
+                <content>
+                    <property-editor>
+                        <property>ResourceBundle</property>
+                        <action>
+                            <id>LiferayIDE.Portlet.RB.Create</id>
+                            <label>Create Locale Bundles</label>
+                            <image>icons/elcl16/new_doc_16x16.png</image>
+                            <hint>
+                                <name>style</name>
+                                <value>image</value>
+                            </hint>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                            <location>after:Sapphire.Browse</location>
+                        </action>
+                        <action-handler>
+                            <action>LiferayIDE.Portlet.RB.Create</action>
+                            <id>LiferayIDE.Portlet.RB.Create</id>
+                            <impl>CreatePortletResourceBundleActionHandler</impl>
+                        </action-handler>
+                    </property-editor>
+                    <property-editor>
+                        <property>SupportedLocales</property>
+                        <show-label>false</show-label>
+                        <span>true</span>
+                    </property-editor>
+                </content>
+            </section>
+            <node>
+                <label>Container Runtime Options</label>
+                <node-include>ContainerRuntimeOptionsNodeList</node-include>
+                <image>images/options_16x16.gif</image>
+                <section>
+                    <label>Container Runtime Options Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>ContainerRuntimeOptions</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                        </property-editor>
+                    </content>
+                </section>
+            </node>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>EventDefinitionsList</id>
+        <property>EventDefinitions</property>
+        <case>
+            <image>${ Image() }</image>
+            <section>
+                <label>Details</label>
+                <content>
+                    <property-editor>NamespaceURI</property-editor>
+                    <property-editor>LocalPart</property-editor>
+                    <property-editor>
+                        <property>EventValueType</property>
+                    </property-editor>
+                    <property-editor>
+                        <property>Aliases</property>
+                        <related-content-width>30</related-content-width>
+                        <child-property>NamespaceURI</child-property>
+                        <child-property>LocalPart</child-property>
+                    </property-editor>
+                </content>
+                <collapsible>false</collapsible>
+                <indent>true</indent>
+            </section>
+            <label>${( (empty Name AND empty NamespaceURI AND empty LocalPart )
+                ||
+                (Name=='EVENT_NAME' &amp;&amp;
+                NamespaceURI
+                =='NAMESPACE_URI'
+                &amp;&amp;
+                LocalPart=='LOCAL_PART') ) ? '&lt;event-definition&gt;'
+                :
+                ((empty Name || Name ==
+                'EVENT_NAME')?(concat('{',NamespaceURI,'}',LocalPart)):Name)}
+            </label>
+        </case>
+    </node-factory>
+    <composite>
+        <id>portlet.basic.composite</id>
+        <content>
+            <property-editor>PortletName</property-editor>
+            <property-editor>DisplayName</property-editor>
+            <property-editor>PortletClass</property-editor>
+        </content>
+        <indent>true</indent>
+        <scroll-vertically>true</scroll-vertically>
+        <scroll-horizontally>true</scroll-horizontally>
+    </composite>
+    <composite>
+        <id>init.param.composite</id>
+        <indent>true</indent>
+        <scroll-vertically>true</scroll-vertically>
+        <scroll-horizontally>true</scroll-horizontally>
+        <content>
+            <property-editor>
+                <property>InitParams</property>
+                <child-property>Name</child-property>
+                <child-property>Value</child-property>
+                <show-label>false</show-label>
+                <span>true</span>
+            </property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>container.runtime.options</id>
+        <content>
+            <property-editor>
+                <property>ContainerRuntimeOptions</property>
+                <child-property>Name</child-property>
+                <child-property>Options</child-property>
+            </property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>id.name.desc.composite</id>
+        <content>
+            <property-editor>Name</property-editor>
+            <property-editor>Description</property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>support.eventdef.composite</id>
+        <content>
+            <property-editor>
+                <property>@{Property}</property>
+                <child-property>Qname</child-property>
+                <child-property>Description</child-property>
+                <show-label>false</show-label>
+                <span>true</span>
+            </property-editor>
+        </content>
+    </composite>
+    <composite>
+        <id>event.def.quickedit.composite</id>
+        <content>
+            <property-editor>
+                <property>EventDefinitions</property>
+                <child-property>NamespaceURI</child-property>
+                <child-property>LocalPart</child-property>
+                <child-property>
+                    <property>EventValueType</property>
+                </child-property>
+                <show-label>false</show-label>
+                <span>true</span>
+            </property-editor>
+        </content>
+    </composite>
+    <node-factory>
+        <id>FiltersNodeList</id>
+        <property>Filters</property>
+        <case>
+            <image>${ Image() }</image>
+            <label>${Name != null ? ( DisplayName != null ? concat ( concat ( concat ( Name, ' [' ), DisplayName ), ']'
+                ) : Name ) : '&lt;filter&gt;'}</label>
+            <section>
+                <label>Filter</label>
+                <collapsible>false</collapsible>
+                <content>
+                    <property-editor>DisplayName</property-editor>
+                    <property-editor>Name</property-editor>
+                    <property-editor>
+                        <property>Implementation</property>
+                    </property-editor>
+                    <property-editor>LifeCycle</property-editor>
+                    <property-editor>InitParams</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>FilterMappingsNodeList</id>
+        <property>FilterMappings</property>
+        <case>
+            <label>${Filter==null?&quot;&lt;filter-mapping&gt;&quot;:concat(concat(Filter,&quot; &lt;&gt; &quot;),
+                Portlet)}</label>
+            <image>${ Image() }</image>
+            <section>
+                <label>Mappings</label>
+                <content>
+                    <property-editor>Filter</property-editor>
+                    <property-editor>Portlet</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>SecurityConstraintNodeList</id>
+        <property>SecurityConstraints</property>
+        <case>
+            <image>${ Image() }</image>
+            <label>${DisplayName != null ? DisplayName : '&lt;security-constraint&gt;'}</label>
+            <section>
+                <label>Security Constraint Details</label>
+                <content>
+                    <property-editor>DisplayName</property-editor>
+                </content>
+            </section>
+            <section>
+                <label>Portlet Names</label>
+                <content>
+                    <property-editor>
+                        <property>PortletNames</property>
+                        <show-label>false</show-label>
+                        <span>true</span>
+                    </property-editor>
+                </content>
+            </section>
+            <section>
+                <label>User Data Constraint</label>
+                <content>
+                    <with>
+                        <panel>
+                            <content>
+                                <property-editor>Description</property-editor>
+                                <property-editor>TransportGuarantee</property-editor>
+                            </content>
+                            <key>UserDataConstraint</key>
+                        </panel>
+                        <path>UserDataConstraint</path>
+                    </with>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>ListenersNodeList</id>
+        <property>Listeners</property>
+        <case>
+            <image>${ Image() }</image>
+            <label>${(empty Description AND empty DisplayName) ? '&lt;listener&gt;' : ((empty DisplayName) ? Description
+                :
+                DisplayName)}
+            </label>
+            <section>
+                <label>Listener Details</label>
+                <content>
+                    <property-editor>Description</property-editor>
+                    <property-editor>DisplayName</property-editor>
+                    <property-editor>
+                        <property>Implementation</property>
+                    </property-editor>
+                </content>
+                <collapsible>false</collapsible>
+            </section>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>PublicRenderParametersList</id>
+        <property>PublicRenderParameters</property>
+        <case>
+            <image>${ Image() }</image>
+            <section>
+                <label>Details</label>
+                <content>
+                    <property-editor>Identifier</property-editor>
+                    <property-editor>NamespaceURI</property-editor>
+                    <property-editor>LocalPart</property-editor>
+                    <property-editor>
+                        <property>Aliases</property>
+                        <child-property>NamespaceURI</child-property>
+                        <child-property>LocalPart</child-property>
+                    </property-editor>
+                </content>
+            </section>
+            <label>${Identifier ==null ? &quot;&lt;param-name&gt;&quot;: Identifier} </label>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>ContainerRuntimeOptionsNodeList</id>
+        <property>ContainerRuntimeOptions</property>
+        <case>
+            <label>${Name ==null ? '&lt;container-runtime-option&gt;' : Name }</label>
+            <image>${ Image() }</image>
+            <section>
+                <label>Details</label>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Options</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    <dialog>
+        <id>new.portlet.wizard</id>
+        <content>
+            <property-editor>PortletName</property-editor>
+            <property-editor>PortletClass</property-editor>
+            <with>
+                <path>Supports</path>
+                <label>Supports</label>
+                <default-panel>
+                    <content>
+                        <property-editor>MimeType</property-editor>
+                    </content>
+                </default-panel>
+            </with>
+        </content>
+        <label>Create new Portlet</label>
+        <initial-focus>PortletName</initial-focus>
+        <scroll-vertically>true</scroll-vertically>
+        <scroll-horizontally>true</scroll-horizontally>
+    </dialog>
+</definition>

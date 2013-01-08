@@ -28,6 +28,7 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPag
 
 /**
  * @author Kamesh Sampath
+ * @author Gregory Amerson
  */
 public class DefinePortletEventHandler extends SapphireActionHandler
 {
@@ -46,8 +47,8 @@ public class DefinePortletEventHandler extends SapphireActionHandler
 
         final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
         final MasterDetailsContentNode root = page.outline().getRoot();
-        final MasterDetailsContentNode node = root.findNodeByModelElement( eventDefintion );
-        
+        final MasterDetailsContentNode node = root.findNode( eventDefintion );
+
         if( node != null )
         {
             node.select();

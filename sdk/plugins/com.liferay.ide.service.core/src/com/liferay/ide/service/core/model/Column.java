@@ -17,6 +17,7 @@ package com.liferay.ide.service.core.model;
 
 import com.liferay.ide.service.core.model.internal.ColumnImageService;
 
+import org.eclipse.sapphire.Since;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
@@ -70,7 +71,7 @@ public interface Column extends IModelElement
     @PossibleValues
     (
         values = { "String", "long", "boolean", "int", "double", "Date", "Collection" },
-        invalidValueMessage = "{0} is not a valid type." 
+        invalidValueMessage = "{0} is not a valid type."
     )
     ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" ); //$NON-NLS-1$
 
@@ -142,7 +143,7 @@ public interface Column extends IModelElement
     @PossibleValues
     (
         values = { "class", "increment", "identity", "sequence" },
-        invalidValueMessage = "{0} is not a valid ID type." 
+        invalidValueMessage = "{0} is not a valid ID type."
     )
     ValueProperty PROP_ID_TYPE = new ValueProperty( TYPE, "IdType" ); //$NON-NLS-1$
 
@@ -221,6 +222,7 @@ public interface Column extends IModelElement
     @Label( standard = "&accessor" )
     @DefaultValue( text = "false" )
     @Documentation( content = "This [b]accessor[/b] value specifies whether or not to generate an accessor for this column. This accessor will provide a fast and type-safe way to access column value." )
+    @Since( "6.1" )
     ValueProperty PROP_ACCESSOR = new ValueProperty( TYPE, "Accessor" ); //$NON-NLS-1$
 
     Value<Boolean> getAccessor();

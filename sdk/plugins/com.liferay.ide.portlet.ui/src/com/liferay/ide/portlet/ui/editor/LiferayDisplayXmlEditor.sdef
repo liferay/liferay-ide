@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,20 +19,20 @@
  *******************************************************************************/
  -->
 <definition>
-	<import>
-		<package>com.liferay.ide.portlet.ui</package>
-		<package>com.liferay.ide.portlet.ui.action</package>
-		<package>com.liferay.ide.portlet.ui.parts</package>
-		<package>com.liferay.ide.portlet.ui.action.filters
-		</package>
-		<package>com.liferay.ide.portlet.ui.editor.internal</package>
-		<package>com.liferay.ide.display.model</package>
-	</import>
-	<editor-page>
-		<id>DetailsPage</id>
-		<initial-selection>Categories</initial-selection>
-		<root-node>
-			<node>
+    <import>
+        <package>com.liferay.ide.portlet.ui</package>
+        <package>com.liferay.ide.portlet.ui.action</package>
+        <package>com.liferay.ide.portlet.ui.parts</package>
+        <package>com.liferay.ide.portlet.ui.action.filters
+        </package>
+        <package>com.liferay.ide.portlet.ui.editor.internal</package>
+        <package>com.liferay.ide.portlet.core.display.model</package>
+    </import>
+    <editor-page>
+        <id>DetailsPage</id>
+        <initial-selection>Categories</initial-selection>
+        <root-node>
+            <node>
                 <label>Categories</label>
                 <node-include>CategoryNodeFactory</node-include>
                 <section>
@@ -45,25 +45,26 @@
                 </section>
                 <image>images/categories_16x16.gif</image>
             </node>
-		</root-node>
+        </root-node>
         <page-header-text>Display</page-header-text>
         <page-header-image>icons/elcl16/liferay_ui_16x16.png</page-header-image>
         <page-name>Overview</page-name>
-	</editor-page>
-	<node-factory>
-		<id>CategoryNodeFactory</id>
-		<property>Categories</property>
-		<case>
-			<image>${ Image() }</image>
-			<section>
-				<label>${Name!=null?concat(Name,' Details'):'Details'}</label>
-				<content>
-					<property-editor>Name</property-editor>
-				</content>
-			</section>
-			<section>
-				<label>Portlets</label>
-				<content>
+        <element-type>Display</element-type>
+    </editor-page>
+    <node-factory>
+        <id>CategoryNodeFactory</id>
+        <property>Categories</property>
+        <case>
+            <image>${ Image() }</image>
+            <section>
+                <label>${Name!=null?concat(Name,' Details'):'Details'}</label>
+                <content>
+                    <property-editor>Name</property-editor>
+                </content>
+            </section>
+            <section>
+                <label>Portlets</label>
+                <content>
                     <property-editor>
                         <property>Portlets</property>
                         <show-label>false</show-label>
@@ -72,14 +73,14 @@
                             <label>Portlet Id</label>
                         </child-property>
                     </property-editor>
-				</content>
-			</section>
-			<label>${Name!=null?Name:'&lt;category&gt;'}</label>
-			<section>
-				<label>Sub Categories</label>
-				<content>
-					<property-editor>
-						<property>Categories</property>
+                </content>
+            </section>
+            <label>${Name!=null?Name:'&lt;category&gt;'}</label>
+            <section>
+                <label>Sub Categories</label>
+                <content>
+                    <property-editor>
+                        <property>Categories</property>
                         <child-property>
                             <property>Name</property>
                             <label>Category Name</label>
@@ -89,10 +90,10 @@
                             </hint>
                         </child-property>
                         <show-label>false</show-label>
-					</property-editor>
-				</content>
-			</section>
-			<node-include>CategoryNodeFactory</node-include>
-		</case>
-	</node-factory>
+                    </property-editor>
+                </content>
+            </section>
+            <node-include>CategoryNodeFactory</node-include>
+        </case>
+    </node-factory>
 </definition>

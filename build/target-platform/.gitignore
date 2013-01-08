@@ -1,11 +1,2 @@
-.apt_generated/
-.DS_Store
-.resources/
-*.swp
-bin/
-target/
-.project
-.settings/
-.springBeans
-target/
-rebel.xml
+sapphire-0.6.x
+m2e

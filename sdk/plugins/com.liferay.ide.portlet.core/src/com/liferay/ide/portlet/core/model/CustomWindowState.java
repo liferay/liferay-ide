@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -18,7 +18,6 @@
 package com.liferay.ide.portlet.core.model;
 
 import com.liferay.ide.portlet.core.model.internal.WindowStateImageService;
-import com.liferay.ide.portlet.core.model.internal.WindowStatesPossibleValueService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -46,7 +45,6 @@ public interface CustomWindowState extends IModelElement, Describeable, Identifi
     @NoDuplicates
     @XmlBinding( path = "window-state" )
     @Required
-    @Service( impl = WindowStatesPossibleValueService.class )
     ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
 
     Value<String> getWindowState();

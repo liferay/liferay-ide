@@ -1,5 +1,5 @@
 /*******************************************************************************
- *  Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *  Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  *   This library is free software; you can redistribute it and/or modify it under
  *   the terms of the GNU Lesser General Public License as published by the Free
@@ -28,8 +28,6 @@ import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementHandle;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Transient;
-import org.eclipse.sapphire.modeling.TransientProperty;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
@@ -51,16 +49,6 @@ public interface Hook extends IModelElement
 {
 
     ModelElementType TYPE = new ModelElementType( Hook.class );
-
-    // *** Version ***
-
-    @Type( base = HookVersionType.class )
-    @Label( standard = "Version" )
-    TransientProperty PROP_VERSION = new TransientProperty( TYPE, "Version" ); //$NON-NLS-1$
-
-    Transient<HookVersionType> getVersion();
-
-    void setVersion( HookVersionType value );
 
     // *** PortalPropertiesFile ***
 
@@ -85,9 +73,14 @@ public interface Hook extends IModelElement
 
     @Type( base = LanguageProperty.class )
     @Label( standard = "Language Properties" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping(
-                    element = "language-properties",
-                    type = LanguageProperty.class ) } )
+    @XmlListBinding
+    (
+        mappings = @XmlListBinding.Mapping
+        (
+            element = "language-properties",
+            type = LanguageProperty.class
+        )
+    )
     ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty( TYPE, "LanguageProperties" ); //$NON-NLS-1$
 
     ModelElementList<LanguageProperty> getLanguageProperties();
@@ -128,9 +121,14 @@ public interface Hook extends IModelElement
 
     @Type( base = IndexerPostProcessor.class )
     @Label( standard = "Index Post Processors" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping(
-                    element = "indexer-post-processor",
-                    type = IndexerPostProcessor.class ) } )
+    @XmlListBinding
+    (
+        mappings = @XmlListBinding.Mapping
+        (
+            element = "indexer-post-processor",
+            type = IndexerPostProcessor.class
+        )
+    )
     ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty( TYPE, "IndexerPostProcessors" ); //$NON-NLS-1$
 
     ModelElementList<IndexerPostProcessor> getIndexerPostProcessors();
@@ -157,9 +155,14 @@ public interface Hook extends IModelElement
 
     @Type( base = ServletFilterMapping.class )
     @Label( standard = "Servlet Filter Mappings" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping(
-                    element = "servlet-filter-mapping",
-                    type = ServletFilterMapping.class ) } )
+    @XmlListBinding
+    (
+        mappings = @XmlListBinding.Mapping
+        (
+            element = "servlet-filter-mapping",
+            type = ServletFilterMapping.class
+        )
+    )
     ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty( TYPE, "ServletFilterMappings" ); //$NON-NLS-1$
 
     ModelElementList<ServletFilterMapping> getServletFilterMappings();

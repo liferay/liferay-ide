@@ -10,7 +10,7 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- * 
+ *
  * Contributors:
  *      Kamesh Sampath - initial implementation
  *      Gregory Amerson - initial implementation review and ongoing maintenance
@@ -268,9 +268,8 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
 
                     if( rootNode != null )
                     {
-                        MasterDetailsContentNode portletAppNode = rootNode.getChildNodes().get( 0 );
-                        MasterDetailsContentNode portletsNode =
-                            portletAppNode.getChildNodeByLabel( PORTLETS_NODE_LABEL );
+                        MasterDetailsContentNode portletAppNode = rootNode.nodes().visible().get( 0 );
+                        MasterDetailsContentNode portletsNode = portletAppNode.findNode( PORTLETS_NODE_LABEL );
 
                         // TODO: Performance Check ???, cant we not have the shared model ?
 
@@ -280,7 +279,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
                             {
                                 Portlet selectedPortlet = (Portlet) selectedModelElement;
 
-                                for( MasterDetailsContentNode childNode : portletsNode.getChildNodes() )
+                                for( MasterDetailsContentNode childNode : portletsNode.nodes().visible() )
                                 {
                                     String selectedPortletName = selectedPortlet.getPortletName().getContent();
 

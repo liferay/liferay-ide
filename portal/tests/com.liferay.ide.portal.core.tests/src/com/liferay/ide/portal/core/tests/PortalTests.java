@@ -1,9 +1,11 @@
-package com.liferay.ide.portal.core;
+package com.liferay.ide.portal.core.tests;
 
 import com.googlecode.sardine.DavResource;
 import com.googlecode.sardine.Sardine;
 import com.googlecode.sardine.SardineFactory;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.portal.core.IPortalConnection;
+import com.liferay.ide.portal.core.PortalConnection;
 
 import java.io.IOException;
 import java.util.List;

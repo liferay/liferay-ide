@@ -11,42 +11,42 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.model;
+package com.liferay.ide.service.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.WindowStateImageService;
+import com.liferay.ide.service.core.model.internal.ServiceBuilderDefaultValueService;
+import com.liferay.ide.service.core.model.internal.ServiceBuilderRootElementController;
 
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Version;
+import org.eclipse.sapphire.VersionCompatibilityTarget;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 @GenerateImpl
-@Service( impl = WindowStateImageService.class )
-public interface WindowState extends IModelElement
+@XmlBinding( path = "service-builder" )
+@VersionCompatibilityTarget( version = "${ Version }", versioned = "Service Builder" )
+@CustomXmlRootBinding( value =  ServiceBuilderRootElementController.class )
+public interface ServiceBuilder6xx extends ServiceBuilder
 {
+	ModelElementType TYPE = new ModelElementType( ServiceBuilder6xx.class );
 
-    ModelElementType TYPE = new ModelElementType( WindowState.class );
+	// *** Version ***
 
-    @Label( standard = "state", full = "Window States" )
-    @NoDuplicates
-    @XmlBinding( path = "" )
-    ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
+    @Type( base = Version.class )
+    @Service( impl = ServiceBuilderDefaultValueService.class )
+    ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" ); //$NON-NLS-1$
 
-    Value<String> getWindowState();
-
-    void setWindowState( String state );
+    Value<Version> getVersion();
+    void setVersion( String value );
+    void setVersion( Version value );
 }

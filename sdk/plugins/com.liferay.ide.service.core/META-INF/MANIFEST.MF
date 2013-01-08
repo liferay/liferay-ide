@@ -26,4 +26,5 @@ Export-Package: com.liferay.ide.service.core,
  com.liferay.ide.service.core.job,
  com.liferay.ide.service.core.model,
  com.liferay.ide.service.core.model.internal,
- com.liferay.ide.service.core.operation
+ com.liferay.ide.service.core.operation,
+ com.liferay.ide.service.core.util

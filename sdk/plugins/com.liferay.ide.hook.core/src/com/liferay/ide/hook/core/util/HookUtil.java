@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,14 +12,13 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 package com.liferay.ide.hook.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
-import com.liferay.ide.hook.core.model.HookVersionType;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
@@ -69,12 +68,12 @@ public class HookUtil
      *
      * @param document
      *            - the document that is loaded by the editor
-     * @return - {@link HookVersionType}
      */
-    public static HookVersionType getDTDVersion( Document document )
+    public static String getDTDVersion( Document document )
     {
-        HookVersionType dtdVersion = null;
+        String dtdVersion = null;
         DocumentType docType = document.getDoctype();
+
         if( docType != null )
         {
             String publicId = docType.getPublicId();
@@ -83,16 +82,15 @@ public class HookUtil
             {
                 if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
-                    dtdVersion = HookVersionType.v6_0_0;
+                    dtdVersion = "6.0.0"; //$NON-NLS-1$
                 }
                 else if( publicId.contains( "6.1.0" ) || systemId.contains( "6.1.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
                 {
-                    dtdVersion = HookVersionType.v6_1_0;
+                    dtdVersion = "6.1.0"; //$NON-NLS-1$
                 }
             }
-    
         }
-    
+
         return dtdVersion;
     }
 

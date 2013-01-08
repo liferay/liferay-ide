@@ -11,9 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Kamesh Sampath - initial implementation
- * 		Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.ui.editor;
@@ -24,10 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
-import com.liferay.ide.hook.core.model.Hook600;
-import com.liferay.ide.hook.core.model.Hook610;
-import com.liferay.ide.hook.core.model.HookVersionType;
-import com.liferay.ide.hook.core.util.HookUtil;
+import com.liferay.ide.hook.core.model.Hook6xx;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -48,27 +42,22 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.PropertyContentEvent;
-import org.eclipse.sapphire.modeling.xml.RootXmlResource;
-import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
-import org.w3c.dom.Document;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class HookXmlEditor extends SapphireEditorForXml
 {
 
-    private static final String EDITOR_DEFINITION_PATH =
-        "com.liferay.ide.hook.ui/com/liferay/ide/hook/ui/editor/hook-editor.sdef/HookConfigurationPage"; //$NON-NLS-1$
-
-    public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor"; //$NON-NLS-1$
+    public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";//$NON-NLS-1$
 
     protected boolean customModelDirty = false;
 
@@ -79,9 +68,32 @@ public class HookXmlEditor extends SapphireEditorForXml
 	 */
     public HookXmlEditor()
     {
-        super( ID );
+        super
+        (
+            Hook6xx.TYPE,
+            DefinitionLoader
+                .sdef( HookXmlEditor.class )
+                .page( "HookConfigurationPage" )
+        );
+    }
 
-        setEditorDefinitionPath( EDITOR_DEFINITION_PATH );
+    @Override
+    protected void adaptModel( final IModelElement model )
+    {
+        super.adaptModel( model );
+
+        Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
+            @Override
+            public void handleTypedEvent( final PropertyContentEvent event )
+            {
+                handleCustomJspsPropertyChangedEvent( event );
+            }
+        };
+
+        this.ignoreCustomModelChanges = true;
+        model.attach( listener, "CustomJsps/*" ); //$NON-NLS-1$
+        this.ignoreCustomModelChanges = false;
     }
 
     private void copyCustomJspsToProject( ModelElementList<CustomJsp> customJsps )
@@ -129,75 +141,6 @@ public class HookXmlEditor extends SapphireEditorForXml
         {
             HookUI.logError( e );
         }
-    }
-
-    @Override
-    protected IModelElement createModel()
-    {
-        RootXmlResource resource = null;
-        HookVersionType dtdVersion = null;
-
-        try
-        {
-            InputStream editorContents = getFileContents();
-
-            resource = new RootXmlResource( new XmlResourceStore( editorContents ) );
-            Document document = resource.getDomDocument();
-            dtdVersion = HookUtil.getDTDVersion( document );
-
-            if( document != null )
-            {
-                switch( dtdVersion )
-                {
-                    case v6_0_0:
-                        setRootModelElementType( Hook600.TYPE );
-                        break;
-
-                    case v6_1_0:
-                    default:
-                        setRootModelElementType( Hook610.TYPE );
-                        break;
-
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            HookUI.logError( e );
-            setRootModelElementType( Hook610.TYPE );
-        }
-        finally
-        {
-            if( resource != null )
-            {
-                resource.dispose();
-            }
-        }
-
-        IModelElement modelElement = super.createModel();
-
-        if( dtdVersion != null )
-        {
-            Hook hookModel = (Hook) modelElement;
-
-            hookModel.setVersion( dtdVersion );
-        }
-
-        Listener listener = new FilteredListener<PropertyContentEvent>()
-        {
-
-            @Override
-            public void handleTypedEvent( final PropertyContentEvent event )
-            {
-                handleCustomJspsPropertyChangedEvent( event );
-            }
-        };
-
-        this.ignoreCustomModelChanges = true;
-        modelElement.attach( listener, "CustomJsps/*" ); //$NON-NLS-1$
-        this.ignoreCustomModelChanges = false;
-
-        return modelElement;
     }
 
     @Override

@@ -18,6 +18,7 @@ package com.liferay.ide.service.core.model;
 import com.liferay.ide.service.core.model.internal.RelationshipsBindingImpl;
 import com.liferay.ide.service.core.model.internal.ShowRelationshipLabelsBinding;
 
+import org.eclipse.sapphire.VersionCompatibilityTarget;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
@@ -37,7 +38,8 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Gregory Amerson
  */
 @GenerateImpl
-public interface ServiceBuilder extends IModelElement 
+@VersionCompatibilityTarget( version = "${ Version }", versioned = "Service Builder" )
+public interface ServiceBuilder extends IModelElement
 {
 	ModelElementType TYPE = new ModelElementType(ServiceBuilder.class);
 

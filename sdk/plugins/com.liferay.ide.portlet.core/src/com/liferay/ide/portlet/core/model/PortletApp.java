@@ -5,18 +5,20 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *      Kamesh Sampath - initial implementation
  *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.model;
+
+import com.liferay.ide.portlet.core.model.internal.WindowStatesPossibleValueService;
 
 import org.eclipse.sapphire.modeling.ListProperty;
 import org.eclipse.sapphire.modeling.ModelElementList;
@@ -27,6 +29,7 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -35,7 +38,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
 
 /**
  * The root container model class that will have &lt;portlet-app&gt;
- * 
+ *
  * @author Kamesh Sampath <br/>
  * @author Gregory Amerson
  */
@@ -67,12 +70,12 @@ public interface PortletApp extends ResourceBundle, Identifiable
 
     @Type( base = CustomPortletMode.class )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "custom-portlet-mode",
             type = CustomPortletMode.class
-        ) 
+        )
     )
     ListProperty PROP_CUSTOM_PORTLET_MODES = new ListProperty( TYPE, "CustomPortletModes" ); //$NON-NLS-1$
 
@@ -82,13 +85,14 @@ public interface PortletApp extends ResourceBundle, Identifiable
 
     @Type( base = CustomWindowState.class )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "custom-window-state",
             type = CustomWindowState.class
         )
     )
+    @Service( impl = WindowStatesPossibleValueService.class )
     ListProperty PROP_CUSTOM_WINDOW_STATES = new ListProperty( TYPE, "CustomWindowStates" ); //$NON-NLS-1$
 
     ModelElementList<CustomWindowState> getCustomWindowStates();
@@ -106,9 +110,14 @@ public interface PortletApp extends ResourceBundle, Identifiable
 
     @Type( base = SecurityConstraint.class )
     @Label( standard = "Security Constraints" )
-    @XmlListBinding( mappings = { @XmlListBinding.Mapping(
-                    type = SecurityConstraint.class,
-                    element = "security-constraint" ) } )
+    @XmlListBinding
+    (
+        mappings = @XmlListBinding.Mapping
+        (
+            type = SecurityConstraint.class,
+            element = "security-constraint"
+        )
+    )
     ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty( TYPE, "SecurityConstraints" ); //$NON-NLS-1$
 
     ModelElementList<SecurityConstraint> getSecurityConstraints();
@@ -156,12 +165,12 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = PublicRenderParameter.class )
     @Label( standard = "Public Render Parameters" )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "public-render-parameter",
             type = PublicRenderParameter.class
-        ) 
+        )
     )
     ListProperty PROP_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "PublicRenderParameters" ); //$NON-NLS-1$
 
@@ -181,7 +190,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @Type( base = ContainerRuntimeOption.class )
     @Label( standard = "Container Runtime Options" )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "container-runtime-option",

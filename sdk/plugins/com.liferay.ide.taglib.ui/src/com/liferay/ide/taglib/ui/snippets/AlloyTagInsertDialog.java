@@ -23,6 +23,8 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
+import org.eclipse.sapphire.ui.def.DialogDef;
 import org.eclipse.sapphire.ui.swt.SapphireDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeListener;
@@ -42,9 +44,9 @@ public class AlloyTagInsertDialog extends SapphireDialog
     protected ISnippetItem fItem = null;
     protected String fPreparedText = null;
 
-    public AlloyTagInsertDialog( Shell host, IModelElement model, String dialogDefPath, boolean clearModality )
+    public AlloyTagInsertDialog( Shell host, IModelElement model, Reference<DialogDef> reference, boolean clearModality )
     {
-        super( host, model, dialogDefPath );
+        super( host, model, reference );
         /**
          * Required to fix defect 218700, since Dialogs default to APPLICATION_MODAL.
          */
@@ -91,7 +93,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
     protected void prepareText()
     {
         // this could be horribly inefficient
-        String text = ( (Tag) getModelElement() ).getSource().getContent();
+        String text = ( element().adapt( Tag.class ) ).getSource().getContent();
 
         // remove all cursor markers
         text = StringUtils.replace( text, "${cursor}", StringUtil.EMPTY ); //$NON-NLS-1$
@@ -109,7 +111,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
 
     /**
      * Gets the item.
-     * 
+     *
      * @return Returns a ISnippetItem
      */
     public ISnippetItem getItem()
@@ -119,7 +121,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
 
     /**
      * Gets the preparedText.
-     * 
+     *
      * @return Returns a String
      */
     public String getPreparedText()
@@ -136,7 +138,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
 
     /**
      * Sets the item.
-     * 
+     *
      * @param item
      *            The item to set
      */
@@ -147,7 +149,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
 
     /**
      * Sets the preparedText.
-     * 
+     *
      * @param preparedText
      *            The preparedText to set
      */

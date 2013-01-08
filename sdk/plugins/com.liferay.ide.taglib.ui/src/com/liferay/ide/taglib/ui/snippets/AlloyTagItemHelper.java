@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Shell;
@@ -54,7 +55,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Class copied from VariableItemHelper.java v1.4
- * 
+ *
  * @author Greg Amerson
  */
 @SuppressWarnings("restriction")
@@ -71,9 +72,12 @@ public class AlloyTagItemHelper {
 
 		Tag model = getTagModel(editorInput, item);
 
-		AlloyTagInsertDialog dialog =
-			new AlloyTagInsertDialog( host, model, TaglibUI.PLUGIN_ID +
-				"/com/liferay/ide/taglib/ui/snippets/AlloyTag.sdef!tagInsertDialog", clearModality ); //$NON-NLS-1$
+		AlloyTagInsertDialog dialog = new AlloyTagInsertDialog
+        (
+            host, model,
+            DefinitionLoader.sdef( AlloyTagInsertDialog.class ).dialog( "tagInsertDialog" ), //$NON-NLS-1$
+            clearModality
+        );
 
 		// VariableInsertionDialog dialog = new TaglibVariableInsertionDialog(host, clearModality);
 		// dialog.setItem(item);
@@ -134,7 +138,7 @@ public class AlloyTagItemHelper {
 		final IProject project = editorFile.getProject();
 		// IDE-110 IDE-648
 		IVirtualFolder webappRoot = CoreUtil.getDocroot(project);
-		
+
         if( webappRoot != null )
         {
             for( IContainer container : webappRoot.getUnderlyingFolders() )
@@ -151,13 +155,13 @@ public class AlloyTagItemHelper {
                         catch (Exception e) {
                             SnippetsUIPlugin.logError(e);
                         }
-     
+
                         break;
                     }
                 }
             }
         }
-		
+
 
 		if( tldDocument == null )
 		{
