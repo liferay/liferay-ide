@@ -10,7 +10,7 @@
  **********************************************************************/
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -297,7 +297,7 @@ public class ModuleTraverser {
             // Handle META-INF/resources
     		String path = rtPath.toString();
     		IFolder resFolder = null;
-    		String targetPath = StringUtil.EMPTY;
+    		String targetPath = StringPool.EMPTY;
     		if ("/".equals(path)) { //$NON-NLS-1$
     			resFolder = dependentProject.getFolder(srcPath.append("META-INF/resources")); //$NON-NLS-1$
     		}

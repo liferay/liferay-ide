@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
@@ -220,7 +220,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( PORTLET_NAME.equals( propertyName ) || LIFERAY_PORTLET_NAME.equals( propertyName ) )
         {
-            return getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, StringUtil.EMPTY );
+            return getProperty( CLASS_NAME ).toString().toLowerCase().replaceAll( PORTLET_SUFFIX_PATTERN, StringPool.EMPTY );
         }
         else if( DISPLAY_NAME.equals( propertyName ) || TITLE.equals( propertyName ) ||
             SHORT_TITLE.equals( propertyName ) )
@@ -229,7 +229,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( KEYWORDS.equals( propertyName ) )
         {
-            return StringUtil.EMPTY;
+            return StringPool.EMPTY;
         }
         else if( INIT_PARAMS.equals( propertyName ) )
         {
@@ -430,7 +430,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             if( i > 0 )
             {
-                newName.append( StringUtil.SPACE );
+                newName.append( StringPool.SPACE );
             }
 
             newName.append( words[i] );

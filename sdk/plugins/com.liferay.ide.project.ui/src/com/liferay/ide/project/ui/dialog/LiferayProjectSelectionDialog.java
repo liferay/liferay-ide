@@ -17,7 +17,7 @@
 
 package com.liferay.ide.project.ui.dialog;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
@@ -174,12 +174,12 @@ public class LiferayProjectSelectionDialog extends SelectionStatusDialog
     {
         if( objects.length != 1 )
         {
-            updateStatus( new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, StringUtil.EMPTY ) );
+            updateStatus( new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY ) );
             setSelectionResult( null );
         }
         else
         {
-            updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringUtil.EMPTY ) );
+            updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY ) );
             setSelectionResult( objects );
         }
     }

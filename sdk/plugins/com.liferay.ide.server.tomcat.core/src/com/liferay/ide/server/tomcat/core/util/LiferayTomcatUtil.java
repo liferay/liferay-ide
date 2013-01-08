@@ -18,7 +18,7 @@ package com.liferay.ide.server.tomcat.core.util;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.IPluginPublisher;
@@ -133,7 +133,7 @@ public class LiferayTomcatUtil
     private static void addUserVMArgs(
         List<String> runtimeVMArgs, IServer currentServer, ILiferayTomcatServer portalTomcatServer )
     {
-        String[] memoryArgs = ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS.split( StringUtil.SPACE );
+        String[] memoryArgs = ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS.split( StringPool.SPACE );
         String userTimezone = ILiferayTomcatConstants.DEFAULT_USER_TIMEZONE;
 
         if( currentServer != null && portalTomcatServer != null )
@@ -704,8 +704,8 @@ public class LiferayTomcatUtil
                         String fileName = contextFile.getName();
                         path = fileName.substring( 0, fileName.length() - ".xml".length() ); //$NON-NLS-1$
                         if( "ROOT".equals( path ) ) //$NON-NLS-1$
-                            path = StringUtil.EMPTY;
-                        context.setPath( StringUtil.FORWARD_SLASH + path );
+                            path = StringPool.EMPTY;
+                        context.setPath( StringPool.FORWARD_SLASH + path );
                     }
                 }
             }
@@ -859,7 +859,7 @@ public class LiferayTomcatUtil
 
                 try
                 {
-                    properties.store( new FileOutputStream( versionInfoFile ), StringUtil.EMPTY );
+                    properties.store( new FileOutputStream( versionInfoFile ), StringPool.EMPTY );
                 }
                 catch( Exception e )
                 {

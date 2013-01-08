@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDKManager;
@@ -100,7 +100,7 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
                 }
                 else
                 {
-                    return StringUtil.EMPTY;
+                    return StringPool.EMPTY;
                 }
             }
             catch( Exception e )

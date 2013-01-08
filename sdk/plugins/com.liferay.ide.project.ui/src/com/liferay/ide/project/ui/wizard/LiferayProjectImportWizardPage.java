@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ILiferayProjectImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -116,7 +116,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
         sdkVersion = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( topComposite, StringPool.EMPTY, 1 );
     }
 
     protected void createPluginTypeField( Composite topComposite )
@@ -126,7 +126,7 @@ public class LiferayProjectImportWizardPage extends DataModelFacetCreationWizard
         pluginType = SWTUtil.createText( topComposite, 1 );
         this.synchHelper.synchText( pluginType, PLUGIN_TYPE, null );
 
-        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( topComposite, StringPool.EMPTY, 1 );
     }
 
     protected void createTargetRuntimeGroup( Composite parent )

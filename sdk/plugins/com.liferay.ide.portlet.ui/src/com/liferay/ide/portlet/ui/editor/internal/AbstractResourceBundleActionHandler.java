@@ -20,7 +20,7 @@ package com.liferay.ide.portlet.ui.editor.internal;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.util.PortletUtil;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 
@@ -156,7 +156,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
                 public void run( final IProgressMonitor monitor ) throws InvocationTargetException,
                     InterruptedException
                 {
-                    monitor.beginTask( StringUtil.EMPTY, workUnit );
+                    monitor.beginTask( StringPool.EMPTY, workUnit );
                     try
                     {
                         IJavaProject javaProject = JavaCore.create( project );

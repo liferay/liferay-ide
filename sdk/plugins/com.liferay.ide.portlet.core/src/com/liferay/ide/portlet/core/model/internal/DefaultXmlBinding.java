@@ -20,7 +20,7 @@ package com.liferay.ide.portlet.core.model.internal;
 import static org.eclipse.sapphire.modeling.xml.XmlUtil.createQualifiedName;
 import static org.eclipse.sapphire.modeling.xml.XmlUtil.equal;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.util.List;
 
@@ -86,7 +86,7 @@ public class DefaultXmlBinding extends LayeredElementBindingImpl
 
         QName xmlElementName = this.xmlElementName;
 
-        if( xmlElementName.getNamespaceURI().equals( StringUtil.EMPTY ) )
+        if( xmlElementName.getNamespaceURI().equals( StringPool.EMPTY ) )
         {
             xmlElementName = new QName( parent.getNamespace(), xmlElementName.getLocalPart() );
         }

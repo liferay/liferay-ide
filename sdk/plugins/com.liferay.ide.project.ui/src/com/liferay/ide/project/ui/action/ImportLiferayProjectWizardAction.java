@@ -17,7 +17,7 @@
 
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard;
 
@@ -41,7 +41,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction
         {
             if( NewWizardAction.ATT_NAME.equals( attr ) )
             {
-                return StringUtil.EMPTY;
+                return StringPool.EMPTY;
             }
             else if( NewWizardAction.ATT_ICON.equals( attr ) )
             {

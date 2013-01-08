@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
@@ -317,7 +317,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         // on an empty path empty selectedProjects
         if( path == null || path.length() == 0 )
         {
-            setMessage( StringUtil.EMPTY );
+            setMessage( StringPool.EMPTY );
 
             selectedProjects = new BinaryProjectRecord[0];
 
@@ -369,7 +369,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
                 public void run( IProgressMonitor monitor )
                 {
 
-                    monitor.beginTask( StringUtil.EMPTY, 100 );
+                    monitor.beginTask( StringPool.EMPTY, 100 );
 
                     selectedProjects = new BinaryProjectRecord[0];
 
@@ -391,7 +391,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
                         monitor.worked( 50 );
 
-                        monitor.subTask( StringUtil.EMPTY );
+                        monitor.subTask( StringPool.EMPTY );
 
                         for( File binaryFile : projectBinaries )
                         {
@@ -427,7 +427,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
         if( selectedProjects.length == 0 )
         {
-            setMessage( StringUtil.EMPTY, WARNING );
+            setMessage( StringPool.EMPTY, WARNING );
         }
 
         Object[] checkedBinaries = projectsList.getCheckedElements();

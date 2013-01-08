@@ -18,7 +18,7 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.File;
 
@@ -125,7 +125,7 @@ public class ProjectRecord
         String path =
             projectSystemFile != null ? projectSystemFile.getParent() : ( liferayProjectDir != null
                 ? liferayProjectDir.getPath() : ( project != null
-                    ? new Path( project.getLocationURI().getPath() ).toOSString() : StringUtil.EMPTY ) );
+                    ? new Path( project.getLocationURI().getPath() ).toOSString() : StringPool.EMPTY ) );
 
         return NLS.bind( "{0} ({1})", projectName, path ); //$NON-NLS-1$
     }

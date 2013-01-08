@@ -12,7 +12,7 @@
 package com.liferay.ide.server.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayRuntimeStub;
 import com.liferay.ide.server.core.LiferayRuntimeStubDelegate;
@@ -246,7 +246,7 @@ public class LiferayRuntimeStubComposite extends Composite
         }
         else
         {
-            textName.setText( StringUtil.EMPTY );
+            textName.setText( StringPool.EMPTY );
         }
 
         if( runtimeWC.getLocation() != null )
@@ -255,7 +255,7 @@ public class LiferayRuntimeStubComposite extends Composite
         }
         else
         {
-            textInstallDir.setText( StringUtil.EMPTY );
+            textInstallDir.setText( StringPool.EMPTY );
         }
 
         updateStubs();
@@ -316,7 +316,7 @@ public class LiferayRuntimeStubComposite extends Composite
     {
         if( liferayRuntime == null )
         {
-            wizard.setMessage( StringUtil.EMPTY, IMessageProvider.ERROR );
+            wizard.setMessage( StringPool.EMPTY, IMessageProvider.ERROR );
             return Status.OK_STATUS;
         }
 

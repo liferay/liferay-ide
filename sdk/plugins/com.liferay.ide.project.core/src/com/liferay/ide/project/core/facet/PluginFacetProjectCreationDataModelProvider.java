@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.IProjectDefinition;
 import com.liferay.ide.project.core.ProjectCorePlugin;
@@ -227,7 +227,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         {
             Object val = getProperty( propertyName );
 
-            if( IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals( val ) || StringUtil.EMPTY.equals( val ) )
+            if( IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals( val ) || StringPool.EMPTY.equals( val ) )
             {
                 return new DataModelPropertyDescriptor(
                     getProperty( propertyName ), IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE_DESCRIPTION );
@@ -491,7 +491,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             // before we do a basic java validation we need to strip "-" and "." characters
 
-            String nameValidation = testProjectName.replaceAll( "-", StringUtil.EMPTY ).replaceAll( "\\.", StringUtil.EMPTY ); //$NON-NLS-1$ //$NON-NLS-2$
+            String nameValidation = testProjectName.replaceAll( "-", StringPool.EMPTY ).replaceAll( "\\.", StringPool.EMPTY ); //$NON-NLS-1$ //$NON-NLS-2$
 
             IStatus status =
                 JavaConventions.validateIdentifier(

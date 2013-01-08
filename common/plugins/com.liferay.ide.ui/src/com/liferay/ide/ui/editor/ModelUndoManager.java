@@ -13,7 +13,7 @@ package com.liferay.ide.ui.editor;
 import com.liferay.ide.core.model.IModelChangeProvider;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.form.IDEFormEditor;
 
 import java.util.List;
@@ -193,7 +193,7 @@ public abstract class ModelUndoManager implements IModelUndoManager, IModelChang
 	}
 
 	private String getOperationText(IModelChangedEvent op) {
-		String opText = StringUtil.EMPTY;
+		String opText = StringPool.EMPTY;
 		switch (op.getChangeType()) {
 			case IModelChangedEvent.INSERT :
 				opText = Msgs.insert;

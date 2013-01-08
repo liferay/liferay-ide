@@ -16,7 +16,7 @@
 package com.liferay.ide.service.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.service.ui.ServiceUI;
@@ -128,14 +128,14 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
         SWTUtil.createLabel( group, SWT.LEAD, Msgs.namespace, 1 );
         namespace = SWTUtil.createText( group, 1 );
         this.synchHelper.synchText( namespace, NAMESPACE, null );
-        SWTUtil.createLabel( group, SWT.LEAD, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, SWT.LEAD, StringPool.EMPTY, 1 );
 
         SWTUtil.createLabel( group, SWT.LEAD, Msgs.author, 1 );
         author = SWTUtil.createText( group, 1 );
         this.synchHelper.synchText( author, AUTHOR, null );
-        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
 
-        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
         Composite checkboxParent = SWTUtil.createComposite( group, 1, 1, SWT.FILL, 0, 3 );
         useSampleTemplate =
             SWTUtil.createCheckButton( checkboxParent, Msgs.includeSampleEntity, null, true, 1 );

@@ -17,7 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.util.SDKUtil;
@@ -266,7 +266,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
             String type =
                 ProjectUtil.isPortletProject( project ) ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
-                    ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : StringUtil.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
+                    ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
             IPath serviceJarPath =
                 sdkLocation.append( type ).append( context ).append( "docroot/WEB-INF/lib" ).append( //$NON-NLS-1$
@@ -360,7 +360,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
         {
             String deps = getPropertyValue( "portal-dependency-jars", pluginPackageFile ); //$NON-NLS-1$
 
-            String[] split = deps.split( StringUtil.COMMA );
+            String[] split = deps.split( StringPool.COMMA );
 
             if( split.length > 0 && !( CoreUtil.isNullOrEmpty( split[0] ) ) )
             {
@@ -393,7 +393,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
             contents = getPluginPackageFile().getContents();
             props.load( contents );
 
-            retval = props.getProperty( key, StringUtil.EMPTY );
+            retval = props.getProperty( key, StringPool.EMPTY );
         }
         catch( Exception e )
         {
@@ -426,7 +426,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
         {
             String context = getPropertyValue( "required-deployment-contexts", pluginPackageFile ); //$NON-NLS-1$
 
-            String[] split = context.split( StringUtil.COMMA );
+            String[] split = context.split( StringPool.COMMA );
 
             if( split.length > 0 && !( CoreUtil.isNullOrEmpty( split[0] ) ) )
             {

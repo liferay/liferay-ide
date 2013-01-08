@@ -15,7 +15,7 @@
 
 package com.liferay.ide.portlet.jsf.ui.wizard;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.jsf.core.JSFPortletUtil;
 import com.liferay.ide.portlet.jsf.core.operation.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.portlet.ui.wizard.NewPortletClassWizardPage;
@@ -77,7 +77,7 @@ public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+            SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
         }
         else
         {

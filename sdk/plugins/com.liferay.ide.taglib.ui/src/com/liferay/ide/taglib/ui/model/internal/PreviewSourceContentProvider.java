@@ -15,7 +15,7 @@
 
 package com.liferay.ide.taglib.ui.model.internal;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.taglib.ui.model.Attribute;
 import com.liferay.ide.taglib.ui.model.Tag;
 
@@ -103,7 +103,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
 
         if( content != null )
         {
-            buffer.append( StringUtil.SPACE );
+            buffer.append( StringPool.SPACE );
 
             if( preview )
             {
@@ -117,7 +117,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
                 buffer.append( "</span>" ); //$NON-NLS-1$
             }
 
-            buffer.append( StringUtil.EQUALS );
+            buffer.append( StringPool.EQUALS );
 
             if( preview )
             {
@@ -125,7 +125,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
             }
             else
             {
-                buffer.append( StringUtil.DOUBLE_QUOTE );
+                buffer.append( StringPool.DOUBLE_QUOTE );
             }
 
             buffer.append( content );
@@ -136,7 +136,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
             }
             else
             {
-                buffer.append( StringUtil.DOUBLE_QUOTE );
+                buffer.append( StringPool.DOUBLE_QUOTE );
             }
         }
     }

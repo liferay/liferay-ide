@@ -18,7 +18,7 @@ import static com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin.warning;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
@@ -209,7 +209,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
         catch( IOException e )
         {
-            return StringUtil.EMPTY;
+            return StringPool.EMPTY;
         }
     }
 
@@ -505,7 +505,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
                 ZipEntry rootEntry = zis.getNextEntry();
                 rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
 
-                if( rootEntryName.endsWith( StringUtil.FORWARD_SLASH ) )
+                if( rootEntryName.endsWith( StringPool.FORWARD_SLASH ) )
                 {
                     rootEntryName = rootEntryName.substring( 0, rootEntryName.length() - 1 );
                 }

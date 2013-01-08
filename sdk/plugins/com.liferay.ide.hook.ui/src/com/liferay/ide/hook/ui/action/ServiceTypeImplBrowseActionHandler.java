@@ -17,7 +17,7 @@
 
 package com.liferay.ide.hook.ui.action;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.model.ServiceWrapper;
 
 import org.eclipse.core.resources.IProject;
@@ -112,7 +112,7 @@ public final class ServiceTypeImplBrowseActionHandler extends SapphireBrowseActi
 
             final SelectionDialog dlg =
                 JavaUI.createTypeDialog(
-                    context.getShell(), null, scope, this.browseDialogStyle, false, StringUtil.DOUBLE_ASTERISK, extension );
+                    context.getShell(), null, scope, this.browseDialogStyle, false, StringPool.DOUBLE_ASTERISK, extension );
 
             final String title = property.getLabel( true, CapitalizationType.TITLE_STYLE, false );
             dlg.setTitle( Msgs.select + title );

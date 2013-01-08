@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.wizard.INewProjectWizard;
 
@@ -179,7 +179,7 @@ public class NewWizardAction extends Action implements Comparable
             return children[0].getValue();
         }
 
-        return StringUtil.EMPTY;
+        return StringPool.EMPTY;
     }
 
     private ImageDescriptor getIconFromConfig( IConfigurationElement config )

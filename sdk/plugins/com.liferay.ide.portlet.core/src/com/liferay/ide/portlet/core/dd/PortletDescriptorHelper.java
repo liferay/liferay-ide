@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
@@ -307,7 +307,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         if( model.getBooleanProperty( ADD_TO_CONTROL_PANEL ) )
         {
-            String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", StringUtil.EMPTY ); //$NON-NLS-1$
+            String entryCategory = model.getStringProperty( ENTRY_CATEGORY ).replaceAll( "^category\\.", StringPool.EMPTY ); //$NON-NLS-1$
             NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory ); //$NON-NLS-1$
             NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) ); //$NON-NLS-1$
 
@@ -412,7 +412,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         {
             // need to remove .properties off the end of the bundle_file_path
             String bundlePath = model.getStringProperty( CREATE_RESOURCE_BUNDLE_FILE_PATH );
-            String bundleValue = bundlePath.replaceAll( "\\.properties$", StringUtil.EMPTY ); //$NON-NLS-1$
+            String bundleValue = bundlePath.replaceAll( "\\.properties$", StringPool.EMPTY ); //$NON-NLS-1$
             NodeUtil.appendChildElement( newPortletElement, "resource-bundle", bundleValue ); //$NON-NLS-1$
         }
 

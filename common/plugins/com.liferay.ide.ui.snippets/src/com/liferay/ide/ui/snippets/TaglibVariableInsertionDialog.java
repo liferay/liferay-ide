@@ -18,7 +18,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -106,7 +106,7 @@ public class TaglibVariableInsertionDialog extends VariableInsertionDialog
 
             if( !CoreUtil.isNullOrEmpty( value ) )
             {
-                value = StringUtil.SPACE + variables[i].getName() + "=\"" + value + StringUtil.DOUBLE_QUOTE; //$NON-NLS-1$
+                value = StringPool.SPACE + variables[i].getName() + "=\"" + value + StringPool.DOUBLE_QUOTE; //$NON-NLS-1$
             }
 
             text = StringUtils.replace( text, "${" + variables[i].getName() + "}", value ); //$NON-NLS-1$ //$NON-NLS-2$

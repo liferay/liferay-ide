@@ -16,7 +16,7 @@
 package com.liferay.ide.server.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
@@ -112,7 +112,7 @@ public class ServerUtil
             file += "/.*"; //$NON-NLS-1$
         }
 
-        deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : StringUtil.EMPTY ) + ( file + "\n" ) ); //$NON-NLS-1$
+        deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : StringPool.EMPTY ) + ( file + "\n" ) ); //$NON-NLS-1$
     }
 
     private static void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
@@ -281,7 +281,7 @@ public class ServerUtil
 
             Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
 
-            processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, StringUtil.EMPTY, adjustGMTOffset );
+            processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, StringPool.EMPTY, adjustGMTOffset );
 
             for( ZipEntry entry : deleteEntries.keySet() )
             {
@@ -741,7 +741,7 @@ public class ServerUtil
             return archive.substring( 0, index + 5 );
         }
 
-        return StringUtil.EMPTY;
+        return StringPool.EMPTY;
     }
 
     public static void terminateLaunchesForConfig( ILaunchConfigurationWorkingCopy config ) throws DebugException

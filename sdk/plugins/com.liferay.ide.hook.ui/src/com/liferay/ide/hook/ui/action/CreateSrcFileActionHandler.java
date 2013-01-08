@@ -19,7 +19,7 @@
 package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -188,7 +188,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
             {
                 if( !file.exists() )
                 {
-                    InputStream defaultContentStream = new ByteArrayInputStream( StringUtil.EMPTY.getBytes() );
+                    InputStream defaultContentStream = new ByteArrayInputStream( StringPool.EMPTY.getBytes() );
 
                     file.create( defaultContentStream, true, null );
 

@@ -16,7 +16,7 @@
 package com.liferay.ide.layouttpl.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
@@ -98,13 +98,13 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
 
         this.name = SWTUtil.createText( parent, 1 );
         this.synchHelper.synchText( name, LAYOUT_TEMPLATE_NAME, null );
-        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
 
         SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.id, 1 );
 
         this.id = SWTUtil.createText( parent, 1 );
         this.synchHelper.synchText( id, LAYOUT_TEMPLATE_ID, null );
-        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
 
         SWTUtil.createLabel( parent, SWT.RIGHT, Msgs.templateFile, 1 );
 

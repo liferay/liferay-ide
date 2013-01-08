@@ -16,7 +16,7 @@
 package com.liferay.ide.properties.core;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -84,7 +84,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
             }
             else if( wrappedProperty )
             {
-                String[] values = value.toString().split( StringUtil.COMMA );
+                String[] values = value.toString().split( StringPool.COMMA );
 
                 if( values.length == 1 )
                 {
@@ -115,7 +115,7 @@ public class PortalPropertiesConfigurationLayout extends PropertiesConfiguration
             }
 
             write( escapeKey( key ) );
-            write( StringUtil.EQUALS );
+            write( StringPool.EQUALS );
             write( v );
 
             writeln( null );

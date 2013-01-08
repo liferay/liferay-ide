@@ -17,7 +17,7 @@ package com.liferay.ide.server.tomcat.ui.wizard;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
@@ -67,7 +67,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
     {
         if( field != null && !field.isDisposed() )
         {
-            field.setText( value != null ? value : StringUtil.EMPTY );
+            field.setText( value != null ? value : StringPool.EMPTY );
         }
     }
 
@@ -148,7 +148,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             }
         } );
 
-        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
 
         SWTUtil.createButton( parent, Msgs.browseDirectory ).addSelectionListener( new SelectionAdapter()
         {
@@ -204,7 +204,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             }
         } );
 
-        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
 
         SWTUtil.createButton( parent, Msgs.browseDirectory ).addSelectionListener( new SelectionAdapter()
         {
@@ -350,7 +350,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             ZipEntry rootEntry = zipEntries.nextElement();
             rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
 
-            if( rootEntryName.endsWith( StringUtil.FORWARD_SLASH ) )
+            if( rootEntryName.endsWith( StringPool.FORWARD_SLASH ) )
             {
                 rootEntryName = rootEntryName.substring( 0, rootEntryName.length() - 1 );
             }
@@ -415,13 +415,13 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         }
 
         IPath bundleZipLocation = getLiferayTomcatRuntime().getBundleZipLocation();
-        setFieldValue( bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : StringUtil.EMPTY );
+        setFieldValue( bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : StringPool.EMPTY );
 
         String javadocURL = getLiferayTomcatRuntime().getJavadocURL();
-        setFieldValue( javadocField, javadocURL != null ? javadocURL : StringUtil.EMPTY );
+        setFieldValue( javadocField, javadocURL != null ? javadocURL : StringPool.EMPTY );
 
         IPath sourceLocation = getLiferayTomcatRuntime().getSourceLocation();
-        setFieldValue( sourceField, sourceLocation != null ? sourceLocation.toOSString() : StringUtil.EMPTY );
+        setFieldValue( sourceField, sourceLocation != null ? sourceLocation.toOSString() : StringPool.EMPTY );
     }
 
     public void modifyText( ModifyEvent e )

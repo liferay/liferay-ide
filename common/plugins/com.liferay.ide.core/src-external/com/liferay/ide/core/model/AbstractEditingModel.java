@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.liferay.ide.core.model;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -66,7 +66,7 @@ public abstract class AbstractEditingModel extends PlatformObject implements IEd
 			return ""; //$NON-NLS-1$
 
 //		return (getNLResourceHelper() == null) ? key : getNLResourceHelper().getResourceString(key);
-		return StringUtil.EMPTY;
+		return StringPool.EMPTY;
 	}
 
 //	protected abstract NLResourceHelper createNLResourceHelper();

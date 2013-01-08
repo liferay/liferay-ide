@@ -15,7 +15,7 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.editor.IDEFormEditorContributor;
 
 import org.eclipse.jface.action.IAction;
@@ -36,7 +36,7 @@ public class PluginPackageEditorActionBarContributor extends IDEFormEditorContri
 
     public PluginPackageEditorActionBarContributor()
     {
-        super( StringUtil.EMPTY );
+        super( StringPool.EMPTY );
     }
 
     @Override

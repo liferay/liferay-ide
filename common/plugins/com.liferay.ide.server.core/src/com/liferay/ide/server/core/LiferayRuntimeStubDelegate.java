@@ -17,7 +17,7 @@
 
 package com.liferay.ide.server.core;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.util.Properties;
 
@@ -122,7 +122,7 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 
     public String getRuntimeStubTypeId()
     {
-        return getAttribute( PROP_STUB_TYPE_ID, StringUtil.EMPTY );
+        return getAttribute( PROP_STUB_TYPE_ID, StringPool.EMPTY );
     }
 
     public String[] getServletFilterNames()

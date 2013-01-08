@@ -17,7 +17,7 @@ package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
@@ -164,7 +164,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                 if( lookAndFeelFile == null )
                 {
-                    String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringUtil.EMPTY );
+                    String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY );
 
                     for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {

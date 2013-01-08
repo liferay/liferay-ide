@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -119,7 +119,7 @@ public class RemoteMonitorProcess extends Process implements IProcess
                 port = wasServer.getHTTPPort();
             }
 
-            this.label = ( host != null ? host : StringUtil.EMPTY ) + ":" + ( port != null ? port : StringUtil.EMPTY ); //$NON-NLS-1$
+            this.label = ( host != null ? host : StringPool.EMPTY ) + ":" + ( port != null ? port : StringPool.EMPTY ); //$NON-NLS-1$
         }
 
         return this.label;

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.util;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,7 +61,7 @@ public class VersionedDTDDefaultValueService extends DefaultValueService
             defaultVersion = "6.0.0"; //$NON-NLS-1$
         }
 
-        return new DefaultValueServiceData( defaultVersion.replaceAll( StringUtil.UNDERSCORE, "." ) ); //$NON-NLS-1$
+        return new DefaultValueServiceData( defaultVersion.replaceAll( StringPool.UNDERSCORE, "." ) ); //$NON-NLS-1$
     }
 
 }

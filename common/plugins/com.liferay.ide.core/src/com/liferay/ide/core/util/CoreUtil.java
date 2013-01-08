@@ -436,7 +436,7 @@ public class CoreUtil
 
     public static boolean isNullOrEmpty( String val )
     {
-        return val == null || val.equals( StringUtil.EMPTY ) || val.trim().equals( StringUtil.EMPTY );
+        return val == null || val.equals( StringPool.EMPTY ) || val.trim().equals( StringPool.EMPTY );
     }
 
     public static boolean isNumeric( String str )

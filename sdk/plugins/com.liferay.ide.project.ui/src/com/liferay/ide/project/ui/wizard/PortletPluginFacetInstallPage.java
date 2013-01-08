@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PortletPluginFacetInstallDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
@@ -83,7 +83,7 @@ public class PortletPluginFacetInstallPage extends DataModelWizardPage
     {
         Composite topComposite = SWTUtil.createTopComposite( parent, 2 );
 
-        Label label = SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
+        Label label = SWTUtil.createLabel( topComposite, StringPool.EMPTY, 1 );
 
         label.setImage( PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJS_INFO_TSK ) );
 

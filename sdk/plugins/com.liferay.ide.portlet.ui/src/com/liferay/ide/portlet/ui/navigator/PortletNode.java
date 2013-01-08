@@ -18,7 +18,7 @@
 
 package com.liferay.ide.portlet.ui.navigator;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.model.Portlet;
 
 import org.eclipse.sapphire.modeling.CapitalizationType;
@@ -48,7 +48,7 @@ public class PortletNode
 
     public String getName()
     {
-        String retval = StringUtil.EMPTY;
+        String retval = StringPool.EMPTY;
 
         if( this.portlet != null )
         {

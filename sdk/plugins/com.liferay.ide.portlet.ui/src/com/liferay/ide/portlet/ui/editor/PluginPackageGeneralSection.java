@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
 import com.liferay.ide.ui.form.FormEntry;
@@ -397,7 +397,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
 
     protected void createSpeedFiltersEntry( Composite parent, FormToolkit toolkit, IActionBars actionBars )
     {
-        SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
 
         GridData td = new GridData();
         td.horizontalSpan = 5;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,11 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.core.util;
 
-
 /**
  * @author Gregory Amerson
  */
-public class StringUtil
+public class StringPool
 {
     public static final String COMMA = ","; //$NON-NLS-1$
     public static final String DOUBLE_ASTERISK = "**"; //$NON-NLS-1$

@@ -12,7 +12,7 @@
 package com.liferay.ide.server.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
@@ -307,7 +307,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 
         if( serverWC == null )
         {
-            wizard.setMessage( StringUtil.EMPTY, IMessageProvider.ERROR );
+            wizard.setMessage( StringPool.EMPTY, IMessageProvider.ERROR );
             return;
         }
 

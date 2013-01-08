@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.ISDKConstants;
@@ -180,7 +180,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
                 Element def = document.createElement( "definition" ); //$NON-NLS-1$
 
-                def.setAttribute( "name", StringUtil.EMPTY ); //$NON-NLS-1$
+                def.setAttribute( "name", StringPool.EMPTY ); //$NON-NLS-1$
 
                 root.appendChild( def );
                 root.appendChild( document.createTextNode( "\n" ) ); //$NON-NLS-1$

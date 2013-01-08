@@ -16,7 +16,7 @@
 package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -96,7 +96,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         this.category.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         this.synchHelper.synchCombo( category, CATEGORY, null );
 
-        SWTUtil.createLabel(group, StringUtil.EMPTY, 1);
+        SWTUtil.createLabel(group, StringPool.EMPTY, 1);
 
         this.addToControlPanelButton = SWTUtil.createCheckButton(group, Msgs.addControlPanel, null, false, 1);
         this.synchHelper.synchCheckbox(this.addToControlPanelButton, ADD_TO_CONTROL_PANEL, null);
@@ -112,7 +112,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         this.entryWeight = SWTUtil.createText(group, 1);
         this.synchHelper.synchText(entryWeight, ENTRY_WEIGHT, null);
         
-        SWTUtil.createLabel(group, StringUtil.EMPTY, 1);
+        SWTUtil.createLabel(group, StringPool.EMPTY, 1);
         
         this.createEntryClassButton = SWTUtil.createCheckButton(group, Msgs.createEntryClass, null, false, 1);
         this.createEntryClassButton.setToolTipText
@@ -186,7 +186,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+            SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
         }
         else
         {
@@ -206,7 +206,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
             );
         }
 
-        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
 
         this.allowMultiInstanceButton = SWTUtil.createCheckButton( group, Msgs.allowMultipleInstances, null, true, 2 );
         this.synchHelper.synchCheckbox( this.allowMultiInstanceButton, ALLOW_MULTIPLE, null );
@@ -218,7 +218,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+            SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
         }
         else
         {
@@ -245,7 +245,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+            SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
         }
         else
         {
@@ -271,7 +271,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         this.cssClassWrapper = SWTUtil.createText( group, 1 );
         this.synchHelper.synchText( cssClassWrapper, CSS_CLASS_WRAPPER, null );
 
-        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
 
         this.synchHelper.getDataModel().addListener
         ( 

@@ -16,7 +16,7 @@
 package com.liferay.ide.ui.snippets.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.util.ArrayList;
@@ -116,7 +116,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
 
     protected IEditorPart editorPart;
 
-    protected String lastVarName = StringUtil.EMPTY;
+    protected String lastVarName = StringPool.EMPTY;
 
     protected StringButtonDialogField modelClassDialogField;
 
@@ -219,7 +219,7 @@ public class AbstractModelWizardPage extends NewTypeWizardPage
         {
 
         }
-        return StringUtil.EMPTY;
+        return StringPool.EMPTY;
     }
 
     public String getModelClass()

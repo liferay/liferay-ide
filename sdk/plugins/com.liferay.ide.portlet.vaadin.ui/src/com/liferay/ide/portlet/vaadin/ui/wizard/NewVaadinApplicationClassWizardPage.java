@@ -15,7 +15,7 @@
 
 package com.liferay.ide.portlet.vaadin.ui.wizard;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.ui.wizard.NewPortletClassWizardPage;
 import com.liferay.ide.portlet.vaadin.core.operation.INewVaadinPortletClassDataModelProperties;
 import com.liferay.ide.portlet.vaadin.ui.VaadinUI;
@@ -95,7 +95,7 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
 
         if( this.fragment )
         {
-            SWTUtil.createLabel( parent, StringUtil.EMPTY, 1 );
+            SWTUtil.createLabel( parent, StringPool.EMPTY, 1 );
         }
         else
         {

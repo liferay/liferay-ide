@@ -17,7 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -142,7 +142,7 @@ public abstract class BaseValidator extends AbstractValidator
                 else if( superTypeNames != null )
                 {
                     boolean typeFound = false;
-                    final String[] superTypes = superTypeNames.split( StringUtil.COMMA );
+                    final String[] superTypes = superTypeNames.split( StringPool.COMMA );
 
                     for( String superType : superTypes )
                     {
@@ -171,7 +171,7 @@ public abstract class BaseValidator extends AbstractValidator
                     {
                         String msg = MessageFormat.format( MESSAGE_CLASS_INCORRECT_HIERARCHY, className, superTypeNames );
 
-                        if( superTypeNames.contains( StringUtil.COMMA ) )
+                        if( superTypeNames.contains( StringPool.COMMA ) )
                         {
                             msg = msg.replaceAll( Msgs.typeLabel, Msgs.possibleTypes );
                         }

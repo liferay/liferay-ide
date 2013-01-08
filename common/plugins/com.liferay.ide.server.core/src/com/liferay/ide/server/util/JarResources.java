@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.util;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -91,7 +91,7 @@ public final class JarResources {
              }
              if (debugOn) {
                 System.out.println(
-                   "ze.getName()="+ze.getName()+ StringUtil.COMMA +"getSize()="+ze.getSize() //$NON-NLS-1$ //$NON-NLS-2$
+                   "ze.getName()="+ze.getName()+ StringPool.COMMA +"getSize()="+ze.getSize() //$NON-NLS-1$ //$NON-NLS-2$
                    );
              }
              int size=(int)ze.getSize();
@@ -146,7 +146,7 @@ public final class JarResources {
        }
        sb.append(ze.getName());
        sb.append("\t"); //$NON-NLS-1$
-       sb.append(StringUtil.EMPTY+ze.getSize());
+       sb.append(StringPool.EMPTY+ze.getSize());
        if (ze.getMethod()==ZipEntry.DEFLATED) {
           sb.append("/"+ze.getCompressedSize()); //$NON-NLS-1$
        }

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.library;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -69,7 +69,7 @@ public abstract class PluginLibraryInstallOperation extends LibraryProviderOpera
 
         IClasspathAttribute[] attributes =
             new IClasspathAttribute[] { JavaCore.newClasspathAttribute(
-                IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, StringUtil.EMPTY ) };
+                IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, StringPool.EMPTY ) };
 
         IClasspathEntry newEntry = JavaCore.newContainerEntry( containerPath, accessRules, attributes, false );
 

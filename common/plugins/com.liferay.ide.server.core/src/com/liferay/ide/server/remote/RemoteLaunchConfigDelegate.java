@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 
 import java.util.Map;
@@ -47,7 +47,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         throws CoreException
     {
 
-        String serverId = configuration.getAttribute( SERVER_ID, StringUtil.EMPTY );
+        String serverId = configuration.getAttribute( SERVER_ID, StringPool.EMPTY );
         IServer server = ServerCore.findServer( serverId );
 
         if( server == null )
@@ -117,7 +117,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
 
         int connectTimeout = JavaRuntime.getPreferences().getInt( JavaRuntime.PREF_CONNECT_TIMEOUT );
 
-        connectMap.put( "timeout", StringUtil.EMPTY + connectTimeout ); //$NON-NLS-1$
+        connectMap.put( "timeout", StringPool.EMPTY + connectTimeout ); //$NON-NLS-1$
 
         // check for cancellation
         if( monitor.isCanceled() )

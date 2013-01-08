@@ -18,7 +18,7 @@ package com.liferay.ide.server.remote;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.util.SDKUtil;
@@ -626,7 +626,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         Map<String, String> properties = new HashMap<String, String>();
         properties.put( ISDKConstants.PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false" ); //$NON-NLS-1$
 
-        IPath deployPath = LiferayServerCorePlugin.getTempLocation( "direct-deploy", StringUtil.EMPTY ); //$NON-NLS-1$
+        IPath deployPath = LiferayServerCorePlugin.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployPath.toOSString() );
 

@@ -16,7 +16,7 @@
 package com.liferay.ide.layouttpl.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
@@ -138,7 +138,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
         }
         else
         {
-            ByteArrayInputStream input = new ByteArrayInputStream( StringUtil.EMPTY.getBytes() );
+            ByteArrayInputStream input = new ByteArrayInputStream( StringPool.EMPTY.getBytes() );
 
             if( templateFileValue.exists() )
             {

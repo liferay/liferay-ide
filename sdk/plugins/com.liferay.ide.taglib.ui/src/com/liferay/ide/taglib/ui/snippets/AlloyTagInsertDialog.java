@@ -15,7 +15,7 @@
 
 package com.liferay.ide.taglib.ui.snippets;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.taglib.ui.model.Tag;
 
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
         String text = ( element().adapt( Tag.class ) ).getSource().getContent();
 
         // remove all cursor markers
-        text = StringUtils.replace( text, "${cursor}", StringUtil.EMPTY ); //$NON-NLS-1$
+        text = StringUtils.replace( text, "${cursor}", StringPool.EMPTY ); //$NON-NLS-1$
 
         // Update EOLs (bug 80231)
         String systemEOL = System.getProperty( "line.separator" ); //$NON-NLS-1$

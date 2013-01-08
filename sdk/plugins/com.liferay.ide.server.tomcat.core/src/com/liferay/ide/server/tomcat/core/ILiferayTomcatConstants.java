@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -38,7 +38,7 @@ public interface ILiferayTomcatConstants
 
     String DEFAULT_USER_TIMEZONE = _defaultPrefs.get( "default.user.timezone", "GMT" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-    String[] LIB_EXCLUDES = _defaultPrefs.get( "tomcat.lib.excludes", StringUtil.EMPTY ).split( StringUtil.COMMA ); //$NON-NLS-1$
+    String[] LIB_EXCLUDES = _defaultPrefs.get( "tomcat.lib.excludes", StringPool.EMPTY ).split( StringPool.COMMA ); //$NON-NLS-1$
 
     boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean( "prevent.multi.ext.plugins.deploy", false ); //$NON-NLS-1$
 }

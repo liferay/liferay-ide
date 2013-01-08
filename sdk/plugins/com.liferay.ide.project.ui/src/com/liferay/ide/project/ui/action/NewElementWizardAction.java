@@ -1,7 +1,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Set;
@@ -57,7 +57,7 @@ public class NewElementWizardAction extends NewWizardAction
 
                 if( validProjectTypes != null && facets != null)
                 {
-                    String[] validTypes = validProjectTypes.split( StringUtil.COMMA );
+                    String[] validTypes = validProjectTypes.split( StringPool.COMMA );
                     for( String validProjectType : validTypes )
                     {
                         for( IProjectFacetVersion facet : facets )

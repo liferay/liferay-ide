@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.util;
 
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.text.MessageFormat;
 import java.util.regex.Matcher;
@@ -81,8 +81,8 @@ public class VersionedDTDRootElementController extends StandardRootElementContro
 
                                 if( systemIdVersion != null )
                                 {
-                                    if( systemIdVersion.replaceAll( StringUtil.UNDERSCORE, StringUtil.EMPTY )
-                                            .equals( version.replaceAll( "\\.", StringUtil.EMPTY ) ) ) //$NON-NLS-1$
+                                    if( systemIdVersion.replaceAll( StringPool.UNDERSCORE, StringPool.EMPTY )
+                                            .equals( version.replaceAll( "\\.", StringPool.EMPTY ) ) ) //$NON-NLS-1$
                                     {
                                         return true;
                                     }

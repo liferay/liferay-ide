@@ -15,7 +15,7 @@
 
 package com.liferay.ide.ui.snippets;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 
 import org.eclipse.jface.window.Window;
@@ -80,7 +80,7 @@ public abstract class ModelSnippetInsertion extends AbstractSnippetInsertion
             return getPreparedText( wizard );
         }
 
-        return StringUtil.EMPTY;
+        return StringPool.EMPTY;
     }
 
 }

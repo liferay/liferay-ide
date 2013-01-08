@@ -15,7 +15,7 @@
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.sdk.ISDKConstants;
 
@@ -98,7 +98,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 
     private String getPortletName()
     {
-        return getProperty( CLASS_NAME ).toString().replaceAll( "Application", StringUtil.EMPTY ); //$NON-NLS-1$
+        return getProperty( CLASS_NAME ).toString().replaceAll( "Application", StringPool.EMPTY ); //$NON-NLS-1$
     }
 
     @Override
@@ -167,7 +167,7 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
 
             String pkg = getDataModel().getStringProperty( JAVA_PACKAGE );
             String cls = getDataModel().getStringProperty( CLASS_NAME );
-            String qualifiedApplicationClass = ( pkg == null || StringUtil.EMPTY.equals( pkg ) ) ? cls : pkg + "." + cls; //$NON-NLS-1$
+            String qualifiedApplicationClass = ( pkg == null || StringPool.EMPTY.equals( pkg ) ) ? cls : pkg + "." + cls; //$NON-NLS-1$
 
             paramValue.setValue( qualifiedApplicationClass );
 

@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.sdk.ISDKConstants;
@@ -516,7 +516,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
 
         this.synchHelper.synchText( sdkVersion, SDK_VERSION, null );
 
-        SWTUtil.createLabel( topComposite, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( topComposite, StringPool.EMPTY, 1 );
     }
 
     protected void createTargetRuntimeGroup( Composite parent )

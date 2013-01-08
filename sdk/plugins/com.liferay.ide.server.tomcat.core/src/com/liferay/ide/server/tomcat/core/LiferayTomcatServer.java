@@ -13,7 +13,7 @@
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
@@ -72,7 +72,7 @@ public class LiferayTomcatServer extends TomcatServer
 
     public String getExternalProperties()
     {
-        return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, StringUtil.EMPTY );
+        return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, StringPool.EMPTY );
     }
 
     public String getMemoryArgs()
@@ -84,7 +84,7 @@ public class LiferayTomcatServer extends TomcatServer
     {
         try
         {
-            return new URL( getPortalHomeUrl(), StringUtil.FORWARD_SLASH + context );
+            return new URL( getPortalHomeUrl(), StringPool.FORWARD_SLASH + context );
         }
         catch( Exception ex )
         {

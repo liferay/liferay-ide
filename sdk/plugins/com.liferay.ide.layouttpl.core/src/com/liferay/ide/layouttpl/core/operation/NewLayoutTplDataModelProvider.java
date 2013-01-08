@@ -18,7 +18,7 @@
 package com.liferay.ide.layouttpl.core.operation;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 
 import java.util.Set;
@@ -96,7 +96,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( !CoreUtil.isNullOrEmpty( name ) )
             {
-                return name.replaceAll( "[^a-zA-Z0-9]+", StringUtil.EMPTY ).toLowerCase(); //$NON-NLS-1$
+                return name.replaceAll( "[^a-zA-Z0-9]+", StringPool.EMPTY ).toLowerCase(); //$NON-NLS-1$
             }
         }
         else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )

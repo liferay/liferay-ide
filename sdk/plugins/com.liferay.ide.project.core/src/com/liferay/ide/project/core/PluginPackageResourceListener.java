@@ -17,7 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -250,7 +250,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
         if( portalDependencyTlds != null )
         {
-            String[] portalTlds = portalDependencyTlds.split( StringUtil.COMMA );
+            String[] portalTlds = portalDependencyTlds.split( StringPool.COMMA );
 
             IVirtualComponent comp = ComponentCore.createComponent( project );
 
@@ -360,7 +360,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
         if( requiredDeploymenContexts != null )
         {
-            String[] contexts = requiredDeploymenContexts.split( StringUtil.COMMA );
+            String[] contexts = requiredDeploymenContexts.split( StringPool.COMMA );
 
             if( !CoreUtil.isNullOrEmpty( contexts ) )
             {

@@ -17,7 +17,7 @@ package com.liferay.ide.server.core;
 
 import com.liferay.ide.core.CorePlugin;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
@@ -286,7 +286,7 @@ public class LiferayServerCorePlugin extends CorePlugin
     public static IPath getTempLocation( String prefix, String fileName )
     {
         return getDefault().getStateLocation().append( "tmp" ).append( //$NON-NLS-1$
-            prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? StringUtil.EMPTY : "/" + fileName ) ); //$NON-NLS-1$ //$NON-NLS-2$
+            prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? StringPool.EMPTY : "/" + fileName ) ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static void logError( Exception e )

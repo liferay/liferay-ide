@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -333,7 +333,7 @@ public class SDKPluginFacetUtil
         String projName = fpjwc.getProjectName();
         IPath location = fpjwc.getProjectLocation();
 
-        String directoryName = StringUtil.EMPTY;
+        String directoryName = StringPool.EMPTY;
 
         if( location != null )
         {
@@ -374,7 +374,7 @@ public class SDKPluginFacetUtil
         IFacetedProjectTemplate template = null;
         String projName = fpjwc.getProjectName();
         IPath location = fpjwc.getProjectLocation();
-        String directoryName = StringUtil.EMPTY;
+        String directoryName = StringPool.EMPTY;
 
         if( location != null )
         {

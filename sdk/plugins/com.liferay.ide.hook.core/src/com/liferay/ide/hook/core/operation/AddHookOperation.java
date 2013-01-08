@@ -18,7 +18,7 @@ package com.liferay.ide.hook.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -463,7 +463,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         try
         {
-            properties.store( buffer, StringUtil.EMPTY );
+            properties.store( buffer, StringPool.EMPTY );
         }
         catch( IOException e )
         {

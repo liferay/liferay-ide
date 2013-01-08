@@ -18,7 +18,7 @@
 package com.liferay.ide.core.remote;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -181,7 +181,7 @@ public class RemoteConnection implements IRemoteConnection
                 for( int i = 1; i < args.length; i += 2 )
                 {
                     String name = null;
-                    String value = StringUtil.EMPTY;
+                    String value = StringPool.EMPTY;
 
                     if( args[i] != null )
                     {

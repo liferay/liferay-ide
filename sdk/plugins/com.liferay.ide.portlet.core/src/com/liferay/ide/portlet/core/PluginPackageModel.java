@@ -19,7 +19,7 @@ import com.liferay.ide.core.model.AbstractEditingModel;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.ModelChangedEvent;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -70,7 +70,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
             return;
         }
 
-        String existingDeps = pluginPackageProperties.getString( propertyName, StringUtil.EMPTY );
+        String existingDeps = pluginPackageProperties.getString( propertyName, StringPool.EMPTY );
 
         String[] existingValues = existingDeps.split( "," ); //$NON-NLS-1$
 
@@ -295,7 +295,7 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         if( updatedValues.size() > 0 )
         {
-            pluginPackageProperties.setProperty( propertyName, StringUtil.EMPTY );
+            pluginPackageProperties.setProperty( propertyName, StringPool.EMPTY );
 
             for( String updatedValue : updatedValues )
             {

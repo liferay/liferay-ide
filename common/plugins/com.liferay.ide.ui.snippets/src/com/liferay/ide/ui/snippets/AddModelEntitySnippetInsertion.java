@@ -16,7 +16,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 import com.liferay.ide.ui.snippets.wizard.AddModelEntityWizard;
 
@@ -57,7 +57,7 @@ public class AddModelEntitySnippetInsertion extends ModelSnippetInsertion
         }
 
         String fieldsVal = fields.toString();
-        text = StringUtils.replace( text, "${fields}", CoreUtil.isNullOrEmpty( fieldsVal ) ? StringUtil.EMPTY : fieldsVal ); //$NON-NLS-1$
+        text = StringUtils.replace( text, "${fields}", CoreUtil.isNullOrEmpty( fieldsVal ) ? StringPool.EMPTY : fieldsVal ); //$NON-NLS-1$
 
         return text;
     }

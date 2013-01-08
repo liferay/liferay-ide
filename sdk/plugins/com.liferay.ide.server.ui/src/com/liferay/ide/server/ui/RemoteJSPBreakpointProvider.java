@@ -16,7 +16,7 @@
 package com.liferay.ide.server.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -174,7 +174,7 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				for (int i = 0; i < types.length; i++) {
 					Object pattern = ((Map) initData).get(types[i].getId());
 					if (pattern != null) {
-						patternBuffer.append(StringUtil.COMMA);
+						patternBuffer.append(StringPool.COMMA);
 						patternBuffer.append(pattern);
 					}
 				}

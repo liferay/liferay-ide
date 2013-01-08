@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
@@ -241,7 +241,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
             serverTargetCombo.select( 0 );
         }
 
-        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
 
         Link facetsLink = new Link( group, SWT.UNDERLINE_LINK );
         GridData gd = new GridData( SWT.DEFAULT, SWT.DEFAULT, false, false, 1, 1 );
@@ -256,7 +256,7 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
                     getShell(), (IFacetedProjectWorkingCopy) getModel().getProperty( FACETED_PROJECT_WORKING_COPY ) );
             }
         } );
-        SWTUtil.createLabel( group, StringUtil.EMPTY, 1 );
+        SWTUtil.createLabel( group, StringPool.EMPTY, 1 );
     }
 
     protected void createPluginTypeGroup( Composite parent )

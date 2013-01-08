@@ -16,7 +16,7 @@
 package com.liferay.ide.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.snippets.wizard.AbstractModelWizard;
 import com.liferay.ide.ui.snippets.wizard.LiferayUISearchContainerWizard;
 
@@ -55,7 +55,7 @@ public class SearchContainerSnippetInsertion extends ModelSnippetInsertion
         }
 
         String columnsVal = columns.toString();
-        text = StringUtils.replace( text, "${columns}", CoreUtil.isNullOrEmpty( columnsVal ) ? StringUtil.EMPTY : columnsVal ); //$NON-NLS-1$
+        text = StringUtils.replace( text, "${columns}", CoreUtil.isNullOrEmpty( columnsVal ) ? StringPool.EMPTY : columnsVal ); //$NON-NLS-1$
 
         return text;
     }

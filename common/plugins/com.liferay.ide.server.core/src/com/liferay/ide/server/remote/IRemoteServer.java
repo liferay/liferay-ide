@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCorePlugin;
 
@@ -49,15 +49,15 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true ); //$NON-NLS-1$
 
-    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", StringUtil.EMPTY ); //$NON-NLS-1$
+    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", StringPool.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", StringUtil.EMPTY ); //$NON-NLS-1$
+    String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", StringPool.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", StringUtil.EMPTY ); //$NON-NLS-1$
+    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", StringPool.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", StringUtil.EMPTY ); //$NON-NLS-1$
+    String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", StringPool.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", StringUtil.EMPTY ); //$NON-NLS-1$
+    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", StringPool.EMPTY ); //$NON-NLS-1$
 
     boolean getAdjustDeploymentTimestamp();
 

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.tomcat.ui.wizard;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
@@ -66,7 +66,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
     {
         if( field != null && !field.isDisposed() )
         {
-            field.setText( value != null ? value : StringUtil.EMPTY );
+            field.setText( value != null ? value : StringPool.EMPTY );
         }
     }
 
@@ -356,7 +356,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
         }
 
         setFieldValue( nameField, getRuntime().getName() );
-        setFieldValue( dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : StringUtil.EMPTY );
+        setFieldValue( dirField, getRuntime().getLocation() != null ? getRuntime().getLocation().toOSString() : StringPool.EMPTY );
     }
 
     protected void updateJREs()

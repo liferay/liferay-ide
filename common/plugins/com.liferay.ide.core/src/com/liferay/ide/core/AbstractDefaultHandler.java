@@ -15,7 +15,7 @@
 
 package com.liferay.ide.core;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -98,7 +98,7 @@ public abstract class AbstractDefaultHandler extends DefaultHandler
             this.dtd = true;
         }
 
-        return new InputSource( new StringReader( StringUtil.EMPTY ) );
+        return new InputSource( new StringReader( StringPool.EMPTY ) );
     }
 
     @Override

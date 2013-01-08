@@ -18,7 +18,7 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 
 import org.eclipse.core.resources.IFile;
@@ -211,7 +211,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
                 taglibNextSibling = NodeUtil.findChildElement( docRoot, "ejb-local-ref" ); //$NON-NLS-1$
             }
 
-            Element taglib = NodeUtil.insertChildElement( docRoot, taglibNextSibling, "taglib", StringUtil.EMPTY ); //$NON-NLS-1$
+            Element taglib = NodeUtil.insertChildElement( docRoot, taglibNextSibling, "taglib", StringPool.EMPTY ); //$NON-NLS-1$
 
             NodeUtil.appendChildElement( taglib, "taglib-uri", tagLibRefType.getTaglibURI() ); //$NON-NLS-1$
 

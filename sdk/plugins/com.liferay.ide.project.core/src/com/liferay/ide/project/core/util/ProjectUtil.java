@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IProjectDefinition;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectCorePlugin;
@@ -223,7 +223,7 @@ public class ProjectUtil
     {
         if( CoreUtil.isNullOrEmpty( name ) )
         {
-            return StringUtil.EMPTY;
+            return StringPool.EMPTY;
         }
 
         String displayName = removePluginSuffix( name );
@@ -260,7 +260,7 @@ public class ProjectUtil
         }
         else
         {
-            emptyFile.create( new ByteArrayInputStream( StringUtil.EMPTY.getBytes() ), true, null );
+            emptyFile.create( new ByteArrayInputStream( StringPool.EMPTY.getBytes() ), true, null );
         }
 
         return emptyFile;
@@ -613,7 +613,7 @@ public class ProjectUtil
     {
         if( isLiferaySDKProjectDir( new File( projectLocation ) ) )
         {
-            String suffix = StringUtil.EMPTY;
+            String suffix = StringPool.EMPTY;
 
             if( projectLocation.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
             {
@@ -636,7 +636,7 @@ public class ProjectUtil
                 suffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
             }
 
-            return suffix.replace( "-", StringUtil.EMPTY ); //$NON-NLS-1$
+            return suffix.replace( "-", StringPool.EMPTY ); //$NON-NLS-1$
         }
 
         return null;
@@ -1132,7 +1132,7 @@ public class ProjectUtil
             return string;
         }
 
-        return string.replaceFirst( regex, StringUtil.EMPTY );
+        return string.replaceFirst( regex, StringPool.EMPTY );
     }
 
     public static void setDefaultRuntime(IDataModel dataModel)

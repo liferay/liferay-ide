@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.vaadin.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPropertiesConfiguration;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
@@ -105,7 +105,7 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
             pluginPackageProperties = new PluginPropertiesConfiguration();
             pluginPackageProperties.load( osfile );
 
-            String existingDeps = pluginPackageProperties.getString( propertyName, StringUtil.EMPTY );
+            String existingDeps = pluginPackageProperties.getString( propertyName, StringPool.EMPTY );
 
             String[] existingValues = existingDeps.split( "," ); //$NON-NLS-1$
 

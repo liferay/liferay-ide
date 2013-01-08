@@ -16,7 +16,7 @@
 package com.liferay.ide.layouttpl.ui.model;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
@@ -193,7 +193,7 @@ public class PortletColumn extends ModelElement
     {
         if( WEIGHT_PROP.equals( propertyId ) )
         {
-            String val = value.toString().replaceAll( "%", StringUtil.EMPTY ); //$NON-NLS-1$
+            String val = value.toString().replaceAll( "%", StringPool.EMPTY ); //$NON-NLS-1$
             int weight = Integer.parseInt( val );
             setWeight( weight );
         }

@@ -16,7 +16,7 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -149,7 +149,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
 
             String serviceType = texts[0].getText();
 
-            String wrapperType = StringUtil.EMPTY;
+            String wrapperType = StringPool.EMPTY;
 
             if( serviceType.endsWith( "Service" ) ) //$NON-NLS-1$
             {

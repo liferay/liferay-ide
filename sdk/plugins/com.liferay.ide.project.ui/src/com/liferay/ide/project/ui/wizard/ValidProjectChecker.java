@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction;
 
@@ -79,7 +79,7 @@ public class ValidProjectChecker
 
                 if( validProjectTypes != null && facets != null )
                 {
-                    String[] validTypes = validProjectTypes.split( StringUtil.COMMA );
+                    String[] validTypes = validProjectTypes.split( StringPool.COMMA );
 
                     for( String validProjectType : validTypes )
                     {

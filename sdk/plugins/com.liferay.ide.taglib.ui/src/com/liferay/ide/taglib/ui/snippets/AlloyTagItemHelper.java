@@ -11,7 +11,7 @@
 package com.liferay.ide.taglib.ui.snippets;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.taglib.ui.TaglibUI;
 import com.liferay.ide.taglib.ui.model.Tag;
 import com.liferay.ide.ui.snippets.SnippetsUIPlugin;
@@ -67,7 +67,7 @@ public class AlloyTagItemHelper {
 
 	public static String getInsertString(final Shell host, ISnippetItem item, IEditorInput editorInput, boolean clearModality) {
 		if (item == null)
-			return StringUtil.EMPTY;
+			return StringPool.EMPTY;
 		String insertString = null;
 
 		Tag model = getTagModel(editorInput, item);

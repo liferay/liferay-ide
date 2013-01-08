@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.ProjectCorePlugin;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -130,7 +130,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
                 final URL helpUrl = framework.getHelpUrl();
                 final String url = (helpUrl != null ? helpUrl.toExternalForm() : null);
-                Link descriptionWithLink = SWTUtil.createHyperLink(group, SWT.WRAP, framework.getDescription() + (helpUrl != null ? NLS.bind( " <a>{0}</a>", Msgs.learnMoreLink ) : StringUtil.EMPTY), 1, url); //$NON-NLS-1$
+                Link descriptionWithLink = SWTUtil.createHyperLink(group, SWT.WRAP, framework.getDescription() + (helpUrl != null ? NLS.bind( " <a>{0}</a>", Msgs.learnMoreLink ) : StringPool.EMPTY), 1, url); //$NON-NLS-1$
                 descriptionWithLink.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
                 if( helpUrl != null )
