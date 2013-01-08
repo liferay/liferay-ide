@@ -46,7 +46,7 @@
                enablesFor="1"
                icon="icons/e16/service.png"
                id="com.liferay.ide.service.ui.wsdd.popup.action"
-               label="%action.label"
+               label="%build.wsdd.action.label"
                menubarPath="liferayPopupMenuCategory/slot1"
                tooltip="%build.web.services.descriptor.action.tooltip">
          </action>
