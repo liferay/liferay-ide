@@ -16,7 +16,7 @@
 package com.liferay.ide.sdk.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKClasspathProvider;
 import com.liferay.ide.sdk.SDKPlugin;
@@ -128,7 +128,7 @@ public class SDKHelper extends LaunchHelper
         {
             for( String vmArg : additionalVMArgs )
             {
-                args.append( StringUtil.SPACE + vmArg );
+                args.append( StringPool.SPACE + vmArg );
             }
         }
 

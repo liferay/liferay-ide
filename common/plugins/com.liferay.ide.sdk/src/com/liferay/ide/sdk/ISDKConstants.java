@@ -15,7 +15,7 @@
 
 package com.liferay.ide.sdk;
 
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -38,18 +38,18 @@ public interface ISDKConstants
 
     static final String _THEME_PLUGIN_PROJECT_SUFFIX = "-theme"; //$NON-NLS-1$
 
-    public static final String[] ANT_LIBRARIES = __defaultPrefs.get( "ant.libraries", StringUtil.EMPTY ).split( StringUtil.COMMA ); //$NON-NLS-1$
+    public static final String[] ANT_LIBRARIES = __defaultPrefs.get( "ant.libraries", StringPool.EMPTY ).split( StringPool.COMMA ); //$NON-NLS-1$
 
     public static final String[] BINARY_PLUGIN_EXTENSIONS = { "*.war" }; //$NON-NLS-1$
 
     public static final String[] BINARY_PLUGIN_FILTERS = { "war" }; //$NON-NLS-1$
 
-    public static final String[] BINARY_PLUGIN_PROJECT_WILDCARDS = 
-    { 
-        StringUtil.ASTERISK + _HOOK_PLUGIN_PROJECT_SUFFIX + "*.war", //$NON-NLS-1$
-        StringUtil.ASTERISK + _THEME_PLUGIN_PROJECT_SUFFIX + "*.war",  //$NON-NLS-1$
-        StringUtil.ASTERISK + _PORTLET_PLUGIN_PROJECT_SUFFIX + "*.war", //$NON-NLS-1$
-        StringUtil.ASTERISK + _LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "*.war"  //$NON-NLS-1$
+    public static final String[] BINARY_PLUGIN_PROJECT_WILDCARDS =
+    {
+        StringPool.ASTERISK + _HOOK_PLUGIN_PROJECT_SUFFIX + "*.war", //$NON-NLS-1$
+        StringPool.ASTERISK + _THEME_PLUGIN_PROJECT_SUFFIX + "*.war",  //$NON-NLS-1$
+        StringPool.ASTERISK + _PORTLET_PLUGIN_PROJECT_SUFFIX + "*.war", //$NON-NLS-1$
+        StringPool.ASTERISK + _LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "*.war"  //$NON-NLS-1$
     };
 
     public static final String EXT_PLUGIN_ANT_BUILD = __defaultPrefs.get( "ext.plugin.ant.build", null ); //$NON-NLS-1$
@@ -82,7 +82,7 @@ public interface ISDKConstants
     public static final String PORTLET_PLUGIN_PROJECT_SUFFIX = _PORTLET_PLUGIN_PROJECT_SUFFIX;
 
     public static final String[] PORTLET_PLUGIN_ZIP_IGNORE_FILES = __defaultPrefs.get(
-        "portlet.plugin.zip.ignore.files", StringUtil.EMPTY ).split( StringUtil.COMMA ); //$NON-NLS-1$
+        "portlet.plugin.zip.ignore.files", StringPool.EMPTY ).split( StringPool.COMMA ); //$NON-NLS-1$
 
     public static final String PORTLET_PLUGIN_ZIP_PATH = __defaultPrefs.get( "portlet.plugin.zip.path", null ); //$NON-NLS-1$
 

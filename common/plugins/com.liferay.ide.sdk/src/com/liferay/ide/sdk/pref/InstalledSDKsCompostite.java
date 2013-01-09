@@ -16,7 +16,7 @@
 package com.liferay.ide.sdk.pref;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKManager;
 import com.liferay.ide.sdk.SDKPlugin;
@@ -131,7 +131,7 @@ public class InstalledSDKsCompostite extends Composite
             }
             else
             {
-                retval = StringUtil.EMPTY;
+                retval = StringPool.EMPTY;
             }
             return retval;
         }

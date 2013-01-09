@@ -16,7 +16,7 @@
 package com.liferay.ide.sdk.pref;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.ISDKConstants;
 import com.liferay.ide.sdk.SDK;
 import com.liferay.ide.sdk.SDKPlugin;
@@ -197,15 +197,15 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         name.addModifyListener( this );
 
-        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 );// spacer
+        SWTUtil.createLabel( container, StringPool.EMPTY, 1 );// spacer
 
-        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 );// spacer
+        SWTUtil.createLabel( container, StringPool.EMPTY, 1 );// spacer
 
         final Button addProject = SWTUtil.createCheckButton( container, Msgs.addEclipseProjectFile, null, true, 1 );
 
-        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 ); // spacer
+        SWTUtil.createLabel( container, StringPool.EMPTY, 1 ); // spacer
 
-        SWTUtil.createLabel( container, StringUtil.EMPTY, 1 );// spacer
+        SWTUtil.createLabel( container, StringPool.EMPTY, 1 );// spacer
 
         final Button openInEclipse = SWTUtil.createCheckButton( container, Msgs.openEclipse, null, true, 1 );
         openInEclipse.addSelectionListener
