@@ -149,13 +149,10 @@
                         <content>
                             <property-editor>
                                 <property>Listeners</property>
-                                <hint>
-                                    <value>false</value>
-                                    <name>show.label</name>
-                                </hint>
                                 <child-property>DisplayName</child-property>
                                 <child-property>Description</child-property>
                                 <child-property>Implementation</child-property>
+                                <show-label>false</show-label>
                             </property-editor>
                         </content>
                     </section>
@@ -181,8 +178,7 @@
                 <node>
                     <label>Customizations</label>
                     <section>
-                        <label>Customizations</label>
-                        <collapsible>false</collapsible>
+                        <label>Custom Portlet Modes</label>
                         <content>
                             <property-editor>
                                 <property>CustomPortletModes</property>
@@ -200,13 +196,14 @@
                                         <value>30</value>
                                     </hint>
                                 </child-property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>true</value>
-                                </hint>
                                 <child-property>Description</child-property>
+                                <show-label>false</show-label>
                             </property-editor>
-                            <spacer></spacer>
+                        </content>
+                    </section>
+                    <section>
+                        <label>Custom Window States</label>
+                        <content>
                             <property-editor>
                                 <property>CustomWindowStates</property>
                                 <child-property>
@@ -217,10 +214,7 @@
                                     </hint>
                                 </child-property>
                                 <child-property>Description</child-property>
-                                <hint>
-                                    <name>show.label</name>
-                                    <value>true</value>
-                                </hint>
+                                <show-label>false</show-label>
                             </property-editor>
                         </content>
                     </section>

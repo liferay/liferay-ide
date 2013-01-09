@@ -19,7 +19,6 @@ package com.liferay.ide.portlet.core.model;
 
 import com.liferay.ide.portlet.core.model.internal.WindowStateImageService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
@@ -35,7 +34,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 @GenerateImpl
 @Service( impl = WindowStateImageService.class )
-public interface CustomWindowState extends IModelElement, Describeable, Identifiable
+public interface CustomWindowState extends Describeable, Identifiable
 {
 
     ModelElementType TYPE = new ModelElementType( CustomWindowState.class );
