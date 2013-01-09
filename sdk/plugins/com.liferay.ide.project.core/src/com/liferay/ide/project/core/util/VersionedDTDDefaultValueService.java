@@ -58,7 +58,7 @@ public class VersionedDTDDefaultValueService extends DefaultValueService
 
         if( defaultVersion == null )
         {
-            defaultVersion = "6.0.0"; //$NON-NLS-1$
+            defaultVersion = "6.0.0"; // default should be 6.0.0 //$NON-NLS-1$
         }
 
         return new DefaultValueServiceData( defaultVersion.replaceAll( StringPool.UNDERSCORE, "." ) ); //$NON-NLS-1$

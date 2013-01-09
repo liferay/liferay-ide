@@ -16,8 +16,6 @@ package com.liferay.ide.service.core.model.internal;
 
 import com.liferay.ide.project.core.util.VersionedDTDDefaultValueService;
 
-import java.util.regex.Pattern;
-
 
 /**
  * @author Gregory Amerson
@@ -25,7 +23,7 @@ import java.util.regex.Pattern;
 public class ServiceBuilderDefaultValueService extends VersionedDTDDefaultValueService
 {
 
-    public ServiceBuilderDefaultValueService( Pattern systemIdPattern )
+    public ServiceBuilderDefaultValueService()
     {
         super( ServiceBuilderRootElementController.systemIdPattern );
     }
