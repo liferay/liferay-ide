@@ -5,19 +5,17 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.model;
-
-import com.liferay.ide.portlet.core.model.internal.DefaultXmlBinding;
 
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
@@ -39,7 +37,6 @@ import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -111,7 +108,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = Supports.class )
     @Label( standard = "Supports" )
     @Required
-    @CustomXmlElementBinding( impl = DefaultXmlBinding.class, params = { "supports" } )
+    @XmlBinding( path = "supports" )
     ImpliedElementProperty PROP_SUPPORTS = new ImpliedElementProperty( TYPE, "Supports" ); //$NON-NLS-1$
 
     Supports getSupports();
@@ -166,7 +163,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = EventDefinitionRef.class )
     @Label( standard = "Supported Processing Events" )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "supported-processing-event",
@@ -182,7 +179,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = EventDefinitionRef.class )
     @Label( standard = "Supported Publishing Events" )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "supported-publishing-event",
@@ -198,7 +195,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = SupportedPublicRenderParameter.class )
     @Label( standard = "Public Render Parameters" )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "supported-public-render-parameter",
@@ -214,11 +211,11 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Type( base = ContainerRuntimeOption.class )
     @Label( standard = "Container Runtime Options" )
     @XmlListBinding
-    ( 
+    (
         mappings = @XmlListBinding.Mapping
         (
             element = "container-runtime-option",
-            type = ContainerRuntimeOption.class 
+            type = ContainerRuntimeOption.class
         )
     )
     ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
