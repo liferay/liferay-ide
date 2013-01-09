@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.ui.action;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 import com.liferay.ide.server.util.WebServicesHelper;
@@ -57,11 +58,17 @@ public class TestWebServicesAction extends AbstractServerRunningAction
         }
 
         URL webServicesListURL = null;
+        String[] names = null;
+        WebServicesHelper helper = null;
+
         if( selectedServer != null )
         {
             ILiferayServer portalServer = (ILiferayServer) selectedServer.loadAdapter( ILiferayServer.class, null );
 
             webServicesListURL = portalServer.getWebServicesListURL();
+
+            helper = new WebServicesHelper( webServicesListURL );
+            names = helper.getWebServiceNames();
         }
         else if( selectedModule != null )
         {
@@ -78,10 +85,28 @@ public class TestWebServicesAction extends AbstractServerRunningAction
                 LiferayServerUIPlugin.logError( e );
                 return;
             }
+
+            helper = new WebServicesHelper( webServicesListURL );
+            names = helper.getWebServiceNames();
+
+            if( CoreUtil.empty( names ) )
+            {
+                try
+                {
+                    webServicesListURL =
+                        new URL( portalServer.getPortalHomeUrl(), selectedModule.getModule()[0].getName() + "/api/axis" ); //$NON-NLS-1$
+                }
+                catch( MalformedURLException e )
+                {
+                    LiferayServerUIPlugin.logError( e );
+                    return;
+                }
+
+                helper = new WebServicesHelper( webServicesListURL );
+                names = helper.getWebServiceNames();
+            }
         }
 
-        WebServicesHelper helper = new WebServicesHelper( webServicesListURL );
-        String[] names = helper.getWebServiceNames();
         StringsFilteredDialog dialog = new StringsFilteredDialog( getActiveShell() );
         dialog.setTitle( Msgs.webServiceSelection );
         dialog.setMessage( Msgs.selectWebService );
