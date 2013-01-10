@@ -267,7 +267,7 @@
       <runtimeFacetMapping
             runtime-component="com.liferay.ide.eclipse.server.tomcat.runtime.component"
             runtimeTypeId="com.liferay.ide.server.62.tomcat.runtime.70"
-            version="6.0">
+            version="7.0">
       </runtimeFacetMapping>
    </extension>
 
@@ -292,11 +292,11 @@
  <extension
        point="com.liferay.ide.server.core.runtimeStubs">
     <liferayRuntimeStub
-          default="true"
           name="Liferay v6.0 (Tomcat 6) Bundle"
           runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
     </liferayRuntimeStub>
     <liferayRuntimeStub
+          default="true"
           name="Liferay v6.1 (Tomcat 7) Bundle"
           runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70">
     </liferayRuntimeStub>
