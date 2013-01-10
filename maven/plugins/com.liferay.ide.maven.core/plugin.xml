@@ -14,17 +14,12 @@
             name="Liferay Project Configurator"
             secondaryTo="org.maven.ide.eclipse.configuration.wtp.configurator">
       </configurator>
-      <configurator
-            class="com.liferay.ide.maven.core.LiferayPluginConfigurator"
-            id="com.liferay.ide.maven.core.plugin.configurator"
-            name="Liferay Plugin Configurator">
-      </configurator>
    </extension>
    <extension
          point="org.eclipse.m2e.core.lifecycleMappings">
       <lifecycleMapping
             class="com.liferay.ide.maven.core.LiferayProjectLifeCycleMapping"
-            id="com.liferay.ide.maven.core.LiferayProjectLifeCycleMapping"
+            id="com.liferay.ide.maven.core.project.liferayProjectLifeCycleMapping"
             name="Liferay Project Lifecycle mapping">
       </lifecycleMapping>
    </extension>

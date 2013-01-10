@@ -235,15 +235,15 @@ public class LiferayProjectConfigurator extends AbstractProjectConfigurator impl
         return loadedParent;
     }
 
-        @Override
-        protected List<MojoExecution> getMojoExecutions( ProjectConfigurationRequest request, IProgressMonitor monitor )
-            throws CoreException
-        {
-            // TODO Auto-generated method stub
-            return super.getMojoExecutions( request, monitor );
-        }
+    @Override
+    protected List<MojoExecution> getMojoExecutions( ProjectConfigurationRequest request, IProgressMonitor monitor )
+        throws CoreException
+    {
+        // TODO Auto-generated method stub
+        return super.getMojoExecutions( request, monitor );
+    }
 
-
+    
 }
 
 

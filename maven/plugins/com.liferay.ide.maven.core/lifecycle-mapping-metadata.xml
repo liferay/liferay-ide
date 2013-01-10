@@ -1,37 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lifecycleMappingMetadata>
-
-    <!--lifecycleMappings>
-        <lifecycleMapping>
-            <packagingType>war</packagingType>
-            <lifecycleMappingId>com.liferay.ide.maven.core.LiferayProjectLifeCycleMapping</lifecycleMappingId>
-            <pluginExecutions>
-                <pluginExecution>
-                    <pluginExecutionFilter>
-                        <groupId>com.liferay.maven.plugins</groupId>
-                        <artifactId>liferay-maven-plugin</artifactId>
-                        <versionRange>[6.0.0,)</versionRange>
-                        <goals>
-                            <goal>theme-merge</goal>
-                            <goal>build-css</goal>
-                            <goal>build-thumbnail</goal>
-                        </goals>
-                    </pluginExecutionFilter>
-                    <action>
-                        <configurator>
-                            <id>com.liferay.ide.maven.core.project.configurator</id>
-                        </configurator>
-                    </action>
-                </pluginExecution>
-            </pluginExecutions>
-        </lifecycleMapping>
-    </lifecycleMappings-->
     <pluginExecutions>
         <pluginExecution>
             <pluginExecutionFilter>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <versionRange>[1.0,)</versionRange>
+                <versionRange>[2.0.1,)</versionRange>
                 <goals>
                     <goal>war</goal>
                 </goals>
@@ -42,26 +16,23 @@
                 </configurator>
             </action>
         </pluginExecution>
-
         <pluginExecution>
             <pluginExecutionFilter>
                 <groupId>com.liferay.maven.plugins</groupId>
                 <artifactId>liferay-maven-plugin</artifactId>
-                <versionRange>[1.0,)</versionRange>
+                <versionRange>[6.0.0,)</versionRange>
                 <goals>
-                    <goal>theme-merge</goal>
                     <goal>build-css</goal>
+                    <goal>build-ext</goal>
                     <goal>build-thumbnail</goal>
+                    <goal>theme-merge</goal>
                 </goals>
             </pluginExecutionFilter>
             <action>
                 <configurator>
-                    <id>com.liferay.ide.maven.core.plugin.configurator</id>
+                    <id>com.liferay.ide.maven.core.project.configurator</id>
                 </configurator>
-                <!-- ignore /-->
             </action>
         </pluginExecution>
-
     </pluginExecutions>
-
 </lifecycleMappingMetadata>
