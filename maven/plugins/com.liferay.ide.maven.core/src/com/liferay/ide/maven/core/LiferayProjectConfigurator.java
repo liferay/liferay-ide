@@ -188,6 +188,7 @@ public class LiferayProjectConfigurator extends AbstractProjectConfigurator impl
         return retval;
     }
 
+
     private boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
     {
         boolean loadedParent = false;
@@ -243,7 +244,7 @@ public class LiferayProjectConfigurator extends AbstractProjectConfigurator impl
         return super.getMojoExecutions( request, monitor );
     }
 
-    
+
 }
 
 

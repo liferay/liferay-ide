@@ -30,7 +30,7 @@
             </pluginExecutionFilter>
             <action>
                 <configurator>
-                    <id>com.liferay.ide.maven.core.project.configurator</id>
+                    <id>com.liferay.ide.maven.core.lifecycle.configurator</id>
                 </configurator>
             </action>
         </pluginExecution>
