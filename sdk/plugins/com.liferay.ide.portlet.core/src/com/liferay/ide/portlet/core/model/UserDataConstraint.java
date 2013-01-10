@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -21,8 +21,8 @@ import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -47,7 +47,7 @@ public interface UserDataConstraint extends IModelElement, Identifiable, Describ
     @NoDuplicates
     @Required
     @XmlBinding( path = "transport-guarantee" )
-    @DefaultValue( text = "NONE" )
+    @InitialValue( text = "NONE" )
     ValueProperty PROP_TRANSPORT_GUARANTEE = new ValueProperty( TYPE, "TransportGuarantee" ); //$NON-NLS-1$
 
     Value<TransportGuarantee> getTransportGuarantee();
