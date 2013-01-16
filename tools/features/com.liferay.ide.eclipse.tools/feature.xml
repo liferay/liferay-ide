@@ -41,7 +41,6 @@
       <import feature="org.eclipse.sapphire.ui" version="0.5.3" match="greaterOrEqual"/>
       <import feature="org.eclipse.sapphire.ui.swt.gef" version="0.5.3" match="greaterOrEqual"/>
       <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="0.5.3" match="greaterOrEqual"/>
-      
       <import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual"/>
@@ -55,7 +54,6 @@
       <import feature="org.eclipse.wst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.xml_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-
       <import feature="com.liferay.ide.common-feature"/>
    </requires>
 
@@ -80,13 +78,6 @@
 
    <plugin
          id="com.liferay.ide.project.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.sdk"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -241,6 +232,20 @@
 
    <plugin
          id="com.liferay.ide.properties.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.sdk.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.liferay.ide.sdk.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
