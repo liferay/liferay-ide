@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.sdk.ui.SDKsPreferencePage"
+            id="com.liferay.ide.sdk.preferences.installedSDKs"
+            name="%installed.plugin.sdks.page.name">
+         <keywordReference
+               id="com.liferay.ide.ui.keyword">
+         </keywordReference>
+      </page>
+   </extension>
+   
+</plugin>

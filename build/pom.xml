@@ -27,7 +27,7 @@
             </activation>
             <modules>
                 <module>../common</module>
-                <module>../sdk</module>
+                <module>../tools</module>
                 <module>../maven</module>
                 <module>../portal</module>
                 <module>../velocity</module>
@@ -46,12 +46,12 @@
         </profile>
 
         <profile>
-            <id>sdk</id>
+            <id>tools</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>../sdk</module>
+                <module>../tools</module>
             </modules>
         </profile>
 

@@ -26,7 +26,7 @@
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.liferay.ide.velocity</groupId>
+    <groupId>com.liferay.ide.velocity.plugins</groupId>
     <artifactId>velocity-plugins</artifactId>
 
     <name>Liferay IDE Velocity Plugins</name>

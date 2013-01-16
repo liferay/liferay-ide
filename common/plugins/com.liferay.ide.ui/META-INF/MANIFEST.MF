@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help,
  org.eclipse.help.base,
  org.eclipse.help.ui,
- com.liferay.ide.core;bundle-version="2.0.0",
+ com.liferay.ide.core;bundle-version="2.0.0";visibility:=reexport,
  org.eclipse.ui.navigator
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
