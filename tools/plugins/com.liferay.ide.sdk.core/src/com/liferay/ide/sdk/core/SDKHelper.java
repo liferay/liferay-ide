@@ -82,7 +82,8 @@ public class SDKHelper extends LaunchHelper
 //        tab.setDefaults( launchConfig );
 //        tab.dispose();
 
-        launchConfig.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT,
+        launchConfig.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
+        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE", //$NON-NLS-1$
             SDKCorePlugin.getDefault().getStateLocation().append( "sdk.log" ).toOSString() ); //$NON-NLS-1$
 
 //        launchConfig.setAttribute(
