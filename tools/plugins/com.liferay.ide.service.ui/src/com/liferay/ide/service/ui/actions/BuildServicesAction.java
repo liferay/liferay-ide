@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.job.BuildServiceJob;
+import com.liferay.ide.service.ui.ServiceUIUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IContainer;
@@ -82,9 +83,12 @@ public class BuildServicesAction extends AbstractObjectAction
 
             if( servicesFile != null && servicesFile.exists() )
             {
-                BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
+                if( ServiceUIUtil.shouldCreateServiceBuilderJob( servicesFile ) )
+                {
+                    BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
 
-                job.schedule();
+                    job.schedule();
+                }
             }
         }
 

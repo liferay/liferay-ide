@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.service.ui;
+package com.liferay.ide.service.ui.editor;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;

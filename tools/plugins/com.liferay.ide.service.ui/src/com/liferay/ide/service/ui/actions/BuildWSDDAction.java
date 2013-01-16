@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.job.BuildWSDDJob;
+import com.liferay.ide.service.ui.ServiceUIUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
 import org.eclipse.core.resources.IContainer;
@@ -80,9 +81,12 @@ public class BuildWSDDAction extends AbstractObjectAction
 
             if( servicesFile != null && servicesFile.exists() )
             {
-                BuildWSDDJob job = ServiceCore.createBuildWSDDJob( servicesFile );
+                if( ServiceUIUtil.shouldCreateServiceBuilderJob( servicesFile ) )
+                {
+                    BuildWSDDJob job = ServiceCore.createBuildWSDDJob( servicesFile );
 
-                job.schedule();
+                    job.schedule();
+                }
             }
         }
 

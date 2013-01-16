@@ -13,21 +13,20 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.service.ui;
+package com.liferay.ide.service.ui.actions;
 
 import com.liferay.ide.service.core.ServiceCore;
-import com.liferay.ide.service.core.job.BuildServiceJob;
+import com.liferay.ide.service.core.job.BuildWSDDJob;
+import com.liferay.ide.service.ui.ServiceUIUtil;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 /**
  * @author Gregory Amerson
  */
-public class BuildServicesActionHandler extends SapphireActionHandler
+public class BuildWSDDActionHandler extends SapphireActionHandler
 {
 
     @Override
@@ -37,26 +36,15 @@ public class BuildServicesActionHandler extends SapphireActionHandler
 
         if( file != null && file.exists() )
         {
-            BuildServiceJob job = ServiceCore.createBuildServiceJob( file );
+            if( ServiceUIUtil.shouldCreateServiceBuilderJob( file ) )
+            {
+                BuildWSDDJob job = ServiceCore.createBuildWSDDJob( file );
 
-            job.schedule();
-        }
-        else
-        {
-            MessageDialog.openWarning( context.getShell(), Msgs.buildServices, Msgs.ActionUnavailableImportProject );
+                job.schedule();
+            }
         }
 
         return null;
     }
 
-    private static class Msgs extends NLS
-    {
-        public static String ActionUnavailableImportProject;
-        public static String buildServices;
-
-        static
-        {
-            initializeMessages( BuildServicesActionHandler.class.getName(), Msgs.class );
-        }
-    }
 }

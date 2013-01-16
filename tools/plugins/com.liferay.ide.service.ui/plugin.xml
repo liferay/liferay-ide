@@ -72,8 +72,8 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.liferay.ide.service.ui.ServiceBuilderEditor"
-            contributorClass="com.liferay.ide.service.ui.ServiceBuilderEditorActionBarContributor"
+            class="com.liferay.ide.service.ui.editor.ServiceBuilderEditor"
+            contributorClass="com.liferay.ide.service.ui.editor.ServiceBuilderEditorActionBarContributor"
             default="true"
             icon="icons/e16/service.png"
             id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"

@@ -18,6 +18,7 @@
         <package>com.liferay.ide.service.core.model</package>
         <package>com.liferay.ide.service.core.model.internal</package>
         <package>com.liferay.ide.service.ui</package>
+        <package>com.liferay.ide.service.ui.actions</package>
         <package>com.liferay.ide.service.ui.internal</package>
         <package>org.eclipse.sapphire.workspace.ui</package>
     </import>
