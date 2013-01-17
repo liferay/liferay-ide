@@ -19,6 +19,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.ui.util.SWTUtil;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.FieldEditor;
@@ -32,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * @author Greg Amerson
@@ -45,15 +47,23 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
 
     protected InstalledSDKsCompostite installedSDKsComposite;
 
+    private ScopedPreferenceStore prefStore;
+
     public SDKsPreferencePage()
     {
         setImageDescriptor( SDKUIPlugin.imageDescriptorFromPlugin( SDKUIPlugin.PLUGIN_ID, "/icons/e16/sdk.png" ) ); //$NON-NLS-1$
     }
 
     @Override
+    @SuppressWarnings( "deprecation" )
     public IPreferenceStore getPreferenceStore()
     {
-        return SDKUIPlugin.getDefault().getPreferenceStore();
+        if( prefStore == null )
+        {
+            prefStore = new ScopedPreferenceStore( new InstanceScope(), SDKUIPlugin.PREFERENCES_ID );
+        }
+
+        return prefStore;
     }
 
     public void init( IWorkbench workbench )

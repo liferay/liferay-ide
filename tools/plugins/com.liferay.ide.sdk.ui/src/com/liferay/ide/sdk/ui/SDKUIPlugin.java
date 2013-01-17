@@ -32,7 +32,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 public class SDKUIPlugin extends AbstractUIPlugin
@@ -42,6 +42,7 @@ public class SDKUIPlugin extends AbstractUIPlugin
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.sdk"; //$NON-NLS-1$
+    public static final String PREFERENCES_ID = "com.liferay.ide.eclipse.sdk"; //$NON-NLS-1$
 
     public static final String PREF_KEY_OVERWRITE_USER_BUILD_FILE = "OVERWRITE_USER_BUILD_FILE"; //$NON-NLS-1$
 
@@ -60,7 +61,7 @@ public class SDKUIPlugin extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static SDKUIPlugin getDefault()
