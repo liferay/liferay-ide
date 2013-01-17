@@ -344,7 +344,9 @@
         <profile>
             <id>indigo</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skipIndigo</name>
+                </property>
             </activation>
             <properties>
                 <eclipse-site>http://download.eclipse.org/releases/indigo/</eclipse-site>

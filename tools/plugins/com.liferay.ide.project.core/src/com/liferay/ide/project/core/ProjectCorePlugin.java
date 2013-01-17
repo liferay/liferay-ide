@@ -41,6 +41,8 @@ public class ProjectCorePlugin extends CorePlugin
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
+    
+    public static final String SETTINGS_ID = "com.liferay.ide.eclipse.project.core"; //$NON-NLS-1$
 
     public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
@@ -282,7 +284,6 @@ public class ProjectCorePlugin extends CorePlugin
      */
     public void start( BundleContext context ) throws Exception
     {
-
         super.start( context );
 
         plugin = this;
@@ -297,7 +298,6 @@ public class ProjectCorePlugin extends CorePlugin
      */
     public void stop( BundleContext context ) throws Exception
     {
-
         plugin = null;
 
         super.stop( context );

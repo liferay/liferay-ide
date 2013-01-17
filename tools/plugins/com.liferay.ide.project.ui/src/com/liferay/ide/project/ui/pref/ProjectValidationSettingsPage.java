@@ -159,7 +159,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPreferenceNodeQualifier()
     {
-        return ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+        return ProjectCorePlugin.SETTINGS_ID;
     }
 
     @Override
@@ -197,7 +197,6 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
     {
         BusyIndicator.showWhile( getControl().getDisplay(), new Runnable()
         {
-
             public void run()
             {
                 initializeValues();

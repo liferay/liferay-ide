@@ -231,7 +231,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPreferenceNodeQualifier()
     {
-        return ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+        return ProjectCorePlugin.SETTINGS_ID;
     }
 
     @Override
