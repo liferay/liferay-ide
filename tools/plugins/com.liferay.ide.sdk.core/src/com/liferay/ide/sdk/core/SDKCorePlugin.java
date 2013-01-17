@@ -35,7 +35,7 @@ public class SDKCorePlugin extends Plugin
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.sdk.core"; //$NON-NLS-1$
-    public static final String PREFERENCE_ID = "com.liferay.ide.sdk"; //$NON-NLS-1$
+    public static final String PREFERENCE_ID = "com.liferay.ide.eclipse.sdk"; //$NON-NLS-1$
 
     // The shared instance
     private static SDKCorePlugin plugin;

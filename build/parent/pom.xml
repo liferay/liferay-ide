@@ -290,13 +290,6 @@
     <profiles>
         <profile>
             <id>helios</id>
-            <!-- We want helios to be active always by default along with other activated profiles (sapphire) -->
-            <!-- http://stackoverflow.com/questions/5309379/how-to-keep-maven-profiles-which-are-activebydefault-active-even-if-another-prof -->
-            <activation>
-                <property>
-                    <name>!skipHelios</name>
-                </property>
-            </activation>
             <properties>
                 <eclipse-site>http://download.eclipse.org/releases/helios/</eclipse-site>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
@@ -351,10 +344,10 @@
         <profile>
             <id>indigo</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
+                <eclipse-site>http://download.eclipse.org/releases/indigo/</eclipse-site>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
             </properties>
