@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.service.ui;
 
+import java.lang.reflect.Method;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.ISaveablePart;
@@ -47,13 +49,31 @@ public class ServiceUIUtil
                     {
                         IWorkbenchPart part = editorReference.getPart( true );
 
-                        if( SaveableHelper.savePart( (ISaveablePart) part, part, window, true ) )
+                        // SaveableHelper.savePart is not visible on Indigo so must use reflection
+                        try
+                        {
+                            Method savePartMethod = SaveableHelper.class.getDeclaredMethod( "savePart",
+                                                                                            ISaveablePart.class,
+                                                                                            IWorkbenchPart.class,
+                                                                                            IWorkbenchWindow.class,
+                                                                                            Boolean.TYPE );
+
+                            savePartMethod.setAccessible( true );
+
+                            boolean save = (Boolean) savePartMethod.invoke( null, part, part, window, true );
+
+                            if( save )
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        catch( Exception e )
                         {
                             return true;
-                        }
-                        else
-                        {
-                            return false;
                         }
                     }
                 }
