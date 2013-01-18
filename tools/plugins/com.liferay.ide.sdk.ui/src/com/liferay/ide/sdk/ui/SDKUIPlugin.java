@@ -41,7 +41,7 @@ public class SDKUIPlugin extends AbstractUIPlugin
     public static final String IMG_ICON_SDK_SMALL = "IMG_ICON_SDK_SMALL"; //$NON-NLS-1$
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.sdk"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "com.liferay.ide.sdk.ui"; //$NON-NLS-1$
     public static final String PREFERENCES_ID = "com.liferay.ide.eclipse.sdk"; //$NON-NLS-1$
 
     public static final String PREF_KEY_OVERWRITE_USER_BUILD_FILE = "OVERWRITE_USER_BUILD_FILE"; //$NON-NLS-1$

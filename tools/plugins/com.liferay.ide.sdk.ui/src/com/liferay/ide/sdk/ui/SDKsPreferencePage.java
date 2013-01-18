@@ -19,6 +19,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.ui.util.SWTUtil;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
@@ -61,6 +62,10 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         if( prefStore == null )
         {
             prefStore = new ScopedPreferenceStore( new InstanceScope(), SDKUIPlugin.PREFERENCES_ID );
+            String defaultValue =
+                new DefaultScope().getNode( SDKUIPlugin.PLUGIN_ID ).get(
+                    SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, null );
+            prefStore.setDefault( SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, defaultValue );
         }
 
         return prefStore;
