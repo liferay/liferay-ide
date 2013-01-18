@@ -15,43 +15,43 @@
 <%  if (model.shouldGenerateOverride(INIT_OVERRIDE) && model.isLiferayPortletSuperclass()) {%>
     public void init() {
 <%      if (model.hasPortletMode(ABOUT_MODE)) {%>
-        aboutJSP = getInitParameter("about-<%=model.getInitParameterName()%>");
+        aboutTemplate = getInitParameter("about-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(CONFIG_MODE)) {%>
-        configJSP = getInitParameter("config-<%=model.getInitParameterName()%>");
+        configTemplate = getInitParameter("config-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(EDITDEFAULTS_MODE)) {%>
-        editDefaultsJSP = getInitParameter("edit-defaults-<%=model.getInitParameterName()%>");
+        editDefaultsTemplate = getInitParameter("edit-defaults-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(EDITGUEST_MODE)) {%>
-        editGuestJSP = getInitParameter("edit-guest-<%=model.getInitParameterName()%>");
+        editGuestTemplate = getInitParameter("edit-guest-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(PREVIEW_MODE)) {%>
-        previewJSP = getInitParameter("preview-<%=model.getInitParameterName()%>");
+        previewTemplate = getInitParameter("preview-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(PRINT_MODE)) {%>
-        printJSP = getInitParameter("print-<%=model.getInitParameterName()%>");
+        printTemplate = getInitParameter("print-<%=model.getInitParameterName()%>");
 <%      }%>
 <%      if (model.hasPortletMode(EDIT_MODE)) {%>
-        editJSP = getInitParameter("edit-<%=model.getInitParameterName()%>");
+        editTemplate = getInitParameter("edit-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(HELP_MODE)) {%>
-        helpJSP = getInitParameter("help-<%=model.getInitParameterName()%>");
+        helpTemplate = getInitParameter("help-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(VIEW_MODE)) {%>
-        viewJSP = getInitParameter("view-<%=model.getInitParameterName()%>");
+        viewTemplate = getInitParameter("view-<%=model.getInitParameterName()%>");
 <%      }%>
     }
 <%  } else if (model.shouldGenerateOverride(INIT_OVERRIDE) && !model.isMVCPortletSuperclass()) {%>
     public void init() {
 <%      if (model.hasPortletMode(EDIT_MODE)) {%>
-        editJSP = getInitParameter("edit-<%=model.getInitParameterName()%>");
+        editTemplate = getInitParameter("edit-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(HELP_MODE)) {%>
-        helpJSP = getInitParameter("help-<%=model.getInitParameterName()%>");
+        helpTemplate = getInitParameter("help-<%=model.getInitParameterName()%>");
 <%      } %>
 <%      if (model.hasPortletMode(VIEW_MODE)) {%>
-        viewJSP = getInitParameter("view-<%=model.getInitParameterName()%>");
+        viewTemplate = getInitParameter("view-<%=model.getInitParameterName()%>");
 <%      }%>
     }
 <%  }%>
@@ -107,33 +107,33 @@
 <%  } %>
 <%  if (model.isLiferayPortletSuperclass()) {%>
 <%      if (model.hasPortletMode(ABOUT_MODE)) {%>
-    protected String aboutJSP;
+    protected String aboutTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(CONFIG_MODE)) {%>
-    protected String configJSP;
+    protected String configTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(EDITDEFAULTS_MODE)) {%>
-    protected String editDefaultsJSP;
+    protected String editDefaultsTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(EDITGUEST_MODE)) {%>
-    protected String editGuestJSP;
+    protected String editGuestTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(PREVIEW_MODE)) {%>
-    protected String previewJSP;
+    protected String previewTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(PRINT_MODE)) {%>
-    protected String printJSP;
+    protected String printTemplate;
 <%      }%>
 <%  } %> 
 <%  if (!model.isMVCPortletSuperclass()) {%>
 <%      if (model.hasPortletMode(EDIT_MODE)) {%>
-    protected String editJSP;
+    protected String editTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(HELP_MODE)) {%>
-    protected String helpJSP;
+    protected String helpTemplate;
 <%      } %>
 <%      if (model.hasPortletMode(VIEW_MODE)) {%>
-    protected String viewJSP;
+    protected String viewTemplate;
 <%      }%>
 <%  }%>
 <%  if (model.shouldGenerateGenericInclude()) { %>

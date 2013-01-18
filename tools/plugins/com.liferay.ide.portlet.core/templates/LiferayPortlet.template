@@ -4,7 +4,7 @@
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
         
-        include(aboutJSP, renderRequest, renderResponse);
+        include(aboutTemplate, renderRequest, renderResponse);
     }
 <%      model.setGenerateGenericInclude(true);
     } 
@@ -14,7 +14,7 @@
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
         
-        include(configJSP, renderRequest, renderResponse);
+        include(configTemplate, renderRequest, renderResponse);
     }
 <%      model.setGenerateGenericInclude(true);
     }
@@ -24,7 +24,7 @@
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
         
-        include(editJSP, renderRequest, renderResponse);
+        include(editTemplate, renderRequest, renderResponse);
     }<%      model.setGenerateGenericInclude(true); 
     } 
     if (model.hasPortletMode(EDITDEFAULTS_MODE)) { %>
@@ -37,7 +37,7 @@
             super.doEdit(renderRequest, renderResponse);
         }
         else {
-            include(editDefaultsJSP, renderRequest, renderResponse);
+            include(editDefaultsTemplate, renderRequest, renderResponse);
         }
     }
 <%      model.setGenerateGenericInclude(true); 
@@ -52,7 +52,7 @@
             super.doEdit(renderRequest, renderResponse);
         }
         else {
-            include(editGuestJSP, renderRequest, renderResponse);
+            include(editGuestTemplate, renderRequest, renderResponse);
         }
     }<%      model.setGenerateGenericInclude(true);
     } 
@@ -62,7 +62,7 @@
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
         
-        include(helpJSP, renderRequest, renderResponse);
+        include(helpTemplate, renderRequest, renderResponse);
     }<%      model.setGenerateGenericInclude(true); 
     } 
     if (model.hasPortletMode(PREVIEW_MODE)) { %>
@@ -71,7 +71,7 @@
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
 
-        include(previewJSP, renderRequest, renderResponse);
+        include(previewTemplate, renderRequest, renderResponse);
     }<%      model.setGenerateGenericInclude(true); 
     } 
     if (model.hasPortletMode(PRINT_MODE)) { %>
@@ -89,6 +89,6 @@
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
         
-        include(viewJSP, renderRequest, renderResponse);
+        include(viewTemplate, renderRequest, renderResponse);
     }<%  model.setGenerateGenericInclude(true);
     } %>
