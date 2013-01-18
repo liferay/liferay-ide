@@ -147,6 +147,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
         domModel.getStructuredDocument().setText( this, templateSource );
         domModel.changedModel();
         domModel.releaseFromEdit();
+        getCommandStack().markSaveLocation();
     }
 
     public void refreshVisualModel()
