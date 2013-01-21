@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -61,7 +61,7 @@ public class BuildHelper
 
     private static final File defaultTempDir = ThemeCore.getDefault().getStateLocation().toFile();
 
-    private static final String TEMPFILE_PREFIX = "tmp"; //$NON-NLS-1$
+    private static final String TEMPFILE_PREFIX = ".tmp-safe-to-delete-"; //$NON-NLS-1$
 
     private File tempDir;
 
@@ -98,10 +98,24 @@ public class BuildHelper
         OutputStream out = null;
 
         File tempFile = null;
+        File tempFileParentDir = null;
+
         try
         {
             File file = to.toFile();
-            tempFile = File.createTempFile( TEMPFILE_PREFIX, "." + to.getFileExtension(), tempDir ); //$NON-NLS-1$
+
+            // IDE-796 need to make sure temporary file is generated in same directory as file destination so that
+            // file.renameTo() will never fail due to source/destination being on two different file systems
+            if( file != null && file.getParentFile().exists() )
+            {
+                tempFileParentDir = to.toFile().getParentFile();
+            }
+            else
+            {
+                tempFileParentDir = tempDir;
+            }
+
+            tempFile = File.createTempFile( TEMPFILE_PREFIX, "." + to.getFileExtension(), tempFileParentDir ); //$NON-NLS-1$
 
             out = new FileOutputStream( tempFile );
 
@@ -646,15 +660,15 @@ public class BuildHelper
         {
 //            IPath path2 = path.append( file.getProjectRelativePath() ).append( file.getName() );
             IPath path2 = path.append(diffsRelativePath);
-            
+
             // restore this file from the first restorePaths that matches
             boolean restored = false;
-            
+
             for (IPath restorePath : restorePaths)
             {
                 final File restoreFile = restorePath.append( diffsRelativePath ).toFile();
-                
-                if (restoreFile.exists()) 
+
+                if ( restoreFile.exists() )
                 {
                     try
                     {
@@ -669,7 +683,7 @@ public class BuildHelper
                     }
                 }
             }
-            
+
             if (!restored)
             {
                 if( path2.toFile().exists() && !path2.toFile().delete() )
@@ -746,6 +760,11 @@ public class BuildHelper
         {
             IStatus[] stat = copy( resources[i], path, monitor );
             addArrayToList( status, stat );
+
+            if( monitor.isCanceled() )
+            {
+                break;
+            }
         }
 
         IStatus[] stat = new IStatus[status.size()];
@@ -755,8 +774,13 @@ public class BuildHelper
 
     private IStatus[] copy( IResource resource, IPath path, IProgressMonitor monitor )
     {
-//        String name = resource.getName();
+        if( monitor != null && monitor.isCanceled() )
+        {
+            return new IStatus[0];
+        }
+
         List<IStatus> status = new ArrayList<IStatus>( 2 );
+
         if( resource instanceof IFolder )
         {
             IFolder folder = (IFolder) resource;
@@ -784,21 +808,40 @@ public class BuildHelper
                 path = path.append(diffsRelativePath);
 
                 File f = path.toFile().getParentFile();
-                if( !f.exists() )
-                    f.mkdirs();
-                try
+
+                if ( f.exists() )
                 {
-                    copyFile( mf, path );
+                    try
+                    {
+                        copyFile( mf, path );
+                    }
+                    catch( CoreException ce )
+                    {
+                        status.add( ce.getStatus() );
+                    }
                 }
-                catch( CoreException ce )
+                else
                 {
-                    status.add( ce.getStatus() );
+                    // Create the parent directory.
+                    if ( f.mkdirs() )
+                    {
+                        try
+                        {
+                            copyFile( mf, path );
+                        }
+                        catch( CoreException ce )
+                        {
+                            status.add( ce.getStatus() );
+                        }
+                    }
+                    else
+                    {
+                        status.add(new Status(IStatus.ERROR, ThemeCore.PLUGIN_ID, 0, NLS.bind(Messages.errorMkdir, f.getAbsolutePath()), null));
+                    }
                 }
             }
-
-
-
         }
+
         IStatus[] stat = new IStatus[status.size()];
         status.toArray( stat );
         return stat;
@@ -959,13 +1002,10 @@ public class BuildHelper
         int count = 0;
         while( count < retrys )
         {
-            if( !f.exists() )
+            if( f.delete() )
+            {
                 return true;
-
-            f.delete();
-
-            if( !f.exists() )
-                return true;
+            }
 
             count++;
             // delay if we are going to try again
