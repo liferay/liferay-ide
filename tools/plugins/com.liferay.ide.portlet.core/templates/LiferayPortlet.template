@@ -3,32 +3,32 @@
     public void doAbout(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
-        
+
         include(aboutTemplate, renderRequest, renderResponse);
     }
 <%      model.setGenerateGenericInclude(true);
-    } 
+    }
     if (model.hasPortletMode(CONFIG_MODE)) { %>
-    
+
     public void doConfig(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
-        
+
         include(configTemplate, renderRequest, renderResponse);
     }
 <%      model.setGenerateGenericInclude(true);
     }
     if (model.hasPortletMode(EDIT_MODE)) { %>
-    
+
     public void doEdit(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
-        
+
         include(editTemplate, renderRequest, renderResponse);
-    }<%      model.setGenerateGenericInclude(true); 
-    } 
+    }<%      model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(EDITDEFAULTS_MODE)) { %>
-    
+
     public void doEditDefaults(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
@@ -40,10 +40,10 @@
             include(editDefaultsTemplate, renderRequest, renderResponse);
         }
     }
-<%      model.setGenerateGenericInclude(true); 
-    } 
+<%      model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(EDITGUEST_MODE)) { %>
-    
+
 	public void doEditGuest(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
@@ -55,16 +55,16 @@
             include(editGuestTemplate, renderRequest, renderResponse);
         }
     }<%      model.setGenerateGenericInclude(true);
-    } 
+    }
     if (model.hasPortletMode(HELP_MODE)) { %>
-    
+
     public void doHelp(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
-        
+
         include(helpTemplate, renderRequest, renderResponse);
-    }<%      model.setGenerateGenericInclude(true); 
-    } 
+    }<%      model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(PREVIEW_MODE)) { %>
 
     public void doPreview(
@@ -72,23 +72,23 @@
         throws IOException, PortletException {
 
         include(previewTemplate, renderRequest, renderResponse);
-    }<%      model.setGenerateGenericInclude(true); 
-    } 
+    }<%      model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(PRINT_MODE)) { %>
 
     public void doPrint(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
 
-        include(printJSP, renderRequest, renderResponse);
+        include(printTemplate, renderRequest, renderResponse);
     }<%      model.setGenerateGenericInclude(true);
-    } 
+    }
     if (model.hasPortletMode(VIEW_MODE)) { %>
-    
+
     public void doView(
             RenderRequest renderRequest, RenderResponse renderResponse)
         throws IOException, PortletException {
-        
+
         include(viewTemplate, renderRequest, renderResponse);
     }<%  model.setGenerateGenericInclude(true);
     } %>

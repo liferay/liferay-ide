@@ -112,15 +112,15 @@ public class PortletTemplate implements INewPortletClassDataModelProperties
   protected final String TEXT_75 = NL + NL + "    public void doPreview(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        super.doPreview(renderRequest, renderResponse);" + NL + "    }";
   protected final String TEXT_76 = NL + NL + "    public void doPrint(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        super.doPrint(renderRequest, renderResponse);" + NL + "    }";
   protected final String TEXT_77 = NL + "    " + NL + "    public void doView(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        super.doView(renderRequest, renderResponse);" + NL + "    }";
-  protected final String TEXT_78 = NL + NL + "    public void doAbout(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "        " + NL + "        include(aboutTemplate, renderRequest, renderResponse);" + NL + "    }";
-  protected final String TEXT_79 = NL + "    " + NL + "    public void doConfig(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "        " + NL + "        include(configTemplate, renderRequest, renderResponse);" + NL + "    }";
-  protected final String TEXT_80 = NL + "    " + NL + "    public void doEdit(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "        " + NL + "        include(editTemplate, renderRequest, renderResponse);" + NL + "    }";
-  protected final String TEXT_81 = NL + "    " + NL + "    public void doEditDefaults(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        if (renderRequest.getPreferences() == null) {" + NL + "            super.doEdit(renderRequest, renderResponse);" + NL + "        }" + NL + "        else {" + NL + "            include(editDefaultsTemplate, renderRequest, renderResponse);" + NL + "        }" + NL + "    }";
-  protected final String TEXT_82 = NL + "    " + NL + "\tpublic void doEditGuest(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        if (renderRequest.getPreferences() == null) {" + NL + "            super.doEdit(renderRequest, renderResponse);" + NL + "        }" + NL + "        else {" + NL + "            include(editGuestTemplate, renderRequest, renderResponse);" + NL + "        }" + NL + "    }";
-  protected final String TEXT_83 = NL + "    " + NL + "    public void doHelp(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "        " + NL + "        include(helpTemplate, renderRequest, renderResponse);" + NL + "    }";
+  protected final String TEXT_78 = NL + NL + "    public void doAbout(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(aboutTemplate, renderRequest, renderResponse);" + NL + "    }";
+  protected final String TEXT_79 = NL + NL + "    public void doConfig(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(configTemplate, renderRequest, renderResponse);" + NL + "    }";
+  protected final String TEXT_80 = NL + NL + "    public void doEdit(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(editTemplate, renderRequest, renderResponse);" + NL + "    }";
+  protected final String TEXT_81 = NL + NL + "    public void doEditDefaults(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        if (renderRequest.getPreferences() == null) {" + NL + "            super.doEdit(renderRequest, renderResponse);" + NL + "        }" + NL + "        else {" + NL + "            include(editDefaultsTemplate, renderRequest, renderResponse);" + NL + "        }" + NL + "    }";
+  protected final String TEXT_82 = NL + NL + "\tpublic void doEditGuest(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        if (renderRequest.getPreferences() == null) {" + NL + "            super.doEdit(renderRequest, renderResponse);" + NL + "        }" + NL + "        else {" + NL + "            include(editGuestTemplate, renderRequest, renderResponse);" + NL + "        }" + NL + "    }";
+  protected final String TEXT_83 = NL + NL + "    public void doHelp(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(helpTemplate, renderRequest, renderResponse);" + NL + "    }";
   protected final String TEXT_84 = NL + NL + "    public void doPreview(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(previewTemplate, renderRequest, renderResponse);" + NL + "    }";
-  protected final String TEXT_85 = NL + NL + "    public void doPrint(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(printJSP, renderRequest, renderResponse);" + NL + "    }";
-  protected final String TEXT_86 = NL + "    " + NL + "    public void doView(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "        " + NL + "        include(viewTemplate, renderRequest, renderResponse);" + NL + "    }";
+  protected final String TEXT_85 = NL + NL + "    public void doPrint(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(printTemplate, renderRequest, renderResponse);" + NL + "    }";
+  protected final String TEXT_86 = NL + NL + "    public void doView(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(viewTemplate, renderRequest, renderResponse);" + NL + "    }";
   protected final String TEXT_87 = NL + NL + "    public void doEdit(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(editTemplate, renderRequest, renderResponse);" + NL + "    }";
   protected final String TEXT_88 = NL + NL + "    public void doHelp(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(helpTemplate, renderRequest, renderResponse);" + NL + "    }";
   protected final String TEXT_89 = NL + NL + "    public void doView(" + NL + "            RenderRequest renderRequest, RenderResponse renderResponse)" + NL + "        throws IOException, PortletException {" + NL + "" + NL + "        include(viewTemplate, renderRequest, renderResponse);" + NL + "    }";
@@ -387,35 +387,35 @@ public class PortletTemplate implements INewPortletClassDataModelProperties
       if (model.hasPortletMode(ABOUT_MODE)) { 
     stringBuffer.append(TEXT_78);
           model.setGenerateGenericInclude(true);
-    } 
+    }
     if (model.hasPortletMode(CONFIG_MODE)) { 
     stringBuffer.append(TEXT_79);
           model.setGenerateGenericInclude(true);
     }
     if (model.hasPortletMode(EDIT_MODE)) { 
     stringBuffer.append(TEXT_80);
-          model.setGenerateGenericInclude(true); 
-    } 
+          model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(EDITDEFAULTS_MODE)) { 
     stringBuffer.append(TEXT_81);
-          model.setGenerateGenericInclude(true); 
-    } 
+          model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(EDITGUEST_MODE)) { 
     stringBuffer.append(TEXT_82);
           model.setGenerateGenericInclude(true);
-    } 
+    }
     if (model.hasPortletMode(HELP_MODE)) { 
     stringBuffer.append(TEXT_83);
-          model.setGenerateGenericInclude(true); 
-    } 
+          model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(PREVIEW_MODE)) { 
     stringBuffer.append(TEXT_84);
-          model.setGenerateGenericInclude(true); 
-    } 
+          model.setGenerateGenericInclude(true);
+    }
     if (model.hasPortletMode(PRINT_MODE)) { 
     stringBuffer.append(TEXT_85);
           model.setGenerateGenericInclude(true);
-    } 
+    }
     if (model.hasPortletMode(VIEW_MODE)) { 
     stringBuffer.append(TEXT_86);
       model.setGenerateGenericInclude(true);
