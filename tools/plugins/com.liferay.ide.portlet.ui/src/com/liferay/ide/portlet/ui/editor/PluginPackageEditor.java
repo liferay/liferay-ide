@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,11 +15,12 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.model.IModelChangedEvent;
 import com.liferay.ide.core.model.IModelChangedListener;
 import com.liferay.ide.portlet.core.PluginPackageModel;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.editor.InputContext;
 import com.liferay.ide.ui.editor.InputContextManager;
 import com.liferay.ide.ui.editor.PluginPackageInputContextManager;
@@ -95,12 +96,11 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
     {
         try
         {
-            return ServerUtil.getLiferayRuntime( getEditorInput().getFile().getProject() ).getPortalDir();
+            final ILiferayProject liferayProject = LiferayCore.create( getEditorInput().getFile().getProject() );
+            return liferayProject.getAppServerPortalDir();
         }
         catch( Exception e )
         {
-            // PortletUIPlugin.logError(e);
-
             return null;
         }
     }
@@ -108,7 +108,6 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
     @Override
     public void init( IEditorSite site, IEditorInput editorInput ) throws PartInitException
     {
-
         Assert.isLegal( editorInput instanceof IFileEditorInput, "Invalid Input: Must be IFileEditorInput" ); //$NON-NLS-1$
 
         super.init( site, editorInput );

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -44,7 +44,7 @@ public abstract class AbstractPortletFrameworkWizardProvider implements IPortlet
     {
         return bundleId;
     }
-    
+
     public Object getDefaultProperty( String propertyName )
     {
         return null;
@@ -92,7 +92,7 @@ public abstract class AbstractPortletFrameworkWizardProvider implements IPortlet
 
     public IStatus getUnsupportedSDKErrorMsg()
     {
-        return ProjectCorePlugin.createErrorStatus( NLS.bind( Msgs.SDKVersionRequired, requiredSDKVersion ) );
+        return LiferayProjectCore.createErrorStatus( NLS.bind( Msgs.SDKVersionRequired, requiredSDKVersion ) );
     }
 
     public boolean hasPropertyName( String propertyName )

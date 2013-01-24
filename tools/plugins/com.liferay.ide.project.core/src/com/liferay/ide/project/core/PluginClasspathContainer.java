@@ -21,7 +21,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
     static
     {
-        cpDecorations = new ClasspathDecorationsManager( LiferayServerCorePlugin.PLUGIN_ID );
+        cpDecorations = new ClasspathDecorationsManager( LiferayServerCore.PLUGIN_ID );
     }
 
     public static String getDecorationManagerKey( IProject project, String container )

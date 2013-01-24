@@ -142,28 +142,28 @@
             type="org.eclipse.wst.validation.problemmarker">
       </super>
    </extension>
-   
+
    <extension
-         point="com.liferay.ide.project.core.liferayProjects">
-      <liferayProjectDefinition
-            class="com.liferay.ide.portlet.core.LiferayPortletDefinition"
+         point="com.liferay.ide.project.core.sdkTemplates">
+      <sdkTemplate
+            class="com.liferay.ide.portlet.core.PortletSDKTemplate"
             displayName="Liferay Portlet"
             facetId="liferay.portlet"
             facetedProjectTemplateId="liferay.portlet.template"
             menuIndex="10"
             shortName="portlet">
-      </liferayProjectDefinition>
-      <liferayProjectDefinition
-            class="com.liferay.ide.portlet.core.LiferayExtDefinition"
+      </sdkTemplate>
+      <sdkTemplate
+            class="com.liferay.ide.portlet.core.ExtSDKTemplate"
             displayName="Liferay Ext"
             facetId="liferay.ext"
             facetedProjectTemplateId="liferay.ext.template"
             menuIndex="30"
             shortName="ext">
-      </liferayProjectDefinition>
+      </sdkTemplate>
    </extension>
-   
-   
+
+
    <extension
        point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
     <portletFrameworkWizardProvider

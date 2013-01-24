@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,16 +15,17 @@
 
 package com.liferay.ide.project.core.facet;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.FileInputStream;
@@ -90,7 +91,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                 }
                 catch( FileNotFoundException e )
                 {
-                    throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+                    throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
                 }
             }
         }
@@ -124,7 +125,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             String portletFrameworkId = this.masterModel.getStringProperty( PORTLET_FRAMEWORK_ID );
 
             IPortletFrameworkWizardProvider portletFramework =
-                ProjectCorePlugin.getPortletFramework( portletFrameworkId );
+                LiferayProjectCore.getPortletFramework( portletFrameworkId );
 
             String frameworkName = portletFramework.getShortName();
 
@@ -144,7 +145,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                ProjectCorePlugin.logError( e );
+                LiferayProjectCore.logError( e );
             }
 
             if( masterModel.getBooleanProperty( PLUGIN_FRAGMENT_ENABLED ) )
@@ -178,7 +179,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                     }
                     catch( Exception ex )
                     {
-                        ProjectCorePlugin.logError( "Error deleting view.jsp", ex ); //$NON-NLS-1$
+                        LiferayProjectCore.logError( "Error deleting view.jsp", ex ); //$NON-NLS-1$
                     }
                 }
             }
@@ -189,11 +190,11 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
 
         // IDE-719  if we have a runtime 6.2.0 or greater don't perform the workarounds for taglib imports.
-        ILiferayRuntime liferayRuntime = getLiferayRuntime();
+        ILiferayProject liferayProject = LiferayCore.create( project );
 
-        if( liferayRuntime != null )
+        if( liferayProject != null )
         {
-            Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
+            Version portalVersion = new Version( liferayProject.getPortalVersion() );
 
             if( CoreUtil.compareVersions( portalVersion, new Version( 6, 2, 0 ) ) < 0 )
             {
@@ -215,7 +216,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                 }
                 catch( Exception e1 )
                 {
-                    LiferayServerCorePlugin.logError( "Error trying to add aui.tld to web.xml", e1 ); //$NON-NLS-1$
+                    LiferayServerCore.logError( "Error trying to add aui.tld to web.xml", e1 ); //$NON-NLS-1$
                 }
             }
         }
@@ -226,7 +227,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
         catch( Exception e1 )
         {
-            ProjectCorePlugin.logError( e1 );
+            LiferayProjectCore.logError( e1 );
         }
 
         // IDE-417 set a project preference for disabling JSP fragment validation
@@ -240,7 +241,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( "Could not store jsp fragment validation preference", e ); //$NON-NLS-1$
+            LiferayProjectCore.logError( "Could not store jsp fragment validation preference", e ); //$NON-NLS-1$
         }
 
         if( shouldConfigureDeploymentAssembly() )

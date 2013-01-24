@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,19 +15,18 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 
 import java.io.File;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
@@ -233,27 +232,11 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
 
             IProject project = ProjectUtil.getProject( model );
 
-            try
-            {
-                ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( project );
+            ILiferayProject liferayProject = LiferayCore.create( project );
 
-                IPath[] libs = runtime.getAllUserClasspathLibraries();
+            IPath serviceJarPath = liferayProject.getLibraryPath( "portal-service.jar" );
 
-                for( IPath lib : libs )
-                {
-                    if( lib.lastSegment().equals( "portal-service.jar" ) ) //$NON-NLS-1$
-                    {
-                        scope.setEnclosingJarPaths( new IPath[] { lib } );
-
-                        break;
-                    }
-                }
-            }
-            catch( CoreException e1 )
-            {
-                HookUI.logError( e1 );
-                return;
-            }
+            scope.setEnclosingJarPaths( new IPath[] { serviceJarPath } );
 
             FilteredTypesSelectionDialog dialog =
                 new FilteredTypesSelectionDialogEx( getShell(), false, null, scope, IJavaSearchConstants.INTERFACE );

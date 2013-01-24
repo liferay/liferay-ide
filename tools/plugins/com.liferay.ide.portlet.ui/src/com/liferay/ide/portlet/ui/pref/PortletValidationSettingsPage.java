@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.ui.pref;
 
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.ui.pref.AbstractValidationSettingsPage;
 
@@ -231,7 +231,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPreferenceNodeQualifier()
     {
-        return ProjectCorePlugin.SETTINGS_ID;
+        return LiferayProjectCore.SETTINGS_ID;
     }
 
     @Override
@@ -243,7 +243,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getProjectSettingsKey()
     {
-        return ProjectCorePlugin.USE_PROJECT_SETTINGS;
+        return LiferayProjectCore.USE_PROJECT_SETTINGS;
     }
 
     @Override

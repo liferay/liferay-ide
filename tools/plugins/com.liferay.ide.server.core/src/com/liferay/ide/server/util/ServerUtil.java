@@ -15,11 +15,13 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,14 +29,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TimeZone;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.IOUtils;
@@ -69,6 +76,9 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
@@ -76,9 +86,6 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 @SuppressWarnings( "restriction" )
 public class ServerUtil
 {
-    protected static final IStatus emptyInstallDirStatus = createErrorStatus( "Install directory is empty." ); //XXX they are also not used? //$NON-NLS-1$
-    protected static final IStatus installDirDoesNotExist = createErrorStatus( "Install directory does not exist." ); //$NON-NLS-1$
-    protected static final IStatus invalidInstallDirStatus = createErrorStatus( "Invalid installation directory." ); //$NON-NLS-1$
 
     private static void addRemoveProps(
         IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
@@ -166,7 +173,8 @@ public class ServerUtil
         }
     }
 
-    public static Map<String, String> configureAppServerProperties( ILiferayRuntime appServer )
+    public static Map<String, String> configureAppServerProperties( ILiferayProject liferayProject,
+                                                                    ILiferayRuntime appServer )
     {
         Map<String, String> properties = new HashMap<String, String>();
 
@@ -174,16 +182,16 @@ public class ServerUtil
 
         String dir = appServer.getAppServerDir().toOSString();
 
-        String deployDir = appServer.getDeployDir().toOSString();
+//        String deployDir = liferayProject.getAppServerDeployDir().toOSString();
 
-        String libGlobalDir = appServer.getLibGlobalDir().toOSString();
+//        String libGlobalDir = liferayProject.getAppServerLibGlobalDir().toOSString();
 
-        String portalDir = appServer.getPortalDir().toOSString();
+        String portalDir = liferayProject.getAppServerPortalDir().toOSString();
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
-        properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
-        properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
+//        properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
+//        properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir );
 
         return properties;
@@ -192,29 +200,31 @@ public class ServerUtil
     public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException
     {
         ILiferayRuntime runtime = null;
+        ILiferayProject liferayProject = null;
 
         try
         {
             runtime = ServerUtil.getLiferayRuntime( project );
+            liferayProject = LiferayCore.create( project );
         }
         catch( CoreException e1 )
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( e1 ) );
+            throw new CoreException( LiferayServerCore.createErrorStatus( e1 ) );
         }
 
-        return configureAppServerProperties( runtime );
+        return configureAppServerProperties( liferayProject, runtime );
     }
 
     public static IStatus createErrorStatus( String msg )
     {
-        return new Status( IStatus.ERROR, LiferayServerCorePlugin.PLUGIN_ID, msg );
+        return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, msg );
     }
 
     public static File createPartialEAR(
         String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, String deltaPrefix,
         boolean adjustGMTOffset )
     {
-        IPath path = LiferayServerCorePlugin.getTempLocation( "partial-ear", archiveName ); //$NON-NLS-1$
+        IPath path = LiferayServerCore.getTempLocation( "partial-ear", archiveName ); //$NON-NLS-1$
 
         FileOutputStream outputStream = null;
         ZipOutputStream zip = null;
@@ -266,7 +276,7 @@ public class ServerUtil
     public static File createPartialWAR(
         String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset )
     {
-        IPath path = LiferayServerCorePlugin.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
+        IPath path = LiferayServerCore.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
 
         FileOutputStream outputStream = null;
         ZipOutputStream zip = null;
@@ -339,6 +349,57 @@ public class ServerUtil
         ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter( serverRuntime, ILiferayRuntime.class );
 
         return runtime != null ? runtime.getAppServerDir() : null;
+    }
+
+    public static Properties getCategories( IPath portalDir )
+    {
+        Properties retval = null;
+
+        File implJar = portalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile(); //$NON-NLS-1$
+
+        if( implJar.exists() )
+        {
+            try
+            {
+                JarFile jar = new JarFile( implJar );
+                Properties categories = new Properties();
+                Properties props = new Properties();
+                props.load( jar.getInputStream( jar.getEntry( "content/Language.properties" ) ) ); //$NON-NLS-1$
+                Enumeration<?> names = props.propertyNames();
+
+                while( names.hasMoreElements() )
+                {
+                    String name = names.nextElement().toString();
+
+                    if( name.startsWith( "category." ) ) //$NON-NLS-1$
+                    {
+                        categories.put( name, props.getProperty( name ) );
+                    }
+                }
+
+                retval = categories;
+
+            }
+            catch( IOException e )
+            {
+                LiferayServerCore.logError( e );
+            }
+        }
+
+        return retval;
+    }
+
+    public static Properties getEntryCategories( IPath portalDir )
+    {
+        Properties categories = getCategories( portalDir );
+
+        Properties retval = new Properties();
+        retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+        return retval;
     }
 
     public static IFacetedProject getFacetedProject( IProject project )
@@ -431,30 +492,16 @@ public class ServerUtil
 
     public static IPath getPortalDir( IProject project )
     {
-        try
-        {
-            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+        IPath retval = null;
 
-            org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime = facetedProject.getPrimaryRuntime();
+        final ILiferayProject liferayProject = LiferayCore.create( project );
 
-            if( runtime != null )
-            {
-                return ServerUtil.getPortalDir( runtime );
-            }
-        }
-        catch( CoreException e )
+        if( liferayProject != null )
         {
-            LiferayServerCorePlugin.logError( e );
+            retval = liferayProject.getAppServerPortalDir();
         }
 
-        return null;
-    }
-
-    public static IPath getPortalDir( org.eclipse.wst.common.project.facet.core.runtime.IRuntime facetRuntime )
-    {
-        ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter( facetRuntime, ILiferayRuntime.class );
-
-        return runtime != null ? runtime.getPortalDir() : null;
+        return retval;
     }
 
     public static IRuntime getRuntime( IProject project ) throws CoreException
@@ -546,6 +593,39 @@ public class ServerUtil
         }
 
         return serverList.toArray( new IServer[0] );
+    }
+
+    public static String[] getServletFilterNames( IPath portalDir ) throws Exception
+    {
+        List<String> retval = new ArrayList<String>();
+
+        File filtersWebXmlFile = portalDir.append( "WEB-INF/liferay-web.xml" ).toFile(); //$NON-NLS-1$
+
+        if( !filtersWebXmlFile.exists() )
+        {
+            filtersWebXmlFile = portalDir.append( "WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
+        }
+
+        if( filtersWebXmlFile.exists() )
+        {
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse( filtersWebXmlFile );
+
+            NodeList filterNameElements = document.getElementsByTagName( "filter-name" ); //$NON-NLS-1$
+
+            for( int i = 0; i < filterNameElements.getLength(); i++ )
+            {
+                Node filterNameElement = filterNameElements.item( i );
+
+                String content = filterNameElement.getTextContent();
+
+                if( !CoreUtil.isNullOrEmpty( content ) )
+                {
+                    retval.add( content.trim() );
+                }
+            }
+        }
+
+        return retval.toArray( new String[0] );
     }
 
     public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
@@ -697,7 +777,7 @@ public class ServerUtil
             IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
 
             IPath deltaPath = null;
- 
+
             if( webappRoot != null )
             {
                 for( IContainer container : webappRoot.getUnderlyingFolders() )

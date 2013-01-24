@@ -31,15 +31,13 @@ public interface ILiferayRuntime extends IJavaRuntime
 
     IPath getAppServerDir();
 
+    IPath getAppServerPortalDir();
+
     String getAppServerType();
 
-    IPath getDeployDir();
+    String[] getHookSupportedProperties();
 
     String getJavadocURL();
-
-    IPath getLibGlobalDir();
-
-    IPath getPortalDir();
 
     String getPortalVersion();
 
@@ -51,10 +49,6 @@ public interface ILiferayRuntime extends IJavaRuntime
 
     IPath getRuntimeLocation();
 
-    String[] getServletFilterNames();
-
     IPath getSourceLocation();
-
-    String[] getSupportedHookProperties();
 
 }

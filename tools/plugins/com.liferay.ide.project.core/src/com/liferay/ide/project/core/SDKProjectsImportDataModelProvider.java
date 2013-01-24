@@ -190,7 +190,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.invalidPluginSDKLocation );
+                return LiferayProjectCore.createErrorStatus( Msgs.invalidPluginSDKLocation );
             }
         }
         else if( SDK_VERSION.equals( name ) )
@@ -203,7 +203,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.invalidPluginSDKVersion +
+                return LiferayProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
                     SDKManager.getLeastValidVersion() );
             }
         }
@@ -230,7 +230,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
             if( !( runtime instanceof BridgedRuntime ) )
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.selectValidLiferayRuntime );
+                return LiferayProjectCore.createErrorStatus( Msgs.selectValidLiferayRuntime );
             }
             else
             {
@@ -252,7 +252,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
      */
     public IStatus createSelectedProjectsErrorStatus()
     {
-        return ProjectCorePlugin.createErrorStatus( Msgs.selectOneLiferayProject );
+        return LiferayProjectCore.createErrorStatus( Msgs.selectOneLiferayProject );
     }
 
     protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy()

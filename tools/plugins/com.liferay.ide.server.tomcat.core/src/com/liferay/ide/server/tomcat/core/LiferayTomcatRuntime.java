@@ -19,7 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
 import com.liferay.ide.server.util.PortalSupportHelper;
@@ -149,7 +149,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public IPath[] getAllUserClasspathLibraries()
     {
-        return LiferayTomcatUtil.getAllUserClasspathLibraries( getRuntimeLocation(), getPortalDir() );
+        return LiferayTomcatUtil.getAllUserClasspathLibraries( getRuntimeLocation(), getAppServerPortalDir() );
 
     }
 
@@ -195,7 +195,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return getAppServerDir().append( "/lib/ext" ); //$NON-NLS-1$
     }
 
-    public IPath getPortalDir()
+    public IPath getAppServerPortalDir()
     {
         return LiferayTomcatUtil.getPortalDir( getAppServerDir() );
     }
@@ -203,24 +203,17 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     public String getPortalVersion()
     {
         // check for existing release info
-        try
-        {
-            return LiferayTomcatUtil.getVersion( getRuntimeLocation(), getPortalDir() );
-        }
-        catch( IOException e )
-        {
-            return StringPool.EMPTY;
-        }
+        return LiferayTomcatUtil.getVersion( getRuntimeLocation(), getAppServerPortalDir() );
     }
 
     public Properties getPortletCategories()
     {
-        return LiferayTomcatUtil.getCategories( getRuntimeLocation(), getPortalDir() );
+        return ServerUtil.getCategories( getAppServerPortalDir() );
     }
 
     public Properties getPortletEntryCategories()
     {
-        return LiferayTomcatUtil.getEntryCategories( getRuntimeLocation(), getPortalDir() );
+        return ServerUtil.getEntryCategories( getAppServerPortalDir() );
     }
 
     protected ReleaseHelper getReleaseHelper( IPath serviceJar )
@@ -252,14 +245,17 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     public String getServerInfo()
     {
         String serverInfo = null;
- 
+
         try
         {
-            serverInfo = LiferayTomcatUtil.getConfigInfoFromCache( LiferayTomcatUtil.CONFIG_TYPE_SERVER, getPortalDir() );
+            serverInfo =
+                LiferayTomcatUtil.getConfigInfoFromCache( LiferayTomcatUtil.CONFIG_TYPE_SERVER, getAppServerPortalDir() );
 
             if( serverInfo == null )
             {
-                serverInfo = LiferayTomcatUtil.getConfigInfoFromManifest( LiferayTomcatUtil.CONFIG_TYPE_SERVER, getPortalDir() );
+                serverInfo =
+                    LiferayTomcatUtil.getConfigInfoFromManifest(
+                        LiferayTomcatUtil.CONFIG_TYPE_SERVER, getAppServerPortalDir() );
 
                 if( serverInfo == null )
                 {
@@ -268,11 +264,12 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
                 if( serverInfo != null )
                 {
-                    LiferayTomcatUtil.saveConfigInfoIntoCache( LiferayTomcatUtil.CONFIG_TYPE_SERVER, serverInfo, getPortalDir() );
+                    LiferayTomcatUtil.saveConfigInfoIntoCache(
+                        LiferayTomcatUtil.CONFIG_TYPE_SERVER, serverInfo, getAppServerPortalDir() );
                 }
             }
         }
-        catch( IOException e )
+        catch( Exception e )
         {
             LiferayTomcatPlugin.logError( e );
         }
@@ -307,7 +304,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     {
         try
         {
-            return LiferayTomcatUtil.getServletFilterNames( getPortalDir() );
+            return ServerUtil.getServletFilterNames( getAppServerPortalDir() );
         }
         catch( Exception e )
         {
@@ -322,11 +319,11 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return location != null ? new Path( location ) : null;
     }
 
-    public String[] getSupportedHookProperties()
+    public String[] getHookSupportedProperties()
     {
         try
         {
-            return LiferayTomcatUtil.getSupportedHookProperties( getRuntimeLocation(), getPortalDir() );
+            return LiferayTomcatUtil.getHookSupportedProperties( getRuntimeLocation(), getAppServerPortalDir() );
         }
         catch( IOException e )
         {
@@ -390,12 +387,12 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
         IPath[] libRoots = new IPath[] { location.append( "lib" ), location.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
 
-        IPath portalDir = getPortalDir();
+        IPath portalDir = getAppServerPortalDir();
 
         try
         {
             URL[] supportUrls =
-                new URL[] { FileLocator.toFileURL( LiferayServerCorePlugin.getDefault().getBundle().getEntry(
+                new URL[] { FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
                     "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
 
             PortalSupportHelper helper =
@@ -440,7 +437,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         // first validate that this runtime is
         if( runtimeDelegateStatus == null )
         {
-            runtimeDelegateStatus = LiferayServerCorePlugin.validateRuntimeDelegate( this );
+            runtimeDelegateStatus = LiferayServerCore.validateRuntimeDelegate( this );
         }
 
         if( !runtimeDelegateStatus.isOK() )

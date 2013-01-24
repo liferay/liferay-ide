@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,13 +11,11 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.core.util;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,7 +62,7 @@ import org.w3c.dom.Node;
 
 /**
  * Core Utility methods
- * 
+ *
  * @author Gregory Amerson
  */
 public class CoreUtil
@@ -146,7 +144,7 @@ public class CoreUtil
                     }
                 }
             }
-            
+
             return false;
         }
 
@@ -177,7 +175,7 @@ public class CoreUtil
 
     public static IStatus createErrorStatus( String msg )
     {
-        return new Status( IStatus.ERROR, CorePlugin.PLUGIN_ID, msg );
+        return new Status( IStatus.ERROR, LiferayCore.PLUGIN_ID, msg );
     }
 
     public static final String createStringDigest( final String str )
@@ -316,7 +314,7 @@ public class CoreUtil
             {
                 IVirtualFile file = webappRoot.getFile( filePath );
 
-                if( file != null && file.exists() ) 
+                if( file != null && file.exists() )
                 {
                     retval = file.getUnderlyingFile();
                 }

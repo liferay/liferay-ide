@@ -15,10 +15,10 @@
 
 package com.liferay.ide.service.ui.wizard;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.wizard.LiferayDataModelOperation;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 
@@ -124,9 +124,9 @@ public class AddServiceBuilderOperation extends LiferayDataModelOperation
 
         try
         {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getTargetProject() );
+            ILiferayProject liferayProject = LiferayCore.create( getTargetProject() );
 
-            Version portalVersion = new Version( liferayRuntime.getPortalVersion() );
+            Version portalVersion = new Version( liferayProject.getPortalVersion() );
 
             descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
         }

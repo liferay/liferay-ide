@@ -16,13 +16,14 @@
 package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.theme.core.operation.ThemeDescriptorHelper;
 
@@ -50,7 +51,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
-import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Greg Amerson
@@ -194,18 +194,12 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                                 }
                             }
 
-                            IRuntime runtime = ServerUtil.getRuntime( project );
+                            final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
-
-                            if( liferayRuntime != null )
-                            {
-                                final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
-
-                                IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) );
-                                themeDescriptorHelper.createDefaultFile(
-                                    descriptorParent, liferayRuntime.getPortalVersion(), id, name );
-                            }
+                            IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) );
+                            ILiferayProject lProject = LiferayCore.create( project );
+                            themeDescriptorHelper.createDefaultFile(
+                                descriptorParent, lProject.getPortalVersion(), id, name );
 
                             try
                             {

@@ -16,7 +16,7 @@
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
 
@@ -104,7 +104,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
                 if( !ServerUtil.isLiferayProject( addModuleProject ) )
                 {
-                    return LiferayServerCorePlugin.createErrorStatus( Msgs.notAddNonLiferayPluginProjectModule );
+                    return LiferayServerCore.createErrorStatus( Msgs.notAddNonLiferayPluginProjectModule );
                 }
 
                 IStatus facetStatus = FacetUtil.verifyFacets( addModuleProject, getServer() );
@@ -117,7 +117,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
                 // make sure that EXT is disabled for now for remote deployment
                 if( ServerUtil.isExtProject( addModuleProject ) )
                 {
-                    return LiferayServerCorePlugin.createErrorStatus( Msgs.extPluginDeployment );
+                    return LiferayServerCore.createErrorStatus( Msgs.extPluginDeployment );
                 }
             }
 
@@ -298,7 +298,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
         }
         catch( MalformedURLException e )
         {
-            LiferayServerCorePlugin.logError( "Unable to get web services list URL", e ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Unable to get web services list URL", e ); //$NON-NLS-1$
         }
 
         return null;
@@ -402,13 +402,13 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
             if( !canMakeHttpConnection() )
             {
-                return LiferayServerCorePlugin.createWarningStatus( NLS.bind(
+                return LiferayServerCore.createWarningStatus( NLS.bind(
                     Msgs.serverNotAvailable, host, getHTTPPort() ) );
             }
 
-            IServerManagerConnection connection = LiferayServerCorePlugin.getRemoteConnection( this );
+            IServerManagerConnection connection = LiferayServerCore.getRemoteConnection( this );
 
-            final IStatus createErrorStatus = LiferayServerCorePlugin.createErrorStatus( CONNECT_ERROR_MSG );
+            final IStatus createErrorStatus = LiferayServerCore.createErrorStatus( CONNECT_ERROR_MSG );
 
             status = connection.isAlive() ? Status.OK_STATUS : createErrorStatus;
 
@@ -429,7 +429,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
         }
         catch( Exception e )
         {
-            status = LiferayServerCorePlugin.createErrorStatus( e );
+            status = LiferayServerCore.createErrorStatus( e );
         }
 
         return status;

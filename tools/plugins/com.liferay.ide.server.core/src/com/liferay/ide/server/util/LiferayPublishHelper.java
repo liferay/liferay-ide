@@ -16,7 +16,7 @@
 package com.liferay.ide.server.util;
 
 import com.liferay.ide.server.core.IPluginPublisher;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -62,7 +62,7 @@ public class LiferayPublishHelper
                         if( runtime != null )
                         {
                             IPluginPublisher pluginPublisher =
-                                LiferayServerCorePlugin.getPluginPublisher( facetId, runtime.getRuntimeType().getId() );
+                                LiferayServerCore.getPluginPublisher( facetId, runtime.getRuntimeType().getId() );
 
                             if( pluginPublisher != null )
                             {
@@ -74,7 +74,7 @@ public class LiferayPublishHelper
                     }
                     catch( Exception e )
                     {
-                        LiferayServerCorePlugin.logError( "Plugin publisher failed", e ); //$NON-NLS-1$
+                        LiferayServerCore.logError( "Plugin publisher failed", e ); //$NON-NLS-1$
                     }
                 }
             }

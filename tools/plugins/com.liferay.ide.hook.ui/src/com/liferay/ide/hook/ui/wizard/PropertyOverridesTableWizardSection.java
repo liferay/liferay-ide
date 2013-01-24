@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,13 +15,11 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.hook.ui.HookUI;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -123,17 +121,11 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
         {
             String[] hookProperties = new String[] {};
 
-            ILiferayRuntime runtime;
+            final ILiferayProject liferayProject = LiferayCore.create( project );
 
-            try
+            if( liferayProject != null )
             {
-                runtime = ServerUtil.getLiferayRuntime( project );
-
-                hookProperties = runtime.getSupportedHookProperties();
-            }
-            catch( CoreException e )
-            {
-                HookUI.logError( e );
+               hookProperties = liferayProject.getHookSupportedProperties();
             }
 
             PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell() );

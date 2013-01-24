@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,17 +11,15 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.util.HookUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -52,8 +50,12 @@ public class CustomJspValidationService extends ValidationService
             {
                 final IModelElement element = context().find( IModelElement.class );
                 final IProject project = element.nearest( Hook.class ).adapt( IFile.class ).getProject();
-                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-                this.portalDir = liferayRuntime.getPortalDir();
+                final ILiferayProject liferayProject = LiferayCore.create( project );
+
+                if( liferayProject != null )
+                {
+                    this.portalDir = liferayProject.getAppServerPortalDir();
+                }
             }
             catch( Exception e )
             {
@@ -137,7 +139,7 @@ public class CustomJspValidationService extends ValidationService
     {
         public static String customJspInvalidPath;
         public static String nonEmptyValueRequired;
-    
+
         static
         {
             initializeMessages( CustomJspValidationService.class.getName(), Msgs.class );

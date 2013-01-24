@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,14 +12,14 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core;
 
-import com.liferay.ide.project.core.AbstractProjectDefinition;
+import com.liferay.ide.project.core.AbstractSDKTemplate;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 
@@ -33,17 +33,17 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Greg Amerson
  */
-public class LiferayPortletDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties
+public class PortletSDKTemplate extends AbstractSDKTemplate implements IPluginProjectDataModelProperties
 {
     protected IDataModel nestedModel;
 
-    public LiferayPortletDefinition()
+    public PortletSDKTemplate()
     {
         super();
     }
 
     @Override
-    public void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    public void setupNewFacetedProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
     {
         FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
         IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
@@ -69,7 +69,7 @@ public class LiferayPortletDefinition extends AbstractProjectDefinition implemen
 
         String portletFrameworkId = dataModel.getStringProperty( PORTLET_FRAMEWORK_ID );
 
-        IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
+        IPortletFrameworkWizardProvider portletFramework = LiferayProjectCore.getPortletFramework( portletFrameworkId );
 
         portletFramework.configureNewProject( dataModel, facetedProject );
     }

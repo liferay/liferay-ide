@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,8 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.portlet.vaadin.ui;
@@ -21,7 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.vaadin.core.VaadinPortletFrameworkWizardProvider;
 import com.liferay.ide.portlet.vaadin.ui.wizard.NewVaadinPortletWizard;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
@@ -67,7 +65,7 @@ public class VaadinPortletFrameworkDelegate extends AbstractPortletFrameworkDele
     {
         String frameworkId = dataModel.getStringProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID );
 
-        IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
+        IPortletFrameworkWizardProvider framework = LiferayProjectCore.getPortletFramework( frameworkId );
 
         if( framework instanceof VaadinPortletFrameworkWizardProvider )
         {

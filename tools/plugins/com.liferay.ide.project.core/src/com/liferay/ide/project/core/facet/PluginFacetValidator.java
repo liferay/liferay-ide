@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -41,7 +41,7 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator
 
     public final static String MARKER_ID = "com.liferay.ide.project.core.facet.validator"; //$NON-NLS-1$
 
-    public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+    public static final String PREFERENCE_NODE_QUALIFIER = LiferayProjectCore.getDefault().getBundle().getSymbolicName();
 
     protected IPreferencesService fPreferencesService = Platform.getPreferencesService();
 
@@ -73,7 +73,7 @@ public abstract class PluginFacetValidator implements IFacetedProjectValidator
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( e );
+            LiferayProjectCore.logError( e );
         }
 
 //        if( projectSDK == null )

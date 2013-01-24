@@ -142,7 +142,7 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
             }
             catch( CoreException e )
             {
-                return ProjectCorePlugin.createErrorStatus( e );
+                return LiferayProjectCore.createErrorStatus( e );
             }
         }
         convertedProject = project;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,7 @@
 
 package com.liferay.ide.core.util;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 
 import java.io.BufferedInputStream;
@@ -98,7 +98,7 @@ public class FileUtil
         }
         catch( Exception e )
         {
-            CorePlugin.logError( "Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath() ); //$NON-NLS-1$ //$NON-NLS-2$
+            LiferayCore.logError( "Unable to copy file " + file.getName() + " to " + dir.getAbsolutePath() ); //$NON-NLS-1$ //$NON-NLS-2$
         }
         finally
         {
@@ -206,7 +206,7 @@ public class FileUtil
         }
         catch( Exception e )
         {
-            CorePlugin.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
+            LiferayCore.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
         }
         finally
         {
@@ -288,7 +288,7 @@ public class FileUtil
         }
         catch( Exception e )
         {
-            CorePlugin.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
+            LiferayCore.logError( "Could not read file: " + file.getPath() ); //$NON-NLS-1$
         }
         finally
         {

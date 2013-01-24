@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.pref;
 
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.ui.pref.AbstractValidationSettingsPage;
 
@@ -159,7 +159,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPreferenceNodeQualifier()
     {
-        return ProjectCorePlugin.SETTINGS_ID;
+        return LiferayProjectCore.SETTINGS_ID;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getProjectSettingsKey()
     {
-        return ProjectCorePlugin.USE_PROJECT_SETTINGS;
+        return LiferayProjectCore.USE_PROJECT_SETTINGS;
     }
 
     @Override
@@ -182,7 +182,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 
     protected String getQualifier()
     {
-        return ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+        return LiferayProjectCore.getDefault().getBundle().getSymbolicName();
     }
 
     protected void initializeValues()

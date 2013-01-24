@@ -17,7 +17,7 @@ package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -31,7 +31,7 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     @SuppressWarnings( "deprecation" )
     public static final IEclipsePreferences defaultPrefs =
-        new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
+        new DefaultScope().getNode( LiferayServerCore.PLUGIN_ID );
 
     String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp"; //$NON-NLS-1$
 

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.sdk.core;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.ByteArrayInputStream;
@@ -230,7 +230,7 @@ public final class SDKManager
         }
         catch( Exception e )
         {
-            CorePlugin.logError( e );
+            LiferayCore.logError( e );
         }
     }
 

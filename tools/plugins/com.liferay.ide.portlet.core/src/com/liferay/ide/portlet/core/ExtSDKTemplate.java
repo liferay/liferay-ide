@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,9 +15,9 @@
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.theme.core;
+package com.liferay.ide.portlet.core;
 
-import com.liferay.ide.project.core.AbstractProjectDefinition;
+import com.liferay.ide.project.core.AbstractSDKTemplate;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 
@@ -29,19 +29,22 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Gregory Amerson
  */
-public class LiferayThemeDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties
+public class ExtSDKTemplate extends AbstractSDKTemplate implements IPluginProjectDataModelProperties
 {
 
-    @Override
-    public void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    public ExtSDKTemplate()
+    {
+        super();
+    }
+
+    public void setupNewFacetedProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
     {
         FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
+        // IDataModel javaFacetModel = map.getFacetDataModel(
+        // JavaFacetUtils.JAVA_FACET.getId() );
         IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );
-
         webFacetModel.setStringProperty(
-            IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER );
-        webFacetModel.setStringProperty(
-            IWebFacetInstallDataModelProperties.SOURCE_FOLDER, IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+            IWebFacetInstallDataModelProperties.CONFIG_FOLDER, IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER );
     }
 
 }

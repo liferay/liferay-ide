@@ -103,7 +103,7 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
 
     public boolean finish()
     {
-        if( this.ownerProject != null && ProjectUtil.isLiferayProject( this.ownerProject ) )
+        if( this.ownerProject != null && ProjectUtil.isLiferayFacetedProject( this.ownerProject ) )
         {
             return true;
         }

@@ -51,7 +51,7 @@ public class LiferayTomcat70Configuration extends Tomcat70Configuration implemen
     @Override
     protected String getWebModuleURL( IModule webModule )
     {
-        if( webModule != null && ProjectUtil.isLiferayProject( webModule.getProject() ) )
+        if( webModule != null && ProjectUtil.isLiferayFacetedProject( webModule.getProject() ) )
         {
             return StringPool.EMPTY; // just go to portal root, no need to view the webapp
                        // context url

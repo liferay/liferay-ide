@@ -16,13 +16,14 @@
 package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.theme.core.operation.ThemeDescriptorHelper;
 import com.liferay.ide.theme.core.util.BuildHelper;
@@ -68,14 +69,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         {
             throw new CoreException(
                 ThemeCore.createErrorStatus( "No SDK for project configured. Could not build theme." ) ); //$NON-NLS-1$
-        }
-
-        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-
-        if( liferayRuntime == null )
-        {
-            throw new CoreException(
-                ThemeCore.createErrorStatus( "Could not get portal runtime for project.  Could not build theme." ) ); //$NON-NLS-1$
         }
 
         final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
@@ -125,12 +118,11 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                         name = nameValue;
                     }
 
-                    if( liferayRuntime != null )
-                    {
-                        final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
+                    final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                        themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), liferayRuntime.getPortalVersion() , id, name );
-                    }
+                    ILiferayProject lProject = LiferayCore.create( project );
+
+                    themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), lProject.getPortalVersion() , id, name );
                 }
                 catch( IOException e )
                 {
@@ -176,16 +168,8 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         // final IPath restoreLocation = getRestoreLocation(docroot);
         String themeParent = getThemeParent( getProject() );
 
-        IPath themesPath = null;
-        try
-        {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
-            themesPath = liferayRuntime.getPortalDir().append( "html/themes" ); //$NON-NLS-1$
-        }
-        catch( CoreException e1 )
-        {
-            e1.printStackTrace();
-        }
+        ILiferayProject liferayProject = LiferayCore.create( getProject() );
+        IPath themesPath = liferayProject.getAppServerPortalDir().append( "html/themes" ); //$NON-NLS-1$
 
         final List<IPath> restorePaths = new ArrayList<IPath>();
 

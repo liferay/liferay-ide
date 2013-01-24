@@ -298,7 +298,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                                 }
                                 catch( FileNotFoundException e )
                                 {
-                                    throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+                                    throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
                                 }
                             }
 
@@ -341,7 +341,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             {
                 IFile file = getWorkspaceFile( path );
 
-                if( file.exists() && ProjectUtil.isLiferayProject( file.getProject() ) )
+                if( file.exists() && ProjectUtil.isLiferayFacetedProject( file.getProject() ) )
                 {
                     for( IVirtualReference ref : rootComponent.getReferences() )
                     {
@@ -453,7 +453,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( e );
+            LiferayProjectCore.logError( e );
         }
         finally
         {
@@ -492,7 +492,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         }
         catch( ExecutionException e )
         {
-            ProjectCorePlugin.logError( e );
+            LiferayProjectCore.logError( e );
         }
     }
 

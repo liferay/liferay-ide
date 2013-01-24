@@ -52,7 +52,7 @@ public class NewElementWizardAction extends NewWizardAction
         boolean hasValidProjectTypes = false;
 
         for( IProject project : projects ) {
-            if( ProjectUtil.isLiferayProject( project ) ) {
+            if( ProjectUtil.isLiferayFacetedProject( project ) ) {
                 Set<IProjectFacetVersion> facets = ProjectUtil.getFacetedProject( project ).getProjectFacets();
 
                 if( validProjectTypes != null && facets != null)

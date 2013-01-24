@@ -21,14 +21,11 @@
       </configurator>
    </extension>
    <extension
-         point="org.eclipse.core.runtime.adapters">
-      <factory
-            adaptableType="org.eclipse.core.resources.IProject"
-            class="com.liferay.ide.maven.core.LiferayMavenProjectFactory">
-         <adapter
-               type="com.liferay.ide.core.ILiferayProject">
-         </adapter>
-      </factory>
+         point="com.liferay.ide.core.liferayProjectProviders">
+      <liferayProjectProvider
+            class="com.liferay.ide.maven.core.LiferayMavenProjectProvider"
+            id="com.liferay.ide.maven.core.mavenProjectProvider">
+      </liferayProjectProvider>
    </extension>
 
 </plugin>

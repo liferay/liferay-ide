@@ -10,8 +10,6 @@
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
-    <url>http://www.liferay.com/</url>
-    <description>The Liferay IDE is an eclipse based environment for doing development with Liferay Portal</description>
 
     <developers>
         <developer>

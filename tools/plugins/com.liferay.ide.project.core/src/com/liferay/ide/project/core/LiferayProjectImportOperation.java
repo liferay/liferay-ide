@@ -52,7 +52,7 @@ public class LiferayProjectImportOperation extends AbstractDataModelOperation
 
         if( projectRecord == null )
         {
-            return ProjectCorePlugin.createErrorStatus( "Project record to import is null." ); //$NON-NLS-1$
+            return LiferayProjectCore.createErrorStatus( "Project record to import is null." ); //$NON-NLS-1$
         }
 
         File projectDir = projectRecord.getProjectLocation().toFile();
@@ -75,7 +75,7 @@ public class LiferayProjectImportOperation extends AbstractDataModelOperation
         }
         catch( CoreException e )
         {
-            return ProjectCorePlugin.createErrorStatus( e );
+            return LiferayProjectCore.createErrorStatus( e );
         }
 
         return Status.OK_STATUS;

@@ -93,7 +93,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
                         }
                         catch( IOException e )
                         {
-                            throw new CoreException( ProjectCorePlugin.createErrorStatus( "Error creating project.", e ) ); //$NON-NLS-1$
+                            throw new CoreException( LiferayProjectCore.createErrorStatus( "Error creating project.", e ) ); //$NON-NLS-1$
                         }
 
                     }

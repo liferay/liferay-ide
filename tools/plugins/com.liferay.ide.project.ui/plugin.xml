@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="portletFrameworkDelegates" name="%portlet.framework.delegates.name" schema="schema/portletFrameworkDelegates.exsd"/>
-   
+
    <extension
          point="org.eclipse.ui.newWizards">
       <category
@@ -21,7 +21,7 @@
          	<parameter name="liferay_project" value="true"/>
             <parameter name="menuIndex" value="10" />
          </class>
-            
+
          <description>
             %new.project.wizard.description
          </description>
@@ -39,7 +39,7 @@
             project="true">
          <class class="com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard">
          </class>
-            
+
          <description>
             %import.project.wizard.description
          </description>
@@ -47,26 +47,26 @@
                class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      
+
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="com.liferay.ide.project.ui.LiferayProjectPropertyPage"
+            class="com.liferay.ide.project.ui.SDKProjectPropertyPage"
             id="com.liferay.ide.project.ui.properties"
             name="%liferay.page.name">
          <enabledWhen>
             <adapt
                   type="org.eclipse.core.resources.IProject">
                <test
-                     property="com.liferay.ide.project.ui.isLiferayProject">
+                     property="com.liferay.ide.project.ui.isSDKProject">
                </test>
             </adapt>
          </enabledWhen>
       </page>
    </extension>
-   
+
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
@@ -112,8 +112,8 @@
             type="org.eclipse.core.resources.IFile">
       </propertyTester>
    </extension>
-   
-   
+
+
    <extension
          point="org.eclipse.ui.keywords">
       <keyword
@@ -175,7 +175,7 @@
                icon="icons/e16/liferay.png"
                id="liferayPopupMenuCategory"
                label="%liferay.menu.label">
-            <separator name="slot1"/> 
+            <separator name="slot1"/>
          </menu>
   	</objectContribution>
       <objectContribution
@@ -211,7 +211,7 @@
 								value="org.eclipse.jdt.core.javanature" />
 						</adapt>
          			</or>
-         			
+
 					<not>
 						<or>
 							<adapt type="org.eclipse.core.resources.IProject">
@@ -242,9 +242,9 @@
 						</or>
 					</not>
 				</and>
-			 </adapt> 
+			 </adapt>
          </enablement>
-         
+
       </objectContribution>
       <objectContribution
             adaptable="true"
@@ -283,10 +283,10 @@
            </adapt>
          </enablement>
       </objectContribution>
-      
+
    </extension>
-   
-   
+
+
    <extension
          point="org.eclipse.wst.common.project.facet.ui.images">
       <image
@@ -318,7 +318,7 @@
          </page>
       </wizard-pages>
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
@@ -404,7 +404,7 @@
          </action>
       </actionSet>
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
@@ -549,7 +549,7 @@
                id="com.liferay.ide.sdk.popup.action.compile-test"
                label="compile-test"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/compile-test">
-         </action>         
+         </action>
          <action
                class="com.liferay.ide.project.ui.action.sdk.DeployAction"
                enablesFor="1"
@@ -597,7 +597,7 @@
                id="com.liferay.ide.sdk.popup.action.war"
                label="war"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/war">
-         </action> 
+         </action>
          <enablement>
          	<adapt type="org.eclipse.core.resources.IResource">
 	          <or>

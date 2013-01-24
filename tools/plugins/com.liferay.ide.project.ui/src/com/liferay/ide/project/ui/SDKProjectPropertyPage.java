@@ -60,13 +60,13 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Greg Amerson
  */
-public class LiferayProjectPropertyPage extends PropertyPage
+public class SDKProjectPropertyPage extends PropertyPage
     implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties
 {
 
     private Combo runtimeCombo;
 
-    public LiferayProjectPropertyPage()
+    public SDKProjectPropertyPage()
     {
         super();
 
@@ -255,7 +255,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
         static
         {
-            initializeMessages( LiferayProjectPropertyPage.class.getName(), Msgs.class );
+            initializeMessages( SDKProjectPropertyPage.class.getName(), Msgs.class );
         }
     }
 }

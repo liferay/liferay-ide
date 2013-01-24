@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,8 +15,8 @@
 
 package com.liferay.ide.server.ui;
 
-import com.liferay.ide.project.core.IProjectDefinition;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.ISDKTemplate;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -54,16 +54,19 @@ public class PluginsCustomLabelProvider extends LabelProvider
                 ModuleServer server = (ModuleServer) element;
                 IProject project = server.getModule()[0].getProject();
                 IFacetedProject facetedProject = ProjectUtil.getFacetedProject( project );
+
                 if( facetedProject != null )
                 {
                     IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
-                    IProjectDefinition projectDef = ProjectCorePlugin.getProjectDefinition( liferayFacet );
+                    ISDKTemplate sdkTemplate = LiferayProjectCore.getSDKTemplate( liferayFacet );
+
                     return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + projectDef.getShortName() + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
+                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + sdkTemplate.getShortName() + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
                 }
                 else
                 {
                     String type = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
+
                     return LiferayServerUIPlugin.imageDescriptorFromPlugin(
                         LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
                 }

@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.Status;
 import org.xml.sax.SAXException;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 
 public abstract class AbstractModel extends PlatformObject implements IModel, IModelChangeProviderExtension, Serializable {
 
@@ -132,7 +132,7 @@ public abstract class AbstractModel extends PlatformObject implements IModel, IM
 	}
 
 	public void throwParseErrorsException(Throwable e) throws CoreException {
-		Status status = new Status(IStatus.ERROR, CorePlugin.PLUGIN_ID, IStatus.OK, "Error in the service file", //$NON-NLS-1$
+		Status status = new Status(IStatus.ERROR, LiferayCore.PLUGIN_ID, IStatus.OK, "Error in the service file", //$NON-NLS-1$
 				e);
 		throw new CoreException(status);
 	}

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.net.URL;
@@ -33,34 +33,34 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
-public class ProjectCorePlugin extends CorePlugin
+public class LiferayProjectCore extends LiferayCore
 {
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
-    
+
     public static final String SETTINGS_ID = "com.liferay.ide.eclipse.project.core"; //$NON-NLS-1$
 
     public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
     // The shared instance
-    private static ProjectCorePlugin plugin;
+    private static LiferayProjectCore plugin;
 
     private static PluginPackageResourceListener pluginPackageResourceListener;
 
     private static IPortletFrameworkWizardProvider[] portletFrameworks;
 
-    private static IProjectDefinition[] projectDefinitions = null;
+    private static ISDKTemplate[] sdkTemplates = null;
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
-    public static ProjectCorePlugin getDefault()
+    public static LiferayProjectCore getDefault()
     {
         return plugin;
     }
@@ -173,17 +173,17 @@ public class ProjectCorePlugin extends CorePlugin
         return portletFrameworks;
     }
 
-    public static IProjectDefinition getProjectDefinition( IProjectFacet projectFacet )
+    public static ISDKTemplate getSDKTemplate( IProjectFacet projectFacet )
     {
-        IProjectDefinition[] definitions = getProjectDefinitions();
+        ISDKTemplate[] templates = getSDKTemplates();
 
-        if( definitions != null )
+        if( templates != null )
         {
-            for( IProjectDefinition def : definitions )
+            for( ISDKTemplate tmpl : templates )
             {
-                if( def != null && def.getFacet() != null && def.getFacet().equals( projectFacet ) )
+                if( tmpl != null && tmpl.getFacet() != null && tmpl.getFacet().equals( projectFacet ) )
                 {
-                    return def;
+                    return tmpl;
                 }
             }
         }
@@ -191,17 +191,17 @@ public class ProjectCorePlugin extends CorePlugin
         return null;
     }
 
-    public static IProjectDefinition getProjectDefinition( String type )
+    public static ISDKTemplate getSDKTemplate( String type )
     {
-        IProjectDefinition[] defs = getProjectDefinitions();
+        ISDKTemplate[] tmpls = getSDKTemplates();
 
-        if( defs != null && defs.length > 0 )
+        if( tmpls != null && tmpls.length > 0 )
         {
-            for( IProjectDefinition def : defs )
+            for( ISDKTemplate tmpl : tmpls )
             {
-                if( def != null && def.getFacetId().equals( type ) )
+                if( tmpl != null && tmpl.getFacetId().equals( type ) )
                 {
-                    return def;
+                    return tmpl;
                 }
             }
         }
@@ -209,28 +209,28 @@ public class ProjectCorePlugin extends CorePlugin
         return null;
     }
 
-    public static IProjectDefinition[] getProjectDefinitions()
+    public static ISDKTemplate[] getSDKTemplates()
     {
-        if( projectDefinitions == null )
+        if( sdkTemplates == null )
         {
             IConfigurationElement[] elements =
-                Platform.getExtensionRegistry().getConfigurationElementsFor( IProjectDefinition.ID );
+                Platform.getExtensionRegistry().getConfigurationElementsFor( ISDKTemplate.ID );
 
             try
             {
-                List<IProjectDefinition> definitions = new ArrayList<IProjectDefinition>();
+                List<ISDKTemplate> templates = new ArrayList<ISDKTemplate>();
 
                 for( IConfigurationElement element : elements )
                 {
                     final Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
 
-                    if( o instanceof AbstractProjectDefinition )
+                    if( o instanceof AbstractSDKTemplate )
                     {
-                        AbstractProjectDefinition projectDefinition = (AbstractProjectDefinition) o;
-                        projectDefinition.setFacetId( element.getAttribute( "facetId" ) ); //$NON-NLS-1$
-                        projectDefinition.setShortName( element.getAttribute( "shortName" ) ); //$NON-NLS-1$
-                        projectDefinition.setDisplayName( element.getAttribute( "displayName" ) ); //$NON-NLS-1$
-                        projectDefinition.setFacetedProjectTemplateId( element.getAttribute( "facetedProjectTemplateId" ) ); //$NON-NLS-1$
+                        AbstractSDKTemplate template = (AbstractSDKTemplate) o;
+                        template.setFacetId( element.getAttribute( "facetId" ) ); //$NON-NLS-1$
+                        template.setShortName( element.getAttribute( "shortName" ) ); //$NON-NLS-1$
+                        template.setDisplayName( element.getAttribute( "displayName" ) ); //$NON-NLS-1$
+                        template.setFacetedProjectTemplateId( element.getAttribute( "facetedProjectTemplateId" ) ); //$NON-NLS-1$
 
                         int menuIndex = Integer.MAX_VALUE;
 
@@ -245,16 +245,16 @@ public class ProjectCorePlugin extends CorePlugin
                         }
                         catch( Exception e )
                         {
-                            ProjectCorePlugin.logError( "Error reading project definition.", e ); //$NON-NLS-1$
+                            LiferayProjectCore.logError( "Error reading project definition.", e ); //$NON-NLS-1$
                         }
 
-                        projectDefinition.setMenuIndex( menuIndex );
+                        template.setMenuIndex( menuIndex );
 
-                        definitions.add( projectDefinition );
+                        templates.add( template );
                     }
                 }
 
-                projectDefinitions = definitions.toArray( new IProjectDefinition[0] );
+                sdkTemplates = templates.toArray( new ISDKTemplate[0] );
             }
             catch( Exception e )
             {
@@ -262,7 +262,7 @@ public class ProjectCorePlugin extends CorePlugin
             }
         }
 
-        return projectDefinitions;
+        return sdkTemplates;
     }
 
     public static void logError( String msg, Exception e )
@@ -273,7 +273,7 @@ public class ProjectCorePlugin extends CorePlugin
     /**
      * The constructor
      */
-    public ProjectCorePlugin()
+    public LiferayProjectCore()
     {
         pluginPackageResourceListener = new PluginPackageResourceListener();
     }

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class RemoteLogStream extends BufferedInputStream
 
     @SuppressWarnings( "deprecation" )
     public static final IEclipsePreferences _defaultPrefs =
-        new DefaultScope().getNode( LiferayServerCorePlugin.PLUGIN_ID );
+        new DefaultScope().getNode( LiferayServerCore.PLUGIN_ID );
 
     public static final long LOG_QUERY_RANGE = _defaultPrefs.getLong( "log.query.range", 51200 ); //$NON-NLS-1$
 

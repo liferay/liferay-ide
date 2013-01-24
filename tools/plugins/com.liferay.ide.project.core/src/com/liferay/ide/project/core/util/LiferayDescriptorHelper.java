@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,13 +15,11 @@
 
 package com.liferay.ide.project.core.util;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.DescriptorHelper;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.osgi.framework.Version;
 
 /**
@@ -41,17 +39,17 @@ public class LiferayDescriptorHelper extends DescriptorHelper
 
         try
         {
-            final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( project );
+            final ILiferayProject lProject = LiferayCore.create( project );
 
-            if( runtime != null )
+            if( lProject != null )
             {
-                final String versionStr = runtime.getPortalVersion();
+                final String versionStr = lProject.getPortalVersion();
                 retval = getDescriptorVersionFromPortalVersion( versionStr );
             }
         }
-        catch( CoreException e )
+        catch( Exception e )
         {
-            CorePlugin.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
+            LiferayCore.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
         }
 
         if( retval == null )

@@ -65,7 +65,7 @@ public class SDKProjectsImportOperation extends AbstractDataModelOperation
                 }
                 catch( Exception ex )
                 {
-                    return ProjectCorePlugin.createErrorStatus( ex );
+                    return LiferayProjectCore.createErrorStatus( ex );
                 }
 
                 return Status.OK_STATUS;

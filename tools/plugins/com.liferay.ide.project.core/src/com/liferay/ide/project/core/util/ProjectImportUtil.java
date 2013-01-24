@@ -18,10 +18,12 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -121,7 +123,8 @@ public class ProjectImportUtil
             IPath sdkPluginProjectFolder = liferaySDK.getLocation();
 
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( bridgedRuntime );
-            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
+            final ILiferayProject liferayProject = LiferayCore.create( liferayRuntime );
+            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayProject, liferayRuntime );
             // IDE-110 IDE-648
             String docrootFolder = null;
 
@@ -135,7 +138,7 @@ public class ProjectImportUtil
             }
             else if( pluginBinaryRecord.isPortlet() )
             {
-                IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+                IPortletFrameworkWizardProvider[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
                 String portletFrameworkName = null;
 
                 for( int i = 0; i < portletFrameworks.length; i++ )

@@ -1,16 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *   
+ *
  * Contributors:
  *      Kamesh Sampath - initial implementation
  *      Gregory Amerson - initial implementation review and ongoing maintenance
@@ -29,7 +29,7 @@ import org.eclipse.ui.internal.navigator.NavigatorContentService;
 import org.eclipse.ui.navigator.CommonViewer;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
@@ -52,7 +52,7 @@ public class PortletResourcesContentProvider extends AbstractNavigatorContentPro
         {
             final IProject project = (IProject) element;
 
-            if( ProjectUtil.isLiferayProject( project ) )
+            if( ProjectUtil.isLiferayFacetedProject( project ) )
             {
                 return new Object[] { new PortletResourcesRootNode( this, project ) };
             }
@@ -102,23 +102,25 @@ public class PortletResourcesContentProvider extends AbstractNavigatorContentPro
     {
         final NavigatorContentService s = (NavigatorContentService) getConfig().getService();
 
-        UIUtil.sync( new Runnable()
-        {
-
-            public void run()
+        UIUtil.sync
+        (
+            new Runnable()
             {
-                try
+                public void run()
                 {
-                    final CommonViewer viewer = (CommonViewer) s.getViewer();
-                    TreePath[] paths = viewer.getExpandedTreePaths();
-                    viewer.refresh( true );
-                    viewer.setExpandedTreePaths( paths );
-                }
-                catch( Exception e )
-                {
+                    try
+                    {
+                        final CommonViewer viewer = (CommonViewer) s.getViewer();
+                        TreePath[] paths = viewer.getExpandedTreePaths();
+                        viewer.refresh( true );
+                        viewer.setExpandedTreePaths( paths );
+                    }
+                    catch( Exception e )
+                    {
+                    }
                 }
             }
-        } );
+         );
 
     }
 

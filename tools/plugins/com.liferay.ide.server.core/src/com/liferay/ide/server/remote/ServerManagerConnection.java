@@ -20,7 +20,7 @@ package com.liferay.ide.server.remote;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.remote.RemoteConnection;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -117,7 +117,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         }
         catch( APIException e1 )
         {
-            LiferayServerCorePlugin.logError( e1);
+            LiferayServerCore.logError( e1);
         }
         
         if( response instanceof JSONObject )
@@ -139,7 +139,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             }
             catch( Exception e )
             {
-                LiferayServerCorePlugin.logError( e );
+                LiferayServerCore.logError( e );
             }
         }
 

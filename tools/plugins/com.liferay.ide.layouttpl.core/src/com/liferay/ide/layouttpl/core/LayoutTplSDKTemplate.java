@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,7 @@
 
 package com.liferay.ide.layouttpl.core;
 
-import com.liferay.ide.project.core.AbstractProjectDefinition;
+import com.liferay.ide.project.core.AbstractSDKTemplate;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 
@@ -29,10 +29,10 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 /**
  * @author Gregory Amerson
  */
-public class LiferayLayoutTplDefinition extends AbstractProjectDefinition implements IPluginProjectDataModelProperties
+public class LayoutTplSDKTemplate extends AbstractSDKTemplate implements IPluginProjectDataModelProperties
 {
 
-    public void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
+    public void setupNewFacetedProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
     {
         FacetDataModelMap map = (FacetDataModelMap) dataModel.getProperty( FACET_DM_MAP );
         IDataModel webFacetModel = map.getFacetDataModel( IJ2EEFacetConstants.DYNAMIC_WEB_FACET.getId() );

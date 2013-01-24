@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.ui;
 
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.RemoteServer;
 import com.liferay.ide.server.ui.cmd.SetAdjustDeploymentTimestampCommand;
@@ -279,7 +279,7 @@ public class RemoteSettingsEditorSection extends ServerEditorSection
 
             public void propertyChange( final PropertyChangeEvent event )
             {
-                LiferayServerCorePlugin.updateConnectionSettings( remoteServer );
+                LiferayServerCore.updateConnectionSettings( remoteServer );
 
                 if( updating )
                 {

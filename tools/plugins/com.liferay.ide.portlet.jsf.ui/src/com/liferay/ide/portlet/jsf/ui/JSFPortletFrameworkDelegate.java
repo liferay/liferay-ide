@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,7 +18,7 @@ package com.liferay.ide.portlet.jsf.ui;
 import com.liferay.ide.portlet.jsf.core.IJSFPortletFrameworkProperties;
 import com.liferay.ide.portlet.jsf.core.JSFPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.ui.AbstractPortletFrameworkDelegate;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -53,9 +53,9 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
     public Composite createNewProjectOptionsComposite( Composite parent )
     {
         this.syncHelper = new DataModelSynchHelper( this.dataModel );
-        
+
         final Group group = SWTUtil.createGroup( parent, Msgs.selectJSFComponentSuite, 2 );
-        
+
         createComponentSuiteOption
         (
             group, 
@@ -65,7 +65,7 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             "http://javaserverfaces.java.net/", //$NON-NLS-1$
             COMPONENT_SUITE_JSF_STANDARD
         );
-        
+
         createComponentSuiteOption
         (
             group, 
@@ -75,7 +75,7 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             "http://www.liferay.com/community/liferay-projects/liferay-faces/alloy", //$NON-NLS-1$
             COMPONENT_SUITE_LIFERAY_FACES_ALLOY
         );
-        
+
         createComponentSuiteOption
         (
             group, 
@@ -85,7 +85,7 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             "http://www.icesoft.org/projects/ICEfaces", //$NON-NLS-1$
             COMPONENT_SUITE_ICEFACES
         );
-        
+
         createComponentSuiteOption
         (
             group, 
@@ -95,7 +95,7 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             "http://www.primefaces.org/", //$NON-NLS-1$
             COMPONENT_SUITE_PRIMEFACES
         );
-        
+
         createComponentSuiteOption
         (
             group, 
@@ -105,10 +105,10 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             "http://www.jboss.org/richfaces", //$NON-NLS-1$
             COMPONENT_SUITE_RICHFACES
         );
-        
+
         return group;
     }
-    
+
     private void createComponentSuiteOption(
         Composite parent, String label, String desc, String imagePath, final String helpUrl, String propertyName )
     {
@@ -116,9 +116,9 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
             ImageDescriptor.createFromURL( JSFUIPlugin.getDefault().getBundle().getEntry( imagePath ) ).createImage();
 
         final Button button = SWTUtil.createRadioButton( parent, label, image, false, 1 );
-        
+
         this.syncHelper.synchRadio( button, propertyName, null );
-        
+
         button.addDisposeListener
         ( 
             new DisposeListener()
@@ -129,9 +129,9 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
                 }
             }
         );
-        
+
         final Link link = SWTUtil.createHyperLink( parent, SWT.WRAP, desc, 1, helpUrl );
-        
+
         final GridData layoutData = new GridData( SWT.LEFT, SWT.TOP, true, false );
         layoutData.widthHint = 350;
         link.setLayoutData( layoutData );
@@ -141,8 +141,8 @@ public class JSFPortletFrameworkDelegate extends AbstractPortletFrameworkDelegat
     protected void updateFragmentEnabled( IDataModel dataModel )
     {
         String frameworkId = dataModel.getStringProperty( IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID );
-        
-        IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
+
+        IPortletFrameworkWizardProvider framework = LiferayProjectCore.getPortletFramework( frameworkId );
 
         if( framework instanceof JSFPortletFrameworkWizardProvider )
         {

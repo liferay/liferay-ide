@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,20 +12,19 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 
 import java.util.Arrays;
 import java.util.SortedSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
@@ -40,22 +39,26 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
     @Override
     protected void fillPossibleValues( SortedSet<String> values )
     {
-        values.addAll( Arrays.asList( this.hookProperties ) );
-    }
-
-    @Override
-    protected void init()
-    {
-        super.init();
-        IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
-
-        try
+        if( this.hookProperties != null )
         {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-            this.hookProperties = liferayRuntime.getSupportedHookProperties();
+            values.addAll( Arrays.asList( this.hookProperties ) );
         }
-        catch( CoreException e )
+
+        if( this.hookProperties == null )
         {
+            final IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
+            if( liferayProject != null )
+            {
+                this.hookProperties = liferayProject.getHookSupportedProperties();
+            }
+        }
+
+        if( this.hookProperties != null )
+        {
+            values.addAll( Arrays.asList( this.hookProperties ) );
         }
     }
 

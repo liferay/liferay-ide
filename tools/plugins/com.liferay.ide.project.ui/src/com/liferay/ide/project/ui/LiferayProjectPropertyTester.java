@@ -31,11 +31,11 @@ public class LiferayProjectPropertyTester extends PropertyTester
     {
         if( receiver instanceof IProject )
         {
-            return ProjectUtil.isLiferayProject( (IProject) receiver );
+            return ProjectUtil.isLiferayFacetedProject( (IProject) receiver );
         }
         else if( receiver instanceof IFolder )
         {
-            return ProjectUtil.isLiferayProject( (IFolder) receiver );
+            return ProjectUtil.isLiferaySDKProject( (IFolder) receiver );
         }
 
         return false;

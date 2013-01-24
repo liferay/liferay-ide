@@ -18,7 +18,7 @@ package com.liferay.ide.project.ui.wizard;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
@@ -83,7 +83,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
         group.setLayoutData( layoutData );
         ( (GridLayout) group.getLayout() ).verticalSpacing = 10;
 
-        IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+        IPortletFrameworkWizardProvider[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
 
         if( !CoreUtil.isNullOrEmpty( portletFrameworks ) )
         {
@@ -279,7 +279,7 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
 
         Collections.addAll( validationPropertyNames, propNames );
 
-        for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+        for( IPortletFrameworkWizardProvider portletFramework : LiferayProjectCore.getPortletFrameworks() )
         {
             validationPropertyNames.addAll( portletFramework.getPropertyNames() );
         }

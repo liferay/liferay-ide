@@ -79,12 +79,14 @@
                                     <condition>CreateSrcFileActionHandler$Condition</condition>
                                     <id>Sapphire.Create.Properties.File</id>
                                 </action-handler>
+                                <!-- TODO IDE-806
                                 <action-handler>
                                     <action>Sapphire.Jump</action>
                                     <id>Sapphire.Jump.Path.Relative</id>
                                     <impl>RelativePathJumpActionHandler</impl>
                                     <label>Open Properties File</label>
                                 </action-handler>
+                                -->
                             </property-editor>
                             <separator></separator>
                             <property-editor>

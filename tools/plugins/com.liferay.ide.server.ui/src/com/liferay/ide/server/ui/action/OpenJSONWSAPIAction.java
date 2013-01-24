@@ -15,8 +15,8 @@
 
 package com.liferay.ide.server.ui.action;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -71,12 +71,13 @@ public class OpenJSONWSAPIAction extends OpenPortalURLAction
 
                 if( runtime != null )
                 {
-                    ILiferayRuntime liferayRuntime =
-                        (ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, null );
+                	//TODO XXX implement ILiferayProject adapter support for ILiferayRuntime
+                    ILiferayProject liferayProject =
+                        (ILiferayProject) runtime.loadAdapter( ILiferayProject.class, null );
 
-                    if( liferayRuntime != null )
+                    if( liferayProject != null )
                     {
-                        Version v = new Version( liferayRuntime.getPortalVersion() );
+                        Version v = new Version( liferayProject.getPortalVersion() );
 
                         if( CoreUtil.compareVersions( v, new Version( "6.1.0" ) ) < 0 ) //$NON-NLS-1$
                         {

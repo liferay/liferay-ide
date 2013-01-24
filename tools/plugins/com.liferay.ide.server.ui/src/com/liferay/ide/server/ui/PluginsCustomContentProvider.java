@@ -71,7 +71,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
 
         for( IModule module : server.getModules() )
         {
-            if( ProjectUtil.isLiferayProject( module.getProject() ) )
+            if( ProjectUtil.isLiferayFacetedProject( module.getProject() ) )
             {
                 liferayPlugins.add( module );
             }
@@ -103,7 +103,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
             {
                 ModuleServer module = (ModuleServer) pipelinedChild;
 
-                if( ProjectUtil.isLiferayProject( module.getModule()[0].getProject() ) )
+                if( ProjectUtil.isLiferayFacetedProject( module.getModule()[0].getProject() ) )
                 {
                     redirectedModules.add( module );
                 }
@@ -130,7 +130,7 @@ public class PluginsCustomContentProvider extends AbstractNavigatorContentProvid
         {
             IProject project = ( (ModuleServer) anObject ).getModule()[0].getProject();
 
-            if( ProjectUtil.isLiferayProject( project ) && this.pluginsContentNode != null )
+            if( ProjectUtil.isLiferayFacetedProject( project ) && this.pluginsContentNode != null )
             {
                 return this.pluginsContentNode;
             }

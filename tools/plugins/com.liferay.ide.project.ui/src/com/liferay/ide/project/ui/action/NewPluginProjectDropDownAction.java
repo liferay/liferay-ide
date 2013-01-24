@@ -16,8 +16,8 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.IProjectDefinition;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.ISDKTemplate;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 
 import java.util.ArrayList;
@@ -50,9 +50,9 @@ import org.eclipse.ui.PlatformUI;
 public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
 {
 
-    private static final class ProjectDefComparator implements Comparator<IProjectDefinition>
+    private static final class SDKTemplateComparator implements Comparator<ISDKTemplate>
     {
-        public int compare( IProjectDefinition o1, IProjectDefinition o2 )
+        public int compare( ISDKTemplate o1, ISDKTemplate o2 )
         {
             int index1 = o1.getMenuIndex();
             int index2 = o2.getMenuIndex();
@@ -99,22 +99,22 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
                 {
                     containers.add( new NewWizardAction( element ) );
 
-                    IProjectDefinition[] projectDefinitions = ProjectCorePlugin.getProjectDefinitions();
+                    ISDKTemplate[] sdkTemplates = LiferayProjectCore.getSDKTemplates();
 
-                    List<IProjectDefinition> projectDefList = Arrays.asList( projectDefinitions );
+                    List<ISDKTemplate> sdkTemplateList = Arrays.asList( sdkTemplates );
 
-                    Collections.sort( projectDefList, new ProjectDefComparator() );
+                    Collections.sort( sdkTemplateList, new SDKTemplateComparator() );
 
-                    for( IProjectDefinition projectDef : projectDefinitions )
+                    for( ISDKTemplate template : sdkTemplates )
                     {
                         NewWizardAction wizardAction = new NewWizardAction( element );
-                        wizardAction.setProjectType( projectDef.getFacetId() );
+                        wizardAction.setProjectType( template.getFacetId() );
 
-                        if( projectDef != null )
+                        if( template != null )
                         {
                             wizardAction.setImageDescriptor( ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
-                                "/icons/n16/" + projectDef.getShortName() + "_new.png" ) ) ); //$NON-NLS-1$ //$NON-NLS-2$
-                            wizardAction.setText( wizardAction.getText().replaceAll( Msgs.liferayPlugin, NLS.bind( Msgs.plugin, projectDef.getDisplayName()) ));
+                                "/icons/n16/" + template.getShortName() + "_new.png" ) ) ); //$NON-NLS-1$ //$NON-NLS-2$
+                            wizardAction.setText( wizardAction.getText().replaceAll( Msgs.liferayPlugin, NLS.bind( Msgs.plugin, template.getDisplayName()) ));
                         }
 
                         containers.add( wizardAction );

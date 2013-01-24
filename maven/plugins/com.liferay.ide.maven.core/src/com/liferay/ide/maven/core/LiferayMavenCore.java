@@ -36,7 +36,7 @@ public class LiferayMavenCore extends Plugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static LiferayMavenCore getDefault()
@@ -74,5 +74,10 @@ public class LiferayMavenCore extends Plugin
     {
         plugin = null;
         super.stop( context );
+    }
+
+    public static void logError( String msg, Throwable t )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, t ) );
     }
 }

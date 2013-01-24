@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,13 +15,14 @@
 
 package com.liferay.ide.portlet.core.operation;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -142,41 +143,28 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         return runtime;
     }
 
-    protected ILiferayRuntime getLiferayRuntime() throws CoreException
+    protected IProject getProject()
     {
-        IRuntime runtime = getRuntime();
-
-        ILiferayRuntime portalRuntime =
-            (ILiferayRuntime) runtime.createWorkingCopy().loadAdapter( ILiferayRuntime.class, null );
-
-        return portalRuntime;
+        return (IProject) getProperty( PROJECT );
     }
 
     protected Properties getCategories()
     {
         if( categories == null )
         {
-            IProject project = (IProject) getProperty( PROJECT );
+            final IProject project = (IProject) getProperty( PROJECT );
 
-            if( project != null )
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
+            if( liferayProject != null )
             {
-                try
-                {
-                    ILiferayRuntime portalRuntime = getLiferayRuntime();
-
-                    categories = portalRuntime.getPortletCategories();
-                }
-                catch( Exception e )
-                {
-                    e.printStackTrace();
-                }
+                categories = liferayProject.getPortletCategories();
             }
         }
 
         return categories;
     }
 
-    
 
     @Override
     public Object getDefaultProperty( String propertyName )
@@ -319,19 +307,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             String initParameterName = "template"; //$NON-NLS-1$
 
-            try
-            {
-                ILiferayRuntime portalRuntime = getLiferayRuntime();
-                String version = portalRuntime.getPortalVersion();
-                Version portalVersion = Version.parseVersion( version );
+            ILiferayProject liferayProject = LiferayCore.create( getProject() );
+            String version = liferayProject.getPortalVersion();
+            Version portalVersion = Version.parseVersion( version );
 
-                if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) < 0 )
-                {
-                    initParameterName = "jsp"; //$NON-NLS-1$
-                }
-            }
-            catch( Exception e )
+            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) < 0 )
             {
+                initParameterName = "jsp"; //$NON-NLS-1$
             }
 
             return initParameterName;
@@ -344,20 +326,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
     {
         if( entryCategories == null )
         {
-            IProject project = (IProject) getProperty( PROJECT );
+            final IProject project = (IProject) getProperty( PROJECT );
 
-            if( project != null )
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
+            if( liferayProject != null )
             {
-                try
-                {
-                    ILiferayRuntime portalRuntime = getLiferayRuntime();
-
-                    entryCategories = portalRuntime.getPortletEntryCategories();
-                }
-                catch( Exception e )
-                {
-                    e.printStackTrace();
-                }
+                entryCategories = liferayProject.getPortletEntryCategories();
             }
         }
 
@@ -378,8 +353,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             try
             {
-                ILiferayRuntime portalRuntime = getLiferayRuntime();
-                String version = portalRuntime.getPortalVersion();
+                ILiferayProject liferayProject = LiferayCore.create( getProject() );
+                String version = liferayProject.getPortalVersion();
                 Version portalVersion = Version.parseVersion( version );
 
                 if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2010-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,7 +26,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractProjectDefinition implements IProjectDefinition
+public abstract class AbstractSDKTemplate implements ISDKTemplate
 {
 
     protected String displayName;
@@ -37,7 +37,7 @@ public abstract class AbstractProjectDefinition implements IProjectDefinition
     protected IProjectFacet projectFacet;
     protected String shortName;
 
-    public AbstractProjectDefinition()
+    public AbstractSDKTemplate()
     {
         super();
     }
@@ -109,9 +109,9 @@ public abstract class AbstractProjectDefinition implements IProjectDefinition
         // dont' generate deployment descriptor
         ProjectUtil.setGenerateDD( dataModel, false );
 
-        setupNewProjectDefinition( dataModel, facetedProject );
+        setupNewFacetedProject( dataModel, facetedProject );
     }
 
-    public abstract void setupNewProjectDefinition( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
+    public abstract void setupNewFacetedProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
 
 }

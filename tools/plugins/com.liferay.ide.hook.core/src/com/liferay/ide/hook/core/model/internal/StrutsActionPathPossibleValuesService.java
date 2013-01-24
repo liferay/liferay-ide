@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,18 +11,16 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.StrutsAction;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.util.SortedSet;
@@ -31,7 +29,6 @@ import java.util.TreeSet;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.services.PossibleValuesService;
 import org.w3c.dom.Document;
@@ -103,22 +100,11 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
     {
         super.init();
 
-        final IProject project = project();
+        final ILiferayProject liferayProject = LiferayCore.create( project() );
 
-        if( project != null )
+        if( liferayProject != null )
         {
-            try
-            {
-                ILiferayRuntime lr = ServerUtil.getLiferayRuntime( project );
-
-                if( lr != null )
-                {
-                    this.portalDir = lr.getPortalDir();
-                }
-            }
-            catch( CoreException e )
-            {
-            }
+            this.portalDir = liferayProject.getAppServerPortalDir();
         }
     }
 

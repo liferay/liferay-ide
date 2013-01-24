@@ -17,20 +17,20 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.util.HookUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.SortedSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status.Severity;
@@ -44,43 +44,69 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
     final FileFilter jspfilter = new FileFilter()
     {
-
         public boolean accept( File pathname )
         {
-            return pathname.isDirectory() || pathname.getName().endsWith( ".jsp" ); //$NON-NLS-1$
+            return pathname.isDirectory() ||
+                   pathname.getName().endsWith( ".jsp" ) || //$NON-NLS-1$
+                   pathname.getName().endsWith( ".jspf" ); //$NON-NLS-1$
         }
     };
 
-    private IPath portalDir;
+    private Path portalDir;
+    private File[] possibleValues;
 
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( final SortedSet<String> values )
     {
-        final File portalDirFile = portalDir.toFile();
-        final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
+        if( possibleValues == null )
+        {
+            final IProject project = project();
 
-        if( htmlDirFile.exists() )
-        {
-            findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), new File[] { htmlDirFile }, values );
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
+            if( liferayProject != null )
+            {
+                this.portalDir = new Path( liferayProject.getAppServerPortalDir().toPortableString() );
+            }
+
+            final File portalDirFile = portalDir.toFile();
+            final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
+
+            final List<File> fileValues = new LinkedList<File>();
+
+            if( htmlDirFile.exists() )
+            {
+                findJSPFiles( new File[] { htmlDirFile }, fileValues );
+            }
+            else
+            {
+                final File[] files = portalDirFile.listFiles( jspfilter );
+                findJSPFiles( files, fileValues );
+            }
+
+            this.possibleValues = fileValues.toArray( new File[0] );
         }
-        else
+
+        if( possibleValues != null )
         {
-            File[] files = portalDirFile.listFiles( jspfilter );
-            findJSPFiles( new Path( portalDirFile.getAbsolutePath() ), files, values );
+            for( final File file : possibleValues )
+            {
+                values.add( new Path( file.getAbsolutePath() ).makeRelativeTo( portalDir ).toPortableString() );
+            }
         }
     }
 
-    private void findJSPFiles( Path portalDir, final File[] files, final SortedSet<String> values )
+    private void findJSPFiles( final File[] files, final List<File> fileValues )
     {
         for( File file : files )
         {
             if( file.isDirectory() )
             {
-                findJSPFiles( portalDir, file.listFiles( jspfilter ), values );
+                findJSPFiles( file.listFiles( jspfilter ), fileValues );
             }
             else
             {
-                values.add( new Path( file.getAbsolutePath() ).makeRelativeTo( portalDir ).toPortableString() );
+                fileValues.add( file );
             }
         }
     }
@@ -106,22 +132,6 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
     private Hook hook()
     {
         return this.context().find( Hook.class );
-    }
-
-    @Override
-    protected void init()
-    {
-        super.init();
-        IProject project = project();
-
-        try
-        {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-            this.portalDir = liferayRuntime.getPortalDir();
-        }
-        catch( CoreException e )
-        {
-        }
     }
 
     protected IProject project()

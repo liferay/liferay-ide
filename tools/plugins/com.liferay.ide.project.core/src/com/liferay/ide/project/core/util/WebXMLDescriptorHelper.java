@@ -19,7 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -151,7 +151,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
                     }
                     catch( Exception e )
                     {
-                        return ProjectCorePlugin.createErrorStatus( e );
+                        return LiferayProjectCore.createErrorStatus( e );
                     }
 
                     return Status.OK_STATUS;

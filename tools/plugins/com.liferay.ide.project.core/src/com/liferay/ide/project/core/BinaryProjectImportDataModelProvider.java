@@ -37,7 +37,7 @@ public class BinaryProjectImportDataModelProvider extends SDKProjectsImportDataM
     @Override
     public IStatus createSelectedProjectsErrorStatus()
     {
-        return ProjectCorePlugin.createErrorStatus( Msgs.selectBinary );
+        return LiferayProjectCore.createErrorStatus( Msgs.selectBinary );
     }
 
     /*

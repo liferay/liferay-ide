@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,7 +18,7 @@ package com.liferay.ide.project.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -98,7 +98,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                ProjectCorePlugin.logError( e );
+                LiferayProjectCore.logError( e );
             }
 
             IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
@@ -195,7 +195,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                ProjectCorePlugin.logError( e );
+                LiferayProjectCore.logError( e );
             }
         }
     }

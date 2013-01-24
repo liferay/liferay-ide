@@ -70,7 +70,7 @@ public class BuildServiceJob extends SDKJob
             return ServiceCore.createErrorStatus( Msgs.useLiferayProjectImportWizard );
         }
 
-        if( !ProjectUtil.isLiferayProject( getProject() ) )
+        if( !ProjectUtil.isLiferayFacetedProject( getProject() ) )
         {
             return ServiceCore.createErrorStatus( MessageFormat.format(
                 Msgs.useConvertLiferayProject, getProject().getName() ) );

@@ -38,7 +38,7 @@ public class HasServiceFilePropertyTester extends PropertyTester
         {
             IResource resource = (IResource) receiver;
 
-            boolean isLiferayProject = ProjectUtil.isLiferayProject( resource.getProject() );
+            boolean isLiferayProject = ProjectUtil.isLiferayFacetedProject( resource.getProject() );
 
             if( isLiferayProject )
             {

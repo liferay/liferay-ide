@@ -3,7 +3,7 @@
 <plugin>
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
-         
+
           <project-facet
             id="liferay.theme">
          <label>
@@ -67,16 +67,16 @@
          <fixed
                facet="jst.java">
          </fixed>
-         <fixed 
+         <fixed
                facet="liferay.theme">
          </fixed>
       </template>
    </extension>
-   
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.presets">
-     
-      
+
+
       <static-preset
             id="liferay.theme.preset">
          <label>
@@ -104,9 +104,8 @@
                version="6.0">
          </facet>
       </static-preset>
-      
    </extension>
-   
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.validators">
       <validator
@@ -118,15 +117,15 @@
       </validator>
    </extension>
    <extension
-         point="com.liferay.ide.project.core.liferayProjects">
-      <liferayProjectDefinition
-            class="com.liferay.ide.theme.core.LiferayThemeDefinition"
+         point="com.liferay.ide.project.core.sdkTemplates">
+      <sdkTemplate
+            class="com.liferay.ide.theme.core.ThemeSDKTemplate"
             displayName="Liferay Theme"
             facetId="liferay.theme"
             facetedProjectTemplateId="liferay.theme.template"
             menuIndex="50"
             shortName="theme">
-      </liferayProjectDefinition>
+      </sdkTemplate>
    </extension>
    <extension
          id="com.liferay.ide.eclipse.theme.core.cssBuilder"
@@ -140,7 +139,7 @@
          </run>
       </builder>
    </extension>
-   
+
    <extension
          point="com.liferay.ide.server.core.pluginPublishers">
       <liferayPluginPublisher
@@ -149,5 +148,5 @@
             facetId="liferay.theme">
       </liferayPluginPublisher>
    </extension>
-	
+
 </plugin>

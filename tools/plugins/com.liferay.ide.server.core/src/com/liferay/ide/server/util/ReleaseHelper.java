@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.util;
 
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -76,7 +76,7 @@ public class ReleaseHelper
         }
         catch( Throwable e )
         {
-            LiferayServerCorePlugin.logError( e );
+            LiferayServerCore.logError( e );
         }
 
         return retval;

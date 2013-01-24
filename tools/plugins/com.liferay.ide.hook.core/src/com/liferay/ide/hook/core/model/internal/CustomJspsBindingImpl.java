@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -11,16 +11,14 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.util.HookUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -150,17 +148,11 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     {
         super.init( element, property, params );
 
-        try
-        {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project() );
+        final ILiferayProject liferayProject = LiferayCore.create( project() );
 
-            if( liferayRuntime != null )
-            {
-                this.portalDir = liferayRuntime.getPortalDir();
-            }
-        }
-        catch( CoreException e )
+        if( liferayProject != null )
         {
+            this.portalDir = liferayProject.getAppServerPortalDir();
         }
     }
 

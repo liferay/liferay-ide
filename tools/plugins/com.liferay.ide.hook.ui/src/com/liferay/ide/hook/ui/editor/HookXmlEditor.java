@@ -17,14 +17,14 @@ package com.liferay.ide.hook.ui.editor;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.Hook6xx;
 import com.liferay.ide.hook.ui.HookUI;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -108,8 +108,8 @@ public class HookXmlEditor extends SapphireEditorForXml
                 IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getProject() );
                 IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
 
-                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
-                IPath portalDir = liferayRuntime.getPortalDir();
+                final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+                final IPath portalDir = liferayProject.getAppServerPortalDir();
 
                 for( CustomJsp customJsp : customJsps )
                 {
@@ -137,7 +137,7 @@ public class HookXmlEditor extends SapphireEditorForXml
                 }
             }
         }
-        catch( CoreException e )
+        catch( Exception e )
         {
             HookUI.logError( e );
         }

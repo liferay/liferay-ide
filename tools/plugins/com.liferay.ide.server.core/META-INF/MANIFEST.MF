@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.server.core;singleton:=true
 Bundle-Version: 2.0.0.qualifier
-Bundle-Activator: com.liferay.ide.server.core.LiferayServerCorePlugin
+Bundle-Activator: com.liferay.ide.server.core.LiferayServerCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";visibility:=reexport,
  org.eclipse.jst.server.core;bundle-version="[1.2.0,2.0.0)";visibility:=reexport,

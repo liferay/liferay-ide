@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -47,11 +47,11 @@ public class QNamesPossibleValuesService extends PossibleValuesService
         IModelElement imodelElement = context( IModelElement.class );
         // values.add( param( "0" ) );
         PortletApp portletApp = context( IModelElement.class ).nearest( PortletApp.class );
-        
+
         if( imodelElement instanceof EventDefinitionRef )
         {
             ModelElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();
-            
+
             for( EventDefinition eventDefinition : eventDefs )
             {
                 if( eventDefinition.getNamespaceURI().getContent() != null &&
@@ -66,7 +66,7 @@ public class QNamesPossibleValuesService extends PossibleValuesService
         else if( imodelElement instanceof SupportedPublicRenderParameter )
         {
             ModelElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
-            
+
             for( PublicRenderParameter publicRenderParam : publicRenderParameters )
             {
                 if( publicRenderParam.getNamespaceURI().getContent() != null &&

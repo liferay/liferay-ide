@@ -73,7 +73,7 @@ public class ValidProjectChecker
 
         for( IProject project : projects )
         {
-            if( ProjectUtil.isLiferayProject( project ) )
+            if( ProjectUtil.isLiferayFacetedProject( project ) )
             {
                 Set<IProjectFacetVersion> facets = ProjectUtil.getFacetedProject( project ).getProjectFacets();
 

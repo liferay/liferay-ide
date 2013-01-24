@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.util;
 
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +54,7 @@ public class SocketUtil
         }
         catch( Exception e )
         {
-            status = LiferayServerCorePlugin.createErrorStatus( Msgs.notConnect );
+            status = LiferayServerCore.createErrorStatus( Msgs.notConnect );
             // e.printStackTrace();
         }
         finally

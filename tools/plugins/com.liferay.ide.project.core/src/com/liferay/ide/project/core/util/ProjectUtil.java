@@ -17,9 +17,9 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.IProjectDefinition;
+import com.liferay.ide.project.core.ISDKTemplate;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -109,7 +109,7 @@ public class ProjectUtil
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e ); //$NON-NLS-1$ //$NON-NLS-2$
+            LiferayProjectCore.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e ); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
@@ -142,7 +142,7 @@ public class ProjectUtil
             }
             catch( IOException exception )
             {
-                ProjectCorePlugin.logError( exception.getLocalizedMessage(), exception );
+                LiferayProjectCore.logError( exception.getLocalizedMessage(), exception );
             }
         }
 
@@ -202,7 +202,7 @@ public class ProjectUtil
                     }
                     catch( IOException exception )
                     {
-                        ProjectCorePlugin.logError( exception.getLocalizedMessage(), exception );
+                        LiferayProjectCore.logError( exception.getLocalizedMessage(), exception );
                     }
 
                     // dont recurse directories that we have already determined
@@ -246,7 +246,7 @@ public class ProjectUtil
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( "Unable to create default web xml", e ); //$NON-NLS-1$
+            LiferayProjectCore.logError( "Unable to create default web xml", e ); //$NON-NLS-1$
         }
     }
 
@@ -513,7 +513,7 @@ public class ProjectUtil
                 }
                 catch( Exception e )
                 {
-                    ProjectCorePlugin.logError( e );
+                    LiferayProjectCore.logError( e );
                 }
             }
 
@@ -521,7 +521,7 @@ public class ProjectUtil
         }
         catch( Exception ex )
         {
-            ProjectCorePlugin.logError( "Exception trying to fix Ext project classpath entries.", ex ); //$NON-NLS-1$
+            LiferayProjectCore.logError( "Exception trying to fix Ext project classpath entries.", ex ); //$NON-NLS-1$
         }
     }
 
@@ -567,7 +567,7 @@ public class ProjectUtil
                                     }
                                     catch( Exception e )
                                     {
-                                        ProjectCorePlugin.logError( e );
+                                        LiferayProjectCore.logError( e );
                                     }
                                 }
                             }
@@ -644,7 +644,7 @@ public class ProjectUtil
 
     public static IFile getPortletXmlFile( IProject project )
     {
-        if( project != null && ProjectUtil.isLiferayProject( project ) )
+        if( project != null && ProjectUtil.isLiferayFacetedProject( project ) )
         {
             // IDE-110 IDE-648
             final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
@@ -788,7 +788,7 @@ public class ProjectUtil
         }
         catch( JavaModelException e )
         {
-            ProjectCorePlugin.logError( e );
+            LiferayProjectCore.logError( e );
         }
 
         return list.toArray( new IPackageFragmentRoot[list.size()] );
@@ -885,7 +885,7 @@ public class ProjectUtil
             }
             catch( CoreException e )
             {
-                throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+                throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
             }
         }
         else if( projectRecord.liferayProjectDir != null )
@@ -896,7 +896,7 @@ public class ProjectUtil
             }
             catch( CoreException e )
             {
-                throw new CoreException( ProjectCorePlugin.createErrorStatus( e ) );
+                throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
             }
         }
 
@@ -941,32 +941,16 @@ public class ProjectUtil
 
     public static boolean isLiferayFacet( IProjectFacet projectFacet )
     {
-        return ProjectCorePlugin.getProjectDefinition( projectFacet ) != null;
+        return LiferayProjectCore.getSDKTemplate( projectFacet ) != null;
     }
 
     public static boolean isLiferayFacet( IProjectFacetVersion projectFacetVersion )
     {
         return projectFacetVersion != null &&
-            ProjectCorePlugin.getProjectDefinition( projectFacetVersion.getProjectFacet() ) != null;
+            LiferayProjectCore.getSDKTemplate( projectFacetVersion.getProjectFacet() ) != null;
     }
 
-    public static boolean isLiferayPluginType( String type )
-    {
-        return type != null &&
-            ( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-                ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-                ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-                ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-                ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
-    }
-
-    public static boolean isLiferayProject( IFolder folder )
-    {
-        return folder != null && folder.exists() && folder.getRawLocation() != null &&
-            isLiferaySDKProjectDir( folder.getRawLocation().toFile() );
-    }
-
-    public static boolean isLiferayProject( IProject project )
+    public static boolean isLiferayFacetedProject( IProject project )
     {
         boolean retval = false;
 
@@ -984,9 +968,9 @@ public class ProjectUtil
                 for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
                 {
                     IProjectFacet projectFacet = facet.getProjectFacet();
-                    IProjectDefinition projectDefinition = ProjectCorePlugin.getProjectDefinition( projectFacet );
+                    ISDKTemplate sdkTemplate = LiferayProjectCore.getSDKTemplate( projectFacet );
 
-                    if( projectDefinition != null )
+                    if( sdkTemplate != null )
                     {
                         retval = true;
                         break;
@@ -999,6 +983,22 @@ public class ProjectUtil
         }
 
         return retval;
+    }
+
+    public static boolean isLiferayPluginType( String type )
+    {
+        return type != null &&
+            ( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
+    }
+
+    public static boolean isLiferaySDKProject( IFolder folder )
+    {
+        return folder != null && folder.exists() && folder.getRawLocation() != null &&
+            isLiferaySDKProjectDir( folder.getRawLocation().toFile() );
     }
 
     public static boolean isLiferaySDKProjectDir( File file )

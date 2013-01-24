@@ -15,7 +15,7 @@
 
 package com.liferay.ide.sdk.ui;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
@@ -51,12 +51,12 @@ public class SDKUIPlugin extends AbstractUIPlugin
 
     public static IStatus createErrorStatus( String msg )
     {
-        return CorePlugin.createErrorStatus( PLUGIN_ID, msg );
+        return LiferayCore.createErrorStatus( PLUGIN_ID, msg );
     }
 
     public static IStatus createErrorStatus( Throwable t )
     {
-        return CorePlugin.createErrorStatus( PLUGIN_ID, t );
+        return LiferayCore.createErrorStatus( PLUGIN_ID, t );
     }
 
     /**

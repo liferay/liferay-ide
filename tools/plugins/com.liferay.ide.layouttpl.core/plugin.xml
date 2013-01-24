@@ -3,7 +3,6 @@
 <plugin>
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
-         
           <project-facet
             id="liferay.layouttpl">
          <label>
@@ -67,12 +66,12 @@
          <fixed
                facet="jst.web">
          </fixed>
-         <fixed 
+         <fixed
                facet="liferay.layouttpl">
          </fixed>
       </template>
    </extension>
-   
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.presets">
       <static-preset
@@ -96,9 +95,9 @@
                version="6.0">
          </facet>
       </static-preset>
-      
+
    </extension>
-   
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.validators">
       <validator
@@ -110,15 +109,15 @@
       </validator>
    </extension>
    <extension
-         point="com.liferay.ide.project.core.liferayProjects">
-      <liferayProjectDefinition
-            class="com.liferay.ide.layouttpl.core.LiferayLayoutTplDefinition"
+         point="com.liferay.ide.project.core.sdkTemplates">
+      <sdkTemplate
+            class="com.liferay.ide.layouttpl.core.LayoutTplSDKTemplate"
             displayName="Liferay Layout Template"
             facetId="liferay.layouttpl"
             facetedProjectTemplateId="liferay.layouttpl.template"
             menuIndex="40"
             shortName="layouttpl">
-      </liferayProjectDefinition>
+      </sdkTemplate>
    </extension>
    <extension
          point="org.eclipse.core.contenttype.contentTypes">

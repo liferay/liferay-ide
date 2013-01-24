@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,14 +16,14 @@
 package com.liferay.ide.hook.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -80,11 +80,11 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
     @Override
     public IStatus execute( IProgressMonitor monitor, IAdaptable info ) throws ExecutionException
     {
-        IDataModel dm = getDataModel();
+        final IDataModel dm = getDataModel();
 
         IStatus retval = null;
 
-        IStatus status = checkDescriptorFile( getTargetProject() );
+        final IStatus status = checkDescriptorFile( getTargetProject() );
 
         if( !status.isOK() )
         {
@@ -236,9 +236,9 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
     protected IFile copyPortalJSPToProject( String portalJsp, IFolder customFolder ) throws Exception
     {
-        ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( getTargetProject() );
+        ILiferayProject liferayProject = LiferayCore.create( getTargetProject() );
 
-        IPath portalDir = runtime.getPortalDir();
+        IPath portalDir = liferayProject.getAppServerPortalDir();
 
         IPath portalJspPath = new Path( portalJsp );
 

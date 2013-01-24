@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -47,9 +47,6 @@ import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPag
 public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
 {
 
-    /**
-     * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
-     */
     private static final class Handler extends SapphireActionHandler
     {
         private final String strModelProperty;
@@ -184,7 +181,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
     {
         SapphireEditor editor = this.getPart().nearest( SapphireEditor.class );
 
-        return editor != null && ProjectUtil.isLiferayProject( editor.getProject() );
+        return editor != null && ProjectUtil.isLiferayFacetedProject( editor.getProject() );
     }
 
     private static class Msgs extends NLS

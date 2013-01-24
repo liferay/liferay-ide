@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,7 +15,7 @@
 
 package com.liferay.ide.core.util;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
@@ -64,7 +64,7 @@ public class DescriptorHelper
             }
             catch( Exception e )
             {
-                CorePlugin.logError( e );
+                LiferayCore.logError( e );
             }
         }
 
@@ -97,7 +97,7 @@ public class DescriptorHelper
             }
             catch( Exception e )
             {
-                retval = CorePlugin.createErrorStatus( e );
+                retval = LiferayCore.createErrorStatus( e );
             }
             finally
             {
@@ -138,7 +138,7 @@ public class DescriptorHelper
 
             if( !this.file.exists() )
             {
-                return CorePlugin.createErrorStatus( this.file.getName() + " doesn't exist" ); //$NON-NLS-1$
+                return LiferayCore.createErrorStatus( this.file.getName() + " doesn't exist" ); //$NON-NLS-1$
             }
 
             IDOMModel domModel = null;
@@ -153,7 +153,7 @@ public class DescriptorHelper
             }
             catch( Exception e )
             {
-                retval = CorePlugin.createErrorStatus( e );
+                retval = LiferayCore.createErrorStatus( e );
             }
             finally
             {

@@ -23,7 +23,7 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayPublishHelper;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
@@ -92,7 +92,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     @Override
     public IStatus canRestart( String mode )
     {
-        return LiferayServerCorePlugin.createWarningStatus( Msgs.restartingRemoteServerNotSupported );
+        return LiferayServerCore.createWarningStatus( Msgs.restartingRemoteServerNotSupported );
     }
 
     @Override
@@ -106,13 +106,13 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     @Override
     public IStatus canStart( String launchMode )
     {
-        return LiferayServerCorePlugin.createErrorStatus( Msgs.liferayServerInstanceRemote );
+        return LiferayServerCore.createErrorStatus( Msgs.liferayServerInstanceRemote );
     }
 
     @Override
     public IStatus canStop()
     {
-        return LiferayServerCorePlugin.createWarningStatus( Msgs.stoppingRemoteLiferayServerNotSupported );
+        return LiferayServerCore.createWarningStatus( Msgs.stoppingRemoteLiferayServerNotSupported );
     }
 
     @Override
@@ -148,7 +148,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
             if( retval == null )
             {
-                setServerStatus( LiferayServerCorePlugin.createErrorStatus( Msgs.checkConnectionSettings ) );
+                setServerStatus( LiferayServerCore.createErrorStatus( Msgs.checkConnectionSettings ) );
                 return IServer.STATE_UNKNOWN;
             }
 
@@ -165,7 +165,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
         catch( Exception e )
         {
-            LiferayServerCorePlugin.logError( "Could not get server state.", e ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Could not get server state.", e ); //$NON-NLS-1$
             return IServer.STATE_UNKNOWN;
         }
 
@@ -258,7 +258,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
                             }
                             catch( Exception e )
                             {
-                                LiferayServerCorePlugin.logError( e );
+                                LiferayServerCore.logError( e );
                             }
 
                             return Status.OK_STATUS;
@@ -375,7 +375,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         if( remoteConnection == null )
         {
-            remoteConnection = LiferayServerCorePlugin.getRemoteConnection( getRemoteServer() );
+            remoteConnection = LiferayServerCore.getRemoteConnection( getRemoteServer() );
         }
 
         return remoteConnection;
@@ -484,7 +484,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
         catch( Exception e )
         {
-            LiferayServerCorePlugin.logError( "Could not create new server launch configuration.", e ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Could not create new server launch configuration.", e ); //$NON-NLS-1$
         }
     }
 
@@ -593,7 +593,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         if( error != null )
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( error.toString() ) );
+            throw new CoreException( LiferayServerCore.createErrorStatus( error.toString() ) );
         }
 
         monitor.done();
@@ -605,7 +605,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         if( module == null || module.length != 1 )
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
                 ( module != null ? module.length : 0 ) ) );
         }
 
@@ -626,7 +626,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         Map<String, String> properties = new HashMap<String, String>();
         properties.put( ISDKConstants.PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false" ); //$NON-NLS-1$
 
-        IPath deployPath = LiferayServerCorePlugin.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
+        IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployPath.toOSString() );
 
@@ -665,7 +665,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         IServerManagerConnection remoteConnection = getServerManagerConnection();
 
-        setModuleStatus( module, LiferayServerCorePlugin.createInfoStatus( Msgs.installing ) );
+        setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.installing ) );
 
         submon.worked( 15 ); // 50% complete
 
@@ -693,19 +693,19 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             setModuleStatus( module, null );
             setModuleState( module, IServer.STATE_UNKNOWN );
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( ex ) );
+            throw new CoreException( LiferayServerCore.createErrorStatus( ex ) );
         }
 
         if( error != null )
         {
             setModuleStatus( module, null );
             setModuleState( module, IServer.STATE_UNKNOWN );
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( error.toString() ) );
+            throw new CoreException( LiferayServerCore.createErrorStatus( error.toString() ) );
         }
 
         submon.worked( 40 ); // 90%
 
-        setModuleStatus( module, LiferayServerCorePlugin.createInfoStatus( Msgs.starting ) );
+        setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.starting ) );
 
         // scriptFile = getScriptFile("publish/startApplicationScript.groovy");
 
@@ -732,7 +732,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         if( state != IServer.STATE_STARTED )
         {
             throw new CoreException(
-                LiferayServerCorePlugin.createErrorStatus( Msgs.notPublishRemoteServer ) );
+                LiferayServerCore.createErrorStatus( Msgs.notPublishRemoteServer ) );
         }
     }
 
@@ -740,7 +740,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         if( module == null || module.length != 1 )
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
                 ( module != null ? module.length : 0 ) ) );
         }
 
@@ -769,7 +769,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         String appName = moduleProject.getName();
 
-        setModuleStatus( module, LiferayServerCorePlugin.createInfoStatus( Msgs.uninstalling ) );
+        setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.uninstalling ) );
 
         monitor.subTask( Msgs.gettingRemoteConnection );
 
@@ -796,7 +796,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         if( error != null )
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( error.toString() ) );
+            throw new CoreException( LiferayServerCore.createErrorStatus( error.toString() ) );
         }
 
         setModuleStatus( module, null );
@@ -877,7 +877,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
         catch( APIException e )
         {
-            LiferayServerCorePlugin.logError( e );
+            LiferayServerCore.logError( e );
         }
 
         IModule[] module2 = new IModule[] { module };

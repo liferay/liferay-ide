@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 
 import java.io.File;
 
@@ -29,7 +29,7 @@ import org.osgi.framework.BundleContext;
  *
  * @author Greg Amerson
  */
-public class LiferayTomcatPlugin extends CorePlugin
+public class LiferayTomcatPlugin extends LiferayCore
 {
 
     // The shared instance

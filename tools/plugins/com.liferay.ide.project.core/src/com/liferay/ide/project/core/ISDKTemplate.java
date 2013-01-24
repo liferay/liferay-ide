@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.project.core;
@@ -25,10 +25,10 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 /**
  * @author Gregory Amerson
  */
-public interface IProjectDefinition
+public interface ISDKTemplate
 {
 
-    public static final String ID = "com.liferay.ide.project.core.liferayProjects"; //$NON-NLS-1$
+    public static final String ID = "com.liferay.ide.project.core.sdkTemplates"; //$NON-NLS-1$
 
     public String getDisplayName();
 

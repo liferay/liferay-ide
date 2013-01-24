@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.server.core;
@@ -39,7 +39,7 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
 {
 
     protected static final String PROP_STUB_TYPE_ID = "stub-type-id"; //$NON-NLS-1$
-    // protected ILiferayRuntimeStub runtimeStub = null;
+
     protected IRuntimeWorkingCopy tempRuntime = null;
 
     public LiferayRuntimeStubDelegate()
@@ -57,32 +57,24 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         return getLiferayRuntime().getAppServerDir();
     }
 
+    public IPath getAppServerPortalDir()
+    {
+        return getLiferayRuntime().getAppServerPortalDir();
+    }
+
     public String getAppServerType()
     {
         return getLiferayRuntime().getAppServerType();
     }
 
-    // public ILiferayRuntimeStub getRuntimeStub() {
-    // if ( runtimeStub == null ) {
-    // runtimeStub = (ILiferayRuntimeStub) LiferayServerCorePlugin.getRuntimeStub( getRuntimeStubTypeId() );
-    // }
-    //
-    // return runtimeStub;
-    // }
-
-    public IPath getDeployDir()
+    public String[] getHookSupportedProperties()
     {
-        return getLiferayRuntime().getDeployDir();
+        return getLiferayRuntime().getHookSupportedProperties();
     }
 
     public String getJavadocURL()
     {
         return getLiferayRuntime().getJavadocURL();
-    }
-
-    public IPath getLibGlobalDir()
-    {
-        return getLiferayRuntime().getLibGlobalDir();
     }
 
     public ILiferayRuntime getLiferayRuntime()
@@ -93,11 +85,6 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
     public String getName()
     {
         return getRuntime().getName();
-    }
-
-    public IPath getPortalDir()
-    {
-        return getLiferayRuntime().getPortalDir();
     }
 
     public String getPortalVersion()
@@ -125,19 +112,9 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         return getAttribute( PROP_STUB_TYPE_ID, StringPool.EMPTY );
     }
 
-    public String[] getServletFilterNames()
-    {
-        return getLiferayRuntime().getServletFilterNames();
-    }
-
     public IPath getSourceLocation()
     {
         return getLiferayRuntime().getSourceLocation();
-    }
-
-    public String[] getSupportedHookProperties()
-    {
-        return getLiferayRuntime().getSupportedHookProperties();
     }
 
     protected IRuntimeWorkingCopy getTempRuntime()
@@ -145,6 +122,7 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         if( tempRuntime == null && getRuntime().getLocation() != null )
         {
             IRuntimeType runtimeType = ServerCore.findRuntimeType( getRuntimeStubTypeId() );
+
             try
             {
                 tempRuntime = runtimeType.createRuntime( getRuntimeStubTypeId() + "-stub", new NullProgressMonitor() ); //$NON-NLS-1$
@@ -152,7 +130,7 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
             }
             catch( CoreException e )
             {
-                LiferayServerCorePlugin.logError( "Error creating runtime", e ); //$NON-NLS-1$
+                LiferayServerCore.logError( "Error creating runtime", e ); //$NON-NLS-1$
             }
         }
 

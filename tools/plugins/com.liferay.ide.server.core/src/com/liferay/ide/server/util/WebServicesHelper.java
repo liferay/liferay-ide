@@ -16,7 +16,7 @@
 package com.liferay.ide.server.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.IOException;
 import java.net.URL;
@@ -70,7 +70,7 @@ public class WebServicesHelper
         }
         catch( IOException e1 )
         {
-            LiferayServerCorePlugin.logError( "Unable to initial web services list." ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Unable to initial web services list." ); //$NON-NLS-1$
         }
     }
 

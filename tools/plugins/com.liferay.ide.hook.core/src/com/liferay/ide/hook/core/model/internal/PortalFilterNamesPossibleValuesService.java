@@ -1,13 +1,29 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Arrays;
 import java.util.SortedSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
@@ -17,32 +33,37 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 public class PortalFilterNamesPossibleValuesService extends PossibleValuesService
 {
 
-    private IFile hookFile;
-
-    @Override
-    protected void init()
-    {
-        super.init();
-
-        this.hookFile = this.context().find( IModelElement.class ).adapt( IFile.class );
-    }
+    private String[] servletFilterNames;
 
     @Override
     protected void fillPossibleValues( SortedSet<String> values )
     {
-        if( hookFile != null )
+        if( this.servletFilterNames == null )
         {
-            try
-            {
-                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( hookFile.getProject() );
+            final IFile hookFile = this.context().find( IModelElement.class ).adapt( IFile.class );
 
-                String[] names = liferayRuntime.getServletFilterNames();
-
-                values.addAll( Arrays.asList( names ) );
-            }
-            catch( Exception e )
+            if( hookFile != null )
             {
+                try
+                {
+                    final ILiferayProject liferayProject = LiferayCore.create( hookFile.getProject() );
+
+                    if( liferayProject != null )
+                    {
+                        final IPath appServerPortalDir = liferayProject.getAppServerPortalDir();
+
+                        this.servletFilterNames = ServerUtil.getServletFilterNames( appServerPortalDir );
+                    }
+                }
+                catch( Exception e )
+                {
+                }
             }
+        }
+
+        if( this.servletFilterNames != null )
+        {
+            values.addAll( Arrays.asList( this.servletFilterNames ) );
         }
     }
 

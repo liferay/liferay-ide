@@ -72,7 +72,7 @@ public class LiferayProjectSelectionDialog extends SelectionStatusDialog
                     IJavaProject[] projects = model.getJavaProjects();
                     for( int i = 0; i < projects.length; i++ )
                     {
-                        if( ProjectUtil.isLiferayProject( projects[i].getProject() ) )
+                        if( ProjectUtil.isLiferayFacetedProject( projects[i].getProject() ) )
                         {
                             set.add( projects[i] );
                         }

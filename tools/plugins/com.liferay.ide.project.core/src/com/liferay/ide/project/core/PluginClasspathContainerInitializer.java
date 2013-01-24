@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.CoreException;
@@ -50,24 +50,22 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
     @Override
     public void initialize( IPath containerPath, IJavaProject project ) throws CoreException
     {
-
         IClasspathContainer classpathContainer = null;
 
         int count = containerPath.segmentCount();
 
         if( count != 2 )
         {
-            throw new CoreException(
-                ProjectCorePlugin.createErrorStatus( "Invalid plugin classpath container should expecting 2 segments." ) ); //$NON-NLS-1$
+            final String msg = "Invalid plugin classpath container should expecting 2 segments."; //$NON-NLS-1$
+            throw new CoreException( LiferayProjectCore.createErrorStatus( msg ) );
         }
 
         String root = containerPath.segment( 0 );
 
         if( !ID.equals( root ) )
         {
-            throw new CoreException(
-                ProjectCorePlugin.createErrorStatus( "Invalid plugin classpath container, expecting container root " + //$NON-NLS-1$
-                    ID ) );
+            final String msg = "Invalid plugin classpath container, expecting container root "; //$NON-NLS-1$
+            throw new CoreException( LiferayProjectCore.createErrorStatus( msg + ID ) );
         }
 
         String finalSegment = containerPath.segment( 1 );
@@ -95,7 +93,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( e );
+            LiferayProjectCore.logError( e );
         }
 
         classpathContainer =
@@ -167,7 +165,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
             }
             catch( Exception e )
             {
-                ProjectCorePlugin.logError( e );
+                LiferayProjectCore.logError( e );
             }
         }
 
@@ -201,7 +199,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         }
         else
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Invalid final segment of type: " + //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.createErrorStatus( "Invalid final segment of type: " + //$NON-NLS-1$
                 finalSegment ) );
         }
 

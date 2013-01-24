@@ -13,7 +13,7 @@ package com.liferay.ide.server.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 import com.liferay.ide.server.remote.RemoteServer;
@@ -139,7 +139,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
             IRemoteServer.ATTR_SERVER_MANAGER_CONTEXT_PATH.equals( evt.getPropertyName() ) )
         {
 
-            LiferayServerCorePlugin.updateConnectionSettings( (IRemoteServer) serverWC.loadAdapter(
+            LiferayServerCore.updateConnectionSettings( (IRemoteServer) serverWC.loadAdapter(
                 IRemoteServer.class, null ) );
         }
     }

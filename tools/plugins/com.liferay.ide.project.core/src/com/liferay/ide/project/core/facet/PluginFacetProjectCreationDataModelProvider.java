@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,8 +18,8 @@ package com.liferay.ide.project.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.IProjectDefinition;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.ISDKTemplate;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -55,18 +55,19 @@ import org.osgi.framework.Version;
 public class PluginFacetProjectCreationDataModelProvider extends WebFacetProjectCreationDataModelProvider
     implements IPluginProjectDataModelProperties
 {
-    protected Map<String, IProjectDefinition> projectDefinitions = new HashMap<String, IProjectDefinition>();
+    protected Map<String, ISDKTemplate> sdkTemplates = new HashMap<String, ISDKTemplate>();
 
     public PluginFacetProjectCreationDataModelProvider()
     {
         super();
-        IProjectDefinition[] definitions = ProjectCorePlugin.getProjectDefinitions();
 
-        for( IProjectDefinition definition : definitions )
+        final ISDKTemplate[] templates = LiferayProjectCore.getSDKTemplates();
+
+        for( ISDKTemplate tmpl : templates )
         {
-            if( definition.getFacetId() != null )
+            if( tmpl.getFacetId() != null )
             {
-                projectDefinitions.put( definition.getFacetId(), definition );
+                sdkTemplates.put( tmpl.getFacetId(), tmpl );
             }
         }
     }
@@ -133,10 +134,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         }
         else if( PORTLET_FRAMEWORK_ID.equals( propertyName ) )
         {
-            return ProjectCorePlugin.getPortletFrameworks()[0].getId();
+            return LiferayProjectCore.getPortletFrameworks()[0].getId();
         }
 
-        for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+        for( IPortletFrameworkWizardProvider portletFramework : LiferayProjectCore.getPortletFrameworks() )
         {
             if( portletFramework.hasPropertyName( propertyName ) )
             {
@@ -265,7 +266,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         propNames.add( PLUGIN_FRAGMENT_DM );
         propNames.add( PORTLET_FRAMEWORK_ID );
 
-        for( IPortletFrameworkWizardProvider portletFramework : ProjectCorePlugin.getPortletFrameworks() )
+        for( IPortletFrameworkWizardProvider portletFramework : LiferayProjectCore.getPortletFrameworks() )
         {
             propNames.addAll( portletFramework.getPropertyNames() );
         }
@@ -331,7 +332,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
             }
         }
 
-        ProjectCorePlugin.getPortletFrameworks( true );
+        LiferayProjectCore.getPortletFrameworks( true );
     }
 
     @Override
@@ -339,7 +340,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
     {
         String portletFrameworkId = getStringProperty( PORTLET_FRAMEWORK_ID );
 
-        IPortletFrameworkWizardProvider portletFramework = ProjectCorePlugin.getPortletFramework( portletFrameworkId );
+        IPortletFrameworkWizardProvider portletFramework = LiferayProjectCore.getPortletFramework( portletFrameworkId );
 
         if( FACET_PROJECT_NAME.equals( propertyName ) || LIFERAY_SDK_NAME.equals( propertyName ) )
         {
@@ -407,7 +408,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
     protected void setupPortletFramework( IPortletFrameworkWizardProvider portletFramework )
     {
-        IPortletFrameworkWizardProvider[] portletFrameworks = ProjectCorePlugin.getPortletFrameworks();
+        IPortletFrameworkWizardProvider[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
 
         for( IPortletFrameworkWizardProvider framework : portletFrameworks )
         {
@@ -429,25 +430,25 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
     {
         updateProjectLocation();
 
-        IProjectDefinition projectDefinition = projectDefinitions.get( facetId );
+        final ISDKTemplate sdkTemplate = sdkTemplates.get( facetId );
 
-        if( projectDefinition != null )
+        if( sdkTemplate != null )
         {
             IFacetedProjectWorkingCopy facetedProject = getFacetedProjectWorkingCopy();
 
-            for( IProjectDefinition def : projectDefinitions.values() )
+            for( ISDKTemplate tmpl : sdkTemplates.values() )
             {
-                removeFacet( facetedProject, def.getFacet() );
+                removeFacet( facetedProject, tmpl.getFacet() );
             }
 
-            IFacetedProjectTemplate template = projectDefinition.getFacetedProjectTemplate();
+            IFacetedProjectTemplate template = sdkTemplate.getFacetedProjectTemplate();
 
             if( template != null )
             {
                 facetedProject.setFixedProjectFacets( Collections.unmodifiableSet( template.getFixedProjectFacets() ) );
             }
 
-            projectDefinition.setupNewProject( getDataModel(), facetedProject );
+            sdkTemplate.setupNewProject( getDataModel(), facetedProject );
         }
     }
 
@@ -471,7 +472,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
     {
         String frameworkId = getStringProperty( PORTLET_FRAMEWORK_ID );
 
-        IPortletFrameworkWizardProvider framework = ProjectCorePlugin.getPortletFramework( frameworkId );
+        IPortletFrameworkWizardProvider framework = LiferayProjectCore.getPortletFramework( frameworkId );
 
         if( FACET_PROJECT_NAME.equals( propertyName ) )
         {
@@ -486,7 +487,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( ProjectUtil.getProject( testProjectName ).exists() )
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.projectExists );
+                return LiferayProjectCore.createErrorStatus( Msgs.projectExists );
             }
 
             // before we do a basic java validation we need to strip "-" and "." characters
@@ -499,7 +500,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( !status.isOK() )
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.projectNameInvalid );
+                return LiferayProjectCore.createErrorStatus( Msgs.projectNameInvalid );
             }
         }
         else if( LIFERAY_SDK_NAME.equals( propertyName ) )
@@ -508,7 +509,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( sdkVal instanceof String && IPluginFacetConstants.LIFERAY_SDK_NAME_DEFAULT_VALUE.equals( sdkVal ) )
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.configurePluginSDK );
+                return LiferayProjectCore.createErrorStatus( Msgs.configurePluginSDK );
             }
             else if( !CoreUtil.isNullOrEmpty( sdkVal.toString() ) )
             {
@@ -516,7 +517,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
                 if( sdk == null || !sdk.isValid() )
                 {
-                    return ProjectCorePlugin.createErrorStatus( Msgs.pluginSDKInvalid );
+                    return LiferayProjectCore.createErrorStatus( Msgs.pluginSDKInvalid );
                 }
                 else
                 {
@@ -538,7 +539,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( facetRuntime == null )
             {
-                return ProjectCorePlugin.createErrorStatus( Msgs.configureLiferayPortalRuntime );
+                return LiferayProjectCore.createErrorStatus( Msgs.configureLiferayPortalRuntime );
             }
             else if( facetRuntime instanceof BridgedRuntime )
             {
@@ -548,7 +549,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
                 }
                 else
                 {
-                    return ProjectCorePlugin.createErrorStatus( Msgs.selectLiferayPortalRuntime );
+                    return LiferayProjectCore.createErrorStatus( Msgs.selectLiferayPortalRuntime );
                 }
             }
         }
@@ -568,7 +569,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
             if( selectedSDK == null )
             {
-                return ProjectCorePlugin.createErrorStatus( NLS.bind( Msgs.unableDetermineSDKVersion, sdkName ) );
+                return LiferayProjectCore.createErrorStatus( NLS.bind( Msgs.unableDetermineSDKVersion, sdkName ) );
             }
 
             Version sdkVersion = new Version( selectedSDK.getVersion() );

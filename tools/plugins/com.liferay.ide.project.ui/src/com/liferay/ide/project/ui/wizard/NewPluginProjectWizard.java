@@ -17,7 +17,7 @@ package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
@@ -377,7 +377,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             String portletFrameworkId = getDataModel().getStringProperty( PORTLET_FRAMEWORK_ID );
 
             IPortletFrameworkWizardProvider portletFramework =
-                ProjectCorePlugin.getPortletFramework( portletFrameworkId );
+                LiferayProjectCore.getPortletFramework( portletFrameworkId );
 
             portletFramework.postProjectCreated( getDataModel(), getFacetedProject() );
         }
@@ -439,7 +439,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             }
             catch( Exception e )
             {
-                ProjectCorePlugin.logError( "Failed to delete welcome file list elements", e ); //$NON-NLS-1$
+                LiferayProjectCore.logError( "Failed to delete welcome file list elements", e ); //$NON-NLS-1$
             }
         }
 

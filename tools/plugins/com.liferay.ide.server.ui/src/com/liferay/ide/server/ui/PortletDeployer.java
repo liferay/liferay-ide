@@ -15,11 +15,11 @@
 
 package com.liferay.ide.server.ui;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.RuntimeClasspathModel;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -43,11 +43,8 @@ public class PortletDeployer extends LaunchHelper
         super( IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION );
 
         setLaunchSync( true );
-
         setLaunchInBackground( true );
-
         setLaunchCaptureInConsole( true );
-
         setLaunchIsPrivate( true );
 
         this.module = module;
@@ -65,7 +62,7 @@ public class PortletDeployer extends LaunchHelper
 
         config.setAttribute(
             IDebugUIConstants.ATTR_CAPTURE_IN_FILE,
-            LiferayServerCorePlugin.getDefault().getStateLocation().append( "portlet.deployer.log" ).toOSString() ); //$NON-NLS-1$
+            LiferayServerCore.getDefault().getStateLocation().append( "portlet.deployer.log" ).toOSString() ); //$NON-NLS-1$
 
         config.setAttribute( IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, deployerClass );
 
@@ -88,11 +85,10 @@ public class PortletDeployer extends LaunchHelper
     {
         if( module != null )
         {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( module.getProject() );
+            ILiferayProject liferayProject = LiferayCore.create( module.getProject() );
+            IPath[] userLibs = liferayProject.getUserLibs();
 
-            IPath[] userlibs = liferayRuntime.getAllUserClasspathLibraries();
-
-            for( IPath userlib : userlibs )
+            for( IPath userlib : userLibs )
             {
                 model.addEntry( RuntimeClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry( userlib ) );
             }

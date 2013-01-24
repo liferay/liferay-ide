@@ -16,7 +16,7 @@
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         if( state != IServer.STATE_STARTED )
         {
             throw new CoreException(
-                LiferayServerCorePlugin.createErrorStatus( Msgs.serverNotRunning ) );
+                LiferayServerCore.createErrorStatus( Msgs.serverNotRunning ) );
         }
 
         if( ILaunchManager.RUN_MODE.equals( mode ) )
@@ -75,7 +75,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         }
         else
         {
-            throw new CoreException( LiferayServerCorePlugin.createErrorStatus( "Profile mode is not supported." ) ); //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.createErrorStatus( "Profile mode is not supported." ) ); //$NON-NLS-1$
         }
     }
 
@@ -158,7 +158,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
     {
 
         IServerManagerConnection connection =
-            LiferayServerCorePlugin.getRemoteConnection( (IRemoteServer) server.loadAdapter(
+            LiferayServerCore.getRemoteConnection( (IRemoteServer) server.loadAdapter(
                 IRemoteServer.class, monitor ) );
 
         RemoteMonitorProcess process = new RemoteMonitorProcess( server, connection, launch );

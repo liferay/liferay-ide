@@ -8,9 +8,39 @@
     <artifactId>liferay-ide</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
     <name>Liferay IDE</name>
-    
+    <url>http://www.liferay.com/community/liferay-projects/liferay-ide/overview</url>
+    <description>The Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development.</description>
+
+    <developers>
+        <developer>
+            <name>Gregory Amerson</name>
+            <id>gregory.amerson</id>
+            <email>gregory.amerson@liferay.com</email>
+        </developer>
+        <developer>
+            <name>Cindy Li</name>
+            <id>cindy.li</id>
+            <email>cindy.li@liferay.com</email>
+        </developer>
+        <developer>
+            <name>Kamesh Sampath</name>
+            <email>kamesh.sampath@hotmail.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:git@github.com:liferay/liferay-ide.git</connection>
+        <url>https://github.com/liferay/liferay-ide</url>
+    </scm>
+
     <modules>
         <module>build/parent</module>
         <module>build</module>

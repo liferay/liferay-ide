@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,11 +17,10 @@ package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -99,7 +98,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( CoreException e )
         {
-            ProjectCorePlugin.logError( "Unable to create link", e ); //$NON-NLS-1$
+            LiferayProjectCore.logError( "Unable to create link", e ); //$NON-NLS-1$
         }
 
         try
@@ -109,7 +108,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( JavaModelException e )
         {
-            ProjectCorePlugin.logError( "Unable to set java-ouput-path", e ); //$NON-NLS-1$
+            LiferayProjectCore.logError( "Unable to set java-ouput-path", e ); //$NON-NLS-1$
         }
     }
 
@@ -271,56 +270,9 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         return (IFacetedProjectWorkingCopy) this.model.getProperty( IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY );
     }
 
-    // protected void copyTLDsFromPortal() throws CoreException {
-    // IPath portalTLDFolder = getPortalRoot().append("WEB-INF/tld");
-    // IFolder tldFolder = getWebRootFolder().getFolder("WEB-INF/tld");
-    // if (!tldFolder.exists()) {
-    // tldFolder.create(true, true, null);
-    // }
-    // for (String tldFile : ISDKConstants.PORTLET_PLUGIN_TLD_FILES) {
-    // IPath portalTLDFilePath = portalTLDFolder.append(tldFile);
-    // if (portalTLDFilePath.toFile().exists()) {
-    // IFile projectTLDFile = tldFolder.getFile(tldFile);
-    // if (!projectTLDFile.exists()) {
-    // try {
-    // projectTLDFile.create(new FileInputStream(portalTLDFilePath.toFile()),
-    // true, null);
-    // } catch (FileNotFoundException e) {
-    // ProjectCorePlugin.logError(e);
-    // }
-    // }
-    // }
-    // }
-    // }
-
-    protected ILiferayRuntime getLiferayRuntime()
-    {
-        try
-        {
-            return ServerUtil.getLiferayRuntime( this.project );
-        }
-        catch( CoreException e )
-        {
-            ProjectCorePlugin.logError( e );
-
-            return null;
-        }
-    }
-
     protected IPath getPortalDir()
     {
-        IRuntime serverRuntime;
-
-        if( masterModel != null )
-        {
-            serverRuntime = (IRuntime) masterModel.getProperty( PluginFacetInstallDataModelProvider.FACET_RUNTIME );
-        }
-        else
-        {
-            serverRuntime = getFacetedProject().getPrimaryRuntime();
-        }
-
-        return ServerUtil.getPortalDir( serverRuntime );
+        return ServerUtil.getPortalDir( getFacetedProject().getProject() );
     }
 
     protected String getRuntimeLocation()
@@ -427,7 +379,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( Exception e )
         {
-            ProjectCorePlugin.logError( e );
+            LiferayProjectCore.logError( e );
         }
     }
 
@@ -450,13 +402,13 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
                 }
                 catch( Exception e )
                 {
-                    ProjectCorePlugin.logError( e );
+                    LiferayProjectCore.logError( e );
                 }
             }
         }
         catch( FileNotFoundException e1 )
         {
-            throw new CoreException( ProjectCorePlugin.createErrorStatus( e1 ) );
+            throw new CoreException( LiferayProjectCore.createErrorStatus( e1 ) );
         }
     }
 
@@ -512,6 +464,11 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
     }
 
+    protected boolean shouldConfigureDeploymentAssembly()
+    {
+        return this.model.getBooleanProperty( CONFIGURE_DEPLOYMENT_ASSEMBLY );
+    }
+
     protected boolean shouldCopyToProject( File file )
     {
         if( isProjectInSDK() )
@@ -528,11 +485,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
 
         return true;
-    }
-
-    protected boolean shouldConfigureDeploymentAssembly()
-    {
-        return this.model.getBooleanProperty( CONFIGURE_DEPLOYMENT_ASSEMBLY );
     }
 
     protected boolean shouldInstallPluginLibraryDelegate()

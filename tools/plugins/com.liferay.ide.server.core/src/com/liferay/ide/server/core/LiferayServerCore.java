@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.core;
 
-import com.liferay.ide.core.CorePlugin;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -43,7 +43,7 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Greg Amerson
  */
-public class LiferayServerCorePlugin extends CorePlugin
+public class LiferayServerCore extends LiferayCore
 {
 
     // The plugin ID
@@ -52,7 +52,7 @@ public class LiferayServerCorePlugin extends CorePlugin
     private static Map<String, IServerManagerConnection> connections = null;
 
     // The shared instance
-    private static LiferayServerCorePlugin plugin;
+    private static LiferayServerCore plugin;
 
     private static IPluginPublisher[] pluginPublishers = null;
 
@@ -75,7 +75,7 @@ public class LiferayServerCorePlugin extends CorePlugin
      * 
      * @return the shared instance
      */
-    public static LiferayServerCorePlugin getDefault()
+    public static LiferayServerCore getDefault()
     {
         return plugin;
     }
@@ -346,7 +346,7 @@ public class LiferayServerCorePlugin extends CorePlugin
     /**
      * The constructor
      */
-    public LiferayServerCorePlugin()
+    public LiferayServerCore()
     {
     }
 

@@ -16,7 +16,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayRuntimeStub;
 import com.liferay.ide.server.core.LiferayRuntimeStubDelegate;
-import com.liferay.ide.server.core.LiferayServerCorePlugin;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -135,7 +135,7 @@ public class LiferayRuntimeStubComposite extends Composite
             public void widgetSelected( SelectionEvent e )
             {
                 int index = comboRuntimeStubType.getSelectionIndex();
-                ILiferayRuntimeStub selectedStub = LiferayServerCorePlugin.getRuntimeStubs()[index];
+                ILiferayRuntimeStub selectedStub = LiferayServerCore.getRuntimeStubs()[index];
                 LiferayRuntimeStubDelegate delegate = getStubDelegate();
                 delegate.setRuntimeStubTypeId( selectedStub.getRuntimeStubTypeId() );
 
@@ -280,7 +280,7 @@ public class LiferayRuntimeStubComposite extends Composite
 
     protected void updateStubs()
     {
-        ILiferayRuntimeStub[] stubs = LiferayServerCorePlugin.getRuntimeStubs();
+        ILiferayRuntimeStub[] stubs = LiferayServerCore.getRuntimeStubs();
 
         if( CoreUtil.isNullOrEmpty( stubs ) )
         {

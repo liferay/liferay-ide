@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,23 +14,54 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 /**
- * The activator class controls the plugin life cycle
- * 
+ *
  * @author Gregory Amerson
  */
-public class CorePlugin extends Plugin
+public class LiferayCore extends Plugin
 {
     // The shared instance
-    private static CorePlugin plugin;
+    private static LiferayCore plugin;
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.core"; //$NON-NLS-1$
+
+    private static LiferayProjectProviderReader reader;
+
+    public static ILiferayProject create( Object adaptable )
+    {
+        ILiferayProject retval = null;
+
+        final ILiferayProjectProvider[] providers = getProviders( adaptable.getClass() );
+
+        if( ! CoreUtil.isNullOrEmpty( providers ) )
+        {
+            for( ILiferayProjectProvider provider : providers )
+            {
+                final ILiferayProject lProject = provider.provide( adaptable );
+
+                if( lProject != null )
+                {
+                    retval = lProject;
+                    break;
+                }
+            }
+        }
+
+        if( retval == null )
+        {
+            LiferayCore.logError( "No liferay project providers registered for type: " + adaptable.getClass() );
+        }
+
+        return retval;
+    }
 
     public static IStatus createErrorStatus( Exception e )
     {
@@ -74,12 +105,22 @@ public class CorePlugin extends Plugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
-    public static CorePlugin getDefault()
+    public static LiferayCore getDefault()
     {
         return plugin;
+    }
+
+    public static synchronized ILiferayProjectProvider[] getProviders( Class<?> type )
+    {
+        if( reader == null )
+        {
+            reader = new LiferayProjectProviderReader();
+        }
+
+        return reader.getProviders( type );
     }
 
     public static void logError( String msg )
@@ -105,7 +146,7 @@ public class CorePlugin extends Plugin
     /**
      * The constructor
      */
-    public CorePlugin()
+    public LiferayCore()
     {
     }
 

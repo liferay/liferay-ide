@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,7 +18,7 @@ package com.liferay.ide.hook.core.descriptor;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -85,7 +85,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
     public static final String PORTAL_PROPERTIES_ELEMENT = "portal-properties"; //$NON-NLS-1$
 
-    public static final String PREFERENCE_NODE_QUALIFIER = ProjectCorePlugin.getDefault().getBundle().getSymbolicName();
+    public static final String PREFERENCE_NODE_QUALIFIER = LiferayProjectCore.getDefault().getBundle().getSymbolicName();
 
     private static final String SERVICE_ELEMENT = "service"; //$NON-NLS-1$
 
@@ -336,7 +336,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
             boolean useProjectSettings =
                 projectScope.getNode( PREFERENCE_NODE_QUALIFIER ).getBoolean(
-                    ProjectCorePlugin.USE_PROJECT_SETTINGS, false );
+                    LiferayProjectCore.USE_PROJECT_SETTINGS, false );
 
             if( useProjectSettings )
             {

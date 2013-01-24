@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,7 +17,7 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.project.core.ProjectCorePlugin;
+import com.liferay.ide.project.core.LiferayProjectCore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -81,7 +81,7 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                         }
                         catch( Exception e )
                         {
-                            ProjectCorePlugin.logError( "Unable to removed fixed jsdt facet", e ); //$NON-NLS-1$
+                            LiferayProjectCore.logError( "Unable to removed fixed jsdt facet", e ); //$NON-NLS-1$
                         }
 
                         // next uninstall the jsdt facet
@@ -124,7 +124,7 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                         }
                         catch( CoreException e )
                         {
-                            ProjectCorePlugin.logError( "Unable to uninstall jsdt facet", e ); //$NON-NLS-1$
+                            LiferayProjectCore.logError( "Unable to uninstall jsdt facet", e ); //$NON-NLS-1$
                         }
 
                         return Status.OK_STATUS;

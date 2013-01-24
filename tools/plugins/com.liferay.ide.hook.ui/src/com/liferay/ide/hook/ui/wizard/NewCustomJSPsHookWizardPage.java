@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,18 +15,17 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -94,25 +93,17 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
         IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
 
-        if( project != null )
+        final ILiferayProject liferayProject = LiferayCore.create( project );
+
+        if( liferayProject != null )
         {
-            try
-            {
-                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            IPath portalDir = liferayProject.getAppServerPortalDir();
 
-                IPath portalDir = liferayRuntime.getPortalDir();
-
-                if( portalDir != null && portalDir.toFile().exists() )
-                {
-                    jspItemsSection.setPortalDir( portalDir.toFile() );
-                }
-            }
-            catch( CoreException e )
+            if( portalDir != null && portalDir.toFile().exists() )
             {
-                HookUI.logError( e );
+                jspItemsSection.setPortalDir( portalDir.toFile() );
             }
         }
-
     }
 
     protected void createDisableJSPFolderValidation( Composite topComposite )
