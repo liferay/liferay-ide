@@ -47,11 +47,6 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         super();
     }
 
-    public IPath[] getAllUserClasspathLibraries()
-    {
-        return getLiferayRuntime().getAllUserClasspathLibraries();
-    }
-
     public IPath getAppServerDir()
     {
         return getLiferayRuntime().getAppServerDir();
@@ -140,6 +135,11 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         }
 
         return tempRuntime;
+    }
+
+    public IPath[] getUserLibs()
+    {
+        return getLiferayRuntime().getUserLibs();
     }
 
     public IVMInstall getVMInstall()

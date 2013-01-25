@@ -17,8 +17,11 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 
 /**
@@ -36,9 +39,23 @@ public class LiferaySDKProjectProvider extends AbstractLiferayProjectProvider
     {
         final IProject project = (IProject) type;
 
+        ILiferayRuntime liferayRuntime = null;
+
+        try
+        {
+            liferayRuntime = ServerUtil.getLiferayRuntime( project );
+        }
+        catch( CoreException e )
+        {
+        }
+
         if( ProjectUtil.isLiferayFacetedProject( project ) )
         {
-            return new LiferaySDKProject( project );
+            return new LiferaySDKProject( project, liferayRuntime );
+        }
+        else if( liferayRuntime != null )
+        {
+            return new LiferayRuntimeProject( liferayRuntime );
         }
 
         return null;

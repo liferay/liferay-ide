@@ -58,6 +58,21 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime
 {
+    private static class Msgs extends NLS
+    {
+        public static String bundleZipLocationNotValid;
+        public static String javadocURLStart;
+        public static String liferayPortal;
+        public static String portalServerNotSupported;
+        public static String portalVersionNotSupported;
+        public static String runtimeLocationDirectoryNotMatch;
+
+        static
+        {
+            initializeMessages( LiferayTomcatRuntime.class.getName(), Msgs.class );
+        }
+    }
+
     public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location"; //$NON-NLS-1$
 
     public static final String PROP_JAVADOC_URL = "javadoc-url"; //$NON-NLS-1$
@@ -147,15 +162,14 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return null;
     }
 
-    public IPath[] getAllUserClasspathLibraries()
-    {
-        return LiferayTomcatUtil.getAllUserClasspathLibraries( getRuntimeLocation(), getAppServerPortalDir() );
-
-    }
-
     public IPath getAppServerDir()
     {
         return getRuntime().getLocation();
+    }
+
+    public IPath getAppServerPortalDir()
+    {
+        return LiferayTomcatUtil.getPortalDir( getAppServerDir() );
     }
 
     public String getAppServerType()
@@ -180,6 +194,18 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return Msgs.liferayPortal;
     }
 
+    public String[] getHookSupportedProperties()
+    {
+        try
+        {
+            return LiferayTomcatUtil.getHookSupportedProperties( getRuntimeLocation(), getAppServerPortalDir() );
+        }
+        catch( IOException e )
+        {
+            return new String[0];
+        }
+    }
+
     public String getJavadocURL()
     {
         return getAttribute( PROP_JAVADOC_URL, (String) null );
@@ -193,11 +219,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     public IPath getLibGlobalDir()
     {
         return getAppServerDir().append( "/lib/ext" ); //$NON-NLS-1$
-    }
-
-    public IPath getAppServerPortalDir()
-    {
-        return LiferayTomcatUtil.getPortalDir( getAppServerDir() );
     }
 
     public String getPortalVersion()
@@ -319,16 +340,10 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return location != null ? new Path( location ) : null;
     }
 
-    public String[] getHookSupportedProperties()
+    public IPath[] getUserLibs()
     {
-        try
-        {
-            return LiferayTomcatUtil.getHookSupportedProperties( getRuntimeLocation(), getAppServerPortalDir() );
-        }
-        catch( IOException e )
-        {
-            return new String[0];
-        }
+        return LiferayTomcatUtil.getAllUserClasspathLibraries( getRuntimeLocation(), getAppServerPortalDir() );
+
     }
 
     @Override
@@ -552,20 +567,5 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
 
         return warning( Msgs.javadocURLStart );
-    }
-
-    private static class Msgs extends NLS
-    {
-        public static String bundleZipLocationNotValid;
-        public static String javadocURLStart;
-        public static String liferayPortal;
-        public static String portalServerNotSupported;
-        public static String portalVersionNotSupported;
-        public static String runtimeLocationDirectoryNotMatch;
-
-        static
-        {
-            initializeMessages( LiferayTomcatRuntime.class.getName(), Msgs.class );
-        }
     }
 }

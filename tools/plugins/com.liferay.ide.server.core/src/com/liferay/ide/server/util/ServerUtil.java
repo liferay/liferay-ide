@@ -173,8 +173,7 @@ public class ServerUtil
         }
     }
 
-    public static Map<String, String> configureAppServerProperties( ILiferayProject liferayProject,
-                                                                    ILiferayRuntime appServer )
+    public static Map<String, String> getSDKRequiredProperties( ILiferayRuntime appServer )
     {
         Map<String, String> properties = new HashMap<String, String>();
 
@@ -186,7 +185,7 @@ public class ServerUtil
 
 //        String libGlobalDir = liferayProject.getAppServerLibGlobalDir().toOSString();
 
-        String portalDir = liferayProject.getAppServerPortalDir().toOSString();
+        String portalDir = appServer.getAppServerPortalDir().toOSString();
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
@@ -199,20 +198,14 @@ public class ServerUtil
 
     public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException
     {
-        ILiferayRuntime runtime = null;
-        ILiferayProject liferayProject = null;
-
         try
         {
-            runtime = ServerUtil.getLiferayRuntime( project );
-            liferayProject = LiferayCore.create( project );
+            return getSDKRequiredProperties( ServerUtil.getLiferayRuntime( project ) );
         }
         catch( CoreException e1 )
         {
             throw new CoreException( LiferayServerCore.createErrorStatus( e1 ) );
         }
-
-        return configureAppServerProperties( liferayProject, runtime );
     }
 
     public static IStatus createErrorStatus( String msg )

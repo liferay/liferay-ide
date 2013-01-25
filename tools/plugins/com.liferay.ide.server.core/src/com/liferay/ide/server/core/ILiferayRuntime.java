@@ -27,8 +27,6 @@ import org.eclipse.wst.server.core.IRuntime;
 public interface ILiferayRuntime extends IJavaRuntime
 {
 
-    IPath[] getAllUserClasspathLibraries();
-
     IPath getAppServerDir();
 
     IPath getAppServerPortalDir();
@@ -50,5 +48,7 @@ public interface ILiferayRuntime extends IJavaRuntime
     IPath getRuntimeLocation();
 
     IPath getSourceLocation();
+
+    IPath[] getUserLibs();
 
 }

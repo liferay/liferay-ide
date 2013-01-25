@@ -18,8 +18,6 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
@@ -123,8 +121,7 @@ public class ProjectImportUtil
             IPath sdkPluginProjectFolder = liferaySDK.getLocation();
 
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( bridgedRuntime );
-            final ILiferayProject liferayProject = LiferayCore.create( liferayRuntime );
-            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayProject, liferayRuntime );
+            Map<String, String> appServerProperties = ServerUtil.getSDKRequiredProperties( liferayRuntime );
             // IDE-110 IDE-648
             String docrootFolder = null;
 
