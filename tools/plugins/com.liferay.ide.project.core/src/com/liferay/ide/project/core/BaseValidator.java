@@ -130,7 +130,7 @@ public abstract class BaseValidator extends AbstractValidator
             {
                 type = javaProject.findType( className );
 
-                if( type == null || !type.exists() )
+                if( type == null || !type.exists() || className.startsWith( "." ) ) //$NON-NLS-1$
                 {
                     final String msg = MessageFormat.format( MESSAGE_CLASS_NOT_FOUND, new Object[] { className } );
 
