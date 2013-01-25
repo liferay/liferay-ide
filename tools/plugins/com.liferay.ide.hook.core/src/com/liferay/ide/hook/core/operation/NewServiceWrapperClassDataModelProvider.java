@@ -15,6 +15,8 @@
 
 package com.liferay.ide.hook.core.operation;
 
+import com.liferay.ide.core.util.StringPool;
+
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.common.operations.NewJavaClassDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -50,7 +52,14 @@ public class NewServiceWrapperClassDataModelProvider extends NewJavaClassDataMod
         {
             int lastDot = this.qualifiedClassname.lastIndexOf( '.' );
 
-            return this.qualifiedClassname.substring( 0, lastDot );
+            if( lastDot > -1 )
+            {
+                return this.qualifiedClassname.substring( 0, lastDot );
+            }
+            else
+            {
+                return StringPool.EMPTY;
+            }
         }
         else if( JAVA_PACKAGE_FRAGMENT_ROOT.equals( propertyName ) )
         {

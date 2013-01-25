@@ -15,6 +15,7 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
 import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
 
@@ -65,7 +66,7 @@ public class NewEventActionClassDialog extends Dialog
     protected String qualifiedSuperclassname;
     protected Combo superCombo;
     protected Label superLabel;
-    
+
     protected NewEventActionClassDialog( Shell parentShell, IDataModel model )
     {
         super( parentShell );
@@ -271,7 +272,14 @@ public class NewEventActionClassDialog extends Dialog
 
     protected void updateQualifiedClassname()
     {
-        this.qualifiedClassname = packageText.getText() + "." + classText.getText(); //$NON-NLS-1$
+        if( ! CoreUtil.isNullOrEmpty( packageText.getText() ) )
+        {
+            this.qualifiedClassname = packageText.getText() + "." + classText.getText(); //$NON-NLS-1$
+        }
+        else
+        {
+            this.qualifiedClassname = classText.getText();
+        }
     }
 
     private static class Msgs extends NLS
