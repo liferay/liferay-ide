@@ -23,6 +23,7 @@
         <package>com.liferay.ide.hook.core.model.internal</package>
         <package>com.liferay.ide.hook.ui.action</package>
         <package>com.liferay.ide.hook.ui.editor</package>
+        <package>org.eclipse.sapphire.java.jdt.ui</package>
         <package>org.eclipse.sapphire.java.jdt.ui.internal</package>
         <package>org.eclipse.sapphire.ui.renderers.swt</package>
         <package>org.eclipse.sapphire.ui.swt.renderer.actions.internal</package>

@@ -310,11 +310,11 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
             entry = null;
 
-            if( bootEntry instanceof ClasspathModelEntry )
-            {
-                entry = ( (ClasspathModelEntry) bootEntry ).getDelegate();
-            }
-            else if( bootEntry instanceof IRuntimeClasspathEntry )
+//            if( bootEntry instanceof ClasspathModelEntry )
+//            {
+//                entry = ( (ClasspathModelEntry) bootEntry ).getDelegate();
+//            }
+            if( bootEntry instanceof IRuntimeClasspathEntry )
             {
                 entry = (IRuntimeClasspathEntry) boot[i];
             }
@@ -338,11 +338,11 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
             entry = null;
 
-            if( userEntry instanceof ClasspathModelEntry )
-            {
-                entry = ( (ClasspathModelEntry) userEntry ).getDelegate();
-            }
-            else if( userEntry instanceof IRuntimeClasspathEntry )
+//            if( userEntry instanceof ClasspathModelEntry )
+//            {
+//                entry = ( (ClasspathModelEntry) userEntry ).getDelegate();
+//            }
+            if( userEntry instanceof IRuntimeClasspathEntry )
             {
                 entry = (IRuntimeClasspathEntry) user[i];
             }
