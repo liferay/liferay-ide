@@ -11,8 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.maven.core;
@@ -29,7 +27,7 @@ public class LiferayMavenCore extends Plugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "com.liferay.ide.portal.core"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "com.liferay.ide.maven.core"; //$NON-NLS-1$
 
     // The shared instance
     private static LiferayMavenCore plugin;

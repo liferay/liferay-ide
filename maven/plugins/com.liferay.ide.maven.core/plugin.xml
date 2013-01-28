@@ -9,9 +9,9 @@
    <extension
          point="org.eclipse.m2e.core.projectConfigurators">
       <configurator
-            class="com.liferay.ide.maven.core.LiferayProjectConfigurator"
+            class="com.liferay.ide.maven.core.LiferayMavenProjectConfigurator"
             id="com.liferay.ide.maven.core.project.configurator"
-            name="Liferay Project Configurator"
+            name="Liferay Maven Project Configurator"
             secondaryTo="org.maven.ide.eclipse.configuration.wtp.configurator">
       </configurator>
       <configurator
@@ -26,6 +26,17 @@
             class="com.liferay.ide.maven.core.LiferayMavenProjectProvider"
             id="com.liferay.ide.maven.core.mavenProjectProvider">
       </liferayProjectProvider>
+   </extension>
+   <extension
+         id="com.liferay.ide.maven.core.configurationProblem"
+         name="Liferay Maven Project Configuration Problem"
+         point="org.eclipse.core.resources.markers">
+      <persistent
+            value="true">
+      </persistent>
+      <super
+            type="org.eclipse.m2e.core.maven2Problem.wtp.configuration">
+      </super>
    </extension>
 
 </plugin>
