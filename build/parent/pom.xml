@@ -31,9 +31,9 @@
         <tycho-version>0.15.0</tycho-version>
         <tycho-extras-version>0.15.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-        <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.6.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
+        <sapphire-site>http://download.eclipse.org/sapphire/0.6.1.201301281155/repository</sapphire-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.3/</m2e-site>
-        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases</m2e-wtp-site>
+        <m2e-wtp-site> http://download.eclipse.org/m2e-wtp/snapshots/</m2e-wtp-site>
     </properties>
 
     <modules>
