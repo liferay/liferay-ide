@@ -37,9 +37,7 @@
     <modules>
         <module>plugins</module>
         <module>features</module>
-		<module>tests</module>
-		<!-- module>docs</module -->
-		<!-- module>site</module -->
+        <module>tests</module>
     </modules>
 </project>
-	
+

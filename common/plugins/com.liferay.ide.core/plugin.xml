@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="liferayProjectProviders" name="Liferay Project Providers" schema="schema/liferayProjectProviders.exsd"/>
+   <extension-point id="liferayProjectProviders" name="%project.providers.ext.point.name" schema="schema/liferayProjectProviders.exsd"/>
 </plugin>

@@ -31,6 +31,7 @@
                 <module>../maven</module>
                 <module>../portal</module>
                 <module>../velocity</module>
+                <module>../nls</module>
                 <module>releng</module>
             </modules>
         </profile>
@@ -74,6 +75,7 @@
                 <module>../portal</module>
             </modules>
         </profile>
+
         <profile>
             <id>velocity</id>
             <activation>
@@ -81,6 +83,16 @@
             </activation>
             <modules>
                 <module>../velocity</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>nls</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>../nls</module>
             </modules>
         </profile>
 
