@@ -42,8 +42,6 @@ public class LiferayProjectCore extends LiferayCore
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
 
-    public static final String SETTINGS_ID = "com.liferay.ide.eclipse.project.core"; //$NON-NLS-1$
-
     public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
     // The shared instance

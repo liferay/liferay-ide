@@ -159,7 +159,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPreferenceNodeQualifier()
     {
-        return LiferayProjectCore.SETTINGS_ID;
+        return LiferayProjectCore.PLUGIN_ID;
     }
 
     @Override
