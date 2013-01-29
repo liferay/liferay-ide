@@ -18,8 +18,8 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ISDKTemplate;
-import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -1074,7 +1074,7 @@ public class ProjectUtil
             return false;
         }
 
-        return SDKUtil.isValidSDKLocation( project.getLocation().toOSString() );
+        return SDKUtil.getSDK( project ) != null;
     }
 
     public static boolean isThemeProject( IProject project )

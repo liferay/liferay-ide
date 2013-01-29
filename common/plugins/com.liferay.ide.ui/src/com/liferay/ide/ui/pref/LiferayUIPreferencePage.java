@@ -84,55 +84,59 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
         link.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
         link.setUnderlined( true );
         link.setText( Msgs.configureSDKs );
-        link.addHyperlinkListener( new HyperlinkAdapter()
-        {
-
-            public void linkActivated( HyperlinkEvent e )
+        link.addHyperlinkListener
+        (
+            new HyperlinkAdapter()
             {
-                final IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
-
-                parent.getDisplay().asyncExec( new Runnable()
+                public void linkActivated( HyperlinkEvent e )
                 {
+                    final IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
 
-                    public void run()
-                    {
-                        container.openPage( "com.liferay.ide.sdk.preferences.installedSDKs", null ); //$NON-NLS-1$
-                    }
-
-                } );
+                    parent.getDisplay().asyncExec
+                    (
+                        new Runnable()
+                        {
+                            public void run()
+                            {
+                                container.openPage( "com.liferay.ide.sdk.preferences.installedSDKs", null ); //$NON-NLS-1$
+                            }
+                        }
+                    );
+                }
             }
-
-        } );
+        );
 
         Hyperlink link2 = new Hyperlink( group, SWT.NULL );
         link2.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
         link2.setUnderlined( true );
         link2.setText( Msgs.createNewLiferayRuntime );
-        link2.addHyperlinkListener( new HyperlinkAdapter()
-        {
-
-            public void linkActivated( HyperlinkEvent e )
+        link2.addHyperlinkListener
+        (
+            new HyperlinkAdapter()
             {
-                ServerUIUtil.showNewRuntimeWizard(
-                    LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
+                public void linkActivated( HyperlinkEvent e )
+                {
+                    ServerUIUtil.showNewRuntimeWizard(
+                        LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
-
-        } );
+        );
 
         Hyperlink link3 = new Hyperlink( group, SWT.NULL );
         link3.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
         link3.setUnderlined( true );
         link3.setText( Msgs.createNewLiferayServer );
-        link3.addHyperlinkListener( new HyperlinkAdapter()
-        {
-
-            public void linkActivated( HyperlinkEvent e )
+        link3.addHyperlinkListener
+        (
+            new HyperlinkAdapter()
             {
-                ServerUIUtil.showNewServerWizard(
-                    LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
+                public void linkActivated( HyperlinkEvent e )
+                {
+                    ServerUIUtil.showNewServerWizard(
+                        LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
+                }
             }
-
-        } );
+        );
 
         group = new Group( pageParent, SWT.NONE );
         group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
@@ -144,23 +148,24 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 
         final Button button = new Button( group, SWT.PUSH );
         button.setText( Msgs.clear );
-        button.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
+        button.addSelectionListener
+        (
+            new SelectionAdapter()
             {
-                try
+                @Override
+                public void widgetSelected( SelectionEvent e )
                 {
-                    LiferayUIPlugin.clearAllPersistentSettings();
-                }
-                catch( BackingStoreException e1 )
-                {
-                    MessageDialog.openError( button.getShell(), "Liferay Preferences", "Unable to reset settings." ); //$NON-NLS-1$ //$NON-NLS-2$
+                    try
+                    {
+                        LiferayUIPlugin.clearAllPersistentSettings();
+                    }
+                    catch( BackingStoreException e1 )
+                    {
+                        MessageDialog.openError( button.getShell(), "Liferay Preferences", "Unable to reset settings." ); //$NON-NLS-1$ //$NON-NLS-2$
+                    }
                 }
             }
-
-        } );
+        );
 
         return pageParent;
     }
