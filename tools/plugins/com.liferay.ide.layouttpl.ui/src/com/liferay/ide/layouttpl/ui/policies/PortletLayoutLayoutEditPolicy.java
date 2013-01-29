@@ -35,6 +35,7 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
@@ -190,6 +191,21 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
     }
 
     @Override
+    protected Object getConstraintFor( ChangeBoundsRequest request, GraphicalEditPart child )
+    {
+        Rectangle column = child.getFigure().getBounds() ;
+
+        //to disable crossing the line where width = 0
+        //using equals because request.getSizeDelta().width doesn't change any more after crossing the line
+        if( ( - request.getSizeDelta().width ) == column.width - 5 )
+        {
+            return null;
+        }
+
+        return super.getConstraintFor( request, child );
+    }
+
+    @Override
     protected Object getConstraintFor( Point orgPoint )
     {
         LayoutConstraint constraint = new LayoutConstraint();
@@ -290,20 +306,38 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         LayoutConstraint constraint = new LayoutConstraint();
         constraint.rowIndex = LayoutTplUtil.getRowIndex( layoutEditPart );
 
+        int refColumnIndex = 0;
+
         // either need to insert this column at the first or the end
         if( rect.x < 0 )
         {
-            constraint.newColumnIndex = 0;
+            return null; // make the command unexecutable
         }
         else
         {
             for( int i = 0; i < columns.size(); i++ )
             {
-                int xCoord = ( (PortletColumnEditPart) columns.get( i ) ).getFigure().getBounds().x;
+                Rectangle bounds = ( (PortletColumnEditPart) columns.get( i ) ).getFigure().getBounds();
+                Rectangle copyBounds = bounds.getCopy();
+                translateFromAbsoluteToLayoutRelative( copyBounds );
+                int xCoord = copyBounds.x;
+                int yCoord = copyBounds.y;
 
-                if( rect.x < xCoord )
+                if( rect.y != yCoord || (rect.y + rect.height) != yCoord + bounds.height )
+                {
+                    return null; // make the command unexecutable
+                }
+
+                if( rect.x == xCoord ) // right side of the column is draged
                 {
                     constraint.newColumnIndex = i;
+                    refColumnIndex  = i + 1;
+                    break;
+                }
+                else if( (rect.x + rect.width) == xCoord + bounds.width ) // left side is draged
+                {
+                    constraint.newColumnIndex = i;
+                    refColumnIndex = i - 1;
                     break;
                 }
             }
@@ -315,16 +349,19 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         }
 
         PortletColumnEditPart refColumnPart = null;
-        if( constraint.newColumnIndex > 0 )
-        {
-            refColumnPart = (PortletColumnEditPart) columns.get( constraint.newColumnIndex - 1 );
-        }
-        else if( constraint.newColumnIndex == 0 )
-        {
-            refColumnPart = (PortletColumnEditPart) columns.get( 1 );
-        }
 
-        constraint.refColumn = refColumnPart.getCastedModel();
+        if( constraint.newColumnIndex >= 0 )
+        {
+            if( refColumnIndex >= 0 && refColumnIndex < numColumns )
+            {
+                refColumnPart = (PortletColumnEditPart) columns.get( refColumnIndex );
+                constraint.refColumn = refColumnPart.getCastedModel();
+            }
+            else
+            {
+                return null; // make the command unexecutable
+            }
+        }
 
         // get new weight based on resize
         int rowWidth = getHostFigure().getSize().width - ( PortletLayoutEditPart.LAYOUT_MARGIN * 2 );

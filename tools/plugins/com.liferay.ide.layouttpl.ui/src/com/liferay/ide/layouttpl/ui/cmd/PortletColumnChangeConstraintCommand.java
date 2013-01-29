@@ -48,7 +48,7 @@ public class PortletColumnChangeConstraintCommand extends Command
 
     public boolean canExecute()
     {
-        return column != null && currentParent != null && newParent != null && layoutConstraint != null;
+        return column != null && currentParent != null && newParent != null && layoutConstraint != null && layoutConstraint.refColumn != null;
     }
 
     public void execute()
@@ -60,18 +60,20 @@ public class PortletColumnChangeConstraintCommand extends Command
     {
         if( currentParent.equals( newParent ) )
         {
-            int currentColumnIndex = LayoutTplUtil.getColumnIndex( currentParent, column );
-
-            if( currentColumnIndex != layoutConstraint.newColumnIndex )
-            {
-            }
-
             int existingWeight = column.getWeight();
             column.setWeight( layoutConstraint.weight );
             int diffWeight = existingWeight - layoutConstraint.weight;
 
             PortletColumn refColumn = layoutConstraint.refColumn;
             int newWeight = refColumn.getWeight() + diffWeight;
+
+            //IDE-800 to avoid changing one column from 66% to 65% but the refColumn stay 33%
+            //since diffWeight is only 1% not enough to get 35% according to adjustWeight
+            //the conflict is caused by 33% + 66% < 100%
+            if( refColumn.getWeight() == 33 )
+            {
+                newWeight = newWeight + 1;
+            }
 
             newWeight = LayoutTplUtil.adjustWeight( newWeight );
 
