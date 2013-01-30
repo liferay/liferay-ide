@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.core.util;
 
+import com.liferay.ide.core.LiferayCore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,25 +24,24 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.launching.VariableClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry2;
 
 
-//XXX needs cleanup
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class RuntimeClasspathModel
 {
-    public static final int BOOTSTRAP= 0;
+//    public static final int BOOTSTRAP= 0;
     public static final int USER= 1;
 
     private List<Object> userEntries = new ArrayList<Object>();
-    private List<Object> bootstrapEntries = new ArrayList<Object>();
-    private IJavaProject project;
+//    private List<Object> bootstrapEntries = new ArrayList<Object>();
+//    private IJavaProject project;
     private ILaunchConfigurationWorkingCopy config;
 
 
@@ -51,10 +52,10 @@ public class RuntimeClasspathModel
 
     public void addEntry( int type, IRuntimeClasspathEntry entry )
     {
-        if( type == BOOTSTRAP )
-        {
-            bootstrapEntries.add( entry );
-        }
+//        if( type == BOOTSTRAP )
+//        {
+//            bootstrapEntries.add( entry );
+//        }
 
         if( type == USER )
         {
@@ -65,15 +66,14 @@ public class RuntimeClasspathModel
     {
         List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 
-        if( type == BOOTSTRAP )
-        {
-            for( Object entry : bootstrapEntries )
-            {
-                //TODO XXX
-                System.out.println(entry);
-            }
-        }
-        else if ( type == USER )
+//        if( type == BOOTSTRAP )
+//        {
+//            for( Object entry : bootstrapEntries )
+//            {
+//                System.out.println(entry);
+//            }
+//        }
+        /*else*/ if ( type == USER )
         {
 
             for( Object entry : userEntries )
@@ -122,8 +122,7 @@ public class RuntimeClasspathModel
                     }
                     catch( CoreException e )
                     {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LiferayCore.logError( "error creating runtime classpath entry", e );
                     }
                 }
                 else if ( entry instanceof IRuntimeClasspathEntry )

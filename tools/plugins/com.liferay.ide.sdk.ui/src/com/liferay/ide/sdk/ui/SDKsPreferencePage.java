@@ -64,7 +64,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
             prefStore = new ScopedPreferenceStore( new InstanceScope(), SDKUIPlugin.PREFERENCES_ID );
             String defaultValue =
                 new DefaultScope().getNode( SDKUIPlugin.PLUGIN_ID ).get(
-                    SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, null );
+                    SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, "always" ); //$NON-NLS-1$
             prefStore.setDefault( SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, defaultValue );
         }
 
@@ -159,11 +159,16 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
     @Override
     protected void createFieldEditors()
     {
-        FieldEditor edit =
-            new RadioGroupFieldEditor( SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE,
-                NLS.bind( Msgs.updateProperties, System.getProperty( "user.name" ) ), 3, new String[][] { //$NON-NLS-1$
-                { Msgs.always, MessageDialogWithToggle.ALWAYS }, { Msgs.never, MessageDialogWithToggle.NEVER },
-                { Msgs.prompt, MessageDialogWithToggle.PROMPT } }, parent, true );
+        FieldEditor edit = new RadioGroupFieldEditor(   SDKUIPlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE,
+                                                        NLS.bind( Msgs.updateProperties, System.getProperty( "user.name" ) ),//$NON-NLS-1$
+                                                        3,
+                                                        new String[][]
+                                                        {
+                                                            { Msgs.always, MessageDialogWithToggle.ALWAYS },
+                                                            { Msgs.never, MessageDialogWithToggle.NEVER }
+                                                        },
+                                                        parent,
+                                                        true );
         edit.setPreferenceStore( getPreferenceStore() );
         addField( edit );
     }
@@ -185,7 +190,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         public static String always;
         public static String haveOneSDK;
         public static String never;
-        public static String prompt;
+//        public static String prompt;
         public static String updateProperties;
 
         static

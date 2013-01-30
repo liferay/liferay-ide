@@ -38,14 +38,18 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.internal.core.XMLMemento;
 import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
  */
+@SuppressWarnings( "restriction" )
 public class SDK
 {
+    private static final String ALWAYS = "always"; //$NON-NLS-1$
 
     private static final String MSG_MANAGED_BY_LIFERAY_IDE =
         "Managed by Liferay IDE (remove this comment to prevent future updates)"; //$NON-NLS-1$
@@ -58,13 +62,19 @@ public class SDK
         return name + "=\"" + value + "\" "; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    @SuppressWarnings( "deprecation" )
+    protected static IEclipsePreferences getPrefStore()
+    {
+        return new InstanceScope().getNode( SDKCorePlugin.PREFERENCE_ID );
+    }
+
     protected boolean contributed;
+
+    // private String runtime;
 
     protected boolean defaultSDK;
 
     protected IPath location;
-
-    // private String runtime;
 
     protected String name;
 
@@ -565,7 +575,6 @@ public class SDK
     protected void persistAppServerProperties( Map<String, String> properties ) throws FileNotFoundException,
         IOException, ConfigurationException
     {
-
         IPath loc = getLocation();
 
         // check for build.<username>.properties
@@ -595,21 +604,16 @@ public class SDK
             }
             else
             {
-                //XXX fix this back
-//                String overwrite = getPrefStore().getString( SDKCorePlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE );
-//
-//                if( MessageDialogWithToggle.ALWAYS.equals( overwrite ) )
-//                {
-//                    shouldUpdateBuildFile = true;
-//                }
-//                else if( MessageDialogWithToggle.NEVER.equals( overwrite ) )
-//                {
-//                    shouldUpdateBuildFile = false;
-//                }
-//                else
-//                {
-//                    shouldUpdateBuildFile = promptForOverwrite( userBuildFile );
-//                }
+                String overwrite = getPrefStore().get( SDKCorePlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE, ALWAYS );
+
+                if( ALWAYS.equals( overwrite ) )
+                {
+                    shouldUpdateBuildFile = true;
+                }
+                else
+                {
+                    shouldUpdateBuildFile = false;
+                }
             }
 
             if( shouldUpdateBuildFile )
@@ -635,38 +639,13 @@ public class SDK
 
     }
 
-    private boolean promptForOverwrite( final File userBuildFile )
+    public IStatus runCommand(  IProject project,
+                                IFile buildXmlFile,
+                                String command,
+                                Map<String, String> overrideProperties,
+                                Map<String, String> appServerProperties )
     {
-        final boolean[] retval = new boolean[1];
-
-        // XXX fix this back
-//        Display.getDefault().syncExec( new Runnable()
-//        {
-//
-//            public void run()
-//            {
-//                String message =
-//                    MessageFormat.format( Msgs.userBuildPropertiesFileNotUpdated, new Object[] { getName(),
-//                        userBuildFile.getName() } );
-//
-//                MessageDialogWithToggle dialog =
-//                    MessageDialogWithToggle.openYesNoQuestion(
-//                        Display.getDefault().getActiveShell(), Msgs.pluginsSDK, message, Msgs.rememberAnswer, false,
-//                        getPrefStore(), SDKCorePlugin.PREF_KEY_OVERWRITE_USER_BUILD_FILE );
-//
-//                retval[0] = dialog.getReturnCode() == IDialogConstants.YES_ID;
-//            }
-//        } );
-
-        return retval[0];
-    }
-
-    public IStatus runCommand(
-        IProject project, IFile buildXmlFile, String command, Map<String, String> overrideProperties,
-        Map<String, String> appServerProperties )
-    {
-
-        SDKHelper antHelper = new SDKHelper( this );
+        final SDKHelper antHelper = new SDKHelper( this );
 
         try
         {
@@ -783,7 +762,6 @@ public class SDK
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
         Map<String, String> appServerProperties )
     {
-
         return war( project, overrideProperties, separateJRE, appServerProperties, null );
     }
 
@@ -791,7 +769,6 @@ public class SDK
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
         Map<String, String> appServerProperties, String[] vmargs )
     {
-
         try
         {
             SDKHelper antHelper = new SDKHelper( this );
@@ -821,10 +798,10 @@ public class SDK
     private static class Msgs extends NLS
     {
         public static String buildXmlFileNotExist;
-        public static String pluginsSDK;
-        public static String rememberAnswer;
+//        public static String pluginsSDK;
+//        public static String rememberAnswer;
         public static String SDKLocationInvalid;
-        public static String userBuildPropertiesFileNotUpdated;
+//        public static String userBuildPropertiesFileNotUpdated;
 
         static
         {

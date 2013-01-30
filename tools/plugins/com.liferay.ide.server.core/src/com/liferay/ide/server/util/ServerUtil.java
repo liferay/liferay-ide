@@ -181,16 +181,16 @@ public class ServerUtil
 
         String dir = appServer.getAppServerDir().toOSString();
 
-//        String deployDir = liferayProject.getAppServerDeployDir().toOSString();
+        String deployDir = appServer.getAppServerDeployDir().toOSString();
 
-//        String libGlobalDir = liferayProject.getAppServerLibGlobalDir().toOSString();
+        String libGlobalDir = appServer.getAppServerLibGlobalDir().toOSString();
 
         String portalDir = appServer.getAppServerPortalDir().toOSString();
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
-//        properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
-//        properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
+        properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
+        properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir );
 
         return properties;

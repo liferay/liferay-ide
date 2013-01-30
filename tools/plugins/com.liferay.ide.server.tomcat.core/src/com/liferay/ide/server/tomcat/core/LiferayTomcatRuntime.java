@@ -58,20 +58,6 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime
 {
-    private static class Msgs extends NLS
-    {
-        public static String bundleZipLocationNotValid;
-        public static String javadocURLStart;
-        public static String liferayPortal;
-        public static String portalServerNotSupported;
-        public static String portalVersionNotSupported;
-        public static String runtimeLocationDirectoryNotMatch;
-
-        static
-        {
-            initializeMessages( LiferayTomcatRuntime.class.getName(), Msgs.class );
-        }
-    }
 
     public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location"; //$NON-NLS-1$
 
@@ -162,9 +148,19 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return null;
     }
 
+    public IPath getAppServerDeployDir()
+    {
+        return getAppServerDir().append( "webapps" ); //$NON-NLS-1$
+    }
+
     public IPath getAppServerDir()
     {
         return getRuntime().getLocation();
+    }
+
+    public IPath getAppServerLibGlobalDir()
+    {
+        return getAppServerDir().append( "lib/ext" ); //$NON-NLS-1$
     }
 
     public IPath getAppServerPortalDir()
@@ -567,5 +563,20 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
 
         return warning( Msgs.javadocURLStart );
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String bundleZipLocationNotValid;
+        public static String javadocURLStart;
+        public static String liferayPortal;
+        public static String portalServerNotSupported;
+        public static String portalVersionNotSupported;
+        public static String runtimeLocationDirectoryNotMatch;
+
+        static
+        {
+            initializeMessages( LiferayTomcatRuntime.class.getName(), Msgs.class );
+        }
     }
 }

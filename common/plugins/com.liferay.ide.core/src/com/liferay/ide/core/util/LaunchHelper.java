@@ -39,8 +39,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( { "rawtypes", "unchecked" } )
-//XXX needs cleanup
+@SuppressWarnings( { "restriction" } )
 public abstract class LaunchHelper implements IDebugEventSetListener
 {
 
@@ -85,7 +84,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
         IRuntimeClasspathEntry[] classpath = getClasspath( launchConfig );
 
-        List mementos = new ArrayList( classpath.length );
+        List<String> mementos = new ArrayList<String>( classpath.length );
 
         for( int i = 0; i < classpath.length; i++ )
         {
@@ -295,40 +294,36 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
     protected IRuntimeClasspathEntry[] getClasspathEntries( RuntimeClasspathModel model )
     {
-        IClasspathEntry[] boot = model.getEntries( RuntimeClasspathModel.BOOTSTRAP, model.getConfig() );
+//        IClasspathEntry[] boot = model.getEntries( RuntimeClasspathModel.BOOTSTRAP, model.getConfig() );
         IClasspathEntry[] user = model.getEntries( RuntimeClasspathModel.USER, model.getConfig() );
 
-        List entries = new ArrayList(); //boot.length + user.length );
+        List<IRuntimeClasspathEntry> entries = new ArrayList<IRuntimeClasspathEntry>(); //boot.length + user.length );
 
-        IClasspathEntry bootEntry;
+//        IClasspathEntry bootEntry;
 
         IRuntimeClasspathEntry entry;
 
-        for( int i = 0; i < boot.length; i++ )
-        {
-            bootEntry = boot[i];
-
-            entry = null;
-
-//            if( bootEntry instanceof ClasspathModelEntry )
+//        for( int i = 0; i < boot.length; i++ )
+//        {
+//            bootEntry = boot[i];
+//
+//            entry = null;
+//
+//            if( bootEntry instanceof IRuntimeClasspathEntry )
 //            {
-//                entry = ( (ClasspathModelEntry) bootEntry ).getDelegate();
+//                entry = (IRuntimeClasspathEntry) boot[i];
 //            }
-            if( bootEntry instanceof IRuntimeClasspathEntry )
-            {
-                entry = (IRuntimeClasspathEntry) boot[i];
-            }
-
-            if( entry != null )
-            {
-                if( entry.getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES )
-                {
-                    entry.setClasspathProperty( IRuntimeClasspathEntry.BOOTSTRAP_CLASSES );
-                }
-
-                entries.add( entry );
-            }
-        }
+//
+//            if( entry != null )
+//            {
+//                if( entry.getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES )
+//                {
+//                    entry.setClasspathProperty( IRuntimeClasspathEntry.BOOTSTRAP_CLASSES );
+//                }
+//
+//                entries.add( entry );
+//            }
+//        }
 
         IClasspathEntry userEntry;
 
@@ -338,10 +333,6 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
             entry = null;
 
-//            if( userEntry instanceof ClasspathModelEntry )
-//            {
-//                entry = ( (ClasspathModelEntry) userEntry ).getDelegate();
-//            }
             if( userEntry instanceof IRuntimeClasspathEntry )
             {
                 entry = (IRuntimeClasspathEntry) user[i];

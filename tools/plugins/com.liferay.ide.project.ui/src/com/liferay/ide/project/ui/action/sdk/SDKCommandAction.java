@@ -75,7 +75,6 @@ public abstract class SDKCommandAction extends AbstractObjectAction
 
                 new Job( p.getName() + " : " + getSDKCommand() ) //$NON-NLS-1$
                 {
-
                     @Override
                     protected IStatus run( IProgressMonitor monitor )
                     {

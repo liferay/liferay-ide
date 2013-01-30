@@ -47,9 +47,19 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         super();
     }
 
+    public IPath getAppServerDeployDir()
+    {
+        return getLiferayRuntime().getAppServerDeployDir();
+    }
+
     public IPath getAppServerDir()
     {
         return getLiferayRuntime().getAppServerDir();
+    }
+
+    public IPath getAppServerLibGlobalDir()
+    {
+        return getLiferayRuntime().getAppServerLibGlobalDir();
     }
 
     public IPath getAppServerPortalDir()

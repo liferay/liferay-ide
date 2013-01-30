@@ -92,7 +92,7 @@ public interface ISDKConstants
 
     public static final String PROPERTY_APP_SERVER_DIR = "app.server.dir"; //$NON-NLS-1$
 
-//    public static final String PROPERTY_APP_SERVER_LIB_GLOBAL_DIR = "app.server.lib.global.dir"; //$NON-NLS-1$
+    public static final String PROPERTY_APP_SERVER_LIB_GLOBAL_DIR = "app.server.lib.global.dir"; //$NON-NLS-1$
 
     public static final String PROPERTY_APP_SERVER_PORTAL_DIR = "app.server.portal.dir"; //$NON-NLS-1$
 
