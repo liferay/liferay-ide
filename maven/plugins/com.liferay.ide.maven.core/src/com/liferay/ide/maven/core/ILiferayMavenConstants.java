@@ -42,11 +42,19 @@ public interface ILiferayMavenConstants
 
     String LIFERAY_MAVEN_PLUGIN_KEY = "com.liferay.maven.plugins:liferay-maven-plugin"; //$NON-NLS-1$
 
+    String PLUGIN_CONFIG_APP_AUTO_DEPLOY_DIR = "autoDeployDir"; //$NON-NLS-1$
+
+    String PLUGIN_CONFIG_APP_SERVER_CLASSES_PORTAL_DIR = "appServerClassesPortalDir"; //$NON-NLS-1$
+
     String PLUGIN_CONFIG_APP_SERVER_DEPLOY_DIR = "appServerDeployDir"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR = "appServerLibGlobalDir"; //$NON-NLS-1$
 
+    String PLUGIN_CONFIG_APP_SERVER_LIB_PORTAL_DIR = "appServerLibPortalDir"; //$NON-NLS-1$
+
     String PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR = "appServerPortalDir"; //$NON-NLS-1$
+
+    String PLUGIN_CONFIG_APP_SERVER_TLD_PORTAL_DIR = "appServerTldPortalDir"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_LIFERAY_VERSION = "liferayVersion"; //$NON-NLS-1$
 

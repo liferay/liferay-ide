@@ -11,13 +11,13 @@
       <configurator
             class="com.liferay.ide.maven.core.LiferayMavenProjectConfigurator"
             id="com.liferay.ide.maven.core.project.configurator"
-            name="Liferay Maven Project Configurator"
+            name="%liferay.maven.project.configurator"
             secondaryTo="org.maven.ide.eclipse.configuration.wtp.configurator">
       </configurator>
       <configurator
             class="com.liferay.ide.maven.core.LiferayProjectLifecycleConfigurator"
             id="com.liferay.ide.maven.core.lifecycle.configurator"
-            name="Liferay Project Lifecycle Configurator">
+            name="%liferay.project.lifecycle.configurator">
       </configurator>
    </extension>
    <extension
@@ -29,7 +29,7 @@
    </extension>
    <extension
          id="com.liferay.ide.maven.core.configurationProblem"
-         name="Liferay Maven Project Configuration Problem"
+         name="%liferay.project.maven.project.configuration.problem"
          point="org.eclipse.core.resources.markers">
       <persistent
             value="true">
