@@ -49,6 +49,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.osgi.framework.Version;
 
 
 /**
@@ -71,23 +72,31 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     public void configure( ProjectConfigurationRequest request, IProgressMonitor monitor ) throws CoreException
     {
         final MavenProject mavenProject = request.getMavenProject();
-        final Xpp3Dom liferayMavenPluginConfig = LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject );
+        final Plugin liferayMavenPlugin = LiferayMavenUtil.getLiferayMavenPlugin( mavenProject );
 
-        if( ! shouldConfigure( liferayMavenPluginConfig ) )
+        if( ! shouldConfigure( liferayMavenPlugin ) )
         {
             return;
         }
 
         final IProject project = request.getProject();
         final IFile pomFile = project.getFile( IMavenConstants.POM_FILE_NAME );
-        final String pluginType = getLiferayMavenPluginType( mavenProject );
         final IFacetedProject facetedProject = ProjectFacetsManager.create( project, false, monitor );
 
         removeLiferayMavenMarkers( project );
 
         if( shouldInstallNewLiferayFacet( facetedProject ) )
         {
-            installNewLiferayFacet( facetedProject, pluginType, monitor );
+            final MavenProblemInfo installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
+
+            if( installProblem != null )
+            {
+                this.markerManager.addMarker(   pomFile,
+                                                ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID,
+                                                installProblem.getMessage(),
+                                                installProblem.getLocation().getLineNumber(),
+                                                IMarker.SEVERITY_WARNING );
+            }
         }
 
         final List<MavenProblemInfo> errors = findLiferayMavenPluginProblems( project, mavenProject );
@@ -159,6 +168,13 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         {
             final Xpp3Dom config = (Xpp3Dom) liferayMavenPlugin.getConfiguration();
 
+            final MavenProblemInfo valueProblemInfo = checkValidLiferayVersion( liferayMavenPlugin, config );
+
+            if( valueProblemInfo != null )
+            {
+                errors.add( valueProblemInfo );
+            }
+
             final String[] configDirParams = new String[]
             {
                 ILiferayMavenConstants.PLUGIN_CONFIG_APP_AUTO_DEPLOY_DIR,
@@ -172,16 +188,52 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             for( final String configParam : configDirParams )
             {
-                final MavenProblemInfo problemInfo = checkValidConfigDir( liferayMavenPlugin, config, configParam );
+                final MavenProblemInfo configProblemInfo = checkValidConfigDir( liferayMavenPlugin, config, configParam );
 
-                if( problemInfo != null )
+                if( configProblemInfo != null )
                 {
-                    errors.add( problemInfo );
+                    errors.add( configProblemInfo );
                 }
             }
         }
 
         return errors;
+    }
+
+    private MavenProblemInfo checkValidLiferayVersion( Plugin liferayMavenPlugin, Xpp3Dom config )
+    {
+        MavenProblemInfo retval = null;
+        Version liferayVersion = null;
+        String liferayVersionValue = null;
+
+        // check for liferayVersion
+        final Xpp3Dom liferayVersionNode = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
+
+        if( liferayVersionNode != null )
+        {
+            liferayVersionValue = liferayVersionNode.getValue();
+
+            try
+            {
+                liferayVersion = new Version( liferayVersionValue );
+            }
+            catch( IllegalArgumentException e )
+            {
+                // bad version
+            }
+        }
+
+        if( liferayVersion == null )
+        {
+            // could not get valid liferayVersion
+            final SourceLocation location = SourceLocationHelper.findLocation( liferayMavenPlugin, null );
+            final String problemMsg = NLS.bind( Msgs.invalidConfigValue,
+                                                ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION,
+                                                liferayVersionValue );
+            retval = new MavenProblemInfo( problemMsg, IMarker.SEVERITY_ERROR, location );
+        }
+
+        return retval;
     }
 
     private MavenProblemInfo checkValidConfigDir( Plugin liferayMavenPlugin, Xpp3Dom config, String configParam )
@@ -270,8 +322,14 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         return retval;
     }
 
-    private void installNewLiferayFacet( IFacetedProject facetedProject, String pluginType, IProgressMonitor monitor )
+    private MavenProblemInfo installNewLiferayFacet(    IFacetedProject facetedProject,
+                                                        MavenProject mavenProject,
+                                                        IProgressMonitor monitor )
     {
+        MavenProblemInfo retval = null;
+
+        final String pluginType = getLiferayMavenPluginType( mavenProject );
+        final Plugin liferayMavenPlugin = LiferayMavenUtil.getLiferayMavenPlugin( mavenProject );
         final Action action = getNewLiferayFacetInstallAction( pluginType );
 
         if( action != null )
@@ -282,9 +340,17 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             }
             catch ( Exception e )
             {
-                LiferayMavenCore.logError( "Unable to install liferay facet " + action.getProjectFacetVersion(), e ); //$NON-NLS-1$
+                final SourceLocation location = SourceLocationHelper.findLocation( liferayMavenPlugin, null );
+                final String problemMsg = NLS.bind( Msgs.facetInstallError, pluginType, e.getCause().getMessage() );
+
+                retval = new MavenProblemInfo( location, e );
+                retval.setMessage( problemMsg );
+
+                LiferayMavenCore.logError( "Unable to install liferay facet " + action.getProjectFacetVersion(), e.getCause() ); //$NON-NLS-1$
             }
         }
+
+        return retval;
     }
 
     private boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
@@ -340,9 +406,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             project, ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID );
     }
 
-    private boolean shouldConfigure( Xpp3Dom config )
+    private boolean shouldConfigure( Plugin liferayMavenPlugin )
     {
-        return config != null;
+        return liferayMavenPlugin != null;
     }
 
     private boolean shouldInstallNewLiferayFacet( IFacetedProject facetedProject )
@@ -352,6 +418,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private static class Msgs extends NLS
     {
+        public static String facetInstallError;
         public static String invalidConfigValue;
 
         static
