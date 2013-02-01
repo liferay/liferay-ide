@@ -177,5 +177,19 @@
           shortName="mvc">
     </portletFrameworkWizardProvider>
     </extension>
+   <extension
+         point="org.eclipse.wst.xml.core.catalogContributions">
+      <catalogContribution
+            id="jsp.dtd.contributions">
+         <system
+               systemId="http://java.sun.com/portlet_2_0"
+               uri="platform:/plugin/com.liferay.ide.portlet.core/tld/liferay-portlet.tld">
+         </system>
+         <system
+                systemId="http://liferay.com/tld/aui"
+                uri="platform:/plugin/com.liferay.ide.portlet.core/tld/liferay-aui.tld">
+         </system>
+      </catalogContribution>
+   </extension>
 
 </plugin>

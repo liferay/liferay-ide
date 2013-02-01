@@ -15,26 +15,19 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
@@ -49,7 +42,6 @@ import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvi
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -59,6 +51,10 @@ import org.osgi.framework.Version;
 public class PortletPluginFacetInstall extends PluginFacetInstall
 {
 
+    /*
+     * IDE-815 Now with contributed portlet_2_0 uri we no longer need to copy TLD to user's project
+     */
+    /*
     public static void addLiferayPortletTldToWebXML( final IProject project )
     {
         ProjectUtil.addTldToWebXml( project, "http://java.sun.com/portlet_2_0", "/WEB-INF/tld/liferay-portlet.tld" ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -96,6 +92,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             }
         }
     }
+    */
 
     @Override
     public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
@@ -189,6 +186,11 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             setupDefaultOutputLocation();
         }
 
+        /*
+         * IDE-815 Now with contributed portlet_2_0 uri we no longer need to copy TLD to user's project
+         */
+
+        /*
         // IDE-719  if we have a runtime 6.2.0 or greater don't perform the workarounds for taglib imports.
         ILiferayProject liferayProject = LiferayCore.create( project );
 
@@ -220,6 +222,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                 }
             }
         }
+        */
 
         try
         {

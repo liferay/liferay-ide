@@ -61,8 +61,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.common.project.facet.core.JavaFacet;
-import org.eclipse.jst.j2ee.jsp.JspFactory;
-import org.eclipse.jst.j2ee.jsp.TagLibRefType;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -96,22 +94,23 @@ public class ProjectUtil
 
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
 
-    public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
-    {
-        WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
-        TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-        tagLibRefType.setTaglibURI( uriValue );
-        tagLibRefType.setTaglibLocation( taglibLocation );
-
-        try
-        {
-            webXmlHelper.addTagLib( tagLibRefType );
-        }
-        catch( Exception e )
-        {
-            LiferayProjectCore.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-    }
+    //IDE-815 no need for this method anymore
+//    public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
+//    {
+//        WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
+//        TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
+//        tagLibRefType.setTaglibURI( uriValue );
+//        tagLibRefType.setTaglibLocation( taglibLocation );
+//
+//        try
+//        {
+//            webXmlHelper.addTagLib( tagLibRefType );
+//        }
+//        catch( Exception e )
+//        {
+//            LiferayProjectCore.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e ); //$NON-NLS-1$ //$NON-NLS-2$
+//        }
+//    }
 
     public static boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
