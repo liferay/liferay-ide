@@ -506,4 +506,8 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         return this.model.getBooleanProperty( SETUP_DEFAULT_OUTPUT_LOCATION );
     }
 
+    protected boolean shouldSetupExtClasspath()
+    {
+        return this.model.getBooleanProperty( SETUP_EXT_CLASSPATH );
+    }
 }

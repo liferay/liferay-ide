@@ -73,5 +73,7 @@ public interface IPluginProjectDataModelProperties
     public static final String SETUP_DEFAULT_OUTPUT_LOCATION =
         "IPluginProjectDataModelProperties.SETUP_DEFAULT_OUTPUT_LOCATION"; //$NON-NLS-1$
 
+    public static final String SETUP_EXT_CLASSPATH = "IPluginProjectDataModelProperties.SETUP_EXT_CLASSPATH"; //$NON-NLS-1$
+
     public static final String THEME_NAME = "IPluginProjectDataModelProperties.THEME_NAME"; //$NON-NLS-1$
 }

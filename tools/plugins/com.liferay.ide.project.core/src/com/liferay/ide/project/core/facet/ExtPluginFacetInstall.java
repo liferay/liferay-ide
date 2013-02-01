@@ -108,46 +108,48 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             deleteFolder( webappRoot.getFolder( "WEB-INF/ext-web/docroot/WEB-INF/lib" ) ); //$NON-NLS-1$
         }
 
-        IJavaProject javaProject = JavaCore.create( project );
-
-        List<IClasspathEntry> existingRawClasspath = Arrays.asList( javaProject.getRawClasspath() );
-
-        List<IClasspathEntry> newRawClasspath = new ArrayList<IClasspathEntry>();
-
-        // first lets add all new source folders
-        for( int i = 0; i < IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS.length; i++ )
+        if( shouldSetupExtClasspath() )
         {
-            IPath sourcePath =
-                this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS[i] ).getFullPath();
+            IJavaProject javaProject = JavaCore.create( project );
 
-            IPath outputPath =
-                this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i] ).getFullPath();
+            List<IClasspathEntry> existingRawClasspath = Arrays.asList( javaProject.getRawClasspath() );
 
-            IClasspathAttribute[] attributes =
-                new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "owner.project.facets", "liferay.ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
+            List<IClasspathEntry> newRawClasspath = new ArrayList<IClasspathEntry>();
 
-            IClasspathEntry sourceEntry =
-                JavaCore.newSourceEntry( sourcePath, new IPath[0], new IPath[0], outputPath, attributes );
-
-            newRawClasspath.add( sourceEntry );
-        }
-
-        // next add all previous classpath entries except for source folders
-        for( IClasspathEntry entry : existingRawClasspath )
-        {
-            if( entry.getEntryKind() != IClasspathEntry.CPE_SOURCE )
+            // first lets add all new source folders
+            for( int i = 0; i < IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS.length; i++ )
             {
-                newRawClasspath.add( entry );
+                IPath sourcePath =
+                    this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_SOURCE_FOLDERS[i] ).getFullPath();
+
+                IPath outputPath =
+                    this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[i] ).getFullPath();
+
+                IClasspathAttribute[] attributes =
+                    new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "owner.project.facets", "liferay.ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
+
+                IClasspathEntry sourceEntry =
+                    JavaCore.newSourceEntry( sourcePath, new IPath[0], new IPath[0], outputPath, attributes );
+
+                newRawClasspath.add( sourceEntry );
             }
+
+            // next add all previous classpath entries except for source folders
+            for( IClasspathEntry entry : existingRawClasspath )
+            {
+                if( entry.getEntryKind() != IClasspathEntry.CPE_SOURCE )
+                {
+                    newRawClasspath.add( entry );
+                }
+            }
+
+            javaProject.setRawClasspath(
+                newRawClasspath.toArray( new IClasspathEntry[0] ),
+                this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[0] ).getFullPath(), null );
+
+            ProjectUtil.fixExtProjectSrcFolderLinks( this.project );
+            // fixTilesDefExtFile();
         }
-
-        javaProject.setRawClasspath(
-            newRawClasspath.toArray( new IClasspathEntry[0] ),
-            this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[0] ).getFullPath(), null );
-
-        ProjectUtil.fixExtProjectSrcFolderLinks( this.project );
-
-        // fixTilesDefExtFile();
     }
 
     protected void deleteFolder( IFolder folder ) throws CoreException

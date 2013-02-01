@@ -85,44 +85,47 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         removeLiferayMavenMarkers( project );
 
-        if( shouldInstallNewLiferayFacet( facetedProject ) )
-        {
-            final MavenProblemInfo installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
-
-            if( installProblem != null )
-            {
-                this.markerManager.addMarker(   pomFile,
-                                                ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID,
-                                                installProblem.getMessage(),
-                                                installProblem.getLocation().getLineNumber(),
-                                                IMarker.SEVERITY_WARNING );
-            }
-        }
-
         final List<MavenProblemInfo> errors = findLiferayMavenPluginProblems( project, mavenProject );
 
         if( errors.size() > 0 )
         {
             try
             {
-                this.markerManager.addErrorMarkers(
-                    pomFile, ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID, errors );
+                this.markerManager.addErrorMarkers( pomFile,
+                                                    ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID,
+                                                    errors );
             }
             catch( CoreException e )
             {
                 // no need to log this error its just best effort
+            }
+
+            return;
+        }
+
+        if( shouldInstallNewLiferayFacet( facetedProject ) )
+        {
+            final MavenProblemInfo installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
+
+            if( installProblem != null )
+            {
+                this.markerManager.addMarker( pomFile,
+                                              ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID,
+                                              installProblem.getMessage(),
+                                              installProblem.getLocation().getLineNumber(),
+                                              IMarker.SEVERITY_WARNING );
             }
         }
     }
 
     private String getLiferayMavenPluginType( MavenProject mavenProject )
     {
-        String pluginType =
-            LiferayMavenUtil.getLiferayMavenPluginConfig(
-                mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
+        String pluginType = LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject,
+                                                                          ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
 
         if( pluginType == null )
         {
+            // check for EXT
             pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
         }
 
@@ -206,20 +209,23 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         Version liferayVersion = null;
         String liferayVersionValue = null;
 
-        // check for liferayVersion
-        final Xpp3Dom liferayVersionNode = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
-
-        if( liferayVersionNode != null )
+        if( config != null )
         {
-            liferayVersionValue = liferayVersionNode.getValue();
+         // check for liferayVersion
+            final Xpp3Dom liferayVersionNode = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
 
-            try
+            if( liferayVersionNode != null )
             {
-                liferayVersion = new Version( liferayVersionValue );
-            }
-            catch( IllegalArgumentException e )
-            {
-                // bad version
+                liferayVersionValue = liferayVersionNode.getValue();
+
+                try
+                {
+                    liferayVersion = new Version( liferayVersionValue );
+                }
+                catch( IllegalArgumentException e )
+                {
+                    // bad version
+                }
             }
         }
 
@@ -251,9 +257,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                 if( ! new File( value ).exists() )
                 {
                     SourceLocation location = SourceLocationHelper.findLocation( liferayMavenPlugin, configParam );
-                    retval = new MavenProblemInfo(  NLS.bind( Msgs.invalidConfigValue, configParam, value ),
-                                                    IMarker.SEVERITY_ERROR,
-                                                    location );
+                    retval = new MavenProblemInfo( NLS.bind( Msgs.invalidConfigValue, configParam, value ),
+                                                   IMarker.SEVERITY_ERROR,
+                                                   location );
                 }
             }
         }
@@ -296,12 +302,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             newFacet = IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET.getDefaultVersion();
             dataModel = new MavenHookPluginFacetInstallProvider();
         }
-        //TODO handle EXT
-//        else if( EXT_PLUGIN_TYPE.equals( pluginType ) )
-//        {
-//            newLiferayFacetToInstall = IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET.getDefaultVersion();
-//            liferayFacetInstallProvider = new MavenExtPluginFacetInstallProvider();
-//        }
+        else if( ILiferayMavenConstants.EXT_PLUGIN_TYPE.equals( pluginType ) )
+        {
+            newFacet = IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET.getDefaultVersion();
+            dataModel = new MavenExtPluginFacetInstallProvider();
+        }
         else if( ILiferayMavenConstants.LAYOUTTPL_PLUGIN_TYPE.equals( pluginType ) )
         {
             newFacet = IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET.getDefaultVersion();
@@ -322,9 +327,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         return retval;
     }
 
-    private MavenProblemInfo installNewLiferayFacet(    IFacetedProject facetedProject,
-                                                        MavenProject mavenProject,
-                                                        IProgressMonitor monitor )
+    private MavenProblemInfo installNewLiferayFacet( IFacetedProject facetedProject,
+                                                     MavenProject mavenProject,
+                                                     IProgressMonitor monitor )
     {
         MavenProblemInfo retval = null;
 
@@ -341,12 +346,15 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             catch ( Exception e )
             {
                 final SourceLocation location = SourceLocationHelper.findLocation( liferayMavenPlugin, null );
-                final String problemMsg = NLS.bind( Msgs.facetInstallError, pluginType, e.getCause().getMessage() );
+                final String problemMsg = NLS.bind( Msgs.facetInstallError,
+                                                    pluginType,
+                                                    e.getCause() != null ? e.getCause().getMessage() : e.getMessage() );
 
                 retval = new MavenProblemInfo( location, e );
                 retval.setMessage( problemMsg );
 
-                LiferayMavenCore.logError( "Unable to install liferay facet " + action.getProjectFacetVersion(), e.getCause() ); //$NON-NLS-1$
+                LiferayMavenCore.logError(
+                    "Unable to install liferay facet " + action.getProjectFacetVersion(), e.getCause() ); //$NON-NLS-1$
             }
         }
 
@@ -402,8 +410,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private void removeLiferayMavenMarkers( IProject project ) throws CoreException
     {
-        this.mavenMarkerManager.deleteMarkers(
-            project, ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID );
+        this.mavenMarkerManager.deleteMarkers( project,
+                                               ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID );
     }
 
     private boolean shouldConfigure( Plugin liferayMavenPlugin )
@@ -428,6 +436,3 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     }
 
 }
-
-
-
