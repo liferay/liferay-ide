@@ -26,7 +26,6 @@
         </developer>
     </developers>
 
-	<!-- Common Properties applies to all plugins -->
     <properties>
         <tycho-version>0.15.0</tycho-version>
         <tycho-extras-version>0.15.0</tycho-extras-version>
@@ -102,22 +101,6 @@
                         <compilerArgument>-proc:none</compilerArgument>
                     </configuration>
                 </plugin>
-                <!--
-                <plugin>
-                    <groupId>org.bsc.maven</groupId>
-                    <artifactId>maven-processor-plugin</artifactId>
-                    <version>2.0.5</version>
-                    <executions>
-                        <execution>
-                            <id>process</id>
-                            <goals>
-                                <goal>process</goal>
-                            </goals>
-                            <phase>generate-sources</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                -->
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>tycho-maven-plugin</artifactId>
@@ -134,7 +117,6 @@
                     </configuration>
                 </plugin>
 
-				<!-- source for bundles -->
                 <plugin>
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>tycho-source-plugin</artifactId>
@@ -205,7 +187,7 @@
                     <artifactId>tycho-packaging-plugin</artifactId>
                     <version>${tycho-version}</version>
                     <configuration>
-                        <format>'v'yyyyMMddHHmm</format>
+                        <format>yyyyMMdd-HHmm</format>
                         <archiveSite>true</archiveSite>
                         <environments>
                             <environment>
@@ -277,12 +259,9 @@
 
 
     <scm>
-        <connection>scm:git:http://github.com/liferay/liferay-ide
-		</connection>
-        <developerConnection>scm:git:http://github.com/liferay/liferay-ide
-		</developerConnection>
-        <url>http://github.com/liferay/liferay-ide
-		</url>
+        <connection>scm:git:http://github.com/liferay/liferay-ide</connection>
+        <developerConnection>scm:git:http://github.com/liferay/liferay-ide</developerConnection>
+        <url>http://github.com/liferay/liferay-ide</url>
     </scm>
 
     <profiles>

@@ -5,7 +5,7 @@
         Portal development platorm.
     </description>
 
-    <feature id="com.liferay.ide.common-feature" version="0.0.0">
+    <feature id="com.liferay.ide.common" version="0.0.0">
         <category name="lide" />
     </feature>
 
