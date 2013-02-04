@@ -156,6 +156,8 @@ public interface ISDKConstants
 
     public static final String TARGET_BUILD_CLIENT = "build-client"; //$NON-NLS-1$
 
+    public static final String TARGET_BUILD_CSS = "build-css"; //$NON-NLS-1$
+
     public static final String TARGET_BUILD_DB = "build-db"; //$NON-NLS-1$
 
     public static final String TARGET_BUILD_LANG = "build-lang"; //$NON-NLS-1$

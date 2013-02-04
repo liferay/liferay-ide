@@ -434,6 +434,9 @@
                   name="build-client">
             </groupMarker>
             <groupMarker
+                  name="build-css">
+            </groupMarker>
+            <groupMarker
                   name="build-db">
             </groupMarker>
             <groupMarker
@@ -599,42 +602,101 @@
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/war">
          </action>
          <enablement>
-         	<adapt type="org.eclipse.core.resources.IResource">
-	          <or>
-	          	<adapt type="org.eclipse.core.resources.IFile">
-		  			<test forcePluginActivation="true"
-						property="com.liferay.ide.project.ui.isBuildFile"
-						value="true" />
-				</adapt>
-				<or>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.portlet" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.hook" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.ext" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.layouttpl" />
-					</adapt>
-					<adapt type="org.eclipse.core.resources.IProject">
-			  			<test forcePluginActivation="true"
-							property="org.eclipse.wst.common.project.facet.core.projectFacet"
-							value="liferay.theme" />
-					</adapt>
-				</or>
-			  </or>
-			</adapt>
+               <adapt type="org.eclipse.core.resources.IResource">
+                   <or>
+                       <adapt type="org.eclipse.core.resources.IFile">
+                           <test forcePluginActivation="true"
+                               property="com.liferay.ide.project.ui.isBuildFile"
+                               value="true" />
+                       </adapt>
+                       <or>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.portlet" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.hook" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.ext" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                                   <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.layouttpl" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                                   <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.theme" />
+                           </adapt>
+                       </or>
+                   </or>
+               </adapt>
+         </enablement>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.sdk.popup2"
+            objectClass="org.eclipse.core.resources.IResource">
+         <action
+               class="com.liferay.ide.project.ui.action.sdk.BuildClientAction"
+               enablesFor="1"
+               icon="icons/e16/target.gif"
+               id="com.liferay.ide.sdk.popup.action.build-css"
+               label="build-css"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuSDKCategory/build-css">
+         </action>
+         <enablement>
+             <adapt type="org.eclipse.core.resources.IResource">
+                <and>
+                   <or>
+                       <adapt type="org.eclipse.core.resources.IFile">
+                           <test forcePluginActivation="true"
+                               property="com.liferay.ide.project.ui.isBuildFile"
+                               value="true" />
+                       </adapt>
+                       <or>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.portlet" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.hook" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.ext" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                                   <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.layouttpl" />
+                           </adapt>
+                           <adapt type="org.eclipse.core.resources.IProject">
+                                   <test forcePluginActivation="true"
+                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                   value="liferay.theme" />
+                           </adapt>
+                       </or>
+                   </or>
+                   <test
+                        args="6.1.0"
+                        forcePluginActivation="true"
+                        property="com.liferay.ide.core.minimumRequiredPortalVersion"
+                        value="true">
+                   </test>
+                </and>
+             </adapt>
          </enablement>
       </objectContribution>
   </extension>

@@ -2,4 +2,14 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="liferayProjectProviders" name="%project.providers.ext.point.name" schema="schema/liferayProjectProviders.exsd"/>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.core.MinimumRequiredPortalVersion"
+            id="com.liferay.ide.core.minimumRequiredPortalVersion"
+            namespace="com.liferay.ide.core"
+            properties="minimumRequiredPortalVersion"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
 </plugin>

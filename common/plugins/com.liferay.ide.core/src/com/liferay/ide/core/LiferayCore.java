@@ -57,7 +57,7 @@ public class LiferayCore extends Plugin
 
         if( retval == null )
         {
-            LiferayCore.logError( "No liferay project providers registered for type: " + adaptable.getClass() );
+            LiferayCore.logError( "No liferay project providers registered for type: " + adaptable.getClass() ); //$NON-NLS-1$
         }
 
         return retval;

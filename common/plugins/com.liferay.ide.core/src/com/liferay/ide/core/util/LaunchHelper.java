@@ -78,9 +78,9 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
         ILaunchConfigurationWorkingCopy launchConfig = type.newInstance( null, name );
 
-        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", isLaunchInBackground() );
-        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", isLaunchCaptureInConsole() );
-        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", isLaunchIsPrivate() );
+        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", isLaunchInBackground() ); //$NON-NLS-1$
+        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", isLaunchCaptureInConsole() ); //$NON-NLS-1$
+        launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", isLaunchIsPrivate() ); //$NON-NLS-1$
 
         IRuntimeClasspathEntry[] classpath = getClasspath( launchConfig );
 

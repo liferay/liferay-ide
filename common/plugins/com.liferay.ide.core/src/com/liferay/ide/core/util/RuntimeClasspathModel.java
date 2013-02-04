@@ -122,7 +122,7 @@ public class RuntimeClasspathModel
                     }
                     catch( CoreException e )
                     {
-                        LiferayCore.logError( "error creating runtime classpath entry", e );
+                        LiferayCore.logError( "error creating runtime classpath entry", e ); //$NON-NLS-1$
                     }
                 }
                 else if ( entry instanceof IRuntimeClasspathEntry )
