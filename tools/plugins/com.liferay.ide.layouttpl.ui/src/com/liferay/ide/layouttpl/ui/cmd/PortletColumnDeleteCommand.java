@@ -29,9 +29,12 @@ import org.eclipse.osgi.util.NLS;
  */
 public class PortletColumnDeleteCommand extends Command
 {
+    protected PortletColumn adjustedColumn = null;
+    protected int adjustedColumnWeight = 0;
     protected final PortletColumn child;
-    protected final PortletLayout parent;
     protected LayoutTplDiagram diagram = null;
+    protected final PortletLayout parent;
+    protected int parentIndex = 0;
     protected boolean wasRemoved;
 
     public PortletColumnDeleteCommand( PortletLayout parent, PortletColumn child )
@@ -60,21 +63,62 @@ public class PortletColumnDeleteCommand extends Command
     public void redo()
     {
         wasRemoved = parent.removeColumn( child );
+        final int columnsNum = parent.getColumns().size();
 
-        if( parent.getColumns().size() == 0 )
+        if( columnsNum == 0 )
         {
             diagram = (LayoutTplDiagram) parent.getParent();
+            parentIndex = diagram.getRows().indexOf( parent );
             diagram.removeChild( parent );
+        }
+        else if( columnsNum == 1 )
+        {
+            adjustedColumn = ((PortletColumn) parent.getColumns().get( 0 ));
+            adjustedColumnWeight = adjustedColumn.getWeight() + child.getWeight();
+            adjustedColumn.setWeight( 100 );
+        }
+        else
+        {
+            //if there are 2 or more columns left, pick the right adjacent one only when there are more right remaining ones than the left,
+            //otherwise pick the left one.
+            final int childIndex = child.getNumId() - ( (PortletColumn) parent.getColumns().get( 0 ) ).getNumId();
+            int adjustedColumnIndex = 0;
+
+            if( childIndex < ( ( columnsNum + 1 ) / 2 ) )
+            {
+                adjustedColumnIndex = childIndex;
+            }
+            else
+            {
+                adjustedColumnIndex = childIndex - 1;
+            }
+
+            adjustedColumn = (PortletColumn) parent.getColumns().get( adjustedColumnIndex );
+            adjustedColumn.setWeight( adjustedColumn.getWeight() + child.getWeight() );
+            adjustedColumnWeight = adjustedColumn.getWeight();
         }
     }
 
     public void undo()
     {
-        parent.addColumn( child );
+        if( adjustedColumn != null )
+        {
+            adjustedColumn.setWeight( adjustedColumnWeight - child.getWeight() );
+        }
+
+        if( ! parent.getColumns().isEmpty() )
+        {
+            final int childIndex = child.getNumId() - ( (PortletColumn) parent.getColumns().get( 0 ) ).getNumId();
+            parent.addColumn( child, childIndex );
+        }
+        else
+        {
+            parent.addColumn( child );
+        }
 
         if( diagram != null )
         {
-            diagram.addRow( parent );
+            diagram.addRow( parent, parentIndex );
         }
     }
 
