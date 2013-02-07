@@ -53,7 +53,7 @@ public class LiferayRuntimeProject implements ILiferayProject
         {
             for( IPath lib : libs )
             {
-                if( lib.lastSegment().equals( filename ) )
+                if( lib.lastSegment().startsWith( filename ) )
                 {
                     return lib;
                 }

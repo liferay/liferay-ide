@@ -26,6 +26,7 @@ Require-Bundle: org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";vis
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core,
+ com.liferay.ide.server.core.proxy,
  com.liferay.ide.server.remote,
  com.liferay.ide.server.util
 Bundle-ClassPath: .

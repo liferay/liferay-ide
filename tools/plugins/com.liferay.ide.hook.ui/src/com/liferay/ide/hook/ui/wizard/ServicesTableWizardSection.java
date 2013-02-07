@@ -234,7 +234,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
 
             ILiferayProject liferayProject = LiferayCore.create( project );
 
-            IPath serviceJarPath = liferayProject.getLibraryPath( "portal-service.jar" );
+            IPath serviceJarPath = liferayProject.getLibraryPath( "portal-service" );
 
             scope.setEnclosingJarPaths( new IPath[] { serviceJarPath } );
 

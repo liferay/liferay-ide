@@ -17,11 +17,27 @@ File contentXml =  new File( contentDir, "content.xml" )
 def contentXmlText = contentXml.text
 
 def parser = new XmlParser()
+parser.setTrimWhitespace( false )
 def root = parser.parseText( contentXmlText )
 
 def props = root.properties
 
 addAssociateSite( root, "http://download.eclipse.org/sapphire/0.6.1.201301281155/repository/" )
+
+
+class MyXmlNodePrinter extends XmlNodePrinter
+{
+    MyXmlNodePrinter(PrintWriter out)
+    {
+       super(out)
+    }
+
+    void printSimpleItem(Object value)
+    {
+       value = value.replaceAll("\n", "&#xA;")
+       out.print(value)
+    }
+}
 
 println 'Overwriting content.xml'
 def writer = new StringWriter()
@@ -57,6 +73,7 @@ def addAssociateSite( root, siteUrl )
 def compositeDir = new File( basedir, "target/composite" )
 def toolsRepository = new File( basedir, "target/repository" )
 def mavenRepository = new File( basedir, "../com.liferay.ide.maven-repository/target/repository" )
+def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
 
 compositeDir.delete()
 compositeDir.mkdirs()
@@ -85,6 +102,14 @@ ant.sequential
     copy( todir:"${compositeDir}/maven" )
     {
         fileset( dir:mavenRepository )
+        {
+            include( name:"**/*" )
+        }
+    }
+
+    copy( todir:"${compositeDir}/velocity" )
+    {
+        fileset( dir:velocityRepository )
         {
             include( name:"**/*" )
         }

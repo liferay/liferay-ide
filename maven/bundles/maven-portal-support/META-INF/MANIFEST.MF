@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Export-Package: com.liferay.ide.maven;uses:="com.liferay.portal.deploy
+ .hot";version="2.0.0.SNAPSHOT"
+Built-By: greg
+Tool: Bnd-0.0.357
+Bundle-Name: maven-portal-support
+Created-By: 1.6.0_29 (Sun Microsystems Inc.)
+Build-Jdk: 1.6.0_29
+Bundle-Version: 2.0.0.SNAPSHOT
+Bnd-LastModified: 1360253502371
+Bundle-ManifestVersion: 2
+Import-Package: com.liferay.ide.maven;version="2.0",com.liferay.portal
+ .deploy.hot;version="6.1"
+Bundle-SymbolicName: com.liferay.ide.maven.bundles.maven-portal-suppor
+ t
+Originally-Created-By: Maven Integration for Eclipse
+

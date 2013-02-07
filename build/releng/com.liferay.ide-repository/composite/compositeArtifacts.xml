@@ -5,8 +5,9 @@
         <property name='p2.timestamp' value='@timestamp@'/>
         <property name='p2.compressed' value='true'/>
     </properties>
-    <children size='2'>
+    <children size='3'>
         <child location='tools/' />
         <child location='maven/' />
+        <child location='velocity/' />
     </children>
 </repository>

@@ -14,12 +14,25 @@ println 'Modify content.xml to add associate sites for Liferay IDE'
 
 File contentXml =  new File( contentDir, "content.xml" )
 def parser = new XmlParser()
+parser.setTrimWhitespace( false )
 def root = parser.parseText( contentXml.text )
 
 addAssociateSite( root, "http://download.eclipse.org/technology/m2e/milestones/1.3/" )
 addAssociateSite( root, "http://download.eclipse.org/m2e-wtp/milestones/juno/0.17.0/" )
 
-root.references
+class MyXmlNodePrinter extends XmlNodePrinter
+{
+    MyXmlNodePrinter(PrintWriter out)
+    {
+       super(out)
+    }
+
+    void printSimpleItem(Object value)
+    {
+       value = value.replaceAll("\n", "&#xA;")
+       out.print(value)
+    }
+}
 
 println 'Overwriting content.xml'
 def writer = new StringWriter()
@@ -49,7 +62,6 @@ def addAssociateSite( root, siteUrl )
     new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
 }
 
-/*
 def zipSite = basedir  + "/target/${project.artifactId}-${project.version}.zip"
 
 println 'Deleting old zip site'
@@ -62,6 +74,5 @@ println 'Zipping updated site'
 ant.zip( destFile: zipSite, baseDir:repositoryDir )
 
 println 'Copying to final version'
-File newZipSite = new File( basedir + "/target/Liferay_IDE_${unqualifiedVersion}.${buildQualifier}-updatesite.zip" )
+File newZipSite = new File( basedir + "/target/Liferay_IDE_Maven_${unqualifiedVersion}.${buildQualifier}-updatesite.zip" )
 ant.copy( file:zipSite, tofile:newZipSite )
-*/

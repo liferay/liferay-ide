@@ -22,11 +22,14 @@ import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -40,19 +43,19 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 public class LiferayServerCore extends LiferayCore
 {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.server.core"; //$NON-NLS-1$
-
     private static Map<String, IServerManagerConnection> connections = null;
 
     // The shared instance
     private static LiferayServerCore plugin;
+
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.server.core"; //$NON-NLS-1$
 
     private static IPluginPublisher[] pluginPublishers = null;
 
@@ -72,12 +75,17 @@ public class LiferayServerCore extends LiferayCore
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static LiferayServerCore getDefault()
     {
         return plugin;
+    }
+
+    public static URL getPluginEntry( String path )
+    {
+        return getDefault().getBundle().getEntry( path );
     }
 
     public static IPluginPublisher getPluginPublisher( String facetId, String runtimeTypeId )
@@ -139,6 +147,19 @@ public class LiferayServerCore extends LiferayCore
         }
 
         return pluginPublishers;
+    }
+
+    public static URL getPortalSupportLibURL()
+    {
+        try
+        {
+            return FileLocator.toFileURL( LiferayServerCore.getPluginEntry( "/portal-support/portal-support.jar" ) ); //$NON-NLS-1$
+        }
+        catch( IOException e )
+        {
+        }
+
+        return null;
     }
 
     public static IServerManagerConnection getRemoteConnection( final IRemoteServer server )

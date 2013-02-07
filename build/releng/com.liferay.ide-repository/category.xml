@@ -13,10 +13,6 @@
         <category name="lide" />
     </feature>
 
-    <feature id="com.liferay.ide.velocity" version="0.0.0">
-        <category name="lide" />
-    </feature>
-
     <category-def name="lide" label="Liferay IDE">
         <description>
             Liferay IDE is the official set of eclipse plugins for supporting Liferay
