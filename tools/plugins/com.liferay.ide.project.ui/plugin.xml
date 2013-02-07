@@ -60,7 +60,7 @@
             <adapt
                   type="org.eclipse.core.resources.IProject">
                <test
-                     property="com.liferay.ide.project.ui.isSDKProject">
+                     property="com.liferay.ide.project.ui.isLiferayProject">
                </test>
             </adapt>
          </enabledWhen>

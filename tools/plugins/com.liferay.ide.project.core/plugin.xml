@@ -452,8 +452,8 @@
    <extension
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
-            class="com.liferay.ide.project.core.LiferaySDKProjectProvider"
-            id="com.liferay.ide.project.core.sdkProjectProvider">
+            class="com.liferay.ide.project.core.LiferayRuntimeProjectProvider"
+            id="com.liferay.ide.project.core.runtimeProjectProvider">
       </liferayProjectProvider>
    </extension>
    
