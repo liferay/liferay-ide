@@ -32,6 +32,8 @@
 
     <build>
         <plugins>
+            <!-- Added the switch to final name in the AddAssociateSites -->
+            <!--
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-p2-repository-plugin</artifactId>
@@ -39,6 +41,24 @@
                 <configuration>
                     <includeAllDependencies>false</includeAllDependencies>
                     <finalName>Liferay_IDE_${unqualifiedVersion}.${buildQualifier}-updatesite</finalName>
+                </configuration>
+            </plugin>
+            -->
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>create-composite-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>${pom.basedir}/src/main/assembly/CreateCompositeSite.groovy</source>
                 </configuration>
             </plugin>
             <plugin>

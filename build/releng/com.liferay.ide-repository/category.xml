@@ -13,32 +13,8 @@
         <category name="lide" />
     </feature>
 
-    <feature id="org.eclipse.sapphire" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.ui" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.modeling.xml" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.java" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.java.jdt" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.osgi" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.platform" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.ui.swt.gef" version="0.0.0">
-        <category name="deps" />
-    </feature>
-    <feature id="org.eclipse.sapphire.ui.swt.xml.editor" version="0.0.0">
-        <category name="deps" />
+    <feature id="com.liferay.ide.velocity" version="0.0.0">
+        <category name="lide" />
     </feature>
 
     <category-def name="lide" label="Liferay IDE">
@@ -48,9 +24,5 @@
             platorm.
         </description>
     </category-def>
-    <category-def name="deps" label="Liferay IDE Dependencies (installed automatically)">
-        <description>
-            Plugins from upstream Eclipse frameworks needed by Liferay IDE features.
-        </description>
-    </category-def>
+
 </site>
