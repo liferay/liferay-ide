@@ -22,7 +22,8 @@ def root = parser.parseText( contentXmlText )
 
 def props = root.properties
 
-addAssociateSite( root, "${sapphire-site}" )
+def sapphireSite = project.properties.getProperty("sapphire-site")
+addAssociateSite( root, sapphireSite )
 
 
 class MyXmlNodePrinter extends XmlNodePrinter

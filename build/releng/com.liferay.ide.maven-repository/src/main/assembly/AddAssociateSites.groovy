@@ -17,8 +17,11 @@ def parser = new XmlParser()
 parser.setTrimWhitespace( false )
 def root = parser.parseText( contentXml.text )
 
-addAssociateSite( root, "${m2e-site}" )
-addAssociateSite( root, "${m2e-wtp-site}" )
+def m2eSite = project.properties.getProperty("m2e-site")
+def m2eWtpSite = project.properties.getProperty("m2e-wtp-site")
+
+addAssociateSite( root, m2eSite )
+addAssociateSite( root, m2eWtpSite )
 
 class MyXmlNodePrinter extends XmlNodePrinter
 {
