@@ -22,7 +22,7 @@ def root = parser.parseText( contentXmlText )
 
 def props = root.properties
 
-addAssociateSite( root, "http://download.eclipse.org/sapphire/0.6.1.201301281155/repository/" )
+addAssociateSite( root, "${sapphire-site}" )
 
 
 class MyXmlNodePrinter extends XmlNodePrinter

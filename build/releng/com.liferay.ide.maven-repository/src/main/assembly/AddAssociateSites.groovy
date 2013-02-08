@@ -17,8 +17,8 @@ def parser = new XmlParser()
 parser.setTrimWhitespace( false )
 def root = parser.parseText( contentXml.text )
 
-addAssociateSite( root, "http://download.eclipse.org/technology/m2e/milestones/1.3/" )
-addAssociateSite( root, "http://download.eclipse.org/m2e-wtp/milestones/juno/0.17.0/" )
+addAssociateSite( root, "${m2e-site}" )
+addAssociateSite( root, "${m2e-wtp-site}" )
 
 class MyXmlNodePrinter extends XmlNodePrinter
 {
