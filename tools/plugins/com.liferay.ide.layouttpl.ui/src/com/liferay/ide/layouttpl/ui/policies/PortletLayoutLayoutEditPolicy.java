@@ -224,11 +224,11 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         int topColumnY = columnBounds.y;
         int bottomColumnY = topColumnY + ( (PortletColumnEditPart) columns.get( 0 ) ).getFigure().getBounds().height;
 
-        if( copyPoint.y > bottomColumnY )
+        if( copyPoint.y > bottomColumnY - PortletLayoutEditPart.LAYOUT_MARGIN )
         {
             constraint.newRowIndex = currentRowIndex + 1;
         }
-        else if( copyPoint.y < topColumnY )
+        else if( copyPoint.y < topColumnY - PortletLayoutEditPart.LAYOUT_MARGIN )
         {
             constraint.newRowIndex = currentRowIndex;
         }
