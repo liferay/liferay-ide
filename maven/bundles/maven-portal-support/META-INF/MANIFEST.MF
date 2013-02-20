@@ -7,7 +7,7 @@ Bundle-Name: maven-portal-support
 Created-By: 1.6.0_29 (Sun Microsystems Inc.)
 Build-Jdk: 1.6.0_29
 Bundle-Version: 2.0.0.SNAPSHOT
-Bnd-LastModified: 1360253502371
+Bnd-LastModified: 1361328500902
 Bundle-ManifestVersion: 2
 Import-Package: com.liferay.ide.maven;version="2.0",com.liferay.portal
  .deploy.hot;version="6.1"
