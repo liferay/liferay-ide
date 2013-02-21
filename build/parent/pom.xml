@@ -30,9 +30,9 @@
         <tycho-version>0.16.0</tycho-version>
         <tycho-extras-version>0.16.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20120119162704/repository/</orbit-site>
-        <sapphire-site>https://hudson.eclipse.org/hudson/job/sapphire-0.6.x/214/artifact/build/repository/</sapphire-site>
-        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.3/</m2e-site>
-        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/milestones/juno/0.17.0/</m2e-wtp-site>
+        <sapphire-site>http://download.eclipse.org/sapphire/0.6.1/repository</sapphire-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/releases</m2e-site>
+        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/juno</m2e-wtp-site>
     </properties>
 
     <modules>
