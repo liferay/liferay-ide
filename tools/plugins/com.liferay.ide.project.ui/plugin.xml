@@ -84,6 +84,13 @@
             type="org.eclipse.core.resources.IProject">
       </propertyTester>
       <propertyTester
+            class="com.liferay.ide.project.ui.SDKFolderProjectPropertyTester"
+            id="com.liferay.ide.project.ui.isSDKFolderProject"
+            namespace="com.liferay.ide.project.ui"
+            properties="isSDKFolderProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
             class="com.liferay.ide.project.ui.ProjectNaturePropertyTester"
             id="com.liferay.ide.project.ui.hasNature"
             namespace="com.liferay.ide.project.ui"
@@ -261,7 +268,7 @@
          <enablement>
          	<adapt type="org.eclipse.core.resources.IProject">
          		<test
-					property="com.liferay.ide.project.ui.isSDKProject" />
+					property="com.liferay.ide.project.ui.isSDKFolderProject" />
          	</adapt>
          </enablement>
       </objectContribution>
@@ -609,33 +616,40 @@
                                property="com.liferay.ide.project.ui.isBuildFile"
                                value="true" />
                        </adapt>
-                       <or>
-                           <adapt type="org.eclipse.core.resources.IProject">
+                       <and>
+                            <adapt type="org.eclipse.core.resources.IProject">
                                <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.portlet" />
+                                   property="com.liferay.ide.project.ui.isSDKProject"
+                                   value="true" />
                            </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
-                               <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.hook" />
-                           </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
-                               <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.ext" />
-                           </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
+                           <or>
+                                <adapt type="org.eclipse.core.resources.IProject">
+                                    <test forcePluginActivation="true"
+                                        property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                        value="liferay.portlet" />
+                                </adapt>
+                                <adapt type="org.eclipse.core.resources.IProject">
+                                    <test forcePluginActivation="true"
+                                        property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                        value="liferay.hook" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
                                    <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.layouttpl" />
-                           </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
-                                   <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.theme" />
-                           </adapt>
-                       </or>
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.ext" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                       <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.layouttpl" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                       <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.theme" />
+                               </adapt>
+                            </or>
+                        </and>
                    </or>
                </adapt>
          </enablement>
@@ -661,33 +675,40 @@
                                property="com.liferay.ide.project.ui.isBuildFile"
                                value="true" />
                        </adapt>
-                       <or>
-                           <adapt type="org.eclipse.core.resources.IProject">
+                       <and>
+                            <adapt type="org.eclipse.core.resources.IProject">
                                <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.portlet" />
+                                   property="com.liferay.ide.project.ui.isSDKProject"
+                                   value="true" />
                            </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
-                               <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.hook" />
-                           </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
-                               <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.ext" />
-                           </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
+                           <or>
+                               <adapt type="org.eclipse.core.resources.IProject">
                                    <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.layouttpl" />
-                           </adapt>
-                           <adapt type="org.eclipse.core.resources.IProject">
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.portlet" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
                                    <test forcePluginActivation="true"
-                                   property="org.eclipse.wst.common.project.facet.core.projectFacet"
-                                   value="liferay.theme" />
-                           </adapt>
-                       </or>
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.hook" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                   <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.ext" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                       <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.layouttpl" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                       <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.theme" />
+                               </adapt>
+                           </or>
+                        </and>
                    </or>
                    <test
                         args="6.1.0"
