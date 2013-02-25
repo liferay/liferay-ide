@@ -319,8 +319,11 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             }
         }
 
-        NodeUtil.appendChildElement(
-            newPortletElement, "instanceable", Boolean.toString( model.getBooleanProperty( ALLOW_MULTIPLE ) ) ); //$NON-NLS-1$
+        if( model.getBooleanProperty( ALLOW_MULTIPLE ) )
+        {
+            NodeUtil.appendChildElement(
+                newPortletElement, "instanceable", Boolean.toString( model.getBooleanProperty( ALLOW_MULTIPLE ) ) ); //$NON-NLS-1$
+        }
 
         NodeUtil.appendChildElement( newPortletElement, "header-portlet-css", model.getStringProperty( CSS_FILE ) ); //$NON-NLS-1$
 
