@@ -111,6 +111,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             {
                 liferayVersionValue = liferayVersionNode.getValue();
 
+                // handle the case where user specifies SNAPSHOT version
+                liferayVersionValue = liferayVersionValue.replaceAll( "-SNAPSHOT$", "" ); //$NON-NLS-1$ //$NON-NLS-2$
+
                 try
                 {
                     liferayVersion = new Version( liferayVersionValue );

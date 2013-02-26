@@ -83,6 +83,7 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 
         propNames.add( CONFIGURE_DEPLOYMENT_ASSEMBLY );
         propNames.add( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE );
+        propNames.add( INSTALL_THEME_CSS_BUILDER );
         propNames.add( LIFERAY_PLUGIN_LIBRARY_DELEGATE );
         propNames.add( LIFERAY_SDK_NAME );
         propNames.add( SETUP_DEFAULT_OUTPUT_LOCATION );

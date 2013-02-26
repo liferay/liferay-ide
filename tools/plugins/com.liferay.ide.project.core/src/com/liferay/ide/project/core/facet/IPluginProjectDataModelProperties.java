@@ -26,7 +26,7 @@ public interface IPluginProjectDataModelProperties
     extends IJ2EEFacetProjectCreationDataModelProperties, IProjectCreationPropertiesNew
 {
 
-    public static final String CONFIGURE_DEPLOYMENT_ASSEMBLY = 
+    public static final String CONFIGURE_DEPLOYMENT_ASSEMBLY =
                     "IPluginProjectDataModelProperties.CONFIGURE_DEPLOYMENT_ASSEMBLY"; //$NON-NLS-1$
 
     public static final String CREATE_PROJECT_OPERATION = "IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION"; //$NON-NLS-1$
@@ -39,6 +39,9 @@ public interface IPluginProjectDataModelProperties
 
     public static final String INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE =
         "IPluginProjectDataModelProperties.INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE"; //$NON-NLS-1$
+
+    public static final String INSTALL_THEME_CSS_BUILDER =
+                    "IPluginProjectDataModelProperties.INSTALL_THEME_CSS_BUILDER"; //$NON-NLS-1$
 
     public static final String LAYOUTTPL_NAME = "IPluginProjectDataModelProperties.LAYOUTTPL_NAME"; //$NON-NLS-1$
 

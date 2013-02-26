@@ -25,6 +25,17 @@ public class ThemePluginFacetInstallDataModelProvider extends PluginFacetInstall
 {
 
     @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        if( INSTALL_THEME_CSS_BUILDER.equals( propertyName) )
+        {
+            return true;
+        }
+
+        return super.getDefaultProperty( propertyName );
+    }
+
+    @Override
     protected String getPluginFacetId()
     {
         return IPluginFacetConstants.LIFERAY_THEME_FACET_ID;

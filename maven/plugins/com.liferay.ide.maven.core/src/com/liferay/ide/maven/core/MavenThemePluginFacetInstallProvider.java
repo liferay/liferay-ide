@@ -30,6 +30,10 @@ public class MavenThemePluginFacetInstallProvider extends ThemePluginFacetInstal
         {
             return false;
         }
+        else if ( INSTALL_THEME_CSS_BUILDER.equals( propertyName) )
+        {
+            return false;
+        }
         else if( SETUP_DEFAULT_OUTPUT_LOCATION.equals( propertyName ) )
         {
             return false;

@@ -106,7 +106,10 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             }
         }
 
-        installThemeBuilder( this.project );
+        if( shouldInstallThemeBuilder() )
+        {
+            installThemeBuilder( this.project );
+        }
 
         try
         {
@@ -205,6 +208,11 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
     protected boolean shouldInstallPluginLibraryDelegate()
     {
         return false;
+    }
+
+    protected boolean shouldInstallThemeBuilder()
+    {
+        return this.model.getBooleanProperty( INSTALL_THEME_CSS_BUILDER );
     }
 
 }
