@@ -28,12 +28,14 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 public class PortletColumnCreateCommand extends Command
 {
     protected LayoutTplDiagram diagram;
     protected LayoutConstraint layoutConstraint;
     protected PortletColumn newColumn;
+    protected int refColumnOldWeight = 0;
 
     public PortletColumnCreateCommand( PortletColumn newColumn, LayoutTplDiagram diagram, LayoutConstraint constraint )
     {
@@ -68,6 +70,7 @@ public class PortletColumnCreateCommand extends Command
 
             if( layoutConstraint.refColumn != null )
             {
+                refColumnOldWeight = layoutConstraint.refColumn.getWeight();
                 layoutConstraint.refColumn.setWeight( layoutConstraint.weight );
             }
 
@@ -86,7 +89,7 @@ public class PortletColumnCreateCommand extends Command
 
     public void undo()
     {
-        if( layoutConstraint.equals( LayoutConstraint.EMPTY ) )
+        if( layoutConstraint.equals( LayoutConstraint.EMPTY ) || layoutConstraint.newColumnIndex == -1  )
         {
             for( ModelElement row : diagram.getRows() )
             {
@@ -95,12 +98,24 @@ public class PortletColumnCreateCommand extends Command
                 if( portletLayout.getColumns().size() == 1 && portletLayout.getColumns().get( 0 ).equals( newColumn ) )
                 {
                     diagram.removeRow( portletLayout );
+                    break;
                 }
             }
         }
-        else
+        else if( layoutConstraint.rowIndex > -1 && layoutConstraint.newColumnIndex > -1 )
         {
-            System.out.println( "UNDO not supported!" ); //$NON-NLS-1$
+            if( layoutConstraint.refColumn != null )
+            {
+                layoutConstraint.refColumn.setWeight( refColumnOldWeight );
+            }
+
+            ModelElement row = diagram.getRows().get( layoutConstraint.rowIndex );
+            PortletLayout portletLayout = (PortletLayout) row;
+
+            if( row != null )
+            {
+                portletLayout.removeColumn( newColumn );
+            }
         }
     }
 

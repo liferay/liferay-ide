@@ -14,24 +14,28 @@
 
 package com.liferay.ide.layouttpl.ui.editor;
 
+import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.MultiPageEditorActionBarContributor;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 import org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML;
 import org.eclipse.wst.sse.ui.internal.ISourceViewerActionBarContributor;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEditorActionBarContributor
 {
     protected IEditorActionBarContributor sourceEditorContributor;
     protected IEditorActionBarContributor visualEditorContributor;
-    protected MultiPageEditorPart multiPageEditor;
+    protected LayoutTplMultiPageEditor layoutTplMultiPageEditor;
     protected boolean needsMultiInit;
 
     public LayoutTplMultiPageEditorActionBarContributor()
@@ -84,13 +88,13 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
             sourceEditorContributor.dispose();
         }
 
-        multiPageEditor = null;
+        layoutTplMultiPageEditor = null;
     }
 
     @Override
     public void setActivePage( IEditorPart activeEditor )
     {
-        if( multiPageEditor != null )
+        if( layoutTplMultiPageEditor != null )
         {
             if( ( activeEditor != null ) && ( activeEditor instanceof ITextEditor ) )
             {
@@ -105,9 +109,54 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
         IActionBars actionBars = getActionBars();
         if( actionBars != null )
         {
+            actionBars.clearGlobalActionHandlers();
+
+            if( layoutTplMultiPageEditor.getSelectedPage() instanceof LayoutTplEditor )
+            {
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.UNDO.getId(), getLayoutEditorAction( ActionFactory.UNDO.getId() ) );
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.REDO.getId(), getLayoutEditorAction( ActionFactory.REDO.getId() ) );
+            }
+
+            if( layoutTplMultiPageEditor.getSelectedPage() instanceof ITextEditor )
+            {
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.UNDO.getId(), getTextEditorAction( ITextEditorActionConstants.UNDO ) );
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.REDO.getId(), getTextEditorAction( ITextEditorActionConstants.REDO ) );
+            }
+
             // update menu bar and tool bar
             actionBars.updateActionBars();
         }
+    }
+
+    protected IAction getTextEditorAction( String actionId )
+    {
+        if( layoutTplMultiPageEditor != null )
+        {
+            try
+            {
+                return layoutTplMultiPageEditor.getSourceEditor().getAction( actionId );
+            }
+            catch( NullPointerException e )
+            {
+                //editor has been disposed, ignore
+            }
+        }
+
+        return null;
+    }
+
+    protected IAction getLayoutEditorAction( String actionId )
+    {
+        if( layoutTplMultiPageEditor != null )
+        {
+            return layoutTplMultiPageEditor.getVisualEditor().getActionRegistry().getAction( actionId );
+        }
+
+        return null;
     }
 
     @Override
@@ -115,7 +164,7 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
     {
         if( part instanceof MultiPageEditorPart )
         {
-            this.multiPageEditor = (MultiPageEditorPart) part;
+            this.layoutTplMultiPageEditor = (LayoutTplMultiPageEditor) part;
         }
 
         if( needsMultiInit )
@@ -137,7 +186,7 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
             // null, so pass in multiPageEditor instead (d282414)
             if( activeEditor == null )
             {
-                sourceEditorContributor.setActiveEditor( multiPageEditor );
+                sourceEditorContributor.setActiveEditor( layoutTplMultiPageEditor );
             }
             else
             {
@@ -151,7 +200,7 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
     {
         if( visualEditorContributor != null )
         {
-            visualEditorContributor.setActiveEditor( multiPageEditor );
+            visualEditorContributor.setActiveEditor( layoutTplMultiPageEditor );
         }
 
         if( ( sourceEditorContributor != null ) &&

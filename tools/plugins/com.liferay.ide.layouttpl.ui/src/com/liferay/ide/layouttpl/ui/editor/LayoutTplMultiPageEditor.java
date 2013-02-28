@@ -47,6 +47,7 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction", "rawtypes" } )
 public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISelectionListener
@@ -188,6 +189,16 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
             }
         }
         return result;
+    }
+
+    public StructuredTextEditor getSourceEditor()
+    {
+        return sourceEditor;
+    }
+
+    public LayoutTplEditor getVisualEditor()
+    {
+        return visualEditor;
     }
 
     @Override

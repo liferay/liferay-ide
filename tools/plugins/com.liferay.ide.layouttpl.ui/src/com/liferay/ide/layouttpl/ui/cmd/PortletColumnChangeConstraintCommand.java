@@ -27,12 +27,14 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 public class PortletColumnChangeConstraintCommand extends Command
 {
 
     protected PortletColumn column;
     protected PortletLayout currentParent;
+    protected int diffWeight = 0;
     protected PortletLayout newParent;
     protected LayoutConstraint layoutConstraint;
 
@@ -62,7 +64,7 @@ public class PortletColumnChangeConstraintCommand extends Command
         {
             int existingWeight = column.getWeight();
             column.setWeight( layoutConstraint.weight );
-            int diffWeight = existingWeight - layoutConstraint.weight;
+            diffWeight = existingWeight - layoutConstraint.weight;
 
             PortletColumn refColumn = layoutConstraint.refColumn;
             int newWeight = refColumn.getWeight() + diffWeight;
@@ -83,7 +85,21 @@ public class PortletColumnChangeConstraintCommand extends Command
 
     public void undo()
     {
-        System.out.println( "UNDO" ); //$NON-NLS-1$
+        //do the opposite of redo: give diffWeight back to the column and take it away from refColumn
+        //since diffWeight means the reduction of the modified column according to redo
+        column.setWeight( column.getWeight() + diffWeight );
+
+        PortletColumn refColumn = layoutConstraint.refColumn;
+        int newWeight = refColumn.getWeight() - diffWeight;
+
+        if( refColumn.getWeight() == 33 )
+        {
+            newWeight = newWeight + 1;
+        }
+
+        newWeight = LayoutTplUtil.adjustWeight( newWeight );
+
+        refColumn.setWeight( newWeight );
     }
 
     private static class Msgs extends NLS

@@ -27,6 +27,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class PortletLayoutCreateCommand extends Command
 {
@@ -65,7 +66,7 @@ public class PortletLayoutCreateCommand extends Command
 
     public void undo()
     {
-        System.out.println( "UNDO not yet supported!" ); //$NON-NLS-1$
+        diagram.removeRow( newLayout );
     }
 
     private static class Msgs extends NLS
