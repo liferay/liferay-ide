@@ -49,7 +49,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayLayoutTplDescriptorValidator extends BaseValidator
+public class LayoutTplDescriptorValidator extends BaseValidator
 {
 
     public static final String TEMPLATE_PATH_ELEMENT = "template-path"; //$NON-NLS-1$
@@ -68,7 +68,7 @@ public class LiferayLayoutTplDescriptorValidator extends BaseValidator
 
     public static final String PREFERENCE_NODE_QUALIFIER = LiferayProjectCore.getDefault().getBundle().getSymbolicName();
 
-    public LiferayLayoutTplDescriptorValidator()
+    public LayoutTplDescriptorValidator()
     {
         super();
     }
@@ -187,7 +187,7 @@ public class LiferayLayoutTplDescriptorValidator extends BaseValidator
 
         static
         {
-            initializeMessages( LiferayLayoutTplDescriptorValidator.class.getName(), Msgs.class );
+            initializeMessages( LayoutTplDescriptorValidator.class.getName(), Msgs.class );
         }
     }
 }

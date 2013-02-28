@@ -17,22 +17,27 @@
 
 package com.liferay.ide.layouttpl.core.descriptor;
 
-import com.liferay.ide.core.AbstractContentDescriber;
 import com.liferay.ide.core.AbstractDefaultHandler;
 
 /**
  * @author Greg Amerson
  */
-public class LiferayLayoutTplContentDescriber extends AbstractContentDescriber
+public class LayoutTplContentHandler extends AbstractDefaultHandler
 {
 
-    public LiferayLayoutTplContentDescriber()
+    public static final String PUBLIC_ID_PREFIX = "-//Liferay//DTD Layout Templates"; //$NON-NLS-1$
+
+    public static final String PUBLIC_ID_SUFFIX = "//EN"; //$NON-NLS-1$
+
+    public static final String LIFERAY_PORTLET_APP = "layout-templates"; //$NON-NLS-1$
+
+    public static final String SYSTEM_ID_PREFIX = "http://www.liferay.com/dtd/liferay-layout-templates_"; //$NON-NLS-1$
+
+    public static final String SYSTEM_ID_SUFFIX = ".dtd"; //$NON-NLS-1$
+
+    public LayoutTplContentHandler()
     {
-        super();
+        super( PUBLIC_ID_PREFIX, PUBLIC_ID_SUFFIX, SYSTEM_ID_PREFIX, SYSTEM_ID_SUFFIX, LIFERAY_PORTLET_APP );
     }
 
-    protected AbstractDefaultHandler createDefaultHandler()
-    {
-        return new LiferayLayoutTplContentHandler();
-    }
 }

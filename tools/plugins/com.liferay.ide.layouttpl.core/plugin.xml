@@ -128,7 +128,7 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
-            describer="com.liferay.ide.layouttpl.core.descriptor.LiferayLayoutTplContentDescriber"
+            describer="com.liferay.ide.layouttpl.core.descriptor.LayoutTplContentDescriber"
             file-extensions="xml"
             file-names="liferay-layout-templates.xml"
             id="liferaylayouttplxml"
@@ -142,7 +142,7 @@
          point="org.eclipse.wst.validation.validatorV2">
       <validator
             build="true"
-            class="com.liferay.ide.layouttpl.core.descriptor.LiferayLayoutTplDescriptorValidator"
+            class="com.liferay.ide.layouttpl.core.descriptor.LayoutTplDescriptorValidator"
             manual="true"
             markerId="com.liferay.ide.layouttpl.core.liferayLayoutTplDescriptorMarker"
             version="1">
