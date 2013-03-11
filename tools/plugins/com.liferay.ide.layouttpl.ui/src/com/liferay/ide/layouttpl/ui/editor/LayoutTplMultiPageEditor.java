@@ -129,26 +129,19 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
 
         if( IContentOutlinePage.class.equals( adapter ) )
         {
-            if( this.multiOutlinePage == null )
+            if( this.multiOutlinePage == null && sourceEditor != null && visualEditor != null )
             {
                 // get outline pages for both source and visual editors
-                IContentOutlinePage sourceOutlinePage = null;
+                IContentOutlinePage sourceOutlinePage = (IContentOutlinePage) sourceEditor.getAdapter( adapter );
 
-                if( sourceEditor != null )
+                IContentOutlinePage visualOutlinePage = (IContentOutlinePage) visualEditor.getAdapter( adapter );
+
+                if( sourceOutlinePage != null && visualOutlinePage != null )
                 {
-                    sourceOutlinePage = (IContentOutlinePage) sourceEditor.getAdapter( adapter );
+                    LayoutTplMultiOutlinePage outlinePage =
+                                    new LayoutTplMultiOutlinePage( this, sourceOutlinePage, visualOutlinePage );
+                    this.multiOutlinePage = outlinePage;
                 }
-
-                IContentOutlinePage visualOutlinePage = null;
-
-                if( visualEditor != null )
-                {
-                    visualOutlinePage = (IContentOutlinePage) visualEditor.getAdapter( adapter );
-                }
-
-                LayoutTplMultiOutlinePage outlinePage =
-                    new LayoutTplMultiOutlinePage( this, sourceOutlinePage, visualOutlinePage );
-                this.multiOutlinePage = outlinePage;
             }
 
             return multiOutlinePage;
