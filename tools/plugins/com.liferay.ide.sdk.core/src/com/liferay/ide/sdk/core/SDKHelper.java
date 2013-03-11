@@ -20,16 +20,20 @@ import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.RuntimeClasspathModel;
 import com.liferay.ide.core.util.StringPool;
 
+import java.io.File;
 import java.util.Map;
 
 import org.eclipse.ant.launching.IAntLaunchConstants;
 import org.eclipse.core.externaltools.internal.IExternalToolConstants;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.JavaRuntime;
 
@@ -203,6 +207,22 @@ public class SDKHelper extends LaunchHelper
             {
                 model.addEntry( RuntimeClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry( antLib ) );
             }
+        }
+
+        //IDE-862 need to add Eclipse's own jdt.core that contains the necessary classes.
+        try
+        {
+            File bundleFile = FileLocator.getBundleFile( JavaCore.getPlugin().getBundle() );
+
+            if( bundleFile.exists() )
+            {
+                model.addEntry(
+                    RuntimeClasspathModel.USER,
+                    JavaRuntime.newArchiveRuntimeClasspathEntry( new Path( bundleFile.getAbsolutePath() ) ) );
+            }
+        }
+        catch( Exception e )
+        {
         }
     }
 

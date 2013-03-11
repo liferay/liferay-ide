@@ -17,6 +17,9 @@ package com.liferay.ide.service.ui;
 import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
+import org.eclipse.debug.internal.ui.IInternalDebugUIConstants;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.ISaveablePart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -33,54 +36,60 @@ public class ServiceUIUtil
 {
     public static boolean shouldCreateServiceBuilderJob( IFile file )
     {
-        IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+        final String saveDirty =
+            DebugUIPlugin.getDefault().getPreferenceStore().getString(
+                IInternalDebugUIConstants.PREF_SAVE_DIRTY_EDITORS_BEFORE_LAUNCH );
 
-        for( IWorkbenchWindow window  : windows )
+        if( !MessageDialogWithToggle.PROMPT.equals( saveDirty ) )
         {
-            IWorkbenchPage[] pages = window.getPages();
+            final IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
 
-            for( IWorkbenchPage page : pages )
+            for( IWorkbenchWindow window  : windows )
             {
-                IEditorReference[] editorReferences = page.getEditorReferences();
+                final IWorkbenchPage[] pages = window.getPages();
 
-                for( IEditorReference editorReference : editorReferences )
+                for( IWorkbenchPage page : pages )
                 {
-                    if( file.getName().equals( editorReference.getName() ) )
+                    final IEditorReference[] editorReferences = page.getEditorReferences();
+
+                    for( IEditorReference editorReference : editorReferences )
                     {
-                        IWorkbenchPart part = editorReference.getPart( true );
-
-                        // SaveableHelper.savePart is not visible on Indigo so must use reflection
-                        try
+                        if( file.getName().equals( editorReference.getName() ) )
                         {
-                            Method savePartMethod = SaveableHelper.class.getDeclaredMethod( "savePart",
-                                                                                            ISaveablePart.class,
-                                                                                            IWorkbenchPart.class,
-                                                                                            IWorkbenchWindow.class,
-                                                                                            Boolean.TYPE );
+                            final IWorkbenchPart part = editorReference.getPart( true );
 
-                            savePartMethod.setAccessible( true );
-
-                            boolean save = (Boolean) savePartMethod.invoke( null, part, part, window, true );
-
-                            if( save )
+                            // SaveableHelper.savePart is not visible on Indigo so must use reflection
+                            try
                             {
-                                return true;
+                                Method savePartMethod = SaveableHelper.class.getDeclaredMethod( "savePart",
+                                                                                                ISaveablePart.class,
+                                                                                                IWorkbenchPart.class,
+                                                                                                IWorkbenchWindow.class,
+                                                                                                Boolean.TYPE );
+
+                                savePartMethod.setAccessible( true );
+
+                                boolean save = (Boolean) savePartMethod.invoke( null, part, part, window, true );
+
+                                if( save )
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
                             }
-                            else
+                            catch( Exception e )
                             {
-                                return false;
                             }
-                        }
-                        catch( Exception e )
-                        {
-                            return true;
                         }
                     }
                 }
             }
         }
 
-        return false;
+        return true;
     }
 
 }
