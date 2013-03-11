@@ -117,28 +117,25 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
 	public Object getAdapter(Class adapter) {
 		Object result = null;
 
-		if (IContentOutlinePage.class.equals(adapter)) {
-			if (this.multiOutlinePage == null) {
-				// get outline pages for both source and visual editors
-				IContentOutlinePage sourceOutlinePage = null;
+		if( IContentOutlinePage.class.equals( adapter ) )
+        {
+            if( this.multiOutlinePage == null && sourceEditor != null && visualEditor != null )
+            {
+                // get outline pages for both source and visual editors
+                IContentOutlinePage sourceOutlinePage = (IContentOutlinePage) sourceEditor.getAdapter( adapter );
 
-				if (sourceEditor != null) {
-					sourceOutlinePage = (IContentOutlinePage) sourceEditor.getAdapter(adapter);
-				}
+                IContentOutlinePage visualOutlinePage = (IContentOutlinePage) visualEditor.getAdapter( adapter );
 
-				IContentOutlinePage visualOutlinePage = null;
+                if( sourceOutlinePage != null && visualOutlinePage != null )
+                {
+                    LayoutTplMultiOutlinePage outlinePage =
+                                    new LayoutTplMultiOutlinePage( this, sourceOutlinePage, visualOutlinePage );
+                    this.multiOutlinePage = outlinePage;
+                }
+            }
 
-				if (visualEditor != null) {
-					visualOutlinePage = (IContentOutlinePage) visualEditor.getAdapter(adapter);
-				}
-
-				LayoutTplMultiOutlinePage outlinePage =
-					new LayoutTplMultiOutlinePage(this, sourceOutlinePage, visualOutlinePage);
-				this.multiOutlinePage = outlinePage;
-			}
-
-			return multiOutlinePage;
-		}
+            return multiOutlinePage;
+        }
 
 		// we extend superclass, not override it, so allow it first
 		// chance to satisfy request.
