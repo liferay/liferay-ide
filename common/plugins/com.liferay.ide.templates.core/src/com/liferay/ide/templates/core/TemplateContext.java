@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -10,30 +10,30 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.templates.core;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.apache.velocity.VelocityContext;
 
 /**
- * @author Gregory Amerson
+ * @author Cindy Li
  */
-public interface ITemplateOperation
+public class TemplateContext extends VelocityContext implements ITemplateContext
 {
+    TemplateContext()
+    {
+        super();
+    }
 
-    public boolean canExecute();
+    public boolean containsKey( String key )
+    {
+        return super.containsKey( key );
+    }
 
-    public void execute( IProgressMonitor monitor ) throws Exception;
-
-    public ITemplateContext getContext();
-
-    public void setOutputBuffer( StringBuffer buffer );
-
-    public void setOutputFile( IFile file );
+    public Object put( String key, Object value )
+    {
+        return super.put( key, value );
+    }
 
 }

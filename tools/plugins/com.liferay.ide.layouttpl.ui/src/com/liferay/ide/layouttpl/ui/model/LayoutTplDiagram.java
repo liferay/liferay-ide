@@ -18,6 +18,7 @@ package com.liferay.ide.layouttpl.ui.model;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.templates.core.ITemplateContext;
 import com.liferay.ide.templates.core.ITemplateOperation;
 import com.liferay.ide.templates.core.TemplatesCore;
 
@@ -26,7 +27,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.velocity.VelocityContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -206,7 +206,7 @@ public class LayoutTplDiagram extends ModelElement implements PropertyChangeList
 
         try
         {
-            VelocityContext ctx = templateOperation.getContext();
+            ITemplateContext ctx = templateOperation.getContext();
             ctx.put( "root", this ); //$NON-NLS-1$
             String name = file.getFullPath().removeFileExtension().lastSegment();
             ctx.put( "templateName", name ); //$NON-NLS-1$

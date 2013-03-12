@@ -23,7 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.StringWriter;
 
 import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class TemplateOperation implements ITemplateOperation
 {
 
-    protected VelocityContext context;
+    protected ITemplateContext context;
     protected TemplateModel model;
     protected StringBuffer outputBuffer;
     protected IFile outputFile;
@@ -85,7 +85,7 @@ public class TemplateOperation implements ITemplateOperation
         }
 
         StringWriter writer = new StringWriter();
-        getTemplate().merge( getContext(), writer );
+        getTemplate().merge( (Context) getContext(), writer );
         String result = writer.toString();
 
         if( this.outputFile != null )
@@ -106,7 +106,7 @@ public class TemplateOperation implements ITemplateOperation
         }
     }
 
-    public VelocityContext getContext()
+    public ITemplateContext getContext()
     {
         if( context == null )
         {
@@ -126,9 +126,10 @@ public class TemplateOperation implements ITemplateOperation
         this.outputFile = file;
     }
 
-    protected VelocityContext createContext()
+    protected TemplateContext createContext()
     {
-        return new VelocityContext();
+        return new TemplateContext();
+
     }
 
     protected Template getTemplate() throws Exception
