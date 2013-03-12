@@ -270,6 +270,11 @@
     	</if>
 
     	<antcall target="install-feature">
+    		<param name="repositoryURL" value="${sapphire.repository.url}" />
+    		<param name="featureId" value="${sapphire.features}" />
+    	</antcall>
+    	
+    	<antcall target="install-feature">
     		<param name="repositoryURL" value="file://${updatesite.dir}"/>
     		<param name="featureId" value="com.liferay.ide.eclipse.tools.feature.group"/>
     	</antcall>
