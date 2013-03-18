@@ -14,26 +14,34 @@
 
 package com.liferay.ide.templates.core;
 
-import org.apache.velocity.VelocityContext;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * @author Cindy Li
  */
-public class TemplateContext extends VelocityContext implements ITemplateContext
+public class TemplateContext implements ITemplateContext
 {
-    TemplateContext()
+    protected Map<String, Object> context = new HashMap<String, Object>();
+
+    public TemplateContext()
     {
-        super();
     }
 
     public boolean containsKey( String key )
     {
-        return super.containsKey( key );
+        return context.containsKey( key );
     }
 
     public Object put( String key, Object value )
     {
-        return super.put( key, value );
+        return context.put( key, value );
+    }
+
+    public Map<String, Object> getMap()
+    {
+        return context;
     }
 
 }

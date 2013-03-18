@@ -19,48 +19,49 @@ package com.liferay.ide.templates.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import freemarker.template.Configuration;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.velocity.app.VelocityEngine;
-
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class TemplateModel
 {
 
     protected String bundleId;
+    protected Configuration config;
     protected String id;
     protected String name;
     protected String resource;
     protected String templateFolder;
-    protected VelocityEngine engine;
     private TemplateVariable[] vars;
 
     public TemplateModel(
-        String bundleId, String id, String name, String resource, String templateFolder, VelocityEngine velocityEngine,
+        String bundleId, Configuration config, String id, String name, String resource, String templateFolder,
         TemplateVariable[] vars )
     {
 
         super();
         this.bundleId = bundleId;
+        this.config = config;
         this.id = id;
         this.name = name;
         this.resource = resource;
         this.templateFolder = templateFolder;
-        this.engine = velocityEngine;
         this.vars = vars;
     }
 
-    public VelocityEngine getEngine()
+    public Configuration getConfig()
     {
-        return engine;
+        return config;
     }
 
-    public void setEngine( VelocityEngine engine )
+    public void setConfig( Configuration config )
     {
-        this.engine = engine;
+        this.config = config;
     }
 
     public String getId()

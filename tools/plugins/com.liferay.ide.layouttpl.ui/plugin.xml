@@ -29,7 +29,7 @@
     <template
           id="layouttpl.tpl"
           name="Default Layout Template"
-          resource="layouttpl.vm">
+          resource="layouttpl.ftl">
     </template>
     <templatesFolder
           path="templates/">

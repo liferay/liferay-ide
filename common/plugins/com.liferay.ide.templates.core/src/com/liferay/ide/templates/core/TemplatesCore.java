@@ -1,13 +1,17 @@
 
 package com.liferay.ide.templates.core;
 
+import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
+
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.velocity.app.VelocityEngine;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IStatus;
@@ -109,11 +113,10 @@ public class TemplatesCore extends Plugin
                 }
             }
 
-            VelocityEngine velocityEngine = new VelocityEngine();
+            Configuration config = new Configuration();
             templateModel =
                 new TemplateModel(
-                    pluginName, id, name, resource, templateFolder, velocityEngine,
-                    paramList.toArray( new TemplateVariable[0] ) );
+                    pluginName, config, id, name, resource, templateFolder, paramList.toArray( new TemplateVariable[0] ) );
         }
         catch( Exception e )
         {
@@ -203,17 +206,14 @@ public class TemplatesCore extends Plugin
     private static void initializeModel( TemplateModel templateModel ) throws Exception
     {
 
-        VelocityEngine engine = templateModel.getEngine();
+        Configuration config = templateModel.getConfig();
 
-        engine.setProperty( "resource.loader", "url" ); //$NON-NLS-1$ //$NON-NLS-2$
-        engine.setProperty(
-            "url.resource.loader.class", "org.apache.velocity.runtime.resource.loader.URLResourceLoader" ); //$NON-NLS-1$ //$NON-NLS-2$
         URL loaderRoot = Platform.getBundle( templateModel.bundleId ).getEntry( templateModel.templateFolder );
-        engine.setProperty( "url.resource.loader.root", loaderRoot.toURI().toASCIIString() ); //$NON-NLS-1$
-        engine.setProperty( "url.resource.loader.cache", true ); //$NON-NLS-1$
-        // properties.put("url.resource.loader.modificationCheckInterval", 10);
+        URL fileUrl = FileLocator.toFileURL( loaderRoot );
+        config.setDirectoryForTemplateLoading( new File( fileUrl.getFile().toString() ) );
+        config.setObjectWrapper( ObjectWrapper.BEANS_WRAPPER );
 
-        templateModel.getEngine().init();
+        templateModel.setConfig( config );
     }
 
     /**
