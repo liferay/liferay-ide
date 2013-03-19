@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -88,6 +89,7 @@ public class TemplatesCore extends Plugin
     private static TemplateModel createPluginModel( IConfigurationElement element, String pluginName )
     {
         TemplateModel templateModel = null;
+
         try
         {
             String id = element.getAttribute( "id" ); //$NON-NLS-1$
@@ -113,15 +115,22 @@ public class TemplatesCore extends Plugin
                 }
             }
 
-            Configuration config = new Configuration();
-            templateModel =
-                new TemplateModel(
-                    pluginName, config, id, name, resource, templateFolder, paramList.toArray( new TemplateVariable[0] ) );
+            final Configuration config = new Configuration();
+            final TemplateVariable[] vars = paramList.toArray( new TemplateVariable[0] );
+
+            templateModel = new TemplateModel( pluginName,
+                                               config,
+                                               id,
+                                               name,
+                                               resource,
+                                               templateFolder,
+                                               vars );
         }
         catch( Exception e )
         {
             TemplatesCore.logError( e );
         }
+
         return templateModel;
     }
 
@@ -133,16 +142,18 @@ public class TemplatesCore extends Plugin
         }
 
         TemplateModel model = templateModels.get( templateId );
+
         if( model == null )
         {
-            IConfigurationElement element = getTplDefinitionElement( templateId );
+            final IConfigurationElement element = getTplDefinitionElement( templateId );
+            final String pluginName = element.getContributor().getName();
 
-            String pluginName = element.getContributor().getName();
             TemplateModel pluginModel = pluginModels.get( pluginName );
 
             if( pluginModel == null )
             {
                 pluginModel = createPluginModel( element, pluginName );
+
                 try
                 {
                     initializeModel( pluginModel );
@@ -176,7 +187,7 @@ public class TemplatesCore extends Plugin
             return null;
         }
 
-        IConfigurationElement[] elements = getTplDefinitionElements();
+        final IConfigurationElement[] elements = getTplDefinitionElements();
 
         for( IConfigurationElement element : elements )
         {
@@ -205,11 +216,17 @@ public class TemplatesCore extends Plugin
 
     private static void initializeModel( TemplateModel templateModel ) throws Exception
     {
+        final Configuration config = templateModel.getConfig();
+        final String bundleId = templateModel.getBundleId();
+        final Bundle bundle = Platform.getBundle( bundleId );
 
-        Configuration config = templateModel.getConfig();
+        if( bundle == null )
+        {
+            logError( "Could not initialize template model: could not find bundle " + bundleId ); //$NON-NLS-1$
+        }
 
-        URL loaderRoot = Platform.getBundle( templateModel.bundleId ).getEntry( templateModel.templateFolder );
-        URL fileUrl = FileLocator.toFileURL( loaderRoot );
+        final URL loaderRoot = bundle.getEntry( templateModel.getTemplateFolder() );
+        final URL fileUrl = FileLocator.toFileURL( loaderRoot );
         config.setDirectoryForTemplateLoading( new File( fileUrl.getFile().toString() ) );
         config.setObjectWrapper( ObjectWrapper.BEANS_WRAPPER );
 

@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.templates.core;
@@ -31,19 +31,22 @@ import java.util.List;
 public class TemplateModel
 {
 
-    protected String bundleId;
-    protected Configuration config;
-    protected String id;
-    protected String name;
-    protected String resource;
-    protected String templateFolder;
+    private String bundleId;
+    private Configuration config;
+    private String id;
+    private String name;
+    private String resource;
+    private String templateFolder;
     private TemplateVariable[] vars;
 
-    public TemplateModel(
-        String bundleId, Configuration config, String id, String name, String resource, String templateFolder,
-        TemplateVariable[] vars )
+    public TemplateModel( String bundleId,
+                          Configuration config,
+                          String id,
+                          String name,
+                          String resource,
+                          String templateFolder,
+                          TemplateVariable[] vars )
     {
-
         super();
         this.bundleId = bundleId;
         this.config = config;
@@ -54,14 +57,14 @@ public class TemplateModel
         this.vars = vars;
     }
 
+    public String getBundleId()
+    {
+        return bundleId;
+    }
+
     public Configuration getConfig()
     {
         return config;
-    }
-
-    public void setConfig( Configuration config )
-    {
-        this.config = config;
     }
 
     public String getId()
@@ -72,16 +75,6 @@ public class TemplateModel
     public String getName()
     {
         return name;
-    }
-
-    public String getResource()
-    {
-        return resource;
-    }
-
-    public String getBundleId()
-    {
-        return bundleId;
     }
 
     public String[] getRequiredVarNames()
@@ -100,6 +93,21 @@ public class TemplateModel
         }
 
         return reqVarNames.toArray( new String[0] );
+    }
+
+    public String getResource()
+    {
+        return resource;
+    }
+
+    public String getTemplateFolder()
+    {
+        return templateFolder;
+    }
+
+    public void setConfig( Configuration config )
+    {
+        this.config = config;
     }
 
 }

@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.templates.core;
@@ -78,6 +78,11 @@ public class TemplateOperation implements ITemplateOperation
         }
     }
 
+    protected TemplateContext createContext()
+    {
+        return new TemplateContext();
+    }
+
     public void execute( IProgressMonitor monitor ) throws Exception
     {
         if( !canExecute() )
@@ -85,10 +90,12 @@ public class TemplateOperation implements ITemplateOperation
             return;
         }
 
-        StringWriter writer = new StringWriter();
-        TemplateContext templateContext = (TemplateContext)getContext();
+        final StringWriter writer = new StringWriter();
+        final TemplateContext templateContext = (TemplateContext)getContext();
+
         getTemplate().process( templateContext.getMap(), writer );
-        String result = writer.toString();
+
+        final String result = writer.toString();
 
         if( this.outputFile != null )
         {
@@ -118,25 +125,8 @@ public class TemplateOperation implements ITemplateOperation
         return context;
     }
 
-    public void setOutputBuffer( StringBuffer buffer )
-    {
-        this.outputBuffer = buffer;
-    }
-
-    public void setOutputFile( IFile file )
-    {
-        this.outputFile = file;
-    }
-
-    protected TemplateContext createContext()
-    {
-        return new TemplateContext();
-
-    }
-
     protected Template getTemplate() throws Exception
     {
-
         if( this.model == null )
         {
             return null;
@@ -148,5 +138,15 @@ public class TemplateOperation implements ITemplateOperation
         }
 
         return template;
+    }
+
+    public void setOutputBuffer( StringBuffer buffer )
+    {
+        this.outputBuffer = buffer;
+    }
+
+    public void setOutputFile( IFile file )
+    {
+        this.outputFile = file;
     }
 }

@@ -17,31 +17,26 @@ package com.liferay.ide.templates.core;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * @author Cindy Li
  */
 public class TemplateContext implements ITemplateContext
 {
-    protected Map<String, Object> context = new HashMap<String, Object>();
-
-    public TemplateContext()
-    {
-    }
+    private Map<String, Object> context = new HashMap<String, Object>();
 
     public boolean containsKey( String key )
     {
         return context.containsKey( key );
     }
 
-    public Object put( String key, Object value )
-    {
-        return context.put( key, value );
-    }
-
     public Map<String, Object> getMap()
     {
         return context;
+    }
+
+    public Object put( String key, Object value )
+    {
+        return context.put( key, value );
     }
 
 }
