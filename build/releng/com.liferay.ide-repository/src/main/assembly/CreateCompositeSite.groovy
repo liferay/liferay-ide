@@ -60,14 +60,12 @@ def addAssociateSite( root, siteUrl )
     {
         def newRefs = new Node( root, 'references' )
         newRefs.@size = "2"
-        root.children().add( 1, newRefs )
         refs = root.references
     }
 
     new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
     new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
 }
-
 
 // Create composite repository
 

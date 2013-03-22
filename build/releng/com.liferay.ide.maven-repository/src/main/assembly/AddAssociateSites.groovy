@@ -1,3 +1,19 @@
+def addAssociateSite( root, siteUrl )
+{
+    def refs = root.references
+
+    if( !refs || refs.size() == 0 )
+    {
+        def newRefs = new Node( root, 'references' )
+        newRefs.@size = "4"
+        refs = root.references
+    }
+
+    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
+    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
+}
+
+
 def basedir = project.basedir.canonicalPath
 def repositoryDir = basedir + "/target/repository"
 def contentJar = repositoryDir  + "/content.jar"
@@ -48,22 +64,6 @@ contentXml.text = result
 
 println 'Zipping back customized content.jar'
 ant.zip( destFile: contentJar, baseDir:contentDir )
-
-def addAssociateSite( root, siteUrl )
-{
-    def refs = root.references
-
-    if( !refs || refs.size() == 0 )
-    {
-        def newRefs = new Node( root, 'references' )
-        newRefs.@size = "4"
-        root.children().add( 1, newRefs )
-        refs = root.references
-    }
-
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
-}
 
 def zipSite = basedir  + "/target/${project.artifactId}-${project.version}.zip"
 
