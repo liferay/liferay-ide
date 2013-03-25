@@ -25,8 +25,9 @@ import com.liferay.ide.layouttpl.ui.parts.LayoutTplRootEditPart;
 
 import java.util.EventObject;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
@@ -48,6 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -57,6 +59,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
@@ -142,7 +145,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
     {
         IDOMModel domModel = getSourceModel();
         domModel.aboutToChangeModel();
-        String name = getSourceFile().getFullPath().removeFileExtension().lastSegment();
+        String name = getSourceFileName();
         String templateSource = diagram.getTemplateSource( name );
         domModel.getStructuredDocument().setText( this, templateSource );
         domModel.changedModel();
@@ -180,7 +183,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
     private void refreshViewer( final GraphicalViewer viewer )
     {
         viewer.getControl().addPaintListener
-        ( 
+        (
             new PaintListener()
             {
                 public void paintControl( PaintEvent e )
@@ -246,7 +249,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
     /**
      * Create a transfer drop target listener. When using a CombinedTemplateCreationEntry tool in the palette, this will
      * enable model element creation by dragging from the palette.
-     * 
+     *
      * @see #createPaletteViewerProvider()
      */
     protected TransferDropTargetListener createTransferDropTargetListener()
@@ -278,9 +281,27 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
         return PALETTE_MODEL;
     }
 
-    protected IFile getSourceFile()
+    protected String getSourceFileName()
     {
-        return ( (IFileEditorInput) getEditorInput() ).getFile();
+        IEditorInput editorInput = getEditorInput();
+
+        IPath path = null;
+
+        if( editorInput instanceof IFileEditorInput )
+        {
+            path = ( (IFileEditorInput) editorInput ).getFile().getFullPath();
+        }
+        else if( editorInput instanceof FileStoreEditorInput )
+        {
+            path = new Path( ( (FileStoreEditorInput) editorInput ).getURI().getPath() );
+        }
+
+        if( path == null )
+        {
+            return editorInput.getName();
+        }
+
+        return path.removeFileExtension().lastSegment();
     }
 
     protected IDOMModel getSourceModel()
@@ -333,8 +354,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
         refreshVisualModel();
 
-        IFile file = ( (IFileEditorInput) input ).getFile();
-        setPartName( file.getName() );
+        setPartName( input.getName() );
 
         // try {
         // IFile file = ((IFileEditorInput) input).getFile();

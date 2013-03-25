@@ -19,7 +19,6 @@ import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.ui.ILayoutTplUIPreferenceNames;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -31,7 +30,6 @@ import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -386,8 +384,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
     {
         super.setInput( input );
 
-        IFile file = ( (IFileEditorInput) input ).getFile();
-        setPartName( file.getName() );
+        setPartName( input.getName() );
     }
 
     void gotoMarker( IMarker marker )
