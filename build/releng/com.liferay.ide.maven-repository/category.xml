@@ -8,6 +8,8 @@
         <category name="lide-maven" />
     </feature>
 
+    <bundle id="org.slf4j.api" version="0.0.0"/>
+
     <category-def name="lide-maven" label="Liferay IDE Maven">
         <description>
             Liferay IDE Maven.

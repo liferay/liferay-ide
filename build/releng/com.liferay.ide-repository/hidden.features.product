@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Liferay IDE Tools Hidden Features" uid="com.liferay.ide-repository.hidden.features" id="com.liferay.ide-repository.hidden.features" application="org.eclipse.ui.ide.workbench" version="2.0.0.qualifier" useFeatures="true" includeLaunchers="false">
+
+   <aboutInfo>
+   </aboutInfo>
+
+   <configIni>
+   </configIni>
+
+   <launcherArgs>
+   </launcherArgs>
+
+   <windowImages>
+   </windowImages>
+
+   <splash>
+   </splash>
+   <launcher>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <license>
+   </license>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="org.eclipse.sapphire" />
+      <feature id="org.eclipse.sapphire.java" />
+      <feature id="org.eclipse.sapphire.java.jdt" />
+      <feature id="org.eclipse.sapphire.modeling.xml" />
+      <feature id="org.eclipse.sapphire.osgi" />
+      <feature id="org.eclipse.sapphire.platform" />
+      <feature id="org.eclipse.sapphire.ui" />
+      <feature id="org.eclipse.sapphire.ui.swt.gef" />
+      <feature id="org.eclipse.sapphire.ui.swt.xml.editor" />
+   </features>
+
+   <configurations>
+   </configurations>
+
+</product>

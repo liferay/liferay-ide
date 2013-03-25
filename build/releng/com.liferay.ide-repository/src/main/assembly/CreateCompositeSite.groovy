@@ -3,7 +3,7 @@ def repositoryDir = basedir + "/target/repository"
 def contentJar = repositoryDir  + "/content.jar"
 def contentDir = basedir  + "/target/content.jar/"
 
-// Add associate sites
+// Remove hidden feature
 
 println 'Unzipping content.jar'
 
@@ -20,11 +20,31 @@ def parser = new XmlParser()
 parser.setTrimWhitespace( false )
 def root = parser.parseText( contentXmlText )
 
+def hiddenCategory = root.units.unit.findAll{ it.'@id'.equals('com.liferay.ide-repository.hidden.features') }.get( 0 )
+hiddenCategory.parent().remove( hiddenCategory )
+
+/*
+def addAssociateSite( root, siteUrl )
+{
+    def refs = root.references
+
+    if( !refs || refs.size() == 0 )
+    {
+        def newRefs = new Node( root, 'references' )
+        newRefs.@size = "2"
+        refs = root.references
+    }
+
+    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
+    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
+}
+
+
 def props = root.properties
 
 def sapphireSite = project.properties.getProperty("sapphire-site")
 addAssociateSite( root, sapphireSite )
-
+*/
 
 class MyXmlNodePrinter extends XmlNodePrinter
 {
@@ -52,27 +72,12 @@ contentXml.text = result
 println 'Zipping back customized content.jar'
 ant.zip( destFile: contentJar, baseDir:contentDir )
 
-def addAssociateSite( root, siteUrl )
-{
-    def refs = root.references
-
-    if( !refs || refs.size() == 0 )
-    {
-        def newRefs = new Node( root, 'references' )
-        newRefs.@size = "2"
-        refs = root.references
-    }
-
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
-}
-
 // Create composite repository
 
 def compositeDir = new File( basedir, "target/composite" )
 def toolsRepository = new File( basedir, "target/repository" )
 def mavenRepository = new File( basedir, "../com.liferay.ide.maven-repository/target/repository" )
-def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
+//def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
 
 compositeDir.delete()
 compositeDir.mkdirs()
@@ -106,13 +111,13 @@ ant.sequential
         }
     }
 
-    copy( todir:"${compositeDir}/velocity" )
-    {
-        fileset( dir:velocityRepository )
-        {
-            include( name:"**/*" )
-        }
-    }
+    //copy( todir:"${compositeDir}/velocity" )
+    //{
+    //    fileset( dir:velocityRepository )
+    //    {
+    //        include( name:"**/*" )
+    //    }
+    //}
 }
 
 def unqualifiedVersion = project.properties.getProperty("unqualifiedVersion")
@@ -121,4 +126,3 @@ def buildQualifier = project.properties.getProperty("buildQualifier")
 println 'Zipping updated site'
 File zipSite = new File( basedir + "/target/Liferay_IDE_${unqualifiedVersion}.${buildQualifier}-updatesite.zip" )
 ant.zip( destFile: zipSite, baseDir:compositeDir )
-

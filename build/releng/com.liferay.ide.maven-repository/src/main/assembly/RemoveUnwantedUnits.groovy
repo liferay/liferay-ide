@@ -1,19 +1,3 @@
-def addAssociateSite( root, siteUrl )
-{
-    def refs = root.references
-
-    if( !refs || refs.size() == 0 )
-    {
-        def newRefs = new Node( root, 'references' )
-        newRefs.@size = "4"
-        refs = root.references
-    }
-
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
-}
-
-
 def basedir = project.basedir.canonicalPath
 def repositoryDir = basedir + "/target/repository"
 def contentJar = repositoryDir  + "/content.jar"
@@ -26,32 +10,18 @@ def ant = new AntBuilder();   // create an antbuilder
 
 ant.unzip( src: contentJar, dest:contentDir,  overwrite:"true" )
 
-println 'Modify content.xml to add associate sites for Liferay IDE'
+println 'Modify content.xml to remove default category'
 
 File contentXml =  new File( contentDir, "content.xml" )
 def parser = new XmlParser()
 parser.setTrimWhitespace( false )
 def root = parser.parseText( contentXml.text )
 
-def m2eSite = project.properties.getProperty("m2e-site")
-def m2eWtpSite = project.properties.getProperty("m2e-wtp-site")
+def defaultCategory = root.units.unit.findAll{ it.'@id'.endsWith('.Default') }.get( 0 )
+defaultCategory.parent().remove( defaultCategory )
 
-addAssociateSite( root, m2eSite )
-addAssociateSite( root, m2eWtpSite )
-
-class MyXmlNodePrinter extends XmlNodePrinter
-{
-    MyXmlNodePrinter(PrintWriter out)
-    {
-       super(out)
-    }
-
-    void printSimpleItem(Object value)
-    {
-       value = value.replaceAll("\n", "&#xA;")
-       out.print(value)
-    }
-}
+def hiddenCategory = root.units.unit.findAll{ it.'@id'.equals('com.liferay.ide.maven-repository.hidden.features') }.get( 0 )
+hiddenCategory.parent().remove( hiddenCategory )
 
 println 'Overwriting content.xml'
 def writer = new StringWriter()

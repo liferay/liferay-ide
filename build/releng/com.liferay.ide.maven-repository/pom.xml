@@ -34,7 +34,7 @@
                 <version>1.4</version>
                 <executions>
                     <execution>
-                        <id>add-associate-sites</id>
+                        <id>remove-unwanted-units</id>
                         <phase>package</phase>
                         <goals>
                             <goal>execute</goal>
@@ -42,7 +42,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <source>${pom.basedir}/src/main/assembly/AddAssociateSites.groovy</source>
+                    <source>${pom.basedir}/src/main/assembly/RemoveUnwantedUnits.groovy</source>
                 </configuration>
             </plugin>
         </plugins>
