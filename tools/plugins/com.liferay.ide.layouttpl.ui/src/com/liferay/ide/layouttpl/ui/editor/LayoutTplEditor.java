@@ -18,6 +18,7 @@
 package com.liferay.ide.layouttpl.ui.editor;
 
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
+import com.liferay.ide.layouttpl.ui.action.LayoutTplEditorSelectAllAction;
 import com.liferay.ide.layouttpl.ui.gef.GraphicalEditorWithFlyoutPalette;
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.layouttpl.ui.parts.LayoutTplEditPartFactory;
@@ -36,6 +37,7 @@ import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
+import org.eclipse.gef.ui.actions.SelectAllAction;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
@@ -49,6 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -85,6 +88,16 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
         firePropertyChange( IEditorPart.PROP_DIRTY );
 
         super.commandStackChanged( event );
+    }
+
+    @Override
+    protected void createActions()
+    {
+        super.createActions();
+
+        getActionRegistry().removeAction( getActionRegistry().getAction( ActionFactory.SELECT_ALL.getId() ) );
+        SelectAllAction action = new LayoutTplEditorSelectAllAction( (LayoutTplEditor) this );
+        getActionRegistry().registerAction(action);
     }
 
     @Override

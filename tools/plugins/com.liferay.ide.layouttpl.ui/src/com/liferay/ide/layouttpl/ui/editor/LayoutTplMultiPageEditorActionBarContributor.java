@@ -117,6 +117,10 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
                     ActionFactory.UNDO.getId(), getLayoutEditorAction( ActionFactory.UNDO.getId() ) );
                 actionBars.setGlobalActionHandler(
                     ActionFactory.REDO.getId(), getLayoutEditorAction( ActionFactory.REDO.getId() ) );
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.DELETE.getId(), getLayoutEditorAction( ActionFactory.DELETE.getId() ) );
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.SELECT_ALL.getId(), getLayoutEditorAction( ActionFactory.SELECT_ALL.getId() ) );
             }
 
             if( layoutTplMultiPageEditor.getSelectedPage() instanceof ITextEditor )
@@ -125,6 +129,10 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
                     ActionFactory.UNDO.getId(), getTextEditorAction( ITextEditorActionConstants.UNDO ) );
                 actionBars.setGlobalActionHandler(
                     ActionFactory.REDO.getId(), getTextEditorAction( ITextEditorActionConstants.REDO ) );
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.DELETE.getId(), getTextEditorAction( ITextEditorActionConstants.DELETE ) );
+                actionBars.setGlobalActionHandler(
+                    ActionFactory.SELECT_ALL.getId(), getTextEditorAction( ITextEditorActionConstants.SELECT_ALL ) );
             }
 
             // update menu bar and tool bar

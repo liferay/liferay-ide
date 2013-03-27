@@ -28,6 +28,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.ui,
+ com.liferay.ide.layouttpl.ui.action,
  com.liferay.ide.layouttpl.ui.cmd,
  com.liferay.ide.layouttpl.ui.draw2d,
  com.liferay.ide.layouttpl.ui.editor,
