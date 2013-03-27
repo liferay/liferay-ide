@@ -26,7 +26,7 @@
             file-extensions="xml"
             file-names="liferay-portlet.xml"
             id="liferayportletxml"
-            name="%display.descriptor.problem.name"
+            name="%liferay.portlet.descriptor.name"
             priority="high">
          <describer
                class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
