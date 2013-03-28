@@ -25,6 +25,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
@@ -51,24 +52,31 @@ public class PluginsCustomLabelProvider extends LabelProvider
         {
             try
             {
-                ModuleServer server = (ModuleServer) element;
-                IProject project = server.getModule()[0].getProject();
-                IFacetedProject facetedProject = ProjectUtil.getFacetedProject( project );
+                final ModuleServer server = (ModuleServer) element;
 
-                if( facetedProject != null )
+                // IDE-880 check to make sure this element isn't a nested jar
+                final IModule module = server.getModule()[ server.module.length - 1 ];
+
+                if( "jst.web".equals( module.getModuleType().getId() ) ) //$NON-NLS-1$
                 {
-                    IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
-                    ISDKTemplate sdkTemplate = LiferayProjectCore.getSDKTemplate( liferayFacet );
+                    final IProject project = module.getProject();
+                    final IFacetedProject facetedProject = ProjectUtil.getFacetedProject( project );
 
-                    return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + sdkTemplate.getShortName() + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
-                }
-                else
-                {
-                    String type = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
+                    String imageKey = null;
 
-                    return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                        LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/" + type + ".png" ).createImage(); //$NON-NLS-1$ //$NON-NLS-2$
+                    if( facetedProject != null )
+                    {
+                        IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
+                        ISDKTemplate sdkTemplate = LiferayProjectCore.getSDKTemplate( liferayFacet );
+
+                        imageKey = sdkTemplate.getShortName();
+                    }
+                    else
+                    {
+                        imageKey = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
+                    }
+
+                    return LiferayServerUIPlugin.getDefault().getImageRegistry().get( imageKey );
                 }
             }
             catch( Exception ex )

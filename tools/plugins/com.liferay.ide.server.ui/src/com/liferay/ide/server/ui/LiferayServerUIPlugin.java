@@ -28,7 +28,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @auther Greg Amerson
  */
 public class LiferayServerUIPlugin extends AbstractUIPlugin
@@ -47,7 +47,7 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static LiferayServerUIPlugin getDefault()
@@ -57,7 +57,7 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
 
     /**
      * Return the image with the given key from the image registry.
-     * 
+     *
      * @param key
      *            java.lang.String
      * @return org.eclipse.jface.parts.IImage
@@ -132,7 +132,7 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
 
     /**
      * Register an image with the registry.
-     * 
+     *
      * @param key
      *            java.lang.String
      * @param partialURL
@@ -163,7 +163,17 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
 
     protected ImageRegistry createImageRegistry()
     {
-        ImageRegistry registry = new ImageRegistry();
+        final ImageRegistry registry = new ImageRegistry();
+
+        final String[] pluginTypes = new String[]
+        {
+            "portlet", "hook", "ext", "layouttpl", "theme" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$
+        };
+
+        for (String type : pluginTypes)
+        {
+            registerImage( registry, type, "/icons/e16/" + type + ".png" ); //$NON-NLS-1$ //$NON-NLS-2$
+        }
 
         registerImage( registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png" ); //$NON-NLS-1$
 
