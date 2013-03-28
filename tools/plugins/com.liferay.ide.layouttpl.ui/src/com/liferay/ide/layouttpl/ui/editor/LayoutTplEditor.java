@@ -19,7 +19,6 @@ package com.liferay.ide.layouttpl.ui.editor;
 
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.action.LayoutTplEditorSelectAllAction;
-import com.liferay.ide.layouttpl.ui.gef.GraphicalEditorWithFlyoutPalette;
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.layouttpl.ui.parts.LayoutTplEditPartFactory;
 import com.liferay.ide.layouttpl.ui.parts.LayoutTplRootEditPart;
@@ -37,11 +36,16 @@ import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
+import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.SelectAllAction;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite;
+import org.eclipse.gef.ui.palette.FlyoutPaletteComposite.FlyoutPreferences;
 import org.eclipse.gef.ui.palette.PaletteViewer;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
+import org.eclipse.gef.ui.parts.GraphicalEditorWithFlyoutPalette;
 import org.eclipse.gef.ui.parts.GraphicalViewerImpl;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
+import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.util.TransferDropTargetListener;
@@ -133,6 +137,12 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
     {
     }
 
+    @Override
+    public ActionRegistry getActionRegistry()
+    {
+        return super.getActionRegistry();
+    }
+
     @SuppressWarnings( "rawtypes" )
     public Object getAdapter( Class type )
     {
@@ -147,6 +157,24 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
     public LayoutTplDiagram getDiagram()
     {
         return diagram;
+    }
+
+    @Override
+    public DefaultEditDomain getEditDomain()
+    {
+        return super.getEditDomain();
+    }
+
+    @Override
+    protected FlyoutPreferences getPalettePreferences()
+    {
+        return FlyoutPaletteComposite.createFlyoutPreferences( LayoutTplUI.getDefault().getPluginPreferences() );
+    }
+
+    @Override
+    public SelectionSynchronizer getSelectionSynchronizer()
+    {
+        return super.getSelectionSynchronizer();
     }
 
     public boolean isSaveAsAllowed()
