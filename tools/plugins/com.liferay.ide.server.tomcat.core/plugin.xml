@@ -149,7 +149,7 @@
       <publishTask
             class="com.liferay.ide.server.tomcat.core.LiferayPublishTask"
             id="com.liferay.ide.server.tomcat.publishTask"
-            typeIds="com.liferay.ide.*">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
       </publishTask>
    </extension>
    <extension

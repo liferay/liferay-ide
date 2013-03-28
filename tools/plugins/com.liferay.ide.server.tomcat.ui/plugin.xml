@@ -86,7 +86,7 @@
             id="com.liferay.ide.server.tomcat.editor.instance"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
-            typeIds="com.liferay.ide.*">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
          <enablement>
             <not>
                <test
@@ -101,7 +101,7 @@
             id="com.liferay.ide.server.tomcat.configuration.editor.mime"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="20"
-            typeIds="com.liferay.ide.*">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
          <enablement>
             <test
                   property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
@@ -114,7 +114,7 @@
             id="com.liferay.ide.server.tomcat.configuration.editor.port"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="10"
-            typeIds="com.liferay.ide.*">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
          <enablement>
             <test
                   property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
