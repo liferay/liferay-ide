@@ -26,7 +26,11 @@ public class MavenHookPluginFacetInstallProvider extends HookPluginFacetInstallD
     @Override
     public Object getDefaultProperty( String propertyName )
     {
-        if( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE.equals( propertyName ) )
+        if( CONFIGURE_DEPLOYMENT_ASSEMBLY.equals( propertyName ) )
+        {
+            return false;
+        }
+        else if( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE.equals( propertyName ) )
         {
             return false;
         }

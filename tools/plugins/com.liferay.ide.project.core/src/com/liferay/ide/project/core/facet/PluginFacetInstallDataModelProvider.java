@@ -48,7 +48,11 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
     @Override
     public Object getDefaultProperty( String propertyName )
     {
-        if( propertyName.equals( FACET_ID ) )
+        if( propertyName.equals( CONFIGURE_DEPLOYMENT_ASSEMBLY ) )
+        {
+            return true;
+        }
+        else if( propertyName.equals( FACET_ID ) )
         {
             return getPluginFacetId();
         }
