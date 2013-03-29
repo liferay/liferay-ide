@@ -659,7 +659,7 @@
             id="com.liferay.ide.project.ui.sdk.popup2"
             objectClass="org.eclipse.core.resources.IResource">
          <action
-               class="com.liferay.ide.project.ui.action.sdk.BuildClientAction"
+               class="com.liferay.ide.project.ui.action.sdk.BuildCSSAction"
                enablesFor="1"
                icon="icons/e16/target.gif"
                id="com.liferay.ide.sdk.popup.action.build-css"
