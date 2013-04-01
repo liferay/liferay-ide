@@ -11,7 +11,7 @@
             canFinishEarly="true"
             category="com.liferay.ide.newWizards"
             icon="icons/n16/portlet_new.png"
-            id="com.liferay.ide.portlet.ui.wizard.portlet"
+            id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet"
             name="%lifeay.portlet.wizard.name">
          <class class="com.liferay.ide.portlet.ui.wizard.NewPortletWizard">
          	<parameter name="liferay_artifact" value="true"/>
@@ -271,7 +271,7 @@
          <commonWizard
                menuGroupId="com.liferay.ide.plugins.ui"
                type="new"
-               wizardId="com.liferay.ide.portlet.ui.wizard.portlet">
+               wizardId="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
             <enablement>
                <and>
                   <or>

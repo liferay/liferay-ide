@@ -57,7 +57,7 @@ public class NewPortletWizard extends NewWebArtifactWizard
     implements IPluginWizardFragment, INewPortletClassDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.portlet.ui.wizard.portlet"; //$NON-NLS-1$
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet"; //$NON-NLS-1$
 
     protected boolean fragment;
     protected IWizardPage hostPage;

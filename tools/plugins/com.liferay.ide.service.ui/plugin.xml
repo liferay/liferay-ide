@@ -11,7 +11,7 @@
       <wizard
             category="com.liferay.ide.newWizards"
             icon="icons/n16/service_new.png"
-            id="com.liferay.ide.service.ui.wizard.servicebuilder"
+            id="com.liferay.ide.eclipse.service.ui.wizard.servicebuilder"
             name="%service.wizard.name">
          <class class="com.liferay.ide.service.ui.wizard.NewServiceBuilderWizard">
           <parameter name="liferay_artifact" value="true"/>

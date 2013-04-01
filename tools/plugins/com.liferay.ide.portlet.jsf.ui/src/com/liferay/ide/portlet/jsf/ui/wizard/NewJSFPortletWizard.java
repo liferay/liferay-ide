@@ -50,7 +50,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPortletClassDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.portlet.jsf.ui.wizard.portlet"; //$NON-NLS-1$
+    public static final String ID = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet"; //$NON-NLS-1$
 
     public NewJSFPortletWizard()
     {

@@ -50,16 +50,16 @@
                id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.project.ui.newProjectWizard">
+               id="com.liferay.ide.eclipse.project.ui.newProjectWizard">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.portlet.ui.wizard.portlet">
+               id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.hook.ui.wizard.hook">
+               id="com.liferay.ide.eclipse.hook.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.service.ui.wizard.servicebuilder">
+               id="com.liferay.ide.eclipse.service.ui.wizard.servicebuilder">
          </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
@@ -71,16 +71,16 @@
                id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.project.ui.newProjectWizard">
+               id="com.liferay.ide.eclipse.project.ui.newProjectWizard">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.portlet.ui.wizard.portlet">
+               id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.hook.ui.wizard.hook">
+               id="com.liferay.ide.eclipse.hook.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.service.ui.wizard.servicebuilder">
+               id="com.liferay.ide.eclipse.service.ui.wizard.servicebuilder">
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>

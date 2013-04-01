@@ -40,7 +40,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 public class NewVaadinPortletWizard extends NewPortletWizard
 {
 
-    public static final String ID = "com.liferay.ide.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
+    public static final String ID = "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
 
     public NewVaadinPortletWizard()
     {
