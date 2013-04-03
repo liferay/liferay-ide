@@ -46,7 +46,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_MARKERS_VIEW = "org.eclipse.ui.views.AllMarkersView"; //$NON-NLS-1$
 
-    public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.hook.ui.wizard.hook"; //$NON-NLS-1$
+    public static final String ID_NEW_HOOK_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.hook"; //$NON-NLS-1$
 
     public static final String ID_NEW_JSF_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.jsf.ui.wizard.portlet"; //$NON-NLS-1$
 
@@ -61,7 +61,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
     public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet"; //$NON-NLS-1$
 
     public static final String ID_NEW_SERVICE_BUILDER_WIZARD =
-        "com.liferay.ide.eclipse.service.ui.wizard.servicebuilder"; //$NON-NLS-1$
+        "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"; //$NON-NLS-1$
 
     public static final String ID_NEW_VAADIN_PORTLET_WIZARD =
         "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$

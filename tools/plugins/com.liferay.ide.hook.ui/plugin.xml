@@ -39,7 +39,7 @@
       <wizard
             category="com.liferay.ide.newWizards"
             icon="icons/n16/hook_new.png"
-            id="com.liferay.ide.eclipse.hook.ui.wizard.hook"
+            id="com.liferay.ide.eclipse.portlet.ui.wizard.hook"
             name="%hook.wizard.name">
          <class class="com.liferay.ide.hook.ui.wizard.NewHookWizard">
           <parameter name="liferay_artifact" value="true"/>

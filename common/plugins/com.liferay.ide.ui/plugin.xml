@@ -19,7 +19,7 @@
          point="org.eclipse.ui.popupMenus">
          <objectContribution objectClass="org.eclipse.core.resources.IProject" adaptable="true" id="com.liferay.ide.ui.popupmenu">
 	         <menu label="%liferay.popup.menu.label"  id="liferayPopupMenuCategory">
-	            <separator name="slot1"/> 
+	            <separator name="slot1"/>
 	         </menu>
       	</objectContribution>
    </extension>
@@ -56,10 +56,10 @@
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.hook.ui.wizard.hook">
+               id="com.liferay.ide.eclipse.portlet.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.service.ui.wizard.servicebuilder">
+               id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder">
          </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
@@ -77,10 +77,10 @@
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.hook.ui.wizard.hook">
+               id="com.liferay.ide.eclipse.portlet.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.service.ui.wizard.servicebuilder">
+               id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder">
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>
@@ -89,6 +89,6 @@
       <startup
             class="com.liferay.ide.ui.LiferayUIPlugin">
       </startup>
-   </extension>   
+   </extension>
 
 </plugin>

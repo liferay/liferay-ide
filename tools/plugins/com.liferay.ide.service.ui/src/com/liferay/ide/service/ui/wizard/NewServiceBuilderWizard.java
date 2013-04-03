@@ -44,7 +44,7 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
     implements INewWizard, INewServiceBuilderDataModelProperties
 {
 
-    public static final String ID = "com.liferay.ide.eclipse.service.ui.wizard.servicebuilder"; //$NON-NLS-1$
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"; //$NON-NLS-1$
 
     public NewServiceBuilderWizard()
     {
