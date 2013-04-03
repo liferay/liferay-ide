@@ -12,14 +12,16 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.ui.editor;
 
+import com.liferay.ide.layouttpl.core.model.LayoutTplDiagramElement;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.action.LayoutTplEditorSelectAllAction;
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
+import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagramUIFactory;
 import com.liferay.ide.layouttpl.ui.parts.LayoutTplEditPartFactory;
 import com.liferay.ide.layouttpl.ui.parts.LayoutTplRootEditPart;
 
@@ -72,7 +74,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 {
     protected static PaletteRoot PALETTE_MODEL;
-    protected LayoutTplDiagram diagram;
+    protected LayoutTplDiagramElement diagram;
     protected StructuredTextEditor sourceEditor;
 
     public LayoutTplEditor()
@@ -154,7 +156,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
         return super.getAdapter( type );
     }
 
-    public LayoutTplDiagram getDiagram()
+    public LayoutTplDiagramElement getDiagram()
     {
         return diagram;
     }
@@ -200,7 +202,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
         if( domModel != null )
         {
-            diagram = LayoutTplDiagram.createFromModel( domModel );
+            diagram = LayoutTplDiagramElement.createFromModel( domModel, LayoutTplDiagramUIFactory.INSTANCE );
             domModel.releaseFromRead();
         }
         else

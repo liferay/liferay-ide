@@ -12,15 +12,16 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.layouttpl.ui.cmd;
 
+import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.ui.model.LayoutConstraint;
 import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
-import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.osgi.util.NLS;
@@ -38,8 +39,10 @@ public class PortletColumnChangeConstraintCommand extends Command
     protected PortletLayout newParent;
     protected LayoutConstraint layoutConstraint;
 
-    public PortletColumnChangeConstraintCommand(
-        PortletColumn column, PortletLayout currentParent, PortletLayout newParent, LayoutConstraint constraint )
+    public PortletColumnChangeConstraintCommand( PortletColumn column,
+                                                 PortletLayout currentParent,
+                                                 PortletLayout newParent,
+                                                 LayoutConstraint constraint )
     {
         this.column = column;
         this.currentParent = currentParent;
@@ -50,7 +53,8 @@ public class PortletColumnChangeConstraintCommand extends Command
 
     public boolean canExecute()
     {
-        return column != null && currentParent != null && newParent != null && layoutConstraint != null && layoutConstraint.refColumn != null;
+        return column != null && currentParent != null && newParent != null && layoutConstraint != null &&
+            layoutConstraint.refColumn != null;
     }
 
     public void execute()
@@ -66,7 +70,7 @@ public class PortletColumnChangeConstraintCommand extends Command
             column.setWeight( layoutConstraint.weight );
             diffWeight = existingWeight - layoutConstraint.weight;
 
-            PortletColumn refColumn = layoutConstraint.refColumn;
+            PortletColumnElement refColumn = layoutConstraint.refColumn;
             int newWeight = refColumn.getWeight() + diffWeight;
 
             //IDE-800 to avoid changing one column from 66% to 65% but the refColumn stay 33%
@@ -77,7 +81,7 @@ public class PortletColumnChangeConstraintCommand extends Command
                 newWeight = newWeight + 1;
             }
 
-            newWeight = LayoutTplUtil.adjustWeight( newWeight );
+            newWeight = LayoutTplUIUtil.adjustWeight( newWeight );
 
             refColumn.setWeight( newWeight );
         }
@@ -89,7 +93,7 @@ public class PortletColumnChangeConstraintCommand extends Command
         //since diffWeight means the reduction of the modified column according to redo
         column.setWeight( column.getWeight() + diffWeight );
 
-        PortletColumn refColumn = layoutConstraint.refColumn;
+        PortletColumnElement refColumn = layoutConstraint.refColumn;
         int newWeight = refColumn.getWeight() - diffWeight;
 
         if( refColumn.getWeight() == 33 )
@@ -97,7 +101,7 @@ public class PortletColumnChangeConstraintCommand extends Command
             newWeight = newWeight + 1;
         }
 
-        newWeight = LayoutTplUtil.adjustWeight( newWeight );
+        newWeight = LayoutTplUIUtil.adjustWeight( newWeight );
 
         refColumn.setWeight( newWeight );
     }

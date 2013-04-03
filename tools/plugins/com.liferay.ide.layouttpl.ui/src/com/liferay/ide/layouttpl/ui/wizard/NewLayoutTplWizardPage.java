@@ -19,7 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
-import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
@@ -218,7 +218,7 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
     @Override
     protected boolean isProjectValid( IProject project )
     {
-        return LayoutTplUtil.isLayoutTplProject( project );
+        return LayoutTplUIUtil.isLayoutTplProject( project );
     }
 
     @Override

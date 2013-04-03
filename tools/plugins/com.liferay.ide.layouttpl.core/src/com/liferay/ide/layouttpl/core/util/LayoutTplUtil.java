@@ -12,39 +12,30 @@
  * details.
  *
  *******************************************************************************/
-
-package com.liferay.ide.layouttpl.ui.util;
+package com.liferay.ide.layouttpl.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.layouttpl.ui.model.ModelElement;
-import com.liferay.ide.layouttpl.ui.model.PortletColumn;
-import com.liferay.ide.layouttpl.ui.model.PortletLayout;
-import com.liferay.ide.layouttpl.ui.parts.LayoutTplDiagramEditPart;
-import com.liferay.ide.layouttpl.ui.parts.PortletLayoutEditPart;
-import com.liferay.ide.project.core.facet.IPluginFacetConstants;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.NodeList;
 
+
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplUtil
 {
 
-    public static IDOMElement[] findChildElementsByClassName(
-        IDOMElement parentElement, String childElementTag, String className )
+    public static IDOMElement[] findChildElementsByClassName( IDOMElement parentElement,
+                                                              String childElementTag,
+                                                              String className )
     {
         if( parentElement == null || !( parentElement.hasChildNodes() ) )
         {
@@ -59,7 +50,7 @@ public class LayoutTplUtil
         {
             IDOMElement childDivElement = (IDOMElement) divChildren.item( i );
 
-            if( LayoutTplUtil.hasClassName( childDivElement, className ) )
+            if( hasClassName( childDivElement, className ) )
             {
                 childElements.add( childDivElement );
             }
@@ -82,26 +73,6 @@ public class LayoutTplUtil
         return mainContentElement;
     }
 
-    public static int getColumnIndex( PortletLayout currentParent, PortletColumn column )
-    {
-        if( currentParent == null || column == null )
-        {
-            return -1;
-        }
-
-        List<ModelElement> cols = currentParent.getColumns();
-
-        for( int i = 0; i < cols.size(); i++ )
-        {
-            if( column.equals( cols.get( i ) ) )
-            {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
     public static String getRoleValue( IDOMElement mainContentElement, String defaultValue )
     {
         String retval = defaultValue;
@@ -113,27 +84,6 @@ public class LayoutTplUtil
         }
 
         return retval;
-    }
-
-    public static int getRowIndex( PortletLayoutEditPart layoutEditPart )
-    {
-        if( layoutEditPart == null )
-        {
-            return -1;
-        }
-
-        LayoutTplDiagramEditPart diagramPart = (LayoutTplDiagramEditPart) layoutEditPart.getParent();
-        Object[] rows = diagramPart.getChildren().toArray();
-
-        for( int i = 0; i < rows.length; i++ )
-        {
-            if( layoutEditPart.equals( rows[i] ) )
-            {
-                return i;
-            }
-        }
-
-        return -1;
     }
 
     public static int getWeightValue( IDOMElement portletColumnElement, int defaultValue )
@@ -220,50 +170,6 @@ public class LayoutTplUtil
             {
                 retval = classAttr.contains( className );
             }
-        }
-
-        return retval;
-    }
-
-    public static boolean isCreateRequest( Class<?> class1, Request request )
-    {
-        if( !( request instanceof CreateRequest ) )
-        {
-            return false;
-        }
-
-        if( !( ( (CreateRequest) request ).getNewObject().getClass() == class1 ) )
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean isLayoutTplProject( IProject project )
-    {
-        return ProjectUtil.hasFacet( project, IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET );
-    }
-
-    public static int adjustWeight( int newWeight )
-    {
-        int retval = -1;
-
-        // make sure that new weight is valid
-
-        //use 35 instead of 34 because the 33 and 66 situations should be corresponding by a sum of 100
-        //or when 66 is in 66, 34 is not in 33 but 35
-        if( newWeight > 31 && newWeight < 35 )
-        {
-            retval = 33;
-        }
-        else if( newWeight > 65 && newWeight < 69 )
-        {
-            retval = 66;
-        }
-        else
-        {
-            retval = (int) Math.round( (double) newWeight / (double) 5 ) * 5;
         }
 
         return retval;

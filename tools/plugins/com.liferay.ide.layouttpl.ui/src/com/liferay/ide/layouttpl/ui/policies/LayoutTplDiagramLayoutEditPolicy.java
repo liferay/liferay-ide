@@ -24,7 +24,7 @@ import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.layouttpl.ui.parts.LayoutTplDiagramEditPart;
 import com.liferay.ide.layouttpl.ui.parts.PortletLayoutEditPart;
-import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
 
 import java.util.List;
 
@@ -72,8 +72,8 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
             return null;
         }
 
-        boolean isRowRequest = LayoutTplUtil.isCreateRequest( PortletLayout.class, request );
-        boolean isColumnRequest = LayoutTplUtil.isCreateRequest( PortletColumn.class, request );
+        boolean isRowRequest = LayoutTplUIUtil.isCreateRequest( PortletLayout.class, request );
+        boolean isColumnRequest = LayoutTplUIUtil.isCreateRequest( PortletColumn.class, request );
         RoundedRectangle feedback = new FeedbackRoundedRectangle();
 
         if( isRowRequest || isColumnRequest )

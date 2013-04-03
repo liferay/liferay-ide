@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 /*******************************************************************************
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
@@ -12,30 +14,20 @@
  * details.
  *
  *******************************************************************************/
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-package com.liferay.ide.layouttpl.ui.model;
+    <parent>
+        <groupId>com.liferay.ide.tools.tests</groupId>
+        <artifactId>tools-tests</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
 
-import com.liferay.ide.layouttpl.core.model.LayoutTplDiagramElement;
+    <artifactId>com.liferay.ide.layouttpl.core.tests</artifactId>
+    <packaging>eclipse-test-plugin</packaging>
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
+    <name>Liferay IDE Layout Templates Core Tests</name>
 
-/**
- * @author Greg Amerson
- */
-public class LayoutTplDiagram extends LayoutTplDiagramElement implements IPropertySource
-{
-
-    /** An empty property descriptor. */
-    private static final IPropertyDescriptor[] EMPTY_ARRAY = new IPropertyDescriptor[0];
-
-    public static LayoutTplDiagram createDefaultDiagram()
-    {
-        return new LayoutTplDiagram();
-    }
-
-    public IPropertyDescriptor[] getPropertyDescriptors()
-    {
-        return EMPTY_ARRAY;
-    }
-}
+</project>

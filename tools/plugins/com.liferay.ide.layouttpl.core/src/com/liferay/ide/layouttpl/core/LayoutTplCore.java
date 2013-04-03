@@ -30,11 +30,11 @@ import org.osgi.framework.BundleContext;
 public class LayoutTplCore extends Plugin
 {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.core"; //$NON-NLS-1$
-
     // The shared instance
     private static LayoutTplCore plugin;
+
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.layouttpl.core"; //$NON-NLS-1$
 
     public static IStatus createErrorStatus( Exception ex )
     {
@@ -44,6 +44,11 @@ public class LayoutTplCore extends Plugin
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg );
+    }
+
+    public static IStatus createErrorStatus( String msg, Exception ex )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, ex );
     }
 
     public static IStatus createWarningStatus( String msg )
@@ -64,6 +69,11 @@ public class LayoutTplCore extends Plugin
     public static void logError( Exception ex )
     {
         getDefault().getLog().log( createErrorStatus( ex ) );
+    }
+
+    public static void logError( String msg, Exception ex )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, ex ) );
     }
 
     /**
@@ -92,4 +102,5 @@ public class LayoutTplCore extends Plugin
         plugin = null;
         super.stop( context );
     }
+
 }

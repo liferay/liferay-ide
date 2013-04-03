@@ -25,7 +25,7 @@ import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.layouttpl.ui.parts.PortletColumnEditPart;
 import com.liferay.ide.layouttpl.ui.parts.PortletLayoutEditPart;
-import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
 
 import java.util.List;
 
@@ -79,8 +79,8 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
 
         if( request instanceof CreateRequest )
         {
-            boolean isRowRequest = LayoutTplUtil.isCreateRequest( PortletLayout.class, request );
-            boolean isColumnRequest = LayoutTplUtil.isCreateRequest( PortletColumn.class, request );
+            boolean isRowRequest = LayoutTplUIUtil.isCreateRequest( PortletLayout.class, request );
+            boolean isColumnRequest = LayoutTplUIUtil.isCreateRequest( PortletColumn.class, request );
             LayoutConstraint constraint = (LayoutConstraint) getConstraintFor( (CreateRequest) request );
             feedback = new FeedbackRoundedRectangle();
 
@@ -91,7 +91,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
                 feedback.setSize( getContainerWidth(), LayoutTplDiagramLayoutEditPolicy.DEFAULT_FEEDBACK_HEIGHT );
 
                 PortletLayoutEditPart layoutEditPart = (PortletLayoutEditPart) getHost();
-                int currentRowIndex = LayoutTplUtil.getRowIndex( layoutEditPart );
+                int currentRowIndex = LayoutTplUIUtil.getRowIndex( layoutEditPart );
                 if( constraint.newRowIndex == currentRowIndex )
                 {
                     partBounds.y -= ( feedback.getSize().height / 2 );
@@ -211,7 +211,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         LayoutConstraint constraint = new LayoutConstraint();
 
         PortletLayoutEditPart layoutEditPart = (PortletLayoutEditPart) getHost();
-        int currentRowIndex = LayoutTplUtil.getRowIndex( layoutEditPart );
+        int currentRowIndex = LayoutTplUIUtil.getRowIndex( layoutEditPart );
         constraint.rowIndex = currentRowIndex;
 
         List columns = layoutEditPart.getChildren();
@@ -289,7 +289,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
                 newWeight = 50; // 50%
             }
 
-            constraint.weight = LayoutTplUtil.adjustWeight( newWeight );
+            constraint.weight = LayoutTplUIUtil.adjustWeight( newWeight );
             constraint.refColumn = refColumnPart.getCastedModel();
         }
 
@@ -304,7 +304,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         int numColumns = columns.size();
 
         LayoutConstraint constraint = new LayoutConstraint();
-        constraint.rowIndex = LayoutTplUtil.getRowIndex( layoutEditPart );
+        constraint.rowIndex = LayoutTplUIUtil.getRowIndex( layoutEditPart );
 
         int refColumnIndex = 0;
 
@@ -365,7 +365,7 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
 
         // get new weight based on resize
         int rowWidth = getHostFigure().getSize().width - ( PortletLayoutEditPart.LAYOUT_MARGIN * 2 );
-        constraint.weight = LayoutTplUtil.adjustWeight( (int) ( (double) rect.width / (double) rowWidth * 100d ) );
+        constraint.weight = LayoutTplUIUtil.adjustWeight( (int) ( (double) rect.width / (double) rowWidth * 100d ) );
 
         return constraint;
     }

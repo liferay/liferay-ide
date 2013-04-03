@@ -12,10 +12,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.xml.core;bundle-version="[1.1.402,2.0.0)";visibility:=reexport,
  org.eclipse.wst.sse.core;bundle-version="[1.1.402,2.0.0)";visibility:=reexport,
  org.eclipse.jst.j2ee.web,
- com.liferay.ide.sdk.core
+ com.liferay.ide.sdk.core,
+ com.liferay.ide.templates.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core,
  com.liferay.ide.layouttpl.core.descriptor,
  com.liferay.ide.layouttpl.core.facet,
- com.liferay.ide.layouttpl.core.operation
+ com.liferay.ide.layouttpl.core.model,
+ com.liferay.ide.layouttpl.core.operation,
+ com.liferay.ide.layouttpl.core.util

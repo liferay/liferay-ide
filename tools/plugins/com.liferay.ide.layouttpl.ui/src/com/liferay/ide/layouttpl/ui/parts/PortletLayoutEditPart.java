@@ -15,9 +15,9 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
+import com.liferay.ide.layouttpl.core.model.ModelElement;
 import com.liferay.ide.layouttpl.ui.draw2d.PortletLayoutPanel;
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
-import com.liferay.ide.layouttpl.ui.model.ModelElement;
 import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.layouttpl.ui.policies.PortletLayoutLayoutEditPolicy;

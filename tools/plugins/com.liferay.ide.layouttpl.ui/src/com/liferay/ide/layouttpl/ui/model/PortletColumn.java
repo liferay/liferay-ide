@@ -15,28 +15,19 @@
 
 package com.liferay.ide.layouttpl.ui.model;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.layouttpl.ui.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class PortletColumn extends ModelElement
+public class PortletColumn extends PortletColumnElement implements IPropertySource
 {
-    public static final int DEFAULT_WEIGHT = -1;
-    public static final String WEIGHT_PROP = "PortletColumn.weight"; //$NON-NLS-1$
-
-    // public static final String SIZE_PROP = "PortletColumn.size";
-    // public static final String LOCATION_PROP = "PortletColumn.location";
-
     protected static IPropertyDescriptor[] descriptors;
 
     static
@@ -68,146 +59,20 @@ public class PortletColumn extends ModelElement
         }
     }
 
-    public static PortletColumn createFromElement( IDOMElement portletColumnElement )
+    public PortletColumn( int i )
     {
-        if( portletColumnElement == null )
-        {
-            return null;
-        }
-
-        PortletColumn newPortletColumn = new PortletColumn();
-
-        String existingClassName = portletColumnElement.getAttribute( "class" ); //$NON-NLS-1$
-        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-column" ) ) //$NON-NLS-1$
-        {
-            newPortletColumn.setClassName( existingClassName );
-        }
-        else
-        {
-            newPortletColumn.setClassName( "portlet-column" ); //$NON-NLS-1$
-        }
-
-        newPortletColumn.setWeight( LayoutTplUtil.getWeightValue( portletColumnElement, -1 ) );
-
-        return newPortletColumn;
+        super( i );
     }
-
-    protected String className;
-    protected boolean first = false;
-    protected boolean last = false;
-    protected int numId = 0;
-    protected int weight;
 
     public PortletColumn()
     {
-        this( DEFAULT_WEIGHT, "portlet-column" ); //$NON-NLS-1$
-    }
-
-    public PortletColumn( int weight )
-    {
-        this( weight, "portlet-column" ); //$NON-NLS-1$
-    }
-
-    public PortletColumn( int weight, String className )
-    {
         super();
-
-        this.weight = weight;
-        this.className = className;
     }
 
-    public String getClassName()
-    {
-        return className;
-    }
-
-    public int getNumId()
-    {
-        return numId;
-    }
-
-    @Override
     public IPropertyDescriptor[] getPropertyDescriptors()
     {
         return descriptors;
     }
 
-    public Object getPropertyValue( Object propertyId )
-    {
-        if( WEIGHT_PROP.equals( propertyId ) )
-        {
-            if( getWeight() == DEFAULT_WEIGHT )
-            {
-                return "100%"; //$NON-NLS-1$
-            }
-            else
-            {
-                return Integer.toString( getWeight() ) + "%"; //$NON-NLS-1$
-            }
-        }
-
-        return super.getPropertyValue( propertyId );
-    }
-
-    public int getWeight()
-    {
-        return weight;
-    }
-
-    public boolean isFirst()
-    {
-        return first;
-    }
-
-    public boolean isLast()
-    {
-        return last;
-    }
-
-    @Override
-    public void removeChild( ModelElement child )
-    {
-    }
-
-    public void setClassName( String className )
-    {
-        this.className = className;
-    }
-
-    public void setFirst( boolean first )
-    {
-        this.first = first;
-    }
-
-    public void setLast( boolean last )
-    {
-        this.last = last;
-    }
-
-    public void setNumId( int numId )
-    {
-        this.numId = numId;
-    }
-
-    public void setPropertyValue( Object propertyId, Object value )
-    {
-        if( WEIGHT_PROP.equals( propertyId ) )
-        {
-            String val = value.toString().replaceAll( "%", StringPool.EMPTY ); //$NON-NLS-1$
-            int weight = Integer.parseInt( val );
-            setWeight( weight );
-        }
-        else
-        {
-            super.setPropertyValue( propertyId, value );
-        }
-    }
-
-    public void setWeight( int weight )
-    {
-        int oldValue = this.weight;
-        this.weight = weight;
-        firePropertyChange( WEIGHT_PROP, oldValue, this.weight );
-    }
 
 }

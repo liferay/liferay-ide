@@ -10,15 +10,12 @@
  *    Gregory Amerson
  *******************************************************************************/
 
-package com.liferay.ide.layouttpl.ui.model;
+package com.liferay.ide.layouttpl.core.model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 
 /**
  * Abstract prototype of a model element. <p>This class provides features
@@ -28,22 +25,19 @@ import org.eclipse.ui.views.properties.IPropertySource;
  * <li>serialization support (the model hierarchy must be serializable, so that
  * the editor can save and restore a binary representation. You might not need
  * this, if you store the model a non-binary form like XML).</li> </ul>
- * 
+ *
  * @author Elias Volanakis
  */
-public abstract class ModelElement implements IPropertySource {
+public abstract class ModelElement {
 
 	protected ModelElement parent;
-
-	/** An empty property descriptor. */
-	private static final IPropertyDescriptor[] EMPTY_ARRAY = new IPropertyDescriptor[0];
 
 	/** Delegate used to implemenent property-change-support. */
 	private transient PropertyChangeSupport pcsDelegate = new PropertyChangeSupport(this);
 
 	/**
 	 * Attach a non-null PropertyChangeListener to this object.
-	 * 
+	 *
 	 * @param l
 	 *            a non-null PropertyChangeListener instance
 	 * @throws IllegalArgumentException
@@ -59,7 +53,7 @@ public abstract class ModelElement implements IPropertySource {
 	/**
 	 * Report a property change to registered listeners (for example edit
 	 * parts).
-	 * 
+	 *
 	 * @param property
 	 *            the programmatic name of the property that changed
 	 * @param oldValue
@@ -79,19 +73,11 @@ public abstract class ModelElement implements IPropertySource {
 	 * return themselves and</li> <li>custom IPropertySource implementations
 	 * (like DimensionPropertySource in the GEF-logic example) should return an
 	 * editable value.</li> </ul> <p>Override only if necessary.</p>
-	 * 
+	 *
 	 * @return this instance
 	 */
 	public Object getEditableValue() {
 		return this;
-	}
-
-	/**
-	 * Children should override this. The default implementation returns an
-	 * empty array.
-	 */
-	public IPropertyDescriptor[] getPropertyDescriptors() {
-		return EMPTY_ARRAY;
 	}
 
 	/**
@@ -110,7 +96,7 @@ public abstract class ModelElement implements IPropertySource {
 
 	/**
 	 * Deserialization constructor. Initializes transient fields.
-	 * 
+	 *
 	 * @see java.io.Serializable
 	 */
 	private void readObject(ObjectInputStream in)
@@ -121,7 +107,7 @@ public abstract class ModelElement implements IPropertySource {
 
 	/**
 	 * Remove a PropertyChangeListener from this component.
-	 * 
+	 *
 	 * @param l
 	 *            a PropertyChangeListener instance
 	 */

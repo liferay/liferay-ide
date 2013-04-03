@@ -15,7 +15,7 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
-import com.liferay.ide.layouttpl.ui.model.ModelElement;
+import com.liferay.ide.layouttpl.core.model.ModelElement;
 
 import java.beans.PropertyChangeListener;
 

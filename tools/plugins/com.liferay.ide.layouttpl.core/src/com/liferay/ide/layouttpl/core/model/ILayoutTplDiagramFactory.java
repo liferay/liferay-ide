@@ -12,30 +12,25 @@
  * details.
  *
  *******************************************************************************/
+package com.liferay.ide.layouttpl.core.model;
 
-package com.liferay.ide.layouttpl.ui.model;
-
-import com.liferay.ide.layouttpl.core.model.LayoutTplDiagramElement;
-
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-public class LayoutTplDiagram extends LayoutTplDiagramElement implements IPropertySource
+@SuppressWarnings( "restriction" )
+public interface ILayoutTplDiagramFactory
 {
 
-    /** An empty property descriptor. */
-    private static final IPropertyDescriptor[] EMPTY_ARRAY = new IPropertyDescriptor[0];
+    LayoutTplDiagramElement newLayoutTplDiagram();
 
-    public static LayoutTplDiagram createDefaultDiagram()
-    {
-        return new LayoutTplDiagram();
-    }
+    PortletColumnElement newPortletColumn();
 
-    public IPropertyDescriptor[] getPropertyDescriptors()
-    {
-        return EMPTY_ARRAY;
-    }
+    PortletColumnElement newPortletColumnFromElement( IDOMElement portletColumnElement );
+
+    PortletLayoutElement newPortletLayout();
+
+    PortletLayoutElement newPortletLayoutFromElement( IDOMElement portletLayoutElement );
+
 }

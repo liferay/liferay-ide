@@ -33,8 +33,26 @@
 
     <packaging>pom</packaging>
 
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <version>${tycho-version}</version>
+                <configuration>
+                    <useUIHarness>false</useUIHarness>
+                    <useUIThread>false</useUIThread>
+                    <includes>
+                      <include>**/*Test*.class</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 	<modules>
 		<module>com.liferay.ide.hook.core.tests</module>
+		<module>com.liferay.ide.layouttpl.core.tests</module>
         <module>com.liferay.ide.project.core.tests</module>
 	</modules>
 </project>
