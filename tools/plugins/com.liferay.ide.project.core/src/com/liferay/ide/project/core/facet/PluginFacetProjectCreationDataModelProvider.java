@@ -34,6 +34,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
@@ -490,6 +491,19 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
                 return LiferayProjectCore.createErrorStatus( Msgs.projectExists );
             }
 
+            //IDE-887 need manually check the location on the disk to make sure the project folder doesn't already exist
+            final String projectLocation = getProjectLocation();
+
+            if( projectLocation != null )
+            {
+                final IPath fullProjectPath = new Path( projectLocation ).append( testProjectName );
+
+                if( fullProjectPath.toFile().exists() )
+                {
+                    return LiferayProjectCore.createErrorStatus( Msgs.bind( Msgs.projectLocationExists, fullProjectPath ) );
+                }
+            }
+
             // before we do a basic java validation we need to strip "-" and "." characters
 
             String nameValidation = testProjectName.replaceAll( "-", StringPool.EMPTY ).replaceAll( "\\.", StringPool.EMPTY ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -600,6 +614,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         public static String configurePluginSDK;
         public static String pluginSDKInvalid;
         public static String projectExists;
+        public static String projectLocationExists;
         public static String projectNameInvalid;
         public static String selectLiferayPortalRuntime;
         public static String unableDetermineSDKVersion;
