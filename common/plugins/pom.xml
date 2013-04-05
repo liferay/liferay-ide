@@ -36,7 +36,7 @@
     <modules>
         <module>com.liferay.ide.core</module>
         <module>com.liferay.ide.doc</module>
-		<module>com.liferay.ide.freemarker</module>
+        <!--<module>com.liferay.ide.freemarker</module>-->
 		<module>com.liferay.ide.properties.core</module>
 		<!--module>com.liferay.ide.properties.ui</module-->
 		<module>com.liferay.ide.templates.core</module>

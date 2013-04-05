@@ -9,30 +9,30 @@
 	-->
 
 	<property environment="env" />
-	 
+
     <property file="bundle.${user.name}.properties" />
     <property file="bundle.${env.COMPUTERNAME}.properties" />
     <property file="bundle.${env.HOST}.properties" />
     <property file="bundle.${env.HOSTNAME}.properties" />
     <property file="bundle.properties" />
-	
+
 	<path id="lib.classpath">
 		<fileset dir="${basedir}/bundle/lib" includes="*.jar" />
 	</path>
-	
+
 	<taskdef classpathref="lib.classpath" resource="net/sf/antcontrib/antlib.xml" />
 
 	<property environment="env" />
 
 	<property file="${basedir}/bundle/bundle.properties" />
-	
+
 	<property name="package.target" value="output-zip"/>
 
 	<target name="all" if="create.bundles">
 		<condition property="isLinux" value="true">
 	            <os family="unix" />
 	    </condition>
-		
+
 		<if>
 			<isset property="isLinux"/>
 			<then>
@@ -45,7 +45,7 @@
 			</then>
 		</if>
 	</target>
-	
+
 	<target name="create-bundle">
 		<antcall target="install-features" />
 		<antcall target="${package.target}" />
@@ -260,7 +260,7 @@
 			<arg value="-roaming"/>
     	</exec>
 	</target>
-	
+
     <target name="install-features" depends="setup-builder,clean-eclipse,setup-eclipse">
     	<if>
     		<available file="${builder.dir}/eclipse" />
@@ -270,27 +270,9 @@
     	</if>
 
     	<antcall target="install-feature">
-    		<param name="repositoryURL" value="${sapphire.repository.url}" />
-    		<param name="featureId" value="${sapphire.features}" />
-    	</antcall>
-    	
-    	<antcall target="install-feature">
     		<param name="repositoryURL" value="file://${updatesite.dir}"/>
-    		<param name="featureId" value="com.liferay.ide.eclipse.tools.feature.group"/>
+    		<param name="featureId" value="${features}"/>
     	</antcall>
-    	
-    	<!--
-    	<antcall target="install-feature">
-    		<param name="repositoryURL" value="http://download.jboss.org/jbosstools/updates/stable/helios/"/>
-    		<param name="featureId" value="org.jboss.ide.eclipse.freemarker.feature.feature.group"/>
-    	</antcall>
-    	
-    	<antcall target="install-feature">
-    		<param name="repositoryURL" value="http://veloeclipse.googlecode.com/svn/trunk/update/"/>
-    		<param name="featureId" value="com.googlecode.veloeclipse.ui.feature.group"/>
-    	</antcall>
-		-->
-    	
    	</target>
 
 	<target name="clean-output-dir">
@@ -315,13 +297,13 @@
     					<gzip destfile="${output.dir}${output.gz.name}" src="${output.dir}${output.tar.name}" />
     					<delete file="${output.dir}${output.tar.name}" />
     				</then>
-    			</if>    			
+    			</if>
     		</then>
     		<else>
     			<zip destfile="${output.dir}/${output.zip.name}" basedir="${work.dir}" />
     		</else>
     	</if>
-		
+
 	</target>
 
 </project>
