@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
     <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-        Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
+        Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
     </description>
 
     <feature id="com.liferay.ide.maven" version="0.0.0">
-        <category name="lide-maven" />
+        <category name="lide" />
     </feature>
 
     <bundle id="org.slf4j.api" version="0.0.0"/>
 
-    <category-def name="lide-maven" label="Liferay IDE Maven">
+    <category-def name="lide" label="Liferay IDE">
         <description>
-            Liferay IDE Maven.
+            Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
         </description>
     </category-def>
 </site>

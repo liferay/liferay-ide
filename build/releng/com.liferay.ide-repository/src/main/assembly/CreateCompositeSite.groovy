@@ -1,81 +1,12 @@
+import static groovy.io.FileType.*
+
 def basedir = project.basedir.canonicalPath
-def repositoryDir = basedir + "/target/repository"
-def contentJar = repositoryDir  + "/content.jar"
-def contentDir = basedir  + "/target/content.jar/"
-
-// Remove hidden feature
-
-println 'Unzipping content.jar'
-
-def ant = new AntBuilder();   // create an antbuilder
-
-ant.unzip( src: contentJar, dest:contentDir,  overwrite:"true" )
-
-println 'Modify content.xml to add associate sites for Liferay IDE'
-
-File contentXml =  new File( contentDir, "content.xml" )
-def contentXmlText = contentXml.text
-
-def parser = new XmlParser()
-parser.setTrimWhitespace( false )
-def root = parser.parseText( contentXmlText )
-
-def hiddenCategory = root.units.unit.findAll{ it.'@id'.equals('com.liferay.ide-repository.hidden.features') }.get( 0 )
-hiddenCategory.parent().remove( hiddenCategory )
-
-/*
-def addAssociateSite( root, siteUrl )
-{
-    def refs = root.references
-
-    if( !refs || refs.size() == 0 )
-    {
-        def newRefs = new Node( root, 'references' )
-        newRefs.@size = "2"
-        refs = root.references
-    }
-
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'1', options:'1'] )
-    new Node( refs.get( 0 ), 'repository', [ uri:siteUrl, url:siteUrl, type:'0', options:'1'] )
-}
-
-
-def props = root.properties
-
-def sapphireSite = project.properties.getProperty("sapphire-site")
-addAssociateSite( root, sapphireSite )
-*/
-
-class MyXmlNodePrinter extends XmlNodePrinter
-{
-    MyXmlNodePrinter(PrintWriter out)
-    {
-       super(out)
-    }
-
-    void printSimpleItem(Object value)
-    {
-       value = value.replaceAll("\n", "&#xA;")
-       out.print(value)
-    }
-}
-
-println 'Overwriting content.xml'
-def writer = new StringWriter()
-def printer = new XmlNodePrinter( new PrintWriter( writer ) )
-printer.setPreserveWhitespace( true )
-printer.print( root )
-def result = writer.toString()
-
-contentXml.text = result
-
-println 'Zipping back customized content.jar'
-ant.zip( destFile: contentJar, baseDir:contentDir )
 
 // Create composite repository
 
 def compositeDir = new File( basedir, "target/composite" )
-def toolsRepository = new File( basedir, "target/repository" )
+def toolsTargetRepository = new File( basedir, "../com.liferay.ide.tools-repository/target/" )
+def toolsRepository = new File( toolsTargetRepository, "repository" )
 def mavenRepository = new File( basedir, "../com.liferay.ide.maven-repository/target/repository" )
 //def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
 
@@ -120,9 +51,12 @@ ant.sequential
     //}
 }
 
-def unqualifiedVersion = project.properties.getProperty("unqualifiedVersion")
-def buildQualifier = project.properties.getProperty("buildQualifier")
+def version = ""
+toolsTargetRepository.eachFileMatch FILES, ~/Liferay_IDE_Tools_.*-updatesite.zip/, {
+    version = ( it.name =~ /Liferay_IDE_Tools_(.*)-updatesite.zip/ )[0][1]
+}
+
 
 println 'Zipping updated site'
-File zipSite = new File( basedir + "/target/Liferay_IDE_${unqualifiedVersion}.${buildQualifier}-updatesite.zip" )
+File zipSite = new File( basedir + "/target/Liferay_IDE_${version}-updatesite.zip" )
 ant.zip( destFile: zipSite, baseDir:compositeDir )

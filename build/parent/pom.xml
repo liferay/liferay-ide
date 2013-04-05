@@ -37,6 +37,7 @@
         <sapphire-site>http://download.eclipse.org/sapphire/0.6.1/repository</sapphire-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/releases</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/juno</m2e-wtp-site>
+        <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
     <modules>

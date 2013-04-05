@@ -30,6 +30,7 @@
    </plugins>
 
    <features>
+      <feature id="com.liferay.ide.common" />
       <feature id="org.eclipse.sapphire" />
       <feature id="org.eclipse.sapphire.java" />
       <feature id="org.eclipse.sapphire.java.jdt" />

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.liferay.ide.maven"
-      label="Liferay IDE Maven Integration"
+      label="m2e-liferay - Maven Integration for Liferay IDE"
       version="2.0.0.qualifier"
       provider-name="Liferay, Inc.">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE is the official set of eclipse plugins for supporting Liferay Portal development platorm.
+      Maven integration for Liferay IDE. Extends m2e-core and m2e-wtp plugins to support Liferay IDE development
+            and also provide lifecycle metadata mapping for liferay-maven-plugin executions.
    </description>
 
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">

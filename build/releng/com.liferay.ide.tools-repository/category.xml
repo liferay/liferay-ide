@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
     <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-        Liferay IDE is the official set of eclipse plugins for supporting Liferay
-        Portal development platorm.
+        Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
     </description>
-
-    <feature id="com.liferay.ide.common" version="0.0.0">
-        <category name="lide" />
-    </feature>
 
     <feature id="com.liferay.ide.eclipse.tools" version="0.0.0">
         <category name="lide" />
@@ -15,9 +10,7 @@
 
     <category-def name="lide" label="Liferay IDE">
         <description>
-            Liferay IDE is the official set of eclipse plugins for supporting Liferay
-            Portal development
-            platorm.
+            Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
         </description>
     </category-def>
 
