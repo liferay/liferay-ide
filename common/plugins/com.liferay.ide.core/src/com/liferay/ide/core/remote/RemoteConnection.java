@@ -72,7 +72,7 @@ public class RemoteConnection implements IRemoteConnection
         if( httpClient == null )
         {
             httpClient = new DefaultHttpClient();
-            
+
             if( getUsername() != null || getPassword() != null )
             {
                 httpClient.getCredentialsProvider().setCredentials(
@@ -80,7 +80,7 @@ public class RemoteConnection implements IRemoteConnection
                     new UsernamePasswordCredentials( getUsername(), getPassword() ) );
             }
         }
-        
+
         return httpClient;
     }
 
@@ -120,7 +120,7 @@ public class RemoteConnection implements IRemoteConnection
 
         HttpGet getAPIMethod = new HttpGet();
 
-        return httpJSONAPI( getAPIMethod, args[0] );
+        return httpJSONAPI( getAPIMethod, args );
     }
 
     private Object getJSONResponse( String response )
@@ -163,34 +163,48 @@ public class RemoteConnection implements IRemoteConnection
         }
 
         Object retval = null;
+        String api = null;
+        Object[] params = new Object[0];
 
-        HttpRequestBase request = (HttpRequestBase) args[0];
+        final HttpRequestBase request = (HttpRequestBase) args[0];
 
-        String api = (String) args[1];
+        if( args[1] instanceof String )
+        {
+            api = args[1].toString();
+        }
+        else if( args[1] instanceof Object[] )
+        {
+            params = (Object[]) args[1];
+            api = params[0].toString();
+        }
+        else
+        {
+            throw new IllegalArgumentException( "2nd argument must be either String or Object[]" ); //$NON-NLS-1$
+        }
 
         try
         {
-            URIBuilder builder = new URIBuilder();
+            final URIBuilder builder = new URIBuilder();
             builder.setScheme( "http" ); //$NON-NLS-1$
             builder.setHost( getHost() );
             builder.setPort( getHttpPort() );
             builder.setPath( api );
 
-            if( args.length >= 3 )
+            if( params.length >= 2 )
             {
-                for( int i = 1; i < args.length; i += 2 )
+                for( int i = 0; i < params.length; i += 2 )
                 {
                     String name = null;
                     String value = StringPool.EMPTY;
 
-                    if( args[i] != null )
+                    if( params[i] != null )
                     {
-                        name = args[i].toString();
+                        name = params[i].toString();
                     }
 
-                    if( args[i + 1] != null )
+                    if( params[i + 1] != null )
                     {
-                        value = args[i + 1].toString();
+                        value = params[i + 1].toString();
                     }
 
                     builder.setParameter( name, value );
@@ -266,7 +280,7 @@ public class RemoteConnection implements IRemoteConnection
         {
             this.httpPort = -1;
         }
-        
+
         this.httpClient = null;
     }
 

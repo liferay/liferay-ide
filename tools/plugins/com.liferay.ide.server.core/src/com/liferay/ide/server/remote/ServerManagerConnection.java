@@ -55,23 +55,23 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         setPassword( pw );
         this.managerContextPath = managerContextPath;
     }
-    
+
     public int getDebugPort() throws APIException
     {
         if( isAlive() )
         {
             Object response = getJSONAPI( getDebugPortAPI() );
-            
+
             if( response instanceof JSONObject )
             {
                 JSONObject debugPort = (JSONObject) response;
-                
+
                 try
                 {
                     if( isSuccess( debugPort ) )
                     {
                         String debugPortOutput = getJSONOutput( debugPort );
-    
+
                         return Integer.parseInt( new String( debugPortOutput ) );
                     }
                 }
@@ -104,13 +104,13 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
     {
         return json.getString( "output" ); //$NON-NLS-1$
     }
-    
+
     public List<String> getLiferayPlugins()
     {
         List<String> retval = new ArrayList<String>();
 
         Object response = null;
-        
+
         try
         {
             response = getJSONAPI( getPluginsAPI() );
@@ -119,7 +119,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         {
             LiferayServerCore.logError( e1);
         }
-        
+
         if( response instanceof JSONObject )
         {
             JSONObject json = (JSONObject) response;
@@ -146,11 +146,11 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         return retval;
     }
 
-    public String getManagerURI() 
+    public String getManagerURI()
     {
         return "http://" + getHost() + ":" + getHttpPort() + managerContextPath; //$NON-NLS-1$ //$NON-NLS-2$
     }
-    
+
     private String getPluginsAPI()
     {
         return managerContextPath + "/plugins"; //$NON-NLS-1$
@@ -172,7 +172,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             return "STOPPED"; //$NON-NLS-1$
         }
     }
-    
+
 
     private String getUndeployURI( String appName )
     {
@@ -189,15 +189,15 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         try
         {
             FileBody fileBody = new FileBody( new File( absolutePath ) );
-            
+
             MultipartEntity entity = new MultipartEntity();
             entity.addPart( "deployWar", fileBody ); //$NON-NLS-1$
-            
+
             HttpPost httpPost = new HttpPost();
             httpPost.setEntity( entity );
-            
+
             Object response = httpJSONAPI( httpPost, getDeployURI(appName) );
-            
+
             if( response instanceof JSONObject )
             {
                 JSONObject json = (JSONObject) response;
@@ -208,14 +208,14 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
                 }
                 else
                 {
-					if( isError( json ) )
-					{
-						return json.getString( "error" ); //$NON-NLS-1$
-					}
-					else
-					{
-						return "installApplication error " + getDeployURI(appName); //$NON-NLS-1$
-					}
+                    if( isError( json ) )
+                    {
+                        return json.getString( "error" ); //$NON-NLS-1$
+                    }
+                    else
+                    {
+                        return "installApplication error " + getDeployURI( appName ); //$NON-NLS-1$
+                    }
                 }
             }
 
@@ -233,9 +233,9 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
     public boolean isAlive() throws APIException
     {
         JSONObject status = null;
-        
+
         Object jsonResponse = getJSONAPI( getIsAliveAPI() );
-        
+
         if( jsonResponse instanceof JSONObject )
         {
             status = (JSONObject) jsonResponse;
@@ -244,7 +244,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         {
             throw new APIException( getIsAliveAPI(), "Unable to connect to server manager." ); //$NON-NLS-1$
         }
-        
+
         try
         {
             if( isSuccess( status ) )
@@ -256,18 +256,18 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         {
             throw new APIException( getIsAliveAPI(), e );
         }
-        
+
         return false;
     }
 
     public boolean isAppInstalled( String appName ) throws APIException
     {
         Object response = getJSONAPI( getPluginURI(appName) );
-        
+
         if( response instanceof JSONObject )
         {
             JSONObject json = (JSONObject) response;
-            
+
             try
             {
                 if( isSuccess( json ) )
@@ -288,32 +288,33 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
                 throw new APIException( getPluginURI(appName), e );
             }
         }
-        
+
         return false;
     }
 
-	private boolean isError( JSONObject jsonObject )
-	{
-		try
-		{
-			String error = jsonObject.getString( "error" ); //$NON-NLS-1$
-			return !CoreUtil.isNullOrEmpty( error );
-		}
-		catch ( JSONException e )
-		{
-		}
+    private boolean isError( JSONObject jsonObject )
+    {
+        try
+        {
+            final String error = jsonObject.getString( "error" ); //$NON-NLS-1$
 
-		return false;
-	}
+            return !CoreUtil.isNullOrEmpty( error );
+        }
+        catch( JSONException e )
+        {
+        }
+
+        return false;
+    }
 
     public boolean isLiferayPluginStarted( String appName ) throws APIException
     {
-        Object response = getJSONAPI( getPluginURI(appName) );
-        
+        final Object response = getJSONAPI( getPluginURI(appName) );
+
         if( response instanceof JSONObject )
         {
             JSONObject json = (JSONObject) response;
-            
+
             try
             {
                 if( isSuccess( json ) )
@@ -345,16 +346,6 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         return "0".equals( success ); //$NON-NLS-1$
     }
 
-    public void setHost( String host )
-    {
-        super.setHost( host );
-    }
-
-    public void setHttpPort( String httpPort )
-    {
-        super.setHttpPort( httpPort );
-    }
-
     public void setManagerContextPath( String managerContextPath )
     {
         this.managerContextPath = managerContextPath;
@@ -363,17 +354,17 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
     public Object uninstallApplication( String appName, IProgressMonitor monitor ) throws APIException
     {
         Object response = deleteJSONAPI( getUndeployURI( appName ) );
-        
+
         if( response instanceof JSONObject )
         {
             JSONObject json = (JSONObject) response;
-            
+
             try
             {
                 if( !isSuccess( json ) )
                 {
                     System.out.println("uninstallApplication: success"); //$NON-NLS-1$
-                    
+
                     return json;
                 }
             }
@@ -395,16 +386,16 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
             final MultipartEntity entity = new MultipartEntity();
             entity.addPart( file.getName(), fileBody );
-            
+
             final HttpPut httpPut = new HttpPut();
             httpPut.setEntity( entity );
-            
+
             Object response = httpJSONAPI( httpPut, getUpdateURI( appName ) );
-            
+
             if( response instanceof JSONObject )
             {
                 JSONObject json = (JSONObject)response;
-                
+
                 if( isSuccess( json ))
                 {
                     System.out.println( "updateApplication: success." ); //$NON-NLS-1$
