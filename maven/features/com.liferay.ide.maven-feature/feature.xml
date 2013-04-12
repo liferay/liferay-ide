@@ -35,7 +35,6 @@
       <import feature="org.eclipse.m2e.wtp.feature" version="0.17.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.wtp.jsf.feature" version="0.17.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.m2e.feature" version="1.3.0" match="greaterOrEqual"/>
-      <import feature="com.liferay.ide.common" version="2.0.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="2.0.0" match="greaterOrEqual"/>
    </requires>
 
