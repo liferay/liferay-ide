@@ -169,5 +169,24 @@
             type="org.eclipse.wst.validation.problemmarker">
       </super>
    </extension>
+ <extension
+       point="com.liferay.ide.templates.core.templateDefinition">
+    <template
+          id="layouttpl.tpl"
+          name="Default Layout Template"
+          resource="layouttpl.ftl">
+    </template>
+    <templatesFolder
+          path="templates/">
+    </templatesFolder>
+    <templateVariable
+          name="root"
+          required="true">
+    </templateVariable>
+    <templateVariable
+          name="templateName"
+          required="true">
+    </templateVariable>
+ </extension>
 
 </plugin>

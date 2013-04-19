@@ -51,6 +51,7 @@ import org.xml.sax.ErrorHandler;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 public class FileUtil
 {
@@ -185,7 +186,7 @@ public class FileUtil
 
         StringBuffer contents = new StringBuffer();
         BufferedReader bufferedReader = null;
-        
+
         try
         {
             FileReader fileReader = new FileReader( file );
@@ -200,7 +201,7 @@ public class FileUtil
 
                 if( includeNewlines )
                 {
-                    contents.append( "\n" ); //$NON-NLS-1$
+                    contents.append( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
                 }
             }
         }
@@ -272,7 +273,7 @@ public class FileUtil
 
         List<String> lines = new ArrayList<String>();
         BufferedReader bufferedReader = null;
-        
+
         try
         {
             FileReader fileReader = new FileReader( file );

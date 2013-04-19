@@ -15,23 +15,42 @@
 package com.liferay.ide.layouttpl.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.layouttpl.core.LayoutTplCore;
+import com.liferay.ide.layouttpl.core.model.LayoutTplDiagramElement;
+import com.liferay.ide.templates.core.ITemplateContext;
+import com.liferay.ide.templates.core.ITemplateOperation;
+import com.liferay.ide.templates.core.TemplatesCore;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections.ArrayStack;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplUtil
 {
+
+    public static void configContext( ITemplateContext ctx, LayoutTplDiagramElement tplDiagramElement, String templateName )
+    {
+        ctx.put( "root", tplDiagramElement ); //$NON-NLS-1$
+        ctx.put( "templateName", templateName ); //$NON-NLS-1$
+        ctx.put( "stack", new ArrayStack() ); //$NON-NLS-1$
+    }
 
     public static IDOMElement[] findChildElementsByClassName( IDOMElement parentElement,
                                                               String childElementTag,
@@ -44,11 +63,11 @@ public class LayoutTplUtil
 
         List<IDOMElement> childElements = new ArrayList<IDOMElement>();
 
-        NodeList divChildren = parentElement.getElementsByTagName( childElementTag );
+        List<Element> divChildren = getChildElementsByTagName( parentElement, childElementTag );
 
-        for( int i = 0; i < divChildren.getLength(); i++ )
+        for( int i = 0; i < divChildren.size(); i++ )
         {
-            IDOMElement childDivElement = (IDOMElement) divChildren.item( i );
+            IDOMElement childDivElement = (IDOMElement) divChildren.get( i );
 
             if( hasClassName( childDivElement, className ) )
             {
@@ -73,6 +92,30 @@ public class LayoutTplUtil
         return mainContentElement;
     }
 
+    public static List<Element> getChildElementsByTagName( IDOMElement parentElement, String childElementTag )
+    {
+        final NodeList childNodes = ( (Node) parentElement ).getChildNodes();
+
+        List<Element> childElements = new ArrayList<Element>();
+
+        for( int i = 0; i < childNodes.getLength(); i++)
+        {
+            Node childNode = childNodes.item( i );
+
+            if( childNode.getNodeType() == 1 && childElementTag != null )
+            {
+                Element element = (Element) childNode;
+
+                if( element.getTagName().equals( childElementTag ) )
+                {
+                    childElements.add( element );
+                }
+            }
+        }
+
+        return childElements;
+    }
+
     public static String getRoleValue( IDOMElement mainContentElement, String defaultValue )
     {
         String retval = defaultValue;
@@ -84,6 +127,26 @@ public class LayoutTplUtil
         }
 
         return retval;
+    }
+
+    public static String getTemplateSource( LayoutTplDiagramElement diagram, String templateName )
+    {
+        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
+        StringBuffer buffer = new StringBuffer();
+        templateOperation.setOutputBuffer( buffer );
+        ITemplateContext ctx = templateOperation.getContext();
+        configContext( ctx, diagram, templateName );
+
+        try
+        {
+            templateOperation.execute( new NullProgressMonitor() );
+        }
+        catch( Exception ex )
+        {
+            LayoutTplCore.logError( "Error getting template source.", ex ); //$NON-NLS-1$
+        }
+
+        return buffer.toString();
     }
 
     public static int getWeightValue( IDOMElement portletColumnElement, int defaultValue )
@@ -173,6 +236,24 @@ public class LayoutTplUtil
         }
 
         return retval;
+    }
+
+    public static void saveToFile( LayoutTplDiagramElement diagram, IFile file, IProgressMonitor monitor )
+    {
+        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
+        templateOperation.setOutputFile( file );
+
+        try
+        {
+            ITemplateContext ctx = templateOperation.getContext();
+            String name = file.getFullPath().removeFileExtension().lastSegment();
+            configContext( ctx, diagram, name );
+            templateOperation.execute( monitor );
+        }
+        catch( Exception e )
+        {
+            LayoutTplCore.logError( e );
+        }
     }
 
 }

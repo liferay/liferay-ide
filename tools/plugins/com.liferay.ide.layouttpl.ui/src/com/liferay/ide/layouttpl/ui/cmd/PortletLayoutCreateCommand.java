@@ -57,7 +57,7 @@ public class PortletLayoutCreateCommand extends Command
     {
         if( newLayout.getColumns().size() == 0 )
         {
-            PortletColumn newColumn = new PortletColumn();
+            PortletColumn newColumn = new PortletColumn( 100 );
             newLayout.addColumn( newColumn );
         }
 

@@ -23,9 +23,10 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
-public class PortletColumnElement extends ModelElement
+public class PortletColumnElement extends PortletRowLayoutElement
 {
     public static final int DEFAULT_WEIGHT = -1;
     public static final String WEIGHT_PROP = "PortletColumn.weight"; //$NON-NLS-1$
@@ -43,6 +44,7 @@ public class PortletColumnElement extends ModelElement
         PortletColumnElement newPortletColumn = factory.newPortletColumn();
 
         String existingClassName = portletColumnElement.getAttribute( "class" ); //$NON-NLS-1$
+
         if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-column" ) ) //$NON-NLS-1$
         {
             newPortletColumn.setClassName( existingClassName );
@@ -53,6 +55,18 @@ public class PortletColumnElement extends ModelElement
         }
 
         newPortletColumn.setWeight( LayoutTplUtil.getWeightValue( portletColumnElement, -1 ) );
+
+        IDOMElement[] portletLayoutElements =
+            LayoutTplUtil.findChildElementsByClassName( portletColumnElement, "div", "portlet-layout" ); //$NON-NLS-1$ //$NON-NLS-2$
+
+        if( !CoreUtil.isNullOrEmpty( portletLayoutElements ) )
+        {
+            for( IDOMElement portletLayoutElement : portletLayoutElements )
+            {
+                PortletLayoutElement newPortletLayout = factory.newPortletLayoutFromElement( portletLayoutElement );
+                newPortletColumn.addRow( newPortletLayout );
+            }
+        }
 
         return newPortletColumn;
     }
@@ -167,16 +181,6 @@ public class PortletColumnElement extends ModelElement
         int oldValue = this.weight;
         this.weight = weight;
         firePropertyChange( WEIGHT_PROP, oldValue, this.weight );
-    }
-
-    public void copyInto( PortletColumnElement newPortletColumn )
-    {
-        newPortletColumn.className = this.className;
-        newPortletColumn.first = this.first;
-        newPortletColumn.last = this.last;
-        newPortletColumn.numId = this.numId;
-        newPortletColumn.parent = this.parent;
-        newPortletColumn.weight = this.weight;
     }
 
 }

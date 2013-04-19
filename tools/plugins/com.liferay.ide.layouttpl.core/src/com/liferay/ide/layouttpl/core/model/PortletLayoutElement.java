@@ -155,11 +155,4 @@ public class PortletLayoutElement extends ModelElement implements PropertyChange
         this.className = className;
     }
 
-    public void copyInto( PortletLayoutElement newPortletColumn )
-    {
-        newPortletColumn.className = this.className;
-        newPortletColumn.columns = this.columns;
-        newPortletColumn.parent = this.parent;
-    }
-
 }

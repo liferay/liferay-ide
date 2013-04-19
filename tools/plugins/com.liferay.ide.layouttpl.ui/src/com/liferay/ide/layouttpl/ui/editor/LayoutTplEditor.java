@@ -18,6 +18,7 @@
 package com.liferay.ide.layouttpl.ui.editor;
 
 import com.liferay.ide.layouttpl.core.model.LayoutTplDiagramElement;
+import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.action.LayoutTplEditorSelectAllAction;
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
@@ -189,7 +190,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
         IDOMModel domModel = getSourceModel();
         domModel.aboutToChangeModel();
         String name = getSourceFileName();
-        String templateSource = diagram.getTemplateSource( name );
+        String templateSource = LayoutTplUtil.getTemplateSource( diagram, name );
         domModel.getStructuredDocument().setText( this, templateSource );
         domModel.changedModel();
         domModel.releaseFromEdit();

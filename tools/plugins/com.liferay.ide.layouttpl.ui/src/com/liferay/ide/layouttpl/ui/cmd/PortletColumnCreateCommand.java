@@ -60,6 +60,7 @@ public class PortletColumnCreateCommand extends Command
         if( layoutConstraint.equals( LayoutConstraint.EMPTY ) || layoutConstraint.newColumnIndex == -1 )
         {
             PortletLayout portletLayout = new PortletLayout();
+            newColumn.setWeight( 100 );
             portletLayout.addColumn( newColumn );
 
             diagram.addRow( portletLayout, layoutConstraint.newRowIndex );

@@ -4,13 +4,13 @@
 
 	<extension
          point="org.eclipse.wst.common.project.facet.ui.images">
-      
+
       <image
             category="liferay.plugins"
             facet="liferay.layouttpl"
             path="icons/e16/layout.png">
       </image>
-      
+
    </extension>
  <extension
        point="org.eclipse.ui.editors">
@@ -23,25 +23,6 @@
           id="com.liferay.ide.eclipse.layouttpl.ui.template.multiEditor"
           name="%layout.editor.name">
     </editor>
- </extension>
- <extension
-       point="com.liferay.ide.templates.core.templateDefinition">
-    <template
-          id="layouttpl.tpl"
-          name="Default Layout Template"
-          resource="layouttpl.ftl">
-    </template>
-    <templatesFolder
-          path="templates/">
-    </templatesFolder>
-    <templateVariable
-          name="root"
-          required="true">
-    </templateVariable>
-    <templateVariable
-          name="templateName"
-          required="true">
-    </templateVariable>
  </extension>
  <extension
        point="org.eclipse.ui.newWizards">
@@ -60,5 +41,5 @@
          </description>
       </wizard>
  </extension>
-   
+
 </plugin>
