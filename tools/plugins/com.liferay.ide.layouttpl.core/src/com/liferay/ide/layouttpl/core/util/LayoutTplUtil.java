@@ -45,8 +45,10 @@ import org.w3c.dom.NodeList;
 public class LayoutTplUtil
 {
 
-    public static void configContext( ITemplateContext ctx, LayoutTplDiagramElement tplDiagramElement, String templateName )
+    private static void createLayoutTplContext( ITemplateOperation op, LayoutTplDiagramElement tplDiagramElement, String templateName )
     {
+        final ITemplateContext ctx = op.getContext();
+
         ctx.put( "root", tplDiagramElement ); //$NON-NLS-1$
         ctx.put( "templateName", templateName ); //$NON-NLS-1$
         ctx.put( "stack", new ArrayStack() ); //$NON-NLS-1$
@@ -131,14 +133,14 @@ public class LayoutTplUtil
 
     public static String getTemplateSource( LayoutTplDiagramElement diagram, String templateName )
     {
-        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
-        StringBuffer buffer = new StringBuffer();
-        templateOperation.setOutputBuffer( buffer );
-        ITemplateContext ctx = templateOperation.getContext();
-        configContext( ctx, diagram, templateName );
+        final StringBuffer buffer = new StringBuffer();
 
         try
         {
+            ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
+            createLayoutTplContext( templateOperation, diagram, templateName );
+
+            templateOperation.setOutputBuffer( buffer );
             templateOperation.execute( new NullProgressMonitor() );
         }
         catch( Exception ex )
@@ -240,15 +242,14 @@ public class LayoutTplUtil
 
     public static void saveToFile( LayoutTplDiagramElement diagram, IFile file, IProgressMonitor monitor )
     {
-        ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
-        templateOperation.setOutputFile( file );
-
         try
         {
-            ITemplateContext ctx = templateOperation.getContext();
+            ITemplateOperation op = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
             String name = file.getFullPath().removeFileExtension().lastSegment();
-            configContext( ctx, diagram, name );
-            templateOperation.execute( monitor );
+            createLayoutTplContext( op, diagram, name );
+
+            op.setOutputFile( file );
+            op.execute( monitor );
         }
         catch( Exception e )
         {
