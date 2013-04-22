@@ -12,34 +12,20 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+package com.liferay.ide.project.core;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
+public interface IProjectBuilder
 {
-    private Class<?> classType;
-    private int priority;
 
-    public AbstractLiferayProjectProvider( Class<?> type )
-    {
-        this.classType = type;
-    }
+    IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException;
 
-    public int getPriority()
-    {
-        return this.priority;
-    }
-
-    public boolean provides( Class<?> type )
-    {
-        return type != null && classType.isAssignableFrom( type );
-    }
-
-    public void setPriority( int priority )
-    {
-        this.priority = priority;
-    }
 }

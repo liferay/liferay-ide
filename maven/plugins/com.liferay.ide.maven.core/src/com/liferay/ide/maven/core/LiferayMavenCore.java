@@ -26,11 +26,21 @@ import org.osgi.framework.BundleContext;
 public class LiferayMavenCore extends Plugin
 {
 
+    // The shared instance
+    private static LiferayMavenCore plugin;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.maven.core"; //$NON-NLS-1$
 
-    // The shared instance
-    private static LiferayMavenCore plugin;
+    public static Status createErrorStatus( String msg, Throwable t )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );
+    }
+
+    public static IStatus createErrorStatus( Throwable throwable )
+    {
+        return createErrorStatus( throwable.getMessage(), throwable );
+    }
 
     /**
      * Returns the shared instance
@@ -40,6 +50,11 @@ public class LiferayMavenCore extends Plugin
     public static LiferayMavenCore getDefault()
     {
         return plugin;
+    }
+
+    public static void logError( String msg, Throwable t )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, t ) );
     }
 
     public static void logError( Throwable t )
@@ -72,10 +87,5 @@ public class LiferayMavenCore extends Plugin
     {
         plugin = null;
         super.stop( context );
-    }
-
-    public static void logError( String msg, Throwable t )
-    {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, t ) );
     }
 }

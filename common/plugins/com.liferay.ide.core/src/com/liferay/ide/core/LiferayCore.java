@@ -27,40 +27,47 @@ import org.osgi.framework.BundleContext;
  */
 public class LiferayCore extends Plugin
 {
+    private static LiferayProjectAdapterReader adapterReader;
+
     // The shared instance
     private static LiferayCore plugin;
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.core"; //$NON-NLS-1$
 
-    private static LiferayProjectProviderReader reader;
+    private static LiferayProjectProviderReader providerReader;
 
     public static ILiferayProject create( Object adaptable )
     {
-        ILiferayProject retval = null;
+        ILiferayProject project = null;
 
         final ILiferayProjectProvider[] providers = getProviders( adaptable.getClass() );
 
         if( ! CoreUtil.isNullOrEmpty( providers ) )
         {
+            ILiferayProjectProvider currentProvider = null;
+
             for( ILiferayProjectProvider provider : providers )
             {
-                final ILiferayProject lProject = provider.provide( adaptable );
-
-                if( lProject != null )
+                if ( currentProvider == null || provider.getPriority() > currentProvider.getPriority() )
                 {
-                    retval = lProject;
-                    break;
+                    final ILiferayProject lrp = provider.provide( adaptable );
+
+                    if( lrp != null )
+                    {
+                        currentProvider = provider;
+                        project = lrp;
+                    }
                 }
             }
         }
 
-        if( retval == null )
+        if( project == null )
         {
             LiferayCore.logError( "No liferay project providers registered for type: " + adaptable.getClass() ); //$NON-NLS-1$
         }
 
-        return retval;
+        return project;
     }
 
     public static IStatus createErrorStatus( Exception e )
@@ -113,19 +120,34 @@ public class LiferayCore extends Plugin
         return plugin;
     }
 
-    public static synchronized ILiferayProjectProvider[] getProviders( Class<?> type )
+    public static synchronized ILiferayProjectAdapter[] getProjectAdapters()
     {
-        if( reader == null )
+        if( adapterReader == null )
         {
-            reader = new LiferayProjectProviderReader();
+            adapterReader = new LiferayProjectAdapterReader();
         }
 
-        return reader.getProviders( type );
+        return adapterReader.getExtensions().toArray( new ILiferayProjectAdapter[0] );
+    }
+
+    public static synchronized ILiferayProjectProvider[] getProviders( Class<?> type )
+    {
+        if( providerReader == null )
+        {
+            providerReader = new LiferayProjectProviderReader();
+        }
+
+        return providerReader.getProviders( type );
+    }
+
+    public static void logError( IStatus status )
+    {
+        getDefault().getLog().log( status );
     }
 
     public static void logError( String msg )
     {
-        getDefault().getLog().log( createErrorStatus( msg ) );
+        logError( createErrorStatus( msg ) );
     }
 
     public static void logError( String msg, Throwable t )

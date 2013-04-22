@@ -14,32 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
+public interface ILiferayProjectAdapter
 {
-    private Class<?> classType;
-    private int priority;
 
-    public AbstractLiferayProjectProvider( Class<?> type )
-    {
-        this.classType = type;
-    }
+    <T> T adapt( ILiferayProject liferayProject, Class<T> adapterType );
 
-    public int getPriority()
-    {
-        return this.priority;
-    }
-
-    public boolean provides( Class<?> type )
-    {
-        return type != null && classType.isAssignableFrom( type );
-    }
-
-    public void setPriority( int priority )
-    {
-        this.priority = priority;
-    }
 }

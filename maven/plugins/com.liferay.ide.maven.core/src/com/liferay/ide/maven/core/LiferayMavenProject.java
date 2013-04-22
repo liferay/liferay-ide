@@ -14,8 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.BaseLiferayProject;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -37,30 +38,51 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
 /**
  * @author Gregory Amerson
  */
-public class LiferayMavenProject implements ILiferayProject
+public class LiferayMavenProject extends BaseLiferayProject
 {
 
-    private IMavenProjectFacade mavenProjectFacade;
-    private IProject project;
-
-    public LiferayMavenProject( IProject project, IMavenProjectFacade mavenProjectFacade )
+    public LiferayMavenProject( IProject project )
     {
-        this.project = project;
-        this.mavenProjectFacade = mavenProjectFacade;
+        super( project );
+    }
+
+    public <T> T adapt( Class<T> adapterType )
+    {
+        T adapter = super.adapt( adapterType );
+
+        if( adapter != null )
+        {
+            return adapter;
+        }
+
+        if( IProjectBuilder.class.equals( adapterType ) && MavenUtil.getProjectFacade( getProject() ) != null )
+        {
+            final IProjectBuilder projectBuilder = new MavenProjectBuilder( getProject() );
+
+            return adapterType.cast( projectBuilder );
+        }
+
+        return null;
     }
 
     public IPath getAppServerDeployDir()
     {
         IPath retval = null;
 
-        final MavenProject mavenProject = this.mavenProjectFacade.getMavenProject();
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
 
-        final String appServerPortalDir =
-            LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_DEPLOY_DIR );
-
-        if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+        if( projectFacade != null )
         {
-            retval = new Path( appServerPortalDir );
+            final MavenProject mavenProject = projectFacade.getMavenProject();
+
+            final String appServerPortalDir =
+                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                    mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_DEPLOY_DIR );
+
+            if( !CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+            {
+                retval = new Path( appServerPortalDir );
+            }
         }
 
         return retval;
@@ -70,31 +92,20 @@ public class LiferayMavenProject implements ILiferayProject
     {
         IPath retval = null;
 
-        final MavenProject mavenProject = this.mavenProjectFacade.getMavenProject();
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
 
-        final String appServerPortalDir =
-            LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR );
-
-        if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+        if( projectFacade != null )
         {
-            retval = new Path( appServerPortalDir );
-        }
+            final MavenProject mavenProject = projectFacade.getMavenProject();
 
-        return retval;
-    }
+            final String appServerPortalDir =
+                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                    mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR );
 
-    public IPath getAppServerPortalDir()
-    {
-        IPath retval = null;
-
-        final MavenProject mavenProject = this.mavenProjectFacade.getMavenProject();
-
-        final String appServerPortalDir =
-            LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR );
-
-        if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
-        {
-            retval = new Path( appServerPortalDir );
+            if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+            {
+                retval = new Path( appServerPortalDir );
+            }
         }
 
         return retval;
@@ -115,6 +126,29 @@ public class LiferayMavenProject implements ILiferayProject
 //            return this.urls;
 //        }
 //    }
+
+    public IPath getAppServerPortalDir()
+    {
+        IPath retval = null;
+
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
+
+        if( projectFacade != null )
+        {
+            final MavenProject mavenProject = projectFacade.getMavenProject();
+
+            final String appServerPortalDir =
+                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                    mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR );
+
+            if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+            {
+                retval = new Path( appServerPortalDir );
+            }
+        }
+
+        return retval;
+    }
 
     public String[] getHookSupportedProperties()
     {
@@ -158,9 +192,19 @@ public class LiferayMavenProject implements ILiferayProject
 
     public String getPortalVersion()
     {
-        MavenProject mavenProject = this.mavenProjectFacade.getMavenProject();
+        String retval = null;
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
 
-        return LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
+        if( projectFacade != null )
+        {
+            MavenProject mavenProject = projectFacade.getMavenProject();
+
+            retval =
+                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                    mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
+        }
+
+        return retval;
     }
 
     public Properties getPortletCategories()
@@ -201,7 +245,7 @@ public class LiferayMavenProject implements ILiferayProject
         {
             final IClasspathEntry[] classpath =
                 buildPathManager.getClasspath(
-                    this.project, IClasspathManager.CLASSPATH_RUNTIME, true, new NullProgressMonitor() );
+                    getProject(), IClasspathManager.CLASSPATH_RUNTIME, true, new NullProgressMonitor() );
 
             for( IClasspathEntry entry : classpath )
             {

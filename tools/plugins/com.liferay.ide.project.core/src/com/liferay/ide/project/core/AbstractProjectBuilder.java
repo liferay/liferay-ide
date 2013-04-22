@@ -12,34 +12,24 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+package com.liferay.ide.project.core;
 
+import org.eclipse.core.resources.IProject;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
+public abstract class AbstractProjectBuilder implements IProjectBuilder
 {
-    private Class<?> classType;
-    private int priority;
+    private IProject project;
 
-    public AbstractLiferayProjectProvider( Class<?> type )
+    public AbstractProjectBuilder( IProject project )
     {
-        this.classType = type;
+        this.project = project;
     }
 
-    public int getPriority()
+    public IProject getProject()
     {
-        return this.priority;
-    }
-
-    public boolean provides( Class<?> type )
-    {
-        return type != null && classType.isAssignableFrom( type );
-    }
-
-    public void setPriority( int priority )
-    {
-        this.priority = priority;
+        return this.project;
     }
 }

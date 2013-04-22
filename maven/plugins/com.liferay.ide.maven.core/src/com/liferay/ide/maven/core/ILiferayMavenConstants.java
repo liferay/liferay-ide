@@ -22,6 +22,10 @@ package com.liferay.ide.maven.core;
 public interface ILiferayMavenConstants
 {
 
+    String _LIFERAY_MAVEN_PLUGINS_PREFIX = "com.liferay.maven.plugins";  //$NON-NLS-1$
+
+    String _LIFERAY_MOJO_PREFIX = "liferay:";  //$NON-NLS-1$
+
     String BUILD_CSS = "build-css"; //$NON-NLS-1$
 
     String BUILD_EXT = "build-ext"; //$NON-NLS-1$
@@ -40,7 +44,11 @@ public interface ILiferayMavenConstants
 
     String LIFERAY_MAVEN_PLUGIN = "liferay-maven-plugin"; //$NON-NLS-1$
 
-    String LIFERAY_MAVEN_PLUGIN_KEY = "com.liferay.maven.plugins:liferay-maven-plugin"; //$NON-NLS-1$
+    String LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID = "liferay-maven-plugin"; //$NON-NLS-1$
+
+    String LIFERAY_MAVEN_PLUGIN_KEY = _LIFERAY_MAVEN_PLUGINS_PREFIX + ":" + LIFERAY_MAVEN_PLUGIN; //$NON-NLS-1$
+
+    String PLUGIN_CONFIG_API_BASE_DIR = "apiBaseDir"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_APP_AUTO_DEPLOY_DIR = "autoDeployDir"; //$NON-NLS-1$
 
@@ -61,6 +69,8 @@ public interface ILiferayMavenConstants
     String PLUGIN_CONFIG_PLUGIN_TYPE = "pluginType"; //$NON-NLS-1$
 
     String PORTLET_PLUGIN_TYPE = DEFAULT_PLUGIN_TYPE;
+
+    String SERVICE_BUILDER_GOAL = _LIFERAY_MOJO_PREFIX + "build-service"; //$NON-NLS-1$
 
     String THEME_PLUGIN_TYPE = "theme"; //$NON-NLS-1$
 

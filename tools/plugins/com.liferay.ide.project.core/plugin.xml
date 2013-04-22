@@ -3,11 +3,9 @@
 <plugin>
    <extension-point id="sdkTemplates" name="%sdk.templates.name" schema="schema/sdkTemplates.exsd"/>
    <extension-point id="portletFrameworkWizardProviders" name="%portlet.plugin.framework.wizard.providers.name" schema="schema/portletFrameworkWizardProviders.exsd"/>
-   
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
-    
-      
       <category
             id="liferay.plugins">
          <label>
@@ -17,7 +15,7 @@
             Liferay Portal Plugin facets including, portlets, hooks, ext, themes, and layout templates.
          </description>
       </category>
-     
+
       <project-facet
             id="liferay.portlet">
          <label>
@@ -81,11 +79,11 @@
          <fixed
                facet="jst.web">
          </fixed>
-         <fixed 
+         <fixed
                facet="liferay.portlet">
          </fixed>
       </template>
-      
+
       <project-facet
             id="liferay.hook">
          <label>
@@ -149,11 +147,11 @@
          <fixed
                facet="jst.web">
          </fixed>
-         <fixed 
+         <fixed
                facet="liferay.hook">
          </fixed>
       </template>
-      
+
      <project-facet
             id="liferay.ext">
          <label>
@@ -217,12 +215,12 @@
          <fixed
                facet="jst.web">
          </fixed>
-         <fixed 
+         <fixed
                facet="liferay.ext">
          </fixed>
       </template>
    </extension>
-   
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.presets">
       <static-preset
@@ -246,7 +244,7 @@
                version="6.0">
          </facet>
       </static-preset>
-      
+
       <static-preset
             id="liferay.hook.preset">
          <label>
@@ -268,7 +266,7 @@
                version="6.0">
          </facet>
       </static-preset>
-      
+
       <static-preset
             id="liferay.ext.preset">
          <label>
@@ -291,7 +289,7 @@
          </facet>
       </static-preset>
    </extension>
-   
+
    <extension
          point="org.eclipse.jst.common.project.facet.core.libraryProviders">
       <provider
@@ -327,7 +325,7 @@
             </config>
          </action>
       </provider>
-      
+
       <provider
             id="com.liferay.ide.eclipse.plugin.hook.libraryProvider">
          <label>
@@ -361,7 +359,7 @@
             </config>
          </action>
       </provider>
-      
+
       <provider
             id="com.liferay.ide.eclipse.plugin.ext.libraryProvider">
          <label>
@@ -395,7 +393,7 @@
             </config>
          </action>
       </provider>
-      
+
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -441,7 +439,7 @@
       </validator>
    </extension>
    -->
- 
+
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
@@ -453,10 +451,11 @@
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
             class="com.liferay.ide.project.core.LiferayRuntimeProjectProvider"
-            id="com.liferay.ide.project.core.runtimeProjectProvider">
+            id="com.liferay.ide.project.core.runtimeProjectProvider"
+            priority="normal">
       </liferayProjectProvider>
    </extension>
-   
+
    <!--
    <extension
          point="org.eclipse.wst.common.project.facet.core.listeners">
@@ -466,5 +465,5 @@
       </listener>
    </extension>
    -->
- 
+
 </plugin>

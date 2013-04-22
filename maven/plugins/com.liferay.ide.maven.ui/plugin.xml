@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.liferay.ide.core.liferayProjectAdapters">
+      <liferayProjectAdapter
+            class="com.liferay.ide.maven.ui.MavenProjectAdapter"
+            id="com.liferay.ide.maven.ui.mavenProjectAdapter">
+      </liferayProjectAdapter>
+   </extension>
+
+</plugin>

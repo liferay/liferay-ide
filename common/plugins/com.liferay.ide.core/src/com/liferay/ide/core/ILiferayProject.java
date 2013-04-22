@@ -19,8 +19,13 @@ import java.util.Properties;
 import org.eclipse.core.runtime.IPath;
 
 
+/**
+ * @author Gregory Amerson
+ */
 public interface ILiferayProject
 {
+
+    <T> T adapt( Class<T> adapterType );
 
     IPath getAppServerPortalDir();
 

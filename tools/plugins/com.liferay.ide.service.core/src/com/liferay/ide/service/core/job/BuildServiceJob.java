@@ -15,38 +15,29 @@
 
 package com.liferay.ide.service.core.job;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKJob;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.service.core.ServiceCore;
 
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.ClasspathContainerInitializer;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.core.ClasspathEntry;
-import org.eclipse.jst.common.jdt.internal.classpath.FlexibleProjectContainer;
-import org.eclipse.jst.j2ee.internal.common.classpath.J2EEComponentClasspathContainerUtils;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class BuildServiceJob extends SDKJob
+public class BuildServiceJob extends Job
 {
 
     protected IFile serviceXmlFile;
@@ -57,7 +48,11 @@ public class BuildServiceJob extends SDKJob
 
         this.serviceXmlFile = serviceXmlFile;
         setUser( true );
-        setProject( serviceXmlFile.getProject() );
+    }
+
+    private IProject getProject()
+    {
+        return this.serviceXmlFile != null ? this.serviceXmlFile.getProject() : null;
     }
 
     @Override
@@ -78,37 +73,17 @@ public class BuildServiceJob extends SDKJob
 
         monitor.beginTask( Msgs.buildingLiferayServices, 100 );
 
+        final IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor ) throws CoreException
+            {
+                runBuildService( monitor );
+            }
+        };
+
         try
         {
-            getWorkspace().run( new IWorkspaceRunnable()
-            {
-                public void run( IProgressMonitor monitor ) throws CoreException
-                {
-                    runBuildService( monitor );
-
-                    try
-                    {
-                        getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-                    }
-                    catch( Exception e )
-                    {
-                        ServiceCore.logError( e );
-                    }
-
-                    ResourcesPlugin.getWorkspace().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-
-                    updateClasspath( project );
-                }
-            }, monitor );
-
-            try
-            {
-                getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-            }
-            catch( Exception e )
-            {
-                ServiceCore.logError( e );
-            }
+            ResourcesPlugin.getWorkspace().run( workspaceRunner, monitor );
         }
         catch( CoreException e1 )
         {
@@ -118,64 +93,48 @@ public class BuildServiceJob extends SDKJob
         return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
     }
 
-    protected void runBuildService( IProgressMonitor monitor ) throws CoreException
+    protected void runBuildService( final IProgressMonitor monitor ) throws CoreException
     {
-        SDK sdk = getSDK();
+        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
 
-        if( sdk == null )
+        if( liferayProject == null )
         {
-            throw new CoreException( ServiceCore.createErrorStatus( Msgs.specifyCorrectSDK ) );
+            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
+                Msgs.couldNotCreateLiferayProject, getProject() ) ) );
+        }
+
+        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+
+        if( builder == null )
+        {
+            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
+                Msgs.couldNotCreateProjectBuilder, getProject() ) ) );
         }
 
         monitor.worked( 50 );
 
-        sdk.buildService( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( project ) );
+        IStatus retval = builder.buildService( serviceXmlFile, monitor );
+
+        if( retval == null )
+        {
+            retval = ServiceCore.createErrorStatus( NLS.bind( Msgs.errorRunningBuildService, getProject() ) );
+        }
+
+        if( retval == null || ! retval.isOK() )
+        {
+            throw new CoreException( retval );
+        }
 
         monitor.worked( 90 );
-    }
-
-    protected IStatus updateClasspath( IProject project ) throws CoreException
-    {
-        FlexibleProjectContainer container =
-            J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer( project );
-
-        if( container == null )
-        {
-            return Status.OK_STATUS;
-        }
-
-        container.refresh();
-
-        container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer( project );
-
-        IClasspathEntry[] webappEntries = container.getClasspathEntries();
-
-        for( IClasspathEntry entry2 : webappEntries )
-        {
-            if( entry2.getPath().lastSegment().equals( getProject().getName() + "-service.jar" ) ) //$NON-NLS-1$
-            {
-                ( (ClasspathEntry) entry2 ).sourceAttachmentPath =
-                    getProject().getFolder( "docroot/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
-
-                break;
-            }
-        }
-
-        ClasspathContainerInitializer initializer =
-            JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" ); //$NON-NLS-1$
-
-        IJavaProject javaProject = JavaCore.create( project );
-
-        initializer.requestClasspathContainerUpdate( container.getPath(), javaProject, container );
-
-        return Status.OK_STATUS;
     }
 
     private static class Msgs extends NLS
     {
         public static String buildingLiferayServices;
         public static String buildServices;
-        public static String specifyCorrectSDK;
+        public static String couldNotCreateLiferayProject;
+        public static String couldNotCreateProjectBuilder;
+        public static String errorRunningBuildService;
         public static String useConvertLiferayProject;
         public static String useLiferayProjectImportWizard;
 

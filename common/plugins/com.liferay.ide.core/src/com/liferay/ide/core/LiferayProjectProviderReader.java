@@ -14,52 +14,32 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.wst.common.core.util.RegistryReader;
 
 
 /**
  * @author Gregory Amerson
  */
-public class LiferayProjectProviderReader extends RegistryReader
+public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjectProvider>
 {
 
-    private static final String ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_ID = "id"; //$NON-NLS-1$
+    private static final String ATTRIBUTE_PRIORITY = "priority"; //$NON-NLS-1$
     private static final String EXTENSION = "liferayProjectProviders"; //$NON-NLS-1$
     private static final String PROVIDER_ELEMENT = "liferayProjectProvider"; //$NON-NLS-1$
 
-    private boolean hasInitialized = false;
-    private Map<String, ILiferayProjectProvider> providerExtensions = new HashMap<String, ILiferayProjectProvider>();
-
     public LiferayProjectProviderReader()
     {
-        super( LiferayCore.PLUGIN_ID, EXTENSION );
+        super( LiferayCore.PLUGIN_ID, EXTENSION, PROVIDER_ELEMENT );
     }
 
     public ILiferayProjectProvider[] getProviders( Class<?> type )
     {
-        if( type == null )
-        {
-            return null;
-        }
+        final List<ILiferayProjectProvider> providers = new ArrayList<ILiferayProjectProvider>();
 
-        if( !this.hasInitialized )
-        {
-            readRegistry();
-
-            this.hasInitialized = true;
-        }
-
-        List<ILiferayProjectProvider> providers = new LinkedList<ILiferayProjectProvider>();
-
-        for( ILiferayProjectProvider provider : this.providerExtensions.values() )
+        for( ILiferayProjectProvider provider : getExtensions() )
         {
             if( provider.provides( type ) )
             {
@@ -71,26 +51,35 @@ public class LiferayProjectProviderReader extends RegistryReader
     }
 
     @Override
-    public boolean readElement( IConfigurationElement element )
+    protected ILiferayProjectProvider initElement( IConfigurationElement configElement, ILiferayProjectProvider provider )
     {
-        if ( PROVIDER_ELEMENT.equals( element.getName() ) )
+        final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
+        int priorityValue = 10;
+
+        if( "lowest".equals( priority ) ) //$NON-NLS-1$
         {
-            String id = element.getAttribute( ATTRIBUTE_ID );
-
-            try
-            {
-                ILiferayProjectProvider provider =
-                    (ILiferayProjectProvider) element.createExecutableExtension( ATTRIBUTE_CLASS );
-
-                this.providerExtensions.put( id, provider );
-            }
-            catch( CoreException e )
-            {
-                LiferayCore.logError( e );
-            }
+            priorityValue = 1;
+        }
+        else if( "low".equals( priority ) ) //$NON-NLS-1$
+        {
+            priorityValue = 2;
+        }
+        else if( "normal".equals( priority ) ) //$NON-NLS-1$
+        {
+            priorityValue = 3;
+        }
+        else if( "high".equals( priority ) ) //$NON-NLS-1$
+        {
+            priorityValue = 4;
+        }
+        else if( "highest".equals( priority ) ) //$NON-NLS-1$
+        {
+            priorityValue = 5;
         }
 
-        return true;
+        ( (AbstractLiferayProjectProvider) provider ).setPriority( priorityValue );
+
+        return provider;
     }
 
 }

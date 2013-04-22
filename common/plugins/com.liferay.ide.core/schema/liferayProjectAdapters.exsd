@@ -3,7 +3,7 @@
 <schema targetNamespace="com.liferay.ide.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.liferay.ide.core" id="liferayProjectProviders" name="Liferay Project Providers"/>
+         <meta.schema plugin="com.liferay.ide.core" id="liferayProjectAdapters" name="Liferay Project Adapters"/>
       </appinfo>
       <documentation>
 
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence minOccurs="0" maxOccurs="unbounded">
-            <element ref="liferayProjectProvider"/>
+            <element ref="liferayProjectAdapter"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,7 +47,7 @@
       </complexType>
    </element>
 
-   <element name="liferayProjectProvider">
+   <element name="liferayProjectAdapter">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -62,37 +62,11 @@
 
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="com.liferay.ide.core.AbstractLiferayProjectProvider:com.liferay.ide.core.ILiferayProjectProvider"/>
+                  <meta.attribute kind="java" basedOn=":com.liferay.ide.core.ILiferayProjectAdapter"/>
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="priority">
-            <annotation>
-               <documentation>
-                  Indicates the relative priority of this provider to other providers. Defaults to normal
-               </documentation>
-            </annotation>
-            <simpleType>
-               <restriction base="string">
-                  <enumeration value="lowest">
-                  </enumeration>
-                  <enumeration value="low">
-                  </enumeration>
-                  <enumeration value="normal">
-                  </enumeration>
-                  <enumeration value="high">
-                  </enumeration>
-                  <enumeration value="highest">
-                  </enumeration>
-               </restriction>
-            </simpleType>
-         </attribute>
       </complexType>
    </element>
-
-
-
-
-
 
 </schema>

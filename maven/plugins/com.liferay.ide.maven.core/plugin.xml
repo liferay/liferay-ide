@@ -24,7 +24,8 @@
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
             class="com.liferay.ide.maven.core.LiferayMavenProjectProvider"
-            id="com.liferay.ide.maven.core.mavenProjectProvider">
+            id="com.liferay.ide.maven.core.mavenProjectProvider"
+            priority="high">
       </liferayProjectProvider>
    </extension>
    <extension

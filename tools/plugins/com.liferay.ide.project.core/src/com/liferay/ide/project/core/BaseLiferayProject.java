@@ -12,50 +12,51 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.AbstractLiferayProjectProvider;
+package com.liferay.ide.project.core;
+
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectAdapter;
+import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.m2e.core.internal.IMavenConstants;
-
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
+public abstract class BaseLiferayProject implements ILiferayProject
 {
 
-    public LiferayMavenProjectProvider()
+    private IProject project;
+
+    public BaseLiferayProject( IProject project )
     {
-        super( IProject.class );
+        this.project = project;
     }
 
-    public ILiferayProject provide( Object type )
+    public <T> T adapt( Class<T> adapterType )
     {
-        if( type instanceof IProject )
-        {
-            final IProject project = (IProject) type;
+        final ILiferayProjectAdapter[] adapters = LiferayProjectCore.getProjectAdapters();
 
-            try
+        if( ! CoreUtil.isNullOrEmpty( adapters ) )
+        {
+            for( ILiferayProjectAdapter adapter : adapters )
             {
-                if( project.hasNature( IMavenConstants.NATURE_ID ) ||
-                    project.getFile( IMavenConstants.POM_FILE_NAME ).exists() )
+                T adapted = adapter.adapt( this, adapterType );
+
+                if( adapted != null )
                 {
-                    return new LiferayMavenProject( project );
+                    return adapted;
                 }
-            }
-            catch( CoreException e )
-            {
-                LiferayMavenCore.logError(
-                    "Unable to create ILiferayProject from maven project " + project.getName(), e ); //$NON-NLS-1$
             }
         }
 
         return null;
+    }
+
+    public IProject getProject()
+    {
+        return this.project;
     }
 
 }

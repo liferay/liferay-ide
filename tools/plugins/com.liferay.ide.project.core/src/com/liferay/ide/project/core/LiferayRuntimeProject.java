@@ -14,27 +14,57 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 
 import java.util.Properties;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 
 /**
  * @author Gregory Amerson
  */
-public class LiferayRuntimeProject implements ILiferayProject
+public class LiferayRuntimeProject extends BaseLiferayProject
 {
 
     private ILiferayRuntime liferayRuntime;
 
-    public LiferayRuntimeProject( ILiferayRuntime liferayRuntime )
+    public LiferayRuntimeProject( IProject project, ILiferayRuntime liferayRuntime )
     {
+        super( project );
+
         this.liferayRuntime = liferayRuntime;
     }
+
+    public <T> T adapt( Class<T> adapterType )
+    {
+        T adapter = super.adapt( adapterType );
+
+        if( adapter != null )
+        {
+            return adapter;
+        }
+
+        if( IProjectBuilder.class.equals( adapterType ) )
+        {
+            final SDK sdk = getSDK();
+
+            if( sdk != null )
+            {
+                final IProjectBuilder projectBuilder = new SDKProjectBuilder( getProject(), sdk );
+
+                return adapterType.cast( projectBuilder );
+            }
+        }
+
+        return null;
+    }
+
     public IPath getAppServerPortalDir()
     {
         return this.liferayRuntime.getAppServerPortalDir();
@@ -76,6 +106,24 @@ public class LiferayRuntimeProject implements ILiferayProject
     public Properties getPortletEntryCategories()
     {
         return this.liferayRuntime.getPortletEntryCategories();
+    }
+
+    protected SDK getSDK()
+    {
+        SDK retval = null;
+
+        // try to determine SDK based on project location
+        IPath sdkLocation = getProject().getRawLocation().removeLastSegments( 2 );
+
+        retval = SDKManager.getInstance().getSDK( sdkLocation );
+
+        if( retval == null )
+        {
+            retval = SDKUtil.createSDKFromLocation( sdkLocation );
+            SDKManager.getInstance().addSDK( retval );
+        }
+
+        return retval;
     }
 
     public IPath[] getUserLibs()

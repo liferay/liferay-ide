@@ -19,7 +19,10 @@ package com.liferay.ide.core;
  */
 public interface ILiferayProjectProvider
 {
+    int getPriority();
+
     ILiferayProject provide( Object type );
 
     boolean provides( Class<?> type );
+
 }

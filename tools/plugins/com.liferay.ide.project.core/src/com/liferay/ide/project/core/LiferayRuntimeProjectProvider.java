@@ -50,7 +50,7 @@ public class LiferayRuntimeProjectProvider extends AbstractLiferayProjectProvide
 
         if( liferayRuntime != null )
         {
-            return new LiferayRuntimeProject( liferayRuntime );
+            return new LiferayRuntimeProject( project, liferayRuntime );
         }
 
         return null;

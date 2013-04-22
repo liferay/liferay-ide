@@ -73,7 +73,10 @@ public class BuildWSDDAction extends AbstractObjectAction
                                 new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ); //$NON-NLS-1$
                             servicesFile = container.getFile( path );
 
-                            break;
+                            if( servicesFile.exists() )
+                            {
+                                break;
+                            }
                         }
                     }
                 }

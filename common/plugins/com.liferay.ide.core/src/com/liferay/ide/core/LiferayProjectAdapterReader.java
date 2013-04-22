@@ -14,32 +14,26 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
+public class LiferayProjectAdapterReader extends ExtensionReader<ILiferayProjectAdapter>
 {
-    private Class<?> classType;
-    private int priority;
 
-    public AbstractLiferayProjectProvider( Class<?> type )
+    private static final String EXTENSION = "liferayProjectAdapters"; //$NON-NLS-1$
+    private static final String PROVIDER_ELEMENT = "liferayProjectAdapter"; //$NON-NLS-1$
+
+    public LiferayProjectAdapterReader()
     {
-        this.classType = type;
+        super( LiferayCore.PLUGIN_ID, EXTENSION, PROVIDER_ELEMENT );
     }
 
-    public int getPriority()
+    @Override
+    protected ILiferayProjectAdapter initElement( IConfigurationElement configElement, ILiferayProjectAdapter adapter )
     {
-        return this.priority;
+        return adapter;
     }
 
-    public boolean provides( Class<?> type )
-    {
-        return type != null && classType.isAssignableFrom( type );
-    }
-
-    public void setPriority( int priority )
-    {
-        this.priority = priority;
-    }
 }
