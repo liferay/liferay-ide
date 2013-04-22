@@ -29,10 +29,10 @@
                 <module>../common</module>
                 <module>../tools</module>
                 <module>../maven</module>
-                <module>../portal</module>
-                <module>../velocity</module>
-                <module>../nls</module>
-                <module>releng</module>
+                <!--module>../portal</module-->
+                <!--module>../velocity</module-->
+                <!--module>../nls</module-->
+                <!--module>releng</module-->
             </modules>
         </profile>
 
