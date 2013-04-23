@@ -57,7 +57,11 @@ public abstract class SDKJob extends Job
         if( retval == null )
         {
             retval = SDKUtil.createSDKFromLocation( sdkLocation );
-            SDKManager.getInstance().addSDK( retval );
+
+            if( retval != null && retval.isValid() )
+            {
+                SDKManager.getInstance().addSDK( retval );
+            }
         }
 
         return retval;
