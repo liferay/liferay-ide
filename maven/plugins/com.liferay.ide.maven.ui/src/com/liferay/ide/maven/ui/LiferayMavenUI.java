@@ -46,7 +46,12 @@ public class LiferayMavenUI extends Plugin
 
     public static void logError( Throwable t )
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
+        logError( t.getMessage(), t );
+    }
+    
+    public static void logError( String msg, Throwable t )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, t ) );
     }
 
     /**

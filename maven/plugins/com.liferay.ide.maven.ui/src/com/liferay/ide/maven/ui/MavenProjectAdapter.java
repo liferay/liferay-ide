@@ -43,7 +43,7 @@ public class MavenProjectAdapter implements ILiferayProjectAdapter
 
             if( ! CoreUtil.isNullOrEmpty( version ) )
             {
-                final Version portalVersion = new Version( version );
+                final Version portalVersion = new Version( version.replaceAll( "-SNAPSHOT", "" ) );
 
                 if( CoreUtil.compareVersions( portalVersion, v620 ) < 0 )
                 {

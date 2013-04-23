@@ -12,11 +12,11 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.maven.core;
+package com.liferay.ide.maven.ui;
 
-import com.liferay.ide.core.AbstractLiferayProjectProvider;
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.maven.core.MavenUtil;
 
+import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
@@ -24,37 +24,23 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
-public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
+public class MavenProjectPropertyTester extends PropertyTester
 {
 
-    public LiferayMavenProjectProvider()
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
     {
-        super( IProject.class );
-    }
-
-    public ILiferayProject provide( Object type )
-    {
-        if( type instanceof IProject )
+        if( receiver instanceof IProject )
         {
-            final IProject project = (IProject) type;
-
             try
             {
-                if( MavenUtil.isMavenProject( project ) )
-                {
-                    return new LiferayMavenProject( project );
-                }
-                
+                return MavenUtil.isMavenProject( (IProject) receiver );
             }
             catch( CoreException e )
             {
-                LiferayMavenCore.logError(
-                    "Unable to create ILiferayProject from maven project " + project.getName(), e ); //$NON-NLS-1$
+                // don't log error
             }
         }
 
-        return null;
+        return false;
     }
-
 }

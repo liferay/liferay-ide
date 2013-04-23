@@ -51,8 +51,8 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 public class MavenProjectBuilder extends AbstractProjectBuilder
 {
 
-    final IMaven maven = MavenPlugin.getMaven();
-    final IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
+    protected final IMaven maven = MavenPlugin.getMaven();
+    protected final IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
 
     public MavenProjectBuilder( IProject project )
     {
@@ -87,7 +87,9 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
             monitor
         );
 
-        refreshLocalProjects( projectFacade, monitor );
+        refreshSiblingProject( projectFacade, monitor );
+
+        getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
         return retval;
     }
@@ -157,13 +159,13 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         return null;
     }
 
-    protected void refreshLocalProjects( IMavenProjectFacade projectFacade, IProgressMonitor monitor ) throws CoreException
+    public void refreshSiblingProject( IMavenProjectFacade projectFacade, IProgressMonitor monitor ) throws CoreException
     {
         // need to look up project configuration and refresh the *-service project associated with this project
         try
         {
             // not doing any null checks since this is in large try/catch
-            final Plugin liferayMavenPlugin = LiferayMavenUtil.getLiferayMavenPlugin( projectFacade.getMavenProject() );
+            final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade.getMavenProject() );
             final Xpp3Dom config = (Xpp3Dom) liferayMavenPlugin.getConfiguration();
             final Xpp3Dom apiBaseDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_API_BASE_DIR );
             // this should be the name path of a project that should be in user's workspace that we can refresh
@@ -176,12 +178,10 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
             apiBaseFacade.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
         }
-        catch(  Exception e )
+        catch( Exception e )
         {
             LiferayMavenCore.logError( "Could not refresh sibling service project.", e ); //$NON-NLS-1$
         }
-
-        getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
     }
 
 }

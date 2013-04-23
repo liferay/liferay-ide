@@ -142,7 +142,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     public void configure( ProjectConfigurationRequest request, IProgressMonitor monitor ) throws CoreException
     {
         final MavenProject mavenProject = request.getMavenProject();
-        final Plugin liferayMavenPlugin = LiferayMavenUtil.getLiferayMavenPlugin( mavenProject );
+        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
 
         if( ! shouldConfigure( liferayMavenPlugin ) )
         {
@@ -249,7 +249,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         final List<MavenProblemInfo> errors = new ArrayList<MavenProblemInfo>();
 
         // first check to make sure that the AppServer* properties are available and pointed to valid location
-        final Plugin liferayMavenPlugin = LiferayMavenUtil.getLiferayMavenPlugin( mavenProject );
+        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
 
         if( liferayMavenPlugin != null )
         {
@@ -289,7 +289,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private String getLiferayMavenPluginType( MavenProject mavenProject )
     {
-        String pluginType = LiferayMavenUtil.getLiferayMavenPluginConfig( mavenProject,
+        String pluginType = MavenUtil.getLiferayMavenPluginConfig( mavenProject,
                                                                           ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
 
         if( pluginType == null )
@@ -368,7 +368,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         MavenProblemInfo retval = null;
 
         final String pluginType = getLiferayMavenPluginType( mavenProject );
-        final Plugin liferayMavenPlugin = LiferayMavenUtil.getLiferayMavenPlugin( mavenProject );
+        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
         final Action action = getNewLiferayFacetInstallAction( pluginType );
 
         if( action != null )

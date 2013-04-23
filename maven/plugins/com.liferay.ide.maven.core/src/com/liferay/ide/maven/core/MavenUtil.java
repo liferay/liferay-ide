@@ -16,6 +16,9 @@ package com.liferay.ide.maven.core;
 
 import java.util.Collections;
 
+import org.apache.maven.model.Plugin;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -33,6 +36,54 @@ import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 @SuppressWarnings( "restriction" )
 public class MavenUtil
 {
+
+    public static Plugin getLiferayMavenPlugin( MavenProject mavenProject )
+    {
+        Plugin retval = null;
+
+        if( mavenProject != null )
+        {
+            retval = mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+        }
+
+        return retval;
+    }
+
+    public static Xpp3Dom getLiferayMavenPluginConfig( MavenProject mavenProject )
+    {
+        Xpp3Dom retval = null;
+
+        if( mavenProject != null )
+        {
+            final Plugin plugin = mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+
+            if( plugin != null )
+            {
+                retval = (Xpp3Dom) plugin.getConfiguration();
+            }
+        }
+
+        return retval;
+    }
+
+    public static String getLiferayMavenPluginConfig( MavenProject mavenProject, String childElement )
+    {
+        String retval = null;
+
+        Xpp3Dom liferayMavenPluginConfig = getLiferayMavenPluginConfig( mavenProject );
+
+        if( liferayMavenPluginConfig != null )
+        {
+            final Xpp3Dom childNode = liferayMavenPluginConfig.getChild( childElement );
+
+            if( childNode != null )
+            {
+                retval = childNode.getValue();
+            }
+        }
+
+        return retval;
+    }
 
     public static IMavenProjectFacade getProjectFacade( final IProject project )
     {
@@ -66,6 +117,18 @@ public class MavenUtil
         }
 
         return projectFacade;
+    }
+
+    public static boolean isMavenProject( IProject project ) throws CoreException
+    {
+        return project != null &&
+            ( project.hasNature( IMavenConstants.NATURE_ID ) || project.getFile( IMavenConstants.POM_FILE_NAME ).exists() );
+    }
+
+    public static boolean isPomFile( IFile pomFile )
+    {
+        return pomFile != null && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals( pomFile.getName() ) &&
+            pomFile.getParent() instanceof IProject;
     }
 
 }

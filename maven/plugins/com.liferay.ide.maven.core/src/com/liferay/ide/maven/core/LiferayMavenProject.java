@@ -76,7 +76,7 @@ public class LiferayMavenProject extends BaseLiferayProject
             final MavenProject mavenProject = projectFacade.getMavenProject();
 
             final String appServerPortalDir =
-                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                MavenUtil.getLiferayMavenPluginConfig(
                     mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_DEPLOY_DIR );
 
             if( !CoreUtil.isNullOrEmpty( appServerPortalDir ) )
@@ -99,7 +99,7 @@ public class LiferayMavenProject extends BaseLiferayProject
             final MavenProject mavenProject = projectFacade.getMavenProject();
 
             final String appServerPortalDir =
-                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                MavenUtil.getLiferayMavenPluginConfig(
                     mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR );
 
             if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
@@ -138,7 +138,7 @@ public class LiferayMavenProject extends BaseLiferayProject
             final MavenProject mavenProject = projectFacade.getMavenProject();
 
             final String appServerPortalDir =
-                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                MavenUtil.getLiferayMavenPluginConfig(
                     mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR );
 
             if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
@@ -200,7 +200,7 @@ public class LiferayMavenProject extends BaseLiferayProject
             MavenProject mavenProject = projectFacade.getMavenProject();
 
             retval =
-                LiferayMavenUtil.getLiferayMavenPluginConfig(
+                MavenUtil.getLiferayMavenPluginConfig(
                     mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
         }
 

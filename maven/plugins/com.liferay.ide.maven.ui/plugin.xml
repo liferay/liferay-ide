@@ -9,4 +9,81 @@
       </liferayProjectAdapter>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.ui.popupmenu"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               icon="icons/e16/liferay.png"
+               id="liferayPopupMenuCategory"
+               label="%liferay.menu.label">
+            <separator
+                  name="slot1">
+            </separator>
+            <groupMarker
+                  name="maven">
+            </groupMarker>
+         </menu>
+         <menu
+               icon="icons/e16/m2.gif"
+               id="liferayPopupMenuMavenCategory"
+               label="%maven.menu.label"
+               path="liferayPopupMenuCategory/maven">
+            <groupMarker
+                  name="build-service">
+            </groupMarker>
+         </menu>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.maven.ui.maven.popup"
+            objectClass="org.eclipse.core.resources.IResource">
+          <action
+               class="com.liferay.ide.maven.ui.action.BuildServiceGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.build-service"
+               label="liferay:build-service"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-service">
+         </action>
+         
+         <enablement>
+               <adapt type="org.eclipse.core.resources.IResource">
+                   <or>
+                       <adapt type="org.eclipse.core.resources.IFile">
+                           <test forcePluginActivation="true"
+                               property="com.liferay.ide.maven.ui.isPomFile"
+                               value="true" />
+                       </adapt>
+                       <and>
+                            <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="com.liferay.ide.maven.ui.isMavenProject"
+                                   value="true" />
+                           </adapt>
+                        </and>
+                   </or>
+               </adapt>
+         </enablement>
+      </objectContribution>
+  </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.maven.ui.MavenProjectPropertyTester"
+            id="com.liferay.ide.maven.ui.isMavenProject"
+            namespace="com.liferay.ide.maven.ui"
+            properties="isMavenProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.maven.ui.PomFilePropertyTester"
+            id="com.liferay.ide.maven.ui.isPomFile"
+            namespace="com.liferay.ide.maven.ui"
+            properties="isPomFile"
+            type="org.eclipse.core.resources.IFile">
+      </propertyTester>
+   </extension>
 </plugin>
