@@ -111,4 +111,9 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         return Status.OK_STATUS;
     }
 
+    public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
+    {
+        return sdk.buildLanguage( getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
+    }
+
 }

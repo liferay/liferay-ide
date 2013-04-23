@@ -76,8 +76,6 @@ public interface ILiferayMavenConstants
 
     String PORTLET_PLUGIN_TYPE = DEFAULT_PLUGIN_TYPE;
 
-    String SERVICE_BUILDER_GOAL = _LIFERAY_MOJO_PREFIX + "build-service"; //$NON-NLS-1$
-
     String THEME_PLUGIN_TYPE = "theme"; //$NON-NLS-1$
 
 }

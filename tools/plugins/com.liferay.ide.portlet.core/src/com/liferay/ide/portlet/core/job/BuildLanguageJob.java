@@ -15,27 +15,29 @@
 
 package com.liferay.ide.portlet.core.job;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKJob;
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.project.core.IProjectBuilder;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceDescription;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-public class BuildLanguageJob extends SDKJob
+public class BuildLanguageJob extends Job
 {
 
     protected IFile langFile;
@@ -45,16 +47,13 @@ public class BuildLanguageJob extends SDKJob
         super( Msgs.buildLanguages );
 
         this.langFile = langFile;
-
         setUser( true );
-
-        setProject( langFile.getProject() );
     }
 
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
-        monitor.beginTask( Msgs.buildingLanguages, 100 );
+        IStatus retval = null;
 
         IWorkspaceDescription desc = ResourcesPlugin.getWorkspace().getDescription();
 
@@ -62,53 +61,25 @@ public class BuildLanguageJob extends SDKJob
 
         desc.setAutoBuilding( false );
 
+        monitor.beginTask( Msgs.buildingLanguages, 100 );
+
+        final IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor ) throws CoreException
+            {
+                runBuildLang( monitor );
+            }
+        };
+
         try
         {
             ResourcesPlugin.getWorkspace().setDescription( desc );
 
-            SDK sdk = getSDK();
-
-            IProject project = getProject();
-
-            monitor.worked( 10 );
-
-            sdk.buildLanguage( project, langFile, null, ServerUtil.configureAppServerProperties( project ) );
-
-            monitor.worked( 90 );
-
-            try
-            {
-                project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-            }
-            catch( Exception e )
-            {
-                PortletCore.logError( e );
-            }
-
-            project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-
-            try
-            {
-                project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-            }
-            catch( Exception e )
-            {
-                PortletCore.logError( e );
-            }
-
-            // check generated properties files and set to UTF8
-            for( IResource file : langFile.getParent().members() )
-            {
-                if( file.getName().matches( "Language_.*\\.properties" ) ) //$NON-NLS-1$
-                {
-                    IFile generatedLangFile = (IFile) file;
-                    generatedLangFile.setCharset( "UTF-8", monitor ); //$NON-NLS-1$
-                }
-            }
+            ResourcesPlugin.getWorkspace().run( workspaceRunner, monitor );
         }
         catch( CoreException e1 )
         {
-            return PortletCore.createErrorStatus( e1 );
+            retval = PortletCore.createErrorStatus( e1 );
         }
         finally
         {
@@ -121,17 +92,90 @@ public class BuildLanguageJob extends SDKJob
             }
             catch( CoreException e1 )
             {
-                return PortletCore.createErrorStatus( e1 );
+                retval = PortletCore.createErrorStatus( e1 );
             }
         }
 
-        return Status.OK_STATUS;
+        return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
+    }
+
+    protected void runBuildLang( IProgressMonitor monitor ) throws CoreException
+    {
+        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+
+        if( liferayProject == null )
+        {
+            throw new CoreException( PortletCore.createErrorStatus( NLS.bind(
+                Msgs.couldNotCreateLiferayProject, getProject() ) ) );
+        }
+
+        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+
+        if( builder == null )
+        {
+            throw new CoreException( PortletCore.createErrorStatus( NLS.bind(
+                Msgs.couldNotCreateProjectBuilder, getProject() ) ) );
+        }
+
+        monitor.worked( 50 );
+
+        IStatus retval = builder.buildLang( this.langFile, monitor );
+
+        if( retval == null )
+        {
+            retval = PortletCore.createErrorStatus( NLS.bind( Msgs.errorRunningBuildLang, getProject() ) );
+        }
+
+        try
+        {
+            getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+        }
+        catch( Exception e )
+        {
+            PortletCore.logError( e );
+        }
+
+        getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+
+        try
+        {
+            getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+        }
+        catch( Exception e )
+        {
+            PortletCore.logError( e );
+        }
+
+        // check generated properties files and set to UTF8
+        for( IResource file : langFile.getParent().members() )
+        {
+            if( file.getName().matches( "Language_.*\\.properties" ) ) //$NON-NLS-1$
+            {
+                IFile generatedLangFile = (IFile) file;
+                generatedLangFile.setCharset( "UTF-8", monitor ); //$NON-NLS-1$
+            }
+        }
+
+        if( retval == null || ! retval.isOK() )
+        {
+            throw new CoreException( retval );
+        }
+
+        monitor.worked( 90 );
+    }
+
+    private IProject getProject()
+    {
+        return this.langFile.getProject();
     }
 
     private static class Msgs extends NLS
     {
         public static String buildingLanguages;
         public static String buildLanguages;
+        public static String couldNotCreateProjectBuilder;
+        public static String couldNotCreateLiferayProject;
+        public static String errorRunningBuildLang;
 
         static
         {

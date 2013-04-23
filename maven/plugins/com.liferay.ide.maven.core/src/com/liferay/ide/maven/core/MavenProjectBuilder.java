@@ -59,63 +59,81 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         super( project );
     }
 
-    public IStatus buildService( final IFile serviceXmlFile, final IProgressMonitor monitor ) throws CoreException
+    public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
 
-        final IStatus retval = this.maven.execute
-        (
-            new ICallable<IStatus>()
+        final ICallable<IStatus> callable = new ICallable<IStatus>()
+        {
+            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
             {
-                public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
-                {
-                    return projectManager.execute
-                    (
-                        projectFacade,
-                        new ICallable<IStatus>()
-                        {
-                            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor )
-                                throws CoreException
-                            {
-                                return executeBuildServiceMojo( projectFacade, context, monitor );
-                            }
-                        },
-                        monitor
-                    );
-                }
-            },
-            monitor
-        );
+                return executeMojoGoal( facade, context, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG, monitor );
+            }
+        };
 
-        refreshSiblingProject( projectFacade, monitor );
+        final IStatus retval = executeMaven( facade, callable, monitor );
 
         getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
         return retval;
     }
 
-    protected IStatus executeBuildServiceMojo( final IMavenProjectFacade projectFacade,
-                                               final IMavenExecutionContext context,
-                                               final IProgressMonitor monitor ) throws CoreException
+    public IStatus buildService( final IFile serviceXmlFile, final IProgressMonitor monitor ) throws CoreException
+    {
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
+
+        final ICallable<IStatus> callable = new ICallable<IStatus>()
+        {
+            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
+            {
+                return executeMojoGoal( facade, context, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, monitor );
+            }
+        };
+
+        final IStatus retval = executeMaven( facade, callable, monitor );
+
+        refreshSiblingProject( facade, monitor );
+
+        getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        return retval;
+    }
+
+    protected IStatus executeMaven( final IMavenProjectFacade projectFacade, final ICallable<IStatus> callable, IProgressMonitor monitor ) throws CoreException
+    {
+        return this.maven.execute
+        (
+            new ICallable<IStatus>()
+            {
+                public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor) throws CoreException
+                {
+                    return projectManager.execute( projectFacade, callable, monitor );
+                }
+            },
+            monitor
+        );
+    }
+
+    protected IStatus executeMojoGoal( final IMavenProjectFacade projectFacade,
+                                       final IMavenExecutionContext context,
+                                       final String goal,
+                                       final IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
 
-        final List<String> goals = Collections.singletonList( ILiferayMavenConstants.SERVICE_BUILDER_GOAL );
+        final List<String> goals = Collections.singletonList( goal );
         final MavenExecutionPlan plan =
             this.maven.calculateExecutionPlan( projectFacade.getMavenProject(), goals, true, monitor );
 
-        final MojoExecution serviceBuilderMojoExecution =
+        final MojoExecution liferayMojoExecution =
             getExecution( plan, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID );
 
-//        Object serviceBuilderMojo =
-//            this.maven.getConfiguredMojo( context.getSession(), serviceBuilderMojoExecution, Object.class );
-//        this.maven.releaseMojo( serviceBuilderMojo, serviceBuilderMojoExecution );
-
-        if( serviceBuilderMojoExecution != null )
+        if( liferayMojoExecution != null )
         {
             ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
             configuration.setResolveWorkspaceProjects( true );
-            this.maven.execute( projectFacade.getMavenProject(), serviceBuilderMojoExecution, monitor );
+
+            this.maven.execute( projectFacade.getMavenProject(), liferayMojoExecution, monitor );
         }
 
         List<Throwable> exceptions = context.getSession().getResult().getExceptions();

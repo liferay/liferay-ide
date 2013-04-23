@@ -28,4 +28,6 @@ public interface IProjectBuilder
 
     IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException;
 
+    IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException;
+
 }

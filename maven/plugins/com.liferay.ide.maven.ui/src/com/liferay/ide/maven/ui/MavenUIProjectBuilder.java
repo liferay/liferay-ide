@@ -63,9 +63,17 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
     }
 
     @Override
+    public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
+    {
+        final IFile pomFile = getProject().getFile( new Path( IMavenConstants.POM_FILE_NAME ) );
+        final IMavenProjectFacade projectFacade = projectManager.create( pomFile, false, new NullProgressMonitor() );
+
+        return runMavenGoal( projectFacade, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG, "run", monitor );
+    }
+
+    @Override
     public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
-
         final IFile pomFile = getProject().getFile( new Path( IMavenConstants.POM_FILE_NAME ) );
         final IMavenProjectFacade projectFacade = projectManager.create( pomFile, false, new NullProgressMonitor() );
 
