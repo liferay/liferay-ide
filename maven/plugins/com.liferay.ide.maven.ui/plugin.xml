@@ -32,6 +32,9 @@
                label="%maven.menu.label"
                path="liferayPopupMenuCategory/maven">
             <groupMarker
+                  name="build-db">
+            </groupMarker>
+            <groupMarker
                   name="build-service">
             </groupMarker>
          </menu>
@@ -40,6 +43,15 @@
             adaptable="true"
             id="com.liferay.ide.maven.ui.maven.popup"
             objectClass="org.eclipse.core.resources.IResource">
+
+          <action
+               class="com.liferay.ide.maven.ui.action.BuildDBGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.build-db"
+               label="liferay:build-db"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-db">
+         </action>
           <action
                class="com.liferay.ide.maven.ui.action.BuildServiceGoalAction"
                enablesFor="1"
@@ -48,7 +60,7 @@
                label="liferay:build-service"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-service">
          </action>
-         
+
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
                    <or>

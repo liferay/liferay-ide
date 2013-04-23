@@ -15,41 +15,36 @@
 package com.liferay.ide.maven.ui.action;
 
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
-import com.liferay.ide.maven.core.MavenProjectBuilder;
-import com.liferay.ide.maven.core.MavenUtil;
 import com.liferay.ide.maven.ui.LiferayMavenUI;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 
 /**
  * @author Gregory Amerson
  */
-public class BuildServiceGoalAction extends MavenGoalAction
+public class BuildDBGoalAction extends MavenGoalAction
 {
 
     @Override
     protected String getMavelGoal()
     {
-        return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE;
+        return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_DB;
     }
 
     @Override
     protected void updateProject( IProject p, IProgressMonitor monitor )
     {
-        final MavenProjectBuilder builder = new MavenProjectBuilder( p );
-
         try
         {
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( p, monitor );
-            builder.refreshSiblingProject( projectFacade, monitor );
+            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
         }
         catch( CoreException e )
         {
-            LiferayMavenUI.logError( "Unable to refresh sibling project", e );
+            LiferayMavenUI.logError( "Error refreshing project after liferay:build-db", e );
         }
     }
 
