@@ -40,6 +40,9 @@
             <groupMarker
                   name="build-service">
             </groupMarker>
+            <groupMarker
+                  name="deploy">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -63,7 +66,7 @@
                label="liferay:build-lang"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-lang">
          </action>
-          <action
+         <action
                class="com.liferay.ide.maven.ui.action.BuildServiceGoalAction"
                enablesFor="1"
                icon="icons/e16/m2.gif"
@@ -71,7 +74,14 @@
                label="liferay:build-service"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-service">
          </action>
-
+         <action
+               class="com.liferay.ide.maven.ui.action.DeployGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.deploy"
+               label="liferay:deploy"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/deploy">
+         </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
                    <or>
