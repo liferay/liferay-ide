@@ -105,7 +105,7 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
         workingCopy.setAttribute( MavenLaunchConstants.ATTR_POM_DIR, basedirLocation.toString() );
         workingCopy.setAttribute( MavenLaunchConstants.ATTR_GOALS, goal );
         workingCopy.setAttribute( MavenLaunchConstants.ATTR_UPDATE_SNAPSHOTS, true );
-        workingCopy.setAttribute( MavenLaunchConstants.ATTR_WORKSPACE_RESOLUTION, true );
+        workingCopy.setAttribute( MavenLaunchConstants.ATTR_WORKSPACE_RESOLUTION, false );
         workingCopy.setAttribute( MavenLaunchConstants.ATTR_SKIP_TESTS, true );
 
         if( projectFacade != null )

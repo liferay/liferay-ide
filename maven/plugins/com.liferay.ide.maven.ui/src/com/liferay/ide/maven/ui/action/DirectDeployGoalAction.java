@@ -23,13 +23,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * @author Gregory Amerson
  */
-public class DeployGoalAction extends MavenGoalAction
+public class DirectDeployGoalAction extends MavenGoalAction
 {
 
     @Override
     protected String getMavelGoal()
     {
-        return "package " + ILiferayMavenConstants.PLUGIN_GOAL_DEPLOY;
+        return "package " + ILiferayMavenConstants.PLUGIN_GOAL_DIRECT_DEPLOY;
     }
 
     @Override

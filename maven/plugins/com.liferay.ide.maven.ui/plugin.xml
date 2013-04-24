@@ -43,6 +43,9 @@
             <groupMarker
                   name="deploy">
             </groupMarker>
+            <groupMarker
+                  name="direct-deploy">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -81,6 +84,14 @@
                id="com.liferay.ide.maven.popup.action.deploy"
                label="liferay:deploy"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/deploy">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.DirectDeployGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.direct-deploy"
+               label="liferay:direct-deploy"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/direct-deploy">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
