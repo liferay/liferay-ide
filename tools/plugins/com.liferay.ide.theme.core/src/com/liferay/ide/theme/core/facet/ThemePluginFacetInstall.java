@@ -91,7 +91,14 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             setupDefaultOutputLocation();
         }
 
-        removeUnneededClasspathEntries();
+        // IDE-925 commented method out below to allow for src/resources-importer
+        // removeUnneededClasspathEntries();
+        // IDE-925 also added configuration of deployment assembly to map WEB-INF/src to WEB-INF/classes
+        if( shouldConfigureDeploymentAssembly() )
+        {
+            // IDE-565
+            configureDeploymentAssembly( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
+        }
 
         IResource libRes = CoreUtil.getDefaultDocrootFolder( project ).findMember( "WEB-INF/lib" ); //$NON-NLS-1$
 
@@ -110,6 +117,8 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
         {
             installThemeBuilder( this.project );
         }
+
+
 
         try
         {
