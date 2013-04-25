@@ -53,7 +53,7 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            class="com.liferay.ide.project.ui.SDKProjectPropertyPage"
+            class="com.liferay.ide.project.ui.LiferayProjectPropertyPage"
             id="com.liferay.ide.project.ui.properties"
             name="%liferay.page.name">
          <enabledWhen>

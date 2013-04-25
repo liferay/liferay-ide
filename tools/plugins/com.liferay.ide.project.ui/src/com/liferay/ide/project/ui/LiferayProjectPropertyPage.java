@@ -60,13 +60,13 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Greg Amerson
  */
-public class SDKProjectPropertyPage extends PropertyPage
+public class LiferayProjectPropertyPage extends PropertyPage
     implements IWorkbenchPropertyPage, IPluginProjectDataModelProperties
 {
 
     private Combo runtimeCombo;
 
-    public SDKProjectPropertyPage()
+    public LiferayProjectPropertyPage()
     {
         super();
 
@@ -179,50 +179,53 @@ public class SDKProjectPropertyPage extends PropertyPage
             pluginTypeLabel.setText( liferayFacet.getLabel() );
         }
 
-        new Label( parent, SWT.LEFT ).setText( Msgs.liferayRuntimeLabel );
-
-        this.runtimeCombo = new Combo( parent, SWT.DROP_DOWN | SWT.READ_ONLY );
-        this.runtimeCombo.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-
-        String currentRuntimeName = null;
-
-        try
+        if( ProjectUtil.isSDKProject( getProject() ) )
         {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
+            new Label( parent, SWT.LEFT ).setText( Msgs.liferayRuntimeLabel );
 
-            currentRuntimeName = liferayRuntime.getRuntime().getName();
-        }
-        catch( Exception e )
-        {
-            ProjectUIPlugin.logError( "Could not determine liferay runtime", e ); //$NON-NLS-1$
-        }
+            this.runtimeCombo = new Combo( parent, SWT.DROP_DOWN | SWT.READ_ONLY );
+            this.runtimeCombo.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
 
-        final List<String> runtimeNames = new ArrayList<String>();
-        int selectionIndex = -1;
+            String currentRuntimeName = null;
 
-        for( IRuntime runtime : ServerCore.getRuntimes() )
-        {
-            if( ServerUtil.isLiferayRuntime( runtime ) )
+            try
             {
-                runtimeNames.add( runtime.getName() );
+                ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
 
-                if( runtime.getName().equals( currentRuntimeName ) )
+                currentRuntimeName = liferayRuntime.getRuntime().getName();
+            }
+            catch( Exception e )
+            {
+                ProjectUIPlugin.logError( "Could not determine liferay runtime", e ); //$NON-NLS-1$
+            }
+
+            final List<String> runtimeNames = new ArrayList<String>();
+            int selectionIndex = -1;
+
+            for( IRuntime runtime : ServerCore.getRuntimes() )
+            {
+                if( ServerUtil.isLiferayRuntime( runtime ) )
                 {
-                    selectionIndex = runtimeNames.size() - 1;
+                    runtimeNames.add( runtime.getName() );
+
+                    if( runtime.getName().equals( currentRuntimeName ) )
+                    {
+                        selectionIndex = runtimeNames.size() - 1;
+                    }
                 }
             }
-        }
 
-        if( runtimeNames.size() == 0 )
-        {
-            runtimeNames.add( "No Liferay runtimes available." ); //$NON-NLS-1$
-        }
+            if( runtimeNames.size() == 0 )
+            {
+                runtimeNames.add( "No Liferay runtimes available." ); //$NON-NLS-1$
+            }
 
-        this.runtimeCombo.setItems( runtimeNames.toArray( new String[0] ) );
+            this.runtimeCombo.setItems( runtimeNames.toArray( new String[0] ) );
 
-        if( selectionIndex > -1 )
-        {
-            this.runtimeCombo.select( selectionIndex );
+            if( selectionIndex > -1 )
+            {
+                this.runtimeCombo.select( selectionIndex );
+            }
         }
     }
 
@@ -255,7 +258,7 @@ public class SDKProjectPropertyPage extends PropertyPage
 
         static
         {
-            initializeMessages( SDKProjectPropertyPage.class.getName(), Msgs.class );
+            initializeMessages( LiferayProjectPropertyPage.class.getName(), Msgs.class );
         }
     }
 }
