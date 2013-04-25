@@ -222,7 +222,7 @@ public class SDK
         return Status.OK_STATUS;
     }
 
-    public IStatus cleanAppServer( IProject project, IPath bundleZipLocation, Map<String, String> appServerProperties )
+    public IStatus cleanAppServer( IProject project, IPath bundleZipLocation, String appServerDir, Map<String, String> appServerProperties )
     {
         try
         {
@@ -230,7 +230,6 @@ public class SDK
 
             Map<String, String> properties = new HashMap<String, String>();
 
-            String appServerDir = appServerProperties.get( ISDKConstants.PROPERTY_APP_SERVER_DIR );
             IPath workPath = new Path( appServerDir ).removeLastSegments( 2 );
 
             properties.put( ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation.toOSString() );

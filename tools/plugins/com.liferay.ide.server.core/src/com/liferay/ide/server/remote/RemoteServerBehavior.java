@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayPublishHelper;
@@ -579,7 +580,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         monitor.subTask( NLS.bind( Msgs.updatingModuleProject, moduleProject.getName() ) );
 
         Object error = null;
-        
+
         try
         {
             error = connection.updateApplication( appName, partialWar.getAbsolutePath(), monitor );
@@ -628,7 +629,12 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
 
-        properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployPath.toOSString() );
+        final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( moduleProject );
+
+        final String appServerDeployDirProp =
+            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime );
+
+        properties.put( appServerDeployDirProp, deployPath.toOSString() );
 
         File warFile = deployPath.append( moduleProject.getName() + ".war" ).toFile(); //$NON-NLS-1$
         warFile.getParentFile().mkdirs();
@@ -782,7 +788,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         monitor.subTask( NLS.bind( Msgs.uninstallingModuleProject, moduleProject.getName() ));
 
         Object error = null;
-        
+
         try
         {
             error = remoteConnection.uninstallApplication( appName, monitor );
@@ -870,7 +876,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         String appName = module.getProject().getName();
 
         boolean appStarted =false;
-        
+
         try
         {
             appStarted = getServerManagerConnection().isLiferayPluginStarted( appName );
