@@ -22,6 +22,7 @@
       <link toc="help/tasks/creating-new-services-toc.xml"/>
       <link toc="help/tasks/creating-new-layout-templates-toc.xml"/>
       <link toc="help/tasks/creating-new-vaadin-portlets-toc.xml"/>
+      <link toc="help/tasks/creating-new-vaadin7-portlets-toc.xml"/>
       <link toc="help/tasks/creating-new-jsf-portlets-toc.xml"/>
       <link toc="help/tasks/using-remote-servers-toc.xml"/>
       <anchor id="tasks-end"/>

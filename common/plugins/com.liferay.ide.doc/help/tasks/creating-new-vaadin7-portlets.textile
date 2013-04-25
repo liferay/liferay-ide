@@ -1,0 +1,14 @@
+h1. Creating New Vaadin 7 Portlets
+
+# You can create a new Vaadin 7 portlet within an existing project by selecting Liferay Vaadin 7 Portlet from the Eclipse File menu (File > New > Liferay Vaadin 7 Portlet). <br/><br/>!images/lide_new_vaadin_portlet.png!<br/><br/>
+## Under Portlet plugin project, you need to select the project within which you want to create a new Vaadin 7 portlet.
+## Under Source folder, you need to specify the location of this project. You can browse to this location in your file system.
+## For UI class, you need to enter a name for the UI class of your new Vaadin 7 portlet. Click next.
+## You also need to specify the locations of the Java package, Superclass, and Portlet class of your new Vaadin 7 portlet. You can browse to their locations in your file system.
+# <br/><br/>!images/lide_new_vaadin_portlet2.png!<br/><br/>
+## Under Portlet Info, you need to specify the name, display name, and title of your new Vaadin 7 portlet. The name should be all lowercase with underscores instead of spaces, but you can choose any characters for the display name and title.
+## Under Resources, you can choose to create a resource bundle file. If you create one you will have to specify its location, which you can do by browsing. Click next.
+# <br/><br/>!images/lide_new_vaadin_portlet3.png!<br/><br/>
+## Under Liferay Portlet info, you can choose an icon to represent your portlet. You can browse to its location. Check the box if your portlet will be instanceable.
+## Also under Liferay Portlet info, you need to specify the locations of any CSS and Javascript that your portlet uses and you have to enter a CSS classname.
+## Under Liferay Display, select the category that best describes the function of your portlet. There is a list of choices. Click finish, and your project should build for you.

@@ -64,7 +64,10 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
         "com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder"; //$NON-NLS-1$
 
     public static final String ID_NEW_VAADIN_PORTLET_WIZARD =
-        "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
+            "com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"; //$NON-NLS-1$
+
+    public static final String ID_NEW_VAADIN7_PORTLET_WIZARD =
+            "com.liferay.ide.eclipse.portlet.vaadin7.ui.wizard.portlet"; //$NON-NLS-1$
 
     public static final String ID_PACKAGE_EXPLORER_VIEW = "org.eclipse.jdt.ui.PackageExplorer"; //$NON-NLS-1$
 
@@ -93,6 +96,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
         layout.addNewWizardShortcut( ID_NEW_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_JSF_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_VAADIN_PORTLET_WIZARD );
+        layout.addNewWizardShortcut( ID_NEW_VAADIN7_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_HOOK_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_SERVICE_BUILDER_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_LAYOUT_TEMPLATE_WIZARD );
