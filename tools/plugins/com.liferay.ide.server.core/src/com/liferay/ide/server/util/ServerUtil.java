@@ -192,7 +192,7 @@ public class ServerUtil
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
 
         final String appServerDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
         final String appServerDeployDirKey =
             getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
         final String appServerLibGlobalDirKey =
