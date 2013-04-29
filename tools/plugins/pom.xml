@@ -44,6 +44,8 @@
         <module>com.liferay.ide.portlet.ui</module>
         <module>com.liferay.ide.portlet.vaadin.core</module>
         <module>com.liferay.ide.portlet.vaadin.ui</module>
+        <module>com.liferay.ide.portlet.vaadin7.core</module>
+        <module>com.liferay.ide.portlet.vaadin7.ui</module>
         <module>com.liferay.ide.project.core</module>
         <module>com.liferay.ide.project.ui</module>
 		<module>com.liferay.ide.sdk.core</module>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
+      <portletFrameworkWizardProvider
+            class="com.liferay.ide.portlet.vaadin7.core.Vaadin7PortletFrameworkWizardProvider"
+            default="false"
+            description="%vaadin7.portlet.framework.description"
+            displayName="%vaadin7.portlet.framework.display.name"
+            helpUrl="http://vaadin.com"
+            id="com.liferay.ide.project.core.framework.vaadin7"
+            requiredSDKVersion="6.0.5"
+            shortName="vaadin7">
+      </portletFrameworkWizardProvider>
+   </extension>
+
+</plugin>

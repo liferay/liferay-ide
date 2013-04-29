@@ -1,0 +1,26 @@
+<%@ jet package="com.liferay.ide.portlet.vaadin7.core.operation" 
+	imports="java.util.* com.liferay.ide.portlet.vaadin7.core.operation.* com.liferay.ide.portlet.core.operation.* org.eclipse.jst.j2ee.internal.common.operations.*" 
+	class="Vaadin7PortletTemplate" 
+	skeleton="vaadin7portlet.generator.skeleton"
+%>
+<% CreateVaadin7PortletTemplateModel model = (CreateVaadin7PortletTemplateModel) argument; %>
+<%@ include file="_flags.template" %>
+<%@ include file="_package.template" %>
+<%@ include file="_imports.template" %>
+<%@ include file="_class.template" %>
+<%@ include file="_constructors.template" %>
+<%@ include file="_methods.template" %>
+
+    public void init(VaadinRequest request) {
+        // set the window or tab title
+        getPage().setTitle("Hello window");
+        
+        // Create the content root layout for the UI
+        VerticalLayout content = new VerticalLayout();
+        setContent(content);
+        
+        // Display the greeting
+        content.addComponent(new Label("Hello Vaadin user!"));
+    }
+
+}
