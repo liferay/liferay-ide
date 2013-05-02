@@ -16,6 +16,7 @@
 package com.liferay.ide.service.core.model;
 
 import com.liferay.ide.service.core.model.internal.ColumnImageService;
+import com.liferay.ide.service.core.model.internal.TypePossibleValuesService;
 
 import org.eclipse.sapphire.Since;
 import org.eclipse.sapphire.modeling.IModelElement;
@@ -34,6 +35,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @GenerateImpl
 @Service( impl = ColumnImageService.class )
@@ -68,11 +70,7 @@ public interface Column extends IModelElement
     @Label( standard = "type" )
     @XmlBinding( path = "@type" )
     @Required
-    @PossibleValues
-    (
-        values = { "String", "long", "boolean", "int", "double", "Date", "Collection" },
-        invalidValueMessage = "{0} is not a valid type."
-    )
+    @Service( impl = TypePossibleValuesService.class )
     ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" ); //$NON-NLS-1$
 
     Value<String> getType();
