@@ -16,6 +16,7 @@
 package com.liferay.ide.maven.core;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
@@ -42,6 +43,12 @@ public class LiferayMavenCore extends Plugin
         return createErrorStatus( throwable.getMessage(), throwable );
     }
 
+    public static IStatus createMultiStatus( int severity, IStatus[] statuses )
+    {
+        return new MultiStatus(
+            LiferayMavenCore.PLUGIN_ID, severity, statuses, statuses[0].getMessage(), statuses[0].getException() );
+    }
+
     /**
      * Returns the shared instance
      *
@@ -52,14 +59,19 @@ public class LiferayMavenCore extends Plugin
         return plugin;
     }
 
+    public static void log( IStatus status )
+    {
+        getDefault().getLog().log( status );
+    }
+
     public static void logError( String msg, Throwable t )
     {
-        getDefault().getLog().log( createErrorStatus( msg, t ) );
+        log( createErrorStatus( msg, t ) );
     }
 
     public static void logError( Throwable t )
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
+        log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
     }
 
     /**

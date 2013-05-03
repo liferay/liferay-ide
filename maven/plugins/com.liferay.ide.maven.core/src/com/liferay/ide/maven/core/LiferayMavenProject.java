@@ -202,6 +202,9 @@ public class LiferayMavenProject extends BaseLiferayProject
             retval =
                 MavenUtil.getLiferayMavenPluginConfig(
                     mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
+
+            // don't have the suffix as that confuses downstream callers
+            retval = retval.replaceAll( "-SNAPSHOT", "" ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return retval;

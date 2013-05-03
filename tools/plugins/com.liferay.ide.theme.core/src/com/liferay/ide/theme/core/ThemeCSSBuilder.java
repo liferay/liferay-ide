@@ -54,6 +54,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * @author Gregory Amerson
+ */
 @SuppressWarnings( "rawtypes" )
 public class ThemeCSSBuilder extends IncrementalProjectBuilder
 {
@@ -80,8 +83,24 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
             throw new CoreException( status );
         }
 
+        ensureLookAndFeelFileExists( project );
+
+        try
+        {
+            project.refreshLocal( IResource.DEPTH_INFINITE, null );
+        }
+        catch( Exception e )
+        {
+            ThemeCore.logError( e );
+        }
+
+        return status;
+    }
+
+    public static void ensureLookAndFeelFileExists( IProject project ) throws CoreException
+    {
         // IDE-110 IDE-648
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project  );
 
         IVirtualFile lookAndFeelFile = null;
 
@@ -100,7 +119,8 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         {
             String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY );
 
-            IVirtualFile propertiesFile = webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
+            IVirtualFile propertiesFile =
+                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
             String name = id;
 
             if( propertiesFile != null && propertiesFile.exists() )
@@ -130,17 +150,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 }
             }
         }
-
-        try
-        {
-            project.refreshLocal( IResource.DEPTH_INFINITE, null );
-        }
-        catch( Exception e )
-        {
-            ThemeCore.logError( e );
-        }
-
-        return status;
     }
 
     private BuildHelper buildHelper;

@@ -26,10 +26,13 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.internal.markers.IMavenMarkerManager;
@@ -41,6 +44,8 @@ import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.jdt.IClasspathDescriptor;
 import org.eclipse.m2e.jdt.IJavaProjectConfigurator;
+import org.eclipse.m2e.wtp.WTPProjectsUtil;
+import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
@@ -62,6 +67,8 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
 {
+    private static final IPath ROOT_PATH = new Path("/");  //$NON-NLS-1$
+
     private IMavenMarkerManager mavenMarkerManager;
 
     public LiferayMavenProjectConfigurator()
@@ -173,21 +180,49 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             return;
         }
 
+        MavenProblemInfo installProblem = null;
+
         if( shouldInstallNewLiferayFacet( facetedProject ) )
         {
-            final MavenProblemInfo installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
-
-            if( installProblem != null )
-            {
-                this.markerManager.addMarker( pomFile,
-                                              ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID,
-                                              installProblem.getMessage(),
-                                              installProblem.getLocation().getLineNumber(),
-                                              IMarker.SEVERITY_WARNING );
-            }
-
-
+            installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
         }
+
+        if( installProblem != null )
+        {
+            this.markerManager.addMarker( pomFile,
+                                          ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID,
+                                          installProblem.getMessage(),
+                                          installProblem.getLocation().getLineNumber(),
+                                          IMarker.SEVERITY_WARNING );
+        }
+        else
+        {
+            final String pluginType = MavenUtil.getLiferayMavenPluginType( mavenProject );
+
+            if( ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE.equals( pluginType ) )
+            {
+                final IVirtualComponent component = ComponentCore.createComponent( project, true );
+
+                if( component != null )
+                {
+                    // make sure to update the main deployment folder
+                    WarPluginConfiguration config = new WarPluginConfiguration( mavenProject, project );
+                    String warSourceDirectory = config.getWarSourceDirectory();
+                    IFolder contentFolder = project.getFolder( warSourceDirectory );
+                    IPath warPath = ROOT_PATH.append( contentFolder.getProjectRelativePath() );
+                    IPath themeFolder = ROOT_PATH.append( getThemeTargetFolder( mavenProject, project ) );
+
+                    // add a link to our m2e-liferay/theme-resources folder into deployment assembly
+                    WTPProjectsUtil.insertLinkBefore(project, themeFolder, warPath, ROOT_PATH, monitor);
+                }
+            }
+        }
+    }
+
+    public static IPath getThemeTargetFolder( MavenProject mavenProject, IProject project )
+    {
+        return MavenUtil.getM2eLiferayFolder( mavenProject, project ).append(
+            ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
     }
 
     public void configureClasspath( IMavenProjectFacade facade, IClasspathDescriptor classpath, IProgressMonitor monitor )
@@ -287,20 +322,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         return errors;
     }
 
-    private String getLiferayMavenPluginType( MavenProject mavenProject )
-    {
-        String pluginType = MavenUtil.getLiferayMavenPluginConfig( mavenProject,
-                                                                          ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
-
-        if( pluginType == null )
-        {
-            // check for EXT
-            pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
-        }
-
-        return pluginType;
-    }
-
     private IProjectFacetVersion getLiferayProjectFacet( IFacetedProject facetedProject )
     {
         IProjectFacetVersion retval = null;
@@ -367,7 +388,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     {
         MavenProblemInfo retval = null;
 
-        final String pluginType = getLiferayMavenPluginType( mavenProject );
+        final String pluginType = MavenUtil.getLiferayMavenPluginType( mavenProject );
         final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
         final Action action = getNewLiferayFacetInstallAction( pluginType );
 
