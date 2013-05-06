@@ -38,6 +38,9 @@
                   name="build-db">
             </groupMarker>
             <groupMarker
+                  name="build-ext">
+            </groupMarker>
+            <groupMarker
                   name="build-lang">
             </groupMarker>
             <groupMarker
@@ -80,6 +83,14 @@
                id="com.liferay.ide.maven.popup.action.build-db"
                label="liferay:build-db"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-db">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.BuildExtGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.build-ext"
+               label="liferay:build-ext"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-ext">
          </action>
          <action
                class="com.liferay.ide.maven.ui.action.BuildLangGoalAction"
