@@ -52,6 +52,9 @@
             <groupMarker
                   name="direct-deploy">
             </groupMarker>
+            <groupMarker
+                  name="theme-merge">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -114,6 +117,14 @@
                id="com.liferay.ide.maven.popup.action.direct-deploy"
                label="liferay:direct-deploy"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/direct-deploy">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.ThemeMergeGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.theme-merge"
+               label="liferay:theme-merge"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/theme-merge">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
