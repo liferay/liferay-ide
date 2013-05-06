@@ -41,6 +41,9 @@
                   name="build-service">
             </groupMarker>
             <groupMarker
+                  name="build-thumbnail">
+            </groupMarker>
+            <groupMarker
                   name="deploy">
             </groupMarker>
             <groupMarker
@@ -76,6 +79,14 @@
                id="com.liferay.ide.maven.popup.action.build-service"
                label="liferay:build-service"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-service">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.BuildThumbnailGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.build-thumbnail"
+               label="liferay:build-thumbnail"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-thumbnail">
          </action>
          <action
                class="com.liferay.ide.maven.ui.action.DeployGoalAction"

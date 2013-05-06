@@ -45,6 +45,7 @@ public class BuildServiceGoalAction extends MavenGoalAction
         try
         {
             final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( p, monitor );
+
             builder.refreshSiblingProject( projectFacade, monitor );
         }
         catch( CoreException e )

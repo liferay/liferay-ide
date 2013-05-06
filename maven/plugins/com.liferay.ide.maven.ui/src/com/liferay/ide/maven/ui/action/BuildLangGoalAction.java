@@ -15,12 +15,6 @@
 package com.liferay.ide.maven.ui.action;
 
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
-import com.liferay.ide.maven.ui.LiferayMavenUI;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 
 /**
@@ -33,19 +27,6 @@ public class BuildLangGoalAction extends MavenGoalAction
     protected String getMavelGoal()
     {
         return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
-    }
-
-    @Override
-    protected void updateProject( IProject p, IProgressMonitor monitor )
-    {
-        try
-        {
-            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-        catch( CoreException e )
-        {
-            LiferayMavenUI.logError( "Error refreshing project after liferay:build-lang", e );
-        }
     }
 
 }

@@ -38,7 +38,9 @@ public class ThemeDescriptorHelper extends LiferayDescriptorHelper
 {
 
     public static final String DEFUALT_FILE_TEMPLATE =
-        "<?xml version=\"1.0\"?>\n<!DOCTYPE look-and-feel PUBLIC \"-//Liferay//DTD Look and Feel {0}//EN\" \"http://www.liferay.com/dtd/liferay-look-and-feel_{1}.dtd\">\n\n<look-and-feel>\n\t<compatibility>\n\t\t<version>__VERSION__</version>\n\t</compatibility>\n\t<theme id=\"__ID__\" name=\"__NAME__\" />\n</look-and-feel>"; //$NON-NLS-1$
+        "<?xml version=\"1.0\"?>\n<!DOCTYPE look-and-feel PUBLIC \"-//Liferay//DTD Look and Feel {0}//EN\" " +
+        "\"http://www.liferay.com/dtd/liferay-look-and-feel_{1}.dtd\">\n\n<look-and-feel>\n\t<compatibility>\n\t\t" +
+        "<version>__VERSION__</version>\n\t</compatibility>\n\t<theme id=\"__ID__\" name=\"__NAME__\" />\n</look-and-feel>"; //$NON-NLS-1$
 
     public ThemeDescriptorHelper( IProject project )
     {

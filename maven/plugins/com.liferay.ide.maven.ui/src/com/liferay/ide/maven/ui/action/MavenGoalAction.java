@@ -15,6 +15,7 @@
 
 package com.liferay.ide.maven.ui.action;
 
+import com.liferay.ide.maven.ui.LiferayMavenUI;
 import com.liferay.ide.maven.ui.MavenUIProjectBuilder;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.ui.action.AbstractObjectAction;
@@ -112,6 +113,15 @@ public abstract class MavenGoalAction extends AbstractObjectAction
         builder.runMavenGoal( projectFacade, goal, "run", monitor );
     }
 
-    protected abstract void updateProject( IProject p, IProgressMonitor monitor );
-
+    protected void updateProject( IProject p, IProgressMonitor monitor )
+    {
+        try
+        {
+            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( CoreException e )
+        {
+            LiferayMavenUI.logError( "Error refreshing project after " + getMavelGoal(), e );
+        }
+    }
 }
