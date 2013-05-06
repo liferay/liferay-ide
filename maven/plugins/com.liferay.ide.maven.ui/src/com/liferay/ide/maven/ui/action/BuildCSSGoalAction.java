@@ -20,13 +20,13 @@ import com.liferay.ide.maven.core.ILiferayMavenConstants;
 /**
  * @author Gregory Amerson
  */
-public class BuildThumbnailGoalAction extends MavenGoalAction
+public class BuildCSSGoalAction extends MavenGoalAction
 {
 
     @Override
     protected String getMavelGoals()
     {
-        return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_THUMBNAIL;
+        return "compile " + ILiferayMavenConstants.PLUGIN_GOAL_BUILD_CSS;
     }
 
 }

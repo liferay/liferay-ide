@@ -48,7 +48,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction
         super();
     }
 
-    protected abstract String getMavelGoal();
+    protected abstract String getMavelGoals();
 
     public void run( IAction action )
     {
@@ -77,14 +77,14 @@ public abstract class MavenGoalAction extends AbstractObjectAction
                 final IProject p = project;
                 final IFile pomXmlFile = pomXml;
 
-                final Job job = new Job( p.getName() + " - " + getMavelGoal() ) //$NON-NLS-1$
+                final Job job = new Job( p.getName() + " - " + getMavelGoals() ) //$NON-NLS-1$
                 {
                     @Override
                     protected IStatus run( IProgressMonitor monitor )
                     {
                         try
                         {
-                            runMavenGoal( pomXmlFile, getMavelGoal(), monitor );
+                            runMavenGoal( pomXmlFile, getMavelGoals(), monitor );
 
                             p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
@@ -92,7 +92,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction
                         }
                         catch( Exception e )
                         {
-                            return ProjectUIPlugin.createErrorStatus( "Error running Maven goal " + getMavelGoal(), e ); //$NON-NLS-1$
+                            return ProjectUIPlugin.createErrorStatus( "Error running Maven goal " + getMavelGoals(), e ); //$NON-NLS-1$
                         }
 
                         return Status.OK_STATUS;
@@ -121,7 +121,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction
         }
         catch( CoreException e )
         {
-            LiferayMavenUI.logError( "Error refreshing project after " + getMavelGoal(), e );
+            LiferayMavenUI.logError( "Error refreshing project after " + getMavelGoals(), e );
         }
     }
 }

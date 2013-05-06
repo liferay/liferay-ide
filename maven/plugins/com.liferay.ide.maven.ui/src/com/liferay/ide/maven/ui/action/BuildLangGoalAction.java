@@ -24,7 +24,7 @@ public class BuildLangGoalAction extends MavenGoalAction
 {
 
     @Override
-    protected String getMavelGoal()
+    protected String getMavelGoals()
     {
         return ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG;
     }

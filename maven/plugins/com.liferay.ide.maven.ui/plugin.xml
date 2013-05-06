@@ -32,6 +32,9 @@
                label="%maven.menu.label"
                path="liferayPopupMenuCategory/maven">
             <groupMarker
+                  name="build-css">
+            </groupMarker>
+            <groupMarker
                   name="build-db">
             </groupMarker>
             <groupMarker
@@ -56,6 +59,14 @@
             id="com.liferay.ide.maven.ui.maven.popup"
             objectClass="org.eclipse.core.resources.IResource">
 
+          <action
+               class="com.liferay.ide.maven.ui.action.BuildCSSGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.build-css"
+               label="liferay:build-css"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-css">
+          </action>
           <action
                class="com.liferay.ide.maven.ui.action.BuildDBGoalAction"
                enablesFor="1"
