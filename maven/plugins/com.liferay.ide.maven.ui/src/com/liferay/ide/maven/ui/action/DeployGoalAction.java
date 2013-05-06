@@ -27,7 +27,7 @@ public class DeployGoalAction extends MavenGoalAction
 {
 
     @Override
-    protected String getMavelGoals()
+    protected String getMavenGoals()
     {
         return "package " + ILiferayMavenConstants.PLUGIN_GOAL_DEPLOY;
     }

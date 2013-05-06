@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -32,6 +31,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
@@ -148,11 +148,19 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     @Override
     public void configure( ProjectConfigurationRequest request, IProgressMonitor monitor ) throws CoreException
     {
+        if( monitor == null )
+        {
+            monitor = new NullProgressMonitor();
+        }
+
+        monitor.beginTask( NLS.bind( Msgs.configuringLiferayProject, request.getProject() ), 100 );
+
         final MavenProject mavenProject = request.getMavenProject();
         final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
 
         if( ! shouldConfigure( liferayMavenPlugin ) )
         {
+            monitor.done();
             return;
         }
 
@@ -161,6 +169,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         final IFacetedProject facetedProject = ProjectFacetsManager.create( project, false, monitor );
 
         removeLiferayMavenMarkers( project );
+
+        monitor.worked( 25 );
 
         final List<MavenProblemInfo> errors = findLiferayMavenPluginProblems( project, mavenProject );
 
@@ -180,12 +190,16 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             return;
         }
 
+        monitor.worked( 25 );
+
         MavenProblemInfo installProblem = null;
 
         if( shouldInstallNewLiferayFacet( facetedProject ) )
         {
             installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
         }
+
+        monitor.worked( 25 );
 
         if( installProblem != null )
         {
@@ -217,6 +231,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                 }
             }
         }
+
+        monitor.worked( 25 );
+        monitor.done();
     }
 
     public static IPath getThemeTargetFolder( MavenProject mavenProject, IProject project )
@@ -260,23 +277,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         ProjectConfigurationRequest request, IClasspathDescriptor classpath, IProgressMonitor monitor )
         throws CoreException
     {
-    }
-
-    private Plugin findLiferayMavenPlugin( MavenProject mavenProject )
-    {
-        Plugin retval = null;
-
-        if( mavenProject != null )
-        {
-            retval = mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
-
-            if( retval == null )
-            {
-                retval = findLiferayMavenPlugin( mavenProject.getParent() );
-            }
-        }
-
-        return retval;
     }
 
     private List<MavenProblemInfo> findLiferayMavenPluginProblems( IProject project, MavenProject mavenProject )
@@ -441,53 +441,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         return retval;
     }
 
-    private boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
-    {
-        boolean loadedParent = false;
-        MavenProject mavenProject = facade.getMavenProject();
-
-        try
-        {
-            if( mavenProject.getModel().getParent() == null || mavenProject.getParent() != null )
-            {
-                // If the getParent() method is called without error,
-                // we can assume the project has been fully loaded, no need to continue.
-                return false;
-            }
-        }
-        catch( IllegalStateException e )
-        {
-            // The parent can not be loaded properly
-        }
-
-        MavenExecutionRequest request = null;
-
-        while( mavenProject != null && mavenProject.getModel().getParent() != null )
-        {
-            if( monitor.isCanceled() )
-            {
-                break;
-            }
-
-            if( request == null )
-            {
-                request = projectManager.createExecutionRequest( facade, monitor );
-            }
-
-            MavenProject parentProject = maven.resolveParentProject( request, mavenProject, monitor );
-
-            if( parentProject != null )
-           {
-                mavenProject.setParent( parentProject );
-                loadedParent = true;
-            }
-
-            mavenProject = parentProject;
-        }
-
-        return loadedParent;
-    }
-
     private void removeLiferayMavenMarkers( IProject project ) throws CoreException
     {
         this.mavenMarkerManager.deleteMarkers( project,
@@ -506,6 +459,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private static class Msgs extends NLS
     {
+        public static String configuringLiferayProject;
         public static String facetInstallError;
         public static String invalidConfigValue;
 

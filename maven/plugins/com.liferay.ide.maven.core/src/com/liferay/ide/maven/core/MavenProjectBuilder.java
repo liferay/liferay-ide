@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.ICallable;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -33,6 +34,7 @@ import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.osgi.util.NLS;
 
 
 /**
@@ -52,7 +54,13 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
     public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
-        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
+        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.buildingLanguages, 100 );
+
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), sub );
+
+        sub.worked( 10 );
 
         final ICallable<IStatus> callable = new ICallable<IStatus>()
         {
@@ -62,16 +70,27 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
             }
         };
 
-        final IStatus retval = executeMaven( facade, callable, monitor );
+        final IStatus retval = executeMaven( facade, callable, sub );
 
-        getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        sub.worked( 80 );
+
+        getProject().refreshLocal( IResource.DEPTH_INFINITE, sub  );
+
+        sub.worked( 10 );
+        sub.done();
 
         return retval;
     }
 
     public IStatus buildService( final IFile serviceXmlFile, final IProgressMonitor monitor ) throws CoreException
     {
+        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.buildingServices, 100 );
+
         final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
+
+        sub.worked( 10 );
 
         final ICallable<IStatus> callable = new ICallable<IStatus>()
         {
@@ -83,9 +102,16 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
         final IStatus retval = executeMaven( facade, callable, monitor );
 
+        sub.worked( 70 );
+
         refreshSiblingProject( facade, monitor );
 
+        sub.worked( 10 );
+
         getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        sub.worked( 10 );
+        sub.done();
 
         return retval;
     }
@@ -129,6 +155,17 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         catch( Exception e )
         {
             LiferayMavenCore.logError( "Could not refresh sibling service project.", e ); //$NON-NLS-1$
+        }
+    }
+
+    protected static class Msgs extends NLS
+    {
+        public static String buildingServices;
+        public static String buildingLanguages;
+
+        static
+        {
+            initializeMessages( MavenProjectBuilder.class.getName(), Msgs.class );
         }
     }
 

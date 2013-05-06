@@ -19,10 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
 import org.eclipse.core.resources.IProject;
@@ -92,6 +90,8 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
         {
         }
 
+        monitor.worked( 10 );
+
         return null;
     }
 
@@ -134,6 +134,8 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
 
         final MavenExecutionPlan plan = maven.calculateExecutionPlan( facade.getMavenProject(), goals, true, monitor );
 
+        monitor.worked( 10 );
+
         final MojoExecution liferayMojoExecution =
             MavenUtil.getExecution( plan, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID );
 
@@ -147,7 +149,9 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
 
         try
         {
-            parentHierarchyLoaded = loadParentHierarchy( facade, context, monitor );
+            parentHierarchyLoaded = MavenUtil.loadParentHierarchy( this.maven, facade, context, monitor );
+
+            monitor.worked( 10 );
 
             final ResolverConfiguration configuration = facade.getResolverConfiguration();
             configuration.setResolveWorkspaceProjects( true );
@@ -155,6 +159,8 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
             liferayMojoExecution.setConfiguration( config );
 
             maven.execute( facade.getMavenProject(), liferayMojoExecution, monitor );
+
+            monitor.worked( 50 );
 
             List<Throwable> exceptions = context.getSession().getResult().getExceptions();
 
@@ -194,55 +200,6 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
     }
 
     protected abstract String getGoal();
-
-    private boolean loadParentHierarchy( final IMavenProjectFacade facade,
-                                         final IMavenExecutionContext context,
-                                         final IProgressMonitor monitor ) throws CoreException
-    {
-        boolean loadedParent = false;
-        MavenProject mavenProject = facade.getMavenProject();
-
-        try
-        {
-            if( mavenProject.getModel().getParent() == null || mavenProject.getParent() != null )
-            {
-                // If the method is called without error, we can assume the project has been fully loaded
-                // No need to continue.
-                return false;
-            }
-        }
-        catch( IllegalStateException e )
-        {
-            // The parent can not be loaded properly
-        }
-
-        MavenExecutionRequest request = null;
-
-        while( mavenProject != null && mavenProject.getModel().getParent() != null )
-        {
-            if( monitor.isCanceled() )
-            {
-                break;
-            }
-
-            if( request == null )
-            {
-                request = context.getExecutionRequest();
-            }
-
-            MavenProject parentProject = maven.resolveParentProject( mavenProject, monitor );
-
-            if( parentProject != null )
-            {
-                mavenProject.setParent( parentProject );
-                loadedParent = true;
-            }
-
-            mavenProject = parentProject;
-        }
-
-        return loadedParent;
-    }
 
     protected abstract boolean shouldBuild( int kind, IMavenProjectFacade facade );
 }

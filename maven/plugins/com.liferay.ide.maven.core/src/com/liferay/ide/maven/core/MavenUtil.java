@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecution;
@@ -238,6 +239,56 @@ public class MavenUtil
     {
         return pomFile != null && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals( pomFile.getName() ) &&
             pomFile.getParent() instanceof IProject;
+    }
+
+    public static boolean loadParentHierarchy( final IMaven maven,
+                                               final IMavenProjectFacade facade,
+                                               final IMavenExecutionContext context,
+                                               final IProgressMonitor monitor ) throws CoreException
+    {
+        boolean loadedParent = false;
+        MavenProject mavenProject = facade.getMavenProject();
+
+        try
+        {
+            if( mavenProject.getModel().getParent() == null || mavenProject.getParent() != null )
+            {
+                // If the method is called without error, we can assume the project has been fully loaded
+                // No need to continue.
+                return false;
+            }
+        }
+        catch( IllegalStateException e )
+        {
+            // The parent can not be loaded properly
+        }
+
+        MavenExecutionRequest request = null;
+
+        while( mavenProject != null && mavenProject.getModel().getParent() != null )
+        {
+            if( monitor.isCanceled() )
+            {
+                break;
+            }
+
+            if( request == null )
+            {
+                request = context.getExecutionRequest();
+            }
+
+            MavenProject parentProject = maven.resolveParentProject( mavenProject, monitor );
+
+            if( parentProject != null )
+            {
+                mavenProject.setParent( parentProject );
+                loadedParent = true;
+            }
+
+            mavenProject = parentProject;
+        }
+
+        return loadedParent;
     }
 
     public static void setConfigValue( Xpp3Dom configuration, String childName, Object value )

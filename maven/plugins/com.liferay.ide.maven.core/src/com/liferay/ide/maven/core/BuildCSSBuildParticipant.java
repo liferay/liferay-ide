@@ -15,10 +15,15 @@
 package com.liferay.ide.maven.core;
 
 import java.io.File;
+import java.util.Set;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.osgi.util.NLS;
 
 
 /**
@@ -26,6 +31,20 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  */
 public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant
 {
+
+    @Override
+    public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
+    {
+        IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.sassToCssBuilder, 100 );
+
+        final Set<IProject> retval = super.build( kind, monitor );
+
+        sub.done();
+
+        return retval;
+    }
 
     @Override
     protected void configureExecution( IMavenProjectFacade facade, Xpp3Dom config )
@@ -66,6 +85,14 @@ public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant
         return retval;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String sassToCssBuilder;
 
+        static
+        {
+            initializeMessages( BuildCSSBuildParticipant.class.getName(), Msgs.class );
+        }
+    }
 
 }

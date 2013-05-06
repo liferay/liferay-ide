@@ -24,7 +24,7 @@ public class ThemeMergeGoalAction extends MavenGoalAction
 {
 
     @Override
-    protected String getMavelGoals()
+    protected String getMavenGoals()
     {
         return "compile " + ILiferayMavenConstants.PLUGIN_GOAL_THEME_MERGE;
     }

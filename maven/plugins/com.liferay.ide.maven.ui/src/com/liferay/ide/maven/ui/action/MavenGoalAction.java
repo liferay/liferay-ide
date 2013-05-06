@@ -48,7 +48,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction
         super();
     }
 
-    protected abstract String getMavelGoals();
+    protected abstract String getMavenGoals();
 
     public void run( IAction action )
     {
@@ -77,22 +77,30 @@ public abstract class MavenGoalAction extends AbstractObjectAction
                 final IProject p = project;
                 final IFile pomXmlFile = pomXml;
 
-                final Job job = new Job( p.getName() + " - " + getMavelGoals() ) //$NON-NLS-1$
+                final Job job = new Job( p.getName() + " - " + getMavenGoals() ) //$NON-NLS-1$
                 {
                     @Override
                     protected IStatus run( IProgressMonitor monitor )
                     {
                         try
                         {
-                            runMavenGoal( pomXmlFile, getMavelGoals(), monitor );
+                            monitor.beginTask( getMavenGoals(), 100 );
+
+                            runMavenGoal( pomXmlFile, getMavenGoals(), monitor );
+
+                            monitor.worked( 80 );
 
                             p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
+                            monitor.worked( 10 );
+
                             updateProject( p, monitor );
+
+                            monitor.worked( 10 );
                         }
                         catch( Exception e )
                         {
-                            return ProjectUIPlugin.createErrorStatus( "Error running Maven goal " + getMavelGoals(), e ); //$NON-NLS-1$
+                            return ProjectUIPlugin.createErrorStatus( "Error running Maven goal " + getMavenGoals(), e ); //$NON-NLS-1$
                         }
 
                         return Status.OK_STATUS;
@@ -121,7 +129,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction
         }
         catch( CoreException e )
         {
-            LiferayMavenUI.logError( "Error refreshing project after " + getMavelGoals(), e );
+            LiferayMavenUI.logError( "Error refreshing project after " + getMavenGoals(), e );
         }
     }
 }

@@ -14,10 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import java.util.Set;
+
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.osgi.util.NLS;
 
 
 /**
@@ -25,6 +31,20 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  */
 public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
 {
+
+    @Override
+    public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
+    {
+        IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.thumbnailBuilder, 100 );
+
+        final Set<IProject> retval = super.build( kind, monitor );
+
+        sub.done();
+
+        return retval;
+    }
 
     @Override
     protected void configureExecution( IMavenProjectFacade facade, Xpp3Dom config )
@@ -52,5 +72,15 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
         }
 
         return retval;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String thumbnailBuilder;
+
+        static
+        {
+            initializeMessages( BuildThumbnailBuildParticipant.class.getName(), Msgs.class );
+        }
     }
 }

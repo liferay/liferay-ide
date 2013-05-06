@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -65,29 +66,48 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
     @Override
     public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
+        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.buildingLanguages, 100 );
+
         final IFile pomFile = getProject().getFile( new Path( IMavenConstants.POM_FILE_NAME ) );
         final IMavenProjectFacade projectFacade = projectManager.create( pomFile, false, new NullProgressMonitor() );
 
-        return runMavenGoal( projectFacade, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG, "run", monitor );
+        sub.worked( 10 );
+
+        final IStatus retval = runMavenGoal( projectFacade, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_LANG, "run", monitor );
+
+        sub.done();
+
+        return retval;
     }
 
     @Override
     public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
+        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.buildingServices, 100 );
+
         final IFile pomFile = getProject().getFile( new Path( IMavenConstants.POM_FILE_NAME ) );
         final IMavenProjectFacade projectFacade = projectManager.create( pomFile, false, new NullProgressMonitor() );
+
+        sub.worked( 10 );
 
         IStatus status = runMavenGoal( projectFacade, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, "run", monitor );
 
         refreshSiblingProject( projectFacade, monitor );
 
+        sub.worked( 10 );
+        sub.done();
+
         return status;
     }
 
     public IStatus runMavenGoal( final IMavenProjectFacade projectFacade,
-                                    final String goal,
-                                    final String mode,
-                                    IProgressMonitor monitor ) throws CoreException
+                                 final String goal,
+                                 final String mode,
+                                 final IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = Status.OK_STATUS;
 
@@ -129,7 +149,7 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
              * value="D:/dev java/workspaces/runtime-eclipse-ide-juno-sr2/WorldDatabase/WorldDatabase-portlet"/>
              * </launchConfiguration>
              */
-            UIJob launchJob = new UIJob( "Maven launch" )
+            UIJob launchJob = new UIJob( "maven launch" )
             {
                 @Override
                 public IStatus runInUIThread( IProgressMonitor monitor )

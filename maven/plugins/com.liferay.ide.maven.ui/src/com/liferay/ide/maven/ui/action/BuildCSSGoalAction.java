@@ -24,7 +24,7 @@ public class BuildCSSGoalAction extends MavenGoalAction
 {
 
     @Override
-    protected String getMavelGoals()
+    protected String getMavenGoals()
     {
         return "compile " + ILiferayMavenConstants.PLUGIN_GOAL_BUILD_CSS;
     }

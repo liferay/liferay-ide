@@ -23,7 +23,9 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.osgi.util.NLS;
 
 
 /**
@@ -35,7 +37,11 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
     @Override
     public Set<IProject> build( int kind, IProgressMonitor monitor ) throws Exception
     {
-        Set<IProject> retval = super.build( kind, monitor );
+        IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+        sub.beginTask( Msgs.mergingTheme, 100 );
+
+        final Set<IProject> retval = super.build( kind, monitor );
 
         try
         {
@@ -45,6 +51,8 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
         {
             LiferayMavenCore.logError( "Unable to ensure look and feel file exists", e ); //$NON-NLS-1$
         }
+
+        sub.done();
 
         return retval;
     }
@@ -69,6 +77,16 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
         }
 
         return retval;
+    }
+
+    private static class Msgs extends NLS
+    {
+        public static String mergingTheme;
+
+        static
+        {
+            initializeMessages( ThemeMergeBuildParticipant.class.getName(), Msgs.class );
+        }
     }
 
 }
