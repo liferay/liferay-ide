@@ -71,7 +71,7 @@ public interface ILiferayMavenConstants
     String PLUGIN_CONFIG_PLUGIN_TYPE = "pluginType"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_SASS_DIR_NAMES = "sassDirNames"; //$NON-NLS-1$
-    
+
     String PLUGIN_CONFIG_THEME_TYPE = "theme"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_WEBAPP_DIR = "webappDir"; //$NON-NLS-1$
@@ -85,6 +85,8 @@ public interface ILiferayMavenConstants
     String PLUGIN_GOAL_BUILD_SERVICE = _LIFERAY_MOJO_PREFIX + "build-service";  //$NON-NLS-1$
 
     String PLUGIN_GOAL_BUILD_THUMBNAIL = _LIFERAY_MOJO_PREFIX + "build-thumbnail"; //$NON-NLS-1$
+
+    String PLUGIN_GOAL_BUILD_WSDD = _LIFERAY_MOJO_PREFIX + "build-wsdd"; //$NON-NLS-1$
 
     String PLUGIN_GOAL_DEPLOY = _LIFERAY_MOJO_PREFIX + "deploy";  //$NON-NLS-1$
 

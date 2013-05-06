@@ -47,6 +47,9 @@
                   name="build-thumbnail">
             </groupMarker>
             <groupMarker
+                  name="build-wsdd">
+            </groupMarker>
+            <groupMarker
                   name="deploy">
             </groupMarker>
             <groupMarker
@@ -101,6 +104,14 @@
                id="com.liferay.ide.maven.popup.action.build-thumbnail"
                label="liferay:build-thumbnail"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-thumbnail">
+         </action>
+         <action
+               class="com.liferay.ide.maven.ui.action.BuildWSDDGoalAction"
+               enablesFor="1"
+               icon="icons/e16/m2.gif"
+               id="com.liferay.ide.maven.popup.action.build-wsdd"
+               label="liferay:build-wsdd"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-wsdd">
          </action>
          <action
                class="com.liferay.ide.maven.ui.action.DeployGoalAction"
