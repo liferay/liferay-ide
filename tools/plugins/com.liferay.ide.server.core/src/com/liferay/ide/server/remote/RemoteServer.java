@@ -40,6 +40,7 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 
 /**
  * @author Greg Amerson
+ * @author Tao Tao
  */
 @SuppressWarnings( "restriction" )
 public class RemoteServer extends ServerDelegate implements IRemoteServerWorkingCopy
@@ -79,17 +80,24 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
         }.start();
 
-        IStatus status = null;
+        IStatus status = SocketUtil.canConnect( socket, host, http );
 
-        try
+        if( status != null && status.isOK() )
         {
-            status = SocketUtil.canConnect( socket, host, http );
+            return true;
         }
-        catch( Exception e )
+        else
         {
+            final Socket socket1 = new Socket();
+            status = SocketUtil.canConnectProxy( socket1, host, http );
+
+            if( status != null && status.isOK() )
+            {
+                return true;
+            }
         }
 
-        return status != null && status.isOK();
+        return false;
     }
 
     @Override

@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";vis
  org.eclipse.jst.common.frameworks;bundle-version="[1.1.300,1.2.0)",
  org.eclipse.jst.common.project.facet.core,
  org.eclipse.emf.common,
- com.liferay.ide.sdk.core
+ com.liferay.ide.sdk.core,
+ org.eclipse.core.net
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core,

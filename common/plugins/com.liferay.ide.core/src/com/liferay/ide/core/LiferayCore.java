@@ -16,10 +16,12 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  *
@@ -138,6 +140,21 @@ public class LiferayCore extends Plugin
         }
 
         return providerReader.getProviders( type );
+    }
+
+    public static IProxyService getProxyService()
+    {
+        final ServiceTracker<Object, Object> proxyTracker =
+            new ServiceTracker<Object, Object>(
+                getDefault().getBundle().getBundleContext(), IProxyService.class.getName(), null );
+
+        proxyTracker.open();
+
+        final IProxyService proxyService = (IProxyService) proxyTracker.getService();
+
+        proxyTracker.close();
+
+        return proxyService;
     }
 
     public static void logError( IStatus status )

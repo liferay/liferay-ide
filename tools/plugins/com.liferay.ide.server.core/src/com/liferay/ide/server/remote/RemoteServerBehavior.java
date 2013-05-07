@@ -59,6 +59,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
  * @author Greg Amerson
+ * @author Tao Tao
  */
 public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
@@ -74,7 +75,23 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
     public boolean canConnect()
     {
-        return SocketUtil.canConnect( getServer().getHost(), getRemoteServer().getHTTPPort() ).isOK();
+        IStatus status = SocketUtil.canConnect( getServer().getHost(), getRemoteServer().getHTTPPort() );
+
+        if( status != null && status.isOK() )
+        {
+            return true;
+        }
+        else
+        {
+            status = SocketUtil.canConnectProxy( getServer().getHost(), getRemoteServer().getHTTPPort() );
+
+            if( status != null && status.isOK() )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

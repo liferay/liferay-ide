@@ -17,10 +17,15 @@
 
 package com.liferay.ide.core.remote;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -32,20 +37,28 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.core.net.proxy.IProxyData;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * @author Gregory Amerson
+ * @author Tao Tao
  */
 public class RemoteConnection implements IRemoteConnection
 {
 
     private String hostname;
-    private DefaultHttpClient httpClient;
+    private HttpClient httpClient;
     private int httpPort;
     private String password;
     private String username;
@@ -69,19 +82,81 @@ public class RemoteConnection implements IRemoteConnection
 
     private HttpClient getHttpClient()
     {
-        if( httpClient == null )
+        if( this.httpClient == null )
         {
-            httpClient = new DefaultHttpClient();
+            DefaultHttpClient newDefaultHttpClient = null;
 
             if( getUsername() != null || getPassword() != null )
             {
-                httpClient.getCredentialsProvider().setCredentials(
+                try
+                {
+                    final IProxyService proxyService = LiferayCore.getProxyService();
+
+                    URI uri = new URI( "http://" + getHost() + ":" + getHttpPort() ); //$NON-NLS-1$ //$NON-NLS-2$
+                    IProxyData[] proxyDataForHost = proxyService.select( uri );
+
+                    for( IProxyData data : proxyDataForHost )
+                    {
+                        if( data.getHost() != null && data.getPort() > 0 )
+                        {
+                            SchemeRegistry schemeRegistry = new SchemeRegistry();
+                            schemeRegistry.register( new Scheme(
+                                "http", data.getPort(), PlainSocketFactory.getSocketFactory() ) ); //$NON-NLS-1$
+
+                            PoolingClientConnectionManager cm = new PoolingClientConnectionManager( schemeRegistry );
+                            cm.setMaxTotal( 200 );
+                            cm.setDefaultMaxPerRoute( 20 );
+
+                            DefaultHttpClient newHttpClient = new DefaultHttpClient( cm );
+                            HttpHost proxy = new HttpHost( data.getHost(), data.getPort() );
+
+                            newHttpClient.getParams().setParameter( ConnRoutePNames.DEFAULT_PROXY, proxy );
+
+                            newDefaultHttpClient = newHttpClient;
+                            break;
+                        }
+                    }
+
+                    if( newDefaultHttpClient == null )
+                    {
+                        uri = new URI( "SOCKS://" + getHost() + ":" + getHttpPort() ); //$NON-NLS-1$ //$NON-NLS-2$
+                        proxyDataForHost = proxyService.select( uri );
+
+                        for( IProxyData data : proxyDataForHost )
+                        {
+                            if( data.getHost() != null )
+                            {
+                                DefaultHttpClient newHttpClient = new DefaultHttpClient();
+                                newHttpClient.getParams().setParameter( "socks.host", data.getHost() ); //$NON-NLS-1$
+                                newHttpClient.getParams().setParameter( "socks.port", data.getPort() ); //$NON-NLS-1$
+                                newHttpClient.getConnectionManager().getSchemeRegistry().register(
+                                    new Scheme( "socks", data.getPort(), PlainSocketFactory.getSocketFactory() ) ); //$NON-NLS-1$
+
+                                newDefaultHttpClient = newHttpClient;
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch( URISyntaxException e )
+                {
+                    LiferayCore.logError( "Unable to read proxy data", e ); //$NON-NLS-1$
+                }
+
+                if( newDefaultHttpClient == null )
+                {
+                    newDefaultHttpClient = new DefaultHttpClient();
+                }
+
+                newDefaultHttpClient.getCredentialsProvider().setCredentials(
                     new AuthScope( getHost(), getHttpPort() ),
                     new UsernamePasswordCredentials( getUsername(), getPassword() ) );
+
+                this.httpClient = newDefaultHttpClient;
             }
         }
 
-        return httpClient;
+        return this.httpClient;
     }
 
     public int getHttpPort()
@@ -92,7 +167,6 @@ public class RemoteConnection implements IRemoteConnection
     protected String getHttpResponse( HttpUriRequest request ) throws Exception
     {
         HttpResponse response = getHttpClient().execute( request );
-
         int statusCode = response.getStatusLine().getStatusCode();
 
         if( statusCode == HttpStatus.SC_OK )
@@ -233,7 +307,7 @@ public class RemoteConnection implements IRemoteConnection
         {
             throw e;
         }
-        catch (Exception e)
+        catch( Exception e )
         {
             throw new APIException( api, e );
         }
@@ -267,7 +341,8 @@ public class RemoteConnection implements IRemoteConnection
     public void setHost( String host )
     {
         this.hostname = host;
-        this.httpClient = null;
+
+        releaseHttpClient();
     }
 
     public void setHttpPort( String httpPort )
@@ -281,19 +356,29 @@ public class RemoteConnection implements IRemoteConnection
             this.httpPort = -1;
         }
 
-        this.httpClient = null;
+        releaseHttpClient();
     }
 
     public void setPassword( String password )
     {
         this.password = password;
-        this.httpClient = null;
+
+        releaseHttpClient();
     }
 
     public void setUsername( String username )
     {
         this.username = username;
-        this.httpClient = null;
+
+        releaseHttpClient();
     }
 
+    public void releaseHttpClient()
+    {
+        if( httpClient != null )
+        {
+            this.httpClient.getConnectionManager().shutdown();
+            this.httpClient = null;
+        }
+    }
 }
