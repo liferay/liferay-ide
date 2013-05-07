@@ -21,18 +21,24 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @auther Greg Amerson
+ * @author Cindy Li
  */
 public class PortletCore extends Plugin
 {
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.portlet.core"; //$NON-NLS-1$
+
+    public static final String PREF_KEY_PORTLET_SUPERCLASSES_USED = "portlet-superclasses-used"; //$NON-NLS-1$
 
     // The shared instance
     private static PortletCore plugin;
@@ -66,12 +72,20 @@ public class PortletCore extends Plugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static PortletCore getDefault()
     {
         return plugin;
+    }
+
+    public static Preferences getPreferences()
+    {
+        @SuppressWarnings( "deprecation" )
+        final IScopeContext scope = new InstanceScope();
+
+        return scope.getNode( PLUGIN_ID );
     }
 
     public static void logError( Exception ex )

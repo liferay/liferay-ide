@@ -50,6 +50,7 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.server.core.IRuntime;
 import org.osgi.framework.Version;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * @author Greg Amerson
@@ -538,10 +539,21 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
     {
         if( SUPERCLASS.equals( propertyName ) )
         {
-            String[] vals =
-                new String[] { QUALIFIED_MVC_PORTLET, QUALIFIED_LIFERAY_PORTLET, QUALIFIED_GENERIC_PORTLET };
+            String vals =
+                QUALIFIED_MVC_PORTLET + StringPool.COMMA + QUALIFIED_LIFERAY_PORTLET + StringPool.COMMA +
+                    QUALIFIED_GENERIC_PORTLET;
 
-            return DataModelPropertyDescriptor.createDescriptors( vals, vals );
+            Preferences preferences = PortletCore.getPreferences();
+            String superclasses = preferences.get( PortletCore.PREF_KEY_PORTLET_SUPERCLASSES_USED, null );
+
+            if( superclasses != null )
+            {
+                vals = vals + StringPool.COMMA + superclasses;
+            }
+
+            String[] values = vals.split( StringPool.COMMA );
+
+            return DataModelPropertyDescriptor.createDescriptors( values, values );
         }
         else if( CATEGORY.equals( propertyName ) )
         {
