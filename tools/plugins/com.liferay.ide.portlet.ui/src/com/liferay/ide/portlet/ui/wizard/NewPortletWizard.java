@@ -25,17 +25,29 @@ import com.liferay.ide.project.ui.wizard.IPluginWizardFragment;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
+import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.corext.fix.CleanUpConstants;
+import org.eclipse.jdt.internal.corext.refactoring.RefactoringExecutionStarter;
+import org.eclipse.jdt.internal.ui.fix.ImportsCleanUp;
+import org.eclipse.jdt.ui.cleanup.CleanUpOptions;
+import org.eclipse.jdt.ui.cleanup.ICleanUp;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IWorkbench;
@@ -51,6 +63,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewPortletWizard extends NewWebArtifactWizard
@@ -157,14 +170,14 @@ public class NewPortletWizard extends NewWebArtifactWizard
     @Override
     protected void openJavaClass()
     {
+        IProject project =
+            ResourcesPlugin.getWorkspace().getRoot().getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+
         if( getDataModel().getBooleanProperty( USE_DEFAULT_PORTLET_CLASS ) )
         {
             try
             {
                 String jspsFolder = getDataModel().getStringProperty( CREATE_JSPS_FOLDER );
-                IProject project =
-                    ResourcesPlugin.getWorkspace().getRoot().getProject(
-                        getDataModel().getStringProperty( PROJECT_NAME ) );
 
                 // IDE-110 IDE-648
                 IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
@@ -192,6 +205,31 @@ public class NewPortletWizard extends NewWebArtifactWizard
         }
         else
         {
+            Map<String, String> settings = new Hashtable<String, String>();
+            settings.put( CleanUpConstants.ORGANIZE_IMPORTS, CleanUpOptions.TRUE );
+            ImportsCleanUp importsCleanUp = new ImportsCleanUp( settings );
+
+            ICleanUp[] cleanUps = new ICleanUp[] { importsCleanUp };
+
+            IJavaProject javaProject = JavaCore.create( project );
+
+            try
+            {
+                IType type =
+                    javaProject.findType( getDataModel().getStringProperty(
+                        INewJavaClassDataModelProperties.QUALIFIED_CLASS_NAME ) );
+
+                ICompilationUnit cu = (ICompilationUnit) type.getParent();
+
+                ICompilationUnit[] units = new ICompilationUnit[] { cu };
+
+                RefactoringExecutionStarter.startCleanupRefactoring(
+                    units, cleanUps, false, getShell(), false, "organize imports" ); //$NON-NLS-1$
+            }
+            catch( Exception e )
+            {
+            }
+
             super.openJavaClass();
         }
     }
