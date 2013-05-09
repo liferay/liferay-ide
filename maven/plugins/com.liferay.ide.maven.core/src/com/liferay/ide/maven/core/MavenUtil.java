@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Plugin;
@@ -63,8 +64,8 @@ public class MavenUtil
         final List<String> goals = Collections.singletonList( goal );
         final MavenExecutionPlan plan = maven.calculateExecutionPlan( projectFacade.getMavenProject(), goals, true, monitor );
 
-        context.getExecutionRequest().setOffline( true );
-        context.getExecutionRequest().setRecursive( false );
+//        context.getExecutionRequest().setOffline( true );
+//        context.getExecutionRequest().setRecursive( false );
 
         final MojoExecution liferayMojoExecution =
             getExecution( plan, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID );
@@ -227,6 +228,13 @@ public class MavenUtil
         }
 
         return projectFacade;
+    }
+
+    public static String getVersion( String version )
+    {
+        DefaultArtifactVersion v = new DefaultArtifactVersion( version );
+
+        return v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public static boolean isMavenProject( IProject project ) throws CoreException

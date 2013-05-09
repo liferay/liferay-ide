@@ -197,14 +197,19 @@ public class LiferayMavenProject extends BaseLiferayProject
 
         if( projectFacade != null )
         {
-            MavenProject mavenProject = projectFacade.getMavenProject();
+            try
+            {
+                MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
 
-            retval =
-                MavenUtil.getLiferayMavenPluginConfig(
-                    mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
+                String liferayVersion =
+                    MavenUtil.getLiferayMavenPluginConfig(
+                        mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
 
-            // don't have the suffix as that confuses downstream callers
-            retval = retval.replaceAll( "-SNAPSHOT", "" ); //$NON-NLS-1$ //$NON-NLS-2$
+                retval = MavenUtil.getVersion( liferayVersion );
+            }
+            catch( CoreException ce )
+            {
+            }
         }
 
         return retval;

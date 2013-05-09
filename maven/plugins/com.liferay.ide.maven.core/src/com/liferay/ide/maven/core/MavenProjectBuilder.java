@@ -45,6 +45,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 {
 
     protected final IMaven maven = MavenPlugin.getMaven();
+
     protected final IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
 
     public MavenProjectBuilder( IProject project )
@@ -82,38 +83,52 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         return retval;
     }
 
+    public IStatus buildSB( final IFile serviceXmlFile, final String goal, final IProgressMonitor monitor ) throws CoreException
+    {
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
+
+        monitor.worked( 10 );
+
+        final ICallable<IStatus> callable = new ICallable<IStatus>()
+        {
+            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
+            {
+                return MavenUtil.executeMojoGoal( facade, context, goal, monitor );
+            }
+        };
+
+        final IStatus retval = executeMaven( facade, callable, monitor );
+
+        monitor.worked( 70 );
+
+        refreshSiblingProject( facade, monitor );
+
+        monitor.worked( 10 );
+
+        getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        monitor.worked( 10 );
+        monitor.done();
+
+        return retval;
+    }
+
     public IStatus buildService( final IFile serviceXmlFile, final IProgressMonitor monitor ) throws CoreException
     {
         final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
 
         sub.beginTask( Msgs.buildingServices, 100 );
 
-        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
+        return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, sub );
+    }
 
-        sub.worked( 10 );
+    public IStatus buildWSDD( final IFile serviceXmlFile, final IProgressMonitor monitor ) throws CoreException
+    {
+        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
 
-        final ICallable<IStatus> callable = new ICallable<IStatus>()
-        {
-            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
-            {
-                return MavenUtil.executeMojoGoal( facade, context, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, monitor );
-            }
-        };
+        sub.beginTask( Msgs.buildingWSDD, 100 );
 
-        final IStatus retval = executeMaven( facade, callable, monitor );
-
-        sub.worked( 70 );
-
-        refreshSiblingProject( facade, monitor );
-
-        sub.worked( 10 );
-
-        getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
-
-        sub.worked( 10 );
-        sub.done();
-
-        return retval;
+        return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD, sub );
     }
 
     protected IStatus executeMaven( final IMavenProjectFacade projectFacade,
@@ -160,8 +175,9 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
     protected static class Msgs extends NLS
     {
-        public static String buildingServices;
         public static String buildingLanguages;
+        public static String buildingServices;
+        public static String buildingWSDD;
 
         static
         {

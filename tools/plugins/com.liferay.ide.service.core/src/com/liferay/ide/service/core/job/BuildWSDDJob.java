@@ -15,110 +15,55 @@
 
 package com.liferay.ide.service.core.job;
 
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKJob;
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.service.core.ServiceCore;
 
-import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRunnable;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
-public class BuildWSDDJob extends SDKJob
+public class BuildWSDDJob extends BuildServiceJob
 {
-
-    protected IFile serviceXmlFile;
 
     public BuildWSDDJob( IFile serviceXmlFile )
     {
-        super( "Build web services descriptor" ); //$NON-NLS-1$
+        super( serviceXmlFile );
 
-        this.serviceXmlFile = serviceXmlFile;
-
+        setName( Msgs.buildWSDD );
         setUser( true );
-
-        setProject( serviceXmlFile.getProject() );
     }
 
     @Override
-    protected IStatus run( IProgressMonitor monitor )
+    protected void runBuild( final IProgressMonitor monitor ) throws CoreException
     {
-        IStatus retval = null;
+        final IProjectBuilder builder = getProjectBuilder();
 
-        monitor.beginTask( Msgs.buildingLiferayWebServicesDeploymentDescriptor, 100 );
+        monitor.worked( 50 );
 
-        try
+        IStatus retval = builder.buildWSDD( serviceXmlFile, monitor );
+
+        if( retval == null )
         {
-            getWorkspace().run( new IWorkspaceRunnable()
-            {
-                public void run( IProgressMonitor monitor ) throws CoreException
-                {
-                    SDK sdk = getSDK();
-
-                    monitor.worked( 10 );
-
-                    Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
-
-                    sdk.buildWSDD( getProject(), serviceXmlFile, null, appServerProperties );
-
-                    monitor.worked( 90 );
-
-                    final IProject project = getProject();
-
-                    try
-                    {
-                        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                    }
-                    catch( Exception e )
-                    {
-                        ServiceCore.logError( e );
-                    }
-
-                    project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-
-                    try
-                    {
-                        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                    }
-                    catch( Exception e )
-                    {
-                        ServiceCore.logError( e );
-                    }
-                }
-            }, monitor );
-
-            try
-            {
-                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-            }
-            catch( Exception e )
-            {
-                ServiceCore.logError( e );
-            }
-        }
-        catch( CoreException e1 )
-        {
-            retval = ServiceCore.createErrorStatus( e1 );
+            retval = ServiceCore.createErrorStatus( NLS.bind( Msgs.errorRunningBuildWSDD, getProject() ) );
         }
 
-        return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
+        if( retval == null || ! retval.isOK() )
+        {
+            throw new CoreException( retval );
+        }
+
+        monitor.worked( 90 );
     }
 
     private static class Msgs extends NLS
     {
-        public static String buildingLiferayWebServicesDeploymentDescriptor;
+        public static String buildWSDD;
+        public static String errorRunningBuildWSDD;
 
         static
         {

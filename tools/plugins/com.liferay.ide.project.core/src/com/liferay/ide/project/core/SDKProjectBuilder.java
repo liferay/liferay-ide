@@ -50,6 +50,11 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         this.sdk = sdk;
     }
 
+    public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
+    {
+        return sdk.buildLanguage( getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
+    }
+
     public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval =
@@ -70,6 +75,34 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         updateClasspath( getProject() );
 
         getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        return retval;
+    }
+
+    public IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
+    {
+        IStatus retval =
+            sdk.buildWSDD( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
+
+        try
+        {
+            getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e )
+        {
+            retval = LiferayProjectCore.createErrorStatus( e );
+        }
+
+        getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+
+        try
+        {
+            getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( Exception e )
+        {
+            LiferayProjectCore.logError( e );
+        }
 
         return retval;
     }
@@ -109,11 +142,6 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         initializer.requestClasspathContainerUpdate( container.getPath(), javaProject, container );
 
         return Status.OK_STATUS;
-    }
-
-    public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
-    {
-        return sdk.buildLanguage( getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
     }
 
 }

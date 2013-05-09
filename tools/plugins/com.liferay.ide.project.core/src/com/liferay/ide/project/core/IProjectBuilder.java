@@ -26,8 +26,10 @@ import org.eclipse.core.runtime.IStatus;
 public interface IProjectBuilder
 {
 
+    IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException;
+
     IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException;
 
-    IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException;
+    IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException;
 
 }

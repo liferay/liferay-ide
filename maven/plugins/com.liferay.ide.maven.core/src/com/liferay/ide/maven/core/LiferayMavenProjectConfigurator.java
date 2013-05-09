@@ -107,7 +107,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     {
         MavenProblemInfo retval = null;
         Version liferayVersion = null;
-        String liferayVersionValue = null;
+        String version = null;
 
         if( config != null )
         {
@@ -116,14 +116,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             if( liferayVersionNode != null )
             {
-                liferayVersionValue = liferayVersionNode.getValue();
-
-                // handle the case where user specifies SNAPSHOT version
-                liferayVersionValue = liferayVersionValue.replaceAll( "-SNAPSHOT$", "" ); //$NON-NLS-1$ //$NON-NLS-2$
+                version = MavenUtil.getVersion( liferayVersionNode.getValue() );
 
                 try
                 {
-                    liferayVersion = new Version( liferayVersionValue );
+                    liferayVersion = new Version( version );
                 }
                 catch( IllegalArgumentException e )
                 {
@@ -138,7 +135,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             final SourceLocation location = SourceLocationHelper.findLocation( liferayMavenPlugin, null );
             final String problemMsg = NLS.bind( Msgs.invalidConfigValue,
                                                 ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION,
-                                                liferayVersionValue );
+                                                version );
             retval = new MavenProblemInfo( problemMsg, IMarker.SEVERITY_ERROR, location );
         }
 

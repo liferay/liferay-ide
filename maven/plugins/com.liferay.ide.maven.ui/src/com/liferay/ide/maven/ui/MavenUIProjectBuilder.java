@@ -83,25 +83,41 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
     }
 
     @Override
+    public IStatus buildSB( IFile serviceXmlFile, final String goal, IProgressMonitor monitor ) throws CoreException
+    {
+        final IFile pomFile = getProject().getFile( new Path( IMavenConstants.POM_FILE_NAME ) );
+        final IMavenProjectFacade projectFacade = projectManager.create( pomFile, false, new NullProgressMonitor() );
+
+        monitor.worked( 10 );
+
+        IStatus status = runMavenGoal( projectFacade, goal, "run", monitor );
+
+        refreshSiblingProject( projectFacade, monitor );
+
+        monitor.worked( 10 );
+        monitor.done();
+
+        return status;
+    }
+
+    @Override
     public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
         final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
 
         sub.beginTask( Msgs.buildingServices, 100 );
 
-        final IFile pomFile = getProject().getFile( new Path( IMavenConstants.POM_FILE_NAME ) );
-        final IMavenProjectFacade projectFacade = projectManager.create( pomFile, false, new NullProgressMonitor() );
+        return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, sub );
+    }
 
-        sub.worked( 10 );
+    @Override
+    public IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
+    {
+        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
 
-        IStatus status = runMavenGoal( projectFacade, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, "run", monitor );
+        sub.beginTask( Msgs.buildingWSDD, 100 );
 
-        refreshSiblingProject( projectFacade, monitor );
-
-        sub.worked( 10 );
-        sub.done();
-
-        return status;
+        return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD, sub );
     }
 
     public IStatus runMavenGoal( final IMavenProjectFacade projectFacade,

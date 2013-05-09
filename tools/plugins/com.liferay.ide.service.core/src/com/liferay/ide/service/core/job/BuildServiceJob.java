@@ -50,9 +50,30 @@ public class BuildServiceJob extends Job
         setUser( true );
     }
 
-    private IProject getProject()
+    protected IProject getProject()
     {
         return this.serviceXmlFile != null ? this.serviceXmlFile.getProject() : null;
+    }
+
+    protected IProjectBuilder getProjectBuilder() throws CoreException
+    {
+        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+
+        if( liferayProject == null )
+        {
+            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
+                Msgs.couldNotCreateLiferayProject, getProject() ) ) );
+        }
+
+        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
+
+        if( builder == null )
+        {
+            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
+                Msgs.couldNotCreateProjectBuilder, getProject() ) ) );
+        }
+
+        return builder;
     }
 
     @Override
@@ -77,7 +98,7 @@ public class BuildServiceJob extends Job
         {
             public void run( IProgressMonitor monitor ) throws CoreException
             {
-                runBuildService( monitor );
+                runBuild( monitor );
             }
         };
 
@@ -93,23 +114,9 @@ public class BuildServiceJob extends Job
         return retval == null || retval.isOK() ? Status.OK_STATUS : retval;
     }
 
-    protected void runBuildService( final IProgressMonitor monitor ) throws CoreException
+    protected void runBuild( final IProgressMonitor monitor ) throws CoreException
     {
-        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
-
-        if( liferayProject == null )
-        {
-            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
-                Msgs.couldNotCreateLiferayProject, getProject() ) ) );
-        }
-
-        final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
-
-        if( builder == null )
-        {
-            throw new CoreException( ServiceCore.createErrorStatus( NLS.bind(
-                Msgs.couldNotCreateProjectBuilder, getProject() ) ) );
-        }
+        final IProjectBuilder builder = getProjectBuilder();
 
         monitor.worked( 50 );
 
@@ -128,7 +135,7 @@ public class BuildServiceJob extends Job
         monitor.worked( 90 );
     }
 
-    private static class Msgs extends NLS
+    protected static class Msgs extends NLS
     {
         public static String buildingLiferayServices;
         public static String buildServices;
