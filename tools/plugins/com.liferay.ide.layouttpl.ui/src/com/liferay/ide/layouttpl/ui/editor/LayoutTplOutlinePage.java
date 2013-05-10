@@ -29,6 +29,7 @@ import org.eclipse.ui.part.IPageSite;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class LayoutTplOutlinePage extends ContentOutlinePage
 {
@@ -77,6 +78,8 @@ public class LayoutTplOutlinePage extends ContentOutlinePage
         // initialize outline viewer with model
         getViewer().setContents( this.layoutTplEditor.getDiagram() );
         // show outline viewer
+
+        getSite().setSelectionProvider( getViewer() );
     }
 
     /*
