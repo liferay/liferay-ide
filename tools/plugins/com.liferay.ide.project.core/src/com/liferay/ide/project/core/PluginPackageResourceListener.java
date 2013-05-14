@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.FileInputStream;
@@ -551,7 +552,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                     IProject referencedFileProject = referencedFile.getProject();
                     // IDE-110 IDE-648
                     ( (ClasspathEntry) entry ).sourceAttachmentPath =
-                        referencedFileProject.getFolder( "docroot/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
+                        referencedFileProject.getFolder( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
                 }
             }
         }

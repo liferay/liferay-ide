@@ -357,7 +357,7 @@ public class ProjectUtil
 
         setGenerateDD( newProjectDataModel, false );
 
-        IPath webXmlPath = projectRecord.getProjectLocation().append( "docroot/WEB-INF/web.xml" ); //$NON-NLS-1$
+        IPath webXmlPath = projectRecord.getProjectLocation().append( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml" ); //$NON-NLS-1$
 
         if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
         {
@@ -380,7 +380,8 @@ public class ProjectUtil
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
         {
             webXmlPath =
-                webXmlPath.removeLastSegments( 3 ).append( new Path( "docroot/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) ); //$NON-NLS-1$
+                webXmlPath.removeLastSegments( 3 ).append(
+                    new Path( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) ); //$NON-NLS-1$
 
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true );
 
@@ -1020,7 +1021,7 @@ public class ProjectUtil
                     continue;
                 }
 
-                if( content.getName().equals( "docroot" ) ) //$NON-NLS-1$
+                if( content.getName().equals( ISDKConstants.DEFAULT_DOCROOT_FOLDER ) )
                 {
                     hasDocroot = true;
 

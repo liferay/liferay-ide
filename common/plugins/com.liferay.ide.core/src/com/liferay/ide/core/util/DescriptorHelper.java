@@ -169,11 +169,11 @@ public class DescriptorHelper
 
     public static IFile getDescriptorFile( IProject project, String fileName )
     {
-        IVirtualFolder docroot = CoreUtil.getDocroot( project );
+        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-        if( docroot != null )
+        if( webappRoot != null )
         {
-            for( IContainer container : docroot.getUnderlyingFolders() )
+            for( IContainer container : webappRoot.getUnderlyingFolders() )
             {
                 if( container != null && container.exists() )
                 {

@@ -52,6 +52,8 @@ public interface ISDKConstants
         StringPool.ASTERISK + _LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "*.war"  //$NON-NLS-1$
     };
 
+    public static final String DEFAULT_DOCROOT_FOLDER = "docroot";  //$NON-NLS-1$
+
     public static final String EXT_PLUGIN_ANT_BUILD = __defaultPrefs.get( "ext.plugin.ant.build", null ); //$NON-NLS-1$
 
     public static final String EXT_PLUGIN_PROJECT_FOLDER = "ext"; //$NON-NLS-1$

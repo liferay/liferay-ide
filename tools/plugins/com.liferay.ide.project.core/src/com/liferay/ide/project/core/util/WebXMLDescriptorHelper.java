@@ -170,48 +170,48 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
         }
 
         String typeId = document.getDocumentTypeId();
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         if( typeId != null && typeId.contains( "2.3" ) ) //$NON-NLS-1$
         {
-            Element taglibNextSibling = NodeUtil.findChildElement( docRoot, "resource-env-ref" ); //$NON-NLS-1$
+            Element taglibNextSibling = NodeUtil.findChildElement( rootElement, "resource-env-ref" ); //$NON-NLS-1$
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "resource-ref" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "resource-ref" ); //$NON-NLS-1$
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "security-constraint" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "security-constraint" ); //$NON-NLS-1$
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "login-config" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "login-config" ); //$NON-NLS-1$
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "security-role" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "security-role" ); //$NON-NLS-1$
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "env-entry" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "env-entry" ); //$NON-NLS-1$
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "ejb-ref" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "ejb-ref" ); //$NON-NLS-1$
             }
 
             if( taglibNextSibling == null )
             {
-                taglibNextSibling = NodeUtil.findChildElement( docRoot, "ejb-local-ref" ); //$NON-NLS-1$
+                taglibNextSibling = NodeUtil.findChildElement( rootElement, "ejb-local-ref" ); //$NON-NLS-1$
             }
 
-            Element taglib = NodeUtil.insertChildElement( docRoot, taglibNextSibling, "taglib", StringPool.EMPTY ); //$NON-NLS-1$
+            Element taglib = NodeUtil.insertChildElement( rootElement, taglibNextSibling, "taglib", StringPool.EMPTY ); //$NON-NLS-1$
 
             NodeUtil.appendChildElement( taglib, "taglib-uri", tagLibRefType.getTaglibURI() ); //$NON-NLS-1$
 
@@ -220,7 +220,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
 
             if( taglibNextSibling == null )
             {
-                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+                rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
             }
             // format the new node added to the model;
             FormatProcessorXML processor = new FormatProcessorXML();
@@ -229,11 +229,11 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
         }
         else
         {
-            Element jspConfig = NodeUtil.findChildElement( docRoot, "jsp-config" ); //$NON-NLS-1$
+            Element jspConfig = NodeUtil.findChildElement( rootElement, "jsp-config" ); //$NON-NLS-1$
 
             if( jspConfig == null )
             {
-                jspConfig = NodeUtil.appendChildElement( docRoot, "jsp-config" ); //$NON-NLS-1$
+                jspConfig = NodeUtil.appendChildElement( rootElement, "jsp-config" ); //$NON-NLS-1$
             }
 
             Element taglib = NodeUtil.appendChildElement( jspConfig, "taglib" ); //$NON-NLS-1$
@@ -242,7 +242,7 @@ public class WebXMLDescriptorHelper extends DescriptorHelper
 
             NodeUtil.appendChildElement( taglib, "taglib-location", tagLibRefType.getTaglibLocation() ); //$NON-NLS-1$
 
-            docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+            rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
 
             // format the new node added to the model;
             FormatProcessorXML processor = new FormatProcessorXML();

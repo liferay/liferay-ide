@@ -283,7 +283,7 @@ public class SDKProjectConvertWizardPage extends DataModelFacetCreationWizardPag
                     continue;
                 }
 
-                if( content.getName().equals( "docroot" ) ) //$NON-NLS-1$
+                if( content.getName().equals( ISDKConstants.DEFAULT_DOCROOT_FOLDER ) )
                 {
                     hasDocroot = true;
 

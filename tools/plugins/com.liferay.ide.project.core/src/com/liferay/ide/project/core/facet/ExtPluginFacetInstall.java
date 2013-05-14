@@ -101,7 +101,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
                 LiferayProjectCore.logError( e );
             }
 
-            IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
+            IFolder webappRoot = this.project.getFolder( ISDKConstants.DEFAULT_DOCROOT_FOLDER );
 
             deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) ); //$NON-NLS-1$
             deleteFolder( webappRoot.getFolder( "WEB-INF/classes" ) ); //$NON-NLS-1$

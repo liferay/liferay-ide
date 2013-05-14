@@ -83,8 +83,8 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             // cleanup files
             FileUtil.deleteDir( newThemePath.toFile(), true );
 
-            // delete WEB-INF/lib and META-INF
-            CoreUtil.deleteResource( project.findMember( "docroot/META-INF" ) ); //$NON-NLS-1$
+            // delete META-INF
+            CoreUtil.deleteResource( project.findMember( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/META-INF" ) ); //$NON-NLS-1$
         }
         else if( shouldSetupDefaultOutputLocation() )
         {

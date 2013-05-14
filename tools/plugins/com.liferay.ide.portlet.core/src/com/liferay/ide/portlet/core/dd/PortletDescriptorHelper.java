@@ -232,7 +232,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     public IStatus updateLiferayDisplayXML( IDOMDocument document, final IDataModel model )
     {
         // <display> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         // for the category assignment check to see if there is already a
         // category element with that id
@@ -240,7 +240,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         String modelCategory = model.getStringProperty( CATEGORY );
 
-        for( Element child : getChildElements( docRoot ) )
+        for( Element child : getChildElements( rootElement ) )
         {
             if( child.getNodeName().equals( "category" ) && modelCategory.equals( child.getAttribute( "name" ) ) ) //$NON-NLS-1$ //$NON-NLS-2$
             {
@@ -273,11 +273,11 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             category = document.createElement( "category" ); //$NON-NLS-1$
             category.setAttribute( "name", modelCategory ); //$NON-NLS-1$
 
-            docRoot.appendChild( category );
+            rootElement.appendChild( category );
 
             Node newline = document.createTextNode( System.getProperty( "line.separator" ) ); //$NON-NLS-1$
 
-            docRoot.appendChild( newline );
+            rootElement.appendChild( newline );
         }
 
         if( id == null )
@@ -296,7 +296,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     public IStatus updateLiferayPortletXML( IDOMDocument document, final IDataModel model )
     {
         // <liferay-portlet-app> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         // new <portlet> element
         Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
@@ -334,7 +334,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         // must append this before any role-mapper elements
         Element firstRoleMapper = null;
 
-        for( Element child : getChildElements( docRoot ) )
+        for( Element child : getChildElements( rootElement ) )
         {
             if( child.getNodeName().equals( "role-mapper" ) ) //$NON-NLS-1$
             {
@@ -347,15 +347,15 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         if( firstRoleMapper != null )
         {
-            docRoot.insertBefore( newPortletElement, firstRoleMapper );
+            rootElement.insertBefore( newPortletElement, firstRoleMapper );
 
-            docRoot.insertBefore( newline, firstRoleMapper );
+            rootElement.insertBefore( newline, firstRoleMapper );
         }
         else
         {
-            docRoot.appendChild( newPortletElement );
+            rootElement.appendChild( newPortletElement );
 
-            docRoot.appendChild( newline );
+            rootElement.appendChild( newline );
         }
 
         // format the new node added to the model;
@@ -369,7 +369,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     public IStatus updatePortletXML( IDOMDocument document, IDataModel model )
     {
         // <portlet-app> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         // new <portlet> element
         Element newPortletElement = document.createElement( "portlet" ); //$NON-NLS-1$
@@ -445,7 +445,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         for( int i = 0; i < refElementNames.length; i++ )
         {
-            refNode = NodeUtil.findFirstChild( docRoot, refElementNames[i] );
+            refNode = NodeUtil.findFirstChild( rootElement, refElementNames[i] );
 
             if( refNode != null )
             {
@@ -453,10 +453,10 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             }
         }
 
-        docRoot.insertBefore( newPortletElement, refNode );
+        rootElement.insertBefore( newPortletElement, refNode );
 
         // append a newline text node
-        docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+        rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
 
         // format the new node added to the model;
         FormatProcessorXML processor = new FormatProcessorXML();

@@ -123,7 +123,7 @@ public class ProjectImportUtil
             ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( bridgedRuntime );
             Map<String, String> appServerProperties = ServerUtil.getSDKRequiredProperties( liferayRuntime );
             // IDE-110 IDE-648
-            String docrootFolder = null;
+            String webappRootFolder = null;
 
             // Create Project
             if( pluginBinaryRecord.isHook() )
@@ -131,7 +131,7 @@ public class ProjectImportUtil
                 projectPath = liferaySDK.createNewHookProject( displayName, displayName );
 
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER );
-                docrootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
+                webappRootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isPortlet() )
             {
@@ -152,25 +152,25 @@ public class ProjectImportUtil
                     liferaySDK.createNewPortletProject(
                         displayName, displayName, portletFrameworkName, appServerProperties );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER );
-                docrootFolder = IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER;
+                webappRootFolder = IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isTheme() )
             {
                 projectPath = liferaySDK.createNewThemeProject( displayName, displayName );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER );
-                docrootFolder = IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER;
+                webappRootFolder = IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isLayoutTpl() )
             {
                 projectPath = liferaySDK.createNewLayoutTplProject( displayName, displayName, appServerProperties );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER );
-                docrootFolder = IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER;
+                webappRootFolder = IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isExt() )
             {
                 projectPath = liferaySDK.createNewExtProject( displayName, displayName, appServerProperties );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER );
-                docrootFolder = IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER;
+                webappRootFolder = IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER;
             }
 
             // Move the porject to Liferay SDK location
@@ -182,8 +182,8 @@ public class ProjectImportUtil
             FileUtils.copyDirectory( tempProjectDir, liferayPluginProjectDir );
 
             // Extract the contents
-            File docRoot = new File( liferayPluginProjectDir, docrootFolder );
-            ZipUtil.unzip( binaryFile, docRoot );
+            File webappRoot = new File( liferayPluginProjectDir, webappRootFolder );
+            ZipUtil.unzip( binaryFile, webappRoot );
 
             // IDE-569 check to see if the project already has .project
             File projectFile = new File( liferayPluginProjectDir, ".project" ); //$NON-NLS-1$

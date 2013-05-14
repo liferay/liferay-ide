@@ -78,23 +78,23 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
     public IStatus doAddLayoutTemplate( IDOMDocument document, IDataModel model )
     {
         // <layout-templates> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         Element layoutTemplateElement = document.createElement( "layout-template" ); //$NON-NLS-1$
         layoutTemplateElement.setAttribute( "id", model.getStringProperty( LAYOUT_TEMPLATE_ID ) ); //$NON-NLS-1$
         layoutTemplateElement.setAttribute( "name", model.getStringProperty( LAYOUT_TEMPLATE_NAME ) ); //$NON-NLS-1$
 
         // find the <custom> element and if it doesn't exist create it
-        Node customElement = NodeUtil.getFirstNamedChildNode( docRoot, "custom" ); //$NON-NLS-1$
+        Node customElement = NodeUtil.getFirstNamedChildNode( rootElement, "custom" ); //$NON-NLS-1$
 
         if( customElement == null )
         {
             // if we are going to create a new <custom> it must be after the <standard>
-            Node standardElement = NodeUtil.getFirstNamedChildNode( docRoot, "standard" ); //$NON-NLS-1$
+            Node standardElement = NodeUtil.getFirstNamedChildNode( rootElement, "standard" ); //$NON-NLS-1$
 
             customElement = document.createElement( "custom" ); //$NON-NLS-1$
-            docRoot.insertBefore( customElement, standardElement );
-            NodeUtil.appendTextNode( docRoot, "\n" ); //$NON-NLS-1$
+            rootElement.insertBefore( customElement, standardElement );
+            NodeUtil.appendTextNode( rootElement, "\n" ); //$NON-NLS-1$
         }
 
         customElement.appendChild( layoutTemplateElement );

@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -269,8 +270,8 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
                     ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
             IPath serviceJarPath =
-                sdkLocation.append( type ).append( context ).append( "docroot/WEB-INF/lib" ).append( //$NON-NLS-1$
-                    context + "-service.jar" ); //$NON-NLS-1$
+                sdkLocation.append( type ).append( context ).append(
+                    ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/lib" ).append( context + "-service.jar" ); //$NON-NLS-1$ //$NON-NLS-2$
 
             if( serviceJarPath.toFile().exists() )
             {

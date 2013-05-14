@@ -128,7 +128,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     protected IStatus doAddActionItems( IDOMDocument document, List<String[]> actionItems )
     {
         // <hook> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         FormatProcessorXML processor = new FormatProcessorXML();
 
@@ -138,7 +138,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         {
             for( String[] actionItem : actionItems )
             {
-                newServiceElement = NodeUtil.appendChildElement( docRoot, "service" ); //$NON-NLS-1$
+                newServiceElement = NodeUtil.appendChildElement( rootElement, "service" ); //$NON-NLS-1$
 
                 NodeUtil.appendChildElement( newServiceElement, "service-type", actionItem[0] ); //$NON-NLS-1$
 
@@ -149,7 +149,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
             if( newServiceElement != null )
             {
                 // append a newline text node
-                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+                rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
 
                 processor.formatNode( newServiceElement );
             }
@@ -161,7 +161,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     protected IStatus doAddLanguageProperties( IDOMDocument document, List<String> languageProperties )
     {
         // <hook> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         FormatProcessorXML processor = new FormatProcessorXML();
 
@@ -170,7 +170,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         // check if we have existing custom_dir
         Node refChild = null;
 
-        NodeList nodeList = docRoot.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
+        NodeList nodeList = rootElement.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
 
         if( nodeList != null && nodeList.getLength() > 0 )
         {
@@ -178,7 +178,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         }
         else
         {
-            nodeList = docRoot.getElementsByTagName( "service" ); //$NON-NLS-1$
+            nodeList = rootElement.getElementsByTagName( "service" ); //$NON-NLS-1$
 
             if( nodeList != null && nodeList.getLength() > 0 )
             {
@@ -190,14 +190,14 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         {
             for( String languageProperty : languageProperties )
             {
-                newLanguageElement = NodeUtil.insertChildElement( docRoot, refChild, "language-properties", languageProperty ); //$NON-NLS-1$
+                newLanguageElement = NodeUtil.insertChildElement( rootElement, refChild, "language-properties", languageProperty ); //$NON-NLS-1$
 
                 processor.formatNode( newLanguageElement );
             }
             if( newLanguageElement != null )
             {
                 // append a newline text node
-                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+                rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
 
                 processor.formatNode( newLanguageElement );
             }
@@ -209,7 +209,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     public IStatus doSetCustomJSPDir( IDOMDocument document, IDataModel model )
     {
         // <hook> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         String relativeJspFolderPath =
             ProjectUtil.getRelativePathFromDocroot( this.project, model.getStringProperty( CUSTOM_JSPS_FOLDER ) );
@@ -217,7 +217,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         Element customJspElement = null;
 
         // check for existing element
-        NodeList nodeList = docRoot.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
+        NodeList nodeList = rootElement.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
 
         if( nodeList != null && nodeList.getLength() > 0 )
         {
@@ -232,19 +232,19 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         else
         {
             // need to insert customJspElement before any <service>
-            NodeList serviceTags = docRoot.getElementsByTagName( "service" ); //$NON-NLS-1$
+            NodeList serviceTags = rootElement.getElementsByTagName( "service" ); //$NON-NLS-1$
 
             if( serviceTags != null && serviceTags.getLength() > 0 )
             {
                 customJspElement =
-                    NodeUtil.insertChildElement( docRoot, serviceTags.item( 0 ), "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
+                    NodeUtil.insertChildElement( rootElement, serviceTags.item( 0 ), "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
             }
             else
             {
-                customJspElement = NodeUtil.appendChildElement( docRoot, "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
+                customJspElement = NodeUtil.appendChildElement( rootElement, "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
 
                 // append a newline text node
-                docRoot.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+                rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
             }
         }
 
@@ -259,12 +259,12 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     protected IStatus doSetPortalProperties( IDOMDocument document, IDataModel model, String propertiesFile )
     {
         // <hook> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         // check for existing element
         Element portalPropertiesElement = null;
 
-        NodeList nodeList = docRoot.getElementsByTagName( "portal-properties" ); //$NON-NLS-1$
+        NodeList nodeList = rootElement.getElementsByTagName( "portal-properties" ); //$NON-NLS-1$
 
         if( nodeList != null && nodeList.getLength() > 0 )
         {
@@ -279,7 +279,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         else
         {
             portalPropertiesElement =
-                NodeUtil.insertChildElement( docRoot, docRoot.getFirstChild(), "portal-properties", propertiesFile ); //$NON-NLS-1$
+                NodeUtil.insertChildElement( rootElement, rootElement.getFirstChild(), "portal-properties", propertiesFile ); //$NON-NLS-1$
         }
 
         // format the new node added to the model;
@@ -318,12 +318,12 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     public String readCustomJSPFolder( IDOMDocument document, IDataModel model )
     {
         // <hook> element
-        Element docRoot = document.getDocumentElement();
+        Element rootElement = document.getDocumentElement();
 
         Element customJspElement = null;
 
         // check for existing element
-        NodeList nodeList = docRoot.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
+        NodeList nodeList = rootElement.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
 
         if( nodeList != null && nodeList.getLength() > 0 )
         {

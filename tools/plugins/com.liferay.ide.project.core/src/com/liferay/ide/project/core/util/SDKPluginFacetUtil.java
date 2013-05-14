@@ -436,7 +436,7 @@ public class SDKPluginFacetUtil
     {
         // check for existing web.xml file, if not there, add a default one
         // IDE-110 IDE-648
-        IPath webinfPath = fpjwc.getProjectLocation().append( "docroot/WEB-INF" ); //$NON-NLS-1$
+        IPath webinfPath = fpjwc.getProjectLocation().append( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF" ); //$NON-NLS-1$
 
         if( ProjectUtil.isExtProject( fpjwc.getProject() ) ||
             fpjwc.getProjectLocation().lastSegment().endsWith( "-ext" ) ) //$NON-NLS-1$

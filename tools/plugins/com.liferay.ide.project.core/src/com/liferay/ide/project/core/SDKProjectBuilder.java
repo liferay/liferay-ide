@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -128,7 +129,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
             if( entry2.getPath().lastSegment().equals( getProject().getName() + "-service.jar" ) ) //$NON-NLS-1$
             {
                 ( (ClasspathEntry) entry2 ).sourceAttachmentPath =
-                    getProject().getFolder( "docroot/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
+                    getProject().getFolder( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service" ).getFullPath(); //$NON-NLS-1$
 
                 break;
             }

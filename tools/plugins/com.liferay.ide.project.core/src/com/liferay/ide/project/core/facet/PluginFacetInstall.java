@@ -362,7 +362,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
 
     protected void installPluginLibraryDelegate() throws CoreException
     {
-
         LibraryInstallDelegate libraryDelegate =
             (LibraryInstallDelegate) this.model.getProperty( IPluginProjectDataModelProperties.LIFERAY_PLUGIN_LIBRARY_DELEGATE );
 

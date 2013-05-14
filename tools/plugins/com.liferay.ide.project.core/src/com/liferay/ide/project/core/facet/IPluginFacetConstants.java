@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.core.facet;
 
+import com.liferay.ide.sdk.core.ISDKConstants;
+
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
@@ -23,37 +25,42 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
  */
 public class IPluginFacetConstants
 {
-    public static final String EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes"; //$NON-NLS-1$
 
-    public static final String EXT_PLUGIN_SDK_CONFIG_FOLDER = "docroot/WEB-INF/ext-web/docroot"; //$NON-NLS-1$
+    public static final String EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
+        "/WEB-INF/classes"; //$NON-NLS-1$
 
-    public static final String[] EXT_PLUGIN_SDK_OUTPUT_FOLDERS = new String[] 
-    { 
-        "docroot/WEB-INF/ext-impl/classes", //$NON-NLS-1$
-        "docroot/WEB-INF/ext-service/classes",  //$NON-NLS-1$
-        "docroot/WEB-INF/ext-util-bridges/classes", //$NON-NLS-1$
-        "docroot/WEB-INF/ext-util-java/classes",  //$NON-NLS-1$
-        "docroot/WEB-INF/ext-util-taglib/classes",  //$NON-NLS-1$
+    public static final String EXT_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
+        "/WEB-INF/ext-web/" + ISDKConstants.DEFAULT_DOCROOT_FOLDER; //$NON-NLS-1$
+
+    public static final String[] EXT_PLUGIN_SDK_OUTPUT_FOLDERS = new String[]
+    {
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-impl/classes", //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-service/classes",  //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-util-bridges/classes", //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-util-java/classes",  //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-util-taglib/classes",  //$NON-NLS-1$
     };
 
-    public static final String[] EXT_PLUGIN_SDK_SOURCE_FOLDERS = new String[] 
-    { 
-        "docroot/WEB-INF/ext-impl/src", //$NON-NLS-1$
-        "docroot/WEB-INF/ext-service/src",  //$NON-NLS-1$
-        "docroot/WEB-INF/ext-util-bridges/src",  //$NON-NLS-1$
-        "docroot/WEB-INF/ext-util-java/src", //$NON-NLS-1$
-        "docroot/WEB-INF/ext-util-taglib/src",  //$NON-NLS-1$
+    public static final String[] EXT_PLUGIN_SDK_SOURCE_FOLDERS = new String[]
+    {
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-impl/src", //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-service/src",  //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-util-bridges/src",  //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-util-java/src", //$NON-NLS-1$
+        ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-util-taglib/src",  //$NON-NLS-1$
     };
 
-    public static final String HOOK_PLUGIN_SDK_CONFIG_FOLDER = "docroot"; //$NON-NLS-1$
+    public static final String HOOK_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER;
 
-    public static final String HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes"; //$NON-NLS-1$
+    public static final String HOOK_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
+        "/WEB-INF/classes"; //$NON-NLS-1$
 
-    public static final String HOOK_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src"; //$NON-NLS-1$
+    public static final String HOOK_PLUGIN_SDK_SOURCE_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/src"; //$NON-NLS-1$
 
-    public static final String LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER = "docroot"; //$NON-NLS-1$
+    public static final String LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER;
 
-    public static final String LAYOUTTPL_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes"; //$NON-NLS-1$
+    public static final String LAYOUTTPL_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
+        "/WEB-INF/classes"; //$NON-NLS-1$
 
     public static final String LIFERAY_DEFAULT_FACET_TEMPLATE = "liferay.portlet.template"; //$NON-NLS-1$
 
@@ -106,13 +113,13 @@ public class IPluginFacetConstants
     public static final IProjectFacet LIFERAY_THEME_PROJECT_FACET =
         ProjectFacetsManager.getProjectFacet( LIFERAY_THEME_FACET_ID );
 
-    public static final String PORTLET_PLUGIN_SDK_CONFIG_FOLDER = "docroot"; //$NON-NLS-1$
+    public static final String PORTLET_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER;
 
-    public static final String PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes"; //$NON-NLS-1$
+    public static final String PORTLET_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/classes"; //$NON-NLS-1$
 
-    public static final String PORTLET_PLUGIN_SDK_SOURCE_FOLDER = "docroot/WEB-INF/src"; //$NON-NLS-1$
+    public static final String PORTLET_PLUGIN_SDK_SOURCE_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/src"; //$NON-NLS-1$
 
-    public static final String THEME_PLUGIN_SDK_CONFIG_FOLDER = "docroot"; //$NON-NLS-1$
+    public static final String THEME_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER;
 
-    public static final String THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = "docroot/WEB-INF/classes"; //$NON-NLS-1$
+    public static final String THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/classes"; //$NON-NLS-1$
 }

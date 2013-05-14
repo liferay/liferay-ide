@@ -16,6 +16,7 @@ package com.liferay.ide.portlet.jsf.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.AbstractPortletFrameworkWizardProvider;
+import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -128,7 +129,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
 
         //TODO IDE-648 IDE-110
         jsfFacetDataModel.setProperty( SERVLET_URL_PATTERNS, null );
-        jsfFacetDataModel.setProperty( WEBCONTENT_DIR, "docroot" ); //$NON-NLS-1$
+        jsfFacetDataModel.setProperty( WEBCONTENT_DIR, ISDKConstants.DEFAULT_DOCROOT_FOLDER );
 
         LibraryInstallDelegate libraryInstallDelegate =
             (LibraryInstallDelegate) jsfFacetDataModel.getProperty( LIBRARY_PROVIDER_DELEGATE );

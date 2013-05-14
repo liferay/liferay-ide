@@ -22,9 +22,19 @@ public class ExtPluginFacetInstallDataModelProvider extends PluginFacetInstallDa
 {
 
     @Override
+    public Object getDefaultProperty( String propertyName )
+    {
+        if( SETUP_EXT_CLASSPATH.equals( propertyName ) )
+        {
+            return true;
+        }
+
+        return super.getDefaultProperty( propertyName );
+    }
+
+    @Override
     protected String getPluginFacetId()
     {
         return IPluginFacetConstants.LIFERAY_EXT_FACET_ID;
     }
-
 }
