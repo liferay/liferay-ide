@@ -42,6 +42,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.internal.core.search.BasicSearchEngine;
 import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.web.operations.NewWebClassDataModelProvider;
@@ -552,8 +558,29 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             }
 
             String[] values = vals.split( StringPool.COMMA );
+            List<String> list = new ArrayList<String>();
 
-            return DataModelPropertyDescriptor.createDescriptors( values, values );
+            try
+            {
+                IJavaProject javaProject = JavaCore.create( getProject() );
+                IJavaSearchScope scope =
+                    BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) ); //$NON-NLS-1$
+
+                for( int i = 0; i < values.length; i++ )
+                {
+                    IType type = javaProject.findType( values[i] );
+
+                    if( type != null && scope.encloses( type ) )
+                    {
+                        list.add( values[i] );
+                    }
+                }
+            }
+            catch( JavaModelException e )
+            {
+            }
+
+            return DataModelPropertyDescriptor.createDescriptors( list.toArray(), list.toArray( new String[0] ) );
         }
         else if( CATEGORY.equals( propertyName ) )
         {

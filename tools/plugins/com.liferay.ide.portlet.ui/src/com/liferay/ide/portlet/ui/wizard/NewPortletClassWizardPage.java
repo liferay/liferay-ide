@@ -85,6 +85,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction", "deprecation" } )
 public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements INewPortletClassDataModelProperties
@@ -362,7 +363,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
                 {
                     // handleSuperButtonPressed();
                     handleClassButtonSelected(
-                        superCombo, "javax.portlet.GenericPortlet", J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE, //$NON-NLS-1$
+                        superCombo, "javax.portlet.Portlet", J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_TITLE, //$NON-NLS-1$
                         J2EEUIMessages.SUPERCLASS_SELECTION_DIALOG_DESC );
                 }
             } );
