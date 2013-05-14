@@ -134,6 +134,44 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return status;
     }
 
+    public String[] getAllPortletCategories()
+    {
+        final List<String> allPortletCategories = new ArrayList<String>();
+
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+
+        if( descriptorFile != null )
+        {
+            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
+            {
+                protected IStatus doExecute( IDOMDocument document )
+                {
+                    NodeList nodeList = document.getElementsByTagName( "category" ); //$NON-NLS-1$
+
+                    if( nodeList != null && nodeList.getLength() > 0 )
+                    {
+                        for( int i = 0; i < nodeList.getLength(); i++ )
+                        {
+                            Element categoryElemnt = (Element) nodeList.item( i );
+                            String categoryName = categoryElemnt.getAttribute( "name" );
+
+                            if( categoryName != null )
+                            {
+                                allPortletCategories.add( categoryName );
+                            }
+                        }
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            };
+
+            op.execute();
+        }
+
+        return allPortletCategories.toArray( new String[0] );
+    }
+
     public String[] getAllPortletNames()
     {
         final List<String> allPortletNames = new ArrayList<String>();
@@ -162,6 +200,40 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         }
 
         return allPortletNames.toArray( new String[0] );
+    }
+
+    protected String getPortletClassText( IDataModel model )
+    {
+        return model.getStringProperty( QUALIFIED_CLASS_NAME );
+    }
+
+    protected IStatus removeAllElements( IDOMDocument document, String tagName )
+    {
+        if( document == null )
+        {
+            return PortletCore.createErrorStatus( MessageFormat.format(
+                "Could not remove {0} elements: null document", tagName ) ); //$NON-NLS-1$
+        }
+
+        NodeList elements = document.getElementsByTagName( tagName );
+
+        try
+        {
+            if( elements != null && elements.getLength() > 0 )
+            {
+                for( int i = 0; i < elements.getLength(); i++ )
+                {
+                    Node element = elements.item( i );
+                    element.getParentNode().removeChild( element );
+                }
+            }
+        }
+        catch( Exception ex )
+        {
+            return PortletCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
+        }
+
+        return Status.OK_STATUS;
     }
 
     public IStatus removeAllPortlets()
@@ -462,40 +534,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         FormatProcessorXML processor = new FormatProcessorXML();
 
         processor.formatNode( newPortletElement );
-
-        return Status.OK_STATUS;
-    }
-
-    protected String getPortletClassText( IDataModel model )
-    {
-        return model.getStringProperty( QUALIFIED_CLASS_NAME );
-    }
-
-    protected IStatus removeAllElements( IDOMDocument document, String tagName )
-    {
-        if( document == null )
-        {
-            return PortletCore.createErrorStatus( MessageFormat.format(
-                "Could not remove {0} elements: null document", tagName ) ); //$NON-NLS-1$
-        }
-
-        NodeList elements = document.getElementsByTagName( tagName );
-
-        try
-        {
-            if( elements != null && elements.getLength() > 0 )
-            {
-                for( int i = 0; i < elements.getLength(); i++ )
-                {
-                    Node element = elements.item( i );
-                    element.getParentNode().removeChild( element );
-                }
-            }
-        }
-        catch( Exception ex )
-        {
-            return PortletCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
-        }
 
         return Status.OK_STATUS;
     }

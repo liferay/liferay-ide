@@ -23,11 +23,13 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -167,11 +169,51 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             {
                 categories = liferayProject.getPortletCategories();
             }
+
+            IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+            for( IProject workspaceProject : workspaceProjects )
+            {
+                if( ProjectUtil.isPortletProject( workspaceProject ) )
+                {
+                    PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( workspaceProject );
+                    String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
+
+                    Enumeration<?> names = categories.propertyNames();
+
+                    if( portletCategories.length > 0 )
+                    {
+                        boolean foundDuplicate = false;
+
+                        for( String portletCategory : portletCategories )
+                        {
+                            names = categories.propertyNames();
+
+                            while( names.hasMoreElements() )
+                            {
+                                String name = names.nextElement().toString();
+
+                                if( portletCategory.equals( name ) )
+                                {
+                                    foundDuplicate = true;
+                                    break;
+                                }
+                            }
+
+                            if( !foundDuplicate )
+                            {
+                                categories.put( portletCategory, portletCategory );
+
+                                foundDuplicate = false;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return categories;
     }
-
 
     @Override
     public Object getDefaultProperty( String propertyName )
