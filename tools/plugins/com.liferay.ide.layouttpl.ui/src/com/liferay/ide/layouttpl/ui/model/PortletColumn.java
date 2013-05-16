@@ -15,7 +15,6 @@
 
 package com.liferay.ide.layouttpl.ui.model;
 
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 
 import org.eclipse.jface.viewers.ICellEditorValidator;
@@ -49,7 +48,14 @@ public class PortletColumn extends PortletColumnElement implements IPropertySour
                     int intValue = -1;
                     try
                     {
-                        intValue = Integer.parseInt( ((String) value).replaceAll( "%", StringPool.EMPTY ) ); //$NON-NLS-1$
+                        String strVal = value.toString();
+
+                        if( strVal.endsWith( "%" ) ) //$NON-NLS-1$
+                        {
+                            strVal = strVal.substring( 0, strVal.length() - 1 );
+                        }
+
+                        intValue = Integer.parseInt( strVal );
                     }
                     catch( NumberFormatException exc )
                     {
