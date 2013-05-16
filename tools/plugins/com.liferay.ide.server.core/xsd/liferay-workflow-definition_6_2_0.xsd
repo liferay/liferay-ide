@@ -361,6 +361,7 @@
 			<xs:enumeration value="email" />
 			<xs:enumeration value="im" />
 			<xs:enumeration value="private-message" />
+			<xs:enumeration value="user-notification" />
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="role-type">

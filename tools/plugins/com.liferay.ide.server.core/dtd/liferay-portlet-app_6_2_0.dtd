@@ -18,14 +18,15 @@ parent-struts-path?, configuration-path?, configuration-action-class?,
 indexer-class*, open-search-class?, scheduler-entry*, portlet-url-class?,
 friendly-url-mapper-class?, friendly-url-mapping?, friendly-url-routes?,
 url-encoder-class?, portlet-data-handler-class?,
-portlet-display-template-handler?, portlet-layout-listener-class?,
-poller-processor-class?, pop-message-listener-class?,
-social-activity-interpreter-class?, social-request-interpreter-class?,
-webdav-storage-token?, webdav-storage-class?, xml-rpc-method-class?,
-control-panel-entry-category?, control-panel-entry-weight?,
-control-panel-entry-class?, asset-renderer-factory*, atom-collection-adapter*,
-custom-attributes-display*, permission-propagator?, trash-handler*,
-workflow-handler*, preferences-company-wide?, preferences-unique-per-layout?,
+staged-model-data-handler-class*, template-handler?,
+portlet-layout-listener-class?, poller-processor-class?,
+pop-message-listener-class?, social-activity-interpreter-class*,
+social-request-interpreter-class?, webdav-storage-token?, webdav-storage-class?,
+xml-rpc-method-class?, control-panel-entry-category?,
+control-panel-entry-weight?, control-panel-entry-class?,
+asset-renderer-factory*, atom-collection-adapter*, custom-attributes-display*,
+ddm-display?, permission-propagator?, trash-handler*, workflow-handler*,
+preferences-company-wide?, preferences-unique-per-layout?,
 preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
 show-portlet-inactive?, action-url-redirect?, restore-current-view?,
 maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
@@ -244,6 +245,13 @@ http://docs.liferay.com/portal/6.2/javadocs/portal-service/com/liferay/portal/ke
 <!ELEMENT portlet-data-handler-class (#PCDATA)>
 
 <!--
+The staged-model-data-handler-class value must be a class that implements
+com.liferay.portal.kernel.lar.StagedModelDatahandler and is called to handle
+export and import logic for a staged model entity.
+-->
+<!ELEMENT staged-model-data-handler-class (#PCDATA)>
+
+<!--
 The portlet-layout-listener-class value must be a class that implements
 com.liferay.portal.kernel.portlet.PortletLayoutListener and is called when a portlet
 is added, moved, or removed from a layout.
@@ -391,6 +399,13 @@ http://docs.liferay.com/portal/6.2/javadocs/portal-service/com/liferay/portlet/e
 <!ELEMENT custom-attributes-display (#PCDATA)>
 
 <!--
+The ddm-display value must be a class that implements
+com.liferay.portlet.dynamicdatamapping.util.DDMDisplay and is called when
+displaying the portlet.
+-->
+<!ELEMENT ddm-display (#PCDATA)>
+
+<!--
 The permission-propagator value must be a class that implements
 com.liferay.portal.security.permission.PermissionPropagator and is called to
 propagate permissions.
@@ -398,11 +413,11 @@ propagate permissions.
 <!ELEMENT permission-propagator (#PCDATA)>
 
 <!--
-The portlet-display-template-handler value must be a class that implements
-com.liferay.portal.kernel.portletdisplaytemplate.PortletDisplayTemplateHandler
-and is called when displaying the portlet.
+The template-handler value must be a class that implements
+com.liferay.portal.kernel.template.TemplateHandler and is called when displaying
+the portlet.
 -->
-<!ELEMENT portlet-display-template-handler (#PCDATA)>
+<!ELEMENT template-handler (#PCDATA)>
 
 <!--
 The trash-handler value must be a class that implements

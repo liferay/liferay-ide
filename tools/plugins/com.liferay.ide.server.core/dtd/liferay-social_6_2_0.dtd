@@ -7,7 +7,7 @@
 <!ELEMENT liferay-social (activity*)>
 
 <!ELEMENT activity (model-name, activity-type, language-key?, log-activity?,
-processor-class?, contribution-value?, contribution-limit?,
+counters-enabled?, processor-class?, contribution-value?, contribution-limit?,
 contribution-limit-period?, participation-value?, participation-limit?,
 participation-limit-period?, counter*, achievement*)>
 
@@ -18,6 +18,8 @@ participation-limit-period?, counter*, achievement*)>
 <!ELEMENT language-key (#PCDATA)>
 
 <!ELEMENT log-activity (#PCDATA)>
+
+<!ELEMENT counters-enabled (#PCDATA)>
 
 <!ELEMENT processor-class (#PCDATA)>
 

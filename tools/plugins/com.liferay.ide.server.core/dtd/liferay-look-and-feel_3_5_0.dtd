@@ -126,12 +126,6 @@ portlet-bg=#FFFFFF
 portlet-font=#000000
 portlet-font-dim=#C4C4C4
 
-portlet-msg-status=#000000
-portlet-msg-info=#000000
-portlet-msg-error=#FF0000
-portlet-msg-alert=#FF0000
-portlet-msg-success=#007F00
-
 portlet-section-header=#596171
 portlet-section-header-bg=#AFBEDA
 

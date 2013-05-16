@@ -30,6 +30,8 @@ auto.login.hooks
 captcha.check.portal.create_account
 captcha.engine.impl
 com.liferay.portal.servlet.filters.*Filter
+company.default.locale
+company.default.time.zone
 company.settings.form.authentication
 company.settings.form.configuration
 company.settings.form.identification
@@ -37,6 +39,10 @@ company.settings.form.miscellaneous
 control.panel.entry.class.default
 convert.processes
 default.landing.page.path
+default.regular.color.scheme.id
+default.regular.theme.id
+default.wap.color.scheme.id
+default.wap.theme.id
 dl.file.entry.drafts.enabled
 dl.file.entry.processors
 dl.repository.impl
@@ -64,7 +70,9 @@ layout.user.public.layouts.auto.create
 layout.user.public.layouts.enabled
 layout.user.public.layouts.power.user.required
 ldap.attrs.transformer.impl
+locales
 locales.beta
+locales.enabled
 lock.listeners
 login.create.account.allow.custom.password
 login.events.post
@@ -90,6 +98,7 @@ phone.number.format.usa.regexp
 portlet.add.default.resource.check.enabled
 portlet.add.default.resource.check.whitelist
 portlet.add.default.resource.check.whitelist.actions
+rss.feeds.enabled
 sanitizer.impl
 servlet.session.create.events
 servlet.session.destroy.events
@@ -113,6 +122,7 @@ theme.loader.new.theme.id.on.import
 theme.portlet.decorate.default
 theme.portlet.sharing.default
 theme.shortcut.icon
+time.zones
 upgrade.processes
 user.notification.event.confirmation.enabled
 users.email.address.generator

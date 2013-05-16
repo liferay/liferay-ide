@@ -153,26 +153,12 @@ compound key will be created.
 See com.liferay.portal.service.persistence.LayoutPK for an example of a compound
 primary key.
 
-If the entity and mapping-key attributes are specified and mapping-table is not,
-then the Service Builder will assume you are specifying a one to many
-relationship.
+The mapping-key attribute is no longer supported. See LPS-32250 for more
+information. The value of the mapping-key is now always assumed to be the column
+entity's primary key.
 
-For example:
-
-<column
-	name="shoppingItemPrices"
-	type="Collection"
-	entity="ShoppingItemPrice"
-	mapping-key="itemId"
-/>
-
-The above column specifies that there will be a getter called
-pojo.getShoppingItemPrices() that will return a collection. It will map to a
-column called itemId in the table that maps to the entity ShoppingItemPrice.
-
-If the entity and mapping-table attributes are specified and mapping-key is not,
-then the Service Builder will assume you are specifying a many to many
-relationship.
+If the entity and mapping-table attributes are specified, then the Service
+Builder will assume you are specifying a many to many relationship.
 
 For example:
 
@@ -296,6 +282,12 @@ different values for different locales. The default value is false.
 The json-enabled value specifies whether or not the column should be annotated
 for JSON serialization. By default, if the json-enabled value in the entity
 element is true, then the json-enabled value in the column element is true.
+
+The container-model value specifies whether the column represents the primary
+key of a container model.
+
+The parent-container-model value specifies whether the column represents the
+primary key of a parent container model.
 -->
 <!ATTLIST column
 	name CDATA #REQUIRED
@@ -305,7 +297,6 @@ element is true, then the json-enabled value in the column element is true.
 	accessor CDATA #IMPLIED
 	filter-primary CDATA #IMPLIED
 	entity CDATA #IMPLIED
-	mapping-key CDATA #IMPLIED
 	mapping-table CDATA #IMPLIED
 	id-type CDATA #IMPLIED
 	id-param CDATA #IMPLIED
@@ -313,6 +304,8 @@ element is true, then the json-enabled value in the column element is true.
 	lazy CDATA #IMPLIED
 	localized CDATA #IMPLIED
 	json-enabled CDATA #IMPLIED
+	container-model CDATA #IMPLIED
+	parent-container-model CDATA #IMPLIED
 >
 
 <!--
