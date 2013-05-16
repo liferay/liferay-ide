@@ -203,9 +203,9 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                             if( !foundDuplicate )
                             {
                                 categories.put( portletCategory, portletCategory );
-
-                                foundDuplicate = false;
                             }
+
+                            foundDuplicate = false;
                         }
                     }
                 }
