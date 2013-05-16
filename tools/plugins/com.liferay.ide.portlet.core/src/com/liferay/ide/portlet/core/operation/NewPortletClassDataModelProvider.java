@@ -587,42 +587,44 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
     {
         if( SUPERCLASS.equals( propertyName ) )
         {
-            String vals =
+            String defaults =
                 QUALIFIED_MVC_PORTLET + StringPool.COMMA + QUALIFIED_LIFERAY_PORTLET + StringPool.COMMA +
                     QUALIFIED_GENERIC_PORTLET;
 
-            Preferences preferences = PortletCore.getPreferences();
-            String superclasses = preferences.get( PortletCore.PREF_KEY_PORTLET_SUPERCLASSES_USED, null );
-
-            if( superclasses != null )
-            {
-                vals = vals + StringPool.COMMA + superclasses;
-            }
-
-            String[] values = vals.split( StringPool.COMMA );
-            List<String> list = new ArrayList<String>();
+            String[] defaultVals = defaults.split( StringPool.COMMA );
 
             try
             {
                 IJavaProject javaProject = JavaCore.create( getProject() );
+
+                Preferences preferences = PortletCore.getPreferences();
+                String superclasses = preferences.get( PortletCore.PREF_KEY_PORTLET_SUPERCLASSES_USED, null );
+
+                String[] customVals = superclasses.split( StringPool.COMMA );
+
+                List<String> list = new ArrayList<String>();
+                list.addAll( Arrays.asList( defaultVals ) );
+
                 IJavaSearchScope scope =
                     BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) ); //$NON-NLS-1$
 
-                for( int i = 0; i < values.length; i++ )
+                for( int i = 0; i < customVals.length; i++ )
                 {
-                    IType type = javaProject.findType( values[i] );
+                    IType type = javaProject.findType( customVals[i] );
 
                     if( type != null && scope.encloses( type ) )
                     {
-                        list.add( values[i] );
+                        list.add( customVals[i] );
                     }
                 }
+
+                return DataModelPropertyDescriptor.createDescriptors( list.toArray(), list.toArray( new String[0] ) );
             }
             catch( JavaModelException e )
             {
             }
 
-            return DataModelPropertyDescriptor.createDescriptors( list.toArray(), list.toArray( new String[0] ) );
+            return DataModelPropertyDescriptor.createDescriptors( defaultVals, defaultVals );
         }
         else if( CATEGORY.equals( propertyName ) )
         {
