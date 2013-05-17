@@ -168,44 +168,45 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             if( liferayProject != null )
             {
                 categories = liferayProject.getPortletCategories();
-            }
 
-            IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+                IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 
-            for( IProject workspaceProject : workspaceProjects )
-            {
-                if( ProjectUtil.isPortletProject( workspaceProject ) )
+                for( IProject workspaceProject : workspaceProjects )
                 {
-                    PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( workspaceProject );
-                    String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
-
-                    Enumeration<?> names = categories.propertyNames();
-
-                    if( portletCategories.length > 0 )
+                    if( ProjectUtil.isPortletProject( workspaceProject ) )
                     {
-                        boolean foundDuplicate = false;
+                        PortletDescriptorHelper portletDescriptorHelper =
+                            new PortletDescriptorHelper( workspaceProject );
+                        String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
 
-                        for( String portletCategory : portletCategories )
+                        Enumeration<?> names = categories.propertyNames();
+
+                        if( portletCategories.length > 0 )
                         {
-                            names = categories.propertyNames();
+                            boolean foundDuplicate = false;
 
-                            while( names.hasMoreElements() )
+                            for( String portletCategory : portletCategories )
                             {
-                                String name = names.nextElement().toString();
+                                names = categories.propertyNames();
 
-                                if( portletCategory.equals( name ) )
+                                while( names.hasMoreElements() )
                                 {
-                                    foundDuplicate = true;
-                                    break;
+                                    String name = names.nextElement().toString();
+
+                                    if( portletCategory.equals( name ) )
+                                    {
+                                        foundDuplicate = true;
+                                        break;
+                                    }
                                 }
-                            }
 
-                            if( !foundDuplicate )
-                            {
-                                categories.put( portletCategory, portletCategory );
-                            }
+                                if( !foundDuplicate )
+                                {
+                                    categories.put( portletCategory, portletCategory );
+                                }
 
-                            foundDuplicate = false;
+                                foundDuplicate = false;
+                            }
                         }
                     }
                 }
