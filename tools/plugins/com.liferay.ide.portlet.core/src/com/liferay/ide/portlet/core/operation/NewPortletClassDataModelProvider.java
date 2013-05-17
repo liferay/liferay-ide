@@ -601,25 +601,28 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 Preferences preferences = PortletCore.getPreferences();
                 String superclasses = preferences.get( PortletCore.PREF_KEY_PORTLET_SUPERCLASSES_USED, null );
 
-                String[] customVals = superclasses.split( StringPool.COMMA );
-
-                List<String> list = new ArrayList<String>();
-                list.addAll( Arrays.asList( defaultVals ) );
-
-                IJavaSearchScope scope =
-                    BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) ); //$NON-NLS-1$
-
-                for( int i = 0; i < customVals.length; i++ )
+                if( superclasses != null )
                 {
-                    IType type = javaProject.findType( customVals[i] );
+                    String[] customVals = superclasses.split( StringPool.COMMA );
 
-                    if( type != null && scope.encloses( type ) )
+                    List<String> list = new ArrayList<String>();
+                    list.addAll( Arrays.asList( defaultVals ) );
+
+                    IJavaSearchScope scope =
+                        BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) ); //$NON-NLS-1$
+
+                    for( int i = 0; i < customVals.length; i++ )
                     {
-                        list.add( customVals[i] );
-                    }
-                }
+                        IType type = javaProject.findType( customVals[i] );
 
-                return DataModelPropertyDescriptor.createDescriptors( list.toArray(), list.toArray( new String[0] ) );
+                        if( type != null && scope.encloses( type ) )
+                        {
+                            list.add( customVals[i] );
+                        }
+                    }
+
+                    return DataModelPropertyDescriptor.createDescriptors( list.toArray(), list.toArray( new String[0] ) );
+                }
             }
             catch( JavaModelException e )
             {

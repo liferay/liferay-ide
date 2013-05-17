@@ -317,6 +317,8 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
                 super.widgetSelected( e );
                 IProject project = CoreUtil.getProject( projectNameCombo.getText() );
                 validateProjectRequirements( project );
+
+                getDataModel().notifyPropertyChange( SUPERCLASS, IDataModel.VALID_VALUES_CHG );
             }
         } );
         synchHelper.synchCombo( projectNameCombo, IArtifactEditOperationDataModelProperties.PROJECT_NAME, null );
