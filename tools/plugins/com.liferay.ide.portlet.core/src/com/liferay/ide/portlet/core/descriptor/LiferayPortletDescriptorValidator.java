@@ -57,6 +57,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LiferayPortletDescriptorValidator extends BaseValidator
@@ -135,7 +136,10 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
                         PREFERENCE_NODE_QUALIFIER, preferenceScopes, validationKey, (IDOMNode) item,
                         MESSAGE_ENTRY_WEIGHT_NOT_VALID );
 
-                problems.add( problem );
+                if( problem != null )
+                {
+                    problems.add( problem );
+                }
             }
         }
     }
@@ -219,7 +223,10 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
                 createMarkerValues(
                     PREFERENCE_NODE_QUALIFIER, preferenceScopes, validationKey, (IDOMNode) liferayPortletNameNode, msg );
 
-            problems.add( problem );
+            if( problem != null )
+            {
+                problems.add( problem );
+            }
         }
     }
 

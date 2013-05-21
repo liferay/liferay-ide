@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -389,28 +390,7 @@ public abstract class BaseValidator extends AbstractValidator
 
         Map<String, Object> markerValues = new HashMap<String, Object>();
 
-        markerValues.put( IMarker.SEVERITY, severity );
-
-        int start = domNode.getStartOffset();
-
-        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
-        {
-            start = domNode.getStartStructuredDocumentRegion().getEndOffset();
-        }
-
-        int end = domNode.getEndOffset();
-
-        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
-        {
-            end = domNode.getEndStructuredDocumentRegion().getStartOffset();
-        }
-
-        int line = domNode.getStructuredDocument().getLineOfOffset( start );
-
-        markerValues.put( IMarker.CHAR_START, new Integer( start ) );
-        markerValues.put( IMarker.CHAR_END, new Integer( end ) );
-        markerValues.put( IMarker.LINE_NUMBER, new Integer( line + 1 ) );
-        markerValues.put( IMarker.MESSAGE, message );
+        setMarkerValues( markerValues, severity, domNode, message );
 
         return markerValues;
     }
@@ -419,9 +399,12 @@ public abstract class BaseValidator extends AbstractValidator
     {
         Map<String, String> map = new HashMap<String, String>();
         Properties p = new Properties();
+        InputStream resource = null;
+
         try
         {
-            p.load( this.getClass().getClassLoader().getResourceAsStream( liferayDescriptorClassElementsProperties ) );
+            resource = this.getClass().getClassLoader().getResourceAsStream( liferayDescriptorClassElementsProperties );
+            p.load( resource );
 
             for( Object key : p.keySet() )
             {
@@ -434,6 +417,19 @@ public abstract class BaseValidator extends AbstractValidator
         catch( IOException e )
         {
             LiferayProjectCore.logError( e );
+        }
+        finally
+        {
+            if( resource != null )
+            {
+                try
+                {
+                    resource.close();
+                }
+                catch( IOException e )
+                {
+                }
+            }
         }
 
         return map;
@@ -459,6 +455,32 @@ public abstract class BaseValidator extends AbstractValidator
         }
 
         return new Integer( IMarker.SEVERITY_WARNING );
+    }
+
+    protected void setMarkerValues( Map<String, Object> markerValues, Object severity, IDOMNode domNode, String message )
+    {
+        markerValues.put( IMarker.SEVERITY, severity );
+
+        int start = domNode.getStartOffset();
+
+        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
+        {
+            start = domNode.getStartStructuredDocumentRegion().getEndOffset();
+        }
+
+        int end = domNode.getEndOffset();
+
+        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
+        {
+            end = domNode.getEndStructuredDocumentRegion().getStartOffset();
+        }
+
+        int line = domNode.getStructuredDocument().getLineOfOffset( start );
+
+        markerValues.put( IMarker.CHAR_START, new Integer( start ) );
+        markerValues.put( IMarker.CHAR_END, new Integer( end ) );
+        markerValues.put( IMarker.LINE_NUMBER, new Integer( line + 1 ) );
+        markerValues.put( IMarker.MESSAGE, message );
     }
 
     @Override

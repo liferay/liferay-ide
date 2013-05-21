@@ -89,5 +89,9 @@ public class ValidationPreferences
     public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =
         "validation-portlet-xml-resource-bundle-not-found"; //$NON-NLS-1$
 
+    public static final String SERVICE_XML_NAMESPACE_INVALID = "validation-service-xml-namespace-invalid"; //$NON-NLS-1$
+
+    public static final String SERVICE_XML_PACKAGE_PATH_INVALID = "validation-service-xml-package-path-invalid"; //$NON-NLS-1$
+
     // public static final String SDK_NOT_VALID = "validation-sdk-not-valid";
 }

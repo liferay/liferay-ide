@@ -20,6 +20,7 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.service.core.ServiceCore;
+import com.liferay.ide.service.core.util.ServiceUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,7 @@ import org.eclipse.wst.common.frameworks.internal.plugin.WTPCommonPlugin;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDataModelProvider
@@ -230,6 +232,11 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
             if( empty( namespace ) )
             {
                 return ServiceCore.createErrorStatus( Msgs.namespaceNotEmpty );
+            }
+
+            if( ! ServiceUtil.isValidNamespace( namespace ) )
+            {
+                return ServiceCore.createErrorStatus( Msgs.namespaceInvalid );
             }
         }
 
@@ -491,6 +498,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
 
     private static class Msgs extends NLS
     {
+        public static String namespaceInvalid;
         public static String namespaceNotEmpty;
         public static String packagePathNotEmpty;
         public static String projectContainsServiceXmlFile;

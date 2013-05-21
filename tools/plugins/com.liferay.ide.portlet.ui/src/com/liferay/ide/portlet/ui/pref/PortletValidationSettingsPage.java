@@ -216,6 +216,12 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
             inner, Msgs.thumbnailPathResourceNotFound,
             ValidationPreferences.LIFERAY_LAYOUTTPL_XML_THUMBNAIL_PATH_NOT_FOUND );
 
+        twistie = createTwistie( body, Msgs.serviceXMLDescriptor, columns );
+        inner = createInnerComposite( parent, twistie, columns );
+
+        createCombo( inner, Msgs.namespaceNotValid, ValidationPreferences.SERVICE_XML_NAMESPACE_INVALID );
+        createCombo( inner, Msgs.packagePathNotValid, ValidationPreferences.SERVICE_XML_PACKAGE_PATH_INVALID );
+
         return parent;
     }
 
@@ -316,12 +322,15 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         public static String liferayHookXMLDescriptor;
         public static String liferayLayoutTemplatesDescriptor;
         public static String liferayPortletXMLDescriptor;
+        public static String namespaceNotValid;
+        public static String packagePathNotValid;
         public static String portalPropertiesResourceNotFound;
         public static String portletIdNotFound;
         public static String portletNameNotFound;
         public static String portletXMLDescriptor;
         public static String resourceBundleNotFound;
         public static String selectSeverityLevel;
+        public static String serviceXMLDescriptor;
         public static String templatePathResourceNotFound;
         public static String thumbnailPathResourceNotFound;
         public static String wapTemplatePathResourceNotFound;

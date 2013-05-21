@@ -15,6 +15,8 @@
 
 package com.liferay.ide.service.core.model;
 
+import com.liferay.ide.service.core.model.internal.NamespaceValidationService;
+import com.liferay.ide.service.core.model.internal.PackagePathValidationService;
 import com.liferay.ide.service.core.model.internal.RelationshipsBindingImpl;
 import com.liferay.ide.service.core.model.internal.ShowRelationshipLabelsBinding;
 
@@ -28,6 +30,7 @@ import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -36,6 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @GenerateImpl
 @VersionCompatibilityTarget( version = "${ Version }", versioned = "Service Builder" )
@@ -47,6 +51,7 @@ public interface ServiceBuilder extends IModelElement
 
 	@XmlBinding(path = "@package-path")
 	@Label(standard = "&Package path")
+	@Service(impl = PackagePathValidationService.class)
 	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath"); //$NON-NLS-1$
 
 	Value<String> getPackagePath();
@@ -80,6 +85,7 @@ public interface ServiceBuilder extends IModelElement
 
 	@XmlBinding(path = "namespace")
 	@Label(standard = "&Namespace")
+	@Service(impl = NamespaceValidationService.class)
 	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace"); //$NON-NLS-1$
 
 	Value<String> getNamespace();

@@ -54,6 +54,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LiferayDisplayDescriptorValidator extends BaseValidator
@@ -173,7 +174,10 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator
                     createMarkerValues(
                         PREFERENCE_NODE_QUALIFIER, preferenceScopes, validationKey, (IDOMNode) portletIdNode, msg );
 
-                problems.add( problem );
+                if( problem != null )
+                {
+                    problems.add( problem );
+                }
             }
         }
 

@@ -20,6 +20,7 @@ import org.w3c.dom.DocumentType;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class ServiceUtil
 {
@@ -49,4 +50,30 @@ public class ServiceUtil
 
         return dtdVersion;
     }
+
+    public static boolean isChar( char c )
+    {
+        int x = c;
+
+        if( ( x >= 97 && x <= 122 ) || ( x >= 65 && x <= 90 ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isValidNamespace( String namespace )
+    {
+        for( char c : namespace.toCharArray() )
+        {
+            if( ( c != '_' ) && ( ! isChar( c ) ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }
