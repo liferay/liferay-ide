@@ -19,7 +19,6 @@ import com.liferay.ide.service.core.model.ServiceBuilder;
 import com.liferay.ide.service.core.util.ServiceUtil;
 
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.services.ValidationService;
@@ -33,23 +32,16 @@ public class NamespaceValidationService extends ValidationService
     public Status validate()
     {
         final Value<String> namespace = context().find( ServiceBuilder.class ).getNamespace();
-        final String label = ( namespace.getProperty() ).getLabel( true, CapitalizationType.NO_CAPS, false );
-
         String content = namespace.getContent();
-
-        String msg = null;
 
         if( content == null )
         {
-            msg = NLS.bind( Msgs.namespaceNotEmpty, label );
-
-            return Status.createErrorStatus( msg );
+            return Status.createErrorStatus( Msgs.namespaceNotEmpty );
         }
-        else if( ! ServiceUtil.isValidNamespace( content.toString() ) )
-        {
-            msg = NLS.bind( Msgs.namespaceElementValidKeyword, label );
 
-            return Status.createErrorStatus( msg );
+        if( ! ServiceUtil.isValidNamespace( content.toString() ) )
+        {
+            return Status.createErrorStatus( Msgs.namespaceElementValidKeyword );
         }
 
         return Status.createOkStatus();

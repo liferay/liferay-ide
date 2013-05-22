@@ -22,7 +22,6 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jst.j2ee.internal.common.J2EECommonMessages;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.sapphire.modeling.CapitalizationType;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.services.ValidationService;
@@ -37,37 +36,25 @@ public class PackagePathValidationService extends ValidationService
     public Status validate()
     {
         final Value<String> packagePath = context().find( ServiceBuilder.class ).getPackagePath();
-        final String label = ( packagePath.getProperty() ).getLabel( true, CapitalizationType.NO_CAPS, false );
-
         String packPathVal = packagePath.getContent();
-
-        String msg = null;
 
         if( packPathVal == null )
         {
-            msg = NLS.bind( Msgs.packagePathNotEmpty, label );
-
-            return Status.createErrorStatus( msg );
+            return Status.createErrorStatus( Msgs.packagePathNotEmpty );
         }
-        else
+
+        // Use standard java conventions to validate the package name
+        IStatus javaStatus =
+            JavaConventions.validatePackageName( packPathVal, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+
+        if( javaStatus.getSeverity() == IStatus.ERROR )
         {
-            // Use standard java conventions to validate the package name
-            IStatus javaStatus =
-                JavaConventions.validatePackageName(
-                    packPathVal, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+            return Status.createErrorStatus( J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage() );
+        }
 
-            if( javaStatus.getSeverity() == IStatus.ERROR )
-            {
-                msg = NLS.bind( J2EECommonMessages.ERR_JAVA_PACAKGE_NAME_INVALID + javaStatus.getMessage(), label );
-
-                return Status.createErrorStatus( msg );
-            }
-            else if( javaStatus.getSeverity() == IStatus.WARNING )
-            {
-                msg = NLS.bind( J2EECommonMessages.ERR_JAVA_PACKAGE_NAME_WARNING + javaStatus.getMessage(), label );
-
-                return Status.createWarningStatus( msg );
-            }
+        if( javaStatus.getSeverity() == IStatus.WARNING )
+        {
+            return Status.createWarningStatus( J2EECommonMessages.ERR_JAVA_PACKAGE_NAME_WARNING + javaStatus.getMessage() );
         }
 
         return Status.createOkStatus();
