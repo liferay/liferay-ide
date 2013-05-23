@@ -24,6 +24,7 @@ import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -378,11 +379,25 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             final IProject project = (IProject) getProperty( PROJECT );
 
-            final ILiferayProject liferayProject = LiferayCore.create( project );
-
-            if( liferayProject != null )
+            if( ServerUtil.isLiferayProject( project ) )
             {
-                entryCategories = liferayProject.getPortletEntryCategories();
+                final ILiferayProject liferayProject = LiferayCore.create( project );
+
+                if( liferayProject != null )
+                {
+                    entryCategories = liferayProject.getPortletEntryCategories();
+                }
+            }
+            else
+            {
+                try
+                {
+                    ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( getRuntime() );
+                    entryCategories = runtime.getPortletEntryCategories();
+                }
+                catch( CoreException e )
+                {
+                }
             }
         }
 

@@ -101,7 +101,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         this.addToControlPanelButton = SWTUtil.createCheckButton(group, Msgs.addControlPanel, null, false, 1);
         this.synchHelper.synchCheckbox(this.addToControlPanelButton, ADD_TO_CONTROL_PANEL, null);
 
-        final Label entryCategoryLabel = SWTUtil.createLabel(group, Msgs.entryCatagoryLabel, 1);
+        final Label entryCategoryLabel = SWTUtil.createLabel(group, Msgs.entryCategoryLabel, 1);
         
         this.entryCategory = new Combo(group, SWT.DROP_DOWN);
         this.entryCategory.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -413,7 +413,7 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
         public static String cssClassWrapperLabel;
         public static String cssSelection;
         public static String displayCategoryLabel;
-        public static String entryCatagoryLabel;
+        public static String entryCategoryLabel;
         public static String entryClassLabel;
         public static String entryWeightLabel;
         public static String iconLabel;
