@@ -164,50 +164,68 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             final IProject project = (IProject) getProperty( PROJECT );
 
-            final ILiferayProject liferayProject = LiferayCore.create( project );
-
-            if( liferayProject != null )
+            if( ServerUtil.isLiferayProject( project ) )
             {
-                categories = liferayProject.getPortletCategories();
+                final ILiferayProject liferayProject = LiferayCore.create( project );
 
-                IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-
-                for( IProject workspaceProject : workspaceProjects )
+                if( liferayProject != null )
                 {
-                    if( ProjectUtil.isPortletProject( workspaceProject ) )
+                    categories = liferayProject.getPortletCategories();
+                }
+            }
+            else
+            {
+                try
+                {
+                    ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( getRuntime() );
+
+                    if( runtime != null )
                     {
-                        PortletDescriptorHelper portletDescriptorHelper =
-                            new PortletDescriptorHelper( workspaceProject );
-                        String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
+                        categories = runtime.getPortletCategories();
+                    }
+                }
+                catch( CoreException e )
+                {
+                    PortletCore.logError( e );
+                }
+            }
 
-                        Enumeration<?> names = categories.propertyNames();
+            IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 
-                        if( portletCategories.length > 0 )
+            for( IProject workspaceProject : workspaceProjects )
+            {
+                if( ProjectUtil.isPortletProject( workspaceProject ) )
+                {
+                    PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( workspaceProject );
+                    String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
+
+                    Enumeration<?> names = categories.propertyNames();
+
+                    if( portletCategories.length > 0 )
+                    {
+                        boolean foundDuplicate = false;
+
+                        for( String portletCategory : portletCategories )
                         {
-                            boolean foundDuplicate = false;
+                            names = categories.propertyNames();
 
-                            for( String portletCategory : portletCategories )
+                            while( names.hasMoreElements() )
                             {
-                                names = categories.propertyNames();
+                                String name = names.nextElement().toString();
 
-                                while( names.hasMoreElements() )
+                                if( portletCategory.equals( name ) )
                                 {
-                                    String name = names.nextElement().toString();
-
-                                    if( portletCategory.equals( name ) )
-                                    {
-                                        foundDuplicate = true;
-                                        break;
-                                    }
+                                    foundDuplicate = true;
+                                    break;
                                 }
-
-                                if( !foundDuplicate )
-                                {
-                                    categories.put( portletCategory, portletCategory );
-                                }
-
-                                foundDuplicate = false;
                             }
+
+                            if( !foundDuplicate )
+                            {
+                                categories.put( portletCategory, portletCategory );
+                            }
+
+                            foundDuplicate = false;
                         }
                     }
                 }
