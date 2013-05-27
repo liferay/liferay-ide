@@ -34,9 +34,12 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.dnd.TemplateTransferDropTargetListener;
 import org.eclipse.gef.palette.PaletteRoot;
+import org.eclipse.gef.requests.CreateRequest;
 import org.eclipse.gef.requests.CreationFactory;
 import org.eclipse.gef.requests.SimpleFactory;
 import org.eclipse.gef.ui.actions.ActionRegistry;
@@ -52,6 +55,7 @@ import org.eclipse.gef.ui.parts.SelectionSynchronizer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.util.TransferDropTargetListener;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Composite;
@@ -311,6 +315,22 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
                 }
 
                 return new SimpleFactory( (Class<?>) template );
+            }
+
+            @Override
+            protected void updateTargetRequest()
+            {
+                this.updateTargetEditPart();
+                CreateRequest request = getCreateRequest();
+                request.setLocation( getDropLocation() );
+                Command command = this.getTargetEditPart().getCommand( request );
+
+                // detect if we are in an invalid create request
+                if( command == null || command.equals( UnexecutableCommand.INSTANCE ))
+                {
+                    getCurrentEvent().detail = DND.DROP_NONE;
+                    getCurrentEvent().feedback = DND.FEEDBACK_NONE;
+                }
             }
         };
     }

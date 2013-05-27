@@ -38,12 +38,14 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "rawtypes" )
 public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
@@ -82,61 +84,65 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
             boolean isRowRequest = LayoutTplUIUtil.isCreateRequest( PortletLayout.class, request );
             boolean isColumnRequest = LayoutTplUIUtil.isCreateRequest( PortletColumn.class, request );
             LayoutConstraint constraint = (LayoutConstraint) getConstraintFor( (CreateRequest) request );
-            feedback = new FeedbackRoundedRectangle();
 
-            Rectangle partBounds = getPart().getFigure().getBounds().getCopy();
-
-            if( isRowRequest )
+            if( constraint != null )
             {
-                feedback.setSize( getContainerWidth(), LayoutTplDiagramLayoutEditPolicy.DEFAULT_FEEDBACK_HEIGHT );
+                feedback = new FeedbackRoundedRectangle();
 
-                PortletLayoutEditPart layoutEditPart = (PortletLayoutEditPart) getHost();
-                int currentRowIndex = LayoutTplUIUtil.getRowIndex( layoutEditPart );
-                if( constraint.newRowIndex == currentRowIndex )
-                {
-                    partBounds.y -= ( feedback.getSize().height / 2 );
-                }
-                else if( constraint.newRowIndex > currentRowIndex || constraint.newRowIndex == -1 )
-                {
-                    partBounds.y = partBounds.y + partBounds.height - ( feedback.getSize().height / 2 );
-                }
+                Rectangle partBounds = getPart().getFigure().getBounds().getCopy();
 
-                feedback.setLocation( new Point( partBounds.x, partBounds.y ) );
-            }
-            else if( isColumnRequest )
-            {
-                feedback.setSize( (int) ( PortletLayoutEditPart.COLUMN_SPACING * 1.2 ), partBounds.height -
-                    ( PortletLayoutEditPart.LAYOUT_MARGIN * 2 ) );
-                Point rectLocation = null;
-
-                List children = getPart().getChildren();
-
-                if( constraint.newColumnIndex >= children.size() )
+                if( isRowRequest )
                 {
-                    PortletColumnEditPart insertColumnPart =
-                        (PortletColumnEditPart) getPart().getChildren().get( constraint.newColumnIndex - 1 );
-                    Rectangle insertColumnRect = insertColumnPart.getFigure().getBounds();
-                    rectLocation = new Point( insertColumnRect.x + insertColumnRect.width, insertColumnRect.y );
-                }
-                else
-                {
-                    int index = 0;
-                    if( constraint.newColumnIndex > -1 )
+                    feedback.setSize( getContainerWidth(), LayoutTplDiagramLayoutEditPolicy.DEFAULT_FEEDBACK_HEIGHT );
+
+                    PortletLayoutEditPart layoutEditPart = (PortletLayoutEditPart) getHost();
+                    int currentRowIndex = LayoutTplUIUtil.getRowIndex( layoutEditPart );
+                    if( constraint.newRowIndex == currentRowIndex )
                     {
-                        index = constraint.newColumnIndex;
+                        partBounds.y -= ( feedback.getSize().height / 2 );
+                    }
+                    else if( constraint.newRowIndex > currentRowIndex || constraint.newRowIndex == -1 )
+                    {
+                        partBounds.y = partBounds.y + partBounds.height - ( feedback.getSize().height / 2 );
+                    }
+
+                    feedback.setLocation( new Point( partBounds.x, partBounds.y ) );
+                }
+                else if( isColumnRequest )
+                {
+                    feedback.setSize( (int) ( PortletLayoutEditPart.COLUMN_SPACING * 1.2 ), partBounds.height -
+                        ( PortletLayoutEditPart.LAYOUT_MARGIN * 2 ) );
+                    Point rectLocation = null;
+
+                    List children = getPart().getChildren();
+
+                    if( constraint.newColumnIndex >= children.size() )
+                    {
+                        PortletColumnEditPart insertColumnPart =
+                            (PortletColumnEditPart) getPart().getChildren().get( constraint.newColumnIndex - 1 );
+                        Rectangle insertColumnRect = insertColumnPart.getFigure().getBounds();
+                        rectLocation = new Point( insertColumnRect.x + insertColumnRect.width, insertColumnRect.y );
                     }
                     else
                     {
-                        index = getPart().getChildren().size() - 1;
+                        int index = 0;
+                        if( constraint.newColumnIndex > -1 )
+                        {
+                            index = constraint.newColumnIndex;
+                        }
+                        else
+                        {
+                            index = getPart().getChildren().size() - 1;
+                        }
+
+                        PortletColumnEditPart insertColumnPart =
+                            (PortletColumnEditPart) getPart().getChildren().get( index );
+                        Rectangle insertColumnRect = insertColumnPart.getFigure().getBounds();
+                        rectLocation = new Point( insertColumnRect.x - feedback.getSize().width, insertColumnRect.y );
                     }
 
-                    PortletColumnEditPart insertColumnPart =
-                        (PortletColumnEditPart) getPart().getChildren().get( index );
-                    Rectangle insertColumnRect = insertColumnPart.getFigure().getBounds();
-                    rectLocation = new Point( insertColumnRect.x - feedback.getSize().width, insertColumnRect.y );
+                    feedback.setLocation( rectLocation );
                 }
-
-                feedback.setLocation( rectLocation );
             }
         }
         else if( request instanceof ChangeBoundsRequest )
@@ -267,15 +273,37 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
                 }
             }
 
-            // for the weight lets cut in half the column just inserted next two
+            // find the nearest(right first) >5% column as ref column; if all columns are 5%, make command invalid
             PortletColumnEditPart refColumnPart = null;
-            if( constraint.newColumnIndex < numColumns )
+
+            for( int i = 0; i < numColumns; i++ )
             {
-                refColumnPart = (PortletColumnEditPart) columns.get( constraint.newColumnIndex );
+                if( constraint.newColumnIndex + i < numColumns )
+                {
+                    PortletColumnEditPart ref = (PortletColumnEditPart) columns.get( constraint.newColumnIndex + i );
+
+                    if( ref.getCastedModel().getWeight() > 5 )
+                    {
+                        refColumnPart = ref;
+                        break;
+                    }
+                }
+
+                if( constraint.newColumnIndex - i > 0 )
+                {
+                    PortletColumnEditPart ref = (PortletColumnEditPart) columns.get( constraint.newColumnIndex - 1 - i );
+
+                    if( ref.getCastedModel().getWeight() > 5 )
+                    {
+                        refColumnPart = ref;
+                        break;
+                    }
+                }
             }
-            else
+
+            if( refColumnPart == null )
             {
-                refColumnPart = (PortletColumnEditPart) columns.get( constraint.newColumnIndex - 1 );
+                return null;
             }
 
             int refWeight = refColumnPart.getCastedModel().getWeight();
@@ -378,6 +406,11 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
     @Override
     protected Command getCreateCommand( CreateRequest request )
     {
+        if( getConstraintFor( request ) == null )
+        {
+            return UnexecutableCommand.INSTANCE;
+        }
+
         Object childClass = request.getNewObjectType();
 
         if( childClass == PortletColumn.class )

@@ -38,11 +38,13 @@ import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.UnexecutableCommand;
 import org.eclipse.gef.editpolicies.ConstrainedLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "rawtypes" )
 public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolicy
@@ -213,6 +215,11 @@ public class LayoutTplDiagramLayoutEditPolicy extends ConstrainedLayoutEditPolic
     @Override
     protected Command getCreateCommand( CreateRequest request )
     {
+        if( getConstraintFor( request ) == null )
+        {
+            return UnexecutableCommand.INSTANCE;
+        }
+
         Object childClass = request.getNewObjectType();
 
         if( childClass == PortletColumn.class )

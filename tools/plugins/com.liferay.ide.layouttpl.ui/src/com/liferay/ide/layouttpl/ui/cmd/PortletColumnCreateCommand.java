@@ -22,6 +22,7 @@ import com.liferay.ide.layouttpl.ui.model.LayoutConstraint;
 import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
+import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
 
 import org.eclipse.gef.commands.Command;
 import org.eclipse.osgi.util.NLS;
@@ -72,7 +73,10 @@ public class PortletColumnCreateCommand extends Command
             if( layoutConstraint.refColumn != null )
             {
                 refColumnOldWeight = layoutConstraint.refColumn.getWeight();
-                layoutConstraint.refColumn.setWeight( layoutConstraint.weight );
+
+                //- 1 is for 33% to get 15% ref column not 20% after adjust weight
+                int newRefWeight = refColumnOldWeight - layoutConstraint.weight - 1;
+                layoutConstraint.refColumn.setWeight( LayoutTplUIUtil.adjustWeight( newRefWeight ) );
             }
 
             newColumn.setWeight( layoutConstraint.weight );
