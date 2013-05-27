@@ -138,10 +138,17 @@ public class PortletRowLayoutElement extends ModelElement implements PropertyCha
                 if( i == 0 && cols.size() > 1 )
                 {
                     col.setFirst( true );
+                    col.setLast( false );
                 }
                 else if( cols.size() > 1 && i == ( cols.size() - 1 ) )
                 {
                     col.setLast( true );
+                    col.setFirst( false );
+                }
+                else
+                {
+                    col.setFirst( false );
+                    col.setLast( false );
                 }
             }
         }
