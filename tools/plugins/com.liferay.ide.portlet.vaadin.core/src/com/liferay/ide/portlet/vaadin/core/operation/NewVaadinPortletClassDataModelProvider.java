@@ -15,8 +15,10 @@
 
 package com.liferay.ide.portlet.vaadin.core.operation;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
+import com.liferay.ide.portlet.vaadin.core.VaadinCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
 import java.util.ArrayList;
@@ -24,13 +26,16 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.JavaConventions;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
 
 /**
  * @author Henri Sara
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
 public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataModelProvider
@@ -136,10 +141,29 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
     @Override
     public IStatus validate( String propertyName )
     {
-        // also accept the case where the superclass does not exist (yet)
+        // also accept the case where the superclass/portlet class does not exist (yet), perform basic java validation
         if( SUPERCLASS.equals( propertyName ) )
         {
-            return Status.OK_STATUS;
+            String superclass = getStringProperty( propertyName );
+
+            if( CoreUtil.isNullOrEmpty( superclass ) )
+            {
+                return VaadinCore.createErrorStatus( Msgs.specifyPortletSuperclass );
+            }
+
+            return JavaConventions.validateJavaTypeName( superclass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5 );
+        }
+
+        if( VAADIN_PORTLET_CLASS.equals( propertyName ) )
+        {
+            String vaadinPortletClass = getStringProperty( propertyName );
+
+            if( CoreUtil.isNullOrEmpty( vaadinPortletClass ) )
+            {
+                return VaadinCore.createErrorStatus( Msgs.specifyVaadinPortletClass );
+            }
+
+            return JavaConventions.validateJavaTypeName( vaadinPortletClass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5 );
         }
 
         return super.validate( propertyName );
@@ -167,4 +191,14 @@ public class NewVaadinPortletClassDataModelProvider extends NewPortletClassDataM
         return initParams;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String specifyPortletSuperclass;
+        public static String specifyVaadinPortletClass;
+
+        static
+        {
+            initializeMessages( NewVaadinPortletClassDataModelProvider.class.getName(), Msgs.class );
+        }
+    }
 }

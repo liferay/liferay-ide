@@ -43,6 +43,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
@@ -125,6 +126,7 @@ public class NewJSFPortletClassWizardPage extends NewPortletClassWizardPage
         }
         else
         {
+            validationPropertyNames.add( JSF_PORTLET_CLASS );
             Collections.addAll( validationPropertyNames, super.getValidationPropertyNames() );
         }
 

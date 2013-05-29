@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
@@ -753,6 +754,30 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         return super.isPropertyEnabled( propertyName );
     }
 
+    public boolean isValidPortletClass( String qualifiedClassName )
+    {
+        try
+        {
+            IJavaProject javaProject = JavaCore.create( getProject() );
+
+            IJavaSearchScope scope =
+                BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) );
+
+            IType classType = javaProject.findType( qualifiedClassName );
+
+            if( classType != null && scope.encloses( classType ) )
+            {
+                return true;
+            }
+        }
+        catch( JavaModelException e )
+        {
+            PortletCore.logError( e );
+        }
+
+        return false;
+    }
+
     @Override
     public boolean propertySet( String propertyName, Object propertyValue )
     {
@@ -926,26 +951,27 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 }
             }
         }
-        else if( ( SUPERCLASS.equals( propertyName ) || SOURCE_FOLDER.equals( propertyName ) ) && this.fragment )
+        else if( SOURCE_FOLDER.equals( propertyName ) && this.fragment )
         {
-            if( SUPERCLASS.equals( propertyName ) )
-            {
-                String superclass = getStringProperty( propertyName );
-
-                if( CoreUtil.isNullOrEmpty( superclass ) )
-                {
-                    return PortletCore.createErrorStatus( Msgs.specifyPortletSuperclass );
-                }
-            }
-
             return Status.OK_STATUS;
         }
-        else if( SUPERCLASS.equals( propertyName ) && !this.fragment )
+        else if( SUPERCLASS.equals( propertyName ) )
         {
             String superclass = getStringProperty( propertyName );
+
             if( CoreUtil.isNullOrEmpty( superclass ) )
             {
                 return PortletCore.createErrorStatus( Msgs.specifyPortletSuperclass );
+            }
+
+            if( this.fragment )
+            {
+                return JavaConventions.validateJavaTypeName( superclass, JavaCore.VERSION_1_5, JavaCore.VERSION_1_5 );
+            }
+
+            if( ! isValidPortletClass( superclass ) )
+            {
+                return PortletCore.createErrorStatus( Msgs.portletSuperclassValid );
             }
         }
         else if( ENTRY_WEIGHT.equals( propertyName ) )
@@ -992,6 +1018,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         public static String jspFolderNotMatchPortletName;
         public static String portletNameEmpty;
         public static String portletNameExists;
+        public static String portletSuperclassValid;
         public static String resourceBundleFilePathEndWithProperties;
         public static String resourceBundleFilePathValid;
         public static String specifyPortletSuperclass;

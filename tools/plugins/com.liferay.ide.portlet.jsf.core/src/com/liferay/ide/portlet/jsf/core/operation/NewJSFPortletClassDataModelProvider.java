@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.jsf.core.operation;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.portlet.jsf.core.JSFCorePlugin;
@@ -25,12 +26,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.web.operations.INewWebClassDataModelProperties;
 import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
 public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataModelProvider
@@ -131,12 +134,34 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
             }
         }
 
+        if( JSF_PORTLET_CLASS.equals( propertyName ) )
+        {
+            String vaadinPortletClass = getStringProperty( propertyName );
+
+            if( CoreUtil.isNullOrEmpty( vaadinPortletClass ) )
+            {
+                return JSFCorePlugin.createErrorStatus( Msgs.specifyJSFPortletClass );
+            }
+
+            if( this.fragment ) //won't be fragment right now, just in case
+            {
+                return Status.OK_STATUS;
+            }
+
+            if( ! isValidPortletClass( vaadinPortletClass ) )
+            {
+                return JSFCorePlugin.createErrorStatus( Msgs.jsfPortletClassValid );
+            }
+        }
+
         return super.validate( propertyName );
     }
 
     private static class Msgs extends NLS
     {
         public static String duplicatePortletName;
+        public static String jsfPortletClassValid;
+        public static String specifyJSFPortletClass;
 
         static
         {

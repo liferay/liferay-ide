@@ -46,6 +46,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Henri Sara - borrows from superclass by Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPage
@@ -132,17 +133,18 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
 
         if( this.fragment )
         {
-            return new String[] 
-            { 
+            return new String[]
+            {
                 IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
-                INewJavaClassDataModelProperties.JAVA_PACKAGE, 
+                INewJavaClassDataModelProperties.JAVA_PACKAGE,
                 INewJavaClassDataModelProperties.CLASS_NAME,
-                INewJavaClassDataModelProperties.SUPERCLASS, 
-                VAADIN_PORTLET_CLASS 
+                INewJavaClassDataModelProperties.SUPERCLASS,
+                VAADIN_PORTLET_CLASS
             };
         }
         else
         {
+            validationPropertyNames.add( VAADIN_PORTLET_CLASS );
             Collections.addAll( validationPropertyNames, super.getValidationPropertyNames() );
         }
 
