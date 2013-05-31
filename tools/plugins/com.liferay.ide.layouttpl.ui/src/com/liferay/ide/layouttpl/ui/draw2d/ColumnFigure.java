@@ -56,10 +56,7 @@ public class ColumnFigure extends RoundedRectangle
             return;
         }
 
-        if( correctedFont == null )
-        {
-            correctFont();
-        }
+        correctFont();
 
         if( graphics.getFont() != null )
         {
@@ -82,7 +79,17 @@ public class ColumnFigure extends RoundedRectangle
 
             for( int i = 0; i < fontData.length; i++ )
             {
-                fontData[i].setHeight( 24 );
+                int height = 24;
+                fontData[i].setHeight( height );
+
+                int width = getFontWidth( fontData[i] );
+
+                while( width > getPreferredSize().width() - 1 )
+                {
+                    height--;
+                    fontData[i].setHeight( height );
+                    width = getFontWidth( fontData[i] );
+                }
             }
 
             Font oldFont = null;
@@ -108,6 +115,16 @@ public class ColumnFigure extends RoundedRectangle
         {
             correctedFont.dispose();
         }
+    }
+
+    protected int getFontWidth( FontData fontData )
+    {
+        int width;
+        Font newFont = new Font( this.getFont().getDevice(), fontData );
+        width = FigureUtilities.getTextExtents( getText(), newFont ).width();
+        newFont.dispose();
+
+        return width;
     }
 
     public String getText()
