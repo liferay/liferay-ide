@@ -171,7 +171,7 @@
           default="true"
           description="%portlet.framework.description"
           displayName="%portlet.framework.display.name"
-          helpUrl="http://www.liferay.com/documentation/liferay-portal/6.1/development/-/ai/portlet-development"
+          helpUrl="http://www.liferay.com/documentation/liferay-portal/6.1/development"
           id="com.liferay.ide.project.core.framework.mvc"
           requiredSDKVersion="6.0.1"
           shortName="mvc">

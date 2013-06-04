@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -50,6 +49,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizardPage
@@ -132,28 +132,6 @@ public class NewPortletPluginProjectPage extends J2EEComponentFacetCreationWizar
                 final String url = (helpUrl != null ? helpUrl.toExternalForm() : null);
                 Link descriptionWithLink = SWTUtil.createHyperLink(group, SWT.WRAP, framework.getDescription() + (helpUrl != null ? NLS.bind( " <a>{0}</a>", Msgs.learnMoreLink ) : StringPool.EMPTY), 1, url); //$NON-NLS-1$
                 descriptionWithLink.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-
-                if( helpUrl != null )
-                {
-                    descriptionWithLink.addSelectionListener( new SelectionAdapter()
-                    {
-
-                        @Override
-                        public void widgetSelected( SelectionEvent e )
-                        {
-                            try
-                            {
-                                PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL( helpUrl );
-                            }
-                            catch( Exception e1 )
-                            {
-                                ProjectUIPlugin.logError( "Could not open external browser", e1 ); //$NON-NLS-1$
-                            }
-                        }
-
-                    } );
-                }
-
             }
 
             frameworkButtons = buttons.toArray( new Button[0] );
