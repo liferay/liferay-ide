@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.tomcat.core.util;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
@@ -77,7 +78,7 @@ public class LiferayTomcatUtil
 {
 
     // to read liferay info from manifest need at least version 6.2.0
-    private static final Version MANIFEST_VERSION_REQUIRED = new Version( 6, 2, 0 );
+    private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V620;
 
     private static String CONFIG_DIR = "conf"; //$NON-NLS-1$
     public static final String CONFIG_TYPE_SERVER = "server"; //$NON-NLS-1$

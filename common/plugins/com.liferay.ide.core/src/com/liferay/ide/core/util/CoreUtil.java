@@ -87,6 +87,14 @@ public class CoreUtil
         proj.setDescription( description, monitor );
     }
 
+    /**
+     * Compares v1 <-> v2, if v1 is greater than v2, then result will be > 0
+     * if v2 is greater than v1 the result will be < 0
+     *
+     * @param v1
+     * @param v2
+     * @return
+     */
     public static int compareVersions( Version v1, Version v2 )
     {
         if( v2 == v1 )

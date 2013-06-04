@@ -128,7 +128,7 @@
             sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
       <launchConfigurationType
-            delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
+            delegate="com.liferay.ide.server.tomcat.core.LiferayTomcatLaunchConfigDelegate"
             id="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
             name="%liferay.v62.ce.tomcat70.launch.config.type.name"

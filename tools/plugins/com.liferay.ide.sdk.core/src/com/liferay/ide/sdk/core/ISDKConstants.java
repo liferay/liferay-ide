@@ -15,6 +15,7 @@
 
 package com.liferay.ide.sdk.core;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.StringPool;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -75,7 +76,7 @@ public interface ISDKConstants
 
     public static final String LAYOUTTPL_PLUGIN_PROJECT_SUFFIX = _LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 
-    public static final Version LEAST_SUPPORTED_SDK_VERSION = new Version( 6, 0, 1 );
+    public static final Version LEAST_SUPPORTED_SDK_VERSION = ILiferayConstants.V601;
 
     public static final String PORTLET_PLUGIN_ANT_BUILD = __defaultPrefs.get( "portlet.plugin.ant.build", null ); //$NON-NLS-1$
 

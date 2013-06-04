@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -842,9 +843,9 @@ public class ServerUtil
         }
     }
 
-    private static final Version v620 = new Version( 6, 2, 0 );
-    private static final Version v612 = new Version( 6, 1, 2 );
-    private static final Version v6110 = new Version( 6, 1, 10 );
+    private static final Version v620 = ILiferayConstants.V620;
+    private static final Version v612 = ILiferayConstants.V612;
+    private static final Version v6110 = ILiferayConstants.V6110;
 //    private static final Version v6120 = new Version( 6, 1, 20 );
 
     public static String getAppServerPropertyKey( String propertyAppServerDeployDir, ILiferayRuntime runtime )

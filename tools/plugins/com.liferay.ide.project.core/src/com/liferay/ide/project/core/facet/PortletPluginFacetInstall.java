@@ -198,7 +198,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         {
             Version portalVersion = new Version( liferayProject.getPortalVersion() );
 
-            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 2, 0 ) ) < 0 )
+            if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V6_2_0 ) < 0 )
             {
                 // modify the web.xml and add <jsp-config><taglib> for liferay tlds
                 copyPortletTLD();

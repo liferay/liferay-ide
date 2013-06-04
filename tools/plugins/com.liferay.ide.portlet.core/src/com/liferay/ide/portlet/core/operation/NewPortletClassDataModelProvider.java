@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.core.operation;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -381,7 +382,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             String version = liferayProject.getPortalVersion();
             Version portalVersion = Version.parseVersion( version );
 
-            if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) < 0 )
+            if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) < 0 )
             {
                 initParameterName = "jsp"; //$NON-NLS-1$
             }
@@ -441,7 +442,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 String version = liferayProject.getPortalVersion();
                 Version portalVersion = Version.parseVersion( version );
 
-                if( CoreUtil.compareVersions( portalVersion, new Version( 6, 1, 0 ) ) >= 0 )
+                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) >= 0 )
                 {
                     paramVals = createDefaultParamValuesForModes( modes, initNames61, initValues );
                 }

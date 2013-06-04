@@ -15,6 +15,8 @@
 
 package com.liferay.ide.server.tomcat.core;
 
+import com.liferay.ide.core.ILiferayConstants;
+
 import org.osgi.framework.Version;
 
 /**
@@ -22,7 +24,7 @@ import org.osgi.framework.Version;
  */
 public class Liferay62TomcatRuntime70 extends LiferayTomcatRuntime
 {
-    public static final Version leastSupportedVersion = new Version( 6, 2, 0 );
+    public static final Version leastSupportedVersion = ILiferayConstants.V620;
 
     protected Version getLeastSupportedVersion()
     {

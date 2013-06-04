@@ -152,7 +152,7 @@ public class LiferayMavenProject extends BaseLiferayProject
 
     public String[] getHookSupportedProperties()
     {
-        //TODO fixme
+        //TODO fixme IDE-822
 //        String[] retval = null;
 //
 //        final IPath appServerPortalDir = getAppServerPortalDir();

@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.ui;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectAdapter;
 import com.liferay.ide.core.util.CoreUtil;
@@ -32,8 +33,6 @@ import org.osgi.framework.Version;
 public class MavenProjectAdapter implements ILiferayProjectAdapter
 {
 
-    private static final Version v620 = new Version( 6, 2, 0 );
-
     public <T> T adapt( ILiferayProject liferayProject, Class<T> adapterType )
     {
         if( liferayProject instanceof LiferayMavenProject && IProjectBuilder.class.equals( adapterType ) )
@@ -45,7 +44,7 @@ public class MavenProjectAdapter implements ILiferayProjectAdapter
             {
                 final Version portalVersion = new Version( version );
 
-                if( CoreUtil.compareVersions( portalVersion, v620 ) < 0 )
+                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) < 0 )
                 {
                     MavenUIProjectBuilder builder = new MavenUIProjectBuilder( (LiferayMavenProject) liferayProject );
 
