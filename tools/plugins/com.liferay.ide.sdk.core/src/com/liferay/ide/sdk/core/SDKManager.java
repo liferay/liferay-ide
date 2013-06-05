@@ -136,7 +136,7 @@ public final class SDKManager
             initialize();
         }
 
-        return sdkList.toArray( new SDK[sdkList.size()] );
+        return sdkList.toArray( new SDK[0] );
     }
 
     public void setSDKs( SDK[] sdks )
@@ -184,14 +184,20 @@ public final class SDKManager
 
                 XMLMemento[] children = root.getChildren( "sdk" ); //$NON-NLS-1$
 
+                SDK defaultSDK = null;
+
                 for( XMLMemento sdkElement : children )
                 {
                     SDK sdk = new SDK();
                     sdk.loadFromMemento( sdkElement );
 
-                    boolean defaultSDK = sdk.getName() != null && sdk.getName().equals( defaultSDKName );
+                    boolean def = sdk.getName() != null && sdk.getName().equals( defaultSDKName ) && defaultSDK == null;
 
-                    sdk.setDefault( defaultSDK );
+                    if( def )
+                    {
+                        sdk.setDefault( def );
+                        defaultSDK = sdk;
+                    }
 
                     sdkList.add( sdk );
                 }

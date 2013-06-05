@@ -487,12 +487,13 @@ public class SDK
 
     }
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
-            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
-    }
+//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
+//    @Override
+//    public boolean equals( Object obj )
+//    {
+//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
+//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
+//    }
 
     public IPath[] getAntLibraries()
     {
@@ -720,7 +721,7 @@ public class SDK
     @Override
     public String toString()
     {
-        return this.getName();
+        return this.getName() + ( isDefault() ? " [default]" : "");  //$NON-NLS-1$//$NON-NLS-2$
     }
 
     public String toXmlString()

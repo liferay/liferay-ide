@@ -80,7 +80,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
     public boolean isValid()
     {
         return this.installedSDKsComposite != null &&
-            ( this.installedSDKsComposite.getSDKs().length == 0 || this.installedSDKsComposite.getCheckedSDK() != null );
+            ( this.installedSDKsComposite.getSDKs().length == 0 || this.installedSDKsComposite.getDefaultSDK() != null );
     }
 
     @Override

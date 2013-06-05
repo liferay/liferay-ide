@@ -25,6 +25,7 @@ import com.liferay.ide.ui.util.SWTUtil;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -76,7 +78,7 @@ public class InstalledSDKsCompostite extends Composite
 
         public Object[] getElements( Object inputElement )
         {
-            return sdkList.toArray();
+            return getSDKs();
         }
 
         public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
@@ -142,7 +144,7 @@ public class InstalledSDKsCompostite extends Composite
     protected ISelection fPrevSelection;
     protected Button fRemoveButton;
     protected PreferencePage page;
-    protected List<SDK> sdkList = new ArrayList<SDK>();
+    protected List<SDK> sdks = null;
     protected Table table;
     protected CheckboxTableViewer tableViewer;
 
@@ -157,36 +159,9 @@ public class InstalledSDKsCompostite extends Composite
         createControl( this );
     }
 
-    public SDK getCheckedSDK()
-    {
-        Object[] checkedElements = tableViewer.getCheckedElements();
-
-        if( checkedElements != null && checkedElements.length == 1 && checkedElements[0] instanceof SDK )
-        {
-            return (SDK) checkedElements[0];
-        }
-
-        return null;
-    }
-
-    public SDK[] getSDKs()
-    {
-        return sdkList.toArray( new SDK[sdkList.size()] );
-    }
-
-    public ISelection getSelection()
-    {
-        return this.tableViewer.getSelection();
-    }
-
-    public void setPreferencePage( PreferencePage prefPage )
-    {
-        this.page = prefPage;
-    }
-
     protected void addSDK()
     {
-        AddSDKDialog dialog = new AddSDKDialog( this.getShell(), sdkList.toArray( new SDK[0] ) );
+        AddSDKDialog dialog = new AddSDKDialog( this.getShell(), getSDKs() );
         int retval = dialog.open();
 
         if( retval == AddSDKDialog.OK )
@@ -206,9 +181,7 @@ public class InstalledSDKsCompostite extends Composite
                 }
             }
 
-            sdkList.add( newSDK );
-
-            this.tableViewer.refresh();
+            sdks.add( newSDK );
 
             ensureDefaultSDK();
 
@@ -252,6 +225,21 @@ public class InstalledSDKsCompostite extends Composite
         this.tableViewer = new CheckboxTableViewer( this.table );
         this.tableViewer.setLabelProvider( new SDKLabelProvider() );
         this.tableViewer.setContentProvider( new SDKContentProvider() );
+        this.tableViewer.setCheckStateProvider
+        ( 
+            new ICheckStateProvider()
+            {
+                public boolean isChecked( Object element )
+                {
+                    return ( (SDK) element ).isDefault();
+                }
+
+                public boolean isGrayed( Object element )
+                {
+                    return false;
+                }
+            }
+        );
 
         this.tableViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -326,7 +314,7 @@ public class InstalledSDKsCompostite extends Composite
 
     protected void editSDK( SDK sdk )
     {
-        AddSDKDialog dialog = new AddSDKDialog( this.getShell(), sdkList.toArray( new SDK[0] ), sdk );
+        AddSDKDialog dialog = new AddSDKDialog( this.getShell(), getSDKs(), sdk );
 
         int retval = dialog.open();
 
@@ -394,16 +382,35 @@ public class InstalledSDKsCompostite extends Composite
 
     protected void ensureDefaultSDK()
     {
-
         // check if we only have one sdk it is new default
-        if( sdkList.size() == 1 )
+        if( sdks.size() == 1 )
         {
-            setCheckedSDK( sdkList.get( 0 ) );
+            sdks.get( 0 ).setDefault( true );
         }
     }
 
     protected void fireSelectionChanged()
     {
+    }
+
+    public SDK getDefaultSDK()
+    {
+        List<SDK> sdkList = new ArrayList<SDK>();
+
+        for( SDK sdk : sdks )
+        {
+            if( sdk.isDefault() )
+            {
+                sdkList.add( sdk );
+            }
+        }
+
+        if( sdkList.size() == 1 )
+        {
+            return sdkList.get( 0 );
+        }
+
+        return null;
     }
 
     protected SDK getFirstSelectedSDK()
@@ -422,6 +429,16 @@ public class InstalledSDKsCompostite extends Composite
         }
 
         return null;
+    }
+
+    public SDK[] getSDKs()
+    {
+        return sdks.toArray( new SDK[0] );
+    }
+
+    private ISelection getSelection()
+    {
+        return this.tableViewer.getSelection();
     }
 
     protected boolean isContributed( SDK install )
@@ -459,13 +476,13 @@ public class InstalledSDKsCompostite extends Composite
         }
     }
 
-    protected void removeSDKs( SDK[] sdks )
+    protected void removeSDKs( SDK[] removeSdks )
     {
         IStructuredSelection prev = (IStructuredSelection) getSelection();
 
-        for( int i = 0; i < sdks.length; i++ )
+        for( int i = 0; i < removeSdks.length; i++ )
         {
-            sdkList.remove( sdks[i] );
+            sdks.remove( removeSdks[i] );
         }
 
         ensureDefaultSDK();
@@ -488,13 +505,20 @@ public class InstalledSDKsCompostite extends Composite
                 fireSelectionChanged();
             }
         }
+
+        this.tableViewer.refresh();
+
+        if( this.page != null )
+        {
+            this.page.getContainer().updateButtons();
+        }
     }
 
     protected void removeSelectedSDKs()
     {
         IStructuredSelection selection = (IStructuredSelection) getSelection();
 
-        SDK[] sdks = new SDK[selection.size()];
+        SDK[] selectedSdks = new SDK[selection.size()];
 
         Iterator<?> iterator = selection.iterator();
 
@@ -515,10 +539,10 @@ public class InstalledSDKsCompostite extends Composite
                 sdk = (SDK) ( (IStructuredSelection) next ).getFirstElement();
             }
 
-            sdks[i++] = sdk;
+            selectedSdks[i++] = sdk;
         }
 
-        List<SDK> sdksList = Arrays.asList( sdks );
+        List<SDK> sdksList = Arrays.asList( selectedSdks );
         // IDE-6 check to make sure that no existing projects use this SDK
 
         List<SDK> sdksToRemove = new ArrayList<SDK>();
@@ -554,25 +578,30 @@ public class InstalledSDKsCompostite extends Composite
             }
         }
 
-        removeSDKs( sdksToRemove.toArray( new SDK[0] ) );
+        removeSDKs( sdksToRemove.toArray( new SDK[sdksToRemove.size()] ) );
     }
 
     protected void setCheckedSDK( SDK element )
     {
-        if( element == null )
+        if( element != null )
         {
-            setSelection( new StructuredSelection() );
-        }
-        else
-        {
-            setSelection( new StructuredSelection( element ) );
-
             for( SDK sdk : getSDKs() )
             {
                 sdk.setDefault( false );
             }
 
             element.setDefault( true );
+
+            this.tableViewer.refresh();
+        }
+        else
+        {
+            for( SDK sdk : getSDKs() )
+            {
+                sdk.setDefault( false );
+            }
+
+            this.tableViewer.refresh();
         }
 
         if( this.page != null )
@@ -581,28 +610,18 @@ public class InstalledSDKsCompostite extends Composite
         }
     }
 
-    protected void setSDKs( SDK[] sdks )
+    public void setPreferencePage( PreferencePage prefPage )
     {
-        SDK defaultSDK = null;
+        this.page = prefPage;
+    }
 
-        sdkList.clear();
+    protected void setSDKs( SDK[] newSdks )
+    {
+        this.sdks = new ArrayList<SDK>();
 
-        for( SDK sdk : sdks )
-        {
-            sdkList.add( sdk );
-
-            if( sdk.isDefault() )
-            {
-                defaultSDK = sdk;
-            }
-        }
+        Collections.addAll( this.sdks, newSdks );
 
         this.tableViewer.setInput( sdks );
-
-        if( defaultSDK != null )
-        {
-            setCheckedSDK( defaultSDK );
-        }
 
         this.tableViewer.refresh();
     }
