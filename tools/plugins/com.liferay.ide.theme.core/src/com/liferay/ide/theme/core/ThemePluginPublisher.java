@@ -93,7 +93,7 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
                     if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) || //$NON-NLS-1$
                         !( container.exists( new Path( "css" ) ) ) ) //$NON-NLS-1$
                     {
-                        ThemeCSSBuilder.cssBuild( project );
+                        ThemeCSSBuilder.compileTheme( project );
                         ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
                     }
                 }

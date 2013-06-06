@@ -62,9 +62,9 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 {
 
     public static final String ID = "com.liferay.ide.eclipse.theme.core.cssBuilder"; //$NON-NLS-1$
-    public static final String[] THEME_PARENTS = { "classic", "_styled", "_unstyled" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    public static final String[] THEME_PARENTS = { "control_panel", "classic", "_styled", "_unstyled" };
 
-    public static IStatus cssBuild( IProject project ) throws CoreException
+    public static IStatus compileTheme( IProject project ) throws CoreException
     {
         final SDK sdk = SDKUtil.getSDK( project );
 
@@ -169,7 +169,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         switch( deltaKind )
         {
             case IResourceDelta.REMOVED_PHANTOM:
-                System.out.println();
                 break;
         }
 
@@ -249,7 +248,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         {
             if( shouldFullBuild( args ) )
             {
-                cssBuild( getProject( args ) );
+                compileTheme( getProject( args ) );
             }
         }
         catch( Exception e )
@@ -319,7 +318,8 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 {
                     public boolean visit( IResourceDelta delta )
                     {
-                        IPath fullResourcePath = delta.getResource().getFullPath();
+                        final IResource resource = delta.getResource();
+                        IPath fullResourcePath = resource.getFullPath();
 
                         for( String segment : fullResourcePath.segments() )
                         {
@@ -339,6 +339,31 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                                         return false;
                                     }
+                                }
+                            }
+                            else if( "build.xml".equals( segment ) )
+                            {
+                                IPath relPath = resource.getProjectRelativePath();
+
+                                if( relPath != null && relPath.segmentCount() == 1 )
+                                {
+//                                    new WorkspaceJob("theme compile")
+//                                    {
+//                                        @Override
+//                                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+//                                        {
+                                            /*return*/
+                                    try
+                                    {
+                                        compileTheme( resource.getProject() );
+                                    }
+                                    catch( CoreException e )
+                                    {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+//                                        }
+//                                    }.schedule();
                                 }
                             }
                         }
