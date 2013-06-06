@@ -64,6 +64,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -89,6 +91,13 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class ServerUtil
 {
+
+    private static final Version v6110 = ILiferayConstants.V6110;
+//    private static final Version v6120 = new Version( 6, 1, 20 );
+
+    private static final Version v612 = ILiferayConstants.V612;
+
+    private static final Version v620 = ILiferayConstants.V620;
 
     private static void addRemoveProps(
         IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
@@ -174,39 +183,6 @@ public class ServerUtil
                     addToZip( path.append( res.getName() ), res, zip, adjustGMTOffset );
                 }
         }
-    }
-
-    public static Map<String, String> getSDKRequiredProperties( ILiferayRuntime appServer )
-    {
-        Map<String, String> properties = new HashMap<String, String>();
-
-        String type = appServer.getAppServerType();
-
-        String dir = appServer.getAppServerDir().toOSString();
-
-        String deployDir = appServer.getAppServerDeployDir().toOSString();
-
-        String libGlobalDir = appServer.getAppServerLibGlobalDir().toOSString();
-
-        String portalDir = appServer.getAppServerPortalDir().toOSString();
-
-        properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
-
-        final String appServerDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
-        final String appServerDeployDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
-        final String appServerLibGlobalDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, appServer );
-        final String appServerPortalDirKey =
-            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, appServer );
-
-        properties.put( appServerDirKey, dir );
-        properties.put( appServerDeployDirKey, deployDir );
-        properties.put( appServerLibGlobalDirKey, libGlobalDir );
-        properties.put( appServerPortalDirKey, portalDir );
-
-        return properties;
     }
 
     public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException
@@ -350,11 +326,66 @@ public class ServerUtil
         return null;
     }
 
+    public static IProject findProjectByContextName( String contextName )
+    {
+        IProject retval = null;
+
+        if( ! CoreUtil.isNullOrEmpty( contextName ) )
+        {
+            for( IProject project : CoreUtil.getAllProjects() )
+            {
+                final IVirtualComponent c = ComponentCore.createComponent( project, true );
+
+                if( c != null )
+                {
+                    String contextRoot = c.getMetaProperties().getProperty( "context-root" ); //$NON-NLS-1$
+
+                    if( contextRoot.equals( contextName ) )
+                    {
+                        retval = project;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return retval;
+    }
+
     public static IPath getAppServerDir( org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime )
     {
         ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter( serverRuntime, ILiferayRuntime.class );
 
         return runtime != null ? runtime.getAppServerDir() : null;
+    }
+
+    public static String getAppServerPropertyKey( String propertyAppServerDeployDir, ILiferayRuntime runtime )
+    {
+        String retval = null;
+
+        try
+        {
+            final Version version = new Version( runtime.getPortalVersion() );
+            final String type = runtime.getAppServerType();
+
+            if( ( CoreUtil.compareVersions( version, v620 ) >= 0 ) ||
+                ( CoreUtil.compareVersions( version, v612 ) >= 0 && CoreUtil.compareVersions( version, v6110 ) < 0 ) )
+            {
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+        }
+        catch( Exception e )
+        {
+        }
+        finally
+        {
+            if( retval == null )
+            {
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." ); //$NON-NLS-1$
+            }
+        }
+
+        return retval;
     }
 
     public static Properties getCategories( IPath portalDir )
@@ -578,6 +609,39 @@ public class ServerUtil
         return null;
     }
 
+    public static Map<String, String> getSDKRequiredProperties( ILiferayRuntime appServer )
+    {
+        Map<String, String> properties = new HashMap<String, String>();
+
+        String type = appServer.getAppServerType();
+
+        String dir = appServer.getAppServerDir().toOSString();
+
+        String deployDir = appServer.getAppServerDeployDir().toOSString();
+
+        String libGlobalDir = appServer.getAppServerLibGlobalDir().toOSString();
+
+        String portalDir = appServer.getAppServerPortalDir().toOSString();
+
+        properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
+
+        final String appServerDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, appServer );
+        final String appServerDeployDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
+        final String appServerLibGlobalDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, appServer );
+        final String appServerPortalDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, appServer );
+
+        properties.put( appServerDirKey, dir );
+        properties.put( appServerDeployDirKey, deployDir );
+        properties.put( appServerLibGlobalDirKey, libGlobalDir );
+        properties.put( appServerPortalDirKey, portalDir );
+
+        return properties;
+    }
+
     public static IServer[] getServersForRuntime( IRuntime runtime )
     {
         List<IServer> serverList = new ArrayList<IServer>();
@@ -686,40 +750,6 @@ public class ServerUtil
         return projectFacet != null && projectFacet.getId().startsWith( "liferay" ); //$NON-NLS-1$
     }
 
-    public static boolean isLiferayProject( IProject project )
-    {
-        boolean retval = false;
-
-        if( project == null )
-        {
-            return retval;
-        }
-
-        try
-        {
-            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
-
-            if( facetedProject != null )
-            {
-                for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
-                {
-                    IProjectFacet projectFacet = facet.getProjectFacet();
-
-                    if( projectFacet.getId().startsWith( "liferay" ) ) //$NON-NLS-1$
-                    {
-                        retval = true;
-                        break;
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
-
-        return retval;
-    }
-
     public static boolean isLiferayRuntime( BridgedRuntime bridgedRuntime )
     {
         if( bridgedRuntime != null )
@@ -746,7 +776,6 @@ public class ServerUtil
     {
         return getLiferayRuntime( server ) != null;
     }
-
     public static boolean isValidPropertiesFile( File file )
     {
         if( file == null || !file.exists() )
@@ -766,7 +795,6 @@ public class ServerUtil
         return true;
 
     }
-
     private static void processResourceDeltasZip(
         IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
         String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException
@@ -841,39 +869,5 @@ public class ServerUtil
                 launch.terminate();
             }
         }
-    }
-
-    private static final Version v620 = ILiferayConstants.V620;
-    private static final Version v612 = ILiferayConstants.V612;
-    private static final Version v6110 = ILiferayConstants.V6110;
-//    private static final Version v6120 = new Version( 6, 1, 20 );
-
-    public static String getAppServerPropertyKey( String propertyAppServerDeployDir, ILiferayRuntime runtime )
-    {
-        String retval = null;
-
-        try
-        {
-            final Version version = new Version( runtime.getPortalVersion() );
-            final String type = runtime.getAppServerType();
-
-            if( ( CoreUtil.compareVersions( version, v620 ) >= 0 ) ||
-                ( CoreUtil.compareVersions( version, v612 ) >= 0 && CoreUtil.compareVersions( version, v6110 ) < 0 ) )
-            {
-                retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-        }
-        catch( Exception e )
-        {
-        }
-        finally
-        {
-            if( retval == null )
-            {
-                retval = MessageFormat.format( propertyAppServerDeployDir, "." ); //$NON-NLS-1$
-            }
-        }
-
-        return retval;
     }
 }

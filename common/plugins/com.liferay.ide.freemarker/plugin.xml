@@ -6,10 +6,12 @@
       <editor
             class="org.jboss.ide.eclipse.freemarker.editor.FreemarkerMultiPageEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
-            extensions="ftl"
             icon="icons/icon.gif"
             id="com.liferay.ide.freemarker.editor.FreemarkerEditor"
-            name="Freemarker Editor">
+            name="Liferay Freemarker Editor">
+         <contentTypeBinding
+               contentTypeId="com.liferay.ide.freemarker.contentType">
+         </contentTypeBinding>
       </editor>
    </extension>
    <extension
@@ -59,6 +61,16 @@
             class="org.jboss.ide.eclipse.freemarker.linetracker.ConsoleLineTracker"
             id="com.liferay.ide.freemarker.linetracker.ConsoleLineTracker"
             processType="java"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="ftl"
+            id="com.liferay.ide.freemarker.contentType"
+            name="Freemarker Content Type"
+            priority="normal">
+      </content-type>
    </extension>
 
 </plugin>

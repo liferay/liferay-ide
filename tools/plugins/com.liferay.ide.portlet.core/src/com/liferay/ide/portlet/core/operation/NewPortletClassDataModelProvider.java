@@ -166,7 +166,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             final IProject project = (IProject) getProperty( PROJECT );
 
-            if( ServerUtil.isLiferayProject( project ) )
+            if( CoreUtil.isLiferayProject( project ) )
             {
                 final ILiferayProject liferayProject = LiferayCore.create( project );
 
@@ -399,7 +399,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             final IProject project = (IProject) getProperty( PROJECT );
 
-            if( ServerUtil.isLiferayProject( project ) )
+            if( CoreUtil.isLiferayProject( project ) )
             {
                 final ILiferayProject liferayProject = LiferayCore.create( project );
 

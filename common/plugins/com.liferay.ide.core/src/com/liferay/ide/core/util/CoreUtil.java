@@ -55,6 +55,10 @@ import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.osgi.framework.Version;
@@ -65,6 +69,7 @@ import org.w3c.dom.Node;
  *
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class CoreUtil
 {
 
@@ -428,6 +433,40 @@ public class CoreUtil
     public static boolean isEqual( Object object1, Object object2 )
     {
         return object1 != null && object2 != null && object1.equals( object2 );
+    }
+
+    public static boolean isLiferayProject( IProject project )
+    {
+        boolean retval = false;
+
+        if( project == null )
+        {
+            return retval;
+        }
+
+        try
+        {
+            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
+
+            if( facetedProject != null )
+            {
+                for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
+                {
+                    IProjectFacet projectFacet = facet.getProjectFacet();
+
+                    if( projectFacet.getId().startsWith( "liferay" ) ) //$NON-NLS-1$
+                    {
+                        retval = true;
+                        break;
+                    }
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retval;
     }
 
     public static boolean isNullOrEmpty( List<?> list )

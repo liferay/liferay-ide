@@ -17,14 +17,21 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.debug.core.ILRDebugConstants;
+import com.liferay.ide.debug.core.fm.FMDebugTarget;
 import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.PortalSourceLookupDirector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
+import org.eclipse.debug.core.sourcelookup.ISourcePathComputer;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.osgi.framework.Version;
@@ -38,6 +45,8 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
     private static final String STOP_SERVER = "stop-server"; //$NON-NLS-1$
     private static final String FALSE = "false"; //$NON-NLS-1$
+    private static final String FM_PARAMS = " -Dfreemarker.debug.password={0} -Dfreemarker.debug.port={1}"; //$NON-NLS-1$
+
     private String saveLaunchMode;
 
     @Override
@@ -60,7 +69,7 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
                 if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
                 {
-                    retval += " -Dfreemarker.debug.password=liferay -Dfreemarker.debug.port=57676"; //$NON-NLS-1$
+                    retval += NLS.bind( FM_PARAMS, ILRDebugConstants.FM_DEBUG_PASSWORD, ILRDebugConstants.FM_DEBUG_PORT );
                 }
             }
             catch( CoreException e )
@@ -75,8 +84,25 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
+        final ISourceLookupDirector sourceLocator = new PortalSourceLookupDirector();
+        final ISourcePathComputer sourcePathComputer =
+            getLaunchManager().getSourcePathComputer( LiferayTomcatSourcePathComputer.ID );
+        sourceLocator.setSourcePathComputer( sourcePathComputer );
+        sourceLocator.initializeDefaults( configuration );
+        launch.setSourceLocator( sourceLocator );
+
         this.saveLaunchMode = mode;
         super.launch( configuration, mode, launch, monitor );
         this.saveLaunchMode = null;
+
+        final String stopServer = configuration.getAttribute(STOP_SERVER, FALSE);
+
+        if( ILaunchManager.DEBUG_MODE.equals( mode ) && FALSE.equals( stopServer ) )
+        {
+            final IServer server = ServerUtil.getServer( configuration );
+
+            final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
+            launch.addDebugTarget( target );
+        }
     }
 }

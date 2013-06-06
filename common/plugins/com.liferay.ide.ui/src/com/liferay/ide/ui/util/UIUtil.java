@@ -42,14 +42,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.ui.internal.navigator.NavigatorContentService;
 import org.eclipse.ui.internal.util.PrefUtil;
 import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
+import org.eclipse.ui.navigator.CommonViewer;
+import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.osgi.framework.Bundle;
 
 /**
  * @author Greg Amerson
  * @author Cindy Li
  */
+@SuppressWarnings( "restriction" )
 public class UIUtil
 {
 
@@ -68,7 +72,6 @@ public class UIUtil
         }
     }
 
-    @SuppressWarnings( "restriction" )
     private static boolean confirmPerspectiveSwitch( IWorkbenchWindow window, IPerspectiveDescriptor finalPersp )
     {
         IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
@@ -83,8 +86,8 @@ public class UIUtil
 
         String desc = finalPersp.getDescription();
         String message;
- 
-        if( desc == null || desc.length() == 0 ) 
+
+        if( desc == null || desc.length() == 0 )
         {
             message = NLS.bind( ResourceMessages.NewProject_perspSwitchMessage, finalPersp.getLabel() );
         }
@@ -222,6 +225,30 @@ public class UIUtil
         return retval[0];
     }
 
+    public static void refreshContent( ICommonContentExtensionSite site, final Object elementOrTreePath )
+    {
+        final NavigatorContentService s = (NavigatorContentService) site.getService();
+
+        sync
+        (
+            new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        final CommonViewer viewer = (CommonViewer) s.getViewer();
+                        viewer.refresh( true );
+                        viewer.setExpandedState( elementOrTreePath, true );
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                }
+            }
+        );
+    }
+
     private static void replaceCurrentPerspective( IPerspectiveDescriptor persp )
     {
         // Get the active page.
@@ -254,7 +281,6 @@ public class UIUtil
         return null;
     }
 
-    @SuppressWarnings( "restriction" )
     public static void switchToLiferayPerspective()
     {
         // Retrieve the new project open perspective preference setting

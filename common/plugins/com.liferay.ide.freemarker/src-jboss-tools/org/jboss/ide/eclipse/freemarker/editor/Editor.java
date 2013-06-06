@@ -21,6 +21,10 @@
  */
 package org.jboss.ide.eclipse.freemarker.editor;
 
+import freemarker.core.ParseException;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -31,8 +35,6 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
-import org.eclipse.jdt.internal.ui.text.JavaPairMatcher;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -40,7 +42,6 @@ import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.MatchingCharacterPainter;
-import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.events.KeyEvent;
@@ -49,27 +50,22 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ContentAssistAction;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+import org.eclipse.wst.sse.ui.internal.debug.DebugTextEditor;
 import org.jboss.ide.eclipse.freemarker.Constants;
-import org.jboss.ide.eclipse.freemarker.Messages;
 import org.jboss.ide.eclipse.freemarker.Plugin;
 import org.jboss.ide.eclipse.freemarker.configuration.ConfigurationManager;
 import org.jboss.ide.eclipse.freemarker.model.Item;
 import org.jboss.ide.eclipse.freemarker.model.ItemSet;
 import org.jboss.ide.eclipse.freemarker.outline.OutlinePage;
 
-import freemarker.core.ParseException;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-
 /**
  * @author <a href="mailto:joe@binamics.com">Joe Hudson</a>
  */
-public class Editor extends TextEditor implements KeyListener, MouseListener {
+public class Editor extends DebugTextEditor implements KeyListener, MouseListener {
 
 	private OutlinePage fOutlinePage;
 	private org.jboss.ide.eclipse.freemarker.editor.Configuration configuration;
@@ -185,9 +181,9 @@ public class Editor extends TextEditor implements KeyListener, MouseListener {
 	public ITextViewer getTextViewer() {
 		return getSourceViewer();
 	}
-	
+
 	public void addProblemMarker(String aMessage, int aLine) {
-		IFile file = ((IFileEditorInput)getEditorInput()).getFile(); 
+		IFile file = ((IFileEditorInput)getEditorInput()).getFile();
 		try {
 			Map attributes = new HashMap(5);
 			attributes.put(IMarker.SEVERITY, new Integer(IMarker.SEVERITY_ERROR));
@@ -196,7 +192,7 @@ public class Editor extends TextEditor implements KeyListener, MouseListener {
 			attributes.put(IMarker.TEXT, aMessage);
 			MarkerUtilities.createMarker(file, attributes, IMarker.PROBLEM);
 		} catch (Exception e) {
-			
+
 		}
 	}
 
@@ -227,7 +223,7 @@ public class Editor extends TextEditor implements KeyListener, MouseListener {
 					ITypedRegion region = items[i].getRegion();
 					getSourceViewer().getTextWidget().setStyleRange(
 							new StyleRange(region.getOffset(),
-									region.getLength(), null, 
+									region.getLength(), null,
 									colorManager.getColor(
 											Constants.COLOR_RELATED_ITEM)));
 				}
@@ -272,12 +268,12 @@ public class Editor extends TextEditor implements KeyListener, MouseListener {
 			else if (getEditorInput() instanceof JarEntryEditorInput) {
 				resource = null;
 			}
-			
+
 			this.itemSet = new ItemSet(
 					getSourceViewer(), resource);
 		}
 		return this.itemSet;
-			
+
 	}
 	public OutlinePage getOutlinePage() {
 		return fOutlinePage;
@@ -419,7 +415,7 @@ public class Editor extends TextEditor implements KeyListener, MouseListener {
 	}
 
 	public IFile getFile () {
-		return (null != getEditorInput()) ? 
+		return (null != getEditorInput()) ?
 				((IFileEditorInput) getEditorInput()).getFile() : null;
 	}
 
@@ -434,7 +430,7 @@ public class Editor extends TextEditor implements KeyListener, MouseListener {
 				if (null != getFile()) {
 					if (null == fmConfiguration) {
 						fmConfiguration = new Configuration();
-						fmConfiguration.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX); 
+						fmConfiguration.setTagSyntax(Configuration.AUTO_DETECT_TAG_SYNTAX);
 					}
 					getFile().deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
 					String pageContents = getDocument().get();

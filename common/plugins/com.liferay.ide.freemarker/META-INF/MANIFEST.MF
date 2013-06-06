@@ -18,11 +18,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.console,
  org.eclipse.debug.ui,
  org.eclipse.jdt.core,
- org.eclipse.jdt.ui
+ org.eclipse.jdt.ui,
+ org.eclipse.wst.sse.ui,
+ com.liferay.ide.core;bundle-version="2.0.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: .,
- lib/freemarker-2.3.18.jar
+Bundle-ClassPath: .
 Export-Package: org.jboss.ide.eclipse.freemarker,
  org.jboss.ide.eclipse.freemarker.configuration,
  org.jboss.ide.eclipse.freemarker.dialogs,

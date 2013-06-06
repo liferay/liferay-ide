@@ -941,7 +941,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
             for( IModule module : modules )
             {
-                if( ServerUtil.isLiferayProject( module.getProject() ) )
+                if( CoreUtil.isLiferayProject( module.getProject() ) )
                 {
                     String appName = module.getProject().getName();
 
