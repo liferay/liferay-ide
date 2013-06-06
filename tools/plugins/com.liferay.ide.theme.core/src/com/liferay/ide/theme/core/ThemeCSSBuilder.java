@@ -341,29 +341,20 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                                     }
                                 }
                             }
-                            else if( "build.xml".equals( segment ) )
+                            else if( "build.xml".equals( segment ) ) //IDE-828
                             {
                                 IPath relPath = resource.getProjectRelativePath();
 
                                 if( relPath != null && relPath.segmentCount() == 1 )
                                 {
-//                                    new WorkspaceJob("theme compile")
-//                                    {
-//                                        @Override
-//                                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-//                                        {
-                                            /*return*/
                                     try
                                     {
                                         compileTheme( resource.getProject() );
                                     }
                                     catch( CoreException e )
                                     {
-                                        // TODO Auto-generated catch block
-                                        e.printStackTrace();
+                                        ThemeCore.logError( "Error compiling theme.", e );
                                     }
-//                                        }
-//                                    }.schedule();
                                 }
                             }
                         }
@@ -375,7 +366,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         }
         catch( CoreException e )
         {
-            e.printStackTrace();
+            ThemeCore.logError( e );
         }
     }
 
