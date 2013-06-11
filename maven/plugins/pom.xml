@@ -36,6 +36,7 @@
     <modules>
         <module>com.liferay.ide.maven.core</module>
         <module>com.liferay.ide.maven.ui</module>
+        <module>com.liferay.ide.maven.branding</module>
     </modules>
 
 </project>
