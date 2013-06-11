@@ -63,6 +63,11 @@ public class LiferayDebugCore extends Plugin
         logError( e.getMessage(), e );
     }
 
+    public static void logError( String msg )
+    {
+        logError( msg, null );
+    }
+
     public static void logError( String msg, Exception e )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );

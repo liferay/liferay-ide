@@ -143,4 +143,4 @@ Bundle-ClassPath: .,
  lib/httpclient-4.2.1.jar,
  lib/httpcore-4.2.1.jar,
  lib/httpmime-4.2.1.jar,
- lib/freemarker-2.3.19.97.jar
+ lib/freemarker-2.3.17-patched.jar

@@ -447,7 +447,16 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
         String templateName = breakpoint.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
         final Breakpoint bp = new Breakpoint( templateName, breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
 
-        getDebuggerClient().removeBreakpoint( bp );
+        Debugger client = getDebuggerClient();
+
+        if( client != null )
+        {
+            client.removeBreakpoint( bp );
+        }
+        else
+        {
+            LiferayDebugCore.logError( "Unable to get debug client to remove breakpoint." );
+        }
     }
 
     /*
