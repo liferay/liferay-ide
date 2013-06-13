@@ -265,7 +265,7 @@ public class LiferayProjectCore extends LiferayCore
 
     public static void logError( String msg, Exception e )
     {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
+        getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, e ) );
     }
 
     /**

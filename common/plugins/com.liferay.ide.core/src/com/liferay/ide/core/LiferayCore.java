@@ -169,7 +169,7 @@ public class LiferayCore extends Plugin
 
     public static void logError( String msg, Throwable t )
     {
-        getDefault().getLog().log( createErrorStatus( msg, t ) );
+        getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, t ) );
     }
 
     public static void logError( Throwable t )

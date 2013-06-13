@@ -27,7 +27,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- *
+ * 
  * @author Greg Amerson
  */
 public class SDKCorePlugin extends Plugin
@@ -52,9 +52,14 @@ public class SDKCorePlugin extends Plugin
         return LiferayCore.createErrorStatus( PLUGIN_ID, t );
     }
 
+    public static IStatus createErrorStatus( String pluginId, String msg, Throwable e )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg, e );
+    }
+
     /**
      * Returns the shared instance
-     *
+     * 
      * @return the shared instance
      */
     public static SDKCorePlugin getDefault()
@@ -65,6 +70,11 @@ public class SDKCorePlugin extends Plugin
     public static void logError( Exception e )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+    }
+
+    public static void logError( String msg, Throwable t )
+    {
+        getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, t ) );
     }
 
     /**
