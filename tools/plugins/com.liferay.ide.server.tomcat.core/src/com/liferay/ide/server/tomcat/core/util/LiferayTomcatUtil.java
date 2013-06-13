@@ -393,7 +393,9 @@ public class LiferayTomcatUtil
         {
             try
             {
-                properties.load( new FileInputStream( configInfoFile ) );
+                FileInputStream fileInput = new FileInputStream( configInfoFile );
+                properties.load( fileInput );
+                fileInput.close();
                 String configInfo = (String) properties.get( portalDirKey );
 
                 if( !CoreUtil.isNullOrEmpty( configInfo ) )
@@ -746,7 +748,9 @@ public class LiferayTomcatUtil
 
                 try
                 {
-                    properties.load( new FileInputStream( versionInfoFile ) );
+                    FileInputStream fileInput = new FileInputStream( versionInfoFile );
+                    properties.load( fileInput );
+                    fileInput.close();
                 }
                 catch( FileNotFoundException e )
                 {
@@ -761,7 +765,9 @@ public class LiferayTomcatUtil
 
                 try
                 {
-                    properties.store( new FileOutputStream( versionInfoFile ), StringPool.EMPTY );
+                    FileOutputStream fileOutput = new FileOutputStream( versionInfoFile );
+                    properties.store( fileOutput, StringPool.EMPTY );
+                    fileOutput.close();
                 }
                 catch( Exception e )
                 {

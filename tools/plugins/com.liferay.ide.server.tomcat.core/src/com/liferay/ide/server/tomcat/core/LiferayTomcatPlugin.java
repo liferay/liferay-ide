@@ -102,6 +102,16 @@ public class LiferayTomcatPlugin extends LiferayCore
             }
         }
 
+        File versionTxt = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.txt" ).toFile(); //$NON-NLS-1$
+
+        if( versionTxt.exists() )
+        {
+            if( !versionTxt.delete() )
+            {
+                versionTxt.deleteOnExit();
+            }
+        }
+
         File serverInfos =
             LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfos.properties" ).toFile(); //$NON-NLS-1$
 
@@ -110,6 +120,16 @@ public class LiferayTomcatPlugin extends LiferayCore
             if( !serverInfos.delete() )
             {
                 serverInfos.deleteOnExit();
+            }
+        }
+
+        File serverInfosTxt = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfo.txt" ).toFile(); //$NON-NLS-1$
+
+        if( serverInfosTxt.exists() )
+        {
+            if( !serverInfosTxt.delete() )
+            {
+                serverInfosTxt.deleteOnExit();
             }
         }
     }

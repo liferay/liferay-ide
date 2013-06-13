@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/freemarker-2.3.19.97.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="src-external"/>
+	<classpathentry kind="src" path="src/"/>
+	<classpathentry kind="src" path="src-external/"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-configuration-1.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-lang-2.5.jar"/>
@@ -15,5 +14,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/httpclient-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/httpcore-4.2.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/httpmime-4.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/freemarker-2.3.17-patched.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
