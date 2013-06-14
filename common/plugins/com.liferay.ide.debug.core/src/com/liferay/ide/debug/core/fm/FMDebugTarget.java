@@ -62,7 +62,6 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
     private FMThread fmThread;
     private IThread[] threads = new IThread[0];
     private EventDispatchJob eventDispatchJob;
-//    private Map<Long, DebuggedEnvironment> envs = new HashMap<Long, DebuggedEnvironment>();
 
     // suspend state
     private boolean suspended = false;
@@ -125,7 +124,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
             return Status.OK_STATUS;
         }
 
-        private boolean setupDebugger(Debugger debugger)
+        private boolean setupDebugger( Debugger debugger )
         {
             try
             {
@@ -133,12 +132,10 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
 
                 FMDebugTarget.this.threads = new IThread[] { FMDebugTarget.this.fmThread };
 
-                final IBreakpoint[] localBreakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+                final IBreakpoint[] localBreakpoints =
+                    DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
 
-                for( IBreakpoint localBreakpoint : localBreakpoints )
-                {
-                    addRemoteBreakpoint( debugger, localBreakpoint );
-                }
+                addRemoteBreakpoints( debugger, localBreakpoints );
             }
             catch( RemoteException e )
             {
@@ -151,7 +148,8 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
         public void environmentSuspended( EnvironmentSuspendedEvent event ) throws RemoteException
         {
             int lineNumber = event.getLine();
-            IBreakpoint[] breakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+            final IBreakpoint[] breakpoints =
+                DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
 
             boolean suspended = false;
 
@@ -226,16 +224,47 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
         DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener( this );
     }
 
-    public void addRemoteBreakpoint( Debugger debugger, IBreakpoint localBreakpoint ) throws RemoteException
+    public void addRemoteBreakpoints( final Debugger debugger, final IBreakpoint bps[] ) throws RemoteException
     {
-        String templateName = localBreakpoint.getMarker().getAttribute( FMLineBreakpoint.ATTR_TEMPLATE_NAME, null );
-        int line = localBreakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 );
-
-        if( ! CoreUtil.isNullOrEmpty( templateName ) && line > -1 )
+        final Job job = new Job("add remote breakpoints")
         {
-            Breakpoint remoteBreakpoint = new Breakpoint( templateName, line );
-            debugger.addBreakpoint( remoteBreakpoint );
-        }
+            @Override
+            protected IStatus run( IProgressMonitor monitor )
+            {
+                IStatus retval = null;
+
+                for( IBreakpoint bp : bps )
+                {
+                    String templateName = bp.getMarker().getAttribute( FMLineBreakpoint.ATTR_TEMPLATE_NAME, null );
+                    int line = bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 );
+
+                    if( ! CoreUtil.isNullOrEmpty( templateName ) && line > -1 )
+                    {
+                        try
+                        {
+                            Breakpoint remoteBreakpoint = new Breakpoint( templateName, line );
+                            debugger.addBreakpoint( remoteBreakpoint );
+                        }
+                        catch( RemoteException e )
+                        {
+                            if( retval == null )
+                            {
+                                retval = LiferayDebugCore.createErrorStatus( e );
+                            }
+                        }
+                    }
+                }
+
+                if( retval == null )
+                {
+                    retval = Status.OK_STATUS;
+                }
+
+                return retval;
+            }
+        };
+
+        job.schedule();
     }
 
     public Debugger getDebuggerClient()
@@ -277,35 +306,13 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
         return this.terminated || getProcess().isTerminated();
     }
 
-    @SuppressWarnings( "rawtypes" )
     public void terminate() throws DebugException
     {
         final IBreakpoint[] localBreakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
 
-        for( IBreakpoint localBreakpoint : localBreakpoints )
-        {
-            try
-            {
-                removeBreakpoint( localBreakpoint );
-            }
-            catch( RemoteException e )
-            {
-                LiferayDebugCore.logError( "Unable to remove remote breakpoint", e );
-            }
-        }
+        removeRemoteBreakpoints( localBreakpoints );
 
-        try
-        {
-            for( Iterator i = getDebuggerClient().getSuspendedEnvironments().iterator(); i.hasNext(); )
-            {
-                DebuggedEnvironment e = (DebuggedEnvironment) i.next();
-                e.resume();
-            }
-        }
-        catch( RemoteException e )
-        {
-            LiferayDebugCore.logError( "Could not resume all suspended environments", e );
-        }
+        resume();
 
         terminated();
     }
@@ -336,22 +343,41 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
     @SuppressWarnings( "rawtypes" )
     public void resume()
     {
-        try
+        final Job job = new Job("resume")
         {
-            for( Iterator i = this.debuggerClient.getSuspendedEnvironments().iterator(); i.hasNext(); )
+            @Override
+            protected IStatus run( IProgressMonitor monitor )
             {
-                DebuggedEnvironment debuged = (DebuggedEnvironment) i.next();
+                try
+                {
+                    for( Iterator i = getDebuggerClient().getSuspendedEnvironments().iterator(); i.hasNext(); )
+                    {
+                        DebuggedEnvironment debuged = (DebuggedEnvironment) i.next();
 
-                debuged.resume();
+                        try
+                        {
+                            debuged.resume();
+                        }
+                        catch( Exception e )
+                        {
+                            LiferayDebugCore.logError( "Could not resume suspended environment", e );
+                        }
+                    }
+
+                    fmStackFrames = null;
+
+                    resumed( DebugEvent.CLIENT_REQUEST );
+                }
+                catch( RemoteException e )
+                {
+                    LiferayDebugCore.logError( "Could not fully resume suspended environments", e );
+                }
+
+                return null;
             }
+        };
 
-            this.fmStackFrames = null;
-
-            resumed( DebugEvent.CLIENT_REQUEST );
-        }
-        catch( RemoteException e )
-        {
-        }
+        job.schedule();
     }
 
     public void resume( FMThread thread ) throws DebugException
@@ -412,7 +438,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
             {
                 if( breakpoint.isEnabled() )
                 {
-                    addRemoteBreakpoint( getDebuggerClient(), breakpoint );
+                    addRemoteBreakpoints( getDebuggerClient(), new IBreakpoint[] { breakpoint } );
                 }
             }
             catch( Exception e )
@@ -431,32 +457,40 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget
     {
         if( supportsBreakpoint( breakpoint ) )
         {
-            try
-            {
-                removeBreakpoint( breakpoint );
-            }
-            catch( RemoteException e )
-            {
-                LiferayDebugCore.logError( "Unable to remove remote breakpoint", e );
-            }
+            removeRemoteBreakpoints( new IBreakpoint[] { breakpoint } );
         }
     }
 
-    private void removeBreakpoint( IBreakpoint breakpoint ) throws RemoteException
+    private void removeRemoteBreakpoints( final IBreakpoint[] breakpoints )
     {
-        String templateName = breakpoint.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
-        final Breakpoint bp = new Breakpoint( templateName, breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
-
-        Debugger client = getDebuggerClient();
-
-        if( client != null )
+        final Job job = new Job("remove remote breakpoints")
         {
-            client.removeBreakpoint( bp );
-        }
-        else
-        {
-            LiferayDebugCore.logError( "Unable to get debug client to remove breakpoint." );
-        }
+            @Override
+            protected IStatus run( IProgressMonitor monitor )
+            {
+                IStatus retval = null;
+
+                for( IBreakpoint bp : breakpoints )
+                {
+                    String templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
+                    final Breakpoint remoteBp =
+                        new Breakpoint( templateName, bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
+
+                    try
+                    {
+                        getDebuggerClient().removeBreakpoint( remoteBp );
+                    }
+                    catch( Exception e )
+                    {
+                        retval = LiferayDebugCore.createErrorStatus( "Unable to get debug client to remove breakpoint: " + templateName, e );
+                    }
+                }
+
+                return retval;
+            }
+        };
+
+        job.schedule();
     }
 
     /*

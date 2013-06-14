@@ -30,17 +30,22 @@ import org.osgi.framework.BundleContext;
 public class LiferayDebugCore extends Plugin
 {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.debug.core"; //$NON-NLS-1$
-
     public static final String ID_FM_BREAKPOINT_TYPE = "com.liferay.ide.debug.core.fmLineBreakpointMarker";
 
     // The shared instance
     private static LiferayDebugCore plugin;
 
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.debug.core"; //$NON-NLS-1$
+
     public static IStatus createErrorStatus( String msg )
     {
         return LiferayCore.createErrorStatus( PLUGIN_ID, msg );
+    }
+
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
     }
 
     public static IStatus createErrorStatus( Throwable t )
@@ -70,7 +75,7 @@ public class LiferayDebugCore extends Plugin
 
     public static void logError( String msg, Exception e )
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
     }
 
     /**
