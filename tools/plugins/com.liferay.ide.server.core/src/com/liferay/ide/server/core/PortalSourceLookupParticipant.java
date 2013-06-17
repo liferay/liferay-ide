@@ -3,7 +3,6 @@ package com.liferay.ide.server.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.debug.core.ILRDebugConstants;
 import com.liferay.ide.debug.core.fm.FMStackFrame;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,25 +67,6 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
         return retval;
     }
 
-    private  IProject getSourceProject( String templateName )
-    {
-        IProject retval = null;
-
-        if( ! CoreUtil.isNullOrEmpty( templateName ) )
-        {
-            String projectName = new Path(templateName).segment( 0 );
-
-            IProject project = CoreUtil.getProject( projectName.replaceAll( "_SERVLET_CONTEXT_", "" ) ); //$NON-NLS-1$ //$NON-NLS-2$
-
-            if( CoreUtil.isLiferayProject( project ) )
-            {
-                retval = project;
-            }
-        }
-
-        return retval;
-    }
-
     public String getSourceName( Object object ) throws CoreException
     {
         String retval = null;
@@ -105,47 +85,62 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
 //                }
 //                else
 //                {
-                    // we need to figure out how to map this back to a valid project path.
-                    // first if it contains _SERVLET_CONTEXT_ we know that this path is pointing to a plugin
+                // we need to figure out how to map this back to a valid project path.
+                // first if it contains a path that points to an existing plugin project
 
                 IPath templatePath = new Path( templateName );
 
                 final String firstSegment = templatePath.segment( 0 );
                 final String resourcePath = templatePath.removeFirstSegments( 1 ).toPortableString();
-                final String lastSegment = templatePath.lastSegment();
 
-                if( firstSegment.contains( "_SERVLET_CONTEXT_" ) ) //$NON-NLS-1$
+                IProject project = CoreUtil.findProjectByContextName( firstSegment );
+
+                IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+
+                // first lets see if we can find
+
+                final String diffsPath = "_diffs/" +  resourcePath; //$NON-NLS-1$
+                IVirtualFile diffsResourceFile = webappRoot.getFile( diffsPath );
+
+                if( diffsResourceFile.exists() )
                 {
-                    // get the context name and find the project
-                    String contextName = firstSegment.replaceAll( "_SERVLET_CONTEXT_", "" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    retval = diffsPath;
+                }
+                else
+                {
+                    IVirtualFile resourceFile = webappRoot.getFile( resourcePath );
 
-                    IProject project = ServerUtil.findProjectByContextName( contextName );
-
-                    IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-                    // first lets see if we can find
-
-                    final String diffsPath = "_diffs/" +  resourcePath; //$NON-NLS-1$
-                    IVirtualFile diffsResourceFile = webappRoot.getFile( diffsPath );
-
-                    if( diffsResourceFile.exists() )
+                    if( resourceFile.exists() )
                     {
-                        retval = diffsPath;
-                    }
-                    else
-                    {
-                        IVirtualFile resourceFile = webappRoot.getFile( resourcePath );
-
-                        if( resourceFile.exists() )
-                        {
-                            retval = resourcePath;
-                        }
+                        retval = resourcePath;
                     }
                 }
-//                }
             }
             catch( Exception e )
             {
+            }
+        }
+
+        return retval;
+    }
+
+    private  IProject getSourceProject( String templateName )
+    {
+        IProject retval = null;
+
+        if( ! CoreUtil.isNullOrEmpty( templateName ) )
+        {
+            final String firstTemplateNameSegment = new Path( templateName ).segment( 0 );
+
+            // make sure and remove any reference to servlet context
+//            final String projectName =
+//                firstTemplateNameSegment.replaceAll( ILRDebugConstants.FM_TEMPLATE_SERVLET_CONTEXT, "" ); //$NON-NLS-1$
+
+            final IProject project = CoreUtil.getProject( firstTemplateNameSegment );
+
+            if( CoreUtil.isLiferayProject( project ) )
+            {
+                retval = project;
             }
         }
 
@@ -164,10 +159,6 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
             IBreakpoint bp = thread.getBreakpoints()[0];
 
             retval = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, null );
-        }
-        else
-        {
-            System.out.println( bps.length );
         }
 
         return retval;

@@ -31,9 +31,12 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
@@ -48,6 +51,7 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.osgi.util.NLS;
 
 
 /**
@@ -55,6 +59,7 @@ import org.eclipse.debug.core.model.IThread;
  */
 public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebugEventSetListener
 {
+    public static final String FM_TEMPLATE_SERVLET_CONTEXT = "_SERVLET_CONTEXT_"; //$NON-NLS-1$
 
     private Debugger debuggerClient;
     private EventDispatchJob eventDispatchJob;
@@ -79,7 +84,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             setSystem( true );
         }
 
-        public void environmentSuspended( EnvironmentSuspendedEvent event ) throws RemoteException
+        public void environmentSuspended( final EnvironmentSuspendedEvent event ) throws RemoteException
         {
             int lineNumber = event.getLine();
             final IBreakpoint[] breakpoints =
@@ -100,7 +105,8 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                             final int bpLineNumber = lineBreakpoint.getLineNumber();
                             final String templateName =
                                 breakpoint.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
-                            final String remoteTemplateName = event.getName();
+                            final String remoteTemplateName =
+                                event.getName().replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
 
                             if( bpLineNumber == lineNumber && remoteTemplateName.equals( templateName ) )
                             {
@@ -128,7 +134,25 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             else
             {
                 // lets not pause the remote environment if for some reason the breakpoints don't match.
-                event.getEnvironment().resume();
+                new Job( "resuming remote environment" )
+                {
+                    @Override
+                    protected IStatus run( IProgressMonitor monitor )
+                    {
+                        IStatus retval = Status.OK_STATUS;
+
+                        try
+                        {
+                            event.getEnvironment().resume();
+                        }
+                        catch( RemoteException e )
+                        {
+                            retval = LiferayDebugCore.createErrorStatus( "Could not resume after missing breakpoint", e );
+                        }
+
+                        return retval;
+                    }
+                }.schedule();
             }
         }
 
@@ -224,7 +248,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     public void addRemoteBreakpoints( final Debugger debugger, final IBreakpoint bps[] ) throws RemoteException
     {
-        final Job job = new Job("add remote breakpoints")
+        final Job job = new Job( "add remote breakpoints" )
         {
             @Override
             protected IStatus run( IProgressMonitor monitor )
@@ -233,14 +257,17 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
                 for( IBreakpoint bp : bps )
                 {
-                    String templateName = bp.getMarker().getAttribute( FMLineBreakpoint.ATTR_TEMPLATE_NAME, null );
+                    final String templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, null );
+
+                    final String remoteTemplateName = createRemoteTemplateName( templateName );
+
                     int line = bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 );
 
-                    if( ! CoreUtil.isNullOrEmpty( templateName ) && line > -1 )
+                    if( ! CoreUtil.isNullOrEmpty( remoteTemplateName ) && line > -1 )
                     {
                         try
                         {
-                            Breakpoint remoteBreakpoint = new Breakpoint( templateName, line );
+                            Breakpoint remoteBreakpoint = new Breakpoint( remoteTemplateName, line );
                             debugger.addBreakpoint( remoteBreakpoint );
                         }
                         catch( RemoteException e )
@@ -356,6 +383,36 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
         DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
         DebugPlugin.getDefault().removeDebugEventListener( this );
+    }
+
+    private String createRemoteTemplateName( String templateName )
+    {
+        String retval = null;
+
+        if( ! CoreUtil.isNullOrEmpty( templateName ) )
+        {
+            final IPath templatePath = new Path( templateName );
+            final String firstSegment = templatePath.segment( 0 );
+            final IProject project = CoreUtil.findProjectByContextName( firstSegment );
+
+            if( project != null )
+            {
+                /*
+                 * need to add special uri to the end of first segment of template path in order to make it work with
+                 * remote debugger
+                 */
+                final Object[] bindings = new Object[] { firstSegment, FM_TEMPLATE_SERVLET_CONTEXT,
+                    templatePath.removeFirstSegments( 1 ) };
+
+                retval = NLS.bind( "{0}{1}/{2}", bindings );
+            }
+            else
+            {
+                retval = templatePath.toPortableString();
+            }
+        }
+
+        return retval;
     }
 
     /*

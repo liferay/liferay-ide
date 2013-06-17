@@ -64,8 +64,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
@@ -324,32 +322,6 @@ public class ServerUtil
         }
 
         return null;
-    }
-
-    public static IProject findProjectByContextName( String contextName )
-    {
-        IProject retval = null;
-
-        if( ! CoreUtil.isNullOrEmpty( contextName ) )
-        {
-            for( IProject project : CoreUtil.getAllProjects() )
-            {
-                final IVirtualComponent c = ComponentCore.createComponent( project, true );
-
-                if( c != null )
-                {
-                    String contextRoot = c.getMetaProperties().getProperty( "context-root" ); //$NON-NLS-1$
-
-                    if( contextRoot.equals( contextName ) )
-                    {
-                        retval = project;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return retval;
     }
 
     public static IPath getAppServerDir( org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime )

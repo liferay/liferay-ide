@@ -241,6 +241,32 @@ public class CoreUtil
         return isNullOrEmpty( val );
     }
 
+    public static IProject findProjectByContextName( String contextName )
+    {
+        IProject retval = null;
+
+        if( ! isNullOrEmpty( contextName ) )
+        {
+            for( IProject project : getAllProjects() )
+            {
+                final IVirtualComponent c = ComponentCore.createComponent( project, true );
+
+                if( c != null )
+                {
+                    String contextRoot = c.getMetaProperties().getProperty( "context-root" ); //$NON-NLS-1$
+
+                    if( contextRoot.equals( contextName ) )
+                    {
+                        retval = project;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return retval;
+    }
+
     public static IProject[] getAllProjects()
     {
         return ResourcesPlugin.getWorkspace().getRoot().getProjects();
