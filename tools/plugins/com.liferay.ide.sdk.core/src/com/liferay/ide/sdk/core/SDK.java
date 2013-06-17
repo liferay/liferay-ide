@@ -456,6 +456,18 @@ public class SDK
         return null;
     }
 
+    public SDK copy()
+    {
+        SDK copy = new SDK( this.getLocation() );
+
+        copy.setContributed( isContributed() );
+        copy.setDefault( isDefault() );
+        copy.setName( getName() );
+        copy.setVersion( getVersion() );
+
+        return copy;
+    }
+
     public IStatus directDeploy(
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
         Map<String, String> appServerProperties )

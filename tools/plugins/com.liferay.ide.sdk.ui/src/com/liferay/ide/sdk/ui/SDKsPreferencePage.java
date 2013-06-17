@@ -131,7 +131,6 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         data.horizontalSpan = 1;
 
         installedSDKsComposite.setLayoutData( data );
-        installedSDKsComposite.setSDKs( SDKManager.getInstance().getSDKs() );
 
         createFieldEditors();
 

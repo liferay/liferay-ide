@@ -305,7 +305,16 @@ public class InstalledSDKsCompostite extends Composite
             }
         } );
 
-        setSDKs( SDKManager.getInstance().getSDKs() );
+        final SDK[] sdks = SDKManager.getInstance().getSDKs();
+
+        SDK[] editableSDKs = new SDK[sdks.length];
+
+        for( int i = 0; i < sdks.length; i++ )
+        {
+            editableSDKs[i] = sdks[i].copy();
+        }
+
+        setSDKs( editableSDKs );
 
         enableButtons();
 
