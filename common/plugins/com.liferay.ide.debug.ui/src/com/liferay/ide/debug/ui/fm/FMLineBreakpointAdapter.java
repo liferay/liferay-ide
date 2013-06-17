@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.debug.ui.fm;
 
 import com.liferay.ide.debug.core.ILRDebugConstants;
@@ -15,13 +29,16 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 
+/**
+ * @author Gregory Amerson
+ */
 public class FMLineBreakpointAdapter implements IToggleBreakpointsTarget
 {
 
     public void toggleLineBreakpoints( IWorkbenchPart part, ISelection selection ) throws CoreException
     {
         ITextEditor textEditor = getEditor( part );
-        
+
         if( textEditor != null )
         {
             IResource resource = (IResource) textEditor.getEditorInput().getAdapter( IResource.class );
@@ -29,11 +46,11 @@ public class FMLineBreakpointAdapter implements IToggleBreakpointsTarget
             int lineNumber = textSelection.getStartLine();
             IBreakpoint[] breakpoints =
                 DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( ILRDebugConstants.ID_FM_DEBUG_MODEL );
-            
+
             for( int i = 0; i < breakpoints.length; i++ )
             {
                 IBreakpoint breakpoint = breakpoints[i];
-                
+
                 if( resource.equals( breakpoint.getMarker().getResource() ) )
                 {
                     if( ( (ILineBreakpoint) breakpoint ).getLineNumber() == ( lineNumber + 1 ) )
@@ -44,7 +61,7 @@ public class FMLineBreakpointAdapter implements IToggleBreakpointsTarget
                     }
                 }
             }
-            
+
             // create line breakpoint (doc line numbers start at 0)
             FMLineBreakpoint lineBreakpoint = new FMLineBreakpoint( resource, lineNumber + 1 );
             DebugPlugin.getDefault().getBreakpointManager().addBreakpoint( lineBreakpoint );
