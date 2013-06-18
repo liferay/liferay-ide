@@ -15,6 +15,7 @@
 package com.liferay.ide.debug.ui.fm;
 
 import com.liferay.ide.debug.core.fm.FMLineBreakpoint;
+import com.liferay.ide.debug.ui.IDebugEditor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -45,20 +46,34 @@ public class FMBreakpointProvider implements IBreakpointProvider
     public IStatus addBreakpoint( IDocument document, IEditorInput input, int lineNumber, int offset )
         throws CoreException
     {
-        if( input instanceof IFileEditorInput )
+        IStatus retval = Status.OK_STATUS;
+
+        if( fSourceEditingTextTools instanceof IDebugEditor )
         {
-            final IFileEditorInput fileEditorInput = (IFileEditorInput) input;
-            final IFile file = fileEditorInput.getFile();
+            IDebugEditor debugEditor = (IDebugEditor) fSourceEditingTextTools;
 
-            final FMLineBreakpoint bp = new FMLineBreakpoint( file, lineNumber );
+            IStatus status = debugEditor.validateBreakpointPosition( lineNumber, offset );
 
-            DebugPlugin.getDefault().getBreakpointManager().addBreakpoint( bp );
+            if( status.isOK()  )
+            {
+                if( input instanceof IFileEditorInput )
+                {
+                    final IFileEditorInput fileEditorInput = (IFileEditorInput) input;
+                    final IFile file = fileEditorInput.getFile();
+
+                    final FMLineBreakpoint bp = new FMLineBreakpoint( file, lineNumber );
+
+                    DebugPlugin.getDefault().getBreakpointManager().addBreakpoint( bp );
+                }
+            }
+            else
+            {
+                retval = status;
+            }
         }
 
-        return Status.OK_STATUS;
+        return retval;
     }
-
-
 
     public IResource getResource( IEditorInput input )
     {

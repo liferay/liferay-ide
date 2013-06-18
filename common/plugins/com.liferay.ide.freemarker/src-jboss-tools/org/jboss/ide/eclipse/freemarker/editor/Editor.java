@@ -21,6 +21,8 @@
  */
 package org.jboss.ide.eclipse.freemarker.editor;
 
+import com.liferay.ide.debug.ui.IDebugEditor;
+
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -34,9 +36,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.internal.ui.javaeditor.JarEntryEditorInput;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.ITextViewerExtension2;
 import org.eclipse.jface.text.ITypedRegion;
@@ -49,12 +55,14 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.ContentAssistAction;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.MarkerUtilities;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wst.sse.ui.internal.debug.DebugTextEditor;
+import org.eclipse.wst.sse.ui.internal.provisional.extensions.ISourceEditingTextTools;
 import org.jboss.ide.eclipse.freemarker.Constants;
 import org.jboss.ide.eclipse.freemarker.Plugin;
 import org.jboss.ide.eclipse.freemarker.configuration.ConfigurationManager;
@@ -65,7 +73,7 @@ import org.jboss.ide.eclipse.freemarker.outline.OutlinePage;
 /**
  * @author <a href="mailto:joe@binamics.com">Joe Hudson</a>
  */
-public class Editor extends DebugTextEditor implements KeyListener, MouseListener {
+public class Editor extends DebugTextEditor implements KeyListener, MouseListener, ISourceEditingTextTools, IDebugEditor {
 
 	private OutlinePage fOutlinePage;
 	private org.jboss.ide.eclipse.freemarker.editor.Configuration configuration;
@@ -105,6 +113,8 @@ public class Editor extends DebugTextEditor implements KeyListener, MouseListene
 				}
 			}
 			adapter = fOutlinePage;
+		} else if(aClass.equals(ISourceEditingTextTools.class)) {
+		    adapter = this;
 		} else {
 		    adapter = super.getAdapter(aClass);
 		}
@@ -485,4 +495,67 @@ public class Editor extends DebugTextEditor implements KeyListener, MouseListene
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
+
+	public IEditorPart getEditorPart()
+    {
+        return this;
+    }
+
+	public ITextSelection getSelection()
+    {
+        return this.getSelection();
+    }
+
+    public IStatus validateBreakpointPosition( int lineNumber, int offset )
+    {
+        IStatus retval = null;
+
+        try
+        {
+            int lineOffset = getDocument().getLineOffset( lineNumber - 1  );
+            int lineLength = getDocument().getLineLength( lineNumber - 1 );
+
+            /* go through all of the offets from the start of the line to the end of the line and see if any of the
+             * lines contain a valid item
+             */
+            Item breakpointItem = null;
+
+            for( int i = lineOffset; i < lineOffset + lineLength; i++ )
+            {
+                Item item = getItemSet().getItem( i );
+
+                if( item != null )
+                {
+                    breakpointItem = item;
+                    break;
+                }
+            }
+
+            if( breakpointItem == null )
+            {
+                retval =
+                    new MultiStatus(
+                        Plugin.ID, IStatus.ERROR,
+                        new IStatus[] { createErrorStatus( "Please add a breakpoint to a different line that contains "
+                            + "a valid freemarker directive, e.g. ${...}, <#...>, <@...>, etc." ) },
+                        "Unable to set breakpoint on this line. Select Details for more info.", null );
+            }
+        }
+        catch( BadLocationException e )
+        {
+            retval = createErrorStatus( "Unable to determine breakpoint offset.", e );
+        }
+
+        return retval == null ? Status.OK_STATUS : retval;
+    }
+
+    private Status createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, Plugin.ID, msg );
+    }
+
+    private Status createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, Plugin.ID, msg, e );
+    }
 }

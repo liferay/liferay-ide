@@ -27,7 +27,9 @@ import freemarker.debug.EnvironmentSuspendedEvent;
 
 import java.net.Inet4Address;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
@@ -86,9 +88,8 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
         public void environmentSuspended( final EnvironmentSuspendedEvent event ) throws RemoteException
         {
-            int lineNumber = event.getLine();
-            final IBreakpoint[] breakpoints =
-                DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+            final int lineNumber = event.getLine();
+            final IBreakpoint[] breakpoints = getBreakpoints();
 
             boolean suspended = false;
 
@@ -207,7 +208,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                 FMDebugTarget.this.threads = new IThread[] { FMDebugTarget.this.fmThread };
 
                 final IBreakpoint[] localBreakpoints =
-                    DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+                    getBreakpoints();
 
                 addRemoteBreakpoints( debugger, localBreakpoints );
             }
@@ -248,6 +249,20 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     public void addRemoteBreakpoints( final Debugger debugger, final IBreakpoint bps[] ) throws RemoteException
     {
+        final List<Breakpoint> remoteBps = new ArrayList<Breakpoint>();
+
+        for( IBreakpoint bp : bps )
+        {
+            final int line = bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 );
+            final String templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, null );
+            final String remoteTemplateName = createRemoteTemplateName( templateName );
+
+            if( ! CoreUtil.isNullOrEmpty( remoteTemplateName ) && line > -1 )
+            {
+                remoteBps.add( new Breakpoint( remoteTemplateName, line ) );
+            }
+        }
+
         final Job job = new Job( "add remote breakpoints" )
         {
             @Override
@@ -255,28 +270,19 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             {
                 IStatus retval = null;
 
-                for( IBreakpoint bp : bps )
+                for( Breakpoint bp : remoteBps )
                 {
-                    final String templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, null );
-
-                    final String remoteTemplateName = createRemoteTemplateName( templateName );
-
-                    int line = bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 );
-
-                    if( ! CoreUtil.isNullOrEmpty( remoteTemplateName ) && line > -1 )
+                    try
                     {
-                        try
-                        {
-                            Breakpoint remoteBreakpoint = new Breakpoint( remoteTemplateName, line );
-                            debugger.addBreakpoint( remoteBreakpoint );
-                        }
-                        catch( RemoteException e )
-                        {
-                            if( retval == null )
-                            {
-                                retval = LiferayDebugCore.createErrorStatus( e );
-                            }
-                        }
+                        debugger.addBreakpoint( bp );
+                    }
+                    catch( RemoteException e )
+                    {
+                        retval =
+                            LiferayDebugCore.createErrorStatus(
+                                NLS.bind(
+                                    "Could not add remote breakpoint: {0}:{1}",
+                                    new Object[] { bp.getTemplateName(), bp.getLine() } ), e );
                     }
                 }
 
@@ -423,6 +429,11 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     {
     }
 
+    private IBreakpoint[] getBreakpoints()
+    {
+        return DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+    }
+
     public Debugger getDebuggerClient()
     {
         if( this.debuggerClient == null )
@@ -535,26 +546,40 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     private void removeRemoteBreakpoints( final IBreakpoint[] breakpoints )
     {
-        final Job job = new Job("remove remote breakpoints")
+        final List<Breakpoint> remoteBreakpoints = new ArrayList<Breakpoint>();
+
+        for( IBreakpoint bp : breakpoints )
+        {
+            final String templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
+
+            final String remoteTemplateName =createRemoteTemplateName( templateName );
+
+            final Breakpoint remoteBp =
+                new Breakpoint( remoteTemplateName, bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
+
+            remoteBreakpoints.add( remoteBp );
+        }
+
+        final Job job = new Job( "remove remote breakpoints" )
         {
             @Override
             protected IStatus run( IProgressMonitor monitor )
             {
                 IStatus retval = null;
 
-                for( IBreakpoint bp : breakpoints )
+                for( Breakpoint bp : remoteBreakpoints )
                 {
-                    String templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
-                    final Breakpoint remoteBp =
-                        new Breakpoint( templateName, bp.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
-
                     try
                     {
-                        getDebuggerClient().removeBreakpoint( remoteBp );
+                        getDebuggerClient().removeBreakpoint( bp );
                     }
                     catch( Exception e )
                     {
-                        retval = LiferayDebugCore.createErrorStatus( "Unable to get debug client to remove breakpoint: " + templateName, e );
+                        retval =
+                            LiferayDebugCore.createErrorStatus(
+                                NLS.bind(
+                                    "Unable to get debug client to remove breakpoint: {0}:{1}",
+                                    new Object[] { bp.getTemplateName(), bp.getLine() } ), e );
                     }
                 }
 
@@ -684,7 +709,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     public void terminate() throws DebugException
     {
-        final IBreakpoint[] localBreakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+        final IBreakpoint[] localBreakpoints = getBreakpoints();
 
         removeRemoteBreakpoints( localBreakpoints );
 
@@ -702,4 +727,5 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
         fireTerminateEvent();
     }
+
 }

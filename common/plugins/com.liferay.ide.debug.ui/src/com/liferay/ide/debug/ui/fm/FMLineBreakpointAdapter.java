@@ -35,6 +35,42 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class FMLineBreakpointAdapter implements IToggleBreakpointsTarget
 {
 
+    public boolean canToggleLineBreakpoints( IWorkbenchPart part, ISelection selection )
+    {
+        return getEditor( part ) != null;
+    }
+
+    public boolean canToggleMethodBreakpoints( IWorkbenchPart part, ISelection selection )
+    {
+        return false;
+    }
+
+    public boolean canToggleWatchpoints( IWorkbenchPart part, ISelection selection )
+    {
+        return false;
+    }
+
+    private ITextEditor getEditor( IWorkbenchPart part )
+    {
+        if( part instanceof ITextEditor )
+        {
+            ITextEditor editorPart = (ITextEditor) part;
+            IResource resource = (IResource) editorPart.getEditorInput().getAdapter( IResource.class );
+
+            if( resource != null )
+            {
+                String extension = resource.getFileExtension();
+
+                if( extension != null && extension.equals( "ftl" ) )
+                {
+                    return editorPart;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public void toggleLineBreakpoints( IWorkbenchPart part, ISelection selection ) throws CoreException
     {
         ITextEditor textEditor = getEditor( part );
@@ -68,48 +104,12 @@ public class FMLineBreakpointAdapter implements IToggleBreakpointsTarget
         }
     }
 
-    private ITextEditor getEditor( IWorkbenchPart part )
-    {
-        if( part instanceof ITextEditor )
-        {
-            ITextEditor editorPart = (ITextEditor) part;
-            IResource resource = (IResource) editorPart.getEditorInput().getAdapter( IResource.class );
-
-            if( resource != null )
-            {
-                String extension = resource.getFileExtension();
-
-                if( extension != null && extension.equals( "ftl" ) )
-                {
-                    return editorPart;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public boolean canToggleLineBreakpoints( IWorkbenchPart part, ISelection selection )
-    {
-        return getEditor( part ) != null;
-    }
-
     public void toggleMethodBreakpoints( IWorkbenchPart part, ISelection selection ) throws CoreException
     {
     }
 
-    public boolean canToggleMethodBreakpoints( IWorkbenchPart part, ISelection selection )
-    {
-        return false;
-    }
-
     public void toggleWatchpoints( IWorkbenchPart part, ISelection selection ) throws CoreException
     {
-    }
-
-    public boolean canToggleWatchpoints( IWorkbenchPart part, ISelection selection )
-    {
-        return false;
     }
 
 }

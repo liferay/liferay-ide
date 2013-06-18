@@ -36,6 +36,29 @@ import org.eclipse.ui.part.FileEditorInput;
 public class FMModelPresentation extends LabelProvider implements IDebugModelPresentation
 {
 
+    public void computeDetail( IValue value, IValueDetailListener listener )
+    {
+        String detail = StringPool.EMPTY;
+
+        if( value instanceof FMValue )
+        {
+            FMValue fmValue = (FMValue) value;
+            detail = fmValue.getDetailString();
+        }
+
+        listener.detailComputed( value, detail );
+    }
+
+    public String getEditorId( IEditorInput input, Object element )
+    {
+        if( element instanceof IFile || element instanceof ILineBreakpoint )
+        {
+            return "com.liferay.ide.freemarker.editor.FreemarkerEditor";
+        }
+
+        return null;
+    }
+
     public IEditorInput getEditorInput( Object element )
     {
         IEditorInput editorInput = null;
@@ -59,20 +82,6 @@ public class FMModelPresentation extends LabelProvider implements IDebugModelPre
         return editorInput;
     }
 
-    public String getEditorId( IEditorInput input, Object element )
-    {
-        if( element instanceof IFile || element instanceof ILineBreakpoint )
-        {
-            return "com.liferay.ide.freemarker.editor.FreemarkerEditor";
-        }
-
-        return null;
-    }
-
-    public void setAttribute( String attribute, Object value )
-    {
-    }
-
     public Image getImage(Object element)
     {
         return null;
@@ -83,17 +92,8 @@ public class FMModelPresentation extends LabelProvider implements IDebugModelPre
         return null;
     }
 
-    public void computeDetail( IValue value, IValueDetailListener listener )
+    public void setAttribute( String attribute, Object value )
     {
-        String detail = StringPool.EMPTY;
-
-        if( value instanceof FMValue )
-        {
-            FMValue fmValue = (FMValue) value;
-            detail = fmValue.getDetailString();
-        }
-
-        listener.detailComputed( value, detail );
     }
 
 }
