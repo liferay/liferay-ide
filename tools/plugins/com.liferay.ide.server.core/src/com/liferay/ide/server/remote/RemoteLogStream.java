@@ -43,8 +43,7 @@ public class RemoteLogStream extends BufferedInputStream
 {
 
     @SuppressWarnings( "deprecation" )
-    public static final IEclipsePreferences _defaultPrefs =
-        new DefaultScope().getNode( LiferayServerCore.PLUGIN_ID );
+    public static final IEclipsePreferences _defaultPrefs = new DefaultScope().getNode( LiferayServerCore.PLUGIN_ID );
 
     public static final long LOG_QUERY_RANGE = _defaultPrefs.getLong( "log.query.range", 51200 ); //$NON-NLS-1$
 
@@ -104,7 +103,6 @@ public class RemoteLogStream extends BufferedInputStream
 
         try
         {
-
             URI uri = new URI( "HTTP://" + url.getHost() + ":" + url.getPort() ); //$NON-NLS-1$ //$NON-NLS-2$
             IProxyData[] proxyDataForHost = proxyService.select( uri );
 
@@ -114,41 +112,34 @@ public class RemoteLogStream extends BufferedInputStream
                 {
                     System.setProperty( "http.proxyHost", data.getHost() ); //$NON-NLS-1$
                     System.setProperty( "http.proxyPort", String.valueOf( data.getPort() ) ); //$NON-NLS-1$
-                    conn = url.openConnection();
-                    conn.setRequestProperty( "Authorization", "Basic " + authStringEnc ); //$NON-NLS-1$ //$NON-NLS-2$
-                    Authenticator.setDefault( null );
-                    conn.setAllowUserInteraction( false );
 
                     break;
                 }
             }
 
-            if( conn == null)
+            uri = new URI( "SOCKS://" + url.getHost() + ":" + url.getPort() ); //$NON-NLS-1$ //$NON-NLS-2$
+            proxyDataForHost = proxyService.select( uri );
+
+            for( IProxyData data : proxyDataForHost )
             {
-                uri = new URI( "SOCKS://" + url.getHost() + ":" + url.getPort() ); //$NON-NLS-1$ //$NON-NLS-2$
-                proxyDataForHost = proxyService.select( uri );
-
-                for( IProxyData data : proxyDataForHost )
+                if( data.getHost() != null )
                 {
-                    if( data.getHost() != null )
-                    {
-                        System.setProperty( "socksProxyHost", data.getHost() ); //$NON-NLS-1$
-                        System.setProperty( "socksProxyPort", String.valueOf( data.getPort() ) ); //$NON-NLS-1$
-                        conn = url.openConnection();
-                        conn.setRequestProperty( "Authorization", "Basic " + authStringEnc ); //$NON-NLS-1$ //$NON-NLS-2$
-                        Authenticator.setDefault( null );
-                        conn.setAllowUserInteraction( false );
+                    System.setProperty( "socksProxyHost", data.getHost() ); //$NON-NLS-1$
+                    System.setProperty( "socksProxyPort", String.valueOf( data.getPort() ) ); //$NON-NLS-1$
 
-                        break;
-                    }
+                    break;
                 }
             }
-
         }
         catch( URISyntaxException e )
         {
             LiferayServerCore.logError( "Could not read proxy data", e ); //$NON-NLS-1$
         }
+
+        conn = url.openConnection();
+        conn.setRequestProperty( "Authorization", "Basic " + authStringEnc ); //$NON-NLS-1$ //$NON-NLS-2$
+        Authenticator.setDefault( null );
+        conn.setAllowUserInteraction( false );
 
         return conn.getInputStream();
     }
