@@ -18,13 +18,13 @@ package com.liferay.ide.project.ui.wizard;
 import com.liferay.ide.project.core.LiferayProjectImportDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.ide.ui.wizard.INewProjectWizard;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -36,7 +36,7 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizard;
  * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
-public class LiferayProjectImportWizard extends DataModelWizard implements IWorkbenchWizard, INewProjectWizard
+public class LiferayProjectImportWizard extends DataModelWizard implements IWorkbenchWizard, INewWizard
 {
 
     protected LiferayProjectImportWizardPage liferayProjectImportWizardPage;

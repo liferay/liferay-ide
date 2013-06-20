@@ -19,8 +19,8 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -50,19 +50,16 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "rawtypes" )
 public class ThemeCSSBuilder extends IncrementalProjectBuilder
 {
 
     public static final String ID = "com.liferay.ide.eclipse.theme.core.cssBuilder"; //$NON-NLS-1$
-    public static final String[] THEME_PARENTS = { "control_panel", "classic", "_styled", "_unstyled" };
 
     public static IStatus compileTheme( IProject project ) throws CoreException
     {
@@ -142,7 +139,8 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                     ILiferayProject lProject = LiferayCore.create( project );
 
-                    themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), lProject.getPortalVersion() , id, name );
+                    themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), lProject.getPortalVersion(), id, name,
+                        ThemeCore.getThemeProperty( "theme.type", project ) ); //$NON-NLS-1$
                 }
                 catch( IOException e )
                 {
@@ -174,24 +172,24 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         final IPath path = CoreUtil.getResourceLocation( docroot );
         // final IPath restoreLocation = getRestoreLocation(docroot);
-        String themeParent = getThemeParent( getProject() );
+        String themeParent = ThemeCore.getThemeProperty( "theme.parent", getProject() ); //$NON-NLS-1$
 
         ILiferayProject liferayProject = LiferayCore.create( getProject() );
         IPath themesPath = liferayProject.getAppServerPortalDir().append( "html/themes" ); //$NON-NLS-1$
 
         final List<IPath> restorePaths = new ArrayList<IPath>();
 
-        for( int i = 0; i < THEME_PARENTS.length; i++ )
+        for( int i = 0; i < IPluginProjectDataModelProperties.THEME_PARENTS.length; i++ )
         {
-            if( THEME_PARENTS[i].equals( themeParent ) )
+            if( IPluginProjectDataModelProperties.THEME_PARENTS[i].equals( themeParent ) )
             {
-                restorePaths.add( themesPath.append( THEME_PARENTS[i] ) );
+                restorePaths.add( themesPath.append( IPluginProjectDataModelProperties.THEME_PARENTS[i] ) );
             }
             else
             {
                 if( restorePaths.size() > 0 )
                 {
-                    restorePaths.add( themesPath.append( THEME_PARENTS[i] ) );
+                    restorePaths.add( themesPath.append( IPluginProjectDataModelProperties.THEME_PARENTS[i] ) );
                 }
             }
         }
@@ -262,43 +260,6 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
         return this.getProject();
     }
 
-    private String getThemeParent( IProject project )
-    {
-        String retval = null;
-
-        try
-        {
-            Document buildXmlDoc = FileUtil.readXML( project.getFile( "build.xml" ).getContents(), null, null ); //$NON-NLS-1$
-
-            NodeList properties = buildXmlDoc.getElementsByTagName( "property" ); //$NON-NLS-1$
-
-            for( int i = 0; i < properties.getLength(); i++ )
-            {
-                final Node item = properties.item( i );
-                Node name = item.getAttributes().getNamedItem( "name" ); //$NON-NLS-1$
-
-                if( name != null && "theme.parent".equals( name.getNodeValue() ) ) //$NON-NLS-1$
-                {
-                    Node value = item.getAttributes().getNamedItem( "value" ); //$NON-NLS-1$
-
-                    retval = value.getNodeValue();
-                    break;
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            e.printStackTrace();
-        }
-
-        if( retval == null )
-        {
-            retval = "_styled"; //$NON-NLS-1$
-        }
-
-        return retval;
-    }
-
     protected void incrementalBuild( IResourceDelta delta, final IProgressMonitor monitor )
     {
         int deltaKind = delta.getKind();
@@ -341,7 +302,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                                     }
                                 }
                             }
-                            else if( "build.xml".equals( segment ) ) //IDE-828
+                            else if( "build.xml".equals( segment ) ) //IDE-828 //$NON-NLS-1$
                             {
                                 IPath relPath = resource.getProjectRelativePath();
 
@@ -353,7 +314,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                                     }
                                     catch( CoreException e )
                                     {
-                                        ThemeCore.logError( "Error compiling theme.", e );
+                                        ThemeCore.logError( "Error compiling theme.", e ); //$NON-NLS-1$
                                     }
                                 }
                             }

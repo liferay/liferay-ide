@@ -54,6 +54,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 public class ThemeDiffResourceListener implements IResourceChangeListener
 {
@@ -196,10 +197,10 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                             final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                            IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) );
+                            IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) ); //$NON-NLS-1$
                             ILiferayProject lProject = LiferayCore.create( project );
                             themeDescriptorHelper.createDefaultFile(
-                                descriptorParent, lProject.getPortalVersion(), id, name );
+                                descriptorParent, lProject.getPortalVersion(), id, name, ThemeCore.getThemeProperty( "theme.type", project ) ); //$NON-NLS-1$
 
                             try
                             {

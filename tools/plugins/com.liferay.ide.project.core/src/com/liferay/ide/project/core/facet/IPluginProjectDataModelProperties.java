@@ -20,6 +20,7 @@ import org.eclipse.wst.common.frameworks.internal.operations.IProjectCreationPro
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public interface IPluginProjectDataModelProperties
@@ -79,4 +80,12 @@ public interface IPluginProjectDataModelProperties
     public static final String SETUP_EXT_CLASSPATH = "IPluginProjectDataModelProperties.SETUP_EXT_CLASSPATH"; //$NON-NLS-1$
 
     public static final String THEME_NAME = "IPluginProjectDataModelProperties.THEME_NAME"; //$NON-NLS-1$
+
+    public static final String THEME_PARENT = "IPluginProjectDataModelProperties.THEME_PARENT"; //$NON-NLS-1$
+
+    public static final String[] THEME_PARENTS = { "classic", "_styled", "_unstyled" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+    public static final String THEME_TEMPLATE_FRAMEWORK = "IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK"; //$NON-NLS-1$
+
+    public static final String[] THEME_TEMPLATE_FRAMEWORKS = { "Velocity", "Freemarker", "JSP" };  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 }

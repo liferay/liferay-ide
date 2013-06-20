@@ -17,7 +17,6 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.ui.LiferayUIPlugin;
-import com.liferay.ide.ui.wizard.INewProjectWizard;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -39,6 +38,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewWizardAction extends Action implements Comparable
@@ -112,11 +112,6 @@ public class NewWizardAction extends Action implements Comparable
         try
         {
             INewWizard wizard = createWizard();
-
-            if( wizard instanceof INewProjectWizard && this.projectType != null )
-            {
-                ( (INewProjectWizard) wizard ).setProjectType( projectType );
-            }
 
             wizard.init( PlatformUI.getWorkbench(), getSelection() );
 

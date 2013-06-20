@@ -28,7 +28,6 @@ import com.liferay.ide.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
-import com.liferay.ide.ui.wizard.INewProjectWizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -53,6 +52,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -67,16 +67,17 @@ import org.eclipse.wst.web.ui.internal.wizards.NewProjectDataModelFacetWizard;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
-    implements INewProjectWizard, IPluginProjectDataModelProperties
+    implements INewWizard, IPluginProjectDataModelProperties
 {
     protected NewPluginProjectFirstPage firstPage;
     protected ImageDescriptor liferayWizardImageDescriptor;
     protected IPortletFrameworkDelegate[] portletFrameworkDelegates;
     protected NewPortletPluginProjectPage portletPluginPage;
-    protected String projectType;
+    protected NewThemePluginProjectPage themePluginPage;
 
     public NewPluginProjectWizard()
     {
@@ -108,6 +109,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
     {
         this.firstPage = createFirstPage();
         this.portletPluginPage = new NewPortletPluginProjectPage( this, model );
+        this.themePluginPage = new NewThemePluginProjectPage( this, model );
 
         return new IWizardPage[] { firstPage, portletPluginPage };
     }
@@ -180,6 +182,11 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             {
                 return null;
             }
+        }
+
+        if( this.firstPage.equals( page ) && model.getBooleanProperty( PLUGIN_TYPE_THEME ) )
+        {
+            return this.themePluginPage;
         }
 
         return super.getNextPage( page );
@@ -299,11 +306,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         }
 
         return null;
-    }
-
-    public String getProjectType()
-    {
-        return this.projectType;
     }
 
     @Override
@@ -426,7 +428,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
                 ProjectUIPlugin.logError( "Error executing wizard fragment", e ); //$NON-NLS-1$
             }
         }
-        
         IProject project = getFacetedProject().getProject();
 
         if( project != null && ProjectUtil.isPortletProject( project ) )
@@ -504,11 +505,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         } );;
 
         super.postPerformFinish();
-    }
-
-    public void setProjectType( String projectType )
-    {
-        this.projectType = projectType;
     }
 
     protected void setupWizard()

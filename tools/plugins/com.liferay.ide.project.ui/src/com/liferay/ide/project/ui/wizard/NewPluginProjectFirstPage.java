@@ -54,6 +54,7 @@ import org.eclipse.wst.server.ui.ServerUIUtil;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IPluginProjectDataModelProperties
@@ -85,8 +86,8 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
 
         if( canFlip )
         {
-            // Only the portlet mode needs a 2ne page
-            return getModel().getBooleanProperty( PLUGIN_TYPE_PORTLET );
+            // Portlet and theme modes need a 2nd page
+            return ( getModel().getBooleanProperty( PLUGIN_TYPE_PORTLET ) ) || ( getModel().getBooleanProperty( PLUGIN_TYPE_THEME ) );
         }
 
         return canFlip;
@@ -437,63 +438,6 @@ public class NewPluginProjectFirstPage extends WebProjectFirstPage implements IP
         updateControls();
 
         return top;
-    }
-
-    @Override
-    protected void enter()
-    {
-        super.enter();
-
-        String projectType = ( (NewPluginProjectWizard) getWizard() ).getProjectType();
-
-        if( CoreUtil.isNullOrEmpty( projectType ) )
-        {
-            projectType = IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID;
-        }
-
-        setShouldValidatePage( false );
-        if( IPluginFacetConstants.LIFERAY_PORTLET_FACET_ID.equals( projectType.toLowerCase() ) )
-        {
-            getDataModel().setProperty( PLUGIN_TYPE_PORTLET, true );
-            getDataModel().setProperty( PLUGIN_TYPE_HOOK, false );
-            getDataModel().setProperty( PLUGIN_TYPE_EXT, false );
-            getDataModel().setProperty( PLUGIN_TYPE_LAYOUTTPL, false );
-            getDataModel().setProperty( PLUGIN_TYPE_THEME, false );
-        }
-        else if( IPluginFacetConstants.LIFERAY_HOOK_FACET_ID.equals( projectType.toLowerCase() ) )
-        {
-            getDataModel().setProperty( PLUGIN_TYPE_HOOK, true );
-            getDataModel().setProperty( PLUGIN_TYPE_PORTLET, false );
-            getDataModel().setProperty( PLUGIN_TYPE_EXT, false );
-            getDataModel().setProperty( PLUGIN_TYPE_LAYOUTTPL, false );
-            getDataModel().setProperty( PLUGIN_TYPE_THEME, false );
-        }
-        else if( IPluginFacetConstants.LIFERAY_EXT_FACET_ID.equals( projectType.toLowerCase() ) )
-        {
-            getDataModel().setProperty( PLUGIN_TYPE_EXT, true );
-            getDataModel().setProperty( PLUGIN_TYPE_PORTLET, false );
-            getDataModel().setProperty( PLUGIN_TYPE_HOOK, false );
-            getDataModel().setProperty( PLUGIN_TYPE_LAYOUTTPL, false );
-            getDataModel().setProperty( PLUGIN_TYPE_THEME, false );
-        }
-        else if( IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_ID.equals( projectType.toLowerCase() ) )
-        {
-            getDataModel().setProperty( PLUGIN_TYPE_LAYOUTTPL, true );
-            getDataModel().setProperty( PLUGIN_TYPE_PORTLET, false );
-            getDataModel().setProperty( PLUGIN_TYPE_HOOK, false );
-            getDataModel().setProperty( PLUGIN_TYPE_EXT, false );
-            getDataModel().setProperty( PLUGIN_TYPE_THEME, false );
-        }
-        else if( IPluginFacetConstants.LIFERAY_THEME_FACET_ID.equals( projectType.toLowerCase() ) )
-        {
-            getDataModel().setProperty( PLUGIN_TYPE_THEME, true );
-            getDataModel().setProperty( PLUGIN_TYPE_LAYOUTTPL, false );
-            getDataModel().setProperty( PLUGIN_TYPE_PORTLET, false );
-            getDataModel().setProperty( PLUGIN_TYPE_HOOK, false );
-            getDataModel().setProperty( PLUGIN_TYPE_EXT, false );
-        }
-        setShouldValidatePage( true );
-        // getDataModel().setProperty(PLUGIN_TYPE_PORTLET, true);
     }
 
     protected IDataModel getModel()

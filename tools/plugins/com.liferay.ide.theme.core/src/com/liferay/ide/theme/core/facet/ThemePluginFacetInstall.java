@@ -24,10 +24,16 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.theme.core.ThemeCSSBuilder;
 import com.liferay.ide.theme.core.ThemeCore;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -46,6 +52,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Greg Amerson
  * @author kamesh.sampath [IDE-450]
+ * @author Cindy Li
  */
 public class ThemePluginFacetInstall extends PluginFacetInstall
 {
@@ -113,6 +120,8 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             }
         }
 
+        updateProjectFiles( project );
+
         if( shouldInstallThemeBuilder() )
         {
             installThemeBuilder( this.project );
@@ -134,6 +143,17 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
     protected String getDefaultOutputLocation()
     {
         return IPluginFacetConstants.THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
+    }
+
+    public String getTemplateExtension( String tplFramework )
+    {
+        Map<String, String> tplMap = new HashMap<String, String>();
+
+        tplMap.put( "Velocity", "vm" ); //$NON-NLS-1$ //$NON-NLS-2$
+        tplMap.put( "Freemarker", "ftl" ); //$NON-NLS-1$ //$NON-NLS-2$
+        tplMap.put( "JSP", "jsp" ); //$NON-NLS-1$ //$NON-NLS-2$
+
+        return tplMap.get( tplFramework );
     }
 
     protected void installThemeBuilder( IProject project ) throws CoreException
@@ -222,6 +242,44 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
     protected boolean shouldInstallThemeBuilder()
     {
         return this.model.getBooleanProperty( INSTALL_THEME_CSS_BUILDER );
+    }
+
+    public void updateProjectFiles( IProject project ) throws CoreException
+    {
+        String themeParent = this.masterModel.getStringProperty( THEME_PARENT );
+        String tplFramework = this.masterModel.getStringProperty( THEME_TEMPLATE_FRAMEWORK );
+
+        if( ( themeParent != null && !themeParent.equals( this.masterModel.getDefaultProperty( THEME_PARENT ) ) ) ||
+            ( tplFramework != null && !tplFramework.equals( this.masterModel.getDefaultProperty( THEME_TEMPLATE_FRAMEWORK ) ) ) )
+        {
+            IFile buildXml = project.getFile( "build.xml" ); //$NON-NLS-1$
+            InputStream inputStream = buildXml.getContents();
+
+            try
+            {
+                String strCon = CoreUtil.readStreamToString( inputStream );
+                inputStream.close();
+
+                if( !themeParent.equals( this.masterModel.getDefaultProperty( THEME_PARENT ) ) )
+                {
+                    strCon = strCon.replace(
+                            "<property name=\"theme.parent\" value=\"_styled\" />", "<property name=\"theme.parent\" value=\"" + themeParent + "\" />" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                }
+
+                if( !tplFramework.equals( this.masterModel.getDefaultProperty( THEME_TEMPLATE_FRAMEWORK ) ) )
+                {
+                    String tplExtension = getTemplateExtension( tplFramework );
+                    strCon = strCon.replace(
+                            "</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                }
+
+                buildXml.setContents( new ByteArrayInputStream( strCon.getBytes() ), IResource.FORCE, null );
+            }
+            catch( IOException e )
+            {
+                ThemeCore.logError( e );
+            }
+        }
     }
 
 }

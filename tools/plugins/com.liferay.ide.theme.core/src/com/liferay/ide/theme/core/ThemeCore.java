@@ -15,16 +15,24 @@
 
 package com.liferay.ide.theme.core;
 
+import com.liferay.ide.core.util.FileUtil;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * The activator class controls the plugin life cycle
  *
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class ThemeCore extends Plugin
 {
@@ -65,6 +73,51 @@ public class ThemeCore extends Plugin
     public static ThemeCore getDefault()
     {
         return plugin;
+    }
+
+    public static String getThemeProperty( String propertyName, IProject project )
+    {
+        String retval = null;
+
+        try
+        {
+            Document buildXmlDoc = FileUtil.readXML( project.getFile( "build.xml" ).getContents(), null, null ); //$NON-NLS-1$
+
+            NodeList properties = buildXmlDoc.getElementsByTagName( "property" ); //$NON-NLS-1$
+
+            for( int i = 0; i < properties.getLength(); i++ )
+            {
+                final Node item = properties.item( i );
+                Node name = item.getAttributes().getNamedItem( "name" ); //$NON-NLS-1$
+
+                if( name != null && propertyName.equals( name.getNodeValue() ) )
+                {
+                    Node value = item.getAttributes().getNamedItem( "value" ); //$NON-NLS-1$
+
+                    retval = value.getNodeValue();
+                    break;
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            e.printStackTrace();
+        }
+
+        if( retval == null )
+        {
+            if( propertyName.equals( "theme.parent" ) ) //$NON-NLS-1$
+            {
+                retval = "_styled"; //$NON-NLS-1$
+            }
+
+            if( propertyName.equals( "theme.type" ) ) //$NON-NLS-1$
+            {
+                retval = "vm"; //$NON-NLS-1$
+            }
+        }
+
+        return retval;
     }
 
     public static void logError( Exception ex )
