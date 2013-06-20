@@ -44,6 +44,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -90,7 +91,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         public void environmentSuspended( final EnvironmentSuspendedEvent event ) throws RemoteException
         {
             final int lineNumber = event.getLine();
-            final IBreakpoint[] breakpoints = getBreakpoints();
+            final ILineBreakpoint[] breakpoints = getEnabledLineBreakpoints();
 
             boolean foundBreakpoint = false;
 
@@ -138,33 +139,6 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                     fmThread.setStepping( false );
                     fmStackFrames = new FMStackFrame[] { new FMStackFrame( fmThread, frameName ) };
 
-//                        new Job("remove step breakpoint")
-//                        {
-//                            @Override
-//                            protected IStatus run( IProgressMonitor monitor )
-//                            {
-//                                IStatus retval = null;
-//
-//                                try
-//                                {
-//                                    Debugger c = getDebuggerClient();
-//                                    List bps1 = c.getBreakpoints();
-//                                    c.removeBreakpoint( stepBp );
-//                                    List bps2 = c.getBreakpoints();
-//
-//                                    if( bps1.size() != bps2.size() + 1 )
-//                                    {
-//                                        retval = LiferayDebugCore.createErrorStatus( "Unable to remove step breakpoint" );
-//                                    }
-//                                }
-//                                catch( RemoteException e )
-//                                {
-//                                    retval = LiferayDebugCore.createErrorStatus( "Unable to remove temporary breakpoint", e );
-//                                }
-//
-//                                return retval == null ? Status.OK_STATUS : retval;
-//                            }
-//                        }.schedule();
                     foundBreakpoint = true;
                 }
             }
@@ -178,6 +152,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                 // lets not pause the remote environment if for some reason the breakpoints don't match.
                 new Job( "resuming remote environment" )
                 {
+                    @SuppressWarnings( "rawtypes" )
                     @Override
                     protected IStatus run( IProgressMonitor monitor )
                     {
@@ -185,7 +160,11 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
                         try
                         {
-                            event.getEnvironment().resume();
+                            for( Iterator i = getDebuggerClient().getSuspendedEnvironments().iterator(); i.hasNext(); )
+                            {
+                                DebuggedEnvironment e = (DebuggedEnvironment) i.next();
+                                e.resume();
+                            }
                         }
                         catch( RemoteException e )
                         {
@@ -196,7 +175,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                     }
                 }.schedule();
 
-                LiferayDebugCore.logError( "Could not find local breakpoint, resuming remote environment" );
+                LiferayDebugCore.logError( "Could not find local breakpoint, resuming all remote environments" );
             }
         }
 
@@ -250,8 +229,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
                 FMDebugTarget.this.threads = new IThread[] { FMDebugTarget.this.fmThread };
 
-                final IBreakpoint[] localBreakpoints =
-                    getBreakpoints();
+                final IBreakpoint[] localBreakpoints = getEnabledLineBreakpoints();
 
                 addRemoteBreakpoints( debugger, localBreakpoints );
             }
@@ -472,27 +450,6 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     {
     }
 
-    private IBreakpoint[] getBreakpoints()
-    {
-        IBreakpoint[] retval = null;
-
-        List<IBreakpoint> bps = new ArrayList<IBreakpoint>();
-
-        IBreakpoint[] fmBreakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
-
-        for( IBreakpoint fmBreakpoint : fmBreakpoints )
-        {
-            if( supportsBreakpoint( fmBreakpoint ) )
-            {
-                bps.add( fmBreakpoint );
-            }
-        }
-
-        retval = bps.toArray( new IBreakpoint[0] );
-
-        return retval;
-    }
-
     public Debugger getDebuggerClient()
     {
         if( this.debuggerClient == null )
@@ -520,6 +477,37 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     private String getDisplayableTemplateName( String templateName )
     {
         return templateName.replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
+    }
+
+    private ILineBreakpoint[] getEnabledLineBreakpoints()
+    {
+        List<ILineBreakpoint> breakpoints = new ArrayList<ILineBreakpoint>();
+
+        final IBreakpointManager breakpointManager = DebugPlugin.getDefault().getBreakpointManager();
+
+        if( breakpointManager.isEnabled() )
+        {
+            IBreakpoint[] fmBreakpoints = breakpointManager.getBreakpoints( getModelIdentifier() );
+
+
+            for( IBreakpoint fmBreakpoint : fmBreakpoints )
+            {
+                try
+                {
+                    if( fmBreakpoint instanceof ILineBreakpoint && supportsBreakpoint( fmBreakpoint ) &&
+                        fmBreakpoint.isEnabled() )
+                    {
+                        breakpoints.add( (ILineBreakpoint) fmBreakpoint );
+                    }
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+
+        }
+
+        return breakpoints.toArray( new ILineBreakpoint[0] );
     }
 
     public ILaunch getLaunch()
@@ -877,7 +865,6 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             }
             catch( CoreException e )
             {
-                e.printStackTrace();
             }
         }
 
@@ -911,7 +898,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     public void terminate() throws DebugException
     {
-        final IBreakpoint[] localBreakpoints = getBreakpoints();
+        final IBreakpoint[] localBreakpoints = getEnabledLineBreakpoints();
 
         removeRemoteBreakpoints( localBreakpoints );
 
