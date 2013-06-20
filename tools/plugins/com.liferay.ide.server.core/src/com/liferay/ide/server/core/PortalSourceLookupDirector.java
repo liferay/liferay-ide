@@ -33,4 +33,10 @@ public class PortalSourceLookupDirector extends JavaSourceLookupDirector
         addParticipants( new ISourceLookupParticipant[] { new PortalSourceLookupParticipant() } );
     }
 
+    @Override
+    public boolean isFindDuplicates()
+    {
+        return true;
+    }
+
 }

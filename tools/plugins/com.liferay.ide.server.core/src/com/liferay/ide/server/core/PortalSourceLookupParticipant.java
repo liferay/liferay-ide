@@ -23,6 +23,7 @@ import com.liferay.ide.debug.core.fm.FMThread;
 import freemarker.debug.Breakpoint;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -61,7 +62,7 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
             if( project != null )
             {
                 // go through all containers and only include the ones in this project
-                List<Object> validSourceElements = new ArrayList<Object>();
+                List<IResource> validSourceElements = new ArrayList<IResource>();
 
                 for( Object sourceElement : sourceElements )
                 {
@@ -71,7 +72,22 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
 
                         if(res.getProject().equals( project ))
                         {
-                            validSourceElements.add( sourceElement );
+                            validSourceElements.add( (IResource) sourceElement );
+                        }
+                    }
+                }
+
+                // check for two source elements in the same project, try to weed one of them out
+                if( validSourceElements.size() > 1 )
+                {
+                    for( Iterator<IResource> i = validSourceElements.iterator(); i.hasNext(); )
+                    {
+                        IResource res = i.next();
+
+                        if( res.getProjectRelativePath().toPortableString().contains(
+                            "target/m2e-liferay/theme-resources" ) ) //$NON-NLS-1$
+                        {
+                            i.remove();
                         }
                     }
                 }
