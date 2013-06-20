@@ -74,6 +74,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     private boolean suspended = false;
     private FMDebugTarget target;
     private boolean terminated = false;
+
     private IThread[] threads = new IThread[0];
 
     class EventDispatchJob extends Job implements DebuggerListener
@@ -91,44 +92,84 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             final int lineNumber = event.getLine();
             final IBreakpoint[] breakpoints = getBreakpoints();
 
-            boolean suspended = false;
+            boolean foundBreakpoint = false;
 
             for( IBreakpoint breakpoint : breakpoints )
             {
-                if( supportsBreakpoint( breakpoint ) )
+                if( breakpoint instanceof ILineBreakpoint )
                 {
-                    if( breakpoint instanceof ILineBreakpoint )
+                    ILineBreakpoint lineBreakpoint = (ILineBreakpoint) breakpoint;
+
+                    try
                     {
-                        ILineBreakpoint lineBreakpoint = (ILineBreakpoint) breakpoint;
+                        final int bpLineNumber = lineBreakpoint.getLineNumber();
+                        final String templateName = breakpoint.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
+                        final String remoteTemplateName = event.getName().replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
 
-                        try
+                        if( bpLineNumber == lineNumber && remoteTemplateName.equals( templateName ) )
                         {
-                            final int bpLineNumber = lineBreakpoint.getLineNumber();
-                            final String templateName =
-                                breakpoint.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
-                            final String remoteTemplateName =
-                                event.getName().replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
+                            final String frameName = templateName + " line: " + lineNumber;
 
-                            if( bpLineNumber == lineNumber && remoteTemplateName.equals( templateName ) )
-                            {
-                                fmThread.setEnvironment( event.getEnvironment() );
-                                fmThread.setBreakpoints( new IBreakpoint[] { breakpoint } );
+                            fmThread.setEnvironment( event.getEnvironment() );
+                            fmThread.setBreakpoints( new IBreakpoint[] { breakpoint } );
+                            fmStackFrames = new FMStackFrame[] { new FMStackFrame( fmThread, frameName ) };
 
-                                String frameName = templateName + " line: " + lineNumber;
-                                fmStackFrames = new FMStackFrame[] { new FMStackFrame( fmThread, frameName ) };
-
-                                suspended = true;
-                                break;
-                            }
+                            foundBreakpoint = true;
+                            break;
                         }
-                        catch( CoreException e )
-                        {
-                        }
+                    }
+                    catch( CoreException e )
+                    {
+                        LiferayDebugCore.logError( "Unable to suspend at breakpoint", e );
                     }
                 }
             }
 
-            if( suspended )
+            if( ! foundBreakpoint && fmThread.isStepping() )
+            {
+                final Breakpoint stepBp = fmThread.getStepBreakpoint();
+
+                if( stepBp != null )
+                {
+                    String frameName = getDisplayableTemplateName( stepBp.getTemplateName() ) + " line: " + stepBp.getLine();
+
+                    fmThread.setEnvironment( event.getEnvironment() );
+                    fmThread.setBreakpoints( null );
+                    fmThread.setStepping( false );
+                    fmStackFrames = new FMStackFrame[] { new FMStackFrame( fmThread, frameName ) };
+
+//                        new Job("remove step breakpoint")
+//                        {
+//                            @Override
+//                            protected IStatus run( IProgressMonitor monitor )
+//                            {
+//                                IStatus retval = null;
+//
+//                                try
+//                                {
+//                                    Debugger c = getDebuggerClient();
+//                                    List bps1 = c.getBreakpoints();
+//                                    c.removeBreakpoint( stepBp );
+//                                    List bps2 = c.getBreakpoints();
+//
+//                                    if( bps1.size() != bps2.size() + 1 )
+//                                    {
+//                                        retval = LiferayDebugCore.createErrorStatus( "Unable to remove step breakpoint" );
+//                                    }
+//                                }
+//                                catch( RemoteException e )
+//                                {
+//                                    retval = LiferayDebugCore.createErrorStatus( "Unable to remove temporary breakpoint", e );
+//                                }
+//
+//                                return retval == null ? Status.OK_STATUS : retval;
+//                            }
+//                        }.schedule();
+                    foundBreakpoint = true;
+                }
+            }
+
+            if( foundBreakpoint )
             {
                 suspended( DebugEvent.BREAKPOINT );
             }
@@ -154,6 +195,8 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                         return retval;
                     }
                 }.schedule();
+
+                LiferayDebugCore.logError( "Could not find local breakpoint, resuming remote environment" );
             }
         }
 
@@ -431,7 +474,23 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     private IBreakpoint[] getBreakpoints()
     {
-        return DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+        IBreakpoint[] retval = null;
+
+        List<IBreakpoint> bps = new ArrayList<IBreakpoint>();
+
+        IBreakpoint[] fmBreakpoints = DebugPlugin.getDefault().getBreakpointManager().getBreakpoints( getModelIdentifier() );
+
+        for( IBreakpoint fmBreakpoint : fmBreakpoints )
+        {
+            if( supportsBreakpoint( fmBreakpoint ) )
+            {
+                bps.add( fmBreakpoint );
+            }
+        }
+
+        retval = bps.toArray( new IBreakpoint[0] );
+
+        return retval;
     }
 
     public Debugger getDebuggerClient()
@@ -456,6 +515,11 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     public FMDebugTarget getDebugTarget()
     {
         return this.target;
+    }
+
+    private String getDisplayableTemplateName( String templateName )
+    {
+        return templateName.replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
     }
 
     public ILaunch getLaunch()
@@ -600,6 +664,13 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             {
                 try
                 {
+                    // need to check to see if current thread is stepping and then remove the step breakpoint
+                    if( fmThread.isStepping() )
+                    {
+                        Breakpoint stepBp = fmThread.getStepBreakpoint();
+                        getDebuggerClient().removeBreakpoint( stepBp );
+                    }
+
                     for( Iterator i = getDebuggerClient().getSuspendedEnvironments().iterator(); i.hasNext(); )
                     {
                         DebuggedEnvironment debuged = (DebuggedEnvironment) i.next();
@@ -634,6 +705,15 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     {
         try
         {
+            Breakpoint stepBp = thread.getStepBreakpoint();
+
+            if( stepBp != null )
+            {
+                getDebuggerClient().removeBreakpoint( stepBp );
+                thread.setStepping( false );
+                thread.setStepBreakpoint( null );
+            }
+
             thread.getEnvironment().resume();
 
             this.fmStackFrames = null;
@@ -660,9 +740,131 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         this.fireResumeEvent( detail );
     }
 
+    /*
+     * Since current fm debugger doens't have native stepping we must emulate stepping with following steps.
+     *
+     * 1. Starting at the current stopped line, continue going down the template file to find a
+     *    suitable line to stop, ie, a addBreakpoint() that doesn't throw an exception.
+     * 2. For the next line if there is already a breakpoint, simply call resume(),
+     * 3. If there is no breakpoint already installed, add another one to the next line if that line has a valid
+     *    breakpoint location, then resume().
+     * 4. Once the next breakpoint is hit, we need to remove the previously added step breakpoint
+     */
+    @SuppressWarnings( { "rawtypes" } )
     protected void step( FMThread thread ) throws DebugException
     {
-        //TODO step()
+        int currentLineNumber = -1;
+        String templateName = null;
+        Breakpoint existingStepBp = null;
+
+        final IBreakpoint[] breakpoints = thread.getBreakpoints();
+
+
+        if( breakpoints.length > 0 )
+        {
+            try
+            {
+                ILineBreakpoint bp = (ILineBreakpoint) breakpoints[0];
+                currentLineNumber = bp.getLineNumber();
+                templateName = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
+            }
+            catch( CoreException e )
+            {
+                LiferayDebugCore.logError( "Could not get breakpoint information.", e );
+            }
+        }
+        else
+        {
+            existingStepBp = thread.getStepBreakpoint();
+
+            currentLineNumber = existingStepBp.getLine();
+            templateName = existingStepBp.getTemplateName();
+        }
+
+        if( currentLineNumber > -1 && templateName != null )
+        {
+            final String remoteTemplateName = createRemoteTemplateName( templateName );
+            int stepLine = currentLineNumber + 1;
+            Breakpoint existingBp = null;
+
+            Debugger debugCli = getDebuggerClient();
+
+            try
+            {
+                List remoteBps = debugCli.getBreakpoints( remoteTemplateName );
+
+                for( Iterator i = remoteBps.iterator(); i.hasNext(); )
+                {
+                    Breakpoint remoteBp = (Breakpoint) i.next();
+
+                    if( remoteBp.getLine() == stepLine )
+                    {
+                        existingBp = remoteBp;
+                        break;
+                    }
+                }
+
+                if( existingBp == null )
+                {
+                    boolean addedRemote = false;
+
+                    while( ! addedRemote )
+                    {
+                        Breakpoint newBp = new Breakpoint( remoteTemplateName, stepLine++ );
+
+                        try
+                        {
+                            debugCli.addBreakpoint( newBp );
+                        }
+                        catch( RemoteException e )
+                        {
+                            // we except to get some remote exceptions if the next line is invalid breakpoint location
+                        }
+
+                        List updatedRemoteBps = debugCli.getBreakpoints( remoteTemplateName );
+
+                        if( updatedRemoteBps.size() == remoteBps.size() + 1 ) // our new remote bp was sucessfully added
+                        {
+                            addedRemote = true;
+                            thread.setStepBreakpoint( newBp );
+                            thread.setStepping( true );
+
+                            fireResumeEvent( DebugEvent.RESUME  );
+
+                            if( existingStepBp != null)
+                            {
+                                debugCli.removeBreakpoint( existingStepBp );
+                            }
+
+                            thread.getEnvironment().resume();
+                        }
+                    }
+                }
+                else
+                {
+                    // the next line already has a remote breakpoint installed so lets clear our "step" breakpoint
+                    thread.setStepBreakpoint( null );
+                    thread.setStepping( false );
+
+                    fireResumeEvent( DebugEvent.RESUME  );
+
+                    if( existingStepBp != null)
+                    {
+                        debugCli.removeBreakpoint( existingStepBp );
+                    }
+
+                    thread.getEnvironment().resume();
+                }
+            }
+            catch( RemoteException e )
+            {
+                LiferayDebugCore.logError( "Unable to check remote breakpoints", e );
+            }
+        }
+        else
+        {
+            LiferayDebugCore.logError( "Unable to step because of missing lineNumber or templateName information." );
+        }
     }
 
     public boolean supportsBreakpoint( IBreakpoint breakpoint )

@@ -16,7 +16,11 @@ package com.liferay.ide.server.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.debug.core.ILRDebugConstants;
+import com.liferay.ide.debug.core.fm.FMDebugTarget;
 import com.liferay.ide.debug.core.fm.FMStackFrame;
+import com.liferay.ide.debug.core.fm.FMThread;
+
+import freemarker.debug.Breakpoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,6 +176,20 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
             IBreakpoint bp = thread.getBreakpoints()[0];
 
             retval = bp.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, null );
+        }
+        else
+        {
+            if( thread instanceof FMThread )
+            {
+                FMThread fmThread = (FMThread) thread;
+
+                Breakpoint stepBp = fmThread.getStepBreakpoint();
+
+                if( stepBp != null )
+                {
+                    retval = stepBp.getTemplateName().replaceAll( FMDebugTarget.FM_TEMPLATE_SERVLET_CONTEXT, "" ); //$NON-NLS-1$
+                }
+            }
         }
 
         return retval;

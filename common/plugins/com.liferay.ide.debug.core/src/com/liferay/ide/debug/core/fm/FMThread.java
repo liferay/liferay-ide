@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.debug.core.fm;
 
+import freemarker.debug.Breakpoint;
 import freemarker.debug.DebuggedEnvironment;
 
 import org.eclipse.debug.core.DebugException;
@@ -34,6 +35,8 @@ public class FMThread extends FMDebugElement implements IThread
      */
     private IBreakpoint[] breakpoints;
 
+    private Breakpoint stepBreakpoint;
+
     /**
      * Whether this thread is stepping
      */
@@ -53,131 +56,11 @@ public class FMThread extends FMDebugElement implements IThread
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.IThread#getStackFrames()
-     */
-    public IStackFrame[] getStackFrames() throws DebugException
-    {
-        if( isSuspended() )
-        {
-            return ( (FMDebugTarget) getDebugTarget() ).getStackFrames();
-        }
-        else
-        {
-            return new IStackFrame[0];
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.IThread#hasStackFrames()
-     */
-    public boolean hasStackFrames() throws DebugException
-    {
-        return isSuspended();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.IThread#getPriority()
-     */
-    public int getPriority() throws DebugException
-    {
-        return 0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.IThread#getTopStackFrame()
-     */
-    public IStackFrame getTopStackFrame() throws DebugException
-    {
-        final IStackFrame[] frames = getStackFrames();
-
-        if( frames.length > 0 )
-        {
-            return frames[0];
-        }
-
-        return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.IThread#getName()
-     */
-    public String getName() throws DebugException
-    {
-        return "FM Environment";
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.IThread#getBreakpoints()
-     */
-    public IBreakpoint[] getBreakpoints()
-    {
-        if( this.breakpoints == null )
-        {
-            return new IBreakpoint[0];
-        }
-
-        return this.breakpoints;
-    }
-
-    /**
-     * Sets the breakpoints this thread is suspended at, or <code>null</code> if none.
-     *
-     * @param breakpoints
-     *            the breakpoints this thread is suspended at, or <code>null</code> if none
-     */
-    protected void setBreakpoints( IBreakpoint[] breakpoints )
-    {
-        this.breakpoints = breakpoints;
-    }
-
-    /*
-     * (non-Javadoc)
      * @see org.eclipse.debug.core.model.ISuspendResume#canResume()
      */
     public boolean canResume()
     {
         return isSuspended();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.ISuspendResume#canSuspend()
-     */
-    public boolean canSuspend()
-    {
-        return !isSuspended();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.ISuspendResume#isSuspended()
-     */
-    public boolean isSuspended()
-    {
-        return getDebugTarget().isSuspended();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.ISuspendResume#resume()
-     */
-    public void resume() throws DebugException
-    {
-        getDebugTarget().resume( this );
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.ISuspendResume#suspend()
-     */
-    public void suspend() throws DebugException
-    {
-        getDebugTarget().suspend();
     }
 
     /*
@@ -209,11 +92,171 @@ public class FMThread extends FMDebugElement implements IThread
 
     /*
      * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.ISuspendResume#canSuspend()
+     */
+    public boolean canSuspend()
+    {
+        return !isSuspended();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.ITerminate#canTerminate()
+     */
+    public boolean canTerminate()
+    {
+        return !isTerminated();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.IThread#getBreakpoints()
+     */
+    public IBreakpoint[] getBreakpoints()
+    {
+        if( this.breakpoints == null )
+        {
+            return new IBreakpoint[0];
+        }
+
+        return this.breakpoints;
+    }
+
+    public DebuggedEnvironment getEnvironment()
+    {
+        return this.suspendedEnvironment;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.IThread#getName()
+     */
+    public String getName() throws DebugException
+    {
+        return "FM Environment";
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.IThread#getPriority()
+     */
+    public int getPriority() throws DebugException
+    {
+        return 0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.IThread#getStackFrames()
+     */
+    public IStackFrame[] getStackFrames() throws DebugException
+    {
+        if( isSuspended() )
+        {
+            return ( (FMDebugTarget) getDebugTarget() ).getStackFrames();
+        }
+        else
+        {
+            return new IStackFrame[0];
+        }
+    }
+
+    public Breakpoint getStepBreakpoint()
+    {
+        return this.stepBreakpoint;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.IThread#getTopStackFrame()
+     */
+    public IStackFrame getTopStackFrame() throws DebugException
+    {
+        final IStackFrame[] frames = getStackFrames();
+
+        if( frames.length > 0 )
+        {
+            return frames[0];
+        }
+
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.IThread#hasStackFrames()
+     */
+    public boolean hasStackFrames() throws DebugException
+    {
+        return isSuspended();
+    }
+
+    /*
+     * (non-Javadoc)
      * @see org.eclipse.debug.core.model.IStep#isStepping()
      */
     public boolean isStepping()
     {
         return this.stepping;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.ISuspendResume#isSuspended()
+     */
+    public boolean isSuspended()
+    {
+        return getDebugTarget().isSuspended();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.ITerminate#isTerminated()
+     */
+    public boolean isTerminated()
+    {
+        return getDebugTarget().isTerminated();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.debug.core.model.ISuspendResume#resume()
+     */
+    public void resume() throws DebugException
+    {
+        getDebugTarget().resume( this );
+    }
+
+    /**
+     * Sets the breakpoints this thread is suspended at, or <code>null</code> if none.
+     *
+     * @param breakpoints
+     *            the breakpoints this thread is suspended at, or <code>null</code> if none
+     */
+    protected void setBreakpoints( IBreakpoint[] breakpoints )
+    {
+        this.breakpoints = breakpoints;
+    }
+
+    public void setEnvironment( DebuggedEnvironment environment )
+    {
+        this.suspendedEnvironment = environment;
+    }
+
+    public void setStepBreakpoint( Breakpoint bp )
+    {
+        this.stepBreakpoint = bp;
+    }
+
+    /**
+     * Sets whether this thread is stepping
+     *
+     * @param stepping
+     *            whether stepping
+     */
+    protected void setStepping( boolean stepping )
+    {
+        this.stepping = stepping;
     }
 
     /*
@@ -243,20 +286,11 @@ public class FMThread extends FMDebugElement implements IThread
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.ITerminate#canTerminate()
+     * @see org.eclipse.debug.core.model.ISuspendResume#suspend()
      */
-    public boolean canTerminate()
+    public void suspend() throws DebugException
     {
-        return !isTerminated();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.debug.core.model.ITerminate#isTerminated()
-     */
-    public boolean isTerminated()
-    {
-        return getDebugTarget().isTerminated();
+        getDebugTarget().suspend();
     }
 
     /*
@@ -266,27 +300,6 @@ public class FMThread extends FMDebugElement implements IThread
     public void terminate() throws DebugException
     {
         getDebugTarget().terminate();
-    }
-
-    /**
-     * Sets whether this thread is stepping
-     *
-     * @param stepping
-     *            whether stepping
-     */
-    protected void setStepping( boolean stepping )
-    {
-        this.stepping = stepping;
-    }
-
-    public DebuggedEnvironment getEnvironment()
-    {
-        return this.suspendedEnvironment;
-    }
-
-    public void setEnvironment( DebuggedEnvironment environment )
-    {
-        this.suspendedEnvironment = environment;
     }
 
 }
