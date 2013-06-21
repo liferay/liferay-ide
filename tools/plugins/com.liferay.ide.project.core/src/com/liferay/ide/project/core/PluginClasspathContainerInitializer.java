@@ -197,6 +197,10 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         {
             classpathContainer = new ExtClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
         }
+        else if( ThemeClasspathContainer.SEGMENT_PATH.equals( finalSegment ) )
+        {
+            classpathContainer = new ThemeClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
+        }
         else
         {
             throw new CoreException( LiferayServerCore.createErrorStatus( "Invalid final segment of type: " + //$NON-NLS-1$

@@ -13,12 +13,24 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.library;
+package com.liferay.ide.theme.core.facet;
+
+import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.project.core.ThemeClasspathContainer;
+import com.liferay.ide.project.core.library.PluginLibraryInstallOperation;
+
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
- * @author Greg Amerson
+ * @author Cindy Li
  */
-public class PortletPluginLibraryInstallOperationConfig extends PluginLibraryInstallOperationConfig
+public class ThemePluginLibraryInstallOperation extends PluginLibraryInstallOperation
 {
+
+    protected IPath getClasspathContainerPath()
+    {
+        return new Path( PluginClasspathContainerInitializer.ID + "/" + ThemeClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
+    }
 
 }

@@ -56,7 +56,7 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
         final Label label = new Label( composite, SWT.NONE );
         label.setText( Msgs.liferayPluginTypeLabel );
 
-        final String[] types = new String[] { "portlet", "hook", "ext" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final String[] types = new String[] { "portlet", "hook", "ext", "theme" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         this.typeCombo = new Combo( composite, SWT.READ_ONLY );
         this.typeCombo.setItems( types );
@@ -80,6 +80,10 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
             else if( ProjectUtil.isExtProject( this.ownerProject ) )
             {
                 index = 2;
+            }
+            else if( ProjectUtil.isThemeProject( this.ownerProject ) )
+            {
+                index = 3;
             }
             else
             {

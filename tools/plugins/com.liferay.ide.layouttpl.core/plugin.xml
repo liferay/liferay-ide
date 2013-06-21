@@ -99,16 +99,6 @@
    </extension>
 
    <extension
-         point="org.eclipse.wst.common.project.facet.core.validators">
-      <validator
-            class="com.liferay.ide.layouttpl.core.facet.LayoutTplPluginFacetValidator">
-         <facet
-               id="liferay.layouttpl"
-               version="6.0">
-         </facet>
-      </validator>
-   </extension>
-   <extension
          point="com.liferay.ide.project.core.sdkTemplates">
       <sdkTemplate
             class="com.liferay.ide.layouttpl.core.LayoutTplSDKTemplate"

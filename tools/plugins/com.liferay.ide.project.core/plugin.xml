@@ -321,7 +321,7 @@
                   class="com.liferay.ide.project.core.library.PortletPluginLibraryInstallOperation">
             </operation>
             <config
-                  class="com.liferay.ide.project.core.library.PortletPluginLibraryInstallOperationConfig">
+                  class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
             </config>
          </action>
       </provider>
@@ -355,7 +355,7 @@
                   class="com.liferay.ide.project.core.library.HookPluginLibraryInstallOperation">
             </operation>
             <config
-                  class="com.liferay.ide.project.core.library.HookPluginLibraryInstallOperationConfig">
+                  class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
             </config>
          </action>
       </provider>
@@ -389,7 +389,7 @@
                   class="com.liferay.ide.project.core.library.ExtPluginLibraryInstallOperation">
             </operation>
             <config
-                  class="com.liferay.ide.project.core.library.ExtPluginLibraryInstallOperationConfig">
+                  class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
             </config>
          </action>
       </provider>
@@ -412,33 +412,6 @@
             eventTypes="PRIMARY_RUNTIME_CHANGED">
       </listener>
    </extension>
-
-   <!--
-   <extension
-         point="org.eclipse.wst.common.project.facet.core.validators">
-      <validator
-            class="com.liferay.ide.project.core.facet.PortletPluginFacetValidator">
-         <facet
-               id="liferay.portlet"
-               version="6.0">
-         </facet>
-      </validator>
-      <validator
-            class="com.liferay.ide.project.core.facet.HookPluginFacetValidator">
-         <facet
-               id="liferay.hook"
-               version="6.0">
-         </facet>
-      </validator>
-      <validator
-            class="com.liferay.ide.project.core.facet.ExtPluginFacetValidator">
-         <facet
-               id="liferay.ext"
-               version="6.0">
-         </facet>
-      </validator>
-   </extension>
-   -->
 
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">

@@ -107,16 +107,6 @@
    </extension>
 
    <extension
-         point="org.eclipse.wst.common.project.facet.core.validators">
-      <validator
-            class="com.liferay.ide.theme.core.facet.ThemePluginFacetValidator">
-         <facet
-               id="liferay.theme"
-               version="6.0">
-         </facet>
-      </validator>
-   </extension>
-   <extension
          point="com.liferay.ide.project.core.sdkTemplates">
       <sdkTemplate
             class="com.liferay.ide.theme.core.ThemeSDKTemplate"
@@ -147,6 +137,42 @@
             runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60"
             facetId="liferay.theme">
       </liferayPluginPublisher>
+   </extension>
+   <extension
+         point="org.eclipse.jst.common.project.facet.core.libraryProviders">
+      <provider
+            id="com.liferay.ide.eclipse.plugin.theme.libraryProvider">
+         <label>
+            Liferay theme plugin library
+         </label>
+         <enablement>
+            <with
+                  variable="requestingProjectFacet">
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                     value="liferay.theme">
+               </test>
+            </with>
+            <with
+                  variable="context">
+               <test
+                     forcePluginActivation="true"
+                     property="com.liferay.ide.project.core.isLiferayRuntime"
+                     value="true">
+               </test>
+            </with>
+         </enablement>
+         <action
+               type="INSTALL">
+            <operation
+                  class="com.liferay.ide.theme.core.facet.ThemePluginLibraryInstallOperation">
+            </operation>
+            <config
+                  class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
+            </config>
+         </action>
+      </provider>
    </extension>
 
 </plugin>

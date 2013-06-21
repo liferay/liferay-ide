@@ -236,7 +236,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
     @Override
     protected boolean shouldInstallPluginLibraryDelegate()
     {
-        return false;
+        return true;
     }
 
     protected boolean shouldInstallThemeBuilder()
