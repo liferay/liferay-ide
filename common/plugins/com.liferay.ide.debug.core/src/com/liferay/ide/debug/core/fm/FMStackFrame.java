@@ -14,9 +14,15 @@
  *******************************************************************************/
 package com.liferay.ide.debug.core.fm;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.debug.core.LiferayDebugCore;
+
 import freemarker.debug.DebuggedEnvironment;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.debug.core.model.ILineBreakpoint;
 import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
@@ -29,16 +35,20 @@ import org.eclipse.debug.core.model.IVariable;
  */
 public class FMStackFrame extends FMDebugElement implements IStackFrame
 {
+    private String name;
     private FMThread thread;
     private IVariable[] variables;
-    private int linePC;
-    private String name;
 
     public FMStackFrame( FMThread thread, String name )
     {
         super( thread.getDebugTarget() );
         this.thread = thread;
         this.name = name;
+    }
+
+    public boolean canResume()
+    {
+        return getThread().canResume();
     }
 
     public boolean canStepInto()
@@ -56,49 +66,9 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
         return getThread().canStepReturn();
     }
 
-    public boolean isStepping()
-    {
-        return getThread().isStepping();
-    }
-
-    public void stepInto() throws DebugException
-    {
-        getThread().stepInto();
-    }
-
-    public void stepOver() throws DebugException
-    {
-        getThread().stepOver();
-    }
-
-    public void stepReturn() throws DebugException
-    {
-        getThread().stepReturn();
-    }
-
-    public boolean canResume()
-    {
-        return getThread().canResume();
-    }
-
     public boolean canSuspend()
     {
         return getThread().canSuspend();
-    }
-
-    public boolean isSuspended()
-    {
-        return getThread().isSuspended();
-    }
-
-    public void resume() throws DebugException
-    {
-        getThread().resume();
-    }
-
-    public void suspend() throws DebugException
-    {
-        getThread().suspend();
     }
 
     public boolean canTerminate()
@@ -106,14 +76,59 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
         return getThread().canTerminate();
     }
 
-    public boolean isTerminated()
+    public int getCharEnd() throws DebugException
     {
-        return getThread().isTerminated();
+        return -1;
     }
 
-    public void terminate() throws DebugException
+    public int getCharStart() throws DebugException
     {
-        getThread().terminate();
+        return -1;
+    }
+
+    public int getLineNumber() throws DebugException
+    {
+        int retval = -1;
+
+        if( this.thread != null && this.thread.isSuspended() )
+        {
+            IBreakpoint[] lineBreakpoints = this.thread.getBreakpoints();
+
+            if( ! CoreUtil.isNullOrEmpty( lineBreakpoints ) )
+            {
+                IBreakpoint bp = lineBreakpoints[0];
+
+                if( bp instanceof ILineBreakpoint )
+                {
+                    ILineBreakpoint lineBp = (ILineBreakpoint) bp;
+
+                    try
+                    {
+                        retval = lineBp.getLineNumber();
+                    }
+                    catch( CoreException e )
+                    {
+                        LiferayDebugCore.logError( "Could not get breakpoint charStart", e );
+                    }
+                }
+            }
+            else if ( this.thread.getStepBreakpoint() != null )
+            {
+                retval = this.thread.getStepBreakpoint().getLine();
+            }
+        }
+
+        return retval;
+    }
+
+    public String getName() throws DebugException
+    {
+        return this.name;
+    }
+
+    public IRegisterGroup[] getRegisterGroups() throws DebugException
+    {
+        return null;
     }
 
     public IThread getThread()
@@ -169,39 +184,59 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
         return this.variables;
     }
 
+    public boolean hasRegisterGroups() throws DebugException
+    {
+        return false;
+    }
+
     public boolean hasVariables() throws DebugException
     {
         return this.variables != null && this.variables.length > 0;
     }
 
-    public int getLineNumber() throws DebugException
+    public boolean isStepping()
     {
-        return linePC;
+        return getThread().isStepping();
     }
 
-    public int getCharStart() throws DebugException
+    public boolean isSuspended()
     {
-        return -1;
+        return getThread().isSuspended();
     }
 
-    public int getCharEnd() throws DebugException
+    public boolean isTerminated()
     {
-        return -1;
+        return getThread().isTerminated();
     }
 
-    public String getName() throws DebugException
+    public void resume() throws DebugException
     {
-        return this.name;
+        getThread().resume();
     }
 
-    public IRegisterGroup[] getRegisterGroups() throws DebugException
+    public void stepInto() throws DebugException
     {
-        return null;
+        getThread().stepInto();
     }
 
-    public boolean hasRegisterGroups() throws DebugException
+    public void stepOver() throws DebugException
     {
-        return false;
+        getThread().stepOver();
+    }
+
+    public void stepReturn() throws DebugException
+    {
+        getThread().stepReturn();
+    }
+
+    public void suspend() throws DebugException
+    {
+        getThread().suspend();
+    }
+
+    public void terminate() throws DebugException
+    {
+        getThread().terminate();
     }
 
 }
