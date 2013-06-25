@@ -166,7 +166,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
             if( retval == null )
             {
-                setServerStatus( LiferayServerCore.createErrorStatus( Msgs.checkConnectionSettings ) );
                 return IServer.STATE_UNKNOWN;
             }
 
@@ -962,7 +961,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
     private static class Msgs extends NLS
     {
-        public static String checkConnectionSettings;
         public static String gettingLiferayConnection;
         public static String gettingRemoteConnection;
         public static String installing;
