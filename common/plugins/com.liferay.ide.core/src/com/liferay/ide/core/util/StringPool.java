@@ -20,10 +20,12 @@ package com.liferay.ide.core.util;
 public class StringPool
 {
     public static final String ASTERISK = "*"; //$NON-NLS-1$
+    public static final String BLANK = ""; //$NON-NLS-1$
+    public static final String COLON = ":"; //$NON-NLS-1$
     public static final String COMMA = ","; //$NON-NLS-1$
     public static final String DOUBLE_ASTERISK = "**"; //$NON-NLS-1$
     public static final String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
-    public static final String EMPTY = ""; //$NON-NLS-1$
+    public static final String EMPTY = BLANK;
     public static final String EQUALS = "="; //$NON-NLS-1$
     public static final String FORWARD_SLASH = "/"; //$NON-NLS-1$
     public static final String SPACE = " "; //$NON-NLS-1$

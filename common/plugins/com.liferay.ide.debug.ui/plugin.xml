@@ -36,7 +36,7 @@
             contextId="com.liferay.ide.debug.ui.fm.debugging">
       </modelContextBinding>
    </extension>
-   
+
    <extension
          point="org.eclipse.wst.sse.ui.breakpoint">
       <breakpointContribution>
@@ -45,5 +45,40 @@
                contentTypes="com.liferay.ide.freemarker.contentType">
          </provider>
       </breakpointContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="com.liferay.ide.debug.ui.freemarker"
+            description="Suspend the related freemarker engine thread that is currently waiting for debug client to send resume."
+            id="com.liferay.ide.debug.ui.freemarker.suspendRelatedThread"
+            name="Suspend Freemarker Thread">
+      </command>
+      <category
+            description="Freemarker Debugger Commands"
+            id="com.liferay.ide.debug.ui.freemarker"
+            name="Freemarker Debugger Commands">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.debug.ui.fm.SuspendFreemarkerThreadHandler"
+            commandId="com.liferay.ide.debug.ui.freemarker.suspendRelatedThread">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.debug.ui.DebugView?after=org.eclipse.debug.ui.commands.Suspend">
+         <command
+               commandId="com.liferay.ide.debug.ui.freemarker.suspendRelatedThread"
+               icon="icons/fm_suspend.png"
+               label="Suspend Freemarker Thread"
+               style="push"
+               tooltip="Suspend the related freemarker engine thread that is currently waiting for debug client to send resume.">
+         </command>
+      </menuContribution>
    </extension>
 </plugin>

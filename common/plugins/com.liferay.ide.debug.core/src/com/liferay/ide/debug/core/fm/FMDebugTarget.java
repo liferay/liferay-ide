@@ -17,6 +17,9 @@ package com.liferay.ide.debug.core.fm;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.debug.core.ILRDebugConstants;
 import com.liferay.ide.debug.core.LiferayDebugCore;
+import com.sun.jdi.Field;
+import com.sun.jdi.ThreadReference;
+import com.sun.jdi.Value;
 
 import freemarker.debug.Breakpoint;
 import freemarker.debug.DebuggedEnvironment;
@@ -54,12 +57,15 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.jdt.debug.core.IJavaDebugTarget;
+import org.eclipse.jdt.internal.debug.core.model.JDIThread;
 import org.eclipse.osgi.util.NLS;
 
 
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebugEventSetListener
 {
     public static final String FM_TEMPLATE_SERVLET_CONTEXT = "_SERVLET_CONTEXT_"; //$NON-NLS-1$
@@ -105,13 +111,14 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                     {
                         final int bpLineNumber = lineBreakpoint.getLineNumber();
                         final String templateName = breakpoint.getMarker().getAttribute( ILRDebugConstants.FM_TEMPLATE_NAME, "" );
-                        final String remoteTemplateName = event.getName().replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
+                        final String remoteTemplateName = event.getTemplateName().replaceAll( FM_TEMPLATE_SERVLET_CONTEXT, "" );
 
                         if( bpLineNumber == lineNumber && remoteTemplateName.equals( templateName ) )
                         {
                             final String frameName = templateName + " line: " + lineNumber;
 
                             fmThread.setEnvironment( event.getEnvironment() );
+                            fmThread.setThreadId( event.getThreadId() );
                             fmThread.setBreakpoints( new IBreakpoint[] { breakpoint } );
                             fmStackFrames = new FMStackFrame[] { new FMStackFrame( fmThread, frameName ) };
 
@@ -209,7 +216,6 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                 {
                     try
                     {
-                        System.out.println("EVENT DISPATCH JOB WAIT()");
                         wait();
                     }
                     catch( InterruptedException e )
@@ -320,6 +326,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
      */
     public void breakpointAdded( IBreakpoint breakpoint )
     {
+
         if( supportsBreakpoint( breakpoint ) && ! this.launch.isTerminated() )
         {
             try
@@ -539,7 +546,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         return this.process;
     }
 
-    protected IStackFrame[] getStackFrames()
+    IStackFrame[] getStackFrames()
     {
         return this.fmStackFrames;
     }
@@ -739,7 +746,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
      * 4. Once the next breakpoint is hit, we need to remove the previously added step breakpoint
      */
     @SuppressWarnings( { "rawtypes" } )
-    protected void step( FMThread thread ) throws DebugException
+    void step( FMThread thread ) throws DebugException
     {
         int currentLineNumber = -1;
         String templateName = null;
@@ -894,6 +901,42 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     {
         this.suspended = true;
         this.fmThread.fireSuspendEvent( detail );
+    }
+
+    boolean suspendRelatedJavaThread( final long remoteThreadId ) throws DebugException
+    {
+        boolean retval = false;
+
+        for( IDebugTarget target : this.launch.getDebugTargets() )
+        {
+            if( target instanceof IJavaDebugTarget )
+            {
+                IJavaDebugTarget javaTarget = (IJavaDebugTarget) target;
+
+                IThread[] threads = javaTarget.getThreads();
+
+                for( final IThread thread : threads )
+                {
+                    if( thread instanceof JDIThread )
+                    {
+                        JDIThread jdiThread = (JDIThread) thread;
+                        ThreadReference underlyingThread = jdiThread.getUnderlyingThread();
+                        Field tidField = underlyingThread.referenceType().fieldByName( "tid" );
+                        Value tidValue = underlyingThread.getValue( tidField );
+
+                        long threadId = Long.parseLong( tidValue.toString() );
+
+                        if( threadId == remoteThreadId )
+                        {
+                            thread.suspend();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return retval;
     }
 
     public void terminate() throws DebugException

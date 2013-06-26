@@ -45,6 +45,12 @@ public class FMThread extends FMDebugElement implements IThread
     private DebuggedEnvironment suspendedEnvironment;
 
     /**
+     * Cooresponds to the thread id of the originating freemarker engine thre
+     */
+    private long threadId = -1;
+
+
+    /**
      * Constructs a new thread for the given target
      *
      * @param target VM
@@ -53,6 +59,7 @@ public class FMThread extends FMDebugElement implements IThread
     {
         super( fmDebugTarget );
     }
+
 
     /*
      * (non-Javadoc)
@@ -166,6 +173,11 @@ public class FMThread extends FMDebugElement implements IThread
         return this.stepBreakpoint;
     }
 
+    public long getThreadId()
+    {
+        return this.threadId;
+    }
+
     /*
      * (non-Javadoc)
      * @see org.eclipse.debug.core.model.IThread#getTopStackFrame()
@@ -257,6 +269,11 @@ public class FMThread extends FMDebugElement implements IThread
     protected void setStepping( boolean stepping )
     {
         this.stepping = stepping;
+    }
+
+    public void setThreadId( long threadId )
+    {
+        this.threadId = threadId;
     }
 
     /*

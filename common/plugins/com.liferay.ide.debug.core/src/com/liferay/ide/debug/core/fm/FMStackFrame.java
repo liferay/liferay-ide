@@ -25,7 +25,6 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.ILineBreakpoint;
 import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
-import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 
@@ -131,7 +130,7 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
         return null;
     }
 
-    public IThread getThread()
+    public FMThread getThread()
     {
         return this.thread;
     }
@@ -232,6 +231,11 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
     public void suspend() throws DebugException
     {
         getThread().suspend();
+    }
+
+    public void suspendJavaThread() throws DebugException
+    {
+        getDebugTarget().suspendRelatedJavaThread( getThread().getThreadId() );
     }
 
     public void terminate() throws DebugException
