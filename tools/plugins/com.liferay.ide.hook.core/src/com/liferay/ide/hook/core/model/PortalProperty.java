@@ -18,7 +18,6 @@
 package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.hook.core.model.internal.PortalPropertyNamePossibleValuesService;
-import com.liferay.ide.hook.core.model.internal.PortalPropertyNameValidationService;
 
 import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.ModelElementType;
@@ -28,7 +27,6 @@ import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 
 /**
  * @author Gregory Amerson
@@ -43,8 +41,7 @@ public interface PortalProperty extends IModelElement
     // *** Name ***
 
     @NoDuplicates
-    @Services( { @Service( impl = PortalPropertyNamePossibleValuesService.class ),
-        @Service( impl = PortalPropertyNameValidationService.class ) } )
+    @Service( impl = PortalPropertyNamePossibleValuesService.class )
     ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();

@@ -20,21 +20,26 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.SortedSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
  * @author Gregory Amerson
+ * @author Tao Tao
  */
 public class PortalPropertyNamePossibleValuesService extends PossibleValuesService
 {
 
     private String[] hookProperties;
+    private String[] wildCardHookProperties;
 
     @Override
     protected void fillPossibleValues( SortedSet<String> values )
@@ -62,4 +67,40 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
         }
     }
 
+    @Override
+    public Severity getInvalidValueSeverity( String invalidValue )
+    {
+        if( wildCardHookProperties == null )
+        {
+            wildCardHookProperties = getWildCardHookProperties();
+        }
+
+        for( String wildCardProperty : wildCardHookProperties )
+        {
+            String propertyWithoutWildCard = wildCardProperty.substring( 0, ( wildCardProperty.indexOf( "*" ) - 1 ) ); //$NON-NLS-1$
+            String pattern = "^" + propertyWithoutWildCard + "\\..+"; //$NON-NLS-1$ //$NON-NLS-2$
+
+            if( invalidValue.matches( pattern ) )
+            {
+                return Severity.OK;
+            }
+        }
+
+        return super.getInvalidValueSeverity( invalidValue );
+    }
+
+    public String[] getWildCardHookProperties()
+    {
+        List<String> properties = new ArrayList<String>();
+
+        for( String property : hookProperties )
+        {
+            if( property.endsWith( ".*" ) ) //$NON-NLS-1$
+            {
+                properties.add( property );
+            }
+        }
+
+       return properties.toArray( new String[0] );
+    }
 }
