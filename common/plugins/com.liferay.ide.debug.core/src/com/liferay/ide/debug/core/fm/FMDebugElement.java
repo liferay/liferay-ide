@@ -20,6 +20,8 @@ import com.liferay.ide.debug.core.LiferayDebugCore;
 import freemarker.debug.DebugModel;
 
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.PlatformObject;
@@ -29,6 +31,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.model.IDebugElement;
+import org.eclipse.debug.core.model.IVariable;
 
 
 /**
@@ -44,37 +47,19 @@ public class FMDebugElement extends PlatformObject implements IDebugElement
         this.target = target;
     }
 
-    @SuppressWarnings( "rawtypes" )
-    public Object getAdapter(Class adapter)
-    {
-        if (adapter == IDebugElement.class)
-        {
-            return this;
-        }
-
-        return super.getAdapter(adapter);
-    }
-
-    public String getModelIdentifier()
-    {
-        return ILRDebugConstants.ID_FM_DEBUG_MODEL;
-    }
-
-    public FMDebugTarget getDebugTarget()
-    {
-        return this.target;
-    }
-
-    public ILaunch getLaunch()
-    {
-        return getDebugTarget().getLaunch();
-    }
-
     protected void abort( String message, Throwable e ) throws DebugException
     {
         throw new DebugException( new Status(
             IStatus.ERROR, LiferayDebugCore.getDefault().getBundle().getSymbolicName(),
             DebugPlugin.INTERNAL_ERROR, message, e ) );
+    }
+
+    /**
+     * Fires a <code>CREATE</code> event for this element.
+     */
+    protected void fireCreationEvent()
+    {
+        fireEvent( new DebugEvent( this, DebugEvent.CREATE ) );
     }
 
     /**
@@ -86,14 +71,6 @@ public class FMDebugElement extends PlatformObject implements IDebugElement
     protected void fireEvent( DebugEvent event )
     {
         DebugPlugin.getDefault().fireDebugEventSet( new DebugEvent[] { event } );
-    }
-
-    /**
-     * Fires a <code>CREATE</code> event for this element.
-     */
-    protected void fireCreationEvent()
-    {
-        fireEvent( new DebugEvent( this, DebugEvent.CREATE ) );
     }
 
     /**
@@ -126,7 +103,33 @@ public class FMDebugElement extends PlatformObject implements IDebugElement
         fireEvent( new DebugEvent( this, DebugEvent.TERMINATE ) );
     }
 
-    protected static String getReferenceTypeName( DebugModel model ) throws DebugException
+    @SuppressWarnings( "rawtypes" )
+    public Object getAdapter(Class adapter)
+    {
+        if (adapter == IDebugElement.class)
+        {
+            return this;
+        }
+
+        return super.getAdapter(adapter);
+    }
+
+    public FMDebugTarget getDebugTarget()
+    {
+        return this.target;
+    }
+
+    public ILaunch getLaunch()
+    {
+        return getDebugTarget().getLaunch();
+    }
+
+    public String getModelIdentifier()
+    {
+        return ILRDebugConstants.ID_FM_DEBUG_MODEL;
+    }
+
+    protected String getReferenceTypeName( DebugModel model ) throws DebugException
     {
         try
         {
@@ -168,5 +171,28 @@ public class FMDebugElement extends PlatformObject implements IDebugElement
         }
 
         return "var";
+    }
+
+    protected void sortVariables( IVariable[] variables )
+    {
+        Arrays.sort
+        (
+            variables,
+            new Comparator<IVariable>()
+            {
+                public int compare( IVariable var1, IVariable var2 )
+                {
+                    try
+                    {
+                        return var1.getName().compareTo( var2.getName() );
+                    }
+                    catch( DebugException e )
+                    {
+                    }
+
+                    return 0;
+                }
+            }
+        );
     }
 }

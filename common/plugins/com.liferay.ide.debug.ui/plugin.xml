@@ -81,4 +81,29 @@
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="com.liferay.ide.debug.ui.FreemarkerVariableViewActions"
+            targetID="org.eclipse.debug.ui.VariableView">
+         <action
+               class="com.liferay.ide.debug.ui.fm.ShowAdvancedVariablesViewActionDelegate"
+               icon="icons/advanced.gif"
+               id="com.liferay.ide.debug.ui.variablesViewActions.FreemarkerAdvancedView"
+               label="Show Advanced Variables View"
+               menubarPath="com.liferay.ide.debug.ui.VariableView.freemarkerSubmenu/freemakerPart"
+               style="toggle"
+               tooltip="Toggle the display all of freemarker variables available debug model (advanced use only).">
+         </action>
+         <menu
+               icon="icons/freemarker.gif"
+               id="com.liferay.ide.debug.ui.VariableView.freemarkerSubmenu"
+               label="Freemarker"
+               path="freemarkerActions">
+            <groupMarker
+                  name="com.liferay.ide.debug.ui.freemarkerPart">
+            </groupMarker>
+         </menu>
+      </viewContribution>
+   </extension>
 </plugin>

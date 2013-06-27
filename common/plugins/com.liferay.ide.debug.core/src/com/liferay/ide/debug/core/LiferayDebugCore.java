@@ -20,12 +20,14 @@ import com.liferay.ide.core.LiferayCore;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
  *
- * @author Gregorg Amerson
+ * @author Gregory Amerson
  */
 public class LiferayDebugCore extends Plugin
 {
@@ -37,6 +39,8 @@ public class LiferayDebugCore extends Plugin
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.debug.core"; //$NON-NLS-1$
+
+    public static final String PREF_ADVANCED_VARIABLES_VIEW = "advanced-variables-view";
 
     public static IStatus createErrorStatus( String msg )
     {
@@ -61,6 +65,11 @@ public class LiferayDebugCore extends Plugin
     public static LiferayDebugCore getDefault()
     {
         return plugin;
+    }
+
+    public static IEclipsePreferences getPrefs()
+    {
+        return InstanceScope.INSTANCE.getNode( PLUGIN_ID );
     }
 
     public static void logError( Exception e )

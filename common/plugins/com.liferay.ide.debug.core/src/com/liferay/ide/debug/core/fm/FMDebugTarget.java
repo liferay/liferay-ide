@@ -44,6 +44,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -55,7 +57,6 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ILineBreakpoint;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.internal.debug.core.model.JDIThread;
@@ -66,13 +67,15 @@ import org.eclipse.osgi.util.NLS;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebugEventSetListener
+public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebugEventSetListener, IPreferenceChangeListener
 {
+    private static final FMStackFrame[] EMPTY_STACK_FRAMES = new FMStackFrame[0];
+
     public static final String FM_TEMPLATE_SERVLET_CONTEXT = "_SERVLET_CONTEXT_"; //$NON-NLS-1$
 
     private Debugger debuggerClient;
     private EventDispatchJob eventDispatchJob;
-    private IStackFrame[] fmStackFrames = new IStackFrame[0];
+    private FMStackFrame[] fmStackFrames = EMPTY_STACK_FRAMES;
     private FMThread fmThread;
     private String host;
     private ILaunch launch;
@@ -270,8 +273,8 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         this.eventDispatchJob.schedule();
 
         DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener( this );
-
         DebugPlugin.getDefault().addDebugEventListener( this );
+        LiferayDebugCore.getPrefs().addPreferenceChangeListener( this );
     }
 
     public void addRemoteBreakpoints( final Debugger debugger, final IBreakpoint bps[] ) throws RemoteException
@@ -417,6 +420,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
         DebugPlugin.getDefault().getBreakpointManager().removeBreakpointListener(this);
         DebugPlugin.getDefault().removeDebugEventListener( this );
+        LiferayDebugCore.getPrefs().removePreferenceChangeListener( this );
     }
 
     private String createRemoteTemplateName( String templateName )
@@ -546,7 +550,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         return this.process;
     }
 
-    IStackFrame[] getStackFrames()
+    FMStackFrame[] getStackFrames()
     {
         return this.fmStackFrames;
     }
@@ -601,6 +605,17 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     public boolean isTerminated()
     {
         return this.terminated || getProcess().isTerminated();
+    }
+
+    public void preferenceChange( PreferenceChangeEvent event )
+    {
+        if( LiferayDebugCore.PREF_ADVANCED_VARIABLES_VIEW.equals( event.getKey() ) )
+        {
+            for( FMStackFrame stackFrame : getStackFrames() )
+            {
+                stackFrame.clearVariables();
+            }
+        }
     }
 
     private void removeRemoteBreakpoints( final IBreakpoint[] breakpoints )
@@ -680,7 +695,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                         }
                     }
 
-                    fmStackFrames = null;
+                    fmStackFrames = EMPTY_STACK_FRAMES;
 
                     resumed( DebugEvent.CLIENT_REQUEST );
                 }
@@ -711,7 +726,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
             thread.getEnvironment().resume();
 
-            this.fmStackFrames = null;
+            this.fmStackFrames = EMPTY_STACK_FRAMES;
 
             resumed( DebugEvent.CLIENT_REQUEST );
         }
@@ -730,7 +745,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     private void resumed( int detail )
     {
         this.suspended = false;
-        this.fmStackFrames = new IStackFrame[0];
+        this.fmStackFrames = EMPTY_STACK_FRAMES;
         this.fmThread.fireResumeEvent( detail );
         this.fireResumeEvent( detail );
     }

@@ -19,6 +19,12 @@ import com.liferay.ide.debug.core.LiferayDebugCore;
 
 import freemarker.debug.DebuggedEnvironment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IBreakpoint;
@@ -34,8 +40,16 @@ import org.eclipse.debug.core.model.IVariable;
  */
 public class FMStackFrame extends FMDebugElement implements IStackFrame
 {
+    final static Pattern freemarkerClasses = Pattern.compile( "^freemarker\\..*\\$.*$" );
+    final static Pattern liferayClasses = Pattern.compile( "^com\\.liferay\\.portal\\.freemarker\\.LiferayObjectWrapper$" );
+    // matches values like: com.liferay.portal.service.permission.UserGroupPermissionImpl@1cd9f974
+    final static Pattern liferaySpringClasses = Pattern.compile( "^com\\.liferay\\..*@[a-z0-9]+$" );
+    final static Pattern classDefs = Pattern.compile( "^public void com\\.liferay.*$" );
+
     private String name;
+
     private FMThread thread;
+
     private IVariable[] variables;
 
     public FMStackFrame( FMThread thread, String name )
@@ -73,6 +87,71 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
     public boolean canTerminate()
     {
         return getThread().canTerminate();
+    }
+
+    void clearVariables()
+    {
+        this.variables = null;
+    }
+
+    private boolean filter( IVariable var )
+    {
+        try
+        {
+            final String name = var.getName();
+
+            if( filterVariableName( name ) )
+            {
+                final String valueString = var.getValue().getValueString();
+
+                if( filterVariableValueString( valueString) )
+                {
+                    return true;
+                }
+            }
+        }
+        catch( DebugException e )
+        {
+        }
+
+        return false;
+    }
+
+    private boolean filterVariableName( String variableName )
+    {
+        boolean retval = true;
+
+        System.out.println(variableName);
+
+        return retval;
+    }
+
+    private IVariable[] filterVariables( IVariable[] variables )
+    {
+        List<IVariable> filtered = new ArrayList<IVariable>();
+
+        for( IVariable var : variables )
+        {
+            if( filter( var ) )
+            {
+                filtered.add( var );
+            }
+        }
+
+        IVariable[] retval = filtered.toArray( new IVariable[0] );
+
+        return retval;
+    }
+
+    private boolean filterVariableValueString( String valueString )
+    {
+        if( liferaySpringClasses.matcher( valueString ).matches() || freemarkerClasses.matcher( valueString ).matches() ||
+            liferayClasses.matcher( valueString ).matches() || classDefs.matcher( valueString ).matches() )
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public int getCharEnd() throws DebugException
@@ -153,11 +232,17 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
              * Additionally, all of the debug models for environment, template, and configuration also support all the
              * setting keys of freemarker.core.Configurable objects.
              */
+
+            boolean advancedView =
+                LiferayDebugCore.getPrefs().getBoolean( LiferayDebugCore.PREF_ADVANCED_VARIABLES_VIEW, false );
+
             final DebuggedEnvironment env = this.thread.getEnvironment();
+
+            FMVariable[] topLevelVars = null;
 
             try
             {
-                this.variables = new IVariable[]
+                topLevelVars = new FMVariable[]
                 {
                     new FMVariable( this, "currentNamespace", env.get("currentNamespace") ),
                     new FMVariable( this, "dataModel", env.get( "dataModel" ) ),
@@ -176,7 +261,37 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
             }
             catch( Exception e )
             {
-                e.printStackTrace();
+                LiferayDebugCore.logError( "Unable to create freemarker variables", e );
+            }
+
+            if( topLevelVars != null )
+            {
+                if( advancedView )
+                {
+                    this.variables = topLevelVars;
+                }
+                else
+                {
+                    // collapse all the variables into one list and remove duplicates
+                    Map<String, IVariable> vars = new HashMap<String, IVariable>();
+
+                    for( FMVariable topLevelVar : topLevelVars )
+                    {
+                        for( IVariable nestedVar : topLevelVar.getValue().getVariables() )
+                        {
+                            IVariable existingVar = vars.get( nestedVar.getName() );
+
+                            if( existingVar == null )
+                            {
+                                vars.put( nestedVar.getName(), nestedVar );
+                            }
+                        }
+                    }
+
+                    this.variables = filterVariables( vars.values().toArray( new IVariable[0] ) );
+
+                    sortVariables( this.variables );
+                }
             }
         }
 

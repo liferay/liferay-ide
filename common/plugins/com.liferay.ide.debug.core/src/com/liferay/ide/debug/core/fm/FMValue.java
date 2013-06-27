@@ -19,8 +19,6 @@ import freemarker.template.TemplateModelException;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
@@ -436,33 +434,10 @@ public class FMValue extends FMDebugElement implements IValue
 
             this.variables = vars.toArray( new IVariable[vars.size()] );
 
-            sortVariables();
+            sortVariables( this.variables );
         }
 
         return this.variables;
-    }
-
-    private void sortVariables()
-    {
-        Arrays.sort
-        (
-            this.variables,
-            new Comparator<IVariable>()
-            {
-                public int compare( IVariable var1, IVariable var2 )
-                {
-                    try
-                    {
-                        return var1.getName().compareTo( var2.getName() );
-                    }
-                    catch( DebugException e )
-                    {
-                    }
-
-                    return 0;
-                }
-            }
-        );
     }
 
     private boolean isValidSequence( DebugModel model )
