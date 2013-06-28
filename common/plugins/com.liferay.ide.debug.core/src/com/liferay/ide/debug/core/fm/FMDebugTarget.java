@@ -410,7 +410,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
     public boolean canTerminate()
     {
-        return getProcess().canTerminate();
+        return false;
     }
 
     private void cleanup()
@@ -539,7 +539,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     {
         if( this.name == null )
         {
-            this.name = "Freemarker Debugger";
+            this.name = "Freemarker Debugger at " + this.host + ":" + ILRDebugConstants.FM_DEBUG_PORT;
         }
 
         return this.name;

@@ -103,7 +103,7 @@ public class FMThread extends FMDebugElement implements IThread
      */
     public boolean canSuspend()
     {
-        return !isSuspended();
+        return false;
     }
 
     /*
@@ -112,7 +112,7 @@ public class FMThread extends FMDebugElement implements IThread
      */
     public boolean canTerminate()
     {
-        return !isTerminated();
+        return false;
     }
 
     /*
@@ -140,7 +140,7 @@ public class FMThread extends FMDebugElement implements IThread
      */
     public String getName() throws DebugException
     {
-        return "FM Environment";
+        return "FM Engine";
     }
 
     /*
