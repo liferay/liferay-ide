@@ -18,8 +18,8 @@
 package com.liferay.ide.layouttpl.ui.cmd;
 
 import com.liferay.ide.layouttpl.core.model.ModelElement;
+import com.liferay.ide.layouttpl.core.model.PortletRowLayoutElement;
 import com.liferay.ide.layouttpl.ui.model.LayoutConstraint;
-import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
@@ -33,22 +33,22 @@ import org.eclipse.osgi.util.NLS;
  */
 public class PortletColumnCreateCommand extends Command
 {
-    protected LayoutTplDiagram diagram;
+    protected PortletRowLayoutElement rowLayout;
     protected LayoutConstraint layoutConstraint;
     protected PortletColumn newColumn;
     protected int refColumnOldWeight = 0;
 
-    public PortletColumnCreateCommand( PortletColumn newColumn, LayoutTplDiagram diagram, LayoutConstraint constraint )
+    public PortletColumnCreateCommand( PortletColumn newColumn, PortletRowLayoutElement rowLayout, LayoutConstraint constraint )
     {
         this.newColumn = newColumn;
-        this.diagram = diagram;
+        this.rowLayout = rowLayout;
         this.layoutConstraint = constraint;
         setLabel( Msgs.portletColumnAdded );
     }
 
     public boolean canExecute()
     {
-        return newColumn != null && diagram != null && layoutConstraint != null;
+        return newColumn != null && rowLayout != null && layoutConstraint != null;
     }
 
     public void execute()
@@ -64,7 +64,7 @@ public class PortletColumnCreateCommand extends Command
             newColumn.setWeight( 100 );
             portletLayout.addColumn( newColumn );
 
-            diagram.addRow( portletLayout, layoutConstraint.newRowIndex );
+            rowLayout.addRow( portletLayout, layoutConstraint.newRowIndex );
         }
         else if( layoutConstraint.rowIndex > -1 && layoutConstraint.newColumnIndex > -1 )
         {
@@ -82,7 +82,7 @@ public class PortletColumnCreateCommand extends Command
             newColumn.setWeight( layoutConstraint.weight );
 
             // get the row that the column will be inserted into
-            ModelElement row = diagram.getRows().get( layoutConstraint.rowIndex );
+            ModelElement row = rowLayout.getRows().get( layoutConstraint.rowIndex );
             PortletLayout portletLayout = (PortletLayout) row;
 
             if( row != null )
@@ -96,13 +96,13 @@ public class PortletColumnCreateCommand extends Command
     {
         if( layoutConstraint.equals( LayoutConstraint.EMPTY ) || layoutConstraint.newColumnIndex == -1  )
         {
-            for( ModelElement row : diagram.getRows() )
+            for( ModelElement row : rowLayout.getRows() )
             {
                 PortletLayout portletLayout = (PortletLayout) row;
 
                 if( portletLayout.getColumns().size() == 1 && portletLayout.getColumns().get( 0 ).equals( newColumn ) )
                 {
-                    diagram.removeRow( portletLayout );
+                    rowLayout.removeRow( portletLayout );
                     break;
                 }
             }
@@ -114,7 +114,7 @@ public class PortletColumnCreateCommand extends Command
                 layoutConstraint.refColumn.setWeight( refColumnOldWeight );
             }
 
-            ModelElement row = diagram.getRows().get( layoutConstraint.rowIndex );
+            ModelElement row = rowLayout.getRows().get( layoutConstraint.rowIndex );
             PortletLayout portletLayout = (PortletLayout) row;
 
             if( row != null )

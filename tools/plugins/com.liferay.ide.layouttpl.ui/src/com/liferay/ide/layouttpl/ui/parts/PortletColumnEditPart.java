@@ -22,10 +22,14 @@ import com.liferay.ide.layouttpl.ui.policies.PortletColumnLayoutEditPolicy;
 
 import java.beans.PropertyChangeEvent;
 
+import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.SWT;
@@ -33,23 +37,15 @@ import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
-public class PortletColumnEditPart extends BaseGraphicalEditPart
+public class PortletColumnEditPart extends PortletRowLayoutEditPart
 {
+    public static final int COLUMN_MARGIN = 10;
 
     public PortletColumnEditPart()
     {
         super();
-    }
-
-    public void propertyChange( PropertyChangeEvent evt )
-    {
-        String prop = evt.getPropertyName();
-
-        if( PortletColumn.WEIGHT_PROP.equals( prop ) )
-        {
-            refreshVisuals();
-        }
     }
 
     protected void createEditPolicies()
@@ -61,14 +57,24 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart
 
     protected IFigure createFigure()
     {
-        IFigure f = createFigureForModel();
-        f.setOpaque( true ); // non-transparent figure
+        IFigure f;
+
+        if( getModelChildren().isEmpty() )
+        {
+            f = createFigureForModel();
+            f.setOpaque( true ); // non-transparent figure
+        }
+        else
+        {
+            f = super.createFigure();
+        }
+
         f.setBackgroundColor( new Color( null, 232, 232, 232 ) );
 
         return f;
     }
 
-    protected IFigure createFigureForModel()
+    protected Figure createFigureForModel()
     {
         if( getModel() instanceof PortletColumn )
         {
@@ -83,6 +89,39 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart
         }
     }
 
+    public GridData createGridData()
+    {
+        GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 );
+        gd.heightHint = getCastedParent().getDefaultColumnHeight();
+
+        return gd;
+    }
+
+    @Override
+    protected Panel createPanel()
+    {
+        return new Panel()
+        {
+            @Override
+            protected void paintFigure( Graphics graphics )
+            {
+                Rectangle r = Rectangle.SINGLETON.setBounds( getBounds() );
+                r.width -= 1;
+                r.height -= 1;
+
+                graphics.drawRoundRectangle( r, 20, 20 ); //draw the outline
+
+                r.width -= 1;
+                r.height -= 1;
+                r.x += 1;
+                r.y += 1;
+
+                graphics.fillRoundRectangle( r, 20, 20 ); //fill the color
+            }
+        };
+    }
+
+    @Override
     public PortletColumn getCastedModel()
     {
         return (PortletColumn) getModel();
@@ -93,13 +132,30 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart
         return (PortletLayoutEditPart) getParent();
     }
 
-    protected ColumnFigure getCastedFigure()
+    @Override
+    public int getMargin()
     {
-        return (ColumnFigure) getFigure();
+        return COLUMN_MARGIN;
+    }
+
+    public void propertyChange( PropertyChangeEvent evt )
+    {
+        String prop = evt.getPropertyName();
+
+        if( PortletColumn.WEIGHT_PROP.equals( prop ) )
+        {
+            refreshVisuals();
+        }
+        else
+        {
+            super.propertyChange( evt );
+        }
     }
 
     protected void refreshVisuals()
     {
+        super.refreshVisuals();
+
         Object constraint =
             ( (GraphicalEditPart) getParent() ).getFigure().getLayoutManager().getConstraint( getFigure() );
         GridData gd = null;
@@ -128,14 +184,9 @@ public class PortletColumnEditPart extends BaseGraphicalEditPart
             columnWeight = 100;
         }
 
-        getCastedFigure().setText( columnWeight + "%" ); //$NON-NLS-1$
+        if( getFigure() instanceof ColumnFigure )
+        {
+            ( (ColumnFigure) getFigure() ).setText( columnWeight + "%" ); //$NON-NLS-1$
+        }
     }
-
-    public GridData createGridData()
-    {
-        GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 );
-        gd.heightHint = getCastedParent().getDefaultColumnHeight();
-        return gd;
-    }
-
 }

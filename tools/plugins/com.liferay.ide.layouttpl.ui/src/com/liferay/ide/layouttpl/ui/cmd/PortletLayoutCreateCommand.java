@@ -17,8 +17,8 @@
 
 package com.liferay.ide.layouttpl.ui.cmd;
 
+import com.liferay.ide.layouttpl.core.model.PortletRowLayoutElement;
 import com.liferay.ide.layouttpl.ui.model.LayoutConstraint;
-import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 
@@ -31,21 +31,21 @@ import org.eclipse.osgi.util.NLS;
  */
 public class PortletLayoutCreateCommand extends Command
 {
-    protected LayoutTplDiagram diagram;
+    protected PortletRowLayoutElement rowLayout;
     protected LayoutConstraint layoutConstraint;
     protected PortletLayout newLayout;
 
-    public PortletLayoutCreateCommand( PortletLayout newLayout, LayoutTplDiagram diagram, LayoutConstraint constraint )
+    public PortletLayoutCreateCommand( PortletLayout newLayout, PortletRowLayoutElement rowLayout, LayoutConstraint constraint )
     {
         this.newLayout = newLayout;
-        this.diagram = diagram;
+        this.rowLayout = rowLayout;
         this.layoutConstraint = constraint;
         setLabel( Msgs.portletRowAdded );
     }
 
     public boolean canExecute()
     {
-        return newLayout != null && diagram != null && layoutConstraint != null;
+        return newLayout != null && rowLayout != null && layoutConstraint != null;
     }
 
     public void execute()
@@ -61,12 +61,12 @@ public class PortletLayoutCreateCommand extends Command
             newLayout.addColumn( newColumn );
         }
 
-        diagram.addRow( newLayout, layoutConstraint.newRowIndex );
+        rowLayout.addRow( newLayout, layoutConstraint.newRowIndex );
     }
 
     public void undo()
     {
-        diagram.removeRow( newLayout );
+        rowLayout.removeRow( newLayout );
     }
 
     private static class Msgs extends NLS

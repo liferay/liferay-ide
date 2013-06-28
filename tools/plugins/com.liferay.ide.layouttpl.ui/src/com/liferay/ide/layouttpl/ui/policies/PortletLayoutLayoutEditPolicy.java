@@ -15,12 +15,12 @@
 
 package com.liferay.ide.layouttpl.ui.policies;
 
+import com.liferay.ide.layouttpl.core.model.PortletRowLayoutElement;
 import com.liferay.ide.layouttpl.ui.cmd.PortletColumnChangeConstraintCommand;
 import com.liferay.ide.layouttpl.ui.cmd.PortletColumnCreateCommand;
 import com.liferay.ide.layouttpl.ui.cmd.PortletLayoutCreateCommand;
 import com.liferay.ide.layouttpl.ui.draw2d.FeedbackRoundedRectangle;
 import com.liferay.ide.layouttpl.ui.model.LayoutConstraint;
-import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
 import com.liferay.ide.layouttpl.ui.model.PortletColumn;
 import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.layouttpl.ui.parts.PortletColumnEditPart;
@@ -398,9 +398,9 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         return constraint;
     }
 
-    protected LayoutTplDiagram getDiagram()
+    protected PortletRowLayoutElement getRowLayout()
     {
-        return (LayoutTplDiagram) getHost().getParent().getModel();
+        return (PortletRowLayoutElement) getHost().getParent().getModel();
     }
 
     @Override
@@ -416,14 +416,13 @@ public class PortletLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolicy
         if( childClass == PortletColumn.class )
         {
             return new PortletColumnCreateCommand(
-                (PortletColumn) request.getNewObject(), getDiagram(), (LayoutConstraint) getConstraintFor( request ) );
+                (PortletColumn) request.getNewObject(), getRowLayout(), (LayoutConstraint) getConstraintFor( request ) );
         }
 
         if( childClass == PortletLayout.class )
         {
             return new PortletLayoutCreateCommand(
-                (PortletLayout) request.getNewObject(), (LayoutTplDiagram) getHost().getParent().getModel(),
-                (LayoutConstraint) getConstraintFor( request ) );
+                (PortletLayout) request.getNewObject(), getRowLayout(), (LayoutConstraint) getConstraintFor( request ) );
         }
 
         return null;

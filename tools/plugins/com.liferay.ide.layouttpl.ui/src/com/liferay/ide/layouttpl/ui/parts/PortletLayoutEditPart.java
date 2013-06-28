@@ -37,6 +37,7 @@ import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 public class PortletLayoutEditPart extends BaseGraphicalEditPart
 {
@@ -114,9 +115,9 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         }
     }
 
-    private LayoutTplDiagramEditPart getCastedParent()
+    private PortletRowLayoutEditPart getCastedParent()
     {
-        return (LayoutTplDiagramEditPart) getParent();
+        return (PortletRowLayoutEditPart) getParent();
     }
 
     @Override

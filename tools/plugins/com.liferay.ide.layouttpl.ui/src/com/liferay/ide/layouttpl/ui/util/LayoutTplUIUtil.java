@@ -18,8 +18,8 @@ package com.liferay.ide.layouttpl.ui.util;
 import com.liferay.ide.layouttpl.core.model.ModelElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
-import com.liferay.ide.layouttpl.ui.parts.LayoutTplDiagramEditPart;
 import com.liferay.ide.layouttpl.ui.parts.PortletLayoutEditPart;
+import com.liferay.ide.layouttpl.ui.parts.PortletRowLayoutEditPart;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -31,6 +31,7 @@ import org.eclipse.gef.requests.CreateRequest;
 
 /**
  * @author Greg Amerson
+ * @author Cindy Li
  */
 public class LayoutTplUIUtil
 {
@@ -62,8 +63,8 @@ public class LayoutTplUIUtil
             return -1;
         }
 
-        LayoutTplDiagramEditPart diagramPart = (LayoutTplDiagramEditPart) layoutEditPart.getParent();
-        Object[] rows = diagramPart.getChildren().toArray();
+        PortletRowLayoutEditPart rowLayoutPart = (PortletRowLayoutEditPart) layoutEditPart.getParent();
+        Object[] rows = rowLayoutPart.getChildren().toArray();
 
         for( int i = 0; i < rows.length; i++ )
         {
