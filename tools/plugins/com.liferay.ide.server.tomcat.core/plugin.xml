@@ -131,9 +131,7 @@
             delegate="com.liferay.ide.server.tomcat.core.LiferayTomcatLaunchConfigDelegate"
             id="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
-            name="%liferay.v62.ce.tomcat70.launch.config.type.name"
-            sourceLocatorId="com.liferay.ide.server.tomcat.sourceLookupDirector"
-            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
+            name="%liferay.v62.ce.tomcat70.launch.config.type.name">
       </launchConfigurationType>
    </extension>
    <extension

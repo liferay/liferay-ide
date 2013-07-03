@@ -566,11 +566,9 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         {
             if( event.getKind() == DebugEvent.TERMINATE )
             {
-                if( event.getSource() instanceof IProcess )
+                if( this.process.equals( event.getSource() ) )
                 {
-                    IProcess process = (IProcess) event.getSource();
-
-                    if( process.isTerminated() )
+                    if( this.process.isTerminated() )
                     {
                         cleanup();
                     }
