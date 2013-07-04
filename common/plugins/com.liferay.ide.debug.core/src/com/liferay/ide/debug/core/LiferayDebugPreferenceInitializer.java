@@ -15,6 +15,7 @@
 package com.liferay.ide.debug.core;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 /**
  * @author Cindy Li
@@ -30,8 +31,9 @@ public class LiferayDebugPreferenceInitializer extends AbstractPreferenceInitial
     @Override
     public void initializeDefaultPreferences()
     {
-        LiferayDebugCore.getDefaultPrefs().put( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, ILRDebugConstants.FM_DEBUG_PASSWORD );
-        LiferayDebugCore.getDefaultPrefs().putInt( LiferayDebugCore.PREF_FM_DEBUG_PORT, ILRDebugConstants.FM_DEBUG_PORT );
+        final IEclipsePreferences defaultPrefs = LiferayDebugCore.getDefaultPrefs();
+        defaultPrefs.put( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, ILRDebugConstants.FM_DEBUG_PASSWORD );
+        defaultPrefs.putInt( LiferayDebugCore.PREF_FM_DEBUG_PORT, ILRDebugConstants.FM_DEBUG_PORT );
     }
 
 }

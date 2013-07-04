@@ -86,7 +86,7 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
     }
 
     @Override
-    public void launch( final ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
+    public void launch( final ILaunchConfiguration configuration, String mode, final ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
         final IServer server = ServerUtil.getServer( configuration );
@@ -111,10 +111,11 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
                             {
                                 try
                                 {
-                                    sourceLocator.setSourceContainers( null );
-                                    sourceLocator.initializeDefaults( configuration );
+                                    final PortalSourceLookupDirector director =
+                                        (PortalSourceLookupDirector) launch.getSourceLocator();
+                                    director.initializeDefaults( configuration );
                                 }
-                                catch( CoreException e )
+                                catch( Exception e )
                                 {
                                     LiferayTomcatPlugin.logError( "Unable to update source containers for server", e ); //$NON-NLS-1$
                                 }
