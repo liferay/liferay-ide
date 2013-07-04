@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
@@ -105,7 +106,7 @@ public abstract class AbstractPortletFrameworkWizardProvider implements IPortlet
         return isDefault;
     }
 
-    public IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject )
+    public IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject, IProgressMonitor monitor )
     {
         // do nothing;
         return Status.OK_STATUS;

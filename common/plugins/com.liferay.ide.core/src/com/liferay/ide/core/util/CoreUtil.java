@@ -27,8 +27,12 @@ import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -36,6 +40,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -61,6 +66,8 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.server.core.model.IModuleResource;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
+import org.eclipse.wst.validation.internal.ValType;
+import org.eclipse.wst.validation.internal.ValidationRunner;
 import org.osgi.framework.Version;
 import org.w3c.dom.Node;
 
@@ -652,6 +659,38 @@ public class CoreUtil
             {
                 node.removeChild( node.getFirstChild() );
             }
+        }
+    }
+
+    public static void validateFolder( IFolder folder, IProgressMonitor monitor )
+    {
+        try
+        {
+            Map<IProject, Set<IResource>> projects = new HashMap<IProject, Set<IResource>>();
+            final Set<IResource> resources = new HashSet<IResource>();
+
+            folder.accept
+            (
+                new IResourceVisitor()
+                {
+                    public boolean visit( IResource resource ) throws CoreException
+                    {
+                        if( resource instanceof IFile || resource instanceof IFile )
+                        {
+                            resources.add( resource );
+                        }
+
+                        return true;
+                    }
+                }
+            );
+
+            projects.put( folder.getProject(), resources );
+            ValidationRunner.validate( projects, ValType.Manual, monitor, false );
+        }
+        catch( CoreException e )
+        {
+            LiferayCore.logError( "Error while validating folder: " + folder.getFullPath(), e ); //$NON-NLS-1$
         }
     }
 }

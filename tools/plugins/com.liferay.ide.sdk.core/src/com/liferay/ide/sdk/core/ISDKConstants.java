@@ -67,6 +67,10 @@ public interface ISDKConstants
 
     public static final String HOOK_PLUGIN_PROJECT_SUFFIX = _HOOK_PLUGIN_PROJECT_SUFFIX;
 
+    public static final String IVY_SETTINGS_XML_FILE = "ivy-settings.xml";  //$NON-NLS-1$
+
+    public static final String IVY_XML_FILE = "ivy.xml";  //$NON-NLS-1$
+
     public static final String LAYOUT_TEMPLATE_PLUGIN_ANT_BUILD = __defaultPrefs.get(
         "layouttpl.plugin.ant.build", null ); //$NON-NLS-1$
 
@@ -198,5 +202,7 @@ public interface ISDKConstants
     public static final String THEME_PLUGIN_PROJECT_FOLDER = "themes"; //$NON-NLS-1$
 
     public static final String THEME_PLUGIN_PROJECT_SUFFIX = _THEME_PLUGIN_PROJECT_SUFFIX;
+
+    public final static String VAR_NAME_LIFERAY_SDK_DIR = "liferay_sdk_dir"; //$NON-NLS-1$
 
 }

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Version;
@@ -33,26 +34,6 @@ import org.osgi.framework.Version;
  */
 public class SDKUtil
 {
-
-    // public static String creaetUniqueSDKId() {
-    // String id = null;
-    // SDK[] currentSDKs = SDKManager.getInstance().getSDKs();
-    // do {
-    // id = String.valueOf(System.currentTimeMillis());
-    // } while (sdksContainId(currentSDKs, id));
-    // return id;
-    // }
-
-    // private static boolean sdksContainName(SDK[] sdks, String name) {
-    // if (name != null) {
-    // for (SDK sdk : sdks) {
-    // if (name.equals(sdk.getName())) {
-    // return true;
-    // }
-    // }
-    // }
-    // return false;
-    // }
 
     public static SDK createSDKFromLocation( IPath path )
     {
@@ -126,6 +107,29 @@ public class SDKUtil
         }
 
         return null;
+    }
+
+    public static boolean isIvyProject( IProject project )
+    {
+        try
+        {
+            return isSDKProject( project ) && project.hasNature( "org.apache.ivyde.eclipse.ivynature" ); //$NON-NLS-1$
+        }
+        catch( CoreException e )
+        {
+        }
+
+        return false;
+    }
+
+    public static boolean isSDKProject( IProject project )
+    {
+        if( project == null || ( !project.exists() ) || ( !project.isAccessible() ) )
+        {
+            return false;
+        }
+
+        return getSDK( project ) != null;
     }
 
     public static boolean isSDKSupported( String location )

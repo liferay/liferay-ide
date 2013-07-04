@@ -25,7 +25,6 @@ import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
@@ -1065,16 +1064,6 @@ public class ProjectUtil
     public static boolean isPortletProject( IProject project )
     {
         return hasFacet( project, IPluginFacetConstants.LIFERAY_PORTLET_PROJECT_FACET );
-    }
-
-    public static boolean isSDKProject( IProject project )
-    {
-        if( project == null || ( !project.exists() ) || ( !project.isAccessible() ) )
-        {
-            return false;
-        }
-
-        return SDKUtil.getSDK( project ) != null;
     }
 
     public static boolean isThemeProject( IProject project )

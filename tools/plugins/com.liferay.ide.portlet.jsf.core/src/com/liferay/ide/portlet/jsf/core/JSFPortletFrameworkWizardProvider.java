@@ -32,6 +32,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.common.project.facet.core.libprov.ILibraryProvider;
@@ -225,7 +226,7 @@ public class JSFPortletFrameworkWizardProvider extends AbstractPortletFrameworkW
     }
 
     @Override
-    public IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject )
+    public IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject, IProgressMonitor monitor )
     {
         /*
          * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer

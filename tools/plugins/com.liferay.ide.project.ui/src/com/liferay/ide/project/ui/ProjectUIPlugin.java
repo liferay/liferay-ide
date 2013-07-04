@@ -153,4 +153,9 @@ public class ProjectUIPlugin extends AbstractUIPlugin
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
     }
+
+    public static IStatus createErrorStatus( String msg )
+    {
+        return createErrorStatus( msg, null );
+    }
 }

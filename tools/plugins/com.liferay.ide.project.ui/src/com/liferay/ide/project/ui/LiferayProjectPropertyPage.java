@@ -18,6 +18,7 @@ package com.liferay.ide.project.ui;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.sdk.ui.SDKsPreferencePage;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -179,7 +180,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
             pluginTypeLabel.setText( liferayFacet.getLabel() );
         }
 
-        if( ProjectUtil.isSDKProject( getProject() ) )
+        if( SDKUtil.isSDKProject( getProject() ) )
         {
             new Label( parent, SWT.LEFT ).setText( Msgs.liferayRuntimeLabel );
 

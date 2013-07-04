@@ -13,9 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui;
-
-import com.liferay.ide.project.core.util.ProjectUtil;
+package com.liferay.ide.sdk.core;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
@@ -30,7 +28,7 @@ public class SDKProjectPropertyTester extends PropertyTester
     {
         if( receiver instanceof IProject )
         {
-            return ProjectUtil.isSDKProject( (IProject) receiver );
+            return SDKUtil.isSDKProject( (IProject) receiver );
         }
 
         return false;

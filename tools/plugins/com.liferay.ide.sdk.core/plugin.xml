@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   
+
    <extension
          point="org.eclipse.jdt.launching.classpathProviders">
       <classpathProvider
@@ -18,5 +18,21 @@
             properties="minimumRequiredSDKVersion"
             type="java.lang.Object">
       </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.sdk.core.SDKProjectPropertyTester"
+            id="com.liferay.ide.sdk.core.isSDKProject"
+            namespace="com.liferay.ide.sdk.core"
+            properties="isSDKProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
    </extension>
+    <extension
+          point="org.eclipse.core.variables.dynamicVariables">
+       <variable
+             description="%sdk.dir.var.desc"
+             name="liferay_sdk_dir"
+             resolver="com.liferay.ide.sdk.core.SDKProjectVariableResolver"
+             supportsArgument="true">
+       </variable>
+    </extension>
 </plugin>

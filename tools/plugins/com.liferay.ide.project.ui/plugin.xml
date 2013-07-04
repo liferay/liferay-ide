@@ -77,13 +77,6 @@
             type="org.eclipse.core.resources.IProject">
       </propertyTester>
       <propertyTester
-            class="com.liferay.ide.project.ui.SDKProjectPropertyTester"
-            id="com.liferay.ide.project.ui.isSDKProject"
-            namespace="com.liferay.ide.project.ui"
-            properties="isSDKProject"
-            type="org.eclipse.core.resources.IProject">
-      </propertyTester>
-      <propertyTester
             class="com.liferay.ide.project.ui.SDKFolderProjectPropertyTester"
             id="com.liferay.ide.project.ui.isSDKFolderProject"
             namespace="com.liferay.ide.project.ui"
@@ -595,7 +588,7 @@
                        <and>
                             <adapt type="org.eclipse.core.resources.IProject">
                                <test forcePluginActivation="true"
-                                   property="com.liferay.ide.project.ui.isSDKProject"
+                                   property="com.liferay.ide.sdk.core.isSDKProject"
                                    value="true" />
                            </adapt>
                            <or>
@@ -654,7 +647,7 @@
                        <and>
                             <adapt type="org.eclipse.core.resources.IProject">
                                <test forcePluginActivation="true"
-                                   property="com.liferay.ide.project.ui.isSDKProject"
+                                   property="com.liferay.ide.sdk.core.isSDKProject"
                                    value="true" />
                            </adapt>
                            <or>
@@ -742,7 +735,7 @@
                               type="org.eclipse.core.resources.IProject">
                            <test
                                  forcePluginActivation="true"
-                                 property="com.liferay.ide.project.ui.isSDKProject"
+                                 property="com.liferay.ide.sdk.core.isSDKProject"
                                  value="true">
                            </test>
                         </adapt>

@@ -29,7 +29,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.browser,
  org.eclipse.ant.ui,
  org.eclipse.jdt.ui;bundle-version="3.6.0",
- com.liferay.ide.sdk.ui
+ com.liferay.ide.sdk.ui,
+ org.apache.ivyde.eclipse;bundle-version="2.2.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

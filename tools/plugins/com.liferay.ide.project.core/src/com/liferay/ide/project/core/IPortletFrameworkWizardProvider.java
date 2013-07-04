@@ -18,6 +18,7 @@ package com.liferay.ide.project.core;
 import java.net.URL;
 import java.util.Collection;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -74,7 +75,7 @@ public interface IPortletFrameworkWizardProvider
 
     boolean isDefault();
 
-    IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject );
+    IStatus postProjectCreated( IDataModel dataModel, IFacetedProject facetedProject, IProgressMonitor monitor );
 
     void propertySet( String propertyName, Object propertyValue );
 
