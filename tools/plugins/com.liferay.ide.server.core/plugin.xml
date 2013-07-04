@@ -18,7 +18,7 @@
                uri="platform:/plugin/com.liferay.ide.server.core/dtd/facelet-taglib_1_0.dtd"
                webURL="http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
          </public>
-      	 <public
+         <public
                publicId="-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                uri="platform:/plugin/com.liferay.ide.server.core/dtd/hibernate-mapping-3.0.dtd"
                webURL="http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
@@ -1002,6 +1002,10 @@
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-facesconfig_2_1.xsd">
          </uri>
          <uri
+               name="http://xmlns.oracle.com/weblogic/weblogic-web-app/1.4/weblogic-web-app.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/weblogic-web-app.xsd">
+         </uri>
+         <uri
                name="http://www.w3.org/2001/03/xml.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/xml.xsd">
          </uri>
@@ -1009,7 +1013,6 @@
                name="http://www.w3.org/2001/xml.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/xml-2001.xsd">
          </uri>
-
       </catalogContribution>
    </extension>
    <extension
