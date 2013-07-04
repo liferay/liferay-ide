@@ -67,8 +67,8 @@
                 <version>1.6</version>
                 <executions>
                     <execution>
-                        <id>install</id>
-                        <phase>install</phase>
+                        <id>verify</id>
+                        <phase>verify</phase>
                         <configuration>
                             <target>
                                 <property name="compile_classpath" refid="maven.compile.classpath" />

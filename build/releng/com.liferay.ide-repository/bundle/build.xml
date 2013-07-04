@@ -29,17 +29,18 @@
 	<property name="package.target" value="output-zip"/>
 
 	<target name="all" if="create.bundles">
+
+        <antcall target="win64" />
+        <antcall target="win32" />
+
 		<condition property="isLinux" value="true">
 	            <os family="unix" />
 	    </condition>
-
 		<if>
 			<isset property="isLinux"/>
 			<then>
-				<antcall target="win32" />
 				<antcall target="linux" />
 				<antcall target="macosx" />
-				<antcall target="win64" />
 				<antcall target="linux64" />
 				<antcall target="macosx64" />
 			</then>
