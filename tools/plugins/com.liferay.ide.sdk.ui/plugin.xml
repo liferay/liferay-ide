@@ -13,4 +13,23 @@
          </keywordReference>
       </page>
    </extension>
+   <extension
+          point="org.eclipse.ltk.core.refactoring.renameParticipants">
+       <renameParticipant
+             class="com.liferay.ide.sdk.ui.SDKProjectRenameParticipant"
+             id="com.liferay.ide.sdk.ui.projectRename"
+             name="%sdk.refactor.project.rename">
+          <enablement>
+             <adapt
+                   type="org.eclipse.core.resources.IProject">
+                <and>
+                   <test
+                         property="com.liferay.ide.sdk.core.isSDKProject"
+                         value="true">
+                   </test>
+                </and>
+             </adapt>
+          </enablement>
+       </renameParticipant>
+    </extension>
 </plugin>
