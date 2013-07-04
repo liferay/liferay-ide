@@ -40,6 +40,8 @@
       <feature id="org.eclipse.sapphire.ui" />
       <feature id="org.eclipse.sapphire.ui.swt.gef" />
       <feature id="org.eclipse.sapphire.ui.swt.xml.editor" />
+      <feature id="org.apache.ivyde.feature" />
+      <feature id="org.apache.ivy.feature" />
    </features>
 
    <configurations>

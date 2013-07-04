@@ -55,6 +55,8 @@
       <import feature="org.eclipse.wst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.xml_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.common" version="2.0.0" match="greaterOrEqual"/>
+      <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
+      <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
