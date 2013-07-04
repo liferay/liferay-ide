@@ -18,9 +18,13 @@ package com.liferay.ide.debug.core;
 import com.liferay.ide.core.LiferayCore;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
 
@@ -28,11 +32,12 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plugin life cycle
  *
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class LiferayDebugCore extends Plugin
 {
 
-    public static final String ID_FM_BREAKPOINT_TYPE = "com.liferay.ide.debug.core.fmLineBreakpointMarker";
+    public static final String ID_FM_BREAKPOINT_TYPE = "com.liferay.ide.debug.core.fmLineBreakpointMarker"; //$NON-NLS-1$
 
     // The shared instance
     private static LiferayDebugCore plugin;
@@ -40,7 +45,9 @@ public class LiferayDebugCore extends Plugin
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.debug.core"; //$NON-NLS-1$
 
-    public static final String PREF_ADVANCED_VARIABLES_VIEW = "advanced-variables-view";
+    public static final String PREF_ADVANCED_VARIABLES_VIEW = "advanced-variables-view"; //$NON-NLS-1$
+    public static final String PREF_FM_DEBUG_PASSWORD = "fm-debug-password"; //$NON-NLS-1$
+    public static final String PREF_FM_DEBUG_PORT = "fm-debug-port"; //$NON-NLS-1$
 
     public static IStatus createErrorStatus( String msg )
     {
@@ -65,6 +72,19 @@ public class LiferayDebugCore extends Plugin
     public static LiferayDebugCore getDefault()
     {
         return plugin;
+    }
+
+    public static IEclipsePreferences getDefaultPrefs()
+    {
+        return DefaultScope.INSTANCE.getNode( PLUGIN_ID );
+    }
+
+    public static String getPreference( String key )
+    {
+        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
+        IPreferencesService preferencesService = Platform.getPreferencesService();
+
+        return preferencesService.getString( PLUGIN_ID, key, null, scopes );
     }
 
     public static IEclipsePreferences getPrefs()

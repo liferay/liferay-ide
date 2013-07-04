@@ -17,7 +17,7 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.debug.core.ILRDebugConstants;
+import com.liferay.ide.debug.core.LiferayDebugCore;
 import com.liferay.ide.debug.core.fm.FMDebugTarget;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.PortalSourceLookupDirector;
@@ -40,6 +40,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfigurationDelegate
@@ -70,7 +71,10 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
                 if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
                 {
-                    retval += NLS.bind( FM_PARAMS, ILRDebugConstants.FM_DEBUG_PASSWORD, ILRDebugConstants.FM_DEBUG_PORT );
+                    retval +=
+                        NLS.bind(
+                            FM_PARAMS, LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD ),
+                            LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PORT ) );
                 }
             }
             catch( CoreException e )

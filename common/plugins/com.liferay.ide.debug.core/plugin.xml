@@ -22,5 +22,11 @@
             value="true">
       </persistent>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.liferay.ide.debug.core.LiferayDebugPreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

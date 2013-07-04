@@ -106,4 +106,13 @@
          </menu>
       </viewContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.debug.ui.DebugPreferencePage"
+            id="com.liferay.ide.debug.ui.DebugPreferencePage"
+            name="Debug">
+      </page>
+   </extension>
 </plugin>
