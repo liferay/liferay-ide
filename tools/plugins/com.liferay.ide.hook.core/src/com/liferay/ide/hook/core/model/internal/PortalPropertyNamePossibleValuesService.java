@@ -70,23 +70,24 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
     @Override
     public Severity getInvalidValueSeverity( String invalidValue )
     {
-        if( wildCardHookProperties == null )
-        {
-            wildCardHookProperties = getWildCardHookProperties();
-        }
-
-        for( String wildCardProperty : wildCardHookProperties )
-        {
-            String propertyWithoutWildCard = wildCardProperty.substring( 0, ( wildCardProperty.indexOf( "*" ) - 1 ) ); //$NON-NLS-1$
-            String pattern = "^" + propertyWithoutWildCard + "\\..+"; //$NON-NLS-1$ //$NON-NLS-2$
-
-            if( invalidValue.matches( pattern ) )
-            {
-                return Severity.OK;
-            }
-        }
-
-        return super.getInvalidValueSeverity( invalidValue );
+//        if( wildCardHookProperties == null )
+//        {
+//            wildCardHookProperties = getWildCardHookProperties();
+//        }
+//
+//        for( String wildCardProperty : wildCardHookProperties )
+//        {
+//            String propertyWithoutWildCard = wildCardProperty.substring( 0, ( wildCardProperty.indexOf( "*" ) - 1 ) ); //$NON-NLS-1$
+//            String pattern = "^" + propertyWithoutWildCard + "\\..+"; //$NON-NLS-1$ //$NON-NLS-2$
+//
+//            if( invalidValue.matches( pattern ) )
+//            {
+//                return Severity.OK;
+//            }
+//        }
+//
+//        return super.getInvalidValueSeverity( invalidValue );
+        return Severity.OK;
     }
 
     public String[] getWildCardHookProperties()
