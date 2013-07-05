@@ -13,6 +13,7 @@
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.LiferayPublishHelper;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -61,10 +63,27 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
     }
 
     @Override
+    public IPath getModuleDeployDirectory( IModule module )
+    {
+        final IPath defaultPath = super.getModuleDeployDirectory( module );
+        final IProject project = module.getProject();
+
+        String requiredSuffix = ProjectUtil.getRequiredSuffix( project );
+        IPath updatedPath = null;
+
+        if( ! defaultPath.lastSegment().endsWith( requiredSuffix ) )
+        {
+            String lastSegment = defaultPath.lastSegment();
+            updatedPath = defaultPath.removeLastSegments( 1 ).append( lastSegment + requiredSuffix );
+        }
+
+        return updatedPath == null ? defaultPath : updatedPath;
+    }
+
+    @Override
     protected void publishModule( int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor )
         throws CoreException
     {
-
         boolean shouldPublishModule =
             LiferayPublishHelper.prePublishModule(
                 this, kind, deltaKind, moduleTree, getPublishedResourceDelta( moduleTree ), monitor );
@@ -134,14 +153,26 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 
             Context context = publishedInstance.createContext( -1 );
             context.setReloadable( "true" ); //$NON-NLS-1$
-            context.setSource( "org.eclipse.jst.jee.server:" + module.getName() ); //$NON-NLS-1$
+
+            final String moduleName = module.getName();
+            final String requiredSuffix = ProjectUtil.getRequiredSuffix( module.getProject() );
+
+            String contextName = moduleName;
+
+            if( ! moduleName.endsWith( requiredSuffix ) )
+            {
+                contextName = moduleName + requiredSuffix;
+            }
+
+            context.setSource( "org.eclipse.jst.jee.server:" + contextName ); //$NON-NLS-1$
 
             if( Boolean.valueOf( context.getAttributeValue( "antiResourceLocking" ) ).booleanValue() ) //$NON-NLS-1$
             {
                 context.setAttributeValue( "antiResourceLocking", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
-            File contextFile = new File( contextDir, module.getName() + ".xml" ); //$NON-NLS-1$
+            File contextFile = new File( contextDir, contextName + ".xml" ); //$NON-NLS-1$
+
             if( !LiferayTomcatUtil.isExtProjectContext( context ) )
             {
                 // If requested, remove path attribute

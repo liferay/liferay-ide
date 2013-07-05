@@ -725,6 +725,34 @@ public class ProjectUtil
         return retval.startsWith( "/" ) ? retval : "/" + retval; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    public static String getRequiredSuffix( IProject project )
+    {
+        String requiredSuffix = null;
+
+        if( ProjectUtil.isPortletProject( project ) )
+        {
+            requiredSuffix = ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( ProjectUtil.isHookProject( project ) )
+        {
+            requiredSuffix = ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( ProjectUtil.isExtProject( project ) )
+        {
+            requiredSuffix = ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( ProjectUtil.isLayoutTplProject( project ) )
+        {
+            requiredSuffix = ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( ProjectUtil.isThemeProject( project ) )
+        {
+            requiredSuffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+        }
+
+        return requiredSuffix;
+    }
+
     public static IPackageFragmentRoot[] getSourceContainers( IProject project )
     {
         IJavaProject jProject = JavaCore.create( project );
