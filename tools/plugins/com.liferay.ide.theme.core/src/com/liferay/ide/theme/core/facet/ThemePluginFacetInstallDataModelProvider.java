@@ -31,6 +31,14 @@ public class ThemePluginFacetInstallDataModelProvider extends PluginFacetInstall
         {
             return true;
         }
+        else if( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE.equals( propertyName ) )
+        {
+            return true;
+        }
+        else if ( UPDATE_BUILD_XML.equals( propertyName ) )
+        {
+            return true;
+        }
 
         return super.getDefaultProperty( propertyName );
     }

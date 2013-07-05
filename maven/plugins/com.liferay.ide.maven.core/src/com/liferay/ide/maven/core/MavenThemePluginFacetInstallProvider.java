@@ -42,6 +42,10 @@ public class MavenThemePluginFacetInstallProvider extends ThemePluginFacetInstal
         {
             return false;
         }
+        else if( UPDATE_BUILD_XML.equals( propertyName ) )
+        {
+            return false;
+        }
 
         return super.getDefaultProperty( propertyName );
     }

@@ -120,14 +120,15 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             }
         }
 
-        updateProjectFiles( project );
+        if( shouldUpdateBuildXml() )
+        {
+            updateBuildXml( project );
+        }
 
         if( shouldInstallThemeBuilder() )
         {
             installThemeBuilder( this.project );
         }
-
-
 
         try
         {
@@ -233,18 +234,17 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
         }
     }
 
-    @Override
-    protected boolean shouldInstallPluginLibraryDelegate()
-    {
-        return true;
-    }
-
     protected boolean shouldInstallThemeBuilder()
     {
         return this.model.getBooleanProperty( INSTALL_THEME_CSS_BUILDER );
     }
 
-    public void updateProjectFiles( IProject project ) throws CoreException
+    protected boolean shouldUpdateBuildXml()
+    {
+        return this.model.getBooleanProperty( UPDATE_BUILD_XML );
+    }
+
+    public void updateBuildXml( IProject project ) throws CoreException
     {
         String themeParent = this.masterModel.getStringProperty( THEME_PARENT );
         String tplFramework = this.masterModel.getStringProperty( THEME_TEMPLATE_FRAMEWORK );

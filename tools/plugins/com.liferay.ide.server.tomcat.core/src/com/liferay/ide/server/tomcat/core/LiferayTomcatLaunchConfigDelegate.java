@@ -101,7 +101,7 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
                 {
                     IModule[] modules = server.getModules();
 
-                    public void serverChanged( ServerEvent event )
+                    public synchronized void serverChanged( ServerEvent event )
                     {
                         if( ( event.getKind() & ServerEvent.MODULE_CHANGE ) > 0 )
                         {
