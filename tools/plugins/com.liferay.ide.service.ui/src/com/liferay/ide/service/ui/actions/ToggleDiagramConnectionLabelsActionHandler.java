@@ -40,40 +40,8 @@ public class ToggleDiagramConnectionLabelsActionHandler extends SapphireActionHa
 
         ServiceBuilder serviceBuilder = (ServiceBuilder) context.getPart().getModelElement();
         serviceBuilder.setShowRelationshipLabels( checked );
-        serviceBuilder.refresh( false, true );
+        serviceBuilder.refresh();
 
-//        SapphireDiagramEditorPagePart diagramPart = (SapphireDiagramEditorPagePart) context.getPart();
-
-        //
-        // DiagramRenderingContext dContext = (DiagramRenderingContext) context;
-        // List<IDiagramConnectionDef> defs = dContext.getDiagramEditor().getPart().getDiagramConnectionDefs();
-        // dContext.getDiagramEditor().refreshContent();
-        // HashSet<PictogramElement> set1 = dContext.getDiagramEditor().getRefreshedFigure4PE();
-        // for ( PictogramElement pe : set1 ) {
-        // System.out.println( pe );
-        // if ( pe instanceof FreeFormConnection ) {
-        // FreeFormConnection ffc = (FreeFormConnection) pe;
-        // for ( ConnectionDecorator cd : ffc.getConnectionDecorators() ) {
-        // GraphicsAlgorithm ga = cd.getGraphicsAlgorithm();
-        // if ( ga instanceof Text ) {
-        // Text text = (Text) ga;
-        // text.setValue( "zzz" );
-        // }
-        // System.out.println( ga );
-        // }
-        // }
-        // }
-        // dContext.getDiagramEditor().refresh();
-        // // dContext.layout();
-        // dContext.getDiagramEditor().getGraphicalViewer().flush();
-        // dContext.getDiagramEditor().getGraphicalViewer().getContents().refresh();
-        // dContext.getDiagramEditor().getFigureCanvas().layout( true );
-        // dContext.getDiagramEditor().getFigureCanvas().redraw();
-        // dContext.getDiagramEditor().syncDiagramWithModel();
-        // ScrollingGraphicalViewer viewer = (ScrollingGraphicalViewer)
-        // dContext.getDiagramEditor().getGraphicalViewer();
-        // RootEditPart root = viewer.getRootEditPart();
-        // root.refresh();
         return null;
     }
 

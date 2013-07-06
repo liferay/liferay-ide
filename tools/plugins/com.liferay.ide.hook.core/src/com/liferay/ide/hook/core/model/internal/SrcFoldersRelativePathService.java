@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
@@ -43,7 +43,7 @@ public class SrcFoldersRelativePathService extends RelativePathService
     public List<Path> roots()
     {
         List<Path> roots = new ArrayList<Path>();
-        IModelElement modelElement = context( Hook.class );
+        Element modelElement = context( Hook.class );
         IProject project = modelElement.adapt( IProject.class );
         IFolder[] folders = ProjectUtil.getSourceFolders( project );
 

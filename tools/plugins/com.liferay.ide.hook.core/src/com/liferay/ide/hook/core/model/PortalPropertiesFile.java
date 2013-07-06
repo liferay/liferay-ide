@@ -19,14 +19,13 @@ package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.hook.core.model.internal.SrcFoldersRelativePathService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
@@ -38,11 +37,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-public interface PortalPropertiesFile extends IModelElement
+public interface PortalPropertiesFile extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( PortalPropertiesFile.class );
+    ElementType TYPE = new ElementType( PortalPropertiesFile.class );
 
     // *** Value ***
 

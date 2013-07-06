@@ -16,13 +16,12 @@
  *******************************************************************************/
 package com.liferay.ide.portal.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -33,11 +32,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Gregory Amerson
  */
 @XmlBinding( path = "root" )
-@GenerateImpl
-public interface StructuresRoot extends IModelElement
+public interface StructuresRoot extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( StructuresRoot.class );
+    ElementType TYPE = new ElementType( StructuresRoot.class );
 
     // *** AvailableLocales ***
 
@@ -64,21 +62,21 @@ public interface StructuresRoot extends IModelElement
     @Type( base = DynamicElement.class )
     @Label( standard = "dynamic elements" )
     @XmlListBinding
-    ( 
-        mappings = 
-        { 
+    (
+        mappings =
+        {
             @XmlListBinding.Mapping
             (
                 element = "dynamic-element",
-                type = DynamicElement.class 
-            ) 
+                type = DynamicElement.class
+            )
         }
     )
     ListProperty PROP_DYNAMIC_ELEMENTS = new ListProperty( TYPE, "DynamicElements" ); //$NON-NLS-1$
 
-    ModelElementList<DynamicElement> getDynamicElements();
-    
-    
+    ElementList<DynamicElement> getDynamicElements();
 
-    
+
+
+
 }

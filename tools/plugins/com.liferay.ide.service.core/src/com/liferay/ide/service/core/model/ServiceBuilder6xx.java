@@ -18,12 +18,11 @@ package com.liferay.ide.service.core.model;
 import com.liferay.ide.service.core.model.internal.ServiceBuilderDefaultValueService;
 import com.liferay.ide.service.core.model.internal.ServiceBuilderRootElementController;
 
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.Version;
 import org.eclipse.sapphire.VersionCompatibilityTarget;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
@@ -32,21 +31,23 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
 @XmlBinding( path = "service-builder" )
 @VersionCompatibilityTarget( version = "${ Version }", versioned = "Service Builder" )
-@CustomXmlRootBinding( value =  ServiceBuilderRootElementController.class )
+@CustomXmlRootBinding( value = ServiceBuilderRootElementController.class )
 public interface ServiceBuilder6xx extends ServiceBuilder
 {
-	ModelElementType TYPE = new ModelElementType( ServiceBuilder6xx.class );
 
-	// *** Version ***
+    ElementType TYPE = new ElementType( ServiceBuilder6xx.class );
+
+    // *** Version ***
 
     @Type( base = Version.class )
     @Service( impl = ServiceBuilderDefaultValueService.class )
     ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" ); //$NON-NLS-1$
 
     Value<Version> getVersion();
+
     void setVersion( String value );
+
     void setVersion( Version value );
 }

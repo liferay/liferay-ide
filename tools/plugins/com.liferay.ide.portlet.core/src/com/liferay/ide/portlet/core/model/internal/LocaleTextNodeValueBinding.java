@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -25,7 +25,7 @@ import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class LocaleTextNodeValueBinding extends XmlValueBindingImpl
 {
@@ -34,7 +34,7 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
      */
     @Override
     public String read()
@@ -70,7 +70,7 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
      */
     @Override
     public void write( String value )

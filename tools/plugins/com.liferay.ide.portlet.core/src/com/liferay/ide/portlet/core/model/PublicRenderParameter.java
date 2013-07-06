@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -22,13 +22,12 @@ import com.liferay.ide.portlet.core.model.internal.NameOrQnameValidationService;
 import com.liferay.ide.portlet.core.model.internal.QNameLocalPartValueBinding;
 import com.liferay.ide.portlet.core.model.internal.QNamespaceValueBinding;
 
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -41,15 +40,14 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "/images/elcl16/parameter_16x16.gif" )
 @Label( full = "Public Render Parameter", standard = "Public Render Parameter" )
 public interface PublicRenderParameter extends QName, Identifiable
 {
 
-    ModelElementType TYPE = new ModelElementType( PublicRenderParameter.class );
+    ElementType TYPE = new ElementType( PublicRenderParameter.class );
 
     // *** Identifier ***
 
@@ -108,6 +106,6 @@ public interface PublicRenderParameter extends QName, Identifiable
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "alias", type = AliasQName.class ) } )
     ListProperty PROP_ALIASES = new ListProperty( TYPE, "Aliases" ); //$NON-NLS-1$
 
-    ModelElementList<AliasQName> getAliases();
+    ElementList<AliasQName> getAliases();
 
 }

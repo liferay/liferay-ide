@@ -20,13 +20,12 @@ package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -36,12 +35,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/locale_16x16.gif" )
-public interface LanguageProperty extends IModelElement
+public interface LanguageProperty extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( LanguageProperty.class );
+    ElementType TYPE = new ElementType( LanguageProperty.class );
     // *** Value ***
 
     @Label( standard = "Language Properties" )

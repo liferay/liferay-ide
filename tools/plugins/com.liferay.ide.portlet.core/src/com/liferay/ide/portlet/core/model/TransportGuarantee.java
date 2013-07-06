@@ -21,7 +21,7 @@ import org.eclipse.sapphire.modeling.annotations.EnumSerialization;
 import org.eclipse.sapphire.modeling.annotations.Label;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 @Label( standard = "Transport Gurantee" )
 public enum TransportGuarantee {

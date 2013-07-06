@@ -17,13 +17,12 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ImpliedElementProperty;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ImpliedElementProperty;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -33,14 +32,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/constraint_16x16.png" )
-public interface SecurityConstraint extends IModelElement, Identifiable, Displayable
+public interface SecurityConstraint extends Element, Identifiable, Displayable
 {
 
-    ModelElementType TYPE = new ModelElementType( SecurityConstraint.class );
+    ElementType TYPE = new ElementType( SecurityConstraint.class );
 
     // *** Portlet Name ***
     @Type( base = PortletName.class )
@@ -59,7 +57,7 @@ public interface SecurityConstraint extends IModelElement, Identifiable, Display
     )
     ListProperty PROP_PORTLET_NAMES = new ListProperty( TYPE, "PortletNames" ); //$NON-NLS-1$
 
-    ModelElementList<PortletName> getPortletNames();
+    ElementList<PortletName> getPortletNames();
 
     // *** UserDataConstraint ***
 

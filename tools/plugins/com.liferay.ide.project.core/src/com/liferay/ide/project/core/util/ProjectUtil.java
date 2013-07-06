@@ -1158,11 +1158,11 @@ public class ProjectUtil
             dataModel.getValidPropertyDescriptors( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
         for( DataModelPropertyDescriptor desc : validDescriptors )
-		{
+        {
             Object runtime = desc.getPropertyValue();
 
             if( runtime instanceof BridgedRuntime && ServerUtil.isLiferayRuntime( (BridgedRuntime) runtime ) )
-			{
+            {
                 dataModel.setProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME, runtime );
                 break;
             }

@@ -17,14 +17,13 @@ package com.liferay.ide.taglib.ui.model;
 
 import com.liferay.ide.taglib.ui.model.internal.PreviewSourceContentProvider;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.ReadOnly;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -34,12 +33,11 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
 @XmlBinding( path = "tag" )
-public interface Tag extends IModelElement
+public interface Tag extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( Tag.class );
+    ElementType TYPE = new ElementType( Tag.class );
 
     // *** Name ***
 
@@ -62,17 +60,17 @@ public interface Tag extends IModelElement
     @Type( base = Attribute.class )
     @ReadOnly
     @XmlListBinding
-    ( 
-        path = "required", 
+    (
+        path = "required",
         mappings = @XmlListBinding.Mapping
         (
             element = "attribute",
-            type = Attribute.class 
-        ) 
+            type = Attribute.class
+        )
     )
     ListProperty PROP_REQUIRED_ATTRIBUTES = new ListProperty( TYPE, "RequiredAttributes" ); //$NON-NLS-1$
 
-    ModelElementList<Attribute> getRequiredAttributes();
+    ElementList<Attribute> getRequiredAttributes();
 
     // *** Event Attributes ***
 
@@ -82,14 +80,14 @@ public interface Tag extends IModelElement
     (
         path = "events",
         mappings = @XmlListBinding.Mapping
-        ( 
-            element = "attribute", 
-            type = Attribute.class 
-        ) 
+        (
+            element = "attribute",
+            type = Attribute.class
+        )
     )
     ListProperty PROP_EVENTS = new ListProperty( TYPE, "Events" ); //$NON-NLS-1$
 
-    ModelElementList<Attribute> getEvents();
+    ElementList<Attribute> getEvents();
 
     // *** Other Attributes ***
 
@@ -98,7 +96,7 @@ public interface Tag extends IModelElement
     @XmlListBinding( path = "other", mappings = @XmlListBinding.Mapping( element = "attribute", type = Attribute.class ) )
     ListProperty PROP_OTHER_ATTRIBUTES = new ListProperty( TYPE, "OtherAttributes" ); //$NON-NLS-1$
 
-    ModelElementList<Attribute> getOtherAttributes();
+    ElementList<Attribute> getOtherAttributes();
 
     @Service( impl = PreviewSourceContentProvider.class )
     @DependsOn( { "RequiredAttributes/*", "Events/*", "OtherAttributes/*" } )

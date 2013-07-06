@@ -12,35 +12,34 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.service.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-@Image(path = "images/tx_requireds_16x16.gif")
-public interface TxRequired extends IModelElement 
+@Image( path = "images/tx_requireds_16x16.gif" )
+public interface TxRequired extends Element
 {
-    ModelElementType TYPE = new ModelElementType( TxRequired.class );
-    
-	// *** TxRequired ***
 
-	@XmlBinding(path = "")
-	@Label(standard = "&tx required")
-	ValueProperty PROP_TX_REQUIRED = new ValueProperty(TYPE, "TxRequired"); //$NON-NLS-1$
+    ElementType TYPE = new ElementType( TxRequired.class );
 
-	Value<String> getTxRequired();
+    // *** TxRequired ***
 
-	void setTxRequired(String value);
+    @XmlBinding( path = "" )
+    @Label( standard = "&tx required" )
+    ValueProperty PROP_TX_REQUIRED = new ValueProperty( TYPE, "TxRequired" ); //$NON-NLS-1$
+
+    Value<String> getTxRequired();
+
+    void setTxRequired( String value );
 
 }

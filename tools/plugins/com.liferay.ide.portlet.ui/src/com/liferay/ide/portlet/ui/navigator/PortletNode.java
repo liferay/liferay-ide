@@ -21,9 +21,9 @@ package com.liferay.ide.portlet.ui.navigator;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.model.Portlet;
 
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.CapitalizationType;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.Value;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -54,13 +54,13 @@ public class PortletNode
         {
             final Value<String> label = this.portlet.getPortletName();
 
-            retval = label.getLocalizedText( CapitalizationType.TITLE_STYLE, false );
+            retval = label.localized( CapitalizationType.TITLE_STYLE, false );
         }
 
         return retval;
     }
 
-    public IModelElement getModel()
+    public Element getModel()
     {
         return this.portlet;
     }

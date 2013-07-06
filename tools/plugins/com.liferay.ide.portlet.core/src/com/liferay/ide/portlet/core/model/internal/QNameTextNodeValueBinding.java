@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -23,18 +23,18 @@ import com.liferay.ide.portlet.core.util.PortletUtil;
 
 import javax.xml.namespace.QName;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 
 public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
@@ -45,14 +45,14 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-     * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+     * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.modeling.Element,
+     * org.eclipse.sapphire.modeling.Property, java.lang.String[])
      */
     @Override
-    public void init( final IModelElement element, final ModelProperty property, final String[] params )
+    public void init( final Property property )
     {
-        super.init( element, property, params );
-        this.params = params;
+        super.init( property );
+        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
         final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
         this.path = new XmlPath( params[0], xmlNamespaceResolver );
 
@@ -61,7 +61,7 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
      */
     @Override
     public String read()
@@ -97,7 +97,7 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+     * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
      */
     @Override
     public void write( final String value )
@@ -126,7 +126,7 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl#getXmlNode()
+     * @see org.eclipse.sapphire.modeling.xml.XmlValuePropertyBinding#getXmlNode()
      */
     @Override
     public XmlNode getXmlNode()

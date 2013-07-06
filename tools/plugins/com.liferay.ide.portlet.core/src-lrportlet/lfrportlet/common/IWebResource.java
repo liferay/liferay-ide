@@ -20,11 +20,11 @@
 
 package com.liferay.ide.portlet.core.model.lfrportlet.common;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
@@ -39,9 +39,9 @@ import org.eclipse.sapphire.workspace.WorkspaceRelativePath;
  * @author kamesh
  */
 @GenerateImpl
-public interface IWebResource extends IModelElement {
+public interface IWebResource extends Element {
 
-	ModelElementType TYPE = new ModelElementType( IWebResource.class );
+	ElementType TYPE = new ElementType( IWebResource.class );
 
 	// *** WebResource ***
 

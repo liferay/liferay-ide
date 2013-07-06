@@ -35,7 +35,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * @author Greg Amerson
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 @SuppressWarnings( "restriction" )
 public class PortletUtil

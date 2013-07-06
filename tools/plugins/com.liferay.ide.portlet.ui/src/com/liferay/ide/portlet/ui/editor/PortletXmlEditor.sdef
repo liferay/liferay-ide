@@ -440,6 +440,7 @@
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
                 </section>
+                <!-- 
                 <section>
                     <label>Supported Processing Events</label>
                     <content>
@@ -466,6 +467,7 @@
                         </include>
                     </content>
                 </section>
+                 -->
                 <image>images/ipc_16x16.gif</image>
             </node>
             <section>
@@ -595,6 +597,7 @@
             <property-editor>Description</property-editor>
         </content>
     </composite>
+    <!--
     <composite>
         <id>support.eventdef.composite</id>
         <content>
@@ -607,6 +610,7 @@
             </property-editor>
         </content>
     </composite>
+    -->
     <composite>
         <id>event.def.quickedit.composite</id>
         <content>

@@ -22,10 +22,10 @@ import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.Relationship;
 import com.liferay.ide.service.core.model.ServiceBuilder;
 
-import org.eclipse.sapphire.modeling.BindingImpl;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.Resource;
-import org.eclipse.sapphire.modeling.ValueBindingImpl;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyBinding;
+import org.eclipse.sapphire.Resource;
+import org.eclipse.sapphire.ValuePropertyBinding;
 
 /**
  * @author Gregory Amerson
@@ -41,14 +41,14 @@ public class RelationshipResource extends Resource
     }
 
     @Override
-    protected BindingImpl createBinding( ModelProperty property )
+    protected PropertyBinding createBinding( Property property )
     {
-        BindingImpl binding = null;
+        PropertyBinding binding = null;
         String[] params = null;
 
         if( Relationship.PROP_FROM_ENTITY.equals( property ) )
         {
-            binding = new ValueBindingImpl()
+            binding = new ValuePropertyBinding()
             {
 
                 @Override
@@ -67,7 +67,7 @@ public class RelationshipResource extends Resource
         }
         else if( Relationship.PROP_TO_ENTITY.equals( property ) )
         {
-            binding = new ValueBindingImpl()
+            binding = new ValuePropertyBinding()
             {
 
                 @Override
@@ -87,7 +87,7 @@ public class RelationshipResource extends Resource
 
         if( binding != null )
         {
-            binding.init( element(), property, params );
+            binding.init( property );
         }
 
         return binding;
@@ -114,7 +114,7 @@ public class RelationshipResource extends Resource
 
             for( Column column : toEntity.getColumns() )
             {
-                if( column.isPrimary().getContent() )
+                if( column.isPrimary().content() )
                 {
                     primaryKeyColumn = column;
                     break;
@@ -124,7 +124,7 @@ public class RelationshipResource extends Resource
             if( primaryKeyColumn != null )
             {
                 final Column column = fromEntity.getColumns().insert();
-                column.setName( primaryKeyColumn.getName().getContent() );
+                column.setName( primaryKeyColumn.getName().content() );
                 column.setType( "long" ); //$NON-NLS-1$
             }
         }

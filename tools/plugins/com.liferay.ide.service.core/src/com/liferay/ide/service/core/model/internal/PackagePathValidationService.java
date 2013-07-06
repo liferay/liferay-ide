@@ -22,8 +22,8 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jst.j2ee.internal.common.J2EECommonMessages;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
@@ -36,7 +36,7 @@ public class PackagePathValidationService extends ValidationService
     public Status validate()
     {
         final Value<String> packagePath = context().find( ServiceBuilder.class ).getPackagePath();
-        String packPathVal = packagePath.getContent();
+        String packPathVal = packagePath.content();
 
         if( packPathVal == null )
         {

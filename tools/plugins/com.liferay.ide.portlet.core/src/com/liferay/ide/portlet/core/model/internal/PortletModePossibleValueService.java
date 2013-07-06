@@ -21,19 +21,19 @@ import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletApp;
 
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class PortletModePossibleValueService extends PossibleValuesService
 {
 
     // provided by Portlet Specification and Liferay
-    private static final String[] DEFAULT_MODES = 
-    { 
+    private static final String[] DEFAULT_MODES =
+    {
         "view",  //$NON-NLS-1$
         "edit",  //$NON-NLS-1$
         "help",  //$NON-NLS-1$
@@ -50,7 +50,7 @@ public class PortletModePossibleValueService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         PortletApp portletApp = context( PortletApp.class );
 
@@ -64,7 +64,7 @@ public class PortletModePossibleValueService extends PossibleValuesService
 
         for( CustomPortletMode iCustomPortletMode : customPortletModes )
         {
-            String customPortletMode = iCustomPortletMode.getPortletMode().getText( false );
+            String customPortletMode = iCustomPortletMode.getPortletMode().text( false );
 
             if( customPortletMode != null )
             {

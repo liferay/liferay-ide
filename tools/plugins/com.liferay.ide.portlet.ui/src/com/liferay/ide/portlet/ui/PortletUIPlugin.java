@@ -33,7 +33,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plugin life cycle
  * 
  * @author Greg Amerson
- * @author kamesh.sampath [IDE-405] updated the ImageRegistry
+ * @author Kamesh Sampath [IDE-405] updated the ImageRegistry
  */
 public class PortletUIPlugin extends AbstractUIPlugin
 {

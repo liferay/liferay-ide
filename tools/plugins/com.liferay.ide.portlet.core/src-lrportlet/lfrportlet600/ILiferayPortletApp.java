@@ -22,9 +22,9 @@ import com.liferay.ide.portlet.core.model.internal.Doctype;
 import com.liferay.ide.portlet.core.model.internal.DtdRootElementController;
 import com.liferay.ide.portlet.core.model.lfrportlet.common.ILiferayPortletAppBase;
 
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -39,7 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 @CustomXmlRootBinding( value = DtdRootElementController.class )
 public interface ILiferayPortletApp extends ILiferayPortletAppBase {
 
-	ModelElementType TYPE = new ModelElementType( ILiferayPortletApp.class );
+	ElementType TYPE = new ElementType( ILiferayPortletApp.class );
 
 	// *** Portlets ***
 
@@ -48,7 +48,7 @@ public interface ILiferayPortletApp extends ILiferayPortletAppBase {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "portlet", type = ILiferayPortlet.class ) } )
 	ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" );
 
-	ModelElementList<ILiferayPortlet> getPortlets();
+	ElementList<ILiferayPortlet> getPortlets();
 
 
 }

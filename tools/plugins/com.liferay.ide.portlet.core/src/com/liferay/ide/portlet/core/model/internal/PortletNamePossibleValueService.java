@@ -28,12 +28,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
@@ -56,11 +56,11 @@ public class PortletNamePossibleValueService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         if( this.localPortletModel == null )
         {
-            final IResource eresource = context( IModelElement.class ).resource().adapt( IFile.class );
+            final IResource eresource = context( Element.class ).resource().adapt( IFile.class );
             final IContainer resourceFolder = eresource.getParent();
 
             try
@@ -99,7 +99,7 @@ public class PortletNamePossibleValueService extends PossibleValuesService
 
             for( Portlet iPortlet : portlets )
             {
-                portletNameList.add( iPortlet.getPortletName().getText() );
+                portletNameList.add( iPortlet.getPortletName().text() );
             }
 
             this.localPortletNames = portletNameList.toArray( new String[0] );

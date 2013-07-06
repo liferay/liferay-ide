@@ -20,11 +20,11 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Arrays;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
@@ -36,11 +36,11 @@ public class PortalFilterNamesPossibleValuesService extends PossibleValuesServic
     private String[] servletFilterNames;
 
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         if( this.servletFilterNames == null )
         {
-            final IFile hookFile = this.context().find( IModelElement.class ).adapt( IFile.class );
+            final IFile hookFile = this.context().find( Element.class ).adapt( IFile.class );
 
             if( hookFile != null )
             {

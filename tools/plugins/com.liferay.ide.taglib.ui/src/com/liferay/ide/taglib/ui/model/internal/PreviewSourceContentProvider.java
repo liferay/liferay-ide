@@ -19,8 +19,8 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.taglib.ui.model.Attribute;
 import com.liferay.ide.taglib.ui.model.Tag;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.services.DerivedValueService;
 import org.eclipse.sapphire.services.DerivedValueServiceData;
 
@@ -33,15 +33,15 @@ public class PreviewSourceContentProvider extends DerivedValueService
     @Override
     protected DerivedValueServiceData compute()
     {
-        boolean preview = "Preview".equals( context( ModelProperty.class ).getName() ); //$NON-NLS-1$
+        boolean preview = "Preview".equals( context( Property.class ).name() ); //$NON-NLS-1$
 
-        Tag tag = (Tag) context( IModelElement.class );;
+        Tag tag = (Tag) context( Element.class );;
 
         StringBuffer buffer = new StringBuffer();
 
-        String tagName = tag.getName().getContent();
+        String tagName = tag.getName().content();
 
-        String prefix = tag.getPrefix().getContent();
+        String prefix = tag.getPrefix().content();
 
         if( preview )
         {
@@ -99,7 +99,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
 
     protected void appendAttr( Attribute attr, StringBuffer buffer, boolean preview )
     {
-        String content = attr.getValue().getContent();
+        String content = attr.getValue().content();
 
         if( content != null )
         {
@@ -110,7 +110,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
                 buffer.append( "<span style='color:RGB(127,0,127)'>" ); //$NON-NLS-1$
             }
 
-            buffer.append( attr.getName().getContent() );
+            buffer.append( attr.getName().content() );
 
             if( preview )
             {

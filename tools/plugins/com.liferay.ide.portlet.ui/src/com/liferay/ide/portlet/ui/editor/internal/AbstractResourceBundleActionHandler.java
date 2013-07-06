@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *      Kamesh Sampath - initial implementation
  *      Gregory Amerson - initial implementation review and ongoing maintanence
@@ -45,10 +45,10 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
@@ -70,10 +70,10 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
     protected boolean computeEnablementState()
     {
         boolean isEnabled = super.computeEnablementState();
-        final IModelElement element = getModelElement();
-        final ModelProperty property = getProperty();
+        final Element element = getModelElement();
+        final Property property = property();
         final IProject project = element.adapt( IProject.class );
-        String rbFile = element.read( (ValueProperty) property ).getText();
+        String rbFile = element.property( (ValueProperty) property.definition() ).text();
         if( rbFile != null )
         {
             String ioFileName =

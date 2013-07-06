@@ -1,16 +1,16 @@
 /*******************************************************************************
  *  Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
- *  
+ *
  *   This library is free software; you can redistribute it and/or modify it under
  *   the terms of the GNU Lesser General Public License as published by the Free
  *   Software Foundation; either version 2.1 of the License, or (at your option)
  *   any later version.
- *  
+ *
  *   This library is distributed in the hope that it will be useful, but WITHOUT
  *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  *   FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  *   details.
- *  
+ *
  *   Contributors:
  *          Kamesh Sampath - initial implementation
  *          Gregory Amerson - IDE-355
@@ -22,15 +22,14 @@ import com.liferay.ide.hook.core.model.internal.BeforeAfterFilterNameBinding;
 import com.liferay.ide.hook.core.model.internal.BeforeAfterFilterTypeBinding;
 import com.liferay.ide.hook.core.model.internal.PortalFilterNamesPossibleValuesService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
@@ -41,14 +40,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/filter_mapping_16x16.gif" )
-public interface ServletFilterMapping extends IModelElement
+public interface ServletFilterMapping extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( ServletFilterMapping.class );
+    ElementType TYPE = new ElementType( ServletFilterMapping.class );
 
     // *** Servlet Filter Name ***
 
@@ -91,7 +89,7 @@ public interface ServletFilterMapping extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = URLPattern.class ) } )
     ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" ); //$NON-NLS-1$
 
-    ModelElementList<URLPattern> getURLPatterns();
+    ElementList<URLPattern> getURLPatterns();
 
     // *** Dispatchers ***
 
@@ -100,6 +98,6 @@ public interface ServletFilterMapping extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "dispatcher", type = Dispatcher.class ) } )
     ListProperty PROP_DISPATCHERS = new ListProperty( TYPE, "Dispatchers" ); //$NON-NLS-1$
 
-    ModelElementList<Dispatcher> getDispatchers();
+    ElementList<Dispatcher> getDispatchers();
 
 }

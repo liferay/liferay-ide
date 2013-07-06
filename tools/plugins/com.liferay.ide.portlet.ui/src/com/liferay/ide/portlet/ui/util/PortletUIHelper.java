@@ -23,7 +23,7 @@ import org.eclipse.sapphire.ui.SapphireEditor;
 import org.eclipse.swt.widgets.Text;
 
 /**
- * @author kamesh.sampath
+ * @author Kamesh Sampath
  */
 public class PortletUIHelper
 {

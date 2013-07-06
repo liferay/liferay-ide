@@ -21,13 +21,12 @@ import com.liferay.ide.portlet.core.model.internal.EventDefinitionReferenceServi
 import com.liferay.ide.portlet.core.model.internal.QNameTextNodeValueBinding;
 import com.liferay.ide.portlet.core.model.internal.QNamesPossibleValuesService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
@@ -37,13 +36,12 @@ import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
-public interface EventDefinitionRef extends IModelElement, Identifiable, Describeable
+public interface EventDefinitionRef extends Element, Identifiable, Describeable
 {
 
-    ModelElementType TYPE = new ModelElementType( EventDefinitionRef.class );
+    ElementType TYPE = new ElementType( EventDefinitionRef.class );
 
     // *** Qname ***
 

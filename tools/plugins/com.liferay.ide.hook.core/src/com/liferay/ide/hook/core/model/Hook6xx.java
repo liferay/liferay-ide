@@ -17,8 +17,7 @@ package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.hook.core.model.internal.HookRootElementController;
 
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -27,10 +26,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 @CustomXmlRootBinding( value = HookRootElementController.class )
 @XmlBinding( path = "hook" )
-@GenerateImpl
 public interface Hook6xx extends Hook
 {
 
-    ModelElementType TYPE = new ModelElementType( Hook6xx.class );
+    ElementType TYPE = new ElementType( Hook6xx.class );
 
 }

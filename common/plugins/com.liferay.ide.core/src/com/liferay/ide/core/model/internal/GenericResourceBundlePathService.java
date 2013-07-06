@@ -27,7 +27,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
@@ -39,7 +39,7 @@ public class GenericResourceBundlePathService extends RelativePathService
 {
 
     public static final String RB_FILE_EXTENSION = "properties"; //$NON-NLS-1$
-    
+
     private final IWorkspaceRoot WORKSPACE_ROOT = CoreUtil.getWorkspaceRoot();
 
     /**
@@ -49,11 +49,11 @@ public class GenericResourceBundlePathService extends RelativePathService
     final List<Path> computeRoots( IProject project )
     {
         List<Path> roots = new ArrayList<Path>();
-        
+
         if( project != null )
         {
             IClasspathEntry[] cpEntries = CoreUtil.getClasspathEntries( project );
-            
+
             for( IClasspathEntry iClasspathEntry : cpEntries )
             {
                 if( IClasspathEntry.CPE_SOURCE == iClasspathEntry.getEntryKind() )
@@ -72,19 +72,18 @@ public class GenericResourceBundlePathService extends RelativePathService
     @Override
     public final Path convertToAbsolute( Path path )
     {
-        Path absPath = path.addFileExtension( RB_FILE_EXTENSION );
-        return absPath;
+        return path.addFileExtension( RB_FILE_EXTENSION );
     }
 
     /**
      * This method is used to get the IProject handle of the project relative to which the source paths needs to be
      * computed
-     * 
+     *
      * @return handle to IProject
      */
     protected IProject project()
     {
-        return context( IModelElement.class ).adapt( IProject.class );
+        return context( Element.class ).adapt( IProject.class );
     }
 
     /*
@@ -94,10 +93,7 @@ public class GenericResourceBundlePathService extends RelativePathService
     @Override
     public final List<Path> roots()
     {
-        IProject project = project();
-        List<Path> roots = computeRoots( project );
-        
-        return roots;
+        return computeRoots( project() );
     }
 
 }

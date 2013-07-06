@@ -5,29 +5,28 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.model;
 
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -37,14 +36,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/obj16/preferences.gif" )
-public interface PortletPreference extends IModelElement, Identifiable
+public interface PortletPreference extends Element, Identifiable
 {
 
-    ModelElementType TYPE = new ModelElementType( PortletPreference.class );
+    ElementType TYPE = new ElementType( PortletPreference.class );
 
     // *** PortletPreferences ***
 
@@ -53,7 +51,7 @@ public interface PortletPreference extends IModelElement, Identifiable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "preference", type = Preference.class ) )
     ListProperty PROP_PORTLET_PREFERENCES = new ListProperty( TYPE, "PortletPreferences" ); //$NON-NLS-1$
 
-    ModelElementList<Preference> getPortletPreferences();
+    ElementList<Preference> getPortletPreferences();
 
     // *** PreferernceValidator ***
 

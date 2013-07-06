@@ -14,11 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.service.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.PossibleValues;
@@ -30,46 +29,44 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
 @Image(path = "images/column_16x16.gif")
-public interface OrderColumn extends IModelElement 
+public interface OrderColumn extends Element
 {
-    ModelElementType TYPE = new ModelElementType( OrderColumn.class );
-    
-	// *** Name ***
-    
-    @XmlBinding(path = "@name")
-	@Label(standard = "&name")
-    @Required
+    ElementType TYPE = new ElementType( OrderColumn.class );
 
-	ValueProperty PROP_NAME = new ValueProperty(TYPE, "Name"); //$NON-NLS-1$
+    // *** Name ***
+
+    @XmlBinding( path = "@name" )
+    @Label( standard = "&name" )
+    @Required
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
 
-	void setName(String value);
+    void setName( String value );
 
-	// *** CaseSensitive ***
+    // *** CaseSensitive ***
 
-	@Type(base = Boolean.class)
-	@Label(standard = "&case sensitive")
-	@XmlBinding(path = "@case-sensitive")
-	ValueProperty PROP_CASE_SENSITIVE = new ValueProperty(TYPE, "CaseSensitive"); //$NON-NLS-1$
+    @Type( base = Boolean.class )
+    @Label( standard = "&case sensitive" )
+    @XmlBinding( path = "@case-sensitive" )
+    ValueProperty PROP_CASE_SENSITIVE = new ValueProperty( TYPE, "CaseSensitive" ); //$NON-NLS-1$
 
-	Value<Boolean> isCaseSensitive();
+    Value<Boolean> isCaseSensitive();
 
-	void setCaseSensitive(String value);
+    void setCaseSensitive( String value );
 
-	void setCaseSensitive(Boolean value);
+    void setCaseSensitive( Boolean value );
 
-	// *** Order By ***
+    // *** Order By ***
 
-	@Label(standard = "order by")
-	@XmlBinding(path = "@order-by")
-	@PossibleValues(values = { "asc", "desc" }, invalidValueMessage = "{0} is not valid.")
-	ValueProperty PROP_ORDER_BY = new ValueProperty(TYPE, "OrderBy"); //$NON-NLS-1$
+    @Label( standard = "order by" )
+    @XmlBinding( path = "@order-by" )
+    @PossibleValues( values = { "asc", "desc" }, invalidValueMessage = "{0} is not valid." )
+    ValueProperty PROP_ORDER_BY = new ValueProperty( TYPE, "OrderBy" ); //$NON-NLS-1$
 
-	Value<String> getOrderBy();
+    Value<String> getOrderBy();
 
-	void setOrderBy(String value);
+    void setOrderBy( String value );
 
 }

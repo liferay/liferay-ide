@@ -18,11 +18,10 @@ package com.liferay.ide.portal.core.model;
 
 import com.liferay.ide.portal.core.model.internal.EntryValueBinding;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -31,11 +30,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-public interface Entry extends IModelElement
+public interface Entry extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( Entry.class );
+    ElementType TYPE = new ElementType( Entry.class );
 
     // *** Name ***
 
@@ -46,7 +44,7 @@ public interface Entry extends IModelElement
     Value<String> getName();
 
     void setName( String value );
-    
+
     // *** Value ***
 
     @Label( standard = "value" )

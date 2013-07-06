@@ -24,17 +24,16 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.ElementDisposeEvent;
-import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class WindowStatesPossibleValueService extends PossibleValuesService
@@ -51,7 +50,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( final SortedSet<String> values )
+    protected void fillPossibleValues( final Set<String> values )
     {
         if( ! this.initialized )
         {
@@ -77,7 +76,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
             }
         };
 
-        portletApp.attach( listener, PortletApp.PROP_CUSTOM_WINDOW_STATES );
+        portletApp.attach( listener, PortletApp.PROP_CUSTOM_WINDOW_STATES.name() );
 
         refresh();
 
@@ -88,7 +87,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
                 @Override
                 protected void handleTypedEvent( final ElementDisposeEvent event )
                 {
-                    portletApp.detach( listener, PortletApp.PROP_CUSTOM_WINDOW_STATES );
+                    portletApp.detach( listener, PortletApp.PROP_CUSTOM_WINDOW_STATES.name() );
                 }
             }
         );
@@ -119,7 +118,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
 
             for( CustomWindowState iCustomWindowState : customWindowStates )
             {
-                String customWindowState = iCustomWindowState.getWindowState().getText( false );
+                String customWindowState = iCustomWindowState.getWindowState().text( false );
 
                 if( customWindowState != null )
                 {

@@ -35,7 +35,7 @@ public class EntityRelationshipService extends ReferenceService
             {
                 for( Entity entity : serviceBuilder.getEntities() )
                 {
-                    if( entityName.equals( entity.getName().getContent() ) )
+                    if( entityName.equals( entity.getName().content() ) )
                     {
                         return entity;
                     }

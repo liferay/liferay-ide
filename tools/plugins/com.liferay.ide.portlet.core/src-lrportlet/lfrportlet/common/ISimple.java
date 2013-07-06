@@ -22,10 +22,10 @@ package com.liferay.ide.portlet.core.model.lfrportlet.common;
 
 import com.liferay.ide.core.model.xml.internal.ChoiceValueBinding;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
@@ -39,9 +39,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author kamesh
  */
 @GenerateImpl
-public interface ISimple extends IModelElement {
+public interface ISimple extends Element {
 
-	ModelElementType TYPE = new ModelElementType( ISimple.class );
+	ElementType TYPE = new ElementType( ISimple.class );
 
 	// *** PropertyKey ***
 

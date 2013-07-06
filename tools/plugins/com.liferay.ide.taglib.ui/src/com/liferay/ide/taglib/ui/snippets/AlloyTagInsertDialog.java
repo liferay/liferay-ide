@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.def.DialogDef;
 import org.eclipse.sapphire.ui.swt.SapphireDialog;
@@ -44,7 +44,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
     protected ISnippetItem fItem = null;
     protected String fPreparedText = null;
 
-    public AlloyTagInsertDialog( Shell host, IModelElement model, Reference<DialogDef> reference, boolean clearModality )
+    public AlloyTagInsertDialog( Shell host, Element model, Reference<DialogDef> reference, boolean clearModality )
     {
         super( host, model, reference );
         /**
@@ -93,7 +93,7 @@ public class AlloyTagInsertDialog extends SapphireDialog
     protected void prepareText()
     {
         // this could be horribly inefficient
-        String text = ( element().adapt( Tag.class ) ).getSource().getContent();
+        String text = ( element().adapt( Tag.class ) ).getSource().content();
 
         // remove all cursor markers
         text = StringUtils.replace( text, "${cursor}", StringPool.EMPTY ); //$NON-NLS-1$

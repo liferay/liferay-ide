@@ -1,41 +1,45 @@
 /*******************************************************************************
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
- *   
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public final class InvertingBooleanXmlValueBinding extends XmlValueBindingImpl
 {
     private XmlPath path;
+    private String[] params;
+
 
     @Override
-    public void init( final IModelElement element, final ModelProperty property, final String[] params )
+    public void init( final Property property )
     {
-        super.init( element, property, params );
+        super.init( property );
+
+        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
 
         final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
         this.path = new XmlPath( params[0], xmlNamespaceResolver );

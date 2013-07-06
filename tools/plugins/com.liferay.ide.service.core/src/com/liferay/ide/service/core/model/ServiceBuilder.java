@@ -20,15 +20,14 @@ import com.liferay.ide.service.core.model.internal.PackagePathValidationService;
 import com.liferay.ide.service.core.model.internal.RelationshipsBindingImpl;
 import com.liferay.ide.service.core.model.internal.ShowRelationshipLabelsBinding;
 
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.VersionCompatibilityTarget;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -41,97 +40,97 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Gregory Amerson
  * @author Cindy Li
  */
-@GenerateImpl
 @VersionCompatibilityTarget( version = "${ Version }", versioned = "Service Builder" )
-public interface ServiceBuilder extends IModelElement
+public interface ServiceBuilder extends Element
 {
-	ModelElementType TYPE = new ModelElementType(ServiceBuilder.class);
 
-	// *** Package-path ***
+    ElementType TYPE = new ElementType( ServiceBuilder.class );
 
-	@XmlBinding(path = "@package-path")
-	@Label(standard = "&Package path")
-	@Service(impl = PackagePathValidationService.class)
-	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath"); //$NON-NLS-1$
+    // *** Package-path ***
 
-	Value<String> getPackagePath();
+    @XmlBinding( path = "@package-path" )
+    @Label( standard = "&Package path" )
+    @Service( impl = PackagePathValidationService.class )
+    ValueProperty PROP_PACKAGE_PATH = new ValueProperty( TYPE, "PackagePath" ); //$NON-NLS-1$
 
-	void setPackagePath(String value);
+    Value<String> getPackagePath();
 
-	// *** Auto-Namespace-Tables ***
+    void setPackagePath( String value );
 
-	@Type(base = Boolean.class)
-	@Label(standard = "&Auto namespace tables")
-	@XmlBinding(path = "@auto-namespace-tables")
-	ValueProperty PROP_AUTO_NAMESPACE_TABLES = new ValueProperty(TYPE, "AutoNamespaceTables"); //$NON-NLS-1$
+    // *** Auto-Namespace-Tables ***
 
-	Value<Boolean> isAutoNamespaceTables();
+    @Type( base = Boolean.class )
+    @Label( standard = "&Auto namespace tables" )
+    @XmlBinding( path = "@auto-namespace-tables" )
+    ValueProperty PROP_AUTO_NAMESPACE_TABLES = new ValueProperty( TYPE, "AutoNamespaceTables" ); //$NON-NLS-1$
 
-	void setAutoNamespaceTables(String value);
+    Value<Boolean> isAutoNamespaceTables();
 
-	void setAutoNamespaceTables(Boolean value);
+    void setAutoNamespaceTables( String value );
 
-	// *** Author ***
+    void setAutoNamespaceTables( Boolean value );
 
-	@XmlBinding(path = "author")
-	@Label(standard = "&Author")
-	ValueProperty PROP_AUTHOR = new ValueProperty(TYPE, "Author"); //$NON-NLS-1$
+    // *** Author ***
 
-	Value<String> getAuthor();
+    @XmlBinding( path = "author" )
+    @Label( standard = "&Author" )
+    ValueProperty PROP_AUTHOR = new ValueProperty( TYPE, "Author" ); //$NON-NLS-1$
 
-	void setAuthor(String value);
+    Value<String> getAuthor();
 
-	// *** namespace ***
+    void setAuthor( String value );
 
-	@XmlBinding(path = "namespace")
-	@Label(standard = "&Namespace")
-	@Service(impl = NamespaceValidationService.class)
-	ValueProperty PROP_NAMESPACE = new ValueProperty(TYPE, "Namespace"); //$NON-NLS-1$
+    // *** namespace ***
 
-	Value<String> getNamespace();
+    @XmlBinding( path = "namespace" )
+    @Label( standard = "&Namespace" )
+    @Service( impl = NamespaceValidationService.class )
+    ValueProperty PROP_NAMESPACE = new ValueProperty( TYPE, "Namespace" ); //$NON-NLS-1$
 
-	void setNamespace(String value);
+    Value<String> getNamespace();
 
-	// *** Entities ***
+    void setNamespace( String value );
 
-	@Type(base = Entity.class)
-	@Label(standard = "Entities")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "entity", type = Entity.class))
-	ListProperty PROP_ENTITIES = new ListProperty(TYPE, "Entities"); //$NON-NLS-1$
+    // *** Entities ***
 
-	ModelElementList<Entity> getEntities();
+    @Type( base = Entity.class )
+    @Label( standard = "Entities" )
+    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "entity", type = Entity.class ) )
+    ListProperty PROP_ENTITIES = new ListProperty( TYPE, "Entities" ); //$NON-NLS-1$
 
-	// *** Exceptions ***
+    ElementList<Entity> getEntities();
 
-	@Type(base = Exception.class)
-	@Label(standard = "exceptions")
-	@XmlListBinding(path = "exceptions", mappings = @XmlListBinding.Mapping(element = "exception", type = Exception.class))
-	ListProperty PROP_EXCEPTIONS = new ListProperty(TYPE, "Exceptions"); //$NON-NLS-1$
+    // *** Exceptions ***
 
-	ModelElementList<Exception> getExceptions();
+    @Type( base = Exception.class )
+    @Label( standard = "exceptions" )
+    @XmlListBinding( path = "exceptions", mappings = @XmlListBinding.Mapping( element = "exception", type = Exception.class ) )
+    ListProperty PROP_EXCEPTIONS = new ListProperty( TYPE, "Exceptions" ); //$NON-NLS-1$
 
-	@Type(base = ServiceBuilderImport.class)
-	@Label(standard = "service builder imports")
-	@XmlListBinding(mappings = @XmlListBinding.Mapping(element = "service-builder-import", type = ServiceBuilderImport.class))
-	ListProperty PROP_SERVICE_BUILDER_IMPORTS = new ListProperty(TYPE, "ServiceBuilderImports"); //$NON-NLS-1$
+    ElementList<Exception> getExceptions();
 
-	ModelElementList<ServiceBuilderImport> getServiceBuilderImports();
+    @Type( base = ServiceBuilderImport.class )
+    @Label( standard = "service builder imports" )
+    @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "service-builder-import", type = ServiceBuilderImport.class ) )
+    ListProperty PROP_SERVICE_BUILDER_IMPORTS = new ListProperty( TYPE, "ServiceBuilderImports" ); //$NON-NLS-1$
 
-	@Type( base = Boolean.class )
-	@DefaultValue( text = "true" )
-	@CustomXmlValueBinding( impl = ShowRelationshipLabelsBinding.class )
-	ValueProperty PROP_SHOW_RELATIONSHIP_LABELS = new ValueProperty( TYPE, "ShowRelationshipLabels" ); //$NON-NLS-1$
+    ElementList<ServiceBuilderImport> getServiceBuilderImports();
 
-	Value<Boolean> getShowRelationshipLabels();
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    @CustomXmlValueBinding( impl = ShowRelationshipLabelsBinding.class )
+    ValueProperty PROP_SHOW_RELATIONSHIP_LABELS = new ValueProperty( TYPE, "ShowRelationshipLabels" ); //$NON-NLS-1$
 
-	void setShowRelationshipLabels( String value );
+    Value<Boolean> getShowRelationshipLabels();
 
-	void setShowRelationshipLabels( Boolean value );
+    void setShowRelationshipLabels( String value );
 
-	@Type(base = Relationship.class)
+    void setShowRelationshipLabels( Boolean value );
+
+    @Type( base = Relationship.class )
     @CustomXmlListBinding( impl = RelationshipsBindingImpl.class )
-    ListProperty PROP_RELATIONSHIPS = new ListProperty(TYPE, "Relationships"); //$NON-NLS-1$
+    ListProperty PROP_RELATIONSHIPS = new ListProperty( TYPE, "Relationships" ); //$NON-NLS-1$
 
-    ModelElementList<Relationship> getRelationships();
+    ElementList<Relationship> getRelationships();
 
 }

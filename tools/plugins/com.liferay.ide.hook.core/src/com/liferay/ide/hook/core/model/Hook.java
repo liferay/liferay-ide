@@ -22,18 +22,17 @@ import com.liferay.ide.hook.core.model.internal.CustomJspsBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesOverridesEnablementService;
 
-import org.eclipse.sapphire.modeling.ElementProperty;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementHandle;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementProperty;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FixedOrderList;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -42,13 +41,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
+ * @author Gregory Amerson
  */
-@GenerateImpl
-public interface Hook extends IModelElement
+public interface Hook extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( Hook.class );
+    ElementType TYPE = new ElementType( Hook.class );
 
     // *** PortalPropertiesFile ***
 
@@ -56,7 +55,7 @@ public interface Hook extends IModelElement
     @XmlBinding( path = "portal-properties" )
     ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty( TYPE, "PortalPropertiesFile" ); //$NON-NLS-1$
 
-    ModelElementHandle<PortalPropertiesFile> getPortalPropertiesFile();
+    ElementHandle<PortalPropertiesFile> getPortalPropertiesFile();
 
     // *** PortalProperties ***
 
@@ -67,7 +66,7 @@ public interface Hook extends IModelElement
     @CustomXmlListBinding( impl = PortalPropertiesBindingImpl.class )
     ListProperty PROP_PORTAL_PROPERTIES_OVERRIDES = new ListProperty( TYPE, "PortalPropertiesOverrides" ); //$NON-NLS-1$
 
-    ModelElementList<PortalProperty> getPortalPropertiesOverrides();
+    ElementList<PortalProperty> getPortalPropertiesOverrides();
 
     // *** LanguageProperties ***
 
@@ -83,7 +82,7 @@ public interface Hook extends IModelElement
     )
     ListProperty PROP_LANGUAGE_PROPERTIES = new ListProperty( TYPE, "LanguageProperties" ); //$NON-NLS-1$
 
-    ModelElementList<LanguageProperty> getLanguageProperties();
+    ElementList<LanguageProperty> getLanguageProperties();
 
     @Type( base = CustomJsp.class )
     @Label( standard = "custom jsps" )
@@ -92,7 +91,7 @@ public interface Hook extends IModelElement
     @DependsOn( value = { "CustomJspDir/Value" } )
     ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" ); //$NON-NLS-1$
 
-    ModelElementList<CustomJsp> getCustomJsps();
+    ElementList<CustomJsp> getCustomJsps();
 
     // *** CustomJspDir ***
 
@@ -101,7 +100,7 @@ public interface Hook extends IModelElement
     @XmlBinding( path = "custom-jsp-dir" )
     ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty( TYPE, "CustomJspDir" ); //$NON-NLS-1$
 
-    ModelElementHandle<CustomJspDir> getCustomJspDir();
+    ElementHandle<CustomJspDir> getCustomJspDir();
 
     // *** CustomJspGlobal ***
 
@@ -131,7 +130,7 @@ public interface Hook extends IModelElement
     )
     ListProperty PROP_INDEXER_POST_PROCESSORS = new ListProperty( TYPE, "IndexerPostProcessors" ); //$NON-NLS-1$
 
-    ModelElementList<IndexerPostProcessor> getIndexerPostProcessors();
+    ElementList<IndexerPostProcessor> getIndexerPostProcessors();
 
     // *** Services ***
 
@@ -140,7 +139,7 @@ public interface Hook extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "service", type = ServiceWrapper.class ) } )
     ListProperty PROP_SERVICES = new ListProperty( TYPE, "Services" ); //$NON-NLS-1$
 
-    ModelElementList<ServiceWrapper> getServices();
+    ElementList<ServiceWrapper> getServices();
 
     // *** ServletFilters ***
 
@@ -149,7 +148,7 @@ public interface Hook extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "servlet-filter", type = ServletFilter.class ) } )
     ListProperty PROP_SERVLET_FILTERS = new ListProperty( TYPE, "ServletFilters" ); //$NON-NLS-1$
 
-    ModelElementList<ServletFilter> getServletFilters();
+    ElementList<ServletFilter> getServletFilters();
 
     // *** ServletFilterMappings ***
 
@@ -165,7 +164,7 @@ public interface Hook extends IModelElement
     )
     ListProperty PROP_SERVLET_FILTER_MAPPINGS = new ListProperty( TYPE, "ServletFilterMappings" ); //$NON-NLS-1$
 
-    ModelElementList<ServletFilterMapping> getServletFilterMappings();
+    ElementList<ServletFilterMapping> getServletFilterMappings();
 
     // *** StrutsActions ***
 
@@ -174,6 +173,6 @@ public interface Hook extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "struts-action", type = StrutsAction.class ) } )
     ListProperty PROP_STRUTS_ACTIONS = new ListProperty( TYPE, "StrutsActions" ); //$NON-NLS-1$
 
-    ModelElementList<StrutsAction> getStrutsActions();
+    ElementList<StrutsAction> getStrutsActions();
 
 }

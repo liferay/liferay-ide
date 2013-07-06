@@ -18,9 +18,9 @@
 
 package com.liferay.ide.portlet.core.model.lfrportlet610;
 
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -32,7 +32,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 @GenerateImpl
 public interface ILiferayPortlet extends com.liferay.ide.portlet.core.model.lfrportlet600.ILiferayPortlet {
 
-	ModelElementType TYPE = new ModelElementType( ILiferayPortlet.class );
+	ElementType TYPE = new ElementType( ILiferayPortlet.class );
 
 	// *** AtomCollectionAdapter ***
 
@@ -41,6 +41,6 @@ public interface ILiferayPortlet extends com.liferay.ide.portlet.core.model.lfrp
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "atom-collection-adapter", type = IAtomCollectionAdapter.class ) } )
 	ListProperty PROP_ATOM_COLLECTION_ADAPTER = new ListProperty( TYPE, "AtomCollectionAdapter" );
 
-	ModelElementList<IAtomCollectionAdapter> getAtomCollectionAdapter();
+	ElementList<IAtomCollectionAdapter> getAtomCollectionAdapter();
 
 }

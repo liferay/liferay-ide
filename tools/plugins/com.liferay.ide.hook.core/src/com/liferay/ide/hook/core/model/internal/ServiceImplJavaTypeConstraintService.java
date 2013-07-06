@@ -25,14 +25,14 @@ import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
 import org.eclipse.sapphire.java.JavaTypeConstraintServiceData;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.PropertyContentEvent;
 
 /**
  * @author Gregory Amerson
@@ -51,8 +51,8 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
     {
         super.initJavaTypeConstraintService();
 
-        final ModelProperty property = context().find( ModelProperty.class );
-        final JavaTypeConstraint javaTypeConstraintAnnotation = property.getAnnotation( JavaTypeConstraint.class );
+        final Property property = context().find( Property.class );
+        final JavaTypeConstraint javaTypeConstraintAnnotation = property.definition().getAnnotation( JavaTypeConstraint.class );
 
         final Set<JavaTypeKind> kind = EnumSet.noneOf( JavaTypeKind.class );
 
@@ -82,7 +82,7 @@ public class ServiceImplJavaTypeConstraintService extends JavaTypeConstraintServ
 
     private Set<String> getServiceTypes()
     {
-        JavaTypeName type = this.service.getServiceType().getContent( false );
+        JavaTypeName type = this.service.getServiceType().content( false );
 
         Set<String> types = new HashSet<String>();
 

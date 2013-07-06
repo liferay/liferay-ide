@@ -23,16 +23,16 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.core.model.PublicRenderParameter;
 import com.liferay.ide.portlet.core.model.SupportedPublicRenderParameter;
 
-import java.util.SortedSet;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class QNamesPossibleValuesService extends PossibleValuesService
 {
@@ -42,39 +42,39 @@ public class QNamesPossibleValuesService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
-        IModelElement imodelElement = context( IModelElement.class );
+        Element Element = context( Element.class );
         // values.add( param( "0" ) );
-        PortletApp portletApp = context( IModelElement.class ).nearest( PortletApp.class );
+        PortletApp portletApp = context( Element.class ).nearest( PortletApp.class );
 
-        if( imodelElement instanceof EventDefinitionRef )
+        if( Element instanceof EventDefinitionRef )
         {
-            ModelElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();
+            ElementList<EventDefinition> eventDefs = portletApp.getEventDefinitions();
 
             for( EventDefinition eventDefinition : eventDefs )
             {
-                if( eventDefinition.getNamespaceURI().getContent() != null &&
-                    eventDefinition.getLocalPart().getContent() != null )
+                if( eventDefinition.getNamespaceURI().content() != null &&
+                    eventDefinition.getLocalPart().content() != null )
                 {
                     values.add( getQName(
-                        eventDefinition.getNamespaceURI().getContent( false ),
-                        eventDefinition.getLocalPart().getContent() ) );
+                        eventDefinition.getNamespaceURI().content( false ),
+                        eventDefinition.getLocalPart().content() ) );
                 }
             }
         }
-        else if( imodelElement instanceof SupportedPublicRenderParameter )
+        else if( Element instanceof SupportedPublicRenderParameter )
         {
-            ModelElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
+            ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
             for( PublicRenderParameter publicRenderParam : publicRenderParameters )
             {
-                if( publicRenderParam.getNamespaceURI().getContent() != null &&
-                    publicRenderParam.getLocalPart().getContent() != null )
+                if( publicRenderParam.getNamespaceURI().content() != null &&
+                    publicRenderParam.getLocalPart().content() != null )
                 {
                     values.add( getQName(
-                        publicRenderParam.getNamespaceURI().getContent( false ),
-                        publicRenderParam.getLocalPart().getContent() ) );
+                        publicRenderParam.getNamespaceURI().content( false ),
+                        publicRenderParam.getLocalPart().content() ) );
                 }
             }
         }

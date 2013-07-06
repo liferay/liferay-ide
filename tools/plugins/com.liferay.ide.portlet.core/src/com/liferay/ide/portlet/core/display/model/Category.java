@@ -17,13 +17,12 @@
 
 package com.liferay.ide.portlet.core.display.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -33,13 +32,12 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/category_16x16.gif" )
-public interface Category extends IModelElement
+public interface Category extends Element
 {
-    ModelElementType TYPE = new ModelElementType( Category.class );
+    ElementType TYPE = new ElementType( Category.class );
 
     // *** Name ***
 
@@ -60,7 +58,7 @@ public interface Category extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "category", type = Category.class ) } )
     ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" ); //$NON-NLS-1$
 
-    ModelElementList<Category> getCategories();
+    ElementList<Category> getCategories();
 
     // *** Portlets ***
 
@@ -69,6 +67,6 @@ public interface Category extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "portlet", type = DisplayPortlet.class ) } )
     ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" ); //$NON-NLS-1$
 
-    ModelElementList<DisplayPortlet> getPortlets();
+    ElementList<DisplayPortlet> getPortlets();
 
 }

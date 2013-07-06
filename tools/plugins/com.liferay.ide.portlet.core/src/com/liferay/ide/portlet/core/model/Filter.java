@@ -1,35 +1,33 @@
 /*******************************************************************************
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
- *   
+ *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.model;
 
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Reference;
@@ -39,14 +37,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/filter_16x16.gif" )
-public interface Filter extends IModelElement, Describeable, Displayable
+public interface Filter extends Describeable, Displayable
 {
 
-    ModelElementType TYPE = new ModelElementType( Filter.class );
+    ElementType TYPE = new ElementType( Filter.class );
 
     // *** Name ***
 
@@ -84,7 +81,7 @@ public interface Filter extends IModelElement, Describeable, Displayable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "lifecycle", type = LifeCycle.class ) )
     ListProperty PROP_LIFE_CYCLE = new ListProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
 
-    ModelElementList<LifeCycle> getLifeCycle();
+    ElementList<LifeCycle> getLifeCycle();
 
     // *** InitParams ***
 
@@ -93,6 +90,6 @@ public interface Filter extends IModelElement, Describeable, Displayable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "init-param", type = Param.class ) )
     ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
 
-    ModelElementList<Param> getInitParams();
+    ElementList<Param> getInitParams();
 
 }

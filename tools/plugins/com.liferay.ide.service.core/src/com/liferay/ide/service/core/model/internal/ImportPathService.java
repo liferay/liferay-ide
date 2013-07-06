@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.RelativePathService;
@@ -35,7 +35,7 @@ public class ImportPathService extends RelativePathService
     @Override
     public List<Path> roots()
     {
-        final File file = context( IModelElement.class ).adapt( File.class );
+        final File file = context( Element.class ).adapt( File.class );
 
         if( file == null )
         {
@@ -58,7 +58,7 @@ public class ImportPathService extends RelativePathService
     {
         if( path != null )
         {
-            final IFile file = context( IModelElement.class ).adapt( IFile.class );
+            final IFile file = context( Element.class ).adapt( IFile.class );
 
             if( file != null )
             {
@@ -78,7 +78,7 @@ public class ImportPathService extends RelativePathService
     {
         if( path != null )
         {
-            final IFile file = context( IModelElement.class ).adapt( IFile.class );
+            final IFile file = context( Element.class ).adapt( IFile.class );
 
             if( file != null )
             {

@@ -33,15 +33,15 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyEvent;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.PropertyEvent;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.ui.PropertyEditorPart;
@@ -52,7 +52,7 @@ import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
- * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHandler
@@ -62,13 +62,13 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
         @Override
         protected final boolean evaluate( final PropertyEditorPart part )
         {
-            final ModelProperty property = part.getProperty();
-            final IModelElement element = part.getModelElement();
+            final Property property = part.property();
+            final Element element = part.getModelElement();
 
-            if( property instanceof ValueProperty && element != null && property.isOfType( Path.class ) )
+            if( property.definition() instanceof ValueProperty && element != null && property.definition().isOfType( Path.class ) )
             {
                 final ValidFileSystemResourceType typeAnnotation =
-                    property.getAnnotation( ValidFileSystemResourceType.class );
+                    property.definition().getAnnotation( ValidFileSystemResourceType.class );
 
                 if( typeAnnotation != null && typeAnnotation.value() == FileSystemResourceType.FILE )
                 {
@@ -79,28 +79,28 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
             return false;
         }
     }
-    
-    private Listener listener;
-    private IModelElement modelElement;
 
-    private ModelProperty modelProperty;
+    private Listener listener;
+    private Element modelElement;
+
+    private Property _property;
 
     @Override
     protected final boolean computeEnablementState()
     {
         boolean isEnabled = super.computeEnablementState();
-        
+
         if( modelElement != null && isEnabled )
         {
             // check for existence of the file
             IFile srcFile = getSrcFile();
-                
+
             if( srcFile != null && srcFile.exists() )
             {
                 isEnabled = false;
             }
         }
-        
+
         return isEnabled;
     }
 
@@ -122,18 +122,18 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
     {
         IFile retval = null;
 
-        if( modelProperty instanceof ValueProperty )
+        if( _property.definition() instanceof ValueProperty )
         {
-            ValueProperty valueProperty = (ValueProperty) modelProperty;
-            final Value<Path> value = modelElement.read( valueProperty );
-            
-            if( value != null && !CoreUtil.isNullOrEmpty( value.getText() ) )
+            ValueProperty valueProperty = (ValueProperty) _property.definition();
+            final Value<Path> value = modelElement.property( valueProperty );
+
+            if( value != null && !CoreUtil.isNullOrEmpty( value.text() ) )
             {
                 final IPath defaultSrcFolderPath = getDefaultSrcFolderPath();
-                
+
                 if( defaultSrcFolderPath != null )
                 {
-                    final IPath filePath = defaultSrcFolderPath.append( value.getText() );
+                    final IPath filePath = defaultSrcFolderPath.append( value.text() );
                     retval = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
                 }
             }
@@ -147,8 +147,8 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
     {
         super.init( action, def );
         modelElement = getModelElement();
-        modelProperty = getProperty();
-        
+        _property = property();
+
         this.listener = new FilteredListener<PropertyEvent>()
         {
             @Override
@@ -159,10 +159,10 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
 
         };
 
-        modelElement.attach( this.listener, modelProperty.getName() );
+        modelElement.attach( this.listener, _property.name() );
 
         attach
-        ( 
+        (
             new Listener()
             {
                 @Override
@@ -170,7 +170,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
                 {
                     if( event instanceof DisposeEvent )
                     {
-                        getModelElement().detach( listener, modelProperty.getName() );
+                        getModelElement().detach( listener, _property.name() );
                     }
                 }
             }
@@ -180,7 +180,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
     @Override
     public Object run( SapphireRenderingContext context )
     {
-        if( modelProperty instanceof ValueProperty )
+        if( _property.definition() instanceof ValueProperty )
         {
             final IFile file = getSrcFile();
 
@@ -201,7 +201,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
                         HookUI.logError( e );
                     }
 
-                    modelElement.refresh( true, true );
+                    modelElement.refresh();
                     // write the property again with the same value to force
                     // modelElement.write( valueProperty, value.getContent() );
                     refreshEnablementState();
@@ -211,7 +211,7 @@ public class CreateSrcFileActionHandler extends SapphirePropertyEditorActionHand
             {
             }
         }
-        
+
         return null;
     }
 }

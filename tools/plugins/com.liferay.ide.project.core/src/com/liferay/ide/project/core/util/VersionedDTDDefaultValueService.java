@@ -19,7 +19,7 @@ import com.liferay.ide.core.util.StringPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.services.DefaultValueService;
 import org.eclipse.sapphire.services.DefaultValueServiceData;
@@ -43,7 +43,7 @@ public class VersionedDTDDefaultValueService extends DefaultValueService
     {
         String defaultVersion = null;
 
-        Document document = this.context( IModelElement.class ).resource().adapt( RootXmlResource.class ).getDomDocument();
+        Document document = this.context( Element.class ).resource().adapt( RootXmlResource.class ).getDomDocument();
 
         if( document != null && document.getDoctype() != null )
         {

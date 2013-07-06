@@ -18,11 +18,10 @@
 
 package com.liferay.ide.portlet.core.display.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -31,10 +30,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-@GenerateImpl
-public interface Display extends IModelElement
+public interface Display extends Element
 {
-    ModelElementType TYPE = new ModelElementType( Display.class );
+    ElementType TYPE = new ElementType( Display.class );
 
     // *** Categories ***
 
@@ -43,6 +41,6 @@ public interface Display extends IModelElement
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "category", type = Category.class ) } )
     ListProperty PROP_CATEGORIES = new ListProperty( TYPE, "Categories" ); //$NON-NLS-1$
 
-    ModelElementList<Category> getCategories();
+    ElementList<Category> getCategories();
 
 }

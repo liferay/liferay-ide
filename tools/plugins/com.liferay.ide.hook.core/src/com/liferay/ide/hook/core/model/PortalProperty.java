@@ -19,11 +19,10 @@ package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.hook.core.model.internal.PortalPropertyNamePossibleValuesService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
@@ -31,12 +30,11 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
 @Image( path = "images/elcl16/properties_16x16.gif" )
-public interface PortalProperty extends IModelElement
+public interface PortalProperty extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( PortalProperty.class );
+    ElementType TYPE = new ElementType( PortalProperty.class );
 
     // *** Name ***
 

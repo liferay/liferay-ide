@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.StandardRootElementController;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -149,7 +150,8 @@ public class VersionedDTDRootElementController extends StandardRootElementContro
 
     private Document getDocument()
     {
-        return this.resource().root().getDomDocument();
+        RootXmlResource rootXmlResource = (RootXmlResource) this.resource().root();
+        return rootXmlResource.getDomDocument();
     }
 
     @Override

@@ -25,8 +25,8 @@ import java.lang.annotation.Target;
 
 /**
  * The annotation that is used to model the propeties that will be seralized as PropertyBinding key/pair values
- * 
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ *
+ * @author Kamesh Sampath
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( { ElementType.FIELD, ElementType.TYPE } )
@@ -35,14 +35,14 @@ public @interface PropertyBinding
 
     /**
      * The category or group under which the property falls
-     * 
+     *
      * @return the category of the property
      */
     String category() default "";
 
     /**
      * the property key
-     * 
+     *
      * @return the property key
      */
     String key();

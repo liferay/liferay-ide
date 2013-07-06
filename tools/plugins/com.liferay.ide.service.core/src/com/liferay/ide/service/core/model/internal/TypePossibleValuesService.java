@@ -17,7 +17,7 @@ package com.liferay.ide.service.core.model.internal;
 
 import com.liferay.ide.service.core.model.ServiceBuilder6xx;
 
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.eclipse.sapphire.Version;
 import org.eclipse.sapphire.services.PossibleValuesService;
@@ -30,7 +30,7 @@ public class TypePossibleValuesService extends PossibleValuesService
     private static final String[] DEFAULT_TYPES = { "String", "long", "boolean", "int", "double", "Date", "Collection" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         for( int i = 0; i < DEFAULT_TYPES.length; i++ )
         {
@@ -39,7 +39,7 @@ public class TypePossibleValuesService extends PossibleValuesService
 
         ServiceBuilder6xx serviceBuilder = context( ServiceBuilder6xx.class );
 
-        if( serviceBuilder.getVersion().getContent( true ).compareTo( new Version( "6.2" ) ) >= 0 ) //$NON-NLS-1$
+        if( serviceBuilder.getVersion().content( true ).compareTo( new Version( "6.2" ) ) >= 0 ) //$NON-NLS-1$
         {
             values.add( "Blob" ); //$NON-NLS-1$
         }

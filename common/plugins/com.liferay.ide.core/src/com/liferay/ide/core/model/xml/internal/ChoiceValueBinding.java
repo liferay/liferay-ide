@@ -12,13 +12,12 @@
  * details.
  *
  * Contributors:
- * 		Kamesh Sampath - initial implementation
+ *      Kamesh Sampath - initial implementation
  *******************************************************************************/
 
 package com.liferay.ide.core.model.xml.internal;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
@@ -61,10 +60,9 @@ public final class ChoiceValueBinding extends XmlValueBindingImpl
      * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
      */
     @Override
-    public void init( IModelElement element, ModelProperty property, String[] params )
+    public void init( Property property )
     {
-        super.init( element, property, params );
-        this.params = params;
+        super.init( property );
 
         final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
         this.path = new XmlPath( params[0], xmlNamespaceResolver );

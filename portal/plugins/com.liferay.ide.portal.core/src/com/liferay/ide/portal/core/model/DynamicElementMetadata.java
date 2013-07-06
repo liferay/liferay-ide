@@ -16,13 +16,12 @@
  *******************************************************************************/
 package com.liferay.ide.portal.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -32,11 +31,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-public interface DynamicElementMetadata extends IModelElement
+public interface DynamicElementMetadata extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( DynamicElementMetadata.class );
+    ElementType TYPE = new ElementType( DynamicElementMetadata.class );
 
     // *** Locale ***
 
@@ -53,18 +51,18 @@ public interface DynamicElementMetadata extends IModelElement
     @Type( base = Entry.class )
     @Label( standard = "entries" )
     @XmlListBinding
-    ( 
-        mappings = 
-        { 
+    (
+        mappings =
+        {
             @XmlListBinding.Mapping
             (
                 element = "entry",
-                type = Entry.class 
-            ) 
+                type = Entry.class
+            )
         }
     )
     ListProperty PROP_ENTRIES = new ListProperty( TYPE, "Entries" ); //$NON-NLS-1$
 
-    ModelElementList<Entry> getEntries();
+    ElementList<Entry> getEntries();
 
 }

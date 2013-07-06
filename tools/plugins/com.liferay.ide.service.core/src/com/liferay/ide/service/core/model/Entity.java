@@ -14,18 +14,17 @@
  *******************************************************************************/
 package com.liferay.ide.service.core.model;
 
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementProperty;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Since;
-import org.eclipse.sapphire.modeling.ElementProperty;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementHandle;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Documentation;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -34,11 +33,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
-@GenerateImpl
 @Image(path = "images/Entity_16x16.gif")
-public interface Entity extends IModelElement
+public interface Entity extends Element
 {
-    ModelElementType TYPE = new ModelElementType( Entity.class );
+    ElementType TYPE = new ElementType( Entity.class );
 
     // *** Name ***
 
@@ -201,14 +199,14 @@ public interface Entity extends IModelElement
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "column", type = Column.class ) )
     ListProperty PROP_COLUMNS = new ListProperty( TYPE, "Columns" ); //$NON-NLS-1$
 
-    ModelElementList<Column> getColumns();
+    ElementList<Column> getColumns();
 
     @Type( base = Order.class )
     @Label( standard = "order" )
     @XmlElementBinding( mappings = @XmlElementBinding.Mapping( element = "order", type = Order.class ) )
     ElementProperty PROP_ORDER = new ElementProperty( TYPE, "Order" ); //$NON-NLS-1$
 
-    ModelElementHandle<Order> getOrder();
+    ElementHandle<Order> getOrder();
 
     // @XmlElementBinding(path = "order")
     // ImpliedElementProperty PROP_ORDER = new ImpliedElementProperty(TYPE, "Order");
@@ -220,7 +218,7 @@ public interface Entity extends IModelElement
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "finder", type = Finder.class ) )
     ListProperty PROP_FINDERS = new ListProperty( TYPE, "Finders" ); //$NON-NLS-1$
 
-    ModelElementList<Finder> getFinders();
+    ElementList<Finder> getFinders();
 
     // *** References ***
 
@@ -229,7 +227,7 @@ public interface Entity extends IModelElement
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "reference", type = Reference.class ) )
     ListProperty PROP_REFERENCES = new ListProperty( TYPE, "References" ); //$NON-NLS-1$
 
-    ModelElementList<Reference> getReferences();
+    ElementList<Reference> getReferences();
 
     // *** TxRequireds ***
 
@@ -238,6 +236,6 @@ public interface Entity extends IModelElement
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "tx-required", type = TxRequired.class ) )
     ListProperty PROP_TX_REQUIREDS = new ListProperty( TYPE, "TxRequireds" ); //$NON-NLS-1$
 
-    ModelElementList<TxRequired> getTxRequireds();
+    ElementList<TxRequired> getTxRequireds();
 
 }

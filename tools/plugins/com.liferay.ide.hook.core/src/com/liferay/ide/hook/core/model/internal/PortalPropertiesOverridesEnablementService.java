@@ -18,11 +18,12 @@
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.hook.core.model.PortalPropertiesFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.PropertyEvent;
+import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.services.EnablementService;
 import org.eclipse.sapphire.services.EnablementServiceData;
 
@@ -43,7 +44,7 @@ public class PortalPropertiesOverridesEnablementService extends EnablementServic
             };
         };
 
-        context( Hook.class ).attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.getName() );
+        context( Hook.class ).property( Hook.PROP_PORTAL_PROPERTIES_FILE ).attach( listener, PortalPropertiesFile.PROP_VALUE.name() );
     }
 
     @Override

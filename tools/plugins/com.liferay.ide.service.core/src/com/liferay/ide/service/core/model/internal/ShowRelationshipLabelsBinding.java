@@ -17,12 +17,12 @@
 
 package com.liferay.ide.service.core.model.internal;
 
-import org.eclipse.sapphire.modeling.ValueBindingImpl;
+import org.eclipse.sapphire.ValuePropertyBinding;
 
 /**
  * @author Gregory Amerson
  */
-public class ShowRelationshipLabelsBinding extends ValueBindingImpl
+public class ShowRelationshipLabelsBinding extends ValuePropertyBinding
 {
     protected boolean showRelationshipLabels = true;
 

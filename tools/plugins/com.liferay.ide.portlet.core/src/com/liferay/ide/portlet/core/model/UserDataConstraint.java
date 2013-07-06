@@ -17,11 +17,10 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -30,13 +29,12 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
-public interface UserDataConstraint extends IModelElement, Identifiable, Describeable
+public interface UserDataConstraint extends Element, Identifiable, Describeable
 {
 
-    ModelElementType TYPE = new ModelElementType( UserDataConstraint.class );
+    ElementType TYPE = new ElementType( UserDataConstraint.class );
 
     /*
      * Transport Gurantee

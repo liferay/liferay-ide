@@ -23,7 +23,6 @@ import com.liferay.ide.hook.core.model.Hook;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -37,7 +36,7 @@ public class HookUtil
 
     public static IFolder getCustomJspFolder(Hook hook, IProject project)
     {
-        CustomJspDir element = hook.getCustomJspDir().element();
+        CustomJspDir element = hook.getCustomJspDir().content();
 
         if( element != null )
         {
@@ -46,15 +45,15 @@ public class HookUtil
 
             if( element != null && webappRoot != null )
             {
-                org.eclipse.sapphire.modeling.Path customJspDir = element.getValue().getContent();
+                org.eclipse.sapphire.modeling.Path customJspDir = element.getValue().content();
 
-                for( IContainer folder : webappRoot.getUnderlyingFolders() )
+                IVirtualFolder customJspFolder = webappRoot.getFolder( customJspDir.toPortableString() );
+
+                for( IContainer folder : customJspFolder.getUnderlyingFolders() )
                 {
-                    IFolder customJspFolder = folder.getFolder( new Path( customJspDir.toPortableString() ) );
-
-                    if( customJspFolder != null )
+                    if( folder != null && ! folder.isDerived() )
                     {
-                        return customJspFolder;
+                        return (IFolder) folder;
                     }
                 }
             }

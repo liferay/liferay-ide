@@ -18,12 +18,11 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
@@ -39,7 +38,6 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
  * @author Kamesh Sampath <br/>
  * @author Gregory Amerson
  */
-@GenerateImpl
 @Image( path = "images/obj16/portlet_model_obj.gif" )
 @XmlNamespace( prefix = "", uri = "http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" )
 @XmlSchema
@@ -51,7 +49,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlSchema;
 public interface PortletApp extends ResourceBundle, Identifiable
 {
 
-    ModelElementType TYPE = new ModelElementType( PortletApp.class );
+    ElementType TYPE = new ElementType( PortletApp.class );
 
     /*
      * Portlets
@@ -61,7 +59,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet", type = Portlet.class ) )
     ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" ); //$NON-NLS-1$
 
-    ModelElementList<Portlet> getPortlets();
+    ElementList<Portlet> getPortlets();
 
     // *** CustomPortletMode ***
 
@@ -76,7 +74,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     )
     ListProperty PROP_CUSTOM_PORTLET_MODES = new ListProperty( TYPE, "CustomPortletModes" ); //$NON-NLS-1$
 
-    ModelElementList<CustomPortletMode> getCustomPortletModes();
+    ElementList<CustomPortletMode> getCustomPortletModes();
 
     // *** CustomWindowStates ***
 
@@ -91,7 +89,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     )
     ListProperty PROP_CUSTOM_WINDOW_STATES = new ListProperty( TYPE, "CustomWindowStates" ); //$NON-NLS-1$
 
-    ModelElementList<CustomWindowState> getCustomWindowStates();
+    ElementList<CustomWindowState> getCustomWindowStates();
 
     // *** UserAttributes ***
 
@@ -100,7 +98,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( type = UserAttribute.class, element = "user-attribute" ) } )
     ListProperty PROP_USER_ATTRIBUTES = new ListProperty( TYPE, "UserAttributes" ); //$NON-NLS-1$
 
-    ModelElementList<UserAttribute> getUserAttributes();
+    ElementList<UserAttribute> getUserAttributes();
 
     // *** SecurityConstraints ***
 
@@ -116,7 +114,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     )
     ListProperty PROP_SECURITY_CONSTRAINTS = new ListProperty( TYPE, "SecurityConstraints" ); //$NON-NLS-1$
 
-    ModelElementList<SecurityConstraint> getSecurityConstraints();
+    ElementList<SecurityConstraint> getSecurityConstraints();
 
     // *** Filters ***
 
@@ -125,7 +123,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "filter", type = Filter.class ) )
     ListProperty PROP_FILTERS = new ListProperty( TYPE, "Filters" ); //$NON-NLS-1$
 
-    ModelElementList<Filter> getFilters();
+    ElementList<Filter> getFilters();
 
     // *** FilterMappings ***
 
@@ -134,7 +132,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "filter-mapping", type = FilterMapping.class ) )
     ListProperty PROP_FILTER_MAPPINGS = new ListProperty( TYPE, "FilterMappings" ); //$NON-NLS-1$
 
-    ModelElementList<FilterMapping> getFilterMappings();
+    ElementList<FilterMapping> getFilterMappings();
 
     // *** DefaultNameSpace ***
 
@@ -154,7 +152,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "event-definition", type = EventDefinition.class ) )
     ListProperty PROP_EVENT_DEFINITIONS = new ListProperty( TYPE, "EventDefinitions" ); //$NON-NLS-1$
 
-    ModelElementList<EventDefinition> getEventDefinitions();
+    ElementList<EventDefinition> getEventDefinitions();
 
     // *** PublicRenderParameters ***
 
@@ -170,7 +168,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     )
     ListProperty PROP_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "PublicRenderParameters" ); //$NON-NLS-1$
 
-    ModelElementList<PublicRenderParameter> getPublicRenderParameters();
+    ElementList<PublicRenderParameter> getPublicRenderParameters();
 
     // *** Listeners ***
 
@@ -179,7 +177,7 @@ public interface PortletApp extends ResourceBundle, Identifiable
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "listener", type = Listener.class ) )
     ListProperty PROP_LISTENERS = new ListProperty( TYPE, "Listeners" ); //$NON-NLS-1$
 
-    ModelElementList<Listener> getListeners();
+    ElementList<Listener> getListeners();
 
     // *** ContainerRuntimeOptions ***
 
@@ -195,6 +193,6 @@ public interface PortletApp extends ResourceBundle, Identifiable
     )
     ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
 
-    ModelElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
+    ElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
 
 }

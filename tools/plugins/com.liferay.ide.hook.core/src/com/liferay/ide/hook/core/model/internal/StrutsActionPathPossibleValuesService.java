@@ -23,7 +23,7 @@ import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.StrutsAction;
 
 import java.io.File;
-import java.util.SortedSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,7 +45,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
     private TreeSet<String> possibleValues;
 
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         if( this.portalDir != null && this.portalDir.toFile().exists() )
         {
@@ -86,7 +86,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
             values.addAll( this.possibleValues );
 
             // add the value that is current set by the user
-            String actionPath = context( StrutsAction.class ).getStrutsActionPath().getContent( false );
+            String actionPath = context( StrutsAction.class ).getStrutsActionPath().content( false );
 
             if( !empty( actionPath ) )
             {

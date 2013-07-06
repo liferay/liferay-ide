@@ -20,7 +20,7 @@ package com.liferay.ide.portlet.core.model;
 import org.eclipse.sapphire.modeling.annotations.Label;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public enum LifeCycleType {
 

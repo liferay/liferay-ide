@@ -12,44 +12,43 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.service.core.model;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
-
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-@Image(path = "images/references_16x16.png")
-public interface Reference extends IModelElement 
+@Image( path = "images/references_16x16.png" )
+public interface Reference extends Element
 {
-	ModelElementType TYPE = new ModelElementType(Reference.class);
-    
-	// *** Package-path ***
 
-	@XmlBinding(path = "@package-path")
-	@Label(standard = "&Package path")
-	ValueProperty PROP_PACKAGE_PATH = new ValueProperty(TYPE, "PackagePath"); //$NON-NLS-1$
+    ElementType TYPE = new ElementType( Reference.class );
 
-	Value<String> getPackagePath();
+    // *** Package-path ***
 
-	void setPackagePath(String value);
+    @XmlBinding( path = "@package-path" )
+    @Label( standard = "&Package path" )
+    ValueProperty PROP_PACKAGE_PATH = new ValueProperty( TYPE, "PackagePath" ); //$NON-NLS-1$
 
-	// *** Entity ***
+    Value<String> getPackagePath();
 
-	@XmlBinding(path = "@entity")
-	@Label(standard = "&entity")
-	ValueProperty PROP_ENTITY = new ValueProperty(TYPE, "Entity"); //$NON-NLS-1$
+    void setPackagePath( String value );
 
-	Value<String> getEntity();
+    // *** Entity ***
 
-	void setEntity(String value);
+    @XmlBinding( path = "@entity" )
+    @Label( standard = "&entity" )
+    ValueProperty PROP_ENTITY = new ValueProperty( TYPE, "Entity" ); //$NON-NLS-1$
+
+    Value<String> getEntity();
+
+    void setEntity( String value );
 }

@@ -2,8 +2,7 @@ package com.liferay.ide.portal.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
@@ -21,11 +20,11 @@ public class EntryValueBinding extends XmlValueBindingImpl
     private XmlPath path;
 
     @Override
-    public void init( IModelElement element, ModelProperty property, String[] params )
+    public void init( Property property )
     {
-        super.init( element, property, params );
+        super.init( property );
 
-        final XmlBinding bindingAnnotation = property.getAnnotation( XmlBinding.class );
+        final XmlBinding bindingAnnotation = property.definition().getAnnotation( XmlBinding.class );
 
         this.path = new XmlPath( bindingAnnotation.path(), resource().getXmlNamespaceResolver() );
     }

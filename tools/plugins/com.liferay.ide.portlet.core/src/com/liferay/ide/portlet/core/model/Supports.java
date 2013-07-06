@@ -20,13 +20,12 @@ package com.liferay.ide.portlet.core.model;
 import com.liferay.ide.portlet.core.model.internal.PortletModePossibleValueService;
 import com.liferay.ide.portlet.core.model.internal.WindowStatesPossibleValueService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -37,15 +36,14 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 @Label( standard = "Supports configuration" )
-@GenerateImpl
 @Image( path = "images/obj16/supports_obj.gif" )
-public interface Supports extends IModelElement
+public interface Supports extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( Supports.class );
+    ElementType TYPE = new ElementType( Supports.class );
 
     // *** MimeType ***
 
@@ -67,7 +65,7 @@ public interface Supports extends IModelElement
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet-mode", type = PortletMode.class ) )
     ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" ); //$NON-NLS-1$
 
-    ModelElementList<PortletMode> getPortletModes();
+    ElementList<PortletMode> getPortletModes();
 
     // *** Window States ***
 
@@ -77,5 +75,5 @@ public interface Supports extends IModelElement
     @Service( impl = WindowStatesPossibleValueService.class )
     ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" ); //$NON-NLS-1$
 
-    ModelElementList<WindowState> getWindowStates();
+    ElementList<WindowState> getWindowStates();
 }

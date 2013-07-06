@@ -17,11 +17,10 @@ package com.liferay.ide.taglib.ui.model;
 
 import com.liferay.ide.taglib.ui.model.internal.DescriptionBinding;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.ReadOnly;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -30,11 +29,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-public interface Attribute extends IModelElement
+public interface Attribute extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( Attribute.class );
+    ElementType TYPE = new ElementType( Attribute.class );
 
     // *** Name ***
 

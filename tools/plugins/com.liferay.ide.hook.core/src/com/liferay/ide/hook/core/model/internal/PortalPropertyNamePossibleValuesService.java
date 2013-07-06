@@ -23,11 +23,11 @@ import com.liferay.ide.core.LiferayCore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
@@ -42,7 +42,7 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
     private String[] wildCardHookProperties;
 
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         if( this.hookProperties != null )
         {
@@ -51,7 +51,7 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
 
         if( this.hookProperties == null )
         {
-            final IProject project = context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+            final IProject project = context( Element.class ).root().adapt( IFile.class ).getProject();
 
             final ILiferayProject liferayProject = LiferayCore.create( project );
 

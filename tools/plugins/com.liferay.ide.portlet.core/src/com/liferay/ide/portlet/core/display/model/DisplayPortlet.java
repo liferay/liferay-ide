@@ -19,11 +19,10 @@ package com.liferay.ide.portlet.core.display.model;
 
 import com.liferay.ide.portlet.core.model.internal.PortletNamePossibleValueService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -31,13 +30,12 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/portlet_16x16.png" )
-public interface DisplayPortlet extends IModelElement
+public interface DisplayPortlet extends Element
 {
-    ModelElementType TYPE = new ModelElementType( DisplayPortlet.class );
+    ElementType TYPE = new ElementType( DisplayPortlet.class );
 
     // *** Id ***
 

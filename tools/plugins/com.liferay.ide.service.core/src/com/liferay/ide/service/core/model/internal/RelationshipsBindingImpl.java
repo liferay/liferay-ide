@@ -29,18 +29,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.LayeredListBindingImpl;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.PropertyEvent;
-import org.eclipse.sapphire.modeling.Resource;
+import org.eclipse.sapphire.LayeredListPropertyBinding;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyEvent;
+import org.eclipse.sapphire.Resource;
 
 /**
  * @author Gregory Amerson
  */
-public class RelationshipsBindingImpl extends LayeredListBindingImpl
+public class RelationshipsBindingImpl extends LayeredListPropertyBinding
 {
 
     private List<RelationshipObject> relationships = new ArrayList<RelationshipObject>();
@@ -51,7 +50,7 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
         {
             for( Column column : entity.getColumns() )
             {
-                if( column.isPrimary().getContent() )
+                if( column.isPrimary().content() )
                 {
                     return column;
                 }
@@ -62,9 +61,9 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     }
 
     @Override
-    public void init( IModelElement element, ModelProperty property, String[] params )
+    public void init( Property property )
     {
-        super.init( element, property, params );
+        super.init( property );
 
         serviceBuilder().attach( new FilteredListener<PropertyEvent>()
         {
@@ -84,7 +83,7 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     }
 
     @Override
-    protected Object insertUnderlyingObject( ModelElementType type, int position )
+    protected Object insertUnderlyingObject( ElementType type, int position )
     {
         RelationshipObject newRelationship = new RelationshipObject();
 
@@ -115,9 +114,9 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
         {
             Column primaryKeyColumn = findPrimaryKey( entity );
 
-            if( primaryKeyColumn != null && !empty( primaryKeyColumn.getName().getContent() ) )
+            if( primaryKeyColumn != null && !empty( primaryKeyColumn.getName().content() ) )
             {
-                primaryKeys.put( primaryKeyColumn.getName().getContent(), entity.getName().getContent() );
+                primaryKeys.put( primaryKeyColumn.getName().content(), entity.getName().content() );
             }
         }
 
@@ -125,15 +124,15 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
         {
             for( Column column : entity.getColumns() )
             {
-                if( !column.isPrimary().getContent() )
+                if( !column.isPrimary().content() )
                 {
-                    final String columnName = column.getName().getContent();
+                    final String columnName = column.getName().content();
 
                     final String entityName = primaryKeys.get( columnName );
 
                     if( entityName != null )
                     {
-                        this.relationships.add( new RelationshipObject( entity.getName().getContent(), entityName ) );
+                        this.relationships.add( new RelationshipObject( entity.getName().content(), entityName ) );
                     }
                 }
             }
@@ -160,7 +159,7 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
 
         if( primaryKeyColumn != null )
         {
-            String primaryKeyName = primaryKeyColumn.getName().getContent();
+            String primaryKeyName = primaryKeyColumn.getName().content();
 
             if( !empty( primaryKeyName ) )
             {
@@ -168,7 +167,7 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
 
                 for( Column column : fromEntity.getColumns() )
                 {
-                    if( primaryKeyName.equals( column.getName().getContent() ) )
+                    if( primaryKeyName.equals( column.getName().content() ) )
                     {
                         columnToRemove = column;
                         break;
@@ -186,16 +185,16 @@ public class RelationshipsBindingImpl extends LayeredListBindingImpl
     @Override
     protected Resource resource( Object obj )
     {
-        return new RelationshipResource( (RelationshipObject) obj, this.element().resource() );
+        return new RelationshipResource( (RelationshipObject) obj, this.property().element().resource() );
     }
 
     private ServiceBuilder serviceBuilder()
     {
-        return this.element().nearest( ServiceBuilder.class );
+        return this.property().nearest( ServiceBuilder.class );
     }
 
     @Override
-    public ModelElementType type( Resource resource )
+    public ElementType type( Resource resource )
     {
         return Relationship.TYPE;
     }

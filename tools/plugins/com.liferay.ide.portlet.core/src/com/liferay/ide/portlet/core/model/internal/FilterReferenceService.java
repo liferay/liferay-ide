@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -25,7 +25,7 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import org.eclipse.sapphire.services.ReferenceService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public final class FilterReferenceService extends ReferenceService
 {
@@ -39,7 +39,7 @@ public final class FilterReferenceService extends ReferenceService
         {
             for( Filter iFilter : portletApp.getFilters() )
             {
-                if( equal( iFilter.getName().getContent(), reference ) )
+                if( equal( iFilter.getName().content(), reference ) )
                 {
                     return iFilter;
                 }

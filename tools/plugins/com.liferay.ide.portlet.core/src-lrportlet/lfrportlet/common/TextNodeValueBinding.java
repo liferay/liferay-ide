@@ -17,35 +17,35 @@
 
 package com.liferay.ide.portlet.core.model.lfrportlet.common;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
-import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.eclipse.sapphire.modeling.xml.XmlValuePropertyBinding;
 
 /**
- * @author kamesh.sampath
+ * @author Kamesh Sampath
  */
 
 public final class TextNodeValueBinding
 
-extends XmlValueBindingImpl
+extends XmlValuePropertyBinding
 
 {
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.BindingImpl#init(org.eclipse.sapphire.modeling.IModelElement,
-	 * org.eclipse.sapphire.modeling.ModelProperty, java.lang.String[])
+	 * @see org.eclipse.sapphire.modeling.PropertyBinding#init(org.eclipse.sapphire.modeling.Element,
+	 * org.eclipse.sapphire.modeling.Property, java.lang.String[])
 	 */
 	@Override
-	public void init( final IModelElement element, final ModelProperty property, final String[] params ) {
+	public void init( final Element element, final Property property, final String[] params ) {
 		super.init( element, property, params );
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#read()
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#read()
 	 */
 	@Override
 	public String read() {
@@ -69,7 +69,7 @@ extends XmlValueBindingImpl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.ValueBindingImpl#write(java.lang.String)
+	 * @see org.eclipse.sapphire.modeling.ValuePropertyBinding#write(java.lang.String)
 	 */
 	@Override
 	public void write( final String value ) {
@@ -88,7 +88,7 @@ extends XmlValueBindingImpl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl#getXmlNode()
+	 * @see org.eclipse.sapphire.modeling.xml.XmlValuePropertyBinding#getXmlNode()
 	 */
 	@Override
 	public XmlNode getXmlNode() {

@@ -22,25 +22,25 @@ import com.liferay.ide.portlet.core.model.PublicRenderParameter;
 import com.liferay.ide.portlet.core.model.QName;
 
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.CapitalizationType;
-import org.eclipse.sapphire.modeling.IModelElement;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class NameOrQnameValidationService extends ValidationService
 {
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.ModelPropertyValidationService#validate()
+     * @see org.eclipse.sapphire.modeling.PropertyValidationService#validate()
      */
     @Override
     public Status validate()
     {
-        IModelElement element = context( IModelElement.class );
+        Element element = context( Element.class );
 
         final String elementLabel = element.type().getLabel( false, CapitalizationType.FIRST_WORD_ONLY, false );
         EventDefinition eventDefinition = null;
@@ -52,20 +52,20 @@ public class NameOrQnameValidationService extends ValidationService
         if( element instanceof QName )
         {
             iqName = (QName) element;
-            nsURI = iqName.getNamespaceURI().getText( false );
-            localPart = iqName.getLocalPart().getText( false );
+            nsURI = iqName.getNamespaceURI().text( false );
+            localPart = iqName.getLocalPart().text( false );
         }
 
         if( element instanceof EventDefinition )
         {
             eventDefinition = (EventDefinition) element;
-            name = eventDefinition.getName().getContent( false );
+            name = eventDefinition.getName().content( false );
         }
 
         if( element instanceof PublicRenderParameter )
         {
             publicRenderParameter = (PublicRenderParameter) element;
-            name = publicRenderParameter.getName().getContent( false );
+            name = publicRenderParameter.getName().content( false );
         }
 
         if( isEmptyOrNull( name ) && isEmptyOrNull( nsURI ) && isEmptyOrNull( localPart ) )

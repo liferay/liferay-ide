@@ -8,7 +8,7 @@ import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFilter;
 
 /**
- * @author kamesh.sampath
+ * @author Kamesh Sampath
  */
 public class AddPortletActionFilter extends SapphireActionHandlerFilter
 {
@@ -21,11 +21,11 @@ public class AddPortletActionFilter extends SapphireActionHandlerFilter
     public boolean check( SapphireActionHandler handler )
     {
         boolean canHandle = true;
-        // IModelElement iModelElement = handler.getModelElement();
+        // Element Element = handler.getModelElement();
 
         // System.out.println( String.format(
         // "AddPortletActionFilter.check() - Action Handler[Action-ID=%s, Handler-ID=%s,Model-Element=%s]",
-        // handler.getAction().getId(), handler.getId(), iModelElement.getClass().getName() ) );
+        // handler.getAction().getId(), handler.getId(), Element.getClass().getName() ) );
 
         if( "Sapphire.Add.IPortlet".equals( handler.getId() ) && "Sapphire.Add".equals( handler.getAction().getId() ) ) //$NON-NLS-1$ //$NON-NLS-2$
         {

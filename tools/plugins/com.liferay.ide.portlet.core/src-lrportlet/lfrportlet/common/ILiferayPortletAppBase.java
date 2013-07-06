@@ -20,10 +20,10 @@
 
 package com.liferay.ide.portlet.core.model.lfrportlet.common;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -34,9 +34,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author kamesh
  */
 @GenerateImpl
-public interface ILiferayPortletAppBase extends IModelElement {
+public interface ILiferayPortletAppBase extends Element {
 
-	ModelElementType TYPE = new ModelElementType( ILiferayPortletAppBase.class );
+	ElementType TYPE = new ElementType( ILiferayPortletAppBase.class );
 
 
 	// *** RoleMappers ***
@@ -46,7 +46,7 @@ public interface ILiferayPortletAppBase extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "role-mapper", type = IRoleMapper.class ) } )
 	ListProperty PROP_ROLE_MAPPERS = new ListProperty( TYPE, "RoleMappers" );
 
-	ModelElementList<IRoleMapper> getRoleMappers();
+	ElementList<IRoleMapper> getRoleMappers();
 
 	// *** CustomUserAttributes ***
 
@@ -55,6 +55,6 @@ public interface ILiferayPortletAppBase extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "custom-user-attribute", type = ICustomUserAttribute.class ) } )
 	ListProperty PROP_CUSTOM_USER_ATTRIBUTES = new ListProperty( TYPE, "CustomUserAttributes" );
 
-	ModelElementList<ICustomUserAttribute> getCustomUserAttributes();
+	ElementList<ICustomUserAttribute> getCustomUserAttributes();
 
 }

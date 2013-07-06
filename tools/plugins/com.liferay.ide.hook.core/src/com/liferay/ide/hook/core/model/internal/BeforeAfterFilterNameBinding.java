@@ -65,8 +65,8 @@ public class BeforeAfterFilterNameBinding extends XmlValueBindingImpl
 
     private BeforeAfterFilterType getFilterType()
     {
-        ServletFilterMapping servletFilterMapping = element().nearest( ServletFilterMapping.class );
-        return servletFilterMapping.getBeforeAfterFilterType().getContent( true );
+        ServletFilterMapping servletFilterMapping = property().nearest( ServletFilterMapping.class );
+        return servletFilterMapping.getBeforeAfterFilterType().content( true );
     }
 
 }

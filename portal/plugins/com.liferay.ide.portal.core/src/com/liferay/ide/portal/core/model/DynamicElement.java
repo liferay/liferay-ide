@@ -16,13 +16,12 @@
  *******************************************************************************/
 package com.liferay.ide.portal.core.model;
 
-import org.eclipse.sapphire.modeling.ElementProperty;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementHandle;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementHandle;
+import org.eclipse.sapphire.ElementProperty;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -31,11 +30,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
-public interface DynamicElement extends IModelElement
+public interface DynamicElement extends Element
 {
 
-    ModelElementType TYPE = new ModelElementType( DynamicElement.class );
+    ElementType TYPE = new ElementType( DynamicElement.class );
 
     // *** DataType ***
 
@@ -75,7 +73,7 @@ public interface DynamicElement extends IModelElement
 
     Value<String> getType();
 
-    void setType( String value );   
+    void setType( String value );
 
     // *** Metadata ***
 
@@ -84,6 +82,6 @@ public interface DynamicElement extends IModelElement
     @XmlBinding( path = "meta-data" )
     ElementProperty PROP_METADATA = new ElementProperty( TYPE, "Metadata" ); //$NON-NLS-1$
 
-    ModelElementHandle<DynamicElementMetadata> getMetadata();
+    ElementHandle<DynamicElementMetadata> getMetadata();
 
 }

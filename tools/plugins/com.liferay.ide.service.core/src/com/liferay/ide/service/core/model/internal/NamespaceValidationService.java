@@ -19,8 +19,8 @@ import com.liferay.ide.service.core.model.ServiceBuilder;
 import com.liferay.ide.service.core.util.ServiceUtil;
 
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.Value;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
@@ -32,7 +32,7 @@ public class NamespaceValidationService extends ValidationService
     public Status validate()
     {
         final Value<String> namespace = context().find( ServiceBuilder.class ).getNamespace();
-        String content = namespace.getContent();
+        String content = namespace.content();
 
         if( content == null )
         {

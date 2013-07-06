@@ -24,10 +24,10 @@ import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
@@ -41,9 +41,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author kamesh
  */
 @GenerateImpl
-public interface IAssetRendererFactory extends IModelElement {
+public interface IAssetRendererFactory extends Element {
 
-	ModelElementType TYPE = new ModelElementType( IAssetRendererFactory.class );
+	ElementType TYPE = new ElementType( IAssetRendererFactory.class );
 
 	// *** AssetRendererFactory ***
 	@Type( base = JavaTypeName.class )

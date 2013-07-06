@@ -17,8 +17,7 @@ package com.liferay.ide.portlet.core.display.model;
 
 import com.liferay.ide.portlet.core.display.model.internal.DisplayRootElementController;
 
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -27,10 +26,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  */
 @CustomXmlRootBinding( value = DisplayRootElementController.class )
 @XmlBinding( path = "display" )
-@GenerateImpl
 public interface Display6xx extends Display
 {
 
-    ModelElementType TYPE = new ModelElementType( Display6xx.class );
+    ElementType TYPE = new ElementType( Display6xx.class );
 
 }

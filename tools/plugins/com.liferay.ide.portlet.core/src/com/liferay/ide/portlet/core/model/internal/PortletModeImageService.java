@@ -5,15 +5,15 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *      Kamesh Sampath - initial implementation
- *      Gregory Amerson - initial implementation review and ongoing maintenance 
+ *      Gregory Amerson - initial implementation review and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.portlet.core.model.internal;
@@ -21,32 +21,32 @@ package com.liferay.ide.portlet.core.model.internal;
 import com.liferay.ide.portlet.core.model.CustomPortletMode;
 import com.liferay.ide.portlet.core.model.PortletMode;
 
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ImageData;
-import org.eclipse.sapphire.modeling.PropertyContentEvent;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.services.ImageService;
 import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class PortletModeImageService extends ImageService
 {
 
     private static final ImageData IMG_DEFAULT = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/portlet.png" ); //$NON-NLS-1$
+        PortletModeImageService.class, "images/portlet.png" ).required(); //$NON-NLS-1$
 
     private static final ImageData IMG_VIEW = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/view.png" ); //$NON-NLS-1$
+        PortletModeImageService.class, "images/view.png" ).required(); //$NON-NLS-1$
 
     private static final ImageData IMG_EDIT = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/edit.png" ); //$NON-NLS-1$
+        PortletModeImageService.class, "images/edit.png" ).required(); //$NON-NLS-1$
 
     private static final ImageData IMG_HELP = ImageData.readFromClassLoader(
-        PortletModeImageService.class, "images/help.png" ); //$NON-NLS-1$
+        PortletModeImageService.class, "images/help.png" ).required(); //$NON-NLS-1$
 
     private Listener listener;
 
@@ -62,25 +62,25 @@ public class PortletModeImageService extends ImageService
             }
         };
 
-        context( IModelElement.class ).attach( this.listener, PortletMode.PROP_PORTLET_MODE.getName() );
+        context( Element.class ).attach( this.listener, PortletMode.PROP_PORTLET_MODE.name() );
     }
 
     @Override
     protected ImageServiceData compute()
     {
         String portletMode = null;
-        IModelElement element = context( IModelElement.class );
+        Element element = context( Element.class );
         ImageData imageData = null;
 
         if( element instanceof CustomPortletMode )
         {
             CustomPortletMode iCustomPortletMode = (CustomPortletMode) element;
-            portletMode = String.valueOf( iCustomPortletMode.getPortletMode().getContent() );
+            portletMode = String.valueOf( iCustomPortletMode.getPortletMode().content() );
         }
         else if( element instanceof PortletMode )
         {
             PortletMode iPortletMode = (PortletMode) element;
-            portletMode = iPortletMode.getPortletMode().getContent();
+            portletMode = iPortletMode.getPortletMode().content();
         }
 
         if( portletMode != null )
@@ -113,7 +113,7 @@ public class PortletModeImageService extends ImageService
     {
         super.dispose();
 
-        context( IModelElement.class ).detach( this.listener, PortletMode.PROP_PORTLET_MODE.getName() );
+        context( Element.class ).detach( this.listener, PortletMode.PROP_PORTLET_MODE.name() );
     }
 
 }

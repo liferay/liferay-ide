@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
@@ -26,12 +26,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.IModelElement;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.services.PossibleValuesService;
@@ -55,8 +55,9 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
     private Path portalDir;
     private File[] possibleValues;
 
+
     @Override
-    protected void fillPossibleValues( final SortedSet<String> values )
+    protected void fillPossibleValues( final Set<String> values )
     {
         if( possibleValues == null )
         {
@@ -136,7 +137,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
     protected IProject project()
     {
-        return context( IModelElement.class ).root().adapt( IFile.class ).getProject();
+        return context( Element.class ).root().adapt( IFile.class ).getProject();
     }
 
 }

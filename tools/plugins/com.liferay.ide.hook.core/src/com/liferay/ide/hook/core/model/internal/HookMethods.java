@@ -17,9 +17,9 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalPropertiesFile;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -43,26 +43,29 @@ public class HookMethods
 
         if( hook != null )
         {
-            PortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().element( false );
+            PortalPropertiesFile portalPropertiesFileElement = hook.getPortalPropertiesFile().content();
 
             if( portalPropertiesFileElement != null )
             {
-                Path filePath = portalPropertiesFileElement.getValue().getContent();
+                Path filePath = portalPropertiesFileElement.getValue().content();
 
-                for( IFolder folder : ProjectUtil.getSourceFolders( hook.adapt( IProject.class ) ) )
+                if( filePath != null )
                 {
-                    IFile file = folder.getFile( filePath.toPortableString() );
-
-                    if( onlyIfExists )
+                    for( IFolder folder : ProjectUtil.getSourceFolders( hook.adapt( IProject.class ) ) )
                     {
-                        if( file.exists() )
+                        IFile file = folder.getFile( filePath.toPortableString() );
+
+                        if( onlyIfExists )
+                        {
+                            if( file.exists() )
+                            {
+                                retval = file;
+                            }
+                        }
+                        else
                         {
                             retval = file;
                         }
-                    }
-                    else
-                    {
-                        retval = file;
                     }
                 }
             }

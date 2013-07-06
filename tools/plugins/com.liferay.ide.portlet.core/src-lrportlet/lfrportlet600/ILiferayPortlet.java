@@ -32,14 +32,14 @@ import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
@@ -60,9 +60,9 @@ import org.eclipse.sapphire.workspace.WorkspaceRelativePath;
  * @author kamesh
  */
 @GenerateImpl
-public interface ILiferayPortlet extends IModelElement {
+public interface ILiferayPortlet extends Element {
 
-	ModelElementType TYPE = new ModelElementType( ILiferayPortlet.class );
+	ElementType TYPE = new ElementType( ILiferayPortlet.class );
 
 	// *** Name ***
 
@@ -187,7 +187,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "scheduler-entry", type = ISchedulerEntry.class ) } )
 	ListProperty PROP_SCHEDULER_ENTRIES = new ListProperty( TYPE, "SchedulerEntries" );
 
-	ModelElementList<ISchedulerEntry> getSchedulerEntries();
+	ElementList<ISchedulerEntry> getSchedulerEntries();
 
 	// *** Portlet URL Class ***
 
@@ -466,7 +466,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "asset-renderer-factory", type = IAssetRendererFactory.class ) } )
 	ListProperty PROP_ASSET_RENDERER_FACTORIES = new ListProperty( TYPE, "AssetRendererFactories" );
 
-	ModelElementList<IAssetRendererFactory> getAssetRendererFactories();
+	ElementList<IAssetRendererFactory> getAssetRendererFactories();
 
 	// *** CustomAttributeDisplays ***
 
@@ -475,7 +475,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "custom-attribute-display", type = ICustomAttributeDisplay.class ) } )
 	ListProperty PROP_CUSTOM_ATTRIBUTE_DISPLAYS = new ListProperty( TYPE, "CustomAttributeDisplays" );
 
-	ModelElementList<ICustomAttributeDisplay> getCustomAttributeDisplays();
+	ElementList<ICustomAttributeDisplay> getCustomAttributeDisplays();
 
 	// *** WorkflowHandlers ***
 
@@ -484,7 +484,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "workflow-handler", type = IWorkflowHandler.class ) } )
 	ListProperty PROP_WORKFLOW_HANDLERS = new ListProperty( TYPE, "WorkflowHandlers" );
 
-	ModelElementList<IWorkflowHandler> getWorkflowHandlers();
+	ElementList<IWorkflowHandler> getWorkflowHandlers();
 
 	// *** PreferencesCompanyWide ***
 
@@ -809,7 +809,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "header-portal-css", type = IWebResource.class ) } )
 	ListProperty PROP_HEADER_PORTAL_CSS = new ListProperty( TYPE, "HeaderPortalCss" );
 
-	ModelElementList<IWebResource> getHeaderPortalCss();
+	ElementList<IWebResource> getHeaderPortalCss();
 
 	// *** HeaderPortletCss ***
 
@@ -818,7 +818,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "header-portlet-css", type = IWebResource.class ) } )
 	ListProperty PROP_HEADER_PORTLET_CSS = new ListProperty( TYPE, "HeaderPortletCss" );
 
-	ModelElementList<IWebResource> getHeaderPortletCss();
+	ElementList<IWebResource> getHeaderPortletCss();
 
 	// *** HeaderPortalJavascript ***
 
@@ -827,7 +827,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "header-portal-javascript", type = IWebResource.class ) } )
 	ListProperty PROP_HEADER_PORTAL_JAVASCRIPT = new ListProperty( TYPE, "HeaderPortalJavascript" );
 
-	ModelElementList<IWebResource> getHeaderPortalJavascript();
+	ElementList<IWebResource> getHeaderPortalJavascript();
 
 	// *** HeaderPortletJavascript ***
 
@@ -836,7 +836,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "header-portlet-javascript", type = IWebResource.class ) } )
 	ListProperty PROP_HEADER_PORTLET_JAVASCRIPT = new ListProperty( TYPE, "HeaderPortletJavascript" );
 
-	ModelElementList<IWebResource> getHeaderPortletJavascript();
+	ElementList<IWebResource> getHeaderPortletJavascript();
 
 	// *** FooterPortalCss ***
 
@@ -845,7 +845,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "footer-portal-css", type = IWebResource.class ) } )
 	ListProperty PROP_FOOTER_PORTAL_CSS = new ListProperty( TYPE, "FooterPortalCss" );
 
-	ModelElementList<IWebResource> getFooterPortalCss();
+	ElementList<IWebResource> getFooterPortalCss();
 
 	// *** FooterPortletCss ***
 
@@ -854,7 +854,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "footer-portlet-css", type = IWebResource.class ) } )
 	ListProperty PROP_FOOTER_PORTLET_CSS = new ListProperty( TYPE, "FooterPortletCss" );
 
-	ModelElementList<IWebResource> getFooterPortletCss();
+	ElementList<IWebResource> getFooterPortletCss();
 
 	// *** FooterPortalJavascript ***
 
@@ -863,7 +863,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "footer-portal-javascript", type = IWebResource.class ) } )
 	ListProperty PROP_FOOTER_PORTAL_JAVASCRIPT = new ListProperty( TYPE, "FooterPortalJavascript" );
 
-	ModelElementList<IWebResource> getFooterPortalJavascript();
+	ElementList<IWebResource> getFooterPortalJavascript();
 
 	// *** FooterPortletJavascript ***
 
@@ -872,7 +872,7 @@ public interface ILiferayPortlet extends IModelElement {
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "footer-portlet-javascript", type = IWebResource.class ) } )
 	ListProperty PROP_FOOTER_PORTLET_JAVASCRIPT = new ListProperty( TYPE, "FooterPortletJavascript" );
 
-	ModelElementList<IWebResource> getFooterPortletJavascript();
+	ElementList<IWebResource> getFooterPortletJavascript();
 
 	// *** CssWrapperClass ***
 

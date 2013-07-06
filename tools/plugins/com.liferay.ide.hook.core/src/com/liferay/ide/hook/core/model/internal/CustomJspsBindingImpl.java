@@ -29,17 +29,15 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.Resource;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.Resource;
 
 /**
  * @author Gregory Amerson
  */
 public class CustomJspsBindingImpl extends HookListBindingImpl
 {
-
     private List<ObjectValue<String>> customJsps;
     private IPath lastCustomJspDirPath;
     private IPath portalDir;
@@ -85,11 +83,11 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     @Override
     protected Resource resource( Object obj )
     {
-        return new CustomJspResource( this.element().resource(), (ObjectValue<String>) obj );
+        return new CustomJspResource( this.property().element().resource(), (ObjectValue<String>) obj );
     }
 
     @Override
-    protected Object insertUnderlyingObject( ModelElementType type, int position )
+    protected Object insertUnderlyingObject( ElementType type, int position )
     {
         ObjectValue<String> retval = null;
 
@@ -144,9 +142,9 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     }
 
     @Override
-    public void init( IModelElement element, ModelProperty property, String[] params )
+    public void init( Property property )
     {
-        super.init( element, property, params );
+        super.init( property );
 
         final ILiferayProject liferayProject = LiferayCore.create( project() );
 
@@ -164,7 +162,7 @@ public class CustomJspsBindingImpl extends HookListBindingImpl
     }
 
     @Override
-    public ModelElementType type( Resource resource )
+    public ElementType type( Resource resource )
     {
         if( resource instanceof CustomJspResource )
         {

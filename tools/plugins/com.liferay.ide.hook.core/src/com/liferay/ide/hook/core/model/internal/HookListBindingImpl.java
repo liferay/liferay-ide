@@ -20,17 +20,17 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.hook.core.model.Hook;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.modeling.LayeredListBindingImpl;
+import org.eclipse.sapphire.LayeredListPropertyBinding;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class HookListBindingImpl extends LayeredListBindingImpl
+public abstract class HookListBindingImpl extends LayeredListPropertyBinding
 {
 
     protected Hook hook()
     {
-        return this.element().nearest( Hook.class );
+        return this.property().nearest( Hook.class );
     }
 
     protected IProject project()

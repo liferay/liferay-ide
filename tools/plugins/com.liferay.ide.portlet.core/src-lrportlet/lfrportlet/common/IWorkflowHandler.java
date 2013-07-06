@@ -19,10 +19,10 @@
  */
 
 package com.liferay.ide.portlet.core.model.lfrportlet.common;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -31,9 +31,9 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
  * @author kamesh
  */
 @GenerateImpl
-public interface IWorkflowHandler extends IModelElement {
+public interface IWorkflowHandler extends Element {
 
-	ModelElementType TYPE = new ModelElementType( IWorkflowHandler.class );
+	ElementType TYPE = new ElementType( IWorkflowHandler.class );
 
 	// *** WorkflowHandler ***
 

@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *               Kamesh Sampath - initial implementation
  *******************************************************************************/
@@ -27,7 +27,7 @@ import javax.xml.namespace.QName;
 import org.eclipse.sapphire.services.ReferenceService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class EventDefinitionReferenceService extends ReferenceService
 {
@@ -49,7 +49,7 @@ public class EventDefinitionReferenceService extends ReferenceService
             {
                 if( QUERY_BY_NAME.equals( param( "0" ) ) ) //$NON-NLS-1$
                 {
-                    if( equal( eventDefinition.getName().getContent(), reference ) )
+                    if( equal( eventDefinition.getName().content(), reference ) )
                     {
                         return eventDefinition;
                     }
@@ -75,8 +75,8 @@ public class EventDefinitionReferenceService extends ReferenceService
     private String getQName( EventDefinition eventDefinition )
     {
         QName qName = null;
-        String nsURI = eventDefinition.getNamespaceURI().getContent();
-        String localPart = eventDefinition.getLocalPart().getContent();
+        String nsURI = eventDefinition.getNamespaceURI().content();
+        String localPart = eventDefinition.getLocalPart().content();
         qName = new QName( nsURI, localPart );
         return qName.toString();
     }

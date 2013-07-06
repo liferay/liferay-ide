@@ -5,12 +5,12 @@
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
- *   
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *    
+ *
  * Contributors:
  *      Kamesh Sampath - initial implementation
  *      Gregory Amerson - initial implementation review and ongoing maintenance
@@ -30,21 +30,21 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyEvent;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.PropertyEvent;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  * @author Gregory Amerson
  */
 public class CreatePortletAppResourceBundleActionHandler extends AbstractResourceBundleActionHandler
@@ -59,8 +59,8 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
     public void init( SapphireAction action, ActionHandlerDef def )
     {
         super.init( action, def );
-        final IModelElement element = getModelElement();
-        final ModelProperty property = getProperty();
+        final Element element = getModelElement();
+        final Property property = property();
         this.listener = new FilteredListener<PropertyEvent>()
         {
             @Override
@@ -70,10 +70,10 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
             }
         };
 
-        element.attach( this.listener, property.getName() );
+        element.attach( this.listener, property.definition().name() );
 
         attach
-        ( 
+        (
             new Listener()
             {
                 @Override
@@ -81,10 +81,10 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
                 {
                     if( event instanceof DisposeEvent )
                     {
-                        getModelElement().detach( listener, getProperty().getName() );
+                        getModelElement().detach( listener, property().definition().name() );
                     }
                 }
-            } 
+            }
         );
     }
 
@@ -95,11 +95,11 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
     @Override
     protected Object run( SapphireRenderingContext context )
     {
-        final IModelElement element = getModelElement();
+        final Element element = getModelElement();
         final IProject project = element.adapt( IProject.class );
-        final ModelProperty property = getProperty();
-        final Value<Path> resourceBundle = element.read( (ValueProperty) property );
-        final String resourceBundleText = resourceBundle.getText();
+        final Property property = property();
+        final Value<Path> resourceBundle = element.property( (ValueProperty) property.definition() );
+        final String resourceBundleText = resourceBundle.text();
 
         int index = resourceBundleText.lastIndexOf( "." ); //$NON-NLS-1$
 
@@ -124,7 +124,7 @@ public class CreatePortletAppResourceBundleActionHandler extends AbstractResourc
             missingRBFiles.add( rbFile );
             createFiles( context, project, packageName, missingRBFiles, rbFileBuffer );
             setEnabled( false );
-            getModelElement().refresh( getProperty(), true );
+            getModelElement().property( property().definition() ).refresh();
         }
         return null;
     }

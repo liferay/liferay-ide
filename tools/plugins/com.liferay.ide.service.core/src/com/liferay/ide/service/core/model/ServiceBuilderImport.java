@@ -17,14 +17,13 @@ package com.liferay.ide.service.core.model;
 
 import com.liferay.ide.service.core.model.internal.ImportPathService;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
@@ -37,11 +36,10 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Gregory Amerson
  */
-@GenerateImpl
 @Image( path = "images/file_16x16.gif" )
-public interface ServiceBuilderImport extends IModelElement 
+public interface ServiceBuilderImport extends Element
 {
-	ModelElementType TYPE = new ModelElementType( ServiceBuilderImport.class );
+	ElementType TYPE = new ElementType( ServiceBuilderImport.class );
 
 	@Type( base = Path.class )
 	@XmlBinding( path = "@file" )

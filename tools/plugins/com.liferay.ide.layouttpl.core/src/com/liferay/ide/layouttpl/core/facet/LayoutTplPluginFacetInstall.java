@@ -46,7 +46,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * @author Greg Amerson
- * @author kamesh.sampath - [IDE-450]
+ * @author Kamesh Sampath - [IDE-450]
  */
 public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 {

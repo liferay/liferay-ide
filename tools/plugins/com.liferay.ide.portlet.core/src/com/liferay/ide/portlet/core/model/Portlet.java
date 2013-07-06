@@ -17,19 +17,18 @@
 
 package com.liferay.ide.portlet.core.model;
 
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ImpliedElementProperty;
+import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.ImpliedElementProperty;
-import org.eclipse.sapphire.modeling.ListProperty;
-import org.eclipse.sapphire.modeling.ModelElementList;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.ReferenceValue;
-import org.eclipse.sapphire.modeling.Value;
-import org.eclipse.sapphire.modeling.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
-import org.eclipse.sapphire.modeling.annotations.GenerateImpl;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
@@ -41,14 +40,13 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
-@GenerateImpl
 @Image( path = "images/elcl16/portlet_16x16.png" )
 public interface Portlet extends ResourceBundle, Identifiable, Describeable, Displayable
 {
 
-    ModelElementType TYPE = new ModelElementType( Portlet.class );
+    ElementType TYPE = new ElementType( Portlet.class );
 
     // *** Portlet Name ***
     @Label( standard = "Portlet name" )
@@ -120,7 +118,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "supported-locale", type = SupportedLocales.class ) )
     ListProperty PROP_SUPPORTED_LOCALES = new ListProperty( TYPE, "SupportedLocales" ); //$NON-NLS-1$
 
-    ModelElementList<SupportedLocales> getSupportedLocales();
+    ElementList<SupportedLocales> getSupportedLocales();
 
     // *** PortletInfo ***
 
@@ -147,7 +145,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "init-param", type = Param.class ) )
     ListProperty PROP_INIT_PARAMS = new ListProperty( TYPE, "InitParams" ); //$NON-NLS-1$
 
-    ModelElementList<Param> getInitParams();
+    ElementList<Param> getInitParams();
 
     // *** SecurityRoleRefs ***
 
@@ -156,7 +154,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "security-role-ref", type = SecurityRoleRef.class ) )
     ListProperty PROP_SECURITY_ROLE_REFS = new ListProperty( TYPE, "SecurityRoleRefs" ); //$NON-NLS-1$
 
-    ModelElementList<SecurityRoleRef> getSecurityRoleRefs();
+    ElementList<SecurityRoleRef> getSecurityRoleRefs();
 
     // *** SupportedProcessingEvents ***
 
@@ -172,7 +170,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     )
     ListProperty PROP_SUPPORTED_PROCESSING_EVENTS = new ListProperty( TYPE, "SupportedProcessingEvents" ); //$NON-NLS-1$
 
-    ModelElementList<EventDefinitionRef> getSupportedProcessingEvents();
+    ElementList<EventDefinitionRef> getSupportedProcessingEvents();
 
     // *** Supported Publishing Events ***
 
@@ -188,7 +186,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     )
     ListProperty PROP_SUPPORTED_PUBLISHING_EVENTS = new ListProperty( TYPE, "SupportedPublishingEvents" ); //$NON-NLS-1$
 
-    ModelElementList<EventDefinitionRef> getSupportedPublishingEvents();
+    ElementList<EventDefinitionRef> getSupportedPublishingEvents();
 
     // *** SupportedPublicRenderParameters ***
 
@@ -204,7 +202,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     )
     ListProperty PROP_SUPPORTED_PUBLIC_RENDER_PARAMETERS = new ListProperty( TYPE, "SupportedPublicRenderParameters" ); //$NON-NLS-1$
 
-    ModelElementList<SupportedPublicRenderParameter> getSupportedPublicRenderParameters();
+    ElementList<SupportedPublicRenderParameter> getSupportedPublicRenderParameters();
 
     // *** ContainerRuntimeOptions ***
 
@@ -220,6 +218,6 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     )
     ListProperty PROP_CONTAINER_RUNTIME_OPTIONS = new ListProperty( TYPE, "ContainerRuntimeOptions" ); //$NON-NLS-1$
 
-    ModelElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
+    ElementList<ContainerRuntimeOption> getContainerRuntimeOptions();
 
 }

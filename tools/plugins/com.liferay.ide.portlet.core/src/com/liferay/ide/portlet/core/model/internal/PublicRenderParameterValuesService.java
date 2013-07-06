@@ -20,13 +20,13 @@ package com.liferay.ide.portlet.core.model.internal;
 import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.core.model.PublicRenderParameter;
 
-import java.util.SortedSet;
+import java.util.Set;
 
-import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
- * @author <a href="mailto:kamesh.sampath@accenture.com">Kamesh Sampath</a>
+ * @author Kamesh Sampath
  */
 public class PublicRenderParameterValuesService extends PossibleValuesService
 {
@@ -36,15 +36,15 @@ public class PublicRenderParameterValuesService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( SortedSet<String> values )
+    protected void fillPossibleValues( Set<String> values )
     {
         final PortletApp portletApp = context( PortletApp.class );
 
-        ModelElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
+        ElementList<PublicRenderParameter> publicRenderParameters = portletApp.getPublicRenderParameters();
 
         for( PublicRenderParameter renderParameter : publicRenderParameters )
         {
-            final String indentifer = renderParameter.getIdentifier().getContent();
+            final String indentifer = renderParameter.getIdentifier().content();
             values.add( indentifer );
         }
     }

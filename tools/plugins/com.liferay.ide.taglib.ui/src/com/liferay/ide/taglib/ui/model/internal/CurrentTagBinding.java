@@ -17,14 +17,14 @@ package com.liferay.ide.taglib.ui.model.internal;
 
 import com.liferay.ide.taglib.ui.model.Tag;
 
-import org.eclipse.sapphire.modeling.ElementBindingImpl;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.Resource;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Resource;
+import org.eclipse.sapphire.modeling.ElementPropertyBinding;
 
 /**
  * @author Gregory Amerson
  */
-public class CurrentTagBinding extends ElementBindingImpl
+public class CurrentTagBinding extends ElementPropertyBinding
 {
 
     @Override
@@ -34,7 +34,7 @@ public class CurrentTagBinding extends ElementBindingImpl
     }
 
     @Override
-    public ModelElementType type( Resource resource )
+    public ElementType type( Resource resource )
     {
         return Tag.TYPE;
     }

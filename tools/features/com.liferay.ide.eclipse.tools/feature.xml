@@ -32,15 +32,15 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.sapphire" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.java" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.java.jdt" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.modeling.xml" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.osgi" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.platform" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.ui" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.ui.swt.gef" version="0.6.1" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="0.6.1" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.java" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.java.jdt" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.modeling.xml" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.osgi" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.platform" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui.swt.gef" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="0.7.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual"/>

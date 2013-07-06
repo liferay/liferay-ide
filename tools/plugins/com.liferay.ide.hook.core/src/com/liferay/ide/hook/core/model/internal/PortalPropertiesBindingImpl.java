@@ -32,15 +32,14 @@ import java.util.List;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.BindingImpl;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementType;
-import org.eclipse.sapphire.modeling.ModelProperty;
-import org.eclipse.sapphire.modeling.PropertyContentEvent;
-import org.eclipse.sapphire.modeling.Resource;
-import org.eclipse.sapphire.modeling.ValueBindingImpl;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyBinding;
+import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Resource;
+import org.eclipse.sapphire.ValuePropertyBinding;
 
 /**
  * @author Gregory Amerson
@@ -68,11 +67,11 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
         }
 
         @Override
-        protected BindingImpl createBinding( ModelProperty property )
+        protected PropertyBinding createBinding( Property property )
         {
-            if( property == PortalProperty.PROP_NAME )
+            if( property.definition() == PortalProperty.PROP_NAME )
             {
-                return new ValueBindingImpl()
+                return new ValuePropertyBinding()
                 {
 
                     @Override
@@ -88,9 +87,9 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
                     }
                 };
             }
-            else if( property == PortalProperty.PROP_VALUE )
+            else if( property.definition() == PortalProperty.PROP_VALUE )
             {
-                return new ValueBindingImpl()
+                return new ValuePropertyBinding()
                 {
 
                     @Override
@@ -154,7 +153,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
     private PropertiesConfiguration portalPropertiesConfiguration;
 
     @Override
-    protected Object insertUnderlyingObject( ModelElementType type, int position )
+    protected Object insertUnderlyingObject( ElementType type, int position )
     {
         Object retval = null;
 
@@ -170,7 +169,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
     @Override
     protected Resource resource( Object obj )
     {
-        return new PortalPropertyResource( this.element().resource(), (NameValueObject) obj );
+        return new PortalPropertyResource( this.property().element().resource(), (NameValueObject) obj );
     }
 
     protected void flushProperties()
@@ -207,9 +206,9 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
     }
 
     @Override
-    public void init( IModelElement element, ModelProperty property, String[] params )
+    public void init( Property property )
     {
-        super.init( element, property, params );
+        super.init( property );
 
         Listener listener = new FilteredListener<PropertyContentEvent>()
         {
@@ -221,7 +220,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             }
         };
 
-        hook().attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.getName() + "/*" ); //$NON-NLS-1$
+        hook().attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.name() + "/*" ); //$NON-NLS-1$
 
         updateConfigurationForFile();
     }
@@ -247,7 +246,7 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
     }
 
     @Override
-    public ModelElementType type( Resource resource )
+    public ElementType type( Resource resource )
     {
         return PortalProperty.TYPE;
     }

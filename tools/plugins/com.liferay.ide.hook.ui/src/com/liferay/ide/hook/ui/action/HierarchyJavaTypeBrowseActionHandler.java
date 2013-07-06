@@ -28,11 +28,11 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.modeling.CapitalizationType;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireBrowseActionHandler;
 import org.eclipse.sapphire.ui.SapphireRenderingContext;
@@ -46,7 +46,7 @@ import org.eclipse.ui.dialogs.SelectionDialog;
 public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseActionHandler
 {
     public static final String ID = "Hierarchy.Browse.Java.Type"; //$NON-NLS-1$
-    
+
     private String typeName;
     private String filter;
 
@@ -63,13 +63,13 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
     @Override
     public String browse( final SapphireRenderingContext context )
     {
-        final IModelElement element = getModelElement();
-        final ModelProperty property = getProperty();
+        final Element element = getModelElement();
+        final Property property = property();
         final IProject project = element.adapt( IProject.class );
 
         try
         {
-            JavaTypeConstraintService typeService = element.service( property, JavaTypeConstraintService.class );
+            JavaTypeConstraintService typeService = property.service( JavaTypeConstraintService.class );
 
             final EnumSet<JavaTypeKind> kinds = EnumSet.noneOf( JavaTypeKind.class );
             kinds.addAll( typeService.kinds() );
@@ -123,7 +123,7 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
             final SelectionDialog dlg =
                 JavaUI.createTypeDialog( context.getShell(), null, scope, browseDialogStyle, false, this.filter, null );
 
-            final String title = property.getLabel( true, CapitalizationType.TITLE_STYLE, false );
+            final String title = property.definition().getLabel( true, CapitalizationType.TITLE_STYLE, false );
 
             dlg.setTitle( Msgs.select + title );
 
@@ -131,7 +131,7 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
             {
                 Object results[] = dlg.getResult();
                 assert results != null && results.length == 1;
-                
+
                 if( results[0] instanceof IType )
                 {
                     return ( (IType) results[0] ).getFullyQualifiedName();

@@ -12,15 +12,14 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.hook.core.model.BeforeAfterFilterType;
 
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelProperty;
+import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
@@ -35,11 +34,11 @@ public class BeforeAfterFilterTypeBinding extends XmlValueBindingImpl
     private String localValue;
 
     @Override
-    public void init( IModelElement element, ModelProperty property, String[] params )
+    public void init( Property property )
     {
-        super.init( element, property, params );
+        super.init( property );
 
-        DefaultValue defaultValue = property.getAnnotation( DefaultValue.class );
+        DefaultValue defaultValue = property.definition().getAnnotation( DefaultValue.class );
 
         this.defaultValueText = defaultValue.text();
     }

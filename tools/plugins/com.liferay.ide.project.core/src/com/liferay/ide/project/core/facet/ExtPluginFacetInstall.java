@@ -51,7 +51,7 @@ import org.w3c.dom.Element;
 
 /**
  * @author Greg Amerson
- * @author kamesh.sampath
+ * @author Kamesh Sampath
  */
 @SuppressWarnings( "restriction" )
 public class ExtPluginFacetInstall extends PluginFacetInstall

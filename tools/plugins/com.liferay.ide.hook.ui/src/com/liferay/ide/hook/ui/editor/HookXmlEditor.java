@@ -36,12 +36,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.modeling.IModelElement;
-import org.eclipse.sapphire.modeling.ModelElementList;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.PropertyContentEvent;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
@@ -78,7 +78,7 @@ public class HookXmlEditor extends SapphireEditorForXml
     }
 
     @Override
-    protected void adaptModel( final IModelElement model )
+    protected void adaptModel( final Element model )
     {
         super.adaptModel( model );
 
@@ -96,15 +96,15 @@ public class HookXmlEditor extends SapphireEditorForXml
         this.ignoreCustomModelChanges = false;
     }
 
-    private void copyCustomJspsToProject( ModelElementList<CustomJsp> customJsps )
+    private void copyCustomJspsToProject( ElementList<CustomJsp> customJsps )
     {
         try
         {
-            CustomJspDir customJspDirElement = this.getModelElement().nearest( Hook.class ).getCustomJspDir().element();
+            CustomJspDir customJspDirElement = this.getModelElement().nearest( Hook.class ).getCustomJspDir().content();
 
             if( customJspDirElement != null && customJspDirElement.validation().ok() )
             {
-                Path customJspDir = customJspDirElement.getValue().getContent();
+                Path customJspDir = customJspDirElement.getValue().content();
                 IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getProject() );
                 IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
 
@@ -113,7 +113,7 @@ public class HookXmlEditor extends SapphireEditorForXml
 
                 for( CustomJsp customJsp : customJsps )
                 {
-                    String content = customJsp.getValue().getContent();
+                    String content = customJsp.getValue().content();
 
                     if( !empty( content ) )
                     {
@@ -148,7 +148,7 @@ public class HookXmlEditor extends SapphireEditorForXml
     {
         if( this.customModelDirty )
         {
-            ModelElementList<CustomJsp> customJsps = getModelElement().nearest( Hook.class ).getCustomJsps();
+            ElementList<CustomJsp> customJsps = getModelElement().nearest( Hook.class ).getCustomJsps();
 
             copyCustomJspsToProject( customJsps );
 
