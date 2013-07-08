@@ -236,7 +236,7 @@
 	</target>
 
 	<target name="install-feature">
-		<exec executable="${builder.exe}">
+		<exec executable="${builder.exe}" failonerror="true">
 			<arg value="-nosplash"/>
     		<arg value="-application"/>
 			<arg value="org.eclipse.equinox.p2.director"/>

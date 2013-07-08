@@ -11,7 +11,7 @@ def ant = new AntBuilder();   // create an antbuilder
 
 ant.unzip( src: contentJar, dest:contentDir,  overwrite:"true" )
 
-println 'Modify content.xml to add associate sites for Liferay IDE'
+println 'Modify content.xml to remove unwanted IUs from Liferay IDE site'
 
 File contentXml =  new File( contentDir, "content.xml" )
 def contentXmlText = contentXml.text
