@@ -14,46 +14,26 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
-package com.liferay.ide.portal.core.model;
+package com.liferay.ide.portal.core.structures.model;
+
+import com.liferay.ide.portal.core.structures.model.internal.CDATAValueBinding;
 
 import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementHandle;
-import org.eclipse.sapphire.ElementProperty;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 
 /**
  * @author Gregory Amerson
  */
-public interface DynamicElement extends Element
+public interface Entry extends Element
 {
 
-    ElementType TYPE = new ElementType( DynamicElement.class );
-
-    // *** DataType ***
-
-    @Label( standard = "data type" )
-    @XmlBinding( path = "@dataType" )
-    ValueProperty PROP_DATA_TYPE = new ValueProperty( TYPE, "DataType" ); //$NON-NLS-1$
-
-    Value<String> getDataType();
-
-    void setDataType( String value );
-
-    // *** FieldNamespace ***
-
-    @Label( standard = "field namespace" )
-    @XmlBinding( path = "@fieldNamespace" )
-    ValueProperty PROP_FIELD_NAMESPACE = new ValueProperty( TYPE, "FieldNamespace" ); //$NON-NLS-1$
-
-    Value<String> getFieldNamespace();
-
-    void setFieldNamespace( String value );
+    ElementType TYPE = new ElementType( Entry.class );
 
     // *** Name ***
 
@@ -65,23 +45,15 @@ public interface DynamicElement extends Element
 
     void setName( String value );
 
-    // *** Type ***
+    // *** Value ***
 
-    @Label( standard = "type" )
-    @XmlBinding( path = "@type" )
-    ValueProperty PROP_TYPE = new ValueProperty( TYPE, "Type" ); //$NON-NLS-1$
+    @Label( standard = "value" )
+    @XmlBinding( path = "" )
+    @CustomXmlValueBinding( impl = CDATAValueBinding.class )
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
-    Value<String> getType();
+    Value<String> getValue();
 
-    void setType( String value );
-
-    // *** Metadata ***
-
-    @Type( base = DynamicElementMetadata.class )
-    @Label( standard = "metadata" )
-    @XmlBinding( path = "meta-data" )
-    ElementProperty PROP_METADATA = new ElementProperty( TYPE, "Metadata" ); //$NON-NLS-1$
-
-    ElementHandle<DynamicElementMetadata> getMetadata();
+    void setValue( String value );
 
 }

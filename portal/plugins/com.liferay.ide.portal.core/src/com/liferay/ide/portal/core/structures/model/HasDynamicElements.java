@@ -12,50 +12,26 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
-package com.liferay.ide.portal.core.model;
+package com.liferay.ide.portal.core.structures.model;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 
 /**
  * @author Gregory Amerson
  */
-@XmlBinding( path = "root" )
-public interface StructuresRoot extends Element
+public interface HasDynamicElements extends Element
 {
 
-    ElementType TYPE = new ElementType( StructuresRoot.class );
-
-    // *** AvailableLocales ***
-
-    @Label( standard = "available locales" )
-    @XmlBinding( path = "@available-locales" )
-    ValueProperty PROP_AVAILABLE_LOCALES = new ValueProperty( TYPE, "AvailableLocales" ); //$NON-NLS-1$
-
-    Value<String> getAvailableLocales();
-
-    void setAvailableLocales( String value );
-
-    // *** DefaultLocale ***
-
-    @Label( standard = "default locale" )
-    @XmlBinding( path = "@default-locale" )
-    ValueProperty PROP_DEFAULT_LOCALE = new ValueProperty( TYPE, "DefaultLocale" ); //$NON-NLS-1$
-
-    Value<String> getDefaultLocale();
-
-    void setDefaultLocale( String value );
+    ElementType TYPE = new ElementType( HasDynamicElements.class );
 
     // *** DynamicElements ***
 
@@ -75,8 +51,5 @@ public interface StructuresRoot extends Element
     ListProperty PROP_DYNAMIC_ELEMENTS = new ListProperty( TYPE, "DynamicElements" ); //$NON-NLS-1$
 
     ElementList<DynamicElement> getDynamicElements();
-
-
-
 
 }

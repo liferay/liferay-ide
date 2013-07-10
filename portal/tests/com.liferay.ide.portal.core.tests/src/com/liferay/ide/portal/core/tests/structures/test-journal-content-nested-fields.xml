@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US,pt_BR" default-locale="en_US">
+	<dynamic-element instance-id="RF3do1m5" name="contact" type="text" index-type="text">
+		<dynamic-element instance-id="QK6B0wK9" name="phone" type="text" index-type="text">
+			<dynamic-element instance-id="L67MPqQf" name="ext" type="text" index-type="text">
+				<dynamic-content language-id="en_US"><![CDATA[1]]></dynamic-content>
+				<dynamic-content language-id="pt_BR"><![CDATA[1]]></dynamic-content>
+			</dynamic-element>
+			<dynamic-element instance-id="8uxzZl41" name="ext" type="text" index-type="text">
+				<dynamic-content language-id="en_US"><![CDATA[2]]></dynamic-content>
+				<dynamic-content language-id="pt_BR"><![CDATA[2]]></dynamic-content>
+			</dynamic-element>
+			<dynamic-element instance-id="S58K861T" name="ext" type="text" index-type="text">
+				<dynamic-content language-id="en_US"><![CDATA[3]]></dynamic-content>
+				<dynamic-content language-id="pt_BR"><![CDATA[3]]></dynamic-content>
+			</dynamic-element>
+			<dynamic-content language-id="en_US"><![CDATA[123]]></dynamic-content>
+			<dynamic-content language-id="pt_BR"><![CDATA[123]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content language-id="en_US"><![CDATA[joe]]></dynamic-content>
+		<dynamic-content language-id="pt_BR"><![CDATA[joao]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="CUeFxcrA" name="contact" type="text" index-type="text">
+		<dynamic-element instance-id="lVTcTviF" name="phone" type="text" index-type="text">
+			<dynamic-element instance-id="cZalDSll" name="ext" type="text" index-type="text">
+				<dynamic-content language-id="en_US"><![CDATA[4]]></dynamic-content>
+				<dynamic-content language-id="pt_BR"><![CDATA[4]]></dynamic-content>
+			</dynamic-element>
+			<dynamic-element instance-id="HDrK2Um5" name="ext" type="text" index-type="text">
+				<dynamic-content language-id="en_US"><![CDATA[5]]></dynamic-content>
+				<dynamic-content language-id="pt_BR"><![CDATA[5]]></dynamic-content>
+			</dynamic-element>
+			<dynamic-content language-id="en_US"><![CDATA[456]]></dynamic-content>
+			<dynamic-content language-id="pt_BR"><![CDATA[456]]></dynamic-content>
+		</dynamic-element>
+		<dynamic-content language-id="en_US"><![CDATA[richard]]></dynamic-content>
+		<dynamic-content language-id="pt_BR"><![CDATA[ricardo]]></dynamic-content>
+	</dynamic-element>
+</root>

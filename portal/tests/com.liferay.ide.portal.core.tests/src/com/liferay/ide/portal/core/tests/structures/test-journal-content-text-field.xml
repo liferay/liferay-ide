@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US,pt_BR" default-locale="en_US">
+	<dynamic-element instance-id="bf4sdx6Q" name="text" type="text" index-type="text">
+		<dynamic-content language-id="en_US"><![CDATA[one]]></dynamic-content>
+		<dynamic-content language-id="pt_BR"><![CDATA[um]]></dynamic-content>
+	</dynamic-element>
+</root>

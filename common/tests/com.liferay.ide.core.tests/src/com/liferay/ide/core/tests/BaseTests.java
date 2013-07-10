@@ -1,6 +1,8 @@
 
 package com.liferay.ide.core.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -9,6 +11,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.modeling.xml.RootXmlResource;
+import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 
 public class BaseTests
 {
@@ -91,6 +98,21 @@ public class BaseTests
     protected final IFile createFile( final IProject project, final String path ) throws Exception
     {
         return createFile( project, path, new byte[0] );
+    }
+
+    protected Element getElementFromFile( IProject project, IPath filePath, ElementType type ) throws Exception
+    {
+        final String filePathValue = filePath.toOSString();
+        final IFile file = createFile( project, filePathValue, this.getClass().getResourceAsStream( filePathValue ) );
+
+        assertEquals( file.getFullPath().lastSegment(), filePath.lastSegment() );
+
+        final InputStream contents = file.getContents();
+        final Element element = type.instantiate( new RootXmlResource( new XmlResourceStore( contents ) ) );
+
+        contents.close();
+
+        return element;
     }
 
 }

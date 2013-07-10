@@ -6,11 +6,11 @@ Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: com.liferay.ide.service.core.ServiceCore
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.sapphire.modeling;bundle-version="0.3.0";visibility:=reexport,
- org.eclipse.sapphire.modeling.xml;bundle-version="0.3.0";visibility:=reexport,
- org.eclipse.sapphire.osgi;bundle-version="0.3.0",
- org.eclipse.sapphire.platform;bundle-version="0.3.0",
- org.eclipse.sapphire.workspace;bundle-version="0.3.0",
+ org.eclipse.sapphire.modeling;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.sapphire.osgi,
+ org.eclipse.sapphire.platform,
+ org.eclipse.sapphire.workspace,
  org.eclipse.core.resources,
  com.liferay.ide.core,
  org.eclipse.text,

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="RFnJ1nCn" name="text_area" type="text_area" index-type="text">
+		<dynamic-content language-id="en_US"><![CDATA[<p>Hello World!</p>]]></dynamic-content>
+	</dynamic-element>
+</root>

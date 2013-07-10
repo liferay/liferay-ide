@@ -14,46 +14,55 @@
  * Contributors:
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
-package com.liferay.ide.portal.core.model;
-
-import com.liferay.ide.portal.core.model.internal.EntryValueBinding;
+package com.liferay.ide.portal.core.structures.model;
 
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
+import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 
 /**
  * @author Gregory Amerson
  */
-public interface Entry extends Element
+public interface DynamicElementMetadata extends Element
 {
 
-    ElementType TYPE = new ElementType( Entry.class );
+    ElementType TYPE = new ElementType( DynamicElementMetadata.class );
 
-    // *** Name ***
+    // *** Locale ***
 
-    @Label( standard = "name" )
-    @XmlBinding( path = "@name" )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
+    @Label( standard = "locale" )
+    @XmlBinding( path = "@locale" )
+    ValueProperty PROP_LOCALE = new ValueProperty( TYPE, "Locale" ); //$NON-NLS-1$
 
-    Value<String> getName();
+    Value<String> getLocale();
 
-    void setName( String value );
+    void setLocale( String value );
 
-    // *** Value ***
+    // *** Entries ***
 
-    @Label( standard = "value" )
-    @XmlBinding( path = "" )
-    @CustomXmlValueBinding( impl = EntryValueBinding.class )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
+    @Type( base = Entry.class )
+    @Label( standard = "entries" )
+    @XmlListBinding
+    (
+        mappings =
+        {
+            @XmlListBinding.Mapping
+            (
+                element = "entry",
+                type = Entry.class
+            )
+        }
+    )
+    ListProperty PROP_ENTRIES = new ListProperty( TYPE, "Entries" ); //$NON-NLS-1$
 
-    Value<String> getValue();
-
-    void setValue( String value );
+    ElementList<Entry> getEntries();
 
 }

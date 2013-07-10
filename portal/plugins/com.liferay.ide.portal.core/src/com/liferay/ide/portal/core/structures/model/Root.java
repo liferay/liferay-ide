@@ -12,16 +12,14 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
-package com.liferay.ide.portal.core.model;
+package com.liferay.ide.portal.core.structures.model;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -31,38 +29,19 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 /**
  * @author Gregory Amerson
  */
-public interface DynamicElementMetadata extends Element
+@XmlBinding( path = "root" )
+public interface Root extends Element
 {
 
-    ElementType TYPE = new ElementType( DynamicElementMetadata.class );
+    ElementType TYPE = new ElementType( Root.class );
 
-    // *** Locale ***
+    // *** Structures ***
 
-    @Label( standard = "locale" )
-    @XmlBinding( path = "@locale" )
-    ValueProperty PROP_LOCALE = new ValueProperty( TYPE, "Locale" ); //$NON-NLS-1$
+    @Type( base = Structure.class )
+    @Label( standard = "structure" )
+    @XmlListBinding ( mappings = { @XmlListBinding.Mapping ( element = "structure", type = Structure.class ) } )
+    ListProperty PROP_STRUCTURES = new ListProperty( TYPE, "Structures" ); //$NON-NLS-1$
 
-    Value<String> getLocale();
-
-    void setLocale( String value );
-
-    // *** Entries ***
-
-    @Type( base = Entry.class )
-    @Label( standard = "entries" )
-    @XmlListBinding
-    (
-        mappings =
-        {
-            @XmlListBinding.Mapping
-            (
-                element = "entry",
-                type = Entry.class
-            )
-        }
-    )
-    ListProperty PROP_ENTRIES = new ListProperty( TYPE, "Entries" ); //$NON-NLS-1$
-
-    ElementList<Entry> getEntries();
+    ElementList<Structure> getStructures();
 
 }

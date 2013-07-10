@@ -13,5 +13,5 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.portal.core,
- com.liferay.ide.portal.core.model,
- com.liferay.ide.portal.core.model.internal
+ com.liferay.ide.portal.core.structures.model,
+ com.liferay.ide.portal.core.structures.model.internal

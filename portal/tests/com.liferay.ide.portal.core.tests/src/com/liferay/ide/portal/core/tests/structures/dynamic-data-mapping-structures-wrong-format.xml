@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<root>
+
+		<name><![CDATA[Contacts]]></name>
+		<description><![CDATA[Contacts]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="string" multiple="true" name="select2235" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="home_edition" type="option" value="HE">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Home Edition]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="business_edition" type="option" value="BE">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Business Edition]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="enterprise_edition" type="option" value="EE">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Enterprise Edition]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Product]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" multiple="true" name="select3212" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="1_0" type="option" value="1">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[1.0]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="2_0" type="option" value="2">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[2.0]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="3_0" type="option" value="3">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[3.0]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Version]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" multiple="true" name="select4115" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="administration" type="option" value="admin">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Administration]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="installation" type="option" value="install">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Installation]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="configuration" type="option" value="config">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Configuration]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Topics]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" multiple="false" name="select5069" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="beginner" type="option" value="beginner">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Beginner]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="intermediate" type="option" value="intermediate">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Intermediate]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="advanced" type="option" value="advanced">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Advanced]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Level]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+
+</root>

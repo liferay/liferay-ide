@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="9X5wVsSv" name="multi-list" type="multi-list" index-type="keyword">
+		<dynamic-content language-id="en_US">
+			<option><![CDATA[a]]></option>
+			<option><![CDATA[b]]></option>
+		</dynamic-content>
+	</dynamic-element>
+</root>

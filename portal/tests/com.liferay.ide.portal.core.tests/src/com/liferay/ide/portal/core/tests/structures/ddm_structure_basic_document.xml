@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <root available-locales="en_US" default-locale="en_US">
     <dynamic-element dataType="string" name="ClimateForcast_PROGRAM_ID" type="text">
         <meta-data locale="en_US">
@@ -163,6 +162,42 @@
             <entry name="showLabel"><![CDATA[true]]></entry>
         </meta-data>
     </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_NAMESPACE_URI_DC" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.NAMESPACE_URI_DC]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_NAMESPACE_URI_DC_TERMS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.NAMESPACE_URI_DC_TERMS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_PREFIX_DC" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.PREFIX_DC]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_PREFIX_DC_TERMS" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.PREFIX_DC_TERMS]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
     <dynamic-element dataType="string" name="DublinCore_FORMAT" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.DublinCore.FORMAT]]></entry>
@@ -211,6 +246,15 @@
     <dynamic-element dataType="string" name="DublinCore_CREATOR" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.DublinCore.CREATOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="DublinCore_CREATED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.DublinCore.CREATED]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>
@@ -294,8 +338,7 @@
             <entry name="label"><![CDATA[metadata.DublinCore.TITLE]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
-            <entry name="required">
-<![CDATA[false]]></entry>
+            <entry name="required"><![CDATA[false]]></entry>
             <entry name="showLabel"><![CDATA[true]]></entry>
         </meta-data>
     </dynamic-element>
@@ -488,45 +531,18 @@
             <entry name="showLabel"><![CDATA[true]]></entry>
         </meta-data>
     </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_AUTHOR" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.AUTHOR]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
     <dynamic-element dataType="string" name="MSOffice_APPLICATION_NAME" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.MSOffice.APPLICATION_NAME]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_CHARACTER_COUNT" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.CHARACTER_COUNT]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_LAST_PRINTED" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.LAST_PRINTED]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_LAST_SAVED" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.LAST_SAVED]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_PAGE_COUNT" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.PAGE_COUNT]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>
@@ -542,27 +558,9 @@
             <entry name="showLabel"><![CDATA[true]]></entry>
         </meta-data>
     </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_WORD_COUNT" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.WORD_COUNT]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
     <dynamic-element dataType="string" name="MSOffice_TEMPLATE" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.MSOffice.TEMPLATE]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_AUTHOR" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.AUTHOR]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>
@@ -578,27 +576,9 @@
             <entry name="showLabel"><![CDATA[true]]></entry>
         </meta-data>
     </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_SLIDE_COUNT" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.SLIDE_COUNT]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
     <dynamic-element dataType="string" name="MSOffice_PRESENTATION_FORMAT" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.MSOffice.PRESENTATION_FORMAT]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_PARAGRAPH_COUNT" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.PARAGRAPH_COUNT]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>
@@ -617,24 +597,6 @@
     <dynamic-element dataType="string" name="MSOffice_MANAGER" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.MSOffice.MANAGER]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_LINE_COUNT" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.LINE_COUNT]]></entry>
-            <entry name="predefinedValue"><![CDATA[]]>
-            </entry>
-            <entry name="required"><![CDATA[false]]></entry>
-            <entry name="showLabel"><![CDATA[true]]></entry>
-        </meta-data>
-    </dynamic-element>
-    <dynamic-element dataType="string" name="MSOffice_CHARACTER_COUNT_WITH_SPACES" type="text">
-        <meta-data locale="en_US">
-            <entry name="label"><![CDATA[metadata.MSOffice.CHARACTER_COUNT_WITH_SPACES]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>
@@ -695,6 +657,96 @@
             <entry name="showLabel"><![CDATA[true]]></entry>
         </meta-data>
     </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_SLIDE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.SLIDE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_PAGE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.PAGE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_PARAGRAPH_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.PARAGRAPH_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LINE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LINE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_WORD_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.WORD_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CHARACTER_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CHARACTER_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_CHARACTER_COUNT_WITH_SPACES" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.CHARACTER_COUNT_WITH_SPACES]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_TABLE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.TABLE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_IMAGE_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.IMAGE_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_OBJECT_COUNT" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.OBJECT_COUNT]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
     <dynamic-element dataType="string" name="MSOffice_EDIT_TIME" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.MSOffice.EDIT_TIME]]></entry>
@@ -707,6 +759,33 @@
     <dynamic-element dataType="string" name="MSOffice_CREATION_DATE" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.MSOffice.CREATION_DATE]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LAST_SAVED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LAST_SAVED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_LAST_PRINTED" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.LAST_PRINTED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="MSOffice_USER_DEFINED_METADATA_NAME_PREFIX" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.MSOffice.USER_DEFINED_METADATA_NAME_PREFIX]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>
@@ -878,6 +957,15 @@
     <dynamic-element dataType="string" name="TikaMetadataKeys_PROTECTED" type="text">
         <meta-data locale="en_US">
             <entry name="label"><![CDATA[metadata.TikaMetadataKeys.PROTECTED]]></entry>
+            <entry name="predefinedValue"><![CDATA[]]>
+            </entry>
+            <entry name="required"><![CDATA[false]]></entry>
+            <entry name="showLabel"><![CDATA[true]]></entry>
+        </meta-data>
+    </dynamic-element>
+    <dynamic-element dataType="string" name="TikaMetadataKeys_EMBEDDED_RELATIONSHIP_ID" type="text">
+        <meta-data locale="en_US">
+            <entry name="label"><![CDATA[metadata.TikaMetadataKeys.EMBEDDED_RELATIONSHIP_ID]]></entry>
             <entry name="predefinedValue"><![CDATA[]]>
             </entry>
             <entry name="required"><![CDATA[false]]></entry>

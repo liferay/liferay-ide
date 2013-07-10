@@ -1,0 +1,461 @@
+<?xml version="1.0"?>
+
+<root>
+	<structure>
+		<name><![CDATA[Contacts]]></name>
+		<description><![CDATA[Contacts]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="string" multiple="true" name="select2235" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="home_edition" type="option" value="HE">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Home Edition]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="business_edition" type="option" value="BE">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Business Edition]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="enterprise_edition" type="option" value="EE">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Enterprise Edition]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Product]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" multiple="true" name="select3212" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="1_0" type="option" value="1">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[1.0]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="2_0" type="option" value="2">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[2.0]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="3_0" type="option" value="3">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[3.0]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Version]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" multiple="true" name="select4115" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="administration" type="option" value="admin">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Administration]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="installation" type="option" value="install">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Installation]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="configuration" type="option" value="config">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Configuration]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Topics]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" multiple="false" name="select5069" readOnly="false" required="false" showLabel="true" type="select">
+				<dynamic-element name="beginner" type="option" value="beginner">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Beginner]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="intermediate" type="option" value="intermediate">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Intermediate]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="advanced" type="option" value="advanced">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Advanced]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Level]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+	</structure>
+	<structure>
+		<name><![CDATA[Events]]></name>
+		<description><![CDATA[Events]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="file-upload" fieldNamespace="ddm" name="attachment" required="false" showLabel="true" type="ddm-fileupload">
+				<meta-data locale="en_US">
+					<entry name="acceptFiles"><![CDATA[*]]></entry>
+					<entry name="folder"><![CDATA[{"folderId":0,"folderName":"Documents Home"}]]></entry>
+					<entry name="label"><![CDATA[Attachment]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[Upload documents no larger than 3,000k.]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="double" fieldNamespace="ddm" name="cost" required="false" showLabel="true" type="ddm-number" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Cost]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="description" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Description]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="date" fieldNamespace="ddm" name="eventDate" required="false" showLabel="true" type="ddm-date" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Date]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="eventName" required="false" showLabel="true" type="text" width="50">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Event Name]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="eventTime" required="false" showLabel="true" type="text" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Time]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="location" required="false" showLabel="true" type="text" width="50">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Location]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+	</structure>
+	<structure>
+		<name><![CDATA[Inventory]]></name>
+		<description><![CDATA[Inventory]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="string" name="description" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Description]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="style"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="item" required="false" showLabel="true" type="text" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Item]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="style"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="location" required="false" showLabel="true" type="text" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Location]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="style"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="date" fieldNamespace="ddm" name="purchaseDate" required="false" showLabel="true" type="ddm-date" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Purchase Date]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="style"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="double" fieldNamespace="ddm" name="purchasePrice" required="false" showLabel="true" type="ddm-number" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Purchase Price]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="double" fieldNamespace="ddm" name="quantity" required="false" showLabel="true" type="ddm-number" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Quantity]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+	</structure>
+	<structure>
+		<name><![CDATA[Issues Tracking]]></name>
+		<description><![CDATA[Issue Tracking]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="string" name="assignedTo" required="false" showLabel="true" type="text" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Assigned To]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="file-upload" fieldNamespace="ddm" name="attachment" required="false" showLabel="true" type="ddm-fileupload">
+				<meta-data locale="en_US">
+					<entry name="acceptFiles"><![CDATA[*]]></entry>
+					<entry name="folder"><![CDATA[{"folderId":0,"folderName":"Documents Home"}]]></entry>
+					<entry name="label"><![CDATA[Attachment]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[Upload documents no larger than 3,000k.]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="comments" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Comments]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="description" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Description]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="date" fieldNamespace="ddm" name="dueDate" required="false" showLabel="true" type="ddm-date">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Due Date]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="issueId" required="false" showLabel="true" type="text" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Issue ID]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="severity" required="false" showLabel="true" type="select">
+				<dynamic-element name="critical" type="option" value="critical">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Critical]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="major" type="option" value="major">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Major]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="minor" type="option" value="minor">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Minor]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="trivial" type="option" value="trivial">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Trivial]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Severity]]></entry>
+					<entry name="predefinedValue"><![CDATA[["minor"]]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="status" required="false" showLabel="true" type="select">
+				<dynamic-element name="open" type="option" value="open">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Open]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="pending" type="option" value="pending">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Pending]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="completed" type="option" value="completed">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Completed]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Status]]></entry>
+					<entry name="predefinedValue"><![CDATA[["open"]]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="title" required="false" showLabel="true" type="text" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Title]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+	</structure>
+	<structure>
+		<name><![CDATA[Meeting Minutes]]></name>
+		<description><![CDATA[Meeting Minutes]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="file-upload" fieldNamespace="ddm" name="attachment" required="false" showLabel="true" type="ddm-fileupload">
+				<meta-data locale="en_US">
+					<entry name="acceptFiles"><![CDATA[*]]></entry>
+					<entry name="folder"><![CDATA[{"folderId":0,"folderName":"Documents Home"}]]></entry>
+					<entry name="label"><![CDATA[Attachment]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[Upload documents no larger than 3,000k.]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="author" required="false" showLabel="true" type="text">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Author]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="description" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Description]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="duration" required="false" showLabel="true" type="text">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Meeting Duration]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="date" fieldNamespace="ddm" name="meetingDate" required="false" showLabel="true" type="ddm-date">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Meeting Date]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="minutes" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Minutes]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="title" required="false" showLabel="true" type="text" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Title]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+	</structure>
+	<structure>
+		<name><![CDATA[To Do]]></name>
+		<description><![CDATA[To Do]]></description>
+		<root available-locales="en_US" default-locale="en_US">
+			<dynamic-element dataType="string" name="assignedTo" required="false" showLabel="true" type="text" width="50">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Assigned To]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="file-upload" fieldNamespace="ddm" name="attachment" required="false" showLabel="true" type="ddm-fileupload">
+				<meta-data locale="en_US">
+					<entry name="acceptFiles"><![CDATA[*]]></entry>
+					<entry name="folder"><![CDATA[{"folderId":0,"folderName":"Documents Home"}]]></entry>
+					<entry name="label"><![CDATA[Attachment]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[Upload documents no larger than 3,000k.]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="comments" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Comments]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="description" required="false" showLabel="true" type="textarea" width="100">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Description]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="date" fieldNamespace="ddm" name="endDate" required="false" showLabel="true" type="ddm-date">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[End Date]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="integer" fieldNamespace="ddm" name="percentComplete" required="false" showLabel="true" type="ddm-integer" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[% Complete]]></entry>
+					<entry name="predefinedValue"><![CDATA[0]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="severity" required="false" showLabel="true" type="select">
+				<dynamic-element name="critical" type="option" value="critical">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Critical]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="major" type="option" value="major">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Major]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="minor" type="option" value="minor">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Minor]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="trivial" type="option" value="trivial">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Trivial]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Severity]]></entry>
+					<entry name="predefinedValue"><![CDATA[["minor"]]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="date" fieldNamespace="ddm" name="startDate" required="false" showLabel="true" type="ddm-date">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Start Date]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="status" required="false" showLabel="true" type="select">
+				<dynamic-element name="open" type="option" value="open">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Open]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="pending" type="option" value="pending">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Pending]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<dynamic-element name="completed" type="option" value="completed">
+					<meta-data locale="en_US">
+						<entry name="label"><![CDATA[Completed]]></entry>
+					</meta-data>
+				</dynamic-element>
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Status]]></entry>
+					<entry name="predefinedValue"><![CDATA[["open"]]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<dynamic-element dataType="string" name="title" required="false" showLabel="true" type="text" width="50">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Title]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+		</root>
+	</structure>
+</root>

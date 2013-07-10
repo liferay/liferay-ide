@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element instance-id="Okhyj6Ni" name="boolean" type="boolean" index-type="keyword">
+		<dynamic-content language-id="en_US"><![CDATA[true]]></dynamic-content>
+	</dynamic-element>
+	<dynamic-element instance-id="1SYNQuhg" name="boolean" type="boolean" index-type="keyword">
+		<dynamic-content language-id="en_US"><![CDATA[]]></dynamic-content>
+	</dynamic-element>
+</root>

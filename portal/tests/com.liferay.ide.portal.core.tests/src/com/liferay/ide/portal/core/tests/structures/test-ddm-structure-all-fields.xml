@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+
+<root available-locales="en_US" default-locale="en_US">
+	<dynamic-element dataType="boolean" name="boolean" repeatable="false" required="false" showLabel="true" type="checkbox" indexType="">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Boolean Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="document-library" fieldNamespace="ddm" indexType="" name="document_library" repeatable="false" required="false" showLabel="true" type="ddm-documentlibrary">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Document Library Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="link-to-page" fieldNamespace="ddm" indexType="" name="link_to_layout" repeatable="false" required="false" showLabel="true" type="ddm-link-to-page" width="25">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Link To Page Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="html" fieldNamespace="ddm" indexType="" name="text_area" repeatable="false" required="false" showLabel="true" type="ddm-text-html" width="25">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[HTML Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" indexType="" multiple="true" name="multi-list" repeatable="false" required="false" showLabel="true" type="select" >
+		<dynamic-element name="001" type="option" value="Item 01">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Item 01]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="002" type="option" value="Item 02">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Item 02]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Multi Select Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" indexType="" name="list" repeatable="false" required="false" showLabel="true" type="select">
+		<dynamic-element name="001" type="option" value="Item 01">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Item 01]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<dynamic-element name="002" type="option" value="Item 02">
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Item 02]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[List Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" indexType="text" name="contact" repeatable="true" required="false" showLabel="true" type="text" width="25">
+		<dynamic-element dataType="string" indexType="text" name="phone" repeatable="true" required="false" showLabel="true" type="text" width="25">
+			<dynamic-element dataType="string" indexType="text" name="ext" repeatable="false" required="false" showLabel="true" type="text" width="25">
+				<meta-data locale="en_US">
+					<entry name="label"><![CDATA[Ext]]></entry>
+					<entry name="predefinedValue"><![CDATA[]]></entry>
+					<entry name="tip"><![CDATA[]]></entry>
+				</meta-data>
+			</dynamic-element>
+			<meta-data locale="en_US">
+				<entry name="label"><![CDATA[Phone]]></entry>
+				<entry name="predefinedValue"><![CDATA[]]></entry>
+				<entry name="tip"><![CDATA[]]></entry>
+			</meta-data>
+		</dynamic-element>
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Contact]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" indexType="text" name="text" repeatable="true" required="true" showLabel="true" type="text" width="25">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Text Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[test]]></entry>
+			<entry name="tip"><![CDATA[These are some instructions.]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="string" indexType="" name="text_box" repeatable="true" required="false" showLabel="true" type="textarea" width="25">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Text Area Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="image" fieldNamespace="wcm" indexType="" name="image_1" readOnly="false" repeatable="false" required="false" showLabel="true" type="wcm-image">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[Image Field]]></entry>
+			<entry name="predefinedValue"><![CDATA[]]></entry>
+			<entry name="tip"><![CDATA[]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="image" fieldNamespace="wcm" indexType="" name="image_2" readOnly="false" repeatable="false" required="false" showLabel="true" type="wcm-image">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[image_2]]></entry>
+		</meta-data>
+	</dynamic-element>
+	<dynamic-element dataType="image" fieldNamespace="wcm" indexType="" name="image_3" readOnly="false" required="false" showLabel="true" type="wcm-image">
+		<meta-data locale="en_US">
+			<entry name="label"><![CDATA[image_3]]></entry>
+		</meta-data>
+	</dynamic-element>
+</root>

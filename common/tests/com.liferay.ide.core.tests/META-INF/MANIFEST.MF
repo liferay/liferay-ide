@@ -6,7 +6,9 @@ Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
- org.junit;bundle-version="4.0.0";visibility:=reexport
+ org.junit;bundle-version="4.0.0";visibility:=reexport,
+ org.eclipse.sapphire.modeling;bundle-version="0.7.0",
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core.tests
