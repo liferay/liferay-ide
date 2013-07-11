@@ -241,6 +241,13 @@
 							</adapt>
 						</or>
 					</not>
+					<and>
+						<adapt type="org.eclipse.core.resources.IProject">
+							<test forcePluginActivation="true"
+								property="com.liferay.ide.project.ui.isSDKFolderProject"
+								value="true" />	
+						</adapt>
+					</and>
 				</and>
 			 </adapt>
          </enablement>
