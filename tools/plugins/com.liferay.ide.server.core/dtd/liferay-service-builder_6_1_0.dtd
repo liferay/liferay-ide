@@ -11,7 +11,7 @@ portlets. The Service Builder saves the developer time by generating Spring
 utilities, SOAP utilities, and Hibernate persistence classes to ease the
 development of services.
 -->
-<!ELEMENT service-builder (author?, namespace?, entity*, exceptions?,
+<!ELEMENT service-builder (author?, namespace, entity*, exceptions?,
 service-builder-import*)>
 
 <!--
@@ -22,7 +22,7 @@ namespace tables. The default value is false for core services and true for
 plugin services.
 -->
 <!ATTLIST service-builder
-	package-path CDATA #IMPLIED
+	package-path CDATA #REQUIRED
 	auto-namespace-tables CDATA #IMPLIED
 >
 
@@ -273,7 +273,7 @@ accessed to generate a unique identifier whenever an insert occurs. This
 implementation is only supported by DB2, Oracle, PostgreSQL, and SAP DB.
 
 This accessor value specifies whether or not to generate an accessor for this
-column. This accessor will provide a fast and type-safe way to access column 
+column. This accessor will provide a fast and type-safe way to access column
 value.
 
 The filter-primary value specifies the column to use as the primary key column

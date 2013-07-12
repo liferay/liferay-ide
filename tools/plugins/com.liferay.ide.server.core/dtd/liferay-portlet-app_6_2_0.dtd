@@ -21,7 +21,8 @@ url-encoder-class?, portlet-data-handler-class?,
 staged-model-data-handler-class*, template-handler?,
 portlet-layout-listener-class?, poller-processor-class?,
 pop-message-listener-class?, social-activity-interpreter-class*,
-social-request-interpreter-class?, webdav-storage-token?, webdav-storage-class?,
+social-request-interpreter-class?, user-notification-definitions?,
+user-notification-handler-class*, webdav-storage-token?, webdav-storage-class?,
 xml-rpc-method-class?, control-panel-entry-category?,
 control-panel-entry-weight?, control-panel-entry-class?,
 asset-renderer-factory*, atom-collection-adapter*, custom-attributes-display*,
@@ -313,6 +314,23 @@ http://docs.liferay.com/portal/6.2/javadocs/portal-service/com/liferay/portlet/s
 <!ELEMENT social-request-interpreter-class (#PCDATA)>
 
 <!--
+The user-notification-handler-class value must be a class that implements
+com.liferay.portal.kernel.notifications.UserNotificationHandler is
+called to interpret requests into friendly messages that are easily
+understandable by a human being.
+
+See:
+
+http://docs.liferay.com/portal/6.2/javadocs/portal-service/com/liferay/portal/kernel/notifications/UserNotificationHandler.html
+-->
+<!ELEMENT user-notification-handler-class (#PCDATA)>
+
+<!--
+The user-notification-definitions points to the XML file that defines the user notifications for this portlet. This file is read by the class loader.
+-->
+<!ELEMENT user-notification-definitions (#PCDATA)>
+
+<!--
 The webdav-storage-token value is the WebDAV directory name for data managed by
 this portlet.
 
@@ -345,9 +363,15 @@ http://docs.liferay.com/portal/6.2/javadocs/portal-impl/com/liferay/portlet/blog
 <!ELEMENT xml-rpc-method-class (#PCDATA)>
 
 <!--
-Set the control-panel-entry-category value to "my", "content", "portal" or
-"server" to make this portlet available in the Control Panel under that
-category.
+Set the control-panel-entry-category value to "my" to make this portlet
+available within the My Account administration of the user. Set the value to
+"apps", "configuration", "sites", or "users" to make it available in the Control
+Panel under that category. Set the value to "site_administration.configuration",
+"site_administration.content", or "site_administration.main" to make it
+available in the Site Administration under that category. Legacy values from
+previous versions of Liferay will be automatically mapped to the new values:
+"content" to "site_administration.content", "portal" to "users", and "server" to
+"apps".
 -->
 <!ELEMENT control-panel-entry-category (#PCDATA)>
 

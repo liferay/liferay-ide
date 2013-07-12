@@ -861,6 +861,15 @@
                uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-theme-loader_6_2_0.dtd">
          </system>
          <public
+               publicId="-//Liferay//DTD User Notification Definition 6.2.0//EN"
+               uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-user-notification-definitions_6_2_0.dtd"
+               webURL="http://www.liferay.com/dtd/liferay-user-notification-definitions_6_2_0.dtd">
+         </public>
+         <system
+               systemId="http://www.liferay.com/dtd/liferay-user-notification-definitions_6_2_0.dtd"
+               uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-user-notification-definitions_6_2_0.dtd">
+         </system>
+         <public
                publicId="-//MuleSource //DTD mule-configuration XML V1.0//EN"
                uri="platform:/plugin/com.liferay.ide.server.core/dtd/mule-configuration.dtd"
                webURL="http://mule.mulesource.org/dtds/mule-configuration.dtd">

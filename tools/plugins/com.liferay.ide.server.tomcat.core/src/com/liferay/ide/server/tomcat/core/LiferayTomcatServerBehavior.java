@@ -66,15 +66,19 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
     public IPath getModuleDeployDirectory( IModule module )
     {
         final IPath defaultPath = super.getModuleDeployDirectory( module );
-        final IProject project = module.getProject();
 
-        String requiredSuffix = ProjectUtil.getRequiredSuffix( project );
         IPath updatedPath = null;
 
-        if( ! defaultPath.lastSegment().endsWith( requiredSuffix ) )
+        if( defaultPath != null && defaultPath.lastSegment() != null )
         {
-            String lastSegment = defaultPath.lastSegment();
-            updatedPath = defaultPath.removeLastSegments( 1 ).append( lastSegment + requiredSuffix );
+            final IProject project = module.getProject();
+            final String requiredSuffix = ProjectUtil.getRequiredSuffix( project );
+
+            if( ! defaultPath.lastSegment().endsWith( requiredSuffix ) )
+            {
+                String lastSegment = defaultPath.lastSegment();
+                updatedPath = defaultPath.removeLastSegments( 1 ).append( lastSegment + requiredSuffix );
+            }
         }
 
         return updatedPath == null ? defaultPath : updatedPath;

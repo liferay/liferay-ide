@@ -23,6 +23,8 @@ auto.deploy.listeners
 application.startup.events
 auth.failure
 auth.max.failures
+auth.token.ignore.actions
+auth.token.ignore.portlets
 auth.token.impl
 auth.pipeline.post
 auth.pipeline.pre

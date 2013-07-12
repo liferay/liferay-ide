@@ -1,0 +1,26 @@
+<!--
+<!DOCTYPE user-notification-definitions PUBLIC
+	"-//Liferay//DTD User Notification Definition 6.2.0//EN"
+	"http://www.liferay.com/dtd/liferay-user-notification-definitions_6_2_0.dtd">
+-->
+
+<!ELEMENT user-notification-definitions (definition*)>
+
+<!ELEMENT definition (model-name?, notification-type, description?,
+delivery-type*)>
+
+<!ELEMENT model-name (#PCDATA)>
+
+<!ELEMENT notification-type (#PCDATA)>
+
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT delivery-type (name, type, default?, modifiable?)>
+
+<!ELEMENT name (#PCDATA)>
+
+<!ELEMENT type (#PCDATA)>
+
+<!ELEMENT default (#PCDATA)>
+
+<!ELEMENT modifiable (#PCDATA)>

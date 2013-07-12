@@ -7,6 +7,15 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
 	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:complexType name="abstract-notification-complex-type" abstract="true">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="description" type="xs:string" minOccurs="0" />
+			<xs:element name="template" type="xs:string" />
+			<xs:element name="template-language" type="template-language-type" />
+			<xs:element name="notification-type" type="notification-transport-type" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 	<xs:complexType name="abstract-timer-complex-type" abstract="true">
 		<xs:sequence>
 			<xs:element name="name" type="xs:string" />
@@ -55,17 +64,25 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="notification-complex-type">
+		<xs:complexContent>
+			<xs:extension base="abstract-notification-complex-type">
+				<xs:sequence>
+					<xs:element name="recipients" type="recipients-complex-type" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="recipients-complex-type">
 		<xs:sequence>
-			<xs:element name="name" type="xs:string" />
-			<xs:element name="description" type="xs:string" minOccurs="0" />
-			<xs:element name="template" type="xs:string" />
-			<xs:element name="template-language" type="template-language-type" />
-			<xs:element name="notification-type" type="notification-transport-type" maxOccurs="unbounded" />
-			<xs:element name="recipients" minOccurs="0">
+			<xs:element name="address" type="email-address-type" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="roles" minOccurs="0">
 				<xs:complexType>
-					<xs:group ref="recipients-group" />
+					<xs:choice minOccurs="0">
+						<xs:element name="role" type="role-complex-type" maxOccurs="unbounded" />
+					</xs:choice>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="user" type="user-complex-type" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="role-complex-type">
@@ -79,6 +96,26 @@
 				</xs:sequence>
 			</xs:choice>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="task-notification-complex-type">
+		<xs:complexContent>
+			<xs:extension base="abstract-notification-complex-type">
+				<xs:sequence>
+					<xs:element name="recipients" type="task-recipients-complex-type" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="task-recipients-complex-type">
+		<xs:complexContent>
+			<xs:extension base="recipients-complex-type">
+				<xs:sequence>
+					<xs:element name="assignees" minOccurs="0" maxOccurs="1">
+						<xs:complexType />
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="task-timer-complex-type">
 		<xs:complexContent>
@@ -121,7 +158,7 @@
 		<xs:choice>
 			<xs:element name="user-id" type="xs:long" minOccurs="0" />
 			<xs:element name="screen-name" type="xs:string" minOccurs="0" />
-			<xs:element name="email-address" type="xs:string" minOccurs="0" />
+			<xs:element name="email-address" type="email-address-type" minOccurs="0" />
 		</xs:choice>
 	</xs:complexType>
 	<xs:element name="condition">
@@ -150,6 +187,17 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="join">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="action-timer-workflow-node-complex-type">
+					<xs:sequence>
+						<xs:element ref="transitions" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="join-xor">
 		<xs:complexType>
 			<xs:complexContent>
 				<xs:extension base="action-timer-workflow-node-complex-type">
@@ -292,19 +340,6 @@
 			<xs:element ref="task" />
 		</xs:choice>
 	</xs:group>
-	<xs:group name="recipients-group">
-		<xs:sequence>
-			<xs:element name="address" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="roles" minOccurs="0">
-				<xs:complexType>
-					<xs:choice minOccurs="0">
-						<xs:element name="role" type="role-complex-type" maxOccurs="unbounded" />
-					</xs:choice>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="user" type="user-complex-type" minOccurs="0" maxOccurs="unbounded" />
-		</xs:sequence>
-	</xs:group>
 	<xs:group name="task-actions-group">
 		<xs:choice>
 			<xs:element name="action">
@@ -321,7 +356,7 @@
 			<xs:element name="notification">
 				<xs:complexType>
 					<xs:complexContent>
-						<xs:extension base="notification-complex-type">
+						<xs:extension base="task-notification-complex-type">
 							<xs:sequence>
 								<xs:element name="execution-type" type="task-execution-type" />
 							</xs:sequence>
@@ -334,7 +369,7 @@
 	<xs:group name="task-timer-actions-group">
 		<xs:choice>
 			<xs:element name="timer-action" type="action-complex-type" />
-			<xs:element name="timer-notification" type="notification-complex-type" />
+			<xs:element name="timer-notification" type="task-notification-complex-type" />
 			<xs:element name="reassignments" minOccurs="0">
 				<xs:complexType>
 					<xs:choice>
@@ -350,6 +385,11 @@
 			<xs:element name="timer-notification" type="notification-complex-type" />
 		</xs:choice>
 	</xs:group>
+	<xs:simpleType name="email-address-type">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[^@]+@[^\.]+\..+" />
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:simpleType name="execution-type">
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="onEntry" />
