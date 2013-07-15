@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            file-extensions="xml"
+            id="structuresFile"
+            name="Liferay Structure XML"
+            priority="high">
+         <describer
+               class="com.liferay.ide.portal.core.structures.StructuresContentDescriber">
+         </describer>
+      </content-type>
+   </extension>
 
 </plugin>
