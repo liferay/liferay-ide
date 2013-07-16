@@ -99,12 +99,15 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
                 {
                     launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, fmDebugPassword );
                     launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT, Integer.toString( fmDebugPort ) );
+
                     final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
+
                     launch.addDebugTarget( target );
                 }
             }
             catch( APIException e )
             {
+                LiferayServerCore.logError( "Unable to determine remote freemarker debugger connection info.", e ); //$NON-NLS-1$
             }
         }
 
