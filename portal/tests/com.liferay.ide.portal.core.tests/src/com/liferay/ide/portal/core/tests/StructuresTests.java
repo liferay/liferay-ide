@@ -80,7 +80,11 @@ public class StructuresTests extends PortalCoreTests
 
         assertEquals( "en_US", root.getDefaultLocale().content() );
 
-        final DynamicElement dynamicElement = root.getDynamicElements().get( 1 );
+        final ElementList<DynamicElement> dynamicElements = root.getDynamicElements();
+
+        assertEquals( 154, dynamicElements.size() );
+
+        final DynamicElement dynamicElement = dynamicElements.get( 1 );
 
         assertNotNull( dynamicElement );
 
