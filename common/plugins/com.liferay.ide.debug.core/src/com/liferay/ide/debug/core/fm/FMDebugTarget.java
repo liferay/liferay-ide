@@ -469,9 +469,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
             try
             {
                 this.debuggerClient =
-                    DebuggerClient.getDebugger(
-                        Inet4Address.getByName( this.host ), getDebuggerPort(),
-                        LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD ) );
+                    DebuggerClient.getDebugger( Inet4Address.getByName( this.host ), getDebugPort(), getDebugPassword() );
             }
             catch( Exception e )
             {
@@ -481,8 +479,27 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
         return this.debuggerClient;
     }
 
-    private int getDebuggerPort()
+    private String getDebugPassword()
     {
+        String debugPassword = launch.getAttribute( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD );
+
+        if( debugPassword != null )
+        {
+            return debugPassword;
+        }
+
+        return LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD );
+    }
+
+    private int getDebugPort()
+    {
+        String debugPort = launch.getAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT );
+
+        if( debugPort != null )
+        {
+            return Integer.parseInt( debugPort );
+        }
+
         return Integer.parseInt( LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PORT ) );
     }
 
@@ -545,7 +562,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
     {
         if( this.name == null )
         {
-            this.name = "Freemarker Debugger at " + this.host + ":" + getDebuggerPort();
+            this.name = "Freemarker Debugger at " + this.host + ":" + getDebugPort();
         }
 
         return this.name;
