@@ -23,6 +23,7 @@ public class StringPool
     public static final String BLANK = ""; //$NON-NLS-1$
     public static final String COLON = ":"; //$NON-NLS-1$
     public static final String COMMA = ","; //$NON-NLS-1$
+    public static final String DASH = "-"; //$NON-NLS-1$
     public static final String DOUBLE_ASTERISK = "**"; //$NON-NLS-1$
     public static final String DOUBLE_QUOTE = "\""; //$NON-NLS-1$
     public static final String EMPTY = BLANK;
