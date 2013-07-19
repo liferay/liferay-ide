@@ -657,6 +657,9 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE, warFile.getAbsolutePath() );
 
+        // IDE-1073 LPS-37923
+        properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE_DEFAULT, warFile.getAbsolutePath() );
+
         submon.worked( 10 ); // 10% complete
 
         if( monitor.isCanceled() )

@@ -141,6 +141,8 @@ public interface ISDKConstants
 
     public static final String PROPERTY_PLUGIN_FILE = "plugin.file"; //$NON-NLS-1$
 
+    public static final String PROPERTY_PLUGIN_FILE_DEFAULT = "plugin.file.default"; //$NON-NLS-1$
+
     public static final String PROPERTY_PORTLET_DISPLAY_NAME = "portlet.display.name"; //$NON-NLS-1$
 
     public static final String PROPERTY_PORTLET_FRAMEWORK = "portlet.framework"; //$NON-NLS-1$
@@ -203,6 +205,6 @@ public interface ISDKConstants
 
     public static final String THEME_PLUGIN_PROJECT_SUFFIX = _THEME_PLUGIN_PROJECT_SUFFIX;
 
-    public final static String VAR_NAME_LIFERAY_SDK_DIR = "liferay_sdk_dir"; //$NON-NLS-1$
+    public static final String VAR_NAME_LIFERAY_SDK_DIR = "liferay_sdk_dir"; //$NON-NLS-1$
 
 }
