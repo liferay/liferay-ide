@@ -28,13 +28,9 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.sourcelookup.ISourcePathComputer;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.IServerListener;
-import org.eclipse.wst.server.core.ServerEvent;
 import org.eclipse.wst.server.core.ServerUtil;
 import org.osgi.framework.Version;
 
@@ -89,77 +85,11 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
     public void launch( final ILaunchConfiguration configuration, String mode, final ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
-        final IServer server = ServerUtil.getServer( configuration );
-
         if( ILaunchManager.DEBUG_MODE.equals( mode ) )
         {
-            final PortalSourceLookupDirector sourceLocator = new PortalSourceLookupDirector();
-
-            server.addServerListener
-            (
-                new IServerListener()
-                {
-                    IModule[] modules = server.getModules();
-
-                    public synchronized void serverChanged( ServerEvent event )
-                    {
-                        if( ( event.getKind() & ServerEvent.MODULE_CHANGE ) > 0 )
-                        {
-                            IModule[] newModules = event.getServer().getModules();
-
-                            if( modulesChanged( modules, newModules ) )
-                            {
-                                try
-                                {
-                                    final PortalSourceLookupDirector director =
-                                        (PortalSourceLookupDirector) launch.getSourceLocator();
-                                    director.initializeDefaults( configuration );
-                                }
-                                catch( Exception e )
-                                {
-                                    LiferayTomcatPlugin.logError( "Unable to update source containers for server", e ); //$NON-NLS-1$
-                                }
-
-                                modules = newModules;
-                            }
-                        }
-                    }
-
-                    private boolean modulesChanged( IModule[] modules, IModule[] modules2 )
-                    {
-                        if( CoreUtil.isNullOrEmpty( modules ) && CoreUtil.isNullOrEmpty( modules2 )  )
-                        {
-                            return true;
-                        }
-
-                        if( CoreUtil.isNullOrEmpty( modules ) || CoreUtil.isNullOrEmpty( modules2 ) )
-                        {
-                            return true;
-                        }
-
-                        if( modules.length != modules2.length )
-                        {
-                            return true;
-                        }
-
-                        for( int i = 0; i < modules.length; i++ )
-                        {
-                            if( ! modules[i].equals( modules2[i] ) )
-                            {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    }
-                }
-            );
-
-            final ISourcePathComputer sourcePathComputer =
-                getLaunchManager().getSourcePathComputer( LiferayTomcatSourcePathComputer.ID );
-            sourceLocator.setSourcePathComputer( sourcePathComputer );
-            sourceLocator.initializeDefaults( configuration );
-            launch.setSourceLocator( sourceLocator );
+            final PortalSourceLookupDirector sourceLocator =
+                new PortalSourceLookupDirector( configuration, LiferayTomcatSourcePathComputer.ID );
+            sourceLocator.configureLaunch( launch );
         }
 
         this.saveLaunchMode = mode;
@@ -170,6 +100,8 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
         if( ILaunchManager.DEBUG_MODE.equals( mode ) && FALSE.equals( stopServer ) )
         {
+            final IServer server = ServerUtil.getServer( configuration );
+
             final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
             launch.addDebugTarget( target );
         }

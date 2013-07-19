@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.debug.core.LiferayDebugCore;
 import com.liferay.ide.debug.core.fm.FMDebugTarget;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.PortalSourceLookupDirector;
 
 import java.util.Map;
 
@@ -117,8 +118,9 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
             return;
         }
 
-        // set the default source locator if required
-        setDefaultSourceLocator( launch, configuration );
+        final PortalSourceLookupDirector sourceLocator =
+            new PortalSourceLookupDirector( configuration, "com.liferay.ide.server.tomcat.portalSourcePathComputer" ); //$NON-NLS-1$
+        sourceLocator.configureLaunch( launch );
 
         if( !launch.isTerminated() )
         {
