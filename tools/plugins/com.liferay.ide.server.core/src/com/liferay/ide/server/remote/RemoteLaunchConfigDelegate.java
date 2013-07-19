@@ -87,31 +87,6 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
 
         connectMap.put( "timeout", StringPool.EMPTY + connectTimeout ); //$NON-NLS-1$
 
-        IServerManagerConnection connection = getServerManagerConnection( server, monitor );
-
-        if( connection != null )
-        {
-            try
-            {
-                String fmDebugPassword = connection.getFMDebugPassword();
-                int fmDebugPort = connection.getFMDebugPort();
-
-                if( fmDebugPassword != null && fmDebugPort != -1 )
-                {
-                    launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, fmDebugPassword );
-                    launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT, Integer.toString( fmDebugPort ) );
-
-                    final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
-
-                    launch.addDebugTarget( target );
-                }
-            }
-            catch( APIException e )
-            {
-                LiferayServerCore.logError( "Unable to determine remote freemarker debugger connection info.", e ); //$NON-NLS-1$
-            }
-        }
-
         // check for cancellation
         if( monitor.isCanceled() )
         {
@@ -141,6 +116,31 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
                 }
             }
             return;
+        }
+
+        final IServerManagerConnection connection = getServerManagerConnection( server, monitor );
+
+        if( connection != null )
+        {
+            try
+            {
+                final String fmDebugPassword = connection.getFMDebugPassword();
+                final int fmDebugPort = connection.getFMDebugPort();
+
+                if( fmDebugPassword != null && fmDebugPort != -1 )
+                {
+                    launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, fmDebugPassword );
+                    launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT, Integer.toString( fmDebugPort ) );
+
+                    final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
+
+                    launch.addDebugTarget( target );
+                }
+            }
+            catch( APIException e )
+            {
+                LiferayServerCore.logError( "Unable to determine remote freemarker debugger connection info.", e ); //$NON-NLS-1$
+            }
         }
 
         monitor.done();
