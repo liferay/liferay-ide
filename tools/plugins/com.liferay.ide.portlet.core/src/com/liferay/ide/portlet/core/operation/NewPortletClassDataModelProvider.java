@@ -55,6 +55,7 @@ import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.internal.core.search.BasicSearchEngine;
 import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
+import org.eclipse.jst.j2ee.internal.common.operations.JavaModelUtil;
 import org.eclipse.jst.j2ee.internal.web.operations.NewWebClassDataModelProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
@@ -676,12 +677,14 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                     List<String> list = new ArrayList<String>();
                     list.addAll( Arrays.asList( defaultVals ) );
 
-                    IJavaSearchScope scope =
-                        BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) ); //$NON-NLS-1$
+                    final IType portletType = JavaModelUtil.findType( javaProject, "javax.portlet.Portlet" ); //$NON-NLS-1$
+
+                    final IJavaSearchScope scope =
+                        BasicSearchEngine.createStrictHierarchyScope( javaProject, portletType, true, true, null );
 
                     for( int i = 0; i < customVals.length; i++ )
                     {
-                        IType type = javaProject.findType( customVals[i] );
+                        IType type = JavaModelUtil.findType( javaProject, customVals[i] );
 
                         if( type != null && scope.encloses( type ) )
                         {
@@ -796,10 +799,12 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( javaProject != null )
             {
-                IJavaSearchScope scope =
-                    BasicSearchEngine.createHierarchyScope( javaProject.findType( "javax.portlet.Portlet" ) );
+                final IType portletType = JavaModelUtil.findType( javaProject, "javax.portlet.Portlet" );
 
-                IType classType = javaProject.findType( qualifiedClassName );
+                final IJavaSearchScope scope =
+                    BasicSearchEngine.createStrictHierarchyScope( javaProject, portletType, true, true, null );
+
+                final IType classType = JavaModelUtil.findType( javaProject, qualifiedClassName );
 
                 if( classType != null && scope.encloses( classType ) )
                 {
