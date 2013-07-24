@@ -9,7 +9,6 @@ import com.liferay.ide.portal.core.structures.model.DynamicElementMetadata;
 import com.liferay.ide.portal.core.structures.model.Entry;
 import com.liferay.ide.portal.core.structures.model.Root;
 import com.liferay.ide.portal.core.structures.model.Structure;
-import com.liferay.ide.portal.core.structures.model.StructureRoot;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -68,11 +67,11 @@ public class StructuresTests extends PortalCoreTests
     @Test
     public void testDDMStructureBasicDocumentRead() throws Exception
     {
-        final Element element = getElementFromFile( getCurrentProject(), DDM_STRUCTURE_BASIC_DOCUMENT, StructureRoot.TYPE );
+        final Element element = getElementFromFile( getCurrentProject(), DDM_STRUCTURE_BASIC_DOCUMENT, Root.TYPE );
 
         setElement( element );
 
-        final StructureRoot root = element.nearest( StructureRoot.class );
+        final Root root = element.nearest( Root.class );
 
         assertNotNull( root );
 
@@ -144,7 +143,7 @@ public class StructuresTests extends PortalCoreTests
         assertEquals( "Learning Module Metadata", structure.getName().content( false ) );
         assertEquals( "Learning Module Metadata", structure.getDescription().content( false ) );
 
-        final StructureRoot structureRoot = structure.getRoot().content( false );
+        final Root structureRoot = structure.getRoot().content( false );
 
         assertNotNull( structureRoot );
         assertEquals( "[$LOCALE_DEFAULT$]", structureRoot.getAvailableLocales().content( false ) );

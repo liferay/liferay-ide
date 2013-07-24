@@ -16,10 +16,11 @@
  *******************************************************************************/
 package com.liferay.ide.portal.core.structures.model;
 
-import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -30,7 +31,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  * @author Gregory Amerson
  */
 @XmlBinding( path = "root" )
-public interface Root extends Element
+public interface Root extends HasDynamicElements
 {
 
     ElementType TYPE = new ElementType( Root.class );
@@ -43,5 +44,25 @@ public interface Root extends Element
     ListProperty PROP_STRUCTURES = new ListProperty( TYPE, "Structures" ); //$NON-NLS-1$
 
     ElementList<Structure> getStructures();
+
+    // *** AvailableLocales ***
+
+    @Label( standard = "available locales" )
+    @XmlBinding( path = "@available-locales" )
+    ValueProperty PROP_AVAILABLE_LOCALES = new ValueProperty( TYPE, "AvailableLocales" ); //$NON-NLS-1$
+
+    Value<String> getAvailableLocales();
+
+    void setAvailableLocales( String value );
+
+    // *** DefaultLocale ***
+
+    @Label( standard = "default locale" )
+    @XmlBinding( path = "@default-locale" )
+    ValueProperty PROP_DEFAULT_LOCALE = new ValueProperty( TYPE, "DefaultLocale" ); //$NON-NLS-1$
+
+    Value<String> getDefaultLocale();
+
+    void setDefaultLocale( String value );
 
 }

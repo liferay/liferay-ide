@@ -11,33 +11,115 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.portal.ui;
 
+
+import com.liferay.ide.portal.ui.templates.StructuresTemplateContext;
+
+import java.io.IOException;
+
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
+import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
+import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * @author Gregory Amerson
- * The activator class controls the plug-in life cycle
  */
 public class PortalUI extends AbstractUIPlugin
 {
 
+    // The shared instance
+    private static PortalUI plugin;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.portal.ui"; //$NON-NLS-1$
 
-    // The shared instance
-    private static PortalUI plugin;
+    private static final String TEMPLATES_KEY = PLUGIN_ID + ".templates"; //$NON-NLS-1$
+
+    /**
+     * Returns the shared instance
+     *
+     * @return the shared instance
+     */
+    public static PortalUI getDefault()
+    {
+        return plugin;
+    }
+
+    public static IPreferenceStore getPrefStore()
+    {
+        return getDefault().getPreferenceStore();
+    }
+
+    public static void logError( Exception e )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
+    }
+
+    public static IStatus logInfo( String msg, IStatus status )
+    {
+        return new Status( IStatus.INFO, PLUGIN_ID, msg, status.getException());
+    }
+
+    private ContributionContextTypeRegistry contextTypeRegistry;
+
+    private ContributionTemplateStore templateStore;
 
     /**
      * The constructor
      */
     public PortalUI()
     {
+    }
+
+    public ContextTypeRegistry getTemplateContextRegistry()
+    {
+        if( contextTypeRegistry == null )
+        {
+            ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
+
+            for( StructuresTemplateContext contextType : StructuresTemplateContext.values() )
+            {
+                registry.addContextType( contextType.getContextTypeId() );
+            }
+
+            contextTypeRegistry = registry;
+        }
+
+        return contextTypeRegistry;
+    }
+
+    public TemplateStore getTemplateStore()
+    {
+        if( templateStore == null )
+        {
+            templateStore =
+                new ContributionTemplateStore( getTemplateContextRegistry(), getPreferenceStore(), TEMPLATES_KEY );
+
+            try
+            {
+                templateStore.load();
+            }
+            catch( IOException ex )
+            {
+                logError( "Unable to load structures templates", ex ); //$NON-NLS-1$
+            }
+        }
+
+        return templateStore;
     }
 
     /*
@@ -58,16 +140,6 @@ public class PortalUI extends AbstractUIPlugin
     {
         plugin = null;
         super.stop( context );
-    }
-
-    /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
-     */
-    public static PortalUI getDefault()
-    {
-        return plugin;
     }
 
 }

@@ -76,13 +76,13 @@ public interface Structure extends Element
 
     void setDescription( String value );
 
-    // *** StructureRoot ***
+    // *** Root ***
 
-    @Type( base = StructureRoot.class )
-    @Label( standard = "structure root" )
+    @Type( base = Root.class )
+    @Label( standard = "root" )
     @XmlBinding( path = "root" )
     ElementProperty PROP_ROOT = new ElementProperty( TYPE, "Root" ); //$NON-NLS-1$
 
-    ElementHandle<StructureRoot> getRoot();
+    ElementHandle<Root> getRoot();
 
 }
