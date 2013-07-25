@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
@@ -37,6 +39,7 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 public class LiferayMavenProject extends BaseLiferayProject
 {
@@ -237,7 +240,15 @@ public class LiferayMavenProject extends BaseLiferayProject
 
         if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
         {
-            retval = ServerUtil.getEntryCategories( appServerPortalDir );
+            String portalVersion = null;
+            ILiferayProject liferayProject = LiferayCore.create( getProject() );
+
+            if( liferayProject != null )
+            {
+                portalVersion  = liferayProject.getPortalVersion();
+            }
+
+            retval = ServerUtil.getEntryCategories( appServerPortalDir, portalVersion );
         }
 
         return retval;

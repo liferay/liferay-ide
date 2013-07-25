@@ -555,7 +555,22 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             if( getProperty( ENTRY_CATEGORY ).equals( "category.my" ) ) //$NON-NLS-1$
             {
-                return new DataModelPropertyDescriptor( "category.my", "My Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$
+                ILiferayProject liferayProject = LiferayCore.create( getProject() );
+                String version = liferayProject.getPortalVersion();
+                Version portalVersion = Version.parseVersion( version );
+
+                String propertyDescription;
+
+                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) >= 0 )
+                {
+                    propertyDescription = "My Account Administration";
+                }
+                else
+                {
+                    propertyDescription = "My Account Section";
+                }
+
+                return new DataModelPropertyDescriptor( "category.my", propertyDescription ); //$NON-NLS-1$ //$NON-NLS-2$
             }
         }
 

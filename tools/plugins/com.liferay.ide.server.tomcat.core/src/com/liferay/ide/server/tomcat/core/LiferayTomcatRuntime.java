@@ -54,6 +54,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime
@@ -230,7 +231,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public Properties getPortletEntryCategories()
     {
-        return ServerUtil.getEntryCategories( getAppServerPortalDir() );
+        return ServerUtil.getEntryCategories( getAppServerPortalDir(), getPortalVersion() );
     }
 
     protected ReleaseHelper getReleaseHelper( IPath serviceJar )

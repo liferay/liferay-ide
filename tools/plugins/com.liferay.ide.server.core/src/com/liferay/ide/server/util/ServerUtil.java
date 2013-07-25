@@ -85,6 +85,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
+ * @author Cindy Li
  */
 @SuppressWarnings( "restriction" )
 public class ServerUtil
@@ -398,15 +399,35 @@ public class ServerUtil
         return retval;
     }
 
-    public static Properties getEntryCategories( IPath portalDir )
+    public static Properties getEntryCategories( IPath portalDir, String portalVersion )
     {
         Properties categories = getCategories( portalDir );
 
         Properties retval = new Properties();
-        retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+        if( ( portalVersion == null ) || ( CoreUtil.compareVersions( new Version( portalVersion ), v620 ) < 0 ) )
+        {
+            retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        }
+        else
+        {
+            retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Administration" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.users", "Control Panel - " + categories.getProperty( "category.users" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.apps", "Control Panel - " + categories.getProperty( "category.apps" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.configuration", "Control Panel - " + categories.getProperty( "category.configuration" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put( "category.sites", "Control Panel - " + categories.getProperty( "category.sites" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put(
+                "category.site_administration.configuration", "Site Administration - " + categories.getProperty( "category.site_administration.configuration" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put(
+                "category.site_administration.content", "Site Administration - " + categories.getProperty( "category.site_administration.content" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put(
+                "category.site_administration.pages", "Site Administration - " + categories.getProperty( "category.site_administration.pages" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            retval.put(
+                "category.site_administration.users", "Site Administration - " + categories.getProperty( "category.site_administration.users" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        }
 
         return retval;
     }
