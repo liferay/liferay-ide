@@ -405,28 +405,40 @@ public class ServerUtil
 
         Properties retval = new Properties();
 
+        final String myKey = "category.my"; //$NON-NLS-1$
+        final String categoryMy = categories.getProperty( myKey );
+
         if( ( portalVersion == null ) || ( CoreUtil.compareVersions( new Version( portalVersion ), v620 ) < 0 ) )
         {
-            retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.portal", categories.getProperty( "category.portal" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.server", categories.getProperty( "category.server" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.content", categories.getProperty( "category.content" ) + " Section" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            final String portalKey = "category.portal"; //$NON-NLS-1$
+            final String serverKey = "category.server"; //$NON-NLS-1$
+            final String keyContent = "category.content"; //$NON-NLS-1$
+
+            retval.put( myKey, categoryMy + " Account Section" ); //$NON-NLS-1$
+            retval.put( portalKey, categories.getProperty( portalKey ) + " Section" ); //$NON-NLS-1$
+            retval.put( serverKey, categories.getProperty( serverKey ) + " Section" ); //$NON-NLS-1$
+            retval.put( keyContent, categories.getProperty( keyContent ) + " Section" ); //$NON-NLS-1$
         }
         else
         {
-            retval.put( "category.my", categories.getProperty( "category.my" ) + " Account Administration" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.users", "Control Panel - " + categories.getProperty( "category.users" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.apps", "Control Panel - " + categories.getProperty( "category.apps" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.configuration", "Control Panel - " + categories.getProperty( "category.configuration" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put( "category.sites", "Control Panel - " + categories.getProperty( "category.sites" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put(
-                "category.site_administration.configuration", "Site Administration - " + categories.getProperty( "category.site_administration.configuration" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put(
-                "category.site_administration.content", "Site Administration - " + categories.getProperty( "category.site_administration.content" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put(
-                "category.site_administration.pages", "Site Administration - " + categories.getProperty( "category.site_administration.pages" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            retval.put(
-                "category.site_administration.users", "Site Administration - " + categories.getProperty( "category.site_administration.users" ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            final String keyUsers = "category.users"; //$NON-NLS-1$
+            final String keyApps = "category.apps"; //$NON-NLS-1$
+            final String keyConfig = "category.configuration"; //$NON-NLS-1$
+            final String keySites = "category.sites"; //$NON-NLS-1$
+            final String keySiteConfig = "category.site_administration.configuration"; //$NON-NLS-1$
+            final String keySiteContent = "category.site_administration.content"; //$NON-NLS-1$
+            final String keySitePages = "category.site_administration.pages"; //$NON-NLS-1$
+            final String keySiteUsers = "category.site_administration.users"; //$NON-NLS-1$
+
+            retval.put( myKey, categoryMy + " Account Administration" ); //$NON-NLS-1$
+            retval.put( keyUsers, "Control Panel - " + categories.getProperty( keyUsers ) ); //$NON-NLS-1$
+            retval.put( keyApps, "Control Panel - " + categories.getProperty( keyApps ) ); //$NON-NLS-1$
+            retval.put( keyConfig, "Control Panel - " + categories.getProperty( keyConfig ) ); //$NON-NLS-1$
+            retval.put( keySites, "Control Panel - " + categories.getProperty( keySites ) ); //$NON-NLS-1$
+            retval.put( keySiteConfig, "Site Administration - " + categories.getProperty( keySiteConfig ) ); //$NON-NLS-1$
+            retval.put( keySiteContent, "Site Administration - " + categories.getProperty( keySiteContent ) ); //$NON-NLS-1$
+            retval.put( keySitePages, "Site Administration - " + categories.getProperty( keySitePages ) ); //$NON-NLS-1$
+            retval.put( keySiteUsers, "Site Administration - " + categories.getProperty( keySiteUsers ) ); //$NON-NLS-1$
         }
 
         return retval;
