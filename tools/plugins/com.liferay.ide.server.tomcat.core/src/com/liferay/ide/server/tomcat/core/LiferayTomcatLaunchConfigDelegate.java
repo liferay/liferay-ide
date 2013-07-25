@@ -22,6 +22,10 @@ import com.liferay.ide.debug.core.fm.FMDebugTarget;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.PortalSourceLookupDirector;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -37,6 +41,7 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Tao Tao
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfigurationDelegate
@@ -46,6 +51,7 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
     private static final String FM_PARAMS = " -Dfreemarker.debug.password={0} -Dfreemarker.debug.port={1}"; //$NON-NLS-1$
 
     private String saveLaunchMode;
+    private String fmDebugPort;
 
     @Override
     public String getVMArguments( ILaunchConfiguration configuration ) throws CoreException
@@ -67,10 +73,17 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
                 if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
                 {
-                    retval +=
-                        NLS.bind(
-                            FM_PARAMS, LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD ),
-                            LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PORT ) );
+                    if( this.fmDebugPort != null )
+                    {
+                        retval +=
+                            NLS.bind(
+                                FM_PARAMS, LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD ),
+                                this.fmDebugPort );
+                    }
+                    else
+                    {
+                        LiferayDebugCore.logError( "The freemarker debug port is invalid." ); //$NON-NLS-1$
+                    }
                 }
             }
             catch( CoreException e )
@@ -82,7 +95,8 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
     }
 
     @Override
-    public void launch( final ILaunchConfiguration configuration, String mode, final ILaunch launch, IProgressMonitor monitor )
+    public void launch(
+        final ILaunchConfiguration configuration, String mode, final ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
         if( ILaunchManager.DEBUG_MODE.equals( mode ) )
@@ -100,10 +114,61 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
         if( ILaunchManager.DEBUG_MODE.equals( mode ) && FALSE.equals( stopServer ) )
         {
-            final IServer server = ServerUtil.getServer( configuration );
+            this.fmDebugPort = getValidatedDebugPort();
 
-            final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
-            launch.addDebugTarget( target );
+            if( this.fmDebugPort != null )
+            {
+                launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT, this.fmDebugPort );
+                this.fmDebugPort = null;
+
+                final IServer server = ServerUtil.getServer( configuration );
+
+                final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
+                launch.addDebugTarget( target );
+            }
+            else
+            {
+                LiferayDebugCore.logError( "Launch freemarker port is invalid." ); //$NON-NLS-1$
+            }
         }
+    }
+
+    private String getValidatedDebugPort()
+    {
+        // This method will firstly do the validation on the customized port,
+        // if the port is not valid, it will search the whole extension ports from port 1025 to 65535
+        // to find another valid port, if no port is found, it returns null.
+        int port = Integer.parseInt( LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PORT ) );
+
+        final int lowerBound = 1025;
+        final int upperBound = 65535;
+
+        if( port < lowerBound || port > upperBound )
+        {
+            port = lowerBound;
+        }
+
+        while( port <= upperBound )
+        {
+            try
+            {
+                ServerSocket server = new ServerSocket();
+                server.bind( new InetSocketAddress( port ) );
+                server.close();
+
+                break;
+            }
+            catch( IOException e )
+            {
+                port++;
+            }
+        }
+
+        if( port <= upperBound )
+        {
+            return String.valueOf( port );
+        }
+
+        return null;
     }
 }
