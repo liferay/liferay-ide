@@ -102,15 +102,15 @@ public class PortletCoreTests extends BaseTests implements INewPortletClassDataM
 
         dataModel.setProperty( PORTLET_NAME, "my-^abcd-tao%*tao ---liferay_PORTlet*^-_Display-_ PORTLET" );
 
-        assertEquals( "My Liferay Display PORTLET", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "My ^abcd Tao%*tao Liferay PORTlet*^ Display PORTLET", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "My Liferay Display PORTLET", dataModel.getProperty( TITLE ) );
+        assertEquals( "My ^abcd Tao%*tao Liferay PORTlet*^ Display PORTLET", dataModel.getProperty( TITLE ) );
 
-        dataModel.setProperty( PORTLET_NAME, "A^A*B&BcD-R@daf!ffwo_casfe/asdr.cv,ae][asdferf--portlet-my new" );
+        dataModel.setProperty( PORTLET_NAME, "ABC^&&&d----DD()--[]AA___{portlet}-my new" );
 
-        assertEquals( "Portlet My New", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "ABC^&&&d DD() []AA {portlet} My New", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "Portlet My New", dataModel.getProperty( TITLE ) );
+        assertEquals( "ABC^&&&d DD() []AA {portlet} My New", dataModel.getProperty( TITLE ) );
 
         dataModel.setProperty( PORTLET_NAME, "" );
 
@@ -126,38 +126,38 @@ public class PortletCoreTests extends BaseTests implements INewPortletClassDataM
 
         dataModel.setProperty( PORTLET_NAME, " \" \" " );
 
-        assertEquals( "", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "\" \"", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "", dataModel.getProperty( TITLE ) );
+        assertEquals( "\" \"", dataModel.getProperty( TITLE ) );
 
         dataModel.setProperty( PORTLET_NAME, " \" " );
 
-        assertEquals( "", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "\"", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "", dataModel.getProperty( TITLE ) );
+        assertEquals( "\"", dataModel.getProperty( TITLE ) );
 
         dataModel.setProperty( PORTLET_NAME, "\"\"       \" " );
 
-        assertEquals( "", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "\"\" \"", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "", dataModel.getProperty( TITLE ) );
+        assertEquals( "\"\" \"", dataModel.getProperty( TITLE ) );
 
         dataModel.setProperty( PORTLET_NAME, " Test1 Test2 \"Test1\" " );
 
-        assertEquals( "Test1 Test2", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "Test1 Test2 \"Test1\"", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "Test1 Test2", dataModel.getProperty( TITLE ) );
+        assertEquals( "Test1 Test2 \"Test1\"", dataModel.getProperty( TITLE ) );
 
         dataModel.setProperty( PORTLET_NAME, " Test1 Test2\" \"Te\"st1 " );
 
-        assertEquals( "Test1", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "Test1 Test2\" \"Te\"st1", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "Test1", dataModel.getProperty( TITLE ) );
+        assertEquals( "Test1 Test2\" \"Te\"st1", dataModel.getProperty( TITLE ) );
 
         dataModel.setProperty( PORTLET_NAME, " Tes \t3 Te\" \" Test2\" \"Te\"st1 " );
 
-        assertEquals( "Tes 3", dataModel.getProperty( DISPLAY_NAME ) );
+        assertEquals( "Tes 3 Te\" \" Test2\" \"Te\"st1", dataModel.getProperty( DISPLAY_NAME ) );
 
-        assertEquals( "Tes 3", dataModel.getProperty( TITLE ) );
+        assertEquals( "Tes 3 Te\" \" Test2\" \"Te\"st1", dataModel.getProperty( TITLE ) );
     }
 }
