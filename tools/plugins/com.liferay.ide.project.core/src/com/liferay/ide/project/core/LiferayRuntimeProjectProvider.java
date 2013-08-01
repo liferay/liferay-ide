@@ -21,6 +21,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.wst.server.core.IRuntime;
 
 
 /**
@@ -31,29 +32,46 @@ public class LiferayRuntimeProjectProvider extends AbstractLiferayProjectProvide
 
     public LiferayRuntimeProjectProvider()
     {
-        super(IProject.class);
+        super( new Class<?>[] { IProject.class, IRuntime.class } );
     }
 
     public ILiferayProject provide( Object type )
     {
-        final IProject project = (IProject) type;
-
+        LiferayRuntimeProject retval = null;
+        IProject project = null;
         ILiferayRuntime liferayRuntime = null;
 
-        try
+        if( type instanceof IProject )
         {
-            liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            project = (IProject) type;
+
+            try
+            {
+                liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            }
+            catch( CoreException e )
+            {
+            }
         }
-        catch( CoreException e )
+        else if( type instanceof IRuntime )
         {
+            try
+            {
+                final IRuntime runtime = (IRuntime) type;
+
+                liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+            }
+            catch( Exception e )
+            {
+            }
         }
 
         if( liferayRuntime != null )
         {
-            return new LiferayRuntimeProject( project, liferayRuntime );
+            retval = new LiferayRuntimeProject( project, liferayRuntime );
         }
 
-        return null;
+        return retval;
     }
 
 }

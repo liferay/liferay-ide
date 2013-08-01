@@ -20,12 +20,12 @@ package com.liferay.ide.core;
  */
 public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
 {
-    private Class<?> classType;
+    private Class<?>[] classTypes;
     private int priority;
 
-    public AbstractLiferayProjectProvider( Class<?> type )
+    public AbstractLiferayProjectProvider( Class<?>[] types )
     {
-        this.classType = type;
+        this.classTypes = types;
     }
 
     public int getPriority()
@@ -35,7 +35,18 @@ public abstract class AbstractLiferayProjectProvider implements ILiferayProjectP
 
     public boolean provides( Class<?> type )
     {
-        return type != null && classType.isAssignableFrom( type );
+        if( type != null )
+        {
+            for( Class<?> classType : classTypes )
+            {
+                if( classType.isAssignableFrom( type ) )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public void setPriority( int priority )

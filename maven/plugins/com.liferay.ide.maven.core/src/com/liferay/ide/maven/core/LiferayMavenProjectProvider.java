@@ -24,13 +24,12 @@ import org.eclipse.core.runtime.CoreException;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
 public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 {
 
     public LiferayMavenProjectProvider()
     {
-        super( IProject.class );
+        super( new Class<?>[] { IProject.class } );
     }
 
     public ILiferayProject provide( Object type )
@@ -45,7 +44,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
                 {
                     return new LiferayMavenProject( project );
                 }
-                
+
             }
             catch( CoreException e )
             {
