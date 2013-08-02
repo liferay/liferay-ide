@@ -319,6 +319,7 @@ public class NewPortletClassWizardPage extends NewJavaClassWizardPage implements
                 validateProjectRequirements( project );
 
                 getDataModel().notifyPropertyChange( SUPERCLASS, IDataModel.VALID_VALUES_CHG );
+                getDataModel().notifyPropertyChange( ENTRY_CATEGORY, IDataModel.VALID_VALUES_CHG );
             }
         } );
         synchHelper.synchCombo( projectNameCombo, IArtifactEditOperationDataModelProperties.PROJECT_NAME, null );
