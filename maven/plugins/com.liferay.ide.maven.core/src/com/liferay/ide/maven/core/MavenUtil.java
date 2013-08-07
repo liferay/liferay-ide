@@ -54,9 +54,9 @@ public class MavenUtil
 {
 
     public static IStatus executeMojoGoal( final IMavenProjectFacade projectFacade,
-                                       final IMavenExecutionContext context,
-                                       final String goal,
-                                       final IProgressMonitor monitor ) throws CoreException
+                                           final IMavenExecutionContext context,
+                                           final String goal,
+                                           final IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
         final IMaven maven = MavenPlugin.getMaven();
@@ -239,7 +239,7 @@ public class MavenUtil
 
     public static boolean isMavenProject( IProject project ) throws CoreException
     {
-        return project != null &&
+        return project != null && project.exists() &&
             ( project.hasNature( IMavenConstants.NATURE_ID ) || project.getFile( IMavenConstants.POM_FILE_NAME ).exists() );
     }
 

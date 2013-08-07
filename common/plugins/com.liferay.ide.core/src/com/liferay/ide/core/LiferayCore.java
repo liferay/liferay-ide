@@ -66,7 +66,7 @@ public class LiferayCore extends Plugin
 
         if( project == null )
         {
-            LiferayCore.logError( "No liferay project providers registered for type: " + adaptable.getClass() ); //$NON-NLS-1$
+            LiferayCore.logInfo( "No liferay project providers registered for type: " + adaptable.getClass() ); //$NON-NLS-1$
         }
 
         return project;
@@ -95,6 +95,16 @@ public class LiferayCore extends Plugin
     public static IStatus createErrorStatus( String pluginId, Throwable t )
     {
         return new Status( IStatus.ERROR, pluginId, t.getMessage(), t );
+    }
+
+    public static IStatus createInfoStatus( String msg )
+    {
+        return createInfoStatus( PLUGIN_ID, msg );
+    }
+
+    public static IStatus createInfoStatus( String pluginId, String msg )
+    {
+        return new Status( IStatus.INFO, pluginId, msg );
     }
 
     public static IStatus createWarningStatus( String message )
@@ -175,6 +185,11 @@ public class LiferayCore extends Plugin
     public static void logError( Throwable t )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
+    }
+
+    public static void logInfo( String msg )
+    {
+        logError( createInfoStatus( msg ) );
     }
 
     public static void logWarning( Throwable t )
