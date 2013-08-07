@@ -312,7 +312,7 @@ public class ProjectUtil
 
         FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation, record );
 
         fpwc.commitChanges( monitor );
 
@@ -403,7 +403,7 @@ public class ProjectUtil
         fpjwc.setProjectName( projectRecord.getProjectName() );
         fpjwc.setProjectLocation( projectRecord.getProjectLocation() );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation );
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation, projectRecord );
 
         fpjwc.commitChanges( monitor );
 

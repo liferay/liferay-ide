@@ -121,7 +121,7 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 
         final IRuntime runtime = (IRuntime) model.getProperty( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation );
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation, record );
 
         fpwc.commitChanges( monitor );
 
