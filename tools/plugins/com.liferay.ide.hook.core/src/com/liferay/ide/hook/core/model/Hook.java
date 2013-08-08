@@ -20,6 +20,7 @@ package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.hook.core.model.internal.CustomJspsBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesBindingImpl;
+import com.liferay.ide.hook.core.model.internal.PortalPropertiesFileListener;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesOverridesEnablementService;
 
 import org.eclipse.sapphire.Element;
@@ -34,6 +35,7 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FixedOrderList;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlListBinding;
@@ -53,6 +55,7 @@ public interface Hook extends Element
 
     @Type( base = PortalPropertiesFile.class )
     @XmlBinding( path = "portal-properties" )
+    @Listeners( PortalPropertiesFileListener.class )
     ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty( TYPE, "PortalPropertiesFile" ); //$NON-NLS-1$
 
     ElementHandle<PortalPropertiesFile> getPortalPropertiesFile();
