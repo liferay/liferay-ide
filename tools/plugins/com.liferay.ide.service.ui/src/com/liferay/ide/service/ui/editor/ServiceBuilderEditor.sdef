@@ -988,7 +988,7 @@ development of services.</content>
             <tool-palette-label>relationship</tool-palette-label>
             <tool-palette-image>icons/references_16x16.png</tool-palette-image>
             <endpoint2>
-                <type>circle</type>
+                <type>arrow</type>
             </endpoint2>
             <line-width>2</line-width>
         </connection>
