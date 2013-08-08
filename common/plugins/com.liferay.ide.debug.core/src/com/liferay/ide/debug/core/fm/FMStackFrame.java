@@ -121,7 +121,7 @@ public class FMStackFrame extends FMDebugElement implements IStackFrame
     {
         boolean retval = true;
 
-        System.out.println(variableName);
+        // System.out.println(variableName);
 
         return retval;
     }

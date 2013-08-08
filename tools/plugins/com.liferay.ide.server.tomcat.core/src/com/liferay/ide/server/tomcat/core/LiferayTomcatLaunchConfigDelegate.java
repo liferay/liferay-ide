@@ -106,6 +106,7 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
             sourceLocator.configureLaunch( launch );
         }
 
+        this.fmDebugPort = getValidatedDebugPort();
         this.saveLaunchMode = mode;
         super.launch( configuration, mode, launch, monitor );
         this.saveLaunchMode = null;
@@ -114,7 +115,7 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
 
         if( ILaunchManager.DEBUG_MODE.equals( mode ) && FALSE.equals( stopServer ) )
         {
-            this.fmDebugPort = getValidatedDebugPort();
+
 
             if( this.fmDebugPort != null )
             {

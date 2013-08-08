@@ -379,25 +379,30 @@ public class FMValue extends FMDebugElement implements IValue
 
                 if( isHashType( types) )
                 {
-                    String[] keys = this.debugModel.keys();
-
-                    DebugModel[] vals = this.debugModel.get( keys );
-
-                    for( int i = 0; i < keys.length; i++ )
+                    try
                     {
-                        DebugModel hashValue = vals[i];
+                        String[] keys = this.debugModel.keys();
 
-                        if( isValidVariable( hashValue ) )
+                        DebugModel[] vals = this.debugModel.get( keys );
+
+                        for( int i = 0; i < keys.length; i++ )
                         {
-                            vars.add( new FMVariable( stackFrame, keys[i] , hashValue ) );
+                            DebugModel hashValue = vals[i];
+
+                            if( isValidVariable( hashValue ) )
+                            {
+                                vars.add( new FMVariable( stackFrame, keys[i] , hashValue ) );
+                            }
                         }
+                    }
+                    catch( ClassCastException cce )
+                    {
+                        // ignore IDE-1082
                     }
                 }
                 else if( isCollectionType( types ) )
                 {
-                    String[] keys = this.debugModel.keys();
-
-                    System.out.println(keys);
+//                    String[] keys = this.debugModel.keys();
 
 //                    if( isValidVariable( hashValue ) )
 //                    {
