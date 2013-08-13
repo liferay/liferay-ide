@@ -175,6 +175,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
                         for( String portletCategory : portletCategories )
                         {
+                            portletCategory = portletCategory.trim();
                             names = categories.propertyNames();
 
                             while( names.hasMoreElements() )
@@ -1015,6 +1016,15 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 return PortletCore.createErrorStatus( Msgs.portletSuperclassValid );
             }
         }
+        else if( CATEGORY.equals( propertyName ) )
+        {
+            String category = getStringProperty( propertyName );
+
+            if( category.matches( "\\s*" ) )
+            {
+                return PortletCore.createErrorStatus( Msgs.categoryNameEmpty );
+            }
+        }
         else if( ENTRY_WEIGHT.equals( propertyName ) )
         {
             String entryweight = getStringProperty( propertyName );
@@ -1055,6 +1065,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
     private static class Msgs extends NLS
     {
+        public static String categoryNameEmpty;
         public static String jspFolderNotEmpty;
         public static String jspFolderNotMatchPortletName;
         public static String portletNameEmpty;
