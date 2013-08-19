@@ -25,7 +25,6 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
-import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
@@ -52,11 +51,9 @@ public final class QNameTextNodeValueBinding extends XmlValueBindingImpl
     public void init( final Property property )
     {
         super.init( property );
-        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
-        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-        this.path = new XmlPath( params[0], xmlNamespaceResolver );
 
-        // System.out.println( "TextNodeValueBinding.init()" + this.path );
+        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
+        this.path = new XmlPath( params[0], resource().getXmlNamespaceResolver() );
     }
 
     /*

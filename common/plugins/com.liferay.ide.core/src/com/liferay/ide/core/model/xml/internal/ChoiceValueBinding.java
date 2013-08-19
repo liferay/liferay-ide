@@ -19,10 +19,10 @@ package com.liferay.ide.core.model.xml.internal;
 
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
-import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
+import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 
 /**
  * @author kamesh.sampath
@@ -64,8 +64,8 @@ public final class ChoiceValueBinding extends XmlValueBindingImpl
     {
         super.init( property );
 
-        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-        this.path = new XmlPath( params[0], xmlNamespaceResolver );
+        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
+        this.path = new XmlPath( params[0], resource().getXmlNamespaceResolver() );
     }
 
     /*
