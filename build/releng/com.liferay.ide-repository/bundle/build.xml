@@ -50,6 +50,23 @@
 	<target name="create-bundle">
 		<antcall target="install-features" />
 		<antcall target="${package.target}" />
+
+		<path id="updatesite.zip.path">
+	        <fileset dir="${target.dir}">
+	            <include name="*.zip"/>
+	        </fileset>
+	    </path>
+
+	    <property name="updatesite.zip" value="${toString:updatesite.zip.path}" />
+
+		<propertyregex property="version" input="${updatesite.zip}"
+			regexp=".*Liferay_IDE_(.*)-updatesite.zip$" replace="\1" />
+
+		<propertyregex property="final.name.versioned"  input="${final.name}"
+			regexp="(.*eclipse_Liferay_IDE_)(.*SNAPSHOT)(-.*.zip)$" replace="\1${version}\3"/>
+
+		<move file="${final.name}" tofile="${final.name.versioned}" />
+
 		<if>
 			<isset property="upload"/>
 			<then>
@@ -297,11 +314,13 @@
     					</exec>
     					<gzip destfile="${output.dir}${output.gz.name}" src="${output.dir}${output.tar.name}" />
     					<delete file="${output.dir}${output.tar.name}" />
+    					<property name="final.name" value="${output.dir}${output.gz.name}"/>
     				</then>
     			</if>
     		</then>
     		<else>
     			<zip destfile="${output.dir}/${output.zip.name}" basedir="${work.dir}" />
+    			<property name="final.name" value="${output.dir}/${output.zip.name}"/>
     		</else>
     	</if>
 
