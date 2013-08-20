@@ -26,7 +26,6 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;
-import org.eclipse.sapphire.modeling.xml.XmlNamespaceResolver;
 import org.eclipse.sapphire.modeling.xml.XmlNode;
 import org.eclipse.sapphire.modeling.xml.XmlPath;
 import org.eclipse.sapphire.modeling.xml.XmlValueBindingImpl;
@@ -50,10 +49,9 @@ public final class QNameValueBinding extends XmlValueBindingImpl
     public void init( Property property )
     {
         super.init( property );
-        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
 
-        final XmlNamespaceResolver xmlNamespaceResolver = resource().getXmlNamespaceResolver();
-        this.path = new XmlPath( params[0], xmlNamespaceResolver );
+        this.params = property.definition().getAnnotation( CustomXmlValueBinding.class ).params();
+        this.path = new XmlPath( params[0], resource().getXmlNamespaceResolver() );
     }
 
     /*
