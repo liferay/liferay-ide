@@ -33,6 +33,7 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.sdk.ui.IvyUtil;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -44,11 +45,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ivyde.eclipse.cpcontainer.ClasspathSetup;
-import org.apache.ivyde.eclipse.cpcontainer.IvyClasspathContainer;
-import org.apache.ivyde.eclipse.cpcontainer.IvyClasspathContainerConfAdapter;
-import org.apache.ivyde.eclipse.cpcontainer.IvyClasspathContainerConfiguration;
-import org.apache.ivyde.eclipse.cpcontainer.SettingsSetup;
+import org.apache.ivyde.eclipse.cp.ClasspathSetup;
+import org.apache.ivyde.eclipse.cp.IvyClasspathContainer;
+import org.apache.ivyde.eclipse.cp.IvyClasspathContainerConfiguration;
+import org.apache.ivyde.eclipse.cp.IvyClasspathContainerHelper;
+import org.apache.ivyde.eclipse.cp.SettingsSetup;
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
 import org.eclipse.ant.internal.ui.views.AntView;
@@ -65,7 +66,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IClasspathAttribute;
-import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -162,7 +162,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         settingsSetup.setIvyUserDir( builder.toString() );
         conf.setIvySettingsSetup( settingsSetup );
 
-        final IPath path = IvyClasspathContainerConfAdapter.getPath(conf );
+        final IPath path = IvyUtil.getPath(conf );
         final IClasspathAttribute[] atts = conf.getAttributes();
 
         final IClasspathEntry ivyEntry = JavaCore.newContainerEntry(path, null, atts, false);
@@ -171,8 +171,6 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
         try
         {
-            IvyClasspathContainer ivycp = new IvyClasspathContainer( javaProject, path, new IClasspathEntry[0], new IClasspathAttribute[0] );
-            JavaCore.setClasspathContainer( path, new IJavaProject[] { javaProject }, new IClasspathContainer[] { ivycp }, monitor );
             IClasspathEntry[] entries = javaProject.getRawClasspath();
             List<IClasspathEntry> newEntries = new ArrayList<IClasspathEntry>( Arrays.asList( entries ) );
 
@@ -184,6 +182,8 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             newEntries.add( cpeTagged );
             entries = (IClasspathEntry[]) newEntries.toArray( new IClasspathEntry[newEntries.size()] );
             javaProject.setRawClasspath( entries, javaProject.getOutputLocation(), monitor );
+
+            IvyClasspathContainer ivycp = IvyClasspathContainerHelper.getContainer( path, javaProject );
 
             return ivycp;
         }
@@ -221,7 +221,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
         if( ( CoreUtil.compareVersions( version, ILiferayConstants.V612 ) >= 0 &&
               CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) ||
-              CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
+              CoreUtil.compareVersions( version, ILiferayConstants.V6120 ) >= 0 )
         {
             IFile ivyXmlFile = project.getFile( ISDKConstants.IVY_XML_FILE );
 

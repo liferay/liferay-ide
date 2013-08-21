@@ -13,6 +13,7 @@
          </keywordReference>
       </page>
    </extension>
+   <!--
    <extension
           point="org.eclipse.ltk.core.refactoring.renameParticipants">
        <renameParticipant
@@ -32,4 +33,5 @@
           </enablement>
        </renameParticipant>
     </extension>
+    -->
 </plugin>
