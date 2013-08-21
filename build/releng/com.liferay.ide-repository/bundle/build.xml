@@ -63,7 +63,7 @@
 			regexp=".*Liferay_IDE_(.*)-updatesite.zip$" replace="\1" />
 
 		<propertyregex property="final.name.versioned"  input="${final.name}"
-			regexp="(.*eclipse_Liferay_IDE_)(.*SNAPSHOT)(-.*.zip)$" replace="\1${version}\3"/>
+			regexp="(.*eclipse_Liferay_IDE_)(.*SNAPSHOT)(-.*)$" replace="\1${version}\3"/>
 
 		<move file="${final.name}" tofile="${final.name.versioned}" />
 
