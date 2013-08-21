@@ -86,6 +86,7 @@
             </modules>
         </profile>
 
+<!--
         <profile>
             <id>nls</id>
             <activation>
@@ -95,6 +96,7 @@
                 <module>../nls</module>
             </modules>
         </profile>
+-->
 
         <profile>
             <id>release</id>

@@ -49,7 +49,7 @@
 
 	<target name="create-bundle">
 		<antcall target="install-features" />
-		<antcall target="${package.target}" />
+		<antcallback target="${package.target}" return="final.name" />
 
 		<path id="updatesite.zip.path">
 	        <fileset dir="${target.dir}">
