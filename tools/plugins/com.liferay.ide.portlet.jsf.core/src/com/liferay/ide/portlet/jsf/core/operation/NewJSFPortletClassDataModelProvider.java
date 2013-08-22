@@ -136,9 +136,9 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
 
         if( JSF_PORTLET_CLASS.equals( propertyName ) )
         {
-            String vaadinPortletClass = getStringProperty( propertyName );
+            String jsfPortletClass = getStringProperty( propertyName );
 
-            if( CoreUtil.isNullOrEmpty( vaadinPortletClass ) )
+            if( CoreUtil.isNullOrEmpty( jsfPortletClass ) )
             {
                 return JSFCorePlugin.createErrorStatus( Msgs.specifyJSFPortletClass );
             }
@@ -148,7 +148,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
                 return Status.OK_STATUS;
             }
 
-            if( ! isValidPortletClass( vaadinPortletClass ) )
+            if( ! isValidPortletClass( jsfPortletClass ) )
             {
                 return JSFCorePlugin.createErrorStatus( Msgs.jsfPortletClassValid );
             }

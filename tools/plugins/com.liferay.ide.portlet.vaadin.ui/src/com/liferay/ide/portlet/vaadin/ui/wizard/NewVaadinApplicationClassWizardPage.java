@@ -144,8 +144,12 @@ public class NewVaadinApplicationClassWizardPage extends NewPortletClassWizardPa
         }
         else
         {
+            validationPropertyNames.add( IArtifactEditOperationDataModelProperties.PROJECT_NAME );
+            validationPropertyNames.add( INewJavaClassDataModelProperties.SOURCE_FOLDER );
+            validationPropertyNames.add( INewJavaClassDataModelProperties.CLASS_NAME );
+            validationPropertyNames.add( INewJavaClassDataModelProperties.JAVA_PACKAGE );
+            validationPropertyNames.add( INewJavaClassDataModelProperties.SUPERCLASS );
             validationPropertyNames.add( VAADIN_PORTLET_CLASS );
-            Collections.addAll( validationPropertyNames, super.getValidationPropertyNames() );
         }
 
         return validationPropertyNames.toArray( new String[0] );
