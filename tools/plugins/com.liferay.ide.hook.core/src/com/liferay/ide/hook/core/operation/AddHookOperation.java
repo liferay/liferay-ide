@@ -399,16 +399,9 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
             }
         }
 
-        if( languageProperties.size() > 0 )
-        {
-            IStatus status = hookDescHelper.addLanguageProperties( languageProperties );
+        IStatus status = hookDescHelper.addLanguageProperties( languageProperties );
 
-            return status;
-        }
-        else
-        {
-            return HookCore.createErrorStatus( "Could not add language-properties to hook descriptor file." ); //$NON-NLS-1$
-        }
+        return status;
 
     }
 
