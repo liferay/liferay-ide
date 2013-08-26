@@ -29,7 +29,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.internal.corext.util.JavaModelUtil;
+import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -64,7 +64,7 @@ public class ContextValueDialog extends Dialog {
 	private Text singleValueText;
 	private Label singleLabel;
 	private Button singleBrowse;
-	
+
 	public ContextValueDialog(Shell parentShell, ContextValue contextValue, IResource resource) {
 		super(parentShell);
 		this.resource = resource;
@@ -80,7 +80,7 @@ public class ContextValueDialog extends Dialog {
 	}
 
 	protected Control createDialogArea(Composite parent) {
-		
+
 		Composite composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout(3, false));
 
@@ -115,7 +115,7 @@ public class ContextValueDialog extends Dialog {
                     if(javaProject != null)
                     {
                         org.eclipse.jdt.core.search.IJavaSearchScope searchScope = SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
-                        SelectionDialog sd = JavaUI.createTypeDialog(getShell(), new ApplicationWindow(getShell()), searchScope, 2, false);
+                        SelectionDialog sd = JavaUI.createTypeDialog(getShell(), new ApplicationWindow(getShell()), searchScope, IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
                         sd.open();
                         Object objects[] = sd.getResult();
                         if(objects != null && objects.length > 0)
@@ -187,7 +187,7 @@ public class ContextValueDialog extends Dialog {
                     if(javaProject != null)
                     {
                         org.eclipse.jdt.core.search.IJavaSearchScope searchScope = SearchEngine.createJavaSearchScope(new IJavaElement[]{javaProject});
-                        SelectionDialog sd = JavaUI.createTypeDialog(getShell(), new ApplicationWindow(getShell()), searchScope, 2, false);
+                        SelectionDialog sd = JavaUI.createTypeDialog(getShell(), new ApplicationWindow(getShell()), searchScope, IJavaElementSearchConstants.CONSIDER_CLASSES_AND_INTERFACES, false);
                         sd.open();
                         Object objects[] = sd.getResult();
                         if(objects != null && objects.length > 0)
