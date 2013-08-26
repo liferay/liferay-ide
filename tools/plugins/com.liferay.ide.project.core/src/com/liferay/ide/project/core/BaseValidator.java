@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -75,6 +76,7 @@ public abstract class BaseValidator extends AbstractValidator
         super();
     }
 
+    @SuppressWarnings( "unchecked" )
     protected Map<String, Object>[] checkAllClassElements(
         Map<String, String> map, IJavaProject javaProject, IFile liferayDescriptorXml, String classExistPreferenceKey,
         String classHierarchyPreferenceKey, IScopeContext[] preferenceScopes, String preferenceNodeQualifier,
@@ -87,7 +89,7 @@ public abstract class BaseValidator extends AbstractValidator
         {
             liferayDescriptorXmlModel = StructuredModelManager.getModelManager().getModelForRead( liferayDescriptorXml );
 
-            if( liferayDescriptorXmlModel != null && liferayDescriptorXmlModel instanceof IDOMModel && map != null)
+            if( liferayDescriptorXmlModel != null && liferayDescriptorXmlModel instanceof IDOMModel && map != null )
             {
                 liferayDescriptorXmlDocument = ( (IDOMModel) liferayDescriptorXmlModel ).getDocument();
 
@@ -171,7 +173,8 @@ public abstract class BaseValidator extends AbstractValidator
 
                     if( typeFound == false )
                     {
-                        String msg = MessageFormat.format( MESSAGE_CLASS_INCORRECT_HIERARCHY, className, superTypeNames );
+                        String msg =
+                            MessageFormat.format( MESSAGE_CLASS_INCORRECT_HIERARCHY, className, superTypeNames );
 
                         if( superTypeNames.contains( StringPool.COMMA ) )
                         {
@@ -236,8 +239,7 @@ public abstract class BaseValidator extends AbstractValidator
             if( classResource.endsWith( ".properties" ) && warnPropertiesSuffix ) //$NON-NLS-1$
             {
                 String msg =
-                    MessageFormat.format(
-                        Msgs.classResourceNotEndWithProperties, new Object[] { classResource } );
+                    MessageFormat.format( Msgs.classResourceNotEndWithProperties, new Object[] { classResource } );
                 return createMarkerValues(
                     preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
             }
@@ -245,6 +247,7 @@ public abstract class BaseValidator extends AbstractValidator
             try
             {
                 IResource classResourceValue = null;
+                final IWorkspaceRoot workspaceRoot = javaProject.getJavaModel().getWorkspace().getRoot();
                 IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath( true );
 
                 for( IClasspathEntry entry : classpathEntries )
@@ -254,8 +257,7 @@ public abstract class BaseValidator extends AbstractValidator
                         IPath entryPath = entry.getPath();
                         IPath classResourcePath = entryPath.append( classResource );
 
-                        classResourceValue =
-                            javaProject.getJavaModel().getWorkspace().getRoot().findMember( classResourcePath );
+                        classResourceValue = workspaceRoot.findMember( classResourcePath );
 
                         if( classResourceValue != null )
                         {
@@ -264,8 +266,7 @@ public abstract class BaseValidator extends AbstractValidator
 
                         IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) ); //$NON-NLS-1$ //$NON-NLS-2$
 
-                        classResourceValue =
-                            javaProject.getJavaModel().getWorkspace().getRoot().findMember( qualifiedResourcePath );
+                        classResourceValue = workspaceRoot.findMember( qualifiedResourcePath );
 
                         if( classResourceValue != null )
                         {
@@ -282,9 +283,7 @@ public abstract class BaseValidator extends AbstractValidator
 
                             IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" ); //$NON-NLS-1$
 
-                            classResourceValue =
-                                javaProject.getJavaModel().getWorkspace().getRoot().findMember(
-                                    propertiesClassResourcePath );
+                            classResourceValue = workspaceRoot.findMember( propertiesClassResourcePath );
 
                             if( classResourceValue != null )
                             {
@@ -294,9 +293,7 @@ public abstract class BaseValidator extends AbstractValidator
                             propertiesClassResourcePath =
                                 parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-                            classResourceValue =
-                                javaProject.getJavaModel().getWorkspace().getRoot().findMember(
-                                    propertiesClassResourcePath );
+                            classResourceValue = workspaceRoot.findMember( propertiesClassResourcePath );
 
                             if( classResourceValue != null )
                             {
@@ -304,15 +301,15 @@ public abstract class BaseValidator extends AbstractValidator
                             }
                         }
 
-                        //IDE-1105
-                       if(classResource.contains( StringPool.ASTERISK ))
+                        // IDE-1105
+                        if( classResource.contains( StringPool.ASTERISK ) )
                         {
                             String classResourceRegex = classResource.replaceAll( "\\*", ".*" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-                            IResource entryResource =
-                                javaProject.getJavaModel().getWorkspace().getRoot().findMember( entryPath );
+                            IResource entryResource = workspaceRoot.findMember( entryPath );
 
-                            classResourceValue = new ClassResourceVisitor().visitClassResource(entryResource,classResourceRegex);
+                            classResourceValue =
+                                new ClassResourceVisitor().visitClassResource( entryResource, classResourceRegex );
 
                             if( classResourceValue != null )
                             {
@@ -506,8 +503,9 @@ public abstract class BaseValidator extends AbstractValidator
         return true;
     }
 
-    protected class ClassResourceVisitor implements IResourceVisitor
+    private static class ClassResourceVisitor implements IResourceVisitor
     {
+
         IResource classResourceValue = null;
         IResource entryResource = null;
         String classResourceRegex = null;
@@ -546,6 +544,7 @@ public abstract class BaseValidator extends AbstractValidator
 
     private static class Msgs extends NLS
     {
+
         public static String classNotFound;
         public static String classResourceNotEndWithProperties;
         public static String possibleTypes;
