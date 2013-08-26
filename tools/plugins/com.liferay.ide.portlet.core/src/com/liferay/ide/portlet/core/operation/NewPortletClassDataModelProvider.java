@@ -167,34 +167,14 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                     PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( workspaceProject );
                     String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
 
-                    Enumeration<?> names = categories.propertyNames();
-
                     if( portletCategories.length > 0 )
                     {
-                        boolean foundDuplicate = false;
-
                         for( String portletCategory : portletCategories )
                         {
-                            portletCategory = portletCategory.trim();
-                            names = categories.propertyNames();
-
-                            while( names.hasMoreElements() )
-                            {
-                                String name = names.nextElement().toString();
-
-                                if( portletCategory.equals( name ) )
-                                {
-                                    foundDuplicate = true;
-                                    break;
-                                }
-                            }
-
-                            if( !foundDuplicate )
+                            if( findExistingCategory( portletCategory ) == null )
                             {
                                 categories.put( portletCategory, portletCategory );
                             }
-
-                            foundDuplicate = false;
                         }
                     }
                 }
@@ -750,6 +730,30 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         return retval;
     }
 
+    private String findExistingCategory( final String portletCategory )
+    {
+        //Check the value and key for each category, if the category's value or key is the same with 
+        //the original one, return the String value of key.
+        Enumeration<?> keys = categories.propertyNames();
+        Enumeration<?> values = categories.elements();
+        String checkedCategory = portletCategory.trim();
+        String retval = null;
+ 
+        while( keys.hasMoreElements() && values.hasMoreElements() )
+        {
+            Object key = keys.nextElement();
+            Object value = values.nextElement();
+
+            if( checkedCategory.equals( key ) || checkedCategory.equals( value ) )
+            {
+                retval = key.toString();
+                break;
+            }
+        }
+
+        return retval;
+    }
+
     @Override
     public boolean isPropertyEnabled( String propertyName )
     {
@@ -884,6 +888,17 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             String liferayPortletName = getStringProperty( propertyName );
 
             getDataModel().setStringProperty( PORTLET_NAME, liferayPortletName );
+        }
+        else if( CATEGORY.equals( propertyName ) )
+        {
+            String portletCategory = findExistingCategory( propertyValue.toString() );
+
+            if( portletCategory != null )
+            {
+                getDataModel().setProperty( CATEGORY, portletCategory );
+            }
+
+            return true;
         }
 
         return super.propertySet( propertyName, propertyValue );

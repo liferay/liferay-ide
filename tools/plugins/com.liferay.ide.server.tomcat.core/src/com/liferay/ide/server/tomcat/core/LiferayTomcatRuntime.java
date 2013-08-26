@@ -226,7 +226,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public Properties getPortletCategories()
     {
-        return ServerUtil.getCategories( getAppServerPortalDir() );
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
     public Properties getPortletEntryCategories()

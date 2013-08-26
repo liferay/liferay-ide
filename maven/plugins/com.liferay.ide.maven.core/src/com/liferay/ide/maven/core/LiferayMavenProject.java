@@ -226,7 +226,7 @@ public class LiferayMavenProject extends BaseLiferayProject
 
         if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
         {
-            retval = ServerUtil.getCategories( appServerPortalDir );
+            retval = ServerUtil.getPortletCategories( appServerPortalDir );
         }
 
         return retval;
