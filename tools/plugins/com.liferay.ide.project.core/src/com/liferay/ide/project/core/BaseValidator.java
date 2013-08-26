@@ -31,6 +31,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -302,6 +303,22 @@ public abstract class BaseValidator extends AbstractValidator
                                 break;
                             }
                         }
+
+                        //IDE-1105
+                       if(classResource.contains( StringPool.ASTERISK ))
+                        {
+                            String classResourceRegex = classResource.replaceAll( "\\*", ".*" ); //$NON-NLS-1$ //$NON-NLS-2$
+
+                            IResource entryResource =
+                                javaProject.getJavaModel().getWorkspace().getRoot().findMember( entryPath );
+
+                            classResourceValue = new ClassResourceVisitor().visitClassResource(entryResource,classResourceRegex);
+
+                            if( classResourceValue != null )
+                            {
+                                break;
+                            }
+                        }
                     }
                 }
 
@@ -487,6 +504,44 @@ public abstract class BaseValidator extends AbstractValidator
     public boolean shouldClearMarkers( ValidationEvent event )
     {
         return true;
+    }
+
+    protected class ClassResourceVisitor implements IResourceVisitor
+    {
+        IResource classResourceValue = null;
+        IResource entryResource = null;
+        String classResourceRegex = null;
+
+        public IResource visitClassResource( IResource res, String str )
+        {
+            entryResource = res;
+            classResourceRegex = str;
+
+            try
+            {
+                entryResource.accept( this );
+            }
+            catch( CoreException e )
+            {
+                // no error msg
+            }
+
+            return classResourceValue;
+        }
+
+        public boolean visit( IResource res )
+        {
+            String classResource =
+                res.getProjectRelativePath().makeRelativeTo( entryResource.getProjectRelativePath() ).toString();
+
+            if( classResource.matches( classResourceRegex ) )
+            {
+                classResourceValue = res;
+                return false;
+            }
+
+            return true;
+        }
     }
 
     private static class Msgs extends NLS
