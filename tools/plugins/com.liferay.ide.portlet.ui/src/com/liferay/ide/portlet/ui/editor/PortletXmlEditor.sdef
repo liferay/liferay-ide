@@ -245,7 +245,7 @@
             <id>Quick.Actions</id>
             <hint>
                 <name>style</name>
-                <value>image+text</value>
+                <value>image</value>
             </hint>
             <context>Sapphire.EditorPage</context>
             <label>New...</label>
