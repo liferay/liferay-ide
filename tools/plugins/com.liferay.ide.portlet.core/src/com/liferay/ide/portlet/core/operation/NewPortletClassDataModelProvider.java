@@ -732,19 +732,17 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
     private String findExistingCategory( final String portletCategory )
     {
-        //Check the value and key for each category, if the category's value or key is the same with 
-        //the original one, return the String value of key.
-        Enumeration<?> keys = categories.propertyNames();
-        Enumeration<?> values = categories.elements();
-        String checkedCategory = portletCategory.trim();
+        // Check the value and key for each category, if the category's value or key is the same with
+        // the original one, return the String value of key.
+        Enumeration<?> keys = categories.keys();
         String retval = null;
- 
-        while( keys.hasMoreElements() && values.hasMoreElements() )
+
+        while( keys.hasMoreElements() )
         {
             Object key = keys.nextElement();
-            Object value = values.nextElement();
+            Object value = categories.get( key );
 
-            if( checkedCategory.equals( key ) || checkedCategory.equals( value ) )
+            if( portletCategory.equals( key ) || portletCategory.equals( value ) )
             {
                 retval = key.toString();
                 break;
