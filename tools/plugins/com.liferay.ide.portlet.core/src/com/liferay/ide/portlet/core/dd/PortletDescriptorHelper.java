@@ -155,7 +155,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
                             Element categoryElemnt = (Element) nodeList.item( i );
                             String categoryName = categoryElemnt.getAttribute( "name" );
 
-                            if( categoryName != null )
+                            if( categoryName != null && !categoryName.matches( "\\s*" ) )
                             {
                                 allPortletCategories.add( categoryName );
                             }

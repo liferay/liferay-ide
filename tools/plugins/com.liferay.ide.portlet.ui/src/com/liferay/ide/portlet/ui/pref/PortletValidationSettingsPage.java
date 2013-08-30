@@ -189,6 +189,8 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
         createCombo( inner, Msgs.portletIdNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND );
 
+        createCombo( inner, Msgs.categoryNameInvalid, ValidationPreferences.LIFERAY_DISPLAY_XML_CATEGORY_NAME_INVALID );
+
         twistie = createTwistie( body, Msgs.liferayHookXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
@@ -302,6 +304,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
     private static class Msgs extends NLS
     {
+        public static String categoryNameInvalid;
         public static String classNotFound;
         public static String customJspDirectoryNotFound;
         public static String entryWeightNotValid;

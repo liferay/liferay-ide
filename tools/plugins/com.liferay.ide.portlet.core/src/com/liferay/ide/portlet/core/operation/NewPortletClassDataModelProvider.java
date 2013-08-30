@@ -735,6 +735,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         // Check the value and key for each category, if the category's value or key is the same with
         // the original one, return the String value of key.
         Enumeration<?> keys = categories.keys();
+        String trimmedCategory = portletCategory.trim();
         String retval = null;
 
         while( keys.hasMoreElements() )
@@ -742,7 +743,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             Object key = keys.nextElement();
             Object value = categories.get( key );
 
-            if( portletCategory.equals( key ) || portletCategory.equals( value ) )
+            if( trimmedCategory.equals( key ) || trimmedCategory.equals( value ) )
             {
                 retval = key.toString();
                 break;
