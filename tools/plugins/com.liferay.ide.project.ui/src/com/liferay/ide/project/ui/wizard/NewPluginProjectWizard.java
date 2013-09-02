@@ -33,7 +33,6 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.sdk.ui.IvyUtil;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -162,7 +161,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         settingsSetup.setIvyUserDir( builder.toString() );
         conf.setIvySettingsSetup( settingsSetup );
 
-        final IPath path = IvyUtil.getPath(conf );
+        final IPath path = conf.getPath();
         final IClasspathAttribute[] atts = conf.getAttributes();
 
         final IClasspathEntry ivyEntry = JavaCore.newContainerEntry(path, null, atts, false);
