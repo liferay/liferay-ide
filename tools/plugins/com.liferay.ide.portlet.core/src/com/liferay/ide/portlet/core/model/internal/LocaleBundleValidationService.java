@@ -55,7 +55,7 @@ public class LocaleBundleValidationService extends ValidationService
 	 *
 	 */
     @Override
-    public Status validate()
+    public Status compute()
     {
         Element modelElement = context( Element.class );
 

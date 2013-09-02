@@ -36,7 +36,7 @@ public class UrlPathValidationService extends ValidationService
      * @see org.eclipse.sapphire.services.ValidationService#validate()
      */
     @Override
-    public Status validate()
+    public Status compute()
     {
         final ValueProperty valueProperty = context( ValueProperty.class );
         final Value<?> value = context( Element.class ).property( valueProperty );

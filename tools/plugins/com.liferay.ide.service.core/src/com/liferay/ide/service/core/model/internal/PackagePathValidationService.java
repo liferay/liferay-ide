@@ -33,7 +33,7 @@ import org.eclipse.sapphire.services.ValidationService;
 public class PackagePathValidationService extends ValidationService
 {
     @Override
-    public Status validate()
+    public Status compute()
     {
         final Value<String> packagePath = context().find( ServiceBuilder.class ).getPackagePath();
         String packPathVal = packagePath.content();

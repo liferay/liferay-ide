@@ -115,7 +115,7 @@ public class CustomJspValidationService extends ValidationService
     }
 
     @Override
-    public Status validate()
+    public Status compute()
     {
         final Value<?> value = (Value<?>) context( Element.class ).property( context( Property.class ).definition() );
         final ValueProperty property = value.definition();

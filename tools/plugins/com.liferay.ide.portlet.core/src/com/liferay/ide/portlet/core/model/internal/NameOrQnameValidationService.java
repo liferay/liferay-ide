@@ -38,7 +38,7 @@ public class NameOrQnameValidationService extends ValidationService
      * @see org.eclipse.sapphire.modeling.PropertyValidationService#validate()
      */
     @Override
-    public Status validate()
+    public Status compute()
     {
         Element element = context( Element.class );
 

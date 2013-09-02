@@ -29,7 +29,7 @@ import org.eclipse.sapphire.services.ValidationService;
 public class NamespaceValidationService extends ValidationService
 {
     @Override
-    public Status validate()
+    public Status compute()
     {
         final Value<String> namespace = context().find( ServiceBuilder.class ).getNamespace();
         String content = namespace.content();
