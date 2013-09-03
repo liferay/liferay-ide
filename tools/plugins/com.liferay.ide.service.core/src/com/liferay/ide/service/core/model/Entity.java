@@ -238,4 +238,20 @@ public interface Entity extends Element
 
     ElementList<TxRequired> getTxRequireds();
 
+    // *** Deprecated ***
+
+    @Type( base = Boolean.class )
+    @XmlBinding( path = "@deprecated" )
+    @Label( standard = "&deprecated" )
+    @DefaultValue( text = "false" )
+    @Documentation( content = "The [b]deprecated[/b] value specifies whether the entity's services are deprecated." )
+    @Since( "6.2" )
+    ValueProperty PROP_DEPRECATED = new ValueProperty( TYPE, "Deprecated" ); //$NON-NLS-1$
+
+    Value<Boolean> getDeprecated();
+
+    void setDeprecated( String value );
+
+    void setDeprecated( Boolean value );
+    
 }

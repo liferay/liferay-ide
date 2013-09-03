@@ -117,6 +117,14 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
+                                             <property-editor>
+                                                <visible-when>${ VersionMatches( Root().Version, '[6.2' ) }</visible-when>
+                                                <property>deprecated</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
                                     	</content>
                                     </group>
                                 </content>
@@ -157,7 +165,9 @@ The [b]cache-enabled[/b] value specifies whether or not to cache this queries fo
 [br/][br/]
 The [b]json-enabled[/b] value specifies whether or not the entity should be annotated
 for JSON serialization. By default, if the remote-service value is true, then
-the json-enabled value is true.</content>
+the json-enabled value is true.
+[br/][br/]
+The [b]deprecated[/b] value specifies whether the entity's services are deprecated.</content>
                                     <title>Entity</title>
                                 </documentation>
                             </section>
