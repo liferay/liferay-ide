@@ -32,7 +32,10 @@ import com.liferay.ide.project.ui.IPortletFrameworkDelegate;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -64,6 +67,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -88,6 +92,7 @@ import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectTemplate;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 import org.eclipse.wst.web.ui.internal.wizards.NewProjectDataModelFacetWizard;
 import org.osgi.framework.Version;
 
@@ -514,7 +519,126 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         model.setProperty( THEME_NAME, projectName );
         model.setProperty( LAYOUTTPL_NAME, projectName );
 
-        super.performFinish( monitor );
+        // IDE-1122
+        /*
+         * Let the progress monitor display message about ivy downloading and resolving artifacts
+         * (particularly the first time plugins-sdk is used it can take several minutes ),
+         * in case users mistakenly think the IDE is blocked.
+         * SDK creating projects is moved here from method execute() of different types of PluginFacetInstall.
+         */
+        monitor.beginTask( "", 10 ); //$NON-NLS-1$
+
+        SDK sdk = SDKManager.getInstance().getSDK( model.getStringProperty( LIFERAY_SDK_NAME ) );
+
+        ILiferayRuntime liferayRuntime =
+            ServerUtil.getLiferayRuntime( (BridgedRuntime) model.getProperty( FACET_RUNTIME ));
+
+        Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
+
+        String displayName = this.model.getStringProperty( DISPLAY_NAME );
+
+        monitor.worked( 1 );
+
+        if( model.getBooleanProperty( PLUGIN_TYPE_PORTLET ) )
+        {
+            String portletName = model.getStringProperty( PORTLET_NAME );
+
+            if( portletName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                portletName =
+                    portletName.substring( 0, portletName.indexOf( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) );
+
+                model.setProperty( PORTLET_NAME, portletName );
+            }
+
+            String portletFrameworkId = this.model.getStringProperty( PORTLET_FRAMEWORK_ID );
+
+            IPortletFrameworkWizardProvider portletFramework =
+                LiferayProjectCore.getPortletFramework( portletFrameworkId );
+
+            String frameworkName = portletFramework.getShortName();
+
+            monitor.subTask( NLS.bind( Msgs.creatingNewProject, "portlet" ) ); //$NON-NLS-1$
+
+            IPath portletProjectTempPath =
+                sdk.createNewPortletProject( portletName, displayName, frameworkName, appServerProperties );
+
+            model.setProperty( PROJECT_TEMP_PATH, portletProjectTempPath );
+        }
+        else if( model.getBooleanProperty( PLUGIN_TYPE_HOOK ) )
+        {
+            String hookName = this.model.getStringProperty( HOOK_NAME );
+
+            if( hookName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                hookName = hookName.substring( 0, hookName.indexOf( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) );
+
+                model.setProperty( HOOK_NAME, hookName );
+            }
+
+            monitor.subTask( NLS.bind( Msgs.creatingNewProject, "hook" ) ); //$NON-NLS-1$
+
+            IPath hookProjectTempPath = sdk.createNewHookProject( hookName, displayName );
+
+            model.setProperty( PROJECT_TEMP_PATH, hookProjectTempPath );
+        }
+        else if( model.getBooleanProperty( PLUGIN_TYPE_EXT ) )
+        {
+            String extName = this.model.getStringProperty( EXT_NAME );
+
+            if( extName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                extName = extName.substring( 0, extName.indexOf( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) );
+
+                model.setProperty( EXT_NAME, extName );
+            }
+
+            monitor.subTask( NLS.bind( Msgs.creatingNewProject, "ext" ) ); //$NON-NLS-1$
+
+            IPath extProjectTempPath = sdk.createNewExtProject( extName, displayName, appServerProperties );
+
+            model.setProperty( PROJECT_TEMP_PATH, extProjectTempPath );
+        }
+        else if( model.getBooleanProperty( PLUGIN_TYPE_THEME ) )
+        {
+            String themeName = this.model.getStringProperty( THEME_NAME );
+
+            if( themeName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                themeName = themeName.substring( 0, themeName.indexOf( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
+
+                model.setProperty( THEME_NAME, themeName );
+            }
+
+            monitor.subTask( NLS.bind( Msgs.creatingNewProject, "theme" ) ); //$NON-NLS-1$
+
+            IPath themeProjectTempPath = sdk.createNewThemeProject( themeName, displayName );
+
+            model.setProperty( PROJECT_TEMP_PATH, themeProjectTempPath );
+        }
+        else if( model.getBooleanProperty( PLUGIN_TYPE_LAYOUTTPL ) )
+        {
+            String layoutTplName = model.getStringProperty( LAYOUTTPL_NAME );
+
+            if( layoutTplName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                layoutTplName =
+                    layoutTplName.substring( 0, layoutTplName.indexOf( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) );
+
+                model.setProperty( LAYOUTTPL_NAME, layoutTplName );
+            }
+
+            monitor.subTask( NLS.bind( Msgs.creatingNewProject, "layout" ) ); //$NON-NLS-1$
+
+            IPath layoutTplPorjectTempPath =
+                sdk.createNewLayoutTplProject( layoutTplName, displayName, appServerProperties );
+
+            model.setProperty( PROJECT_TEMP_PATH, layoutTplPorjectTempPath );
+        }
+
+        monitor.worked( 4 );
+
+        super.performFinish( new SubProgressMonitor( monitor, 5 ) );
     }
 
     @Override
@@ -700,11 +824,13 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
     {
         setWindowTitle( Msgs.newLiferayProject );
         setShowFacetsSelectionPage( false );
+        setNeedsProgressMonitor( true );
     }
 
     private static class Msgs extends NLS
     {
         public static String newLiferayProject;
+        public static String creatingNewProject;
 
         static
         {

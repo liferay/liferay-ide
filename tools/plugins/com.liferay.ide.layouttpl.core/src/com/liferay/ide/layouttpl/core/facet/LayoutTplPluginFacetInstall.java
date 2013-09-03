@@ -23,12 +23,9 @@ import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -62,6 +59,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
         if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
         {
+            /*
             // get the template zip for layouttpl and extract into the project
             SDK sdk = getSDK();
 
@@ -84,6 +82,19 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
             // cleanup files
             FileUtil.deleteDir( newLayoutTplPath.toFile(), true );
+            */
+
+            // IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
+            String layoutTplName = this.masterModel.getStringProperty( LAYOUTTPL_NAME );
+
+            IPath projectTempPath = (IPath) masterModel.getProperty( PROJECT_TEMP_PATH );
+
+            processNewFiles( projectTempPath.append( layoutTplName +
+                ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) );
+
+            FileUtil.deleteDir( projectTempPath.toFile(), true );
+            // End IDE-1122
+
         }
         else if( shouldSetupDefaultOutputLocation() )
         {

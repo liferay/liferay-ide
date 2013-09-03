@@ -21,13 +21,10 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -68,6 +65,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
         if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
         {
+            /*
             // get the template zip for portlets and extract into the project
             SDK sdk = getSDK();
 
@@ -90,7 +88,18 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
             processNewFiles( tempInstallPath );
             // cleanup ext temp files
-            FileUtil.deleteDir( tempInstallPath.toFile(), true );
+            FileUtil.deleteDir( installPath.toFile(), true );
+            */
+
+            // IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
+            String extName = this.masterModel.getStringProperty( EXT_NAME );
+
+            IPath projectTempPath = (IPath) masterModel.getProperty( PROJECT_TEMP_PATH );
+
+            processNewFiles( projectTempPath.append( extName + ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) );
+
+            FileUtil.deleteDir( projectTempPath.toFile(), true );
+            // End IDE-1122
 
             try
             {

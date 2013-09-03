@@ -197,6 +197,11 @@ public class ServerUtil
         }
     }
 
+    public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
+    {
+        return getSDKRequiredProperties( liferayRuntime );
+    }
+
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, msg );

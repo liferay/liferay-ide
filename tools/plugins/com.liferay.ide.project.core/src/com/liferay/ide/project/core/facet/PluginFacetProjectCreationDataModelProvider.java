@@ -277,6 +277,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         propNames.add( PORTLET_FRAMEWORK_ID );
         propNames.add( THEME_PARENT );
         propNames.add( THEME_TEMPLATE_FRAMEWORK );
+        propNames.add( PROJECT_TEMP_PATH );
 
         for( IPortletFrameworkWizardProvider portletFramework : LiferayProjectCore.getPortletFrameworks() )
         {

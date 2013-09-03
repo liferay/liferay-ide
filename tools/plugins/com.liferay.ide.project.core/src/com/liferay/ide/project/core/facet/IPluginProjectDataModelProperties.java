@@ -74,6 +74,8 @@ public interface IPluginProjectDataModelProperties
 
     public static final String PORTLET_NAME = "IPluginProjectDataModelProperties.PORTLET_NAME"; //$NON-NLS-1$
 
+    public static final String PROJECT_TEMP_PATH = "IPluginProjectDataModelProperties.PROJECT_TEMP_PATH"; //$NON-NLS-1$
+
     public static final String SETUP_DEFAULT_OUTPUT_LOCATION =
         "IPluginProjectDataModelProperties.SETUP_DEFAULT_OUTPUT_LOCATION"; //$NON-NLS-1$
 

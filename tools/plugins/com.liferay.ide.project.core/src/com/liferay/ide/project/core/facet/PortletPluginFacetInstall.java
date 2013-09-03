@@ -18,13 +18,8 @@ package com.liferay.ide.project.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.server.util.ServerUtil;
-
-import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -106,6 +101,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
 
         if( masterModel != null && masterModel.getBooleanProperty( CREATE_PROJECT_OPERATION ) )
         {
+            /*
             SDK sdk = getSDK();
 
             String portletName = this.masterModel.getStringProperty( PORTLET_NAME );
@@ -116,7 +112,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                     portletName.substring( 0, portletName.indexOf( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) );
             }
             // END FIX IDE-450
-            String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
+            /*String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
 
             // get the template delegate
             String portletFrameworkId = this.masterModel.getStringProperty( PORTLET_FRAMEWORK_ID );
@@ -135,6 +131,17 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
 
             // cleanup portlet files
             FileUtil.deleteDir( newPortletPath.toFile(), true );
+            */
+
+            // IDE-1122 SDK creating project has been moved to Class NewPluginProjectWizard
+            String portletName = this.masterModel.getStringProperty( PORTLET_NAME );
+
+            IPath projectTempPath = (IPath) masterModel.getProperty( PROJECT_TEMP_PATH );
+
+            processNewFiles( projectTempPath.append( portletName + ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) );
+
+            FileUtil.deleteDir( projectTempPath.toFile(), true );
+            // End IDE-1122
 
             try
             {
