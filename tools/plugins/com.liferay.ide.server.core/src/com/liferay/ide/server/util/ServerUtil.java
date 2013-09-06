@@ -367,7 +367,7 @@ public class ServerUtil
         return retval;
     }
 
-    public static Properties getPortletCategories( IPath portalDir )
+    public static Properties getAllCategories( IPath portalDir )
     {
         Properties retval = null;
 
@@ -383,43 +383,18 @@ public class ServerUtil
                 props.load( jar.getInputStream( jar.getEntry( "content/Language.properties" ) ) ); //$NON-NLS-1$
                 Enumeration<?> names = props.propertyNames();
 
-                String[] controlPanelCategories = 
-                {   "category.my", //$NON-NLS-1$
-                    "category.users", //$NON-NLS-1$
-                    "category.apps", //$NON-NLS-1$
-                    "category.configuration", //$NON-NLS-1$
-                    "category.sites", //$NON-NLS-1$
-                    "category.site_administration.configuration", //$NON-NLS-1$
-                    "category.site_administration.content", //$NON-NLS-1$
-                    "category.site_administration.pages", //$NON-NLS-1$
-                    "category.site_administration.users" //$NON-NLS-1$
-                };
-
                 while( names.hasMoreElements() )
                 {
-                    boolean isControlPanelCategory = false;
-
                     String name = names.nextElement().toString();
 
                     if( name.startsWith( "category." ) ) //$NON-NLS-1$
                     {
-                        for( String category : controlPanelCategories )
-                        {
-                            if( name.equals( category ) )
-                            {
-                                isControlPanelCategory = true;
-                                break;
-                            }
-                        }
-
-                        if( !isControlPanelCategory )
-                        {
-                            categories.put( name, props.getProperty( name ) );
-                        }
+                        categories.put( name, props.getProperty( name ) );
                     }
                 }
 
                 retval = categories;
+
             }
             catch( IOException e )
             {
@@ -430,9 +405,51 @@ public class ServerUtil
         return retval;
     }
 
+    public static Properties getPortletCategories( IPath portalDir )
+    {
+        Properties props = getAllCategories( portalDir );
+        Properties categories = new Properties();
+        Enumeration<?> names = props.propertyNames();
+
+        String[] controlPanelCategories = 
+        {   "category.my", //$NON-NLS-1$
+            "category.users", //$NON-NLS-1$
+            "category.apps", //$NON-NLS-1$
+            "category.configuration", //$NON-NLS-1$
+            "category.sites", //$NON-NLS-1$
+            "category.site_administration.configuration", //$NON-NLS-1$
+            "category.site_administration.content", //$NON-NLS-1$
+            "category.site_administration.pages", //$NON-NLS-1$
+            "category.site_administration.users" //$NON-NLS-1$
+        };
+
+        while( names.hasMoreElements() )
+        {
+            boolean isControlPanelCategory = false;
+
+            String name = names.nextElement().toString();
+
+            for( String category : controlPanelCategories )
+            {
+                if( name.equals( category ) )
+                {
+                    isControlPanelCategory = true;
+                    break;
+                }
+            }
+
+            if( !isControlPanelCategory )
+            {
+                categories.put( name, props.getProperty( name ) );
+            }
+        }
+
+        return categories;
+    }
+
     public static Properties getEntryCategories( IPath portalDir, String portalVersion )
     {
-        Properties categories = getPortletCategories( portalDir );
+        Properties categories = getAllCategories( portalDir );
 
         Properties retval = new Properties();
 
