@@ -17,6 +17,7 @@
 
 package com.liferay.ide.hook.core.model;
 
+import com.liferay.ide.hook.core.model.internal.CustomJspDirListener;
 import com.liferay.ide.hook.core.model.internal.DocrootRelativePathService;
 
 import org.eclipse.sapphire.Element;
@@ -27,6 +28,7 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -50,6 +52,7 @@ public interface CustomJspDir extends Element
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @DefaultValue( text = "/META-INF/custom_jsps" )
     @MustExist
+    @Listeners( CustomJspDirListener.class )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
 
     Value<Path> getValue();
@@ -57,4 +60,5 @@ public interface CustomJspDir extends Element
     void setValue( String value );
 
     void setValue( Path value );
+
 }

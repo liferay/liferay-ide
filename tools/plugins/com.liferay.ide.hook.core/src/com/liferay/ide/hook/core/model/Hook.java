@@ -32,7 +32,6 @@ import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FixedOrderList;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
@@ -87,11 +86,12 @@ public interface Hook extends Element
 
     ElementList<LanguageProperty> getLanguageProperties();
 
+    // *** CustomJsps ***
+
     @Type( base = CustomJsp.class )
     @Label( standard = "custom jsps" )
     @FixedOrderList
     @CustomXmlListBinding( impl = CustomJspsBindingImpl.class )
-    @DependsOn( value = { "CustomJspDir/Value" } )
     ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" ); //$NON-NLS-1$
 
     ElementList<CustomJsp> getCustomJsps();

@@ -57,7 +57,6 @@ public interface SupportedLocales extends Element
         }
     )
     @CustomXmlValueBinding( impl = LocaleTextNodeValueBinding.class )
-    @DependsOn( { "/Portlets/ResourceBundle" } )
     ValueProperty PROP_SUPPORTED_LOCALE = new ValueProperty( TYPE, "SupportedLocale" ); //$NON-NLS-1$
 
     Value<String> getSupportedLocale();
