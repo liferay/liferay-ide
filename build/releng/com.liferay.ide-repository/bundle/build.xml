@@ -16,20 +16,33 @@
     <property file="bundle.${env.HOSTNAME}.properties" />
     <property file="bundle.properties" />
 
-	<path id="lib.classpath">
-		<fileset dir="${basedir}/bundle/lib" includes="*.jar" />
-	</path>
-
-	<taskdef classpathref="lib.classpath" resource="net/sf/antcontrib/antlib.xml" />
-
 	<property environment="env" />
-
-	<property file="${basedir}/bundle/bundle.properties" />
 
 	<property name="package.target" value="output-zip"/>
 
-	<target name="all" if="create.bundles">
+    <target name="all">
+    	<path id="lib.classpath">
+    		<fileset dir="${basedir}/lib" includes="*.jar" />
+    	</path>
 
+    	<taskdef classpathref="lib.classpath" resource="net/sf/antcontrib/antlib.xml" />
+
+    	<property file="${basedir}/bundle.properties" />
+
+    	<antcall target="bundle"/>
+    </target>
+
+    <target name="maven-build" if="create.bundles">
+    	<property name="rootdir" value="${basedir}/bundle"/>
+
+    	<property name="target.dir" value="${basedir}/target"/>
+
+    	<property file="${basedir}/bundle/bundle.properties" />
+
+    	<antcall target="bundle"/>
+    </target>
+
+    <target name="bundle">
         <antcall target="win64" />
         <antcall target="win32" />
 
@@ -48,24 +61,13 @@
 	</target>
 
 	<target name="create-bundle">
-		<antcall target="install-features" />
+		<antcallback target="install-features" return="version" />
 		<antcallback target="${package.target}" return="final.name" />
 
-		<path id="updatesite.zip.path">
-	        <fileset dir="${target.dir}">
-	            <include name="*.zip"/>
-	        </fileset>
-	    </path>
+		<propertyregex property="final.name.versioned" input="${final.name}"
+			regexp="(.*)VERSION(.*)" replace="\1${version}\2" />
 
-	    <property name="updatesite.zip" value="${toString:updatesite.zip.path}" />
-
-		<propertyregex property="version" input="${updatesite.zip}"
-			regexp=".*Liferay_IDE_(.*)-updatesite.zip$" replace="\1" />
-
-		<propertyregex property="final.name.versioned"  input="${final.name}"
-			regexp="(.*eclipse_Liferay_IDE_)(.*SNAPSHOT)(-.*)$" replace="\1${version}\3"/>
-
-		<move file="${final.name}" tofile="${final.name.versioned}" />
+		<move file="${final.name}" tofile="${final.name.versioned}" verbose="true" />
 
 		<if>
 			<isset property="upload"/>
@@ -253,7 +255,7 @@
 	</target>
 
 	<target name="install-feature">
-		<exec executable="${builder.exe}" failonerror="true">
+		<exec executable="${builder.exe}" outputproperty="output" failonerror="true">
 			<arg value="-nosplash"/>
     		<arg value="-application"/>
 			<arg value="org.eclipse.equinox.p2.director"/>
@@ -287,10 +289,34 @@
     		</then>
     	</if>
 
-    	<antcall target="install-feature">
-    		<param name="repositoryURL" value="file://${updatesite.dir}"/>
+    	<if>
+    		<available file="${updatesite}" />
+    		<then>
+    			<property name="repositoryURL" value="file://${updatesite}" />
+    		</then>
+    		<else>
+    			<property name="repositoryURL" value="${updatesite}" />
+    		</else>
+    	</if>
+
+    	<antcallback target="install-feature" return="output">
     		<param name="featureId" value="${features}"/>
-    	</antcall>
+    	</antcallback>
+
+    	<echo>${output}</echo>
+    	<propertyregex property="temp" input="${output}"
+    		regexp=".*feature.group (.*)\..*" replace="\1" />
+
+    	<echo file="${target.dir}/temp.txt" append="true">${temp}</echo>
+
+    	<loadfile property="version" srcfile="${target.dir}/temp.txt">
+    		<filterchain>
+    			<headfilter lines="1"/>
+    			<striplinebreaks/>
+    		</filterchain>
+    	</loadfile>
+
+    	<delete file="${target.dir}/temp.txt"/>
    	</target>
 
 	<target name="clean-output-dir">
@@ -309,12 +335,12 @@
     				<then>
     					<exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
     						<arg value="cf" />
-    						<arg value="${output.dir}${output.tar.name}" />
+    						<arg value="${output.dir}/${output.tar.name}" />
     						<arg value="eclipse" />
     					</exec>
-    					<gzip destfile="${output.dir}${output.gz.name}" src="${output.dir}${output.tar.name}" />
-    					<delete file="${output.dir}${output.tar.name}" />
-    					<property name="final.name" value="${output.dir}${output.gz.name}"/>
+    					<gzip destfile="${output.dir}/${output.gz.name}" src="${output.dir}/${output.tar.name}" />
+    					<delete file="${output.dir}/${output.tar.name}" />
+    					<property name="final.name" value="${output.dir}/${output.gz.name}"/>
     				</then>
     			</if>
     		</then>
@@ -323,7 +349,6 @@
     			<property name="final.name" value="${output.dir}/${output.zip.name}"/>
     		</else>
     	</if>
-
 	</target>
 
 </project>
