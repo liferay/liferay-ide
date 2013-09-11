@@ -11,37 +11,32 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- *               Kamesh Sampath - initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.model.internal;
+package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.portlet.core.util.PortletUtil;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.PropertyContentEvent;
 
-import java.util.Locale;
-import java.util.Set;
-
-import org.eclipse.sapphire.services.PossibleValuesService;
+import com.liferay.ide.hook.core.model.CustomJspDir;
+import com.liferay.ide.hook.core.model.Hook;
 
 /**
- * @author Kamesh Sampath
+ * @author Kuo Zhang
  */
-public class LocalePossibleValueService extends PossibleValuesService
+public class CustomJspDirListener extends FilteredListener<PropertyContentEvent>
 {
 
-    static final Locale[] locales = Locale.getAvailableLocales();
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
-     */
+    // IDE-1132, Listen the change of Property CustomJspDir, and refresh the Property CustomJsps.
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void handleTypedEvent( PropertyContentEvent event )
     {
-        for( Locale locale : locales )
+        final Property prop = event.property();
+
+        if( CustomJspDir.PROP_VALUE.equals( prop.definition() ) )
         {
-            values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
+            prop.element().nearest( Hook.class ).property( Hook.PROP_CUSTOM_JSPS ).refresh();
         }
     }
 

@@ -78,7 +78,6 @@ public class QNamesPossibleValuesService extends PossibleValuesService
                 }
             }
         }
-
     }
 
     /**
@@ -93,4 +92,5 @@ public class QNamesPossibleValuesService extends PossibleValuesService
         qName = new QName( nsURI, localPart );
         return qName.toString();
     }
+
 }
