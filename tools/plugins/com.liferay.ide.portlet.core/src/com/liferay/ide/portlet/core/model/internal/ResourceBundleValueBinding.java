@@ -61,10 +61,7 @@ public final class ResourceBundleValueBinding extends XmlValueBindingImpl
 
             if( element != null )
             {
-
                 value = element.getText();
-
-                // System.out.println( "Reading VALUE ___________________ " + value );
 
                 if( value != null )
                 {

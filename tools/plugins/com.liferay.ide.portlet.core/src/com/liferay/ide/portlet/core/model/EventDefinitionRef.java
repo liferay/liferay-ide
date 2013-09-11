@@ -49,7 +49,6 @@ public interface EventDefinitionRef extends Element, Identifiable, Describeable
     @XmlBinding( path = "qname" )
     @NoDuplicates
     @Service( impl = QNamesPossibleValuesService.class, params = { @Service.Param( name = "0", value = "Q_NAME" ) } )
-    @DependsOn( { "/EventDefinitions/NamespaceURI", "/EventDefinitions/LocalPart" } )
     @CustomXmlValueBinding( impl = QNameTextNodeValueBinding.class, params = { "qname" } )
     ValueProperty PROP_Q_NAME = new ValueProperty( TYPE, "Qname" ); //$NON-NLS-1$
 

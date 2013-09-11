@@ -49,6 +49,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     ElementType TYPE = new ElementType( Portlet.class );
 
     // *** Portlet Name ***
+
     @Label( standard = "Portlet name" )
     @Required
     @NoDuplicates

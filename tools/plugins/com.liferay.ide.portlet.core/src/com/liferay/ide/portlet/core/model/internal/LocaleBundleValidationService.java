@@ -36,6 +36,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -48,12 +51,25 @@ import org.eclipse.sapphire.services.ValidationService;
 public class LocaleBundleValidationService extends ValidationService
 {
 
+    // IDE-1132 ,Add a listener to Property ResourceBundle, so LocaleBundle can be validated once ResourceBundle gets changed.
+    @Override
+    protected void initValidationService()
+    {
+        final Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
+            @Override
+            protected void handleTypedEvent( final PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
+
+        context( SupportedLocales.class ).nearest( Portlet.class ).getResourceBundle().attach( listener );
+    }
+
     final Locale[] AVAILABLE_LOCALES = Locale.getAvailableLocales();
     final Locale DEFAULT_LOCALE = Locale.getDefault();
 
-    /**
-	 *
-	 */
     @Override
     public Status compute()
     {
@@ -93,8 +109,8 @@ public class LocaleBundleValidationService extends ValidationService
                     }
                 }
             }
-
         }
+
         return Status.createOkStatus();
     }
 

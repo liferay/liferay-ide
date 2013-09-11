@@ -26,7 +26,6 @@ import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.annotations.DependsOn;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Image;
@@ -46,12 +45,12 @@ public interface ResourceBundle extends Element
     ElementType TYPE = new ElementType( ResourceBundle.class );
 
     // *** ResourceBundle ***
+
     @Type( base = Path.class )
     @Service( impl = GenericResourceBundlePathService.class )
     @FileExtensions( expr = "properties" )
     @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @XmlBinding( path = "resource-bundle" )
-    @DependsOn( { "/Portlets/SupportedLocales" } )
     @CustomXmlValueBinding( impl = ResourceBundleValueBinding.class, params = { "resource-bundle" } )
     ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" ); //$NON-NLS-1$
 
