@@ -65,9 +65,29 @@
 		<antcallback target="${package.target}" return="final.name" />
 
 		<propertyregex property="final.name.versioned" input="${final.name}"
-			regexp="(.*)VERSION(.*)" replace="\1${version}\2" />
+			regexp="(.*)QUALIFIED_VERSION(.*)" replace="\1${version}\2" />
 
 		<move file="${final.name}" tofile="${final.name.versioned}" verbose="true" />
+
+		<path id="updatesite.path">
+			<fileset dir="${target.dir}" includes="Liferay_IDE_*.zip" />
+		</path>
+
+		<property name="updatesite.name" value="${toString:updatesite.path}"/>
+
+		<condition property="check.updatesite" value="true">
+			<matches pattern=".*Liferay_IDE_.*-updatesite\.zip" string="${updatesite.name}" />
+		</condition>
+
+		<if>
+			<isset property="check.updatesite"/>
+			<then>
+				<propertyregex property="final.updatesite.name" input="${updatesite.name}"
+					regexp="(.*)Liferay_IDE_.*-updatesite(.*)" replace="\1liferay-ide-updatesite-${version}\2" />
+
+				<move file="${updatesite.name}" tofile="${final.updatesite.name}" verbose="true" />
+			</then>
+		</if>
 
 		<if>
 			<isset property="upload"/>
@@ -309,12 +329,38 @@
 
     	<echo file="${target.dir}/temp.txt" append="true">${temp}</echo>
 
-    	<loadfile property="version" srcfile="${target.dir}/temp.txt">
+    	<loadfile property="tmp" srcfile="${target.dir}/temp.txt">
     		<filterchain>
     			<headfilter lines="1"/>
     			<striplinebreaks/>
     		</filterchain>
     	</loadfile>
+
+    	<if>
+    		<isset property="forceContextQualifier"/>
+    		<then>
+    			<propertyregex property="label" input="${forceContextQualifier}" 
+    				regexp="\d+-(.*)" replace="\1" />
+    			<propertyregex property="timestamp" input="${forceContextQualifier}"
+    				regexp="(\d+).*" replace="\1" />
+    			<propertyregex property="unqualifiedVersion" input="${tmp}"
+    				regexp="(\d+\.)(\d+\.)(\d+).*" replace="\1\2\3" />
+    			<if>
+    				<not>
+    					<equals arg1="${label}" arg2="$${label}" />
+    				</not>
+    				<then>
+    					<property name="version" value="${unqualifiedVersion}-${label}-${timestamp}" />
+    				</then>
+    				<else>
+        				<property name="version" value="${unqualifiedVersion}\.${timestamp}" />
+    				</else>
+    			</if>
+    		</then>
+    		<else>
+    			<property name="version" value="${tmp}"/>
+    		</else>
+    	</if>
 
     	<delete file="${target.dir}/temp.txt"/>
    	</target>
