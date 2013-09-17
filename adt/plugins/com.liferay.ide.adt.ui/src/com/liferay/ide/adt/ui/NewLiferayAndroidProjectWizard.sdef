@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <wizard>
+        <id>NewLiferayAndroidProjectWizard</id>
+        <element-type>com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp</element-type>
+        <label>New Liferay Android Project</label>
+        <page>
+            <id>NewLiferayAndroidProjectWizardPage</id>
+            <label>Create Liferay Android Project</label>
+            <content>
+                <spacer></spacer>
+                <property-editor>ProjectName</property-editor>
+                <spacer></spacer>
+                <property-editor>UseDefaultLocation</property-editor>
+                <property-editor>Location</property-editor>
+                <separator></separator>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>TargetSDK</property>
+                </property-editor>
+                <property-editor>
+                    <hint>
+                        <name>factory</name>
+                        <value>CheckBoxListPropertyEditorRenderer$Factory</value>
+                    </hint>
+                    <property>LiferayApis</property>
+                    <span>false</span>
+                    <scale-vertically>true</scale-vertically>
+                </property-editor>
+                <spacer></spacer>
+                <property-editor>IncludeExample</property-editor>
+            </content>
+            <description>Create a new Android project configured as Liferay client</description>
+            <image>NewLiferayAndroidProjectWizard.png</image>
+        </page>
+        <description>Create a new Android project configured as Liferay client</description>
+    </wizard>
+    <import>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+    </import>
+</definition>

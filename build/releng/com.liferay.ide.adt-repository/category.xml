@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
+        Liferay IDE ADT is a plugin for Eclipse Android Development Tools (ADT)
+    </description>
+
+    <feature id="com.liferay.ide.adt" version="0.0.0">
+        <category name="lide" />
+    </feature>
+
+    <category-def name="lide" label="Liferay IDE">
+        <description>
+            Liferay IDE ADT is a plugin for Eclipse Android Development Tools (ADT)
+        </description>
+    </category-def>
+
+</site>

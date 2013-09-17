@@ -11,33 +11,14 @@
 
     <name>Liferay IDE Parent</name>
 
-    <developers>
-        <developer>
-            <name>Gregory Amerson</name>
-            <email>gregory.amerson@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Cindy Li</name>
-            <email>cindy.li@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Tao Tao</name>
-            <email>tao.tao@liferay.com</email>
-        </developer>
-        <developer>
-            <name>Kamesh Sampath</name>
-            <email>kamesh.sampath@hotmail.com</email>
-        </developer>
-    </developers>
-
     <properties>
-        <tycho-version>0.16.0</tycho-version>
-        <tycho-extras-version>0.16.0</tycho-extras-version>
+        <tycho-version>0.18.0</tycho-version>
+        <tycho-extras-version>0.18.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/</orbit-site>
         <sapphire-site>https://hudson.eclipse.org/sapphire/job/0.7.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
+        <ivyde-site>https://builds.apache.org/job/IvyDE-updatesite/673/artifact/trunk/build/</ivyde-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/releases/1.4/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/juno/</m2e-wtp-site>
-        <ivyde-site>https://builds.apache.org/job/IvyDE-updatesite/673/artifact/trunk/build/</ivyde-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
@@ -55,21 +36,6 @@
             <id>sapphire</id>
             <layout>p2</layout>
             <url>${sapphire-site}</url>
-        </repository>
-        <repository>
-            <id>m2e</id>
-            <layout>p2</layout>
-            <url>${m2e-site}</url>
-        </repository>
-        <repository>
-            <id>m2e-wtp</id>
-            <layout>p2</layout>
-            <url>${m2e-wtp-site}</url>
-        </repository>
-        <repository>
-            <id>ivyde</id>
-            <layout>p2</layout>
-            <url>${ivyde-site}</url>
         </repository>
     </repositories>
 
@@ -198,7 +164,7 @@
                     <artifactId>tycho-packaging-plugin</artifactId>
                     <version>${tycho-version}</version>
                     <configuration>
-                        <format>yyyyMMdd-HHmm</format>
+                        <format>yyyyMMddHHmm</format>
                         <archiveSite>true</archiveSite>
                         <environments>
                             <environment>

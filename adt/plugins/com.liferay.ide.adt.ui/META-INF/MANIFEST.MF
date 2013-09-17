@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE ADT UI
+Bundle-SymbolicName: com.liferay.ide.adt.ui;singleton:=true
+Bundle-Version: 2.0.0.qualifier
+Bundle-Activator: com.liferay.ide.adt.ui.ADTUI
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ com.liferay.ide.adt.core;bundle-version="2.0.0",
+ org.eclipse.sapphire.ui;bundle-version="0.7.0",
+ org.eclipse.sapphire.java;bundle-version="0.7.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.adt.ui

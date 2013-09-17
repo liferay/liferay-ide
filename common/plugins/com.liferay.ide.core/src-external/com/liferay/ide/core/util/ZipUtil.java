@@ -29,7 +29,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * Contains a series of static utility methods for working with zip archives.
- * 
+ *
  * @author <a href="mailto:konstantin.komissarchik@oracle.com">Konstantin Komissarchik</a>
  */
 
@@ -87,84 +87,99 @@ public final class ZipUtil {
 		unzip(file, destdir, new NullProgressMonitor());
 	}
 
-	public static void unzip(final File file, final File destdir, final IProgressMonitor monitor)
+	public static void unzip( final File file, final File destdir, final IProgressMonitor monitor ) throws IOException
+    {
+	    unzip( file, null, destdir, monitor );
+    }
 
-		throws IOException
-
+	public static void unzip( final File file, final String entryToStart, final File destdir, final IProgressMonitor monitor )
+	    throws IOException
 	{
-		final ZipFile zip = open(file);
+	    final ZipFile zip = open( file );
 
-		try {
-			final Enumeration<? extends ZipEntry> entries = zip.entries();
+	    try
+	    {
+	        final Enumeration<? extends ZipEntry> entries = zip.entries();
 
-			final int totalWork = zip.size();
-			monitor.beginTask( Resources.progressUnzipping, totalWork );
+            final int totalWork = zip.size();
+            monitor.beginTask( Resources.progressUnzipping, totalWork );
 
-			int c = 0;
+            int c = 0;
+            boolean foundStartEntry = entryToStart == null;
 
-			while (entries.hasMoreElements()) {
-				final ZipEntry entry = entries.nextElement();
+            while (entries.hasMoreElements())
+            {
+                final ZipEntry entry = entries.nextElement();
 
-				monitor.worked(1);
+                if( !foundStartEntry )
+                {
+                    foundStartEntry = entryToStart.equals( entry.getName() );
+                    continue;
+                }
 
-				final String taskMsg =
-					NLS.bind( Resources.progressUnzipped, new Object[] { file.getName(), c++, totalWork } );
-				monitor.setTaskName(taskMsg);
+                monitor.worked(1);
 
-				if (entry.isDirectory())
-					continue;
+                final String taskMsg =
+                    NLS.bind( Resources.progressUnzipped, new Object[] { file.getName(), c++, totalWork } );
+                monitor.setTaskName(taskMsg);
 
-				final File f = new File(destdir, entry.getName());
-				final File dir = f.getParentFile();
+                if (entry.isDirectory())
+                    continue;
 
-				if (!dir.exists() && !dir.mkdirs()) {
-					final String msg = "Could not create dir: " + dir.getPath(); //$NON-NLS-1$
-					throw new IOException(msg);
-				}
+                final File f = new File(destdir, entry.getName().replaceFirst( entryToStart, "" )); //$NON-NLS-1$
+                final File dir = f.getParentFile();
 
-				InputStream in = null;
-				FileOutputStream out = null;
+                if (!dir.exists() && !dir.mkdirs()) {
+                    final String msg = "Could not create dir: " + dir.getPath(); //$NON-NLS-1$
+                    throw new IOException(msg);
+                }
 
-				try {
-					in = zip.getInputStream(entry);
-					out = new FileOutputStream(f);
+                InputStream in = null;
+                FileOutputStream out = null;
 
-					final byte[] bytes = new byte[1024];
-					int count = in.read(bytes);
+                try {
+                    in = zip.getInputStream(entry);
+                    out = new FileOutputStream(f);
 
-					while (count != -1) {
-						out.write(bytes, 0, count);
-						count = in.read(bytes);
-					}
+                    final byte[] bytes = new byte[1024];
+                    int count = in.read(bytes);
 
-					out.flush();
-				}
-				finally {
-					if (in != null) {
-						try {
-							in.close();
-						}
-						catch (IOException e) {
-						}
-					}
+                    while (count != -1) {
+                        out.write(bytes, 0, count);
+                        count = in.read(bytes);
+                    }
 
-					if (out != null) {
-						try {
-							out.close();
-						}
-						catch (IOException e) {
-						}
-					}
-				}
-			}
-		}
-		finally {
-			try {
-				zip.close();
-			}
-			catch (IOException e) {
-			}
-		}
+                    out.flush();
+                }
+                finally {
+                    if (in != null) {
+                        try {
+                            in.close();
+                        }
+                        catch (IOException e) {
+                        }
+                    }
+
+                    if (out != null) {
+                        try {
+                            out.close();
+                        }
+                        catch (IOException e) {
+                        }
+                    }
+                }
+            }
+	    }
+	    finally
+	    {
+            try
+            {
+                zip.close();
+            }
+            catch (IOException e)
+            {
+            }
+        }
 	}
 
 	public static void zip(final File dir, final File target)

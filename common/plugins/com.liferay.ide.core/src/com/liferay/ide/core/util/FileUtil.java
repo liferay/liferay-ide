@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -365,6 +366,18 @@ public class FileUtil
         catch( Throwable t )
         {
             return null;
+        }
+    }
+
+    public static void searchAndReplace( File file, String search, String replace ) throws FileNotFoundException, IOException
+    {
+        if( file.exists() )
+        {
+            final String searchContents = CoreUtil.readStreamToString( new FileInputStream( file ) );
+
+            final String replaceContents = searchContents.replace( search, replace );
+
+            CoreUtil.writeStreamFromString( replaceContents, new FileOutputStream( file ) );
         }
     }
 

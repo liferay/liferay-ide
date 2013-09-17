@@ -17,13 +17,17 @@ package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.LiferayCore;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
@@ -41,6 +45,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -447,6 +452,11 @@ public class CoreUtil
         return retval;
     }
 
+    public static IWorkspace getWorkspace()
+    {
+        return ResourcesPlugin.getWorkspace();
+    }
+
     public static IWorkspaceRoot getWorkspaceRoot()
     {
         return ResourcesPlugin.getWorkspace().getRoot();
@@ -692,5 +702,35 @@ public class CoreUtil
         {
             LiferayCore.logError( "Error while validating folder: " + folder.getFullPath(), e ); //$NON-NLS-1$
         }
+    }
+
+    public static void writeStreamFromString( String contents, OutputStream outputStream ) throws IOException
+    {
+        if( contents == null )
+        {
+            return;
+        }
+
+        final char[] buffer = new char[0x10000];
+
+        Reader in = new InputStreamReader( new ByteArrayInputStream( contents.getBytes( "UTF-8" ) ) );  //$NON-NLS-1$
+
+        Writer out = new OutputStreamWriter( outputStream, "UTF-8" ); //$NON-NLS-1$
+
+        int read;
+        do
+        {
+            read = in.read( buffer, 0, buffer.length );
+
+            if( read > 0 )
+            {
+                out.write( buffer, 0, read );
+            }
+        }
+        while( read >= 0 );
+
+        in.close();
+        out.flush();
+        out.close();
     }
 }

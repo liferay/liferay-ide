@@ -39,5 +39,13 @@
         <module>features</module>
         <module>tests</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>ivyde</id>
+            <layout>p2</layout>
+            <url>${ivyde-site}</url>
+        </repository>
+    </repositories>
 </project>
 

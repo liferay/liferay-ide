@@ -86,6 +86,17 @@
             </modules>
         </profile>
 
+        <profile>
+            <id>adt</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <modules>
+                <module>../common</module>
+                <module>../adt</module>
+                <module>releng/com.liferay.ide.adt-repository</module>
+            </modules>
+        </profile>
 <!--
         <profile>
             <id>nls</id>
