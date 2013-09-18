@@ -75,6 +75,7 @@
             class="com.liferay.ide.service.ui.editor.ServiceBuilderEditor"
             contributorClass="com.liferay.ide.service.ui.editor.ServiceBuilderEditorActionBarContributor"
             default="true"
+            filenames="service.xml"
             icon="icons/e16/service.png"
             id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
             name="%service.editor.name"

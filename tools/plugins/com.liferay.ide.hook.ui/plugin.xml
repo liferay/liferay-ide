@@ -20,6 +20,7 @@
       <editor
             class="com.liferay.ide.hook.ui.editor.HookXmlEditor"
             default="true"
+            filenames="liferay-hook.xml"
             icon="icons/e16/hook.png"
             id="com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor"
             name="%hook.editor.name"

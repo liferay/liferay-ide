@@ -50,6 +50,7 @@
       <editor
             class="com.liferay.ide.portlet.ui.editor.PortletXmlEditor"
             default="true"
+            filenames="portlet.xml"
             icon="icons/e16/portlet.png"
             id="com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"
             name="%portlet.application.configuration.editor.name"
@@ -61,9 +62,10 @@
       <editor
             class="com.liferay.ide.portlet.ui.editor.LiferayDisplayXmlEditor"
             default="true"
+            filenames="liferay-display.xml"
             icon="icons/elcl16/liferay_ui_16x16.png"
-            name="%display.configuration.editor.name"
             id="com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"
+            name="%display.configuration.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
          <contentTypeBinding
                contentTypeId="com.liferay.ide.portlet.core.liferaydisplayxml">
