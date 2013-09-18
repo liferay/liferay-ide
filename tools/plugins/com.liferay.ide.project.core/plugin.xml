@@ -428,6 +428,25 @@
             priority="normal">
       </liferayProjectProvider>
    </extension>
+   <extension
+         id="FacetedSDKProjectValidator"
+         name="%faceted.sdk.project.validator.name"
+         point="org.eclipse.wst.common.project.facet.core.validators">
+      <validator
+            class="com.liferay.ide.project.core.FacetedSDKProjectValidator">
+      </validator>
+   </extension>
+   <extension
+         id="FacetedSDKProjectMarker"
+         name="%faceted.sdk.project.problem.name"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
 
    <!--
    <extension
