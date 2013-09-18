@@ -33,19 +33,14 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAnd
     implements IWorkbenchWizard, INewWizard
 {
 
-    public NewLiferayAndroidProjectWizard()
-    {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayAndroidProjectWizard.class ).wizard() );
-    }
-
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
-
     private static NewLiferayAndroidProjectOp createDefaultOp()
     {
         return NewLiferayAndroidProjectOp.TYPE.instantiate();
+    }
+
+    public NewLiferayAndroidProjectWizard()
+    {
+        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayAndroidProjectWizard.class ).wizard() );
     }
 
     @Override
@@ -56,6 +51,11 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAnd
         SapphireWizardPage wizardPage = (SapphireWizardPage) getPages()[0];
 
         wizardPage.setMessage( "Please enter a project name", SapphireWizardPage.NONE );
+    }
+
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
     }
 
 }
