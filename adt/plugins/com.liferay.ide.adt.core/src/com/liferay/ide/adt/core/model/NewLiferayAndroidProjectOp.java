@@ -55,9 +55,9 @@ public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
     // *** ProjectName ***
 
     @Label( standard = "project name" )
-    @Required
     @Listeners( ProjectNameListener.class )
     @Service( impl = ProjectNameValidationService.class )
+    @Required
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
 
     Value<String> getProjectName();
@@ -97,11 +97,8 @@ public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
     // *** SDKLevel ***
 
     @Label( standard = "Target SDK" )
-//    @Services(
-//        { @Service( impl = TargetSDKPossibleValuesService.class ),
-//          @Service( impl = TargetSDKDefaultValueService.class ) } )
     @Service( impl = TargetSDKPossibleValuesService.class )
-    @DefaultValue( text = "API 17: Android 4.2.2" )
+    @DefaultValue( text = "API 17: Android 4.2 (Jelly Bean)" )
     ValueProperty PROP_TARGET_SDK = new ValueProperty( TYPE, "TargetSDK" );
 
     Value<String> getTargetSDK();
@@ -120,7 +117,7 @@ public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
     // *** IncludeExample ***
 
     @Type( base = Boolean.class )
-    @Label( standard = "include example project" )
+    @Label( standard = "include example activity" )
     @DefaultValue( text = "true" )
     ValueProperty PROP_INCLUDE_EXAMPLE = new ValueProperty( TYPE, "IncludeExample" );
 

@@ -14,12 +14,13 @@
  *******************************************************************************/
 package com.liferay.ide.adt.ui;
 
-import com.liferay.ide.adt.core.model.LiferayApi;
 import com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.SapphireWizard;
+import org.eclipse.sapphire.ui.swt.SapphireWizardPage;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
@@ -44,12 +45,17 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAnd
 
     private static NewLiferayAndroidProjectOp createDefaultOp()
     {
-        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
+        return NewLiferayAndroidProjectOp.TYPE.instantiate();
+    }
 
-        LiferayApi newApi = op.getLiferayApis().insert();
-        newApi.setName( "User Sites" );
+    @Override
+    public void createPageControls( Composite pageContainer )
+    {
+        super.createPageControls( pageContainer );
 
-        return op;
+        SapphireWizardPage wizardPage = (SapphireWizardPage) getPages()[0];
+
+        wizardPage.setMessage( "Please enter a project name", SapphireWizardPage.NONE );
     }
 
 }

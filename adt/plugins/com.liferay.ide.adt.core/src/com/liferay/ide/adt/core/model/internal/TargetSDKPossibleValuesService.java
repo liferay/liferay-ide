@@ -14,9 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
-import com.android.ide.eclipse.adt.internal.sdk.Sdk;
-import com.android.sdklib.IAndroidTarget;
-import com.liferay.ide.adt.core.ADTUtil;
+import com.android.ide.eclipse.adt.AdtUtils;
 
 import java.util.Set;
 
@@ -33,15 +31,15 @@ public class TargetSDKPossibleValuesService extends PossibleValuesService
     @Override
     protected void fillPossibleValues( Set<String> values )
     {
-        Sdk currentSdk = Sdk.getCurrent();
-
-        if( currentSdk != null )
+        for( String version : AdtUtils.getKnownVersions() )
         {
-            for( IAndroidTarget target : currentSdk.getTargets() )
-            {
-                values.add( ADTUtil.getTargetLabel( target ) );
-            }
+            values.add( version );
         }
     }
 
+    @Override
+    public boolean ordered()
+    {
+        return true;
+    }
 }

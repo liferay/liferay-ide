@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.adt.core.ADTUtil;
-import com.liferay.ide.adt.core.model.LiferayApi;
 import com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp;
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
@@ -34,8 +33,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -43,14 +40,6 @@ import org.junit.Test;
  */
 public class ADTCoreTests extends BaseTests
 {
-
-    private IProject a;
-
-    @After
-    public void cleanup() throws Exception
-    {
-        deleteProject( "a" );
-    }
 
     protected IProject createLiferayAndroidProject( NewLiferayAndroidProjectOp op )
     {
@@ -67,40 +56,6 @@ public class ADTCoreTests extends BaseTests
         assertEquals( true, newLiferayAndroidProject.exists() );
 
         return newLiferayAndroidProject;
-    }
-
-    protected void createLiferayAndroidProjectAPI( String[] requiredApis )
-    {
-        final StringBuffer sb = new StringBuffer();
-
-        for( String api : requiredApis )
-        {
-            sb.append( api + "-" );
-        }
-
-        final String projectName = "test-liferay-android-project-api-" + sb.toString();
-
-        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
-        op.setProjectName( projectName );
-
-        for( String api : requiredApis )
-        {
-            LiferayApi liferayApi = LiferayApi.TYPE.instantiate();
-            liferayApi.setName( api );
-
-            op.getLiferayApis().add( liferayApi );
-        }
-
-        final IProject newLiferayAndroidProject = createLiferayAndroidProject( op );
-
-        for( final String api : requiredApis )
-        {
-            final IFile apiFile = newLiferayAndroidProject.getFile( "libs/" + api + "-service.jar" );
-
-            assertEquals( "Checking for api file: " + api, true, apiFile.exists() );
-        }
-
-        //TODO need to ensure no other jars exist that user didn't specify
     }
 
     protected void createLiferayAndroidProjectExample( boolean createExample )
@@ -145,31 +100,12 @@ public class ADTCoreTests extends BaseTests
             CoreUtil.readStreamToString( this.getClass().getResourceAsStream(
                 "files/AndroidManifest-targetSDK-" + sdkLevel + ".xml" ) );
 
-        assertEquals( androidManifestContent, expectedAndroidManifestContent );
+        assertEquals( stripCarriageReturns( androidManifestContent ), stripCarriageReturns( expectedAndroidManifestContent ) );
     }
 
-    @Before
-    public void createTestProject() throws Exception
+    private String stripCarriageReturns( String value )
     {
-        this.a = createProject( "a" );
-    }
-
-    protected IProject getCurrentProject()
-    {
-        return this.a;
-    }
-
-    @Test
-    public void testCreateLiferayAndroidProjectAPIs() throws Exception
-    {
-        final String[] noapis = {};
-        createLiferayAndroidProjectAPI( noapis );
-
-        final String[] blogs = { "blogs" };
-        createLiferayAndroidProjectAPI( blogs );
-
-        final String[] blogsAndUsers = { "blogs", "users" };
-        createLiferayAndroidProjectAPI( blogsAndUsers );
+        return value.replaceAll( "\r", "" );
     }
 
     @Test
@@ -228,7 +164,8 @@ public class ADTCoreTests extends BaseTests
     @Test
     public void testCreateLiferayAndroidProjectTargetSDKs() throws Exception
     {
-        createLiferayAndroidProjectSDK( "API 17: Android 4.2.2"/*17*/ );
+        createLiferayAndroidProjectSDK( "API 16: Android 4.1 (Jelly Bean)"/*16*/ );
+        createLiferayAndroidProjectSDK( "API 17: Android 4.2 (Jelly Bean)"/*17*/ );
         createLiferayAndroidProjectSDK( "API 18: Android 4.3"/*18*/ );
     }
 

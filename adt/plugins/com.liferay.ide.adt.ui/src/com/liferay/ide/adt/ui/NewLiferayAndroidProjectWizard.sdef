@@ -18,6 +18,7 @@
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetSDK</property>
                 </property-editor>
+                <!--
                 <property-editor>
                     <hint>
                         <name>factory</name>
@@ -27,6 +28,7 @@
                     <span>false</span>
                     <scale-vertically>true</scale-vertically>
                 </property-editor>
+                -->
                 <spacer></spacer>
                 <property-editor>IncludeExample</property-editor>
             </content>
