@@ -53,15 +53,18 @@ public class DebugPreferencePage extends FieldEditorPreferencePage implements IW
 
         StringFieldEditor passwordEditor =
             new StringFieldEditor( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, "Password:", composite ); //$NON-NLS-1$
-
+        passwordEditor.setEmptyStringAllowed( false );
+        passwordEditor.setErrorMessage( "Password is invalid." );
         passwordEditor.setPreferenceStore( getPreferenceStore() );
         addField( passwordEditor );
 
         IntegerFieldEditor portEditor =
             new IntegerFieldEditor( LiferayDebugCore.PREF_FM_DEBUG_PORT, "Port:", composite ); //$NON-NLS-1$
 
+        portEditor.setValidRange( 1025, 65535 );
+        portEditor.setEmptyStringAllowed( false );
         portEditor.setPreferenceStore( getPreferenceStore() );
-        portEditor.setErrorMessage( "Port value must be an integer." ); //$NON-NLS-1$
+        portEditor.setErrorMessage( "Port value ranges from integer 1025 to 65535." ); //$NON-NLS-1$
         portEditor.setValidateStrategy( StringFieldEditor.VALIDATE_ON_KEY_STROKE );
         addField( portEditor );
     }
