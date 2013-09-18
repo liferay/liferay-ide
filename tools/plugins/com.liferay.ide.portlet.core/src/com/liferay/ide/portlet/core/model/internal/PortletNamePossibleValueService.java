@@ -18,38 +18,36 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.model.Portlet;
-import com.liferay.ide.portlet.core.model.PortletApp;
+import com.liferay.ide.core.LiferayCore;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.modeling.ResourceStoreException;
-import org.eclipse.sapphire.modeling.xml.RootXmlResource;
-import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Kamesh Sampath
  * @author Gregory Amerson
+ * @author Tao Tao
  */
+@SuppressWarnings( "restriction" )
 public class PortletNamePossibleValueService extends PossibleValuesService
 {
 
-    private static Map<IResource, PortletApp> portletModels = new HashMap<IResource, PortletApp>();
-    private PortletApp localPortletModel;
+    private static final String PORTLET_NAME_ELEMENT = "portlet-name";
     private String[] localPortletNames;
-
 
     /*
      * (non-Javadoc)
@@ -58,51 +56,39 @@ public class PortletNamePossibleValueService extends PossibleValuesService
     @Override
     protected void fillPossibleValues( Set<String> values )
     {
-        if( this.localPortletModel == null )
+        final IFile displayXmlFile = context( Element.class ).resource().adapt( IFile.class );
+        final IFolder resourceFolder = (IFolder) displayXmlFile.getParent();
+
+        final IFile portletXml = resourceFolder.getFile( "portlet.xml" );
+
+        try
         {
-            final IResource eresource = context( Element.class ).resource().adapt( IFile.class );
-            final IContainer resourceFolder = eresource.getParent();
+            IDOMModel portletModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( portletXml );
 
-            try
-            {
-                final IResource resource = resourceFolder.findMember( "portlet.xml" ); //$NON-NLS-1$
+            IDOMDocument portletDocument = portletModel.getDocument();
 
-                if( resource != null )
-                {
-                    final PortletApp cachedPortletModel = portletModels.get( resource );
+            NodeList elements = portletDocument.getElementsByTagName( PORTLET_NAME_ELEMENT );
 
-                    if( cachedPortletModel == null )
-                    {
-                        File file = resource.getLocation().toFile();
-                        XmlResourceStore portletXmlResourceStore = new XmlResourceStore( file );
-                        RootXmlResource portletXmlResource = new RootXmlResource( portletXmlResourceStore );
-                        this.localPortletModel = PortletApp.TYPE.instantiate( portletXmlResource );
-                        portletModels.put( resource, this.localPortletModel );
-                    }
-                    else
-                    {
-                        this.localPortletModel = cachedPortletModel;
-                    }
-                }
-
-            }
-            catch( ResourceStoreException e )
-            {
-                PortletCore.logError( e );
-            }
-        }
-
-        if( this.localPortletModel != null && this.localPortletNames == null )
-        {
             List<String> portletNameList = new LinkedList<String>();
-            List<Portlet> portlets = this.localPortletModel.getPortlets();
 
-            for( Portlet iPortlet : portlets )
+            for( int i = 0; i < elements.getLength(); i++ )
             {
-                portletNameList.add( iPortlet.getPortletName().text() );
+                Node portletElement = elements.item( i );
+
+                if( portletElement != null )
+                {
+                    String portletName = portletElement.getTextContent();
+                    portletNameList.add( portletName );
+                }
             }
 
             this.localPortletNames = portletNameList.toArray( new String[0] );
+
+            portletModel.releaseFromRead();
+        }
+        catch( Exception e )
+        {
+            LiferayCore.logError( e );
         }
 
         if( this.localPortletNames != null )
