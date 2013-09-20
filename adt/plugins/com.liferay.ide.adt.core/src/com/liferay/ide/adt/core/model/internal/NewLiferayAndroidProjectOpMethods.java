@@ -94,15 +94,12 @@ public class NewLiferayAndroidProjectOpMethods
 
     private static File getLatestSampleAndroidAppZipFile()
     {
-        // https://codeload.github.com/brunofarache/sample-android-app/zip/0.1.0
+        // https://codeload.github.com/brunofarache/liferay-sample-android-app
         try
         {
-            final URL versionFile =
-                ADTCore.getDefault().getBundle().getEntry( "templates/sample-android-app-version.txt" );
-            final String latestVersion = CoreUtil.readStreamToString( versionFile.openStream() );
-
-            URL versionUrl =
-                ADTCore.getDefault().getBundle().getEntry( "templates/sample-android-app-" + latestVersion + ".zip" );
+            final URL templateFile = ADTCore.getDefault().getBundle().getEntry( "templates/version.txt" );
+            final String latestFile = CoreUtil.readStreamToString( templateFile.openStream() );
+            final URL versionUrl = ADTCore.getDefault().getBundle().getEntry( "templates/" + latestFile );
 
             return new File( FileLocator.toFileURL( versionUrl ).getFile() );
         }
