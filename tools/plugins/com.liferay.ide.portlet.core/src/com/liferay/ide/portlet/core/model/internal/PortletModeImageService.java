@@ -24,10 +24,9 @@ import com.liferay.ide.portlet.core.model.PortletMode;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.ImageData;
+import org.eclipse.sapphire.ImageService;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.services.ImageService;
-import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
  * @author Kamesh Sampath
@@ -66,7 +65,7 @@ public class PortletModeImageService extends ImageService
     }
 
     @Override
-    protected ImageServiceData compute()
+    protected ImageData compute()
     {
         String portletMode = null;
         Element element = context( Element.class );
@@ -105,7 +104,7 @@ public class PortletModeImageService extends ImageService
             imageData = IMG_DEFAULT;
         }
 
-        return new ImageServiceData( imageData );
+        return imageData;
     }
 
     @Override

@@ -22,10 +22,9 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.ImageData;
+import org.eclipse.sapphire.ImageService;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
-import org.eclipse.sapphire.services.ImageService;
-import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
  * @author Gregory Amerson
@@ -73,7 +72,7 @@ public class ColumnImageService extends ImageService
     }
 
     @Override
-    public ImageServiceData compute()
+    public ImageData compute()
     {
         ImageData imageData = null;
 
@@ -86,7 +85,7 @@ public class ColumnImageService extends ImageService
             imageData = IMG_COLUMN;
         }
 
-        return new ImageServiceData( imageData );
+        return imageData;
     }
 
 }

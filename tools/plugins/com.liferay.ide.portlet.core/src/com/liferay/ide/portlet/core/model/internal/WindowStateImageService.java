@@ -24,10 +24,9 @@ import com.liferay.ide.portlet.core.model.WindowState;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.ImageData;
+import org.eclipse.sapphire.ImageService;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
-import org.eclipse.sapphire.services.ImageService;
-import org.eclipse.sapphire.services.ImageServiceData;
 
 /**
  * @author Kamesh Sampath
@@ -63,7 +62,7 @@ public class WindowStateImageService extends ImageService
     }
 
     @Override
-    protected ImageServiceData compute()
+    protected ImageData compute()
     {
         String strWindowState = null;
         Element element = context( Element.class );
@@ -95,7 +94,7 @@ public class WindowStateImageService extends ImageService
 
         }
 
-        return new ImageServiceData( imageData );
+        return imageData;
     }
 
     @Override
