@@ -126,7 +126,18 @@ public final class ZipUtil {
                 if (entry.isDirectory())
                     continue;
 
-                final File f = new File(destdir, entry.getName().replaceFirst( entryToStart, "" )); //$NON-NLS-1$
+                String entryName = null;
+
+                if( entryToStart == null )
+                {
+                    entryName = entry.getName();
+                }
+                else
+                {
+                    entryName = entry.getName().replaceFirst( entryToStart, "" ); //$NON-NLS-1$
+                }
+
+                final File f = new File( destdir, entryName );
                 final File dir = f.getParentFile();
 
                 if (!dir.exists() && !dir.mkdirs()) {
