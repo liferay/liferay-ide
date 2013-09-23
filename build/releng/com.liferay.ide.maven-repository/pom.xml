@@ -15,7 +15,20 @@
 
     <name>Liferay IDE Maven Repository</name>
 
-    <build>
+    <repositories>
+        <repository>
+            <id>m2e</id>
+            <layout>p2</layout>
+            <url>${m2e-site}</url>
+        </repository>
+        <repository>
+            <id>m2e-wtp</id>
+            <layout>p2</layout>
+            <url>${m2e-wtp-site}</url>
+        </repository>
+    </repositories>
+
+	<build>
         <plugins>
             <!--
             <plugin>
