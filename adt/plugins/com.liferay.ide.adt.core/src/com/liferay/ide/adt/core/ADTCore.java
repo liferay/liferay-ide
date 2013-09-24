@@ -15,9 +15,17 @@
 
 package com.liferay.ide.adt.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
+import java.io.File;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -28,11 +36,51 @@ import org.osgi.framework.BundleContext;
 public class ADTCore extends Plugin
 {
 
+    // The shared instance
+    private static ADTCore plugin;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.adt.core"; //$NON-NLS-1$
 
-    // The shared instance
-    private static ADTCore plugin;
+    public static final String PREF_PROJECT_TEMPLATE_LOCATION = "project-template-location";
+
+    private static final IScopeContext[] prefContexts =
+                    new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
+
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
+
+    /**
+     * Returns the shared instance
+     *
+     * @return the shared instance
+     */
+    public static ADTCore getDefault()
+    {
+        return plugin;
+    }
+
+    public static File getProjectTemplateFile()
+    {
+        File retval = null;
+
+        final String location =
+            Platform.getPreferencesService().getString( PLUGIN_ID, PREF_PROJECT_TEMPLATE_LOCATION, null, prefContexts );
+
+        if( ! CoreUtil.isNullOrEmpty( location ) )
+        {
+            retval = new File( location );
+        }
+
+        return retval;
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
+    }
 
     /**
      * The constructor
@@ -59,21 +107,6 @@ public class ADTCore extends Plugin
     {
         plugin = null;
         super.stop( context );
-    }
-
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static ADTCore getDefault()
-    {
-        return plugin;
-    }
-
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
     }
 
 }

@@ -25,8 +25,6 @@ import com.liferay.ide.core.util.ZipUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -34,7 +32,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -72,13 +69,13 @@ public class NewLiferayAndroidProjectOpMethods
 
         File projectDir = createProjectDir( op );
 
-        File latestSampleAndroidAppZipFile = getLatestSampleAndroidAppZipFile();
+        File projectTemplate = ADTCore.getProjectTemplateFile();
 
         try
         {
-            final String topLevelDir = getTopLevelDir( latestSampleAndroidAppZipFile );
+            final String topLevelDir = ZipUtil.getFirstZipEntryName( projectTemplate );
 
-            ZipUtil.unzip( latestSampleAndroidAppZipFile, topLevelDir, projectDir, platformMonitor );
+            ZipUtil.unzip( projectTemplate, topLevelDir, projectDir, platformMonitor );
 
             updateProjectContents( projectDir, op );
 
@@ -90,33 +87,6 @@ public class NewLiferayAndroidProjectOpMethods
         }
 
         return Status.createOkStatus();
-    }
-
-    private static File getLatestSampleAndroidAppZipFile()
-    {
-        // https://codeload.github.com/brunofarache/liferay-sample-android-app
-        try
-        {
-            final URL templateFile = ADTCore.getDefault().getBundle().getEntry( "templates/version.txt" );
-            final String latestFile = CoreUtil.readStreamToString( templateFile.openStream() );
-            final URL versionUrl = ADTCore.getDefault().getBundle().getEntry( "templates/" + latestFile );
-
-            return new File( FileLocator.toFileURL( versionUrl ).getFile() );
-        }
-        catch( IOException e )
-        {
-        }
-
-        return null;
-    }
-
-    private static String getTopLevelDir( File file ) throws Exception
-    {
-        final ZipFile sampleFile = new ZipFile( file );
-        final String topLevelDir = sampleFile.entries().nextElement().getName();
-        sampleFile.close();
-
-        return topLevelDir;
     }
 
     private static void openProject( File projectDir, NewLiferayAndroidProjectOp op, final IProgressMonitor monitor )

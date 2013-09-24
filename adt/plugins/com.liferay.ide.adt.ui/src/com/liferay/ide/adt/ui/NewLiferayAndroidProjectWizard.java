@@ -17,10 +17,10 @@ package com.liferay.ide.adt.ui;
 import com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.swt.SapphireWizardPage;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
@@ -33,6 +33,8 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAnd
     implements IWorkbenchWizard, INewWizard
 {
 
+    private boolean firstErrorMessageRemoved = false;
+
     private static NewLiferayAndroidProjectOp createDefaultOp()
     {
         return NewLiferayAndroidProjectOp.TYPE.instantiate();
@@ -44,14 +46,34 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAnd
     }
 
     @Override
-    public void createPageControls( Composite pageContainer )
+    public IWizardPage[] getPages()
     {
-        super.createPageControls( pageContainer );
+        final IWizardPage[] wizardPages = super.getPages();
 
-        SapphireWizardPage wizardPage = (SapphireWizardPage) getPages()[0];
+        if( !firstErrorMessageRemoved && wizardPages != null )
+        {
+            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
 
-        wizardPage.setMessage( "Please enter a project name", SapphireWizardPage.NONE );
+            if( "Project name must be specified.".equals( wizardPage.getMessage() ) )
+            {
+                wizardPage.setMessage( "Please enter a project name.", SapphireWizardPage.NONE );
+                firstErrorMessageRemoved = true;
+            }
+        }
+
+        return wizardPages;
     }
+
+
+//    @Override
+//    public void createPageControls( Composite pageContainer )
+//    {
+//        super.createPageControls( pageContainer );
+//
+//        SapphireWizardPage wizardPage = (SapphireWizardPage) getPages()[0];
+//
+//        wizardPage.setMessage( "Please enter a project name", SapphireWizardPage.NONE );
+//    }
 
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )

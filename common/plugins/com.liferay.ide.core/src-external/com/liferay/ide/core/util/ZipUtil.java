@@ -48,6 +48,32 @@ public final class ZipUtil {
 		}
 	}
 
+	private static void delete(final File f)
+
+		throws IOException
+
+	{
+		if (f.isDirectory()) {
+			for (File child : f.listFiles()) {
+				delete(child);
+			}
+		}
+
+		if (!f.delete()) {
+			final String msg = "Could not delete " + f.getPath() + "."; //$NON-NLS-1$ //$NON-NLS-2$
+			throw new IOException(msg);
+		}
+	}
+
+	public static String getFirstZipEntryName( File zipFile ) throws Exception
+    {
+        final ZipFile zip = new ZipFile( zipFile );
+        final String name = zip.entries().nextElement().getName();
+        zip.close();
+
+        return name;
+    }
+
 	public static ZipEntry getZipEntry(final ZipFile zip, final String name) {
 		final String lcasename = name.toLowerCase();
 
@@ -220,23 +246,6 @@ public final class ZipUtil {
 		}
 	}
 
-	private static void delete(final File f)
-
-		throws IOException
-
-	{
-		if (f.isDirectory()) {
-			for (File child : f.listFiles()) {
-				delete(child);
-			}
-		}
-
-		if (!f.delete()) {
-			final String msg = "Could not delete " + f.getPath() + "."; //$NON-NLS-1$ //$NON-NLS-2$
-			throw new IOException(msg);
-		}
-	}
-
 	private static void zipDir(
 		final File target, final ZipOutputStream zip, final File dir, final FilenameFilter filter, final String path)
 
@@ -299,7 +308,7 @@ public final class ZipUtil {
 		}
 	}
 
-	/**
+    /**
 	 * This class is a container for static methods and is not meant to be instantiated.
 	 */
 

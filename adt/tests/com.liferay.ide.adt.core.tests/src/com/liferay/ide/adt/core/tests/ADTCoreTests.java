@@ -18,18 +18,24 @@ package com.liferay.ide.adt.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.adt.core.ADTCore;
 import com.liferay.ide.adt.core.ADTUtil;
 import com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp;
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ZipUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -106,6 +112,74 @@ public class ADTCoreTests extends BaseTests
     private String stripCarriageReturns( String value )
     {
         return value.replaceAll( "\r", "" );
+    }
+
+    @Test
+    public void testGetProjectTemplateLocation() throws Exception
+    {
+        final File projectTemplateFile = ADTCore.getProjectTemplateFile();
+
+        assertNotNull( projectTemplateFile );
+
+        assertEquals( true, projectTemplateFile.exists() );
+
+        final String topLevelDir = ZipUtil.getFirstZipEntryName( projectTemplateFile );
+
+        assertNotNull( topLevelDir );
+    }
+
+    @Test
+    public void testSetCustomProjectTemplateLocation() throws Exception
+    {
+        final File defaultTemplateFile = ADTCore.getProjectTemplateFile();
+
+        final IEclipsePreferences adtCorePrefs = getADTCorePrefs();
+
+        final File customTemplateFile = getCustomTemplateFile();
+
+        adtCorePrefs.put( ADTCore.PREF_PROJECT_TEMPLATE_LOCATION, customTemplateFile.getCanonicalPath() );
+
+        final File projectTemplateFile = ADTCore.getProjectTemplateFile();
+
+        assertEquals( customTemplateFile, projectTemplateFile );
+
+        adtCorePrefs.remove( ADTCore.PREF_PROJECT_TEMPLATE_LOCATION );
+
+        final File newDefaultTemplateFile = ADTCore.getProjectTemplateFile();
+
+        assertEquals( defaultTemplateFile, newDefaultTemplateFile );
+    }
+
+    private IEclipsePreferences getADTCorePrefs()
+    {
+        return InstanceScope.INSTANCE.getNode( ADTCore.PLUGIN_ID );
+    }
+
+    private File getCustomTemplateFile() throws IOException
+    {
+        return new File(
+            FileLocator.toFileURL(
+                Activator.getDefault().getBundle().getEntry(
+                    "templates/liferay-mobile-sdk-sample-android-custom.zip" ) ).getFile() );
+    }
+
+    @Test
+    public void testCreateLiferayAndroidProjectCustomTemplate() throws Exception
+    {
+        getADTCorePrefs().put( ADTCore.PREF_PROJECT_TEMPLATE_LOCATION, getCustomTemplateFile().getCanonicalPath() );
+
+        final String projectName = "test-liferay-android-project-sdk-custom-template";
+
+        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
+        op.setProjectName( projectName );
+
+        final IProject newLiferayAndroidProject = createLiferayAndroidProject( op );
+
+        assertNotNull( newLiferayAndroidProject );
+
+        final IFile customFile = newLiferayAndroidProject.getFile( "custom-file.txt" );
+
+        assertEquals( true, customFile.exists() );
     }
 
     @Test
