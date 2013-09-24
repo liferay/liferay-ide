@@ -33,6 +33,14 @@
 
     <packaging>pom</packaging>
 
+    <repositories>
+        <repository>
+            <id>ivyde</id>
+            <layout>p2</layout>
+            <url>${ivyde-site}</url>
+        </repository>
+    </repositories>
+
     <modules>
         <!-- all repositories included in composite need to be built before the com.liferay.ide-repository -->
         <module>com.liferay.ide.maven-repository</module>

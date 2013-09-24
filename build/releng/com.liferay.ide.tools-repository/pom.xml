@@ -30,14 +30,6 @@
 
     <name>Liferay IDE Tools Repository</name>
 
-    <repositories>
-        <repository>
-            <id>ivyde</id>
-            <layout>p2</layout>
-            <url>${ivyde-site}</url>
-        </repository>
-    </repositories>
-
     <build>
         <plugins>
             <!-- Added the switch to final name in the AddAssociateSites -->
