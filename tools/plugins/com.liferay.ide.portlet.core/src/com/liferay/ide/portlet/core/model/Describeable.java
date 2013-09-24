@@ -22,27 +22,26 @@ import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author Kamesh Sampath
  */
-public interface Describeable extends Element {
+public interface Describeable extends Element
+{
 
-	ElementType TYPE = new ElementType( Describeable.class );
+    ElementType TYPE = new ElementType( Describeable.class );
 
-	/*
-	 * Description Element
-	 */
+    /*
+     * Description Element
+     */
 
-	@Label( standard = "Description" )
-	@NoDuplicates
-	@XmlBinding( path = "description" )
-	ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" ); //$NON-NLS-1$
+    @Label( standard = "Description" )
+    @XmlBinding( path = "description" )
+    ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" ); //$NON-NLS-1$
 
-	Value<String> getDescription();
+    Value<String> getDescription();
 
-	void setDescription( String description );
+    void setDescription( String description );
 
 }

@@ -28,9 +28,9 @@
                     <span>false</span>
                     <scale-vertically>true</scale-vertically>
                 </property-editor>
-                -->
                 <spacer></spacer>
                 <property-editor>IncludeExample</property-editor>
+                -->
             </content>
             <description>Create a new Android project configured as Liferay client</description>
             <image>NewLiferayAndroidProjectWizard.png</image>

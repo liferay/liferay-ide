@@ -64,20 +64,20 @@ public class ADTCoreTests extends BaseTests
         return newLiferayAndroidProject;
     }
 
-    protected void createLiferayAndroidProjectExample( boolean createExample )
-    {
-        final String projectName = "test-liferay-android-project-example-" + createExample;
-
-        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
-        op.setProjectName( projectName );
-        op.setIncludeExample( createExample );
-
-        final IProject newProject = createLiferayAndroidProject( op );
-
-        final IFile exampleFile = newProject.getFile( "src/com/liferay/mobile/sample/task/UserSitesAsyncTask.java" );
-
-        assertEquals( createExample, exampleFile.exists() );
-    }
+//    protected void createLiferayAndroidProjectExample( boolean createExample )
+//    {
+//        final String projectName = "test-liferay-android-project-example-" + createExample;
+//
+//        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
+//        op.setProjectName( projectName );
+//        op.setIncludeExample( createExample );
+//
+//        final IProject newProject = createLiferayAndroidProject( op );
+//
+//        final IFile exampleFile = newProject.getFile( "src/com/liferay/mobile/sample/task/UserSitesAsyncTask.java" );
+//
+//        assertEquals( createExample, exampleFile.exists() );
+//    }
 
     protected void createLiferayAndroidProjectName( final String projectName ) throws Exception
     {
@@ -220,12 +220,12 @@ public class ADTCoreTests extends BaseTests
         assertEquals( expectedProjectLocation, newProject.getLocation() );
     }
 
-    @Test
-    public void testCreateLiferayAndroidProjectExample() throws Exception
-    {
-        createLiferayAndroidProjectExample( true );
-        createLiferayAndroidProjectExample( false );
-    }
+//    @Test
+//    public void testCreateLiferayAndroidProjectExample() throws Exception
+//    {
+//        createLiferayAndroidProjectExample( true );
+//        createLiferayAndroidProjectExample( false );
+//    }
 
     @Test
     public void testCreateLiferayAndroidProjectNames() throws Exception

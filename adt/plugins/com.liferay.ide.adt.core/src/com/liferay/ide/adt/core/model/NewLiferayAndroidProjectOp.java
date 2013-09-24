@@ -116,16 +116,16 @@ public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
 
     // *** IncludeExample ***
 
-    @Type( base = Boolean.class )
-    @Label( standard = "include example activity" )
-    @DefaultValue( text = "true" )
-    ValueProperty PROP_INCLUDE_EXAMPLE = new ValueProperty( TYPE, "IncludeExample" );
-
-    Value<Boolean> getIncludeExample();
-
-    void setIncludeExample( String value );
-
-    void setIncludeExample( Boolean value );
+//    @Type( base = Boolean.class )
+//    @Label( standard = "include example activity" )
+//    @DefaultValue( text = "true" )
+//    ValueProperty PROP_INCLUDE_EXAMPLE = new ValueProperty( TYPE, "IncludeExample" );
+//
+//    Value<Boolean> getIncludeExample();
+//
+//    void setIncludeExample( String value );
+//
+//    void setIncludeExample( Boolean value );
 
 
     // *** Method: execute ***
