@@ -296,10 +296,12 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             final String[] configDirParams = new String[]
             {
-                ILiferayMavenConstants.PLUGIN_CONFIG_APP_AUTO_DEPLOY_DIR,
+                // don't check auto deploy folder as it can sometimes not exist yet
+                // ILiferayMavenConstants.PLUGIN_CONFIG_APP_AUTO_DEPLOY_DIR,
                 ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_CLASSES_PORTAL_DIR,
                 ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_DEPLOY_DIR,
-                ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR,
+                // don't need server lib global dir for project operations
+                // ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR,
                 ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_LIB_PORTAL_DIR,
                 ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR,
                 ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_TLD_PORTAL_DIR,
