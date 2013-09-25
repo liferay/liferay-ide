@@ -22,6 +22,9 @@ import java.io.File;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -32,6 +35,8 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class LocationValidationService extends ValidationService
 {
+
+    private Listener listener;
 
     private boolean canCreate( File file )
     {
@@ -53,46 +58,99 @@ public class LocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        if( ! op().getUseDefaultLocation().content( true ) )
+        if( !op().getUseDefaultLocation().content( true ) )
         {
             final Path currentProjectLocation = op().getLocation().content( false );
             final String currentProjectName = op().getProjectName().content();
 
-            if( currentProjectLocation != null )
+            /*
+             * IDE-1150, instead of using annotation "@Required",use this service to validate the custom project
+             * location must be specified, let the wizard display the error of project name when project name and
+             * location are both null.
+             */
+            if( currentProjectName != null )
             {
-                String currentPath = currentProjectLocation.toOSString();
-
-                final IProject handle= CoreUtil.getWorkspaceRoot().getProject( currentProjectName );
-
-                if( ! org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+                if( currentProjectLocation != null )
                 {
-                    retval = Status.createErrorStatus( "error 1" );
+                    String currentPath = currentProjectLocation.toOSString();
+
+                    final IProject handle = CoreUtil.getWorkspaceRoot().getProject( currentProjectName );
+
+                    if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+                    {
+                        retval = Status.createErrorStatus( "\"" + currentPath + "\" is not a valid path." );
+                    }
+                    else
+                    {
+                        IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+
+                        if( !osPath.toFile().isAbsolute() )
+                        {
+                            retval = Status.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." );
+                        }
+                        else
+                        {
+                            if( !osPath.toFile().exists() )
+                            {
+                                // check non-existing external location
+                                if( !canCreate( osPath.toFile() ) )
+                                {
+                                    retval =
+                                        Status.createErrorStatus( "Cannot create project content at \"" + 
+                                             currentPath + "\"" );
+                                }
+                            }
+
+                            // validate the location
+                            final IStatus locationStatus =
+                                CoreUtil.getWorkspace().validateProjectLocation( handle, osPath );
+
+                            if( !locationStatus.isOK() )
+                            {
+                                retval =
+                                    Status.createErrorStatus( "\"" + currentPath +
+                                        "\" is not a valid project location." );
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
-
-                    if ( ! osPath.toFile().exists() )
-                    {
-                        // check non-existing external location
-                        if ( ! canCreate( osPath.toFile() ) )
-                        {
-                            retval = Status.createErrorStatus( "error 2" );
-                        }
-                    }
-
-                    // validate the location
-                    final IStatus locationStatus= CoreUtil.getWorkspace().validateProjectLocation(handle, osPath);
-
-                    if (!locationStatus.isOK())
-                    {
-                        retval = Status.createErrorStatus( "error 3" );
-                    }
+                    retval = Status.createErrorStatus( "Location must be specified." );
                 }
             }
         }
 
         return retval;
+    }
+
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        if( this.listener != null )
+        {
+            op().getProjectName().detach( this.listener );
+
+            this.listener = null;
+        }
+    }
+
+    @Override
+    protected void initValidationService()
+    {
+        this.listener = new FilteredListener<PropertyContentEvent>()
+        {
+
+            @Override
+            protected void handleTypedEvent( final PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
+
+        op().getProjectName().attach( this.listener );
     }
 
     private NewLiferayAndroidProjectOp op()
