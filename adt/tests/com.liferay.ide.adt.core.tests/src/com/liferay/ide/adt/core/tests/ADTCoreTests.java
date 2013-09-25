@@ -106,7 +106,20 @@ public class ADTCoreTests extends BaseTests
             CoreUtil.readStreamToString( this.getClass().getResourceAsStream(
                 "files/AndroidManifest-targetSDK-" + sdkLevel + ".xml" ) );
 
-        assertEquals( stripCarriageReturns( androidManifestContent ), stripCarriageReturns( expectedAndroidManifestContent ) );
+        assertEquals(
+            stripCarriageReturns( expectedAndroidManifestContent ), stripCarriageReturns( androidManifestContent ) );
+
+        final IFile projectProperties = newProject.getFile( "project.properties" );
+
+        final String projectPropertiesContent = CoreUtil.readStreamToString( projectProperties.getContents() );
+
+        final String expectedProjectPropertiesContent =
+            CoreUtil.readStreamToString( this.getClass().getResourceAsStream(
+                "files/project-" + sdkLevel + ".properties" ) );
+
+        assertEquals(
+            stripCarriageReturns( expectedProjectPropertiesContent ),
+            stripCarriageReturns( projectPropertiesContent ) );
     }
 
     private String stripCarriageReturns( String value )
@@ -238,9 +251,9 @@ public class ADTCoreTests extends BaseTests
     @Test
     public void testCreateLiferayAndroidProjectTargetSDKs() throws Exception
     {
-        createLiferayAndroidProjectSDK( "API 16: Android 4.1 (Jelly Bean)"/*16*/ );
-        createLiferayAndroidProjectSDK( "API 17: Android 4.2 (Jelly Bean)"/*17*/ );
-        createLiferayAndroidProjectSDK( "API 18: Android 4.3"/*18*/ );
+        createLiferayAndroidProjectSDK( "API 16: Android 4.1 (Jelly Bean)" /*16*/ );
+        createLiferayAndroidProjectSDK( "API 17: Android 4.2 (Jelly Bean)" /*17*/ );
+        createLiferayAndroidProjectSDK( "API 18: Android 4.3 (Jelly Bean)" /*18*/ );
     }
 
 }
