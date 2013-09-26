@@ -223,9 +223,9 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
         // and match 6.2.0 and greater
         final Version version = new Version( sdk.getVersion() );
 
-        if( ( CoreUtil.compareVersions( version, ILiferayConstants.V612 ) >= 0 &&
-              CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) ||
-              CoreUtil.compareVersions( version, ILiferayConstants.V6120 ) >= 0 )
+        if( ( CoreUtil.compareVersions( version, ILiferayConstants.V611 ) >= 0 &&
+                        CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) ||
+                        CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
         {
             IFile ivyXmlFile = project.getFile( ISDKConstants.IVY_XML_FILE );
 
@@ -233,6 +233,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             {
                 // IDE-1044
                 addIvyNature( project, monitor );
+
                 IvyClasspathContainer ivycp = addIvyLibrary( project, monitor );
 
                 if( ivycp != null )

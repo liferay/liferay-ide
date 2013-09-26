@@ -31,26 +31,41 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 public class ProjectUIPlugin extends AbstractUIPlugin
 {
 
-    public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
+    // Shared images
+    public static final String IMAGE_ID = "war.image"; //$NON-NLS-1$
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.project.ui"; //$NON-NLS-1$
+    public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
 
     // The shared instance
     private static ProjectUIPlugin plugin;
 
-    // Shared images
-    public static final String IMAGE_ID = "war.image"; //$NON-NLS-1$
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.project.ui"; //$NON-NLS-1$
+
+    public static IStatus createErrorStatus( String msg )
+    {
+        return createErrorStatus( msg, null );
+    }
+
+    public static IStatus createErrorStatus( String msg, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
+
+    public static IStatus createInfoStatus( String msg )
+    {
+        return new Status( IStatus.INFO, PLUGIN_ID, msg, null );
+    }
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static ProjectUIPlugin getDefault()
@@ -61,18 +76,6 @@ public class ProjectUIPlugin extends AbstractUIPlugin
     public static void logError( Exception e )
     {
         getDefault().getLog().log( createErrorStatus( e.getMessage(), e ) );
-    }
-
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
-
-    /**
-     * The constructor
-     */
-    public ProjectUIPlugin()
-    {
     }
 
     // private static IConfigurationElement[] pluginWizardFragmentElements;
@@ -113,17 +116,21 @@ public class ProjectUIPlugin extends AbstractUIPlugin
     // return pluginWizardFragmentElements;
     // }
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
-     */
-    @Override
-    public void start( BundleContext context ) throws Exception
+    public static void logError( String msg, Exception e )
     {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
+    }
 
-        super.start( context );
+    public static void logInfo( String msg )
+    {
+        getDefault().getLog().log( createInfoStatus( msg ) );
+    }
 
-        plugin = this;
+    /**
+     * The constructor
+     */
+    public ProjectUIPlugin()
+    {
     }
 
     @Override
@@ -138,6 +145,19 @@ public class ProjectUIPlugin extends AbstractUIPlugin
 
     /*
      * (non-Javadoc)
+     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
+     */
+    @Override
+    public void start( BundleContext context ) throws Exception
+    {
+
+        super.start( context );
+
+        plugin = this;
+    }
+
+    /*
+     * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
      */
     @Override
@@ -147,15 +167,5 @@ public class ProjectUIPlugin extends AbstractUIPlugin
         plugin = null;
 
         super.stop( context );
-    }
-
-    public static IStatus createErrorStatus( String msg, Exception e )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
-    }
-
-    public static IStatus createErrorStatus( String msg )
-    {
-        return createErrorStatus( msg, null );
     }
 }
