@@ -41,6 +41,7 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class NewLiferayAndroidProjectOpMethods
 {
@@ -118,10 +119,13 @@ public class NewLiferayAndroidProjectOpMethods
             op.getProjectName().content() + "</name>" );
 
         File androidManfest = new File( projectDir, "AndroidManifest.xml" );
+        File projectProperties = new File( projectDir, "project.properties" );
 
         int sdkLevel = ADTUtil.extractSdkLevel( op.getTargetSDK().content( true ) );
+
         FileUtil.searchAndReplace( androidManfest, "android:targetSdkVersion=\"17\"", "android:targetSdkVersion=\"" +
             sdkLevel + "\"" );
+        FileUtil.searchAndReplace( projectProperties, "target=android-17", "target=android-" + sdkLevel );
     }
 
     private static IWorkspace workspace()

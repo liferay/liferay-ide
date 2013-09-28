@@ -14,10 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
+import com.android.ide.eclipse.adt.AdtUtils;
 import com.android.ide.eclipse.adt.internal.sdk.Sdk;
 import com.android.sdklib.IAndroidTarget;
-import com.liferay.ide.adt.core.ADTUtil;
-import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.sapphire.services.DefaultValueService;
 import org.eclipse.sapphire.services.DefaultValueServiceData;
@@ -25,6 +24,7 @@ import org.eclipse.sapphire.services.DefaultValueServiceData;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class TargetSDKDefaultValueService extends DefaultValueService
@@ -33,19 +33,34 @@ public class TargetSDKDefaultValueService extends DefaultValueService
     @Override
     protected DefaultValueServiceData compute()
     {
+        String defaultData = "API 17: Android 4.2 (Jelly Bean)" ;
+
         Sdk currentSdk = Sdk.getCurrent();
 
         if( currentSdk != null )
         {
             IAndroidTarget[] targets = currentSdk.getTargets();
 
-            if( ! CoreUtil.isNullOrEmpty( targets ) )
+            // The default sdk target should be the one with the max api level.
+            defaultData =  AdtUtils.getAndroidName( getMaxTargetApiLevel( targets ) );
+        }
+
+        return new DefaultValueServiceData( defaultData );
+    }
+
+    private int getMaxTargetApiLevel( IAndroidTarget[] targets )
+    {
+        int max = 1;
+
+        for( IAndroidTarget target : targets )
+        {
+            if( target.getVersion().getApiLevel() > max )
             {
-                return new DefaultValueServiceData( ADTUtil.getTargetLabel( targets[0] ) );
+                max = target.getVersion().getApiLevel();
             }
         }
 
-        return new DefaultValueServiceData( "" );
+        return max;
     }
 
 }

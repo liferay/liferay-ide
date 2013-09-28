@@ -19,6 +19,7 @@ import com.liferay.ide.adt.core.model.internal.LocationValidationService;
 import com.liferay.ide.adt.core.model.internal.NewLiferayAndroidProjectOpMethods;
 import com.liferay.ide.adt.core.model.internal.ProjectNameListener;
 import com.liferay.ide.adt.core.model.internal.ProjectNameValidationService;
+import com.liferay.ide.adt.core.model.internal.TargetSDKDefaultValueService;
 import com.liferay.ide.adt.core.model.internal.TargetSDKPossibleValuesService;
 import com.liferay.ide.adt.core.model.internal.UseDefaultLocationListener;
 
@@ -40,12 +41,14 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
 {
@@ -97,8 +100,14 @@ public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
     // *** SDKLevel ***
 
     @Label( standard = "Target SDK" )
-    @Service( impl = TargetSDKPossibleValuesService.class )
-    @DefaultValue( text = "API 17: Android 4.2 (Jelly Bean)" )
+    @Services
+    ( 
+        value = 
+        {
+            @Service( impl = TargetSDKPossibleValuesService.class ),
+            @Service( impl = TargetSDKDefaultValueService.class ),
+        }
+    )
     ValueProperty PROP_TARGET_SDK = new ValueProperty( TYPE, "TargetSDK" );
 
     Value<String> getTargetSDK();
