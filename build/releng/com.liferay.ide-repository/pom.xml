@@ -28,7 +28,7 @@
     <artifactId>com.liferay.ide-repository</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liferay IDE Repository</name>
+    <name>Liferay IDE Composite Repository</name>
 
     <build>
         <plugins>
