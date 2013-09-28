@@ -101,11 +101,11 @@ public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
 
     @Label( standard = "Target SDK" )
     @Services
-    ( 
-        value = 
+    (
+        value =
         {
             @Service( impl = TargetSDKPossibleValuesService.class ),
-            @Service( impl = TargetSDKDefaultValueService.class ),
+            @Service( impl = TargetSDKDefaultValueService.class )
         }
     )
     ValueProperty PROP_TARGET_SDK = new ValueProperty( TYPE, "TargetSDK" );

@@ -113,18 +113,21 @@ public class NewLiferayAndroidProjectOpMethods
     private static void updateProjectContents( File projectDir, NewLiferayAndroidProjectOp op )
         throws FileNotFoundException, IOException
     {
-        File dotProject = new File( projectDir, ".project" );
+        // update project name
+        final File dotProject = new File( projectDir, ".project" );
 
-        FileUtil.searchAndReplace( dotProject, "<name>sample-android-app</name>", "<name>" +
-            op.getProjectName().content() + "</name>" );
+        FileUtil.searchAndReplace(
+            dotProject, "<name>sample-android-app</name>", "<name>" + op.getProjectName().content() + "</name>" );
 
-        File androidManfest = new File( projectDir, "AndroidManifest.xml" );
-        File projectProperties = new File( projectDir, "project.properties" );
+        // update target sdk
+        final int sdkLevel = ADTUtil.extractSdkLevel( op.getTargetSDK().content( true ) );
+        final File androidManfest = new File( projectDir, "AndroidManifest.xml" );
 
-        int sdkLevel = ADTUtil.extractSdkLevel( op.getTargetSDK().content( true ) );
+        FileUtil.searchAndReplace(
+            androidManfest, "android:targetSdkVersion=\"17\"", "android:targetSdkVersion=\"" + sdkLevel + "\"" );
 
-        FileUtil.searchAndReplace( androidManfest, "android:targetSdkVersion=\"17\"", "android:targetSdkVersion=\"" +
-            sdkLevel + "\"" );
+        final File projectProperties = new File( projectDir, "project.properties" );
+
         FileUtil.searchAndReplace( projectProperties, "target=android-17", "target=android-" + sdkLevel );
     }
 
