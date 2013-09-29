@@ -32,7 +32,7 @@
 		<antcall target="bundle"/>
 	</target>
 
-    <target name="maven-build" if="create.bundles">
+    <target name="maven-build" if="create.adt.bundles">
     	<property name="rootdir" value="${basedir}/bundle"/>
 
     	<property name="target.dir" value="${basedir}/target"/>
@@ -313,9 +313,9 @@
 		<antcall target="clean-eclipse"/>
 		<antcall target="setup-eclipse"/>
 
-		<echo>${adt-site}</echo>
+		<echo>adt-site: ${google-adt-repository}</echo>
 		<antcallback target="install-feature" return="output">
-			<param name="repositoryURL" value="${adt-site}"/>
+			<param name="repositoryURL" value="${google-adt-repository}"/>
 			<param name="featureId" value="${adt.ide.features}"/>
 		</antcallback>
 
