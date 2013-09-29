@@ -42,6 +42,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaProject;
@@ -374,7 +375,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         SDK sdk = getSDK();
         String themeName = this.masterModel.getStringProperty( THEME_NAME );
         String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
-        IPath newThemePath = sdk.createNewThemeProject( themeName, displayName );
+        IPath newThemePath = sdk.createNewThemeProject( themeName, displayName, new NullProgressMonitor() );
 
         processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
 

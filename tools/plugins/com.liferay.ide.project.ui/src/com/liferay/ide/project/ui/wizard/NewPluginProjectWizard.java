@@ -59,7 +59,10 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
@@ -67,7 +70,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -494,9 +496,8 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
     }
 
     @Override
-    protected void performFinish( IProgressMonitor monitor ) throws CoreException
+    public boolean performFinish()
     {
-
         // String projectName = getFacetedProjectWorkingCopy().getProjectName();
         // getFacetedProjectWorkingCopy().setProjectName(projectName +
         // getProjectSuffix());
@@ -509,6 +510,50 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
         // model.setProperty(SETUP_PROJECT_FLAG, "");
 
+        final IWorkspaceRunnable wr = new IWorkspaceRunnable()
+        {
+            public void run( final IProgressMonitor monitor ) throws CoreException
+            {
+                performSDKInstall( monitor );
+            }
+        };
+
+        final IRunnableWithProgress op = new IRunnableWithProgress()
+        {
+            public void run( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+            {
+                try
+                {
+                    final IWorkspace ws = ResourcesPlugin.getWorkspace();
+                    ws.run( wr, ws.getRoot(), IWorkspace.AVOID_UPDATE, monitor );
+                }
+                catch( CoreException e )
+                {
+                    throw new InvocationTargetException( e );
+                }
+            }
+        };
+
+        try
+        {
+            getContainer().run( true, true, op );
+        }
+        catch( InvocationTargetException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch( InterruptedException e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return super.performFinish();
+    }
+
+    protected void performSDKInstall(IProgressMonitor monitor)
+    {
         String projectName = getNestedModel().getStringProperty( PROJECT_NAME );
 
         if( !projectName.endsWith( getProjectSuffix() ) )
@@ -562,7 +607,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             monitor.subTask( NLS.bind( Msgs.creatingNewProject, "portlet" ) ); //$NON-NLS-1$
 
             IPath portletProjectTempPath =
-                sdk.createNewPortletProject( portletName, displayName, frameworkName, appServerProperties );
+                sdk.createNewPortletProject( portletName, displayName, frameworkName, appServerProperties, monitor );
 
             model.setProperty( PROJECT_TEMP_PATH, portletProjectTempPath );
         }
@@ -579,7 +624,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
             monitor.subTask( NLS.bind( Msgs.creatingNewProject, "hook" ) ); //$NON-NLS-1$
 
-            IPath hookProjectTempPath = sdk.createNewHookProject( hookName, displayName );
+            IPath hookProjectTempPath = sdk.createNewHookProject( hookName, displayName, monitor );
 
             model.setProperty( PROJECT_TEMP_PATH, hookProjectTempPath );
         }
@@ -596,7 +641,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
             monitor.subTask( NLS.bind( Msgs.creatingNewProject, "ext" ) ); //$NON-NLS-1$
 
-            IPath extProjectTempPath = sdk.createNewExtProject( extName, displayName, appServerProperties );
+            IPath extProjectTempPath = sdk.createNewExtProject( extName, displayName, appServerProperties, monitor );
 
             model.setProperty( PROJECT_TEMP_PATH, extProjectTempPath );
         }
@@ -613,7 +658,7 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
 
             monitor.subTask( NLS.bind( Msgs.creatingNewProject, "theme" ) ); //$NON-NLS-1$
 
-            IPath themeProjectTempPath = sdk.createNewThemeProject( themeName, displayName );
+            IPath themeProjectTempPath = sdk.createNewThemeProject( themeName, displayName, monitor );
 
             model.setProperty( PROJECT_TEMP_PATH, themeProjectTempPath );
         }
@@ -632,14 +677,10 @@ public class NewPluginProjectWizard extends NewProjectDataModelFacetWizard
             monitor.subTask( NLS.bind( Msgs.creatingNewProject, "layout" ) ); //$NON-NLS-1$
 
             IPath layoutTplPorjectTempPath =
-                sdk.createNewLayoutTplProject( layoutTplName, displayName, appServerProperties );
+                sdk.createNewLayoutTplProject( layoutTplName, displayName, appServerProperties, monitor );
 
             model.setProperty( PROJECT_TEMP_PATH, layoutTplPorjectTempPath );
         }
-
-        monitor.worked( 4 );
-
-        super.performFinish( new SubProgressMonitor( monitor, 5 ) );
     }
 
     @Override

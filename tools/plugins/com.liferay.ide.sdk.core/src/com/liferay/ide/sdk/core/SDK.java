@@ -35,6 +35,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -278,11 +279,12 @@ public class SDK
         return Status.OK_STATUS;
     }
 
-    public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties )
+    public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties,
+        IProgressMonitor monitor )
     {
         try
         {
-            SDKHelper antHelper = new SDKHelper( this );
+            SDKHelper antHelper = new SDKHelper( this, monitor );
 
             persistAppServerProperties( appServerProperties );
 
@@ -304,8 +306,8 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_EXT_PARENT_DIR, tempPath.toOSString() );
 
-            antHelper.runTarget(
-                getLocation().append( ISDKConstants.EXT_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE, properties );
+            antHelper.runTarget( getLocation().append( ISDKConstants.EXT_PLUGIN_ANT_BUILD ),
+                ISDKConstants.TARGET_CREATE, properties, true );
 
             return tempPath;
         }
@@ -317,9 +319,9 @@ public class SDK
         return null;
     }
 
-    public IPath createNewHookProject( String hookName, String hookDisplayName )
+    public IPath createNewHookProject( String hookName, String hookDisplayName, IProgressMonitor monitor )
     {
-        SDKHelper antHelper = new SDKHelper( this );
+        SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
@@ -335,7 +337,7 @@ public class SDK
             properties.put( ISDKConstants.PROPERTY_HOOK_PARENT_DIR, newHookPath.toOSString() );
 
             antHelper.runTarget(
-                getLocation().append( ISDKConstants.HOOK_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE, properties );
+                getLocation().append( ISDKConstants.HOOK_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE, properties, true );
 
             return newHookPath;
         }
@@ -347,10 +349,10 @@ public class SDK
         return null;
     }
 
-    public IPath createNewLayoutTplProject(
-        String layoutTplName, String layoutTplDisplayName, Map<String, String> appServerProperties )
+    public IPath createNewLayoutTplProject( String layoutTplName, String layoutTplDisplayName,
+        Map<String, String> appServerProperties, IProgressMonitor monitor )
     {
-        SDKHelper antHelper = new SDKHelper( this );
+        SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
@@ -372,7 +374,7 @@ public class SDK
 
             antHelper.runTarget(
                 getLocation().append( ISDKConstants.LAYOUTTPL_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE,
-                properties );
+                properties, true );
 
             return newLayoutTplPath;
         }
@@ -384,17 +386,10 @@ public class SDK
         return null;
     }
 
-    public IPath createNewPortletProject(
-        String portletName, String portletDisplayName, Map<String, String> appServerProperties )
+    public IPath createNewPortletProject( String portletName, String portletDisplayName, String portletFramework,
+        Map<String, String> appServerProperties, IProgressMonitor monitor )
     {
-        return createNewPortletProject( portletName, portletDisplayName, null, appServerProperties );
-    }
-
-    public IPath createNewPortletProject(
-        String portletName, String portletDisplayName, String portletFramework, Map<String, String> appServerProperties )
-    {
-
-        SDKHelper antHelper = new SDKHelper( this );
+        SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
@@ -413,8 +408,8 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_PORTLET_PARENT_DIR, newPortletPath.toOSString() );
 
-            antHelper.runTarget(
-                getLocation().append( ISDKConstants.PORTLET_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE, properties );
+            antHelper.runTarget( getLocation().append( ISDKConstants.PORTLET_PLUGIN_ANT_BUILD ),
+                ISDKConstants.TARGET_CREATE, properties, true );
 
             return newPortletPath;
         }
@@ -426,9 +421,9 @@ public class SDK
         return null;
     }
 
-    public IPath createNewThemeProject( String themeName, String themeDisplayName )
+    public IPath createNewThemeProject( String themeName, String themeDisplayName, IProgressMonitor monitor )
     {
-        SDKHelper antHelper = new SDKHelper( this );
+        SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
@@ -443,8 +438,8 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_THEME_PARENT_DIR, tempPath.toOSString() );
 
-            antHelper.runTarget(
-                getLocation().append( ISDKConstants.THEME_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE, properties );
+            antHelper.runTarget( getLocation().append( ISDKConstants.THEME_PLUGIN_ANT_BUILD ),
+                ISDKConstants.TARGET_CREATE, properties, true );
 
             return tempPath;
         }

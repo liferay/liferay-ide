@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -180,7 +181,6 @@ public abstract class LaunchHelper implements IDebugEventSetListener
 
     public void launch( ILaunchConfiguration config, String mode, IProgressMonitor monitor ) throws CoreException
     {
-
         if( config == null )
         {
             throw new IllegalArgumentException( "Launch config cannot be null" ); //$NON-NLS-1$
@@ -191,7 +191,7 @@ public abstract class LaunchHelper implements IDebugEventSetListener
             DebugPlugin.getDefault().addDebugEventListener( this );
         }
 
-        ILaunch launch = config.launch( mode, monitor );
+        ILaunch launch = config.launch( mode, new NullProgressMonitor() );
 
         if( isLaunchSync() )
         {
@@ -201,7 +201,15 @@ public abstract class LaunchHelper implements IDebugEventSetListener
             {
                 while( isLaunchRunning() )
                 {
-                    Thread.sleep( 100 );
+                    if( monitor != null && monitor.isCanceled() && !launch.isTerminated() )
+                    {
+                        launch.getProcesses()[0].terminate();
+                        launch.terminate();
+                    }
+                    else
+                    {
+                        Thread.sleep( 100 );
+                    }
                 }
             }
             catch( InterruptedException e )

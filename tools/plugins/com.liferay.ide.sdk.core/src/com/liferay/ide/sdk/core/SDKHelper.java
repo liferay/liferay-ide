@@ -28,6 +28,7 @@ import org.eclipse.core.externaltools.internal.IExternalToolConstants;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -56,6 +57,8 @@ public class SDKHelper extends LaunchHelper
 
     private String[] additionalVMArgs;
 
+    private IProgressMonitor monitor;
+
     public SDKHelper( SDK sdk )
     {
         super( ANT_LAUNCH_CONFIG_TYPE_ID );
@@ -67,6 +70,13 @@ public class SDKHelper extends LaunchHelper
         setLaunchCaptureInConsole( true );
         setLaunchIsPrivate( true );
         // this.launchTimeout = 10000;
+    }
+
+    public SDKHelper( SDK sdk, IProgressMonitor monitor )
+    {
+        this( sdk );
+
+        this.monitor = monitor;
     }
 
     public ILaunchConfiguration createLaunchConfiguration(
@@ -171,11 +181,6 @@ public class SDKHelper extends LaunchHelper
         return buffer.toString();
     }
 
-    public void runTarget( IPath buildFile, String targets, Map<String, String> properties ) throws CoreException
-    {
-        runTarget( buildFile, targets, properties, false );
-    }
-
     public void runTarget( IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE )
         throws CoreException
     {
@@ -190,7 +195,7 @@ public class SDKHelper extends LaunchHelper
 
         ILaunchConfiguration launchConfig = createLaunchConfiguration( buildFile, targets, properties, separateJRE );
 
-        launch( launchConfig, ILaunchManager.RUN_MODE, null );
+        launch( launchConfig, ILaunchManager.RUN_MODE, monitor );
 
         this.currentBuildFile = null;
 

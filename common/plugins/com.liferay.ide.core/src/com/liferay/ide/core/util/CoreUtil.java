@@ -265,12 +265,17 @@ public class CoreUtil
 
                 if( c != null )
                 {
-                    String contextRoot = c.getMetaProperties().getProperty( "context-root" ); //$NON-NLS-1$
+                    final Properties metaProperties = c.getMetaProperties();
 
-                    if( contextRoot.equals( contextName ) )
+                    if( metaProperties != null )
                     {
-                        retval = project;
-                        break;
+                        String contextRoot = metaProperties.getProperty( "context-root" ); //$NON-NLS-1$
+
+                        if( contextName.equals( contextRoot ) )
+                        {
+                            retval = project;
+                            break;
+                        }
                     }
                 }
             }
