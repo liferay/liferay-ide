@@ -25,10 +25,10 @@ import com.liferay.ide.adt.core.model.internal.UseDefaultLocationListener;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.IExecutableModelElement;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -50,7 +50,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public interface NewLiferayAndroidProjectOp extends IExecutableModelElement
+public interface NewLiferayAndroidProjectOp extends ExecutableElement
 {
 
     ElementType TYPE = new ElementType( NewLiferayAndroidProjectOp.class );

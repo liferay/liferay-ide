@@ -84,7 +84,7 @@
 			<isset property="check.updatesite"/>
 			<then>
 				<propertyregex property="final.updatesite.name" input="${updatesite.name}"
-					regexp="(.*)Liferay_IDE_ADT_.*-updatesite(.*)" replace="\1liferay-ide-updatesite-${version}\2" />
+					regexp="(.*)Liferay_IDE_ADT_.*-updatesite(.*)" replace="\1liferay-ide-adt-updatesite-${version}\2" />
 
 				<move file="${updatesite.name}" tofile="${final.updatesite.name}" verbose="true" />
 			</then>
