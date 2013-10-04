@@ -1,1 +1,1 @@
-liferay-mobile-sdk-sample-android-master.zip
+liferay-mobile-sdk-sample-android-0.1.1.zip
