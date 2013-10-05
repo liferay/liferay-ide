@@ -20,8 +20,8 @@ import com.liferay.ide.service.core.job.BuildWSDDJob;
 import com.liferay.ide.service.ui.ServiceUIUtil;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 /**
  * @author Gregory Amerson
@@ -30,9 +30,9 @@ public class BuildWSDDActionHandler extends SapphireActionHandler
 {
 
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
-        IFile file = context.getPart().getModelElement().adapt( IFile.class );
+        IFile file = context.part().getModelElement().adapt( IFile.class );
 
         if( file != null && file.exists() )
         {

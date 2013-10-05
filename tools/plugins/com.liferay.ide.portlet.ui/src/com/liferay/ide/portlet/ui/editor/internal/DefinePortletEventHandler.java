@@ -21,10 +21,10 @@ package com.liferay.ide.portlet.ui.editor.internal;
 import com.liferay.ide.portlet.core.model.EventDefinition;
 import com.liferay.ide.portlet.core.model.PortletApp;
 
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
 
 /**
  * @author Kamesh Sampath
@@ -38,16 +38,16 @@ public class DefinePortletEventHandler extends SapphireActionHandler
      * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
      */
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
-        PortletApp rootModel = (PortletApp) context.getPart().getModelElement();
+        PortletApp rootModel = (PortletApp) context.part().getModelElement();
         EventDefinition eventDefintion = rootModel.getEventDefinitions().insert();
 
         // Select the node
 
         final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-        final MasterDetailsContentNode root = page.outline().getRoot();
-        final MasterDetailsContentNode node = root.findNode( eventDefintion );
+        final MasterDetailsContentNodePart root = page.outline().getRoot();
+        final MasterDetailsContentNodePart node = root.findNode( eventDefintion );
 
         if( node != null )
         {

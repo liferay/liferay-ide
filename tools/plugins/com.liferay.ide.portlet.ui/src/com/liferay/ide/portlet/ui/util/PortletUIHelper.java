@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 
 package com.liferay.ide.portlet.ui.util;
@@ -18,8 +18,8 @@ import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.sapphire.ui.ISapphirePart;
-import org.eclipse.sapphire.ui.PropertyEditorPart;
 import org.eclipse.sapphire.ui.SapphireEditor;
+import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
 import org.eclipse.swt.widgets.Text;
 
 /**

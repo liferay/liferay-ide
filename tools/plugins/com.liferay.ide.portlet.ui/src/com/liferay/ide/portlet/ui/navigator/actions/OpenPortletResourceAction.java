@@ -39,9 +39,9 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.ui.SapphireEditor;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentOutline;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPage;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentOutline;
+import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
@@ -264,12 +264,12 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
                 if( mdepDetailsEditorPage != null )
                 {
                     MasterDetailsContentOutline contentOutline = mdepDetailsEditorPage.outline();
-                    MasterDetailsContentNode rootNode = contentOutline.getRoot();
+                    MasterDetailsContentNodePart rootNode = contentOutline.getRoot();
 
                     if( rootNode != null )
                     {
-                        MasterDetailsContentNode portletAppNode = rootNode.nodes().visible().get( 0 );
-                        MasterDetailsContentNode portletsNode = portletAppNode.findNode( PORTLETS_NODE_LABEL );
+                        MasterDetailsContentNodePart portletAppNode = rootNode.nodes().visible().get( 0 );
+                        MasterDetailsContentNodePart portletsNode = portletAppNode.findNode( PORTLETS_NODE_LABEL );
 
                         // TODO: Performance Check ???, cant we not have the shared model ?
 
@@ -279,7 +279,7 @@ public class OpenPortletResourceAction extends BaseSelectionListenerAction
                             {
                                 Portlet selectedPortlet = (Portlet) selectedModelElement;
 
-                                for( MasterDetailsContentNode childNode : portletsNode.nodes().visible() )
+                                for( MasterDetailsContentNodePart childNode : portletsNode.nodes().visible() )
                                 {
                                     String selectedPortletName = selectedPortlet.getPortletName().content();
 

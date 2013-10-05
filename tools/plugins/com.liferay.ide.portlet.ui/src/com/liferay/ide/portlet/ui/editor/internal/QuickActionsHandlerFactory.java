@@ -30,15 +30,15 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.PropertyDef;
 import org.eclipse.sapphire.modeling.CapitalizationType;
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.SapphireEditor;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
 
 /**
  * @author Kamesh Sampath
@@ -76,9 +76,9 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
          * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
          */
         @Override
-        protected Object run( SapphireRenderingContext context )
+        protected Object run( Presentation context )
         {
-            final Element rootModel = context.getPart().getModelElement();
+            final Element rootModel = context.part().getModelElement();
             final PropertyDef _property = rootModel.type().property( this.strProperty );
             final Object obj = rootModel.property( _property );
             Element mElement = null;
@@ -95,8 +95,8 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
 
             // Select the ndoe
             final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-            final MasterDetailsContentNode root = page.outline().getRoot();
-            final MasterDetailsContentNode node = root.findNode( mElement );
+            final MasterDetailsContentNodePart root = page.outline().getRoot();
+            final MasterDetailsContentNodePart node = root.findNode( mElement );
 
             if( node != null )
             {

@@ -19,8 +19,8 @@ package com.liferay.ide.service.ui.actions;
 
 import com.liferay.ide.service.core.model.ServiceBuilder;
 
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 
 public class ToggleDiagramConnectionLabelsActionHandler extends SapphireActionHandler
 {
@@ -34,11 +34,11 @@ public class ToggleDiagramConnectionLabelsActionHandler extends SapphireActionHa
     }
 
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
         checked = !checked;
 
-        ServiceBuilder serviceBuilder = (ServiceBuilder) context.getPart().getModelElement();
+        ServiceBuilder serviceBuilder = (ServiceBuilder) context.part().getModelElement();
         serviceBuilder.setShowRelationshipLabels( checked );
         serviceBuilder.refresh();
 

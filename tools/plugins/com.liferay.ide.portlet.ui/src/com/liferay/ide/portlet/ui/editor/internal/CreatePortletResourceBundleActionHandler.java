@@ -39,8 +39,8 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 
 /**
@@ -124,7 +124,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
      * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
      */
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
         final List<IFile> missingRBFiles = new ArrayList<IFile>();
         final Portlet portlet = (Portlet) getModelElement();

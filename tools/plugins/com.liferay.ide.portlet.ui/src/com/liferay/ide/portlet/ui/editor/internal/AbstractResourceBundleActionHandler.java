@@ -49,13 +49,14 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
+import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
+import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
 
 /**
  * @author Kamesh Sampath
  */
-public abstract class AbstractResourceBundleActionHandler extends SapphirePropertyEditorActionHandler
+public abstract class AbstractResourceBundleActionHandler extends PropertyEditorActionHandler
 {
 
     final IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -144,7 +145,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
      * @param rbFileBuffer
      */
     protected final void createFiles(
-        final SapphireRenderingContext context, final IProject project, final String packageName,
+        final Presentation context, final IProject project, final String packageName,
         final List<IFile> rbFiles, final StringBuilder rbFileBuffer )
     {
         if( !rbFiles.isEmpty() )
@@ -193,7 +194,7 @@ public abstract class AbstractResourceBundleActionHandler extends SapphireProper
 
             try
             {
-                ( new ProgressMonitorDialog( context.getShell() ) ).run( false, false, rbCreationProc );
+                ( new ProgressMonitorDialog( ((SwtPresentation)context).shell() ) ).run( false, false, rbCreationProc );
                 rbFiles.clear();
             }
             catch( InvocationTargetException e )

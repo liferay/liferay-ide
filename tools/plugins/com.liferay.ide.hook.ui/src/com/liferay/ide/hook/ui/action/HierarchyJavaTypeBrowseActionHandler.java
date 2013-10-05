@@ -33,17 +33,18 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.java.JavaTypeConstraintService;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.modeling.CapitalizationType;
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.SapphireBrowseActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
+import org.eclipse.sapphire.ui.forms.BrowseActionHandler;
+import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
 import org.eclipse.sapphire.ui.internal.SapphireUiFrameworkPlugin;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
 /**
  * @author Gregory Amerson
  */
-public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseActionHandler
+public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHandler
 {
     public static final String ID = "Hierarchy.Browse.Java.Type"; //$NON-NLS-1$
 
@@ -61,7 +62,7 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
     }
 
     @Override
-    public String browse( final SapphireRenderingContext context )
+    public String browse( final Presentation context )
     {
         final Element element = getModelElement();
         final Property property = property();
@@ -120,8 +121,10 @@ public final class HierarchyJavaTypeBrowseActionHandler extends SapphireBrowseAc
             final IJavaSearchScope scope =
                 SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( this.typeName ) );
 
+            SwtPresentation swt = (SwtPresentation) context;
+
             final SelectionDialog dlg =
-                JavaUI.createTypeDialog( context.getShell(), null, scope, browseDialogStyle, false, this.filter, null );
+                JavaUI.createTypeDialog( swt.shell(), null, scope, browseDialogStyle, false, this.filter, null );
 
             final String title = property.definition().getLabel( true, CapitalizationType.TITLE_STYLE, false );
 

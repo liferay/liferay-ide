@@ -36,17 +36,17 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.services.RelativePathService;
-import org.eclipse.sapphire.ui.PropertyEditorPart;
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.SapphirePropertyEditorActionHandler;
-import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
+import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
+import org.eclipse.sapphire.ui.forms.PropertyEditorCondition;
+import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
 
 /**
  * @author Gregory Amerson
  */
-public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHandler
+public class CreateDirectoryActionHandler extends PropertyEditorActionHandler
 {
 
     public CreateDirectoryActionHandler()
@@ -108,7 +108,7 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
     }
 
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
         try
         {
@@ -150,7 +150,7 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
         return null;
     }
 
-    public static class Condition extends SapphirePropertyEditorCondition
+    public static class Condition extends PropertyEditorCondition
     {
         @Override
         protected final boolean evaluate( final PropertyEditorPart part )
@@ -171,5 +171,7 @@ public class CreateDirectoryActionHandler extends SapphirePropertyEditorActionHa
 
             return false;
         }
+
     }
+
 }

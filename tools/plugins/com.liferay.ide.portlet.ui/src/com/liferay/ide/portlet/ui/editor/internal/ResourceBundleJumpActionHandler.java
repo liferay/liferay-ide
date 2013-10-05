@@ -35,8 +35,8 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.ui.SapphireJumpActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
+import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.sapphire.ui.forms.JumpActionHandler;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -47,7 +47,7 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Kamesh Sampath
  */
-public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler
+public class ResourceBundleJumpActionHandler extends JumpActionHandler
 {
 
     /*
@@ -92,7 +92,7 @@ public class ResourceBundleJumpActionHandler extends SapphireJumpActionHandler
      * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
      */
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
 
         final Element element = getModelElement();

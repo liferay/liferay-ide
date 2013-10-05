@@ -21,13 +21,13 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
-import org.eclipse.sapphire.ui.PropertyEditorPart;
-import org.eclipse.sapphire.ui.SapphirePropertyEditorCondition;
+import org.eclipse.sapphire.ui.forms.PropertyEditorCondition;
+import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
 
 /**
  * @author Kamesh Sampath
  */
-public class ResourceBundleJumpActionHandlerCondition extends SapphirePropertyEditorCondition
+public class ResourceBundleJumpActionHandlerCondition extends PropertyEditorCondition
 {
 
     @Override

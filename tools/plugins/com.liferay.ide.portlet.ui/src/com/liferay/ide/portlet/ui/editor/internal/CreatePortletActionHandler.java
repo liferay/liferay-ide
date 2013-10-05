@@ -24,12 +24,13 @@ import com.liferay.ide.portlet.ui.editor.PortletXmlEditor;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
+import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.SapphireRenderingContext;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsContentNode;
-import org.eclipse.sapphire.ui.form.editors.masterdetails.MasterDetailsEditorPagePart;
-import org.eclipse.sapphire.ui.swt.SapphireDialog;
+import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
+import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
+import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
+import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
 
 /**
  * @author Kamesh Sampath
@@ -43,14 +44,14 @@ public class CreatePortletActionHandler extends SapphireActionHandler
      * @see org.eclipse.sapphire.ui.SapphireActionHandler#run(org.eclipse.sapphire.ui.SapphireRenderingContext)
      */
     @Override
-    protected Object run( SapphireRenderingContext context )
+    protected Object run( Presentation context )
     {
-        PortletApp rootModel = (PortletApp) context.getPart().getModelElement();
+        PortletApp rootModel = (PortletApp) context.part().getModelElement();
         Portlet portlet = rootModel.getPortlets().insert();
         // Open the dialog to capture the mandatory properties
         final SapphireDialog dialog = new SapphireDialog
         (
-            context.getShell(), portlet,
+            ((SwtPresentation)context).shell(), portlet,
             DefinitionLoader.sdef( PortletXmlEditor.class ).dialog()
         );
 
@@ -58,8 +59,8 @@ public class CreatePortletActionHandler extends SapphireActionHandler
         {
             // Select the node
             final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
-            final MasterDetailsContentNode root = page.outline().getRoot();
-            final MasterDetailsContentNode node = root.findNode( portlet );
+            final MasterDetailsContentNodePart root = page.outline().getRoot();
+            final MasterDetailsContentNodePart node = root.findNode( portlet );
             if( node != null )
             {
                 node.select();
