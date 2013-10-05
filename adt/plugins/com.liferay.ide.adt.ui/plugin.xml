@@ -18,5 +18,13 @@
          </selection>
       </wizard>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.adt.ui.AndroidPreferencePage"
+            id="com.liferay.ide.adt.ui.AndroidPreferencePage"
+            name="Android">
+      </page>
+   </extension>
 </plugin>

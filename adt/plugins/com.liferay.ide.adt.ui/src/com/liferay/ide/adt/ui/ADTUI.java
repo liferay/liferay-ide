@@ -15,6 +15,8 @@
 
 package com.liferay.ide.adt.ui;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -26,11 +28,31 @@ import org.osgi.framework.BundleContext;
 public class ADTUI extends AbstractUIPlugin
 {
 
+    // The shared instance
+    private static ADTUI plugin;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.adt.ui"; //$NON-NLS-1$
 
-    // The shared instance
-    private static ADTUI plugin;
+    public static IStatus createErrorStatus( String message, Exception e )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, message, e );
+    }
+
+    /**
+     * Returns the shared instance
+     *
+     * @return the shared instance
+     */
+    public static ADTUI getDefault()
+    {
+        return plugin;
+    }
+
+    public static void logError( Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( e.getMessage(), e ) );
+    }
 
     /**
      * The constructor
@@ -57,16 +79,6 @@ public class ADTUI extends AbstractUIPlugin
     {
         plugin = null;
         super.stop( context );
-    }
-
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static ADTUI getDefault()
-    {
-        return plugin;
     }
 
 }

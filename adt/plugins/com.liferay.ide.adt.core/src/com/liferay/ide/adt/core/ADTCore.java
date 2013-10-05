@@ -18,7 +18,10 @@ package com.liferay.ide.adt.core;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
@@ -44,6 +47,12 @@ public class ADTCore extends Plugin
 
     public static final String PREF_PROJECT_TEMPLATE_LOCATION = "project-template-location";
 
+    public static final String PREF_PROJECT_TEMPLATE_LOCATION_OPTION = "project-template-location-option";
+
+    public static final String VALUE_USE_CUSTOM_TEMPLATE = "use-custom-template";
+
+    public static final String VALUE_USE_EMBEDDED_TEMPLATE = "use-embedded-template";
+
     private static final IScopeContext[] prefContexts =
                     new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
 
@@ -62,16 +71,48 @@ public class ADTCore extends Plugin
         return plugin;
     }
 
+    public static String getEmbeddedProjectTemplateLocation()
+    {
+        // https://github.com/brunofarache/liferay-mobile-sdk-sample-android
+        try
+        {
+            final URL templateFile = ADTCore.getDefault().getBundle().getEntry( "templates/version.txt" );
+            final String latestFile = CoreUtil.readStreamToString( templateFile.openStream() );
+            final URL versionUrl = ADTCore.getDefault().getBundle().getEntry( "templates/" + latestFile );
+
+            return new File( FileLocator.toFileURL( versionUrl ).getFile() ).getCanonicalPath();
+        }
+        catch( IOException e )
+        {
+            ADTCore.logError( "Could not get built-in project template.", e );
+        }
+
+        return null;
+    }
+
     public static File getProjectTemplateFile()
     {
         File retval = null;
 
-        final String location =
-            Platform.getPreferencesService().getString( PLUGIN_ID, PREF_PROJECT_TEMPLATE_LOCATION, null, prefContexts );
+        final String templateOption =
+            Platform.getPreferencesService().getString(
+                PLUGIN_ID, PREF_PROJECT_TEMPLATE_LOCATION_OPTION, ADTCore.VALUE_USE_EMBEDDED_TEMPLATE, prefContexts );
 
-        if( ! CoreUtil.isNullOrEmpty( location ) )
+        if( ADTCore.VALUE_USE_CUSTOM_TEMPLATE.equals( templateOption ) )
         {
-            retval = new File( location );
+            final String location =
+                Platform.getPreferencesService().getString(
+                    PLUGIN_ID, PREF_PROJECT_TEMPLATE_LOCATION, null, prefContexts );
+
+            if( ! CoreUtil.isNullOrEmpty( location ) )
+            {
+                retval = new File( location );
+            }
+        }
+
+        if( retval == null || ( ! retval.exists() ) )
+        {
+            retval = new File( getEmbeddedProjectTemplateLocation() );
         }
 
         return retval;

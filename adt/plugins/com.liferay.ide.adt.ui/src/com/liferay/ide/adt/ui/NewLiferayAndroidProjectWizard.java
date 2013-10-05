@@ -54,7 +54,7 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAnd
         {
             final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
 
-            if( "Project name must be specified.".equals( wizardPage.getMessage() ) )
+            if( "Project name must be specified".equals( wizardPage.getMessage() ) )
             {
                 wizardPage.setMessage( "Please enter a project name.", SapphireWizardPage.NONE );
                 firstErrorMessageRemoved = true;

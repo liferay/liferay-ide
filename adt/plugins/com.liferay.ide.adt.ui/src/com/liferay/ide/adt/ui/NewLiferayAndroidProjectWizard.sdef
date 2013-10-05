@@ -18,19 +18,23 @@
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <property>TargetSDK</property>
                 </property-editor>
-                <!--
-                <property-editor>
-                    <hint>
-                        <name>factory</name>
-                        <value>CheckBoxListPropertyEditorRenderer$Factory</value>
-                    </hint>
-                    <property>LiferayApis</property>
-                    <span>false</span>
-                    <scale-vertically>true</scale-vertically>
-                </property-editor>
-                <spacer></spacer>
-                <property-editor>IncludeExample</property-editor>
-                -->
+                <separator></separator>
+                <label>The project will be created using the ${ TemplateOption }.</label>
+                <actuator>
+                    <action-id>LiferayAndroidProjectWizard.Preferences.Link</action-id>
+                    <label>Open preferences</label>
+                    <show-image>false</show-image>
+                    <action>
+                        <id>LiferayAndroidProjectWizard.Preferences.Link</id>
+                        <label>Open Liferay Android Preferences Page</label>
+                    </action>
+                    <action-handler>
+                        <action>LiferayAndroidProjectWizard.Preferences.Link</action>
+                        <impl>OpenAndroidPreferencesHandler</impl>
+                        <id>LiferayAndroidProjectWizard.Preferences.Link</id>
+                    </action-handler>
+                    <action-handler-id>LiferayAndroidProjectWizard.Preferences.Link</action-handler-id>
+                </actuator>
             </content>
             <description>Create a new Android project configured as Liferay client</description>
             <image>NewLiferayAndroidProjectWizard.png</image>
@@ -39,5 +43,6 @@
     </wizard>
     <import>
         <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.adt.ui</package>
     </import>
 </definition>

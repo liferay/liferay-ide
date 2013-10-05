@@ -14,19 +14,17 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model;
 
-import com.liferay.ide.adt.core.model.internal.LiferayApisPossibleValueService;
 import com.liferay.ide.adt.core.model.internal.LocationValidationService;
 import com.liferay.ide.adt.core.model.internal.NewLiferayAndroidProjectOpMethods;
 import com.liferay.ide.adt.core.model.internal.ProjectNameListener;
 import com.liferay.ide.adt.core.model.internal.ProjectNameValidationService;
 import com.liferay.ide.adt.core.model.internal.TargetSDKDefaultValueService;
 import com.liferay.ide.adt.core.model.internal.TargetSDKPossibleValuesService;
+import com.liferay.ide.adt.core.model.internal.TemplateOptionDerivedValueService;
 import com.liferay.ide.adt.core.model.internal.UseDefaultLocationListener;
 
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
-import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -35,6 +33,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
@@ -114,27 +113,14 @@ public interface NewLiferayAndroidProjectOp extends ExecutableElement
 
     void setTargetSDK( String value );
 
-    // *** LiferayApis ***
+    // *** TemplateOption ***
 
-    @Type( base = LiferayApi.class )
-    @Label( standard = "Liferay APIs" )
-    @Service( impl = LiferayApisPossibleValueService.class )
-    ListProperty PROP_LIFERAY_APIS = new ListProperty( TYPE, "LiferayApis" );
+    @Label( standard = "template option" )
+    @Derived
+    @Service( impl = TemplateOptionDerivedValueService.class )
+    ValueProperty PROP_TEMPLATE_OPTION = new ValueProperty( TYPE, "TemplateOption" );
 
-    ElementList<LiferayApi> getLiferayApis();
-
-    // *** IncludeExample ***
-
-//    @Type( base = Boolean.class )
-//    @Label( standard = "include example activity" )
-//    @DefaultValue( text = "true" )
-//    ValueProperty PROP_INCLUDE_EXAMPLE = new ValueProperty( TYPE, "IncludeExample" );
-//
-//    Value<Boolean> getIncludeExample();
-//
-//    void setIncludeExample( String value );
-//
-//    void setIncludeExample( Boolean value );
+    Value<String> getTemplateOption();
 
 
     // *** Method: execute ***

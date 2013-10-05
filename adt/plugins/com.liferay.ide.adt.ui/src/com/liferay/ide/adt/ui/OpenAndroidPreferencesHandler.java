@@ -12,28 +12,29 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.adt.core;
+package com.liferay.ide.adt.ui;
 
-import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 
 /**
  * @author Gregory Amerson
  */
-public class DefaultPreferenceInitializer extends AbstractPreferenceInitializer
+public class OpenAndroidPreferencesHandler extends SapphireActionHandler
 {
 
-    public DefaultPreferenceInitializer()
-    {
-        super();
-    }
-
     @Override
-    public void initializeDefaultPreferences()
+    protected Object run( Presentation context )
     {
-        DefaultScope.INSTANCE.getNode( ADTCore.PLUGIN_ID ).put(
-            ADTCore.PREF_PROJECT_TEMPLATE_LOCATION_OPTION, ADTCore.VALUE_USE_EMBEDDED_TEMPLATE );
+        PreferencesUtil.createPreferenceDialogOn(
+            ( (SwtPresentation) context ).shell(), AndroidPreferencePage.ID, new String[] { AndroidPreferencePage.ID },
+            null ).open();
+
+        return Status.createOkStatus();
     }
 
 }
