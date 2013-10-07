@@ -3,10 +3,10 @@
     <wizard>
         <id>NewLiferayAndroidProjectWizard</id>
         <element-type>com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp</element-type>
-        <label>New Liferay Android Project</label>
+        <label>New Liferay Android Sample Project</label>
         <page>
             <id>NewLiferayAndroidProjectWizardPage</id>
-            <label>Create Liferay Android Project</label>
+            <label>Create Liferay Android Sample Project</label>
             <content>
                 <spacer></spacer>
                 <property-editor>ProjectName</property-editor>
@@ -19,27 +19,27 @@
                     <property>TargetSDK</property>
                 </property-editor>
                 <separator></separator>
-                <label>The project will be created using the ${ TemplateOption }.</label>
+                <label>The sample project will be created using the ${ TemplateOption }.</label>
                 <actuator>
                     <action-id>LiferayAndroidProjectWizard.Preferences.Link</action-id>
-                    <label>Open preferences</label>
+                    <label>Open Mobile SDK Preferences</label>
                     <show-image>false</show-image>
                     <action>
                         <id>LiferayAndroidProjectWizard.Preferences.Link</id>
-                        <label>Open Liferay Android Preferences Page</label>
+                        <label>Open Liferay Mobile SDK Preferences Page</label>
                     </action>
                     <action-handler>
                         <action>LiferayAndroidProjectWizard.Preferences.Link</action>
-                        <impl>OpenAndroidPreferencesHandler</impl>
+                        <impl>OpenMobileSDKPreferencesHandler</impl>
                         <id>LiferayAndroidProjectWizard.Preferences.Link</id>
                     </action-handler>
                     <action-handler-id>LiferayAndroidProjectWizard.Preferences.Link</action-handler-id>
                 </actuator>
             </content>
-            <description>Create a new Android project configured as Liferay client</description>
+            <description>Create a new sample Android project configured as Liferay client</description>
             <image>NewLiferayAndroidProjectWizard.png</image>
         </page>
-        <description>Create a new Android project configured as Liferay client</description>
+        <description>Create a new sample Android project configured as Liferay client</description>
     </wizard>
     <import>
         <package>org.eclipse.sapphire.ui.renderers.swt</package>

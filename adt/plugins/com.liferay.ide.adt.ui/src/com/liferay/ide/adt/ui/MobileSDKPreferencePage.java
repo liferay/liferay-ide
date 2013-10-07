@@ -17,8 +17,6 @@ package com.liferay.ide.adt.ui;
 import com.liferay.ide.adt.core.ADTCore;
 import com.liferay.ide.ui.util.SWTUtil;
 
-import java.io.File;
-
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -39,7 +37,7 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Gregory Amerson
  */
-public class AndroidPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
+public class MobileSDKPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
 
     public class MyFileFieldEditor extends FileFieldEditor
@@ -57,14 +55,14 @@ public class AndroidPreferencePage extends FieldEditorPreferencePage implements 
         }
     }
 
-    public static final String ID = "com.liferay.ide.adt.ui.AndroidPreferencePage";
+    public static final String ID = "com.liferay.ide.adt.ui.MobileSDKPreferencePage";
 
     private ScopedPreferenceStore prefStore;
     private MyFileFieldEditor fileEditor;
     private RadioGroupFieldEditor radioGroupEditor;
     private Composite fileEditorParent;
 
-    public AndroidPreferencePage()
+    public MobileSDKPreferencePage()
     {
         super( GRID );
     }
@@ -72,12 +70,10 @@ public class AndroidPreferencePage extends FieldEditorPreferencePage implements 
     @Override
     protected void createFieldEditors()
     {
-        final String embeddedName = new File( ADTCore.getEmbeddedProjectTemplateLocation() ).getName();
-
         final String[][] labelAndValues =
         {
-            { "Embedded project template (" + embeddedName + ")", ADTCore.VALUE_USE_EMBEDDED_TEMPLATE },
-            { "Custom project template", ADTCore.VALUE_USE_CUSTOM_TEMPLATE }
+            { "Default sample project template", ADTCore.VALUE_USE_EMBEDDED_TEMPLATE },
+            { "Custom sample project template", ADTCore.VALUE_USE_CUSTOM_TEMPLATE }
         };
 
         Composite c = SWTUtil.createComposite( getFieldEditorParent(), 1, 1, SWT.FILL );
@@ -85,7 +81,7 @@ public class AndroidPreferencePage extends FieldEditorPreferencePage implements 
 
         radioGroupEditor =
             new RadioGroupFieldEditor(
-                ADTCore.PREF_PROJECT_TEMPLATE_LOCATION_OPTION, "New Liferay Android Project Template", 1,
+                ADTCore.PREF_PROJECT_TEMPLATE_LOCATION_OPTION, "Liferay Android Sample Project Template", 1,
                 labelAndValues, c, true );
 
         radioGroupEditor.fillIntoGrid( c, 1 );

@@ -41,20 +41,25 @@ public class TemplateOptionDerivedValueService extends DerivedValueService
     protected DerivedValueServiceData compute()
     {
         String retval = null;
+
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String templateOption = Platform.getPreferencesService().getString( ADTCore.PLUGIN_ID, ADTCore.PREF_PROJECT_TEMPLATE_LOCATION_OPTION, null, prefContexts );
+        final String templateOption =
+            Platform.getPreferencesService().getString(
+                ADTCore.PLUGIN_ID, ADTCore.PREF_PROJECT_TEMPLATE_LOCATION_OPTION, null, prefContexts );
 
         if( ADTCore.VALUE_USE_CUSTOM_TEMPLATE.equals( templateOption ) )
         {
-            final String customLocation = Platform.getPreferencesService().getString( ADTCore.PLUGIN_ID, ADTCore.PREF_PROJECT_TEMPLATE_LOCATION, "", prefContexts );
+            final String customLocation =
+                Platform.getPreferencesService().getString(
+                    ADTCore.PLUGIN_ID, ADTCore.PREF_PROJECT_TEMPLATE_LOCATION, "", prefContexts );
 
             final File templateFile = new File( customLocation );
 
-            retval = "custom template file " + ( templateFile.exists() ? templateFile.getName() : "" );
+            retval = "custom sample project template file " + ( templateFile.exists() ? templateFile.getName() : "" );
         }
         else
         {
-            retval = "default embedded template";
+            retval = "default sample project template";
         }
 
         return new DerivedValueServiceData( retval );

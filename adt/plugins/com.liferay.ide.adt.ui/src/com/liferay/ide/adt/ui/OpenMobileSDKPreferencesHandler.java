@@ -24,14 +24,14 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 /**
  * @author Gregory Amerson
  */
-public class OpenAndroidPreferencesHandler extends SapphireActionHandler
+public class OpenMobileSDKPreferencesHandler extends SapphireActionHandler
 {
 
     @Override
     protected Object run( Presentation context )
     {
         PreferencesUtil.createPreferenceDialogOn(
-            ( (SwtPresentation) context ).shell(), AndroidPreferencePage.ID, new String[] { AndroidPreferencePage.ID },
+            ( (SwtPresentation) context ).shell(), MobileSDKPreferencePage.ID, new String[] { MobileSDKPreferencePage.ID },
             null ).open();
 
         return Status.createOkStatus();

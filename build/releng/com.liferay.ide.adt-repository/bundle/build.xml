@@ -61,7 +61,11 @@
 	</target>
 
 	<target name="create-bundle">
-		<antcall target="install-adt-ide-features"/>
+		<delete dir="${work.dir}" />
+		<mkdir dir="${work.dir}" />
+
+		<antcall target="copy-liferay-mobile-sdk" />
+		<antcall target="install-adt-ide-features" />
 		<antcallback target="install-tools-features" return="version" />
 		<antcallback target="install-adt-features" return="final.name"/>
 
@@ -89,13 +93,25 @@
 				<move file="${updatesite.name}" tofile="${final.updatesite.name}" verbose="true" />
 			</then>
 		</if>
-
-		<if>
-			<isset property="upload"/>
-			<then>
-				<antcall target="upload-output-file" />
-			</then>
-		</if>
+	</target>
+	
+	<target name="copy-liferay-mobile-sdk" depends="download-liferay-mobile-sdk">
+		<unzip src="${downloads.dir}/${liferay.mobile.sdk.zip}" dest="${work.dir}/" />
+	</target>
+	
+	<target name="download-liferay-mobile-sdk" depends="create-downloads-dir">
+        <if>
+            <not>
+                <available file="${downloads.dir}/${liferay.mobile.sdk.zip}" />
+            </not>
+            <then>
+                <get
+                    dest="${downloads.dir}/${liferay.mobile.sdk.zip}"
+                    src="${liferay.mobile.sdk.url}"
+                    verbose="true"
+                />
+            </then>
+        </if>
 	</target>
 
 	<target name="win32">
