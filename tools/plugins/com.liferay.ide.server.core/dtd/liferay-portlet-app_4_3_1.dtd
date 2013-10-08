@@ -50,7 +50,7 @@ The default value is "" which means this is not used.
 <!ELEMENT virtual-path (#PCDATA)>
 
 <!--
-Supppose the struts-path value is "mail". This tells the portal that all
+Suppose the struts-path value is "mail". This tells the portal that all
 requests with the path mail/* are considered part of this portlet's scope. Users
 who request paths that match mail/* will only be granted access if they also
 have access to this portlet. This is true for both portlet requests and regular

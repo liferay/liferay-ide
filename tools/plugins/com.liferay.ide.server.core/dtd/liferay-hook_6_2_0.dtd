@@ -16,7 +16,9 @@ are:
 admin.default.group.names
 admin.default.role.names
 admin.default.user.group.names
+asset.publisher.asset.entry.query.processors
 asset.publisher.display.styles
+asset.publisher.query.form.configuration
 auth.forward.by.last.path
 auth.public.paths
 auto.deploy.listeners
@@ -115,6 +117,9 @@ sites.form.add.seo
 sites.form.update.advanced
 sites.form.update.main
 sites.form.update.seo
+social.activity.sets.bundling.enabled
+social.activity.sets.enabled
+social.activity.sets.selector
 social.bookmark.*
 terms.of.use.required
 theme.css.fast.load

@@ -110,6 +110,9 @@ The json-enabled value specifies whether or not the entity should be annotated
 for JSON serialization. By default, if the remote-service value is true, then
 the json-enabled value is true.
 
+The trash-enabled value specifies whether trash related methods should be
+generated or not.
+
 The deprecated value specifies whether the entity's services are deprecated.
 -->
 <!ATTLIST entity
@@ -126,6 +129,7 @@ The deprecated value specifies whether the entity's services are deprecated.
 	tx-manager CDATA #IMPLIED
 	cache-enabled CDATA #IMPLIED
 	json-enabled CDATA #IMPLIED
+	trash-enabled CDATA #IMPLIED
 	deprecated CDATA #IMPLIED
 >
 

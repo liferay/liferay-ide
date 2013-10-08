@@ -336,6 +336,7 @@
 			<xs:element ref="condition" />
 			<xs:element ref="fork" />
 			<xs:element ref="join" />
+			<xs:element ref="join-xor" />
 			<xs:element ref="state" />
 			<xs:element ref="task" />
 		</xs:choice>

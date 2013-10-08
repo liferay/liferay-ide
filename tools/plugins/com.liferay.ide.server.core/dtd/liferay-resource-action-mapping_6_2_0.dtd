@@ -88,7 +88,7 @@ permissions on all supported actions.
 <!--
 The model-resource element defines the permissions of the model.
 -->
-<!ELEMENT model-resource (model-name, portlet-ref, weight?, permissions?) >
+<!ELEMENT model-resource (model-name, portlet-ref, root?, weight?, permissions?) >
 
 <!--
 The model-name element is the name of the model.
@@ -99,6 +99,13 @@ The model-name element is the name of the model.
 The portlet-ref element is the name of the portlet that the model belongs to.
 -->
 <!ELEMENT portlet-ref (portlet-name*) >
+
+<!--
+The root element is a boolean value that specifies whether the resource is
+a root model resource. A root resource is the one that contains all other
+resources within a portlet.
+-->
+<!ELEMENT root (#PCDATA) >
 
 <!--
 The weight element is a double number to control the position of the resource
