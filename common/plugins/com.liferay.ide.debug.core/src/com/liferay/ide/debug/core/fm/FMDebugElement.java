@@ -104,14 +104,18 @@ public class FMDebugElement extends PlatformObject implements IDebugElement
     }
 
     @SuppressWarnings( "rawtypes" )
-    public Object getAdapter(Class adapter)
+    public Object getAdapter( Class adapter )
     {
-        if (adapter == IDebugElement.class)
+        if( adapter == IDebugElement.class )
         {
             return this;
         }
+        else if( adapter == ILaunch.class )
+        {
+            return getDebugTarget().getLaunch();
+        }
 
-        return super.getAdapter(adapter);
+        return super.getAdapter( adapter );
     }
 
     public FMDebugTarget getDebugTarget()
