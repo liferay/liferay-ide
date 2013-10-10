@@ -39,4 +39,37 @@
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.adt.ui.popupmenu"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="com.liferay.ide.adt.ui.actions.AddLiferayMobileSdkLibrariesAction"
+               icon="icons/e16/liferay_android_16x16.png"
+               id="com.liferay.ide.adt.ui.add.liferay.mobile.sdk.libraries.action"
+               label="Add Liferay Mobile Sdk Libraries"
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Add Liferay mobile SDK Libraries">
+         </action>
+         <enablement>
+          <adapt type="org.eclipse.core.resources.IProject">
+               <test forcePluginActivation="true"
+                   property="com.liferay.ide.adt.ui.isNonLiferayAndroidProject" />
+           </adapt>
+         </enablement>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.adt.ui.IsNonLiferayAndroidProjectTester"
+            id="com.liferay.ide.adt.ui.isNonLiferayAndroidProject"
+            namespace="com.liferay.ide.adt.ui"
+            properties="isNonLiferayAndroidProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+   </extension>
+
 </plugin>
