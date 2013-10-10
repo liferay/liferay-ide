@@ -15,6 +15,8 @@
 
 package com.liferay.ide.adt.core;
 
+import com.liferay.ide.core.util.ZipUtil;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
@@ -24,11 +26,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-
-import com.liferay.ide.core.util.ZipUtil;
 
 /**
  * @author Gregory Amerson
@@ -37,10 +36,12 @@ import com.liferay.ide.core.util.ZipUtil;
 public class ADTUtil
 {
 
-    private static final IPath[] liferayMobileSdkLibs = { 
-        new Path( "libs/liferay-android-sdk.jar" ),
-        new Path( "libs/liferay-android-sdk.jar.properties" ),
-        new Path( "libs/src/liferay-android-sdk-sources.jar" ) };
+    private static final String[] liferayMobileSdkFiles =
+    {
+        "libs/liferay-android-sdk.jar",
+        "libs/liferay-android-sdk.jar.properties",
+        "libs/src/liferay-android-sdk-sources.jar"
+    };
 
     // IDE-1179
     public static void addLiferayMobileSdkLibraries( final IProject project, IProgressMonitor monitor )
@@ -57,21 +58,22 @@ public class ADTUtil
 
             File libDir = null;
 
-            for( IPath lib : liferayMobileSdkLibs )
+            for( String file : liferayMobileSdkFiles )
             {
                 //Unzip lib file to project if it doesn't exist.
-                libFile = project.getFile( lib );
+                libFile = project.getFile( file );
 
-                if( !libFile.exists() )
+                if( ! libFile.exists() )
                 {
                     // Create lib dir if it doesn't exist.
-                    libDir = project.getLocation().append( lib.removeLastSegments( 1 ) ).toFile();
+                    libDir = project.getLocation().append( new Path( file ).removeLastSegments( 1 ) ).toFile();
 
                     if( !libDir.exists() )
                     {
                         libDir.mkdirs();
 
-                        try{
+                        try
+                        {
                             project.refreshLocal( IResource.DEPTH_INFINITE, null );
                         }
                         catch( CoreException e)
@@ -80,13 +82,13 @@ public class ADTUtil
                         }
                     }
 
-                    libInputStream = projectTemplate.getInputStream( new ZipEntry( zipTopLevelDir + lib.toString() ) );
+                    libInputStream = projectTemplate.getInputStream( new ZipEntry( zipTopLevelDir + file.toString() ) );
                     libFile.create( libInputStream, IResource.FORCE, null );
                 }
 
                 if( !monitorNull )
                 {
-                    monitor.worked( 10 / (liferayMobileSdkLibs.length ) );
+                    monitor.worked( 10 / (liferayMobileSdkFiles.length ) );
                 }
             }
 
@@ -110,9 +112,9 @@ public class ADTUtil
 
     public static boolean hasLiferayMobileSdkLibraries( final IProject project )
     {
-        for( IPath p : liferayMobileSdkLibs )
+        for( String lib : liferayMobileSdkFiles )
         {
-            if( !project.getFile( p ).exists() )
+            if( ! project.getFile( lib ).exists() )
             {
                 return false;
             }

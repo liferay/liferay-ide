@@ -15,6 +15,9 @@
 
 package com.liferay.ide.adt.ui.actions;
 
+import com.liferay.ide.adt.core.ADTUtil;
+import com.liferay.ide.adt.ui.ADTUI;
+
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
@@ -28,16 +31,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.liferay.ide.adt.core.ADTUtil;
-import com.liferay.ide.adt.ui.ADTUI;
-
 /**
  * @author Kuo Zhang
  */
 public class AddLiferayMobileSdkLibrariesAction implements IObjectActionDelegate
 {
 
-    protected ISelection selection;
+    private ISelection selection;
 
     public AddLiferayMobileSdkLibrariesAction()
     {
@@ -55,22 +55,21 @@ public class AddLiferayMobileSdkLibrariesAction implements IObjectActionDelegate
             {
                 try
                 {
-                    new ProgressMonitorDialog( new Shell() ).run( true, false, new IRunnableWithProgress()
-                    {
-
-                        @Override
-                        public void run( IProgressMonitor monitor ) throws InvocationTargetException,
-                            InterruptedException
+                    new ProgressMonitorDialog( new Shell() ).run( true, false,
+                        new IRunnableWithProgress()
                         {
-                            // The adding process runs so fast that monitor cannot even been seen.
-                            monitor.beginTask( "Adding Liferay Mobile SDK Libraires...", 10 );
+                            public void run( IProgressMonitor monitor ) throws InvocationTargetException,
+                                InterruptedException
+                            {
+                                // The adding process runs so fast that monitor cannot even been seen.
+                                monitor.beginTask( "Adding Liferay Mobile SDK Libraires...", 10 );
 
-                            ADTUtil.addLiferayMobileSdkLibraries( (IProject) elem, monitor );
+                                ADTUtil.addLiferayMobileSdkLibraries( (IProject) elem, monitor );
 
-                            monitor.done();
-
+                                monitor.done();
+                            }
                         }
-                    } );
+                    );
                 }
                 catch( InvocationTargetException e )
                 {

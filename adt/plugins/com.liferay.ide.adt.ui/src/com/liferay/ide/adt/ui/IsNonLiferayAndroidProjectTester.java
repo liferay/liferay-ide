@@ -23,7 +23,6 @@ import com.liferay.ide.adt.core.ADTUtil;
 /**
  * @author Kuo Zhang
  */
-
 public class IsNonLiferayAndroidProjectTester extends PropertyTester
 {
 

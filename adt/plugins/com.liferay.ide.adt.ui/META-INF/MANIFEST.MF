@@ -17,4 +17,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.expressions
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.adt.ui
+Export-Package: com.liferay.ide.adt.ui,
+ com.liferay.ide.adt.ui.actions

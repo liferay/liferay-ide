@@ -49,7 +49,7 @@
                class="com.liferay.ide.adt.ui.actions.AddLiferayMobileSdkLibrariesAction"
                icon="icons/e16/liferay_android_16x16.png"
                id="com.liferay.ide.adt.ui.add.liferay.mobile.sdk.libraries.action"
-               label="Add Liferay Mobile Sdk Libraries"
+               label="Add Liferay Mobile SDK Libraries"
                menubarPath="liferayPopupMenuCategory/slot1"
                tooltip="Add Liferay mobile SDK Libraries">
          </action>
