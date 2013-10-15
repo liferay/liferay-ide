@@ -926,6 +926,10 @@
                name="http://java.sun.com/xml/ns/javaee/javaee_6.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/javaee_6.xsd">
          </uri>
+                  <uri
+               name="http://xmlns.jcp.org/xml/ns/javaee/javaee_7.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/javaee_7.xsd">
+         </uri>
          <uri
                name="http://java.sun.com/xml/ns/javaee/javaee_web_services_client_1_2.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/javaee_web_services_client_1_2.xsd">
@@ -933,6 +937,10 @@
          <uri
                name="http://java.sun.com/xml/ns/javaee/javaee_web_services_client_1_3.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/javaee_web_services_client_1_3.xsd">
+         </uri>
+         <uri
+               name="http://xmlns.jcp.org/xml/ns/javaee/javaee_web_services_client_1_4.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/javaee_web_services_client_1_4.xsd">
          </uri>
          <uri
                name="http://java.sun.com/xml/ns/j2ee/jsp_2_0.xsd"
@@ -945,6 +953,14 @@
          <uri
                name="http://java.sun.com/xml/ns/javaee/jsp_2_2.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/jsp_2_2.xsd">
+         </uri>
+         <uri
+               name="http://xmlns.jcp.org/xml/ns/javaee/jsp_2_3.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/jsp_2_3.xsd">
+         </uri>
+         <uri
+               name="http://www.liferay.com/dtd/liferay-ddm-structure_6_2_0.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/liferay-ddm-structure_6_2_0.xsd">
          </uri>
          <uri
                name="http://www.liferay.com/dtd/liferay-workflow-definition_6_0_0.xsd"
@@ -994,9 +1010,17 @@
                name="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-app_3_0.xsd">
          </uri>
+                  <uri
+               name="http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-app_3_1.xsd">
+         </uri>
          <uri
                name="http://java.sun.com/xml/ns/javaee/web-common_3_0.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-common_3_0.xsd">
+         </uri>
+         <uri
+               name="http://xmlns.jcp.org/xml/ns/javaee/web-common_3_1.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-common_3_1.xsd">
          </uri>
          <uri
                name="http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
@@ -1009,6 +1033,10 @@
          <uri
                name="http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-facesconfig_2_1.xsd">
+         </uri>
+         <uri
+               name="http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+               uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-facesconfig_2_2.xsd">
          </uri>
          <uri
                name="http://xmlns.oracle.com/weblogic/weblogic-web-app/1.4/weblogic-web-app.xsd"
