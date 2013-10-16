@@ -19,8 +19,9 @@ variable.
 The plugin-package element contains the declarative data of a plugin.
 -->
 <!ELEMENT plugin-package (name, module-id, recommended-deployment-context?,
-types, tags?, short-description, long-description?, change-log, page-url?,
-screenshots?, author, licenses, liferay-versions, deployment-settings?)>
+required-deployment-contexts?, types, tags?, short-description,
+long-description?, change-log, page-url?, screenshots?, author, licenses,
+liferay-versions, deployment-settings?)>
 
 <!--
 The name element contains the name of the plugin package that will be shown to
@@ -42,6 +43,19 @@ plugin should be deployed. Some portlet packages require this because their own
 code references itself through URLs that include the context.
 -->
 <!ELEMENT recommended-deployment-context (#PCDATA)>
+
+<!--
+The required-deployment-contexts element indicates contexts which this plugin
+needs to be deployed. Some plugins require this in order to rely on services and
+features provided by other plugins.
+-->
+<!ELEMENT required-deployment-contexts (required-deployment-context)*>
+
+<!--
+The required-deployment-context element contains the name of a context that is
+required by this plugin.
+-->
+<!ELEMENT required-deployment-context (#PCDATA)>
 
 <!--
 The types element contains a list of plugin types included in the package.
