@@ -61,9 +61,6 @@
                         </property-editor>
                     </content>
                     <collapsible>false</collapsible>
-                    <scroll-vertically>true</scroll-vertically>
-                    <scroll-horizontally>true</scroll-horizontally>
-                    <indent>true</indent>
                 </section>
                 <node>
                     <label>Portlets</label>
@@ -559,15 +556,10 @@
             <property-editor>DisplayName</property-editor>
             <property-editor>PortletClass</property-editor>
         </content>
-        <indent>true</indent>
-        <scroll-vertically>true</scroll-vertically>
-        <scroll-horizontally>true</scroll-horizontally>
     </composite>
     <composite>
         <id>init.param.composite</id>
         <indent>true</indent>
-        <scroll-vertically>true</scroll-vertically>
-        <scroll-horizontally>true</scroll-horizontally>
         <content>
             <property-editor>
                 <property>InitParams</property>
@@ -774,7 +766,5 @@
         </content>
         <label>Create new Portlet</label>
         <initial-focus>PortletName</initial-focus>
-        <scroll-vertically>true</scroll-vertically>
-        <scroll-horizontally>true</scroll-horizontally>
     </dialog>
 </definition>
