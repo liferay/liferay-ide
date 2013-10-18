@@ -11,7 +11,7 @@
       <image
             icon="icons/e16/server.png"
             id="com.liferay.ide.server.tomcat.runtime.ui.image"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.60,com.liferay.ide.eclipse.server.tomcat.70,com.liferay.ide.server.62.tomcat.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.60,com.liferay.ide.eclipse.server.tomcat.70,com.liferay.ide.eclipse.server.tomcat.7062">
       </image>
    </extension>
    <extension
@@ -76,7 +76,7 @@
             id="com.liferay.ide.server.tomcat.ui.context"
             name="%update.context.path.publisher.name"
             order="0"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
       </publisher>
    </extension>
    <extension
@@ -86,7 +86,7 @@
             id="com.liferay.ide.server.tomcat.editor.instance"
             insertionId="org.eclipse.wst.server.editor.overview.left"
             order="0"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
          <enablement>
             <not>
                <test
@@ -101,7 +101,7 @@
             id="com.liferay.ide.server.tomcat.configuration.editor.mime"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="20"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
          <enablement>
             <test
                   property="com.liferay.ide.server.tomcat.ui.hasConfiguration"
@@ -114,7 +114,7 @@
             id="com.liferay.ide.server.tomcat.configuration.editor.port"
             insertionId="org.eclipse.wst.server.editor.overview.right"
             order="10"
-            typeIds="com.liferay.ide.eclipse.server.tomcat.*,com.liferay.ide.server.62.tomcat.70">
+            typeIds="com.liferay.ide.eclipse.server.tomcat.*">
          <enablement>
             <test
                   property="com.liferay.ide.server.tomcat.ui.hasConfiguration"

@@ -156,7 +156,7 @@ public class LiferayTomcatServer extends TomcatServer
             {
                 configuration = new LiferayTomcat60Configuration( folder );
             }
-            else if( id.endsWith( "70" ) ) //$NON-NLS-1$
+            else if( id.endsWith( "70" ) || id.endsWith( "7062" ) ) //$NON-NLS-1$ //$NON-NLS-2$
             {
                 configuration = new LiferayTomcat70Configuration( folder );
             }
@@ -220,7 +220,7 @@ public class LiferayTomcatServer extends TomcatServer
         {
             configuration = new LiferayTomcat60Configuration( folder );
         }
-        else if( id.endsWith( "70" ) ) //$NON-NLS-1$
+        else if( id.endsWith( "70" ) || id.endsWith( "7062" ) ) //$NON-NLS-1$ //$NON-NLS-2$
         {
             configuration = new LiferayTomcat70Configuration( folder );
         }

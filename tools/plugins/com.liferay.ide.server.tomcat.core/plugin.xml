@@ -98,7 +98,7 @@
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatServer"
             description="%liferay.v62.ce.tomcat70.server.type.description"
             hasConfiguration="true"
-            id="com.liferay.ide.server.62.tomcat.70"
+            id="com.liferay.ide.eclipse.server.tomcat.7062"
             initialState="stopped"
             launchConfigId="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
             name="%liferay.v62.ce.tomcat70.server.type.name"
@@ -131,7 +131,9 @@
             delegate="com.liferay.ide.server.tomcat.core.LiferayTomcatLaunchConfigDelegate"
             id="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"
             modes="run, debug, profile"
-            name="%liferay.v62.ce.tomcat70.launch.config.type.name">
+            name="%liferay.v62.ce.tomcat70.launch.config.type.name"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+            sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
       </launchConfigurationType>
    </extension>
    <extension
