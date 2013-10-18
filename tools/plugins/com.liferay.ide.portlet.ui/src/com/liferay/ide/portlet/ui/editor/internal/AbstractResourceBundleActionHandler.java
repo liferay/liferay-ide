@@ -32,6 +32,7 @@ import java.util.ListIterator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -71,16 +72,25 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
     protected boolean computeEnablementState()
     {
         boolean isEnabled = super.computeEnablementState();
-        final Element element = getModelElement();
-        final Property property = property();
-        final IProject project = element.adapt( IProject.class );
-        String rbFile = element.property( (ValueProperty) property.definition() ).text();
-        if( rbFile != null )
+
+        if( isEnabled )
         {
-            String ioFileName =
-                PortletUtil.convertJavaToIoFileName( rbFile, GenericResourceBundlePathService.RB_FILE_EXTENSION );
-            isEnabled = isEnabled && !getFileFromClasspath( project, ioFileName );
+            final Element element = getModelElement();
+            final Property property = property();
+            final IProject project = element.adapt( IProject.class );
+            String rbFile = element.property( (ValueProperty) property.definition() ).text();
+            if( rbFile != null )
+            {
+                String ioFileName =
+                    PortletUtil.convertJavaToIoFileName( rbFile, GenericResourceBundlePathService.RB_FILE_EXTENSION );
+                isEnabled = !getFileFromClasspath( project, ioFileName );
+            }
+            else
+            {
+                isEnabled = false;
+            }
         }
+
         return isEnabled;
     }
 
@@ -178,6 +188,8 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
                                 new ByteArrayInputStream( rbFileBuffer.toString().getBytes() ), true, monitor );
                             monitor.worked( 1 );
                         }
+
+                        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
                     }
                     catch( CoreException e )
