@@ -135,6 +135,13 @@ public class MavenUtil
             retval = mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
         }
 
+        if( retval == null )
+        {
+            retval =
+                mavenProject.getPluginManagement().getPluginsAsMap().get(
+                    ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+        }
+
         return retval;
     }
 
