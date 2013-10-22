@@ -618,6 +618,11 @@ public class CoreUtil
 
     public static String readStreamToString( InputStream contents ) throws IOException
     {
+        return readStreamToString( contents, true );
+    }
+
+    public static String readStreamToString( InputStream contents, boolean closeStream ) throws IOException
+    {
         if( contents == null )
         {
             return null;
@@ -639,6 +644,11 @@ public class CoreUtil
             }
         }
         while( read >= 0 );
+
+        if( closeStream )
+        {
+            contents.close();
+        }
 
         return out.toString();
     }

@@ -30,6 +30,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -407,13 +408,27 @@ public abstract class NewLiferayPluginProjectOpBaseTests extends ProjectCoreBase
             createNewSDKProjectCustomLocation( newProjectOp( testProjectCustomLocationName ), customLocation );
 
         assertEquals( "Project not at expected custom location", true, newProject.getLocation().equals( customLocation ) );
+
+        final IFile buildXml = newProject.getFile( "build.xml" );
+
+        assertEquals( true, buildXml.exists() );
+
+        final InputStream contents = buildXml.getContents( true );
+        final String buildXmlContent = CoreUtil.readStreamToString( contents );
+        contents.close();
+
+        final Pattern p = Pattern.compile( ".*<import file=\".*portlets/build-common-portlet.xml\".*", Pattern.MULTILINE | Pattern.DOTALL );
+
+        final Matcher m = p.matcher( buildXmlContent );
+
+        assertEquals( "sdk project build.xml didn't use correct plugin type dir.", true, m.matches() );
     }
 
     @Test
     public void testCreateNewSDKProjectEclipseWorkspace() throws Exception
     {
         final NewLiferayPluginProjectOp newProjectOp = newProjectOp( "test-project-in-workspace" );
-        newProjectOp.setUseSdkLocation( true );
+        newProjectOp.setUseSdkLocation( false );
 
         final IProject projectInWorkspace = createAntProject( newProjectOp );
 

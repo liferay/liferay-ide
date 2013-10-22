@@ -131,11 +131,12 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
         String workingDir = null;
         // baseDir should only be set when we are wanting to specifically allow 'out-of-sdk' projects, i.e. custom/workspace
         String baseDir = null;
+        boolean updateBaseDir = false;
 
         if( ( !op.getUseDefaultLocation().content() ) ||
             ( op.getUseDefaultLocation().content() && ( !op.getUseSdkLocation().content() ) ) )
         {
-            baseDir = sdk.getLocation().toString();
+            updateBaseDir = true;
         }
 
         IPath newSDKProjectPath = null;
@@ -151,6 +152,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
                 }
 
                 workingDir = sdk.getLocation().append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER ).toOSString();
+                baseDir = updateBaseDir ? workingDir : null;
 
                 newSDKProjectPath =
                     sdk.createNewPortletProject(
@@ -160,6 +162,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
             case hook:
                 workingDir = sdk.getLocation().append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER ).toOSString();
+                baseDir = updateBaseDir ? workingDir : null;
 
                 newSDKProjectPath =
                     sdk.createNewHookProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );
@@ -167,6 +170,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
             case ext:
                 workingDir = sdk.getLocation().append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER ).toOSString();
+                baseDir = updateBaseDir ? workingDir : null;
 
                 newSDKProjectPath =
                     sdk.createNewExtProject(
@@ -175,6 +179,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
             case layouttpl:
                 workingDir = sdk.getLocation().append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER ).toOSString();
+                baseDir = updateBaseDir ? workingDir : null;
 
                 newSDKProjectPath =
                     sdk.createNewLayoutTplProject(
@@ -183,6 +188,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
             case theme:
                 workingDir = sdk.getLocation().append( ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER ).toOSString();
+                baseDir = updateBaseDir ? workingDir : null;
 
                 newSDKProjectPath =
                     sdk.createNewThemeProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );

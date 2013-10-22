@@ -173,7 +173,7 @@ public class RemoteConnection implements IRemoteConnection
         {
             HttpEntity entity = response.getEntity();
 
-            String body = CoreUtil.readStreamToString( entity.getContent() );
+            String body = CoreUtil.readStreamToString( entity.getContent(), false );
 
             EntityUtils.consume( entity );
 

@@ -423,10 +423,8 @@ public class ProjectUtil
 
         final String projectDirName = projectLocation.lastSegment();
 
-        if ( ! CoreUtil.getWorkspaceRoot().getLocation().append(projectDirName).equals( projectLocation ) )
-        {
-            fpwc.setProjectLocation( projectRecord.getProjectLocation() );
-        }
+        // for now always set a project location (so it can be used by facet install methods) may be unset later
+        fpwc.setProjectLocation( projectRecord.getProjectLocation() );
 
         String pluginType = null;
 
@@ -453,6 +451,12 @@ public class ProjectUtil
         {
             IPortletFramework portletFramework = op.getPortletFramework().content( true );
             portletFramework.configureNewProject( newProjectDataModel, fpwc );
+        }
+
+        // if project is located in natural workspace location then don't need to set a project location
+        if ( CoreUtil.getWorkspaceRoot().getLocation().append(projectDirName).equals( projectLocation ) )
+        {
+            fpwc.setProjectLocation( null );
         }
 
         fpwc.commitChanges( monitor );
