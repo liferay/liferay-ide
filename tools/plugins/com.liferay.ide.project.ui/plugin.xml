@@ -808,4 +808,11 @@
             name="%plugin.api.classpath.container.page.name">
       </classpathContainerPage>
    </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            markerType="com.liferay.ide.project.core.PluginsSDKProjectMarker"
+            class="com.liferay.ide.project.ui.PluginsSDKProjectMarkerResolutionGenerator">
+      </markerResolutionGenerator>
+   </extension>
 </plugin>

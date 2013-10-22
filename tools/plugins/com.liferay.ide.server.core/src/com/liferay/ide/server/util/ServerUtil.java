@@ -15,15 +15,6 @@
 
 package com.liferay.ide.server.util;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCore;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,10 +25,12 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -83,10 +76,20 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.LiferayServerCore;
+
 /**
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Tao Tao
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class ServerUtil
@@ -511,6 +514,23 @@ public class ServerUtil
         {
             return null;
         }
+    }
+
+    public static Set<IRuntime> getAvailableLiferayRuntimes()
+    {
+        Set<IRuntime> retval = new HashSet<IRuntime>();
+
+        IRuntime[] runtimes = ServerCore.getRuntimes();
+
+        for( IRuntime rt : runtimes )
+        {
+            if( isLiferayRuntime( rt ) )
+            {
+                retval.add( rt );
+            }
+        }
+
+        return retval;
     }
 
     public static ILiferayRuntime getLiferayRuntime( IRuntime runtime )
