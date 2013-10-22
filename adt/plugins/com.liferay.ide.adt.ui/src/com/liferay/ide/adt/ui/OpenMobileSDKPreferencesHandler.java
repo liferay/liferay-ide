@@ -17,7 +17,7 @@ package com.liferay.ide.adt.ui;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 
